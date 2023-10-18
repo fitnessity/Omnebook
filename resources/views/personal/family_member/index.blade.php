@@ -52,7 +52,7 @@
                                             
                                             <div class="booking-activity-view">
                                                 <a class="view-booking" href="{{route('personal.family_members.index',['business_id'=>$bs->id ,'id' =>@$customer->id])}}"> View Bookings</a>
-                                                <a class="view-schedule" href="{{route('business_activity_schedulers',['business_id'=>$bs->id])}}"> View Schedule</a>
+                                                <a class="view-schedule" href="{{route('business_activity_schedulers',['business_id'=>$bs->id,'customer_id' =>@$customer->id ])}}"> View Schedule</a>
                                             </div>
                                          </div>
                                      </div>

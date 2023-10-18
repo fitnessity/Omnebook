@@ -73,6 +73,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/member_expirations','MembershipExpirationsController@index')->name('member_expirations.index');
     Route::post('/getMemberships','MembershipExpirationsController@getMemberships')->name('member_expirations.getMemberships');
     Route::get('/getMoreMemberships','MembershipExpirationsController@getMoreMemberships')->name('member_expirations.getMoreMemberships');
+    Route::get('/exportMembership','MembershipExpirationsController@exportMembership')->name('member_expirations.exportMembership');
 
     Route::get('/sales_report','SalesReportController@index')->name('sales_report.index');
 

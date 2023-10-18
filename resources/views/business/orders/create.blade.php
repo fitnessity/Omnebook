@@ -280,6 +280,12 @@
 																		</select>
 																	</div>
 																</div> -->
+																<div class="col-md-4 col-sm-4 col-xs-12">
+																	<div class="select0service mb-10">
+																		<label>Select Product</label>
+																		<button type="button" data-bs-toggle="modal" data-bs-target="#addproduct" class="btn btn-red width-100 search-add-client"> Select </button>
+																	</div>
+																</div>
 															</div>
 														</div>
 													</div>
@@ -1175,7 +1181,298 @@
 	    	</div>                                                                       
 	    </div>                                          
 	</div>
+	
+	<div class="modal fade" id="addproduct" tabindex="-1" aria-modal="true" role="dialog">
+	    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+	        <div class="modal-content">
+				<div class="modal-header p-3">
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+				</div>  
+	            <div class="modal-body conuter-body" id="Countermodalbody">
+	            	<div class="row">
+	            		<div class="col-lg-12">
+                        	<h4 class="modal-title mb-25 partcipate-model">Select Product</h4>
+                    	</div>
+						<div class="col-md-12 col-sm-12 col-xs-12 border-bottom">
+							<div class="row">
+								<div class="col-md-8 col-sm-8 col-xs-6 col-6">
+									<div class="counter-titles mb-25">
+										<p class="fs-15">Product Name</p>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="qty counter-txt mb-25">
+										<span class="minus bg-darkbtn adultminus"><i class="fa fa-minus"></i></span>
+										<input type="text" class="count " name="adultcnt" id="product_one" min="0" value="0" readonly="">
+										<span class="plus bg-darkbtn adultplus"><i class="fa fa-plus"></i></span>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="select0service mb-10">
+										<label>Select Size </label>
+										<select name="program_list" class="form-select">
+											<option value="">Select</option>
+											<option value="154">15</option>
+											<option value="156">16</option>
+											<option value="157">32</option>
+											<option value="158">28</option>
+											<option value="160">29</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="select0service mb-10">
+										<label>Select Color </label>
+										<select name="program_list" id="" class="form-select" >
+											<option value="">Select</option>
+											<option value="154">Red</option>
+											<option value="156">Green</option>
+											<option value="157">Blue</option>
+											<option value="158">White</option>
+											<option value="160">Yellow</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="select0service mb-10">
+										<label>Select Material </label>
+										<select name="program_list" id="" class="form-select" >
+											<option value="">Select</option>
+											<option value="154">Red</option>
+											<option value="156">Green</option>
+											<option value="157">Blue</option>
+											<option value="158">White</option>
+											<option value="160">Yellow</option>
+										</select>
+									</div>									
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12 col-sm-12 col-xs-12 border-bottom">
+							<div class="row mt-15">
+								<div class="col-md-8 col-sm-8 col-xs-6 col-6">
+									<div class="counter-titles mb-25">
+										<p class="fs-15">Product Name</p>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="qty counter-txt mb-25">
+										<span class="minus bg-darkbtn childminus"><i class="fa fa-minus"></i></span>
+										<input type="text" class="count " name="adultcnt" id="product_two" min="0" value="0" readonly="">
+										<span class="plus bg-darkbtn childplus"><i class="fa fa-plus"></i></span>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="select0service mb-10">
+										<label>Select Size </label>
+										<select name="program_list" class="form-select">
+											<option value="">Select</option>
+											<option value="154">15</option>
+											<option value="156">16</option>
+											<option value="157">32</option>
+											<option value="158">28</option>
+											<option value="160">29</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="select0service mb-10">
+										<label>Select Color </label>
+										<select name="program_list" id="" class="form-select" >
+											<option value="">Select</option>
+											<option value="154">Red</option>
+											<option value="156">Green</option>
+											<option value="157">Blue</option>
+											<option value="158">White</option>
+											<option value="160">Yellow</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="select0service mb-10">
+										<label>Select Material </label>
+										<select name="program_list" id="" class="form-select" >
+											<option value="">Select</option>
+											<option value="154">Red</option>
+											<option value="156">Green</option>
+											<option value="157">Blue</option>
+											<option value="158">White</option>
+											<option value="160">Yellow</option>
+										</select>
+									</div>									
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-md-12 col-sm-12 col-xs-12 border-bottom">
+							<div class="row mt-15">
+								<div class="col-md-8 col-sm-8 col-xs-6 col-6">
+									<div class="counter-titles mb-25">
+										<p class="fs-15">Product Name</p>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="qty counter-txt mb-25">
+										<span class="minus bg-darkbtn infantminus"><i class="fa fa-minus"></i></span>
+										<input type="text" class="count " name="adultcnt" id="product_three" min="0" value="0" readonly="">
+										<span class="plus bg-darkbtn infantplus"><i class="fa fa-plus"></i></span>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="select0service mb-10">
+										<label>Select Size </label>
+										<select name="program_list" class="form-select">
+											<option value="">Select</option>
+											<option value="154">15</option>
+											<option value="156">16</option>
+											<option value="157">32</option>
+											<option value="158">28</option>
+											<option value="160">29</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="select0service mb-10">
+										<label>Select Color </label>
+										<select name="program_list" id="" class="form-select" >
+											<option value="">Select</option>
+											<option value="154">Red</option>
+											<option value="156">Green</option>
+											<option value="157">Blue</option>
+											<option value="158">White</option>
+											<option value="160">Yellow</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="select0service mb-10">
+										<label>Select Material </label>
+										<select name="program_list" id="" class="form-select" >
+											<option value="">Select</option>
+											<option value="154">Red</option>
+											<option value="156">Green</option>
+											<option value="157">Blue</option>
+											<option value="158">White</option>
+											<option value="160">Yellow</option>
+										</select>
+									</div>									
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-md-12 col-sm-12 col-xs-12 border-bottom">
+							<div class="row mt-15">
+								<div class="col-md-8 col-sm-8 col-xs-6 col-6">
+									<div class="counter-titles mb-25">
+										<p class="fs-15">Product Name</p>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="qty counter-txt mb-25">
+										<span class="minus bg-darkbtn adultminus"><i class="fa fa-minus"></i></span>
+										<input type="text" class="count " name="adultcnt" id="product_four" min="0" value="0" readonly="">
+										<span class="plus bg-darkbtn adultplus"><i class="fa fa-plus"></i></span>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="select0service mb-10">
+										<label>Select Size </label>
+										<select name="program_list" class="form-select">
+											<option value="">Select</option>
+											<option value="154">15</option>
+											<option value="156">16</option>
+											<option value="157">32</option>
+											<option value="158">28</option>
+											<option value="160">29</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="select0service mb-10">
+										<label>Select Color </label>
+										<select name="program_list" id="" class="form-select" >
+											<option value="">Select</option>
+											<option value="154">Red</option>
+											<option value="156">Green</option>
+											<option value="157">Blue</option>
+											<option value="158">White</option>
+											<option value="160">Yellow</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-xs-6 col-6">
+									<div class="select0service mb-10">
+										<label>Select Material </label>
+										<select name="program_list" id="" class="form-select" >
+											<option value="">Select</option>
+											<option value="154">Red</option>
+											<option value="156">Green</option>
+											<option value="157">Blue</option>
+											<option value="158">White</option>
+											<option value="160">Yellow</option>
+										</select>
+									</div>									
+								</div>
+							</div>
+						</div>
+						
+	                </div>
+	            </div>            
+	            <div class="modal-footer conuter-body">
+	                <button type="button" onclick="saveparticipate();" class="btn btn-red rev-submit-btn">Save</button>
+	            </div>
+	    	</div>                                                                       
+	    </div>                                          
+	</div>
 
+<script>
+$(document).ready(function () {
+		$('#product_one').prop('readonly', true);
+		$(document).on('click','.adultplus',function(){
+			$('#product_one').val(parseInt($('#product_one').val()) + 1 );
+		});
+    	$(document).on('click','.adultminus',function(){
+			$('#product_one').val(parseInt($('#product_one').val()) - 1 );
+			if ($('#product_one').val() <= 0) {
+				$('#product_one').val(0);
+			}
+	    });
+
+	    $('#product_two').prop('readonly', true);
+		$(document).on('click','.childplus',function(){
+			$('#product_two').val(parseInt($('#product_two').val()) + 1 );
+		});
+    	$(document).on('click','.childminus',function(){
+			$('#product_two').val(parseInt($('#product_two').val()) - 1 );
+			if ($('#product_two').val() <= 0) {
+				$('#product_two').val(0);
+			}
+	    }); 
+
+	    $('#product_three').prop('disabled', true);
+		$(document).on('click','.infantplus',function(){
+			$('#product_three').val(parseInt($('#product_three').val()) + 1 );
+		});
+    	$(document).on('click','.infantminus',function(){
+			$('#product_three').val(parseInt($('#product_three').val()) - 1 );
+			if ($('#product_three').val() <= 0) {
+				$('#product_three').val(0);
+			}
+	    });
+		
+		 $('#product_four').prop('disabled', true);
+		$(document).on('click','.adultplus',function(){
+			$('#product_four').val(parseInt($('#product_four').val()) + 1 );
+		});
+    	$(document).on('click','.adultminus',function(){
+			$('#product_four').val(parseInt($('#product_four').val()) - 1 );
+			if ($('#product_four').val() <= 0) {
+				$('#product_four').val(0);
+			}
+	    });
+	});
+
+</script>
 <script>
 	flatpickr(".flatpickr-range", {
         dateFormat: "m/d/Y",
