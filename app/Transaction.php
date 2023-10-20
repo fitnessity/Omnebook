@@ -126,4 +126,34 @@ class Transaction extends Model
             return Customer::where(['email'=>@$user->email ,'fname' => @$user->firstname ,'lname' => @$user->lastname ,'business_id' =>$business_id])->first();
         }
     }
+
+    public function can_void(){
+        return $this->status == 'requires_capture';
+    }
+
+    public function can_refund(){
+        return $this->kind == 'card' && $this->status == 'complete';
+    }
+
+    public function void(){
+        
+        $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->item_id)->first();
+
+        if($transaction && $transaction->status == 'requires_capture'){
+            $stripe = new \Stripe\StripeClient(
+                config('constants.STRIPE_KEY')
+            );
+            $cancelPaymentIntent = $stripe->paymentIntents->cancel($transaction->transaction_id, []);
+            if($cancelPaymentIntent['status']=='canceled'){
+                $transaction->update(["status" => 'canceled']);
+                $booking_status = UserBookingStatus::where('id', $this->item_id)->orderby('created_at','desc')->first();
+                $booking_status->UserBookingDetail()->update(["status" => 'void']);
+            }
+            
+        }
+
+
+            
+
+    }
 }

@@ -448,5 +448,26 @@ class UserBookingDetail extends Model
         }
     }
 
+    public function can_void(){
+        $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->userBookingStatus->id)->first();
+
+        if($transaction && $transaction->status == 'requires_capture'){
+            return True;
+        }else{
+            return False;
+        }
+    }
+
+    public function can_refund(){
+        $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->userBookingStatus->id)->first();
+
+        if($transaction && $transaction->status == 'complete'){
+            return True;
+        }else{
+            return False;
+        }
+    }
+    
+
 }
 
