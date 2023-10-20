@@ -770,11 +770,9 @@
 																	@endphp
 
 																	@foreach ($purchase_history as $history) 
-																	    @if($history->item_description()['itemDescription'] != '')
-																	        @php
-																	            $totalPaid += $history->amount;
-																	        @endphp
-																	    @endif
+															        @php
+															            $totalPaid += $history->amount;
+															        @endphp
 																	@endforeach
 																	<div class="accordion-item shadow">
 																			<h2 class="accordion-header" id="accordionnesting2Example2">
@@ -801,7 +799,7 @@
 																								</thead>
 																								<tbody>
 																									@foreach ($purchase_history as $history) 
-																										@if($history->item_description()['itemDescription'] != '')
+
 																										<tr>
 																											<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
 																											<td>{!!$history->item_description()['itemDescription']!!}</td>
@@ -809,11 +807,19 @@
 																											<td>{{$history->getPmtMethod()}}</td>
 																											<td>${{$history->amount}}</td>
 																											<td>{{$history->item_description()['qty']}}</td>
-																											<td>Refund | Void</td>
+																											<td>
+																												@if($history->can_void() && $history->item_type=="UserBookingStatus")
+																													<a href="#" data-booking-detail-id="{{$history->item_id}}" data-behavior="transaction_void" data-customer-id = "{{$customerdata->id}}">Void</a>
+																												@endif
+
+																												@if($history->can_refund())
+																													Refund
+																												@endif
+																											</td>
 																											<td><a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$customerdata->id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
 																											</td>
 																										</tr>
-																										@endif
+
 																									@endforeach
 																								</tbody>
 																							</table>
@@ -1374,6 +1380,28 @@
 </div>
 
 @include('layouts.business.footer')
+	<script type="text/javascript">
+
+		$("[data-behavior~=transaction_void]").click(function(e){
+			e.preventDefault();
+
+	        $.ajax({
+	            url: "/business/{{request()->business_id}}/booking_details/" + $(this).data('booking-detail-id') + '/void',
+	            method: "POST",
+	            data:{
+	                _token: '{{csrf_token()}}', 
+	                customer_id: $(this).data('customer-id')
+	            },
+	            error: function(xhr, status, error){
+	            	var errorMessage = JSON.parse(xhr.responseText);
+	            	alert(errorMessage.message);
+	            },
+	            success:function(response) {
+	                location.reload()
+	            },
+	        });
+	    });
+	</script>
 	<script>
 		$(document).ready(function () {
 			var business_id = '{{request()->business_id}}';

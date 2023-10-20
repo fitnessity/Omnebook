@@ -136,7 +136,7 @@ class Customer extends Authenticatable
 
     public function Transaction()
     {
-        return $this->hasMany(Transaction::class,'user_id');
+        return $this->hasMany(Transaction::class,'user_id')->where('user_type','customer');
     }
 
     public function BookingCheckinDetails()
@@ -268,7 +268,7 @@ class Customer extends Authenticatable
 
         //$results = $results->select('user_booking_details.*');
           //print_r($results->get());
-        $results = $results->select('user_booking_details.*', DB::raw('(CASE WHEN bcd.checkin_date IS NOT NULL AND bcd.checkin_date != CURDATE() AND bcd.checkin_date >= CURDATE() THEN COUNT(bcd.use_session_amount) ELSE 0 END) as checkin_count'))->join('booking_checkin_details as bcd', 'user_booking_details.id', '=', 'bcd.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->where('user_booking_details.business_id', $company->id)->groupBy('user_booking_details.id')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'));
+        $results = $results->select('user_booking_details.*', DB::raw('(CASE WHEN bcd.checkin_date IS NOT NULL AND bcd.checkin_date != CURDATE() AND bcd.checkin_date >= CURDATE() THEN COUNT(bcd.use_session_amount) ELSE 0 END) as checkin_count'))->join('booking_checkin_details as bcd', 'user_booking_details.id', '=', 'bcd.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->where('user_booking_details.business_id', $company->id)->where('user_booking_details.status', 'active')->groupBy('user_booking_details.id')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'));
 
         /*$results = $results->when($date, function($query) use ($date) {
             return $query->where('bcd.checkin_date', '=', $date);
@@ -320,9 +320,12 @@ class Customer extends Authenticatable
 	   }
 	   
     }
+    public function purchase_history(){
+        return $this->transaction()->where('user_type','customer')->whereIn('status',['complete', 'requires_capture']);
+    }
 
     public function total_spend(){
-        $purchase_history = $this->transaction()->where('user_type','customer')->get();
+        $purchase_history = $this->transaction()->where('user_type','customer')->where('status','complete')->get();
         $sum = 0;
         foreach($purchase_history as $item){
             $sum += $item->amount;
