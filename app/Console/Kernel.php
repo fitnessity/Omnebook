@@ -4,7 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\{UserBookingDetail,Recurring};
+use App\{UserBookingDetail,Recurring, Transaction};
 use DB;
 
 class Kernel extends ConsoleKernel
@@ -68,6 +68,20 @@ class Kernel extends ConsoleKernel
                 $userBookingDetail->membershipExpiredAlert('membership');
             }
         })->daily();*/
+
+        $schedule->call(function () {
+            $transactions = Transaction::where(['status' => 'requires_capture'])->get();
+
+            foreach($transactions as $transaction){
+                try {
+                    $transaction->capture();
+
+                }catch (Exception $e) {
+                    $errormsg = $e->getError()->message;
+                    return redirect(route('business.orders.create', ['cus_id' => $customer->id]))->with('stripeErrorMsg', $errormsg);
+                }
+            }
+        })->daily();
        // $schedule->command('stripe:cron')->everyMinute()->appendOutputTo('/storage/logs/getlogContent.log'));
 
     }

@@ -152,8 +152,24 @@ class Transaction extends Model
             
         }
 
+    }
 
+    public function capture(){
+        
+        $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->item_id)->first();
+
+        if($transaction && $transaction->status == 'requires_capture'){
+            $stripe = new \Stripe\StripeClient(
+                config('constants.STRIPE_KEY')
+            );
+            $capturePaymentIntent = $stripe->paymentIntents->capture($transaction->transaction_id, []);
+            if($capturePaymentIntent['status']=='succeeded'){
+                $transaction->update(["status" => 'complete']);
+                $booking_status = UserBookingStatus::where('id', $this->item_id)->orderby('created_at','desc')->first();
+                $booking_status->UserBookingDetail()->update(["status" => 'active']);
+            }
             
+        }
 
     }
 }
