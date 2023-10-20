@@ -35,7 +35,7 @@
 }
 </style>
 
-<div class="modal fade " tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="ajax_html_modal">
+<div class="modal fade " tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="ajax_html_modal" data-bs-focus="false">
 	<div class="modal-dialog modal-dialog-centered" id="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
