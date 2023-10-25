@@ -770,7 +770,7 @@
 																	@endphp
 
 																	@foreach ($purchase_history as $history) 
-																	    @if($history->item_description()['itemDescription'] != '')
+																	    @if($history->item_description(request()->business_id)['itemDescription'] != '')
 																	        @php
 																	            $totalPaid += $history->amount;
 																	        @endphp
@@ -801,14 +801,14 @@
 																								</thead>
 																								<tbody>
 																									@foreach ($purchase_history as $history) 
-																										@if($history->item_description()['itemDescription'] != '')
+																										@if($history->item_description(request()->business_id)['itemDescription'] != '')
 																										<tr>
 																											<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
-																											<td>{!!$history->item_description()['itemDescription']!!}</td>
+																											<td>{!!$history->item_description(request()->business_id)['itemDescription']!!}</td>
 																											<td>{{$history->item_type_terms()}}</td>
 																											<td>{{$history->getPmtMethod()}}</td>
 																											<td>${{$history->amount}}</td>
-																											<td>{{$history->item_description()['qty']}}</td>
+																											<td>{{$history->item_description(request()->business_id)['qty']}}</td>
 																											<td>Refund | Void</td>
 																											<td><a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$customerdata->id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
 																											</td>
