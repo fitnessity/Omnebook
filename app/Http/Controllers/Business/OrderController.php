@@ -11,7 +11,7 @@ use DateTime;
 use Config;
 use DateInterval;
 use DateTimeZone;
-use App\{CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,BusinessPriceDetails,user,Transaction,Recurring,BusinessPriceDetailsAges,SGMailService,BookingCheckinDetails,Products};
+use App\{CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,ProductsCategory,BusinessPriceDetails,user,Transaction,Recurring,BusinessPriceDetailsAges,SGMailService,BookingCheckinDetails,Products};
 use App\Repositories\BookingRepository;
 use App\Services\CheckoutRegisterCartService;
 
@@ -117,6 +117,8 @@ class OrderController extends BusinessBaseController
         $program_list = BusinessServices::where(['is_active'=>1, 'userid'=>Auth::user()->id, 'cid'=>$companyId])->get();
         $products = Products::where(['user_id'=>Auth::user()->id, 'business_id'=>$companyId])->get();
 
+        $productCategory = ProductsCategory::orderBy('name')->get();
+
         $modelchk = 0;
         $modeldata = '';
         $ordermodelary = array();
@@ -154,6 +156,7 @@ class OrderController extends BusinessBaseController
            'customer' => $customer,
            'participateName' => $participateName,
            'products' => $products,
+           'productCategory' => $productCategory,
         ]);
     }
 
@@ -344,6 +347,9 @@ class OrderController extends BusinessBaseController
                 $cUid = $item['participate_from_checkout_regi']['id'];
                 $participateName =  trim($item['participate_from_checkout_regi']['pc_name'],"(me)");
             }
+
+            $price_detail = $checkoutRegisterCartService->getPriceDetail($item['priceid']);
+
             $booking_detail = UserBookingDetail::create([                 
                 'booking_id' => $userBookingStatus->id,
                 'sport' => $item['code'],
@@ -351,7 +357,7 @@ class OrderController extends BusinessBaseController
                 'price' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['price']),
                 'qty' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['qty']),
                 'priceid' => $item['priceid'],
-                'pay_session' => $item['p_session'],
+                'pay_session' => $item['p_session'] ?? $price_detail->pay_session,
                 'expired_at' => $expired_at,
                 'contract_date' => $contractDate,
                 'subtotal' => $checkoutRegisterCartService->getSubTotalByItem($item, $user),
@@ -374,7 +380,7 @@ class OrderController extends BusinessBaseController
             $bookidarray [] = $booking_detail->id;
 
             $qty_c = $checkoutRegisterCartService->getQtyPriceByItem($item)['qty'];
-            $price_detail = $checkoutRegisterCartService->getPriceDetail($item['priceid']);
+           
 
             foreach($qty_c as $key=> $qty){
                 $re_i = 0;

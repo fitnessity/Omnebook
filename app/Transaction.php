@@ -65,7 +65,7 @@ class Transaction extends Model
     }
 
     public function item_description($chkBusiness = null){
-        $itemDescription = $itemPrice = $itemSubTotal = $itemDis = $itemTax = $location = $notes = '';
+        $itemDescription = $itemPrice = $itemSubTotal = $itemDis = $itemTax = $location = $notes = $addOnTotal = '';
         $totalTax = $totalDis = $totalPaid =  $qty = 0;
         $arry = [];
         if($this->item_type == 'UserBookingStatus'){
@@ -79,13 +79,14 @@ class Transaction extends Model
                             $priceOption = $bd->business_price_detail_with_trashed->price_title;
                             $itemDescription .= ($key+1).'. '.$activityName.' ('.$categoryName.') ,'.$priceOption.'<br>';
                             $itemPrice .= $bd->total() != '' ? '$'.$bd->total().'<br>' : '$0<br>';
-                            $itemSubTotal .= '$'.$bd->subtotal.'<br>';
+                            $itemSubTotal .= '$'. $bd->subtotal ?? 0 .'<br>';
                             $itemDis .= $bd->discount != '0.00' ? '$'.$bd->discount.'<br>' : '$0<br>';
                             $itemTax .= $bd->tax != '0.00' ? '$'.$bd->tax.'<br>' : '$0<br>';
+                            $addOnTotal .= $bd->addOnservice_total != '' ? '$'.$bd->addOnservice_total.'<br>' : '$0<br>';
                             $location .= @$bd->company_information != '' ? @$bd->company_information->public_company_name.'<br>' : '<br>';
                             $totalTax += $bd->tax != '0.00' ? $bd->tax : 0;
                             $totalDis += $bd->discount != '0.00' ? $bd->discount : 0;
-                            $totalPaid += $bd->subtotal != '0.00' ? $bd->subtotal : 0;
+                            $totalPaid += $bd->subtotal != '0.00' ?  $bd->subtotal : 0;
                             $notes .= $bd->note != '' ? $bd->note.'<br>' : 'N/A<br>';
                             $qty++;
                         }
@@ -100,20 +101,21 @@ class Transaction extends Model
                 $categoryName = $bookingData->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
                 $priceOption = $bookingData->business_price_detail_with_trashed->price_title;
                 $itemDescription = $activityName.' ('.$categoryName.') ,'.$priceOption;
-                $itemPrice .= $bookingData->total() != '' ? '$'.$bookingData->total().'<br>' : '$0<br>';
-                $itemSubTotal .= '$'.$bookingData->subtotal.'<br>';
-                $itemDis .= $bookingData->discount != '0.00' ? '$'.$bookingData->discount.'<br>' : '$0<br>';
-                $itemTax .= $bookingData->tax != '0.00' ? '$'.$bookingData->tax.'<br>' : '$0<br>';
+                $itemPrice .= $this->Recurring->amount != '' ? '$'.$this->Recurring->amount .'<br>' : '$0<br>';
+                $itemSubTotal .= '$'. (($this->Recurring->amount + $this->Recurring->tax) ?? 0 ) .'<br>' ;
+                $itemDis .= '$0<br>';
+                $itemTax .= '$' . ($this->Recurring->tax ?? 0) . '<br>';
+                $addOnTotal .= '$0<br>';
+                            
                 $location .= @$bookingData->company_information != '' ? @$bookingData->company_information->public_company_name.'<br>' : '<br>';
-                $totalTax += $bookingData->tax != '0.00' ? $bookingData->tax : 0;
-                $totalDis += $bookingData->discount != '0.00' ? $bookingData->discount : 0;
-                $totalPaid += $bookingData->subtotal != '0.00' ? $bookingData->subtotal : 0;
+                $totalTax += $this->Recurring->tax ?? 0;
+                $totalDis +=  0;
+                $totalPaid += ($this->Recurring->amount + $this->Recurring->tax) ?? 0;
                 $notes .= $bookingData->note != '' ? $bookingData->note.'<br>' : 'N/A<br>';
                 $qty++;
             }
         }
-
-       
+        
         $arry = array("qty"=>$qty,"itemDescription"=>$itemDescription,"itemPrice"=> $itemPrice ?? 0,"itemSubTotal"=> $itemSubTotal ?? 0,"itemDis"=> $itemDis ?? 0,"itemTax"=> $itemTax ?? 0,"location"=> $location  ?? 'N/A',"totalTax"=> $totalTax ?? 0, "totalDis"=> $totalDis ?? 0,"totalPaid"=> $totalPaid  ?? 0,'notes'=>$notes);
         return $arry;
     }
