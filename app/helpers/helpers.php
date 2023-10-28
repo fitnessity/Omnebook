@@ -2,7 +2,7 @@
 
     use Carbon\Carbon;
     use App\Repositories\{ReviewRepository,UserRepository,NetworkRepository};
-    use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction};
+    use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction,Products};
 
     function getUserRatings($user_id)
     {
@@ -36,6 +36,28 @@
                 $aOService = AddOnService::find($id);
                 $price =  $aOService->service_price * $qty[$key];
                 $text .= $qty[$key].' x '.$aOService->service_name.' = $'. $price.'<br>';
+            }
+        }else{
+            $text = "—";
+        }
+        return $text;
+    }
+
+    function getProducts($ids,$qtys,$types)
+    {
+        $text = '';$price = 0;
+        if($ids!= '') {
+            $ids = explode(',', $ids);
+            $qty = explode(',', $qtys);
+            $type = explode(',', $types);
+            foreach ($ids as $key => $id) {
+                $product = Products::find($id);
+                if($type[$key] == 'rent'){
+                    $price =  $product->rental_price * $qty[$key];
+                }else{
+                    $price =  $product->sale_price * $qty[$key];
+                }
+                $text .= $qty[$key].' x '.$product->name.' = $'. $price.'<br>';
             }
         }else{
             $text = "—";

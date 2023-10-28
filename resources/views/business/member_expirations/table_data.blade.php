@@ -7,26 +7,24 @@
 					<th>Name</th>
 					<th>Membership Type</th>
 					<th>Started on</th>
-					<th>End on</th>
+					<th>Expires On</th>
 					<th></th>
 				</tr>
 			</thead>
 			<tbody>
-				@php $y=0; @endphp
-				@forelse($expiringMembership as $i=>$list)
-					@if($list->Customer != '' && $list->business_price_detail != '')
-					@php $y++; @endphp
+				@php $counter = 1; @endphp
+				@forelse($memberships as $i=>$list)
 					<tr>
-						<td>{{$y}}</td>
-						<td>{{$list->Customer->full_name}}</td>
+						<td>{{$counter}}</td>
+						<td><a href="{{url('business/'.@$list->business_price_detail->cid.'/customers/'.@$list->Customer->id)}}" class="fw-medium" target="_blank">  {{@$list->Customer->full_name}}  </a> </td>
 						<td>{{@$list->business_price_detail->price_title}}</td>
 						<td>{{date('m-d-Y', strtotime($list->contract_date))}}</td>
 						<td>{{date('m-d-Y', strtotime($list->expired_at))}}</td>
 						<td>
-							<a href="{{route('personal.orders.index',['business_id'=>$list->business_id])}}"> View </a>
+							<a href="{{url('business/'.@$list->business_price_detail->cid.'/customers/'.@$list->Customer->id)}}"> View </a>
 						</td>
 					</tr>
-					@endif
+					 @php $counter++; @endphp
 				@empty
 					<tr> <td colspan="6"></td> </tr>
 				@endforelse

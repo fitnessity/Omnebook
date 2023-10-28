@@ -90,7 +90,7 @@ class CheckoutRegisterCartService
         
         $pretaxSubTotal = $this->getGrossSubtotalByItem($item);
 
-        return $pretaxSubTotal + $item["tax"] + (@$item['addOnServicesTotalPrice'] ?? 0);
+        return $pretaxSubTotal + $item["tax"] + (@$item['addOnServicesTotalPrice'] ?? 0) + (@$item['productTotalPrices'] ?? 0);
     }
 
     public function getPriceDetail($priceid){
