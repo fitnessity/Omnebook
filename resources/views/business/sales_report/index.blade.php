@@ -1,7 +1,19 @@
 @inject('request', 'Illuminate\Http\Request')
 @extends('layouts.business.header')
 @section('content')
+<style>
 
+	
+	@media print {
+		.printnone {
+			display: none !important;
+		}
+
+		.exclude-from-print {
+			display: block !important;
+		}
+	}
+</style>
 	@include('layouts.business.business_topbar')
 	<!-- ============================================================== -->
     <!-- Start right Content here -->
@@ -9,7 +21,13 @@
     <div class="main-content">
 		<div class="page-content">
                 <div class="container-fluid">
-					<div class="row mb-3">
+					<div class="row mb-3 printnone">
+						<div class="col-12">
+							<div class="page-heading">
+								<a href="{{route('business.reports.index')}}" class="btn btn-red">Back</a>
+							</div>
+						</div>
+								
 						<div class="col-12">
 							<div class="page-heading">
 								<label>Sales Report</label>
@@ -17,7 +35,7 @@
 						</div>
 					</div>
 		
-					<div class="row">
+					<div class="row printnone">
 						<div class="col-xxl-12">
 							<div class="card">
 								<div class="card-header">
@@ -30,9 +48,7 @@
 										<div class="card-body">
 											<div class="d-flex align-items-center mb-25">
 												<div class="avatar-sm flex-shrink-0">
-													<span class="avatar-title bg-primary rounded-circle fs-2">
-														1
-													</span>
+													<span class="avatar-title bg-primary rounded-circle fs-2">1</span>
 												</div>
 												<div class="flex-grow-1 ms-3 sale-date">
 													<h2 class="mb-0">Choose Dates</h2>
@@ -46,7 +62,7 @@
 													<div class="col-lg-7 col-md-8 col-sm-8">
 														<div class="form-group mb-10">	
 															<div class="input-group">
-																<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="startDate" id="startDate"  readonly="readonly" value="{{$filterStartDate->format('m/d/Y')}}">
+																<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="startDate" id="startDate"  readonly="readonly" value="{{$filterStartDate}}" placeholder="StartDate">
 																<div class="input-group-text bg-primary border-primary text-white">
 																	<i class="ri-calendar-2-line"></i>
 																</div>
@@ -61,7 +77,7 @@
 													<div class="col-lg-7 col-md-8 col-sm-8">
 														<div class="form-group mb-25">	
 															<div class="input-group">
-																<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="endDate" id="endDate"  readonly="readonly" value="{{$filterEndDate->format('m/d/Y')}}">
+																<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="endDate" id="endDate"  readonly="readonly" value="{{$filterEndDate}}"  placeholder="StartDate">
 																<div class="input-group-text bg-primary border-primary text-white">
 																	<i class="ri-calendar-2-line"></i>
 																</div>
@@ -72,7 +88,6 @@
 												<div class="row justify-content-md-center">
 													<div class="col-lg-6">
 														<a class="btn btn-black w-100 mb-25" data-behavior="on_change_submit"> Generate Reports </a>
-			
 													</div>
 												</div>
 											</form>
@@ -93,35 +108,38 @@
 											<div class="row justify-content-md-center">
 												<div class="col-lg-6">
 													<div class="form-group mb-10">
-														<select class="form-select" name="position" required="">
+														<select class="form-select" name="exportOptions" id="exportOptions" required="">
+															<option value="">Select Export Options</option>
 															<option value="print">Print this report</option>
-															<option value="export">Export to excel</option>
+															<option value="excel">Export to excel</option>
 															<option value="pdf">Export to PDF</option>
-															<option value="report">Save this report</option>
 														</select>
 													</div>
-													<button type="button" class="btn btn-black w-100 mb-25">
-                                                        Go!
-                                                    </button>
+													<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();">Go!</button>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<!-- end card -->
+							</div><!-- end card -->
 						</div><!-- end col -->
 					</div>
 					
 					@php $grandTax =  $grandDiscount =  $grandCash =  $grandCheck =  $grandCard = $grandComp = $grandTotal = 0; 
 					@endphp
-					<div class="row">
+					<div class="row exclude-from-print mt-5">
 						@foreach($sortedDates as $y=>$date)
 
 						@php  
-					        $cardDetails = clone $cardReport; // Create a fresh copy of the query
-					        $cardDetails = $cardDetails->whereDate('transaction.created_at','=', $date->format('Y-m-d'))->get();
+							$cardDetails = [];
+					        $cardDetails1 = clone $cardReportrec; // Create a fresh copy of the query
+					        $cardDetails1 = $cardDetails1->whereDate('transaction.created_at','=', $date->format('Y-m-d'));
 
+					        $cardDetails2 = clone $cardReportubs; // Create a fresh copy of the query
+					        $cardDetails2 = $cardDetails2->whereDate('transaction.created_at','=', $date->format('Y-m-d'));
+
+					        $cardDetails = $cardDetails1->get()->merge($cardDetails2->get());
+					       
 					        $cashData = clone $cashReport; // Create a fresh copy of the query
 					        $cashData = $cashData->whereDate('transaction.created_at','=', $date->format('Y-m-d'))->get();
 
@@ -150,96 +168,97 @@
 										               	$cardData[$card][] = $data1;
 										          	}
 									          	@endphp
-	                                        	@forelse($cardData as $i=>$data)
-	                                            <div class="accordion-item shadow">
-	                                                <h2 class="accordion-header" id="heading{{$i}}{{$y}}">
-	                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{$i}}{{$y}}" aria-expanded="true" aria-controls="collapse{{$i}}{{$y}}">
-	                                                        Credit Card ({{strtoupper($i)}}-Keyed)
-	                                                    </button>
-	                                                </h2>
-	                                                <div id="collapse{{$i}}{{$y}}" class="accordion-collapse collapse" aria-labelledby="heading{{$i}}{{$y}}" data-bs-parent="#default-accordion-example">
-	                                                    <div class="accordion-body">
-	                                                        <div class="row">
-																<div class="col-xl-12">
-																	<div class="card">
-																		<div class="">
-																			<div class="live-preview sales-report-table">
-																				<div class="table-responsive">
-																					<table class="table align-middle table-nowrap mb-25">
-																						<thead class="table-light">
-																							<tr>
-																								<th scope="col">Sale Date </th>
-																								<th scope="col">Client</th>
-																								<th scope="col">Item name</th>
-																								<th scope="col">Location</th>
-																								<th scope="col">Notes</th>
-																								<th scope="col">Item Price</th>
-																								<th scope="col">Qty </th>
-																								<th scope="col">Subtotal </th>
-																								<th scope="col">Discount Amount</th>
-																								<th scope="col">Tax </th>
-																								<th scope="col">Item Total </th>
-																								<th scope="col">Total Paid/Payment Method </th>
-																							</tr>
-																						</thead>
-																						<tbody>
-																							<tbody>
-																							@php $totalTaxCard = $totalPaidCard = $totalDiscountCard =  0 ; @endphp
-																							@forelse($data as $i=>$dt)
+									          	@if(count($cardData) > 0 )
+		                                        	@forelse($cardData as $i=>$data)
+		                                            <div class="accordion-item shadow">
+		                                                <h2 class="accordion-header" id="heading{{$i}}{{$y}}">
+		                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{$i}}{{$y}}" aria-expanded="true" aria-controls="collapse{{$i}}{{$y}}">
+		                                                        Credit Card ({{strtoupper($i)}}-Keyed)
+		                                                    </button>
+		                                                </h2>
+		                                                <div id="collapse{{$i}}{{$y}}" class="accordion-collapse collapse" aria-labelledby="heading{{$i}}{{$y}}" data-bs-parent="#default-accordion-example">
+		                                                    <div class="accordion-body">
+		                                                        <div class="row">
+																	<div class="col-xl-12">
+																		<div class="card">
+																			<div class="">
+																				<div class="live-preview sales-report-table">
+																					<div class="table-responsive">
+																						<table class="table align-middle table-nowrap mb-25">
+																							<thead class="table-light">
 																								<tr>
-																									<td> {{date('m-d-Y',strtotime($dt->created_at))}}</td>
-																									<td>@if($dt->getCustomer($business_id) != '') 
-																										<a href="{{url('business/'.$business_id.'/customers/'.@$dt->getCustomer($business_id)->id)}}" class="fw-medium">{{@$dt->getCustomer($business_id)->full_name}}</a>
-																										@else N/A
-																									@endif</td>
-																									<td>{!!$dt->item_description($business_id)['itemDescription']!!}</td>
-																									<td>{!! @$dt->item_description($business_id)['location'] !!}</td>
-																									<td>{!!$dt->item_description($business_id)['notes']!!}</td>
-																									<td>{!!$dt->item_description($business_id)['itemPrice']!!}</td>
-																									<td>{!!$dt->item_description($business_id)['qty']!!}</td>
-																									<td>{!!$dt->item_description($business_id)['itemPrice']!!}</td>
-																									<td>{!!$dt->item_description($business_id)['itemDis']!!}</td>
-																									<td>{!!$dt->item_description($business_id)['itemTax']!!}</td>
-																									<td>{!!$dt->item_description($business_id)['itemSubTotal']!!}</td>
-																									<td>{!!$dt->item_description($business_id)['itemSubTotal']!!}</td>
+																									<th scope="col">Sale Date </th>
+																									<th scope="col">Client</th>
+																									<th scope="col">Item name</th>
+																									<th scope="col">Location</th>
+																									<th scope="col">Notes</th>
+																									<th scope="col">Item Price</th>
+																									<th scope="col">Qty </th>
+																									<th scope="col">Subtotal </th>
+																									<th scope="col">Discount Amount</th>
+																									<th scope="col">Tax </th>
+																									<th scope="col">Item Total </th>
+																									<th scope="col">Total Paid/Payment Method </th>
 																								</tr>
-																								@php 
-																									$totalTaxCard += $dt->item_description($business_id)['totalTax'];
+																							</thead>
+																							<tbody>
+																								<tbody>
+																								@php $totalTaxCard = $totalPaidCard = $totalDiscountCard =  0 ; @endphp
+																								@forelse($data as $i=>$dt)
+																									<tr>
+																										<td> {{date('m-d-Y',strtotime($dt->created_at))}}</td>
+																										<td>@if($dt->getCustomer($business_id) != '') 
+																											<a href="{{url('business/'.$business_id.'/customers/'.@$dt->getCustomer($business_id)->id)}}" class="fw-medium">{{@$dt->getCustomer($business_id)->full_name}}</a>
+																											@else N/A
+																										@endif</td>
+																										<td>{!!$dt->item_description($business_id)['itemDescription']!!}</td>
+																										<td>{!! @$dt->item_description($business_id)['location'] !!}</td>
+																										<td>{!!$dt->item_description($business_id)['notes']!!}</td>
+																										<td>{!!$dt->item_description($business_id)['itemPrice']!!}</td>
+																										<td>{!!$dt->item_description($business_id)['qty']!!}</td>
+																										<td>{!!$dt->item_description($business_id)['itemPrice']!!}</td>
+																										<td>{!!$dt->item_description($business_id)['itemDis']!!}</td>
+																										<td>{!!$dt->item_description($business_id)['itemTax']!!}</td>
+																										<td>{!!$dt->item_description($business_id)['itemSubTotal']!!}</td>
+																										<td>{!!$dt->item_description($business_id)['itemSubTotal']!!} </td>
+																									</tr>
+																									@php 
+																										$totalTaxCard += $dt->item_description($business_id)['totalTax'];
 
-																									$totalDiscountCard += $dt->item_description($business_id)['totalDis'];
+																										$totalDiscountCard += $dt->item_description($business_id)['totalDis'];
 
-																									$totalPaidCard += $dt->item_description($business_id)['totalPaid'];
-																								@endphp
-																							@empty
-	                                            											@endforelse
-																						</tbody>
-																						@php $grandTax += $totalTaxCard;
-																							$grandDiscount += $totalDiscountCard;
-																							$grandCard += $totalPaidCard;
-																							$grandTotal += $totalPaidCard;
-																						@endphp
-																						<tfoot class="table-light">
-																							<tr>
-																								<td colspan="9"></td>
-																								<td>Tax ${{$totalTaxCard}}</td>
-																								<td colspan="1"></td>
-																								<td>Total ${{$totalPaidCard}}</td>
-																							</tr>
-																						</tfoot>
-																					</table>
+																										$totalPaidCard += $dt->item_description($business_id)['totalPaid'];
+																									@endphp
+																								@empty
+		                                            											@endforelse
+																							</tbody>
+																							@php $grandTax += $totalTaxCard;
+																								$grandDiscount += $totalDiscountCard;
+																								$grandCard += $totalPaidCard;
+																								echo $grandCard;
+																								$grandTotal += $totalPaidCard;
+																							@endphp
+																							<tfoot class="table-light">
+																								<tr>
+																									<td colspan="9"></td>
+																									<td>Tax ${{$totalTaxCard}}</td>
+																									<td colspan="1"></td>
+																									<td>Total ${{$totalPaidCard}}</td>
+																								</tr>
+																							</tfoot>
+																						</table>
+																					</div>
 																				</div>
-																				<!-- end table responsive -->
 																			</div>
-																		</div><!-- end card-body -->
-																	</div><!-- end card -->
-																</div><!-- end col -->
-															</div>
-															<!--end row-->
-	                                                    </div>
-	                                                </div>
-	                                            </div>
-	                                            @empty
-	                                            @endforelse
+																		</div>
+																	</div>
+																</div>
+		                                                    </div>
+		                                                </div>
+		                                            </div>
+		                                            @empty
+		                                            @endforelse
+		                                        @endif
 												
 												@if(count($cashData) > 0 )
 	                                            <div class="accordion-item shadow">
@@ -304,7 +323,7 @@
 																						</tbody>
 																						@php $grandTax += $totalTax;
 																							$grandDiscount += $totalDiscount;
-																							$grandCash = $totalPaid;
+																							$grandCash += $totalPaid;
 																							$grandTotal += $grandCash;
 																						@endphp
 																						<tfoot class="table-light">
@@ -392,7 +411,7 @@
 																						</tbody>
 																						@php $grandTax += $totalTaxCheck;
 																							$grandDiscount += $totalDisCheck;
-																							$grandCheck = $totalPaidCheck;
+																							$grandCheck += $totalPaidCheck;
 																							$grandTotal += $grandCheck;
 																						@endphp
 																						<tfoot class="table-light">
@@ -507,7 +526,7 @@
 						@endforeach
 					</div>
 			
-					<div class="row">
+					<div class="row exclude-from-print mt-5">
 						<div class="col-xxl-12">
 							<div class="card">
                                 <div class="card-header align-items-center d-flex">
@@ -558,27 +577,68 @@
                             </div><!-- end card -->
 						</div>
 					</div>
-					
-                </div>
-                <!-- container-fluid -->
-            </div>
-            <!-- End Page-content -->
-     </div><!-- end main content-->
-</div><!-- END layout-wrapper -->
+                </div><!-- container-fluid -->
+            </div><!-- End Page-content -->
+     	</div><!-- end main content-->
+	</div><!-- END layout-wrapper -->
 
 
 @include('layouts.business.footer')
 	<script>
 		flatpickr(".flatpickr-range", {
-	        dateFormat: "m/d/Y",
-	        maxDate: "01/01/2050"
-	   	});
+		   	altInput: true,
+		   	altFormat: "m/d/Y",
+	     	dateFormat: "Y-m-d",
+	     	maxDate: "2050-01-01"
+		});
 
 	  
 	    $(document).on('click', '[data-behavior~=on_change_submit]', function(e){
 			e.preventDefault()
 			$(this).parents('form').submit();
 		});
+
+		function exportData(){
+	
+			let startDate = '<?= $filterStartDate ? $filterStartDate->format("Y-m-d") : ''; ?>' || $('#startDate').val();
+			let endDate = '<?= $filterEndDate ? $filterEndDate->format("Y-m-d") : ''; ?>' ||  $('#endDate').val();
+			var type = $('#exportOptions').val();
+			var filename =  '';
+			if(type != '' && type != 'print'){
+				var downloadUrl = '{{ route("business.sales_report.export") }}' +
+		        '?endDate=' + endDate +
+		        '&startDate=' + startDate +
+		        '&type=' + type;
+
+			    if(type == 'excel'){
+		    		filename = 'SalesReport.xlsx';
+		    	}else if(type == 'pdf'){
+		    		filename = 'SalesReport.pdf';
+		    	}
+			
+			    var link = document.createElement('a');
+			    link.href = downloadUrl;
+			    link.download = 'SalesReport.xlsx';
+			    document.body.appendChild(link);
+			    link.click();
+			    document.body.removeChild(link);
+			}else if(type == 'print'){
+				$('.accordion-button').removeClass('collapsed');
+				$('.accordion-collapse').addClass('show');
+				$('.table').removeClass('table-nowrap');
+
+				$('.sales-report-table table thead tr th').css({
+			        'background': '#ea1515',
+			        'color': '#fff',
+			        'padding': '10px 5px',
+			        'border': '1px solid #878a99',
+			        'border-collapse': 'collapse'
+			    });
+				print();
+
+				$('.table').addClass('table-nowrap');
+			}
+		}
 
 	</script>
 @endsection
