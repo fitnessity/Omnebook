@@ -432,6 +432,11 @@ class BookingRepository
         $addOnServicesId = $booking_details->addOnservice_ids;
         $addOnServicesQty = $booking_details->addOnservice_qty;
         $addOnPrice= $booking_details->addOnservice_total ?? 0;
+
+        $productIds = $booking_details->productIds;
+        $productQtys = $booking_details->productQtys;
+        $productTypes= $booking_details->productTypes;
+
         $pmt_type = $booking_status->getPaymentDetail();
         //var_dump($pmt_type);
         $last4 = $pmt_type;
@@ -472,6 +477,9 @@ class BookingRepository
             "addOnServicesId" => $addOnServicesId,
             "addOnServicesQty" => $addOnServicesQty,
             "addOnPrice" => $addOnPrice,
+            "productIds" => $productIds,
+            "productQtys" => $productQtys,
+            "productTypes" => $productTypes,
         );
        /*$arayy =array_values(array_unique($one_array, SORT_REGULAR));*/
         return $one_array;

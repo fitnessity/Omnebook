@@ -57,6 +57,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('suspend', 'UserBookingDetailController@suspend')->name('suspend');
     Route::post('terminate', 'UserBookingDetailController@terminate')->name('terminate');
     Route::get('customers/card_editing_form', 'CustomerController@card_editing_form')->name('customers.card_editing_form');
+    Route::get('customers/import', 'CustomerController@importcustomer')->name('customers.import');
     Route::any('customers/refresh_payment_methods', 'CustomerController@refresh_payment_methods')->name('customers.refresh_payment_methods');
     Route::post('customers/import-customer','CustomerController@importcustomer')->name('customers.import');
     Route::resource('customers', 'CustomerController')->only(['index', 'update','store']);
@@ -69,13 +70,19 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('editcartmodel', 'OrderController@editcartmodel')->name('editcartmodel');
     Route::any('addToCartForCheckout', 'OrderController@addToCartForCheckout')->name('addToCartForCheckout');
     Route::any('removeFromCartForCheckout', 'OrderController@removeFromCartForCheckout')->name('removeFromCartForCheckout');
+    Route::any('order-product-details', 'OrderController@productDetails')->name('order-product-details');
+    Route::any('open-product-modal', 'OrderController@openProductModal')->name('open-product-modal');
+    Route::any('get-category-product', 'OrderController@getCategoryProduct')->name('get-category-product');
 
     Route::get('/member_expirations','MembershipExpirationsController@index')->name('member_expirations.index');
     Route::post('/getMemberships','MembershipExpirationsController@getMemberships')->name('member_expirations.getMemberships');
     Route::get('/getMoreMemberships','MembershipExpirationsController@getMoreMemberships')->name('member_expirations.getMoreMemberships');
-    Route::get('/exportMembership','MembershipExpirationsController@exportMembership')->name('member_expirations.exportMembership');
+    Route::get('/member_expirations/export','MembershipExpirationsController@export')->name('member_expirations.export');
 
     Route::get('/sales_report','SalesReportController@index')->name('sales_report.index');
+    Route::get('/sales_report/export','SalesReportController@export')->name('sales_report.export');
+
+    Route::resource('reports', 'ReportsController')->only(['index']);
 
 });
 
@@ -133,6 +140,8 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/providers_onboarded','DesignController@providers_onboarded')->name('providers_onboarded');
 	Route::get('/onboarded_steps','DesignController@onboarded_steps')->name('onboarded_steps');   
 	Route::get('/home','DesignController@home')->name('home');  
+	Route::get('/reports','DesignController@reports')->name('reports'); 
+	Route::get('/settings','DesignController@settings')->name('settings'); 
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
