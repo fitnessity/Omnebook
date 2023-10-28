@@ -375,12 +375,12 @@ class OrderController extends BusinessBaseController
                 'addOnservice_ids' =>@$item['addOnServicesId'],
                 'addOnservice_qty' => @$item['addOnServicesQty'],
                 'addOnservice_total' => @$item['addOnServicesTotalPrice'] ?? 0 ,
-                'productIds' => @$item['productIds'],
-                'productQtys' => @$item['productQtys'],
-                'productSize' => @$item['productSize'],
-                'productColor' => @$item['productColor'],
-                'productTypes' => @$item['productTypes'],
-                'productTotalPrices' => @$item['productTotalPrices'],
+                // 'productIds' => @$item['productIds'],
+                // 'productQtys' => @$item['productQtys'],
+                // 'productSize' => @$item['productSize'],
+                // 'productColor' => @$item['productColor'],
+                // 'productTypes' => @$item['productTypes'],
+                // 'productTotalPrices' => @$item['productTotalPrices'],
             ]);
             $booking_detail->transfer_to_provider();
             $bookidarray [] = $booking_detail->id;
