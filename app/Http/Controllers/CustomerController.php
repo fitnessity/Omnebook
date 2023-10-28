@@ -470,7 +470,13 @@ class CustomerController extends Controller {
         $customer = Customer::find($request->cid);
         $parentCustomer = Customer::find($request->currentCid);
         if($parentCustomer->parent_cus_id != $customer->id && $customer->parent_cus_id != $customer->id){
-            $customer->update(['parent_cus_id' => $request->currentCid]);
+            $parentCustomer = Customer::find($request->currentCid);
+            if($parentCustomer->parent_cus_id != ''){
+                $pid = $parentCustomer->parent_cus_id;
+            }else{
+                $pid = $request->currentCid;
+            }
+            $customer->update(['parent_cus_id' => $pid]);
         }
     }
 
