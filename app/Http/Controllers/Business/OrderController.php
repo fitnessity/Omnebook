@@ -11,7 +11,7 @@ use DateTime;
 use Config;
 use DateInterval;
 use DateTimeZone;
-use App\{CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,ProductsCategory,BusinessPriceDetails,user,Transaction,Recurring,BusinessPriceDetailsAges,SGMailService,BookingCheckinDetails,Products};
+use App\{CompanyInformation,BusinessSubscriptionPlan,UserBookingDetail,BusinessServices,Customer,UserBookingStatus,ProductsCategory,BusinessPriceDetails,user,Transaction,Recurring,BusinessPriceDetailsAges,SGMailService,BookingCheckinDetails,Products,ProductSize,ProductColors};
 use App\Repositories\BookingRepository;
 use App\Services\CheckoutRegisterCartService;
 
@@ -375,6 +375,12 @@ class OrderController extends BusinessBaseController
                 'addOnservice_ids' =>@$item['addOnServicesId'],
                 'addOnservice_qty' => @$item['addOnServicesQty'],
                 'addOnservice_total' => @$item['addOnServicesTotalPrice'] ?? 0 ,
+                'productIds' => @$item['productIds'],
+                'productQtys' => @$item['productQtys'],
+                'productSize' => @$item['productSize'],
+                'productColor' => @$item['productColor'],
+                'productTypes' => @$item['productTypes'],
+                'productTotalPrices' => @$item['productTotalPrices'],
             ]);
             $booking_detail->transfer_to_provider();
             $bookidarray [] = $booking_detail->id;
@@ -688,6 +694,17 @@ class OrderController extends BusinessBaseController
 
                         <div class="col-md-6 col-xs-6">
                             <div class="text-left">
+                                <label>PRODUCTS:</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-6">
+                            <div class="float-end text-right">
+                                <span>'.getProducts(@$odt['productIds'],@$odt['productQtys'],@$odt['productTypes']).'</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-xs-6">
+                            <div class="text-left">
                                 <label>PARTICIPANT QUANTITY:</label>
                             </div>
                         </div>
@@ -889,15 +906,13 @@ class OrderController extends BusinessBaseController
     }
 
     public function editcartmodel(Request $request){
-        $cart_item = [];
+        $cart_item = $cart = [];
         if (session()->has('cart_item_for_checkout')) {
             $cart_item = session()->get('cart_item_for_checkout');
         }
-        $html = '';
-        $salestaxajax = 0;
-        $duestaxajax = 0;
-        $result = '';
-        $cart = [];
+        $html = $result = '';
+        $salestaxajax = $duestaxajax = 0;
+
         if(in_array($request->customerId.'~~'.$request->priceid, array_keys($cart_item["cart_item"]))) {
             $cart = $cart_item["cart_item"][$request->customerId.'~~'.$request->priceid];
             $cartselectedpriceid = BusinessPriceDetails::where('id',$cart['priceid'])->first();
@@ -932,9 +947,9 @@ class OrderController extends BusinessBaseController
             $qtysArray = explode(',', $cart['addOnServicesQty']);
             $addOnServices = $cartselectedcategory  != '' ?  $cartselectedcategory->AddOnService: [];
             $addOnData = view('business.orders.add_on_service')->with(['addOnServices' =>$addOnServices ,'idsArray'=>$idsArray ,'qtysArray'=>$qtysArray ,'ajax'=>'ajax' ]);
-
+            $business_id = $cartselectedpriceid->cid;
             $view1 = view('business.orders.edit_cart', compact('cart','aduprice','childprice','infantprice','salestaxajax','duestaxajax','aduqty','childqty','infantqty','actscheduleid','participate','membershiplist','cartselectedpriceid','cartselectedcategory','program_list','catelist','pricelist','pageid','indexOfAry',
-                'addOnData'));
+                'addOnData','business_id'));
 
             $view2 = view('business.orders.participate_modal', compact('aduprice','childprice','infantprice','aduqty','childqty','infantqty','p_session'));
 
@@ -952,9 +967,19 @@ class OrderController extends BusinessBaseController
         $parti_from_chkout_regi = $request->has('pc_value') != '' ? array('id'=>$customerId, 'from'=>$request->pc_user_tp, 'pc_name'=>$request->pc_value) : array();
         $categoryid = $request->has('categoryid') != '' ? $request->categoryid : '';
         $p_session = $request->has('pay_session') != '' ? $request->pay_session : '';
+
         $addOnServicesId = $request->has('addOnServicesId') != '' ? $request->addOnServicesId: '';
         $addOnServicesQty = $request->has('addOnServicesQty') != '' ? $request->addOnServicesQty: '';
         $addOnServicesTotalPrice = $request->has('addOnServicesTotalPrice') != '' ? $request->addOnServicesTotalPrice: 0 ;
+        $aos_details = $request->has('aos_details') != '' ? $request->aos_details: '';
+
+        $product_details = $request->has('product_details') != '' ? $request->product_details: '';
+        $productIds = $request->has('productIds') != '' ? $request->productIds: '';
+        $productQtys = $request->has('productQtys') != '' ? $request->productQtys: '';
+        $productSize = $request->has('productSize') != '' ? $request->productSize: '';
+        $productColor = $request->has('productColor') != '' ? $request->productColor: '';
+        $productTypes = $request->has('productTypes') != '' ? $request->productTypes: '';
+        $productTotalPrices = $request->has('productTotalPrices') != '' ? $request->productTotalPrices: 0 ;
     
         $pid = $request->pid ?? 0;
         $priceid = $request->priceid ?? 0;
@@ -984,7 +1009,7 @@ class OrderController extends BusinessBaseController
         }
 
         if ($service != '') {
-            $itemArray = array($customerId.'~~'.$request->priceid=>array('type'=>$service->service_type, 'name'=>$service->program_name, 'code'=>$service->id,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'tax'=>$tax,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'categoryid'=>$categoryid ,'p_session'=>$p_session,'addOnServicesId'=> $addOnServicesId, 'addOnServicesQty' => $addOnServicesQty, 'addOnServicesTotalPrice' => $addOnServicesTotalPrice, 'customerId' => $customerId ));
+            $itemArray = array($customerId.'~~'.$request->priceid=>array('type'=>$service->service_type, 'name'=>$service->program_name, 'code'=>$service->id,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'tax'=>$tax,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'categoryid'=>$categoryid ,'p_session'=>$p_session,'addOnServicesId'=> $addOnServicesId, 'addOnServicesQty' => $addOnServicesQty, 'addOnServicesTotalPrice' => $addOnServicesTotalPrice, 'aos_details' => $aos_details, 'product_details' => $product_details,'productIds' => $productIds, 'productQtys' => $productQtys, 'productSize' => $productSize, 'productColor' => $productColor, 'productTypes' =>$productTypes ,'productTotalPrices' =>$productTotalPrices, 'customerId' => $customerId ));
 
             if(!empty($cart_item["cart_item"])) {
                 if(in_array($customerId.'~~'.$request->priceid, array_keys($cart_item["cart_item"]))) {
@@ -1014,6 +1039,16 @@ class OrderController extends BusinessBaseController
                             $cart_item["cart_item"][$k]["addOnServicesId"] = $addOnServicesId;
                             $cart_item["cart_item"][$k]["addOnServicesQty"] = $addOnServicesQty;
                             $cart_item["cart_item"][$k]["addOnServicesTotalPrice"] = $addOnServicesTotalPrice;
+                            $cart_item["cart_item"][$k]["aos_details"] = $aos_details;
+
+                            $cart_item["cart_item"][$k]["product_details"] = $product_details;
+                            $cart_item["cart_item"][$k]["productIds"] = $productIds;
+                            $cart_item["cart_item"][$k]["productQtys"] = $productQtys;
+                            $cart_item["cart_item"][$k]["productSize"] = $productSize;
+                            $cart_item["cart_item"][$k]["productColor"] = $productColor;
+                            $cart_item["cart_item"][$k]["productTypes"] = $productTypes;
+                            $cart_item["cart_item"][$k]["productTotalPrices"] = $productTotalPrices;
+
                             $cart_item["cart_item"][$k]["customerId"] = $customerId;
                         }
                     }
@@ -1052,4 +1087,48 @@ class OrderController extends BusinessBaseController
         
         return redirect()->route('business.orders.create', ['business_id'=>Auth::user()->cid,'cus_id' => $request->pageid]);
     }
+
+    public function productDetails(Request $request){
+        $product = Products::where(['business_id' =>$request->cid ,'id'=>$request->pid])
+            ->when($request->categoryId ,function($q) use($request){
+                $q->where('category', '!=', '')->whereRaw("FIND_IN_SET(?, category)", [$request->categoryId]);
+            })->first();
+
+        $chk = $request->chk;
+        if($product){
+            return view('business.orders.product_data', ['product' =>$product ,'productSize' =>ProductSize::orderBy('name')->get(),'productColor' =>ProductColors::orderBy('name')->get(),'chk'=>$chk]);
+        }
+    }
+
+    public function openProductModal(Request $request){
+        $productCategory = ProductsCategory::orderBy('name')->get();
+        $productData = '';
+        if($request->ids){
+            foreach(explode(',',$request->ids) as $id){
+                $productData = $this->productDetails(new Request([
+                    'cid' => $request->cid,  
+                    'pid' => $id,
+                    'chk' => $request->chk,
+                ]));
+            }
+        }
+        return view('business.orders.product_modal', ['productCategory' =>$productCategory,'chk'=>$request->chk,'productData'=>$productData ,'business_id' =>$request->cid]);
+    }
+
+    function getCategoryProduct(Request $request){
+        $html = '';
+        $productList = Products::where('category', '!=', '')->whereRaw("FIND_IN_SET(?, category)", [$request->id])->get();
+        $html .= '<div class="select0service category-search mb-15">
+            <label>Select Item</label>
+            <select id="categoryProList" class="form-select">
+                <option value="">Select Item</option>';
+                foreach($productList as $p){
+                    $html .= '<option value="'.$p->id.'">'.$p->name.'</option>';
+                }
+        $html .= '</select>
+        </div>';
+
+        return $html;
+    }
+   
 }
