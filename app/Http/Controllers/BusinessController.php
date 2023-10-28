@@ -11,7 +11,7 @@ use Auth,Response,Redirect,Validator,Input,Image,File,DB,DateTime,Config,Storage
 use Carbon\Carbon;
 use Illuminate\Support\Facades\{Gate,Log};
 
-use App\{PageAttachment,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,BusinessActivityScheduler,PageLike,Notification,Sports,BusinessReview,BusinessPostViews,UserFollow,UserBookingStatus,UserBookingDetail,MailService,User,UserService,UserProfessionalDetail,PagePost,PagePostComments,PagePostCommentsLike,PagePostLikes,PagePostSave,CompanyInformation,Miscellaneous,BusinessServiceReview};
+use App\{PageAttachment,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,BusinessActivityScheduler,PageLike,Notification,Sports,BusinessReview,BusinessPostViews,UserFollow,UserBookingStatus,UserBookingDetail,MailService,User,UserService,UserProfessionalDetail,PagePost,PagePostComments,PagePostCommentsLike,PagePostLikes,PagePostSave,CompanyInformation,Miscellaneous,BusinessServiceReview,Transaction};
 
 class BusinessController extends Controller
 {
@@ -33,11 +33,12 @@ class BusinessController extends Controller
 
         
         $date = explode(' to ', @$dates);
+
         $startDate = @$date[0] != '' ? date('Y-m-d',strtotime($date[0])): $startDate;
         $endDate = array_key_exists(1,$date) ? date('Y-m-d',strtotime($date[1])): $endDate;
 
-        $startDateCalendar =  @$date[0] != '' ?  $date[0]: Carbon::now()->firstOfMonth()->format('m-d-Y');
-        $endDateCalendar = array_key_exists(1,$date) ? $date[1] : Carbon::now()->lastOfMonth()->format('m-d-Y');
+        $startDateCalendar =  @$date[0] != '' ?  $date[0]: Carbon::now()->firstOfMonth()->format('Y-m-d');
+        $endDateCalendar = array_key_exists(1,$date) ? $date[1] : Carbon::now()->lastOfMonth()->format('Y-m-d');
         
         $startDateMonth = Carbon::parse($startDate)->format('m'); 
         $endDateMonth =  Carbon::parse($endDate)->format('m');
@@ -84,6 +85,42 @@ class BusinessController extends Controller
 
             $booking = @$business->UserBookingDetails();
 
+          
+            $totalSales = Transaction::select('transaction.*')
+              ->where('item_type', 'UserBookingStatus')
+              ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+              ->join('user_booking_details as ubd', function($join) use ($business_id) {
+                  $join->on('ubd.booking_id', '=', 'ubs.id')
+                      ->where('ubd.business_id', '=', $business_id);
+              })->whereDate('transaction.created_at', '>=', $startDate)->whereDate('transaction.created_at', '<=', $endDate)->sum('transaction.amount');
+
+            $previousTotalSales = Transaction::select('transaction.*')
+              ->where('item_type', 'UserBookingStatus')
+              ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+              ->join('user_booking_details as ubd', function($join) use ($business_id) {
+                  $join->on('ubd.booking_id', '=', 'ubs.id')
+                      ->where('ubd.business_id', '=', $business_id);
+              })->whereDate('transaction.created_at','=',Carbon::now()->subMonth()->format('Y-m-d'))->sum('transaction.amount');
+
+
+            $totalSalesforRecurring = Transaction::select('transaction.*')
+              ->where('item_type', 'Recurring')
+              ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+              ->join('user_booking_details as ubd', function($join) use ($business_id) {
+                  $join->on('ubd.booking_id', '=', 'ubs.id')
+                      ->where('ubd.business_id', '=', $business_id);
+              })->whereDate('transaction.created_at', '>=', $startDate)->whereDate('transaction.created_at', '<=', $endDate)->sum('transaction.amount');
+
+            $previousTotalSalesforRecurring = Transaction::select('transaction.*')
+              ->where('item_type', 'Recurring')
+              ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+              ->join('user_booking_details as ubd', function($join) use ($business_id) {
+                  $join->on('ubd.booking_id', '=', 'ubs.id')
+                      ->where('ubd.business_id', '=', $business_id);
+              })->whereDate('transaction.created_at','=',Carbon::now()->subMonth()->format('Y-m-d'))->sum('transaction.amount');
+
+            $totalSales += $totalSalesforRecurring;
+            $previousTotalSales += $previousTotalSalesforRecurring;
             if(!empty($booking->get())){
                 foreach($booking->get() as $b){
                     if(!empty($b->BookingCheckinDetails()->get())){
@@ -98,15 +135,15 @@ class BusinessController extends Controller
                         $topBookedPriceId[] = $b->business_price_detail->id;
                     }
                     
-                    $totalSales += $b->userBookingStatus->Transaction()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->sum('amount');
-                    $previousTotalSales += $b->userBookingStatus->Transaction()->whereMonth('created_at','=',Carbon::now()->subMonth()->format('m'))->sum('amount');
+                    /*$totalSales += $b->userBookingStatus->Transaction()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->sum('amount');
+                    $previousTotalSales += $b->userBookingStatus->Transaction()->whereMonth('created_at','=',Carbon::now()->subMonth()->format('m'))->sum('amount');*/
 
                     $in_person += $b->userBookingStatus->Transaction()->where(['user_type' =>'Customer'])->count();
                     $online +=  $b->userBookingStatus->Transaction()->where(['user_type' =>'user'])->count();
                 }
             }
 
-            $totalSales += $compltedpmtcnt;
+            //$totalSales += $compltedpmtcnt;
               
             //print_r($totalSales);exit();
 
