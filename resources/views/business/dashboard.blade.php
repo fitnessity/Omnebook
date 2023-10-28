@@ -939,8 +939,10 @@
         date1 = '{{$startDateCalendar}}';
         date2 = '{{$endDateCalendar}}';
 		flatpickr(".flatpickr-range", {
+            altInput: true,
 	        mode:  "range",
-	        dateFormat: "m-d-Y",
+            altFormat: "m-d-Y",
+	        dateFormat: "Y-m-d",
 	        maxDate: "01-01-2050",
             defaultDate: [date1, date2],
             onChange: function(selectedDates, dateStr, instance) {
