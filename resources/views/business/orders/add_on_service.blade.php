@@ -17,13 +17,13 @@
 					<div class="qtyButtons">
 						<div class="qty count-members ">
 							<span class="minus bg-darkbtn addonminus" aid="{{$aos->id}}" chk="{{$ajax}}"><i class="fa fa-minus"></i></span>
-							<input type="text" class="count" name="add-one" id="add-one{{$aos->id}}" min="0" value="{{ in_array($aos->id, $idsArray) ? @$qtysArray[array_search($aos->id, $idsArray)] : 0 }}" readonly="" apirce="{{$aos->service_price}}">
+							<input type="text" class="count" name="add-one" id="add-one{{$aos->id}}" min="0" value="{{ in_array($aos->id, $idsArray) ? @$qtysArray[array_search($aos->id, $idsArray)] : 0 }}" readonly="" apirce="{{$aos->service_price}}" sname="{{ $aos->service_name}}">
 							<span class="plus bg-darkbtn addonplus" aid="{{$aos->id}}" chk="{{$ajax}}"><i class="fa fa-plus"></i></span>
 						</div>   
 					</div>
 				</div>
 		  	@empty
-				<p>Not Available</p>
+				<p>Not Options Available</p>
 			@endforelse
 		</div>
 	</div>
