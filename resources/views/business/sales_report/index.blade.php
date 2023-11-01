@@ -235,7 +235,6 @@
 																							@php $grandTax += $totalTaxCard;
 																								$grandDiscount += $totalDiscountCard;
 																								$grandCard += $totalPaidCard;
-																								echo $grandCard;
 																								$grandTotal += $totalPaidCard;
 																							@endphp
 																							<tfoot class="table-light">
@@ -324,7 +323,7 @@
 																						@php $grandTax += $totalTax;
 																							$grandDiscount += $totalDiscount;
 																							$grandCash += $totalPaid;
-																							$grandTotal += $grandCash;
+																							$grandTotal += $totalPaid;
 																						@endphp
 																						<tfoot class="table-light">
 																							<tr>
@@ -412,7 +411,7 @@
 																						@php $grandTax += $totalTaxCheck;
 																							$grandDiscount += $totalDisCheck;
 																							$grandCheck += $totalPaidCheck;
-																							$grandTotal += $grandCheck;
+																							$grandTotal += $totalPaidCheck;
 																						@endphp
 																						<tfoot class="table-light">
 																							<tr>
