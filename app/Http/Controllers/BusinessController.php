@@ -106,25 +106,23 @@ class BusinessController extends Controller
 
 
             $totalSalesforRecurring = Transaction::select('transaction.*')
-              ->where('item_type', 'Recurring')
-              ->where('kind','!=' ,'comp')
-              ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
-              ->join('user_booking_details as ubd', function($join) use ($business_id) {
-                  $join->on('ubd.booking_id', '=', 'ubs.id')
-                      ->where('ubd.business_id', '=', $business_id);
-              })->whereDate('transaction.created_at', '>=', $startDate)->whereDate('transaction.created_at', '<=', $endDate)->sum('transaction.amount');
+                ->where('item_type', 'Recurring')
+                ->where('kind','!=' ,'comp')
+                ->join('recurring as rec', 'rec.id', '=', 'transaction.item_id')
+                ->where('rec.business_id', '=', $business_id)
+                ->whereDate('transaction.created_at', '>=', $startDate)
+                ->whereDate('transaction.created_at', '<=', $endDate)->sum('transaction.amount');
 
             $previousTotalSalesforRecurring = Transaction::select('transaction.*')
               ->where('item_type', 'Recurring')
               ->where('kind','!=', 'comp')
-              ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
-              ->join('user_booking_details as ubd', function($join) use ($business_id) {
-                  $join->on('ubd.booking_id', '=', 'ubs.id')
-                      ->where('ubd.business_id', '=', $business_id);
-              })->whereDate('transaction.created_at','=',Carbon::now()->subMonth()->format('Y-m-d'))->sum('transaction.amount');
+              ->join('recurring as rec', 'rec.id', '=', 'transaction.item_id')
+                ->where('rec.business_id', '=', $business_id)
+                ->whereDate('transaction.created_at', '=', Carbon::now()->subMonth()->format('Y-m-d'))->sum('transaction.amount');
 
             $totalSales += $totalSalesforRecurring;
             $previousTotalSales += $previousTotalSalesforRecurring;
+
             if(!empty($booking->get())){
                 foreach($booking->get() as $b){
                     if(!empty($b->BookingCheckinDetails()->get())){
@@ -139,17 +137,10 @@ class BusinessController extends Controller
                         $topBookedPriceId[] = $b->business_price_detail->id;
                     }
                     
-                    /*$totalSales += $b->userBookingStatus->Transaction()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->sum('amount');
-                    $previousTotalSales += $b->userBookingStatus->Transaction()->whereMonth('created_at','=',Carbon::now()->subMonth()->format('m'))->sum('amount');*/
-
                     $in_person += $b->userBookingStatus->Transaction()->where(['user_type' =>'Customer'])->count();
                     $online +=  $b->userBookingStatus->Transaction()->where(['user_type' =>'user'])->count();
                 }
             }
-
-            //$totalSales += $compltedpmtcnt;
-              
-            //print_r($totalSales);exit();
 
             $totalSales = number_format($totalSales,2,'.','');
             $totalsalePercentage =  $previousTotalSales != 0 ? number_format(($totalSales - $previousTotalSales)*100/$previousTotalSales,2,'.','') : 0;

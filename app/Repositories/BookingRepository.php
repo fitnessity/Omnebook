@@ -436,6 +436,7 @@ class BookingRepository
         $productIds = $booking_details->productIds;
         $productQtys = $booking_details->productQtys;
         $productTypes= $booking_details->productTypes;
+        $productPrice= $booking_details->productTotalPrices ?? 0;
 
         $pmt_type = $booking_status->getPaymentDetail();
         //var_dump($pmt_type);
@@ -477,6 +478,7 @@ class BookingRepository
             "addOnServicesId" => $addOnServicesId,
             "addOnServicesQty" => $addOnServicesQty,
             "addOnPrice" => $addOnPrice,
+            "productPrice" => $productPrice,
             "productIds" => $productIds,
             "productQtys" => $productQtys,
             "productTypes" => $productTypes,

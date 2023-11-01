@@ -115,8 +115,9 @@
 																			</div>
 																		</div>
 																	</div>
-																	<input type="hidden"  name="duration_cnt" id="duration_cnt" value="{{ count($businessActivity)-1 }}"> 
+
 																	@if(isset($businessActivity) && count($businessActivity) > 0) 
+																		<input type="hidden"  name="duration_cnt" id="duration_cnt" value="{{ count($businessActivity)-1 }}"> 
 																		@foreach($businessActivity as $i=>$schedule)
 																		<div id="dayduration{{$i}}">
 																			<div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnestingin{{$i}}">
@@ -386,9 +387,11 @@
 <script>
 
 	$("body").on("click", ".daycircle", function(){
-      if($("#frm_class_meets").val() == 'Weekly')
+      /*if($("#frm_class_meets").val() == 'Weekly')
       {
-        activity_days = "";     
+        
+      }*/
+      activity_days = "";     
         $(this).find(".weekdays").each( function() {
           $.each( $(this).find('.day_circle'), function( key, value ) {
             if ($(this).hasClass('day_circle_fill')) {         
@@ -397,86 +400,66 @@
           });
         });
         $(this).find('.activity_days').val(activity_days);
-      }
 
-      if($("#frm_class_meets").val() == 'On a specific day') {
+      /*if($("#frm_class_meets").val() == 'On a specific day') {
         activity_days = "";
         $.each( $(this).find('.weekdays').children(".day_circle_fill"), function( key, value ) {
           activity_days += value.classList[3] + ","
         });
         $(this).find('.activity_days').val(activity_days);
-      }
+      }*/
    });
 
   	$("#frm_class_meets").on("change", function () {
-      $('#startingpicker').val('');
-      $(".daycircle").hide();
-      $(".remove-week").hide();
-      var day = moment($('#startingpicker').val(), 'MM-DD-YYYY').format('dddd');
-      var activityMeet = $(this).val();
-      $("#activity_scheduler_body").html("");
-      $(".timezone-round").removeClass('day_circle_fill');
-      $(".timezone-round").css('pointer-events', 'none');
-      if(activityMeet == 'Weekly') {
-        if(day=='Monday') {
-            $(".Monday").css('pointer-events', '');
-            $(".Tuesday").css('pointer-events', '');
-            $(".Wednesday").css('pointer-events', '');
-            $(".Thursday").css('pointer-events', '');
-            $(".Friday").css('pointer-events', '');
-            $(".Saturday").css('pointer-events', '');
-        }
-        if(day=='Tuesday') {
-            $(".Tuesday").css('pointer-events', '');
-            $(".Wednesday").css('pointer-events', '');
-            $(".Thursday").css('pointer-events', '');
-            $(".Friday").css('pointer-events', '');
-            $(".Saturday").css('pointer-events', '');
-        }
-        if(day=='Wednesday') {
-            $(".Wednesday").css('pointer-events', '');
-            $(".Thursday").css('pointer-events', '');
-            $(".Friday").css('pointer-events', '');
-            $(".Saturday").css('pointer-events', '');
-        }
-        if(day=='Thursday') {
-            $(".Thursday").css('pointer-events', '');
-            $(".Friday").css('pointer-events', '');
-            $(".Saturday").css('pointer-events', '');
-        }
-        if(day=='Friday') {
-            $(".Friday").css('pointer-events', '');
-            $(".Saturday").css('pointer-events', '');
-        }
-        if(day=='Saturday') {
-            $(".Saturday").css('pointer-events', '');
-        }
-        if(day=='Sunday') {
-            $(".Monday").css('pointer-events', '');
-            $(".Tuesday").css('pointer-events', '');
-            $(".Wednesday").css('pointer-events', '');
-            $(".Thursday").css('pointer-events', '');
-            $(".Friday").css('pointer-events', '');
-            $(".Saturday").css('pointer-events', '');
-            $(".Sunday").css('pointer-events', '');
-        }
-      }
+  		var result = confirm("Switching between Weekly and Specific will erase any times already created. Are you sure to switch ?");
+  		if(result){
+     		$('#startingpicker').val('');
+	      $(".daycircle").hide();
+	      $(".remove-week").hide();
+	      var day = moment($('#startingpicker').val(), 'MM-DD-YYYY').format('dddd');
+	      var activityMeet = $(this).val();
+	      $("#activity_scheduler_body").html("");
+	      $(".timezone-round").removeClass('day_circle_fill');
+	      $(".timezone-round").css('pointer-events', 'none');
+	      $("#activity_scheduler_body").html('');
+	      $(".timezone-round").removeClass('day_circle_fill');
+	      $(".timezone-round").css('pointer-events', 'none');
+	      $(".Monday").css('pointer-events', 'auto');
+	      $(".Tuesday").css('pointer-events', 'auto');
+	      $(".Wednesday").css('pointer-events', 'auto');
+	      $(".Thursday").css('pointer-events', 'auto');
+	      $(".Friday").css('pointer-events', 'auto');
+	      $(".Saturday").css('pointer-events', 'auto');
+	      $(".Sunday").css('pointer-events', 'auto');
+    
+      	var cnt=$('#duration_cnt').val();
+	   	if(cnt >= 0){
+		   	for (var i = 1; i <= cnt; i++) {
+				    $("#dayduration" + i).remove();
+				}
+				$("#dayduration0").html('');
+	      	$("#dayduration0").html('<div id="dayduration0"> <div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnestingin0"> <div class="accordion-item shadow"> <h2 class="accordion-header" id="accordionnestinginExample0"> <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestinginExamplecollapse0" aria-expanded="true" aria-controls="accor_nestinginExamplecollapse0"> Time Select </button> </h2> <div id="accor_nestinginExamplecollapse0" class="accordion-collapse collapse show" aria-labelledby="accordionnestinginExample0" data-bs-parent="#accordionnestingin0"> <div class="accordion-body"> <div id="day-circle"> <div class="col-md-12" id="deleteschedule0" style="display: none;" onclick="removeschedule(0);"> <i class="float-right ri-delete-bin-fill align-bottom me-2 text-muted" title="Remove activity"></i> </div> <div class="daycircle" id="editscheduler"> <input type="hidden" name="id[]" id="id" value=""> <input type="hidden" name="activity_days[]" id="activity_days" class="activity_days" value="" width="800"> <div class="weekdays"> <div class="col-md-12"> <div class="display-line"> <div data-day="Monday" class="col-sm-1 timezone-round day_circle Monday dys"> <p>Mo</p> </div> <div data-day="Tuesday" class="col-sm-1 timezone-round day_circle Tuesday dys"> <p>Tu</p> </div> <div data-day="Wednesday" class="col-sm-1 timezone-round day_circle Wednesday dys "> <p>We</p> </div> <div data-day="Thursday" class="col-sm-1 timezone-round day_circle Thursday dys"> <p>Th</p> </div> <div data-day="Friday" class="col-sm-1 timezone-round day_circle Friday dys"> <p>Fr</p> </div> <div data-day="Saturday" class="col-sm-1 timezone-round day_circle Saturday dys"> <p>Sa</p> </div> <div data-day="Sunday" class="col-sm-1 timezone-round day_circle Sunday dys"> <p>Su</p> </div> </div> </div> </div> <div class="row"> <div class="col-lg-3 col-md-5 col-sm-5"> <div class="form-group mmt-10"> <label>Start Time</label>'+ '{{timeSlotOption("shift_start",'')}}' +' </div> </div> <div class="col-lg-1 col-md-2 col-sm-2"> <div class="weekly-time-estimate"> <label>To</label> </div> </div> <div class="col-lg-3 col-md-5 col-sm-5"> <div class="form-group mmt-10"> <label>End Time</label>'+'{{timeSlotOption("shift_end", '')}}' + '</div> </div> <div class="col-lg-3 col-md-6 col-sm-6"> <label class="mmt-10 imt-10">Duration</label> <div class="sp-bottom"> <input type="text" name="set_duration[]" id="set_duration" value="" readonly="" class="set_duration form-control"> </div> </div> <div class="col-lg-2 col-md-6 col-sm-6"> <label class="mmt-10 imt-10"># Spots Available</label> <div class="sp-bottom"> <input type="text" class="form-control valid" name="sport_avail[]" id="sport_avail" value="1" required="required"> </div> </div> </div> </div> </div> </div> </div> </div> </div> </div>');
+	      	$('#duration_cnt').val('0');
+		   } else{
+		      $("#activity_scheduler_body").append($("#day-circle").html());
+		   }
 
-      $(".timezone-round").removeClass('day_circle_fill');
-      $(".daycircle ."+day).addClass('day_circle_fill');
-      $("#activity_scheduler_body").append($("#day-circle").html());
-      $("#activity_scheduler_body .daycircle").show();
-      $('#startingpicker').datepicker('hide');
+      	/*$(".daycircle ."+day).addClass('day_circle_fill');*/
+	      $("#activity_scheduler_body .daycircle").show();
+	      $('#startingpicker').datepicker('hide');	
+    	}
    });
 
    $('body').delegate('.timezone-round','click',function(){  
-      if($('#frm_class_meets').val()=='Weekly')
+      /*if($('#frm_class_meets').val()=='Weekly')
       {   
-        if($(this).hasClass("day_circle_fill"))
-          $(this).removeClass('day_circle_fill');
-        else
-          $(this).addClass('day_circle_fill');
-      }
+      }*/
+
+      if($(this).hasClass("day_circle_fill"))
+         $(this).removeClass('day_circle_fill');
+      else
+         $(this).addClass('day_circle_fill');
+
    });
 
    $("body").on("change",".shift_start, .shift_end", function(){

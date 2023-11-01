@@ -33,7 +33,7 @@
 										<div class="accordion accordion-flush filter-accordion">
 											<div class="card-body">
 												<div>
-													<p class="text-muted text-uppercase fs-12 fw-medium mb-2">Products</p>
+													<p class="text-muted text-uppercase fs-12 fw-medium mb-2">CATEGORY</p>
 													<ul class="list-unstyled mb-0 filter-list" id="categoryList">
 														<li data-category="">
 															<a class="d-flex py-1 align-items-center filter-active">
@@ -91,7 +91,7 @@
 										            <tr>
 										               <th>Product Image</th>
 															<th>Product Name</th>
-															<th>Catagory </th>
+															<th>Category </th>
 															<th>Qty</th>
 															<th>Low Qty Alert</th>
 															<th>Sale Price</th>
