@@ -598,7 +598,7 @@ class OrderController extends BusinessBaseController
             $tot_dis += $odt['discount'];
             $tot_tip += $odt['tip'];
             $service_fee += $odt['service_fee'];
-            $total = ($odt['totprice_for_this'] - $odt['discount']);
+            $total = ($odt['totprice_for_this'] - $odt['discount']) + $odt['productPrice'] + $odt['addOnPrice'];
             $subtotaltax += $total;
             $per_total = $total; 
             $html .= '
@@ -678,28 +678,6 @@ class OrderController extends BusinessBaseController
                         <div class="col-md-6 col-xs-6">
                             <div class="float-end text-right">
                                 <span>'.$odt['BusinessPriceDetails']['membership_type'].'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>ADD ON SERVICE:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'.getAddonService(@$odt['addOnServicesId'],@$odt['addOnServicesQty']).'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>PRODUCTS:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'.getProducts(@$odt['productIds'],@$odt['productQtys'],@$odt['productTypes']).'</span>
                             </div>
                         </div>
 
@@ -793,6 +771,28 @@ class OrderController extends BusinessBaseController
 
                         <div class="col-md-6 col-xs-6">
                             <div class="text-left">
+                                <label>ADD ON SERVICE:</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-6">
+                            <div class="float-end text-right">
+                                <span>'.getAddonService(@$odt['addOnServicesId'],@$odt['addOnServicesQty']).'</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-xs-6">
+                            <div class="text-left">
+                                <label>PRODUCTS:</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-6">
+                            <div class="float-end text-right">
+                                <span>'.getProducts(@$odt['productIds'],@$odt['productQtys'],@$odt['productTypes']).'</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-xs-6">
+                            <div class="text-left">
                                 <label>PRICE:</label>
                             </div>
                         </div>
@@ -812,6 +812,7 @@ class OrderController extends BusinessBaseController
                                 <span>$'.$odt['discount'].'</span>
                             </div>
                         </div>
+
 
                         <div class="col-md-6 col-xs-6">
                             <div class="text-left">
@@ -1094,21 +1095,42 @@ class OrderController extends BusinessBaseController
                 $q->where('category', '!=', '')->whereRaw("FIND_IN_SET(?, category)", [$request->categoryId]);
             })->first();
 
-        $chk = $request->chk;
+        $qty = $request->qty ?? 0;
+        $psize = $request->psize ?? '';
+        $pcolor = $request->pcolor ?? '';
+        $chk = $request->chk ?? '';
+        $sptype = $request->sptype ?? ($product->product_type == 'both' ? 'sale': $product->product_type ) ;
         if($product){
-            return view('business.orders.product_data', ['product' =>$product ,'productSize' =>ProductSize::orderBy('name')->get(),'productColor' =>ProductColors::orderBy('name')->get(),'chk'=>$chk]);
+            $lowAlertQty = $product->low_quantity_alert;
+            $reminingQty = $product->getSoldProducts();
+            
+            return view('business.orders.product_data', ['product' =>$product ,'productSize' => ProductSize::orderBy('name')->get(),'productColor' =>ProductColors::orderBy('name')->get(),'chk'=>$chk ,'qty' => $qty,'psize' => $psize,'pcolor' => $pcolor,'sptype' => $sptype ,'lowAlertQty' =>$lowAlertQty ,'reminingQty' =>$reminingQty ]);
         }
     }
 
     public function openProductModal(Request $request){
         $productCategory = ProductsCategory::orderBy('name')->get();
         $productData = '';
+        $productQtys = explode(',',$request->productQtys);
+        $productSize = explode(',',$request->productSize);
+        $productColor = explode(',',$request->productColor);
+        $productTypes = explode(',',$request->productTypes);
+ 
         if($request->ids){
-            foreach(explode(',',$request->ids) as $id){
-                $productData = $this->productDetails(new Request([
+            foreach(explode(',',$request->ids) as $i=>$id){
+                $qty = $productQtys[$i] ?? '';
+                $psize = $productSize[$i] ?? '';
+                $pcolor = $productColor[$i] ?? '';
+                $ptype = $productTypes[$i] ?? '';
+                
+                $productData .= $this->productDetails(new Request([
                     'cid' => $request->cid,  
                     'pid' => $id,
                     'chk' => $request->chk,
+                    'qty' => $qty,
+                    'psize' => $psize,
+                    'pcolor' => $pcolor,
+                    'sptype' => $ptype,
                 ]));
             }
         }
@@ -1117,10 +1139,11 @@ class OrderController extends BusinessBaseController
 
     function getCategoryProduct(Request $request){
         $html = '';
+        $chk = "'".$request->chk."'";
         $productList = Products::where('category', '!=', '')->whereRaw("FIND_IN_SET(?, category)", [$request->id])->get();
         $html .= '<div class="select0service category-search mb-15">
             <label>Select Item</label>
-            <select id="categoryProList" class="form-select">
+            <select id="categoryProList" class="form-select categoryProList" onchange="getList(this.value,'.$request->business_id.','.$chk.');">
                 <option value="">Select Item</option>';
                 foreach($productList as $p){
                     $html .= '<option value="'.$p->id.'">'.$p->name.'</option>';

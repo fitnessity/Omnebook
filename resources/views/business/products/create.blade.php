@@ -392,8 +392,14 @@
                                                         <div class="row">
                                                              <div class="col-lg-4">
                                                                 <div class="mb-3">
-                                                                    <label for="meta-keywords-input">Colors (Select all that apply) </label>
-                                                                    <a data-url="{{route('business.products.addVariantModal',['name'=>'Color'])}}" class="float-end" data-behavior="ajax_html_modal" data-modal-width="modal-20"> Add new colors</a>
+																	<div class="row">
+																		<div class="col-lg-6 col-md-6 col-6">
+																			<label for="meta-keywords-input">Colors (Select all that apply) </label>
+																		</div>
+																		<div class="col-lg-6 col-md-6 col-6">
+																			<a data-url="{{route('business.products.addVariantModal',['name'=>'Color'])}}" class="float-end text-right" data-behavior="ajax_html_modal" data-modal-width="modal-20"> Add new colors</a>
+																		</div>
+																	</div>
         															<div class="priceselect">
         																<div class="product-vendor" id="individualstype">
         																	<select id="color" multiple name="colors[]">
@@ -409,11 +415,15 @@
 
                                                             <div class="col-lg-4">
                                                                 <div class="mb-3">
-                                                                    <label  for="meta-keywords-input">Brands </label>
-        															
-                                                                    <a data-url="{{route('business.products.addVariantModal',['name'=>'Brand'])}}" class="float-end" data-behavior="ajax_html_modal" data-modal-width="modal-20"> Add new brands</a>
-
-        															<div class="priceselect">
+																	<div class="row">
+																		<div class="col-lg-6 col-md-6 col-6">
+																			<label  for="meta-keywords-input">Brands </label>
+																		</div>
+																		<div class="col-lg-6 col-md-6 col-6">
+																			<a data-url="{{route('business.products.addVariantModal',['name'=>'Brand'])}}" class="float-end text-right" data-behavior="ajax_html_modal" data-modal-width="modal-20"> Add new brands</a>
+																		</div>
+																	</div>
+																	<div class="priceselect">
         																<div class="product-vendor" id="individualstype">
         																	<select name="brands[]" multiple id="brand" >
         																		@foreach($productBrand as $brand)
@@ -428,10 +438,14 @@
         													
         													<div class="col-lg-4">
                                                                 <div class="mb-3">
-                                                                    <label  for="meta-keywords-input">Sizes (Select all that apply) </label>
-
-                                                                    <a data-url="{{route('business.products.addVariantModal',['name'=>'Size'])}}" class="float-end" data-behavior="ajax_html_modal" data-modal-width="modal-20"> Add new size</a>
-
+																	<div class="row">
+																		<div class="col-lg-6 col-md-6 col-6">
+																			<label  for="meta-keywords-input">Sizes (Select all that apply) </label>
+																		</div>
+																		<div class="col-lg-6 col-md-6 col-6">
+																			<a data-url="{{route('business.products.addVariantModal',['name'=>'Size'])}}" class="float-end text-right" data-behavior="ajax_html_modal" data-modal-width="modal-20"> Add new size</a>
+																		</div>
+																	</div>
         															<div class="priceselect">
         																<div class="product-vendor" id="individualstype">
         																	<select id="size" multiple name="size[]">
@@ -507,10 +521,14 @@
         													
         													<div class="col-lg-4">
                                                                 <div class="mb-3">
-                                                                    <label  for="meta-keywords-input">Material (Select all that apply) </label>
-        															
-                                                                    <a data-url="{{route('business.products.addVariantModal',['name'=>'Material'])}}" class="float-end" data-behavior="ajax_html_modal" data-modal-width="modal-20"> Add new material</a>
-
+																	<div class="row">
+																		<div class="col-lg-6 col-md-6 col-6">
+																			<label  for="meta-keywords-input">Material (Select all that apply) </label>
+																		</div>
+																		<div class="col-lg-6 col-md-6 col-6">
+																			<a data-url="{{route('business.products.addVariantModal',['name'=>'Material'])}}" class="float-end text-right" data-behavior="ajax_html_modal" data-modal-width="modal-20"> Add new material</a>
+																		</div>
+																	</div>
         															<div class="priceselect">
         																<div class="product-vendor" id="individualstype">
         																	<select id="material" name="material[]" multiple>
