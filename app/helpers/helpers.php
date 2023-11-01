@@ -73,6 +73,7 @@
             'fname' => $user->firstname,
             'lname' => $user->lastname,
             'email' => $user->email,
+            'primary_account' => @$user->primary_account ?? 0,
             'phone_number' => $user->phone_number,
             'emergency_contact' => $user->emergency_contact,
             'relationship' => $user->relationship,
@@ -146,6 +147,7 @@
             'lname' => ($detail->lastname) ? $detail->lastname : '',
             'username' => $detail->username,
             'email' => $detail->email,
+            'primary_account' => @$detail->primary_account ?? 0,
             'country' => 'US',
             'status' => 0,
             'phone_number' => $detail->phone_number,
@@ -170,6 +172,7 @@
                 'gender' => $member->gender,
                 'user_id' => NULL, //this is null bcz of user is not created at 
                 'parent_cus_id'=> $customer->id ,
+                'primary_account' => 0,
                 'relationship' =>$member->relationship
             ]);
         }
@@ -197,12 +200,6 @@
             })->get();
 
         foreach($paymentHistory as $data){
-            /*if($data->user_type == 'Customer'){
-                $userId = $customer->id;
-            }else{
-                $userId = $detail->id;
-            }*/
-
             Transaction::create([
                 'item_id' => $data->item_id,
                 'user_type' => 'Customer',

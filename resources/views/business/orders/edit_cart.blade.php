@@ -53,7 +53,7 @@
                                    </div>
                           
                                    <div class="row">
-                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
                                              <label>Select Price Option  </label>
                                              <select name="priceopt_listajax" id="priceopt_listajax" class="form-control" onchange="loaddropdownajax('priceopt',this,this.value);">
                                                   <option value="">Select Price Title</option>
@@ -65,10 +65,19 @@
                                                   @endif
                                              </select>
                                         </div>
-                                        <div class="col-md-4 col-sm-4 col-xs-12">
+
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
                                              <div class="select0service">
                                                   <div class="date-activity-scheduler date-activity-check paynowset">
                                                        <button type="button" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#addpartcipateajax">Participant Quantity </button>
+                                                  </div>
+                                             </div>
+                                        </div>
+
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                             <div class="select0service">
+                                                  <div class="date-activity-scheduler date-activity-check paynowset">
+                                                       <button type="button"  onclick="openProductModal('{{$business_id}}' , '{{$cart["productIds"]}}' ,'ajax' ,'{{$cart["productQtys"]}}','{{$cart["productSize"]}}','{{$cart["productColor"]}}','{{$cart["productTypes"]}}')" class="btn btn-red search-add-client"> Select Product</button>
                                                   </div>
                                              </div>
                                         </div>
@@ -233,7 +242,17 @@
           <input type="hidden" name="value_tax" id="value_taxajax" value="{{$cart['tax']}}">
           <input type="hidden" name="addOnServicesId"  value="{{$cart['addOnServicesId']}}" id="addOnServicesIdajax" />
           <input type="hidden" name="addOnServicesQty"  value="{{$cart['addOnServicesQty']}}" id="addOnServicesQtyajax" />
-          <input type="hidden" name="addOnServicesTotalPrice"  value="{{$cart['addOnServicesTotalPrice']}}"id="addOnServicesTotalPriceajax" />
+          <input type="hidden" name="addOnServicesTotalPrice"  value="{{$cart['addOnServicesTotalPrice']}}" id="addOnServicesTotalPriceajax" />
+          <input type="hidden" name="aos_details" value="{{$cart['aos_details']}}" id="aos_detailsajax" />
+
+          <input type="hidden" name="product_details" value="{{$cart['product_details']}}" id="product_detailsajax" />
+          <input type="hidden" name="productIds" value="{{$cart['productIds']}}" id="productIdsajax" />
+          <input type="hidden" name="productQtys" value="{{$cart['productQtys']}}" id="productQtysajax" />
+
+          <input type="hidden" name="productSize" value="{{$cart['productSize']}}" id="productSizeajax" />
+          <input type="hidden" name="productColor" value="{{$cart['productColor']}}" id="productColorajax" />
+          <input type="hidden" name="productTypes" value="{{$cart['productTypes']}}" id="productTypesajax" />
+          <input type="hidden" name="productTotalPrices" value="{{$cart['productTotalPrices']}}" id="productTotalPricesajax" />
                                                                            
           <button type="submit" class="btn btn-red" >Submit</a>
      </form>
