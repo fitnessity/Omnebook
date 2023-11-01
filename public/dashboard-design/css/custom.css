@@ -5196,6 +5196,46 @@ div#termsdiv{order: 4;}
 	left: 9px;
 	position: absolute;
 }
+.check-box-primary-account{
+	width: auto !important;
+	display: inline-block !important;
+	min-height: 9px !important;
+}
+.check-box-info label{
+	display: inline-block !important;
+}
+.check-box-info{
+	width: 70%;
+	margin: 10px auto;
+}
+.custom-search-icon{
+	top: 13px !important;
+}
+.switch-account-dropdown{
+	transform: translate(62px, 40px) !important;
+	inset: 10px 80px auto auto !important;
+}
+.switch-account-dropdown li a i{
+	margin-right: 10px;
+}
+.account-switchh{
+	font-size: 11px;
+	margin-left: 24px;
+}
+.btn-switch-business{
+	background: #f3f3f9;
+	color: #000;
+	border: none;
+}
+.btn-switch-business:hover{
+	background: #f3f3f9;
+}
+
+
+
+
+
+
 
 /* header class */
 

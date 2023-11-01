@@ -101,28 +101,25 @@ class RegistrationController extends Controller
 
                 $last_name = ($postArr['firstname']) ? $postArr['lastname'] : '';
                 $cus_name = $postArr['firstname'].' '.$last_name;
-                $customer = \Stripe\Customer::create(
-                    [
-                        'name' => $cus_name,
-                        'email'=> $postArr['email'],
+                $customer = \Stripe\Customer::create( 
+                    [ 'name' => $cus_name,
+                        'email'=> $postArr['email'] 
                     ]);
                 $stripe_customer_id = $customer->id;  
-
 
                 $random_password = Str::random(8);
 
                 $customerObj = New Customer();
                 $customerObj->business_id = $company->id;
                 $customerObj->fname = $postArr['firstname'];
-                $customerObj->lname = ($postArr['lastname']) ? $postArr['lastname'] : '';
-                // $customerObj->username = $postArr['username'];
-                //$customerObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
+                $customerObj->lname = $postArr['lastname'] ?? '';
                 $customerObj->password = Hash::make($random_password);
                 $customerObj->email = $postArr['email'];
+                $customerObj->primary_account = $request->primaryAccountHolder ?? 0;
                 $customerObj->country = 'US';
                 $customerObj->status = 0;
                 $customerObj->phone_number = $postArr['contact'];
-                $customerObj->birthdate = date("Y-m-d", strtotime($postArr['dob']));
+                $customerObj->birthdate = $postArr['dob'];
                 $customerObj->stripe_customer_id = $stripe_customer_id;
 
                 $fitnessity_user = User::where('email', $postArr['email'])->first();
@@ -141,28 +138,26 @@ class RegistrationController extends Controller
                     if($result){
                         $customerObj->user_id = $fitnessity_user->id;
                     }
+                    $customerObj->save();
+                }else{
+                    $userObj = New User();
+                    $userObj->role = 'customer';
+                    $userObj->firstname = $postArr['firstname'];
+                    $userObj->lastname = $postArr['lastname'] ?? '';
+                    $userObj->username = $postArr['firstname'].$postArr['lastname'];
+                    $userObj->password = $customerObj->password;
+                    $userObj->buddy_key = $random_password;
+                    $userObj->email = $postArr['email'];
+                    $userObj->primary_account = $request->primaryAccountHolder ?? 0;
+                    $userObj->country = 'US';
+                    $userObj->phone_number = $postArr['contact'];
+                    $userObj->birthdate = $postArr['dob'];
+                    $userObj->stripe_customer_id = $stripe_customer_id;
+                    $userObj->save(); 
+                    $customerObj->user_id = $userObj->id;
                 }
-                
+    
                 $customerObj->save();
-
-                $userObj = New User();
-                $userObj->role = 'customer';
-                $userObj->firstname = $postArr['firstname'];
-                $userObj->lastname = ($postArr['lastname']) ? $postArr['lastname'] : '';
-                $userObj->username = $postArr['firstname'].$postArr['lastname'];
-                /*$userObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
-                $userObj->buddy_key = $postArr['password'];*/
-                $userObj->password = $customerObj->password;
-                $userObj->buddy_key = $random_password;
-                $userObj->email = $postArr['email'];
-                $userObj->country = 'US';
-                $userObj->phone_number = $postArr['contact'];
-                $userObj->birthdate = date("Y-m-d", strtotime($postArr['dob']));
-                $userObj->stripe_customer_id = $stripe_customer_id;
-                $userObj->save(); 
-               
-                $customerObj->user_id = $userObj->id;
-                 $customerObj->save();
                 if ($customerObj) {    
                     $status = SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id'],$random_password); 
                     $response = array(
@@ -170,24 +165,19 @@ class RegistrationController extends Controller
                         'type' => 'success',
                         'msg' => 'Customer Successfully Registered.',
                     );
-
                     return Response::json($response);
                 } else {
-
                     $response = array(
                         'type' => 'danger',
                         'msg' => 'Some wrror occured while registering. Please try again later.',
                     );
-
                     return Response::json($response);
                 }
             } else {
-
                 $response = array(
                     'type' => 'danger',
                     'msg' => 'Invalid email or password',
                 );
-
                 return Response::json($response);
             }
         }
@@ -239,17 +229,29 @@ class RegistrationController extends Controller
     }
 
     public function submitFamilyCustomer(Request $request) {
-
+        // print_r($request->all());exit;
         $postArr = $request->all();
-
+        $parentId = NULL;
+        $currentCustomer = Customer::find($request->cust_id);
         for($i=0;$i<=$request->familycnt;$i++){
             if($request->fname[$i] != ''){
                 $date = NULL;
                 if($request->birthdate[$i] != ''){
-                    $date = date('Y-m-d',strtotime($request->birthdate[$i]));
+                    $date = $request->birthdate[$i];
                 }
+                if($request->primaryAccount == 1 && $currentCustomer->primary_account != 1){
+                    if($i == 0){
+                        $parentId = NULL;
+                        $isParentAccount = 1;
+                    }
+                }else{
+                    $parentId = $request->cust_id;
+                    $isParentAccount = 0;
+                }
+
                 $customerObj = New Customer();
-                $customerObj->parent_cus_id = $request->cust_id;
+                $customerObj->parent_cus_id = $parentId;
+                $customerObj->primary_account = $isParentAccount;
                 $customerObj->business_id = $request->business_id;
                 $customerObj->fname = $request->fname[$i];
                 $customerObj->lname = $request->lname[$i];
@@ -265,6 +267,13 @@ class RegistrationController extends Controller
                 $customerObj->emergency_relation = $request->emergency_relation[$i];
                 $customerObj->gender =  $request->gender[$i];
                 $customerObj->save();
+
+                if($request->primaryAccount == 1 && $currentCustomer->primary_account != 1){
+                    if($i == 0){
+                       $parentId = $customerObj->id;
+                       $currentCustomer->update(['parent_cus_id' =>$parentId]);
+                    }
+                }
                 if ($customerObj) {      
                     SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id'],'');
                 }
