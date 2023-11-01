@@ -47,7 +47,7 @@ class CustomerController extends Controller {
 	    $customers = $company->customers()->orderBy('fname');
         
         if($request->term){
-            $searchValues = preg_split('/\s+/', $request->term, -1, PREG_SPLIT_NO_EMPTY); 
+            $searchValues = preg_split('/\s+/', $request->term, -1, PREG_SPLIT_NO_EMPTY);
             $customers = $customers->where('business_id', $business_id)
                 ->where(function ($q) use ($searchValues) {
                     $serch1 = @$searchValues[0] != '' ? @$searchValues[0] : '';
@@ -298,7 +298,6 @@ class CustomerController extends Controller {
                     return response()->json(['status'=>500,'message'=>'File format is not supported.']);
                 }
                 $headings = (new HeadingRowImport)->toArray($request->file('import_file'));
-                /*print_r($headings);*/
                 if(!empty($headings)){
                     foreach($headings as $key => $row) {
                         $firstrow = $row[0];
@@ -560,7 +559,6 @@ class CustomerController extends Controller {
     }
 
     public function paymentdeletecustomer(Request $request) {
-        /*print_r($request->all());*/
         $customer = Customer::where('id', $request->cus_id)->first();
         if($customer != ''){
             \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
