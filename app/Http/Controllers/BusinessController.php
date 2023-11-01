@@ -88,6 +88,7 @@ class BusinessController extends Controller
           
             $totalSales = Transaction::select('transaction.*')
               ->where('item_type', 'UserBookingStatus')
+              ->where('kind','!=' ,'comp')
               ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
               ->join('user_booking_details as ubd', function($join) use ($business_id) {
                   $join->on('ubd.booking_id', '=', 'ubs.id')
@@ -96,6 +97,7 @@ class BusinessController extends Controller
 
             $previousTotalSales = Transaction::select('transaction.*')
               ->where('item_type', 'UserBookingStatus')
+              ->where('kind','!=' ,'comp')
               ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
               ->join('user_booking_details as ubd', function($join) use ($business_id) {
                   $join->on('ubd.booking_id', '=', 'ubs.id')
@@ -105,6 +107,7 @@ class BusinessController extends Controller
 
             $totalSalesforRecurring = Transaction::select('transaction.*')
               ->where('item_type', 'Recurring')
+              ->where('kind','!=' ,'comp')
               ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
               ->join('user_booking_details as ubd', function($join) use ($business_id) {
                   $join->on('ubd.booking_id', '=', 'ubs.id')
@@ -113,6 +116,7 @@ class BusinessController extends Controller
 
             $previousTotalSalesforRecurring = Transaction::select('transaction.*')
               ->where('item_type', 'Recurring')
+              ->where('kind','!=', 'comp')
               ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
               ->join('user_booking_details as ubd', function($join) use ($business_id) {
                   $join->on('ubd.booking_id', '=', 'ubs.id')
