@@ -170,20 +170,10 @@
 					<a class="nav-link menu-link @if(Route::current()->getName()=='business.reports.index') tab-active @endif" @if($companyId) href="{{ route('business.reports.index') }}"   @endif aria-controls="sidebarForms">
 						<img src="{{asset('/public/img/salesreports1.png')}}" alt="Fitnessity"> <span data-key="t-forms">Reports</span><span class="badge badge-pill bg-success" data-key="t-new">New</span>
 					</a>
-				<!--<div class="collapse menu-dropdown" id="sidebarForms">
-						<ul class="nav nav-sm flex-column">
-							<li class="nav-item @if(Route::current()->getName()=='business.sales_report.index') tab-active @endif">
-								<a @if($companyId)  href="{{route('business.sales_report.index')}}" @endif class="nav-link" data-key="t-basic-elements">Sales Reports</a>
-							</li>
-							<li class="nav-item @if(Route::current()->getName()=='business.member_expirations.index') tab-active @endif">
-								<a @if($companyId)  href="{{route('business.member_expirations.index')}}" @endif class="nav-link" data-key="t-form-select">Membership Expirations</a>
-							</li>
-						</ul>
-					</div> -->
 				</li>
 				
 				<li class="nav-item">
-                    <a class="nav-link menu-link " href="#">
+                    <a class="nav-link menu-link @if(Route::current()->getName()=='business.settings.index') tab-active @endif" @if($companyId) href="{{ route('business.settings.index') }}"   @endif >
                         <img src="{{asset('/public/img/setings-1.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Settings </span><span class="badge badge-pill bg-success" data-key="t-new">New</span> 
                     </a>
                 </li>

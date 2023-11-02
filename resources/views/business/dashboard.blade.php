@@ -299,7 +299,7 @@
                                                                 {{date('M',strtotime($startDate))}} to {{date('M',strtotime($endDate))}},
                                                                 {{date('Y',strtotime($startDate))}} 
                                                             @endif</h4>
-															<h4 class="fs-22 fw-semibold ff-secondary scheduled-payments">$<span class="counter-value" data-target="{{$totalRecurringPmt}}">{{$totalRecurringPmt}}</span></h4>
+															<h4 class="fs-22 fw-semibold ff-secondary scheduled-payments">$<span class="counter-value" data-target="{{$recurringAmount}}">{{$recurringAmount}}</span></h4>
 															<p class="mb-0">Scheduled Payments </p>
 														</div>
 													</div>
@@ -320,7 +320,7 @@
 																<div class="card-body" style="z-index:1 ;">
 																	<div class="d-flex align-items-center">
 																		<div class="flex-grow-1 overflow-hidden">
-																			<h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="{{$compltedpmtcnt}}">{{$compltedpmtcnt}}</span></h4>
+																			<h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="{{$completeRecurringAmount}}">{{$completeRecurringAmount}}</span></h4>
 																			<p class="fw-medium text-muted text-truncate mb-0">Paid So Far </p>
 																		</div>
 																		<div class="flex-shrink-0">
@@ -348,7 +348,7 @@
 																<div class="card-body" style="z-index:1 ;">
 																	<div class="d-flex align-items-center">
 																		<div class="flex-grow-1 overflow-hidden">
-																			<h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="{{$remainigpmtcnt}}">{{$remainigpmtcnt}}</span></h4>
+																			<h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="{{$reminingRecurringAmount}}">{{$reminingRecurringAmount}}</span></h4>
 																			<p class="fw-medium text-muted text-truncate mb-0">Owed </p>
 																		</div>
 																		<div class="flex-shrink-0">
@@ -796,7 +796,6 @@
                                                     </div>
                                                 </div>
                                             @endforeach
-                                            
                                         </div>
 
                                         <div class="card sidebar-alert bg-light border-0 text-center mx-4 mb-0 mt-3">
@@ -809,20 +808,15 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div> <!-- end card-->
                             </div> <!-- end .rightbar-->
                         </div> <!-- end col -->
                     </div>
-                </div>
-                <!-- container-fluid -->
-            </div>
-            <!-- End Page-content -->
-        </div>
-        <!-- end main content-->
-    </div>
-    <!-- END layout-wrapper -->
+                </div><!-- container-fluid -->
+            </div><!-- End Page-content -->
+        </div><!-- end main content-->
+    </div><!-- END layout-wrapper -->
 	
 <div class="modal fade monthly-financial" tabindex="-1" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-80">
@@ -980,12 +974,12 @@
 		    draw_chart_donut_revenue({{$in_person}}, {{$online}},'');
 		    draw_chart_donut_category({{$ptdata}},{{$clsdata}},{{$expdata}},{{$evdata}},{{$prdata}},'');
 		    <?php 
-		    	$comp_color = $completedtdata <= 20 ? '#FA4443':'#3577f1';
-		    	$rem_color = $remainingdata <= 20 ? '#FA4443':'#3577f1';
+		    	$comp_color = $completedRecPercentage <= 20 ? '#FA4443':'#3577f1';
+		    	$rem_color = $remainingRecPercentage <= 20 ? '#FA4443':'#3577f1';
 		    ?>
 
-		    draw_chart_radial_bar({{$completedtdata}},'new_jobs_chart' ,'{{$comp_color}}');
-		    draw_chart_radial_bar({{$remainingdata}},'rejected_chart','{{$rem_color}}');
+		    draw_chart_radial_bar({{$completedRecPercentage}},'new_jobs_chart' ,'{{$comp_color}}');
+		    draw_chart_radial_bar({{$remainingRecPercentage}},'rejected_chart','{{$rem_color}}');
             category =["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 		    draw_chart_combo('','' , category);
 		});

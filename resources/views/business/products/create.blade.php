@@ -214,12 +214,12 @@
                                                                 </div>
                                                             </div>
         													
-                                                            <div class="col-lg-3 col-sm-6">
+                                                            <!-- <div class="col-lg-3 col-sm-6">
                                                                 <div class="mb-3">
                                                                     <label class="form-label">Add Sales Tax</label>
                                                                     <input type="text" class="form-control" placeholder="Add Tax" required name="sales_tax"  value="{{@$product->sales_tax}}" >
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
         													
         													<div class="col-lg-3 col-sm-6">
                                                                 <div class="mb-3">
