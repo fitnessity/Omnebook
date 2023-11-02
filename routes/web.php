@@ -80,9 +80,13 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/member_expirations/export','MembershipExpirationsController@export')->name('member_expirations.export');
 
     Route::get('/sales_report','SalesReportController@index')->name('sales_report.index');
+
     Route::get('/sales_report/export','SalesReportController@export')->name('sales_report.export');
 
     Route::resource('reports', 'ReportsController')->only(['index']);
+    Route::resource('settings', 'SettingsController')->only(['index']);
+
+    Route::resource('tax','TaxController')->only(['index','store']);
 
 });
 

@@ -205,8 +205,8 @@ class ServiceController extends BusinessBaseController
                         "cid" => $user->cid,
                         "userid" =>  $user->id,
                         "serviceid" => $serviceId,
-                        "dues_tax" => $request->dues_tax[$i] ?? '',
-                        "sales_tax" => $request->sales_tax[$i] ?? '',
+                       /* "dues_tax" => $request->dues_tax[$i] ?? '',
+                        "sales_tax" => $request->sales_tax[$i] ?? '',*/
                         "visibility_to_public" => in_array('V'.$i, @$request->visibility_to_public) ? 1 : 0,
                     ];
 

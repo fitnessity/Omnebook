@@ -240,6 +240,7 @@
           <input type="hidden" name="categoryid" id="categoryidajax" value="{{$cart['categoryid']}}">
           <input type="hidden" name="chk" value="activity_purchase">
           <input type="hidden" name="value_tax" id="value_taxajax" value="{{$cart['tax']}}">
+          <input type="hidden" name="value_tax_activity" id="value_tax_activityajax" value="{{$cart['tax_activity']}}">
           <input type="hidden" name="addOnServicesId"  value="{{$cart['addOnServicesId']}}" id="addOnServicesIdajax" />
           <input type="hidden" name="addOnServicesQty"  value="{{$cart['addOnServicesQty']}}" id="addOnServicesQtyajax" />
           <input type="hidden" name="addOnServicesTotalPrice"  value="{{$cart['addOnServicesTotalPrice']}}" id="addOnServicesTotalPriceajax" />
@@ -259,8 +260,108 @@
 </div>
 
 <script type="text/javascript">
-    flatpickr(".flatpickr-input", {
+     flatpickr(".flatpickr-input", {
         dateFormat: "m/d/Y",
         maxDate: "01/01/2050",
-    });
+     });
+
+     $("#taxajax").click(function () {
+        get_total_ajax();
+     });
+
+     function loaddropdownajax(chk,val,id){
+          var selectedText = val.options[val.selectedIndex].innerHTML;
+          if(chk == 'program'){
+               $('#pidajax').val(id);
+               $('#category_listajax').html('');
+               $('#priceopt_listajax').html('');
+               $('#membership_opt_listajax').html('');
+               $('.addondataajax').html('');
+          }
+          if(chk == 'category'){
+               $('#categoryidajax').val(id);
+               $('#priceopt_listajax').html('');
+               $('#membership_opt_listajax').html('');
+          }
+          if(chk == 'priceopt'){
+               $('#priceidajax').val(id);
+               $('#membership_opt_listajax').html('');
+          }
+          if(chk == 'duration'){
+               $('#actscheduleidajax').val($('#duration_intajax').val() +' '+ id);
+          }
+
+          $.ajax({
+               url: '{{route("getdropdowndata")}}',
+               type: 'get',
+               data:  {
+                    'sid':id,
+                    'chk':chk,
+                    'type':'ajax',
+                    'page':'checkout',
+                    'user_type':'{{$cart["type"]}}',
+               },
+               success:function(data){
+
+                    if(chk == 'program'){
+                         $('#category_listajax').html(data);
+                    }
+                    if(chk == 'category'){
+                         var data1 = data.split('~~');
+                         $('#priceopt_listajax').html(data1[0]);
+
+                         var splittax =  data1[1].split('^^');
+                         //$('#duestaxajax').val(splittax[0]);
+
+                         var splitforaddon =  splittax[1].split('^!^');
+                         //$('#salestaxajax').val(splitforaddon[0]);
+                         $('.addondataajax').html(splitforaddon[1]);
+
+                    }
+                    if(chk == 'priceopt'){
+                         $('#pricedivajax').html('');
+                         var data1 = data.split('~~');
+                         $('#membership_opt_listajax').html(data1[0]);
+                         var part = data1[1].split('^^');
+                         $('#pricedivajax').html(part[0]);
+                         var second = part[1].split('!!');
+                         $('#duration_intajax').val(second[0]);
+                         $('#duration_dropdownajax').val(second[1]);
+                         $('#actscheduleidajax').val(second[0]+ ' ' + second[1]);
+                    }
+               }
+          });
+     }
+
+     if (document.getElementById("priceajax")) {
+         document.getElementById("priceajax").onkeyup = function() {
+             var price = parseFloat($(this).val());
+             $("#pricetotalajax").val(price);
+             var chkadu = chkchild = chkinfant = 0;
+             var qty = uniqueprice = 0;
+             if($("#adupricequantityajax").val() != "" && $("#adupricequantityajax").val() != 0 && $("#adultpriceajax").val() != ""){
+                 qty += parseInt($("#adupricequantityajax").val());
+                 chkadu = 1;
+             }if($("#childpricequantityajax").val() != "" && $("#childpricequantityajax").val() != 0 && $("#childpriceajax").val() != ""){
+                 qty += parseInt($("#childpricequantityajax").val());
+                 chkchild = 1;
+             }if($("#infantpricequantityajax").val() != "" && $("#infantpricequantityajax").val() != 0 && $("#infantprice").val() != ""){
+                    qty += parseInt($("#infantpricequantityajax").val());
+                    chkinfant = 1;
+             }
+             if(qty != 0 && price != 0 && price != "undefined"){
+                 uniqueprice = parseFloat(price/parseFloat(qty));
+             }
+             if(chkadu == 1  && $("#adultpriceajax").val() != ""){
+                 $("#cartadupriceajax").val(uniqueprice);
+             }
+             if(chkchild == 1 && $("#childpriceajax").val() != ""){
+                 $("#cartchildpriceajax").val(uniqueprice);
+             }
+             if(chkinfant == 1 && $("#infantpriceajax").val() != ""){
+                 $("#cartinfantpriceajax").val(uniqueprice);
+             }
+             get_total_ajax();
+         };
+     }
 </script>
