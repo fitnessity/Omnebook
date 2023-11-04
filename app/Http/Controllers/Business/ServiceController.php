@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\{CompanyInformation,User,BusinessServicesMap,BusinessServices,BusinessPriceDetailsAges,BusinessPriceDetails,Miscellaneous,Sports,BusinessStaff,AddOnService};
 use Auth;
+use Illuminate\Support\Facades\Session;
 
 class ServiceController extends BusinessBaseController
 {
@@ -19,7 +20,13 @@ class ServiceController extends BusinessBaseController
         $services = @$companyInfo->service->sortByDesc('created_at');
         $companyId = @$companyInfo->id;
         $companyName = @$companyInfo->dba_business_name;
-        return view('business.services.index', compact('companyName','companyId', 'services'));
+        $displayModal  = '';
+        if(session()->has('scheduleEdit')){
+            $displayModal =  Session::get('scheduleEdit');
+            Session::forget('scheduleEdit');
+        }
+
+        return view('business.services.index', compact('companyName','companyId', 'services','displayModal'));
     }
     /**
      * Show the form for creating a new resource.
@@ -205,8 +212,8 @@ class ServiceController extends BusinessBaseController
                         "cid" => $user->cid,
                         "userid" =>  $user->id,
                         "serviceid" => $serviceId,
-                        "dues_tax" => $request->dues_tax[$i] ?? '',
-                        "sales_tax" => $request->sales_tax[$i] ?? '',
+                       /* "dues_tax" => $request->dues_tax[$i] ?? '',
+                        "sales_tax" => $request->sales_tax[$i] ?? '',*/
                         "visibility_to_public" => in_array('V'.$i, @$request->visibility_to_public) ? 1 : 0,
                     ];
 

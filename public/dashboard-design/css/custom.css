@@ -5230,9 +5230,42 @@ div#termsdiv{order: 4;}
 .btn-switch-business:hover{
 	background: #f3f3f9;
 }
-
-
-
+.remaining-days{   
+	background-color: #fff5da;
+	padding: 15px;
+}
+.days-left p{
+	margin-bottom: 0px;
+	font-size: 13px;
+	font-weight: 500;
+	text-transform: uppercase;
+} 
+.chat-with-us p{
+	text-align: center;
+	color: #868686;
+	font-size: 13px;
+	font-weight: 500;
+	margin-bottom: 9px;
+}
+.subscriptions-info h1{
+	font-size: 16px;
+	font-weight: 600;
+}
+.subscriptions-info {
+	display: grid;
+}
+.subscriptions-info span{
+	font-size: 14px;
+}
+.invoices-select{
+	display: flex;
+}
+.width-30{
+	width: 30%;
+}
+.invoices-select label{
+	line-height: 2;
+}
 
 
 
