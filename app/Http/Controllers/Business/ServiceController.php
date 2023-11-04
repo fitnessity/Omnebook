@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\{CompanyInformation,User,BusinessServicesMap,BusinessServices,BusinessPriceDetailsAges,BusinessPriceDetails,Miscellaneous,Sports,BusinessStaff,AddOnService};
 use Auth;
+use Illuminate\Support\Facades\Session;
 
 class ServiceController extends BusinessBaseController
 {
@@ -19,7 +20,13 @@ class ServiceController extends BusinessBaseController
         $services = @$companyInfo->service->sortByDesc('created_at');
         $companyId = @$companyInfo->id;
         $companyName = @$companyInfo->dba_business_name;
-        return view('business.services.index', compact('companyName','companyId', 'services'));
+        $displayModal  = '';
+        if(session()->has('scheduleEdit')){
+            $displayModal =  Session::get('scheduleEdit');
+            Session::forget('scheduleEdit');
+        }
+
+        return view('business.services.index', compact('companyName','companyId', 'services','displayModal'));
     }
     /**
      * Show the form for creating a new resource.

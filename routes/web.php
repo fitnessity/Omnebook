@@ -146,6 +146,7 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/home','DesignController@home')->name('home');  
 	Route::get('/reports','DesignController@reports')->name('reports'); 
 	Route::get('/settings','DesignController@settings')->name('settings'); 
+	Route::get('/subscriptions_payments','DesignController@subscriptions_payments')->name('subscriptions_payments'); 
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -195,7 +196,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/getExpiringMembership', 'BusinessController@getExpiringMembership')->name('getExpiringMembership');
     Route::get('/bookingchart', 'BusinessController@bookingchart')->name('bookingchart');
     
-    Route::prefix('/business/{business_id}')->group(function () {
+    Route::prefix('/business/{business_id}')->middleware('auth', 'business_scope')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
         Route::delete('/customers/delete/{id}','CustomerController@delete')->name('business_customer_delete');
         Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');

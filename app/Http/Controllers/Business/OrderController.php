@@ -64,7 +64,6 @@ class OrderController extends BusinessBaseController
             var_dump('no this cases');
             exit();
         }else if($request->cus_id != ''){
-
             $user_type = 'customer';
             $customer = $customerdata = $request->current_company->customers->find($request->cus_id);
             @$customer->create_stripe_customer_id();
@@ -103,7 +102,7 @@ class OrderController extends BusinessBaseController
             $email = @$customerdata->email;
         }
 
-        if($request->cus_id == ''){
+        if($request->cus_id == '' || $request->book_id == 0){
             if(!empty($cart_item)){
                 session()->put('cart_item_for_checkout',[]);
             }
