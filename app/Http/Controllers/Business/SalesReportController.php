@@ -18,6 +18,8 @@ class SalesReportController extends BusinessBaseController
 
      public function index(Request $request ,$business_id)
      {
+          //print_r($request->all());exit;
+          $filterOptions = $request->filterOptions;
           $date= '';
          	$today = date('m/d/Y');
           $filterStartDate = $request->startDate != '' ? Carbon::parse($request->startDate) : Carbon::parse($today);
@@ -78,7 +80,7 @@ class SalesReportController extends BusinessBaseController
                          ->where('ubd.business_id', '=', $business_id);
                });
 
-    	     return view('business.sales_report.index',compact('date','cardReportubs','cardReportrec','cashReport','business_id','compReport','checkReport','filterStartDate','filterEndDate','sortedDates'));
+    	     return view('business.sales_report.index',compact('date','cardReportubs','cardReportrec','cashReport','business_id','compReport','checkReport','filterStartDate','filterEndDate','sortedDates','filterOptions'));
      }
 
      public function export($business_id,Request $request){
@@ -140,12 +142,7 @@ class SalesReportController extends BusinessBaseController
                     ->whereDate('transaction.created_at', '<=', $request->endDate)->orderBy('transaction.created_at', 'Desc');
 
                $cardReport = $cardReportubs->get()->merge($cardReportrec->get());
-               //print_r($mergedArray);exit;
-               /*$cardReport = $mergedArray->filter(function($item) {
-                    $userBookingDetailCount = @$item->userBookingStatus->UserBookingDetail != '' ? count(@$item->userBookingStatus->UserBookingDetail) : 0 ;
-                    return $userBookingDetailCount > 0 ;
-               });*/
-
+     
                $cashReport  = $cashReport->filter(function ($item) {
                     $userBookingDetailCount = count($item->userBookingStatus->UserBookingDetail);
                     return $userBookingDetailCount > 0 ;

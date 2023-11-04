@@ -96,7 +96,7 @@
                                                                                 <span class="font-13"> {{$schedules->count()}} TIMESLOTS SCHEDULED</span>
                                                                             </div>
                                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"> 
-                                                                                <span> <a href="{{route('business.schedulers.create', ['business_id'=>$category->cid,'categoryId'=>$category->id ]) }}">+ EDIT SCHEDULE</a></span>
+                                                                                <span> <a href="{{route('business.schedulers.create', ['business_id'=>$category->cid,'categoryId'=>$category->id,'session'=> $service->id ]) }}">+ EDIT SCHEDULE</a></span>
                                                                             </div>
                                                                         </div>
                                                                     @endforeach
@@ -129,7 +129,7 @@
                                                                     <div class="manage-txt mb-15">
                                                                         <label class="highlight-font">Edit/Add Schedule</label>
                                                                         <span>{{ count($service->businessPriceDetailsAges)}} CATEGORIES CREATED | <br> {{$service->get_scheduled_categories($categories)}} CATEGORIES SCHEDULED | <br>
-                                                                        <a href="#" data-bs-toggle="modal" data-bs-target=".edit-schedule{{$service->id}}"> + EDIT SCHEDULE</a>
+                                                                        <a href="#" data-bs-toggle="modal" data-bs-target=".edit-schedule{{$service->id}}" class="editSchedule{{$service->id}}"> + EDIT SCHEDULE</a>
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -175,7 +175,16 @@
     <!-- END layout-wrapper -->
 
     @include('layouts.business.footer')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        
+        $(document).ready(function() {
+            var chkDisplay = '{{$displayModal}}';
+            if(chkDisplay){
+                $('.edit-schedule'+chkDisplay).modal('show');
+            }
+        });
+
         function getbookingmodel(sid,chk,type,open){  
             let date = '';
             if(chk == 'ajax'){

@@ -41,7 +41,7 @@
 									</div>
 								</div>
 							</div>
-                      
+               
 							<div class="row">
 								<div class="col-xl-12">
 									<div class="card">
@@ -360,12 +360,15 @@
 														</div>
 													</div>
 												</div>
+												<div class="btn-ano-time mt-20 float-right">
+													<a href="{{route('business.services.index')}}" class="btn btn-red" >Finish</a>
+												</div> 		
 											</div>
 										</div><!-- end card-body -->
 									</div><!-- end card -->
 								</div>
-							</div>				
-						</div> 
+							</div>	
+						</div>
                 </div> 
             </div>
          </div>

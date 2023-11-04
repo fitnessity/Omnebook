@@ -1,5 +1,6 @@
 <?php
     if(request()->business_id){
+        
         $companyId = request()->business_id;
         //temporary add here, wait for controller refactored
         URL::defaults(['business_id' => $companyId]);

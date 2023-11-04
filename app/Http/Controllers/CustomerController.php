@@ -73,6 +73,7 @@ class CustomerController extends Controller {
 
         if($request->customer_id){
             $customers = $customers->where('id',$request->customer_id);
+
         }
 
         $customers = $customers->get();
@@ -99,6 +100,9 @@ class CustomerController extends Controller {
         $company = $user->businesses()->findOrFail($business_id);
         $terms = $company->business_terms->first();
         $customerdata = $company->customers->find($id);
+        if(!$customerdata){
+            return redirect()->route('business_customer_index');
+        }
         $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
         $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->get() : [];
         $purchase_history = @$customerdata != '' ?  @$customerdata->Transaction()->orderby('id', 'desc')->get() : [];
