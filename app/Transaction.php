@@ -63,8 +63,8 @@ class Transaction extends Model
         }
     }
 
-    public function item_description($chkBusiness = null){
-        $itemDescription = $itemPrice = $itemSubTotal = $itemDis = $itemTax = $location = $notes = $addOnTotal = '';
+    public function item_description($chkBusiness = null,$chk = null){
+        $itemDescription = $itemPrice = $itemSubTotal = $itemDis = $itemTax = $location = $notes = $addOnTotal = $customer = '';
         $totalTax = $totalDis = $totalPaid =  $qty = 0;
         $arry = [];
         if($this->item_type == 'UserBookingStatus'){
@@ -73,12 +73,20 @@ class Transaction extends Model
                 if(!empty($bookingData)){
                     foreach($bookingData as $key => $bd){
                         if($bd->business_id == $chkBusiness){
+                            $text ='<a href="'.url('business/'.@$bd->business_id.'/customers/'.@$bd->Customer->id).'" class="fw-medium">';
+                            if($chk == 'no'){
+                                $customer .= @$bd->Customer !='' ? ($key+1).'. '.@$bd->Customer->full_name.'<br>' : ($key+1).". N/A<br>";
+                            }else{
+                                $customer .= @$bd->Customer !='' ? ($key+1).'. '.$text .''.@$bd->Customer->full_name.'</a><br>' : ($key+1).". N/A<br>";
+                            }
+                           
+                           
                             $activityName = $bd->business_services_with_trashed->program_name;
                             $categoryName = $bd->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
                             $priceOption = $bd->business_price_detail_with_trashed->price_title;
                             $itemDescription .= ($key+1).'. '.$activityName.' ('.$categoryName.') ,'.$priceOption.'<br>';
                             $itemPrice .= $bd->total() != '' ? '$'.$bd->total().'<br>' : '$0<br>';
-                            $itemSubTotal .= '$'. $bd->subtotal ?? 0 .'<br>';
+                            $itemSubTotal .= $bd->subtotal != ''  ? '$'. $bd->subtotal.'<br>' : '$0<br>';
                             $itemDis .= $bd->discount != '0.00' ? '$'.$bd->discount.'<br>' : '$0<br>';
                             $itemTax .= $bd->tax != '0.00' ? '$'.$bd->tax.'<br>' : '$0<br>';
                             $addOnTotal .= $bd->addOnservice_total != '' ? '$'.$bd->addOnservice_total.'<br>' : '$0<br>';
@@ -96,12 +104,20 @@ class Transaction extends Model
         }else if ($this->item_type == 'Recurring') {
             $bookingData = $this->Recurring->UserBookingDetail;
             if($bookingData != ''){
+                $text ='<a href="'.url('business/'.@$bookingData->business_id.'/customers/'.@$bookingData->Customer->id).'" class="fw-medium">';
+                if($chk == 'no'){
+                    $customer .= @$bd->Customer !='' ? '1. '.@$bookingData->Customer->full_name.'<br>' : "1. N/A<br>";
+                }else{
+                    $customer .= @$bookingData->Customer !='' ? '1. '.$text .''.@$bookingData->Customer->full_name.'</a><br>' :"1. N/A<br>";
+                }
+
                 $activityName = $bookingData->business_services_with_trashed->program_name;
                 $categoryName = $bookingData->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
                 $priceOption = $bookingData->business_price_detail_with_trashed->price_title;
                 $itemDescription = $activityName.' ('.$categoryName.') ,'.$priceOption;
                 $itemPrice .= $this->Recurring->amount != '' ? '$'.$this->Recurring->amount .'<br>' : '$0<br>';
-                $itemSubTotal .= '$'. (($this->Recurring->amount + $this->Recurring->tax) ?? 0 ) .'<br>' ;
+                $itemSubTotal .=  $this->Recurring->amount != '' ? '$'.($this->Recurring->amount + $this->Recurring->tax) .'<br>' : '$0<br>';
+                
                 $itemDis .= '$0<br>';
                 $itemTax .= '$' . ($this->Recurring->tax ?? 0) . '<br>';
                 $addOnTotal .= '$0<br>';
@@ -115,7 +131,7 @@ class Transaction extends Model
             }
         }
         
-        $arry = array("qty"=>$qty,"itemDescription"=>$itemDescription,"itemPrice"=> $itemPrice ?? 0,"itemSubTotal"=> $itemSubTotal ?? 0,"itemDis"=> $itemDis ?? 0,"itemTax"=> $itemTax ?? 0,"location"=> $location  ?? 'N/A',"totalTax"=> $totalTax ?? 0, "totalDis"=> $totalDis ?? 0,"totalPaid"=> $totalPaid  ?? 0,'notes'=>$notes);
+        $arry = array("qty"=>$qty,"itemDescription"=>$itemDescription,"itemPrice"=> $itemPrice ?? 0,"itemSubTotal"=> $itemSubTotal ?? 0,"itemDis"=> $itemDis ?? 0,"itemTax"=> $itemTax ?? 0,"location"=> $location  ?? 'N/A',"totalTax"=> $totalTax ?? 0, "totalDis"=> $totalDis ?? 0,"totalPaid"=> $totalPaid  ?? 0,'notes'=>$notes ,'customer' => $customer);
         return $arry;
     }
 
