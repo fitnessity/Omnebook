@@ -223,4 +223,54 @@
         return App\UserBookingDetail::where(['sport'=> $sid ,'user_id'=>$cid])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->orderby('created_at','desc')->get();
     }
 
+    function getGroupByPriceOption($cdt)
+    {
+        $cardPriceOption = [];
+        if(!empty($cdt)){
+            foreach ($cdt as $key => $data){
+                if($data->item_type == 'UserBookingStatus'){
+                    $bDetails = $data->UserBookingStatus->UserBookingDetail;
+                    foreach ($bDetails as $key => $dt) 
+                    {
+                        $name = $dt->business_price_detail_with_trashed->price_title;
+                        $cardPriceOption[$name][] = $data;
+                    }
+                }else{
+                    $bDetails = $data->Recurring->UserBookingDetail;
+                    if($bDetails != ''){
+                        $name = $bDetails->business_price_detail_with_trashed->price_title;
+                        $cardPriceOption[$name][] = $data;
+                    }
+                }
+            }
+        }
+
+        return $cardPriceOption;
+    }
+
+    function getGroupByCategoty($cdt)
+    {
+        $cardCategoty = [];
+        if(!empty($cdt)){
+            foreach ($cdt as $key => $data){
+                if($data->item_type == 'UserBookingStatus'){
+                    $bDetails = $data->UserBookingStatus->UserBookingDetail;
+                    foreach ($bDetails as $key => $dt) 
+                    {
+                        $name = $dt->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
+                        $cardCategoty[$name][] = $data;
+                    }
+                }else{
+                    $bDetails = $data->Recurring->UserBookingDetail;
+                    if($bDetails != ''){
+                        $name = $bDetails->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
+                        $cardCategoty[$name][] = $data;
+                    }
+                }
+            }
+        }
+
+        return $cardCategoty;
+    }
+
 ?>

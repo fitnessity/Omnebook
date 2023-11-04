@@ -25,7 +25,7 @@ class CompanyInformation extends Model {
      *
      * @var array
      */
-    protected $fillable = [
+    /*protected $fillable = [
         'user_id',
         'first_name',
         'last_name',
@@ -62,8 +62,8 @@ class CompanyInformation extends Model {
         "client_skip_logs_url",
         "client_fail_logs_url",
         "client_imported_at"
-    ];
-
+    ];*/
+    protected $guarded = [];  
     protected $appends = ['full_name', 'first_letter','public_company_name','cname_first_letter'];
 
     public function getFullNameAttribute(){

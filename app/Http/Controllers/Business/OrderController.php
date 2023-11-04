@@ -64,7 +64,6 @@ class OrderController extends BusinessBaseController
             var_dump('no this cases');
             exit();
         }else if($request->cus_id != ''){
-
             $user_type = 'customer';
             $customer = $customerdata = $request->current_company->customers->find($request->cus_id);
             @$customer->create_stripe_customer_id();
@@ -103,7 +102,7 @@ class OrderController extends BusinessBaseController
             $email = @$customerdata->email;
         }
 
-        if($request->cus_id == ''){
+        if($request->cus_id == '' || $request->book_id == 0){
             if(!empty($cart_item)){
                 session()->put('cart_item_for_checkout',[]);
             }
@@ -157,6 +156,7 @@ class OrderController extends BusinessBaseController
            'participateName' => $participateName,
            'products' => $products,
            'productCategory' => $productCategory,
+           'company' => $request->current_company,
         ]);
     }
 
@@ -922,7 +922,7 @@ class OrderController extends BusinessBaseController
             $catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$cart['code'])->get(); 
             $pricelist = BusinessPriceDetails::select('id','price_title')->where('category_id',@$cart['categoryid'])->get();
             $membershiplist = BusinessPriceDetails::select('id','membership_type')->where('id',$cart['priceid'])->get();
-
+            $company = $cartselectedpriceid->CompanyInformation;
             $aduqty = $infantqty = $childqty = 0;
             $priceType = (date('l') == 'Saturday' || date('l') == 'Sunday') ? 'weekend_price_diff' : 'cus_weekly_price';
 
@@ -930,8 +930,8 @@ class OrderController extends BusinessBaseController
             $childprice = $cartselectedpriceid['child_'.$priceType] ?? 0;
             $infantprice = $cartselectedpriceid['infant_'.$priceType] ?? 0;
 
-            $salestaxajax = $cartselectedcategory->sales_tax ?? '';
-            $duestaxajax = $cartselectedcategory->dues_tax ?? '';
+            $salestaxajax = $company->sales_tax ?? '';
+            $duestaxajax = $company->dues_tax ?? '';
 
             $aduqty = !empty($cart['adult']) ? ($cart['adult']['quantity'] != 0 ? $cart['adult']['quantity'] : 0) : 0;
             $childqty = !empty($cart['child']) ? ($cart['child']['quantity'] != 0 ? $cart['child']['quantity'] : 0) : 0;
@@ -963,6 +963,7 @@ class OrderController extends BusinessBaseController
         $customerId = $request->pc_regi_id;
         $cart_item = $request->session()->has('cart_item_for_checkout') ? $request->session()->get('cart_item_for_checkout') : [];
         $tax = $request->has('value_tax') != '' ? $request->value_tax : 0;
+        $tax_activity = $request->has('value_tax_activity') != '' ? $request->value_tax_activity : 0;
         $tip_amt_val = $request->has('tip_amt_val') != '' ? $request->tip_amt_val : 0;
         $dis_amt_val = $request->has('dis_amt_val') != '' ? $request->dis_amt_val : 0;
         $parti_from_chkout_regi = $request->has('pc_value') != '' ? array('id'=>$customerId, 'from'=>$request->pc_user_tp, 'pc_name'=>$request->pc_value) : array();
@@ -1010,7 +1011,7 @@ class OrderController extends BusinessBaseController
         }
 
         if ($service != '') {
-            $itemArray = array($customerId.'~~'.$request->priceid=>array('type'=>$service->service_type, 'name'=>$service->program_name, 'code'=>$service->id,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'tax'=>$tax,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'categoryid'=>$categoryid ,'p_session'=>$p_session,'addOnServicesId'=> $addOnServicesId, 'addOnServicesQty' => $addOnServicesQty, 'addOnServicesTotalPrice' => $addOnServicesTotalPrice, 'aos_details' => $aos_details, 'product_details' => $product_details,'productIds' => $productIds, 'productQtys' => $productQtys, 'productSize' => $productSize, 'productColor' => $productColor, 'productTypes' =>$productTypes ,'productTotalPrices' =>$productTotalPrices, 'customerId' => $customerId ));
+            $itemArray = array($customerId.'~~'.$request->priceid=>array('type'=>$service->service_type, 'name'=>$service->program_name, 'code'=>$service->id,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'tax'=>$tax,'tax_activity'=>$tax_activity,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'categoryid'=>$categoryid ,'p_session'=>$p_session,'addOnServicesId'=> $addOnServicesId, 'addOnServicesQty' => $addOnServicesQty, 'addOnServicesTotalPrice' => $addOnServicesTotalPrice, 'aos_details' => $aos_details, 'product_details' => $product_details,'productIds' => $productIds, 'productQtys' => $productQtys, 'productSize' => $productSize, 'productColor' => $productColor, 'productTypes' =>$productTypes ,'productTotalPrices' =>$productTotalPrices, 'customerId' => $customerId ));
 
             if(!empty($cart_item["cart_item"])) {
                 if(in_array($customerId.'~~'.$request->priceid, array_keys($cart_item["cart_item"]))) {
@@ -1020,6 +1021,7 @@ class OrderController extends BusinessBaseController
                             $cart_item["cart_item"][$k]["tip"] = $tip_amt_val;
                             $cart_item["cart_item"][$k]["discount"] = $dis_amt_val;
                             $cart_item["cart_item"][$k]["tax"] = $tax;
+                            $cart_item["cart_item"][$k]["tax_activity"] = $tax_activity;
                             $cart_item["cart_item"][$k]["categoryid"] = $categoryid;
                             $cart_item["cart_item"][$k]["p_session"] = $p_session;
 
