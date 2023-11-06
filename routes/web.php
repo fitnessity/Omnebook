@@ -59,7 +59,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('customers/card_editing_form', 'CustomerController@card_editing_form')->name('customers.card_editing_form');
     Route::get('customers/import', 'CustomerController@importcustomer')->name('customers.import');
     Route::any('customers/refresh_payment_methods', 'CustomerController@refresh_payment_methods')->name('customers.refresh_payment_methods');
-    
+    Route::post('customers/import-customer','CustomerController@importcustomer')->name('customers.import');
     Route::resource('customers', 'CustomerController')->only(['index', 'update','store']);
    
     Route::resource('staff', 'StaffController')->only(['index','create','show','edit','store','update', 'destroy']);
