@@ -331,7 +331,7 @@ class OrderController extends BusinessBaseController
         }
 
         foreach($checkoutRegisterCartService->items() as $item){
-
+            print_r($item);
             $now = new DateTime();
             /*$contractDate = $now->format('Y-m-d');
             $now->modify('+'. $item['actscheduleid']);
@@ -375,12 +375,12 @@ class OrderController extends BusinessBaseController
                 'addOnservice_ids' =>@$item['addOnServicesId'],
                 'addOnservice_qty' => @$item['addOnServicesQty'],
                 'addOnservice_total' => @$item['addOnServicesTotalPrice'] ?? 0 ,
-                'productIds' => '1,2',
-                'productQtys' => '1,2',
-                'productSize' => '',
-                'productColor' => '',
-                'productTypes' => 'sale,sale',
-                'productTotalPrices' => '10',
+                'productIds' => @$item['productIds'],
+                'productQtys' => @$item['productQtys'],
+                'productSize' => @$item['productSize'],
+                'productColor' => @$item['productColor'],
+                'productTypes' => @$item['productTypes'],
+                'productTotalPrices' => @$item['productTotalPrices'],
             ]);
 
             $booking_detail->transfer_to_provider();
