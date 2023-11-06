@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Business\BusinessBaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Auth;
 use DB;
 use Carbon\Carbon;
@@ -40,11 +41,17 @@ class OrderController extends BusinessBaseController
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request ,$business_id)
-    {    //print_r($request->all());
+    {    
         $cart_item = [];
+        if($request->book_id === '0' || $request->cus_id == ''){
+            if (Session::has('cart_item_for_checkout')) {
+                session()->forget('cart_item_for_checkout');
+            }
+            
+        }
+
         if (session()->has('cart_item_for_checkout')) {
             $cart_item = session()->get('cart_item_for_checkout');
-            // /session()->forget('cart_item_for_checkout');
         }
 
         //print_r($cart_item);exit;
@@ -102,11 +109,6 @@ class OrderController extends BusinessBaseController
             $email = @$customerdata->email;
         }
 
-        if($request->cus_id == '' || $request->book_id == 0){
-            if(!empty($cart_item)){
-                session()->put('cart_item_for_checkout',[]);
-            }
-        }
         if($activated == 0){
             $status = "InActive";
         }else{

@@ -34,7 +34,9 @@ class CheckoutRegisterCartService
     }
 
     public function items(){
-        return $this->_cart['cart_item'];
+        $cart['cart_item'] = [];
+        $cart['cart_item'] = $this->_cart['cart_item'];
+        return $cart['cart_item'];
     }
 
     public function getQtyPriceByItem($item){
