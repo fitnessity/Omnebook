@@ -352,7 +352,7 @@ class OrderController extends BusinessBaseController
 
             DB::enableQueryLog(); 
             $booking_detail = UserBookingDetail::create([                 
-                'booking_id' => $userBookingStatus->id,
+                /*'booking_id' => $userBookingStatus->id,
                 'sport' => $item['code'],
                 'business_id'=> Auth::user()->cid,
                 'price' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['price']),
