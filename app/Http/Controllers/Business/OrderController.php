@@ -352,7 +352,7 @@ class OrderController extends BusinessBaseController
 
             DB::enableQueryLog(); 
             $booking_detail = UserBookingDetail::create([                 
-                'booking_id' => $userBookingStatus->id,
+                /*'booking_id' => $userBookingStatus->id,
                 'sport' => $item['code'],
                 'business_id'=> Auth::user()->cid,
                 'price' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['price']),
@@ -375,7 +375,7 @@ class OrderController extends BusinessBaseController
                 'order_from' => "Checkout Register",
                 'addOnservice_ids' =>@$item['addOnServicesId'],
                 'addOnservice_qty' => @$item['addOnServicesQty'],
-                'addOnservice_total' => @$item['addOnServicesTotalPrice'] ?? 0 ,
+                'addOnservice_total' => @$item['addOnServicesTotalPrice'] ?? 0 ,*/
                 'productIds' => @$item['productIds'],
                 'productQtys' => @$item['productQtys'],
                 'productSize' => @$item['productSize'],
