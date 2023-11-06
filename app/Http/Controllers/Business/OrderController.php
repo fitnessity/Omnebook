@@ -185,7 +185,7 @@ class OrderController extends BusinessBaseController
         $transactions = [];
 
         $checkoutRegisterCartService = new CheckoutRegisterCartService();
-        print_r($checkoutRegisterCartService->items());
+        //print_r($checkoutRegisterCartService->items());
         if($isComp){
             $transactions[] = [
                 'channel' =>'comp',
@@ -331,7 +331,6 @@ class OrderController extends BusinessBaseController
         }
 
         foreach($checkoutRegisterCartService->items() as $item){
-            print_r($item);
             $now = new DateTime();
             /*$contractDate = $now->format('Y-m-d');
             $now->modify('+'. $item['actscheduleid']);
