@@ -185,7 +185,7 @@ class OrderController extends BusinessBaseController
         $transactions = [];
 
         $checkoutRegisterCartService = new CheckoutRegisterCartService();
-        //print_r($checkoutRegisterCartService->items());
+        print_r($checkoutRegisterCartService->items());
         if($isComp){
             $transactions[] = [
                 'channel' =>'comp',
@@ -284,7 +284,6 @@ class OrderController extends BusinessBaseController
             }
 
             if($isCash){
-
                 $transactions[] = [
                     'channel' =>'cash',
                     'kind' => 'cash',
@@ -297,7 +296,6 @@ class OrderController extends BusinessBaseController
             }
 
             if($isCheck){
-
                 $transactions[] = [
                     'channel' =>'check',
                     'kind' => 'check',
@@ -352,6 +350,7 @@ class OrderController extends BusinessBaseController
 
             $price_detail = $checkoutRegisterCartService->getPriceDetail($item['priceid']);
 
+            DB::enableQueryLog(); 
             $booking_detail = UserBookingDetail::create([                 
                 'booking_id' => $userBookingStatus->id,
                 'sport' => $item['code'],
@@ -384,6 +383,8 @@ class OrderController extends BusinessBaseController
                 'productTypes' => @$item['productTypes'],
                 'productTotalPrices' => @$item['productTotalPrices'],
             ]);
+             return dd(DB::getQueryLog()); 
+             
             $booking_detail->transfer_to_provider();
             $bookidarray [] = $booking_detail->id;
 
