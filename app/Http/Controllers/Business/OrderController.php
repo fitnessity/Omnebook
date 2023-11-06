@@ -350,9 +350,8 @@ class OrderController extends BusinessBaseController
 
             $price_detail = $checkoutRegisterCartService->getPriceDetail($item['priceid']);
 
-            DB::enableQueryLog(); 
             $booking_detail = UserBookingDetail::create([                 
-                /*'booking_id' => $userBookingStatus->id,
+                'booking_id' => $userBookingStatus->id,
                 'sport' => $item['code'],
                 'business_id'=> Auth::user()->cid,
                 'price' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['price']),
@@ -375,16 +374,15 @@ class OrderController extends BusinessBaseController
                 'order_from' => "Checkout Register",
                 'addOnservice_ids' =>@$item['addOnServicesId'],
                 'addOnservice_qty' => @$item['addOnServicesQty'],
-                'addOnservice_total' => @$item['addOnServicesTotalPrice'] ?? 0 ,*/
-                'productIds' => @$item['productIds'],
-                'productQtys' => @$item['productQtys'],
-                'productSize' => @$item['productSize'],
-                'productColor' => @$item['productColor'],
-                'productTypes' => @$item['productTypes'],
-                'productTotalPrices' => @$item['productTotalPrices'],
+                'addOnservice_total' => @$item['addOnServicesTotalPrice'] ?? 0 ,
+                'productIds' => '1,2',
+                'productQtys' => '1,2',
+                'productSize' => '',
+                'productColor' => '',
+                'productTypes' => 'sale,sale',
+                'productTotalPrices' => '10',
             ]);
-             return dd(DB::getQueryLog()); 
-             
+
             $booking_detail->transfer_to_provider();
             $bookidarray [] = $booking_detail->id;
 
