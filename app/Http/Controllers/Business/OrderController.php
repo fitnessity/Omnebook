@@ -74,8 +74,8 @@ class OrderController extends BusinessBaseController
             $user_type = 'customer';
             $customer = $customerdata = $request->current_company->customers->find($request->cus_id);
             @$customer->create_stripe_customer_id();
-            if($customer->parent_cus_id){
-                return redirect(route('business.orders.create', ['cus_id' => $customer->parent_cus_id, 'participate_id' => $request->cus_id]));
+            if($customer->parent_cus_id && $request->redirected != 1){
+                return redirect(route('business.orders.create', ['cus_id' => $customer->parent_cus_id, 'participate_id' => $request->cus_id, 'redirected' => true]));
             }
 
             $username  =  @$customerdata->fname.' '. @$customerdata->lname;
@@ -375,13 +375,13 @@ class OrderController extends BusinessBaseController
                 'order_from' => "Checkout Register",
                 'addOnservice_ids' =>@$item['addOnServicesId'],
                 'addOnservice_qty' => @$item['addOnServicesQty'],
-                'addOnservice_total' => @$item['addOnServicesTotalPrice'] ?? 0 ,*/
-                'productIds' => @$item['productIds'],
-                'productQtys' => @$item['productQtys'],
-                'productSize' => @$item['productSize'],
-                'productColor' => @$item['productColor'],
-                'productTypes' => @$item['productTypes'],
-                'productTotalPrices' => @$item['productTotalPrices'],
+                'addOnservice_total' => @$item['addOnServicesTotalPrice'] ?? 0 ,
+                // 'productIds' => @$item['productIds'],
+                // 'productQtys' => @$item['productQtys'],
+                // 'productSize' => @$item['productSize'],
+                // 'productColor' => @$item['productColor'],
+                // 'productTypes' => @$item['productTypes'],
+                // 'productTotalPrices' => @$item['productTotalPrices'],
             ]);
              return dd(DB::getQueryLog()); 
              
