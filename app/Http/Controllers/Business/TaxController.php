@@ -14,7 +14,7 @@ class TaxController extends Controller
     	$company = CompanyInformation::find($business_id);
     	$dues_tax = $company->dues_tax;
     	$sales_tax = $company->sales_tax;
-    	return view('business.tax.index',compact('dues_tax','sales_tax'));
+    	return view('business.settings.tax.index',compact('dues_tax','sales_tax'));
     }
 
     public function store(Request $request ,$business_id){
