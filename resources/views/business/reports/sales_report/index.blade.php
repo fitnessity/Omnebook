@@ -217,11 +217,11 @@
 																						<div class="live-preview sales-report-table">
 																							<div class="table-responsive">
 																								<table class="table align-middle table-nowrap mb-25">
-																									@include('business.sales_report.table_header_index')
+																									@include('business.reports.sales_report.table_header_index')
 																									<tbody>
 																										@php $totalTaxCard = $totalPaidCard = $totalDiscountCard =  0 ; @endphp
 																										@forelse($data as $i=>$dt)
-																											@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$dt])
+																											@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$dt])
 																											@php 
 																												$totalTaxCard += $dt->item_description($business_id)['totalTax'];
 
@@ -287,11 +287,11 @@
 																						<div class="live-preview sales-report-table">
 																							<div class="table-responsive">
 																								<table class="table align-middle table-nowrap mb-25">
-																									@include('business.sales_report.table_header_index')
+																									@include('business.reports.sales_report.table_header_index')
 																									<tbody>
 																										@php $totalTaxCard = $totalPaidCard = $totalDiscountCard =  0 ; @endphp
 																										@forelse($data as $i=>$dt)
-																											@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$dt])
+																											@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$dt])
 																											@php 
 																												$totalTaxCard += $dt->item_description($business_id)['totalTax'];
 
@@ -359,11 +359,11 @@
 																								<div class="live-preview sales-report-table">
 																									<div class="table-responsive">
 																										<table class="table align-middle table-nowrap mb-25">
-																											@include('business.sales_report.table_header_index')
+																											@include('business.reports.sales_report.table_header_index')
 																											<tbody>
 																												@php $totalTaxCard = $totalPaidCard = $totalDiscountCard =  0 ; @endphp
 																												@forelse($cpo as $i=>$dt)
-																													@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$dt])
+																													@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$dt])
 																													@php 
 																														$totalTaxCard += $dt->item_description($business_id)['totalTax'];
 
@@ -433,11 +433,11 @@
 																								<div class="live-preview sales-report-table">
 																									<div class="table-responsive">
 																										<table class="table align-middle table-nowrap mb-25">
-																											@include('business.sales_report.table_header_index')
+																											@include('business.reports.sales_report.table_header_index')
 																											<tbody>
 																												@php $totalTaxCard = $totalPaidCard = $totalDiscountCard =  0 ; @endphp
 																												@forelse($cpo as $i=>$dt)
-																													@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$dt])
+																													@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$dt])
 																													@php 
 																														$totalTaxCard += $dt->item_description($business_id)['totalTax'];
 
@@ -501,11 +501,11 @@
 																						<div class="live-preview sales-report-table">
 																							<div class="table-responsive">
 																								<table class="table align-middle table-nowrap mb-25">
-																									@include('business.sales_report.table_header_index')
+																									@include('business.reports.sales_report.table_header_index')
 																									<tbody>
 																										@php $totalTaxCard = $totalPaidCard = $totalDiscountCard =  0 ; @endphp
 																										@forelse($data as $i=>$dt)
-																											@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$dt])
+																											@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$dt])
 																											@php 
 																												$totalTaxCard += $dt->item_description($business_id)['totalTax'];
 
@@ -567,14 +567,14 @@
 																					<div class="live-preview sales-report-table">
 																						<div class="table-responsive">
 																							<table class="table align-middle table-nowrap mb-25">
-																								@include('business.sales_report.table_header_index')
+																								@include('business.reports.sales_report.table_header_index')
 																								<tbody>
 																									@php 
 																										$totalDiscount = $totalTax = $totalPaid = 0 ; 
 																									@endphp
 																									@forelse($cashCustomer as $i=>$cData)
 																										@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																											@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
+																											@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
 																											@php 
 																												$totalTax += $cData->item_description($business_id)['totalTax'];
 
@@ -626,14 +626,14 @@
 																					<div class="live-preview sales-report-table">
 																						<div class="table-responsive">
 																							<table class="table align-middle table-nowrap mb-25">
-																								@include('business.sales_report.table_header_index')
+																								@include('business.reports.sales_report.table_header_index')
 																								<tbody>
 																									@php 
 																										$totalDiscount = $totalTax = $totalPaid = 0 ; 
 																									@endphp
 																									@forelse($cashUser as $i=>$cData)
 																										@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																											@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
+																											@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
 																											@php 
 																												$totalTax += $cData->item_description($business_id)['totalTax'];
 
@@ -707,14 +707,14 @@
 																							<div class="live-preview sales-report-table">
 																								<div class="table-responsive">
 																									<table class="table align-middle table-nowrap mb-25">
-																										@include('business.sales_report.table_header_index')
+																										@include('business.reports.sales_report.table_header_index')
 																										<tbody>
 																											@php 
 																												$totalDiscount = $totalTax = $totalPaid = 0 ; 
 																											@endphp
 																											@forelse($data as $i=>$cData)
 																												@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																													@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
+																													@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
 																													@php 
 																														$totalTax += $cData->item_description($business_id)['totalTax'];
 
@@ -790,14 +790,14 @@
 																							<div class="live-preview sales-report-table">
 																								<div class="table-responsive">
 																									<table class="table align-middle table-nowrap mb-25">
-																										@include('business.sales_report.table_header_index')
+																										@include('business.reports.sales_report.table_header_index')
 																										<tbody>
 																											@php 
 																												$totalDiscount = $totalTax = $totalPaid = 0 ; 
 																											@endphp
 																											@forelse($data as $i=>$cData)
 																												@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																													@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
+																													@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
 																													@php 
 																														$totalTax += $cData->item_description($business_id)['totalTax'];
 
@@ -851,14 +851,14 @@
 																					<div class="live-preview sales-report-table">
 																						<div class="table-responsive">
 																							<table class="table align-middle table-nowrap mb-25">
-																								@include('business.sales_report.table_header_index')
+																								@include('business.reports.sales_report.table_header_index')
 																								<tbody>
 																									@php 
 																										$totalDiscount = $totalTax = $totalPaid = 0 ; 
 																									@endphp
 																									@forelse($cashData as $i=>$cData)
 																										@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																											@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
+																											@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
 																											@php 
 																												$totalTax += $cData->item_description($business_id)['totalTax'];
 
@@ -919,12 +919,12 @@
 																					<div class="live-preview sales-report-table">
 																						<div class="table-responsive">
 																							<table class="table align-middle table-nowrap mb-25">
-																								@include('business.sales_report.table_header_index')
+																								@include('business.reports.sales_report.table_header_index')
 																								<tbody>
 																									@php $totalDisCheck = $totalTaxCheck = $totalPaidCheck = 0 ; @endphp
 																									@forelse($checkCustomer as $i=>$cData)
 																										@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																										@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
+																										@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
 																										@php 
 																											$totalTaxCheck += $cData->item_description($business_id)['totalTax'];
 
@@ -978,12 +978,12 @@
 																					<div class="live-preview sales-report-table">
 																						<div class="table-responsive">
 																							<table class="table align-middle table-nowrap mb-25">
-																								@include('business.sales_report.table_header_index')
+																								@include('business.reports.sales_report.table_header_index')
 																								<tbody>
 																									@php $totalDisCheck = $totalTaxCheck = $totalPaidCheck = 0 ; @endphp
 																									@forelse($checkUser as $i=>$cData)
 																										@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																										@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
+																										@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
 																										@php 
 																											$totalTaxCheck += $cData->item_description($business_id)['totalTax'];
 
@@ -1057,12 +1057,12 @@
 																							<div class="live-preview sales-report-table">
 																								<div class="table-responsive">
 																									<table class="table align-middle table-nowrap mb-25">
-																										@include('business.sales_report.table_header_index')
+																										@include('business.reports.sales_report.table_header_index')
 																										<tbody>
 																											@php $totalDisCheck = $totalTaxCheck = $totalPaidCheck = 0 ; @endphp
 																											@forelse($data as $i=>$cData)
 																												@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																												@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
+																												@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
 																												@php 
 																													$totalTaxCheck += $cData->item_description($business_id)['totalTax'];
 
@@ -1140,12 +1140,12 @@
 																							<div class="live-preview sales-report-table">
 																								<div class="table-responsive">
 																									<table class="table align-middle table-nowrap mb-25">
-																										@include('business.sales_report.table_header_index')
+																										@include('business.reports.sales_report.table_header_index')
 																										<tbody>
 																											@php $totalDisCheck = $totalTaxCheck = $totalPaidCheck = 0 ; @endphp
 																											@forelse($data as $i=>$cData)
 																												@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																												@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
+																												@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
 																												@php 
 																													$totalTaxCheck += $cData->item_description($business_id)['totalTax'];
 
@@ -1199,12 +1199,12 @@
 																					<div class="live-preview sales-report-table">
 																						<div class="table-responsive">
 																							<table class="table align-middle table-nowrap mb-25">
-																								@include('business.sales_report.table_header_index')
+																								@include('business.reports.sales_report.table_header_index')
 																								<tbody>
 																									@php $totalDisCheck = $totalTaxCheck = $totalPaidCheck = 0 ; @endphp
 																									@forelse($checkData as $i=>$cData)
 																										@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																										@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
+																										@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData])
 																										@php 
 																											$totalTaxCheck += $cData->item_description($business_id)['totalTax'];
 
@@ -1265,12 +1265,12 @@
 																					<div class="live-preview sales-report-table">
 																						<div class="table-responsive">
 																							<table class="table align-middle table-nowrap mb-25">
-																								@include('business.sales_report.table_header_index')
+																								@include('business.reports.sales_report.table_header_index')
 																								<tbody>
 																									@php $taxComp = $totalTaxComp = $totalPaidComp = 0 ; @endphp
 																									@forelse($compCustomer as $i=>$cData)
 																										@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																										@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData ,'type'=>'comp'])
+																										@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData ,'type'=>'comp'])
 																										@php 
 																											$totalTaxComp += $cData->item_description($business_id)['totalTax'];
 																											$totalPaidComp += 0;
@@ -1317,12 +1317,12 @@
 																					<div class="live-preview sales-report-table">
 																						<div class="table-responsive">
 																							<table class="table align-middle table-nowrap mb-25">
-																								@include('business.sales_report.table_header_index')
+																								@include('business.reports.sales_report.table_header_index')
 																								<tbody>
 																									@php $taxComp = $totalTaxComp = $totalPaidComp = 0 ; @endphp
 																									@forelse($compUser as $i=>$cData)
 																										@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																										@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData ,'type'=>'comp'])
+																										@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData ,'type'=>'comp'])
 																										@php 
 																											$totalTaxComp += $cData->item_description($business_id)['totalTax'];
 																											$totalPaidComp += 0;
@@ -1389,12 +1389,12 @@
 																						<div class="live-preview sales-report-table">
 																							<div class="table-responsive">
 																								<table class="table align-middle table-nowrap mb-25">
-																									@include('business.sales_report.table_header_index')
+																									@include('business.reports.sales_report.table_header_index')
 																									<tbody>
 																										@php $taxComp = $totalTaxComp = $totalPaidComp = 0 ; @endphp
 																										@forelse($data as $i=>$cData)
 																											@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																											@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData ,'type'=>'comp'])
+																											@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData ,'type'=>'comp'])
 																											@php 
 																												$totalTaxComp += $cData->item_description($business_id)['totalTax'];
 																												$totalPaidComp += 0;
@@ -1463,12 +1463,12 @@
 																						<div class="live-preview sales-report-table">
 																							<div class="table-responsive">
 																								<table class="table align-middle table-nowrap mb-25">
-																									@include('business.sales_report.table_header_index')
+																									@include('business.reports.sales_report.table_header_index')
 																									<tbody>
 																										@php $taxComp = $totalTaxComp = $totalPaidComp = 0 ; @endphp
 																										@forelse($data as $i=>$cData)
 																											@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																											@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData ,'type'=>'comp'])
+																											@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData ,'type'=>'comp'])
 																											@php 
 																												$totalTaxComp += $cData->item_description($business_id)['totalTax'];
 																												$totalPaidComp += 0;
@@ -1515,12 +1515,12 @@
 																					<div class="live-preview sales-report-table">
 																						<div class="table-responsive">
 																							<table class="table align-middle table-nowrap mb-25">
-																								@include('business.sales_report.table_header_index')
+																								@include('business.reports.sales_report.table_header_index')
 																								<tbody>
 																									@php $taxComp = $totalTaxComp = $totalPaidComp = 0 ; @endphp
 																									@forelse($compData as $i=>$cData)
 																										@if(count($cData->userBookingStatus->UserBookingDetail) >0)
-																										@include('business.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData ,'type'=>'comp'])
+																										@include('business.reports.sales_report.table_data_index',['business_id' =>$business_id , 'dt' =>$cData ,'type'=>'comp'])
 																										@php 
 																											$totalTaxComp += $cData->item_description($business_id)['totalTax'];
 																											$totalPaidComp += 0;

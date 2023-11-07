@@ -80,8 +80,13 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/member_expirations/export','MembershipExpirationsController@export')->name('member_expirations.export');
 
     Route::get('/sales_report','SalesReportController@index')->name('sales_report.index');
-
     Route::get('/sales_report/export','SalesReportController@export')->name('sales_report.export');
+
+    Route::get('/credit_card_report','CreditCardReportController@index')->name('credit_card_report.index');
+    Route::post('/getCards','CreditCardReportController@getCards')->name('credit_card_report.getCards');
+    Route::get('/getMoreCards','CreditCardReportController@getMoreCards')->name('credit_card_report.getMoreCards');
+    Route::get('/credit_cards/export','CreditCardReportController@export')->name('credit_card_report.export');
+    
 
     Route::resource('reports', 'ReportsController')->only(['index']);
     Route::resource('settings', 'SettingsController')->only(['index']);
@@ -192,6 +197,7 @@ Route::get('/getAddOnData', 'ActivityController@getAddOnData')->name('getAddOnDa
 
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/dashboard/{date?}/{id?}', 'BusinessController@dashboard')->name('business_dashboard');
+    Route::get('/getBookingList', 'BusinessController@getBookingList')->name('getBookingList');
     Route::post('/getscheduleactivity', 'BusinessController@getscheduleactivity')->name('getscheduleactivity');
     Route::post('/getExpiringMembership', 'BusinessController@getExpiringMembership')->name('getExpiringMembership');
     Route::get('/bookingchart', 'BusinessController@bookingchart')->name('bookingchart');
