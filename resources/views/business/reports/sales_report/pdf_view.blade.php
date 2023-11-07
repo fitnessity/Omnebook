@@ -74,7 +74,7 @@
 				        	$totalTax += $dt->item_description($business_id)['totalTax'];
 				        	$totalDiscount += $dt->item_description($business_id)['totalDis'];
         				@endphp
-                		@include('business.sales_report.table_data' , ['dt'=> $dt,'business_id' =>$business_id ])
+                		@include('business.reports.sales_report.table_data' , ['dt'=> $dt,'business_id' =>$business_id ])
                 	@empty
 				    @endforelse
 				</table>
@@ -106,7 +106,7 @@
 			        	$totalTax += $dt->item_description($business_id)['totalTax'];
 				        	$totalDiscount += $dt->item_description($business_id)['totalDis'];
     				@endphp
-            		@include('business.sales_report.table_data' , ['dt'=> $dt,'business_id' =>$business_id ])
+            		@include('business.reports.sales_report.table_data' , ['dt'=> $dt,'business_id' =>$business_id ])
             	@empty
 			    @endforelse
 			</table>
@@ -133,7 +133,7 @@
 				        <th>Total Paid/Payment Method </th>
 				    </tr>
 				    @forelse($compReport as $i=>$dt)
-                		@include('business.sales_report.table_data' , ['dt'=> $dt,'business_id' =>$business_id ])
+                		@include('business.reports.sales_report.table_data' , ['dt'=> $dt,'business_id' =>$business_id ])
                 	@empty
 				    @endforelse
 				</table>
@@ -166,7 +166,7 @@
 				        	$totalTax += $dt->item_description($business_id)['totalTax'];
 				        	$totalDiscount += $dt->item_description($business_id)['totalDis'];
         				@endphp
-                		@include('business.sales_report.table_data' , ['dt'=> $dt,'business_id' =>$business_id ])
+                		@include('business.reports.sales_report.table_data' , ['dt'=> $dt,'business_id' =>$business_id ])
                 	@empty
 				    @endforelse
 				</table>

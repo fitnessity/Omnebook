@@ -22,7 +22,7 @@ class MembershipExpirationsController extends BusinessBaseController
     public function index()
     {
         $today = new DateTime();
-    	return view('business.member_expirations.index',compact('today'));
+    	return view('business.reports.member_expirations.index',compact('today'));
     }
 
     public function membership($days,$edate,$sDate){
@@ -72,7 +72,7 @@ class MembershipExpirationsController extends BusinessBaseController
         if($request->limit == ''){
             $memberships = $memberships->take(10);
         }
-    	return view('business.member_expirations.table_data',compact('memberships','type'));
+    	return view('business.reports.member_expirations.table_data',compact('memberships','type'));
     }
 
     public function getMoreMemberships(Request $request)
@@ -87,7 +87,7 @@ class MembershipExpirationsController extends BusinessBaseController
             return $item->Customer && $item->business_price_detail;
         });
         $memberships = $memberships->take($offset);
-    	return view('business.member_expirations.table_data',compact('memberships','type'));
+    	return view('business.reports.member_expirations.table_data',compact('memberships','type'));
     }
 
     public function export(Request $request){
@@ -127,7 +127,7 @@ class MembershipExpirationsController extends BusinessBaseController
                 'startDate'=>$request->startDate,
                 'endDate'=>$request->endDate,
             ];
-            $pdf = PDF::loadView('business.member_expirations.pdf_view', $data);
+            $pdf = PDF::loadView('business.reports.member_expirations.pdf_view', $data);
             return $pdf->download('Membership.pdf');
         }
     
