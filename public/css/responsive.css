@@ -705,7 +705,7 @@
     }
 
     .header-right {
-        width: 88%;
+        width: 39%;
     }
 
     .slider-block input {
@@ -1381,6 +1381,10 @@
 	.special-offer {  float: none !important; margin-bottom: 10px;}
 	.activity-width {  width: 100% !important; }
 	.choose-sport-hire { display: block !important;}
+	.main-box-body {  padding: 0 0px !important;}
+	.custom-multiple-book .owl-prev{left: 13px !important;}
+	.custom-multiple-book .owl-next{right: 0px !important;}
+	.business-info{padding: 25px 20px;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -1722,7 +1726,6 @@
     }
 	.modal-dialog.modal-lg.business{width: 35% !important;}
 	.modal-dialog.manage-customer.mobile-1920{  width: 60%;}
-	.manage-customer-modal-title h3 { left: 503px !important;}
 }
 
 @media screen and (min-width:1920px) and (max-width:2500px){
@@ -1767,12 +1770,10 @@
 	.modal-dialog.familyorfrnd{width: 60% !important;}
 	.add-family-frnd .cards-content .familyfrnd-info .edit-family{left: 156px !important;}
 	.modal-dialog.manage-customer.mobile-1920{width: 60% !important;}
-	.manage-customer-modal-title h3{left: 532px !important;}
 }
 
 @media screen and (min-width:1500px) and (max-width:1920px){
 	.favorite-block .favorite-button{margin: 3.2% 0px !important;}
-	.manage-customer-modal-title h3{left: 555px !important; top: 7px !important;}
 }
 
 @media screen and (min-width:1200px){
@@ -1958,10 +1959,6 @@
         text-align: center;
     }
 
-    header .header-right .btn {
-        font-size: 13px;
-        padding: 6px 10px;
-    }
 
     .without_signin {
         position: relative;
@@ -2385,7 +2382,7 @@
 	.cart-btns-continues{float: none;}
 	.btn-cart-info{margin-left: 20px; margin-right: 0px;}
 	.points-cards-home-text {  display: block;}
-	.activity-time-main{float: left; margin-top: 4px;}
+	.activity-time-main{text-align: center !important; margin-top: 4px;} 
 	.find-activity img{margin-bottom: 0px !important; min-height: 150px !important;}
 	.nav-sliders-activites{float: left;}
 	.instant-banner h4{top: 60%; width: 70%; left: 15px;}
@@ -2498,7 +2495,7 @@
 	.padding-r0{padding-right: 0px;}
 	.activity-inner-data{font-size: 11px;}
 	.activity-hours span{font-size: 10px;}
-	.activity-city span{font-size: 12px;}
+	.activity-city span{font-size: 12px; color: #000;}
 	.companyalink{font-size: 14px;}
 	.activity-information span{font-size: 13px !important; }
 	.activity-information p{font-size: 13px;}
@@ -2566,6 +2563,19 @@
 	.friend-name{padding-left: 15px; padding-right: 7px;}
 	.post-meta.social-img input{padding-left: 15px;}
 	.mobile-none{display:none;}
+	.main-box-body {  padding: 0 0px !important;}
+	.main-box-body{margin-top: 55px !important;}
+	.multiple-modal-size {  width: 95%;}
+	.calendar-separator-line{border-left: none !important;}
+	.custom-multiple-book .owl-prev{left: 0px;}
+	.custom-multiple-book .owl-next{right: -5px;}
+	.book0total-price {  text-align: left;}
+	#calendar .fc-toolbar.fc-header-toolbar .fc-right .fc-button-group{margin-top: -65px; height: 35px;}
+	#calendar .fc-toolbar.fc-header-toolbar .fc-right{align-items: end !important;}
+	.fc .fc-toolbar h2{text-align: center; width: 100%; }
+	.business-info{padding: 23px 10px;}
+	.reset-passthru form {  padding: 0 0px;}
+	.reset-title{padding-left: 0px;}
 }
 
 @media(max-width: 575px) {
@@ -2779,11 +2789,11 @@
 	.emoji-picker-icon {  right: 48%;  top: 64%;}
 	.btn-cart{padding: 5px 7px 0px 25px !important;}
 	.btn-cart > span{top: 2px;}
-	header .header-right .btn{font-size: 14px;}
+	header .header-right .btn{font-size: 12px;}
 	.btn-style-one{font-size: 14px;}
 	.modal-dialog.counter-modal-size {  width: 354px;}
 	.showall-btn{padding: 5px 18px;}
-	.home-black-section label{font-size: 20px;}
+	.home-black-section label{font-size: 12px;}
 	.home-black-section i{display: none;}
 	#dropBox { min-width: 330px;}
 	.form-control.rs-birthdate {  width: 272px;}
@@ -2840,8 +2850,13 @@
 	.modal-banner .bannar-size img { height: 140px !important;}
 	.booking-active {  left: 95px;}
 	.profile-section .nav > li > a { padding: 10px 6px;}
+	header .header-right .header-bottom-sp{margin-bottom: 6px;}
 }
 
+@media(max-width: 360px){
+	.user0imgs.set-text {  top: 0 !important;}
+	.plus-set {  top: 0 !important;}
+}
 
 @media(max-width: 280px){
 	header .header-right{display: block ruby;}

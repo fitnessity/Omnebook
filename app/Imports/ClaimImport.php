@@ -23,48 +23,9 @@ class ClaimImport implements ToModel, WithStartRow
     }
     public function model(array $row)
     {
-        //print_r($row[0]);die;
-        /*$data = [];
-        $not_data = [];
-        if($row[0] != null){
-        if((BusinessClaim::where('website',$row[3])->count()) == 0 && (CompanyInformation::where('website',$row[3])->count()) == 0){
-           // print_r(BusinessClaim::where('business_name',$row[0])->count());
-            return new BusinessClaim([
-               'business_name'     => $row[0],
-               'activity'    => $row[1],
-               'location' => $row[2],
-               'website' => $row[3],
-               'business_phone' => $row[4],
-               'address' => $row[5],
-            ]);
-        }
-        else{
-            if((CompanyInformation::where('website',$row[3])->count()) != 0){
-                \Session::push('notuser', $row);
-                //return "hell";
-             array_push($not_data,$row);
-            }
-            else{
-                \Session::push('user', $row);
+        $not_data = $str_arr = [];
+        $address = $city = $ZipCode = $state =  $data['lat']  = $data['lng'] = NULL;
 
-             array_push($data,$row);
-            }
-            
-            
-            
-            
-            // print_r($data);
-        }
-        }*/
-
-        $not_data = [];
-        $address = NULL;
-        $city = NULL;
-        $ZipCode = NULL;
-        $state = NULL;
-        $data['lat']  = NULL;
-        $data['lng']  = NULL;
-        $str_arr = array();
         if($row[0] != null){
 
             if((CompanyInformation::where('website',$row[3])->count()) == 0){

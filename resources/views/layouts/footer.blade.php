@@ -66,7 +66,7 @@
                     ->where('content_alias', 'footer_content')->get(); ?>
             @foreach($footer_fitnessity as $footercon)
                 <div class="footer-logo">
-                    <img src="/public/images/fitnessity_logo1.png" style="width:250px">
+                    <img src="/public/images/fitnessity-logo-white.png" style="width:250px">
                     <p style="text-align: justify; padding: 5px 50px 5px 0px">
                         {!!$footercon->content!!}
                     </p>
@@ -94,7 +94,8 @@
             <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                 <div class="footer-link">
                     <a href="#">BUSINESS</a><br/>
-                    <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business">Claim your Business</a>
+                    <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business">Claim Your Business</a>
+					<a href="{{route('staff_login')}}">Staff Login</a>
                 </div> 
                 <div class="footer-bottom-left social-footer">
                     <ul>
@@ -176,7 +177,8 @@
 		<div class="shortcut-sticky">
 			<a href="{{route('personal.orders.index')}}" class="short-links">
 				<i class="fas fa-info"></i>
-				<label>Bookings</label>
+				<!-- <label>Bookings</label> -->
+				<label>Account</label>
 			</a>
 		</div>
 	</div>
@@ -196,11 +198,7 @@
 								<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeMobileNav()"></a>
 								<ul class="pc-navbar">
 									<li style="text-align: center;"> 
-										@if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
-										<img src="{{ url('/public/uploads/profile_pic/thumb/'.Auth::user()->profile_pic) }}" alt="Fitnessity" class="sidemenupic" >
-										@else
-										<img src="{{ asset('/public/images/user-icon.png') }}" alt="Fitnessity" class="sidemenupic">
-										  @endif
+										<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" alt="Fitnessity" class="sidemenupic" >
 									</li>
 									<li class="pc-caption"><span> Welcome</span></li>
 									<li class="pc-caption-1">
@@ -221,26 +219,19 @@
 										  <a href="{{route('profile-viewbusinessProfile')}}" style="color: white;">Business Profile</a>
 									 </li><?php */?>
 									 <li class="pc-link">
-										 <span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;"> Edit Personal Profile</a>
+										 <span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;"> Manage Personal Profile</a>
 									  </li>
-									<!-- <li class="pc-link">
-										   <span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
-									 </li> -->
+									
 									<li class="pc-link">
-										<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Manage Family</a>
+										<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('family-member.index')}}" style="color: white;"> Manage Accounts</a>
 									</li>
-									<li class="pc-link">
-										<span class="pc-micon"><i class="fas fa-file-alt"></i></span> <a href="{{ route('personal.orders.index')}}" style="color: white;"> Booking Info</a>
-									</li>
-									<li class="pc-link">
-										<span class="pc-micon"><img src="{{ url('public/img/menu-icon2.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/payment-info" style="color: white;">Payment Info</a>
-									</li>
+									
 									<li class="pc-link">
 										<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calendar</a>
 									</li>
-									<li class="pc-link">
+									<!-- <li class="pc-link">
 										 <span class="pc-micon"><i class="fa fa-envelope" aria-hidden="true"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/booking-request" style="color: white;"> Inbox</a>
-									</li>
+									</li> -->
 									<li class="pc-link">
 										<span class="pc-micon"><img src="{{ url('public/img/menu-icon1.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/favorite" style="color: white;">Favorite</a>
 									</li>
@@ -263,10 +254,10 @@
 									<li class="lp-per-pro"> <span>Business Center </span></li>
 									<li class="pc-link">
 										<span class="pc-micon"><i class="fas fa-clipboard-list"></i></span>
-										<a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">List My Business</a>
+										<a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">Create A Business</a>
 									</li>
 									<li class="pc-link">
-										<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('manageCompany')}}" style="color: white;">Manage My Business</a>
+										<span class="pc-micon"><i class="fa fa-tasks"></i></span><a @if(count(Auth::user()->company) > 0) href="{{route('business_dashboard')}}"  @else href="{{route('staff_login')}}" @endif style="color: white;">Staff Login</a>
 									</li>
 									<li><div class="border-sidebar"></div></li>
 									<li class="lp-per-pro"> <span>Support </span> </li>
@@ -319,6 +310,7 @@
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>toastr.min.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>toastr-custom.js"></script>
 @if(Route::current()->getName() != 'design.dashboard' && Route::current()->getName() != 'design.createNewBusinessProfile')
+<!--<script src="{{asset('/public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script> -->
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>bootstrap.min.js"></script>
 @endif
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>JQueryValidate/jquery.validate.js"></script>
@@ -354,14 +346,19 @@ function closeMobileNav() {
         var width = $(this).data('modal-width');
         if(width == undefined){
             width = '600px';
-        }            
+        }          
+        var chkbackdrop  =   $(this).attr('data-modal-chkBackdrop');
         e.preventDefault()
         $.ajax({
             url: $(this).data('url'),
             success: function(html){
                 $('#ajax_html_modal .modal-body').html(html)
-                $('#ajax_html_modal .modal-dialog').css({width:width});
-                $('#ajax_html_modal').modal('show')
+                $('#ajax_html_modal .modal-dialog').css('width', width);
+            	if(chkbackdrop == 1){
+            		$('#ajax_html_modal').modal({ backdrop: 'static', keyboard: false });
+        		}else{
+                   $('#ajax_html_modal').modal('show');
+        		}
             }
         })
     });
@@ -411,6 +408,17 @@ function closeMobileNav() {
             yearRange: 'c-60:c',
         });
     });
+
+    $(document).on('focus', '[data-behavior~=flatpicker_birthdate]', function(e){
+    	
+    	flatpickr("[data-behavior~=flatpicker_birthdate]", {
+	         dateFormat: "m/d/Y",
+	        maxDate: "01/01/2050",
+	        defaultDate: [new Date()],
+	    });
+    });
+
+
 
     $(document).ready(function() {
         // hide #back-top first

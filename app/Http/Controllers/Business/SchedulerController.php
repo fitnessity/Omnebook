@@ -34,174 +34,184 @@ use DateTimeZone;
 
 class SchedulerController extends BusinessBaseController
 {    
-  protected $business_service_repo;
-  protected $customers;
-  protected $users;
-  protected $booking_repo;
+     protected $business_service_repo;
+     protected $customers;
+     protected $users;
+     protected $booking_repo;
 
-  public function __construct(BusinessServiceRepository $business_service_repo ,CustomerRepository $customers,UserRepository $users,BookingRepository $booking_repo){        
-      $this->business_service_repo = $business_service_repo;
-      $this->users = $users;
-      $this->customers = $customers;
-      $this->booking_repo = $booking_repo;
+     public function __construct(BusinessServiceRepository $business_service_repo ,CustomerRepository $customers,UserRepository $users,BookingRepository $booking_repo){        
+          $this->business_service_repo = $business_service_repo;
+          $this->users = $users;
+          $this->customers = $customers;
+          $this->booking_repo = $booking_repo;   
+     }
+
+     public function index(Request $request){
+          $filterDate = Carbon::parse($request->date);
+          $schedules = BusinessActivityScheduler::alldayschedule($filterDate,$request->activity_type)->where('cid', $request->current_company->id)->get();
+
+          //print_r($schedules);exit;
+          return view('business.scheduler.index', [
+              'schedules' => $schedules, 
+              'filterDate' => $filterDate,
+          ]);
+     }
+
+     public function create(Request $request , $business_id, $categoryId= null){
+          $category =  BusinessPriceDetailsAges::where('id',$request->categoryId)->first();
+          $businessActivity = BusinessActivityScheduler::where('cid', $category->cid)->where('serviceid', $category->serviceid)->where('category_id',$category->id)->get();
+          return view('business.scheduler.create',compact('category','businessActivity'));
+     }
+
+     public function store(Request $request){
+          //print_r($request->all());exit;
+          $shift_start = $request->duration_cnt;
+          if($shift_start >= 0) {
+               $idary = BusinessActivityScheduler::where('cid', $request->cId)->where('userid', Auth::user()->id)->where('serviceid',  $request->serviceId)->where('category_id',$request->categoryId)->pluck('id')->toArray();
+     
+               $idary1 = array();
+
+               for($i=0; $i <= $shift_start; $i++) { 
+                    $idary1[] = $request->id[$i] != '' ?  $request->id[$i] : '';
+                    
+                    if($request->shift_start[$i] != '' && $request->shift_end[$i] != '' && $request->set_duration[$i] != '') {
+
+                         $expdate  = date('Y-m-d', strtotime($request->starting. '+'.$request->scheduled.$request->until ));
+
+                         $activitySchedulerData = [
+                             "cid" => $request->cId,
+                             "category_id" => $request->categoryId,
+                             "userid" =>Auth::user()->id,
+                             "serviceid" =>$request->serviceId,
+                             "activity_meets" => $request->frm_class_meets,
+                             "starting" => date('Y-m-d', strtotime($request->starting)),
+                             "activity_days" => isset($request->activity_days[$i]) ? $request->activity_days[$i] : '',
+                             "shift_start" => isset($request->shift_start[$i]) ? $request->shift_start[$i] : '',
+                             "shift_end" => isset($request->shift_end[$i]) ? $request->shift_end[$i] : '',
+                             "set_duration" => isset($request->set_duration[$i]) ? $request->set_duration[$i] : '',
+                             "spots_available" => isset($request->sport_avail[$i]) ? $request->sport_avail[$i] : '',
+                             "scheduled_day_or_week" => $request->until, 
+                             "scheduled_day_or_week_num" => $request->scheduled,
+                             "end_activity_date" => $expdate,
+                             "is_active" => 1,
+                         ];
+                         if($request->id[$i] != ''){
+                              BusinessActivityScheduler::where('id', $request->id[$i])->update($activitySchedulerData);
+                         }else{
+                              BusinessActivityScheduler::create($activitySchedulerData);
+                         }
+                    }
+               }
+        
+               $differenceArray1 = array_diff($idary, $idary1);
+               foreach($differenceArray1 as $deletdata){
+                    BusinessActivityScheduler::where('id',$deletdata)->delete();
+               }
+          }
+          return redirect()->route('business.schedulers.create', ["business_id"=>$request->cId,"categoryId"=>$request->categoryId]);
+     }
+
+     public function destroy(Request $request){
+          // /print_r($request->all());exit;
+          $mail_type = $request->has('cancel_date_chk') ? 'cancel' : 'reschedule';
+          $cancel_date_chk = $request->has('cancel_date_chk') ? 1:0 ;
+          $act_cancel_chk = $request->has('cancel_date_chk') ? 1:0;
+          $showSchedule = $request->chk_cancel_on_schedule == 1 ? 1: 0;
+          $hideSchedule = $request->chk_cancel_on_schedule == 1 ? 0: 1;
+          $email_Instructor = $request->has('hide_cancel_on_schedule') ? 1: 0;
+          $email_clients = $request->has('hide_cancel_on_schedule') ? 1: 0;
+
+          $ac_data = [
+              "show_cancel_on_schedule" => $showSchedule,
+              "hide_cancel_on_schedule" => $hideSchedule,
+              "email_Instructor" => $email_Instructor,
+              "email_clients" => $email_clients,
+              "act_cancel_chk" => $act_cancel_chk ,
+              "cancel_date_chk" => $cancel_date_chk,
+              "schedule_id" => $request->schedule_id,
+              "cancel_date" => date('Y-m-d',strtotime($request->cancel_date)),
+          ];
+
+          ActivityCancel::updateOrCreate(['id' => $request->can_id], $ac_data);
+
+          if($request->has('email_clients')){
+               $checkInDetails = BookingCheckinDetails::where('business_activity_scheduler_id', $request->schedule_id)->where('checkin_date' ,date('Y-m-d',strtotime($request->cancel_date)))->get();
+               foreach($checkInDetails as $cid){
+                    $userdata = $cid->customer;
+                    $businessdata = $cid->order_detail->business_services;
+                    $companydata = $cid->order_detail->business_services->company_information;
+                    $time = date('h:i a',strtotime($cid->scheduler->shift_start));
+                    $date = $request->cancel_date;
+                    $status = MailService::sendEmailforchedulechange($userdata , $businessdata ,$companydata,$time,$date,'customer',$mail_type);
+               } 
+          }
+
+          if($request->has('email_Instructor')){
+               $checkInDetails = BookingCheckinDetails::where('business_activity_scheduler_id', $request->schedule_id)->where('checkin_date' ,date('Y-m-d',strtotime($request->cancel_date)))->groupBy('instructor_id')->get();
           
-  }
+               foreach($checkInDetails as $cid){
+                    $insdata = $cid->instructor;
+                    if($insdata != ''){
+                         $businessdata = $cid->order_detail->business_services;
+                         $companydata = $cid->order_detail->business_services->company_information;
+                         $time = date('h:i a',strtotime($cid->scheduler->shift_start));
+                         $date = $request->cancel_date;
+                         if($insdata->email != ''){
+                              $status = MailService::sendEmailtoInstructorforschedulechange($insdata , $businessdata ,$companydata,$time,$date,$mail_type);
+                         }
+                    }
+               }
+          }
+          return redirect($request->return_url);
+     }
 
-  public function index(Request $request){
-    $filter_date = Carbon::parse($request->date);
-    $business_schedulers = BusinessActivityScheduler::alldayschedule($filter_date,$request->activity_type)->where('cid', $request->current_company->id)->get();
+     public function delete_modal(Request $request){
+          $cancelDate = Carbon::parse($request->date);
+          $schedule = BusinessActivityScheduler::alldayschedule($cancelDate,'')->where('cid', $request->current_company->id)->findOrFail($request->schedulerId);
 
-    return view('business.scheduler.index', [
-         'todaydate'=>$filter_date->format('l, F j , Y'),
-         'business_schedulers' => $business_schedulers, 
-         'filter_date' => $filter_date,
-    ]);
-  }
-  public function destroy(Request $request){
-       if($request->has('cancel_date_chk')){
-            $mail_type = 'cancel';
-            $cancel_date_chk = 1;
-            $act_cancel_chk = 1;
-       }else{
-            $mail_type = 'reschedule';
-            $cancel_date_chk = 0;
-            $act_cancel_chk = 0;
-       }
-       if($request->can_id == ''){
-            $data = $request->all();
-            if(@$data['cancel_date'] != ''){
-                 $data['cancel_date'] = date('Y-m-d',strtotime($request->cancel_date));
-            }
-            $position = array_search(request()->_token, $data);
-            unset($data[$position]);
-            ActivityCancel::create($data);
-       }else{
-           if($request->has('show_cancel_on_schedule')){
-                 $show_cancel_on_schedule = 1;
-            }else{
-                 $show_cancel_on_schedule = 0;
-            }
-
-            if($request->has('hide_cancel_on_schedule')){
-                 $hide_cancel_on_schedule = 1;
-            }else{
-                 $hide_cancel_on_schedule = 0;
-            }
-
-            if($request->has('email_Instructor')){
-                 $email_Instructor = 1;
-            }else{
-                 $email_Instructor = 0;
-            }
-
-            if($request->has('email_clients')){
-                 $email_clients = 1;
-            }else{
-                 $email_clients = 0;
-            }
-
-            $ac_data = ActivityCancel::where('id',$request->can_id)->update(['show_cancel_on_schedule'=>$show_cancel_on_schedule,'hide_cancel_on_schedule'=>$hide_cancel_on_schedule,'email_Instructor'=>$email_Instructor,'email_clients'=>$email_clients,'act_cancel_chk'=>$act_cancel_chk ,'cancel_date_chk'=>$cancel_date_chk]);
-       }
-
-       if($request->has('email_clients')){
-           $databooked = UserBookingDetail::where('act_schedule_id', $request->schedule_id)->where('bookedtime' ,date('Y-m-d',strtotime($request->cancel_date)))->get();
-            foreach($databooked as $db){
-                 if($db->booking->user_type == 'user'){
-                      $userdata = $db->booking->user;
-                 }elseif($db->booking->user_type == 'customer'){
-                      $userdata = $db->booking->customer;
-                 }  
-
-                 $businessdata = $db->business_services;
-                 $companydata = $db->business_services->company_information;
-                 $time = date('h:i a',strtotime($db->business_activity_scheduler->shift_start));
-                 $date = $request->cancel_date;
-                 $status = MailService::sendEmailforchedulechange($userdata , $businessdata ,$companydata,$time,$date,$db->booking->user_type,$mail_type);
-            } 
-       }
-
-       if($request->has('email_Instructor')){
-            $databooked = UserBookingDetail::where('act_schedule_id', $request->schedule_id)->where('bookedtime' ,date('Y-m-d',strtotime($request->cancel_date)))->first();
-            //print_r($databooked);
-            
-            $insdata = $databooked->business_services->StaffMembers;
-            if($insdata != ''){
-                 $businessdata = $databooked->business_services;
-                 $companydata = $databooked->business_services->company_information;
-                 $time = date('h:i a',strtotime($databooked->business_activity_scheduler->shift_start));
-                 $date = $request->cancel_date;
-                 if($insdata->email != ''){
-                      $status = MailService::sendEmailtoInstructorforschedulechange($insdata , $businessdata ,$companydata,$time,$date,$mail_type);
-                 }
-            }
-       }
-       return redirect($request->return_url);
-  }
-
-  public function delete_modal(Request $request){
-    $cancel_date = Carbon::parse($request->date);
-    $business_scheduler = BusinessActivityScheduler::alldayschedule($cancel_date,'')
-                                                      ->where('cid', $request->current_company->id)
-                                                      ->findOrFail($request->business_scheduler_id);
-
-    
-    $activity_cancel = ActivityCancel::where('cancel_date', $cancel_date->format("Y-m-d"))->where('schedule_id',$business_scheduler->id)->first();
-
-       $output = '';
-       $output .='<form method="post" action="'.route("business.schedulers.destroy", ['scheduler' => $business_scheduler->id]).'">
+          $activityCancel = ActivityCancel::where('cancel_date', $cancelDate->format("Y-m-d"))->where('schedule_id',$schedule->id)->first();
+          $cancelDateChk = @$activityCancel->cancel_date_chk == 1 ? 'checked': '' ;
+          $showCancelOnSchedule = @$activityCancel->show_cancel_on_schedule == 1 ? 'checked': '' ;
+          $hideCancelOnSchedule = @$activityCancel->hide_cancel_on_schedule == 1 ? 'checked': '' ;
+          $emailInstructor = @$activityCancel->email_Instructor == 1 ? 'checked': '' ;
+          $emailClients = @$activityCancel->email_clients == 1 ? 'checked': '' ;
+          $return_url = $request->return_url;
+          return view('business.scheduler.cancel',compact('cancelDateChk','showCancelOnSchedule','hideCancelOnSchedule','emailInstructor','emailClients','return_url','schedule','cancelDate','activityCancel'));        
+          /*$output = '';
+          $output .='<h5 class="modal-title mb-10" id="myModalLabel">Cancel Activity</h5><form method="post" action="'.route("business.schedulers.destroy", ['scheduler' => $schedule->id]).'">
                  <input type="hidden" name="_method" value="delete">
                  <input type="hidden" name="_token" value="'.csrf_token().'">
-                 <input type ="hidden" name="can_id" value="'.@$activity_cancel->id.'">
+                 <input type ="hidden" name="can_id" value="'.@$activityCancel->id.'">
                  <input type="hidden" name="return_url" value="'.$request->return_url.'">
-                 <input type="hidden" name="schedule_id" value="'.$business_scheduler->id.'">
-                 <input type="hidden" name="cancel_date" value="'.$cancel_date->format("Y-m-d").'">
+                 <input type="hidden" name="schedule_id" value="'.$schedule->id.'">
+                 <input type="hidden" name="cancel_date" value="'.$cancelDate->format("Y-m-d").'">
                  <div class="row">
                       <div class="col-md-12">
                            <div class="">
-                                <input type="checkbox" id="cancel_date_chk" name="cancel_date_chk" value="1"';
-                                if(@$activity_cancel->cancel_date_chk == 1){
-                                     $output .='checked';
-                                }
-                                $output .='>
-                                <label for="vehicle1"> Cancel this activity for today only</label><br>
-                                <input type="checkbox" id="show_cancel_on_schedule" name="show_cancel_on_schedule" value="1"';
-                                if(@$activity_cancel->show_cancel_on_schedule == 1){
-                                     $output .='checked';
-                                }
-                                $output .='>
-                                <label for="vehicle2">Show cancellation on schedule</label><br>
-                                <input type="checkbox" id="hide_cancel_on_schedule" name="hide_cancel_on_schedule" value="1"';
-                                if(@$activity_cancel->hide_cancel_on_schedule == 1){
-                                     $output .='checked';
-                                }
-                                $output .='>
-                                <label for="vehicle3">Hide cancellation on schedule</label><br>
+                                <input type="checkbox" id="cancel_date_chk" name="cancel_date_chk" value="1" '.$cancelDateChk.'>
+                                <label for="cancel_date_chk"> Cancel this activity for today only</label><br>
+                                <input type="checkbox" id="show_cancel_on_schedule" name="show_cancel_on_schedule" value="1"'.$showCancelOnSchedule.'>
+                                <label for="show_cancel_on_schedule">Show cancellation on schedule</label><br>
+                                <input type="checkbox" id="hide_cancel_on_schedule" name="hide_cancel_on_schedule" value="1"'.$hideCancelOnSchedule.'>
+                                <label for="hide_cancel_on_schedule">Hide cancellation on schedule</label><br>
                            </div>
                       </div>
                  </div>
                  <hr style="border: 1px solid #efefef; width: 107%; margin-left: -15px; margin-top: 15px;">
                  <div class="row">
                       <div class="col-md-12">
-                            <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 500; font-size: 15px; margin-bottom: 15px">Alert others of the cancellations</h4> 
+                            <h5 class="modal-title mb-10">Alert others of the cancellations</h5> 
                            <div class="">
-                                <input type="checkbox" id="email_Instructor" name="email_Instructor" value="1"';
-                                if(@$activity_cancel->email_Instructor == 1){
-                                     $output .='checked';
-                                }
-                                $output .='>
-                                <label for="vehicle1">Email Instructor ('.$request->insname.')</label><br>
-                                <input type="checkbox" id="email_clients" name="email_clients" value="1"';
-                                if(@$activity_cancel->email_clients == 1){
-                                     $output .='checked';
-                                }
-                                $output .='>
-                                <label for="vehicle2">You have '.$business_scheduler->spots_reserved($cancel_date).' clients registered </label><br>
+                                <input type="checkbox" id="email_Instructor" name="email_Instructor" value="1"'.$emailInstructor.'>
+                                <label for="email_Instructor">Email Instructor</label><br>
+                                <input type="checkbox" id="email_clients" name="email_clients" value="1"'.$emailClients.'>
+                                <label for="email_clients">You have '.$schedule->spots_reserved($cancelDate).' clients registered </label><br>
                                 <label class="alert-label"> Alert registed clients with an email</label><br>
                            </div>
-                           <button type="submit" class="btn-nxt manage-cus-btn cancel-modal">Submit</a>
+                           <button type="submit" class="btn btn-red float-right">Submit</a>
                       </div>
                  </div>
             </form>';
-       return $output;
-  }
+          return $output;*/
+     }
 }

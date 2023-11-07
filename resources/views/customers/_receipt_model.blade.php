@@ -1,3 +1,4 @@
+<h5 class="modal-title mb-10" id="myModalLabel">Booking Receipt</h5>
 
 @php
     use App\UserBookingDetail;
@@ -7,7 +8,7 @@
     $idarry = ''; 
 @endphp
 
-<div class="row"> 
+<div class="row">
     <div class="col-lg-4 bg-sidebar">
         <div class="your-booking-page side-part">
             <div class="booking-page-meta">
@@ -18,11 +19,10 @@
                 <div class="modal-inner-box">
                     <label></label>
                     <h3>Email Receipt</h3>
-                    <div class="form-group">
-                        <input type="text" name="email" id="email"  placeholder="youremail@abc.com" class="form-control" value="{{$email}}">
+                    <div class="form-group mb-25">
+                        <input type="text" name="email" id="clientEmail" placeholder="youremail@abc.com" class="form-control" value="{{$email}}">
                     </div>
-                    <button class="submit-btn btn-modal-booking post-btn-red" 
-                 onclick="sendemail();">Send Email Receipt</button>
+                    <button class="btn btn-red width-100 mb-25" onclick="sendemail();">Send Email Receipt</button>
                     <div class="reviewerro" id="reviewerro"></div>
                 </div>
             </div>
@@ -35,9 +35,7 @@
         </div>
     </div>
     <div class="col-lg-8">
-        <div class="modal-booking-info">
-            <h3>Booking Receipt</h3>
-
+        <div class="modal-booking-info mmt-10 imt-10 main-separator mb-25">
             @foreach($array as $or)
                 @php 
                     $order_detail = UserBookingDetail::where('id',$or)->first();
@@ -51,283 +49,288 @@
                     $subtotaltax += $total;
                     $per_total = $total;
                 @endphp
-
                 <div class="row">
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
                             <label>BOOKING#</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
                             <span>{{ $odt['confirm_id']}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
                             <label>PROVIDER COMPANY NAME:</label>
+                        </div>
                     </div>
-                    </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
                             <span>{{ $odt['company_name']}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
                             <label>PROGRAM NAME:</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
                             <span>{{ $odt['program_name']}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
                             <label>CATEGORY:</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
                             <span>{{ $odt['categoty_name']}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
                             <label>PRICE OPTION:</label>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
                             <span>{{@$odt['BusinessPriceDetails']['price_title']}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                    <div class="booking-page-meta-info">
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
                             <label>NUMBER OF SESSIONS:</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
                             <span>{{@$odt['pay_session']}} Session</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
                             <label>MEMBERSHIP OPTION:</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
                             <span>{{$odt['BusinessPriceDetails']['membership_type']}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
                             <label>PARTICIPANT QUANTITY:</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
                             <span>{{ $odt['qty']}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
                             <label>WHO IS PRATICIPATING?</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
                             <span>{{ $odt['parti_data']}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
                             <label>ACTIVITY TYPE:</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
                             <span>{{ $odt['sport_activity']}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
                             <label>SERVICE TYPE:</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
                             <span>{{ $odt['select_service_type']}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
                             <label>MEMBERSHIP DURATION:</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
-                            <span>{{$order_detail->expired_duration}}</span>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
+                            <span>{{$order_detail->expired_duration != '' ? $order_detail->expired_duration : "—"}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
                             <label>PURCHASE DATE:</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
                             <span>{{$odt['created_at']}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
-                                <label>MEMBERSHIP ACTIVATION DATE:</label>
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
+                            <label>MEMBERSHIP ACTIVATION DATE:</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
                             <span>{{date('d-m-Y',strtotime($order_detail->contract_date))}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
-                                <label>MEMBERSHIP EXPIRATION:</label>
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
+                            <label>MEMBERSHIP EXPIRATION:</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
                             <span>{{date('d-m-Y',strtotime($order_detail->expired_at))}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="">
-                            <label>PRICE:</label>
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
+                            <label class="highlight-fonts">PRICE:</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
-                            <span>${{$odt['totprice_for_this']}}</span>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
+                            <span class="highlight-fonts">${{$odt['totprice_for_this']}}</span>
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-xs-6">
-                        <div class="">
-                            <label>TOTAL:</label>
+                    
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="text-left space-bottom">
+                            <label class="highlight-fonts">TOTAL:</label>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <div class="booking-page-meta-info">
-                            <span>${{$per_total}}</span>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="float-end text-right">
+                            <span class="highlight-fonts">${{$per_total}}</span>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="black-sparetor"></div>
                 </div>
             @endforeach
+        </div>
+        @php $idarry = rtrim($idarry,','); @endphp
 
-            @php $idarry = rtrim($idarry,','); @endphp
-
-            <input type="hidden" name="booking_id" id="booking_id" value="{{$order_detail->booking_id}}"> 
-            <input type="hidden" name="orderdetalidary[]" id="orderdetalidary" value="{{$idarry}}"> 
-            <div class="row border-xx mg-tp">
-                <div class="col-md-6 col-xs-6">
-                   <div class="total-titles">
-                        <label>PAYMENT METHOD</label>
-                   </div>
+        <input type="hidden" name="booking_id" id="booking_id" value="{{$order_detail->booking_id}}"> 
+        <input type="hidden" name="orderdetalidary[]" id="orderdetalidary" value="{{$idarry}}"> 
+        <div class="main-separator mb-10">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class=" text-left">
+                        <label class="highlight-fonts">PAYMENT METHOD</label>
+                    </div>
                 </div>
-                <div class="col-md-6 col-xs-6">
-                    <div class="total-titles">
-                        <span>{{ $odt['pmt_type']}}</span>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class="float-end line-break text-right">
+                        <span class="highlight-fonts">{{ $odt['pmt_type']}}</span>
                     </div>
                 </div>
             </div>
-
-            <div class="row border-xx">
-                <div class="col-md-6 col-xs-6">
-                    <div class="total-titles">
-                        <label>TIP AMOUNT</label>
+        </div>
+                
+        <div class="main-separator mb-10">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class=" text-left">
+                        <label class="highlight-fonts">TIP AMOUNT</label>
                     </div>
                 </div>
-                <div class="col-md-6 col-xs-6">
-                    <div class="total-titles">
-                        <span>${{UserBookingDetail::where('booking_id', $orderId)->sum('tip')}}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row border-xx">
-                <div class="col-md-6 col-xs-6">
-                   <div class="total-titles">
-                        <label>DISCOUNT</label>
-                   </div>
-                </div>
-                <div class="col-md-6 col-xs-6">
-                   <div class="total-titles">
-                        <span>${{UserBookingDetail::where('booking_id', $orderId)->sum('discount')}}</span>
-                   </div>
-                </div>
-            </div>
-
-            <div class="row border-xx">
-                <div class="col-md-6 col-xs-6">
-                    <div class="total-titles">
-                        <label>TAXES AND FEES</label>
-                    </div>
-                </div>
-                <div class="col-md-6 col-xs-6">
-                    <div class="total-titles">
-                        <span>${{ (UserBookingDetail::where('booking_id', $orderId)->sum('tax') )}}</span>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class="float-end line-break text-right">
+                        <span class="highlight-fonts">${{UserBookingDetail::where('booking_id', $orderId)->sum('tip')}}</span>
                     </div>
                 </div>
             </div>
-
-            <div class="row border-xx">
-                <div class="col-md-6 col-xs-6">
-                    <div class="total-titles">
-                        <label>MERCHANT FEE</label>
+        </div>
+                
+        <div class="main-separator mb-10">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class=" text-left">
+                        <label class="highlight-fonts">DISCOUNT</label>
                     </div>
                 </div>
-                <div class="col-md-6 col-xs-6">
-                    <div class="total-titles">
-                        <span>${{ ($odt['amount'] - UserBookingDetail::where('booking_id', $orderId)->sum('subtotal') )}}</span>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="row border-xx">
-                <div class="col-md-6 col-xs-6">
-                    <div class="total-titles">
-                        <label>TOTAL AMOUNT PAID</label>
-                    </div>
-                </div>
-                <div class="col-md-6 col-xs-6">
-                    <div class="total-titles">
-                        <span>${{$odt['amount']}}</span>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class="float-end line-break text-right">
+                        <span class="highlight-fonts">${{UserBookingDetail::where('booking_id', $orderId)->sum('discount')}}</span>
                     </div>
                 </div>
             </div>
+        </div>
+                
+        <div class="main-separator mb-10">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class=" text-left">
+                        <label class="highlight-fonts">TAXES AND FEES</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class="float-end line-break text-right">
+                        <span class="highlight-fonts">${{ (UserBookingDetail::where('booking_id', $orderId)->sum('tax') )}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+                
+        <div class="main-separator mb-10">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class=" text-left">
+                        <label class="highlight-fonts">MERCHANT FEE</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class="float-end line-break text-right">
+                        <span class="highlight-fonts">${{ ($odt['amount'] - UserBookingDetail::where('booking_id', $orderId)->sum('subtotal') )}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+                
+        <div class="main-separator mb-10">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class=" text-left">
+                        <label class="highlight-fonts">TOTAL AMOUNT PAID</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class="float-end line-break text-right">
+                        <span class="highlight-fonts">${{$odt['amount']}}</span>
+                    </div>
+                </div>
+            </div>  
         </div>
     </div>
 </div>
@@ -335,7 +338,7 @@
 <script type="text/javascript">
     function sendemail(){
         $('.reviewerro').html('');
-        var email = $('#email').val();
+        var email = $('#clientEmail').val();
         var orderdetalidary = $('#orderdetalidary').val();
         var booking_id = $('#booking_id').val();
         if(email == ''){

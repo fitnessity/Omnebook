@@ -770,6 +770,9 @@
 													<div class="selecting-title">Personal Trainer</div>
 													<p>A provider offers one-on-one personal training, coaching, nutrition advice, or instructions.</p>
                                                 </div>
+												<div class="box-footer">
+													<button type="button" class="btn-red select-event"> Select </button>
+												</div>
                                             </div><!-- end card body -->
                                         </a><!-- end card -->
                                     </div><!-- end col -->
@@ -785,6 +788,9 @@
 													<div class="selecting-title">CLASSES</div>
 													<p>A provider offers group fitness workouts and classes at a gym, studio, or facility.</p>
                                                 </div>
+												<div class="box-footer">
+													<button type="button" class="btn-red select-event"> Select </button>
+												</div>
                                             </div><!-- end card body -->
                                         </a><!-- end card -->
                                     </div><!-- end col -->
@@ -800,6 +806,9 @@
 													<div class="selecting-title">Experience</div>
 													<p>A provider that offers an adventurous activity or an experience surrounding the activity.</p>
                                                 </div>
+												<div class="box-footer">
+													<button type="button" class="btn-red select-event"> Select </button>
+												</div>
                                             </div><!-- end card body -->
                                         </a><!-- end card -->
                                     </div><!-- end col -->
@@ -809,12 +818,16 @@
                                         <a class="card card-animate fix-box">
                                             <div class="card-body">
                                                 <div class="text-center selection-service">
-													<img src="/public/images/newimage/bus-experience.png" class="pro_card_img1">
+													<img src="/public/dashboard-design/images/yoga.jpeg" class="pro_card_img1">
+													
                                                 </div>
                                                 <div class="text-center mt-4 service-details">
 													<div class="selecting-title">EVENTS</div>
 													<p>You offer events, seminars, races, marathons, meets, tournaments and more.</p>
                                                 </div>
+												<div class="box-footer">
+													<button type="button" class="btn-red select-event"> Select </button>
+												</div>
                                             </div><!-- end card body -->
                                         </a><!-- end card -->
                                     </div><!-- end col -->

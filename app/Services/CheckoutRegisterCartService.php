@@ -15,7 +15,7 @@ class CheckoutRegisterCartService
      */
     public function __construct()
     {
-        $this->_cart = session()->get('cart_item', []);
+        $this->_cart = session()->get('cart_item_for_checkout', []);
     }
 
     // with tax + 
@@ -34,12 +34,13 @@ class CheckoutRegisterCartService
 
     public function items(){
         $cart['cart_item'] = [];
-        foreach($this->_cart['cart_item'] as $key=>$c)
+        /*foreach($this->_cart['cart_item'] as $key=>$c)
         {   
             if($c['chk'] == 'activity_purchase') {
                 $cart['cart_item'][] = $c;
             }
-        }
+        }*/
+        $cart['cart_item'] = $this->_cart['cart_item'];
         return $cart['cart_item'];
     }
 
@@ -89,7 +90,7 @@ class CheckoutRegisterCartService
         
         $pretaxSubTotal = $this->getGrossSubtotalByItem($item);
 
-        return $pretaxSubTotal + $item["tax"];
+        return $pretaxSubTotal + $item["tax"] + (@$item['addOnServicesTotalPrice'] ?? 0);
     }
 
     public function getPriceDetail($priceid){
@@ -102,7 +103,7 @@ class CheckoutRegisterCartService
 
     public function getCategory($priceid){
         $BusinessPriceDetails =  BusinessPriceDetails::find($priceid);
-        return $BusinessPriceDetails->business_price_details_ages;
+        return @$BusinessPriceDetails->business_price_details_ages;
     }
 
     public function getbookedPerson($id){

@@ -127,12 +127,12 @@ class BookingRepository
                 $bookingDetail = @$customer->active_memberships()->join('business_services', 'user_booking_details.sport', '=', 'business_services.id')->where('business_services.service_type',$serviceType)->get();
             }
         }
-        //sprint_r($bookingDetail);exit;
+        //print_r($bookingDetail);exit();
         return $bookingDetail;
     } 
 
     public function otherTab($serviceType,$business_id,$customer){
-        $checkInDetail = BookingCheckinDetails::where('customer_id',@$customer->id)->get();
+        $checkInDetail = BookingCheckinDetails::where('customer_id',@$customer->id)->orWhere('booked_by_customer_id',@$customer->id)->get();
         return $checkInDetail;
     }
 
@@ -166,16 +166,12 @@ class BookingRepository
     }
 
     public function tabFilterData($checkInDetail,$chkVal,$serviceType ,$date){
-
         $full_ary = $bookingDetail= [];
         $now = Carbon::now();
        
         foreach($checkInDetail as $chkD){
             $datechk = 0;
             $chk = $chkVal;
-
-            /*echo $chk;
-            echo $chkD->checkin_date;*/
             if(date('Y-m-d',strtotime($chkD->checkin_date)) == $date && $chk == 'today'){
                 $datechk = 1;
             }
@@ -184,7 +180,6 @@ class BookingRepository
             }if(date('Y-m-d',strtotime($chkD->checkin_date)) < $date && $chk == 'past'){
                 $datechk = 1;
             }
-            /*echo $datechk;*/
             if($datechk == 1){
                 $full_ary[] =  $chkD;
             }
@@ -358,13 +353,18 @@ class BookingRepository
             $main_total =  number_format(($tax_for_this + $totprice_for_this),2);
             $nameofbookedby = Auth::user()->firstname.' '.Auth::user()->lastname;
         }else{  
-            $extra_fees = json_decode(@$booking_details->extra_fees,true); 
+            /*$extra_fees = json_decode(@$booking_details->extra_fees,true); 
             $tax_for_this = @$extra_fees['tax'];
             $tip = @$extra_fees['tip'];
             $discount = @$extra_fees['discount'];
-            $service_fee = @$extra_fees['service_fee'];
-            $service_fee = ($totprice_for_this * $service_fee )/100;
-            $main_total = number_format(( $tip + $tax_for_this + $totprice_for_this - $discount + $service_fee),2);
+            $service_fee = @$extra_fees['service_fee'];*/
+            $tax_for_this = @$booking_details->tax;
+            $tip = @$booking_details->tip;
+            $discount = @$booking_details->discount;
+            $service_fee = @$booking_details->$service_fee;
+            //$service_fee = ($totprice_for_this * $service_fee )/100;
+
+            $main_total = number_format($booking_details->subtotal,2);
             $nameofbookedby = $booking_status->customer->fname.' '.$booking_status->customer->lname;
         }
 
@@ -397,7 +397,6 @@ class BookingRepository
             $end_activity_date = date('d-m-Y', strtotime(@$booking_details->expired_at));
         }
          
-
         if(@$booking_details->created_at != ''){
             $created_at = date('d-m-Y', strtotime(@$booking_details->created_at));
         }
@@ -430,6 +429,9 @@ class BookingRepository
             $shift_start = date('h:i a', strtotime( @$schedulerdata->shift_start ));
         }
 
+        $addOnServicesId = $booking_details->addOnservice_ids;
+        $addOnServicesQty = $booking_details->addOnservice_qty;
+        $addOnPrice= $booking_details->addOnservice_total ?? 0;
         $pmt_type = $booking_status->getPaymentDetail();
         //var_dump($pmt_type);
         $last4 = $pmt_type;
@@ -467,6 +469,9 @@ class BookingRepository
             "categoty_name" =>   $categoty_name,
             "booking_id" =>   $oid,
             "order_id" => $orderdetailid,
+            "addOnServicesId" => $addOnServicesId,
+            "addOnServicesQty" => $addOnServicesQty,
+            "addOnPrice" => $addOnPrice,
         );
        /*$arayy =array_values(array_unique($one_array, SORT_REGULAR));*/
         return $one_array;
@@ -479,7 +484,10 @@ class BookingRepository
         $businessuser = $booking_details->business_services->company_information;
         $BusinessPriceDetails = $booking_details->business_price_detail;
         $qty = $booking_details->getparticipate();
-      
+        
+
+        $companyImage = $businessuser->getCompanyImage();
+
         $participate = $booking_details->decodeparticipate();
         $price = $booking_details->total();
         $total = ($price + $booking_details->getperoderprice());
@@ -550,6 +558,8 @@ class BookingRepository
             "total" => $total,
             "email" => $email,
             "bookingUrl" => $bookingUrl,
+            "companyImage" => $companyImage,
+            "notes" => 'Thank you for doing business with us!',
         );
 
         //return json_encode($one_array); 
@@ -1117,10 +1127,51 @@ class BookingRepository
         return $return;
     }
     
-    public function getbusinessbookingsdata($sid,$date){
-        // disable date filter for temporary used;
-        return UserBookingDetail::where(['sport'=>$sid])->orderBy('bookedtime', 'desc')->get();
-       // return UserBookingDetail::select('id','bookedtime','participate','priceid')->where(['sport'=>$sid,'bookedtime'=> date('Y-m-d',strtotime($date))])->get();
+    public function getbusinessbookingsdata($sid,$date,$type){
+        $currentDate = Carbon::now(); 
+        switch ($type) {
+            case 'date':
+                $date = $date;
+                break;
+
+            case 'week':
+                $date = $currentDate->startOfWeek()->format('Y-m-d');
+                break;
+
+            case 'month':
+                $date = $currentDate->format('Y-m');
+                break;
+        }
+
+        $userBookingDetail = [];
+        $checkInDetail = BookingCheckinDetails::where(function ($query) use ($date, $type, $sid) {
+                $query->when($type === 'week', function ($q) use ($date) {
+
+                    $weekStart = Carbon::parse($date)->startOfWeek();
+                    $weekEnd = Carbon::parse($date)->endOfWeek();
+
+                    $q->whereBetween('checkin_date', [$weekStart, $weekEnd]);
+                })
+                ->when($type === 'month', function ($q) use ($date) {
+                    $q->where('checkin_date', 'LIKE', $date . '%');
+                })
+                ->when($type === 'date', function ($q) use ($date) {
+                    $q->where('checkin_date', $date);
+                });
+                $query->orderBy('checkin_date', 'desc');
+            })->orderBy('checkin_date', 'desc')
+            ->join('user_booking_details as bd','booking_checkin_details.booking_detail_id' ,'=' , 'bd.id')
+            ->where('bd.sport',$sid)
+            ->select('booking_checkin_details.*', 'bd.id as bdid', 'bd.sport')->orderBy('bd.bookedtime', 'desc')
+            ->get();
+
+        /*foreach($checkInDetail as $detail){
+            if($detail->UserBookingDetail != ''){
+               $userBookingDetail [] = $detail->UserBookingDetail;
+            }
+        }*/
+
+        return $checkInDetail;
     }
 
     public function getbookingbyUserid($userid){
@@ -1134,18 +1185,17 @@ class BookingRepository
         return  $book_cnt;
     }
 
-    public function lastbookingbyUserid($userid){
+    public function lastbookingbyUserid($userid,$customer_id){
         $data = '';
         $purchasefor = '';
         $price_title = '';
-        //$status = UserBookingStatus::where('user_id',$userid)->orderby('created_at','Desc')->first();
-        $status = UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$userid, $userid])->orderby('created_at','Desc')->first();
+        $status = UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$userid, $customer_id])->orderby('created_at','Desc')->first();
         if($status != ''){
             $price  =  $status->amount;
             $book_data = UserBookingDetail::where('booking_id',$status->id)->orderby('created_at','desc')->first();
             if($book_data != ''){
-                $programname = $book_data->business_services->program_name;
-                $price_title = $book_data->business_price_detail->price_title;
+                $programname = @$book_data->business_services->program_name;
+                $price_title = @$book_data->business_price_detail->price_title;
                 $purchasefor =  $programname.' $'.$price;
             }
         }
@@ -1153,7 +1203,7 @@ class BookingRepository
     }
 
     public function gettotalbooking($sid,$date){
-        $SpotsLeft = UserBookingDetail::where('act_schedule_id',$sid)->whereDate('bookedtime', '=', date('Y-m-d',strtotime($date)))->get();
+        /*$SpotsLeft = UserBookingDetail::where('act_schedule_id',$sid)->whereDate('bookedtime', '=', date('Y-m-d',strtotime($date)))->get();
         $totalquantity = 0;
         if(!empty($SpotsLeft) && count($SpotsLeft)>0){
             foreach($SpotsLeft as $data){
@@ -1165,8 +1215,9 @@ class BookingRepository
                 if($item['infant'] != '')
                     $totalquantity += $item['infant'];
             }
-        }
-        return $totalquantity;
+        }*/
+        $SpotsLeft = BookingCheckinDetails::where('business_activity_scheduler_id',$sid)->whereDate('checkin_date', '=', date('Y-m-d',strtotime($date)))->count();
+        return $SpotsLeft;
     }
 
 

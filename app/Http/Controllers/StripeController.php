@@ -15,34 +15,9 @@ use Input;
 use Image;
 use File;
 use DB;
-use App\User;
-use App\UserService;
-use App\UserProfessionalDetail;
-use App\PagePost;
-use App\PagePostComments;
-use App\PagePostCommentsLike;
-use App\PagePostLikes;
-use App\PagePostSave;
-use App\CompanyInformation;
-use App\Miscellaneous;
+use App\{User,CompanyInformation};
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
-use App\PageAttachment;
-use App\BusinessCompanyDetail;
-use App\BusinessExperience;
-use App\BusinessInformation;
-use App\BusinessService;
-use App\BusinessTerms;
-use App\BusinessVerified;
-use App\BusinessServices;
-use App\BusinessServicesMap;
-use App\BusinessPriceDetails;
-use App\BusinessSubscriptionPlan;
-use App\BusinessActivityScheduler;
-use App\PageLike;
-use App\Notification;
-use App\Sports;
-use App\BusinessReview;
 
 class StripeController extends Controller
 {
@@ -59,11 +34,8 @@ class StripeController extends Controller
 		$stripe_client = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
 		$current_user = Auth::user(); 
 		$company = CompanyInformation::where('id', $current_user->cid)->first();
-		if(!$company->stripe_connect_id) $company->stripe_connect_id = '111111111';
+		if(!@$company->stripe_connect_id) $company->stripe_connect_id = '111111111';
 		
-		
-
-
 		try{
 			$stripe_account = $stripe_client->accounts->retrieve(
 			  $company->stripe_connect_id,
@@ -116,8 +88,8 @@ class StripeController extends Controller
 	  		$link = $stripe_client->accountLinks->create(
 			  [
 			    'account' => $stripe_account->id,
-			    'refresh_url' => 'https://fitnessity.co/createNewBusinessProfile',
-			    'return_url' => 'https://fitnessity.co/createNewBusinessProfile',
+			    'refresh_url' => env('APP_URL').'/dashboard',
+			    'return_url' => env('APP_URL').'/dashboard',
 			    'type' => 'account_onboarding',
 			  ]
 			);

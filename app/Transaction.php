@@ -26,7 +26,11 @@ class Transaction extends Model
      */
 
     public function User(){
-        return $this->belongsTo(User::class,'user_id')->where('user_type','user');
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function Customer(){
+        return $this->belongsTo(Customer::class,'user_id');
     }
 
     public function UserBookingStatus(){
@@ -60,20 +64,31 @@ class Transaction extends Model
         }
     }
 
-    public function item_description(){
-        $itemDescription = '';
-        $qty = 0;
+    public function item_description($chkBusiness = null){
+        $itemDescription = $itemPrice = $itemSubTotal = $itemDis = $itemTax = $location = $notes = '';
+        $totalTax = $totalDis = $totalPaid =  $qty = 0;
         $arry = [];
         if($this->item_type == 'UserBookingStatus'){
             if($this->userBookingStatus != ''){
                 $bookingData = $this->userBookingStatus->UserBookingDetail;
                 if(!empty($bookingData)){
                     foreach($bookingData as $key => $bd){
-                        $activityName = $bd->business_services_with_trashed->program_name;
-                        $categoryName = $bd->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
-                        $priceOption = $bd->business_price_detail_with_trashed->price_title;
-                        $itemDescription .= ($key+1).'. '.$activityName.' ('.$categoryName.') ,'.$priceOption.'<br>';
-                        $qty++;
+                        if($bd->business_id == $chkBusiness){
+                            $activityName = $bd->business_services_with_trashed->program_name;
+                            $categoryName = $bd->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
+                            $priceOption = $bd->business_price_detail_with_trashed->price_title;
+                            $itemDescription .= ($key+1).'. '.$activityName.' ('.$categoryName.') ,'.$priceOption.'<br>';
+                            $itemPrice .= $bd->total() != '' ? '$'.$bd->total().'<br>' : '$0<br>';
+                            $itemSubTotal .= '$'.$bd->subtotal.'<br>';
+                            $itemDis .= $bd->discount != '0.00' ? '$'.$bd->discount.'<br>' : '$0<br>';
+                            $itemTax .= $bd->tax != '0.00' ? '$'.$bd->tax.'<br>' : '$0<br>';
+                            $location .= @$bd->company_information != '' ? @$bd->company_information->public_company_name.'<br>' : '<br>';
+                            $totalTax += $bd->tax != '0.00' ? $bd->tax : 0;
+                            $totalDis += $bd->discount != '0.00' ? $bd->discount : 0;
+                            $totalPaid += $bd->subtotal != '0.00' ? $bd->subtotal : 0;
+                            $notes .= $bd->note != '' ? $bd->note.'<br>' : 'N/A<br>';
+                            $qty++;
+                        }
                     }
                 }
             }
@@ -85,10 +100,76 @@ class Transaction extends Model
                 $categoryName = $bookingData->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
                 $priceOption = $bookingData->business_price_detail_with_trashed->price_title;
                 $itemDescription = $activityName.' ('.$categoryName.') ,'.$priceOption;
+                $itemPrice .= $bookingData->total() != '' ? '$'.$bookingData->total().'<br>' : '$0<br>';
+                $itemSubTotal .= '$'.$bookingData->subtotal.'<br>';
+                $itemDis .= $bookingData->discount != '0.00' ? '$'.$bookingData->discount.'<br>' : '$0<br>';
+                $itemTax .= $bookingData->tax != '0.00' ? '$'.$bookingData->tax.'<br>' : '$0<br>';
+                $location .= @$bookingData->company_information != '' ? @$bookingData->company_information->public_company_name.'<br>' : '<br>';
+                $totalTax += $bookingData->tax != '0.00' ? $bookingData->tax : 0;
+                $totalDis += $bookingData->discount != '0.00' ? $bookingData->discount : 0;
+                $totalPaid += $bookingData->subtotal != '0.00' ? $bookingData->subtotal : 0;
+                $notes .= $bookingData->note != '' ? $bookingData->note.'<br>' : 'N/A<br>';
                 $qty++;
             }
         }
-        $arry = array("qty"=>$qty,"itemDescription"=>$itemDescription);
+
+       
+        $arry = array("qty"=>$qty,"itemDescription"=>$itemDescription,"itemPrice"=> $itemPrice ?? 0,"itemSubTotal"=> $itemSubTotal ?? 0,"itemDis"=> $itemDis ?? 0,"itemTax"=> $itemTax ?? 0,"location"=> $location  ?? 'N/A',"totalTax"=> $totalTax ?? 0, "totalDis"=> $totalDis ?? 0,"totalPaid"=> $totalPaid  ?? 0,'notes'=>$notes);
         return $arry;
+    }
+
+    public function getCustomer($business_id){
+        if($this->user_type == 'customer'){
+            return $this->Customer;
+        }else{
+            $user = $this->User;
+            return Customer::where(['email'=>@$user->email ,'fname' => @$user->firstname ,'lname' => @$user->lastname ,'business_id' =>$business_id])->first();
+        }
+    }
+
+    public function can_void(){
+        return $this->status == 'requires_capture';
+    }
+
+    public function can_refund(){
+        return $this->kind == 'card' && $this->status == 'complete';
+    }
+
+    public function void(){
+        
+        $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->item_id)->first();
+
+        if($transaction && $transaction->status == 'requires_capture'){
+            $stripe = new \Stripe\StripeClient(
+                config('constants.STRIPE_KEY')
+            );
+            $cancelPaymentIntent = $stripe->paymentIntents->cancel($transaction->transaction_id, []);
+            if($cancelPaymentIntent['status']=='canceled'){
+                $transaction->update(["status" => 'canceled']);
+                $booking_status = UserBookingStatus::where('id', $this->item_id)->orderby('created_at','desc')->first();
+                $booking_status->UserBookingDetail()->update(["status" => 'void']);
+            }
+            
+        }
+
+    }
+
+    public function capture(){
+        
+        $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->item_id)->first();
+
+        if($transaction && $transaction->status == 'requires_capture'){
+            $stripe = new \Stripe\StripeClient(
+                config('constants.STRIPE_KEY')
+            );
+            $capturePaymentIntent = $stripe->paymentIntents->capture($transaction->transaction_id, []);
+            if($capturePaymentIntent['status']=='succeeded'){
+                $transaction->update(["status" => 'complete']);
+                $booking_status = UserBookingStatus::where('id', $this->item_id)->orderby('created_at','desc')->first();
+                $booking_status->UserBookingDetail()->update(["status" => 'active']);
+            }
+            
+        }
+
     }
 }

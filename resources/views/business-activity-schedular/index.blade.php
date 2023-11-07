@@ -88,7 +88,9 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 											$categoryList = [];
 											if($priceid != ''){
 												$pricelist =  @$ser->price_details()->find($priceid);
-												$categoryList []= @$pricelist->business_price_details_ages;
+												if(@$pricelist->business_price_details_ages != ''){
+													$categoryList []= @$pricelist->business_price_details_ages;
+												}
 											}else{
 												$categoryList = @$ser->BusinessPriceDetailsAges;
 											}
@@ -125,41 +127,46 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 														
 														<div class="col-md-6 col-sm-6 col-xs-12 nopadding">
 															<div class="row">
-											@if(!empty($sche_ary))
-												@foreach($sche_ary as $scary)
-													@php 
-														$duration = $scary->get_duration();
+																@if(!empty($sche_ary))
+																	@foreach($sche_ary as $scary)
+																		@php 
+																			$duration = $scary->get_duration();
 
-														$SpotsLeftdis = 0;
-														$bs = new  \App\Repositories\BookingRepository;
-														$bookedspot = $bs->gettotalbooking($scary->id,$filter_date->format('Y-m-d')); 
-														$SpotsLeftdis = $scary->spots_available - $bookedspot;
-														
-												        $cancel_chk = 0;
-														$canceldata = ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id])->first();
-														$date = $filter_date->format('Y-m-d');
-														$time = $scary->shift_start;
-														$st_time = date('Y-m-d H:i:s', strtotime("$date $time"));
-														$current  = date('Y-m-d H:i:s');
-														$difference = round((strtotime($st_time) - strtotime($current))/3600, 1);
-														$timeOfActivity = date('h:i a', strtotime($scary->shift_start));
-													@endphp
-													<div class="col-md-4 col-sm-5 col-xs-12">
-														<div class="classes-time">
-															<button class="post-btn activity-scheduler" onclick="timeBookingPopUP({{$scary->id}} , {{$ser->id}} ,'{{$ser->program_name}}' , '{{$timeOfActivity}}');" >{{$timeOfActivity}} <br>{{$duration}}</button>
-
-															<!-- @if(@$checkindetail != '' && $difference >= 24)
-																<a onclick="ReScheduleOrder({{@$checkindetail->id}});">Reschedule</a>
-															@endif -->
-															
-															<!-- <a onclick="">Reschedule</a> -->
-															<label>{{$SpotsLeftdis}}/{{$scary->spots_available}} Spots Left</label>
-														</div>
-													</div>
-												@endforeach
-											@else
-												<div class="col-md-12 col-sm-6 col-xs-12 noschedule">No Time available</div>
-											@endif
+																			$SpotsLeftdis = 0;
+																			$bs = new  \App\Repositories\BookingRepository;
+																			$bookedspot = $bs->gettotalbooking($scary->id,$filter_date->format('Y-m-d')); 
+																			$SpotsLeftdis = $scary->spots_available - $bookedspot;
+																			
+																	        $cancel_chk = 0;
+																			$canceldata = ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id])->first();
+																			$date = $filter_date->format('Y-m-d');
+																			$time = $scary->shift_start;
+																			$st_time = date('Y-m-d H:i:s', strtotime("$date $time"));
+																			$current  = date('Y-m-d H:i:s');
+																			$difference = round((strtotime($st_time) - strtotime($current))/3600, 1);
+																			$timeOfActivity = date('h:i a', strtotime($scary->shift_start));
+																			$grayBtnChk = 0;$class = '';
+																			if($filter_date->format('Y-m-d') == date('Y-m-d') && $st_time < $current){
+																				$grayBtnChk = 1;
+																				$class = 'post-btn-gray';
+																			}
+																			if($SpotsLeftdis == 0){
+																				$grayBtnChk = 2;
+																				$class = 'post-btn-gray';
+																			}
+																		@endphp
+																		<div class="col-md-4 col-sm-5 col-xs-12">
+																			<div class="classes-time">
+																				<button class="post-btn {{$class}} activity-scheduler" onclick="openPopUp({{$scary->id}} , {{$ser->id}} ,'{{$ser->program_name}}','{{$timeOfActivity}}',{{$grayBtnChk}},'{{$scary->category_id}}');"  {{ $SpotsLeftdis == 0 ?  "disabled" : ''}} >{{$timeOfActivity}} <br>{{$duration}}</button>
+																				
+																				<label>{{ $SpotsLeftdis == 0 ? 
+																					"Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</label>
+																			</div>
+																		</div>
+																	@endforeach
+																@else
+																	<div class="col-md-12 col-sm-6 col-xs-12 noschedule">No Time available</div>
+																@endif
 																</div>
 															</div>
 															<div class="col-md-12 col-xs-12">
@@ -214,64 +221,151 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 	    </div>
 	</div>
 
+	<div class="modal fade compare-model modal-middle in selectbooking">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header" > 
+	                <div class="closebtn">
+	                    <button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+	                        <span aria-hidden="true">×</span>
+	                    </button>
+	                </div>
+	            </div>
+	            <div class="modal-body" id="select-booking-type">
+	            </div>
+	        </div>
+	    </div>
+	</div>
 </div>
 
 
 @include('layouts.footer')
 
-
 <script>
+	flatpickr(".flatpickr-range", {
+	    dateFormat: "m/d/Y",
+	    maxDate: "01/01/2050",
+		defaultDate: [new Date()],
+	});
+</script>
+	
+<script>
+
 	$( '.activity-schedule-tabs .nav-tabs a' ).on('click',function () {
 		$( '.activity-schedule-tabs .nav-tabs' ).find( 'li.active' ).removeClass( 'active' );
 		$( this ).parent( 'li' ).addClass( 'active' );
 	});
+	
 
+	function  getRemainingSession(){
+		var did = $('#priceId').find('option:selected').data('did');
+		if(did != ''){
+			$.ajax({
+				url:'/chksession/'+did,
+				type: 'GET',
+				success:function(data){
+					$('#remainingSession').html(data+' Session Remaining.')
+				}
+			});
+		}
+	}
 
-	function timeBookingPopUP(scheduleId,sid,activityName,time) {
-		$('#ajax_html_modal').modal('show');
+	function openPopUp(scheduleId,sid,activityName,time,chk,catId){
+		if ("{{Auth::check()}}") { 
+			if(chk == 1){
+	 			$('#select-booking-type').html('<div class="row contentPop"> <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12  text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>You can\'t book this activity for today. The time has passed. Please choose another time.</p></div> </div></div>');
+			}else{
+				$('#select-booking-type').html('<div class="row contentPop text-center"><div class="col-lg-12 btns-modal"><h4 class="mb-20">Choose How You Would Like To Book</h4><button type="button" class="addbusiness-btn-modal" onclick="timeBookingPopUP('+scheduleId+','+sid+',\''+activityName+'\',\''+time+'\','+chk+','+catId+')" id="singletime" data-id="">Book 1 Time Slot</button>  <button type="button" class="addbusiness-btn-modal" onclick="goToMultibookingPage('+sid+');">Book Multiple Time Slots At Once</button></div></div>');
+			}
+			
+			$('.selectbooking').modal('show');
+		}else{
+			$.ajax({
+				url:'{{route("setSessionOfSchedule")}}',
+				type: 'POST',
+				data:{
+					_token: '{{csrf_token()}}',
+					businessId : '{{$businessId}}',
+				},
+				success:function(data){
+					 window.location.href = '/userlogin';
+				}
+			});
+		}
+	}
 
-		$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt"><p>Are You Sure To Book This Date And Time?</p></div> </div> <div class="col-lg-12 btns-modal"><a onclick="addtimedate('+scheduleId+' ,'+sid+',\''+activityName+'\',\''+time+'\')" class="addbusiness-btn-modal">Yes</a> <a data-dismiss="modal" class="addbusiness-btn-black">No</a> </div> </div>');
+	function goToMultibookingPage(sid) {
+		let date = '{{$filter_date->format("Y-m-d")}}';
+		//window.open('/schedule/multibooking/'+'{{$businessId}}'+'?business_service_id='+sid+'&priceid='+'{{$priceid}}'+'&customer_id='+'{{@$customer->id}}' , '_blank');
+		window.open('/schedule/multibooking/'+'{{$businessId}}'+'?customer_id='+'{{@$customer->id}}'+'&date='+date, '_blank');
+	}
+
+	function timeBookingPopUP(scheduleId,sid,activityName,time,chk,catId) {
+		var date = '{{$filter_date->format("m/d/Y")}}';
+		$('.selectbooking').modal('hide');
+		var membershipHtml = '';
+		$.ajax({
+			url:'{{route("chkOrderAvailable")}}',
+			type: 'POST',
+			data:{
+				_token: '{{csrf_token()}}',
+				sid : sid,
+				cid : '{{@$customer->id}}',
+				// priceId : '{{$priceid}}',
+				catId : catId,
+			},
+			success:function(data){
+				if(data == ''){
+					html = '<div class="row contentPop"> <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12  text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>You don\'t have a membership for this activity.  </p> <p> Please buy a membership in order to book. </p></div> <a href="/activity-details/'+sid+'"  class="addbusiness-btn-modal">Buy Membership Now </a> </div> </div> ';
+				}else{
+					html = '<div class="row contentPop"> <div class="col-md-12"> <h4 class="mb-10 lh-25 text-center"> You are booking 1 time slot for '+activityName+' </h4> </div> <div class="col-md-12"> <h4 class="mb-30 lh-25 text-center"> on '+date+' at '+time+' </h4> </div> <div class="col-lg-7 col-sm-12 col-md-7 col-xs-12 text-center mb-20"> <div class="modal-inner-txt"> <p> Select Your Membership To Pay For This </p> </div> </div> <div class="col-lg-5 col-sm-12 col-md-5 col-xs-12 btns-modal mb-20"  id="bookingDetails" >'+data+'</div> <div class="col-lg-12 text-center"> <div class="modal-inner-txt"><p>Are You Sure To Book This Date And Time?</p></div> </div> <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 btns-modal"><a onclick="addtimedate('+scheduleId+' ,'+sid+',\''+activityName+'\',\''+time+'\')" class="addbusiness-btn-modal">Yes</a> <a data-dismiss="modal" class="addbusiness-btn-black">No</a> </div> </div>';
+				}
+				$('#ajax_html_modal').modal('show');
+ 				$('#booking-time-model').html(html);
+			}
+		});
 	}
 
 	function addtimedate(scheduleId,sid,activityName,time){
-		//jQuery.noConflict();
-		/*let text = "Are You Sure To Book This Date And Time?";
-		if (confirm(text) == true) {*/
-			let date ='{{$filter_date->format("m-d-Y")}}';
-		   	$.ajax({
-		   		url: "{{route('personal.schedulers.store')}}",
-				type: 'POST',
-				xhrFields: {
-					withCredentials: true
-		    	},
-		    	data:{
-					_token: '{{csrf_token()}}',
-					date:'{{$filter_date->format("Y-m-d")}}',
-					timeid:scheduleId,
-					businessId:'{{$businessId}}',
-					serviceID:sid,
-					customerID:'{{@$customer->id}}',
-					priceId:'{{@$priceid}}',
-				},
-				success: function (response) { /*alert(response);*/
-					if(response == 'success'){
-						$('.pay-confirm').addClass('green-fonts');
-						$('.pay-confirm').html('Confirm your reservation for '+activityName+' on '+date+' at '+time);
-						$('#success-reservation').modal('show');
-						$('#ajax_html_modal').modal('hide');
-	 					$(".activity-tabs").load(location.href+" .activity-tabs>*","");
-					}else if(response == 'fail'){
-						$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>No membership/sessions available to pay for this activity.</p></div> </div> <div class="col-lg-12 btns-modal"><a href="/activity-details/'+sid+'"  class="addbusiness-btn-modal">Purchase Now</a></div> </div>');
-						//window.location = '/activity-details/'+sid;
-						//alert('schedule failed');
-					}else{
-						$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>'+response+'</p></div> </div></div>');
-					}
-
-					//swindow.location.reload();
+	
+		var priceId = $('#priceId').val();
+		var selectedOption = $('#priceId').find("option:selected");
+		var oid = selectedOption.attr("data-did");
+		let date ='{{$filter_date->format("m-d-Y")}}';
+	   	$.ajax({
+	   		url: "{{route('personal.schedulers.store')}}",
+			type: 'POST',
+			xhrFields: {
+				withCredentials: true
+	    	},
+	    	data:{
+				_token: '{{csrf_token()}}',
+				date:'{{$filter_date->format("Y-m-d")}}',
+				timeid:scheduleId,
+				businessId:'{{$businessId}}',
+				serviceID:sid,
+				customerID:'{{@$customer->id}}',
+				priceId:priceId,
+				oid:oid,
+			},
+			success: function (response) { //alert(response);
+				if(response == 'success'){
+					$('.pay-confirm').addClass('green-fonts');
+					$('.pay-confirm').html('Confirm your reservation for '+activityName+' on '+date+' at '+time);
+					$('#success-reservation').modal('show');
+					$('#ajax_html_modal').modal('hide');
+ 					$(".activity-tabs").load(location.href+" .activity-tabs>*","");
+				}else if(response == 'fail'){
+					$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>No membership/sessions available to pay for this activity.</p></div> </div> <div class="col-lg-12 btns-modal"><a href="/activity-details/'+sid+'"  class="addbusiness-btn-modal">Buy Membership Now</a></div> </div>');
+					//window.location = '/activity-details/'+sid;
+					//alert('schedule failed');
+				}else{
+					$('#booking-time-model').html('<div class="row contentPop"> <div class="col-lg-12 text-center"> <div class="modal-inner-txt scheduler-time-txt"><p>'+response+'</p></div> </div></div>');
 				}
-		   	});
-		// }
+
+				//swindow.location.reload();
+			}
+	   	});
 	}
 
 	function ReScheduleOrder(checkinId){

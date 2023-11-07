@@ -4,7 +4,7 @@ namespace App;
 
 
 
-use App\User;
+use App\{User,Customer};
 use Auth;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,9 +22,28 @@ class BookingCheckinDetails extends Model
                 $userBookingDetail = UserBookingDetail::findOrFail($model->booking_detail_id);
                 $model->before_use_session_amount = $userBookingDetail->getremainingsession();
                 $model->after_use_session_amount = $model->before_use_session_amount - $model->use_session_amount;
+                if($userBookingDetail != ''){
+                    $statusData = $userBookingDetail->userBookingStatus;
+                    if($statusData != ''){
+                        if($statusData->user_type == 'customer'){
+                            $customer = Customer::where(['business_id'=>$userBookingDetail->business_id, 'user_id'=>$statusData->user_id])->first();
+                            if($customer == ''){
+                                $user = User::where('id', $statusData->user_id)->first();
+                                $customer = Customer::create(['business_id'=>$userBookingDetail->business_id, 'user_id'=>$statusData->user_id ,'fname'=>$user->firstname,'lname'=>$user->lastname, 'username'=>$user->username ,'email'=>$user->email,'stripe_customer_id'=>$user->stripe_customer_id,]);
+                            }
+                            $id = @$customer->id;
+                        }else{
+                            $id= $userBookingDetail->user_id;
+                        }
+                    }
+                    $model->instructor_id = @$userBookingDetail->business_services->instructor_id;
+                }
+                $id = @$id != '' ? @$id : 0;
+                $model->booked_by_customer_id = $id;
             }else{
                 $model->before_use_session_amount = 0;
                 $model->after_use_session_amount = 0;
+                $model->booked_by_customer_id =0;
             }
         });
 
@@ -59,7 +78,7 @@ class BookingCheckinDetails extends Model
     public $timestamps = false;
     protected $table = 'booking_checkin_details';
 	protected $fillable = [
-        'business_activity_scheduler_id', 'customer_id', 'booking_detail_id', 'checkin_date', 'checked_at', 'created_at', 'updated_at', 'use_session_amount', 'before_use_session_amount', 'after_use_session_amount', 'no_show_action', 'no_show_charged', 'source_type',
+        'business_activity_scheduler_id', 'customer_id', 'booking_detail_id', 'checkin_date', 'checked_at', 'created_at', 'updated_at', 'use_session_amount', 'before_use_session_amount', 'after_use_session_amount', 'no_show_action', 'no_show_charged', 'source_type','booked_by_customer_id','instructor_id'
     ];
 
 
@@ -75,6 +94,10 @@ class BookingCheckinDetails extends Model
         return $this->belongsTo(Customer::class,'customer_id');
     }
 
+    public function instructor(){
+        return $this->belongsTo(BusinessStaff::class,'instructor_id');
+    }
+
     public function order_detail(){
         return $this->belongsTo(UserBookingDetail::class,'booking_detail_id');
     }
@@ -87,6 +110,14 @@ class BookingCheckinDetails extends Model
         if($this->no_show_action){
             return 'No Show';
         }
+    }
+
+    public static function checkCustomerInClass($scheduleId,$date){
+        $pos = strpos($date, ' ');
+        $result = substr($date, 0, $pos);
+        $checkInDetails = BookingCheckinDetails::where("business_activity_scheduler_id" , $scheduleId)->whereDate('checkin_date',date('Y-m-d',strtotime($date)))->whereNotNull('checked_at')->count();
+
+        return $checkInDetails;
     }
 
 }

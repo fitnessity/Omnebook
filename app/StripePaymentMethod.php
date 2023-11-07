@@ -18,6 +18,7 @@ class StripePaymentMethod extends Model
         'exp_year',
         'last4',
         'primary',
+        'brand',
     ];
 
     public static function boot(){
@@ -25,7 +26,10 @@ class StripePaymentMethod extends Model
 
         static::deleting(function($model) {
             $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-            $stripe->paymentMethods->detach($model->payment_id,[]);
+            try {
+                $stripe->paymentMethods->detach($model->payment_id,[]);
+            }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException | \Exception $e){
+            }
         });
     }
     

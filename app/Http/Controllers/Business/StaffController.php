@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Business;
 use Illuminate\Support\Facades\Hash;
-use App\BusinessStaff;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\{CompanyInformation};
-use Str;
+use Illuminate\Support\Facades\Storage;
+use App\{CompanyInformation,BusinessStaff,BusinessPositions};
+use Str,Auth;
+
+use App\Imports\staffImport;
 
 class StaffController extends Controller
 {
@@ -18,7 +20,9 @@ class StaffController extends Controller
     public function index(Request $request, $business_id )
     {
         $companyInfo = CompanyInformation::where('id', $business_id)->orderBy('id', 'DESC')->first();
-        $companyStaff = @$companyInfo->business_staff->sortByDesc('created_at');
+        $companyStaff = @$companyInfo->business_staff->sortByDesc('id');
+       /* print_r($companyStaff);
+        exit;*/
         return view('business.staff.index', compact('companyStaff'));
     }
 
@@ -27,9 +31,10 @@ class StaffController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request , $business_id)
     {
-        return view('business.staff._add_staff_model');
+        $positions = BusinessPositions::where('business_id',$business_id)->get();
+        return view('business.staff.add_staff_model',['business_id'=>$business_id,'positions'=>$positions]);
     }
 
     /**
@@ -40,21 +45,15 @@ class StaffController extends Controller
      */
     public function store(Request $request, $business_id)
     {   
-       // print_r($request->all());exit;
+        //print_r($request->all());exit;
         $image = '';
-        if ($request->hasFile('insimg')) 
-        {   
-            $file = $request->file('insimg');
-            $name = date('His').$file->getClientOriginalName();
-            $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'instructureimg'.DIRECTORY_SEPARATOR,$name);
-            if( !empty($name) ){
-                $image = $name;
-            }
+        if ($request->hasFile('files')){   
+            $image = $request->file('files')->store('staff');
         }
-
+        echo
         $random_password = Str::random(8);
         $company = $request->current_company;
-        $create = BusinessStaff::create(['business_id' => $company->id,'first_name' => $request->first_name, 'last_name' => $request->last_name, 'position' =>$request->position, 'phone' => $request->phone ,'email'=>$request->email, 'profile_pic' => $image, 'bio'=> $request->bio ,'password'=>Hash::make($random_password)]);
+        $create = BusinessStaff::create(['business_id' => $company->id,'first_name' => $request->first_name, 'last_name' => $request->last_name, 'gender' => $request->gender,'position' =>$request->position, 'phone' => $request->phone ,'email'=>$request->email, 'profile_pic' => $image, 'bio'=> $request->bio,'address'=>$request->address,'city'=> $request->city,'state'=> $request->state,'postcode'=>$request->postcode,'birthdate'=>date('Y-m-d',strtotime($request->birthdate)) ,'password'=>Hash::make($random_password),'buddy_key'=>$random_password]);
         if($request->has('fromservice')){
             if($create){
                 return "success";
@@ -72,9 +71,11 @@ class StaffController extends Controller
      * @param  \App\BusinessStaff  $businessStaff
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $business_id)
+    public function show(Request $request, $business_id, $id)
     {
-        return view('business.staff.show');
+        $staffMember = BusinessStaff::find($id);
+        $positions = BusinessPositions::where('business_id',$business_id)->get();
+        return view('business.staff.show',compact('staffMember','positions'));
     }
 
     /**
@@ -95,9 +96,45 @@ class StaffController extends Controller
      * @param  \App\BusinessStaff  $businessStaff
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, BusinessStaff $businessStaff)
+    public function update(Request $request ,$business_id, $id)
     {
-        //
+        //print_r($request->all());
+        if($request->has('image')){
+            $image = $request->file('image')->store('staff');
+            Storage::delete($request->oldImage);
+        }else{
+            $image = $request->oldImage;
+        }
+
+        $staff = BusinessStaff::where('id',$id)->first();
+        if($request->password != ''){
+            $password = Hash::make($request->password);
+            $buddy_key = $request->password;
+        }else{
+            $password = $staff->password;
+            $buddy_key = $staff->buddy_key;
+        }
+
+        $update = [
+            'first_name' => $request->fname,
+            'last_name' => $request->lname,
+            'gender' => $request->gender,
+            'position' =>$request->position, 
+            'phone' => $request->phone,
+            'email'=>$request->email, 
+            'profile_pic' => $image, 
+            'bio'=> $request->bio,
+            'address'=>$request->address,
+            'city'=> $request->city,
+            'state'=> $request->state,
+            'password'=>$password,
+            'buddy_key'=>$buddy_key,
+            'postcode'=>$request->postcode,
+            'birthdate'=>date('Y-m-d',strtotime($request->birthdate))
+        ];   
+        $staff->update($update);
+        //print_r($update);exit;     
+        return redirect()->back();
     }
 
     /**
@@ -106,8 +143,39 @@ class StaffController extends Controller
      * @param  \App\BusinessStaff  $businessStaff
      * @return \Illuminate\Http\Response
      */
-    public function destroy(BusinessStaff $businessStaff)
+    public function destroy($business_id,$id)
     {
-        //
+        $member = BusinessStaff::find($id);
+        $services = $member->BusinessServices;
+        if(!empty($services) && count($services) > 0){
+           return 'error';
+        }else{
+            $member->delete();
+            return 'success';
+        }
+        
+    }
+
+    public function position_modal($business_id){
+        $positions = BusinessPositions::where('business_id',$business_id)->get();
+        return view('business.staff.add_positions_modal',['business_id'=>$business_id,'positions'=>$positions]);
+    }
+
+    public function position_store(Request $request, $business_id){
+        for ($i=0; $i < count($request->positions) ; $i++) { 
+            $data = [
+                "name"=> $request->positions[$i],
+                "business_id"=>  $business_id,
+                "user_id"=> Auth::user()->id,
+            ];
+            BusinessPositions::create($data);
+        }
+
+        return redirect()->route('business.staff.index');
+    }
+
+    public function position_delete(Request $request, $business_id, $id){
+        $position = BusinessPositions::where('id',$id)->first();
+        $position->delete();
     }
 }

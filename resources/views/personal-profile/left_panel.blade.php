@@ -23,10 +23,10 @@
                                 </a>
                             </li> <?php ?>
 
-                            <li class=" {{ (request()->is('personal-profile/add-family*')) ? 'active' : '' }}">
-                                <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family">
+                            <li class=" {{ (request()->is('family-member')) ? 'active' : '' }}">
+                                <a href="{{route('family-member.index')}}">
                                     <img src="{{ url('public/img/menu-icon5.svg') }}" alt="">
-                                    <span>Add Family</span>
+                                    <span><!-- Add Family -->  Manage Accounts</span>
                                 </a>
                             </li>
                             <?php /*?>
@@ -37,20 +37,20 @@
                                 </a>
                             </li> <?php */?>
 
-                            <li class=" {{ (request()->is('personal-profile/payment-info*')) ? 'active' : '' }}">
+                            <!-- <li class=" {{ (request()->is('personal-profile/payment-info*')) ? 'active' : '' }}">
                                 <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/payment-info">
                                     <img src="{{ url('public/img/menu-icon2.svg') }}" alt="">
                                     <span>Payment Info</span>
                                 </a>
-                            </li>
+                            </li> -->
                             
                             
-                            <li class=" {{ (request()->is('personal/orders*')) ? 'active' : '' }}">
+                            <!-- <li class=" {{ (request()->is('personal/orders*')) ? 'active' : '' }}">
                                 <a href="{{ route('personal.orders.index')}}">
                                     <img src="{{ url('public/img/menu-icon4.svg') }}" alt="">
                                     <span>Booking Info</span>
                                 </a>
-                            </li>
+                            </li> -->
 
                             <li class=" {{ (request()->is('personal-profile/favorite*')) ? 'active' : '' }}">
                                 <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/favorite">

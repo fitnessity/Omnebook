@@ -1,235 +1,190 @@
-@extends('layouts.header')
-@section('content')
-@include('layouts.userHeader')
+<div class="row">
+	<div class="col-md-5">
+		<div class="pro-name">
+			<label>{{$business_activity_scheduler->business_service->program_name}}</label>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<span class="mb-3">{{@$business_activity_scheduler->businessPriceDetailsAges != '' ? $business_activity_scheduler->businessPriceDetailsAges->category_title : "N/A" }}</span>
+			</div>
+			<div class="col-md-6">
+				<div class="mb-3">
+					<span>{{$filter_date->format('l, F j, Y')}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-7">
+		<div class="row">
+			<div class="col-md-4 col-sm-4 col-6">
+				<div class="gry-box d-grid side-box mb-3">
+					<label>Time</label>
+					<span>{{date('h:i A', strtotime($business_activity_scheduler->shift_start))}}  - {{date('h:i A', strtotime($business_activity_scheduler->shift_end))}}</span>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4 col-6">
+				<div class="gry-box d-grid side-box mb-3">
+					<label>Duration</label>
+					<span>{{$business_activity_scheduler->get_clean_duration()}} </span>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4 col-6">
+				<div class="gry-box d-grid side-box mb-3">
+					<label>Spots</label>
+					<span>{{$business_activity_scheduler->spots_left($filter_date)}}/{{$business_activity_scheduler->spots_available}} </span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 col-sm-4 col-12">	
+		<div class="mb-3 select-staff-member">
+			<select name="activity_type" class="form-select" id="" onchange="changeInstructor(this.value)">
+				<option value="">Select Staff Member</option>
+				@foreach($staffMember as $sm)
+					<option value="{{$sm->id}}" @if($instructor_id == $sm->id) selected @endif>{{$sm->full_name}}</option>
+				@endforeach
+			</select>
+		</div>
+	</div>
+	<div class="col-md-8 col-sm-8 col-12">	
+		<div class="float-right mb-3">
+			<div class="search-set manage-search manage-space">
+				<div class="client-search">
+					<div class="position-relative">
+						<input type="text" id="search_postorder_client" name="fname" placeholder="Search for client" autocomplete="off" value="" class="form-control" data-customer-id = "">
+                      
+						<!-- <input type="text" class="form-control ui-autocomplete-input" placeholder="Search for client" autocomplete="off" id="search_postorder_client" value=""> -->
+						<span class="mdi mdi-magnify search-widget-icon"></span>
+						<span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-close-options"></span>
+					</div>
+					<div class="dropdown-menu dropdown-menu-lg" id="search-dropdown"></div>
+				</div>
+			</div>
+			<div class="btn-client-search">
+				<a class="btn-red-primary btn-red mmt-10 addCustomer" data-business-activity-scheduler-id="{{$business_activity_scheduler->id}}" data-behavior="add_client_to_booking_post_order">Add </a>
+			</div>
+		</div>
+	</div>
+	@if(session()->has('success'))
+	    <div class="font-green mb-10 fs-16">
+	        {{ session()->get('success') }}
+	    </div>
+	@endif
 
-<div class="p-0 col-md-12 inner_top padding-0">
-    <div class="row">
-        <div class="col-md-2 col-sm-12" style="background: black;">
-             @include('business.businessSidebar')
-        </div>
-        <div class="col-md-10 col-sm-12">
-            <div class="container-fluid p-0">
-                <div class="row">
-                    <div class="col-md-6 col-xs-12 col-sm-12">
-                        <div class="tab-hed scheduler-txt"><span class="font-red">Activity Scheduler </span> | <a href="{{route('booking_request')}}">Booking Request </a></div>
-                    </div>
-                    <div class="col-md-6 col-xs-12 col-sm-12">
-                        @include('customers._search_header', ['company_id' => request()->current_company->id])
-                    </div>
-                </div>
-                <hr style="border: 3px solid black; width: 123%; margin-left: -38px; margin-top: 5px;">
-              </div>
-              <div class="container-fluid plr-0">
-                <div class="row">
-                    <div class="col-md-4 col-xs-12 col-sm-5">
-                         <div class="scheduler-info">
-                            <label>Program Name: </label>
-                            <span>{{$business_activity_scheduler->business_service->program_name}} <br/></span>
-                         </div>
-                         <div class="scheduler-info">
-                            <label>Category: </label>
-                            @if($business_activity_scheduler->businessPriceDetailsAges)
-                                <span>{{$business_activity_scheduler->businessPriceDetailsAges->category_title}}</span>
-                            @else
-                                <span>N/A</span>
-                            @endif
-                         </div>
-                         
-                         <div class="scheduler-info">
-                            <label>Date: </label><span>{{$filter_date->format('l, F j , Y')}} </span>
-                         </div>
-                         <div class="scheduler-info">
-                            <label>Time: </label><span>{{date('h:i A', strtotime($business_activity_scheduler->shift_start))}}  - {{date('h:i A', strtotime($business_activity_scheduler->shift_end))}}</span>
-                         </div>
-                         <div class="scheduler-info">
-                            <label>Duration:  </label><span>{{$business_activity_scheduler->get_clean_duration()}} </span>
-                         </div>
-                         <div class="scheduler-info">
-                            <label>Spots: </label><span>{{$business_activity_scheduler->spots_left($filter_date)}}/{{$business_activity_scheduler->spots_available}} </span>
-                         </div>
-                    </div>
-                    <div class="col-md-4 col-sm-12 col-sm-6">
-                        <div class="row">
-                            <div class="col-md-10 col-sm-12 col-sm-6">
-                                <div class="manage-search manage-space">
-                                    <div class="sub">
-                                        <input type="text" id="search_postorder_client" name="fname" placeholder="Search for client" autocomplete="off" value="{{Request::get('fname')}}" >
-                                        <div id="serch_postorder_client_box" style="display:none;">
-                                            <ul class="customer-list">
-                                            </ul>
-                                        </div>
+	@if(session()->has('error'))
+	    <div class="font-red mb-10 fs-16">
+	        {{ session()->get('error') }}
+	    </div>
+	@endif
+	<div class="col-md-12">	
+		<div class="booking-add-client">
+			<div class="table-responsive dots">
+				<table>
+				  	<tr>
+						<th>No</th>
+						<th>Client</th>
+						<th>Options</th>
+						<th>Check In</th>
+						<th>Remaining </th>
+						<th>Expiration</th>
+						<th>Alerts</th>
+						<th></th>
+					</tr>
 
-                                        <button ><i class="fa fa-search"></i></button>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                            <div class="col-md-2 col-sm-12 col-sm-6">
-                                <a style="margin-top: 73px;" class="btn-nxt manage-cus-btn" href="#" data-business-activity-scheduler-id="{{$business_activity_scheduler->id}}"  data-behavior="add_client_to_booking_post_order">Add</a>
-                            </div>
-                        </div>
+					@foreach($customers as $i=>$cus)
+						@php 
+							$firstCheckInDetail = '';
+							$rowRelation = $cus->BookingCheckinDetails();
+							$firstCheckInDetail = $chkCusId != $cus->id ||  $chkInId == '' ? $rowRelation->whereDate('checkin_date', $filter_date->format('Y-m-d'))->where('business_activity_scheduler_id', $business_activity_scheduler->id)->first() : $rowRelation->where('id',$chkInId)->first();
+							$checkInIds = '';
+     					@endphp
+						<tr>
+							<td>{{$i+1}}</td>
+							<td>
+								<div class="mini-stats-wid d-flex align-items-center width-185">
+									<div class="avatar-sm mr-15">
+										@if($cus->profile_pic)
+											<img class='mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4' src="{{Storage::Url($cus->profile_pic)}}" width=60 height=60 alt="">
+										@else
+											<div class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">
+												<span> {{$cus->first_letter}} </span>
+											</div>
+										@endif
+									</div>
+									<h6 class="mb-1">{{$cus->full_name}}</h6>
+								</div>
+							</td>
+							<td>
+								<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" data-cus-id="{{$cus->id}}">
+									<option value="" @if(!@$firstCheckInDetail->order_detail) selected @endif>Choose option</option>
+									@foreach($cus->active_memberships()->get() as $bookingDetail)
+										@php $checkInIds .= $bookingDetail->id.','; @endphp
+                                        <option value="{{$bookingDetail->id}}" @if(@$firstCheckInDetail->order_detail->id == $bookingDetail->id) selected @endif checkInId="{{$cus->getCheckInId($bookingDetail->id, $filter_date->format('Y-m-d'))}}">
+                                                {{@$bookingDetail->business_price_detail_with_trashed->price_title}} 
+                                        </option>
+                     				@endforeach
+								</select>
+							</td>
+							<td>
+								<div class="check-cancel width-105">
+									@if(@$firstCheckInDetail->order_detail && @$firstCheckInDetail->checkin_date <= date('Y-m-d')) 
+										@php  
+											$datetime = new DateTime(@$firstCheckInDetail->checkin_date.' '.$business_activity_scheduler->shift_start);
+											$formattedDatetime = $datetime->format('Y-m-d H:i:s');
+										@endphp
+										<input type="checkbox" name="check_in" value="1" data-behavior="checkin"data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}"data-booking-detail-id="{{@$firstCheckInDetail->booking_detail_id}}"  data-booking-detail-date="{{$formattedDatetime}}" @if(@$firstCheckInDetail->checked_at != '' ) checked @endif   data-cus-id="{{$cus->id}}"> 
+									@endif 
+									<label for="checkin" class="mb-0 mmt-10">Check In</label><br>
 
-                    </div>
-                </div>
-                
-                <hr style="border: 1px solid #efefef; width: 115%; margin-left: -15px; margin-top: 5px;">
-                @if(session('success'))
-                 <span class="alert alert-success" role="alert" style=" padding: 6px;">
-                     <strong>{{ session('success') }}</strong>
-                 </span>
-                @endif
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="row mobile-scheduler">
-                            <div class="col-md-1">
-                                <div class="scheduler-table-title">
-                                    <label>  </label>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <div class="scheduler-table-title">
-                                    <label></label>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="scheduler-table-title">
-                                    <label>Client Name  </label>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="scheduler-table-title">
-                                    <label> Price Title  </label>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <div class="scheduler-table-title">
-                                    <label>  Remaining   </label>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <div class="scheduler-table-title">
-                                    <label> Expiration</label>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                            </div>
-                        </div>
-                        
-                        <div id="schedulelist">
-                            
-                            @foreach($booking_checkin_details as $booking_checkin_detail)
+									@if(@$firstCheckInDetail->order_detail && @$firstCheckInDetail->checkin_date == date('Y-m-d'))
+					                    <input type="checkbox"  onclick="call()" name="late_cancel" value="0" data-behavior="ajax_html_modal" data-url="{{route('business.scheduler_checkin_details.latecencel_modal', ['id' => @$firstCheckInDetail->id, 'scheduler_id' => $business_activity_scheduler->id])}}"  data-modal-width = "500px" data-booking-detail-id="{{@$firstCheckInDetail->order_detail->id}}"
+					                        @if(@$firstCheckInDetail->no_show_action) checked @endif >
+					                @endif 
+									<label for="cancel" class="mb-0 mmt-10"> Late Cancel</label><br>
+								</div>
+							</td>
+							<td>
+								<div>
+									<p class="mb-0">{{ @$firstCheckInDetail->order_detail !='' ? @$firstCheckInDetail->order_detail->getremainingsession()."/".@$firstCheckInDetail->order_detail->pay_session : "N/A"}}</p>
+								</div>
+							</td>
+							<td>{{@$firstCheckInDetail->order_detail != '' ? Carbon\Carbon::parse(@$firstCheckInDetail->order_detail->expired_at)->format('m/d/Y') : "N/A"}}</td>
+							<td>{!! $cus->chkSignedTerms() !!} {!!$cus->chkBirthday() !!} {!! $cus->findExpiredCC() !!} {!! $cus->chkRecurringPayment(@$firstCheckInDetail->booking_detail_id) !!}</td>
+							<td>
+								<div class="multiple-options">
+									<div class="setting-icon">
+										<i class="ri-more-fill"></i>
+										<ul>
+											<li><a href="{{route('business.orders.create',['cus_id' => $cus->id])}}"><i class="fas fa-plus text-muted"></i>Purchase</a></li>
+											<li><a href="{{route('business_customer_show',['business_id' => request()->current_company->id, 'id'=> $cus->id])}}" target="_blank" ><i class="fas fa-plus text-muted"></i>View Account</a></li>
+											<li>
+												<a href="#" data-behavior="delete_checkin_detail" data-booking-checkin-detail-id="{{@$checkInIds}}"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</td>
+						</tr>
+					@endforeach
 
-                                <div class="scheduler-info-box">
-                                    <div class="row">
-                                        <div class="col-md-1 col-xs-12 col-sm-4">
-                                            <div class="scheduler-border scheduler-label">
-                                                <a href="#" data-behavior="delete_checkin_detail" data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}" ><i class="fas fa-times"></i></a>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="col-md-1 col-xs-3 col-sm-4">    
-                                            @if($booking_checkin_detail->customer->profile_pic)
-                                                <img class='img-circle' src="{{Storage::Url($booking_checkin_detail->customer->profile_pic)}}" width=60 height=60 alt="">
-                                            @else
-                                                <div class="scheduler-qty">
-                                                    <span> 
-                                                        {{$booking_checkin_detail->customer->first_letter}}
-                                                    </span>
-                                                </div>
-                                            @endif
-                                            
-                                        </div>
-                                        <div class="col-md-2 col-xs-9 col-sm-4">
-                                            <div class="scheduled-activity-info">
-                                                <span>{{$booking_checkin_detail->customer->full_name}}</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 col-xs-12 col-sm-4">
-                                            <div class="scheduled-activity-info">
-                                                <div class="price-mobileview">
-                                                    <select class="form-control valid price-info" data-behavior="change_price_title" data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}">
-                                                        <option value=""  @if(!$booking_checkin_detail->order_detail) selected @endif>Choose option</option>
-                                                        @foreach($booking_checkin_detail->customer->active_memberships()->get() as $customer_booking_detail)
-                                                            @if($customer_booking_detail->business_price_detail)
-                                                                @if($customer_booking_detail->getremainingsession() > 0 || ($booking_checkin_detail->order_detail && $customer_booking_detail->id == $booking_checkin_detail->order_detail->id))
-                                                                    <option value="{{$customer_booking_detail->id}}" @if($booking_checkin_detail->order_detail && ($customer_booking_detail->id == $booking_checkin_detail->order_detail->id)) selected @endif>
-                                                                        {{$customer_booking_detail->business_price_detail->price_title}}
-                                                                    </option>
-                                                                @endif
-                                                            @endif
-                                                        @endforeach
-                                                    </select>
-                                                    @if(count($booking_checkin_detail->customer->active_memberships()->get()) < 1)
-                                                        <span style="color:red;text-align:left;">No Active memberships</span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1 col-xs-12 col-sm-4">
-                                            <div class="scheduled-location">
-                                                @if($booking_checkin_detail->order_detail)
-                                                    {{$booking_checkin_detail->order_detail->getremainingsession()}}/{{$booking_checkin_detail
-                                                        ->order_detail->pay_session}}
-                                                @else
-                                                    N/A
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1 col-xs-12 col-sm-4">
-                                            <div class="scheduled-location">
-                                                @if($booking_checkin_detail->order_detail)
-                                                    {{Carbon\Carbon::parse($booking_checkin_detail->order_detail->expired_at)->format('m/d/Y')}}
-                                                @else
-                                                    N/A
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 col-xs-12 col-sm-4">
-
-                                                <div class="checkbox-check">
-                                                    <label style="font-weight: inherit;">
-                                                    @if($booking_checkin_detail->order_detail)
-                                                        <input type="checkbox" name="check_in" value="1"
-                                                            data-behvaior="checkin"
-                                                            data-booking-checkin-detail-id="{{$booking_checkin_detail->id}}"  
-                                                            data-booking-detail-id="{{$booking_checkin_detail->booking_detail_id}}"
-                                                            @if($booking_checkin_detail->checked_at) checked @endif >
-                                                        
-                                                    @endif
-                                                     Check In</label><br>
-                                                    <label style="font-weight: inherit;">
-                                                    @if($booking_checkin_detail->order_detail)
-                                                        <input type="checkbox" name="late_cancel" value="0" data-behavior="ajax_html_modal" data-url="{{route('business.scheduler_checkin_details.latecencel_modal', ['id' => $booking_checkin_detail->id, 'scheduler_id' => $business_activity_scheduler->id])}}"  data-modal-width = "500px" data-booking-detail-id="{{$booking_checkin_detail->order_detail->id}}"
-                                                        @if($booking_checkin_detail->no_show_action) checked @endif 
-                                                        >
-                                                    @endif
-                                                    Late Cancel</label>
-                                                </div>
-                                        </div>
-
-                                        <div class="col-md-2 col-xs-12 col-sm-12">
-                                            <div class="scheduled-btns">
-                                                <a href="{{route('business.orders.create',['cus_id' => $booking_checkin_detail->customer_id])}}" class="btn-edit btn-sp">Purchase</a>
-                                                <a href="{{route('business_customer_show',['business_id' => request()->current_company->id, 'id'=> $booking_checkin_detail->customer_id])}}" class="btn-edit" target="_blank">View Account</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>              
-            </div>  
-        </div>
-    </div>
+				  	@if(count($customers) == 0 )
+						<tr>
+							<td colspan="8"> 
+								<div class="no0signup text-center">
+									<img src="{{url('/dashboard-design/images/sports-set.jpg')}}">
+									<h3>No one is signed up. Add them to this activity</h3>
+								</div>
+							</td>
+						</tr>
+					@endif
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-@include('layouts.footer')
-
-<script>
-    
-    $(document).ready(function () {
+<script type="text/javascript">
+	$(document).ready(function () {
         var business_id = '{{request()->current_company->id}}';
         var url = "{{ url('/business/business_id/customers') }}";
         url = url.replace('business_id', business_id);
@@ -242,7 +197,6 @@
             select: function( event, ui ) {
                 $("#search_postorder_client").val( ui.item.fname + ' ' +  ui.item.lname);
                 $('#search_postorder_client').data('customer-id', ui.item.id)
-                $("[data-behavior~=add_client_to_booking_post_order]").show();
                  return false;
             }
         }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
@@ -252,10 +206,10 @@
                 profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
             }
 
-            var inner_html = '<div class="row rowclass-controller"></div><div class="col-md-3 nopadding text-center">' + profile_img + '</div><div class="col-md-9 div-controller">' + 
+            var inner_html = '<div class="row rowclass-controller"></div><div class="row"> <div class="col-md-3 nopadding text-center">' + profile_img + '</div><div class="col-md-9 div-controller">' + 
                       '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
                       '<p class="pstyle liaddress">' + item.email +'</p>' + 
-                      '<p class="pstyle liaddress">' + item.phone_number + '</p></div>';
+                      '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
            
             return $( "<li></li>" )
                     .data( "item.autocomplete", item )
@@ -264,139 +218,91 @@
         };
     });
 
-</script>
+	function changeInstructor(value){
+		date = "{{$filter_date->format('Y-m-d')}}";
+		today = "{{$today}}";
+		if(today == date){
+			$.ajax({
+				url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/change_instructor",
+		        method: "POST",
+		        data: { 
+		            _token: '{{csrf_token()}}',  
+		            date: date, 
+		            insID: value, 
+		        },
+		        success: function(html){
+		        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','','','');
+		            //location.reload();
+		        }
+			})
+		}else{
+			alert("You can't change instructor at this time.");
+		}
+	}
 
+	$('[data-behavior~=delete_checkin_detail]').click(function(e){
+	    e.preventDefault()
+    	$.ajax({
+	        url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + $(this).data('booking-checkin-detail-id'),
+	        method: "DELETE",
+	        data: { 
+	            _token: '{{csrf_token()}}', 
+	            date: '{{$filter_date->format("Y-m-d")}}', 
+	        },
+	        success: function(html){
+	        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','','','');
+	            //location.reload();
+	        }
+    	})
+	});
 
-<script type="text/javascript">
+	$('[data-behavior~=add_client_to_booking_post_order]').click(function(e){
+	    e.preventDefault()
+    	if(!$('#search_postorder_client').data('customer-id')){
+	        $('#search_postorder_client').focus();
+	        return
+    	}
 
-
-    $(document).on('click', '[data-behavior~=delete_checkin_detail]', function(e){
-        e.preventDefault()
-
-        $.ajax({
-            url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + $(this).data('booking-checkin-detail-id'),
-            method: "DELETE",
-            data: { 
-                _token: '{{csrf_token()}}', 
-            },
-            success: function(html){
-                location.reload();
-            }
-        })
-    })
-    
-
-    $(document).on('click', '[data-behavior~=add_client_to_booking_post_order]', function(e){
-        e.preventDefault()
-        if(!$('#search_postorder_client').data('customer-id')){
-            $('#search_postorder_client').focus();
-            return
-        }
-
-        $.ajax({
+       	$.ajax({
             url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details",
             method: "POST",
             data: { 
                 _token: '{{csrf_token()}}', 
                 customer_id: $('#search_postorder_client').data('customer-id'),
-                checkin_date: "{{$filter_date->format('Y/m/d')}}"
+                checkin_date: "{{$filter_date->format('Y/m/d')}}",
+                serviceId: "{{$business_activity_scheduler->serviceid}}",
             },
             success: function(html){
-                location.reload();
-            }
-        })
-    })
+                //location.reload();	
+                getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','',html,'');
+        	}
+    	})
+	});
 
-    $(document).on('click', 'body', function(){
-        $("#serch_postorder_client_box .customer-list").html('');
-        $("#serch_postorder_client_box").hide();
-    })
-
-    /*$(document).on('keyup', '#search_postorder_client', function() {
-      $.ajax({
-          type: "GET",
-          url: "{{route("business_customer_index", ['business_id' => request()->current_company->id])}}",
-          data: { fname: $(this).val(),  _token: '{{csrf_token()}}', },
-          success: function(data) {
-            $("#serch_postorder_client_box .customer-list").html('');
-            console.log(data);
-            
-            $.each(data, function(index, customer){
-            let customer_row = $('<div class="row rowclass-controller"></div>');
-              let content = customer_row.find('.rowclass-controller');
-              let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
-
-              if(customer.profile_pic_url){
-                profile_img = '<img class="img-circle" src="' + (customer.profile_pic_url ? customer.profile_pic_url : '') + '" style="width: 50px;height: 50px">';            
-              }
-              customer_row.append('<div class="col-md-3">' + profile_img + '</div>');
-              customer_row.append('<div class="col-md-9 div-controller"><a data-customer-id="' + customer.id + '" data-name="'+customer.fname + ' ' +  customer.lname+'" class="click_to_input" style="color: black;" href="/business/' + {{request()->current_company->id}} +'/customers/'+ customer.id + '">' + 
-                  '<p class="pstyle"><label class="liaddress">' + customer.fname + ' ' +  customer.lname  + (customer.age ? ' (' + customer.age+ '  Years Old)' : '') + '</label></p>' +
-                  '<p class="pstyle liaddress">' + customer.email +'</p>' + 
-                  '<p class="pstyle liaddress">' + customer.phone_number + '</p></a></div>');
-
-              $("#serch_postorder_client_box .customer-list").append(customer_row);
-              
-            })
-
-            
-            $("#serch_postorder_client_box").show();
-          }
-      });
-    });*/
-
-    $(document).on('click', '.click_to_input', function(e){
-        e.preventDefault()
-        e.stopPropagation()
-        $('#search_postorder_client').val($(this).data('name'))
-        $('#search_postorder_client').data('customer-id', $(this).data('customer-id'))
-        $("#serch_postorder_client_box").hide();
-        $("#serch_postorder_client_box .customer-list").html('');
-        $("[data-behavior~=add_client_to_booking_post_order]").show();
-        
-    })
-
-
-    // $(document).on('change', 'input[data-behavior="show_latecancel"]', function(){
-    //     if($(this).is(':checked')){
-    //         $.ajax({
-    //                 url:"/getbookingcancelmodel",
-    //                 type: "POST",
-    //                 data:{
-    //                         _token: '{{csrf_token()}}', 
-    //                         booking_detail_id:$(this).attr("booking-detail-id"),
-    //                 },
-    //                 success:function(response) {
-    //                         $('.latecancle-types').html(response);
-    //                         $('#latecancel').modal('show');
-    //                 }
-    //         });
-    //         $('#booking_id').val($(this).attr("data-oid"));
-    //         $('#order_detail_id').val($(this).attr("data-bookingid"));
-            
-    //     }
-    // });
-
-    $(document).on('change', "[data-behvaior~=checkin]", function(e){
+	$('[data-behavior~=checkin]').change(function(e){
         checkbox = this
-        if(!$(this).data('booking-detail-id')){
+     	if(!$(this).data('booking-detail-id')){
             this.checked = false;
             alert('Need to choose price title first.');
             e.preventDefault()
             e.stopPropagation();
             return false
-        }
-
-
-        $.ajax({
-            url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + $(this).data('booking-checkin-detail-id'),
+    	}
+     	
+     	var date = $(this).data('booking-detail-date');
+     	var chkInID =$(this).data('booking-checkin-detail-id');
+     	var cus_id =$(this).data('cus-id');
+     	var chk = $(this).is(':checked') ? 1 : 0;
+     	$.ajax({
+            url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + chkInID,
             type: "PATCH",
             data:{
                 _token: '{{csrf_token()}}', 
-                checked_at: $(this).is(':checked') ? moment().format('YYYY-MM-DD[T]HH:mm:ss') : null,
+                checked_at: $(this).is(':checked') ? date : null,
             },
             success:function(response) {
-                location.reload()
+            	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}',chkInID,cus_id,chk,'',response);
+                //location.reload()
             },
             error: function(){
                 checkbox.checked = false;
@@ -406,8 +312,8 @@
         });
     });
 
-    $(document).on('change', "[data-behavior~=change_price_title]", function(){
-
+    $('[data-behavior~=change_price_title]').change(function(e){
+    	var t = $(this)
         $.ajax({
             url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + $(this).data('booking-checkin-detail-id'),
             type: "PATCH",
@@ -416,16 +322,16 @@
                 booking_detail_id: $(this).val()
             },
             success:function(response) {
-                location.reload()
+        	    var cus_id =t.data('cus-id');
+            	var selectedOption = t.find('option:selected');
+            	var chkInID = selectedOption.attr('checkInId');
+            	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date->format("Y-m-d")}}',chkInID,cus_id,'','','');
             },
-        });
+       	});
     });
 
-
-
-
-
-
+    function call() {
+    	$('.checkinDetails').modal('hide');
+    }
 
 </script>
-@endsection

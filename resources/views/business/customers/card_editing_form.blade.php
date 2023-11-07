@@ -1,24 +1,13 @@
-
-
-
-
-
-  
-
-
 <form id="payment-form" data-secret="{{$intent['client_secret']}}" style="padding: 16px;margin-bottom: 0px;">
 
   <div id="error-message" class="alert alert-danger" role="alert" style="display: none;"></div>
   <div id="payment-element" style="margin-top: 8px;"></div>
-  
-  <button class="post-btn-red" type="submit" id="submit">Add on file</button>
-
-  
+   
+  <button class="btn btn-red" type="submit" id="submit">Add on file</button>
 </form>
 
-<script type="text/javascript">
+<script type="text/javascript" >
   const stripe = Stripe('{{ env('STRIPE_PKEY') }}');
-
   const options = {
     clientSecret: '{{$intent['client_secret']}}',
     appearance: {

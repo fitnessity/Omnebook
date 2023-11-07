@@ -1,25 +1,26 @@
 @if(!empty($bookingDetail))
-    @foreach($bookingDetail as $book_details)
-    @php 
-        $pic = url('/public/uploads/profile_pic');                 
-        
-        $pic =  url('/public/uploads/profile_pic/'.$book_details->business_services()->withTrashed()->first()->first_profile_pic());
-        
-    @endphp
+    @foreach($bookingDetail as $i=>$book_details)
         <div class="col-md-4 col-sm-6 ">
             <div class="boxes_arts">
                 <div class="headboxes">
-                    <img src="{{$pic}}" class="imgboxes" alt="">
-                    <h4 class="fontsize">{{$book_details->business_services()->withTrashed()->first()->program_name}}</h4>
-
-                    <a class="openreceiptmodel" data-behavior="ajax_html_modal" data-url="{{route('getreceiptmodel',['orderid'=>$book_details->booking_id , 'orderdetailid'=>$book_details->id])}}" data-modal-width="900px">
-                        <i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
-                    </a>
-                    @if($tabname == 'current')
-                       <!--  <div class="booking-active @if($book_details->pay_session >0 ) booking-active-color @else booking-inactive-color @endif">@if($book_details->pay_session >0 ) Active @else Inactive @endif</div> -->
+                    @if( Storage::disk('s3')->exists( $book_details->business_services()->withTrashed()->first()->first_profile_pic() ) )
+                        <img src="{{Storage::URL($book_details->business_services()->withTrashed()->first()->first_profile_pic())}}" class="imgboxes" alt="">
+                    @else
+                        <img src="{{url('/images/service-nofound.jpg')}}" class="imgboxes" alt="">
                     @endif
-                    <div class="highlighted_box">Confirmed</div>
-                   
+                    <h4 class="fontsize">{{$book_details->business_services()->withTrashed()->first()->program_name}}</h4>
+					<div class="text-center">
+						<span class="date-timebooking"> @if($book_details->getReserveData('reserve_date') != '—') {{$book_details->getReserveData('reserve_date')}}  | {{$book_details->getReserveData('reserve_time')}} @endif</span>
+					</div>
+					<div>
+						<a class="openreceiptmodel set-file-icon" data-behavior="ajax_html_modal" data-url="{{route('getreceiptmodel',['orderid'=>$book_details->booking_id , 'orderdetailid'=>$book_details->id])}}" data-modal-width="900px">
+							<i class="fas fa-file-alt file-booking-receipt" aria-hidden="true"></i>
+						</a>
+						@if($tabname == 'current')
+						   <!--  <div class="booking-active @if($book_details->pay_session >0 ) booking-active-color @else booking-inactive-color @endif">@if($book_details->pay_session >0 ) Active @else Inactive @endif</div> -->
+						@endif
+						<div class="highlighted_box">Confirmed</div>
+                   </div>
                 </div>
                 <div class="middleboxes middletoday" id="{{$tabname}}_<?php echo $i.'_'.$book_details->business_services()->withTrashed()->first()->id; ?>">
                     <p>
@@ -28,13 +29,11 @@
                     </p>
                     <p>
                         <span class="text-left">TOTAL PRICE:</span>
-                        <span class="text-rihgt">@if($book_details->booking->getPaymentDetail() != 'Comp') {{$book_details->getperoderprice() + $book_details->total()}} @else 0 @endif </span>
+                        <span class="text-rihgt">@if($book_details->booking->getPaymentDetail() != 'Comp') {{ $book_details->subtotal}} @else 0 @endif </span>
                     </p>
                     <p>
                         <span class="text-left">PRICE OPTION:</span>
-                        <span class="text-right">{{@$book_details->business_price_detail_with_trashed->price_title}} - {{@$book_details['pay_session']}} Sessions
-                        
-                        </span>
+                        <span class="text-right">{{@$book_details->business_price_detail_with_trashed->price_title}} - {{@$book_details['pay_session']}} Sessions</span>
                     </p>
                     <p>
                         <span class="text-left">PAYMENT TYPE:</span>
@@ -108,11 +107,15 @@
                         <span class="text-left">WHO IS PARTICIPATING?</span>
                         <span class="text-rihgt">{!!$book_details->decodeparticipate()!!}</span>
                     </p>
+                    <p>
+                        <span class="text-left">ADD ON SERVICES:</span>
+                        <span class="text-rihgt">{!! getAddonService($book_details->addOnservice_ids,$book_details->addOnservice_qty) !!} </span>
+                    </p>
                 </div>
                 <div class="foterboxes">
                     <div class="threebtn_fboxes">
-                        @if($tabname == 'current' || $tabname == 'upcoming'  )
-                            <a href="{{route('business_activity_schedulers',['business_id' => $book_details['business_id'] ,'business_service_id'=>$book_details['sport'] ,'stype'=>$book_details->business_services()->withTrashed()->first()->service_type ,'priceid' =>$book_details['priceid'] ,'customer_id' =>@$customer->id ] )}}" target="_blank">Schedule</a>
+                        @if($tabname != 'past' )
+                            <a class="btn-booking-red"  href="{{route('business_activity_schedulers',['business_id' => $book_details['business_id'] ,'business_service_id'=>$book_details['sport'] ,'stype'=>$book_details->business_services()->withTrashed()->first()->service_type ,'priceid' =>$book_details['priceid'] ,'customer_id' =>$book_details['user_id'] ] )}}" target="_blank">Schedule</a>
                         @endif
                         @if($tabname == 'past')
                          <a href="{{route('activities_show',['serviceid' => $book_details->business_services()->withTrashed()->first()->id ])}}" target="_blank">Rebook</a>
@@ -144,6 +147,6 @@
                 </div>
             </div>
         </div>
-    @php  $i++; @endphp
     @endforeach
 @endif
+

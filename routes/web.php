@@ -11,51 +11,81 @@
 */
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\CompanyInformation;
-use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Customers_Auth\HomeController;
-
+use App\Http\Controllers\Products\ProductController;
 
 
 Route::get('/invitation/accept','HomeController@invitation_accept')->name('invitation_accept');
+Route::any('/welcome_provider/','OnBoardedController@welcome')->name('onboard_process.welcome');
+Route::get('/onboard_process/','OnBoardedController@index')->name('onboard_process.index');
+Route::get('/stripe-dashboard-onboard','OnBoardedController@stripeDashboard')->name('stripe-dashboard-onboard');
+Route::post('/onboard_process/store','OnBoardedController@store')->name('onboard_process.store');
+Route::post('/storePlan','OnBoardedController@storePlan')->name('onboard_process.storePlan');
+Route::any('/getCardForm','OnBoardedController@getCardForm')->name('onboard_process.getCardForm');
+Route::any('/doLoginProcess','OnBoardedController@doLoginProcess')->name('doLoginProcess');
+Route::any('/storeCards','OnBoardedController@storeCards')->name('storeCards');
+
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
     // Scheduler
     Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
-    Route::resource('schedulers', 'SchedulerController')->only(['index', 'destroy']);
+    Route::resource('schedulers', 'SchedulerController')->only(['index', 'create','store','update','destroy']);
 
     // Scheduler Checkin Details
     Route::get('schedulers/{scheduler_id}/checkin_details/{id}/latecancel_modal', 'SchedulerCheckinDetailController@latecancel_modal')->name('scheduler_checkin_details.latecencel_modal');
+
+    Route::post('schedulers/{scheduler_id}/checkin_details/change_instructor', 'SchedulerCheckinDetailController@changeInstructor')->name('scheduler_checkin_details.changeInstructor');
+
     Route::resource('schedulers.checkin_details', 'SchedulerCheckinDetailController')->only(['index', 'update', 'destroy', 'store']);
 
     Route::resource('products', 'ProductController')->only(['index','create', 'update', 'destroy', 'store']);
 
+    Route::get('addVariantModal/{name}','ProductController@addVariantModal')->name('products.addVariantModal');
+    Route::post('addVariant','ProductController@addVariant')->name('products.addVariant');
+    
     Route::resource('recurring', 'RecurringController')->only(['index', 'update','destroy', ]);
-    Route::post('recurring/pay_recurring_item', 'RecurringController@pay_recurring_item')->name('recurring.pay_recurring_item');
-
+    Route::post('recurring/pay_recurring_item', 'RecurringController@pay_recurring_item')->name('recurring.pay_recurring_item');    
+    
     Route::resource('orders', 'OrderController')->only(['create', 'store']);
     Route::resource('services', 'ServiceController')->only(['index','create','edit', 'update', 'destroy', 'store']);
+
+    Route::get('services/select', 'ServiceController@select')->name('service.select');
+    Route::post('services/destroyimage', 'ServiceController@destroyimage')->name('service.destroyimage');
+
     Route::post('service_redirection','ServiceController@service_redirection')->name('service_redirection');
     Route::resource('orders', 'UserBookingDetailController')->only(['index', 'update', 'destroy']);
     Route::post('refund', 'UserBookingDetailController@refund')->name('refund');
     Route::post('suspend', 'UserBookingDetailController@suspend')->name('suspend');
     Route::post('terminate', 'UserBookingDetailController@terminate')->name('terminate');
+    Route::post('booking_details/{id}/void', 'UserBookingDetailController@void')->name('void');
     Route::get('customers/card_editing_form', 'CustomerController@card_editing_form')->name('customers.card_editing_form');
-    Route::get('customers/refresh_payment_methods', 'CustomerController@refresh_payment_methods')->name('customers.refresh_payment_methods');
-    
-    Route::resource('customers', 'CustomerController')->only(['index', 'update', 'destroy', 'store']);
-    Route::get('/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');
-
+    Route::any('customers/refresh_payment_methods', 'CustomerController@refresh_payment_methods')->name('customers.refresh_payment_methods');
+    Route::post('customers/import-customer','CustomerController@importcustomer')->name('customers.import');
+    Route::resource('customers', 'CustomerController')->only(['index', 'update','store']);
+   
     Route::resource('staff', 'StaffController')->only(['index','create','show','edit','store','update', 'destroy']);
+    Route::get('position_modal','StaffController@position_modal')->name('staff.position_modal');
+    Route::post('position_modal/store','StaffController@position_store')->name('staff.position_modal.store');
+    Route::post('position_modal/delete/{id}','StaffController@position_delete')->name('staff.position_modal.delete');
 
     Route::post('editcartmodel', 'OrderController@editcartmodel')->name('editcartmodel');
-  
+    Route::any('addToCartForCheckout', 'OrderController@addToCartForCheckout')->name('addToCartForCheckout');
+    Route::any('removeFromCartForCheckout', 'OrderController@removeFromCartForCheckout')->name('removeFromCartForCheckout');
+
+    Route::get('/member_expirations','MembershipExpirationsController@index')->name('member_expirations.index');
+    Route::post('/getMemberships','MembershipExpirationsController@getMemberships')->name('member_expirations.getMemberships');
+    Route::get('/getMoreMemberships','MembershipExpirationsController@getMoreMemberships')->name('member_expirations.getMoreMemberships');
+    Route::get('/exportMembership','MembershipExpirationsController@exportMembership')->name('member_expirations.exportMembership');
+
+    Route::get('/sales_report','SalesReportController@index')->name('sales_report.index');
+
 });
 
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
-
     Route::resource('orders', 'OrderController')->only(['index','show']);
     Route::resource('family_members', 'FamilyMemberController')->only(['index','show']);
     Route::resource('schedulers', 'SchedulerController')->only(['index','create','update','destroy','store']);  
     Route::any('all_activity_schedule', 'SchedulerController@allActivitySchedule')->name('allActivitySchedule');
+    Route::resource('company', 'CompanyController')->only(['index','create','edit', 'update', 'destroy', 'store']);
 });
 
 Route::name('design.')->prefix('/design')->middleware('auth')->group(function () {
@@ -67,11 +97,60 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/createNewBusinessProfile','DesignController@createNewBusinessProfile')->name('createNewBusinessProfile');
     Route::get('/createNewBusinessProfileone','DesignController@createNewBusinessProfileone')->name('createNewBusinessProfileone');
     Route::get('/createNewBusinessProfiletwo','DesignController@createNewBusinessProfiletwo')->name('createNewBusinessProfiletwo');
+    Route::get('/manage_activity','DesignController@manage_activity')->name('manage_activity');
+    Route::get('/manage_booking','DesignController@manage_booking')->name('manage_booking');
+    Route::get('/manage_company','DesignController@manage_company')->name('manage_company');
+    Route::get('/schedule_create','DesignController@schedule_create')->name('schedule_create');
+    Route::get('/company_setup','DesignController@company_setup')->name('company_setup');
+    Route::get('/checkin_details','DesignController@checkin_details')->name('checkin_details');
+    Route::get('/clients','DesignController@clients')->name('clients');
+    Route::get('/calendar','DesignController@calendar')->name('calendar');
+	Route::get('/clientsview','DesignController@clientsview')->name('clientsview');
+	Route::get('/addfamily','DesignController@addfamily')->name('addfamily');
+    Route::get('/manage_staff','DesignController@manage_staff')->name('manage_staff');
+	Route::get('/view_staff','DesignController@view_staff')->name('view_staff');
+	Route::get('/manage_product','DesignController@manage_product')->name('manage_product');
+	Route::get('/add_product','DesignController@add_product')->name('add_product');
+    Route::get('/sales_report','DesignController@sales_report')->name('sales_report');
+	Route::get('/shopping_cart','DesignController@shopping_cart')->name('shopping_cart');
+    Route::get('/book_multi_times','DesignController@book_multi_times')->name('book_multi_times');
+	Route::get('/instant_activity_details','DesignController@instant_activity_details')->name('instant_activity_details');
+	Route::get('/member_expirations','DesignController@member_expirations')->name('member_expirations');
+	Route::get('/chat_inbox','DesignController@chat_inbox')->name('chat_inbox');
+	Route::get('/edit_profile','DesignController@edit_profile')->name('edit_profile');
+	Route::get('/personal_profile','DesignController@personal_profile')->name('personal_profile');
+	Route::get('/provider_profile_calendar','DesignController@provider_profile_calendar')->name('provider_profile_calendar');
+	Route::get('/add_family_provider','DesignController@add_family_provider')->name('add_family_provider');
+	Route::get('/followers','DesignController@followers')->name('followers');
+	Route::get('/following','DesignController@following')->name('following');
+	Route::get('/favorite','DesignController@favorite')->name('favorite');
+	Route::get('/booking_info','DesignController@booking_info')->name('booking_info');
+	Route::get('/price_plan','DesignController@price_plan')->name('price_plan');
+	Route::get('/payment_info','DesignController@payment_info')->name('payment_info');  
+	Route::get('/booking_details','DesignController@booking_details')->name('booking_details');
+	Route::get('/creditcard_info','DesignController@creditcard_info')->name('creditcard_info');
+	Route::get('/o_payment_info','DesignController@o_payment_info')->name('o_payment_info');
+	Route::get('/o_card_info','DesignController@o_card_info')->name('o_card_info');
+	Route::get('/providers_onboarded','DesignController@providers_onboarded')->name('providers_onboarded');
+	Route::get('/onboarded_steps','DesignController@onboarded_steps')->name('onboarded_steps');   
+	Route::get('/home','DesignController@home')->name('home');  
 });
 
-//Route::resource('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController')->only(['index','create','edit','store','update', 'destroy']);
-
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
+Route::any('/schedule/multibooking/{business_id}/', 'BusinessActivitySchedulerController@multibooking')->name('multibooking');
+Route::post('/chkOrderAvailable', 'BusinessActivitySchedulerController@chkOrderAvailable')->name('chkOrderAvailable');
+Route::get('/chksession/{did}/{date?}/{timeId?}/{chk?}', 'BusinessActivitySchedulerController@chksession')->name('chksession');
+Route::post('/chkMultiBooking', 'BusinessActivitySchedulerController@chkMultiBooking')->name('chkMultiBooking');
+
+Route::post('/chkMultipleOrder', 'BusinessActivitySchedulerController@chkMultipleOrder')->name('chkMultipleOrder');
+
+Route::get('/getReviewData/{cid}/{business_id}', 'BusinessActivitySchedulerController@getReviewData')->name('getReviewData');
+
+Route::post('/deleteFromSession', 'BusinessActivitySchedulerController@deleteFromSession')->name('deleteFromSession');
+
+Route::post('/multibooking/save', 'BusinessActivitySchedulerController@save')->name('multibooking.save');
+
+Route::post('/setSessionOfSchedule/', 'BusinessActivitySchedulerController@setSessionOfSchedule')->name('setSessionOfSchedule');
 
 Route::resource('stripe_payment_methods', 'StripePaymentMethodController')->only(['destroy']);
 
@@ -94,20 +173,26 @@ Route::post('/act_detail_filter', 'ActivityController@act_detail_filter')->name(
 Route::post('/act_detail_filter_for_cart', 'ActivityController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
 Route::post('/getmodelbody', 'ActivityController@getmodelbody')->name('getmodelbody');
 Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
+Route::get('/getBookingSummary', 'ActivityController@getBookingSummary')->name('getBookingSummary');
+Route::get('/getAddOnData', 'ActivityController@getAddOnData')->name('getAddOnData');
 
 
 Route::group(['middleware' => ['auth']], function(){
-    Route::get('/dashboard', 'BusinessController@dashboard')->name('business_dashboard');
+    Route::get('/dashboard/{date?}/{id?}', 'BusinessController@dashboard')->name('business_dashboard');
     Route::post('/getscheduleactivity', 'BusinessController@getscheduleactivity')->name('getscheduleactivity');
     Route::post('/getExpiringMembership', 'BusinessController@getExpiringMembership')->name('getExpiringMembership');
     Route::get('/bookingchart', 'BusinessController@bookingchart')->name('bookingchart');
     
     Route::prefix('/business/{business_id}')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
-        Route::delete('/customers/{id}','CustomerController@delete')->name('business_customer_delete');
+        Route::delete('/customers/delete/{id}','CustomerController@delete')->name('business_customer_delete');
         Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
         Route::get('/customers/{id}/visit_modal','CustomerController@visit_modal')->name('visit_modal');
         Route::get('/customers/{id}/visit_autopaymodel','CustomerController@visit_autopaymodel')->name('visit_autopaymodel');
+        Route::get('/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');
+        Route::get('/void_or_refund_modal','CustomerController@void_or_refund_modal')->name('void_or_refund_modal');
+        Route::get('/terminate_or_suspend_modal','CustomerController@terminate_or_suspend_modal')->name('terminate_or_suspend_modal');
+        
         Route::get('/request-access-mail','CustomerController@request_access_mail')->name('request_access_mail');
 
         // BookingPostorders
@@ -117,8 +202,8 @@ Route::group(['middleware' => ['auth']], function(){
         // Booking Checkin Details
         Route::get('/scheduler/{business_activity_scheduler_id}/checkin_details', 'SchedulerController@checkin_details')->name('booking_checkin_details_index');
 
-        Route::get('/createStaff','StaffController@createmanageStaff')->name('createStaff');
-        Route::get('/staff-scheduled-activities','StaffController@staff_scheduled_activities')->name('staff-scheduled-activities');
+       /* Route::get('/createStaff','StaffController@createmanageStaff')->name('createStaff');
+        Route::get('/staff-scheduled-activities','StaffController@staff_scheduled_activities')->name('staff-scheduled-activities');*/
         //Route::get('/products','ProductController@index')->name('products_index');
     });
 });
@@ -175,9 +260,9 @@ Route::get('send-sms-twillio','UserProfileController@sendCustomMessage');
 Route::get('send-call-twillio','UserProfileController@makeCall');
 Route::post('generateMessage/{otpCode}', 'UserProfileController@generateVoiceMessage')->name('generateMessage');
 Route::post('modelboxsuccess', 'UserProfileController@modelboxsuccess')->name('modelboxsuccess');
-Route::post('delimageactivity', 'UserProfileController@delimageactivity')->name('delimageactivity');
 Route::get('editactivityimg', 'UserProfileController@editactivityimg')->name('editactivityimg');
 Route::post('activityimgupdate', 'UserProfileController@activityimgupdate')->name('activityimgupdate');
+
 
 Route::get('make-new-logout',function(){
     if(Auth::check()){
@@ -197,6 +282,9 @@ Route::get('/unset-session-for-claim','UserProfileController@unset_session_for_c
 Route::any('/varify-code-to-claim-business','UserProfileController@varify_code_to_claim_business')->name('varify_code_to_claim_business');
 
 Route::any('/varify-email-for-claim-business','UserProfileController@varify_email_for_claim_business')->name('varify_email_for_claim_business');
+
+Route::any('/resend-otp-for-claim','UserProfileController@resendOpt')->name('resendOpt');
+
 
 Route::any('/business-claim-varification/{cid}','UserProfileController@business_claim_varification')->name('business_claim_varification');
 
@@ -280,6 +368,9 @@ Route::get('/check',function(){
 
 
 Route::post('/auth/postRegistration_as_guest', 'ActivityController@postRegistration_as_guest')->name('auth/postRegistration_as_guest');
+
+Route::get('/openGuestRegistration', 'ActivityController@openGuestRegistration')->name('openGuestRegistration');
+
 Route::get('/', 'Frontend\HomeController@index')->name('homepage');
 Route::get('/home', 'Frontend\HomeController@index')->name('homemy');
 Route::get('/testleft', 'Frontend\HomeController@testleft')->name('testleft');
@@ -709,6 +800,7 @@ Route::post('/unfollower_company', 'UserProfileController@Punfollower')->name('u
 Route::post('/company-image-upload', 'UserProfileController@companyImageUpload');
 Route::post('/user-multi-image-upload', 'UserProfileController@userImageUpload');
 Route::get('personal-profile/add-family', 'UserProfileController@addFamily')->name('addFamily');
+Route::get('payment_history', 'UserProfileController@payment_history')->name('payment_history');
 Route::post('/gallery-upload', 'UserProfileController@galleryUpload')->name('file-upload');
 Route::get('gallery-picture/{user_id}', 'UserProfileController@galleryList')->name('file-list');
 Route::post('profile/editProfilePicture', 'UserProfileController@editProfilePicture');
@@ -839,9 +931,11 @@ Route::any('/direct-hire/confirm-payment', 'LessonController@confirmpayment');
 Route::get('/direct-hire/getCompareProfessionalDetail/{id}', 'LessonController@getCompareProfessionalDetail');
 /*Route::any('/payments/card', 'LessonController@cartpaymentinstant')->name('payments_card');*/
 Route::get('/carts', 'CartController@index')->name('carts_index');
+Route::get('/indexCart', 'CartController@indexCart')->name('indexCart');
 Route::post('/addfamilyfromcart', 'CartController@addfamilyfromcart')->name('addfamilyfromcart');
 Route::post('/addactivitygift', 'CartController@addactivitygift')->name('addactivitygift');
 Route::post('/activity_gift_model', 'CartController@activity_gift_model')->name('activity_gift_model');
+Route::get('/getTerms', 'CartController@getTerms')->name('getTerms');
 
 
 
@@ -947,26 +1041,27 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/sendemailofreceipt', 'BookingController@sendemailofreceipt')->name('sendemailofreceipt');
     Route::get('/getreceiptmodel', 'BookingController@getreceiptmodel')->name('getreceiptmodel');
+    Route::get('/getRescheduleModel', 'BookingController@getRescheduleModel')->name('getRescheduleModel');
     Route::post('/datefilterdata', 'BookingController@datefilterdata')->name('datefilterdata');
     Route::post('/searchfilteractivty', 'BookingController@searchfilteractivty')->name('searchfilteractivty');
     Route::post('/searchfilterdata', 'BookingController@searchfilterdata')->name('searchfilterdata');
     Route::get('/cancelbooking', 'BookingController@cancelbooking')->name('cancelbooking');
     Route::get('/getbookingmodeldata', 'BookingController@getbookingmodeldata')->name('getbookingmodeldata');
 
+    Route::resource('/family-member', 'FamilyMemberController')->only(['index','store','update','destroy']);
+
+    Route::get('family-member.show', 'FamilyMemberController@show')->name('family-member.show');
 });
-
-
-
 
 Route::post('/fullcalenderAjax', 'UserProfileController@cajax')->name('fullcalenderAjax');
 Route::get('/personal-profile/favorite', 'UserProfileController@favorite');
 Route::get('/personal-profile/followers', 'UserProfileController@followers');
 Route::get('/personal-profile/following', 'UserProfileController@following');
-Route::get('/personal-profile/payment-info', 'UserProfileController@paymentinfo');
+Route::post('/personal-profile/card-delete', 'UserProfileController@cardDelete')->name('cardDelete');
+Route::get('/personal-profile/cards-save', 'UserProfileController@cardsSave')->name('cards-save');
+Route::get('/personal-profile/credit-cards-info', 'UserProfileController@creditCardInfo')->name('creditCardInfo');
+Route::get('/personal-profile/payment-history', 'UserProfileController@paymentHistory')->name('paymentHistory');
 Route::post('/personal-profile/get-card-purchase-history', 'UserProfileController@card_purchase_history')->name('card_purchase_history');
-//Route::post('/personal-profile/payment-save', 'UserProfileController@paymentsave')->name('paymentsave');
-Route::get('/personal-profile/payment-save', 'UserProfileController@paymentsave')->name('paymentsave');
-Route::post('/personal-profile/payment-delete', 'UserProfileController@paymentdelete')->name('paymentdelete');
 Route::get('/personal-profile/review', 'UserProfileController@review');
 Route::get('/personal-profile/user-profile', 'UserProfileController@userprofile')->name('user-profile');
 Route::post('updateuserprofile', 'UserProfileController@updateuserprofile')->name('updateuserprofile');
@@ -1038,19 +1133,25 @@ Route::namespace('Customers_Auth')->group(function(){
 
 Route::group(['middleware' => ['auth']], function()
 {
-    
     Route::get('/grant_access/{id}/{business_id}','CustomerController@grant_access')->name('grant_access');
     Route::get('/remove_grant_access/{id?}/{customerId?}','CustomerController@remove_grant_access')->name('remove_grant_access');
     Route::get('/receiptmodel/{orderId}/{customer}', 'CustomerController@receiptmodel')->name('receiptmodel');
     Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
     Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');
     Route::post('/import-customer','CustomerController@importcustomer')->name('importcustomer');
+    Route::post('/import-membership','CustomerController@importmembership')->name('importmembership');
+    Route::post('/import-attendance','CustomerController@importattendance')->name('importattendance');
     Route::post('update_customer','CustomerController@update_customer')->name('update_customer');
     Route::get('addcustomerfamily/{id}','CustomerController@addcustomerfamily')->name('addcustomerfamily');
+    Route::get('customer/add-family/{id}','CustomerController@add_family')->name('customer.add_family');
     Route::post('addFamilyMemberCustomer','CustomerController@addFamilyMemberCustomer')->name('addFamilyMemberCustomer');
     Route::post('removefamilyCustomer','CustomerController@removefamilyCustomer')->name('removefamilyCustomer');
     Route::post('/payment-delete', 'CustomerController@paymentdeletecustomer')->name('paymentdeletecustomer');
     Route::get('/send-receipt-to-customer', 'CustomerController@sendReceiptToCustomer')->name('sendReceiptToCustomer');
+    Route::get('/loadView', 'CustomerController@loadView')->name('load.view');
+    Route::get('/get-more-records', 'CustomerController@getMoreRecords');
+    Route::post('/sendTermsMail', 'CustomerController@sendTermsMail')->name('sendTermsMail');
+    Route::post('/addFamilyViaSearch', 'CustomerController@addFamilyViaSearch')->name('addFamilyViaSearch');
 });
 
 
@@ -1070,8 +1171,24 @@ Route::group(['middleware' => ['auth']], function()
 {
     Route::get('/personal-profile/calendar', 'CalendarController@calendar')->name('calendar');
     Route::post('eventmodelboxdata', 'CalendarController@eventmodelboxdata')->name('eventmodelboxdata');
-    Route::get('/provider/calendar', 'CalendarController@provider_calendar')->name('provider_calendar');
+    Route::prefix('/business/{business_id}')->group(function () {
+        Route::get('/calendar', 'CalendarController@provider_calendar')->name('provider_calendar');
+        Route::get('/paymentModal/{customerID}', 'CalendarController@paymentModal')->name('paymentModal');
+    });
+    Route::post('/calendar/order/store', 'CalendarController@store')->name('calendar.order.store');
+    Route::get('/chkStaffAssignedOrder', 'CalendarController@chkStaffAssignedOrder')->name('calendar.chkStaffAssignedOrder');
 });
+
+Route::get('/staff_login','StaffController@index')->name('staff_login');
+Route::post('/login','StaffController@login')->name('dologin');
+Route::post('/import-staff','StaffController@importstaff')->name('importstaff');
+
+
+Route::get('/addproducts',[ProductController::class,'addProduct'])->name('addproducts');
+
+
+    //Route::resource('product', 'Products\ProductController')->only(['store','create']);
+    Route::post('products', 'Products\ProductController@store')->name('products');
 
 
 ?>

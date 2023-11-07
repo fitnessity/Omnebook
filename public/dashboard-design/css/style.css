@@ -89,7 +89,8 @@
     --vz-input-focus-border:#a59cd9;
     --vz-input-disabled-bg:#eff2f7;
     --vz-input-group-addon-bg:#eff2f7;
-    --vz-input-check-border:var(--vz-input-border)
+    --vz-input-check-border:var(--vz-input-border);
+	--vz-black-font-color:#000;
 }
 :root .nav-tabs{
     --vz-nav-tabs-link-active-bg:#f2f2f7
@@ -104,6 +105,7 @@ body{
 	overflow-x: hidden;
 }
 [data-layout-mode=dark]{
+	--vz-black-font-color:#fff;
     --vz-gray-100:#1a1d21;
     --vz-gray-200:#212529;
     --vz-gray-300:#2a2f34;
@@ -285,9 +287,26 @@ body{
     --vz-vertical-menu-border-gradient:var(--vz-primary);
     --vz-twocolumn-menu-bg-dark:var(--vz-primary)
 }
+
+[data-layout-mode=dark] :is(.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6){
+	color: --vz-black-font-color:#fff;
+}
+[data-layout-mode=dark] .fix-box:hover {
+  background: #6a6a6a;
+}
+[data-layout-mode=dark] .nav-tabs-custom .nav-item .nav-link{
+  color: #fff;
+}
+[data-layout-mode=dark] .setting-icon > ul {
+  background: #3f3f3f none repeat scroll 0 0;
+}
+[data-layout-mode=dark] .check-client-info-box {
+  background: #4c4c4c;
+}
+
 #page-topbar{
     position: absolute;
-	top: 74px;
+	top: 65px;
     right:0;
     left:0;
     z-index: 7;
@@ -706,7 +725,7 @@ body{
 }
 .navbar-menu{
     width:250px;
-    z-index:7;
+    /*z-index:7;*/
     background: #151529;
     border-right:1px solid #151529;
     bottom:0;
@@ -4207,7 +4226,7 @@ html{
     min-height:100%
 }
 :is(.h1,.h2,.h3,.h4,.h5,.h6,h1,h2,h3,h4,h5,h6){
-    color: #000;
+    color: --vz-black-font-color:#000;
     font-family:Inter,sans-serif
 }
 a{
@@ -10706,7 +10725,7 @@ div.dtr-modal div.dtr-modal-close:hover{
 }
 .numInputWrapper span{
     position:absolute;
-    right:0;
+    /* right:0; */
     width:14px;
     padding:0 4px 0 2px;
     height:50%;
@@ -10730,7 +10749,8 @@ div.dtr-modal div.dtr-modal-close:hover{
 }
 .numInputWrapper span.arrowUp{
     top:0;
-    border-bottom:0
+    border-bottom:0;
+	opacity: 1;
 }
 .numInputWrapper span.arrowUp:after{
     border-left:4px solid transparent;
@@ -10739,7 +10759,8 @@ div.dtr-modal div.dtr-modal-close:hover{
     top:26%
 }
 .numInputWrapper span.arrowDown{
-    top:50%
+    top:50%; 
+	opacity: 1;
 }
 .numInputWrapper span.arrowDown:after{
     border-left:4px solid transparent;
@@ -10792,10 +10813,10 @@ div.dtr-modal div.dtr-modal-close:hover{
     display:inline-block
 }
 .flatpickr-current-month span.arrowUp::after{
-    border-bottom-color:rgba(0,0,0,.9)
+    border-bottom-color: rgb(255, 255, 255);
 }
 .flatpickr-current-month span.arrowDown:after{
-    border-top-color:rgba(0,0,0,.9)
+    border-top-color: rgb(255, 255, 255);
 }
 .flatpickr-current-month input.cur-year{
     background:0 0;
@@ -11356,13 +11377,13 @@ span.flatpickr-weekday{
         top:35px!important
     }
 }
-.upcoming-scheduled .flatpickr-months{
-    position:absolute!important;
-    top:-45px!important;
-    left:auto!important;
-    right:0!important;
-    width:200px;
-    background-color:transparent
+/* .upcoming-scheduled.position-relative .flatpickr-months{
+    position: absolute!important;
+    top: -43px!important;
+    left: 140px !important;
+    right: 0!important;
+    width: 100%;
+    background-color: transparent; */
 }
 .upcoming-scheduled .flatpickr-months .flatpickr-month{
     color:#878a99!important;
@@ -11413,6 +11434,12 @@ span.flatpickr-weekday{
 }
 .upcoming-scheduled .flatpickr-days{
     border:none!important
+}
+.upcoming-scheduled .flatpickr-months .flatpickr-month{
+	height: 37px;
+}
+.upcoming-scheduled .flatpickr-months{
+	background-color: #ea1515;
 }
 .crm-widget .col{
     border-right:1px solid var(--vz-border-color)
@@ -13109,8 +13136,8 @@ span.flatpickr-weekday{
 }
 @media (min-width:992px){
     .chat-leftsidebar{
-        min-width:300px;
-        max-width:300px;
+        /* min-width:300px;
+        max-width:300px; */
         height:calc(100vh - 70px - 60px - 8px)
     }
 }
@@ -14721,4 +14748,13 @@ span.flatpickr-weekday{
     right:-35px
 }
 /*# sourceMappingURL=app.min.css.map */
- 
+
+
+/* A-Class Start*/
+.scheduler-box a{
+	color: var(--vz-black-font-color);
+}
+.color-black{
+	color: var(--vz-black-font-color) !important;
+}
+/* A-Class End*/

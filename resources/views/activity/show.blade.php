@@ -22,42 +22,21 @@ input:disabled{
 	use App\{UserBookingDetail,BusinessServices,BusinessService,BusinessPriceDetails,BusinessPriceDetailsAges,BusinessServiceReview,BusinessTerms,User,BusinessActivityScheduler,BusinessServicesFavorite,CompanyInformation,BusinessReview,BusinessStaff};
 	use Carbon\Carbon;
 
-    $activity = $service;
-	$sid = $serviceid = $activity->id;
+	$sid = $service->id;
 
-    $cancelation = $cleaning = $houserules = $comp_address = $Phonenumber = '';
-    $email = $companylat = $companylon  = $companylogo = '';
-
-    $houserules = $activity['know_before_you_go'];
-
-    $comp_data = $activity->company_information;
-
+    $comp_data = $service->company_information;
     $businessSp = $comp_data->business_service;
-	if(!empty($businessSp)) {
-        $languages = $businessSp['languages'];
-    }  
+    $languages = (!empty($businessSp['languages'])) ? $businessSp['languages'] : '';
 
-    $address = '';
-	$Instruname = $comp_data->full_name;
 	$comp_address = $comp_data->company_address();
-	if($comp_data->city != ''){
-		$address .= ', '.$comp_data->city.', ';
-	}
-	if($comp_data->country != ''){
-		$address .= $comp_data->country.', ';
-	}
-	if($comp_data->zip_code != ''){
-		$address .= $comp_data->zip_code;
-	}
+	$address = '';
+	$address .= ($comp_data->city) ? ', ' . $comp_data->city : '';
+	$address .= ($comp_data->country) ? ', ' . $comp_data->country : '';
+	$address .= ($comp_data->zip_code) ? ' ' . $comp_data->zip_code : '';
 
-	$profilePicact = url('/public/images/service-nofound.jpg'); 
-	if($activity->instructor_id != ''){
-		$staffdata = BusinessStaff::where(['id'=>$activity->instructor_id])->first();
-		if (@$staffdata->profile_pic != "") {
-	    	if (File::exists(public_path("/uploads/instructureimg/".$staffdata->profile_pic))){
-	    		$profilePicact = url('/public/uploads/instructureimg/'.$staffdata->profile_pic);
-	    	}
-	    }
+	if($service->instructor_id != ''){
+		$staffdata = $service->BusinessStaff;
+	    $profilePicact = $staffdata->profile_pic_url ?? url('/public/images/service-nofound.jpg');
 	}else{
 		$staffdata = $comp_data;
 		$profilePicact = url('/uploads/profile_pic/thumb/'.$staffdata->logo);
@@ -65,188 +44,18 @@ input:disabled{
 
 	$companyname = $comp_data->dba_business_name;
 	$companyid = $comp_data->id;
-	$Phonenumber = $comp_data->contact_number;
-	$companylon = $comp_data->longitude;
-	$companylat = $comp_data->latitude;
-	$companylogo  = $comp_data->logo ;
-	$email = $comp_data->email;
 
 	$BusinessTerms = BusinessTerms::where('cid', $comp_data->id)->first();
-	if(!empty($BusinessTerms)){
-		$cancelation = $BusinessTerms->cancelation;
-		$cleaning = $BusinessTerms->cleaning;
-	}
+	$cancelation = !empty($BusinessTerms) ? $BusinessTerms->cancelation : '';
+	$cleaning = !empty($BusinessTerms) ? $BusinessTerms->cleaning : '';
 
-	$companyactid =$activity->cid;
+	$companyid = $service->cid;
 	$redlink = str_replace(" ","-",$companyname)."/".$companyid;
 
-	$servicePr=[]; $bus_schedule=[];
-	$servicePrfirst = BusinessPriceDetails::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->first();
-	$sercate = BusinessPriceDetailsAges::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->get()->toArray();
-	$sercatefirst = BusinessPriceDetailsAges::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->first();
-	//DB::enableQueryLog();
-	if(@$sercatefirst != ''){
-    	$servicePr = BusinessPriceDetails::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->get()->toArray();
-	}
-
-	//dd(\DB::getQueryLog());
-    $todayday = date("l");
-    $todaydate = date('m/d/Y');
-    $maxspotValue = 0;
-	if(!empty(@$sercatefirst)){
-    	$bus_schedule = BusinessActivityScheduler::where('serviceid',@$serviceid )->where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->get();
-    	$bus_service = BusinessService::where('cid' ,$service['cid'])->first();
-    	$maxspotValue = BusinessActivityScheduler::where('serviceid',@$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->max('spots_available');
-	}
-	
-	$chk_found = '';
-	if( strpos(@$bus_service->special_days_off,date('m/d/Y')) !== false){
-       	$chk_found = "Found";
-    }else{
-        $chk_found = "Not";
-    }
-
-    $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  $SpotsLeftdis = 0 ;
-    $i=0;
-    if(!empty(@$bus_schedule)){
-        foreach($bus_schedule as $data){
-        	if($i==0 && $chk_found =='Not'){
-        		$SpotsLeftdis = 0; 
-				$SpotsLeft = UserBookingDetail::where('act_schedule_id',$data['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->get()->toArray();
-				$totalquantity = 0;
-				foreach($SpotsLeft as $data1){
-					$item = json_decode($data1['qty'],true);
-					if($item['adult'] != '')
-                        $totalquantity += $item['adult'];
-                    if($item['child'] != '')
-                        $totalquantity += $item['child'];
-                    if($item['infant'] != '')
-                        $totalquantity += $item['infant'];
-				}
-				if( $data['spots_available'] != ''){
-					$SpotsLeftdis = $data['spots_available'] - $totalquantity;
-				} 
-				
-	            $expdate  = date('m/d/Y', strtotime($data['end_activity_date']));
-	            $date_now = new DateTime();
-	            $expdate = new DateTime($expdate);
-	            if($SpotsLeftdis != 0){
-	            	if($date_now <= $expdate){
-		                if(@$data['shift_start']!=''){
-		                    $start = date('h:i a', strtotime( $data['shift_start'] ));
-		                    $timedata .= $start;
-		                }
-		                if(@$data['shift_end']!=''){
-		                    $end = date('h:i a', strtotime( $data['shift_end'] ));
-		                    $timedata .= ' - '.$end;
-		                } 
-
-		                if(@$data['set_duration']!=''){
-		                    $tm=explode(' ',$data['set_duration']);
-		                    $hr=''; $min=''; $sec='';
-		                    if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-		                    if($tm[2]!=0){ $min=$tm[2].'min. '; }
-		                    if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-		                    if($hr!='' || $min!='' || $sec!='')
-		                    { 
-		                    	$time = $hr.$min.$sec; 
-		                        $timedata .= ' / '.$time;
-		                    } 
-		                }
-		                $i++;
-		            }
-	            }
-           	}
-        }
-    }
- 	/*echo $timedata;exit();*/
-
- 	$mbox =''; 
- 	$mem_ary = []; 
-    if (!empty(@$servicePr)) {
-    	foreach ($servicePr as  $pr) {
-            $mem_ary [] =  $pr['membership_type'];
-        }
-        $mem_ary = array_unique($mem_ary);
-        foreach ($mem_ary as  $pr) {
-            $mbox .='<option value="'.$pr.'">'.$pr.'</option>';
-        }
-    }
-
-	$selectval = $priceid = $total_price_val = '' ;
-	$adult_cnt =$child_cnt =$infant_cnt =0;
-	$adult_price = $child_price = $infant_price =0;
-	if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-        $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'] + @$servicePrfirst['child_weekend_price_diff'] + @$servicePrfirst['infant_weekend_price_diff'] ;
-        if(@$servicePrfirst['adult_weekend_price_diff'] != ''){
-        	$adult_price = @$servicePrfirst['adult_weekend_price_diff'];
-        	$adult_cnt = 1;
-        }
-
-        if(@$servicePrfirst['child_weekend_price_diff'] != ''){
-        	$child_price = @$servicePrfirst['child_weekend_price_diff'];
-        	$child_cnt = 1;
-        }
-
-        if(@$servicePrfirst['infant_weekend_price_diff'] != ''){
-        	$infant_price = @$servicePrfirst['infant_weekend_price_diff'];
-        	$infant_cnt = 1;
-        }
-       
-        $i=1;
-        if (!empty(@$servicePr)) {
-            foreach ($servicePr as  $pr) {
-            	if(@$mem_ary[0] == $pr['membership_type']){
-	                if($i==1){
-	            		$priceid = $pr['id'];
-	            	}
-	                $selectval .='<option value="'.$pr['id'].'">'.$pr['price_title'].'</option>';
-	                $i++;
-	            }
-            }
-        }
-    }else{
-		/*print_r($servicePr); exit;*/
-		if(!empty(@$servicePr))
-		{
-
-			$total_price_val =  @$servicePrfirst['adult_cus_weekly_price'] + @$servicePrfirst['child_cus_weekly_price'] + @$servicePrfirst['infant_cus_weekly_price'];
-			if(@$servicePrfirst['adult_cus_weekly_price'] != ''){
-				$adult_price = @$servicePrfirst['adult_cus_weekly_price'];
-	        	$adult_cnt = 1;
-	        }
-
-	        if(@$servicePrfirst['child_cus_weekly_price'] != ''){
-	        	$child_price = @$servicePrfirst['child_cus_weekly_price'];
-	        	$child_cnt = 1;
-	        }
-
-	        if(@$servicePrfirst['infant_cus_weekly_price'] != ''){
-	        	$infant_price = @$servicePrfirst['infant_cus_weekly_price'];
-	        	$infant_cnt = 1;
-	        }
-			$i=1;
-            foreach ($servicePr as  $pr) {
-            	if(@$mem_ary[0] == $pr['membership_type']){
-	            	if($i==1){
-	            		$priceid =$pr['id'];
-	            	}
-					$selectval .='<option value="'.$pr['id'].'">'.$pr['price_title'].'</option>';
-					$i++;
-				}
-			}
-		}
-    }
-
-    $activities_search = BusinessServices::where('cid', $service['cid'])->where('is_active', '1')->where('id', '!=' , $serviceid)->orderBy('id', 'DESC')->get();
-
+	$pro_pic1 = '';
     $pro_pic = $service->profile_pic;
 	if(!empty($pro_pic)){
-		if(str_contains($pro_pic, ',')){
-			$pro_pic1 = explode(',', $pro_pic);
-		}else{
-			$pro_pic1 = $pro_pic;
-		}
+		$pro_pic1 = (str_contains($pro_pic, ',')) ? explode(',', $pro_pic) : [$pro_pic];
 	}
 
 ?>
@@ -264,60 +73,50 @@ input:disabled{
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
 
 <div id="mykickboxing" class="mykickboxing-activities kickboxing-moredetails" style="padding-top: 78px">
-<!-- The Modal Add Business-->
+
    	<div class="container">
 	   	<div class="row">
 			<div class="col-md-12 col-xs-12">
 				<div class="modal-banner modal-banner-sp galleryfancy">
 					@php $i=0; $newary= []; @endphp
-					@if(is_array(@$pro_pic1))
-	                    @if(!empty(@$pro_pic1))
-	                    	@foreach(@$pro_pic1 as $img)
-	                    		@if(!empty($img) && File::exists(public_path("/uploads/profile_pic/".$img)))
-	                    	 		@php $newary [] = $img; @endphp
-	                    	 	@endif
-	                    	@endforeach
-	                        @foreach(@$pro_pic1 as $img)
-	                            @if(!empty($img) && File::exists(public_path("/uploads/profile_pic/".$img)))
-		                            <div @if(count(@$newary) == 1) class="single-banner" @elseif(count(@$newary) == 2) class="dual-banner" @elseif(count(@$newary) == 3) class="three-banner"  @else class="bannar-size" @endif @if($i>3) style="display:none" @endif>
-				                    	<a href="{{ url('/public/uploads/profile_pic/'.$img)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
-										<img src="{{ url('/public/uploads/profile_pic/'.$img)}}">
-										@if($i==3) <button class="showall-btn showphotos" ><i class="fas fa-bars"></i>Show all photos</button> @endif
-				                        </a>
-									</div>	                            
-								@endif
-								@php $i++; @endphp
-	                        @endforeach
-	                    @endif
+					@if(is_array(@$pro_pic1) && !empty(@$pro_pic1))
+                    	@foreach(@$pro_pic1 as $img) 
+                    		@if(!empty($img) && Storage::disk('s3')->exists($img))
+                    	 		@php $newary [] = $img; @endphp
+                    	 	@endif
+                    	@endforeach
+                        @foreach(@$pro_pic1 as $img)
+                            @if(!empty($img) && Storage::disk('s3')->exists($img))
+	                            <div @if(count(@$newary) == 1) class="single-banner" @elseif(count(@$newary) == 2) class="dual-banner" @elseif(count(@$newary) == 3) class="three-banner"  @else class="bannar-size" @endif @if($i>3) style="display:none" @endif>
+			                    	<a href="{{Storage::URL($img)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
+									<img src="{{Storage::URL($img)}}">
+									@if($i==3) <button class="showall-btn showphotos" ><i class="fas fa-bars"></i>Show all photos</button> @endif
+			                        </a>
+								</div>	                            
+							@endif
+							@php $i++; @endphp
+                        @endforeach
 	                @else
-	                	@if(!empty($pro_pic1) && File::exists(public_path("/uploads/profile_pic/".$pro_pic1)))
+	                	@if(!empty($pro_pic1) &&  Storage::disk('s3')->exists($pro_pic1))
 	                	<div class="single-banner">
-							<a href="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
-								<img src="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}">
+							<a href="{{Storage::URL($pro_pic1)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
+								<img src="{{Storage::URL($pro_pic1)}}">
 				            </a>
 						</div>
-						<!-- <div class="bannar-size">
-	                    	<a href="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
-							<img src="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}">
-							<button class="showall-btn showphotos" ><i class="fas fa-bars"></i>Show all photos</button> 
-	                        </a>
-						</div> -->
                         @endif
                     @endif
-              
 				</div>
 			</div>
 
-			<div class="col-lg-6 col-xs-12">
-				<!--<img src="http://fitnessity.co/public/uploads/profile_pic/thumb/1653996182-aerobics.jpg" class="kickboximg-big">-->
+			<div class="col-lg-8 col-xs-12">
 				<h3 class="details-titles">{{@$service['program_name']}}</h3>
 				<p class="caddress"> <b> Provider: </b> <a href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}"> {{ $companyname }} </a>{{$address }}
 				</p>
 				<div class="service-review-desc">
 					<div class="provider_review">
 					<?php
-						$reviews_count = BusinessServiceReview::where('service_id', $serviceid)->count();
-						$reviews_sum = BusinessServiceReview::where('service_id', $serviceid)->sum('rating');
+						$reviews_count = BusinessServiceReview::where('service_id', $sid)->count();
+						$reviews_sum = BusinessServiceReview::where('service_id', $sid)->sum('rating');
 						
 						$reviews_avg=0;
 						if($reviews_count>0)
@@ -335,10 +134,6 @@ input:disabled{
 				<div class="row">
 					<div class="col-md-5 col-sm-5 col-xs-12">
 						<div class="prdetails">
-							<!-- <div>
-								<label>Duration: </label>
-								<span> </span>
-							</div> -->
 							<div class="mb-10">
 								<label>Service Type: </label>
 								<span> {{@$service['select_service_type']}}  </span>
@@ -359,10 +154,6 @@ input:disabled{
 					</div>
 					<div class="col-md-7 col-sm-7 col-xs-12">
 						<div class="prdetails">
-							<!-- <div>
-								<label>Spots Left:</label>
-								<span> </span>
-							</div> -->
 							<div class="mb-10">
 								<label>Activity: </label>
 								<span>{{@$service['sport_activity']}}</span>
@@ -382,31 +173,18 @@ input:disabled{
 						</div>
 					</div>
 				</div>
-				
-				
 
 				<h3 class="subtitle details-sp font-32 mt-20">Things To Know </h3>
 				
 				<h3 class="subsubtitle details-sp">Know Before You Go</h3>
-				@if($houserules != '')
-					<p class="mb-20"><?php echo nl2br($houserules);?></p>
-				@else
-					<p class="mb-20">No Details Found</p>
-				@endif
-				
+				<p class="mb-20">@if($service['know_before_you_go'] != '') <?php echo nl2br($service['know_before_you_go']);?> @else No Details Found @endif</p>
+
 				<h3 class="subsubtitle details-sp">Cancelation Policy</h3>
-				@if($cancelation != '')
-					<p class="mb-20"><?php echo nl2br($cancelation);?></p>
-				@else
-					<p class="mb-20">No Details Found</p>
-				@endif
-				
+				<p class="mb-20">@if($cancelation != '') <?php echo nl2br($cancelation);?> @else No Details Found @endif</p>
+
 				<h3 class="subsubtitle details-sp">Safety and Cleaning Procedures</h3>
-				@if($cleaning != '')
-					<p class="mb-20"><?php echo nl2br($cleaning);?></p>
-				@else
-					<p class="mb-20">No Details Found</p>
-				@endif
+				<p class="mb-20">@if($cleaning != '') <?php echo nl2br($cleaning);?> @else No Details Found @endif</p>
+				
 				
 				<div class="row">
 					<div class="col-md-9">
@@ -421,10 +199,10 @@ input:disabled{
 							</div>
 							<?php   
 								$locations = []; 
-		                        if($companylat != '' || $companylon  != ''){
-									$lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-									$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-		                    		$a = [$companyname, $lat, $long, $companyid, $companylogo];
+		                        if($comp_data->latitude != '' || $comp_data->longitude  != ''){
+									$lat = $comp_data->latitude + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+									$long = $comp_data->longitude + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+		                    		$a = [$companyname, $lat, $long, $companyid, $comp_data->logo];
 		                            array_push($locations, $a);
 								}
 								
@@ -436,16 +214,16 @@ input:disabled{
 									<p>{{$comp_address}}</p>
 								</span>
                                 @endif
-                                @if(@$Phonenumber != '')
+                                @if(@$comp_data->contact_number != '')
 								<span>
 									<i class="fas fa-phone-alt map-fa"></i>
-									<p>{{$Phonenumber}}</p>
+									<p>{{$comp_data->contact_number}}</p>
 								</span>
                                 @endif
-                                @if(@$email != '')
+                                @if(@$comp_data->email != '')
 								<span>
 									<i class="fa fa-envelope map-fa"></i>
-									<p>{{$email}}</p>
+									<p>{{$comp_data->email}}</p>
 								</span>
                                 @endif
 							</div>
@@ -453,8 +231,7 @@ input:disabled{
 					</div>
 				</div>
 				
-				@if(@$staffdata != '') 
-				<div class="col-md-12 col-sm-12 col-xs-12 instructor-details">
+				<div class="col-md-12 col-sm-12 col-xs-12 instructor-details @if(@$staffdata != '')  d-none @endif ">
 					<div class="row">
 						<div class="col-md-3 col-sm-3 col-xs-12">
 							<div class="instructor-img">
@@ -472,9 +249,8 @@ input:disabled{
 						</div>
 					</div>
 				</div>
-				@endif 
 				
-				<div class="row" id="user_ratings_div{{$serviceid}}">
+				<div class="row" id="user_ratings_div{{$sid}}">
 					<div class="col-md-12 col-xs-12">
 						<h3 class="subtitle mt-50">Submit A Review </h3>
 					</div>
@@ -496,20 +272,18 @@ input:disabled{
 									$business_reviews_count = BusinessReview::where('page_id', $companyid)->count();
 									$business_reviews_sum = BusinessReview::where('page_id', $companyid)->sum('rating');
 
-									$business_reviews_avg=0;
-									$business_reviews_per=0;
+									$business_reviews_avg = $business_reviews_per= $reviews_avg = $reviews_per=0;
 									if($business_reviews_count>0)
-									{ $business_reviews_avg = round($business_reviews_sum/$business_reviews_count,2); 
+									{ 
+										$business_reviews_avg = round($business_reviews_sum/$business_reviews_count,2); 
 										$business_sum_of_rating = $business_reviews_count*5;
 										$business_totalRating = $business_reviews_avg * $business_reviews_count;
 										$business_reviews_per = ($business_totalRating/$business_sum_of_rating)*100;
 									}
 
-									$reviews_count = BusinessServiceReview::where('service_id', $serviceid)->count();
-									$reviews_sum = BusinessServiceReview::where('service_id', $serviceid)->sum('rating');
+									$reviews_count = BusinessServiceReview::where('service_id', $sid)->count();
+									$reviews_sum = BusinessServiceReview::where('service_id', $sid)->sum('rating');
 									
-									$reviews_avg=0;
-									$reviews_per=0;
 									if($reviews_count>0)
 									{ $reviews_avg = round($reviews_sum/$reviews_count,2); 
 										$sum_of_rating = $reviews_count*5;
@@ -556,12 +330,12 @@ input:disabled{
 							<a href="#" class="rev-follow-txt">{{$reviews_count}} Followers Reviewed This</a>
 							<div class="users-thumb-list">
 								<?php 
-									$reviews_people = BusinessServiceReview::where('service_id', $serviceid)->orderBy('id','desc')->limit(6)->get(); 
+									$reviews_people = BusinessServiceReview::where('service_id', $sid)->orderBy('id','desc')->limit(6)->get(); 
 								?>
 	                            @if(!empty($reviews_people))
 	                                @foreach($reviews_people as $people)
 	                                	<?php $userinfo = User::find($people->user_id); ?>
-	                                    <a href="<?php echo config('app.url'); ?>/userprofile/{{@$userinfo->username}}" target="_blank" title="{{@$userinfo->firstname}} {{@$userinfo->lastname}}" data-toggle="tooltip">
+	                                    <a href="<?php echo config('app.url'); ?>/userprofile/{{@$userinfo->username}}" target="_blank" title="{{@$userinfo->firstname}} {{@$userinfo->lastname}}">
 	                                        @if(File::exists(public_path("/uploads/profile_pic/thumb/".@$userinfo->profile_pic)))
 	                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$userinfo->profile_pic) }}" alt="{{@$userinfo->firstname}} {{@$userinfo->lastname}}">
 	                                        @else
@@ -579,7 +353,7 @@ input:disabled{
 						<div class="ser-review-list">
 							<div>
 								<?php
-	    							$reviews = BusinessServiceReview::where('service_id', $serviceid)->get();
+	    							$reviews = BusinessServiceReview::where('service_id', $sid)->get();
 	    						?>
 	                        	@if(!empty($reviews))
 	                                @foreach($reviews as $review)
@@ -632,18 +406,32 @@ input:disabled{
 				</div>	
 			</div>	
 				
-	        <div class="col-lg-6 col-sm-12 col-xs-12">
-            	<h3 class="subtitle details-sp mb-30 mtxt-cnter" id="check_availability"> Check Availability </h3>
-            	<div class="activered" id="spoterror"></div>
-            	<div class="mainboxborder black-border">	
+	        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            	<h3 class="subtitle details-sp mb-20 mtxt-cnter text-center" id="check_availability"> Check Availability </h3>
+            	
+            	<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="book-instantly mb-20 text-center">
+							<a class="font-red"> Book Instantly  </a>
+							<span class="book-tool-tip" data-toggle="tooltip" data-placement="top" title="This provider allows you to make booking with them Immediately.">
+								<i class="fas fa-info"></i>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="activered text-center mb-10" id="spoterror"></div>
+            	<div class="mainboxborder">	
 					<div class="row">
+
 						<div class="col-md-12 col-sm-12 col-xs-12">
-                        	
-							<div class="activities-calendar">
+							<div class="">
+								<h3 class="date-title mt-10 mb-10"></h3>
+								<label class="mb-10">Step: 1 </label> <span class="">Select Date</span>
+
 								<div class="row">
-									<div class="col-md-6 col-sm-6 col-xs-6">
-										<div class="activityselect3 special-date">
-											<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" autocomplete="off"  onchange="updatedetail({{$companyactid}},{{$serviceid}});" >
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										<div class="activityselect3 special-date mb-20">
+											<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" autocomplete="off"  onchange="updatedetail({{$companyid}},{{$sid}},'date','');" >
 											<i class="fa fa-calendar"></i>
 										</div>
 									</div>
@@ -655,66 +443,12 @@ input:disabled{
 							$totalquantity = 0;
 						@endphp 
 						<div id="updatefilterforcart">
-							<div class="col-md-12 col-sm-12 col-xs-12">
-								<div class="choose-calendar-time">
-									<div class="row">
-										
-									</div>
-								</div>
-							</div>
-							<div class="col-md-12 col-xs-12">
-								<div class="indetails-btn">
-									@if(!empty(@$servicePrfirst))
-										<input type="hidden" name="price_title_hidden" id="price_title_hidden{{$serviceid}}{{$serviceid}}" value="{{@$servicePrfirst['price_title']}}">
-									@endif
-									<input type="hidden" name="time_hidden" id="time_hidden{{$serviceid}}{{$serviceid}}" @if($timedata != '' ) value="{{$timedata}}" @endif>
-									<input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden{{$serviceid}}{{$serviceid}}" value="{{$Totalspot}}">
-
-									<input type="hidden" name="memtype_hidden" id="memtype_hidden{{$serviceid}}{{$serviceid}}" @if(@$servicePrfirst['membership_type'] != '') value="{{@$servicePrfirst['membership_type'] }}@if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif" @endif>
-
-									<form action="" id="addtocartform">
-										@csrf
-										<input type="hidden" name="pid" value="{{$serviceid}}"  />
-										<input type="hidden" name="persontype" id="persontype" value="adult"/>
-										<input type="hidden" name="quantity" id="pricequantity{{$serviceid}}{{$serviceid}}" value="1" class="product-quantity"/>
-
-										<input type="hidden" name="aduquantity" id="adupricequantity" value="{{$adult_cnt}}" class="product-quantity"/>
-										<input type="hidden" name="childquantity" id="childpricequantity" value="{{$child_cnt}}" class="product-quantity"/>
-										<input type="hidden" name="infantquantity" id="infantpricequantity" value="{{$infant_cnt}}" class="product-quantity"/>
-
-										<input type="hidden" name="cartaduprice" id="cartaduprice" value="{{$adult_price}}" class="product-quantity"/>
-										<input type="hidden" name="cartchildprice" id="cartchildprice" value="{{$child_price}}" class="product-quantity"/>
-										<input type="hidden" name="cartinfantprice" id="cartinfantprice" value="{{$infant_price}}" class="product-quantity"/>
-
-									   <input type="hidden" name="pricetotal" id="pricetotal{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price"/>
-									   <input type="hidden" name="price" id="price{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price" />
-										<input type="hidden" name="session" id="session{{$serviceid}}" value="{{@$servicePrfirst['pay_session']}}" />
-										<input type="hidden" name="priceid" value="{{$priceid}}" id="priceid{{$serviceid}}" />
-										<input type="hidden" name="actscheduleid" value="{{@$bschedulefirst->id}}" id="actscheduleid{{$serviceid}}" />
-										<input type="hidden" name="sesdate" value="{{date('Y-m-d')}}" id="sesdate{{$serviceid}}" />
-										<input type="hidden" name="cate_title" value="{{@$sercatefirst['category_title']}}" id="cate_title{{$service['id']}}{{$service['id']}}" />
-										<input type="hidden" name="timechk" value="" id="timechk" />
-										
-										<div id="cartadd">
-											@if($totalquantity >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0)
-												<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
-											@else
-	                                            @if( @$total_price_val !='' && $timedata != '')
-	                                            	<div id="addcartdiv">
-	                                                    <button type="button" id="btnaddcart" class="btn btn-red mt-10"> Add to Cart </button>
-	                                                </div>
-											  	@endif
-											@endif
-										</div>
-									</form>
-								</div>
-							</div>
 						</div>
 					</div>  
 				</div>
 	        </div>	
-            
-            <div class="col-md-12 col-xs-12 mb-80">
+
+	        <div class="col-md-12 col-xs-12 mb-80">
             	@if(count($activities_search)>0)
 					<div class="col-md-12 col-sm-12 col-xs-12">
 						<h3 class="subtitle text-center mtb-30">Other Activities Offered By This Provider</h3>
@@ -730,16 +464,16 @@ input:disabled{
                             </div>
 						
                         @php 
-							$actoffer = BusinessServices::where('cid',$companyactid)->groupBy('sport_activity')->get()->toArray();
+							$actoffer = BusinessServices::where('cid',$companyid)->groupBy('sport_activity')->get()->toArray();
 						@endphp
 						<div class="col-md-6 col-sm-6 col-xs-6">
 							<div class="activityselect3 special-date dropdowns">
-								<input type="text" name="actfildate" id="actfildate{{$serviceid}}" placeholder="Date" class="form-control" onchange="actFilter({{$companyactid}},{{$serviceid}})" autocomplete="off" value="{{date('M-d-Y')}}">
+								<input type="text" name="actfildate" id="actfildate{{$sid}}" placeholder="Date" class="form-control" onchange="actFilter({{$companyid}},{{$sid}})" autocomplete="off" value="{{date('M-d-Y')}}">
 								<i class="fa fa-calendar"></i>
 							</div>
 							<script>
 								$( function() {
-									$( "#actfildate{{$serviceid}}" ).datepicker( { 
+									$( "#actfildate{{$sid}}" ).datepicker( { 
 										minDate: 0,
 										changeMonth: true,
 										changeYear:true,
@@ -749,7 +483,7 @@ input:disabled{
 						</div>
 						<div class="col-md-6 col-sm-6 col-xs-6">
 							<div class="dropdowns">
-								<select id="actfiloffer{{$serviceid}}" name="actfiloffer" class="form-control activityselect1" onchange="actFilter({{$companyactid}},{{$serviceid}})">
+								<select id="actfiloffer{{$sid}}" name="actfiloffer" class="form-control activityselect1" onchange="actFilter({{$companyid}},{{$sid}})">
                                 	<option value="">Activity Offered</option>
 									@if (!empty($actoffer)) 
 										@foreach ($actoffer as  $off)
@@ -762,7 +496,7 @@ input:disabled{
                         <div id="filteroption" style="display: none">
 	                        <div class="col-md-6 col-sm-6 col-xs-6">
 	                        	<div class="dropdowns">
-		                            <select id="actfillocation{{$serviceid}}" name="actfillocation" class="form-control activityselect2" onchange="actFilter({{$companyactid}},{{$serviceid}})">
+		                            <select id="actfillocation{{$sid}}" name="actfillocation" class="form-control activityselect2" onchange="actFilter({{$companyid}},{{$sid}})">
 		                                <option value="">Location</option>
 		                                <option value="Online">Online</option>
 		                                <option value="At Business">At Business Address</option>
@@ -772,7 +506,7 @@ input:disabled{
 	                        </div>
 	                        <div class="col-md-6 col-sm-6 col-xs-6">
 	                        	<div class="dropdowns">
-		                            <select id="actfilmtype" name="actfilmtype" class="form-control activityselmtype" onchange="actFilter({{$companyactid}},{{$serviceid}})">
+		                            <select id="actfilmtype" name="actfilmtype" class="form-control activityselmtype" onchange="actFilter({{$companyid}},{{$sid}})">
 		                                <option value="">Membership Type</option>
 		                                <option>Drop In</option>
 		                                <option>Semester</option>
@@ -781,7 +515,7 @@ input:disabled{
 	                        </div>
 	                        <div class="col-md-6 col-sm-6 col-xs-6">
 	                        	<div class="dropdowns">
-		                            <select id="actfilgreatfor{{$serviceid}}" name="actfilgreatfor" class="form-control activityselgreatfor" onchange="actFilter({{$companyactid}},{{$serviceid}})">
+		                            <select id="actfilgreatfor{{$sid}}" name="actfilgreatfor" class="form-control activityselgreatfor" onchange="actFilter({{$companyid}},{{$sid}})">
 		                                <option value="">Great For</option>
 		                                <option>Individual</option>
 		                                <option>Kids</option>
@@ -797,7 +531,7 @@ input:disabled{
 	                        </div>
 	                        <div class="col-md-6 col-sm-6 col-xs-6">
 	                        	<div class="dropdowns">
-		                            <select id="actfilbtype{{$serviceid}}" name="actfilbtype" class="form-control activityselbtype" onchange="actFilter({{$companyactid}},{{$serviceid}})" >
+		                            <select id="actfilbtype{{$sid}}" name="actfilbtype" class="form-control activityselbtype" onchange="actFilter({{$companyid}},{{$sid}})" >
 		                                <option value="">Business Type</option>
 		                                <option value="individual">Personal Trainer</option>
 		                                <option value="classes">Classes</option>
@@ -808,7 +542,7 @@ input:disabled{
 	                        </div>
 	                        <div class="col-md-6 col-sm-6 col-xs-6">
 	                        	<div class="dropdowns">
-		                            <select id="actfilsType{{$serviceid}}" name="actfilsType" class="form-control activityselect5" onchange="actFilter({{$companyactid}},{{$serviceid}})">
+		                            <select id="actfilsType{{$sid}}" name="actfilsType" class="form-control activityselect5" onchange="actFilter({{$companyid}},{{$sid}})">
 		                                <option value="">Service Type</option>
 		                                <option>Personal Training</option>
 		                                <option>Coaching</option>
@@ -829,199 +563,107 @@ input:disabled{
 		                            </select>
 		                        </div>
 	                        </div>
-                       </div> <!--filteroption -->     
+                        </div> <!--filteroption -->     
 					</div><!-- col-5 -->
                     <div class="col-md-12 col-sm-12 col-xs-12">    
                         <div id="filtersearchdata">
-	 						<?php
-							if (!empty($activities_search)) { 
-								$companyid = $companyname = $serviceid = $companycity = $companycountry = $pay_price  = "";
-								$i=1;
-								foreach ($activities_search as  $service) {
-									$company = $price = $businessSp = [];
-									$serviceid = $service['id'];
-			                        $sport_activity = $service['sport_activity'];
+	 						@forelse($activities_search as $service) 
+	 							@php
 			                        $companyData = CompanyInformation::where('id',$service['cid'])->first();
-			                        if (isset($companyData)) {
+			                        $companyname = $companyData ? $companyData['dba_business_name'] : '';
+						            $companycity = $companyData ? $companyData['city'] : '';
+						            $companycountry = $companyData ? $companyData['country'] : '';
 
-	                                    $companyid = $companyData['id'];
-	                                    $companyname = $companyData['dba_business_name'];
-										$companycity = $companyData['city'];
-										$companycountry = $companyData['country'];
-			                                
-			                        }
-			                       
-			                        if ($service['profile_pic']!="") {
-			                        	if(str_contains($service['profile_pic'], ',')){
-	                                        $pic_image = explode(',', $service['profile_pic']);
-	                                        if( $pic_image[0] == ''){
-	                                           $p_image  = $pic_image[1];
-	                                        }else{
-	                                            $p_image  = $pic_image[0];
-	                                        }
-	                                    }else{
-	                                        $p_image = $service['profile_pic'];
-	                                    }
-
-	                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-	                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
-	                                    }else {
-	                                       $profilePic = url('/public/images/service-nofound.jpg');
-	                                    }
-
-									}else{ $profilePic = '/public/images/service-nofound.jpg'; }
+			                        $profilePic = $service->first_profile_pic();
+			                        $profilePic =  Storage::disk('s3')->exists($profilePic) ? Storage::url($profilePic) : '/public/images/service-nofound.jpg';
+			                     
+			                     	$businessServiceReview = BusinessServiceReview::where('service_id', $service['id']);
+									$reviews_avg = $businessServiceReview->count() >0 ? round($businessServiceReview->sum('rating')/$businessServiceReview->count(),2) :0 ;
 									
-									$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
-									$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
-									$reviews_avg=0;
-									if($reviews_count>0)
-									{	
-										$reviews_avg= round($reviews_sum/$reviews_count,2); 
-									}
 									$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
-									$service_type='';
-									if($service['service_type']!=''){
-										if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-										else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
-										else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
-									}
-									$pricearr = [];
-									$price_all = '';
-									$ser_date = '';
-									$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
-									if(!empty($price_allarray)){
-										foreach ($price_allarray as $key => $value) {
-											if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-												$pricearr[] = $value->adult_weekend_price_diff;
-											}else{
-												$pricearr[] = $value->adult_cus_weekly_price;
-											}
-										}
-									}
-									if(!empty($pricearr)){
-										$price_all = min($pricearr);
-									}
+									$service_type = $service->formal_service_types();
 									
-	 								$bookscheduler='';
-									$time='';
-									$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-									if(@$bookscheduler[0]['set_duration']!=''){
-										$tm=explode(' ',$bookscheduler[0]['set_duration']);
-										$hr=''; $min=''; $sec='';
-										if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-										if($tm[2]!=0){ $min=$tm[2].'min. '; }
-										if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-										if($hr!='' || $min!='' || $sec!='')
-										{ $time =  $hr.$min.$sec; } 
-									}
-									if($i<3){
-										if($time != ''){
-							?>
-								<div class="col-md-4 col-sm-6 col-xs-12 ">
-									<div class="find-activity">
-										<div class="row">
-											<div class="col-md-5 col-sm-5 col-xs-12">
-												<div class="img-modal-left customer-details">
-													<img src="{{ $profilePic }}" >
-												</div>
-											</div>
-											<div class="col-md-7 col-sm-7 col-xs-12 activity-data">
-												<div class="row">
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<div class="activity-inner-data">
-															<i class="fas fa-star"></i>
-															<span> {{$reviews_avg}} ({{$reviews_count}})  </span>
-														</div>
-														@if($time != '')
-															<div class="activity-hours">
-																<span>{{$time}}</span>
-															</div>
-														@endif
+									$price_all = $service->min_price();
+									
+									$bookscheduler= '';
+									$bookscheduler = App\BusinessActivityScheduler::where('serviceid', $service['id'])->orderBy('id', 'ASC')->first();
+									$time = @$bookscheduler != '' ? @$bookscheduler->get_duration() : '';
+								@endphp
+								@if($loop->index < 3 && $time != '')
+									<div class="col-md-4 col-sm-6 col-xs-12 ">
+										<div class="find-activity">
+											<div class="row">
+												<div class="col-md-5 col-sm-5 col-xs-12">
+													<div class="img-modal-left customer-details">
+														<img src="{{ $profilePic }}" >
 													</div>
-													<div class="col-md-6 col-sm-6 col-xs-6">
-														<div class="activity-city">
-															<span>{{$companycity}}, {{$companycountry}}</span>
-															@if(Auth::check())
-															<?php
-																$loggedId = Auth::user()->id;
-																$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();              
-															?>
-																<div class="serv_fav1" ser_id="{{$service['id']}}">
-																	<a class="fav-fun-2" id="serfav{{$service['id']}}">
-																		<?php
-																			if( !empty($favData) ){ ?>
-																				<i class="fas fa-heart"></i>
-																			<?php }
-																			else{ ?>
-																				<i class="far fa-heart"></i>
-																		 <?php } ?></a>
+												</div>
+												<div class="col-md-7 col-sm-7 col-xs-12 activity-data">
+													<div class="row">
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="activity-inner-data">
+																<i class="fas fa-star"></i>
+																<span> {{$reviews_avg}} ({{$businessServiceReview->count()}})  </span>
+															</div>
+															@if($time != '')
+																<div class="activity-hours">
+																	<span>{{$time}}</span>
 																</div>
-															@else
-																<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
 															@endif
 														</div>
+														<div class="col-md-6 col-sm-6 col-xs-6">
+															<div class="activity-city">
+																<span>{{$companycity}}, {{$companycountry}}</span>
+																@if(Auth::check())
+																 	@php
+																		$favData = BusinessServicesFavorite::where('user_id',Auth::user()->id)->where('service_id',$service['id'])->first();              
+																 	@endphp
+																	<div class="serv_fav1" ser_id="{{$service['id']}}">
+																		<a class="fav-fun-2" id="serfav{{$service['id']}}">
+																			<i class="{{ !empty($favData) ? 'fas' : 'far' }} fa-heart"></i>
+																	    </a>
+																	</div>
+																@else
+																	<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+																@endif
+															</div>
+														</div>
 													</div>
-												</div>
-												<div class="activity-information">
-													<span><a 
-						                                <?php if (Auth::check()) { ?> 
-						                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
-						                                <?php } else { ?>
-						                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
-						                                <?php }?>
-						                                    target="_blank">{{ $service['program_name'] }}</a></span>
-													<p>{{ $service_type }} | {{ $service['sport_activity'] }}</p>
-													<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $service['id']])}}">Book Now</a>
-												</div>
-												@if($price_all != '')
-													<div>
-														<span class="activity-time">From ${{$price_all}}/Person</span>
+													<div class="activity-information">
+														<span>
+															@if(Auth::check())
+															    <a href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{ $redlink }}" target="_blank">
+															@else
+															    <a href="{{ Config::get('constants.SITE_URL') }}/userlogin" target="_blank">
+															@endif
+							                                    {{ $service['program_name'] }}</a></span>
+														<p>{{ $service_type }} | {{ $service['sport_activity'] }}</p>
+														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $service['id']])}}">Book Now</a>
 													</div>
-												@endif
+													@if($price_all != '')
+														<div>
+															<span class="activity-time">From {!!$price_all!!}/Person</span>
+														</div>
+													@endif
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-							<?php 
-									$i++;
-										}
-									}
-								}
-								}else{ ?>
-									<div class="col-md-4">
-										<p class="noactivity"> There Is No Activity</p>
-									</div>
-							<?php	} ?>
+								@endif
+							@empty		
+								<div class="col-md-4">
+									<p class="noactivity"> There Is No Activity</p>
+								</div>	
+							@endforelse					
 						</div>
-
 					</div>
                        
-					</div>
 				</div>
-            </div>
-  
+			</div>
+        </div>
+
 		</div>
    	</div>            
-<!-- end modal -->
-
-	<div class="modal fade" id="Countermodal">
-	    <div class="modal-dialog counter-modal-size">
-	        <div class="modal-content">
-	           <div class="modal-header"> 
-					<div class="closebtn">
-						<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">×</span>
-						</button>
-					</div>
-				</div>  
-	            <div class="modal-body conuter-body" id="Countermodalbody">
-	            </div>            
-	            <div class="modal-footer conuter-body">
-	                <button type="button" onclick="getbookdetails({{$sid}});" class="btn btn-primary rev-submit-btn">Save</button>
-	            </div>
-	    	</div>                                                                       
-	    </div>                                          
-	</div>
 
 	<div id="busireview" class="modal modalbusireview" tabindex="-1">
 	    <div class="modal-dialog rating-star" role="document">
@@ -1076,6 +718,7 @@ input:disabled{
 			</div>                                                                       
 		</div>                                          
 	</div>
+
 	<div class="modal fade " id="ActivtityFail">
 	    <div class="modal-dialog counter-modal-size">
 	        <div class="modal-content">
@@ -1088,6 +731,22 @@ input:disabled{
                 </div>
 			</div>                                                                       
 		</div>                                          
+	</div>
+
+	<div class="modal fade" id="Countermodal">
+	    <div class="modal-dialog counter-modal-size">
+	        <div class="modal-content">
+	           <div class="modal-header"> 
+					<div class="closebtn">
+						<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+				</div>  
+	            <div class="modal-body conuter-body" id="Countermodalbody">
+	            </div>            
+	    	</div>                                                                       
+	    </div>                                          
 	</div>
 </div>
 
@@ -1103,28 +762,45 @@ input:disabled{
 
 @include('layouts.footer')
 
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}&sensor=false"></script>
+
+
 <script>
+
+	$(function () {
+	    $('[data-toggle="tooltip"]').tooltip();
+	});
+
 	$(document).ready(function() {
 		$(document).on("click", "#btnaddcart", function(){
 			$('#spoterror').html('');
 			var timechk = $('#timechk').val();
+			var totalQty = parseInt($('#totalQty').val());
+			var maxQty = parseInt($('#maxQty').val());
+			
 			if(timechk == 1){
-				var form = $("#addtocartform");
-		        var url = '{{route("addtocart")}}';
-		        $.ajax({
-		            type: "POST",
-		            url: url,
-		            data: form.serialize(),
-		            success: function(data) {
-		                if(data == 'no_spots'){
-		                 	$('#spoterror').html("There Is No Spots left You Can't Add This Activity.");
-		                }else{
-		                	$(".btns-modal").html('<button type="button" class="addbusiness-btn-modal noborder" data-dismiss="modal">Add Another Person</button>     <a href="'+data+'" class=" addbusiness-btn-modal" id="redicttosuccess">Continue Add To Cart</a>');
-		                	$('#confirmredirection').modal({ backdrop: 'static',keyboard: false});
-		                }
-		                $(".cartitmclass").load(location.href+" .cartitmclass>*","");
-		            }
-		        });
+				if(totalQty == 0){
+					$('#spoterror').html("Please select a participate.");
+				}else if(totalQty > maxQty ){
+					$('#spoterror').html("You have "+maxQty+" sports left.");
+				}else{
+					var form = $("#addtocartform");
+			        var url = '{{route("addtocart")}}';
+			        $.ajax({
+			            type: "POST",
+			            url: url,
+			            data: form.serialize(),
+			            success: function(data) {
+			                if(data == 'no_spots'){
+			                 	$('#spoterror').html("There Is No Spots left You Can't Add This Activity.");
+			                }else{
+			                	$(".btns-modal").html('<button type="button" class="addbusiness-btn-modal noborder" data-dismiss="modal">Add Another Person</button>     <a href="'+data+'" class=" addbusiness-btn-modal" id="redicttosuccess">Continue Add To Cart</a>');
+			                	$('#confirmredirection').modal({ backdrop: 'static',keyboard: false});
+			                }
+			                $(".cartitmclass").load(location.href+" .cartitmclass>*","");
+			            }
+			        });
+				}
 		    }else{
 		    	$('#ActivtityFail').modal('show');
 		    }
@@ -1139,127 +815,84 @@ input:disabled{
 	  	$.fancybox.close();
 	});
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&sensor=false"></script>
-<script>
-
-$(document).ready(function () {
-    var locations = @json($locations);
-    var map = ''
-    var infowindow = ''
-    var marker = ''
-    var markers = []
-    var circle = ''
-    $('#map_canvas').empty();
-
-    if (locations.length != 0) {  console.log('!empty');
-        map = new google.maps.Map(document.getElementById('map_canvas'), {
-            zoom:18,
-            center: new google.maps.LatLng(locations[0][1], locations[0][2]),
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-        });
-        infowindow = new google.maps.InfoWindow();
-        var bounds = new google.maps.LatLngBounds();
-        var marker, i;
-        var icon = {
-            url: "{{url('/public/images/hoverout2.png')}}",
-            scaledSize: new google.maps.Size(50, 50),
-            labelOrigin: {x: 25, y: 16}
-        };
-        for (i = 0; i < locations.length; i++) {
-            var labelText = i + 1
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-                map: map,
-                icon: icon,
-                title: labelText.toString(),
-                label: {
-                    text: labelText.toString(),
-                    color: '#222222',
-                    fontSize: '12px',
-                    fontWeight: 'bold'
-                }
-            });
-
-            bounds.extend(marker.position);
-
-            var img_path = "{{Config::get('constants.USER_IMAGE_THUMB')}}";
-            var contents =
-                    '<div class="card-claimed-business"> <div class="row"><div class="col-lg-12" >' +
-                    '<div class="img-claimed-business">' +
-                    '<img src=' + img_path + encodeURIComponent(locations[i][4]) + ' alt="">' +
-                    '</div></div> </div>' +
-                    '<div class="row"><div class="col-lg-12" ><div class="content-claimed-business">' +
-                    '<div class="content-claimed-business-inner">' +
-                    '<div class="content-left-claimed">' +
-                    '<a href="/pcompany/view/' + locations[i][3] + '">' + locations[i][0] + '</a>' +
-                    '<ul>' +
-                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
-                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
-                    '<li class="fill-str"><i class="fa fa-star "></i></li>' +
-                    '<li><i class="fa fa-star"></i></li>' +
-                    '<li><i class="fa fa-star"></i></li>' +
-                    '<li class="count">25</li>' +
-                    '</ul>' +
-                    '</div>' +
-                    '<div class="content-right-claimed"></div>' +
-                    '</div>' +
-                    '</div></div></div>' +
-                    '</div>';
-
-            google.maps.event.addListener(marker, 'mouseover', (function (marker, contents, infowindow) {
-                return function () {
-                    infowindow.setPosition(marker.latLng);
-                    infowindow.setContent(contents);
-                    infowindow.open(map, this);
-                };
-            })(marker, contents, infowindow));
-            markers.push(marker);
-        }
-
-        //nnn commented on 18-05-2022 - its not displaying proper map
-       // map.fitBounds(bounds);
-       // map.panToBounds(bounds);
-        
-        $('.mysrchmap').show()
-    } else {
-        $('#mapdetails').hide()
-    }
-});
-</script>
 
 <script>
 	$(document).ready(function () {
+		var uniqueAids = {};
+		$('#add-one').prop('readonly', true);
+		$(document).on('click','.addonplus',function(){
+			id = $(this).attr('aid');
+			$('#add-one'+id).val(parseInt($('#add-one'+id).val()) + 1 );
+			if (!uniqueAids[id]) {
+		      	uniqueAids[id] = true; // Mark aid as unique
+		    }
+
+		    var commaSeparatedAids = Object.keys(uniqueAids).join(',');
+		    $('#addOnServicesId').val(commaSeparatedAids);
+		    setAddOnServiceTotal();
+		});
+    	$(document).on('click','.addonminus',function(){
+    		id = $(this).attr('aid');
+    		if (!uniqueAids[id]) {
+		      	uniqueAids[id] = true; // Mark aid as unique
+		    }
+
+			$('#add-one'+id).val(parseInt($('#add-one'+id).val()) - 1 );
+			if ($('#add-one'+id).val() <= 0) {
+				$('#add-one'+id).val(0);
+		    	delete uniqueAids[id];
+			}
+			
+		    var commaSeparatedAids = Object.keys(uniqueAids).join(',');
+		    $('#addOnServicesId').val(commaSeparatedAids);
+
+		    setAddOnServiceTotal();
+	    });
+
 	    $('#adultcnt').prop('readonly', true);
 		$(document).on('click','.adultplus',function(){
-			$('#adultcnt').val(parseInt($('#adultcnt').val()) + 1 );
+		    $('#adultcnt').val(parseInt($('#adultcnt').val()) + 1 );
+		    $('#adultCount').val(parseInt($('#adultcnt').val()));
+		    calculateTotal();
 		});
+
     	$(document).on('click','.adultminus',function(){
 			$('#adultcnt').val(parseInt($('#adultcnt').val()) - 1 );
 			if ($('#adultcnt').val() <= 0) {
 				$('#adultcnt').val(0);
 			}
+			$('#adultCount').val(parseInt($('#adultcnt').val()));
+			calculateTotal();
 	    });
 
 	    $('#childcnt').prop('readonly', true);
 		$(document).on('click','.childplus',function(){
 			$('#childcnt').val(parseInt($('#childcnt').val()) + 1 );
+			$('#childCount').val(parseInt($('#childcnt').val()));
+			calculateTotal();
 		});
     	$(document).on('click','.childminus',function(){
 			$('#childcnt').val(parseInt($('#childcnt').val()) - 1 );
 			if ($('#childcnt').val() <= 0) {
 				$('#childcnt').val(0);
 			}
+			$('#childCount').val(parseInt($('#childcnt').val()));
+			calculateTotal();
 	    }); 
 
 	    $('#infantcnt').prop('disabled', true);
 		$(document).on('click','.infantplus',function(){
 			$('#infantcnt').val(parseInt($('#infantcnt').val()) + 1 );
+			$('#infantCount').val(parseInt($('#infantcnt').val()));
+			calculateTotal();
 		});
     	$(document).on('click','.infantminus',function(){
 			$('#infantcnt').val(parseInt($('#infantcnt').val()) - 1 );
 			if ($('#infantcnt').val() <= 0) {
 				$('#infantcnt').val(0);
 			}
+			$('#infantCount').val(parseInt($('#infantcnt').val()));
+			calculateTotal();
 	    });
  	
 		$(document).on('click', '.serv_fav1', function(){
@@ -1292,196 +925,99 @@ $(document).ready(function () {
 	    	}else{
 	    		$('#filteroption').show();
 	    	}
-
 	    });
 	});
 </script>
 
 <script>
-	function getbookdetails(sid){
-		$('#errordiv').html('');
-		var aducnt = $('#adultcnt').val();
-		var chilcnt = $('#childcnt').val();
-		var infcnt = $('#infantcnt').val();
-		var maxlengthval = $('#maxlengthval').val() ;
-		maxlengthval = parseInt(maxlengthval);
-		
-		if(typeof(aducnt) == 'undefined'){
-			aducnt = 0;
+	function  setAddOnServiceTotal() {
+		var totalQty =  0;
+		var sQty = '';
+		var addOnServicesId = $('#addOnServicesId').val();
+		var idArray = addOnServicesId.split(','); 
+		for (var i = 0; i < idArray.length; i++) {
+			sQty +=  $('#add-one' + idArray[i]).val() + ',';
+		    qty  =   parseFloat($('#add-one' + idArray[i]).val()) || 0;
+		    price =   parseFloat($('#add-one' + idArray[i]).attr('apirce')) || 0;
+			totalQty += qty * price;
 		}
-		if(typeof(chilcnt) == 'undefined'){
-			chilcnt = 0;
+		if (sQty.endsWith(",")) {
+		  	sQty = sQty.slice(0, -1);
 		}
-		if(typeof(infcnt) == 'undefined'){
-			infcnt = 0;
-		}
-		
-		var totalcnt = parseInt(aducnt) + parseInt(chilcnt) + parseInt(infcnt);
-	
-		if(aducnt ==0 && chilcnt==0 && infcnt==0){
-			$('#errordiv').html('Please Select participate');
-			$('#cartadd').html('<div id="addcartdiv"></div>');
-		}else if(maxlengthval == 0){
-			$('#cartadd').html('<div id="addcartdiv"><a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;">Sold Out</a></div>');
-			$('#errordiv').html('Please Select another Category or Activity.');
-			
-		}else if(totalcnt > maxlengthval){
-			$('#errordiv').html('Sports left only '+maxlengthval);
-			$('#cartadd').html('<div id="addcartdiv"><a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>');
-		}else{
-			var aduprice = $('#adultprice').val();
-			var childprice = $('#childprice').val();
-			var infantprice = $('#infantprice').val();
+		sQty = (addOnServicesId != '') ? sQty : '';
+		$('#addOnServicesQty').val(sQty);
+		$('#addOnServicesTotalPrice').val(totalQty);		
+		calculateTotal();
+	}
 
-			var adultdis = $('#adultdis').val();
-			var childdis = $('#childdis').val();
-			var infantdis = $('#infantdis').val();
+	function calculateTotal(){
+		var adultCount = parseInt($('#adultCount').val()) || 0;
+		var childCount = parseInt($('#childCount').val()) || 0;
+		var infantCount = parseInt($('#infantCount').val()) || 0;
+		var adultPrice = parseFloat($('#adultDiscountPrice').val()) || 0;
+		var childPrice = parseFloat($('#childDiscountPrice').val()) || 0;
+		var infantPrice = parseFloat($('#infantDiscountPrice').val()) || 0;
+		var addOnServicesTotalPrice = parseFloat($('#addOnServicesTotalPrice').val()) || 0;
 
-			var totalprice = 0; var totalpricedisplay = 0;
-			var totalpriceadult = 0; var totalpricechild = 0; var totalpriceinfant = 0; 
-			var totalpriceadultdisplay = 0; var totalpricechilddisplay  = 0;  var totalpriceinfantdisplay = 0; 
-			var adustrike = ''; var childstrike = ''; var infantstrike = '';
-			if(typeof(aduprice) != "undefined" && aduprice != null){
-				totalpriceadult = parseInt(aducnt) * parseFloat(aduprice);
-				totalpriceadultdisplay = parseInt(aducnt) * parseFloat(adultdis);
-				if(totalpriceadult != totalpriceadultdisplay){
-					adustrike ='<strike style="color:red"><span style="color:black"> $ '+ totalpriceadult +'</span></strike>&nbsp; $'+ totalpriceadultdisplay +'</span>';
-				}else{
-					adustrike ='$'+totalpriceadult;
-				}
-				if(aducnt != 0){
-					$('#cartaduprice').val(aduprice);
-				}else{
-					$('#cartaduprice').val(0);
-				}
-			}
+		var total = (adultCount * adultPrice) + (childCount * childPrice) + (infantCount * infantPrice);
+		var totalQty =  adultCount + childCount + infantCount;
+		total = (addOnServicesTotalPrice != '') ? ( total + addOnServicesTotalPrice) : total;
+		$('#totalQty').val(totalQty);
+		$('#textPrice').html('$'+ parseFloat(total)+' USD' || '$0 USD');
+		$('#priceTotal').val(parseFloat(total) || 0);
+		$('#price').val(parseFloat(total) || 0);
+	}
 
-			if(typeof(childprice) != "undefined" && childprice != null){
-				totalpricechild = parseInt(chilcnt)*parseFloat(childprice);
-				totalpricechilddisplay = parseInt(chilcnt) * parseFloat(childdis);
-				if(totalpricechild != totalpricechilddisplay){
-					childstrike ='<strike style="color:red"><span style="color:black"> $ '+ totalpricechild +'</span></strike>&nbsp; $'+ totalpricechilddisplay +'</span>';
-				}else{
-					childstrike ='$'+totalpricechild;
-				}
-
-				if(chilcnt != 0){
-					$('#cartchildprice').val(childprice);
-				}else{
-					$('#cartchildprice').val(0);
-				}
-			}
-			if(typeof(infantprice) != "undefined" && infantprice != null){
-				totalpriceinfant = parseInt(infcnt)*parseFloat(infantprice);
-				totalpriceinfantdisplay = parseInt(infcnt) * parseFloat(infantdis);
-				if(totalpriceinfant != totalpriceinfantdisplay){
-					infantstrike ='<strike style="color:red"><span style="color:black"> $ '+ totalpriceinfant +'</span></strike>&nbsp; $'+ totalpriceinfantdisplay +'</span>';
-				}else{
-					infantstrike ='$'+ totalpriceinfant;
-				}
-
-				if(infcnt != 0){
-					$('#cartinfantprice').val(infantprice);
-				}else{
-					$('#cartinfantprice').val(0);
-				}
-			}
-
-			var adult = '';
-			var child = '';
-			var infant = '';
-
-			if(aducnt != 0){
-				adult = '<span>Adults x '+aducnt+' = '+ adustrike +'</span>';
-			}
-
-			if(chilcnt != 0){
-				child = '<span>Kids x  '+chilcnt+' = '+ childstrike +'</span>';
-			}
-
-			if(infcnt != 0){
-				infant = '<span>Infants x  '+infcnt+' = '+ infantstrike +'</span>';
-			}
-			
-			totalprice = parseFloat(totalpriceadult)+parseFloat(totalpricechild)+parseFloat(totalpriceinfant);
-			totalpricedisplay = parseFloat(totalpriceadultdisplay)+parseFloat(totalpricechilddisplay)+parseFloat(totalpriceinfantdisplay);
-
-			$('.personcategory').html(adult+child+infant);
-			$('#totalprice').html('$'+totalpricedisplay+' USD');
-			$('#adupricequantity').val(aducnt);
-			$('#childpricequantity').val(chilcnt);
-			$('#infantpricequantity').val(infcnt);
-
-			$('#pricetotal'+sid+sid).val(totalprice);
-			$("#Countermodal").modal('hide');
-			$('#cartadd').html('<div id="addcartdiv"><button type="button" id="btnaddcart" class="btn btn-red mt-10"> Add to Cart </button></div>');
+	function addhiddentime(id,sid,chk) {
+		updatedetail({{$companyid}},sid,'schedule',id);
+		if(chk == 1){
+			$('#Countermodalbody').html('<div class="row "> <div class="col-lg-12 text-center"> <div class="modal-inner-txt scheduler-time-txt label-space"><label>You can\'t book this activity for today.</label><label> The time has passed.</label><label>Please choose another time.</label></div> </div></div>');
+			$('#Countermodal').modal('show');
 		}
 	}
 
-	function addhiddentime(id,sid) {
-		var actscheduleid = $('#actscheduleid'+sid).val(id);
-		var pricetitleid = $('#selprice'+sid).val();
-		var sesdate = $('#sesdate'+sid).val();
-		/*alert(pricetitleid);*/
-		var _token = $("input[name='_token']").val();
-		$.ajax({
-			url: "{{route('getmodelbody')}}",
-			type: 'POST',
-			data:{
-				_token: _token,
-				type: 'POST',
-				pricetitleid:pricetitleid,
-				serviceid:sid,
-				actscheduleid:id,
-				dateval:sesdate
-			},
-			success: function (response) {
-				if(response != ''){
-					var data = response.split('~~');
-					var data1 = data[1].split('^^');
-					$('#Countermodalbody').html(data[0]);
-					$('#book'+sid+sid).html(data1[0]);
-					$('#cartadd').html('<div id="addcartdiv"></div>');
-					$('#timechk').val(data1[1]);
-				}
-			}
-		});
-		$('#priceid'+sid).val(pricetitleid);
-		$('#Countermodal').modal('show');
-	}
-
-	function updateparticipate(cid,sid){
-		var participate= $('#actfiloffer_forcart').val();
-		$('.personcategory').html('<span>Adults x '+participate+' </span><span>Kids x 0</span><span>Infants x 0</span>');
-		var price = 0;
-		price =$('#price'+sid+sid).val();
-		var totalprice  = price*participate;
-		$('#totalprice').html('$'+totalprice+' USD');
-		if(totalprice != 0)
-		{
-			$('#pricetotal'+sid+sid).val(totalprice);
-		}
-		$('#pricequantity'+sid+sid).val(participate);
-	}
-
-	function updatedetail(cid,sid){
+	function updatedetail(cid,sid,type,val){
 		var actdate = $('#actfildate_forcart').val();
-		var serviceid =sid;
+		var serviceid = sid;
+		var categoryId = $('#selcatpr').val();
+		var priceId = $('#selprice').val();
+		var scheduleId = $('.checkbox-option:checked').attr('id');
+		if(type == 'date'){
+			categoryId = '';
+			scheduleId = '';
+			priceId = '';
+			scheduleId = '';
+		}else if(type == 'category'){
+			categoryId = val;
+			scheduleId = '';
+			priceId = '';
+		}else if(type == 'price'){
+			priceId = val;
+			scheduleId = ''
+		}else if(type == 'schedule'){
+			scheduleId = val;
+		}
+		
 		var _token = $("input[name='_token']").val();
 		$.ajax({
 			url: "{{route('act_detail_filter_for_cart')}}",
 			type: 'POST',
+			dataType: 'JSON',
 			data:{
 				_token: _token,
 				type: 'POST',
 				actdate:actdate,
 				serviceid:serviceid,
 				companyid:cid,
+				categoryId:categoryId,
+				priceId:priceId,
+				scheduleId:scheduleId,
 			},
 			success: function (response) {
 				if(response != ''){
-					$('#updatefilterforcart').html(response);
+					$('#updatefilterforcart').html(response.html);
 					$('#sesdate'+sid).val(actdate);
+					$('.date-title').html(response.date);
 				}else{
 					$('#updatefilterforcart').html('');
 				}
@@ -1526,48 +1062,32 @@ $(document).ready(function () {
 				}else{
 					$('#filtersearchdata').html('<div class="col-md-12 col-sm-8 col-xs-12 "><p>No Activity Found.</p></div>');
 				}
-				/*var data = response.split('~~~~');
-				$('#actsearch'+sid).html(data[0]);
-				$('#statact'+sid).html(data[1]);
-				//alert($('#price'+sid).val());
-				var firstval=$("#selprice"+sid).prop("selectedIndex", 1).val();
-				if(actdate!=''){
-					var actdt = actdate.split('/');
-					$('#sesdate'+sid+sid).val(actdt[2]+'-'+actdt[0]+'-'+actdt[1]);
-				}*/		
 			}
 		});
 	}
 </script>
 
 <?php
-	$next_available_date = new DateTime();
-	$activities = BusinessActivityScheduler::where('serviceid', $activity->id)->get();
-	$result = [];
+	$next_available_date = null;
+	$activities = BusinessActivityScheduler::where('serviceid', $sid)->get();
+	$result = $arrayofdates = [];
 	foreach($activities as $local_activity){
 		$activity_next_available_date = $local_activity->next_available_date();
-		if($next_available_date == null){
-			$next_available_date = $activity_next_available_date;	
-		}else{
-			if($next_available_date < $activity_next_available_date){
-				$next_available_date = $activity_next_available_date;		
-			}
+		if($activity_next_available_date != ''){
+			if ($next_available_date === null || $activity_next_available_date < $next_available_date) {
+	            $next_available_date = $activity_next_available_date;
+	        }
 		}
-
 		array_push($result, [$local_activity->starting, $local_activity->end_activity_date, $local_activity->activity_days]);
 	}
+	
+	if($next_available_date == null){
+		$next_available_date = new DateTime();
+	}
 ?>
-<script>
+ <script>
 	var active_days = JSON.parse('<?php echo json_encode($result)?>');
-	const days = [
-	  'Sunday',
-	  'Monday',
-	  'Tuesday',
-	  'Wednesday',
-	  'Thursday',
-	  'Friday',
-	  'Saturday',
-	]
+	const days = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',]
 	$( function() {
 		$( "#actfildate_forcart" ).datepicker( { 
 			minDate: 0,
@@ -1589,83 +1109,75 @@ $(document).ready(function () {
         		return [0];
         	}
 		});
-	} );
-</script>
-<script>
-	$( function() {
-		$( "#actfildate0" ).datepicker( {
-		 	minDate: 0,
-			changeMonth: true,
-			changeYear:true,
-        	yearRange: "1960:2060"
-        } );
+	});
 
+	$( function() {
 		$('#actfildate_forcart').val('{{$next_available_date->format('M-d-Y')}}');
-        updatedetail({{$companyactid}},{{$activity->id}});
+        updatedetail('{{$companyid}}','{{$sid}}','date','');
 	} );
-</script>
+</script> 
 
 <script type="text/javascript">	
 	function submit_rating(sid)
 	{
 		@if(Auth::check())
-		//var formData = $("#sreview"+sid).serialize();
-		var formData = new FormData();
-		var rating=$('#rating').val();
-		var review=$('#review'+sid).val();
-		var rtitle=$('#rtitle'+sid).val();
-		var _token = $("input[name='_token']").val();
-		
-		TotalFiles = $('#rimg'+sid)[0].files.length;
-		
-		let rimg = $('#rimg'+sid)[0];
-		for (let i = 0; i < TotalFiles; i++) {
-			formData.append('rimg' + i, rimg.files[i]);
-		}
-		formData.append('TotalFiles', TotalFiles);
-	    formData.append('rtitle', rtitle);
-		formData.append('review', review);
-		formData.append('rating', rating);
-		formData.append('sid', sid);
-		formData.append('_token', _token);
-		
-		if(rating!='' && review!='')
-		{ 
-			$.ajax({
-				url: "{{route('save_business_service_reviews')}}",
-				type: 'POST',
-	            contentType: 'multipart/form-data',
-	            cache: false,
-	            contentType: false,
-	            processData: false,
-	            data: formData,
-				success: function (response) {
-					$('.progress-bar-main').load(' .progress-bar-main > *')
-					$(".provider_review").load(location.href+" .provider_review >*","");
-					if(response=='submitted')
-					{	$('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Review submitted'); 
-						//$("#user_ratings_div"+sid).load(location.href + " #user_ratings_div"+sid);
-						$("#user_ratings_div"+sid).load(location.href+" #user_ratings_div"+sid+">*","");
-						$('#rating').val(' ');
-						$('#review').val(' '); $('#rtitle'+sid).val(' ');
+			//var formData = $("#sreview"+sid).serialize();
+			var formData = new FormData();
+			var rating=$('#rating').val();
+			var review=$('#review'+sid).val();
+			var rtitle=$('#rtitle'+sid).val();
+			var _token = $("input[name='_token']").val();
+			
+			TotalFiles = $('#rimg'+sid)[0].files.length;
+			
+			let rimg = $('#rimg'+sid)[0];
+			for (let i = 0; i < TotalFiles; i++) {
+				formData.append('rimg' + i, rimg.files[i]);
+			}
+			formData.append('TotalFiles', TotalFiles);
+		    formData.append('rtitle', rtitle);
+			formData.append('review', review);
+			formData.append('rating', rating);
+			formData.append('sid', sid);
+			formData.append('_token', _token);
+			
+			if(rating!='' && review!='')
+			{ 
+				$.ajax({
+					url: "{{route('save_business_service_reviews')}}",
+					type: 'POST',
+		            contentType: 'multipart/form-data',
+		            cache: false,
+		            contentType: false,
+		            processData: false,
+		            data: formData,
+					success: function (response) {
+						$('.progress-bar-main').load(' .progress-bar-main > *')
+						$(".provider_review").load(location.href+" .provider_review >*","");
+						if(response=='submitted')
+						{	$('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Review submitted'); 
+							//$("#user_ratings_div"+sid).load(location.href + " #user_ratings_div"+sid);
+							$("#user_ratings_div"+sid).load(location.href+" #user_ratings_div"+sid+">*","");
+							$('#rating').val(' ');
+							$('#review').val(' '); $('#rtitle'+sid).val(' ');
+						}
+						else if(response=='already')
+						{ $('#reviewerro'+sid).show(); 
+							$('#reviewerro'+sid).html('You have already submitted your review for this activity.'); }
+						else if(response=='addreview')
+						{ $('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Add your review and select rating for activity');  }
+						
 					}
-					else if(response=='already')
-					{ $('#reviewerro'+sid).show(); 
-						$('#reviewerro'+sid).html('You have already submitted your review for this activity.'); }
-					else if(response=='addreview')
-					{ $('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Add your review and select rating for activity');  }
-					
-				}
-			});
-		}
-		else
-		{
-			$('#reviewerro'+sid).show(); 
-			$('#reviewerro'+sid).html('Please add your reivew and select rating'); 
-			$('#rating').val(' ');
-			$('#review').val(' ');
-			return false;
-		}
+				});
+			}
+			else
+			{
+				$('#reviewerro'+sid).show(); 
+				$('#reviewerro'+sid).html('Please add your reivew and select rating'); 
+				$('#rating').val(' ');
+				$('#review').val(' ');
+				return false;
+			}
 		@else
 			$('#reviewerro'+sid).show(); 
 			$('#reviewerro'+sid).html('Please login in your account to review this activity');
@@ -1674,240 +1186,95 @@ $(document).ready(function () {
 			return false;
 		@endif	
 	}
-
-	function changeactpr(aid,val,part,div,maid)
-	{
-	    $('#book'+maid+aid).html('<div class="pt-20"><label>Category:</label><span></span></div><div id="timeduration"><label>Duration:</label><span></span></div><div><label>Price Title:</label><span> </span></div><div><label>Price Option:</label><span></span></div><div><label>Membership:</label><span></span></div><div class="personcategory"><span>Adults x 0 =  $0</span><span>Kids x 0 =  $0</span><span>Infants x 0 =  $0</span></div><div class="cartstotal mt-20"><label>Total </label> <span id="totalprice">$0 USD</span></div>');
-
-		/*var n = val.split('!^');
-		    var datan = '';
-		    var session = '';
-		    var id = '';
-		    var pr1 = 0;
-		    var price_title = '—';
-		    var memtype_hidden = '';
-		    var persontype = '';
-		    if(n[0] != ''){
-		    	datan1 = n[0].split('~~');
-		    	if(datan1[0] != ''){
-		    		session =  datan1[0]; 
-		    	}
-		    	if(datan1[1] != ''){
-					pr1 =  datan1[1]; 
-		    	}
-		    	if(datan1[2] != ''){
-		    		id=datan1[2];
-		    	}
-		    }
-		    if(n[1] != ''){
-		        datan = n[1].split('^^');
-		        if(datan[0] != ''){
-		            price_title = datan[0];
-		            $('#price_title_hidden'+maid+aid).val(datan[0]);
-		        }
-		        if(datan[1] != ''){
-		            memtype_hidden = datan[1];
-		            $('#memtype_hidden'+maid+aid).val(datan[1]);
-		        }
-		        if(datan[2] != ''){
-		          	persontype = datan[2];
-		            $('#persontype').val(datan[2]);
-		        }
-		  
-		    }
-			var pr; var qty;
-			var actfilparticipant=$('#actfilparticipant'+maid).val();
-			var category_title = $('#cate_title'+maid+aid).val();
-		    var time = $('#time_hidden'+maid+aid).val();
-		    var sportsleft = $('#sportsleft_hidden'+maid+aid).val();
-
-			if(actfilparticipant!='')
-			{
-				pr=actfilparticipant*pr1; 
-				qty=actfilparticipant;
-			}
-			else{ 
-				qty=1; 
-				if( pr1!='' ){ pr=qty*pr1; } else { pr='100'; }
-			}
-			var infantcnt = 0;
-			var childcnt = 0;
-			var adultcnt = 0;
-			var bookdata ='';
-			if(category_title != ''){
-				bookdata += '<div class="price-cat"><label>Category: </label><span> '+ category_title +'</span></div>';
-			}
-			if(time != ''){
-				bookdata += '<div><label>Duration: </label><span>'+ time +'</span></div>';
-			}
-			if(price_title != ''){
-				bookdata += '<div><label>Price Title: </label><span>'+ price_title+'</span></div>';
-			}
-			if(session != ''){
-				bookdata += '<div><label>Price Option: </label><span>'+session+' Session</span></div>';
-			}
-
-			if(session != ''){
-				bookdata += '<div><label>Membership: </label><span> '+memtype_hidden+'</span></div><div class="personcategory"><span>Adults x 1</span><span>Kids x 0</span><span>Infants x 0</span></div>';
-			}
-			if(pr1 !=''){
-				bookdata += '<div><label>Total </label><span id="totalprice">$'+pr1+' USD</span></div>';
-			}
-			bookdata += '</div>';
-
-			if(div=='book'){
-				$('#book'+maid+aid).html(bookdata);
-				$('#pricequantity'+maid+aid).val(qty);
-				$('#price'+maid+aid).val(pr);
-				$('#pricetotal'+maid+aid).val(pr);
-				$('#priceid'+aid).val(id);
-			}
-
-			else if (div=='bookmore'){
-				console.log(aid);
-				$('#bookmore'+maid+aid).html(bookdata);
-				$('#pricebookmore'+maid+aid).val(pr);
-				$('#priceid'+aid).val(id);
-			}
-
-			else if (div=='bookajax'){
-				$('#bookajax'+maid+aid).html(bookdata);
-				$('#pricebookajax'+maid+aid).val(pr);
-				$('#pricequantity'+maid+aid).val(qty);
-				$('#priceid'+aid).val(id);	
-			}
-			$("#actfiloffer_forcart option:selected").prop("selected", false);
-		*/
-	}
-
-	function chngemember(sid) {
-		var actfilmtype = $('#actfilmtype'+sid).val();
-		var catid = $('#selcatpr'+sid).val();
-		$.ajax({
-			url: "{{route('pricemember')}}",
-			type: 'POST',
-			xhrFields: {
-				withCredentials: true
-		    },
-			data:{
-				_token: '{{csrf_token()}}',
-				type: 'POST',
-				mtype:actfilmtype,
-                sid:sid,
-                catid:catid,
-			},
-
-			success: function (response) { /*alert(response);*/
-				$("#pricechng"+sid+sid).html(response);
-				var selval = $("#selprice"+sid).val();
-				$("#priceid"+sid).val(selval);
-				$('#cartadd').html('<div id="addcartdiv"></div>');
-				$('#book'+sid+sid).html('<div class="pt-20"><label>Category:</label><span></span></div><div id="timeduration"><label>Duration:</label><span></span></div><div><label>Price Title:</label><span> </span></div><div><label>Price Option:</label><span></span></div><div><label>Membership:</label><span></span></div><div class="personcategory"><span>Adults x 0 =  $0</span><span>Kids x 0 =  $0</span><span>Infants x 0 =  $0</span></div><div class="cartstotal mt-20"><label>Total </label> <span id="totalprice">$0 USD</span></div>');
-			}
-		});
-	}
-
-	function changeactsession(main,aid,val,div,simple)
-	{   
-	    var price_title = $('#price_title_hidden'+main+aid).val();
-	    var sesdate = $('#sesdate'+aid).val();
-	    var time = $('#time_hidden'+main+aid).val();
-	    var sportsleft = $('#sportsleft_hidden'+main+aid).val();
-	    var pricequantity = $('#pricequantity'+main+aid).val();
-	    if(div =='book'){
-	        var price = $('#price'+main+aid).val();
-	    }else if (div =='bookmore'){
-	        var price = $('#pricebookmore'+main+aid).val();
-	    }else{
-	        var price = $('#pricebookajax'+main+aid).val();   
-	    }
-	    var cid = '{{@$service["cid"]}}';
-
-	    var session = $('#session'+main+aid).val();
-		if(aid != '')
-		{
-			$.ajax({
-				url: "{{route('pricecategory')}}",
-				type: 'POST',
-				xhrFields: {
-					withCredentials: true
-			    },
-				data:{
-					_token: '{{csrf_token()}}',
-					type: 'POST',
-					actid:aid,
-					catid:val,
-	                sid:main,
-	                div:div,
-	                filtertype:simple,
-	                sesdate:sesdate,
-	                cid:cid,
-				},
-
-				success: function (response) { /*alert(response);*/
-					var dat = response.split('~~~~~~~~');
-					var bookdata='';
-					var catedata='';
-					var timedata='';
-					var cattitle='';
-					var timedata12='';
-					var pricelistdata='';
-					var memberoption='';
-					
-					if(dat[0] != ''){
-						box = dat[0].split('^^');
-						pricelistdata = box[0];
-						memberoption = box[1];
-					}
-					// alert(pricelistdata);
-					var catedata = dat[1].split('****');
-					if(catedata[0] != ''){
-						bookdata = catedata[0];
-					}
-					/*alert(catedata[1]);*/
-					if(catedata[1] != ''){
-						dt = catedata[1].split('!!~');
-						timedata = dt[0];
-						cdata = dt[1].split('*^');
-						cattitle = cdata[0];
-						getval = cdata[1].split('^~^');
-						setime = getval[0];
-						id= getval[1];
-					}
-					$("#pricechng"+main+aid).html(pricelistdata);
-					$("#memberoption").html(memberoption);
-					var datahtml = '<div class="pt-20"><label>Category:</label><span></span></div><div id="timeduration"><label>Duration:</label><span></span></div><div><label>Price Title:</label><span> </span></div><div><label>Price Option:</label><span></span></div><div><label>Membership:</label><span></span></div><div class="personcategory"><span>Adults x 0 =  $0</span><span>Kids x 0 =  $0</span><span>Infants x 0 =  $0</span></div><div class="cartstotal mt-20"><label>Total </label> <span id="totalprice">$0 USD</span></div>';
-
-					$('#cartadd').html('<div id="addcartdiv"></div>');
-					if(div =='book'){
-	                    //$('#book'+main+aid).html(bookdata);
-	                    $('#book'+main+aid).html(datahtml);
-	                }else if (div =='bookmore'){
-	                    //$('#bookmore'+main+aid).html(bookdata);
-	                    $('#bookmore'+main+aid).html(datahtml);
-	                }else{
-	                    //$('#bookajax'+main+aid).html(bookdata);
-	                    $('#bookajax'+main+aid).html(datahtml);
-	                }
-	                if(cattitle != ''){
-	                    $('#cate_title'+main+aid).val(cattitle);
-	                }
-	                if(timedata == 'no' || timedata == ''){
-	            	 	$('#cartadd').html('<div id="addcartdiv" ></div>');
-	            	 	$('#timeschedule').html(setime);
-	            	}else{
-	            		$('#timeschedule').html(setime);
-	            		$('#time_hidden'+main+aid).val(timedata);
-						/*$('#cartadd').html('<div id="addcartdiv"><button type="button" id="btnaddcart" class="btn btn-red mt-10"> Add to Cart </button></div>');*/
-	            	}
-	            	$('#actscheduleid'+aid).val(id);
-	            	$("#actfiloffer_forcart option:selected").prop("selected", false);
-				}
-			});
-		}
-	}
 </script>
+
 <script src="/public/js/ratings.js"></script>
+
+<script>
+	$(document).ready(function () {
+	    var locations = @json($locations);
+	    var map = ''
+	    var infowindow = ''
+	    var marker = ''
+	    var markers = []
+	    var circle = ''
+	    $('#map_canvas').empty();
+
+	    if (locations.length != 0) {  console.log('!empty');
+	        map = new google.maps.Map(document.getElementById('map_canvas'), {
+	            zoom:18,
+	            center: new google.maps.LatLng(locations[0][1], locations[0][2]),
+	            mapTypeId: google.maps.MapTypeId.ROADMAP,
+	        });
+	        infowindow = new google.maps.InfoWindow();
+	        var bounds = new google.maps.LatLngBounds();
+	        var marker, i;
+	        var icon = {
+	            url: "{{url('/public/images/hoverout2.png')}}",
+	            scaledSize: new google.maps.Size(50, 50),
+	            labelOrigin: {x: 25, y: 16}
+	        };
+	        for (i = 0; i < locations.length; i++) {
+	            var labelText = i + 1
+	            marker = new google.maps.Marker({
+	                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+	                map: map,
+	                icon: icon,
+	                title: labelText.toString(),
+	                label: {
+	                    text: labelText.toString(),
+	                    color: '#222222',
+	                    fontSize: '12px',
+	                    fontWeight: 'bold'
+	                }
+	            });
+
+	            bounds.extend(marker.position);
+
+	            var img_path = "{{Config::get('constants.USER_IMAGE_THUMB')}}";
+	            var contents =
+	                    '<div class="card-claimed-business"> <div class="row"><div class="col-lg-12" >' +
+	                    '<div class="img-claimed-business">' +
+	                    '<img src=' + img_path + encodeURIComponent(locations[i][4]) + ' alt="">' +
+	                    '</div></div> </div>' +
+	                    '<div class="row"><div class="col-lg-12" ><div class="content-claimed-business">' +
+	                    '<div class="content-claimed-business-inner">' +
+	                    '<div class="content-left-claimed">' +
+	                    '<a href="/pcompany/view/' + locations[i][3] + '">' + locations[i][0] + '</a>' +
+	                    '<ul>' +
+	                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
+	                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
+	                    '<li class="fill-str"><i class="fa fa-star "></i></li>' +
+	                    '<li><i class="fa fa-star"></i></li>' +
+	                    '<li><i class="fa fa-star"></i></li>' +
+	                    '<li class="count">25</li>' +
+	                    '</ul>' +
+	                    '</div>' +
+	                    '<div class="content-right-claimed"></div>' +
+	                    '</div>' +
+	                    '</div></div></div>' +
+	                    '</div>';
+
+	            google.maps.event.addListener(marker, 'mouseover', (function (marker, contents, infowindow) {
+	                return function () {
+	                    infowindow.setPosition(marker.latLng);
+	                    infowindow.setContent(contents);
+	                    infowindow.open(map, this);
+	                };
+	            })(marker, contents, infowindow));
+	            markers.push(marker);
+	        }
+
+	        //nnn commented on 18-05-2022 - its not displaying proper map
+	       // map.fitBounds(bounds);
+	       // map.panToBounds(bounds);
+	        
+	        $('.mysrchmap').show()
+	    } else {
+	        $('#mapdetails').hide()
+	    }
+	});
+</script>
 
 @endsection
 

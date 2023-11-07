@@ -36,11 +36,6 @@ class BusinessActivityScheduler extends Model
         'scheduled_day_or_week',
         'spots_available',
         'starting',
-        'schedule_until',
-        'sales_tax',
-        'sales_tax_percent',
-        'dues_tax',
-        'dues_tax_percent',
         'activity_days',
         'shift_start',
         'shift_end',
@@ -81,6 +76,7 @@ class BusinessActivityScheduler extends Model
         }else{
             return null;
         }
+        echo $i;
     } 
 
     public static function next_8_hours($datetime){
@@ -121,8 +117,8 @@ class BusinessActivityScheduler extends Model
     }
 
     public function activity_time(){
-        $from = date("g:i a", strtotime($this->shift_start));
-        $to = date("g:i a", strtotime($this->shift_end));
+        $from = date("g:i A", strtotime($this->shift_start));
+        $to = date("g:i A", strtotime($this->shift_end));
         return $from.' to '.$to;
     }
     
@@ -219,19 +215,7 @@ class BusinessActivityScheduler extends Model
     }
 
     public function spots_reserved($current_time){
-        $user_booking_details = UserBookingDetail::where('act_schedule_id', $this->id)->whereDate('bookedtime', '=', $current_time->format("Y-m-d"))->get();
-
-        $totalquantity = 0;
-        foreach($user_booking_details as $user_booking_detail){
-            $item = json_decode($user_booking_detail['qty'],true);
-            if($item['adult'] != '')
-                $totalquantity += $item['adult'];
-            if($item['child'] != '')
-                $totalquantity += $item['child'];
-            if($item['infant'] != '')
-                $totalquantity += $item['infant'];
-        }
-        return $totalquantity;
+        return BookingCheckinDetails::where(['business_activity_scheduler_id' => $this->id ])->whereDate('checkin_date', '=', $current_time->format("Y-m-d"))->count();
     }
 
     public function getcanceldata($date,$sid){

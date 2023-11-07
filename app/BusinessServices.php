@@ -114,6 +114,32 @@ class BusinessServices extends Model
         'cancelbeforeint',
         'know_before_you_go',
     ];
+
+     public static function boot(){
+        parent::boot();
+
+        static::deleting(function($service) {
+            $service->price_details->each(function($price) {
+                $price->delete();
+            });
+
+            $service->BusinessPriceDetailsAges->each(function($category) {
+                $category->delete();
+            });
+
+            $service->schedulers->each(function($schedule) {
+                $schedule->delete();
+            });
+
+            $service->reviews->each(function($review) {
+                $reviews->delete();
+            });
+
+            $service->favourites->each(function($favourite) {
+                $favourite->delete();
+            });
+        });
+    }
     
     public function BusinessStaff(){
         return $this->belongsTo(BusinessStaff::class, 'instructor_id');
@@ -178,15 +204,69 @@ class BusinessServices extends Model
         return $pictures[0];
     }
 
+    public function min_price(){
+        $pricearr =$discountPriceArr= [];
+        $priceAllArray = $this->price_details;
+        if(!empty($priceAllArray)){
+            foreach ($priceAllArray as $key => $value) {
+                $price = 0;
+                if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+                    if($value->adult_weekend_price_diff != ''){
+                        $price = $value->adult_weekend_price_diff;
+                        $discount = $value->adult_discount;
+                    }else if($value->child_weekend_price_diff != ''){
+                        $price = $value->child_weekend_price_diff;
+                        $discount = $value->child_discount;
+                    }else{
+                        $price = $value->infant_weekend_price_diff;
+                        $discount = $value->infant_discount;
+                    }
+                }else{
+                    if($value->adult_cus_weekly_price != ''){
+                        $price = $value->adult_cus_weekly_price;
+                        $discount = $value->adult_discount;
+                    }else if($value->child_cus_weekly_price != ''){
+                        $price = $value->child_cus_weekly_price;
+                        $discount = $value->child_discount;
+                    }else{
+                        $price = $value->infant_cus_weekly_price;
+                        $discount = $value->infant_discount;
+                    }
+                }
+
+                $pricearr[] = $price != '' ? $price : 0;
+                $discountPriceArr[] = ($price != '' &&  $discount != '') ? $price - ($price * $discount/100) : 0 ; 
+            }
+        }
+        $priceAll = !empty($pricearr) ? min($pricearr) : '';
+        $discountPrice = !empty($discountPriceArr) ? min($discountPriceArr) : '';
+
+        if($priceAll != $discountPrice){
+            $price = ' <strike> $'.$priceAll.'</strike> $'.$discountPrice;
+        }else{
+            $price = ' $'.$priceAll;
+        }
+        return $price;
+    }
+
     public function profile_pictures(){
         return explode(',',$this->profile_pic);
     }
 
     public function formal_service_types(){
 		if( $this->service_type =='individual' ) return 'Personal Training'; 
-		else if( $this->service_type =='classes' )	return 'Group Class'; 
+		else if( $this->service_type =='classes' )	return 'Classes'; 
 		else if( $this->service_type =='experience' ) return 'Experience'; 
         else if( $this->service_type =='events' ) return 'Events'; 
+    }
+
+    public function fullAdressForMap(){
+        $full_address = '';
+        $full_address .= $this->exp_address != '' ? $this->exp_address.','  : ''; 
+        $full_address .= $this->exp_city != ''  ?  $this->exp_city.',' : ''; 
+        $full_address .= $this->exp_state != ''  ?  $this->exp_state.',': ''; 
+        $full_address .= $this->exp_country != ''  ?  $this->exp_country.',' : ''; 
+        return $full_address;
     }
 
     public function get_expired_time(){
@@ -194,7 +274,7 @@ class BusinessServices extends Model
         $ex_date = 'N/A';
         $dates = [];
         if(!empty($sc_details) && count($sc_details)>0){
-            foreach( $sc_details as $sd){
+            foreach($sc_details as $sd){
                 $dates[] = $sd['end_activity_date'];
             }
             $ex_date = date('m/d/Y',strtotime(max($dates)));
@@ -221,8 +301,13 @@ class BusinessServices extends Model
 
 
     public function this_week_booking(){
-       $UserBookingDetailcount = UserBookingDetail::where('sport',$this->id)->where('bookedtime',">=", date('Y-m-d', strtotime("this week")))->count();
-        return  $UserBookingDetailcount;
+        //$UserBookingDetailcount = UserBookingDetail::where('sport',$this->id)->where('bookedtime',">=", date('Y-m-d', strtotime("this week")))->count();
+        $chkDetailCnt = 0;
+        $userbookingDetail =  UserBookingDetail::where('sport',$this->id)->get();
+        foreach($userbookingDetail as $usd){
+            $chkDetailCnt += BookingCheckinDetails::where('booking_detail_id', $usd->id)->where('checkin_date',">=", date('Y-m-d', strtotime("this week")))->where('checkin_date',"<=", date('Y-m-d', strtotime("saturday 0 week")))->count();
+        }
+        return  $chkDetailCnt;
     }
 
 

@@ -4,7 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\{UserBookingDetail,Recurring};
+use App\{UserBookingDetail,Recurring, Transaction};
 use DB;
 
 class Kernel extends ConsoleKernel
@@ -28,22 +28,23 @@ class Kernel extends ConsoleKernel
     {
         //$schedule->command('stripe:cron')->everyMinute();
 
-        $schedule->call(function () {
+        /*$schedule->call(function () {
             $user_booking_details = UserBookingDetail::whereRaw("transfer_provider_status is NULL or transfer_provider_status !='paid'");
 
             foreach($user_booking_details->get() as $user_booking_detail){
                 $user_booking_detail->transfer_to_provider();
             }
-        })->everyTenMinutes();
+        })->everyTenMinutes();*/
 
         $schedule->call(function () {
-            $recurringDetails = Recurring::whereDate('payment_date' ,'=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','Scheduled')->get();
+            $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->where('attempt' ,'<' ,3)->where('status','!=','Completed')->orderBy('created_at','desc')->get();
+            //print_r($recurringDetails);exit();
             foreach($recurringDetails as $recurringDetail){
                 $recurringDetail->createRecurringPayment();
             }
         })->everyMinute();
 
-        $schedule->call(function () {
+        /*$schedule->call(function () {
             $userBookingDetails = UserBookingDetail::whereDate("expired_at", ">=" ,date('Y-m-d'))->get();
             foreach($userBookingDetails as $userBookingDetail){
                 $userBookingDetail->membershipOrSessionAboutToExpireAlert('membership');
@@ -55,7 +56,7 @@ class Kernel extends ConsoleKernel
             ->groupBy('user_booking_details.id')
             ->havingRaw('(user_booking_details.pay_session - checkin_count) between 0 and 2')
             ->whereDate('user_booking_details.expired_at', '>=', date('Y-m-d'))->get();
-           /* print_r($userBookingDetails);exit;*/
+            //print_r($userBookingDetails);exit;
             foreach($userBookingDetails as $userBookingDetail){
                 $userBookingDetail->membershipOrSessionAboutToExpireAlert('session');
             }
@@ -65,6 +66,20 @@ class Kernel extends ConsoleKernel
             $userBookingDetails = UserBookingDetail::whereDate("expired_at", "=" ,date('Y-m-d'))->get();
             foreach($userBookingDetails as $userBookingDetail){
                 $userBookingDetail->membershipExpiredAlert('membership');
+            }
+        })->daily();*/
+
+        $schedule->call(function () {
+            $transactions = Transaction::where(['status' => 'requires_capture'])->get();
+
+            foreach($transactions as $transaction){
+                try {
+                    $transaction->capture();
+
+                }catch (Exception $e) {
+                    $errormsg = $e->getError()->message;
+                    return redirect(route('business.orders.create', ['cus_id' => $customer->id]))->with('stripeErrorMsg', $errormsg);
+                }
             }
         })->daily();
        // $schedule->command('stripe:cron')->everyMinute()->appendOutputTo('/storage/logs/getlogContent.log'));

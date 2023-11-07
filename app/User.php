@@ -6,6 +6,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
+use Storage;
+use App\StripePaymentMethod;
 
 class User extends Authenticatable
 {
@@ -17,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','new_password_key','username','is_deleted','isguestuser','fitnessity_fee','firstname','lastname','birthdate'
+        'name',  'password','new_password_key','is_deleted','isguestuser','fitnessity_fee','recurring_fee','firstname','lastname','birthdate','cid','bstep','serviceid','servicetype','stripe_connect_id','stripe_customer_id','username','gender','email','phone_number','profile_pic','address','city','state','country','zipcode','activated','show_step','dobstatus','buddy_key',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -37,7 +39,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['about_me','network_count','about_business', 'full_name','age'];
+    protected $appends = ['about_me','network_count','about_business', 'full_name','age','first_letter'];
 
     public $timestamps = false;
     
@@ -70,6 +72,25 @@ class User extends Authenticatable
     
     public function getFullNameAttribute(){
         return $this->firstname . ' ' . $this->lastname;
+    }
+
+    public function getFirstLetterAttribute(){
+        if($this->firstname != '' && $this->lastname != '' ){
+            return $this->firstname[0] . '' . $this->lastname[0];
+        }else if($this->firstname != ''){
+           return $this->firstname[0];
+        }else{
+            return 'F';
+        }
+    }
+
+    public function getPic(){
+       $profile_pic = '';
+        if(Storage::disk('s3')->exists($this->profile_pic)){
+            $profile_pic = Storage::url($this->profile_pic);
+        }
+
+        return $profile_pic;
     }
 
     public function getaddress(){
@@ -181,6 +202,21 @@ class User extends Authenticatable
     public function customers()
     {
         return $this->hasMany(Customer::class,'user_id');
+    }
+
+    public function BusinessPriceDetailsAges()
+    {
+        return $this->hasMany(BusinessPriceDetailsAges::class,'userid');
+    }
+
+    public function AddOnService()
+    {
+        return $this->hasMany(AddOnService::class,'user_id');
+    }
+
+    public function BusinessPriceDetails()
+    {
+        return $this->hasMany(BusinessPriceDetails::class,'userid');
     }
 
     public function employmenthistory()
@@ -324,6 +360,11 @@ class User extends Authenticatable
         $customer_ids = implode(',',$customer_ids);
         //return UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id in (?)))', [$this->id,$customer_ids]); 
         return UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id in ('.$customer_ids.')))', [$this->id]); 
+    }
+
+
+    public function stripePaymentMethods(){
+        return StripePaymentMethod::where('user_type', 'User')->where('user_id', $this->id);
     }
 
 }

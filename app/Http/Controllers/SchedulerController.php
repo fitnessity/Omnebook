@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use DateTime;
 use Config;
 use DateInterval;
+use View;
 use App\Repositories\{BusinessServiceRepository,BookingRepository,CustomerRepository,UserRepository};
 use DateTimeZone;
 
@@ -210,6 +211,10 @@ class SchedulerController extends Controller
                $orderId = explode("," , $detail['oid']);
                foreach($orderId as $oid){
                     $getreceipemailtbody = $this->booking_repo->getreceipemailtbody($detail['booking_id'], $oid);
+
+                    if($request->notes != ''){
+                         $getreceipemailtbody['notes'] = $request->notes;
+                    } 
                     $email_detail = array(
                          'getreceipemailtbody' => $getreceipemailtbody,
                          'email' => $request->email);
@@ -218,8 +223,15 @@ class SchedulerController extends Controller
           }
      }
      public function getdropdowndata(Request $request){
-          $output = '';
-          $html = '';
+          $output = $html = $circleSize = $textSize = $inputSize = '';
+          $textSize = 'counter-age-heading';
+
+          if($request->page == 'calendar'){
+               $circleSize = 'calendar-plus';
+               $textSize = 'calendar-counter-age';
+               $inputSize = 'calendar-count';
+          }
+
           if($request->chk == 'program'){
                $catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$request->sid)->get();
                $output = '<option value="">Select Category</option>';
@@ -233,67 +245,45 @@ class SchedulerController extends Controller
                foreach($pricelist as $pl){
                     $output .= '<option value="'.$pl->id.'">'.$pl->price_title.'</option>';
                }
-               $dues_tax = $sales_tax = 0;
-               if($catedata->dues_tax != ''){
-                    $dues_tax = $catedata->dues_tax;
-               }
 
-               if($catedata->sales_tax != ''){
-                    $sales_tax = $catedata->sales_tax;
-               }
-
-               $html .= $catedata->dues_tax.'^^'.$catedata->sales_tax;
+               $addOnServices = $catedata  != '' ?  $catedata->AddOnService: [];
+               $addOnData = View::make('business.orders.add_on_service')->with(['addOnServices' =>$addOnServices,'ajax'=>'','idsArray'=>[] ,'qtysArray'=>[]])->render();
+               
+               $html .= $catedata->dues_tax.'^^'.$catedata->sales_tax.'^!^'.$addOnData;
           }else if($request->chk == 'priceopt'){
-               //$membershiplist = BusinessPriceDetails::where('id',$request->sid)->get();
                $membershiplist = BusinessPriceDetails::where('id',$request->sid)->first();
-               /*$output = '<option value="">Select Membership Type</option>';
-               foreach($membershiplist as $pl){
-                    $output .= '<option value="'.$pl->id.'">'.$pl->membership_type.'</option>';
-               }*/
 
-               //print_r( $membershiplist);exit;
                $output = $membershiplist->membership_type;
-               $total_price_val_adult =  @$membershiplist['adult_cus_weekly_price'];
-               $total_price_val_child =  @$membershiplist['child_cus_weekly_price'];
-               $total_price_val_infant =  @$membershiplist['infant_cus_weekly_price']; 
 
-               if($total_price_val_adult == 0 &&  $total_price_val_adult == '' ){
-                    $total_price_val_adult =  @$membershiplist['adult_weekend_price_diff'];
-               }
+               $total_price_val_adult = @$membershiplist['adult_cus_weekly_price'] == 0 &&  @$membershiplist['adult_cus_weekly_price'] == '' ? @$membershiplist['adult_weekend_price_diff'] : @$membershiplist['adult_cus_weekly_price'];
 
-               if($total_price_val_child == 0 &&  $total_price_val_child == '' ){
-                    $total_price_val_child =  @$membershiplist['child_weekend_price_diff'];
-               }
+               $total_price_val_child = @$membershiplist['child_cus_weekly_price'] == 0 &&  @$membershiplist['child_cus_weekly_price'] == '' ? @$membershiplist['child_weekend_price_diff'] : @$membershiplist['child_cus_weekly_price'];
 
-               if($total_price_val_infant == 0 &&  $total_price_val_infant == '' ){
-                    $total_price_val_infant =  @$membershiplist['infant_weekend_price_diff'];
-               }
-               $aduid = "adultprice";
-               $childtid = "childprice";
-               $infantid = "infantprice";
-               $session_val = "session_val";
-               if($request->type == 'ajax'){
-                    $aduid = "adultpriceajax";
-                    $childtid = "childpriceajax";
-                    $infantid = "infantpriceajax";
-                    $session_val = "session_valajax";
-               }
+               $total_price_val_infant = @$membershiplist['infant_cus_weekly_price'] == 0 &&  @$membershiplist['infant_cus_weekly_price'] == '' ? @$membershiplist['infant_weekend_price_diff'] : @$membershiplist['infant_cus_weekly_price'];
+             
+               $aduid = $request->type == 'ajax' ? "adultpriceajax" : "adultprice";
+               $childtid = $request->type == 'ajax' ? "childpriceajax" : "childprice";
+               $infantid = $request->type == 'ajax' ? "infantpriceajax" : "infantprice";
+               $session_val = $request->type == 'ajax' ? "session_valajax" : "session_val";
 
+               $adultcnt = $request->type == 'ajax' ? "adultcntajax" : "adultcnt";
+               $childcnt = $request->type == 'ajax' ? "childcntajax" : "childcnt";
+               $infantcnt = $request->type == 'ajax' ? "infantcntajax" : "infantcnt";
 
                if($total_price_val_adult != 0 &&  $total_price_val_adult != '' ){
                     $html .='<div class="col-md-12 col-sm-12 col-xs-12">
                                    <div class="row">
-                                        <div class="col-md-8 col-sm-8 col-xs-6">
+                                        <div class="col-md-8 col-sm-8 col-xs-6 col-6">
                                              <div class="counter-titles">
-                                                  <p class="counter-age-heading">Adults</p>
+                                                  <p class="'.$textSize.'">Adults</p>
                                                   <p>Ages 13 & Up</p>
                                              </div>
                                         </div>
-                                        <div class="col-md-4 col-sm-4 col-xs-6">
-                                             <div class="qty mt-5 counter-txt">
-                                                  <span class="minus bg-darkbtn adultminus"><i class="fa fa-minus"></i></span>
-                                                  <input type="text" class="count" name="adultcnt" id="adultcnt" min="0" value="0" readonly>
-                                                  <span class="plus bg-darkbtn adultplus"><i class="fa fa-plus"></i></span>
+                                        <div class="col-md-4 col-sm-4 col-xs-6 col-6">
+                                             <div class="qty counter-txt">
+                                                  <span class="minus bg-darkbtn adultminus '.$circleSize.'"><i class="fa fa-minus"></i></span>
+                                                  <input type="text" class="count '. $inputSize.'" name="adultcnt" id="'.$adultcnt.'" min="0" value="0" readonly>
+                                                  <span class="plus bg-darkbtn adultplus '.$circleSize.'"><i class="fa fa-plus"></i></span>
                                              </div>
                                         </div>
                                    </div>
@@ -303,17 +293,17 @@ class SchedulerController extends Controller
                if($total_price_val_child != 0 &&  $total_price_val_child != '' ){
                     $html .='<div class="col-md-12 col-sm-12 col-xs-12">
                                    <div class="row">
-                                        <div class="col-md-8 col-sm-8 col-xs-6">
+                                        <div class="col-md-8 col-sm-8 col-xs-6 col-6">
                                              <div class="counter-titles">
-                                                  <p class="counter-age-heading">Children</p>
+                                                  <p class="'.$textSize.'">Children</p>
                                                   <p>Ages 2-12</p>
                                              </div>
                                         </div>
-                                        <div class="col-md-4 col-sm-4 col-xs-6">
-                                             <div class="qty mt-5 counter-txt">
-                                                  <span class="minus bg-darkbtn childminus"><i class="fa fa-minus"></i></span>
-                                                  <input type="text" class="count" name="childcnt" id="childcnt" min="0" value="0" readonly>
-                                                  <span class="plus bg-darkbtn childplus"><i class="fa fa-plus"></i></span>
+                                        <div class="col-md-4 col-sm-4 col-xs-6 col-6">
+                                             <div class="qty counter-txt">
+                                                  <span class="minus bg-darkbtn childminus '.$circleSize.'"><i class="fa fa-minus"></i></span>
+                                                  <input type="text" class="count '. $inputSize.'" name="childcnt" id="'.$childcnt.'" min="0" value="0" readonly>
+                                                  <span class="plus bg-darkbtn childplus '.$circleSize.'"><i class="fa fa-plus"></i></span>
                                              </div>
                                         </div>
                                    </div>
@@ -323,17 +313,17 @@ class SchedulerController extends Controller
                if($total_price_val_infant != 0 &&  $total_price_val_infant != '' ){
                     $html .='<div class="col-md-12 col-sm-12 col-xs-12">
                                    <div class="row">
-                                        <div class="col-md-8 col-sm-8 col-xs-6">
+                                        <div class="col-md-8 col-sm-8 col-xs-6 col-6">
                                              <div class="counter-titles">
-                                                  <p class="counter-age-heading">Infants</p>
+                                                  <p class="'.$textSize.'">Infants</p>
                                                   <p>Under 2</p>
                                              </div>
                                         </div>
-                                        <div class="col-md-4 col-sm-4 col-xs-6">
-                                             <div class="qty mt-5 counter-txt">
-                                                  <span class="minus bg-darkbtn infantminus"><i class="fa fa-minus"></i></span>
-                                                  <input type="text" class="count" name="infantcnt" id="infantcnt" value="0" min="0" readonly>
-                                                  <span class="plus bg-darkbtn infantplus"><i class="fa fa-plus"></i>
+                                        <div class="col-md-4 col-sm-4 col-xs-6 col-6">
+                                             <div class="qty counter-txt">
+                                                  <span class="minus bg-darkbtn infantminus '.$circleSize.'"><i class="fa fa-minus"></i></span>
+                                                  <input type="text" class="count '. $inputSize.'" name="infantcnt" id="'.$infantcnt.'" value="0" min="0" readonly>
+                                                  <span class="plus bg-darkbtn infantplus '.$circleSize.'"><i class="fa fa-plus"></i>
                                              </span>
                                              </div>
                                         </div>
@@ -367,18 +357,11 @@ class SchedulerController extends Controller
                     $date = $user->birthdate;
                }
                $age = Carbon::parse($date)->age;
-               if($age < 18){
-                    $output .= $username .' ('.$age .' yrs) '.$relation .' (Paid For by '.$data1[1].')';
-               }else{
-                    $output .= $username .' ('.$age .' yrs)';
-               }    
+               $output .=  $age < 18 ? $username .' ('.$age .' yrs) '.$relation .' (Paid For by '.$data1[1].')': $username .' ('.$age .' yrs)';   
           }    
-          
-          if($html != ''){
-               return $output.'~~'.$html;
-          }else{
-               return $output;
-          }   
+       
+          return ($html != '' ? $output.'~~'.$html : $output);
+         
      }
 
      public function booking_activity_cancel(Request $request){

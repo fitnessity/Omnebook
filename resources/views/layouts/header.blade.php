@@ -29,11 +29,16 @@ $total_quantity = 0;
         <link rel="icon" href="{{ url('/public/images/email/favicon.ico') }}">
         <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,900'>
         <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'>
-        <link rel='stylesheet' type='text/css' href="<?php //echo Config::get('constants.FRONT_CSS'); ?>font-awesome.css"> 
+        <link rel='stylesheet' type='text/css' href="{{url('/public/css/font-awesome.css')}}"> 
         <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
         <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>owl.css">
 		
-		@if(Route::current()->getName() != 'design.dashboard' && Route::current()->getName() != 'design.createNewBusinessProfile') 
+		@if(Route::current()->getName() == 'design.home' ) 
+			<link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+		@endif
+		
+		@if(Route::current()->getName() != 'design.dashboard' && Route::current()->getName() != 'design.createNewBusinessProfile' && Route::current()->getName() != 'design.home') 
+			<!--<link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" /> -->
 			<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap.css"> 
 
        		<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
@@ -47,7 +52,21 @@ $total_quantity = 0;
 		<link rel="stylesheet" href="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 		<script src="{{env('APP_URL')}}/public/js/ratings.js"></script>
-        <style>/*
+
+		<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/style.css')}}">
+		<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>
+
+		@if(Route::current()->getName() == 'design.shopping_cart' || Route::current()->getName() == 'carts_index') 
+			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/custom.css')}}">
+			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/responsive.css')}}">
+			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}">
+			<script src="{{asset('public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
+		@endif
+		
+
+        <style>
+
+		/*
             .btn-style-one {
                 position: relative;
                 display: inline-block;
@@ -259,6 +278,7 @@ $total_quantity = 0;
 			}
 			@media screen and (min-width: 1920px) and (max-width: 2500px){ }
 			*/
+			
 	</style>
 	
 	<!-- Google tag (gtag.js) -->
@@ -283,7 +303,7 @@ $total_quantity = 0;
 						<div class="menu_nav">
                 
 						<div class="logo-header">
-						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo1.png') }}"> </a>
+						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo.png') }}"> </a>
 						</div>
 					
 						<div class="top-area">
@@ -330,20 +350,12 @@ $total_quantity = 0;
                     </nav><?php */?>
 					
 						<div class="header-right">
-                        	<ul class="setting-area">
-                            @if(Auth::check())
-                            	<?php $user = User::where('id', Auth::user()->id)->first(); ?>
-                                <li><!--<a href="<?php echo config('app.url'); ?>/userprofile/{{@$user['username']}}" title="Home" data-ripple="" style="margin-top: 12%;">
-                                    <i class="fa fa-home" style="font-size:18px;"></i></a>-->
-                                </li>
-                            @else
-                            	<li><!--<a href="{{ Config::get('constants.SITE_URL') }}" title="Home" data-ripple="" style="margin-top: 12%;">
-                                    <i class="fa fa-home" style="font-size:18px;"></i></a>-->
-                                </li>
-							@endif
-                            </ul>
-
-							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp">List My Business</a>
+                           <?php /* @if(Session('StaffLogin'))
+                            	<a href="{{ Config::get('constants.SITE_URL') }}/userlogout" class="btn btn-list-business mr-15 header-bottom-sp"  style="color: white;">Logout </a>
+							@elseif(Auth::check() == '0')
+								<a  class="btn btn-list-business mr-15 header-bottom-sp" href="{{route('staff_login')}}">Staff Login</a>
+							@endif  */?>
+							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp header-bottom-sp">List My Business</a>
 							<div class="button"><span></span></div>
 
 							<a value="Book an Activity" class="btn business-sp btn-style-two" href="{{route('activities_index')}}">Book An Activity</a>
@@ -354,9 +366,7 @@ $total_quantity = 0;
 									    foreach($cart["cart_item"] as $item){
 									    	if($item['chk'] == ''){
 									    		$newcart['cart_item'] [] = $item;
-									    		//$total_quantity = count($cart["cart_item"]);
 									    	}
-									        /*$total_quantity += (int)$item["quantity"];*/
 									    }
 									} 
 									$total_quantity = count($newcart["cart_item"]);?>
@@ -370,13 +380,8 @@ $total_quantity = 0;
                         	@if(Auth::check())
 						 	<div class="userblock mobile-none">
                         		<div class="login_links" onclick="openNav()">
-                                
-                                @if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
-                                	<img src="{{ url('/public/uploads/profile_pic/thumb/'.Auth::user()->profile_pic) }}"
+                                	<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}"
                                      alt="Fitnessity" >
-                                @else
-                                	<img src="{{ asset('/public/images/user-icon.png') }}" alt="Fitnessity">
-                                @endif
                                 </div>
 								<nav class="pc-sidebar">
 									<div class="navbar-wrapper">
@@ -385,12 +390,7 @@ $total_quantity = 0;
 												<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeNav()"></a>
 												<ul class="pc-navbar">
 													<li style="text-align: center;"> 
-                                                    @if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
-                                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.Auth::user()->profile_pic) }}" alt="Fitnessity" class="sidemenupic" >
-                                                    @else
-                                                        <img src="{{ asset('/public/images/user-icon.png') }}" alt="Fitnessity" class="sidemenupic">
-                                                    @endif
-														
+                                                        <img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" class="sidemenupic">
 													</li>
 													<li class="pc-caption"><span> Welcome</span></li>
                                                     <li class="pc-caption-1">
@@ -412,23 +412,23 @@ $total_quantity = 0;
                                                       	<a href="{{route('profile-viewbusinessProfile')}}" style="color: white;">Business Profile</a>
                                                     </li><?php */?>
                                                     <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;">Edit Personal Profile</a>
+                                                    	<span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;">Manage Personal Profile</a>
                                                     </li>
 													<!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
                                                     </li> -->
 													<li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Add Family Members</a>
+                                                    	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('family-member.index')}}" style="color: white;">Manage Accounts</a>
                                                     </li>
-													<li class="pc-link">
+													<!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
 															<a href="{{ Config::get('constants.SITE_URL') }}/booking-request" style="color: white;">Inbox</a>
-                                                    </li>
+                                                    </li> -->
 
-                                                    <li class="pc-link">
+                                                   <!--  <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-file-alt"></i></span>
 															<a href="{{ route('personal.orders.index')}}" style="color: white;">Booking Info</a>
-                                                    </li>
+                                                    </li> -->
 													<!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-user-plus"></i></span><a href="#" style="color: white;">Invite Friends</a>
                                                     </li> -->
@@ -437,12 +437,12 @@ $total_quantity = 0;
 													<li class="lp-per-pro"> <span>Business Center </span></li>
 													<li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-clipboard-list"></i></span>
-                                                        <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">List My Business</a>
+                                                        <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">Create A Business</a>
                                                     </li>
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-tasks"></i></span>
                                                     	<!-- <a href="{{route('manageCompany')}}" style="color: white;">Manage My Business</a> -->
-                                                    	<a href="{{route('business_dashboard')}}" style="color: white;">Manage My Business</a>
+                                                    	<a @if(count(Auth::user()->company) > 0) href="{{route('business_dashboard')}}"  @else href="{{route('staff_login')}}" @endif style="color: white;">Staff Login</a>
                                                     </li>
 													<li><div class="border-sidebar"></div></li>
 													<li class="lp-per-pro"> <span>Support </span> </li>
@@ -552,6 +552,7 @@ $total_quantity = 0;
         
     </body>
 </html>
+
 
 <script>
 	

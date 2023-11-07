@@ -39,8 +39,6 @@ class BusinessPriceDetails extends Model
         'pay_setnum',
         'pay_setduration',
         'pay_after',
-		/*'recurring_every',
-		'recurring_duration',*/
 		'fitnessity_fee',
 		'membership_type',
         'category_id',
@@ -110,4 +108,65 @@ class BusinessPriceDetails extends Model
         return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id')->withTrashed();
     }
 
+    public function UserBookingDetail()
+    {
+        return $this->hasMany(UserBookingDetail::class, 'priceid');
+    }
+
+    public function BusinessServices(){
+        return $this->belongsTo(BusinessServices::class, 'serviceid'); 
+    }
+
+    public function getCurrentPrice($type,$date){
+        switch ($type) {
+            case 'adult':
+                $price = $this->adult_cus_weekly_price;
+                break;
+            case 'child':
+                $price = $this->child_cus_weekly_price;
+                break;
+            case 'infant':
+                $price = $this->infant_cus_weekly_price;
+                break;
+        }
+
+        if (date('l', strtotime($date)) == 'Saturday' || date('l', strtotime($date)) == 'Sunday') {
+            switch ($type) {
+                case 'adult':
+                    $price = $this->adult_weekend_price_diff;
+                    break;
+                case 'child':
+                    $price = $this->child_weekend_price_diff;
+                    break;
+                case 'infant':
+                    $price = $this->infant_weekend_price_diff;
+                    break;
+            }
+        }
+
+        $price = $price != '' ? $price: 0;
+        return $price;
+    }
+
+    public function getDiscoutPrice($type, $date){
+        $price = $this->getCurrentPrice($type, $date);
+
+        switch ($type) {
+            case 'adult':
+                $discount = $this->adult_discount ?? 0;
+                break;
+            case 'child':
+                $discount = $this->child_discount ?? 0;
+                break;
+            case 'infant':
+                $discount = $this->infant_discount ?? 0;
+                break;
+        }
+        return ($discount  != '' && $price != 0 ? ($price - ($price * $discount )/100) : $price);  
+    }
+
+    public function getExpirationDate($startDate){
+        $date = new \DateTime($startDate);
+        return $date->modify('+'.$this->pay_setnum.' '.$this->pay_setduration);
+    }
 }

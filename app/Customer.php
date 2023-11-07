@@ -4,13 +4,14 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\CompanyInformation;
-use App\BookingCheckinDetails;
+use App\{BookingCheckinDetails,StripePaymentMethod,CompanyInformation,Recurring};
 use File;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use DB;
-use App\StripePaymentMethod;
+use Auth;
+
+use Illuminate\Support\Str;
 
 class Customer extends Authenticatable
 {
@@ -27,7 +28,7 @@ class Customer extends Authenticatable
 
         self::created(function($model){
             if(!$model->stripe_customer_id){
-                $model->create_stripe_customer_id();
+                //$model->create_stripe_customer_id();
             }
         });
 
@@ -39,11 +40,12 @@ class Customer extends Authenticatable
 
         self::updating(function($model){
             
-            $fitnessity_user = User::where('email', $model->email)->first();
+            $fitnessity_user = User::where(['email' => $model->email,'firstname' => $model->fname ,'lastname' => $model->lname])->first();
             if($fitnessity_user){
                 $model->user_id = $fitnessity_user->id;
             }
         });
+        
     }
 
 	use  Notifiable;
@@ -55,7 +57,7 @@ class Customer extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'business_id','fname','lname', 'email','birthdate', 'phone_number','relationship','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id','card_stripe_id','card_token_id','stripe_customer_id','terms_covid','terms_liability','terms_contract', 'user_id'
+        'business_id','fname','lname', 'email','birthdate', 'phone_number','relationship','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id','card_stripe_id','card_token_id','stripe_customer_id','terms_covid','terms_liability','terms_contract', 'user_id','emergency_contact','emergency_relation','emergency_email','emergency_name'
     ];
 
     /**
@@ -99,6 +101,16 @@ class Customer extends Authenticatable
         }
     }
 
+    public function getFullNameAttribute(){
+        return $this->fname . ' ' . $this->lname;
+    }
+
+    public function getFirstLetterAttribute(){
+        $fname = $this->fname != '' ? $this->fname[0] : '';
+        $lname = $this->lname != '' ? $this->lname[0] : '';
+        return $fname . '' . $lname;
+    }
+
     public function company_information()
     {
         return $this->belongsTo(CompanyInformation::class, 'business_id');
@@ -113,6 +125,10 @@ class Customer extends Authenticatable
         return $this->hasMany(UserBookingDetail::class,'user_id');
     }
 
+    public function recurringDetail(){
+        return $this->hasMany(recurring::class,'user_id');
+    }
+
     public function bookingStatus()
     {
         return UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$this->user_id, $this->id]);
@@ -120,7 +136,12 @@ class Customer extends Authenticatable
 
     public function Transaction()
     {
-        return $this->hasMany(Transaction::class,'user_id');
+        return $this->hasMany(Transaction::class,'user_id')->where('user_type','customer');
+    }
+
+    public function BookingCheckinDetails()
+    {
+        return $this->hasMany(BookingCheckinDetails::class,'customer_id');
     }
 
     public static function getcustomerofthiscompany($companyId){
@@ -134,16 +155,20 @@ class Customer extends Authenticatable
 
     public function get_families()
     {
+        $familes = [];
         if($this->parent_cus_id){
             $parent = Customer::where('id',$this->parent_cus_id)->first();
-            $familes = Customer::where('parent_cus_id', $parent->id)->where('id', '<>', $this->id)->get();
-            $familes = $familes->merge(Customer::where('id',$this->parent_cus_id)->where('id', '<>', $this->id)->get());
+            if ($parent != '') {
+                $familes = Customer::where('parent_cus_id', $parent->id)->where('id', '<>', $this->id)->get();
+                $familes = $familes->merge(Customer::where('id',$this->parent_cus_id)->where('id', '<>', $this->id)->get());
+                $familes = $familes->merge(Customer::where('parent_cus_id',$this->id)->get());
+            }
+            
             return $familes;
         }else{
             return Customer::where('parent_cus_id',$this->id)->get();
         }
     }
-
 
     public function get_stripe_card_info(){
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
@@ -167,14 +192,6 @@ class Customer extends Authenticatable
         $paymentMethods = $stripe->paymentMethods->all(['customer' => $this->stripe_customer_id, 'type' => 'card']);
         return $paymentMethods;
 
-    }
-
-    public function getFullNameAttribute(){
-        return $this->fname . ' ' . $this->lname;
-    }
-
-    public function getFirstLetterAttribute(){
-        return $this->fname[0] . ' ' . $this->lname[0];
     }
 
     public function full_address(){
@@ -221,24 +238,47 @@ class Customer extends Authenticatable
     public function memberships(){
         $customer = $this;
         $company = $this->company_information;
-        $result = UserBookingDetail::where('business_id', $company->id)->whereIn('booking_id', function($query) use ($customer){
+        $result = UserBookingDetail::where('business_id', $company->id)/*->whereIn('booking_id', function($query) use ($customer){
             $query->select('id')
                   ->from('user_booking_status')
-                  ->where(['user_type'=>'customer','user_id'=> $customer->id]);
-        });
+                  */->where(['user_type'=>'customer','user_id'=> $customer->id]);
+       /* });*/
         return $result->count();
     }
 
-    public function active_memberships(){
+    public function active_memberships($sport = null){
+        //echo $this->id;exit;
+
         $company = $this->company_information;
         $now = Carbon::now();
-        //$result = UserBookingDetail::where('user_booking_details.business_id', $company->id)->where(['user_booking_details.user_type'=>'customer','user_booking_details.user_id'=>$this->id])->whereDate('user_booking_details.expired_at', '>', $now)->whereRaw('user_booking_details.pay_session > 0');
+        $results = UserBookingDetail::where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $this->id])->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->where('user_booking_details.business_id', $company->id);
+        /*if($sport != NULL){
+            $results = $results->where('user_booking_details.sport',$sport);
+        }*/
+        /*$results = $results->when($date, function($query) use ($date) {
+            return $query->where('bcd.checkin_date', '=', $date);
+        });*/
+        if($this->user_id == Auth::user()->id){
+            $results = $results->join('user_booking_status as ubs','user_booking_details.booking_id', '=', 'ubs.id')->orwhere(['ubs.user_id' => Auth::user()->id])->where('user_booking_details.business_id', $company->id);
+        }
 
-        $results = UserBookingDetail::select('user_booking_details.*', DB::raw('SUM(booking_checkin_details.use_session_amount) as checkin_count') )->join('booking_checkin_details', 'user_booking_details.id', '=', 'booking_checkin_details.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->where('user_booking_details.business_id', $company->id)
-            ->where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $this->id])
-            ->groupBy('user_booking_details.id')
-            ->whereDate('user_booking_details.expired_at', '>', $now);
-            //print_r($results->get());exit;
+        /*$results = $results->when($date, function($query) use ($date) {
+            return $query->where('bcd.checkin_date', '=', $date);
+        });*/
+
+        //$results = $results->select('user_booking_details.*');
+          //print_r($results->get());
+        $results = $results->select('user_booking_details.*', DB::raw('(CASE WHEN bcd.checkin_date IS NOT NULL AND bcd.checkin_date != CURDATE() AND bcd.checkin_date >= CURDATE() THEN COUNT(bcd.use_session_amount) ELSE 0 END) as checkin_count'))->join('booking_checkin_details as bcd', 'user_booking_details.id', '=', 'bcd.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->where('user_booking_details.business_id', $company->id)->where('user_booking_details.status', 'active')->groupBy('user_booking_details.id')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'));
+
+        /*$results = $results->when($date, function($query) use ($date) {
+            return $query->where('bcd.checkin_date', '=', $date);
+        });
+        if($sport != NULL){
+            $results = $results->where('user_booking_details.sport',$sport);
+        }*/
+
+       
+        //print_r($results->get());exit; 
         return $results; 
     }
 
@@ -254,19 +294,38 @@ class Customer extends Authenticatable
     }
 
     function create_stripe_customer_id(){
-        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $customer = \Stripe\Customer::create([
-            'name' => $this->fname . ' '. $this->lname,
-            'email'=> $this->email,
-        ]);
-        $this->stripe_customer_id = $customer->id;
-        $this->save();
-
-        return $customer->id;
+	   if( !empty($this->email) && $this->email != 'N/A' && $this->email != '-' &&  $this->stripe_customer_id == ''){
+            $FndCustomer = Customer::where(['fname' => $this->fname, 'lname' => $this->lname,'email' => $this->email])->whereNotNull('stripe_customer_id')->where('id', '!=', $this->id)->first();
+            if($FndCustomer == ''){
+                try {
+                    \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+                    $customer = \Stripe\Customer::create([
+                        'name' => $this->fname . ' '. $this->lname,
+                        'email'=> $this->email,
+                    ]);
+                    $this->stripe_customer_id = $customer->id;
+                    $this->save();
+            
+                    return $customer->id;
+                    
+                } catch (Exception $e) {
+                    return '';
+                }
+            }else{
+                $this->stripe_customer_id = $FndCustomer->stripe_customer_id;
+                $this->save();
+                return $this->id;
+            }
+            
+	   }
+	   
+    }
+    public function purchase_history(){
+        return $this->transaction()->where('user_type','customer')->whereIn('status',['complete', 'requires_capture']);
     }
 
     public function total_spend(){
-        $purchase_history = $this->transaction()->where('user_type','customer')->get();
+        $purchase_history = $this->transaction()->where('user_type','customer')->where('status','complete')->get();
         $sum = 0;
         foreach($purchase_history as $item){
             $sum += $item->amount;
@@ -295,7 +354,6 @@ class Customer extends Authenticatable
         $booking_detail_ids = $booking_details->get()->map(function($item){
             return $item->id;
         });
-
 
         return BookingCheckinDetails::whereIn('booking_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc');
     }
@@ -344,6 +402,50 @@ class Customer extends Authenticatable
         return UserBookingStatus::whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id in ('.$this->id.')))', [$this->user_id]); 
     }
 
+    public function sendemail($customer){
+        
+    }
+
+    public function chkSignedTerms(){
+        $termsChk = $this->terms_covid != '' && $this->terms_liability != '' && $this->terms_contract != '' ? "" : "Terms not signed. <br>";
+        return $termsChk;
+    }
+
+    public function chkBirthday(){
+        $currentDate = date('m-d');
+        $birthdate = date('m-d' , strtotime($this->birthdate));
+
+        return $birthdate == $currentDate ?  "<br>Today is your birthday.<br>" : '';  
+    }
+
+    public function findExpiredCC(){
+        $cards = '';
+        $cardDetails = $this->stripePaymentMethods()->get();
+       // print_r($cardDetails);
+        foreach($cardDetails as $card){
+            if($card->exp_year <= date('Y') && $card->exp_month <= date('n')){
+                $cards .=  $card->brand."  **** ".$card->last4."<br>";
+            }
+        }
+
+        return $cards != '' ? "<br><h6>Expired CC List</h6>".$cards : '';
+    }
+
+    public function chkRecurringPayment($bookId){
+        $currentMonth = date('m');
+        $bookingData  = UserBookingDetail::find($bookId);
+        $data = $bookingData != '' ? @$bookingData->Recurring()->where(['booking_detail_id' =>$bookId])->whereMonth('payment_date', '=' , $currentMonth)->first() : '';
+        if(@$data->status == 'Completed'){
+            return "<br>Default payment done";
+        }else if(@$data->status == 'Retry'){
+            return "<br>Default payment failed";
+        }
+    } 
+
+    public function getCheckInId($bookingId,$date){
+        $checkInDetail = $this->BookingCheckinDetails()->where('booking_detail_id',$bookingId)->whereDate('checkin_date' ,$date)->first();
+        return @$checkInDetail->id;
+    }
     
 }
    

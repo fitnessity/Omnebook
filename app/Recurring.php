@@ -8,7 +8,7 @@ use File;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use DB;
-use App\Transaction;
+use App\{Transaction,User,Customer,SGMailService};
 
 // /use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -25,7 +25,7 @@ class Recurring extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [ 'booking_detail_id', 'user_id', 'user_type', 'business_id', 'payment_date', 'amount', 'tax', 'charged_amount', 'payment_method', 'stripe_payment_id', 'status','transfer_provider_status','provider_amount','provider_transaction_id'];
+    protected $fillable = [ 'booking_detail_id', 'user_id', 'user_type', 'business_id', 'payment_date', 'amount', 'tax', 'charged_amount', 'payment_method', 'stripe_payment_id', 'status','transfer_provider_status','provider_amount','provider_transaction_id','attempt'];
 
 
     public function company_information(){
@@ -45,7 +45,8 @@ class Recurring extends Authenticatable
     }
 
     public static function autoPayRemaining($totalCount,$id){
-        $paymentDoneCount = Recurring::where('booking_detail_id',$id)->where('stripe_payment_id' ,'!=' , '')->where('user_type','customer')->count();
+        //echo $totalCount;
+        $paymentDoneCount = Recurring::where('booking_detail_id',$id)->where('stripe_payment_id' ,'==' , '')->where('user_type','customer')->count();
         $remaining = $totalCount - $paymentDoneCount;
         return $remaining;
     }
@@ -71,7 +72,7 @@ class Recurring extends Authenticatable
                 $brand = $payment_intent['charges']['data'][0]['payment_method_details']['card']['brand'];
 
                 $card_id =  $brand.'  XXXX'.$last4;
-            }catch(\Stripe\Exception\CardException $e) {
+            }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
             }catch(Exception $e){
             }
         }else{
@@ -81,24 +82,27 @@ class Recurring extends Authenticatable
         return $card_id;
     }
 
-
     public function createRecurringPayment(){
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
 
-        /*if($this->user_type == 'user'){
-            $customer = User::findOrFail($this->user_id);
-            $stripeCustomerId = $customer->stripe_customer_id;
-            $cardDetails = DB::table('users_payment_info')->where('user_id', $customer->id)->latest()->first();
-            $cardID = $cardDetails->card_stripe_id;
-        }else{*/
-            $customer = Customer::findOrFail($this->user_id); 
-            $stripeCustomerId = $customer->stripe_customer_id;  
-           /* $cardDetails = DB::table('stripe_payment_methods')->where(['user_id'=> $customer->id,'user_type'=>'customer'])->latest()->first();
-            $cardID = $cardDetails->payment_id;
-        }*/
+        if ($this->user_type == 'user') {
+            $customer = User::find($this->user_id);
+            $personalData = $this->User;
+        } else {
+            $customer = Customer::find($this->user_id); 
+            $personalData = $this->Customer;
+        }
+
+        $stripeCustomerId = @$customer->stripe_customer_id;
+        $cardDetails = @$customer != '' ? $customer->stripePaymentMethods()->latest()->first() : '';
+        $stripeCardID = $cardDetails ? $cardDetails->payment_id : null;
+       
         $cardID =  $this->payment_method;
+        $cardID = $cardID != ''  ?  $cardID : $stripeCardID;
+        
         if($cardID != '' && $stripeCustomerId != ''){
+            
             try {
                 $totalPrice = ($this->amount + $this->tax )*100;
                 $paymentIntent = \Stripe\PaymentIntent::create([
@@ -113,8 +117,8 @@ class Recurring extends Authenticatable
                 $this->stripe_payment_id = $paymentIntent->id;
                 $this->charged_amount = round($totalPrice)/100;
                 $this->status = 'Completed';
-                $this->save();
-
+                $this->attempt += 1;
+            
                 $transactiondata = array( 
                     'user_type' => $this->user_type ,
                     'user_id' => $this->user_id,
@@ -132,9 +136,53 @@ class Recurring extends Authenticatable
                 $transactionstatus = Transaction::create($transactiondata);
 
                 $this->charged();
-            }catch(\Stripe\Exception\CardException $e) {
+            }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e ) {
+                $this->payment_method = NULL;
+                $this->attempt += 1;
+                $this->status = "Retry";
             }catch (Exception $e) {
+                $this->status = "Retry";
+                $this->attempt += 1;
+            }finally {
+                $this->save();
+
+                if($this->attempt != 0){
+                    $priceOption = $this->UserBookingDetail != '' ? $this->UserBookingDetail->business_price_detail_with_trashed : '';
+                    $category =  @$priceOption->business_price_details_ages_with_trashed;
+                    $emailDetail = array(
+                        'CompanyImage'=> $this->company_information->getCompanyImage(),
+                        'CompanyName'=> $this->company_information->company_name,
+                        'ProviderName'=> $this->company_information->full_name,
+                        'CustomerName'=> @$personalData->full_name,
+                        'PriceOption'=> @$priceOption->price_title,
+                        'CategoryName'=> @$category->category_title ,
+                        'amount'=> $this->amount,
+                        'email'=> $this->company_information->business_email,
+                    );
+
+                    $emailDetail1 = array(
+                        'CompanyImage'=> $this->company_information->getCompanyImage(),
+                        'CompanyName'=> $this->company_information->company_name,
+                        'ProviderName'=> $this->company_information->full_name,
+                        'address'=> $this->company_information->company_address(),
+                        'ProviderEmail'=> $this->company_information->business_email,
+                        'phone'=> $this->company_information->business_phone,
+                        'CustomerName'=> @$personalData->full_name,
+                        'email'=> @$personalData->email,
+                        'PriceOption'=> @$priceOption->price_title,
+                        'CategoryName'=> @$category->category_title ,
+                        'amount'=> $this->amount,
+                        'Website' => env('APP_URL'),
+                        'url'=> env('APP_URL').'/family-member',
+                    );
+
+                    SGMailService::sendAutoPayFaildAlertToProvider($emailDetail);
+                    SGMailService::sendAutoPayFaildAlertToCustomer($emailDetail1);
+                }
             }
+        }else{
+            $this->status = "Retry";
+            $this->save();
         }
     }
 
@@ -178,7 +226,7 @@ class Recurring extends Authenticatable
                 }
 
             }
-        } catch(\Exception $e) {
+        } catch(\Stripe\Exception\CardException  | \Stripe\Exception\InvalidRequestException | \Exception $e) {
         } 
     }
 

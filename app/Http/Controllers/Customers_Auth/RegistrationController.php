@@ -69,19 +69,27 @@ class RegistrationController extends Controller
         } else {
 
             //check for unique customer name
-            if (!$this->customers->findUniquefeildPerBusiness($company->id, 'username',$postArr['username'])) {
+            /*if (!$this->customers->findUniquefeildPerBusiness($company->id, 'username',$postArr['username'])) {
                 $response = array(
                     'type' => 'danger',
                     'msg' => 'User name already exists. Please select different Name',
                 );
                 return Response::json($response);
-            };
+            };*/
 
             //check for unique email id
             if (!$this->customers->findUniquefeildPerBusiness($company->id, 'email',$postArr['email'])) {
                 $response = array(
                     'type' => 'danger',
                     'msg' => 'Email already exists. Please select different Email',
+                );
+                return Response::json($response);
+            }; 
+
+            if (!$this->customers->findUniquefeildPerBusiness($company->id, 'phone_number',$postArr['contact'])) {
+                $response = array(
+                    'type' => 'danger',
+                    'msg' => 'Phone Number already exists. Please Enter different Phone Number',
                 );
                 return Response::json($response);
             };
@@ -107,7 +115,7 @@ class RegistrationController extends Controller
                 $customerObj->business_id = $company->id;
                 $customerObj->fname = $postArr['firstname'];
                 $customerObj->lname = ($postArr['lastname']) ? $postArr['lastname'] : '';
-                $customerObj->username = $postArr['username'];
+                // $customerObj->username = $postArr['username'];
                 //$customerObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
                 $customerObj->password = Hash::make($random_password);
                 $customerObj->email = $postArr['email'];
@@ -141,7 +149,7 @@ class RegistrationController extends Controller
                 $userObj->role = 'customer';
                 $userObj->firstname = $postArr['firstname'];
                 $userObj->lastname = ($postArr['lastname']) ? $postArr['lastname'] : '';
-                $userObj->username = $postArr['username'];
+                $userObj->username = $postArr['firstname'].$postArr['lastname'];
                 /*$userObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
                 $userObj->buddy_key = $postArr['password'];*/
                 $userObj->password = $customerObj->password;
@@ -204,8 +212,20 @@ class RegistrationController extends Controller
         /*$customers->latitude=$request->lat;
         $customers->longitude=$request->lon;*/
         $customers->save();
-        $url = '/viewcustomer/'.$request->cus_id;
-        return response()->json(['status'=>200,'redirecturl'=>route('business_customer_show',['business_id' => $customers->company_information->id, 'id'=>$customers->id])]);
+
+        $customers->create_stripe_customer_id();
+        $intent = $client_secret = null;
+        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        if($customers->stripe_customer_id != ''){
+            $intent = $stripe->setupIntents->create([
+                'payment_method_types' => ['card'],
+                'customer' => $customers->stripe_customer_id,
+            ]);
+            $client_secret = $intent['client_secret'];
+        }
+
+        return response()->json(['status'=>200,'redirecturl'=>route('business_customer_show',['business_id' => $customers->company_information->id, 'id'=>$customers->id ] ),'client_secret'=>$client_secret]);
     }
 
     public function savephotoCustomer(Request $request)
@@ -225,8 +245,8 @@ class RegistrationController extends Controller
         for($i=0;$i<=$request->familycnt;$i++){
             if($request->fname[$i] != ''){
                 $date = NULL;
-                if($request->birthday_date[$i] != ''){
-                    $date = date('Y-m-d',strtotime($request->birthday_date[$i]));
+                if($request->birthdate[$i] != ''){
+                    $date = date('Y-m-d',strtotime($request->birthdate[$i]));
                 }
                 $customerObj = New Customer();
                 $customerObj->parent_cus_id = $request->cust_id;
@@ -240,10 +260,13 @@ class RegistrationController extends Controller
                 $customerObj->phone_number = $request->mphone[$i];
                 $customerObj->birthdate = $date;
                 $customerObj->emergency_contact = $request->emergency_phone[$i];
+                $customerObj->emergency_name = $request->emergency_name[$i];
+                $customerObj->emergency_email = $request->emergency_email[$i];
+                $customerObj->emergency_relation = $request->emergency_relation[$i];
                 $customerObj->gender =  $request->gender[$i];
                 $customerObj->save();
                 if ($customerObj) {      
-                    SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id']);
+                    SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id'],'');
                 }
             }
         }
@@ -257,6 +280,5 @@ class RegistrationController extends Controller
         );
 
         return Response::json($response);
-            
     }
 }

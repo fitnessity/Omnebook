@@ -1,8 +1,6 @@
-<div class="row">
-   <div class="col-lg-12">
-      <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600; margin-top: 9px;margin-bottom: 10px;">What happens if a customer late cancels or no show? </h4>
-   </div>
-</div>
+
+<h4 class="modal-title mb-10 fs-17">What happens if a customer late cancels or no show? </h4>
+
 <div class="row">
   <div class="col-md-12">
     <form method="post" action="{{route('business.schedulers.checkin_details.update', ['scheduler'=>$booking_checkin_detail->business_activity_scheduler_id, 'checkin_detail' => $booking_checkin_detail->id])}}">
@@ -33,7 +31,7 @@
           @endif
       >
       <label for="javascript">Deduct from membership</label> 
-      <select class="form-control" name="booking_detail_id">
+      <select class="form-control form-select" name="booking_detail_id">
           @foreach($booking_checkin_detail->customer->active_memberships()->get() as $customer_booking_detail)
             @if($customer_booking_detail->business_price_detail)
                <option value="{{$customer_booking_detail->id}}" >
@@ -43,7 +41,7 @@
           @endforeach
 
       </select>
-      <button type="submit" class="btn-nxt manage-cus-btn cancel-modal">Submit</button>
+      <button type="submit" class="btn btn-red mt-10">Submit</button>
    </form>
   </div>
 </div>

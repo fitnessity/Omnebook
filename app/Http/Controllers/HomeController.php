@@ -7,7 +7,7 @@ use Auth;
 use App\Repositories\{SportsCategoriesRepository,SportsRepository,ProfessionalRepository,UserRepository};
 use DB;
 use Session;
-use App\{AddrStates,AddrCities,AddrCountries,CompanyInformation,BusinessServices,BusinessClaim,Miscellaneous,Languages,MailService,SGMailService,Sports,User};
+use App\{AddrStates,AddrCities,AddrCountries,CompanyInformation,BusinessServices,BusinessClaim,Miscellaneous,Languages,MailService,SGMailService,Sports,User,Customer,Transaction,StripePaymentMethod,UserFamilyDetail};
 
 use Illuminate\Support\Facades\Crypt;
 
@@ -179,7 +179,7 @@ class HomeController extends Controller
 				$array_data[]=$city->sport_name;
 			}
 			$comd = CompanyInformation::where('dba_business_name' ,'=' , null)->get();
-			if(!empty($comd){
+			if(!empty($comd)){
 				foreach($comd as $det){
 					CompanyInformation::where('id', $det->id)->update(["dba_business_name" => $det->company_name]);
 				}
@@ -191,7 +191,29 @@ class HomeController extends Controller
 				$array_data[]=$state->dba_business_name."~~business_profile"."~~".str_replace(" ","-",$state->dba_business_name)."/".$state->id;
 			}
 			
-			$data_user = User::where('firstname', 'LIKE', "%{$query}%")->orWhere('lastname', 'LIKE', "%{$query}%")->orWhere('username', 'LIKE', "%{$query}%")->get();
+			$searchValues = preg_split('/\s+/', $query, -1, PREG_SPLIT_NO_EMPTY);
+			$data_user = User::where(function ($q) use ($searchValues) {
+            	$serch1 = @$searchValues[0] != '' ? strtolower(@$searchValues[0]) : '';
+                $serch2 = @$searchValues[1] != '' ? strtolower(@$searchValues[1]) : '';
+                $q->orderBy('created_at');
+                if($serch1 != '' && $serch2 != ''){
+                    $q->where(function($q) use ($serch1, $serch2) {
+                        $q->where(DB::raw('LOWER(firstname)'), 'like', "%{$serch1}%")
+                          ->where(DB::raw('LOWER(lastname)'), 'like', "%{$serch2}%");
+                    })
+                    ->orWhere(function($q) use ($serch1, $serch2) {
+                        $q->where(DB::raw('LOWER(firstname)'), 'like', "%{$serch2}%")
+                          ->where(DB::raw('LOWER(lastname)'), 'like', "%{$serch1}%");
+                    });
+                }else{
+                    $q->orWhere(DB::raw('LOWER(firstname)'), 'like', "%{$serch1}%")
+                    ->orWhere(DB::raw('LOWER(lastname)'), 'like', "%{$serch1}%")->orWhere(DB::raw('LOWER(username)'), 'LIKE', "%{$serch1}%");
+                } 
+            })->get();
+
+			//$data_user = User::where('firstname', 'LIKE', "%{$query}%")->orWhere('lastname', 'LIKE', "%{$query}%")->orWhere('username', 'LIKE', "%{$query}%")->get();
+
+
 			foreach($data_user as $user_data)
 			{
 				$array_data[]=$user_data->full_name."(".$user_data->username.")"."~~personal_profile"."~~".$user_data->username;
@@ -332,7 +354,7 @@ class HomeController extends Controller
             $query = $request->get('query');
             //$query = $request->get('query');
           
-            $data_bus = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->get();
+            $data_bus = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->orWhere('company_name', 'LIKE', "%{$query}%")->get();
            /* $data_bus1 =BusinessClaim::where('business_name', 'LIKE', "%{$query}%")->where('is_verified',0)->get();*/
             foreach($data_bus as $buss)
             {	
@@ -354,7 +376,7 @@ class HomeController extends Controller
             	}
 
                 $array_data [] = array(
-	                "cname"=>$buss->dba_business_name, 
+	                "cname"=>$buss->public_company_name, 
 	                "cid"=>$buss->id,
 	                "claim_business_status"=> $buss->is_verified,
 	                "image" => $buss->logo,
@@ -448,7 +470,26 @@ class HomeController extends Controller
     public function searchuser(Request $request) {
     	$user = User::orderby('created_at','desc');
     	if($request->term){
-            $user = $user->whereRaw('LOWER(`firstname`) LIKE ?', [ '%'. strtolower($request->term) .'%' ]);
+    		$searchValues = preg_split('/\s+/', $request->term, -1, PREG_SPLIT_NO_EMPTY);
+            $user = $user->where(function ($q) use ($searchValues) {
+            	$serch1 = @$searchValues[0] != '' ? strtolower(@$searchValues[0]) : '';
+                $serch2 = @$searchValues[1] != '' ? strtolower(@$searchValues[1]) : '';
+                $q->orderBy('created_at');
+                if($serch1 != '' && $serch2 != ''){
+                    $q->where(function($q) use ($serch1, $serch2) {
+                        $q->where(DB::raw('LOWER(firstname)'), 'like', "%{$serch1}%")
+                          ->where(DB::raw('LOWER(lastname)'), 'like', "%{$serch2}%");
+                    })
+                    ->orWhere(function($q) use ($serch1, $serch2) {
+                        $q->where(DB::raw('LOWER(firstname)'), 'like', "%{$serch2}%")
+                          ->where(DB::raw('LOWER(lastname)'), 'like', "%{$serch1}%");
+                    });
+                }else{
+                    $q->orWhere(DB::raw('LOWER(firstname)'), 'like', "%{$serch1}%")
+                    ->orWhere(DB::raw('LOWER(lastname)'), 'like', "%{$serch1}%");
+                } 
+            });
+            	//->whereRaw('LOWER(`firstname`) LIKE ?', [ '%'. strtolower($request->term) .'%' ]);
         }
         $user = $user->get();
     	return response()->json($user);
@@ -457,8 +498,77 @@ class HomeController extends Controller
     public function sendGrantAccessMail(Request $request){
     	$user = User::where('id',$request->id)->first();
     	$company = CompanyInformation::findOrFail($request->business_id);
-    	$customer = $user->customers()->get();
-    	if(count($customer) >0 && !empty($customer)){
+    	$customer = Customer::where('user_id' , $user->id)->first();
+    	if($customer != ''){
+    		$familyMember = UserFamilyDetail::where(['user_id' => $user->id])->get();
+            foreach($familyMember as $member){
+                $chk = Customer::where(['fname' =>$member->first_name ,'lname' =>$member->last_name])->first();
+                if($chk == ''){
+                    Customer::create([
+                        'business_id' => $request->business_id,
+                        'fname' => $member->first_name,
+                        'lname' => ($member->last_name) ? $member->last_name : '',
+                        'username' => $member->first_name.' '.$member->last_name,
+                        'email' => $member->email,
+                        'country' => 'US',
+                        'status' => 0,
+                        'phone_number' => $member->mobile,
+                        'birthdate' => $member->birthday,
+                        'gender' => $member->gender,
+                        'user_id' => NULL, //this is null bcz of user is not created at 
+                        'parent_cus_id'=> $customer->id ,
+                        'relationship' =>$member->relationship
+                    ]);
+                }
+            }
+
+            $cardData = StripePaymentMethod::where(['user_id' => $user->id , 'user_type' => 'User' ])->get();
+
+            foreach($cardData as $data){
+                $stripData = StripePaymentMethod::where(['user_id' =>$customer->id ,'payment_id'=> $data->payment_id ,'exp_year' => $data->exp_year ,'last4' =>$data->last4])->first();
+                if($stripData == ''){
+                    StripePaymentMethod::create([
+                        'payment_id' => $data->payment_id,
+                        'user_type' => 'Customer',
+                        'user_id' => $customer->id,
+                        'pay_type'=> $data->pay_type,
+                        'brand'=> $data->brand,
+                        'exp_month'=> $data->exp_month,
+                        'exp_year'=> $data->exp_year,
+                        'last4'=> $data->last4,
+                    ]);
+                }
+                
+            }
+
+            $paymentHistory = Transaction::where('user_type', 'User')
+            ->where('user_id', $user->id)
+            ->orWhere(function($subquery) use ($customer) {
+                $subquery->where('user_type', 'Customer')
+                    ->where('user_id', $customer->id);
+            })->get();
+
+            foreach($paymentHistory as $data){
+                $history = Transaction::where(['user_id' =>$customer->id ,'user_type'=>'Customer'])->first();
+                if($history == ''){
+                    Transaction::create([
+                        'item_id' => $data->item_id,
+                        'user_type' => 'Customer',
+                        'user_id' => $customer->id,
+                        'item_type'=> $data->item_type,
+                        'channel'=> $data->channel,
+                        'kind'=> $data->kind,
+                        'transaction_id'=> $data->transaction_id,
+                        'stripe_payment_method_id'=> $data->stripe_payment_method_id,
+                        'amount'=> $data->amount,
+                        'qty'=> $data->qty,
+                        'status'=> $data->status,
+                        'refund_amount'=> $data->refund_amount,
+                        'payload'=> $data->payload
+                    ]);
+                }
+                
+            }
     		return "already";
     	}else{
     		$data = array(

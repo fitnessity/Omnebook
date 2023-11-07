@@ -1,7 +1,18 @@
 @inject('request', 'Illuminate\Http\Request')
 @extends('layouts.header')
 @section('content')
+<style>
+    .register_wrap form{padding: 0 50px;}
+    .sign-step_2 .reg-title-step2 input{max-width: 340px;}
+    .sign-step_3 h2{letter-spacing: 6px}
+    .sign-step_4 .form-group{padding:10px; width:355px;}
+    .sign-step_5 .form-group{width:355px;}
+    .Zebra_DatePicker_Icon_Wrapper{
+        padding: 0 !important;
+    }
+	.sign-step_4 .form-group input{width: 83%;}
 
+</style>
 <?php 
 													 
 use App\BusinessActivityScheduler;
@@ -24,28 +35,22 @@ if(!empty($cart["cart_item"])) {
 
         if(!empty($item['adult'])){
             $totalquantity += $item['adult']['quantity'];
-            $discount += ($item['adult']['price'] *$serprice['adult_discount'])/100; 
+            $discount += ($item['adult']['price'] * is_int($serprice['adult_discount']))/100; 
         }
         if(!empty($item['child'])){
             $totalquantity += $item['child']['quantity'];
-            $discount += ($item['child']['price'] *$serprice['child_discount'])/100;
+            $discount += ($item['child']['price'] * is_int($serprice['child_discount']))/100;
         }
         if(!empty($item['infant'])){
             $totalquantity += $item['infant']['quantity'];
-            $discount += ($item['infant']['price'] *$serprice['infant_discount'])/100;
+            $discount += ($item['infant']['price'] * is_int($serprice['infant_discount']))/100;
         }
     }
 
     $pid = $cart['cart_item'][$priceid]['code'];
     $totalprice = $cart['cart_item'][$priceid]['totalprice'];
-    $profilePicact = url('/public/images/service-nofound.jpg');
-    if ($cart['cart_item'][$priceid]['image']!="") {
-    	if (File::exists(public_path("/uploads/profile_pic/" . $cart['cart_item'][$priceid]['image']))) {
-    			$profilePicact = url('/public/uploads/profile_pic/' . $cart['cart_item'][$priceid]['image']);
-    	} else {
-    			$profilePicact = url('/public/images/service-nofound.jpg');
-    	}
-    }else{ $profilePicact = url('/public/images/service-nofound.jpg'); }
+    
+    $profilePicact  =  Storage::disk('s3')->exists($cart['cart_item'][$priceid]['image']) ? Storage::URL($cart['cart_item'][$priceid]['image']) : url('/images/service-nofound.jpg');  
 
     $bookschedulercart = BusinessActivityScheduler::where('id', $cartdata["actscheduleid"])->limit(1)->orderBy('id', 'ASC')->first();
     $act = BusinessServices::where('id', $cartdata["code"])->first();
@@ -127,7 +132,7 @@ if(!empty($cart["cart_item"])) {
 				<div class="row">
 					<div class="col-md-4 col-sm-4">
 						<div class="cart-itme-img">
-							<img src="{{$profilePicact}}">
+							<img src="{{@$profilePicact}}">
 							<h4>You Just Booked With </h4>
 						</div>
 
@@ -153,35 +158,41 @@ if(!empty($cart["cart_item"])) {
 									<div class="col-md-6 col-xs-6">
 										<div class="info-display info-align">
 											@if($cart['cart_item'][$priceid]['adult'])
-											  x{{$cart['cart_item'][$priceid]['adult']['quantity']}} Child
-											  @if($serprice['child_discount'])
-											    @php
-											      $child_discount_price = ($cart['cart_item'][$priceid]['adult']['price'] - ($cart['cart_item'][$priceid]['adult']['price'] * $serprice['child_discount'])/100)
-											    @endphp
-											    ${{$child_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['adult']['price']}}</strike>/person
-											  @endif
+											  x{{$cart['cart_item'][$priceid]['adult']['quantity']}} Adult
+											  	@if($serprice['adult_discount'])
+												    @php
+												      	$adult_discount_price = $cart['cart_item'][$priceid]['adult']['quantity'] * ($cart['cart_item'][$priceid]['adult']['price'] - ($cart['cart_item'][$priceid]['adult']['price'] * $serprice['adult_discount'])/100)
+												    @endphp
+												    ${{$adult_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['adult']['quantity'] * $cart['cart_item'][$priceid]['adult']['price']}}</strike>/person
+												@else
+													${{$cart['cart_item'][$priceid]['adult']['quantity'] * $cart['cart_item'][$priceid]['adult']['price']}}/person
+												@endif
 											  <br/>
 											@endif
 
 											@if($cart['cart_item'][$priceid]['child'])
 											  x{{$cart['cart_item'][$priceid]['child']['quantity']}} Child
-											  @if($serprice['child_discount'])
-											    @php
-											      $child_discount_price = ($cart['cart_item'][$priceid]['child']['price'] - ($cart['cart_item'][$priceid]['child']['price'] * $serprice['child_discount'])/100)
-											    @endphp
-											    ${{$child_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['child']['price']}}</strike>/person
-											  @endif
+											  	@if($serprice['child_discount'])
+												    @php
+												      $child_discount_price = $cart['cart_item'][$priceid]['child']['quantity'] * ($cart['cart_item'][$priceid]['child']['price'] - ($cart['cart_item'][$priceid]['child']['price'] * $serprice['child_discount'])/100)
+												    @endphp
+											    	${{$child_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['child']['quantity'] *  $cart['cart_item'][$priceid]['child']['price']}}</strike>/person
+											    @else
+													${{$cart['cart_item'][$priceid]['child']['quantity'] * $cart['cart_item'][$priceid]['child']['price']}}/person
+											  	@endif
 											  <br/>
 											@endif
 
 											@if($cart['cart_item'][$priceid]['infant'])
-											  x{{$cart['cart_item'][$priceid]['infant']['quantity']}} Child
-											  @if($serprice['child_discount'])
-											    @php
-											      $child_discount_price = ($cart['cart_item'][$priceid]['infant']['price'] - ($cart['cart_item'][$priceid]['infant']['price'] * $serprice['child_discount'])/100)
-											    @endphp
-											    ${{$child_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['infant']['price']}}</strike>/person
-											  @endif
+											  x{{$cart['cart_item'][$priceid]['infant']['quantity']}} Infant
+											  	@if($serprice['infant_discount'])
+												    @php
+													    $infant_discount_price = $cart['cart_item'][$priceid]['infant']['quantity'] * ($cart['cart_item'][$priceid]['infant']['price'] - ($cart['cart_item'][$priceid]['infant']['price'] * $serprice['infant_discount'])/100)
+												    @endphp
+												    ${{$infant_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['infant']['quantity'] * $cart['cart_item'][$priceid]['infant']['price']}}</strike>/person
+											  	@else
+													${{$cart['cart_item'][$priceid]['infant']['quantity'] * $cart['cart_item'][$priceid]['infant']['price'] }}/person
+											  	@endif
 											  <br/>
 											@endif
 										</div>
@@ -288,6 +299,19 @@ if(!empty($cart["cart_item"])) {
 												<span>@if(!empty($cartdata['adult'])) @if($cartdata['adult']['quantity']  != 0) Adult x {{$cartdata['adult']['quantity']}} @endif @endif</span> 
 												<span>@if(!empty($cartdata['child']))  @if($cartdata['child']['quantity']  != 0) Children x {{$cartdata['child']['quantity']}} @endif @endif</span>
 												<span>@if(!empty($cartdata['infant'])) @if($cartdata['infant']['quantity'] != 0) Infant x {{$cartdata['infant']['quantity'] }} @endif @endif</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6 col-xs-6 col-6">
+											<div class="info-display">
+												<label>Add On Service: </label>
+											</div>
+										</div>
+										<div class="col-md-6 col-xs-6 col-6">
+											<div class="info-display info-align">
+												<span>{!! getAddonService($cartdata['addOnServicesId'],$cartdata['addOnServicesQty']) !!} </span>
 											</div>
 										</div>
 									</div>
@@ -426,7 +450,7 @@ if(!empty($cart["cart_item"])) {
 					<div class="owl-slider kickboxing-slider cart-slider">
 						<div id="carousel-slider" class="owl-carousel">
 							<?php
-								$companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= $profilePic ="";
+								$companyid = $companyname  = $latitude = $longitude = $serviceid =$profilePic ="";
 								$companycity = $companycountry = $pay_price  = "";
 									$servicetype = [];
 									foreach ($discovermore as $loop => $service) {
@@ -437,57 +461,17 @@ if(!empty($cart["cart_item"])) {
 										$area = !empty($service['area']) ? $service['area'] : 'Location';
 
 										$companyid = $companyData->id;
-										$companyaddress = $companyData->address;
 										$companyname = $companyData->dba_business_name;
 										$companycity = $companyData->city;
-										$companycountry = $companyData->country;
-										$companylogo = $companyData->logo;
-										$companylat = $companyData->latitude;
-										$companylon = $companyData->longitude;
 													
-										if ($service['profile_pic']!="") {
-											if(str_contains($service['profile_pic'], ',')){
-									    	$pic_image = explode(',', $service['profile_pic']);
-										    if( $pic_image[0] == ''){
-										       $p_image  = $pic_image[1];
-										    }else{
-										       $p_image  = $pic_image[0];
-										    }
-										  }else{
-										  	$pic_image = $service['profile_pic'];
-										   	$p_image = $service['profile_pic'];
-											}
+										$profilePic =  Storage::disk('s3')->exists($service->first_profile_pic()) ? Storage::URL($service->first_profile_pic()) : url('/images/service-nofound.jpg');  
+					                  	$pic_image = explode(',',$service['profile_pic']);
 
-											if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-										   	$profilePic = url('/public/uploads/profile_pic/' . $p_image);
-											}else {
-										   	$profilePic = url('/public/images/service-nofound.jpg');
-											}
-										}else{ $profilePic = '/public/images/service-nofound.jpg'; }
-
-										$bookscheduler='';
-										$time='';
-										$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-										if(@$bookscheduler[0]['set_duration']!=''){
-											$tm=explode(' ',$bookscheduler[0]['set_duration']);
-											$hr=''; $min=''; $sec='';
-											if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-											if($tm[2]!=0){ $min=$tm[2].'min. '; }
-											if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-											if($hr!='' || $min!='' || $sec!='')
-											{ $time =  $hr.$min.$sec; } 
-										}
-										$pricearr = [];
-										$price_all = '';
-										$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
-										if(!empty($price_allarray)){
-											foreach ($price_allarray as $key => $value) {
-												$pricearr[] = $value->pay_price;
-											}
-										}
-										if(!empty($pricearr)){
-											$price_all = min($pricearr);
-										}        
+										$bookscheduler= '';
+										$bookscheduler = App\BusinessActivityScheduler::where('serviceid', $service['id'])->orderBy('id', 'ASC')->first();
+										$time = @$bookscheduler != '' ? @$bookscheduler->get_duration() : '';
+										
+										$price_all = $service->min_price();       
 							?>
 								<div class="item">
 								<div class="kickboxing-block">
@@ -499,33 +483,25 @@ if(!empty($cart["cart_item"])) {
 										<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 											<div class="inner-owl-slider-hire">
 												<div id="owl-demo-learn_thismon{{$service['id']}}" class="owl-carousel owl-theme">
-													<?php 
-														$i = 0;
-														if(is_array($pic_image)){
-															foreach($pic_image as $img){
-																$profilePic1 = '';
-																if($img != ''){
-																	if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
-											           				$profilePic1 = url('/public/uploads/profile_pic/' . $img);
-																	}
-											         		} 
-
-										        				if($profilePic1 != ''){ ?>
-																	<div class="item-inner">
-																		<img src="{{$profilePic1}}" class="productImg">
-																	</div>
-																<?php }
-															}
-														}else{
-															if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
-										   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
-										    				}else {
-										       				$profilePic1 = url('/public/images/service-nofound.jpg');
-										    				} ?>
+													@if(is_array($pic_image))
+														@foreach($pic_image as $img)
+															@if(Storage::disk('s3')->exists($img) && $img != '' )
+																<div class="item-inner">
+																	<img src="{{Storage::URL($img)}}" class="productImg">
+																</div>
+															@else
+																<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+															@endif
+														@endforeach
+													@else
+														@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 															<div class="item-inner">
-																<img src="{{$profilePic1}}">
+																<img src="{{Storage::URL($pic_image)}}">
 															</div>
-													<?php } ?>
+														@else
+															<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+														@endif
+													@endif
 												</div>
 											</div>
 											<script type="text/javascript">
@@ -550,40 +526,32 @@ if(!empty($cart["cart_item"])) {
 											 <?php } ?></a>
 											</div>
 											@if($price_all != '')
-												<span>From ${{$price_all}}/Person</span>
+												<span>From  {!! $price_all !!}/Person</span>
 											@endif
 										</div>
 									@else
 										<div class="kickboxing-topimg-content">
 											<div class="inner-owl-slider-hire">
 												<div id="owl-demo-learn_thismon{{$service['id']}}" class="owl-carousel owl-theme">
-													<?php 
-														$i = 0;
-														if(is_array($pic_image)){
-															foreach($pic_image as $img){
-																$profilePic1 = '';
-																if($img != ''){
-																	if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
-											           				$profilePic1 = url('/public/uploads/profile_pic/' . $img);
-																	}
-											         		} 
-
-										        				if($profilePic1 != ''){ ?>
-																	<div class="item-inner">
-																		<img src="{{$profilePic1}}" class="productImg">
-																	</div>
-																<?php }
-															}
-														}else{
-															if (file_exists( public_path() . '/uploads/profile_pic/' . @$pic_image) &&  @$pic_image != '' ) {
-										   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
-										    				}else {
-										       				$profilePic1 = url('/public/images/service-nofound.jpg');
-										    				} ?>
+													@if(is_array($pic_image))
+														@foreach($pic_image as $img)
+															@if(Storage::disk('s3')->exists($img) && $img != '' )
+																<div class="item-inner">
+																	<img src="{{Storage::URL($img)}}" class="productImg">
+																</div>
+															@else
+																<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+															@endif
+														@endforeach
+													@else
+														@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 															<div class="item-inner">
-																<img src="{{$profilePic1}}">
+																<img src="{{Storage::URL($pic_image)}}">
 															</div>
-													<?php } ?>
+														@else
+															<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+														@endif
+													@endif
 												</div>
 											</div>
 											<script type="text/javascript">
@@ -599,18 +567,14 @@ if(!empty($cart["cart_item"])) {
 											</script>
 											<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
 											@if($price_all != '')	
-											  <span>From ${{$price_all}}/Person</span>
+											  <span>From ${!! $price_all !!}/Person</span>
 											@endif
 										</div>
 									@endif
 									<?php
 										$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
 										$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
-										$reviews_avg=0;
-										if($reviews_count>0)
-										{	
-											$reviews_avg= round($reviews_sum/$reviews_count,2); 
-										}
+										$reviews_avg=  $reviews_count>0 ? round($reviews_sum/$reviews_count,2):0;
 									?>
 									<div class="bottom-content">
 										<div class="class-info">
@@ -627,11 +591,7 @@ if(!empty($cart["cart_item"])) {
 													@endif
 
 													<div class="claimed">
-														<span>@if($companyData->is_verified == 1)
-																		CLAIMED
-																	@else
-																		UNCLAIMED
-																	@endif</span>
+														<span>{{ $companyData->is_verified == 1 ? "CLAIMED" : "UNCLAIMED"}}</span>
 													</div>
 											</div>
 												<div class="col-md-5 country-instant">
@@ -643,12 +603,6 @@ if(!empty($cart["cart_item"])) {
 										</div>
 											<?php
 												$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
-												$service_type='';
-												if($service['service_type']!=''){
-													if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-													else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
-													else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
-												}
 											?>
 											<div class="activity-information">
 												<span><a 
@@ -659,7 +613,7 @@ if(!empty($cart["cart_item"])) {
 													  <?php }?>
 														  target="_blank">{{ $service['program_name'] }}</a>
 												</span>
-												<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
+												<p>{{ $service->formal_service_types() }} | {{ $service['sport_activity'] }}</p>
 											</div>
 											<hr>
 											<div class="all-details">
@@ -703,7 +657,7 @@ if(!empty($cart["cart_item"])) {
 					</div>
 					<div class="col-lg-12 btns-modal">
 						<a href="{{route('addcheckoutsession')}}" class="addbusiness-btn-modal cart-btn-width">Log in</a>
-						<a href="#" class="addbusiness-btn-modal"data-toggle="modal" data-target="#registermodal">Continue as Guest</a>
+						<a onclick="openRegistrationModal();" class="addbusiness-btn-modal" >Continue as Guest</a>
 					</div>
 				 </div>
             </div>
@@ -713,7 +667,7 @@ if(!empty($cart["cart_item"])) {
 <!-- end modal -->
 
 <!-- The Modal Registraion-->
-<div class="modal fade compare-model" id="registermodal">
+<div class="modal fade compare-model" id="registermodal"  tabindex="-1" data-bs-focus="false">
     <div class="modal-dialog registermodal">
         <div class="modal-content">
 			<div class="modal-header" style="text-align: right;"> 
@@ -725,139 +679,26 @@ if(!empty($cart["cart_item"])) {
 			</div>
 
             <!-- Modal body -->
-            <div class="modal-body body-tbm register-bg">
-				<div class="row"> 
-                    <div class="col-lg-6 col-xs-12 register-modal">
-						<div class="logo-my">
-							<a href="#"> <img src="{{url('/public/images/logo-small.jpg')}}"> </a>
-						</div>
-						<div class="manage-customer-from">
-							<form id="frmregister" method="post">
-								<div class="register-pop-title ftitle1">
-									<h3>Tell Us About You</h3>
-								</div>
-								<br>
-								<h4 class="text-center">To make sure you are 18, please complete these steps</h4>
-								<div id='systemMessage' class="alert-msgs"></div>
-                    			<input type="hidden" name="_token" value="{{csrf_token()}}">
-								<input type="text" name="firstname" id="firstname" size="30" maxlength="80" placeholder="First Name">
-								<input type="text" name="lastname" id="lastname" size="30" maxlength="80" placeholder="Last Name">
-								<input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
-								<input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-Mail" maxlength="80" autocomplete="off">
-								<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
-								<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)" maxlength="10" data-behavior="datepickerforbirtdate">
-								<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
-								<input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
-								<div class="row check-txt-center">
-									<div class="col-md-8">
-										<div class="terms-wrap wrap-sp">
-											<input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-											<label class="modalregister-private" for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
-										</div>
-                    					<div id='termserror'></div><br>
-										<button type="button" style="margin-bottom: 10px;" class="signup-new" id="register_submit" onclick="$('#frmregister').submit();">Continue</button><br>
-									</div>
-								</div>
-							</form>
-						</div>
-                    </div>
-				 </div>
+            <div class="modal-body body-space register-bg">
+				
             </div>
         </div>
     </div>
 </div>
+
 <!-- end modal -->
 
 @include('layouts.footer')
 <script type="text/javascript">
-    
-    jQuery(function ($) {
-    	$('#frmregister').validate({
-	        rules: {
-	            firstname: "required",
-	            lastname: "required",
-	            username: "required",
-	            email: {
-	                required: true,
-	                email: true
-	            },
-	            dob: {
-	                required: true,
-	            },
-	            password: {
-	                required: true,
-	                minlength: 8
-	            },
-	            confirm_password: {
-	                required: true,
-	                minlength: 8,
-	                equalTo: "#password"
-	            },
-	        },
-	        messages: {
-	            firstname: "Enter your Firstname",
-	            lastname: "Enter your Lastname",
-	            username: "Enter your Username",
-	            email: {
-	                required: "Please enter a valid email address",
-	                minlength: "Please enter a valid email address",
-	                remote: jQuery.validator.format("{0} is already in use")
-	            },
-	            dob: {
-	                required: "Please provide your date of birth",
-	            },
-	            password: {
-	                required: "Provide a password",
-	                minlength: jQuery.validator.format("Enter at least {0} characters")
-	            },
-	            confirm_password: {
-	                required: "Repeat your password",
-	                minlength: jQuery.validator.format("Enter at least {0} characters"),
-	                equalTo: "Enter the same password as above"
-	            },
-	        },
-	        submitHandler:  function(form){
-	        	if (!jQuery("#b_trm1").is(":checked")) {
-		           $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
-		            return false;
-		        }
-		        var valchk = getAge();
-		        if(valchk == 1){
-		            $('#register_submit').prop('disabled', true);
-	                var formData = $("#frmregister").serialize();
-	                var posturl = '/auth/postRegistration_as_guest';
-	                $.ajax({
-	                    url: posturl,
-	                    type: 'POST',
-	                    dataType: 'json',
-	                    data: formData,
-	                    beforeSend: function () {
-	                        $('#register_submit').prop('disabled', true).css('background','#999999');
-	                        showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
-	                        $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
-	                    },
-	                    complete: function () {
-	                        $('#register_submit').prop('disabled', true).css('background','#999999');
-	                    },
-	                    success: function (response) {
-	                        $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-	                        showSystemMessages('#systemMessage', response.type, response.msg);
-	                        if (response.type === 'success') {
-	                            window.location.href = '{{route("carts_index")}}';
-	                        } else {
-	                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-	                        }
-	                    }
-	                });
-		        }else{
-		            $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
-		        }
-	        }
-	    });
-    });
+	flatpickr(".flatpicker_registration", {
+		dateFormat: 'm/d/Y',
+	    maxDate: '01/01/2050',		
+	}); 
 </script>
 
+
 <script type="text/javascript">
+
 	$(document).ready(function () {
 		$(".show-more").click(function(event) {
 			var txt = $(".hide-part").is(':visible') ? 'Show More <i class="fas fa-caret-down"></i>' : 'Show Less <i class="fas fa-caret-up"></i>';
@@ -865,23 +706,6 @@ if(!empty($cart["cart_item"])) {
 			$(this).html(txt);
 			event.preventDefault();
 		});
-
-        $('#email').on('blur', function() {
-	        var posturl = '{{route("emailvalidation")}}';
-	        var formData = $("#frmregister").serialize();
-	        $.ajax({
-                url: posturl,
-                type: 'get',
-                dataType: 'json',
-                data: formData,  
-                 beforeSend: function () {
-                    $("#systemMessage").html('');
-                },             
-                success: function (response) {                    
-                    $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');  
-                }
-            });
-	    });
 
 	  	$(document).on('click', '.serv_fav1', function(){
 	        var ser_id = $(this).attr('ser_id');
@@ -907,64 +731,53 @@ if(!empty($cart["cart_item"])) {
     	});
   	});
 
-	function getAge() {
-        var dateString = document.getElementById("dob").value;
-        var today = new Date();
-        var birthDate = new Date(dateString);
-        var age = today.getFullYear() - birthDate.getFullYear();
-        if(age < 13)
-        {
-            var agechk = '0';
-        } else {
-           var agechk = '1';
-        }
-        return agechk;
-    }
+  	function openRegistrationModal(){
+		$.ajax({
+            url: '{{route('openGuestRegistration')}}',
+            type: 'GET',
+            success: function (response) {
+            	$('.register-bg').html(response);
+            	$('#registermodal').modal({ show: true, focus: false});
+            }
+        });
+	}
 
-    function changeformate() {
-        /*alert($('#contact').val());*/
-        var con = $('#contact').val();
-        var curchr = con.length;
-        if (curchr == 3) {
-            $("#contact").val("(" + con + ")" + "-");
-        } else if (curchr == 9) {
-            $("#contact").val(con + "-");
-        }
-    }
 </script>
+
 <script>
-jQuery("#carousel-slider").owlCarousel({
-  autoplay: true,
-  rewind: true, /* use rewind if you don't want loop */
-  margin: 20,
-   /*
-  animateOut: 'fadeOut',
-  animateIn: 'fadeIn',
-  */
-  responsiveClass: true,
-  autoHeight: true,
-  autoplayTimeout: 7000,
-  smartSpeed: 800,
-  nav: true,
-  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-  responsive: {
-    0: {
-      items: 1
-    },
+	jQuery("#carousel-slider").owlCarousel({
+		autoplay: true,
+		rewind: true, /* use rewind if you don't want loop */
+		margin: 20,
+		/*
+		  	animateOut: 'fadeOut',
+		  	animateIn: 'fadeIn',
+		*/
+	  	responsiveClass: true,
+	  	autoHeight: true,
+	  	autoplayTimeout: 7000,
+	  	smartSpeed: 800,
+	  	nav: true,
+	  	navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  	responsive: {
+		    0: {
+		      	items: 1
+	    	},
 
-    600: {
-      items: 3
-    },
+	    	600: {
+	      		items: 3
+	    	},
 
-    1024: {
-      items: 3
-    },
+	    	1024: {
+	      		items: 3
+	    	},
 
-    1366: {
-      items: 3
-    }
-  }
-});
+	    	1366: {
+	      		items: 3
+	    	}
+	  	}
+	});
 </script>
+
 @endsection
 

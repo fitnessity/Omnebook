@@ -52,7 +52,10 @@ p {
     list-style: none;
     font-weight: normal;
 }
-
+hr{
+	margin-top: 10px !important;
+	margin-bottom: 10px !important;
+}
 a {
     text-decoration: none; transition: 0.5s;
 }
@@ -18675,11 +18678,13 @@ input#zipcode {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+	background-attachment: fixed;
 }
 
 .register_wrap {
     background: #ffffff;
     float: left;
+	width: 100%;
 }
 
 .register_wrap .logo-my {
@@ -18693,7 +18698,7 @@ input#zipcode {
 
 .register_wrap form {
     padding: 0 110px;
-    float: left;
+    float: none;
 }
 
 .register_wrap form input {
@@ -19929,10 +19934,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
     text-decoration: none;
 }
 .mainboxborder{
-	border: 1px solid #ede9e9;
-	padding: 5px;
+	border: 1px solid #dedede;
+	padding: 10px;
 	height: auto;
-	border-radius: 5px;
+	border-radius: 15px;
+	box-shadow: 0px 2px 20px #18101012;
 }
 .details-titles{
 	color: #000;
@@ -19953,8 +19959,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	display: grid;
 }
 .indetails-btn{
-	display: flex;
-	float: right;
+	text-align: center;
 }
 .price-cat{
 	margin-top: 17px;
@@ -20001,7 +20006,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	font-size: 15px;
 	position: absolute;
 	top: 7px;
-	left: 8px;
+	left: 7px;
 }
 .minus.bg-darkbtn.adultminus {
 	position: relative;
@@ -20009,8 +20014,8 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .minus.bg-darkbtn.childminus i{
 	font-size: 15px;
 	position: absolute;
-	top: 8px;
-	left: 9px;
+	top: 7px;
+	left: 7px;
 }
 .minus.bg-darkbtn.childminus {
 	position: relative;
@@ -20018,8 +20023,8 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .minus.bg-darkbtn.infantminus i{
 	font-size: 15px;
 	position: absolute;
-	top: 8px;
-	left: 9px;
+	top: 7px;
+	left: 7px;
 }
 .minus.bg-darkbtn.infantminus{
 	position: relative;
@@ -20029,7 +20034,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	font-size: 15px;
 	position: absolute;
 	top: 7px;
-	left: 8px;
+	left: 7px;
 }
 .plus.bg-darkbtn.adultplus {
 	position: relative;
@@ -20037,8 +20042,8 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .plus.bg-darkbtn.childplus i{
 	font-size: 15px;
 	position: absolute;
-	top: 8px;
-	left: 9px;
+	top: 7px;
+	left: 7px;
 }
 .plus.bg-darkbtn.childplus {
 	position: relative;
@@ -20046,8 +20051,8 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .plus.bg-darkbtn.infantplus i{
 	font-size: 15px;
 	position: absolute;
-	top: 8px;
-	left: 9px;
+	top: 7px;
+	left: 7px;
 }
 .plus.bg-darkbtn.infantplus {
 	position: relative;
@@ -20567,6 +20572,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
   margin: 10px 0;
   font-family: "Segoe UI",Arial,sans-serif;
   text-transform: uppercase;
+  border: 1px solid #ea1515;
 }
 .addbusiness-btn-modal:hover{
 	color: #fff;
@@ -21146,6 +21152,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .activity-inner-data span {
   font-weight: 600;
+  color: #000;
 }
 .activity-hours {
   display: inline-block;
@@ -21156,6 +21163,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
   padding: 2px 4px;
   border-radius: 5px;
   font-size: 11px;
+  color: #000;
 }
 .activity-city {
   display: inline-block;
@@ -21180,6 +21188,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .activity-information p {
   margin-bottom: 4px;
+  color: #000;
 }
 .showall-btn {
   background: #f91942;
@@ -21193,6 +21202,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .dollar-person {
   line-height: 1;
+  color: #000;
 }
 .dollar-person span {
   font-size: 11px;
@@ -21203,6 +21213,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .activity-time-main {
   text-align: end;
   line-height: 1;
+  color: #000;
 }
 .activity-time-main span {
   font-size: 11px;
@@ -21210,6 +21221,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .home-black-section{
 	background: #010101;
 	max-height: 150px;
+	width: 100%;
 }
 .home-black-section label{
 	color: white;
@@ -21475,7 +21487,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
     display: block;
     float: none;
     margin: 20px auto;
-    width: 70%;
+    width: 100%;
     font-style: italic;
 }
 .check-txt-center{
@@ -21515,7 +21527,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	width: 100% !important;
 }
 .font-red{
-	color: #ed1b24;
+	color: #ed1b24 !important;
 }
 .scheduler-txt{
 	font-size: 21px !important;
@@ -22798,6 +22810,8 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .activity-schedule-tabs ul li a{
 	color: #000;
+	padding: 10px 12px !important;
+	border: none !important;
 }
 .activity-schedule-tabs .nav-tabs > li.active > a:hover{
 	color: #000;
@@ -22816,6 +22830,10 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .classes-info label{
 	font-weight: 500;
+	font-size: 15px;
+}
+.classes-info span{
+	font-size: 15px;
 }
 .classes-info{
 	border-right: 1px solid #d1d0d0;
@@ -24138,3 +24156,829 @@ padding-left: 0px;
 .timechk-text{
 	float: left !important;
 }
+
+.post-btn-gray.activity-scheduler {
+    width: 100%;
+    background: #777;
+    border-radius: 0px;
+}
+.multiple-modal-size{
+	width: 60%;
+}
+.grey-box-multiple-date{
+	background: #dedada;
+	padding: 30px 20px;
+	min-height: 250px;
+}
+.select-date-off {
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.rounded-corner {
+  padding: 6px;
+  padding-right: 10px;
+  padding-left: 10px;
+  background: #ed1b24;
+  color: #fff !important;
+  border-radius: 30px;
+  border: 1px solid #ed1b24;
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+.mb-25{
+	margin-bottom: 25px;
+}
+
+.custom-multiple-book .nav.nav-tabs{ 
+	border-bottom: 1px solid #ddd;
+	padding: 20px 0;
+}
+.custom-multiple-book{
+	width: 100%;
+	padding: 25px 0;
+}
+.custom-multiple-book .owl-prev {
+    position: absolute;
+    left: -7px;
+    top: 46%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 100% !important;
+    color: #2e2e2e !important;
+  }
+
+.custom-multiple-book .owl-next {
+    position: absolute;
+    right: -16px;
+    top: 46%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 100% !important;
+    color: #2e2e2e !important;
+  }
+
+.custom-multiple-book .owl-dots {
+    display: none;
+  }
+
+.custom-multiple-book .item {
+    display: flex;
+    justify-content: center;
+}
+.custom-multiple-book .item li{
+	list-style: none !important;
+}
+
+.custom-multiple-book .item li a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 125px;
+	height: 43px;
+	background-color: #fff;
+	border-radius: 25px;
+	color: #000;
+	flex-wrap: wrap;
+	text-align: center;
+	font-size: 15px;
+	text-decoration: none;
+	font-weight: 500;
+}
+.custom-multiple-book .item .active a{
+	background-color: #ea1515 !important;
+	color: #fff !important;
+}
+
+.custom-multiple-book .tab-content {
+    padding: 0px;
+    background-color: #fff;
+    font-size: 17px;
+    text-align: center;
+    line-height: 25px;
+    margin-top: 30px;
+    border-radius: 19px;
+}
+
+.custom-multiple-book .tab-content h3 {
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 10px;
+	text-align: left;
+}
+
+
+.multiple0select.btn-group .select {
+  position: relative;
+  text-align: center;
+  margin-bottom: 15px;
+  width: 100%;
+}
+.multiple0select.btn-group .select input:checked + label {
+  background-color: #ea1515;
+  color: #fff;
+}
+.multiple0select.btn-group .select input:checked + label:hover, .multiple0select.btn-group .select input:checked + label:focus, .multiple0select.btn-group .select input:checked + label:active {
+  background-color: #ea1515;
+}
+.multiple0select.btn-group .select input {
+  opacity: 0;
+  position: absolute;
+}
+.multiple0select.btn-group .select .button_select {
+  background-color: #e2e2e2;
+  text-align: center;
+  padding: 10px 8px;
+  width: 100%;
+}
+.multiple0select.btn-group .select .button_select:focus, .multiple0select.btn-group .select .button_select:active {
+  background-color: transparent;
+}
+
+.multiple0select .option {
+  position: relative;
+}
+.multiple0select .option input {
+  opacity: 0;
+  position: absolute;
+}
+.multiple0select .option input:checked + span {
+  background-color: #ffc107;
+}
+.multiple0select .option input:checked + span:hover, .multiple0select .option input:checked + span:focus, .multiple0select .option input:checked + span:active {
+  background-color: #ffc107;
+}
+.multiple0select .option .btn-option {
+  margin: 0 10px 10px 0;
+  display: flex;
+  background-color: transparent;
+}
+.multiple0select .option .btn-option:hover, .multiple0select .option .btn-option:focus, .multiple0select .option .btn-option:active {
+  background-color: transparent;
+}
+.multiple0select.btn-group .select span{
+	font-size: 13px;
+}
+.selecting-month label{
+	font-size: 17px;
+	color: #f91942;
+}
+.justify-content-md-center{
+	justify-content: center !important;
+	display: flex;
+}
+.selecting-month {
+	text-align: center;
+}
+.calendar-separator-line{
+	border-left: 1px solid #d1d0d0;
+}
+.remove-line{
+	border-right: none;
+}
+.line-height-1{
+	line-height: 1;
+}
+.multiple-slots h3{
+	text-align: center !important;
+	font-size: 17px !important;
+	margin-bottom: 0px !important;
+}
+.multiple-slots p{
+	text-align: center !important;
+	font-size: 14px !important;
+	margin-bottom: 30px !important;
+}
+.calendar-footer{
+	text-align: end;
+}  
+.btn-delete{
+	background: none;
+	border: none;
+}
+.activity-counter{
+	background: #f0f0f0;
+	padding: 7px;
+	text-align: center;
+}
+.activity-counter p{
+	display: inline-block;
+}
+.review-modal-fix{
+	max-height: calc(120vh - 212px);
+    overflow-y: auto;
+}
+.review-header h4{
+	text-align: center; 
+	color: #000; 
+	font-weight: 500;
+}
+.time-slots-saprator{
+	border-bottom: 1px solid #f91942;
+}
+.confirm-booking table tr td{
+	padding: 10px 5px;
+	border: 1px solid #eaeaea;
+	border-collapse: collapse;
+}
+.count-members .count{
+	font-size: 18px;
+}
+.count-members .plus.bg-darkbtn.adultplus i{
+	font-size: 13px;
+	top: 8px;
+	left: 9px;
+}
+.count-members .minus.bg-darkbtn.adultminus i{
+	font-size: 13px;
+	top: 8px;
+	left: 9px;
+}
+.count-members .minus.bg-darkbtn.childminus i{
+	font-size: 13px;
+	top: 8px;
+	left: 9px;
+}
+.count-members .plus.bg-darkbtn.childplus i{
+	font-size: 13px;
+	top: 8px;
+	left: 9px;
+}
+.count-members .minus.bg-darkbtn.infantminus i{
+	font-size: 13px;
+	top: 8px;
+	left: 9px;
+}
+.count-members .plus.bg-darkbtn.infantplus i{
+	font-size: 13px;
+	top: 8px;
+	left: 9px;
+}
+.mr-15{
+	margin-right: 15px;
+}
+.add-onservice{
+	display: block;
+	
+}
+.add-onservice-title label{
+	margin-bottom: 0px;
+}
+
+
+
+
+.add-onservice.btn-group .select {
+  position: relative;
+  text-align: center;
+  margin-bottom: 15px;
+  width: 100%;
+}
+.add-onservice.btn-group .select input:checked + label {
+  background-color: #ea1515;
+  color: #fff;
+}
+.add-onservice.btn-group .select input:checked + label:hover, .add-onservice.btn-group .select input:checked + label:focus, .add-onservice.btn-group .select input:checked + label:active {
+  background-color: #ea1515;
+}
+.add-onservice.btn-group .select input {
+  opacity: 0;
+  position: absolute;
+}
+.add-onservice.btn-group .select .button_select {
+  background-color: #e2e2e2;
+  text-align: center;
+  padding: 10px 8px;
+  width: 100%;
+	text-align: left;
+}
+.add-onservice.btn-group .select .button_select:focus, .add-onservice.btn-group .select .button_select:active {
+  background-color: transparent;
+}
+
+.add-onservice .option {
+  position: relative;
+}
+.add-onservice .select .qtyButtons input {
+  opacity: 1;
+  position: relative;
+}
+.add-onservice .select input {
+  opacity: 0;
+  position: absolute;
+}
+
+.add-onservice .option input:checked + span {
+  background-color: #ffc107;
+}
+.add-onservice .option input:checked + span:hover, .add-onservice .option input:checked + span:focus, .add-onservice .option input:checked + span:active {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.add-onservice .option .btn-option {
+  margin: 0 10px 10px 0;
+  display: flex;
+  background-color: transparent;
+}
+.add-onservice .option .btn-option:hover, .add-onservice .option .btn-option:focus, .add-onservice .option .btn-option:active {
+  background-color: transparent;
+}
+.add-onservice.btn-group .select label{
+	display: inline-block;
+	float: left;
+	font-size: 15px;
+	font-weight: 600;	
+}
+.add-onservice.btn-group .select span{
+	font-size: 15px;
+	display: inline-block;
+	float: right;
+	font-weight: 600;
+}
+.add-onservice.btn-group .select .qtyButtons span{
+	float: none;
+}
+.add-onservice.btn-group .qtyButtons {
+  background: #f8f8f8;
+  height: auto;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 15px;
+  transition: .3s;
+  border-radius: 0 0 4px 4px;
+  margin-top: 0;
+  border-top: 1px solid #eaeaea;
+}
+.add-onservice.btn-group .plus.bg-darkbtn.addonplus i{
+	font-size: 13px;
+	top: 8px;
+	left: 9px;
+	position: absolute;
+}
+.add-onservice .qty .plus{
+	position: relative;
+}
+.add-onservice.btn-group .plus.bg-darkbtn.addon2plus i{
+	font-size: 13px;
+	top: 8px;
+	left: 9px;
+	position: absolute;
+}
+.add-onservice .qty .minus{
+	position: relative;
+}
+.add-onservice.btn-group .minus.bg-darkbtn.addonminus i{
+	font-size: 13px;
+	top: 8px;
+	left: 9px;
+	position: absolute;
+}
+.add-onservice.btn-group .minus.bg-darkbtn.addon2minus i{
+	font-size: 13px;
+	top: 8px;
+	left: 9px;
+	position: absolute;
+}
+
+
+.participant-accordion .panel-heading a {
+  display: block;
+  position: relative;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.participant-accordion .panel-heading a::after {
+    content: "";
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    position: absolute;
+    right: 0;
+    top: 5;
+    transform: rotate(45deg);
+}
+
+.participant-accordion .panel-heading a[aria-expanded="true"]::after {
+    transform: rotate(-135deg);
+    top: 5px;
+}
+
+
+.participant-selection.btn-group{
+	width: 100%;
+}
+.participant-selection.btn-group .select {
+  position: relative;
+  text-align: center;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.participant-selection.btn-group .select .qtyButtons input {
+  opacity: 1;
+  position: relative;
+}
+.participant-selection.btn-group .select input {
+  opacity: 0;
+  position: absolute;
+}
+.participant-selection.btn-group .select .button_select {
+  background-color: #e2e2e2;
+  text-align: center;
+  padding: 10px 8px;
+  width: 100%;
+}
+
+
+.participant-selection .option {
+  position: relative;
+}
+.participant-selection .option input {
+  display: none; 
+}
+
+
+.participant-selection .option .btn-option {
+  margin: 0 10px 10px 0;
+  display: flex;
+  background-color: transparent;
+}
+
+.participant-selection.btn-group .select label{
+	display: inline-block;
+	font-size: 15px;
+	font-weight: 600;	
+}
+.participant-selection.btn-group .select span{
+	font-size: 15px;
+	display: inline-block;
+	font-weight: 600;
+}
+.participant-selection.btn-group .qtyButtons {
+  background: #f8f8f8;
+  height: auto;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 15px;
+  transition: .3s;
+  border-radius: 0 0 4px 4px;
+  margin-top: 0;
+  border-top: 1px solid #eaeaea;
+}
+.summery-recodes label{
+	margin-bottom: 5px;
+}
+.summery-recodes span{
+	margin-bottom: 5px;
+	text-align: end;
+}
+.booking-d-grid{
+	display: grid;
+	text-align: right;
+}
+.qtyButtons .qty.count-members{
+	width: 100%;
+}
+.book0total-price{
+	text-align: right;
+	font-size: 14px;
+}
+.book0total-price label{
+	margin-bottom: 0px;
+}
+.ui-menu.ui-widget {
+    height: 300px;
+    overflow: auto;
+    overflow-x: hidden;
+	width: 280px !important;
+	scrollbar-color: #f91942 #dedfde;
+	scrollbar-width: thin;
+}
+.staff-login-home .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover{
+	background: none !important;
+	border: none !important;
+	color: #000 !important;
+}
+.staff-login-home .ui-menu .ui-state-focus, .ui-menu .ui-state-active {
+  margin: none !important;
+}
+.lh-25{
+	line-height: 25px;
+}
+.book-tool-tip{
+	background: #ed1b24;
+	border-radius: 100%;
+	font-size: 11px;
+	color: #fff;
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+	text-align: center;
+	padding: 1px;
+}
+
+
+
+/*form styles*/
+.step-forms #msform {
+	text-align: center;
+	position: relative;
+}
+.step-forms #msform fieldset {
+	background: white;
+	border: 0 none;
+	border-radius: 3px;
+	padding: 20px 30px;
+	
+	box-sizing: border-box;
+	width: 100%;
+}
+/*Hide all except first fieldset*/
+.step-forms #msform fieldset:not(:first-of-type) {
+	display: none;
+}
+/*inputs*/
+.step-forms #msform input, #msform textarea {
+	padding: 15px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	width: 100%;
+	box-sizing: border-box;
+	color: #2C3E50;
+	font-size: 13px;
+}
+/*buttons*/
+.step-forms #msform .action-button {
+	width: 100px;
+	background: #ea1515;
+	font-weight: bold;
+	color: #fff;
+	border: 0 none;
+	border-radius: 1px;
+	cursor: pointer;
+	padding: 10px 5px;
+	margin: 10px 5px;
+	border-radius: 5px;
+}
+.step-forms #msform .action-button:hover, #msform .action-button:focus {
+	background-color: #000;
+}
+/*headings*/
+.step-forms .fs-title {
+	font-size: 19px;
+	color: #000;
+	margin-bottom: 10px;
+	font-weight: 500;
+}
+.step-forms .fs-subtitle {
+	font-weight: normal;
+	font-size: 14px;
+	color: #666;
+	margin-bottom: 20px;
+}
+/*progressbar*/
+.step-forms #progressbar {
+	margin-bottom: 30px;
+	overflow: hidden;
+	/*CSS counters to number the steps*/
+	counter-reset: step;
+}
+.step-forms #progressbar li {
+	list-style-type: none;
+	color: #ea1515;
+	text-transform: uppercase;
+	font-size: 9px;
+	width: 20%;
+	float: left;
+	position: relative;
+}
+.step-forms #progressbar li:before {
+	content: counter(step);
+	counter-increment: step;
+	width: 30px;
+	line-height: 30px;
+	display: block;
+	font-size: 12px;
+	color: #333;
+	background: #e1e1e1;
+	border-radius: 3px;
+	margin: 0 auto 5px auto;
+	font-weight: bold;
+}
+/*progressbar connectors*/
+.step-forms #progressbar li:after {
+	content: '';
+	width: 100%;
+	height: 2px;
+	background: #ea1515;
+	position: absolute;
+	left: -50%;
+	top: 9px;
+	z-index: -1; /*put it behind the numbers*/
+}
+.step-forms #progressbar li:first-child:after {
+	/*connector not needed before the first step*/
+	content: none; 
+}
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+.step-forms #progressbar li.active:before,  #progressbar li.active:after{
+	background: #ea1515;
+	color: #fff;
+}
+
+.step-forms .help-block {
+  font-size: .8em;
+  color: #7c7c7c;
+  text-align: left;
+  margin-bottom: .5em;
+}
+.step-forms .radio-block{
+  text-align: left;
+}
+
+.step-forms .radio-content{
+	display: inline-block;
+	width: 100%;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	text-align: left;
+	background: #f7f7f7;
+	padding: 6px;
+	border: 1px solid #ececec;
+	border-radius: 5px;
+}
+
+.step-forms input[type="radio"] {
+  display:none;
+}
+
+.step-forms input[type="radio"] + label {
+  color:black;
+  cursor:pointer;
+  font-size: 17px;
+	font-weight: normal;
+}
+
+.step-forms input[type="radio"] + label span {
+  display:inline-block;
+  width:20px;
+  height:20px;
+  margin:-2px 5px 0 0;
+  vertical-align:middle;
+  border:1px solid #cecece;
+  border-radius: 50%;
+  cursor:pointer;
+  transition: background .2s,
+      transform .2s;
+}
+
+.step-forms input[type="radio"] + label span:hover, .step-forms input[type="radio"] + label:hover span{
+  transform: scale(1.2);
+} 
+
+.step-forms input[type="radio"]:checked + label span {
+  background: #ea1515;
+  box-shadow: 0px 0px 0px 3px white inset;
+}
+
+.step-forms input[type="radio"]:checked + label{
+  color: #ea1515; 
+}
+.not-claimed{
+	height: 665px;
+}
+.x-middle{
+	align-items: center;
+	display: grid;
+}
+.font-green{
+	color: #009f0a;
+}
+
+.review-data table tr th{
+    padding: 10px 5px;
+    border: 1px solid #eaeaea;
+    border-collapse: collapse;
+    text-align: center;
+}
+.booking-summery{
+	font-size: 14px;
+}
+ .register_wrap{
+	max-height: 920px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+.register_wrap .sign-step_5 {
+    padding: 00px 00px !important;
+}
+.sign-step_5 .form-group {
+	width: 100% !important;
+}
+.d-grid{
+	display: grid;
+}
+.service-desc{
+	font-weight: normal;
+	font-size: 12px;
+}
+.label-space label{
+	font-size: 17px;
+	margin-bottom: 0px;
+}
+.label-space{
+	display: grid;
+	padding: 25px;
+}
+.position-relative {
+  position: relative !important;
+}
+.password-addon{
+	right: 0 !important;
+	top: 0;
+	position: absolute;
+	min-height: 45px;
+	padding: 12px;
+	color: #04344d;
+}
+.btn-link:hover, .btn-link:focus{
+	text-decoration: none;
+}
+.fc-prev-button::before {
+	content: "\2039" !important;
+	font-weight: 700;
+	font-size: 200% !important;
+	top: -4% !important;
+}
+.fc-icon-left-single-arrow::after{
+	font-family: remixicon !important;
+}
+.fc-icon-left-single-arrow::after{
+	display: none;
+}
+.fc-icon-right-single-arrow::after{
+	display: none;
+}
+.fc-next-button::before{
+	content: "\203A" !important;
+	font-weight: 700;
+	font-size: 200% !important;
+	top: -4% !important;
+}
+.fc-next-button::before, .fc-prev-button::before{
+	bottom: 4px !important;
+}
+
+.dot-settings .fname{
+    margin-top: 10px
+}
+.card-info{
+	background-color: #fff !important;
+}
+
+.mw-70{
+    min-width: 70% !important;
+}
+.password-addon-guest-regi {
+  top: 0;
+  position: absolute;
+  min-height: 45px;
+  padding: 12px;
+  color: #04344d;
+  right: 0 !important;
+}
+
+.manage-customer-from form{
+	padding: 0 50px;
+}
+.width-65{
+	width: 65% !important;
+}
+.mt-15{margin-top: 15px;}
