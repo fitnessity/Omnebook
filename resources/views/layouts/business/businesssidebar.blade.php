@@ -1,5 +1,6 @@
 <?php
     if(request()->business_id){
+        
         $companyId = request()->business_id;
         //temporary add here, wait for controller refactored
         URL::defaults(['business_id' => $companyId]);
@@ -47,6 +48,28 @@
             <div id="two-column-menu">
             </div>
             <ul class="navbar-nav dash-sidebar-menu" id="navbar-nav">
+			<!--<li>
+					<div class="live-preview text-center">
+						<div class="dropdown">
+							<button class="btn btn-switch-business dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">
+								Valor Mixed Martial Arts
+							</button>
+							<ul class="dropdown-menu dropdown-menu-dark switch-account-dropdown" aria-labelledby="dropdownMenuButton21">
+								<li>
+									<a class="dropdown-item active" href="#"><i class="fas fa-user-circle"></i> Valor Mixed Martial Arts <br><span class="account-switchh"> Business Account </span> </a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="#"><i class="fa fa-user"></i> Nipa Soni <br><span class="account-switchh"> Consumer Account </span> </a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="#"><i class="fas fa-plus"></i> New Business Account </a>
+								</li>
+								<li> <hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+							</ul>
+						</div>
+					</div> 
+				</li>--> 
 				<li class="menu-title border-bottom">
 					<span class="font-white switch-business" data-key="t-menu">{{$dba_business_name}}
 						<a href="" data-bs-toggle="modal" data-bs-target=".switch-business-modal">(switch)</a>
@@ -145,20 +168,17 @@
                 </li>
 
 				<li class="nav-item">
-					<a class="nav-link menu-link" href="#sidebarForms" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
-						<img src="{{asset('/public/img/salesreports.png')}}" alt="Fitnessity"> <span data-key="t-forms">Reports</span>
+					<a class="nav-link menu-link @if(Route::current()->getName()=='business.reports.index') tab-active @endif" @if($companyId) href="{{ route('business.reports.index') }}"   @endif aria-controls="sidebarForms">
+						<img src="{{asset('/public/img/salesreports1.png')}}" alt="Fitnessity"> <span data-key="t-forms">Reports</span><span class="badge badge-pill bg-success" data-key="t-new">New</span>
 					</a>
-					<div class="collapse menu-dropdown" id="sidebarForms">
-						<ul class="nav nav-sm flex-column">
-							<li class="nav-item @if(Route::current()->getName()=='business.sales_report.index') tab-active @endif">
-								<a @if($companyId)  href="{{route('business.sales_report.index')}}" @endif class="nav-link" data-key="t-basic-elements">Sales Reports</a>
-							</li>
-							<li class="nav-item @if(Route::current()->getName()=='business.member_expirations.index') tab-active @endif">
-								<a @if($companyId)  href="{{route('business.member_expirations.index')}}" @endif class="nav-link" data-key="t-form-select">Membership Expirations</a>
-							</li>
-						</ul>
-					</div>
 				</li>
+				
+				<li class="nav-item">
+                    <a class="nav-link menu-link @if(Route::current()->getName()=='business.settings.index') tab-active @endif" @if($companyId) href="{{ route('business.settings.index') }}"   @endif >
+                        <img src="{{asset('/public/img/setings-1.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Settings </span><span class="badge badge-pill bg-success" data-key="t-new">New</span> 
+                    </a>
+                </li>
+				
             </ul>
         </div>
         <!-- Sidebar -->

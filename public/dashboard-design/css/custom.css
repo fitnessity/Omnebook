@@ -5124,7 +5124,148 @@ div#termsdiv{order: 4;}
   color: #fff;
   border-radius: 8px;
 }
+.modal-60{
+	max-width: 60%;
+}
+.reports-title{
+	font-size: 16px;
+}
+.report-links a{
+	color: #000;
+	font-size: 15px;
+}
+.report-links{
+	padding: 5px;
+	border-bottom: 1px solid var(--vz-border-color);
+	width: 100%;
+}
+.box-border{
+	border: 1px solid #e8e9e9;
+}
+.remove-border{
+	border-bottom: none !important;
+}
+.report-links a:hover{
+	color: #ed1b24;
+}
+.category-search{
+	width: 225px;
+	float: right;
+}
 
+#product-description {
+	width: 100%; 
+	position:relative;
+}
+#product-description .d-text {
+	margin-bottom: 5px; 
+	color: #000; 
+	position:relative; 
+	font-size: 14px; 
+	display: block;
+}
+#product-description .show-more {
+	color: #777; 
+	position:relative; 
+	font-size: 12px; 
+	padding-top: 5px; 
+	cursor: pointer;
+}
+#product-description .show-more:hover { 
+    color: #ea1515;
+}
+#product-description .show-more-height { 
+	height: 19px; 
+	overflow:hidden; 
+}
+.minus.bg-darkbtn.prominus{
+	position: relative
+}
+.minus.bg-darkbtn.prominus i{
+	font-size: 13px;
+	top: 8px;
+	left: 9px;
+	position: absolute;
+}
+.plus.bg-darkbtn.proplus{
+	position: relative
+}
+.plus.bg-darkbtn.proplus i{
+	font-size: 13px;
+	top: 8px;
+	left: 9px;
+	position: absolute;
+}
+.check-box-primary-account{
+	width: auto !important;
+	display: inline-block !important;
+	min-height: 9px !important;
+}
+.check-box-info label{
+	display: inline-block !important;
+}
+.check-box-info{
+	width: 70%;
+	margin: 10px auto;
+}
+.custom-search-icon{
+	top: 13px !important;
+}
+.switch-account-dropdown{
+	transform: translate(62px, 40px) !important;
+	inset: 10px 80px auto auto !important;
+}
+.switch-account-dropdown li a i{
+	margin-right: 10px;
+}
+.account-switchh{
+	font-size: 11px;
+	margin-left: 24px;
+}
+.btn-switch-business{
+	background: #f3f3f9;
+	color: #000;
+	border: none;
+}
+.btn-switch-business:hover{
+	background: #f3f3f9;
+}
+.remaining-days{   
+	background-color: #fff5da;
+	padding: 15px;
+}
+.days-left p{
+	margin-bottom: 0px;
+	font-size: 13px;
+	font-weight: 500;
+	text-transform: uppercase;
+} 
+.chat-with-us p{
+	text-align: center;
+	color: #868686;
+	font-size: 13px;
+	font-weight: 500;
+	margin-bottom: 9px;
+}
+.subscriptions-info h1{
+	font-size: 16px;
+	font-weight: 600;
+}
+.subscriptions-info {
+	display: grid;
+}
+.subscriptions-info span{
+	font-size: 14px;
+}
+.invoices-select{
+	display: flex;
+}
+.width-30{
+	width: 30%;
+}
+.invoices-select label{
+	line-height: 2;
+}
 
 
 

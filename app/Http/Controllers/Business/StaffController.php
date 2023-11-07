@@ -73,7 +73,12 @@ class StaffController extends Controller
      */
     public function show(Request $request, $business_id, $id)
     {
-        $staffMember = BusinessStaff::find($id);
+        $user = Auth::user();
+        $company = $user->businesses()->findOrFail($business_id);
+        $staffMember = $company->business_staff->find($id);
+        if(!$staffMember){
+            return redirect()->route('business.staff.index');
+        }
         $positions = BusinessPositions::where('business_id',$business_id)->get();
         return view('business.staff.show',compact('staffMember','positions'));
     }

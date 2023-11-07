@@ -57,7 +57,7 @@ class Customer extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'business_id','fname','lname', 'email','birthdate', 'phone_number','relationship','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id','card_stripe_id','card_token_id','stripe_customer_id','terms_covid','terms_liability','terms_contract', 'user_id','emergency_contact','emergency_relation','emergency_email','emergency_name'
+        'business_id','fname','lname', 'email','birthdate', 'phone_number','relationship','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id','card_stripe_id','card_token_id','stripe_customer_id','terms_covid','terms_liability','terms_contract', 'user_id','emergency_contact','emergency_relation','emergency_email','emergency_name','primary_account'
     ];
 
     /**
@@ -346,11 +346,13 @@ class Customer extends Authenticatable
         $company = $this->company_information;
         $user_id = $user ? $user->id : "no_user_id";
 
-        $booking_details = UserBookingDetail::where('business_id', $company->id)->whereIn('booking_id', function($query) use ($customer, $user_id){
+        $booking_details = UserBookingDetail::where('business_id', $company->id)->where(['user_type'=>'customer','user_id'=>$this->id]);
+
+        /*$booking_details = UserBookingDetail::where('business_id', $company->id)->whereIn('booking_id', function($query) use ($customer, $user_id){
             $query->select('id')
                   ->from('user_booking_status')
                   ->whereRaw('((user_type = "user" and user_id = ?) or (user_type = "customer" and customer_id = ?))', [$user_id, $customer->id]);
-        });
+        });*/
         $booking_detail_ids = $booking_details->get()->map(function($item){
             return $item->id;
         });
@@ -363,7 +365,7 @@ class Customer extends Authenticatable
     }
 
     public function get_last_seen(){
-        $checkin = $this->visits()->orderby('checkin_date','desc')->first();
+        $checkin = $this->visits()->where('checked_at',"!=",NULL)->orderby('checkin_date','desc')->first();
         if($checkin){
             return $checkin->checkin_date;
         }

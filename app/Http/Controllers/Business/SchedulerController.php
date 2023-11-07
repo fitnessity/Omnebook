@@ -26,11 +26,9 @@ use DateTime;
 use Config;
 use DateInterval;
 use App\MailService;
-use App\Repositories\BusinessServiceRepository;
-use App\Repositories\BookingRepository;
-use App\Repositories\CustomerRepository;
-use App\Repositories\UserRepository;
+use App\Repositories\{BusinessServiceRepository,BookingRepository,CustomerRepository,UserRepository};
 use DateTimeZone;
+use Illuminate\Support\Facades\Session;
 
 class SchedulerController extends BusinessBaseController
 {    
@@ -49,7 +47,7 @@ class SchedulerController extends BusinessBaseController
      public function index(Request $request){
           $filterDate = Carbon::parse($request->date);
           $schedules = BusinessActivityScheduler::alldayschedule($filterDate,$request->activity_type)->where('cid', $request->current_company->id)->get();
-
+         
           //print_r($schedules);exit;
           return view('business.scheduler.index', [
               'schedules' => $schedules, 
@@ -58,6 +56,9 @@ class SchedulerController extends BusinessBaseController
      }
 
      public function create(Request $request , $business_id, $categoryId= null){
+          if($request->session){
+               Session::put('scheduleEdit', $request->session);
+          }
           $category =  BusinessPriceDetailsAges::where('id',$request->categoryId)->first();
           $businessActivity = BusinessActivityScheduler::where('cid', $category->cid)->where('serviceid', $category->serviceid)->where('category_id',$category->id)->get();
           return view('business.scheduler.create',compact('category','businessActivity'));

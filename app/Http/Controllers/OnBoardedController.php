@@ -4,17 +4,22 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Http\Request;
-use App\{User,CompanyInformation,CustomerPlanDetails,Transaction,StripePaymentMethod};
+use App\{User,CompanyInformation,CustomerPlanDetails,Transaction,StripePaymentMethod,Plan};
+use App\Repositories\FeaturesRepository;
 use Str;
 use DateTime;
 
 class OnBoardedController extends Controller {
 
 
+    protected $features;
+
+    public function __construct(FeaturesRepository $features)
+    {
+        $this->features = $features;
+    }
+
     public function index(Request $request) { 
-        /*if (Auth::check()) {
-            return redirect()->route('business_dashboard');
-        }*/
         
         $cid = $request->cid ?? '';
         $id = $request->id ?? '';
@@ -40,7 +45,9 @@ class OnBoardedController extends Controller {
         }
 
         $show = @$user->show_step ?? 1;
-        return view('on-boarded.index',compact('show','cid','companyDetail','user','id','show'));
+        $plans = Plan::get();
+        $features = $this->features->getAllFeatures();
+        return view('on-boarded.index',compact('show','cid','companyDetail','user','id','show','plans','features'));
     }
 
     public function store(Request $request){
