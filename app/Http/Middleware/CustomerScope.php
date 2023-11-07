@@ -17,6 +17,14 @@ class CustomerScope
      */
     public function handle($request, Closure $next)
     {
+        if($request->business_id != Auth::user()->cid){
+            $request->business_id = Auth::user()->cid;
+            $currentUrl = $request->url();
+            $newUrl = preg_replace('/business\/\d+/', 'business/' . Auth::user()->cid, $currentUrl);
+            $request->server->set('REQUEST_URI', $newUrl);
+            $request->server->set('QUERY_STRING', parse_url($newUrl, PHP_URL_QUERY));
+            return redirect($newUrl);
+        }
         $company =  Auth::user()->businesses()->findOrFail($request->business_id);
         $request->current_customer = $company->customers()->findOrFail($request->customer_id);
         
