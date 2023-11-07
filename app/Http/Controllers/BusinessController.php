@@ -261,6 +261,14 @@ class BusinessController extends Controller
         return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingRecPercentage','completedRecPercentage','totalsalePercentage','bookingCountPercentage','customerCountPercentage','todayBooking','services','startDate','endDate','topBookedCategories','notificationAry' ,'startDateCalendar','endDateCalendar','completeRecurringAmount','reminingRecurringAmount','recurringAmount'));
     }
 
+    public function getBookingList(Request $request){
+       /* $programName = $this->businessservice->findById($request->sid)->program_name;
+        $date = date('m-d-Y',strtotime($request->date));
+        $data = $this->bookings->getbusinessbookingsdata($request->sid,date('Y-m-d',strtotime($request->date)) ,$request->type );
+        return view('business.services.view_bookings_of_service', compact('data', 'date', 'programName', 'sid' ,'type'));
+        return view('business.bookingListModal',compact('');*/
+    }
+
     public function bookingchart(Request $request){
         $business = Auth::user()->current_company;
         $ptdata=  $evdata = $clsdata = $expdata = $prdata = $in_person_cnt= $online_cnt=0;

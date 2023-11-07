@@ -80,7 +80,7 @@ class SalesReportController extends BusinessBaseController
                          ->where('ubd.business_id', '=', $business_id);
                });
 
-    	     return view('business.sales_report.index',compact('date','cardReportubs','cardReportrec','cashReport','business_id','compReport','checkReport','filterStartDate','filterEndDate','sortedDates','filterOptions'));
+    	     return view('business.reports.sales_report.index',compact('date','cardReportubs','cardReportrec','cashReport','business_id','compReport','checkReport','filterStartDate','filterEndDate','sortedDates','filterOptions'));
      }
 
      public function export($business_id,Request $request){
@@ -176,7 +176,7 @@ class SalesReportController extends BusinessBaseController
                     'cardData' => $cardData,
                     'business_id' => $business_id,
                ];
-               $pdf = PDF::loadView('business.sales_report.pdf_view', $data);
+               $pdf = PDF::loadView('business.reports.sales_report.pdf_view', $data);
                return $pdf->download('SalesReport.pdf');
           }
      }
