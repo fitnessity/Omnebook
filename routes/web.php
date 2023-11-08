@@ -59,6 +59,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('booking_details/{id}/void', 'UserBookingDetailController@void')->name('void');
     Route::post('booking_details/{id}/refund', 'UserBookingDetailController@refund')->name('refund');
     Route::get('customers/card_editing_form', 'CustomerController@card_editing_form')->name('customers.card_editing_form');
+    Route::get('customers/import', 'CustomerController@importcustomer')->name('customers.import');
     Route::any('customers/refresh_payment_methods', 'CustomerController@refresh_payment_methods')->name('customers.refresh_payment_methods');
     Route::post('customers/import-customer','CustomerController@importcustomer')->name('customers.import');
     Route::resource('customers', 'CustomerController')->only(['index', 'update','store']);
@@ -71,13 +72,28 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('editcartmodel', 'OrderController@editcartmodel')->name('editcartmodel');
     Route::any('addToCartForCheckout', 'OrderController@addToCartForCheckout')->name('addToCartForCheckout');
     Route::any('removeFromCartForCheckout', 'OrderController@removeFromCartForCheckout')->name('removeFromCartForCheckout');
+    Route::any('order-product-details', 'OrderController@productDetails')->name('order-product-details');
+    Route::any('open-product-modal', 'OrderController@openProductModal')->name('open-product-modal');
+    Route::any('get-category-product', 'OrderController@getCategoryProduct')->name('get-category-product');
 
     Route::get('/member_expirations','MembershipExpirationsController@index')->name('member_expirations.index');
     Route::post('/getMemberships','MembershipExpirationsController@getMemberships')->name('member_expirations.getMemberships');
     Route::get('/getMoreMemberships','MembershipExpirationsController@getMoreMemberships')->name('member_expirations.getMoreMemberships');
-    Route::get('/exportMembership','MembershipExpirationsController@exportMembership')->name('member_expirations.exportMembership');
+    Route::get('/member_expirations/export','MembershipExpirationsController@export')->name('member_expirations.export');
 
     Route::get('/sales_report','SalesReportController@index')->name('sales_report.index');
+    Route::get('/sales_report/export','SalesReportController@export')->name('sales_report.export');
+
+    Route::get('/credit_card_report','CreditCardReportController@index')->name('credit_card_report.index');
+    Route::post('/getCards','CreditCardReportController@getCards')->name('credit_card_report.getCards');
+    Route::get('/getMoreCards','CreditCardReportController@getMoreCards')->name('credit_card_report.getMoreCards');
+    Route::get('/credit_cards/export','CreditCardReportController@export')->name('credit_card_report.export');
+    
+
+    Route::resource('reports', 'ReportsController')->only(['index']);
+    Route::resource('settings', 'SettingsController')->only(['index']);
+
+    Route::resource('tax','TaxController')->only(['index','store']);
 
 });
 
@@ -135,6 +151,9 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/providers_onboarded','DesignController@providers_onboarded')->name('providers_onboarded');
 	Route::get('/onboarded_steps','DesignController@onboarded_steps')->name('onboarded_steps');   
 	Route::get('/home','DesignController@home')->name('home');  
+	Route::get('/reports','DesignController@reports')->name('reports'); 
+	Route::get('/settings','DesignController@settings')->name('settings'); 
+	Route::get('/subscriptions_payments','DesignController@subscriptions_payments')->name('subscriptions_payments'); 
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -180,11 +199,12 @@ Route::get('/getAddOnData', 'ActivityController@getAddOnData')->name('getAddOnDa
 
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/dashboard/{date?}/{id?}', 'BusinessController@dashboard')->name('business_dashboard');
+    Route::get('/getBookingList', 'BusinessController@getBookingList')->name('getBookingList');
     Route::post('/getscheduleactivity', 'BusinessController@getscheduleactivity')->name('getscheduleactivity');
     Route::post('/getExpiringMembership', 'BusinessController@getExpiringMembership')->name('getExpiringMembership');
     Route::get('/bookingchart', 'BusinessController@bookingchart')->name('bookingchart');
     
-    Route::prefix('/business/{business_id}')->group(function () {
+    Route::prefix('/business/{business_id}')->middleware('auth', 'business_scope')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
         Route::delete('/customers/delete/{id}','CustomerController@delete')->name('business_customer_delete');
         Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');

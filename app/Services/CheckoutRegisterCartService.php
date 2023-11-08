@@ -24,8 +24,9 @@ class CheckoutRegisterCartService
         // var_dump($this->items());
         $taxTotal = 0;
         foreach($this->items() as $item){
-            
-            $pretaxTotal = $item['totalprice'] + $item['tip']  - $item['discount'];
+            $addOnServiceTotal = $item['addOnServicesTotalPrice'] ?? 0;
+            $productTotal = $item['productTotalPrices'] ?? 0;
+            $pretaxTotal = $item['totalprice'] + $item['tip']  - $item['discount'] + $addOnServiceTotal + $productTotal;
             $taxTotal += $item["tax"];
         }
         $service_fee = ($pretaxTotal * $user->recurring_fee) / 100;
@@ -34,12 +35,6 @@ class CheckoutRegisterCartService
 
     public function items(){
         $cart['cart_item'] = [];
-        /*foreach($this->_cart['cart_item'] as $key=>$c)
-        {   
-            if($c['chk'] == 'activity_purchase') {
-                $cart['cart_item'][] = $c;
-            }
-        }*/
         $cart['cart_item'] = $this->_cart['cart_item'];
         return $cart['cart_item'];
     }
@@ -90,7 +85,7 @@ class CheckoutRegisterCartService
         
         $pretaxSubTotal = $this->getGrossSubtotalByItem($item);
 
-        return $pretaxSubTotal + $item["tax"] + (@$item['addOnServicesTotalPrice'] ?? 0);
+        return $pretaxSubTotal + $item["tax"] + (@$item['addOnServicesTotalPrice'] ?? 0) + (@$item['productTotalPrices'] ?? 0);
     }
 
     public function getPriceDetail($priceid){

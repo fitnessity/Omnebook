@@ -29,9 +29,11 @@
                     <div id='systemMessage'></div>
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
                     <input type="hidden" name="customerId" value="{{$customerId}}">
+
                     <input type="text" name="firstname" id="firstname" size="30" maxlength="80" placeholder="First Name">
                     <input type="text" name="lastname" id="lastname" size="30" maxlength="80" placeholder="Last Name">
                     <input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
+
                     <input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-MAIL" maxlength="80" autocomplete="off">
                     <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
                     <input type="text" id="dob" name="dob" class=" flatpicker_birthdate1" placeholder="Birthday">
@@ -47,6 +49,13 @@
                             <i class="fas fa-eye"></i>
                         </button>
 					</div>
+
+                    <div class="form-group check-box-info">
+                        <input class="check-box-primary-account" type="checkbox" id="primary_account" name="primary_account" value="1" >
+                        <label for="primary_account"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="You are paying for yourself and all added family members.">(i)</span></label>
+                    </div>
+                    
+
                     <div class="terms-wrap">
                         <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
                         <label for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
@@ -878,7 +887,7 @@
             },
             submitHandler: function (form) {
                 if (!jQuery("#b_trm1").is(":checked")) {
-                    $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
+                    $("#termserror").html('Please Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
                     return false;
                 }
                 var valchk = getAge();
