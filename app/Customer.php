@@ -321,7 +321,7 @@ class Customer extends Authenticatable
 	   
     }
     public function purchase_history(){
-        return $this->transaction()->where('user_type','customer')->whereIn('status',['complete', 'requires_capture']);
+        return $this->transaction()->where('user_type','customer')->whereIn('status',['complete', 'requires_capture', 'refund_complete']);
     }
 
     public function total_spend(){
