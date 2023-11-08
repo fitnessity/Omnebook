@@ -10,10 +10,12 @@
 	.desktop-none-booking{display: none;}
 	.dots {  overflow-x: visible !important;}
 }
+
 @media screen and (min-width: 1200px) and (max-width: 1900px){
 	.desktop-none-booking{display: none;}
 	.dots {  overflow-x: visible !important;}
 }
+
 @media screen and (min-width: 768px) and (max-width: 992px){
 	#page-topbar{top: 65px;} 
 	:is([data-layout="vertical"], [data-layout="semibox"])[data-sidebar-size="sm"] .navbar-menu{padding-top: 0px;}
@@ -89,6 +91,14 @@
 	.mobile0view-flex{display: flex;}
 	.steps-free-trial-img img { margin-bottom: -45px; margin-top: -43px;}
 	.sports-side-img img { width: 405px; float: none; margin-top: 15px; margin-bottom: 15px;}
+	.set-searchbox {  margin-top: 55px;}
+	.banner-img img{height: 300px;}
+	.home-black-section label{font-size: 30px; padding: 15px;}
+	.home-black-section i {  top: 75px;}
+	.hpl-50 {padding-left: 12px;}
+	.mt--25 {  margin-top: 25px;}
+	.pro-background-overlay{width: 97%;}
+	.up-down-sp {  padding: 20px 30px 20px 30px;}
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){
@@ -189,6 +199,10 @@
 	.mobile0view-flex{display: flex;}
 	.save-exit{margin-top: 0px;}
 	.sports-side-img img { width: 405px; float: none; margin-top: 15px; margin-bottom: 15px;}
+	.searchbox .btn{padding: 10px 10px;}
+	.searchbox .form-control.padding-lrtb { padding: 10px 0 10px;}
+	.searchbox .form-control.padding-lrtb-one {padding: 10px 0px 10px 0px;}
+	.searchbox {  padding: 10px 15px;}
 }
 
 @media screen and (max-width: 699px){ 
@@ -310,6 +324,18 @@
 	.save-exit{margin-top: 0px;}
 	.cre-service {  margin-right: 0;}
 	.sports-side-img img { width: 315px; float: none;}
+	.modal-60 {  max-width: 100%;}
+	.banner-img img{  height: 350px;}
+	.set-searchbox { margin-top: 35px; }
+	.searchbox { padding: 20px 20px;}
+	.searchbox .btn{border-radius: 10px;}
+	.home-black-section{max-height: 365px;}
+	.hpl-50 {padding-left: 12px;}
+	.mt--25 {  margin-top: 25px;} 
+	.providers-bg-image{padding: 15px 15px 15px 15px;}
+	.pro-background-overlay{width: 94%;}
+	.up-down-sp {padding: 20px 30px 20px 30px;}
+	.joinus-box{padding: 40px 30px 40px 30px;}
 }
 
 @media screen and (min-width: 351px) and (max-width: 370px){

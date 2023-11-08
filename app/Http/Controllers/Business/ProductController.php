@@ -19,9 +19,18 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request, $business_id)
-    {
+    {   
         $productCategory = ProductsCategory::orderBy('name')->get();
         $data = Products::where('business_id',$business_id)->orderBy('created_at','desc');
+
+        if($request->term){
+            $searchValues = preg_split('/\s+/', $request->term, -1, PREG_SPLIT_NO_EMPTY); 
+            $products = $data->where('name', 'like', "%{$request->term}%")
+                ->when($request->categoryId ,function($q) use($request){
+                    $q->where('category', '!=', '')->whereRaw("FIND_IN_SET(?, category)", [$request->categoryId]);
+                })->get();
+            return response()->json($products);
+        }
 
         if ($request->ajax()) {
             $data->when($request->categoryId ,function($q) use($request){
@@ -67,18 +76,8 @@ class ProductController extends Controller
                 })
                 ->rawColumns(['action','product_image1','category1'])
                 ->addIndexColumn()->make(true);
-                
-    
-
-           /* return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function($row){
-                       $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
-                        return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);*/
         }
+        
         $productCount = $data->count();
         return view('business.products.index',compact('productCategory','productCount','business_id'));
     }
@@ -172,13 +171,13 @@ class ProductController extends Controller
             'rental_price' =>$request->rental_price ?? 0,
             'on_sale_price' =>$request->on_sale_price  ?? 0,
             'business_cost' =>$request->cost_price  ?? 0,
-            'sales_tax' =>$request->sales_tax  ?? 0,
+            /*'sales_tax' =>$request->sales_tax  ?? 0,*/
             'shipping_cost' =>$request->shipping_cost ?? 0,
             'rental_duration' => $request->rental_duration_int != '' ? $request->rental_duration_int.' '. $request->rental_duration: '',
             'require_deposit' =>$request->require_deposite,
             'deposit_amount' =>$request->require_deposite == 'yes' ? $request->deposit_amount : 0,
             'delivery_method' =>$request->require_deposite == 'yes' ? $request->delivery_method : '',
-            'require_ID_to_rent' =>$request->requireID == 'yes' ? $request->requireID : '',
+            'require_ID_to_rent' => $request->requireID ,
             'agreement_info' =>$request->requireID == 'yes' ? $request->agreement_info : '',
             'agreement_img' =>$request->requireID == 'yes' ? $agreementImg : '',
             'quantity' =>$request->quantity ?? 0,

@@ -24982,3 +24982,8 @@ padding-left: 0px;
 	width: 65% !important;
 }
 .mt-15{margin-top: 15px;}
+.check-box-primary-account{
+	width: auto !important;
+	display: inline-block !important;
+	min-height: 9px !important;
+}

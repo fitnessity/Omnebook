@@ -49,7 +49,7 @@ class Kernel extends ConsoleKernel
             }
         })->everyMinute();
 
-        /*$schedule->call(function () {
+        $schedule->call(function () {
             $userBookingDetails = UserBookingDetail::whereDate("expired_at", ">=" ,date('Y-m-d'))->get();
             foreach($userBookingDetails as $userBookingDetail){
                 $userBookingDetail->membershipOrSessionAboutToExpireAlert('membership');
@@ -72,7 +72,7 @@ class Kernel extends ConsoleKernel
             foreach($userBookingDetails as $userBookingDetail){
                 $userBookingDetail->membershipExpiredAlert('membership');
             }
-        })->daily();*/
+        })->daily();
 
         $schedule->call(function () {
             $transactions = Transaction::where(['status' => 'requires_capture'])->get();

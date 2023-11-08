@@ -613,117 +613,40 @@
 													<div class="row justify-content-center">
 														<div class="col-xl-10 col-lg-10 mb-120">
 															<div class="row">
+																@foreach($plans as $p)
 																<div class="col-lg-4 col-md-6 col-sm-6 mb-20">
 																	<div class="packages">
 																		<div>
-																			<img src="{{url('dashboard-design/images/dollar-coins.png')}}" alt="">
+																			<img src="{{$p->getPic()}}" alt="">
 																		</div>
 																		<div class="basic-plan">
-																			<h1>Pay as you go</h1>
-																			<p>A simple start for everyone</p>
+																			<h1>{{$p->title}}</h1>
+																			<p>{{$p->heading}}</p>
 																		</div>
 																		<div class="v-plan-cart">
 																			<div class=" position-relative text-center">
 																				<div class="d-flex justify-center align-center">
 																					<sup class="text-sm me-1 mt-10">$</sup>
-																					<h1 class="text1 text-5xl font-weight-medium font-red">0 </h1>
-																					<h1 class="text2 text-5xl font-weight-medium font-red">0</h1>
+																					<h1 class="text1 text-5xl font-weight-medium font-red">{{$p->price_per_month}}</h1>
+																					<h1 class="text2 text-5xl font-weight-medium font-red">{{$p->price_per_year / 12 }}</h1>
 																					<sub class="text-sm font-weight-medium ms-1 mt-4">/month</sub>
 																				</div>
 																			</div>
 																			<div class="price-list">
-																				<label class="text1">Free</label>
+																				<label class="text1">USD {{$p->price_per_year}}/Year</label>
 																			</div>
 																		</div>
+
+										
 																		<div class="v-plan-details">
-																			<ul>
-																				<li>100 responses a month</li>
-																				<li>Unlimited forms and surve</li>
-																				<li>Unlimited fields</li>
-																				<li>Basic form creation tools</li>
-																				<li>Up to 2 subdomains</li>
-																			</ul>
+																			{!! $p->description !!}
 																		</div>
 																		<div class="width-100">
-																			<a onclick="getPlan(1,'{{$cid}}')" class="btn btn-red mt-25 width-100" >Your Current Plan </a>
+																			<a onclick="getPlan(1,'{{$cid}}','{{$p->price_per_month}}')" class="btn btn-red mt-25 width-100" >Your Current Plan </a>
 																		</div>
 																	</div>
 																</div>
-																<div class="col-lg-4 col-md-6 col-sm-6 mb-20">
-																	<div class="packages popular-box">
-																		<div class="pxyz">
-																			<span class="badge badge-soft-popular text-uppercase">Popular </span>
-																		</div>
-																		<div>
-																			<img src="{{url('dashboard-design/images/3d-safe-box.png')}}" alt="">
-																		</div>
-																		<div class="basic-plan">
-																			<h1>Basic </h1>
-																			<p>For small to medium businesses</p>
-																		</div>
-																		<div class="v-plan-cart">
-																			<div class=" position-relative text-center">
-																				<div class="d-flex justify-center align-center">
-																					<sup class="text-sm me-1 mt-10">$</sup>
-																					<h1 class="text1 text-5xl font-weight-medium font-red">42 </h1>
-																					<h1 class="text2 text-5xl font-weight-medium font-red">38</h1>
-																					<sub class="text-sm font-weight-medium ms-1 mt-4">/month</sub>
-																				</div>
-																			</div>
-																			<div class="price-list">
-																				<label class="text1">USD 460/Year</label>
-																			</div>
-																		</div>
-																		<div class="v-plan-details">
-																			<ul>
-																				<li>Unlimited responses</li>
-																				<li>Unlimited forms and surv..</li>
-																				<li>Instagram profile page</li>
-																				<li>Google Docs integration</li>
-																				<li>Custom “Thank you” pag..</li>
-																			</ul>
-																		</div>
-																		<div class="width-100">
-																			<a onclick="getPlan(2,'{{$cid}}')" class="btn btn-black mt-25 width-100">Upgrade</a>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-lg-4 col-md-6 col-sm-6 mb-20">
-																	<div class="packages">
-																		<div>
-																			<img src="{{url('dashboard-design/images/3d-space-rocket.png')}}" alt="">
-																		</div>
-																		<div class="basic-plan">
-																			<h1>Pro</h1>
-																			<p>Solution for big organizations</p>
-																		</div>
-																		<div class="v-plan-cart">
-																			<div class=" position-relative text-center">
-																				<div class="d-flex justify-center align-center">
-																					<sup class="text-sm me-1 mt-10">$</sup>
-																					<h1 class="text1 text-5xl font-weight-medium font-red">84</h1>
-																					<h1 class="text2 text-5xl font-weight-medium font-red">57</h1>
-																					<sub class="text-sm font-weight-medium ms-1 mt-4">/month</sub>
-																				</div>
-																			</div>
-																			<div class="price-list">
-																				<label class="text1">USD 690/Year</label>
-																			</div>
-																		</div>
-																		<div class="v-plan-details">
-																			<ul>
-																				<li>PayPal payments</li>
-																				<li>Logic Jumps</li>
-																				<li>File upload with 5GB stora</li>
-																				<li>Custom domain support</li>
-																				<li>Stripe integration</li>
-																			</ul>
-																		</div>
-																		<div class="width-100">
-																			<a onclick="getPlan(3,'{{$cid}}')" class="btn btn-red mt-25 width-100">Upgrade</a>
-																		</div>
-																	</div>
-																</div>
+																@endforeach
 																
 																<div class="col-lg-12">
 																	<div class="bg-light-red mt-105 mb-55">
@@ -732,7 +655,7 @@
 																				<div class="free-trial-text">
 																					<h3> Still not convinced? Start with a 14-day FREE trial! </h3>
 																					<p>You will get full access to all the features for 14 days. </p>
-																					<a onclick="getPlan(1,'{{$cid}}')"class="btn btn-red "> Start-14-day FREE trial </a>
+																					<a onclick="getPlan(1,'{{$cid}}',0)"class="btn btn-red "> Start-14-day FREE trial </a>
 																				</div>
 																			</div>
 																			<div class="col-lg-4 col-md-5 col-sm-12">
@@ -744,199 +667,74 @@
 																	</div>
 																</div>
 																
-																<div class="col-lg-12">
-																	<div class="booking-titles text-center mt-70">
+																<div class="card-body mb-20">	
+																	<div class="booking-titles text-center mb-20 mt-10">
 																		<h4 class="fs-18">Pick a plan that works best for you</h4>
 																		<p>Stay cool, we have a 48-hour money back guarantee!</p>
 																	</div>
 																	<div class="row">
-																		<div class="col-lg-12">
-																			<div class="priceplan-table steps-table">
-																				 <div class="table-responsive">
-																					<table class="table table-borderless table-nowrap align-middle mb-25 mt-25">
-																						<thead class="table-light">
-																							<tr class="text-muted">
-																								<th scope="col"> 
-																									<h1 class="text-muted fs-12 mb-0 text-uppercase">FEATURES </h1>
-																									<span class="text-muted fs-12 mb-0 text-uppercase"> Native Front Features </span>
-																								</th>
-																								<th scope="col">
-																									<h1 class="text-muted fs-12 text-uppercase"> Pay As You Go
-																									</h1>
-																								</th>
-																								<th scope="col" style="width: 20%;">
-																									<h1 class="text-muted fs-12 text-uppercase"> BASIC </h1>
-																								</th>
-																								
-																								<th scope="col" style="width: 16%;">
-																									<h1 class="text-muted fs-12 text-uppercase"> Pro </h1>
-																								</th>
-																							</tr>
-																						</thead>
+																		<div class="col-lg-12">	 
+																			<div class="fit-price-plan-table">
+																				<div class="row">
+																					<div class="col-md-6 fit-xop">
+																						<div class="custom-table-header">
+																							<h1 class="text-muted fs-12 mb-1 text-uppercase">FEATURES </h1>
+																							<span class="text-muted fs-12 mb-0 text-uppercase"> Native Front Features </span>
+																						</div>
+																						<div class="custom-table-data">
+																							<label>14-days free trial</label>
+																						</div>
+																						@foreach($features as $key=>$f)
+																						<div class="custom-table-data">
+																							<label>{{$f->name}}</label>
+																						</div>
+																						@endforeach
+																						<div class="custom-table-data-footer">
+																							<label></label>
+																						</div>											
+																					</div>
+																					@foreach($plans as $p)
+																					<div class="col-md-2 @if(!$loop->last)fit-xop nopadding @endif @if($loop->last) pl-0 @endif">
+																						<div class="custom-table-header">
+																							<h1 class="text-muted fs-12 mb-1 text-uppercase"> {{$p->title}} </h1>
+																							<span class="text-muted fs-12 mb-0 text-uppercase"> @if($p->price_per_month != 0) ${{$p->price_per_month}}/MONTH @else FREE @endif  </span>
+																						</div>
+																						<div class="custom-table-data">
+																							<div class="check-right">
+																								<i class="fas fa-check"></i>
+																							</div>
+																						</div>
+																						@foreach(json_decode($p->featurs_details) as $i=> $f)
+																						<div class="custom-table-data">
 
-																						<tbody>
-																							<tr>
-																								<td>14-days free trial</td>
-																								<td>
-																									<div class="check-right">
-																										<i class="fas fa-check"></i>
-																									</div>
-																								</td>
-																								<td>
-																									<div class="check-right">
-																										<i class="fas fa-check"></i>
-																									</div>
-																								</td>
-																								<td>
-																									<div class="check-right">
-																										<i class="fas fa-check"></i>
-																									</div>
-																								</td>
-																							</tr>
-																							<tr>
-																								<td>No user limit</td>
-																								 <td>
-																									<div class="check-wrong">
-																										<i class="fas fa-times"></i>
-																									</div>
-																								</td>
-																								<td>
-																									<div class="check-wrong">
-																										<i class="fas fa-times"></i>
-																									</div>
-																								</td>
-																								<td>
-																									<div class="check-right">
-																										<i class="fas fa-check"></i>
-																									</div>
-																								</td>
-																							</tr>
-																							<tr>
-																								<td>Product Support</td>
-																								 <td>
-																									<div class="check-wrong">
-																										<i class="fas fa-times"></i>
-																									</div>
-																								</td>
-																								<td>
-																									<div class="check-right">
-																										<i class="fas fa-check"></i>
-																									</div>
-																								</td>
-																								<td>
-																									<div class="check-right">
-																										<i class="fas fa-check"></i>
-																									</div>
-																								</td>
-																							</tr>
-																							<tr>
-																								<td>Email Support</td>
-																								  <td>
-																									<div class="check-wrong">
-																										<i class="fas fa-times"></i>
-																									</div>
-																								</td>
-																								<td>
-																									<span class="badge badge-soft-red p-2"> ADD-ON AVAILABLE </span>
-																								</td>
-																								<td>
-																									<div class="check-right">
-																										<i class="fas fa-check"></i>
-																									</div>
-																								</td>
-																							</tr>
-																							<tr>
-																								<td>Integrations</td>
-																								<td>
-																									<div class="check-wrong">
-																										<i class="fas fa-times"></i>
-																									</div>
-																								</td>
-																								<td>
-																									<div class="check-right">
-																										<i class="fas fa-check"></i>
-																									</div>
-																								</td>
-																								<td>
-																									<div class="check-right">
-																										<i class="fas fa-check"></i>
-																									</div>
-																								</td>
-																							</tr>
-																							<tr>
-																								<td>Removal of Front branding</td>
-																								<td>
-																									<div class="check-wrong">
-																										<i class="fas fa-times"></i>
-																									</div>
-																								</td>
-																								<td>
-																									<span class="badge badge-soft-red p-2"> ADD-ON AVAILABLE </span>
-																								</td>
-																								<td>
-																									<div class="check-right">
-																										<i class="fas fa-check"></i>
-																									</div>
-																								</td>
-																							</tr>
-																							<tr>
-																								<td>Active maintenance & support</td>
-																								 <td>
-																									<div class="check-wrong">
-																										<i class="fas fa-times"></i>
-																									</div>
-																								</td>
-																								<td>
-																									<div class="check-wrong">
-																										<i class="fas fa-times"></i>
-																									</div>
-																								</td>
-																								<td>
-																									<div class="check-right">
-																										<i class="fas fa-check"></i>
-																									</div>
-																								</td>
-																							</tr>
-																							<tr>
-																								<td>Data storage for 365 days</td>
-																								 <td>
-																									<div class="check-wrong">
-																										<i class="fas fa-times"></i>
-																									</div>
-																								</td>
-																								<td>
-																									<div class="check-wrong">
-																										<i class="fas fa-times"></i>
-																									</div>
-																								</td>
-																								<td>
-																									<div class="check-right">
-																										<i class="fas fa-check"></i>
-																									</div>
-																								</td>
-																							</tr>
-																							<tr>
-																								<td></td>
-																								 <td>
-																									<a onclick="getPlan(1,'{{$cid}}')"  class="btn btn-red">Your Current Plan </a>
-																								</td>
-																								<td>
-																									<a onclick="getPlan(2,'{{$cid}}')"  class="btn btn-black"> Choose Plan </a>
-																								</td>
-																								<td>
-																									<a onclick="getPlan(3,'{{$cid}}')"  class="btn btn-red"> Choose Plan </a>
-																								</td>
-																							</tr>
-																						</tbody><!-- end tbody -->
-																					</table><!-- end table -->
-																				</div><!-- end table responsive -->
+																							@if($f == 'Yes')
+																							<div class="check-right">
+																								<i class="fas fa-check"></i>
+																							</div>
+																							@elseif($f == 'No')
+																							<div class="check-wrong">
+																								<i class="fas fa-times"></i>
+																							</div>
+																							@elseif($f == 'Add On')
+																								<span class="badge badge-soft-red p-2"> ADD-ON AVAILABLE </span>
+																							@else
+																								<span class="badge badge-soft-red p-2"> {{$f}}</span>
+																							@endif
+																						</div>
+																						@endforeach
+																						<div class="custom-table-data-footer">
+																							<a onclick="getPlan('{{$p->id}}','{{$cid}}','{{$p->price_per_month}}')"  class="btn btn-red"> Choose Plan </a>
+																						</div>
+																					</div>
+																					@endforeach
+																				</div>
 																			</div>
 																		</div>
 																	</div>
 																</div>
 															
 																<div class="col-lg-12 col-md-12  col-sm-12 col-12">
-																	<div class="booking-titles text-center mb-20 mt-20">
+																	<div class="booking-titles text-center mb-20 mt-40">
 																		<h4 class="fs-18">FAQ's </h4>
 																		<p>Let us help answer the most common questions. </p>
 																	</div>
@@ -1090,7 +888,7 @@
 
 <script>
 
-	function getPlan(id,cid){
+	function getPlan(id,cid,price){
 		$.ajax({
             url: '{{route('onboard_process.storePlan')}}',
             type: 'POST',
@@ -1100,10 +898,10 @@
             	'_token' :'{{csrf_token()}}'
             },
             success: function (response) {
-            	if(id == 1){
+            	if(price == 0){
             		window.location.href = '/onboard_process?show=6&cid='+cid;
             	}else{
-					getCardForm(cid)
+					getCardForm(cid);
 				}
             }
         });

@@ -342,7 +342,7 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="inner-accordion-titles float-end text-right line-break">
-																																		<span>Remaining {{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span> 
+																																		<span>Remaining {{$booking_detail->getRemainingSessionAfterAttend()}}/{{$booking_detail->pay_session}}</span> 
 																																		<a class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=> $booking_detail->booking_id ,'customer'=>$customerdata->id ])}}" data-item-type="no" data-modal-width="modal-70" >
 																																			<i class="far fa-file-alt" aria-hidden="true"></i></a>
 																																	</div>
@@ -393,7 +393,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span>{{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span>
+																																	<span>{{$booking_detail->getRemainingSessionAfterAttend()}}/{{$booking_detail->pay_session}}</span>
 																																</div>
 																															</div>
 																														
@@ -626,7 +626,7 @@
 																																	</div>
 																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																		<div class="float-end line-break text-right">
-																																			<span>{{$booking_detail->getremainingsession()}}/{{$booking_detail->pay_session}}</span>
+																																			<span>{{$booking_detail->getRemainingSessionAfterAttend()}}/{{$booking_detail->pay_session}}</span>
 																																		</div>
 																																	</div>
 																																@endif
@@ -770,9 +770,11 @@
 																	@endphp
 
 																	@foreach ($purchase_history as $history) 
-															        @php
-															            $totalPaid += $history->amount;
-															        @endphp
+																	    @if($history->item_description(request()->business_id)['itemDescription'] != '')
+																	        @php
+																	            $totalPaid += $history->amount;
+																	        @endphp
+																	    @endif
 																	@endforeach
 																	<div class="accordion-item shadow">
 																			<h2 class="accordion-header" id="accordionnesting2Example2">
@@ -799,14 +801,14 @@
 																								</thead>
 																								<tbody>
 																									@foreach ($purchase_history as $history) 
-
+																										@if($history->item_description(request()->business_id)['itemDescription'] != '')
 																										<tr>
 																											<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
-																											<td>{!!$history->item_description()['itemDescription']!!}</td>
+																											<td>{!!$history->item_description(request()->business_id)['itemDescription']!!}</td>
 																											<td>{{$history->item_type_terms()}}</td>
 																											<td>{{$history->getPmtMethod()}}</td>
 																											<td>${{$history->amount}}</td>
-																											<td>{{$history->item_description()['qty']}}</td>
+																											<td>{{$history->item_description(request()->business_id)['qty']}}</td>
 																											<td>
 																												@if($history->can_void() && $history->item_type=="UserBookingStatus")
 																													<a href="#" data-booking-detail-id="{{$history->item_id}}" data-behavior="transaction_void" data-customer-id = "{{$customerdata->id}}">Void</a>
@@ -889,7 +891,7 @@
 																									<td class="text-center">
 																										<a onclick="deleteMember({{$family_member->id}})" class="btn btn-red mmb-10">Delete</a>
 
-																										<a href="#" onclick="redirctAddfamily({{$customerdata->id}});" class="btn btn-black mmb-10">Edit</a>
+																										<a href="#" trget="_blank" onclick="redirctAddfamily({{$customerdata->id}});" class="btn btn-black mmb-10">Edit</a>
 
 																										<a href="{{route('business_customer_show',['business_id' => request()->business_id, 'id'=>$family_member->id])}}" class="btn btn-red mmb-10">View</a></td>
 																									
@@ -1291,6 +1293,11 @@
 								<label>	Zipcode </label>
 								<input class="form-control" type="text" id="zipcode1" name="zipcode" placeholder="Zipcode" value="{{$customerdata->zipcode}}">
 							</div>
+
+							<div class="mb-10">
+								<input class="check-box-primary-account" type="checkbox" id="primary_account" name="primary_account" value="1" @if($customerdata->primary_account == '1') checked @endif>
+								<label for="primary_account"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="You are paying for yourself and all added family members.">(i)</span></label>
+							</div>
 						</div>
 						<div class="col-lg-6 col-md-6 col-sm-6">
 							<div class="mb-10">
@@ -1306,7 +1313,7 @@
 								</div>
 								<input type="file" class="form-control mt-10" name="profile_pic" id="profile_pic">
 							</div>
-						</div>
+						</div>	
 					</div>					
 				</div>
 				<div class="modal-footer">
@@ -1596,7 +1603,7 @@
      });
    	
    	function redirctAddfamily(id){
-   		window.location.href="/customer/add-family/"+id;
+   		window.open('/customer/add-family/'+id, '_blank');
    	}
 	</script>
 
