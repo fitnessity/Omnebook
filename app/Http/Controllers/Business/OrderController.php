@@ -322,7 +322,6 @@ class OrderController extends BusinessBaseController
         ]);
 
         foreach($transactions as $transaction){
-            
             $tran_data = Transaction::create(array_merge($transaction, [ 
                 'user_type' => 'customer',
                 'user_id' => $customer->id,
@@ -374,7 +373,6 @@ class OrderController extends BusinessBaseController
                 'addOnservice_qty' => @$item['addOnServicesQty'],
                 'addOnservice_total' => @$item['addOnServicesTotalPrice'] ?? 0 ,
             ]);
-            $booking_detail->transfer_to_provider();
             $bookidarray [] = $booking_detail->id;
 
             $qty_c = $checkoutRegisterCartService->getQtyPriceByItem($item)['qty'];

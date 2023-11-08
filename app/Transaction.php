@@ -132,7 +132,7 @@ class Transaction extends Model
     }
 
     public function can_refund(){
-        return $this->kind == 'card' && $this->status == 'complete';
+        return $this->kind == 'card' && $this->amount != $this->refund_amount && $this->status != 'requires_capture' && $this->status != 'refund_complete';
     }
 
     public function void(){
@@ -148,6 +148,45 @@ class Transaction extends Model
                 $transaction->update(["status" => 'canceled']);
                 $booking_status = UserBookingStatus::where('id', $this->item_id)->orderby('created_at','desc')->first();
                 $booking_status->UserBookingDetail()->update(["status" => 'void']);
+            }
+            
+        }
+
+    }
+
+    public function refund(){
+        
+        $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->item_id)->first();
+
+
+        if($transaction){
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            $payment_intent = $stripe->paymentIntents->retrieve(
+              $transaction->transaction_id,
+              []
+            );
+            $transfer_group = $payment_intent['transfer_group'];
+
+            if($transfer_group){
+                $transfers = $stripe->transfers->all([
+                 'limit' => 3,
+                 'transfer_group' => $transfer_group
+                ]); 
+
+                $transfer_id = $transfers->data[0]['id'];
+
+                $stripe->transfers->createReversal($transfer_id);
+            }
+
+
+            $refund = $stripe->refunds->create([
+              'payment_intent' => $transaction->transaction_id
+            ]);
+
+            if($refund['status']=='succeeded'){
+                $transaction->update(["status" => 'refund_complete', 'refund_amount' => $refund['amount']/100]);
+                $booking_status = UserBookingStatus::where('id', $this->item_id)->orderby('created_at','desc')->first();
+                $booking_status->UserBookingDetail()->update(["status" => 'refund']);
             }
             
         }
