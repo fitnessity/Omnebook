@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-md-10 col-sm-18 col-xs-6 col-6">
 			<div class="counter-titles mb-15">
-				<p class="fs-15">{{$product->name}} (This product is for @if($product->product_type == "both" ) both rent and sale. @elseif($product->product_type == "sale") sale. @else rent @endif) <span class="font-red">@if($reminingQty == 0) Sold Out @elseif($reminingQty <= $lowAlertQty ) Only {{$reminingQty}} remining.@endif </span></p>
+				<p class="fs-15">{{$product->name}} (This product is for @if($product->product_type == "both" ) both rent and sale. (Rental Duration is {{$product->rental_duration}}) @elseif($product->product_type == "sale") sale. @else rent (Rental Duration is {{$product->rental_duration}} ) @endif) <span class="font-red">@if($reminingQty == 0) Sold Out @elseif($reminingQty <= $lowAlertQty ) Only {{$reminingQty}} remining.@endif </span></p>
 			</div>
 		</div>
 		@php $pType= ''; $pPrice= 0;
@@ -12,6 +12,7 @@
 			$pPrice = ($product->product_type == 'both' || $product->product_type == 'sale')  ? $product->sale_price : $product->rental_price;
 
 		@endphp
+		<input type="hidden" id="rental_duration{{$product->id}}" value="{{$product->rental_duration}}">
 		<div class="col-md-2 col-sm-2 col-xs-6 col-6">
 			<div class="qty counter-txt mb-15">
 				<span class="minus bg-darkbtn prominus" aid="{{$product->id}}" chk="{{$chk}}" remining="{{$reminingQty}}"><i class="fa fa-minus"></i></span>

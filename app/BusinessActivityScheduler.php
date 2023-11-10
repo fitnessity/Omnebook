@@ -41,7 +41,8 @@ class BusinessActivityScheduler extends Model
         'shift_end',
         'set_duration',
         'is_active',
-        'end_activity_date'
+        'end_activity_date',
+        'instructure_ids',
     ];
 
     public function businessPriceDetailsAges(){

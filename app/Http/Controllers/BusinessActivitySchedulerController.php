@@ -179,9 +179,7 @@ class BusinessActivitySchedulerController extends Controller
             }
         }else{
             $customer = $request->user()->customers()->find($request->cid);
-
-            $active_memberships = $customer->active_memberships()->get();
-
+            $active_memberships = $customer->active_memberships()->where('user_booking_details.user_id',$request->cid)->get();
             foreach($active_memberships as $active_membership){
                 $remainingSession = $active_membership->getremainingsession();
                 if($remainingSession > 0 && $active_membership->business_price_detail){
@@ -295,7 +293,7 @@ class BusinessActivitySchedulerController extends Controller
         $activitySchedulerData = BusinessActivityScheduler::find($request->timeid);
         $customer = Customer::where(['id'=>$request->customerID,'business_id'=>$request->businessId])->first();
 
-        $UserBookingDetails = $customer->bookingDetail()->whereDate('expired_at' ,'>' ,date('Y-m-d'))->where(['sport'=>$request->serviceID ,'id'=> $request->did])
+        $UserBookingDetails = $customer->bookingDetail()->whereDate('expired_at' ,'>' ,date('Y-m-d'))->where(['id'=> $request->did])/*->where('sport',$request->serviceID )*/
         ->when($request->priceId, function ($query, $priceId) {
             return $query->orWhere('priceid', $priceId);
         })
@@ -440,7 +438,7 @@ class BusinessActivitySchedulerController extends Controller
                         $chkData = $UserBookingDetails->BookingCheckinDetails()->whereDate('business_activity_scheduler_id',0)->where(['checkin_date' =>null])->first();
                         if($chkData != ''){
                             $chkData->update(["business_activity_scheduler_id"=>$ary['timeId'],
-                                "checkin_date"=>$ary['date']]);
+                                "checkin_date"=>$ary['date'], "instructor_id"=>@$activitySchedulerData->instructure_ids]);
                             $sendmail = 1;
                         }else{
                             $chkMissSession = $UserBookingDetails->BookingCheckinDetails()->whereDate('checkin_date','<',date('Y-m-d'))->where(['checked_at' =>null,'business_activity_scheduler_id'=>$ary['timeId']])->first();
@@ -450,8 +448,10 @@ class BusinessActivitySchedulerController extends Controller
                                 $sendmail = 1;
                             }else{
                                 if($UserBookingDetails->BookingCheckinDetails()->count() < $UserBookingDetails->pay_session){
+                                    $schedule = BusinessActivityScheduler::find($ary['timeId']);
                                     BookingCheckinDetails::create([
                                         "business_activity_scheduler_id"=>$ary['timeId'], 
+                                        "instructor_id"=>@$schedule->instructure_ids, 
                                         "customer_id" => $ary['cid'],
                                         "booking_detail_id"=> $UserBookingDetails->id,
                                         "checkin_date"=>$ary['date'],

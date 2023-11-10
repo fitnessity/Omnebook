@@ -301,6 +301,7 @@ class OrderController extends BusinessBaseController
                     'kind' => 'check',
                     'transaction_id' => "CK_" . Carbon::now()->format('YmdHmsv'),
                     'amount' => $request->cash_amt,
+
                     'qty' =>'1',
                     'status' =>'complete',
                     'refund_amount' => 0,
@@ -337,7 +338,9 @@ class OrderController extends BusinessBaseController
             $expired_at = $now;*/
             $date = new DateTime($item['sesdate']);
             $contractDate = $date->format('Y-m-d');
-            $date->modify('+'. $item['actscheduleid']);
+            if(@$item['orderType'] == 'Membership'){
+                $date->modify('+'. $item['actscheduleid']);
+            } 
             $expired_at = $date;
             $cUid = NULL;
             $participateName = NULL;
@@ -356,15 +359,15 @@ class OrderController extends BusinessBaseController
                 'price' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['price']),
                 'qty' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['qty']),
                 'priceid' => $item['priceid'],
-                'pay_session' => $item['p_session'] ?? $price_detail->pay_session,
-                'expired_at' => $expired_at,
-                'contract_date' => $contractDate,
+                'pay_session' => $item['p_session'] ?? @$price_detail->pay_session,
+                'expired_at' => @$item['orderType'] == 'Membership'  ? $expired_at : NULL,
+                'contract_date' => @$item['orderType'] == 'Membership' ? $contractDate : NULL,
+                'expired_duration' => @$item['orderType'] == 'Membership' ? $item['actscheduleid'] : NULL,
                 'subtotal' => $checkoutRegisterCartService->getSubTotalByItem($item, $user),
                 'fitnessity_fee' => $checkoutRegisterCartService->getRecurringFeeByItem($item, $user),
                 'tax' => $item['tax'],
                 'tip' => $item['tip'],
                 'discount' => $item['discount'],
-                'expired_duration' => $item['actscheduleid'],
                 'participate' => '['.json_encode($item['participate_from_checkout_regi']).']',
                 'user_type'=> 'customer',
                 'user_id'=> $cUid,
@@ -380,14 +383,13 @@ class OrderController extends BusinessBaseController
                 'productColor' => @$item['productColor'],
                 'productTypes' => @$item['productTypes'],
                 'productTotalPrices' => @$item['productTotalPrices'],
+                'order_type' => @$item['orderType'],
             ]);
 
             $booking_detail->transfer_to_provider();
             $bookidarray [] = $booking_detail->id;
 
             $qty_c = $checkoutRegisterCartService->getQtyPriceByItem($item)['qty'];
-           
-
             foreach($qty_c as $key=> $qty){
                 $re_i = 0;
                 $date = new Carbon;
@@ -474,14 +476,17 @@ class OrderController extends BusinessBaseController
                 }
             }
 
-            BookingCheckinDetails::create([
-                'business_activity_scheduler_id' => 0,
-                'customer_id' => $cUid,
-                'booking_detail_id' => $booking_detail->id,
-                'checkin_date' => NULL,
-                'use_session_amount' => 0,
-                'source_type' => 'in_person',
-            ]);
+            if(@$item['orderType'] == 'Membership'){
+                BookingCheckinDetails::create([
+                    'business_activity_scheduler_id' => 0,
+                    'customer_id' => $cUid,
+                    'booking_detail_id' => $booking_detail->id,
+                    'checkin_date' => NULL,
+                    'use_session_amount' => 0,
+                    'source_type' => 'in_person',
+                ]);
+            }
+
             /*$businessService = $checkoutRegisterCartService->getbusinessService($item['code']); 
             $email_detail = array(
                 "email" => @$checkoutRegisterCartService->getCompany(Auth::user()->cid)->business_email, 
@@ -556,38 +561,7 @@ class OrderController extends BusinessBaseController
         $html = $idarry = '';
         $totaltax =  $subtotaltax = $tot_dis = $tot_tip = $service_fee = 0;
 
-        $html .= '<div class="row"> 
-                <div class="col-lg-4 bg-sidebar">
-                    <div class="your-booking-page side-part">
-                        <div class="booking-page-meta">
-                            <a href="#" title="" class="underline"></a>
-                        </div>
-                        <div class="box-subtitle">
-                            <h4>Transaction Complete</h4>
-                            <div class="modal-inner-box">
-                                <h3>Email Receipt</h3>
-                                <div class="form-group">
-                                    <input type="text" name="email" id="receipt_email"  placeholder="youremail@abc.com" class="form-control" value="'.$email.'">
-                                </div>
-                                <button class="btn btn-red mt-10 width-100 mb-25" onclick="sendemail();">Send Email Receipt</button>
-                                <div class="reviewerro" id="reviewerro"></div>
-
-                                <h3>Notes</h3>
-                                <div class="form-group">
-                                    <textarea id="notes" name="notes" rows="4" cols="50" class="form-control">Thank you for doing business with us</textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="powered-img">
-                            <label>Powered By</label>
-                            <div class="booking-modal-logo">
-                                <img src="'.url("/public/images/fitnessity_logo1.png").'">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="modal-booking-info">';
+        $html .= view('business.orders.bookingReceiptData1',compact('email'));
     
         foreach($array as $or){
             $order_detail = UserBookingDetail::where('id',$or)->first();
@@ -601,328 +575,34 @@ class OrderController extends BusinessBaseController
             $total = ($odt['totprice_for_this'] - $odt['discount']) + $odt['productPrice'] + $odt['addOnPrice'];
             $subtotaltax += $total;
             $per_total = $total; 
-            $html .= '
-                    <div class="row">
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>BOOKING#</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'. $odt['confirm_id'].'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>PROVIDER COMPANY NAME:</label>
-                        </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'. $odt['company_name'].'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>PROGRAM NAME:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'. $odt['program_name'].'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>CATEGORY:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'. $odt['categoty_name'].'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>PRICE OPTION:</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'.@$odt['BusinessPriceDetails']['price_title'].'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                        <div class="text-left">
-                                <label>NUMBER OF SESSIONS:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'.@$odt['pay_session'].' Session</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>MEMBERSHIP OPTION:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'.$odt['BusinessPriceDetails']['membership_type'].'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>PARTICIPANT QUANTITY:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'. $odt['qty'].'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>WHO IS PRATICIPATING?</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'. $odt['parti_data'].'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>ACTIVITY TYPE:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'. $odt['sport_activity'].'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>SERVICE TYPE:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'. $odt['select_service_type'].'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>MEMBERSHIP DURATION:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'.$order_detail->expired_duration.'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>PURCHASE DATE:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'.$odt['created_at'].'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                    <label>MEMBERSHIP ACTIVATION DATE:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'.date('d-m-Y',strtotime($order_detail->contract_date)).'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>MEMBERSHIP EXPIRATION:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'.date('d-m-Y',strtotime($order_detail->expired_at)).'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>ADD ON SERVICE:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'.getAddonService(@$odt['addOnServicesId'],@$odt['addOnServicesQty']).'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>PRODUCTS:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'.getProducts(@$odt['productIds'],@$odt['productQtys'],@$odt['productTypes']).'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>PRICE:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>$'.$odt['totprice_for_this'].'</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>DISCOUNT:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>$'.$odt['discount'].'</span>
-                            </div>
-                        </div>
-
-
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>TOTAL:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>$'.$per_total.'</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="main-separator mb-10"></div>
-                    </div>';
+            $html .= view('business.orders.bookingReceiptData',compact('odt','order_detail','per_total'));
         }
 
         $idarry = rtrim($idarry,',');
 
         // print_r($odt);exit;
-        $html .= '     
-                    <input type="hidden" name="booking_id" id="booking_id" value="'.$order_detail->booking_id.'"> 
-                    <input type="hidden" name="orderdetalidary[]" id="orderdetalidary" value="'.$idarry.'"> 
-                    <div class="row border-xx mg-tp">
-                        <div class="col-md-6 col-xs-6">
-                           <div class="text-left">
-                                <label>PAYMENT METHOD</label>
-                           </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>'. $odt['pmt_type'].'</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row border-xx">
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>TIP AMOUNT</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>$'.$tot_tip.'</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row border-xx">
-                        <div class="col-md-6 col-xs-6">
-                           <div class="text-left">
-                                <label>DISCOUNT</label>
-                           </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                           <div class="float-end text-right">
-                                <span>$'.$tot_dis.'</span>
-                           </div>
-                        </div>
-                    </div>
-
-                    <div class="row border-xx">
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>TAXES AND FEES</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>$'. ($totaltax +  $service_fee ).'</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row border-xx">
-                        <div class="col-md-6 col-xs-6">
-                            <div class="text-left">
-                                <label>TOTAL AMOUNT PAID</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            <div class="float-end text-right">
-                                <span>$'.$odt['amount'].'</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-               </div>
-          </div>';
+        $html .= view('business.orders.bookingReceiptData2',compact('odt','order_detail','totaltax','tot_tip','service_fee','idarry','tot_dis'));
 
         return $html;
     }
 
-    public function editcartmodel(Request $request){
+    public function editcartmodel(Request $request ,$business_id){
         $cart_item = $cart = [];
         if (session()->has('cart_item_for_checkout')) {
             $cart_item = session()->get('cart_item_for_checkout');
         }
         $html = $result = '';
         $salestaxajax = $duestaxajax = 0;
-
-        if(in_array($request->customerId.'~~'.$request->priceid, array_keys($cart_item["cart_item"]))) {
-            $cart = $cart_item["cart_item"][$request->customerId.'~~'.$request->priceid];
+        $request->priceid = $request->priceid == 0 ? '' : $request->priceid;
+        if(in_array($request->customerId.'~~'.$request->priceid.'^~'.$request->orderType, array_keys($cart_item["cart_item"]))) {
+            $cart = $cart_item["cart_item"][$request->customerId.'~~'.$request->priceid.'^~'.$request->orderType];
             $cartselectedpriceid = BusinessPriceDetails::where('id',$cart['priceid'])->first();
             $cartselectedcategory = BusinessPriceDetailsAges::where('id',$cart['categoryid'])->first();
             $program_list = BusinessServices::where(['is_active'=>1,'userid'=>Auth::user()->id])->get();
             $catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$cart['code'])->get(); 
             $pricelist = BusinessPriceDetails::select('id','price_title')->where('category_id',@$cart['categoryid'])->get();
             $membershiplist = BusinessPriceDetails::select('id','membership_type')->where('id',$cart['priceid'])->get();
-            $company = $cartselectedpriceid->CompanyInformation;
+            $company = $request->current_company;
             $aduqty = $infantqty = $childqty = 0;
             $priceType = (date('l') == 'Saturday' || date('l') == 'Sunday') ? 'weekend_price_diff' : 'cus_weekly_price';
 
@@ -942,13 +622,13 @@ class OrderController extends BusinessBaseController
             $participate = $cart["participate_from_checkout_regi"]['pc_name'];
             $pageid = $request->pageid;
             $p_session = $cart["p_session"];
-            $indexOfAry = $request->customerId.'~~'.$request->priceid;
+            $indexOfAry = $request->customerId.'~~'.$request->priceid.'^~'.$request->orderType;
 
             $idsArray = explode(',', $cart['addOnServicesId']);
             $qtysArray = explode(',', $cart['addOnServicesQty']);
             $addOnServices = $cartselectedcategory  != '' ?  $cartselectedcategory->AddOnService: [];
             $addOnData = view('business.orders.add_on_service')->with(['addOnServices' =>$addOnServices ,'idsArray'=>$idsArray ,'qtysArray'=>$qtysArray ,'ajax'=>'ajax' ]);
-            $business_id = $cartselectedpriceid->cid;
+            //$business_id = @$cartselectedpriceid->cid;
             $view1 = view('business.orders.edit_cart', compact('cart','aduprice','childprice','infantprice','salestaxajax','duestaxajax','aduqty','childqty','infantqty','actscheduleid','participate','membershiplist','cartselectedpriceid','cartselectedcategory','program_list','catelist','pricelist','pageid','indexOfAry',
                 'addOnData','business_id'));
 
@@ -982,13 +662,14 @@ class OrderController extends BusinessBaseController
         $productColor = $request->has('productColor') != '' ? $request->productColor: '';
         $productTypes = $request->has('productTypes') != '' ? $request->productTypes: '';
         $productTotalPrices = $request->has('productTotalPrices') != '' ? $request->productTotalPrices: 0 ;
+        $orderType = $request->orderType;
     
         $pid = $request->pid ?? 0;
-        $priceid = $request->priceid ?? 0;
+        $priceid = $request->priceid ?? '';
         $price =  $request->price ?? 0;
         $pricetotal =$request->pricetotal ?? 0;
-        $actscheduleid = $request->actscheduleid ?? 0;
-        $sesdate = isset($request->sesdate) ? date('Y-m-d',strtotime($request->sesdate)) : 0;
+        $actscheduleid = $orderType == 'Membership' ? ($request->actscheduleid ?? 0) : '';
+        $sesdate = $orderType == 'Membership' ? (isset($request->sesdate) ? date('Y-m-d',strtotime($request->sesdate)) : 0) : '';
 
         $service = BusinessServices::find($pid);
         $infantarray = $childarray = $adultarray= [];
@@ -1006,17 +687,17 @@ class OrderController extends BusinessBaseController
             $tot_qty += $request->infantquantity;
         }
         
-        if($request->deletepid != $customerId.'~~'.$priceid){
+        if($request->deletepid != $customerId.'~~'.$priceid.'^~'.$orderType ){
             unset($cart_item["cart_item"][$request->deletepid]);
         }
 
-        if ($service != '') {
-            $itemArray = array($customerId.'~~'.$request->priceid=>array('type'=>$service->service_type, 'name'=>$service->program_name, 'code'=>$service->id,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'tax'=>$tax,'tax_activity'=>$tax_activity,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'categoryid'=>$categoryid ,'p_session'=>$p_session,'addOnServicesId'=> $addOnServicesId, 'addOnServicesQty' => $addOnServicesQty, 'addOnServicesTotalPrice' => $addOnServicesTotalPrice, 'aos_details' => $aos_details, 'product_details' => $product_details,'productIds' => $productIds, 'productQtys' => $productQtys, 'productSize' => $productSize, 'productColor' => $productColor, 'productTypes' =>$productTypes ,'productTotalPrices' =>$productTotalPrices, 'customerId' => $customerId ));
-
+        if ($service != '' || $productIds != '') {
+            $itemArray = array($customerId.'~~'.$request->priceid.'^~'.$orderType=>array('type'=>@$service->service_type, 'name'=>@$service->program_name, 'code'=>@$service->id,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'tax'=>$tax,'tax_activity'=>$tax_activity,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'categoryid'=>$categoryid ,'p_session'=>$p_session,'addOnServicesId'=> $addOnServicesId, 'addOnServicesQty' => $addOnServicesQty, 'addOnServicesTotalPrice' => $addOnServicesTotalPrice, 'aos_details' => $aos_details, 'product_details' => $product_details,'productIds' => $productIds, 'productQtys' => $productQtys, 'productSize' => $productSize, 'productColor' => $productColor, 'productTypes' =>$productTypes ,'productTotalPrices' =>$productTotalPrices, 'customerId' => $customerId ,'orderType' =>$orderType));
+    
             if(!empty($cart_item["cart_item"])) {
-                if(in_array($customerId.'~~'.$request->priceid, array_keys($cart_item["cart_item"]))) {
+                if(in_array($customerId.'~~'.$request->priceid.'^~'.$orderType, array_keys($cart_item["cart_item"]))) {
                     foreach($cart_item["cart_item"] as $k => $v) {
-                        if($customerId.'~~'.$request->priceid == $k) {
+                        if($customerId.'~~'.$request->priceid.'^~'.$orderType == $k) {
                             $cart_item["cart_item"][$k]["actscheduleid"] = $actscheduleid;
                             $cart_item["cart_item"][$k]["tip"] = $tip_amt_val;
                             $cart_item["cart_item"][$k]["discount"] = $dis_amt_val;
@@ -1051,7 +732,7 @@ class OrderController extends BusinessBaseController
                             $cart_item["cart_item"][$k]["productColor"] = $productColor;
                             $cart_item["cart_item"][$k]["productTypes"] = $productTypes;
                             $cart_item["cart_item"][$k]["productTotalPrices"] = $productTotalPrices;
-
+                            $cart_item["cart_item"][$k]["orderType"] = $orderType;
                             $cart_item["cart_item"][$k]["customerId"] = $customerId;
                         }
                     }
@@ -1077,7 +758,7 @@ class OrderController extends BusinessBaseController
         
         if(!empty($cart_item["cart_item"])) {
             foreach($cart_item["cart_item"] as $k => $v) {
-                if($request->customerID.'~~'.$_GET["priceid"] == $v['customerId'].'~~'.$v['priceid']) {
+                if($request->customerID.'~~'.@$_GET["priceid"].'^~'.$_GET["orderType"] == @$v['customerId'].'~~'.@$v['priceid'].'^~'.@$v["orderType"]) {
                     unset($cart_item["cart_item"][$k]);
                 }
             }

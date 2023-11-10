@@ -203,6 +203,32 @@
 																												<input type="text" class="form-control valid" name="sport_avail[]" id="sport_avail" value="{{ $schedule->spots_available}}" required="required">
 																											</div>
 																										</div>
+																										<div class="col-lg-3 col-md-6 col-sm-6">
+			                                                                        <div class="priceselect sp-select mt-10">
+			                                                                           <label>Choose Instructure</label>
+			                                                                           <input type="hidden" name="instructure[{{ $i }}]" value="">
+			                                                                           <select name="instructure[{{$i}}][]" id="instructure{{$i}}" multiple >
+			                                                                              @foreach($staffData as $data)
+                                                                                          <option value="{{$data->id}}" @if(@$service->instructor_id == $data->id) selected @endif> {{$data->first_name}} {{$data->last_name}} </option>
+                                                                                       @endforeach
+			                                                                           </select>
+			                                                                           
+			                                                                           <script id="slimSelectScript{{$i}}">
+																													new SlimSelect({
+																												      select: '#instructure{{$i}}'
+																												   });
+
+																												   const instructure{{$i}}  = '{{ @$schedule->instructure_ids }}';
+																													const insIds{{$i}}  = instructure{{$i}} ? instructure{{$i}}.split(',') : [];
+
+																													const s{{$i}}  = new SlimSelect({
+																													   select: '#instructure{{$i}}'
+																													});
+																													 s{{$i}}.set(insIds{{$i}});
+																												   
+																												</script>
+			                                                                        </div>
+			                                                                     </div>
 																									</div>
 																								</div>
 																							</div>
@@ -291,6 +317,24 @@
 																												<input type="text" class="form-control valid" name="sport_avail[]" id="sport_avail" value="1" required="required">
 																											</div>
 																										</div>
+
+																										<div class="col-lg-3 col-md-6 col-sm-6">
+			                                                                        <div class="priceselect sp-select mt-10">
+			                                                                           <label>Choose Instructure</label>
+			                                                                           <input type="hidden" name="instructure[0]" value="">
+			                                                                           <select name="instructure[]" id="instructure0" multiple >
+			                                                                              @foreach($staffData as $data)
+                                                                                          <option value="{{$data->id}}" @if(@$service->instructor_id == $data->id) selected @endif> {{$data->first_name}} {{$data->last_name}} </option>
+                                                                                       @endforeach
+			                                                                           </select>
+			                                                                           <script id="slimSelectScript0">
+																													new SlimSelect({
+																												      select: '#instructure0'
+																												   });
+																												</script>
+			                                                                        </div>
+			                                                                     </div>
+
 																									</div>
 																								</div>
 																							</div>
@@ -387,13 +431,17 @@
 		   }]
 	   });
 	</script>
+<div id="slimselectdiv">
+	<script id="slimSelectScript0">
+		new SlimSelect({
+	      select: '#instructure0'
+	   });
+	</script>
+</div>
 <script>
 
 	$("body").on("click", ".daycircle", function(){
-      /*if($("#frm_class_meets").val() == 'Weekly')
-      {
-        
-      }*/
+ 
       activity_days = "";     
         $(this).find(".weekdays").each( function() {
           $.each( $(this).find('.day_circle'), function( key, value ) {
@@ -403,14 +451,6 @@
           });
         });
         $(this).find('.activity_days').val(activity_days);
-
-      /*if($("#frm_class_meets").val() == 'On a specific day') {
-        activity_days = "";
-        $.each( $(this).find('.weekdays').children(".day_circle_fill"), function( key, value ) {
-          activity_days += value.classList[3] + ","
-        });
-        $(this).find('.activity_days').val(activity_days);
-      }*/
    });
 
   	$("#frm_class_meets").on("change", function () {
@@ -441,7 +481,17 @@
 				    $("#dayduration" + i).remove();
 				}
 				$("#dayduration0").html('');
-	      	$("#dayduration0").html('<div id="dayduration0"> <div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnestingin0"> <div class="accordion-item shadow"> <h2 class="accordion-header" id="accordionnestinginExample0"> <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestinginExamplecollapse0" aria-expanded="true" aria-controls="accor_nestinginExamplecollapse0"> Time Select </button> </h2> <div id="accor_nestinginExamplecollapse0" class="accordion-collapse collapse show" aria-labelledby="accordionnestinginExample0" data-bs-parent="#accordionnestingin0"> <div class="accordion-body"> <div id="day-circle"> <div class="col-md-12" id="deleteschedule0" style="display: none;" onclick="removeschedule(0);"> <i class="float-right ri-delete-bin-fill align-bottom me-2 text-muted" title="Remove activity"></i> </div> <div class="daycircle" id="editscheduler"> <input type="hidden" name="id[]" id="id" value=""> <input type="hidden" name="activity_days[]" id="activity_days" class="activity_days" value="" width="800"> <div class="weekdays"> <div class="col-md-12"> <div class="display-line"> <div data-day="Monday" class="col-sm-1 timezone-round day_circle Monday dys"> <p>Mo</p> </div> <div data-day="Tuesday" class="col-sm-1 timezone-round day_circle Tuesday dys"> <p>Tu</p> </div> <div data-day="Wednesday" class="col-sm-1 timezone-round day_circle Wednesday dys "> <p>We</p> </div> <div data-day="Thursday" class="col-sm-1 timezone-round day_circle Thursday dys"> <p>Th</p> </div> <div data-day="Friday" class="col-sm-1 timezone-round day_circle Friday dys"> <p>Fr</p> </div> <div data-day="Saturday" class="col-sm-1 timezone-round day_circle Saturday dys"> <p>Sa</p> </div> <div data-day="Sunday" class="col-sm-1 timezone-round day_circle Sunday dys"> <p>Su</p> </div> </div> </div> </div> <div class="row"> <div class="col-lg-3 col-md-5 col-sm-5"> <div class="form-group mmt-10"> <label>Start Time</label>'+ '{{timeSlotOption("shift_start",'')}}' +' </div> </div> <div class="col-lg-1 col-md-2 col-sm-2"> <div class="weekly-time-estimate"> <label>To</label> </div> </div> <div class="col-lg-3 col-md-5 col-sm-5"> <div class="form-group mmt-10"> <label>End Time</label>'+'{{timeSlotOption("shift_end", '')}}' + '</div> </div> <div class="col-lg-3 col-md-6 col-sm-6"> <label class="mmt-10 imt-10">Duration</label> <div class="sp-bottom"> <input type="text" name="set_duration[]" id="set_duration" value="" readonly="" class="set_duration form-control"> </div> </div> <div class="col-lg-2 col-md-6 col-sm-6"> <label class="mmt-10 imt-10"># Spots Available</label> <div class="sp-bottom"> <input type="text" class="form-control valid" name="sport_avail[]" id="sport_avail" value="1" required="required"> </div> </div> </div> </div> </div> </div> </div> </div> </div> </div>');
+				var htmlData = '';
+	      	htmlData = '<div id="dayduration0"> <div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnestingin0"> <div class="accordion-item shadow"> <h2 class="accordion-header" id="accordionnestinginExample0"> <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestinginExamplecollapse0" aria-expanded="true" aria-controls="accor_nestinginExamplecollapse0"> Time Select </button> </h2> <div id="accor_nestinginExamplecollapse0" class="accordion-collapse collapse show" aria-labelledby="accordionnestinginExample0" data-bs-parent="#accordionnestingin0"> <div class="accordion-body"> <div id="day-circle"> <div class="col-md-12" id="deleteschedule0" style="display: none;" onclick="removeschedule(0);"> <i class="float-right ri-delete-bin-fill align-bottom me-2 text-muted" title="Remove activity"></i> </div> <div class="daycircle" id="editscheduler"> <input type="hidden" name="id[]" id="id" value=""> <input type="hidden" name="activity_days[]" id="activity_days" class="activity_days" value="" width="800"> <div class="weekdays"> <div class="col-md-12"> <div class="display-line"> <div data-day="Monday" class="col-sm-1 timezone-round day_circle Monday dys"> <p>Mo</p> </div> <div data-day="Tuesday" class="col-sm-1 timezone-round day_circle Tuesday dys"> <p>Tu</p> </div> <div data-day="Wednesday" class="col-sm-1 timezone-round day_circle Wednesday dys "> <p>We</p> </div> <div data-day="Thursday" class="col-sm-1 timezone-round day_circle Thursday dys"> <p>Th</p> </div> <div data-day="Friday" class="col-sm-1 timezone-round day_circle Friday dys"> <p>Fr</p> </div> <div data-day="Saturday" class="col-sm-1 timezone-round day_circle Saturday dys"> <p>Sa</p> </div> <div data-day="Sunday" class="col-sm-1 timezone-round day_circle Sunday dys"> <p>Su</p> </div> </div> </div> </div> <div class="row"> <div class="col-lg-3 col-md-5 col-sm-5"> <div class="form-group mmt-10"> <label>Start Time</label>'+ '{{timeSlotOption("shift_start",'')}}' +' </div> </div> <div class="col-lg-1 col-md-2 col-sm-2"> <div class="weekly-time-estimate"> <label>To</label> </div> </div> <div class="col-lg-3 col-md-5 col-sm-5"> <div class="form-group mmt-10"> <label>End Time</label>'+'{{timeSlotOption("shift_end", '')}}' + '</div> </div> <div class="col-lg-3 col-md-6 col-sm-6"> <label class="mmt-10 imt-10">Duration</label> <div class="sp-bottom"> <input type="text" name="set_duration[]" id="set_duration" value="" readonly="" class="set_duration form-control"> </div> </div> <div class="col-lg-2 col-md-6 col-sm-6"> <label class="mmt-10 imt-10"># Spots Available</label> <div class="sp-bottom"> <input type="text" class="form-control valid" name="sport_avail[]" id="sport_avail" value="1" required="required"> </div> </div>';
+
+	      	htmlData += '<div class="col-lg-3 col-md-6 col-sm-6"><div class="priceselect sp-select mt-10"><label>Choose Instructure</label>';
+	      	
+		      htmlData += '{!!$staffDataHTml!!}';
+		  
+	      	htmlData += $('#slimselectdiv').html();
+   			htmlData +='</div></div>';
+	      	htmlData += 	'</div> </div> </div> </div> </div> </div> </div> </div>';
+	      	$("#dayduration0").html(htmlData);
 	      	$('#duration_cnt').val('0');
 		   } else{
 		      $("#activity_scheduler_body").append($("#day-circle").html());
@@ -454,10 +504,7 @@
    });
 
    $('body').delegate('.timezone-round','click',function(){  
-      /*if($('#frm_class_meets').val()=='Weekly')
-      {   
-      }*/
-
+ 
       if($(this).hasClass("day_circle_fill"))
          $(this).removeClass('day_circle_fill');
       else
@@ -489,18 +536,30 @@
 
  	$("body").on("click", ".add-another-time", function(){ 
     	var cnt=$('#duration_cnt').val();
+    	var i=cnt;
 	   cnt++;
 	   $('#duration_cnt').val(cnt);
-	   var add_time = "";
-	   add_time += '<div id="dayduration'+cnt+'"><div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnestingin'+cnt+'"><div class="accordion-item shadow"><h2 class="accordion-header" id="accordionnestinginExample'+cnt+'"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestinginExamplecollapse'+cnt+'" aria-expanded="false" aria-controls="accor_nestinginExamplecollapse'+cnt+'">Time Select</button></h2><div id="accor_nestinginExamplecollapse'+cnt+'" class="accordion-collapse collapse" aria-labelledby="accordionnestinginExample'+cnt+'" data-bs-parent="#accordionnestingin'+cnt+'" style=""><div class="accordion-body"><div id="day-circle">';
+	   var htmlData =add_time = "";
+	   htmlData += '<div id="dayduration'+cnt+'"><div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnestingin'+cnt+'"><div class="accordion-item shadow"><h2 class="accordion-header" id="accordionnestinginExample'+cnt+'"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestinginExamplecollapse'+cnt+'" aria-expanded="false" aria-controls="accor_nestinginExamplecollapse'+cnt+'">Time Select</button></h2><div id="accor_nestinginExamplecollapse'+cnt+'" class="accordion-collapse collapse" aria-labelledby="accordionnestinginExample'+cnt+'" data-bs-parent="#accordionnestingin'+cnt+'" style=""><div class="accordion-body"><div id="day-circle">';
 
-     	add_time += '<div class="daycircle" id="editscheduler"><div class="col-md-12" id="deleteschedule'+cnt+'" onclick="removeschedule('+cnt+');"><i class="float-right ri-delete-bin-fill align-bottom me-2 text-muted"  title="Remove activity"></i></div>';
+     	htmlData += '<div class="daycircle" id="editscheduler"><div class="col-md-12" id="deleteschedule'+cnt+'" onclick="removeschedule('+cnt+');"><i class="float-right ri-delete-bin-fill align-bottom me-2 text-muted"  title="Remove activity"></i></div>';
 
-     	add_time += $(".daycircle").html();
-     	add_time += '</div>';
+     	htmlData += $(".daycircle").html();
+     	htmlData += '</div>';
 
-     	add_time += '</div></div></div></di></div></div>';
+     	htmlData += '</div></div></div></div></div></div>';
+     	add_time = htmlData.replace(/instructure\d+/,"instructure"+cnt);
+     	add_time = add_time.replaceAll(/instructure\[\d+\]/g,"instructure["+cnt+"]");
+     	add_time = add_time.replace(/slimSelectScript\d+/,"slimSelectScript"+cnt);
      	$("#activity_scheduler_body").append(add_time);
+     	$('#slimSelectScript'+cnt).html('');
+		let newScript = document.createElement('script');
+		newScript.type = 'text/javascript';
+		let newSelector = '#instructure'+cnt;
+		let newScriptContent = `new SlimSelect({ select: '${newSelector}' });`;
+		newScript.appendChild(document.createTextNode(newScriptContent));
+
+		$('#slimSelectScript'+cnt).html(newScript);
      	parent = document.querySelector("#dayduration"+cnt);
 	   shift_start = parent.querySelector('#shift_start').value='';
 	   shift_end = parent.querySelector('#shift_end').value='';

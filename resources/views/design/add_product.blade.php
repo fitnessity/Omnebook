@@ -37,7 +37,6 @@
                                         </div>
                                         <div>
                                             <label>Product Description</label>
-
                                             <div id="ckeditor-classic">
                                                 <p>Tommy Hilfiger men striped pink sweatshirt. Crafted with cotton. Material composition is 100% organic cotton. This is one of the world’s leading designer lifestyle brands and is internationally recognized for celebrating the essence of classic American cool style, featuring preppy with a twist designs.</p>
                                                 <ul>
@@ -368,8 +367,8 @@
 													
 													 <div class="col-lg-4">
                                                         <div class="mb-3">
-															<a href="#" class="float-end"> Create New Vendor</a>
-                                                            <label  for="meta-keywords-input">Vendor</label>
+															<a href="#" class="float-end" data-bs-toggle="modal" data-bs-target=".add-vendor"> Create New Vendor</a>
+                                                            <label for="meta-keywords-input">Vendor</label>
 															<div class="priceselect">
 																<div class="product-vendor" id="individualstype" style="">
 																	<select name="frm_servicetype[]" id="categSTypeidividuals" multiple>
@@ -392,8 +391,8 @@
                                                 <div class="row">
                                                      <div class="col-lg-4">
                                                         <div class="mb-3">
-                                                            <label  for="meta-keywords-input">Colors (Select all that apply) </label>
-															<a href="#" class="float-end"> Add new colors</a>
+                                                            <label for="meta-keywords-input">Colors (Select all that apply) </label>
+															<a href="#" class="float-end" data-bs-toggle="modal" data-bs-target=".add-color"> Add new colors</a>
 															<div class="priceselect">
 																<div class="product-vendor" id="individualstype">
 																	<select name="frm_servicetype[]" id="selectcolor" multiple>
@@ -411,7 +410,7 @@
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
                                                             <label  for="meta-keywords-input">Brands </label>
-															<a href="#" class="float-end">Add new brands</a>
+															<a href="#" class="float-end" data-bs-toggle="modal" data-bs-target=".add-brand">Add new brands</a>
 															<div class="priceselect">
 																<div class="product-vendor" id="individualstype">
 																	<select name="frm_servicetype[]" id="brands" multiple>
@@ -429,7 +428,7 @@
 													<div class="col-lg-4">
                                                         <div class="mb-3">
                                                             <label  for="meta-keywords-input">Sizes (Select all that apply) </label>
-															<a href="#" class="float-end">Add New Size</a>
+															<a href="#" class="float-end" data-bs-toggle="modal" data-bs-target=".add-size">Add New Size</a>
 															<div class="priceselect">
 																<div class="product-vendor" id="individualstype">
 																	<select name="frm_servicetype[]" id="product-size" multiple>
@@ -498,7 +497,7 @@
 													<div class="col-lg-4">
                                                         <div class="mb-3">
                                                             <label  for="meta-keywords-input">Material (Select all that apply) </label>
-															<a href="#" class="float-end">Add new material</a>
+															<a href="#" class="float-end" data-bs-toggle="modal" data-bs-target=".add-material">Add new material</a>
 															<div class="priceselect">
 																<div class="product-vendor" id="individualstype">
 																	<select name="frm_servicetype[]" id="product-material" multiple>
@@ -551,7 +550,150 @@
      </div><!-- end main content-->
 </div><!-- END layout-wrapper -->
 
+<div class="modal fade add-color" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Add a new color </h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="row y-middle"> 
+					<div class="col-lg-4">
+						<div>
+							<label class="fs-15"> Color Name </label>
+						</div>
+					</div>
+					<div class="col-lg-8">
+						<div>
+							<input type="text" class="form-control" placeholder="Add Color">
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary btn-red">Add</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
+<div class="modal fade add-brand" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Add a new brand </h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="row y-middle"> 
+					<div class="col-lg-4">
+						<div>
+							<label class="fs-15">Brand Name </label>
+						</div>
+					</div>
+					<div class="col-lg-8">
+						<div>
+							<input type="text" class="form-control">
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary btn-red">Add</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade add-size" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Add a new size </h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="row y-middle"> 
+					<div class="col-lg-4">
+						<div>
+							<label class="fs-15">Size Name </label>
+						</div>
+					</div>
+					<div class="col-lg-8">
+						<div>
+							<input type="text" class="form-control">
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary btn-red">Add</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade add-material" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Add a new material </h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="row y-middle"> 
+					<div class="col-lg-4">
+						<div>
+							<label class="fs-15"> Material Name </label>
+						</div>
+					</div>
+					<div class="col-lg-8">
+						<div>
+							<input type="text" class="form-control">
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary btn-red">Add</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade add-vendor" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Add a new vendor </h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="row y-middle"> 
+					<div class="col-lg-4">
+						<div>
+							<label class="fs-15"> Vendor Name </label>
+						</div>
+					</div>
+					<div class="col-lg-8">
+						<div>
+							<input type="text" class="form-control">
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary btn-red">Add</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 	@include('layouts.business.footer')
 	<script>
 		$('input[type=radio][name=product]').change(function() {

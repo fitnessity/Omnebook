@@ -175,8 +175,8 @@
         														<input type="radio" id="sale" name="product_type" value="sale" @if(@$product->product_type == 'sale' || $product == '' ) checked @endif>
         														<label class="mr-15" for="sale">Sale Product</label>
         														
-        														<input type="radio" id="rant" name="product_type" value="rant" @if(@$product->product_type == 'rant' ) checked @endif>
-        														<label class="mr-15" for="rant">Rent Product</label>
+        														<input type="radio" id="rent" name="product_type" value="rent" @if(@$product->product_type == 'rent' ) checked @endif>
+        														<label class="mr-15" for="rent">Rent Product</label>
         														
         														<input type="radio" id="both" name="product_type" value="both" @if(@$product->product_type == 'both' ) checked @endif>
         														<label class="mr-15" for="both">Both</label>
@@ -608,7 +608,7 @@
 	<script>
         $(document).ready(function() {
             function toggleDisplay(productType) {
-                if (productType == "rant" ) {
+                if (productType == "rent" ) {
                     $('.display-rant').removeClass('d-none');
                     $('.display-sale').addClass('d-none');
                 } else if (productType == "sale") {
