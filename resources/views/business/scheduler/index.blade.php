@@ -249,7 +249,6 @@
 		});
 
 		function getCheckInDetails(scheduleId,date,chkInID,cus_id,chk,chkMsg,chkInMsg){
-			alert(chkMsg)
 			var business_id = '{{$request->current_company->id}}';
 			$.ajax({	
 				url:"/business/"+business_id+"/schedulers/"+scheduleId+"/checkin_details?date="+date+"&chkInId="+chkInID+"&cus_id="+cus_id+"&chk="+chk+"&msg="+chkMsg+"&chkInMsg="+chkInMsg,

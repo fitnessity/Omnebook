@@ -1,4 +1,5 @@
 @inject('request', 'Illuminate\Http\Request')
+@inject('request', 'Illuminate\Http\Request')
 @extends('layouts.business.header')
 
 @section('content')
@@ -16,21 +17,21 @@
 						<div class="row">
 							<div class="col-lg-12">
 								<div class="float-right">
-								<div class="search-set">
-									<form class="client-search">
-										<div class="position-relative">
-											<input type="text" class="form-control" placeholder="Search for client" autocomplete="off" id="search-options" value="">
-											<span class="mdi mdi-magnify search-widget-icon"></span>
-											<span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-close-options"></span>
-										</div>
-										<div class="dropdown-menu dropdown-menu-lg" id="search-dropdown">
-											
-										</div>
-									</form>
-								</div>
-								<div class="btn-client-search">
-									<button type="button" class="btn-red-primary btn-red mmt-10" id="">Search </button>
-								</div>
+									<div class="search-set">
+										<form class="client-search">
+											<div class="position-relative">
+												<input type="text" class="form-control" placeholder="Search for client" autocomplete="off" id="search-options" value="">
+												<span class="mdi mdi-magnify search-widget-icon"></span>
+												<span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-close-options"></span>
+											</div>
+											<div class="dropdown-menu dropdown-menu-lg" id="search-dropdown">
+												
+											</div>
+										</form>
+									</div>
+									<div class="btn-client-search">
+										<button type="button" class="btn-red-primary btn-red mmt-10" id="">Search </button>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -449,7 +450,7 @@
 												<p class="text-muted mb-0">9:20 <span class="text-uppercase">pm</span></p>
 											</div>
 											<div class="flex-shrink-0 avatar-sm ms-3">
-												<a href="#" class="cursor-pointer">
+												<a href="#" class="cursor-pointer" data-bs-toggle="modal" data-bs-target=".add_client">
 													<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4">
 														1/10
 													</span>
@@ -704,9 +705,260 @@
         </div><!-- End Page-content -->
      </div><!-- end main content-->
 </div><!-- END layout-wrapper -->
-    
 
-	
+<div class="modal fade add_client" tabindex="-1" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-70">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Activity Scheduler Check-In</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-5">
+						<div class="pro-name">
+							<label>World Kungfu Championships</label>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<span class="mb-3">kung fu session 2</span>
+							</div>
+							<div class="col-md-6">
+								<div class="mb-3">
+									<span >Wednesday, August 2, 2023</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-7">
+						<div class="row">
+							<div class="col-md-4 col-sm-4 col-6">
+								<div class="gry-box d-grid side-box mb-3">
+									<label>Time</label>
+									<span>01:30 AM - 03:30 AM</span>
+								</div>
+							</div>
+							<div class="col-md-4 col-sm-4 col-6">
+								<div class="gry-box d-grid side-box mb-3">
+									<label>Duration</label>
+									<span>2 hour</span>
+								</div>
+							</div>
+							<div class="col-md-4 col-sm-4 col-6">
+								<div class="gry-box d-grid side-box mb-3">
+									<label>Spots</label>
+									<span>8/10</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 col-sm-4 col-12">	
+						<div class="mb-3 select-staff-member">
+							<select name="activity_type" class="form-select" id="" data-choices="" data-choices-search-false="">
+								<option value="">Select Staff Member</option>
+								<option value="">Option 2</option>
+								<option value="">Option 3</option>
+								<option value="">Option 4</option>
+								<option value="">Option 5</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-8 col-sm-8 col-12">	
+						<div class="float-right mb-3">
+							<div class="search-set manage-search manage-space">
+								<div class="client-search">
+									<div class="position-relative">
+										<input type="text" class="form-control ui-autocomplete-input" placeholder="Search for client" autocomplete="off" id="search_postorder_client" value="">
+										<span class="mdi mdi-magnify search-widget-icon"></span>
+										<span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-close-options"></span>
+									</div>
+									<div class="dropdown-menu dropdown-menu-lg" id="search-dropdown"></div>
+								</div>
+							</div>
+							<div class="btn-client-search">
+								<a class="btn-red-primary btn-red mmt-10" data-business-activity-scheduler-id="1101" data-behavior="add_client_to_booking_post_order">Add </a>
+								<!--<a class="btn-red-primary btn-red mmt-10" href="#" data-bs-toggle="modal" data-bs-target=".add_client">Add </a>-->
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-md-12">	
+						<div class="booking-add-client">
+							<div class="table-responsive">
+								<table>
+								  <tr>
+									<th>No</th>
+									<th>Client</th>
+									<th>Options</th>
+									<th>Check In</th>
+									<th>Remaining </th>
+									<th>Expiration</th>
+									<th>Alerts</th>
+									<th></th>
+								  </tr>
+								<tr>
+									<td>1</td>
+									<td>
+										<div class="mini-stats-wid d-flex align-items-center width-185">
+											<div class="avatar-sm mr-15">
+												<div class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">
+													<span> AJ </span>
+												</div>
+											</div>
+											<h6 class="mb-1">Aadi Jambawalikar</h6>
+										</div>
+									</td>
+									<td>
+										<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="370">
+											<option value="" selected="">Choose option</option>
+										</select>
+									</td>
+									<td>
+										<div class="check-cancel width-105">
+											<input type="checkbox" id="checkin" name="checkin" value="">
+											<label for="checkin" class="mb-0 mmt-10">Check In</label><br>
+											<input type="checkbox" id="cancel" name="cancel" value="">
+											<label for="cancel" class="mb-0 mmt-10"> Late Cancel</label><br>
+										</div>
+									</td>
+									<td>
+										<div>
+											<h6 class="mmt-10">Remaining</h6>
+											<p class="mb-0">N/A</p>
+										</div>
+									</td>
+									<td>N/A</td>
+									<td>
+										<p>expired CC</p>
+									</td>
+									<td>
+										<div class="multiple-options">
+											<div class="setting-icon">
+												<i class="ri-more-fill"></i>
+												<ul>
+													<li><a href="http://dev.fitnessity.co/business/68/orders/create?cus_id=30400"><i class="fas fa-plus text-muted"></i>Purchase</a></li>
+													<li><a href="http://dev.fitnessity.co/business/68/customers/30400" target="_blank" ><i class="fas fa-plus text-muted"></i>View Account</a></li>
+													<li>
+														<a href="#" data-behavior="delete_checkin_detail" data-booking-checkin-detail-id="374"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</td>
+								  </tr>
+								 <tr>
+									<td>2</td>
+									<td>
+										<div class="mini-stats-wid d-flex align-items-center width-185">
+											<div class="avatar-sm mr-15">
+												<div class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">
+													<span> AJ </span>
+												</div>
+											</div>
+											<h6 class="mb-1">Aadi Jambawalikar</h6>
+										</div>
+									</td>
+									<td>
+										<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="370">
+											<option value="" selected="">Choose option</option>
+										</select>
+									</td>
+									<td>
+										<div class="check-cancel width-105">
+											<input type="checkbox" id="checkin" name="checkin" value="">
+											<label for="checkin" class="mb-0 mmt-10">Check In</label><br>
+											<input type="checkbox" id="cancel" name="cancel" value="">
+											<label for="cancel" class="mb-0 mmt-10"> Late Cancel</label><br>
+										</div>
+									</td>
+									<td>
+										<div>
+											<h6 class="mmt-10">Remaining</h6>
+											<p class="mb-0">N/A</p>
+										</div>
+									</td>
+									<td>N/A</td>
+									<td>
+										<div class="scheduled-btns width-120">
+											<p>expired CC</p>
+										</div>
+									</td>
+									<td>
+										<div class="multiple-options">
+											<div class="setting-icon">
+												<i class="ri-more-fill"></i>
+												<ul>
+													<li><a href="http://dev.fitnessity.co/business/68/orders/create?cus_id=30400"><i class="fas fa-plus text-muted"></i>Purchase</a></li>
+													<li><a href="http://dev.fitnessity.co/business/68/customers/30400" target="_blank" ><i class="fas fa-plus text-muted"></i>View Account</a></li>
+													<li>
+														<a href="#" data-behavior="delete_checkin_detail" data-booking-checkin-detail-id="374"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</td>
+								  </tr>
+								<tr>
+									<td colspan="8"> 
+										<div class="no0signup text-center">
+											<img src="http://dev.fitnessity.co/public/dashboard-design/images/sports-set.jpg">
+											<h3>No one is signed up. Add them to this activity</h3>
+										</div>
+									</td>
+								</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div> 
+
+<div class="modal fade checking-details0" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-modal="true">
+	<div class="modal-dialog modal-dialog-centered width-50 bsw-35">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Activity Scheduler</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="scheduler-table">
+					<div class="table-responsive">
+						<table class="table mb-0">
+							<thead>
+								<tr>
+									<th>Expiration</th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<p class="mb-0">N/A</p>
+									</td>
+									<td>
+										<div class="scheduled-btns">
+											<a href="http://dev.fitnessity.co/business/68/orders/create?cus_id=30400" class="btn btn-red mb-10">Purchase</a>
+											<a href="http://dev.fitnessity.co/business/68/customers/30400" target="_blank" class="btn btn-black mb-10">View Account</a>
+										</div>
+									</td>
+									<td>
+										<div class="scheduled-btns">
+											<a href="#" data-behavior="delete_checkin_detail" data-booking-checkin-detail-id="374" class="btn btn-red">Delete</a>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div>	
 	
 	@include('layouts.business.footer')
 	<script>

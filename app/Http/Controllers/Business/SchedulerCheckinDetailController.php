@@ -266,7 +266,8 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         $idsArray = explode(',', $id);
         $company = $request->current_company;
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
-        $business_checkin_detail = BookingCheckinDetails::whereIn('booking_detail_id', $idsArray)->whereDate('checkin_date', $request->date)->delete();
+        /*$business_checkin_detail = BookingCheckinDetails::whereIn('booking_detail_id', $idsArray)->whereDate('checkin_date', $request->date)->get();*/
+        BookingCheckinDetails::whereIn('id', $idsArray)->whereDate('checkin_date', $request->date)->delete();
         //$business_checkin_detail->delete();
     }
 
