@@ -4,29 +4,32 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Repositories\{PlanRepository,SportsRepository};
+use App\Repositories\{PlanRepository,SportsRepository,FeaturesRepository};
 use Auth;
 use Redirect;
 use Response;
 use DB;
 use Validator;
 use Image;
-use Excel;
+use Storage;
 use App\Imports\ClaimImport;
 use Maatwebsite\Excel\HeadingRowImport;
 use App\{BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessActivityScheduler,PagePost,PagePostSave,PageLike,BusinessReview,Miscellaneous,BusinessPriceDetailsAges,MailService,Plan,BusinessClaim,CompanyInformation,UserService,BusinessService,Sports,User};
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class PlansController extends Controller
 {   
     protected $plan;
     public $error = '';
     protected $sports;
+    protected $features;
 
-    public function __construct(PlanRepository $plan ,SportsRepository $sports)
+    public function __construct(PlanRepository $plan ,SportsRepository $sports ,FeaturesRepository $features)
     {
         $this->middleware('admin');
         $this->plan = $plan;    
         $this->sports = $sports;
+        $this->features = $features;
     }
 
     public function index()
@@ -38,7 +41,185 @@ class PlansController extends Controller
             'pageTitle' => 'Manage Membership Plans'
         ]);
     }
+
+    public function create()
+    {
+        $features = $this->features->getAllFeatures();
+        return view('admin.plan.create', [      
+            'features' => $features,       
+            'pageTitle' => 'Add New Membership Plan'
+
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $features = $this->features->getAllFeatures();
+        $myArray = [];
+        foreach ($features as $key=>$f){
+            $myArray[$f->id] = $request->input('featureValue_'.$f->id);
+        }
+        $image = $request->has('image') ? $request->file('image')->store('plan') : ''; 
+        $plan = $this->plan->create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'price_per_month' => $request->price_per_month,
+            'price_per_year' => $request->price_per_year,
+            'image' => $image,
+            'featurs_details' => json_encode($myArray),
+            'heading' => $request->heading]);
+
+        if($plan)
+        {
+            session(['key' => 'success']);
+            session(['msg' => 'Membership Plan Created Succesfully !']);    
+        }
+
+        return redirect()->route('plan-list');
+    }
+
+    protected function saveValidator($data)
+    {
+        return Validator::make($data, [            
+            'title' => 'required|max:255|unique:membership_plans',
+            'price_per_month' => 'required|integer',
+            'price_per_year' =>'required|integer',
+            'description' =>'required'
+        ],
+        [
+            'title.required' => 'Provide a title',
+            'price_per_month.required' => 'Provide a Price per month',
+            'price_per_year.required' => 'Provide a  Price per year',
+            'description.required' => 'Provide a description',
+        ]);
+    }
+
+    protected function updateValidator($data,$id)
+    {
+        return Validator::make($data, [            
+            'title' => 'required|max:255|unique:membership_plans,title,'.$id,
+            'price_per_month' => 'required|integer',
+            'price_per_year' =>'required|integer',
+            'description' =>'required'
+        ],
+        [
+            'title.required' => 'Provide a title',
+            'price_per_month.required' => 'Provide a Price per month',
+            'price_per_year.required' => 'Provide a Quote per month',
+            'description.required' => 'Provide a description',
+        ]);
+    }
+
+    public function edit($id)
+    {
+        $features = $this->features->getAllFeatures();
+        $plan = $this->plan->getById($id);
+        if($plan){
+            return view('admin.plan.edit', [
+                'pageTitle' => 'Edit Membership Plan',
+                'plan' => $plan,
+                'features' => $features
+            ]);
+        }
+
+        return redirect()->route('plan-list');   
+    }
+
+    public function update($id, Request $request)
+    {
+        /*print_r($request->all());*/
+        $features = $this->features->getAllFeatures();
+        $myArray = [];
+        foreach ($features as $key=>$f){
+            $myArray[$f->id] = $request->input('featureValue_'.$f->id);
+        }
+
+        $image = $request->file('image') ? $request->file('image')->store('plan') : $request->hiddenimage; 
+        $status = $this->plan->update($id,[
+            'title' => $request->title,
+            'description' => $request->description,
+            'price_per_month' => $request->price_per_month,
+            'price_per_year' => $request->price_per_year,
+            'image' => $image,
+            'featurs_details' =>  json_encode($myArray),
+            'heading' => $request->heading]);
+
+        if($status)
+        {
+            session(['key' => 'success']);
+            session(['msg' => 'Membership Plan Updated Succesfully !']);    
+        }
+
+        return redirect()->route('plan-list');
+    }
+
+    public function deactivate(Request $request)
+    {
+        $status = $this->plan->update($request->id, array('is_deleted'=>'1'));
+
+        if($status)
+        {
+            return json_encode([
+                'status' => true
+            ]);
+        }
+        
+        return json_encode([
+            'status' => false
+        ]);
+    }
+
+    public function activate(Request $request)
+    {
+        $status = $this->plan->update($request->id, array('is_deleted'=>'0'));
+
+        if($status)
+        {
+            return json_encode([
+                'status' => true
+            ]);
+        }
+        
+        return json_encode([
+            'status' => false
+        ]);
+    }
+
+    /**
+     * Delete Multiple Plans
+     * 
+     * @param Request $request
+     * @return array
+     */
+    public function deleteAll(Request $request){
+        $input = $request->all();
+
+        if(isset($request->planIds) && count($request->planIds) > 0) {
+
+            $update = Plan::whereIn('id', $input['planIds'])
+                     ->update([
+                        'is_deleted' => 1
+                    ]);
+
+            if(!$update) {
+                $response = array(
+                        'danger' => 'Some error while deactivating plans.',
+                );
+            } else {
+                $response = array(
+                    'success' =>  'Plans Deactivated Successfully.',
+                ); 
+            }
+
+        } else {
+            $response = array(
+                    'danger' =>  'Please select at least one plan.',
+            );
+        }
+        return Redirect::to('/admin/plans/membership-plan')->with('status',$response);
+    }
     
+
     public function businessUnclaim()
     {
         $claims = CompanyInformation::where('is_verified',0)->get();
@@ -161,98 +342,6 @@ class PlansController extends Controller
                 return response()->json(['status'=>200,'message'=>'File replaced Successfully']);
     
         }  
-    }
-
-    public function create()
-    {
-        return view('admin.plan.create', [            
-            'pageTitle' => 'Add New Membership Plan'
-        ]);
-    }
-
-    public function store(Request $request)
-    {
-        $validator = $this->saveValidator($request->all());
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        }
-        $status = $this->plan->create($request->all());
-
-        if($status)
-        {
-            session(['key' => 'success']);
-            session(['msg' => 'Membership Plan Created Succesfully !']);    
-        }
-
-        return redirect()->route('plan-list');
-    }
-
-    protected function saveValidator($data)
-    {
-        return Validator::make($data, [            
-            'title' => 'required|max:255|unique:membership_plans',
-            'price_per_month' => 'required|integer',
-            'quote_per_month' =>'required|integer',
-            'description' =>'required'
-        ],
-        [
-            'title.required' => 'Provide a title',
-            'price_per_month.required' => 'Provide a Price per month',
-            'quote_per_month.required' => 'Provide a Quote per month',
-            'description.required' => 'Provide a description',
-        ]);
-    }
-
-    protected function updateValidator($data,$id)
-    {
-        return Validator::make($data, [            
-            'title' => 'required|max:255|unique:membership_plans,title,'.$id,
-            'price_per_month' => 'required|integer',
-            'quote_per_month' =>'required|integer',
-            'description' =>'required'
-        ],
-        [
-            'title.required' => 'Provide a title',
-            'price_per_month.required' => 'Provide a Price per month',
-            'quote_per_month.required' => 'Provide a Quote per month',
-            'description.required' => 'Provide a description',
-        ]);
-    }
-
-    public function edit($id)
-    {
-        $plan = $this->plan->getById($id);
-
-        if($plan)
-        {
-            return view('admin.plan.edit', [
-                'pageTitle' => 'Edit Membership Plan',
-                'plan' => $plan
-            ]);
-        }
-
-        return redirect()->route('plan-list');   
-    }
-
-    public function update($id, Request $request)
-    {
-        $validator = $this->updateValidator($request->all(),$id);
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        }
-        $status = $this->plan->update($id, $request->all());
-
-        if($status)
-        {
-            session(['key' => 'success']);
-            session(['msg' => 'Membership Plan Updated Succesfully !']);    
-        }
-
-        return redirect()->route('plan-list');
     }
 
     public function deleteClaim($id){
@@ -1219,72 +1308,6 @@ class PlansController extends Controller
         ]);
     }
 
-    public function deactivate(Request $request)
-    {
-        $status = $this->plan->update($request->id, array('is_deleted'=>'1'));
-
-        if($status)
-        {
-            return json_encode([
-                'status' => true
-            ]);
-        }
-        
-        return json_encode([
-            'status' => false
-        ]);
-    }
-
-    public function activate(Request $request)
-    {
-        $status = $this->plan->update($request->id, array('is_deleted'=>'0'));
-
-        if($status)
-        {
-            return json_encode([
-                'status' => true
-            ]);
-        }
-        
-        return json_encode([
-            'status' => false
-        ]);
-    }
-
-    /**
-     * Delete Multiple Plans
-     * 
-     * @param Request $request
-     * @return array
-     */
-    public function deleteAll(Request $request){
-        $input = $request->all();
-
-        if(isset($request->planIds) && count($request->planIds) > 0) {
-
-            $update = Plan::whereIn('id', $input['planIds'])
-                     ->update([
-                        'is_deleted' => 1
-                    ]);
-
-            if(!$update) {
-                $response = array(
-                        'danger' => 'Some error while deactivating plans.',
-                );
-            } else {
-                $response = array(
-                    'success' =>  'Plans Deactivated Successfully.',
-                ); 
-            }
-
-        } else {
-            $response = array(
-                    'danger' =>  'Please select at least one plan.',
-            );
-        }
-        return Redirect::to('/admin/plans/membership-plan')->with('status',$response);
-    }
-	
 	public function business_delete($id){
 		//$comp = CompanyInformation::where('id', $id)->first();
 		$del = CompanyInformation::where('id',$id)->delete();
@@ -1383,5 +1406,11 @@ class PlansController extends Controller
         $AllDetail  = json_decode(json_encode($detail_data_com), true); 
         $status = MailService::sendEmailfromadmin($AllDetail);
         return $status;
+    }
+
+
+    protected function throwValidationException(Request $request, $validator)
+    {
+        throw new HttpResponseException(response()->json(['error' => $validator->errors()], 422));
     }
 }
