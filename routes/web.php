@@ -28,6 +28,8 @@ Route::any('/storeCards','OnBoardedController@storeCards')->name('storeCards');
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
     // Scheduler
     Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
+    Route::get('schedulers/cancel_all', 'SchedulerController@cancel_all')->name('schedulers.cancel_all');
+    Route::post('cancel-all-activity', 'SchedulerController@cancel_all_store')->name('cancel_all_store');
     Route::resource('schedulers', 'SchedulerController')->only(['index', 'create','store','update','destroy']);
 
     // Scheduler Checkin Details
