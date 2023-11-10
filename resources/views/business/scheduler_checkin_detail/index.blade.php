@@ -260,6 +260,7 @@
                 serviceId: "{{$business_activity_scheduler->serviceid}}",
             },
             success: function(html){
+            	alert(html);
                 //location.reload();	
                 getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','',html,'');
         	}
@@ -288,7 +289,6 @@
                 checked_at: $(this).is(':checked') ? date : null,
             },
             success:function(response) {
-            	alert(response);
             	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}',chkInID,cus_id,chk,'',response);
                 //location.reload()
             },
