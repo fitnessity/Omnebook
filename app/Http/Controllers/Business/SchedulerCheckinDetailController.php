@@ -118,7 +118,6 @@ class SchedulerCheckinDetailController extends BusinessBaseController
                             'source_type' => 'in_person',
                             'use_session_amount' => 0,
                         ]);
-
                         return $chk;
                     }
                 }
@@ -161,10 +160,12 @@ class SchedulerCheckinDetailController extends BusinessBaseController
      */
     public function update(Request $request, $business_id, $scheduler_id, $id)
     {
+
         $company = $request->current_company;
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
         $business_checkin_detail = BookingCheckinDetails::whereRaw('1=1');
         $overwrite = []; $sendmail= 0;
+
 
         if($request->checked_at){
             $customerInClass = BookingCheckinDetails::checkCustomerInClass($scheduler_id,$request->checked_at);
@@ -183,8 +184,10 @@ class SchedulerCheckinDetailController extends BusinessBaseController
             }
             
         }else{
-            $checkin_detail = BookingCheckinDetails::whereNotNull('booking_detail_id')->findOrFail($id);
+            
+            $checkin_detail = BookingCheckinDetails::findOrFail($id);
             $overwrite['use_session_amount'] = 0;
+            $overwrite['checked_at'] = Null;
             $checkin_detail->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
         }
 
