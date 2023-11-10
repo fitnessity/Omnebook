@@ -47,7 +47,7 @@
         <div class="container-fluid">
             <div id="two-column-menu">
             </div>
-			<!--<div class="live-preview text-center">
+			<div class="live-preview text-center">
 				<div class="dropdown mt-70">
 					<button class="btn btn-switch-business dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">
 						Fitness Pvt. Ltd.
@@ -102,7 +102,7 @@
 						<li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
 					</ul>
 				</div>
-			</div> -->
+			</div> 
             <ul class="navbar-nav dash-sidebar-menu" id="navbar-nav">
 				<li class="menu-title border-bottom">
 					<span class="font-white switch-business" data-key="t-menu">{{$dba_business_name}}

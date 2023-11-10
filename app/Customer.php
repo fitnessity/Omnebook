@@ -257,7 +257,7 @@ class Customer extends Authenticatable
             $results = $results->join('user_booking_status as ubs','user_booking_details.booking_id', '=', 'ubs.id')->orwhere(['ubs.user_id' => Auth::user()->id])->where('user_booking_details.business_id', $company->id);
         }
 
-        $results = $results->select('user_booking_details.*', DB::raw('(CASE WHEN bcd.checkin_date IS NOT NULL AND bcd.checkin_date != CURDATE() AND bcd.checkin_date >= CURDATE() THEN COUNT(bcd.use_session_amount) ELSE 0 END) as checkin_count'))->join('booking_checkin_details as bcd', 'user_booking_details.id', '=', 'bcd.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->where('user_booking_details.business_id', $company->id)->groupBy('user_booking_details.id')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'));
+        $results = $results->select('user_booking_details.*', DB::raw('(CASE WHEN bcd.checkin_date IS NOT NULL AND bcd.checkin_date != CURDATE() AND bcd.checkin_date >= CURDATE() THEN COUNT(bcd.use_session_amount) ELSE 0 END) as checkin_count'))->join('booking_checkin_details as bcd', 'user_booking_details.id', '=', 'bcd.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->where('user_booking_details.business_id', $company->id)->where('user_booking_details.order_type', 'Membership')->groupBy('user_booking_details.id')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'));
 
        
         //print_r($results->get());exit; 
@@ -270,7 +270,7 @@ class Customer extends Authenticatable
         $from = (Carbon::now()->subDays(7))->format('Y-m-d');
         $to = (Carbon::now()->addDays(7))->format('Y-m-d');
 
-        $result = UserBookingDetail::where('business_id', $company->id)->where(['user_type'=>'customer','user_id'=>$this->id])->whereDate('expired_at', '>',  $now)->whereBetween('expired_at',  [$from, $to]);
+        $result = UserBookingDetail::where('business_id', $company->id)->where(['user_type'=>'customer','user_id'=>$this->id])->where('user_booking_details.order_type', 'Membership')->whereDate('expired_at', '>',  $now)->whereBetween('expired_at',  [$from, $to]);
 
         return $result->count();
     }
@@ -314,7 +314,7 @@ class Customer extends Authenticatable
 
     public function complete_booking_details(){
         $company = $this->company_information;
-        $booking_details = UserBookingDetail::where('business_id', $company->id)->where(['user_type'=>'customer','user_id'=>$this->id])->whereRaw('((pay_session <= 0 or pay_session is null) or expired_at < now())');
+        $booking_details = UserBookingDetail::where('business_id', $company->id)->where(['user_type'=>'customer','user_id'=>$this->id])->where('user_booking_details.order_type', 'Membership')->whereRaw('((pay_session <= 0 or pay_session is null) or expired_at < now())');
 
         return $booking_details;
     }
@@ -325,7 +325,7 @@ class Customer extends Authenticatable
         $company = $this->company_information;
         $user_id = $user ? $user->id : "no_user_id";
 
-        $booking_details = UserBookingDetail::where('business_id', $company->id)->where(['user_type'=>'customer','user_id'=>$this->id]);
+        $booking_details = UserBookingDetail::where('business_id', $company->id)->where(['user_type'=>'customer','user_id'=>$this->id])->where('user_booking_details.order_type', 'Membership');
 
         /*$booking_details = UserBookingDetail::where('business_id', $company->id)->whereIn('booking_id', function($query) use ($customer, $user_id){
             $query->select('id')

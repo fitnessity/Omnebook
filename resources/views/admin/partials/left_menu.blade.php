@@ -134,6 +134,12 @@
           </a>
         </li>
 
+        <li class="{{ $request->segment(2) == 'features' ? 'active' : '' }}">
+          <a href="/admin/features">
+            <i class="fa fa-list-alt"></i> <span>Manage Features</span>  
+          </a>
+        </li>
+
         <li class="{{ $request->segment(2) == 'sports' ? 'active' : '' }}">
           <a href="/admin/sports">
             <i class="fa fa-futbol-o"></i> <span>Manage Sports</span>  

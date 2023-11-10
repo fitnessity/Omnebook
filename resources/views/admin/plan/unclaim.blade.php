@@ -88,22 +88,7 @@
                         $emailval= $value->business_email;
                       }
                         $i++; 
-                      $address = '';
-                      if($value->address != ''){
-                        $address = $value->address.', ';
-                      }
-                      if($value->city != ''){
-                        $address .= $value->city.', ';
-                      }
-                      if($value->state != ''){
-                        $address .= $value->state.', ';
-                      }
-                      if($value->country != ''){
-                        $address .= $value->country.', ';
-                      }
-                      if($value->zip_code != ''){
-                        $address .= $value->zip_code;
-                      }
+                    
                     ?>
                       <tr id="item-{!! $value->id !!}">
                         <td><input type="checkbox" name="planIds[]" value="{{$value->id}}"></td>
@@ -112,7 +97,7 @@
                         <td>{{ $value->business_email}}</td>
                         <td>{{ $value->website}}</td>
                         <td>{{ $value->business_phone}}</td>
-                        <td>{{ $address }}</td>
+                        <td>{{ $value->company_address() }}</td>
                         <td>@if($value->is_verified == 1) Verfied @else Unclaimed @endif</td>
                         <td><a class="btn btn-success-red btn-sp" href="{{route('add_activity',['id'=>$value->id])}}">Add</a><a class="btn btn-success-red" href="{{route('list_activity',['id'=>$value->id])}}">List</a></td>
                         <td> 

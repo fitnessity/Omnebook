@@ -70,12 +70,12 @@
 													</p>
 												</div>
                                                 <?php  ?>
-												<div class="col-lg-12 col-md-12 col-12">
+											<!--<div class="col-lg-12 col-md-12 col-12">
 													<div class="chat-with-us text-center">
 														<p>Need help getting started ?</p>
 														<button type="submit" class="btn btn-red">Chat with us </button>
 													</div>
-												</div>
+												</div> -->
 												<?php  ?>
 											</div>
 										</div>
