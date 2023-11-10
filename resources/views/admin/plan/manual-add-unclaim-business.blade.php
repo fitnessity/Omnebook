@@ -188,7 +188,7 @@
 
 							<label> Email   </label>
 
-							<input class="width form-control" type="text" name="email" id="email" value="">
+							<input class="width form-control" type="text" name="email" id="email" value="" required>
 
 						</div>
 
