@@ -103,7 +103,10 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 														if(strpos($sc->activity_days, $filter_date->format('l')) !== false){
 															$cancelSc = $sc->activity_cancel->where('cancel_date',date('Y-m-d'))->first();
 															$hide_cancel = @$cancelSc->hide_cancel_on_schedule;
-															if($hide_cancel == '' || $hide_cancel != 1){
+															if(@$cancelSc->cancel_date_chk == 0 ){
+																$hide_cancel = 0;
+															}
+															if($hide_cancel == '' || $hide_cancel != 1 ){
 																$sche_ary [] = $sc;
 															}
 														}
