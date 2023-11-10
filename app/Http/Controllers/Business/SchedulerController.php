@@ -168,6 +168,7 @@ class SchedulerController extends BusinessBaseController
                                         "time"=>$time,
                                         "date"=>$date,
                                         "email"=>$insdata->email,
+                                        "mail_type"=>$mail_type,
                                    ];
                                    $status = SGMailService::sendEmailInstructorforScheduleChange($emailDetail);
                               }
@@ -263,7 +264,6 @@ class SchedulerController extends BusinessBaseController
                } 
           }
 
-
           if($request->has('email_Instructor')){
                $checkInDetails = BookingCheckinDetails::whereIn('business_activity_scheduler_id',$scheduleIdsArray)->where('checkin_date' ,$cancelDate)->groupBy('instructor_id')->get();
           
@@ -284,6 +284,7 @@ class SchedulerController extends BusinessBaseController
                                         "time"=>$time,
                                         "date"=>$date,
                                         "email"=>$insdata->email,
+                                        "mail_type"=>$mail_type,
                                    ];
                                    $status = SGMailService::sendEmailInstructorforScheduleChange($emailDetail);
                               }
