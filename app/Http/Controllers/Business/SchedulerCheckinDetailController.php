@@ -100,7 +100,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         $bookingDetail = UserBookingDetail::where(['user_id' =>$request->customer_id])->whereDate('expired_at','>=',date('Y-m-d'))->get();
         $chk = 0;
         print_r($bookingDetail);
-        if(!empty($bookingDetail) && count($bookingDetail) > 0){
+        if(isset($bookingDetail) && count($bookingDetail) > 0){
             foreach($bookingDetail as $detail){
                 $reminingSession = $detail->getremainingsession();
                 if($reminingSession > 0){

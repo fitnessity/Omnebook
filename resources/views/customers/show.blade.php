@@ -543,7 +543,7 @@
 																												<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting01Examplecollapsec{{$i}}" aria-expanded="false" aria-controls="accor_nesting01Examplecollapsec{{$i}}">
 																													 <div class="container-fluid nopadding">
 																														<div class="row mini-stats-wid d-flex align-items-center ">
-																															<div class="col-lg-6 col-md-6 col-8">{{$booking_detail->business_services_with_trashed->program_name}} - {{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </div>
+																															<div class="col-lg-6 col-md-6 col-8">{{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </div>
 																															<div class="col-lg-6 col-md-6 col-4">
 																																<div class="multiple-options">
 																																	<div class="setting-icon">
@@ -576,7 +576,7 @@
 																																<div class="row">
 																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																		<div class="inner-accordion-titles">
-																																			<label> {{$booking_detail->business_services_with_trashed->program_name}}</label>	
+																																			<label> {{@$booking_detail->business_services_with_trashed->program_name}}</label>	
 																																		</div>
 																																	</div>
 																																</div>
@@ -651,7 +651,7 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
-																																		<span>{{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </span>
+																																		<span>{{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </span>
 																																	</div>
 																																</div>
 
@@ -662,7 +662,7 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
-																																		<span>{{$booking_detail->business_price_detail_with_trashed->price_title}} </span>
+																																		<span>{{@$booking_detail->business_price_detail_with_trashed->price_title}} </span>
 																																	</div>
 																																</div>
 
