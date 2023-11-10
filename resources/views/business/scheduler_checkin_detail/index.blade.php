@@ -128,7 +128,12 @@
 								<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" data-cus-id="{{$cus->id}}">
 									<option value="" @if(!@$firstCheckInDetail->order_detail) selected @endif>Choose option</option>
 									@foreach($cus->active_memberships()->get() as $bookingDetail)
-										@php $checkInIds .= $bookingDetail->id.','; @endphp
+										@php 
+											$cCheckin = $bookingDetail->BookingCheckinDetails->where('checkin_date', $filter_date->format('Y-m-d'))->first();
+											if($cCheckin){
+												$checkInIds .= $cCheckin->id.','; 
+											}
+										@endphp
                                         <option value="{{$bookingDetail->id}}" @if(@$firstCheckInDetail->order_detail->id == $bookingDetail->id) selected @endif checkInId="{{$cus->getCheckInId($bookingDetail->id, $filter_date->format('Y-m-d'))}}">
                                                 {{@$bookingDetail->business_price_detail_with_trashed->price_title}} 
                                         </option>
@@ -168,7 +173,9 @@
 											<li><a href="{{route('business.orders.create',['cus_id' => $cus->id])}}"><i class="fas fa-plus text-muted"></i>Purchase</a></li>
 											<li><a href="{{route('business_customer_show',['business_id' => request()->current_company->id, 'id'=> $cus->id])}}" target="_blank" ><i class="fas fa-plus text-muted"></i>View Account</a></li>
 											<li>
-												<a href="#" data-behavior="delete_checkin_detail" data-booking-checkin-detail-id="{{@$checkInIds}}"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a>
+												<a href="#" data-behavior="delete_checkin_detail" @if($checkInIds == '')
+													data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" @else 
+													data-booking-checkin-detail-id="{{@$checkInIds}}" @endif ><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a>
 											</li>
 										</ul>
 									</div>
@@ -261,8 +268,6 @@
                 serviceId: "{{$business_activity_scheduler->serviceid}}",
             },
             success: function(html){
-            	alert(html);
-                //location.reload();	
                 getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','',html,'');
         	}
     	})
