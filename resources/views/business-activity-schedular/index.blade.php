@@ -101,7 +101,11 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 												foreach($cList->BusinessActivityScheduler as $sc){
 													if($sc->end_activity_date >= $filter_date->format('Y-m-d') && $sc->starting <= $filter_date->format('Y-m-d')){
 														if(strpos($sc->activity_days, $filter_date->format('l')) !== false){
-															$sche_ary [] = $sc;
+															$cancelSc = $sc->activity_cancel->where('cancel_date',date('Y-m-d'))->first();
+															$hide_cancel = @$cancelSc->hide_cancel_on_schedule;
+															if($hide_cancel == '' || $hide_cancel != 1){
+																$sche_ary [] = $sc;
+															}
 														}
 													}
 												} 
@@ -138,7 +142,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																			$SpotsLeftdis = $scary->spots_available - $bookedspot;
 																			
 																	        $cancel_chk = 0;
-																			$canceldata = ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id])->first();
+																			$canceldata = ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id,'cancel_date_chk'=>1])->first();
 																			$date = $filter_date->format('Y-m-d');
 																			$time = $scary->shift_start;
 																			$st_time = date('Y-m-d H:i:s', strtotime("$date $time"));
@@ -154,13 +158,19 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																				$grayBtnChk = 2;
 																				$class = 'post-btn-gray';
 																			}
+
+																			if($canceldata != ''){
+																				$grayBtnChk = 3;
+																				$class = 'post-btn-gray';
+																			}
 																		@endphp
 																		<div class="col-md-4 col-sm-5 col-xs-12">
 																			<div class="classes-time">
-																				<button class="post-btn {{$class}} activity-scheduler" onclick="openPopUp({{$scary->id}} , {{$ser->id}} ,'{{$ser->program_name}}','{{$timeOfActivity}}',{{$grayBtnChk}},'{{$scary->category_id}}');"  {{ $SpotsLeftdis == 0 ?  "disabled" : ''}} >{{$timeOfActivity}} <br>{{$duration}}</button>
-																				
+																				<button class="post-btn {{$class}} activity-scheduler" onclick="openPopUp({{$scary->id}} , {{$ser->id}} ,'{{$ser->program_name}}','{{$timeOfActivity}}',{{$grayBtnChk}},'{{$scary->category_id}}');"  {{ $SpotsLeftdis == 0 ?  "disabled" : ''}}  {{ $canceldata != '' ?  "disabled" : ''}} >{{$timeOfActivity}} <br>{{$duration}}</button>
 																				<label>{{ $SpotsLeftdis == 0 ? 
 																					"Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</label>
+
+																				<label class="font-red">{{ $canceldata != '' ? "Cancelled" : ''}}</label>
 																			</div>
 																		</div>
 																	@endforeach

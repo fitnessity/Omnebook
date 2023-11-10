@@ -295,6 +295,6 @@ class SchedulerCheckinDetailController extends BusinessBaseController
 
 
     public function changeInstructor(Request $request , $business_id, $scheduler_id){
-        BookingCheckinDetails::where(['business_activity_scheduler_id'=> $scheduler_id, 'checkin_date' =>date('Y-m-d')])->update(['instructor_id' => $request->insID]);
+        BookingCheckinDetails::where(['business_activity_scheduler_id'=> $scheduler_id, 'checkin_date' =>date('Y-m-d')])->update(['instructor_id' => implode(',' , $request->insID)]);
     }
 }

@@ -703,7 +703,7 @@
         $('#familycnt').val(cnt);
 	});
 
-	$(document).on("click",'#request_access_btn',function(e){
+	$(document).on("click",'.request_access_btn',function(e){
 		$.ajax({
             url: "{{route('sendgrantaccessmail')}}",
             method: "POST",
@@ -720,7 +720,7 @@
               	}else if(response == 'success'){
               		$('.errclass').removeClass('error');
               		$('.errclass').addClass('font-green');
-              		$('.errclass').html("<p>Email Successfully Sent..</p>");
+              		$('.errclass').html('<p>Email Successfully Sent..</p><a class="request_access_btn">Resend Email</a>');
               	}else{
               		$('.errclass').html("<p>Can't Send Mail to your mail..</p>");
               	}

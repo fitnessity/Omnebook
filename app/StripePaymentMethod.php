@@ -32,5 +32,9 @@ class StripePaymentMethod extends Model
             }
         });
     }
+
+    public function Customer(){
+        return $this->belongsTo(Customer::class,'user_id');
+    }
     
 }

@@ -51,10 +51,10 @@
                         <div class="col">
                             <div class="h-100">
                                 <div class="row mb-3 pb-1">
-									<div class="col-12">
+									<div class="col-6">
 										<div class="remaining-days mb-15">
-											<div class="row y-middle">
-												<div class="col-lg-1 col-md-1 col-3">
+											<div class="row y-middle" style="margin-top:5px;margin-bottom: 5px;">
+												<div class="col-lg-2 col-md-2 col-3">
 													<center>
 														<div class="avatar-xs flex-shrink-0">
 															<span class="avatar-title bg-primary rounded-circle fs-15">14</span>
@@ -64,21 +64,23 @@
 														</div>
 													</center>
 												</div>
-												<div class="col-lg-8 col-md-8 col-9">	
+												<div class="col-lg-10 col-md-10 col-9">	
 													<p class="fs-13">
 														You have 14 days remaining in your 14 day free trial. To keep using TeamUp after the trial period, enter your <a href="#"> payment details.</a> If you have any questions, please don't hesitate to <a href="#"> contact us</a>! 
 													</p>
 												</div>
-												<div class="col-lg-3 col-md-3 col-12">
+                                                <?php  ?>
+												<div class="col-lg-12 col-md-12 col-12">
 													<div class="chat-with-us text-center">
 														<p>Need help getting started ?</p>
 														<button type="submit" class="btn btn-red">Chat with us </button>
 													</div>
 												</div>
+												<?php  ?>
 											</div>
 										</div>
 									</div>
-									<div class="col-12">
+									<div class="col-6">
                                         <div class="card">
                                             <div class="card-body p-0">
                                                 <div class="alert alert-warning border-0 rounded-0 m-0 d-flex align-items-center" role="alert">
@@ -203,6 +205,7 @@
                                                     <div>
                                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$bookingCount}}">{{$bookingCount}}</span></h4>
                                                         <a href="{{route('business.schedulers.index',['business_id'=>$business_id])}}" class="text-decoration-underline" target="_blank">View Bookings</a>
+                                                        <!-- <a onclick="getbookingmodel();" class="text-decoration-underline" target="_blank">View Bookings</a> -->
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-info rounded fs-3">
@@ -625,8 +628,8 @@
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
                                                             <h6 class="mb-1 lh-base">{{$tb->booking->order_id}}</h6>
-                                                            <p class="text-muted mb-1"><b>Activity : </b>{{$tb->business_services->program_name}} </p>
-                                                            <p class="text-muted mb-1"><b>Price : </b> ${{$tb->subtotal + $tb->getperoderprice() }}</p>
+                                                            <p class="text-muted mb-1"><b>Activity : </b>{{@$tb->business_services->program_name}} </p>
+                                                            <p class="text-muted mb-1"><b>Price : </b> ${{@$tb->subtotal + $tb->getperoderprice() }}</p>
                                                             <small class="mb-0 text-muted">{{date('H:i A' ,strtotime($tb->created_at))}} Today</small>
                                                         </div>
                                                     </div>
@@ -875,7 +878,12 @@
             </div><!-- End Page-content -->
         </div><!-- end main content-->
     </div><!-- END layout-wrapper -->
-	
+	<div class="modal fade view-booking" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-80">
+            <div class="modal-content" id="bookingmodel">
+            </div>
+        </div>
+    </div> 
 <div class="modal fade monthly-financial" tabindex="-1" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-80">
 		<div class="modal-content">
@@ -1000,8 +1008,23 @@
             onChange: function(selectedDates, dateStr, instance) {
                 window.location.href= '/dashboard/'+dateStr;
             },
-	     });
+	   });
 
+        function getbookingmodel(){
+            $.ajax({
+                url:"{{route('getBookingList')}}",
+                type:"get",
+                data:{
+                    startDate:'{{$startDate}}',
+                    endDate:'{{$endDate}}',
+                    cid:'{{$business_id}}',
+                },
+                success:function(data){
+                    $('#bookingmodel').html(data);
+                    $('.view-booking').modal('show');
+                }
+            });
+        }
 
 		function activityschedule(type,date){
 			$.ajax({
