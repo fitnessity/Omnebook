@@ -93,12 +93,20 @@
 											</div> 	
 											<div class="row justify-content-md-center">
 												<div class="col-lg-6">
+													<div class="form-group mb-10">
+														<select class="form-select" name="position" required="">
+															<option value="print">Print this report</option>
+															<option value="export">Export to excel</option>
+															<option value="pdf">Export to PDF</option>
+															<option value="report">Save this report</option>
+														</select>
+													</div>
 													<button type="button" class="btn btn-black w-100 mb-25">
                                                         Go!
                                                     </button>
 												</div>
 											</div>
-											<div class="row">
+											<!--<div class="row">
 												<div class="col-lg-12">
 													<div class="options-to-print">
 														<ul>
@@ -109,7 +117,7 @@
 														</ul>
 													</div>
 												</div>
-											</div>
+											</div>-->
 										</div>
 									</div>
 								</div>
@@ -128,13 +136,135 @@
                                 <div class="card-body">
                                     <div class="live-preview">
                                         <div class="accordion accordion-border-box" id="default-accordion-example">
+											<div class="accordion-item shadow">
+                                                <h2 class="accordion-header" id="headingZero">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseZero" aria-expanded="true" aria-controls="collapseZero">
+                                                       Cash
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseZero" class="accordion-collapse collapse" aria-labelledby="headingZero" data-bs-parent="#default-accordion-example">
+                                                    <div class="accordion-body">
+                                                        <div class="row">
+															<div class="col-xl-12">
+																<div class="card">
+																	<div class="">
+																		<div class="live-preview sales-report-table">
+																			<div class="table-responsive">
+																				<table class="table align-middle table-nowrap mb-25">
+																					<thead class="table-light">
+																						<tr>
+																							<th scope="col">Sale Date </th>
+																							<th scope="col">Client</th>
+																							<th scope="col">Item name</th>
+																							<th scope="col">Location</th>
+																							<th scope="col">Notes</th>
+																							<th scope="col">Item Price</th>
+																							<th scope="col">Qty </th>
+																							<th scope="col">Subtotal </th>
+																							<th scope="col">Discount Amount</th>
+																							<th scope="col">Tax </th>
+																							<th scope="col">Item Total </th>
+																							<th scope="col">Total Paid/Payment Method </th>
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<tr>
+																							<td>6/1/2023</td>
+																							<td><a href="#" class="fw-medium">Nipa Soni</a></td>
+																							<td>XYZ</td>
+																							<td>Valor Mixed Martial Arts</td>
+																							<td>--</td>
+																							<td>$40.00</td>
+																							<td>1</td>
+																							<td>$40.00</td>
+																							<td>$0.00</td>
+																							<td>$0.00</td>
+																							<td>$40.00</td>
+																							<td>$40.00</td>
+																						</tr>
+																						<tr>
+																							<td>6/1/2023</td>
+																							<td><a href="#" class="fw-medium">Ankita Patel</a></td>
+																							<td>XYZ</td>
+																							<td>Valor Mixed Martial Arts</td>
+																							<td>--</td>
+																							<td>$50.00</td>
+																							<td>1</td>
+																							<td>$50.00</td>
+																							<td>$0.00</td>
+																							<td>$0.00</td>
+																							<td>$50.00</td>
+																							<td>$50.00</td>
+																						</tr>
+																						<tr>
+																							<td>6/1/2023</td>
+																							<td><a href="#" class="fw-medium">Nipa Soni</a></td>
+																							<td>XYZ</td>
+																							<td>Valor Mixed Martial Arts</td>
+																							<td>--</td>
+																							<td>$40.00</td>
+																							<td>1</td>
+																							<td>$40.00</td>
+																							<td>$0.00</td>
+																							<td>$0.00</td>
+																							<td>$40.00</td>
+																							<td>$40.00</td>
+																						</tr>
+																						<tr>
+																							<td>6/1/2023</td>
+																							<td><a href="#" class="fw-medium">Nipa Soni</a></td>
+																							<td>XYZ</td>
+																							<td>Valor Mixed Martial Arts</td>
+																							<td>--</td>
+																							<td>$40.00</td>
+																							<td>1</td>
+																							<td>$40.00</td>
+																							<td>$0.00</td>
+																							<td>$0.00</td>
+																							<td>$40.00</td>
+																							<td>$40.00</td>
+																						</tr>
+																						<tr>
+																							<td>6/1/2023</td>
+																							<td><a href="#" class="fw-medium">Nipa Soni</a></td>
+																							<td>XYZ</td>
+																							<td>Valor Mixed Martial Arts</td>
+																							<td>--</td>
+																							<td>$40.00</td>
+																							<td>1</td>
+																							<td>$40.00</td>
+																							<td>$0.00</td>
+																							<td>$0.00</td>
+																							<td>$40.00</td>
+																							<td>$40.00</td>
+																						</tr>
+																					</tbody>
+																					<tfoot class="table-light">
+																						<tr>
+																							<td colspan="9"></td>
+																							<td>Tax $0.00</td>
+																							<td colspan="1"></td>
+																							<td>Total $947.55</td>
+																						</tr>
+																					</tfoot>
+																				</table>
+																			</div>
+																		</div>
+																	</div><!-- end card-body -->
+																</div><!-- end card -->
+															</div><!-- end col -->
+														</div>
+														<!--end row-->
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="accordion-item shadow">
                                                 <h2 class="accordion-header" id="headingOne">
-                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                         Credit Card (AMEX-Keyed)
                                                     </button>
                                                 </h2>
-                                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#default-accordion-example">
+                                                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#default-accordion-example">
                                                     <div class="accordion-body">
                                                         <div class="row">
 															<div class="col-xl-12">
@@ -375,7 +505,131 @@
 													</div>
                                                 </div>
                                             </div>
-                                        </div>
+											
+											<div class="accordion-item shadow">
+                                                <h2 class="accordion-header" id="headingFour">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                                                       Miscellaneous
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#default-accordion-example">
+                                                    <div class="accordion-body">
+                                                        <div class="row">
+															<div class="col-xl-12">
+																<div class="card">
+																	<div class="">
+																		<div class="live-preview sales-report-table">
+																			<div class="table-responsive">
+																				<table class="table align-middle table-nowrap mb-25">
+																					<thead class="table-light">
+																						<tr>
+																							<th scope="col">Sale Date </th>
+																							<th scope="col">Client</th>
+																							<th scope="col">Item name</th>
+																							<th scope="col">Location</th>
+																							<th scope="col">Notes</th>
+																							<th scope="col">Item Price</th>
+																							<th scope="col">Qty </th>
+																							<th scope="col">Subtotal </th>
+																							<th scope="col">Discount Amount</th>
+																							<th scope="col">Tax </th>
+																							<th scope="col">Item Total </th>
+																							<th scope="col">Total Paid/Payment Method </th>
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<tr>
+																							<td>6/1/2023</td>
+																							<td><a href="#" class="fw-medium">Nipa Soni</a></td>
+																							<td>XYZ</td>
+																							<td>Valor Mixed Martial Arts</td>
+																							<td>--</td>
+																							<td>$40.00</td>
+																							<td>1</td>
+																							<td>$40.00</td>
+																							<td>$0.00</td>
+																							<td>$0.00</td>
+																							<td>$40.00</td>
+																							<td>$40.00</td>
+																						</tr>
+																						<tr>
+																							<td>6/1/2023</td>
+																							<td><a href="#" class="fw-medium">Ankita Patel</a></td>
+																							<td>XYZ</td>
+																							<td>Valor Mixed Martial Arts</td>
+																							<td>--</td>
+																							<td>$50.00</td>
+																							<td>1</td>
+																							<td>$50.00</td>
+																							<td>$0.00</td>
+																							<td>$0.00</td>
+																							<td>$50.00</td>
+																							<td>$50.00</td>
+																						</tr>
+																						<tr>
+																							<td>6/1/2023</td>
+																							<td><a href="#" class="fw-medium">Nipa Soni</a></td>
+																							<td>XYZ</td>
+																							<td>Valor Mixed Martial Arts</td>
+																							<td>--</td>
+																							<td>$40.00</td>
+																							<td>1</td>
+																							<td>$40.00</td>
+																							<td>$0.00</td>
+																							<td>$0.00</td>
+																							<td>$40.00</td>
+																							<td>$40.00</td>
+																						</tr>
+																						<tr>
+																							<td>6/1/2023</td>
+																							<td><a href="#" class="fw-medium">Nipa Soni</a></td>
+																							<td>XYZ</td>
+																							<td>Valor Mixed Martial Arts</td>
+																							<td>--</td>
+																							<td>$40.00</td>
+																							<td>1</td>
+																							<td>$40.00</td>
+																							<td>$0.00</td>
+																							<td>$0.00</td>
+																							<td>$40.00</td>
+																							<td>$40.00</td>
+																						</tr>
+																						<tr>
+																							<td>6/1/2023</td>
+																							<td><a href="#" class="fw-medium">Nipa Soni</a></td>
+																							<td>XYZ</td>
+																							<td>Valor Mixed Martial Arts</td>
+																							<td>--</td>
+																							<td>$40.00</td>
+																							<td>1</td>
+																							<td>$40.00</td>
+																							<td>$0.00</td>
+																							<td>$0.00</td>
+																							<td>$40.00</td>
+																							<td>$40.00</td>
+																						</tr>
+																					</tbody>
+																					<tfoot class="table-light">
+																						<tr>
+																							<td colspan="9"></td>
+																							<td>Tax $0.00</td>
+																							<td colspan="1"></td>
+																							<td>Total $947.55</td>
+																						</tr>
+																					</tfoot>
+																				</table>
+																			</div>
+																		</div>
+																	</div><!-- end card-body -->
+																</div><!-- end card -->
+															</div><!-- end col -->
+														</div>
+														<!--end row-->
+                                                    </div>
+                                                </div>
+                                            </div>
+											
+										</div>
                                     </div>
                                 </div><!-- end card-body -->
                             </div><!-- end card -->
