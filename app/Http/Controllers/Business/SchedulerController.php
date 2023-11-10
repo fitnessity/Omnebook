@@ -160,7 +160,7 @@ class SchedulerController extends BusinessBaseController
                     if(!empty($insIdsArray)){
                          foreach($insIdsArray as $ins){
                               $insdata = BusinessStaff::find($ins);
-                              if($insdata->email != ''){
+                              if(@$insdata->email != ''){
                                   $emailDetail = [
                                         "insdata"=>$insdata,
                                         "pName"=>$businessdata->program_name,
