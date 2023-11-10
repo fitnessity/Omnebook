@@ -81,9 +81,9 @@ class Transaction extends Model
                             }
                            
                            
-                            $activityName = $bd->business_services_with_trashed->program_name;
-                            $categoryName = $bd->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
-                            $priceOption = $bd->business_price_detail_with_trashed->price_title;
+                            $activityName = @$bd->business_services_with_trashed->program_name;
+                            $categoryName = @$bd->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
+                            $priceOption = @$bd->business_price_detail_with_trashed->price_title;
                             $itemDescription .= ($key+1).'. '.$activityName.' ('.$categoryName.') ,'.$priceOption.'<br>';
                             $itemPrice .= $bd->total() != '' ? '$'.$bd->total().'<br>' : '$0<br>';
                             $itemSubTotal .= $bd->subtotal != ''  ? '$'. $bd->subtotal.'<br>' : '$0<br>';

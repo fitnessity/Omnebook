@@ -22,7 +22,7 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header align-items-center d-flex">
-                                            <h4 class="card-title mb-0 flex-grow-1 nesting-steps-title">Step 1: Program Details</h4>
+                                            <h4 class="card-title mb-0 flex-grow-1 nesting-steps-title">Step 1: Basic Program Details</h4>
                                         </div>
 
                                         <div class="card-body">
@@ -183,7 +183,7 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header align-items-center d-flex">
-                                            <h4 class="card-title mb-0 flex-grow-1 nesting-steps-title">Step 2: Booking Settings</h4>
+                                            <h4 class="card-title mb-0 flex-grow-1 nesting-steps-title">Step 2: Online Marketplace Settings</h4>
                                         </div><!-- end card header -->
 
                                         <div class="card-body">
