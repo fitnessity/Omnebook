@@ -236,7 +236,6 @@
           <input type="hidden" name="pc_user_tp" id="pc_user_tpajax" value="{{$cart['participate_from_checkout_regi']['from']}}" class="product-price">
           <input type="hidden" name="pc_value" id="pc_valueajax" value="{{$participate}}" class="product-price">
           <input type="hidden" name="pid" id="pidajax" value="{{$cart['code']}}">
-          <input type="hidden" name="deletepid" id="deletepid" value="{{$indexOfAry}}">
           <input type="hidden" name="categoryid" id="categoryidajax" value="{{$cart['categoryid']}}">
           <input type="hidden" name="chk" value="activity_purchase">
           <input type="hidden" name="value_tax" id="value_taxajax" value="{{$cart['tax']}}">
@@ -254,8 +253,10 @@
           <input type="hidden" name="productColor" value="{{$cart['productColor']}}" id="productColorajax" />
           <input type="hidden" name="productTypes" value="{{$cart['productTypes']}}" id="productTypesajax" />
           <input type="hidden" name="productTotalPrices" value="{{$cart['productTotalPrices']}}" id="productTotalPricesajax" />
-                                                                           
+          <input type="hidden" name="orderType" value="{{$cart['orderType']}}" id="orderTypeajax" />
+          <input type="hidden" name="deletepid" id="deletepid" value="{{$indexOfAry}}">                                                     
           <button type="submit" class="btn btn-red" >Submit</a>
+
      </form>
 </div>
 

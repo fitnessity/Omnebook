@@ -1,13 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\{User,BusinessCompanyDetail,CompanyInformation,BusinessServices,UserBookingStatus,BusinessActivityScheduler,BusinessPriceDetailsAges,BusinessPriceDetails,StaffMembers,UserBookingDetail,ActivityCancel,UserFamilyDetail,BusinessSubscriptionPlan,Customer,BookingActivityCancel,BookingCheckinDetails,BookingPostorder,SGMailService,MailService};
+use App\{User,BusinessServices,UserBookingStatus,BusinessActivityScheduler,BusinessPriceDetailsAges,BusinessPriceDetails,UserBookingDetail,ActivityCancel,UserFamilyDetail,Customer,BookingActivityCancel,SGMailService};
 use Auth;
 use DB;
 use Carbon\Carbon;
 use DateTime;
 use Config;
-use DateInterval;
 use View;
 use App\Repositories\{BusinessServiceRepository,BookingRepository,CustomerRepository,UserRepository};
 use DateTimeZone;
@@ -270,7 +269,7 @@ class SchedulerController extends Controller
                $childcnt = $request->type == 'ajax' ? "childcntajax" : "childcnt";
                $infantcnt = $request->type == 'ajax' ? "infantcntajax" : "infantcnt";
 
-               if($total_price_val_adult != 0 &&  $total_price_val_adult != '' ){
+               
                     $html .='<div class="col-md-12 col-sm-12 col-xs-12">
                                    <div class="row">
                                         <div class="col-md-8 col-sm-8 col-xs-6 col-6">
@@ -288,9 +287,9 @@ class SchedulerController extends Controller
                                         </div>
                                    </div>
                               </div>';
-               }
+               
 
-               if($total_price_val_child != 0 &&  $total_price_val_child != '' ){
+               
                     $html .='<div class="col-md-12 col-sm-12 col-xs-12">
                                    <div class="row">
                                         <div class="col-md-8 col-sm-8 col-xs-6 col-6">
@@ -308,9 +307,9 @@ class SchedulerController extends Controller
                                         </div>
                                    </div>
                               </div>';
-               }
+               
 
-               if($total_price_val_infant != 0 &&  $total_price_val_infant != '' ){
+               
                     $html .='<div class="col-md-12 col-sm-12 col-xs-12">
                                    <div class="row">
                                         <div class="col-md-8 col-sm-8 col-xs-6 col-6">
@@ -329,7 +328,7 @@ class SchedulerController extends Controller
                                         </div>
                                    </div>
                               </div>';
-               }
+               
                
                $html .='<input type="hidden" name="session_val" id="'.$session_val.'" value="'.@$membershiplist['pay_session'].'" >
                          <input type="hidden" name="adultprice" id="'.$aduid.'" value="'.$total_price_val_adult.'" >

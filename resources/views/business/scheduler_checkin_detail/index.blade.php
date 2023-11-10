@@ -38,12 +38,21 @@
 	</div>
 	<div class="col-md-4 col-sm-4 col-12">	
 		<div class="mb-3 select-staff-member">
-			<select name="activity_type" class="form-select" id="" onchange="changeInstructor(this.value)">
-				<option value="">Select Staff Member</option>
-				@foreach($staffMember as $sm)
-					<option value="{{$sm->id}}" @if($instructor_id == $sm->id) selected @endif>{{$sm->full_name}}</option>
+
+			<select name="instructure[]" id="instructure" multiple >
+              	@foreach($staffMember as $sm)
+					<option value="{{$sm->id}}">{{$sm->full_name}}</option>
 				@endforeach
-			</select>
+            </select>
+
+			<script type="text/javascript">
+				const instructure  = '{{ @$instructor_id }}';
+				const insIds  = instructure ? instructure.split(',') : [];
+				const s  = new SlimSelect({
+				   select: '#instructure'
+				});
+				s.set(insIds);
+			</script>
 		</div>
 	</div>
 	<div class="col-md-8 col-sm-8 col-12">	
@@ -218,28 +227,6 @@
         };
     });
 
-	function changeInstructor(value){
-		date = "{{$filter_date->format('Y-m-d')}}";
-		today = "{{$today}}";
-		if(today == date){
-			$.ajax({
-				url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/change_instructor",
-		        method: "POST",
-		        data: { 
-		            _token: '{{csrf_token()}}',  
-		            date: date, 
-		            insID: value, 
-		        },
-		        success: function(html){
-		        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','','','');
-		            //location.reload();
-		        }
-			})
-		}else{
-			alert("You can't change instructor at this time.");
-		}
-	}
-
 	$('[data-behavior~=delete_checkin_detail]').click(function(e){
 	    e.preventDefault()
     	$.ajax({
@@ -334,4 +321,30 @@
     	$('.checkinDetails').modal('hide');
     }
 
+    var ins = new SlimSelect({
+      	select: '#instructure'
+   	});
+
+   	$('#instructure').on('change', function() {
+    	var selectedValues = ins.selected();
+    	date = "{{$filter_date->format('Y-m-d')}}";
+		today = "{{$today}}";
+		if(today == date){
+			$.ajax({
+				url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/change_instructor",
+		        method: "POST",
+		        data: { 
+		            _token: '{{csrf_token()}}',  
+		            date: date, 
+		            insID: selectedValues, 
+		        },
+		        success: function(html){
+		        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','','','');
+		            //location.reload();
+		        }
+			})
+		}else{
+			alert("You can't change instructor at this time.");
+		}
+	  });
 </script>

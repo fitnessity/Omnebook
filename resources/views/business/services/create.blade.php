@@ -1332,7 +1332,6 @@ yourButton.addEventListener('mouseleave', (e) => {
 
     function showdiv(i,j){
         var chk = $("input[name='sectiondisplay"+i+j+"']:checked").val();  
-
         if(chk == 'freeprice'){
             $('.displaysectiondiv'+i+j).addClass('d-none');
             $("#freeprice"+i+j).attr('checked','checked');
@@ -1343,13 +1342,13 @@ yourButton.addEventListener('mouseleave', (e) => {
             $("#freeprice"+i+j).removeAttr('checked');
             $("#weekdayprice"+i+j).removeAttr('checked');
             $('.Weekend'+i+j).removeClass('d-none');
-            $('.displaysectiondiv'+i+j).css('display','block');
+            $('.displaysectiondiv'+i+j).removeClass('d-none');
         }else{
             $("#weekdayprice"+i+j).attr('checked','checked');
             $("#freeprice"+i+j).removeAttr('checked');
             $("#weekendprice"+i+j).removeAttr('checked');
             $('.Weekend'+i+j).addClass('d-none');
-            $('.displaysectiondiv'+i+j).css('display','block');  
+            $('.displaysectiondiv'+i+j).removeClass('d-none');  
         }
     }
 
