@@ -704,7 +704,7 @@
 																								<i class="fas fa-check"></i>
 																							</div>
 																						</div>
-																						@foreach(json_decode($p->featurs_details) as $i=> $f)
+																						@foreach(json_decode(@$p->featurs_details) as $i=> $f)
 																						<div class="custom-table-data">
 
 																							@if($f == 'Yes')
