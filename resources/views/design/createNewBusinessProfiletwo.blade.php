@@ -1531,6 +1531,7 @@
 																						</li>
 																						<li><a href=""><i class="fas fa-plus text-muted"></i>Schedule</a></li>
 																						<li><a href="#"><i class="fas fa-plus text-muted"></i>Duplicate Entire Category</a></li>
+																						<li><a href="#" data-bs-toggle="modal" data-bs-target=".add-on-service"><i class="fas fa-plus text-muted"></i>Create Add On Service</a></li>
 																						<li class="dropdown-divider"></li>
 																						<li><a href=""><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>
 																					</ul>
@@ -2377,6 +2378,42 @@
             </div>
         </div>
     </div>
+
+	<div class="modal fade add-on-service" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-50">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="myModalLabel">Create Add On Service</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="row justify-content-md-center">
+						<div class="col-md-6">
+							<div class="mb-3">
+								<label class="form-label" for="product-title-input">Name</label>
+								<input type="text" class="form-control" id="" name="formAction" placeholder="Enter name" >
+							</div>
+							<div class="mb-3">
+								<label class="form-label" for="product-title-input">Price</label>
+								<input type="text" class="form-control" id="" name="formAction" placeholder="Enter price" >
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="mb-3">
+								<label class="form-label" for="product-title-input">Description</label>
+								<textarea class="form-control" id="" placeholder="Enter description" rows="3"></textarea>
+							</div>
+							
+						</div>
+					</div>					
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary btn-red">Submit</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
 	<div class="modal fade edit-photo" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-80">
 			<div class="modal-content">
