@@ -17,7 +17,7 @@ class UpdateTableMembershipPlans extends Migration
             $table->dropColumn('quote_per_month');
             $table->float('price_per_year',8,2)->nullable()->after('price_per_month');
             $table->string('image')->nullable()->after('price_per_year');
-            $table->string('feature_ids')->nullable()->after('iamge');
+            $table->string('feature_ids')->nullable()->after('image');
             $table->string('heading')->nullable()->after('feature_ids');
         });
     }
