@@ -38,7 +38,7 @@
                 $text .= $qty[$key].' x '.$aOService->service_name.' = $'. $price.'<br>';
             }
         }else{
-            $text = "—";
+            $text = "N/A";
         }
         return $text;
     }
@@ -54,13 +54,15 @@
                 $product = Products::find($id);
                 if($type[$key] == 'rent'){
                     $price =  $product->rental_price * $qty[$key];
+                    $rentText =  '( Rental Duration is '.$product->rental_duration .' )';
                 }else{
                     $price =  $product->sale_price * $qty[$key];
+                    $rentText = '';
                 }
-                $text .= $qty[$key].' x '.$product->name.' = $'. $price.'<br>';
+                $text .= $qty[$key].' x '.$product->name.' = $'. $price.'<br>'.$rentText.'<br>';
             }
         }else{
-            $text = "—";
+            $text = "N/A";
         }
         return $text;
     }

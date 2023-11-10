@@ -4810,7 +4810,8 @@ a,button{
 }
 .btn{
     -webkit-box-shadow:var(--vz-box-shadow);
-    box-shadow:var(--vz-box-shadow)
+    box-shadow:var(--vz-box-shadow);
+	border-radius: 10px;
 }
 :is(.btn.show,.btn:first-child:active,:not(.btn-check)+.btn:active){
     border-color:transparent

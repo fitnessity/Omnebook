@@ -17,14 +17,14 @@ a:hover{
 }
 .dash-sidebar-menu{
 	 display: block;
-	 margin-top: 70px;
+	 /* margin-top: 70px; */
 }
 .add-client{
 	display: block;
 	text-align: center;
 	padding: 7px 21px;
 	color: #fff;
-	border-radius: 4px;
+	border-radius: 10px;
 	background: #ed1b24;
 	margin-left: 15px;
 	font-size: 14px;
@@ -301,7 +301,7 @@ header{ position: fixed !important; }
 	text-align: center;
 	padding: 7px 21px;
 	color: #fff;
-	border-radius: 4px;
+	border-radius: 10px;
 	background: #ed1b24;
 	font-size: 14px;
 }
@@ -619,7 +619,7 @@ header{ position: fixed !important; }
 	border: none;
 	padding: 7px 21px;
 	color: #fff;
-	border-radius: 4px;
+	border-radius: 10px;
 	font-size: 14px;
 	cursor: pointer;
 }
@@ -1092,7 +1092,7 @@ header{ position: fixed !important; }
 }
 .select-event{
 	padding: 5px 14px;
-	border-radius: 3px;
+	border-radius: 10px;
 }
 .box-footer{
 	text-align: center;
@@ -3574,7 +3574,7 @@ div#termsdiv{order: 4;}
 	text-align: left;
 }
 .booking-activity span{
-	color: #fff;
+	color: #000;
 }
 .purchase-history{
 	box-shadow: var(--vz-box-shadow);
@@ -3587,14 +3587,17 @@ div#termsdiv{order: 4;}
 	padding-top: 8px;
 }
 .body-bg-gradient{
-	background-image: linear-gradient(#b30004, #480003, #111224);
+	/* background-image: linear-gradient(#b30004, #480003, #111224); */
+	background: #fff;
+	border: 1px solid #000;
+	border-radius: 10px;
 }
 .v-booking a{
-	color: #fff;
+	color: #ed1b24;
 	font-weight: bold;
 }
 .v-schedule a{
-	color: #fff;
+	color: #ed1b24;
 	font-weight: bold;
 }
 .v-booking a:hover{
@@ -5211,10 +5214,10 @@ div#termsdiv{order: 4;}
 .custom-search-icon{
 	top: 13px !important;
 }
-.switch-account-dropdown{
+/* .switch-account-dropdown{
 	transform: translate(62px, 40px) !important;
 	inset: 10px 80px auto auto !important;
-}
+} */
 .switch-account-dropdown li a i{
 	margin-right: 10px;
 }
@@ -5266,6 +5269,29 @@ div#termsdiv{order: 4;}
 .invoices-select label{
 	line-height: 2;
 }
+.mt-70{
+	margin-top: 70px;
+}
+.one-latter{
+	display: inline-block;
+}
+.bg-danger-red{
+	background: #ed1b24;
+} 
+.act-cancel-p{
+	background: #ccc;
+	padding: 5px;
+}
+.btn-booking-activity{
+	background: #484848;
+	border: none;
+	border-radius: .25rem;
+	color: #fff;
+}
+.btn-booking-activity:hover{
+	color: #fff;
+}
+
 
 
 

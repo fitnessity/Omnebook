@@ -4,8 +4,9 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\{UserBookingDetail,Recurring};
+use App\{UserBookingDetail,Recurring,Transaction,BookingCheckinDetails};
 use DB;
+use Carbon\Carbon;
 
 class Kernel extends ConsoleKernel
 {
@@ -30,9 +31,12 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
             $user_booking_details = UserBookingDetail::whereRaw("transfer_provider_status is NULL or transfer_provider_status !='paid'");
-
             foreach($user_booking_details->get() as $user_booking_detail){
-                $user_booking_detail->transfer_to_provider();
+                try {
+                    $user_booking_detail->transfer_to_provider();
+                }catch (Exception $e) {
+                    $errormsg = $e->getError()->message;
+                }
             }
         })->everyTenMinutes();
 
@@ -68,8 +72,30 @@ class Kernel extends ConsoleKernel
                 $userBookingDetail->membershipExpiredAlert('membership');
             }
         })->daily();
-       // $schedule->command('stripe:cron')->everyMinute()->appendOutputTo('/storage/logs/getlogContent.log'));
 
+        $schedule->call(function () {
+            $transactions = Transaction::where(['status' => 'requires_capture'])->get();
+            foreach($transactions as $transaction){
+                try {
+                    $transaction->capture();
+                }catch (Exception $e) {
+                    $errormsg = $e->getError()->message;
+                }
+            }
+        })->daily();
+
+        $schedule->call(function () {
+            $today = Carbon::now()->format('Y-m-d');
+            $checkinDateFiveDaysAfter = Carbon::now()->addDays(5)->format('Y-m-d');
+            $checkinDateDayBefore = Carbon::now()->addDay()->format('Y-m-d');
+            $checkinData = BookingCheckinDetails::whereDate('checkin_date', $checkinDateFiveDaysAfter)
+                ->orWhereDate('checkin_date', $checkinDateDayBefore)
+                ->orWhereDate('checkin_date', $today)
+                ->get();
+            foreach($checkinData as $cid){
+                $cid->reminderaboutReservation();
+            }
+        })->daily();
     }
 
     protected function scheduleTimezone()
