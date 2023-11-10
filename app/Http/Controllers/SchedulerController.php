@@ -269,7 +269,11 @@ class SchedulerController extends Controller
                $childcnt = $request->type == 'ajax' ? "childcntajax" : "childcnt";
                $infantcnt = $request->type == 'ajax' ? "infantcntajax" : "infantcnt";
 
-               
+               $total_price_val_adult = $total_price_val_adult ?? 0;
+               $total_price_val_child = $total_price_val_child ?? 0;
+               $total_price_val_infant = $total_price_val_infant ?? 0;
+
+               if(($total_price_val_adult == 0 && $membershiplist->dispaly_section == 'freeprice') || ($total_price_val_adult != 0 && $membershiplist->dispaly_section != 'freeprice') ){
                     $html .='<div class="col-md-12 col-sm-12 col-xs-12">
                                    <div class="row">
                                         <div class="col-md-8 col-sm-8 col-xs-6 col-6">
@@ -287,9 +291,9 @@ class SchedulerController extends Controller
                                         </div>
                                    </div>
                               </div>';
-               
+               }
 
-               
+               if(($total_price_val_child == 0 && $membershiplist->dispaly_section == 'freeprice') || ($total_price_val_child != 0 && $membershiplist->dispaly_section != 'freeprice') ){
                     $html .='<div class="col-md-12 col-sm-12 col-xs-12">
                                    <div class="row">
                                         <div class="col-md-8 col-sm-8 col-xs-6 col-6">
@@ -307,9 +311,9 @@ class SchedulerController extends Controller
                                         </div>
                                    </div>
                               </div>';
-               
+               }
 
-               
+               if(($total_price_val_infant == 0 && $membershiplist->dispaly_section == 'freeprice') || ($total_price_val_infant != 0 && $membershiplist->dispaly_section != 'freeprice') ){
                     $html .='<div class="col-md-12 col-sm-12 col-xs-12">
                                    <div class="row">
                                         <div class="col-md-8 col-sm-8 col-xs-6 col-6">
@@ -328,7 +332,7 @@ class SchedulerController extends Controller
                                         </div>
                                    </div>
                               </div>';
-               
+               }
                
                $html .='<input type="hidden" name="session_val" id="'.$session_val.'" value="'.@$membershiplist['pay_session'].'" >
                          <input type="hidden" name="adultprice" id="'.$aduid.'" value="'.$total_price_val_adult.'" >
