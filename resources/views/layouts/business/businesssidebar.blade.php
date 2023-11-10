@@ -47,29 +47,63 @@
         <div class="container-fluid">
             <div id="two-column-menu">
             </div>
+			<!--<div class="live-preview text-center">
+				<div class="dropdown mt-70">
+					<button class="btn btn-switch-business dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">
+						Fitness Pvt. Ltd.
+					</button>
+					<ul class="dropdown-menu dropdown-menu-dark switch-account-dropdown" aria-labelledby="dropdownMenuButton21">
+						<li>
+							<a class="dropdown-item" href="#">
+								<img src="https://fitnessity-production.s3.amazonaws.com/company/pHSVR4Hvc7abvaVqPG3zk3tUJjbJNCdEMfKuCM1j.jpg" alt="" class="avatar-xs rounded-circle me-2 shadow">
+								<label class="fs-12">Fitness Pvt. Ltd.</label>
+							</a>
+						</li>
+						<li>
+							<a class="dropdown-item active" href="#"><i class="fa fa-user"></i> Nipa Soni <br><span class="account-switchh"> Personal Account </span> </a>
+						</li>
+						<li> <hr class="dropdown-divider"></li>
+						
+						<li>
+							<a class="dropdown-item" href="#">
+								<div class="avatar-xs me-2 one-latter">
+									<span class="avatar-title rounded-circle bg-danger-red text-white">
+										A
+									</span>
+								</div>
+								<label class="fs-12">Alex Lansky Personal Training</label>
+							</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="#">
+								<div class="avatar-xs me-2 one-latter">
+									<span class="avatar-title rounded-circle bg-danger-red text-white">
+										C
+									</span>
+								</div>
+								<label class="fs-12">Chiara Gorodesky</label>
+							</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="#">
+								<div class="avatar-xs me-2 one-latter">
+									<span class="avatar-title rounded-circle bg-danger-red text-white">
+										A
+									</span>
+								</div>
+								<label class="fs-12">arya pvt lmt</label>
+							</a>
+						</li>
+						<li> <hr class="dropdown-divider"></li>
+						<li>
+							<a class="dropdown-item" href="#"><i class="fas fa-plus"></i> New Business Account </a>
+						</li>
+						<li> <hr class="dropdown-divider"></li>
+						<li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+					</ul>
+				</div>
+			</div> -->
             <ul class="navbar-nav dash-sidebar-menu" id="navbar-nav">
-			<!--<li>
-					<div class="live-preview text-center">
-						<div class="dropdown">
-							<button class="btn btn-switch-business dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">
-								Valor Mixed Martial Arts
-							</button>
-							<ul class="dropdown-menu dropdown-menu-dark switch-account-dropdown" aria-labelledby="dropdownMenuButton21">
-								<li>
-									<a class="dropdown-item active" href="#"><i class="fas fa-user-circle"></i> Valor Mixed Martial Arts <br><span class="account-switchh"> Business Account </span> </a>
-								</li>
-								<li>
-									<a class="dropdown-item" href="#"><i class="fa fa-user"></i> Nipa Soni <br><span class="account-switchh"> Consumer Account </span> </a>
-								</li>
-								<li>
-									<a class="dropdown-item" href="#"><i class="fas fa-plus"></i> New Business Account </a>
-								</li>
-								<li> <hr class="dropdown-divider"></li>
-								<li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-							</ul>
-						</div>
-					</div> 
-				</li>--> 
 				<li class="menu-title border-bottom">
 					<span class="font-white switch-business" data-key="t-menu">{{$dba_business_name}}
 						<a href="" data-bs-toggle="modal" data-bs-target=".switch-business-modal">(switch)</a>
@@ -94,7 +128,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link"  @if($companyId!='') href="{{route('business.service.select',['business_id'=>$companyId])}}" @endif aria-controls="sidebarLayouts">
-                        <img src="{{asset('/public/img/service-price.png')}}" alt="Fitnessity"> <span data-key="t-layouts">Services & Prices </span> 
+                        <img src="{{asset('/public/img/service-price.png')}}" alt="Fitnessity"> <span data-key="t-layouts">Create New Service  </span> 
                     </a>
                 </li> 
 				
@@ -111,7 +145,7 @@
                                 </li> 
                             @endif
                             <li class="nav-item">
-                                <a href="{{route('business.schedulers.index')}}" class="nav-link @if(Route::current()->getName()=='business.schedulers.index') tab-active @endif" data-key="t-signin"> Manage Bookings
+                                <a href="{{route('business.schedulers.index')}}" class="nav-link @if(Route::current()->getName()=='business.schedulers.index') tab-active @endif" data-key="t-signin"> Manage Scheduler 
                                 </a>
                             </li>
                             
@@ -121,14 +155,14 @@
                             </li>
 
                             <li class="nav-item">
-                                <a @if($companyId) href="{{route('business.products.index')}}" @endif class="nav-link  @if(Route::current()->getName() == 'business.products.index') tab-active @endif" data-key="t-password-reset">Add/Manage Product
+                                <a @if($companyId) href="{{route('business.products.index')}}" @endif class="nav-link  @if(Route::current()->getName() == 'business.products.index') tab-active @endif" data-key="t-password-reset">Manage Product
 									<span class="badge badge-pill bg-success" data-key="t-new">New</span>
                                 </a>
                             </li>
                             @if(!Session('StaffLogin'))
                                 <li class="nav-item">
                                     <a href="{{route('business.staff.index')}}" class="nav-link @if(Route::current()->getName() == 'business.staff.index') tab-active @endif" data-key="t-password-create">
-                                        Add/Manage Staff
+                                        Manage Staff
                                     </a>
                                 </li>
                             @endif
@@ -143,11 +177,11 @@
                 </li>
                 @endif
 
-                <li class="nav-item">
+               <!-- <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName() == 'booking_request') tab-active @endif" href="{{route('booking_request')}}" aria-controls="sidebarLanding">
                         <img src="{{asset('/public/img/email1.png')}}" alt="Fitnessity"> <span data-key="t-landing">Inbox </span>
                     </a>
-                </li>
+                </li> -->
 
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName() == 'provider_calendar' ) tab-active @endif"  @if($companyId) href="{{route('provider_calendar')}}" @endif aria-controls="sidebarUI">
@@ -163,7 +197,7 @@
                 @endif
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName()=='business.orders.create') tab-active @endif" @if($companyId) href="{{ route('business.orders.create', [ 'book_id'=>'0']) }}"   @endif>
-                        <img src="{{asset('/public/img/checkout-register.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Checkout Register </span>
+                        <img src="{{asset('/public/img/checkout-register.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Point Of Sale </span>
                     </a>
                 </li>
 
