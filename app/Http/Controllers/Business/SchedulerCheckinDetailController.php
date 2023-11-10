@@ -100,11 +100,14 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         $bookingDetail = UserBookingDetail::where(['user_id' =>$request->customer_id])->whereDate('expired_at','>=',date('Y-m-d'))->get();
         $chk = 0;
         print_r($bookingDetail);
-        if(isset($bookingDetail) && count($bookingDetail) > 0){
+        if($bookingDetail->isNotEmpty()){
+            echo "hii10";
             foreach($bookingDetail as $detail){
+                 echo "hii20";
                 $reminingSession = $detail->getremainingsession();
                 if($reminingSession > 0){
                     $chk = 1;
+                     echo "hi30";
                     $chkCheckInDetails = BookingCheckinDetails::where(['booking_detail_id' =>$detail->id,'checkin_date' => $request->checkin_date, 'business_activity_scheduler_id' => $business_activity_scheduler->id])->first();
                     if($chkCheckInDetails == ''){
                         $status = BookingCheckinDetails::create([
