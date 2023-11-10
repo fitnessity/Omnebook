@@ -1106,7 +1106,7 @@
 																				</div>
 																			</div>	
 																			<div class='form-row row'>
-																				<div class='col-md-12 form-group d-none'>
+																				<div class='col-md-12 form-group error d-none'>
 																					<div class='alert-danger alert'>Fix the errors before you begin.</div>
 																				</div>
 																			</div>
@@ -1116,15 +1116,15 @@
 																</div>
 
 																@if (session('stripeErrorMsg'))
-																	<div class="col-md-12">
-																		<div class='form-row row'>
-																			<div class='col-md-12  error form-group'>
-																				<div class="alert-danger alert">
-																					{{ session('stripeErrorMsg') }}
-																				</div>
+																<div class="col-md-12">
+																	<div class='form-row row'>
+																		<div class='col-md-12  error form-group'>
+																			<div class="alert-danger alert">
+																				{{ session('stripeErrorMsg') }}
 																			</div>
 																		</div>
 																	</div>
+																</div>
 																@endif
 																<input type="hidden" name="grand_total" id="grand_total" value="{{$grand_total}}">
 																<input type="hidden" name="cash_change" id="cash_change" value="">
@@ -1587,7 +1587,7 @@
 			var cardinfoRadio = $('input[name=cardinfo]:checked', '#payment-form').val();
 
 			if(cash_amt <= 0 && cc_amt <=0 && cc_new_card_amt <=0 && check_amt <=0 && cardinfoRadio!= 'comp'){
-				$('.error').removeClass('hide').find('.alert').text('Choose payment method first');
+				$('.error').removeClass('d-none').find('.alert').text('Choose correct payment method first');
 				$('#checkout-button').html('Complete Payment').prop('disabled', false);
 				return false;
 			}
