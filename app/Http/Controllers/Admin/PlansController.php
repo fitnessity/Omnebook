@@ -14,7 +14,7 @@ use Image;
 use Storage;
 use App\Imports\ClaimImport;
 use Maatwebsite\Excel\HeadingRowImport;
-use App\{BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessActivityScheduler,PagePost,PagePostSave,PageLike,BusinessReview,Miscellaneous,BusinessPriceDetailsAges,MailService,Plan,BusinessClaim,CompanyInformation,UserService,BusinessService,Sports,User};
+use App\{BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessActivityScheduler,PagePost,PagePostSave,PageLike,BusinessReview,Miscellaneous,BusinessPriceDetailsAges,MailService,Plan,BusinessClaim,CompanyInformation,UserService,BusinessService,Sports,User,SGMailService};
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class PlansController extends Controller
@@ -555,6 +555,12 @@ class PlansController extends Controller
         $bs->hours_opt       =  'Open on selected hours';
         $bs->save();
 
+
+        $email_detail = array(
+            'companydata' => $bc,
+            'email' => @$request->email);
+        SGMailService::sendEmailToCustomerforClaim($email_detail);
+        
         session(['key' => 'success']);
         session(['msg' => 'New Unclaim Business Added Succesfully !']); 
         return redirect()->route('businessUnclaim');
@@ -1399,12 +1405,15 @@ class PlansController extends Controller
 
     public function sendemail(Request $request){
 
-        $detail_data_com=  [];
-        $detail_data_user =  [];
-
-        $detail_data_com['company_data'] = CompanyInformation::where('id',$request->cid)->first();
+       /* $detail_data_com['company_data'] = CompanyInformation::where('id',$request->cid)->first();
         $AllDetail  = json_decode(json_encode($detail_data_com), true); 
-        $status = MailService::sendEmailfromadmin($AllDetail);
+        $status = MailService::sendEmailfromadmin($AllDetail);*/
+
+        $company_data= CompanyInformation::where('id',$request->cid)->first();
+        $email_detail = array(
+            'companydata' => $company_data,
+            'email' => @$company_data->business_email);
+        $status = SGMailService::sendEmailToCustomerforClaim($email_detail);
         return $status;
     }
 

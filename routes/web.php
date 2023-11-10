@@ -528,6 +528,11 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::post('/plans/activate-plan', 'Admin\PlansController@activate')->name('activate-plan'); 
     Route::post('/plans/deleteAll', 'Admin\PlansController@deleteAll')->name('delete-plans');
 
+    //features
+    Route::get('/features/', 'Admin\FeaturesController@index')->name('features.index');
+    Route::get('/features/edit/{id}', 'Admin\FeaturesController@edit')->name('features.edit');
+
+
 	//fees
 	Route::get('/fees', 'Admin\FeesController@index')->name('fees');
 	Route::post('/update-fees', 'Admin\FeesController@update')->name('update-fees');
