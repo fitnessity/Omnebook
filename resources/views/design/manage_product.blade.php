@@ -16,7 +16,7 @@
                         <div class="row mb-3">
 							<div class="col-12">
 								<div class="page-heading">
-									<label>Manage Staff</label>
+									<label>Manage Store</label>
 								</div>
 							</div>
                             <!--end col-->
@@ -104,7 +104,6 @@
 											</div>
 										</div>
 
-
 									</div>
 								</div>
 								<!-- end card -->
@@ -140,13 +139,13 @@
 																	<input class="form-check-input" type="checkbox" id="checkAll" value="option">
 																</div>
 															</th>
-
 															<th>Product Image</th>
 															<th>Product Name</th>
 															<th>Catagory </th>
 															<th>Qty</th>
 															<th>Low Qty Alert</th>
 															<th>Sale Price</th>
+															<th>Rental Price</th>
 															<th>Your Cost</th>
 															<th>Shipping Cost</th>
 															<th>Action</th>
@@ -170,6 +169,7 @@
 															<td class="status">50</td>
 															<td>5</td>
 															<td> $10.00 </td>
+															<td> $14.00 </td>
 															<td>$4.95 </td>
 															<td>$10.95</td>
 															<td>
@@ -201,6 +201,7 @@
 															<td class="status">50</td>
 															<td>5</td>
 															<td> $10.00 </td>
+															<td> $56.00 </td>
 															<td>$4.95 </td>
 															<td>$10.95</td>
 															<td>
@@ -232,6 +233,7 @@
 															<td class="status">50</td>
 															<td>5</td>
 															<td> $10.00 </td>
+															<td> $34.00 </td>
 															<td>$4.95 </td>
 															<td>$10.95</td>
 															<td>
@@ -263,6 +265,7 @@
 															<td class="status">50</td>
 															<td>5</td>
 															<td> $10.00 </td>
+															<td> $77.00 </td>
 															<td>$4.95 </td>
 															<td>$10.95</td>
 															<td>
@@ -294,6 +297,7 @@
 															<td class="status">50</td>
 															<td>5</td>
 															<td> $10.00 </td>
+															<td> $22.00 </td>
 															<td>$4.95 </td>
 															<td>$10.95</td>
 															<td>
@@ -325,6 +329,7 @@
 															<td class="status">50</td>
 															<td>5</td>
 															<td> $10.00 </td>
+															<td> $4.00 </td>
 															<td>$4.95 </td>
 															<td>$10.95</td>
 															<td>
@@ -356,6 +361,7 @@
 															<td class="status">50</td>
 															<td>5</td>
 															<td> $10.00 </td>
+															<td> $13.00 </td>
 															<td>$4.95 </td>
 															<td>$10.95</td>
 															<td>
@@ -387,6 +393,7 @@
 															<td class="status">50</td>
 															<td>5</td>
 															<td> $10.00 </td>
+															<td> $53.00 </td>
 															<td>$4.95 </td>
 															<td>$10.95</td>
 															<td>
@@ -418,6 +425,7 @@
 															<td class="status">50</td>
 															<td>5</td>
 															<td> $10.00 </td>
+															<td> $23.00 </td>
 															<td>$4.95 </td>
 															<td>$10.95</td>
 															<td>
