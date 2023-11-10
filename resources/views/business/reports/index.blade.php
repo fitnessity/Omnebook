@@ -38,7 +38,7 @@
 															<a href="{{route('business.sales_report.index')}}">Sales Reports</a>
 														</div>
 														<div class="report-links">
-															<a href="#">Credit Card Expirations</a>
+															<a href="{{route('business.credit_card_report.index')}}">Credit Card Expirations</a>
 														</div>
 														<div class="report-links">
 															<a href="#">Recurring Payments Details</a>

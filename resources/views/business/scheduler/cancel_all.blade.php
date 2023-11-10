@@ -1,10 +1,9 @@
 <h5 class="modal-title mb-10" id="myModalLabel">Cancel Activity</h5>
-<form method="post" action="{{route('business.schedulers.destroy', ['scheduler' => $schedule->id])}}">
+<form method="post" action="{{route('business.cancel_all_store')}}">
    @csrf
-   <input type="hidden" name="_method" value="delete">
-   <input type ="hidden" name="can_id" value="{{@$activityCancel->id}}">
+   <input type="hidden" name="_method" value="post">
    <input type="hidden" name="return_url" value="{{$return_url}}">
-   <input type="hidden" name="schedule_id" value="{{$schedule->id}}">
+   <input type="hidden" name="schedule_id" value="{{$scheduleIds}}">
    <input type="hidden" name="cancel_date" value="{{$cancelDate->format('Y-m-d')}}">
    <div class="row">
       <div class="col-md-12">
@@ -28,7 +27,7 @@
             <label for="email_Instructor">Email Instructor</label><br>
             <input type="checkbox" id="email_clients" name="email_clients" value="1"{{$emailClients}}>
             <label class="alert-label"> Alert registed clients with an email</label><br>
-            <label for="email_clients">You have {{$schedule->spots_reserved($cancelDate)}} clients registered </label><br>
+            <label for="email_clients">You have {{$totalRegisteredClient}} clients registered </label><br>
          </div>
          <button type="submit" class="btn btn-red float-right">Submit</a>
       </div>

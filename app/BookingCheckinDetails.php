@@ -1,19 +1,13 @@
 <?php
 
 namespace App;
-
-
-
-use App\{User,Customer};
+use App\{User,Customer,SGMailService};
 use Auth;
 use Illuminate\Database\Eloquent\Model;
-
 use Carbon\Carbon;
 
 class BookingCheckinDetails extends Model
-
 { 
-	
     public static function boot(){
         parent::boot();
 
@@ -118,6 +112,25 @@ class BookingCheckinDetails extends Model
         $checkInDetails = BookingCheckinDetails::where("business_activity_scheduler_id" , $scheduleId)->whereDate('checkin_date',date('Y-m-d',strtotime($date)))->whereNotNull('checked_at')->count();
 
         return $checkInDetails;
+    }
+
+    public function reminderaboutReservation(){
+        $customer =  $this->Customer;
+        if($customer){
+            $company = $customer->company_information;
+            $businessdata = $this->order_detail->business_services;
+            $time = date('h:i a',strtotime($this->scheduler->shift_start));
+            $date = date('m-d-Y', strtotime($this->checkin_date));
+            $emailDetail = [
+                "userdata"=>$customer,
+                "pName"=>$businessdata->program_name,
+                "companydata"=>$company,
+                "time"=>$time,
+                "date"=>$date,
+                "email"=>$customer->email,
+            ];
+            SGMailService::sendEmailCustomerforReminder($emailDetail);
+        }
     }
 
 }

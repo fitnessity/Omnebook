@@ -435,6 +435,8 @@
 										                    <input type="hidden" name="productTypes" value="" id="productTypes" />
 										                    <input type="hidden" name="productTotalPrices" value="0" id="productTotalPrices" />
 
+										                    <input type="hidden" name="orderType" value="" id="orderType" />
+
 															<div class="check-client-info">
 																<div class="row payment-detials">
 																	<div class="col-md-6 col-sm-6 col-xs-6 col-6"> 
@@ -560,7 +562,7 @@
 													
 												</div>
 											</div>
-											<!-- @php print_r(@$cart['cart_item']); @endphp   -->
+											<!-- @php print_r(@$cart['cart_item']); @endphp -->  
 											<div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
 												<div class="activity_purchase-box">
 													<div class="ticket-summery ticket-title">
@@ -586,8 +588,8 @@
 																				$participate = @$item["participate_from_checkout_regi"]['pc_name'];
 																				$taxes += $taxval;
 																				$act = BusinessServices::where('id', $item["code"])->first();
-																				$serprice =$act->price_details->find($item['priceid']);
-																				$serpricecate =$act->businessPriceDetailsAges->find(@$serprice->category_id);
+																				$serprice = $act != '' ? @$act->price_details->find(@$item['priceid']) : '';
+																				$serpricecate = $act != '' ? $act->businessPriceDetailsAges->find(@$serprice->category_id) : '';
 
 																				$total =($item['totalprice'] + $item['tip']  - $item['discount'] ) + $taxval ;
 																				$iprice = number_format($total,0, '.', '');
@@ -601,11 +603,11 @@
 																			<input type="hidden" name="itemparticipate[]" id="itemparticipate" value="" />
 																			<div class="d-flex">
 																				<div class="close-cross-icon mr-10"> 
-																					<a class="p-red-color editcartitemaks" data-toggle="modal" data-priceid="{{$item['priceid']}}" data-pageid="{{$pageid}}" data-customerId="{{$item['customerId']}}"> 
+																					<a class="p-red-color editcartitemaks" data-toggle="modal" data-priceid="{{$item['priceid']}}" data-pageid="{{$pageid}}" data-customerId="{{$item['customerId']}}" data-orderType = "{{$item['orderType']}}"> 
 																					<i class="fas fa-pencil-alt"></i></a>
 																				</div>
 																				<div class="close-cross-icon-trash">
-																					<a href="{{route('business.removeFromCartForCheckout',['priceid'=>$item['priceid'],'pageid'=>$pageid ,'customerID'=>$item['customerId'],])}}" class="p-red-color">
+																					<a href="{{route('business.removeFromCartForCheckout',['priceid'=>@$item['priceid'],'pageid'=>$pageid ,'customerID'=>$item['customerId'],'orderType' =>@$item['orderType'], ])}}" class="p-red-color">
 																					<i class="fas fa-trash-alt"></i></a>
 																				</div>
 																			</div>
@@ -616,35 +618,35 @@
 																						<label>Program Name: </label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{$act->program_name}} </span>
+																						<span>{{@$act->program_name ?? 'N/A'}} </span>
 																					</div>
 																					
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<label>Catagory: </label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{@$serpricecate->category_title}}</span>
+																						<span>{{@$serpricecate->category_title ?? 'N/A'}}</span>
 																					</div>
 																					
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<label>Price Option:</label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{@$serprice['price_title']}} - {{@$serprice['pay_session']}} Sessions</span>
+																						<span>@if(@$serprice['pay_session']) {{@$serprice['price_title']}} - {{@$serprice['pay_session']}} Sessions @else N/A @endif</span>
 																					</div>
 																					
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<label>Membership Option:</label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{@$serprice['membership_type']}}</span>
+																						<span>{{ @$serprice['membership_type'] != '' ? @$serprice['membership_type'] :  "N/A" }}</span>
 																					</div>
 
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<label>Number Of Seesion:</label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{@$item['p_session']}}</span>
+																						<span>{{ @$item['p_session'] ?? "N/A" }}</span>
 																					</div>
 
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
@@ -681,16 +683,16 @@
 																						<label>Duration:</label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{$item['actscheduleid']}}</span>
+																						<span>{{ @$serprice['actscheduleid'] != '' ? @$serprice['actscheduleid'] :  "N/A" }} </span>
 																					</div>
 
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<label>Starts On:</label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{date('m/d/Y',strtotime($item['sesdate']))}}</span>
+																						<span>{{ $item['sesdate'] ? date('m/d/Y',strtotime($item['sesdate'])) : "N/A"}}</span>
 																					</div>
-																					@php  $expired_at = '';
+																					@php  $expired_at = 'N/A';
 																						$explodetime = explode(' ',$item['actscheduleid']);
 																						if(!empty($explodetime) && array_key_exists(1, $explodetime)){
 																							$daynum = '+'.$explodetime[0].' '.strtolower($explodetime[1]);
@@ -701,7 +703,7 @@
 																						<label>Expires On:</label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{$expired_at}}</span>
+																						<span>{{$expired_at ?? N/A}}</span>
 																					</div>
 																					
 																					<div class="col-md-12 col-sm-12 col-xs-12">
@@ -1501,11 +1503,14 @@
 		            qty  = parseFloat($('#product_' + idArray[i]).val()) || 0;
 		            price = parseFloat($('#product_' + idArray[i]).attr('apirce')) || 0;
 					totalQty += qty * price;
-					name +=  $('#product_' + idArray[i]).attr('pname') + ' X '+ qty + ' = $' +  (qty * price) + ' <br>';
+					name +=  $('#product_' + idArray[i]).attr('pname') + ' X '+ qty + ' = $' +  (qty * price)+' <br>';
 		        }
 		        
 		        if ($('#product_' + idArray[i]).attr('ptype') !== undefined) {
 		            sType += $('#product_' + idArray[i]).attr('ptype') + ',';
+		            if($('#product_' + idArray[i]).attr('ptype') == 'rent' ){
+		            	name += ' ( Rental Duration is ' + $('#rental_duration'+idArray[i]).val() +' )<br>';
+		            }
 		        }
 
 		        if ($('#size' + idArray[i]).val() !== undefined) {
@@ -1515,7 +1520,6 @@
 		        if ($('#color' + idArray[i]).val() !== undefined) {
 		            color += $('#color' + idArray[i]).val() + ',';
 		        } 
-
 		        if ($('#product_' + idArray[i]).val() == undefined && $('#product_' + idArray[i]).attr('ptype') == undefined && $('#size' + idArray[i]).val() == undefined && $('#color' + idArray[i]).val()  == undefined) {
 		            productIds = productIds.replace(new RegExp('\\b' + currentProductId + '\\b'), '').replace(/^,|,$/g, '');
 		        }
@@ -1681,6 +1685,7 @@
 		var priceid = $(this).attr('data-priceid');
 		var pageid = $(this).attr('data-pageid');
 		var customerId = $(this).attr('data-customerId');
+		var orderType = $(this).attr('data-orderType');
 		$.ajax({
 			url: '{{route("business.editcartmodel")}}',
 			type: 'post',
@@ -1689,6 +1694,7 @@
 				'pageid':pageid,
 				'customerId':customerId,
 				'companyId': '{{$companyId}}',
+				'orderType': orderType,
 				_token: '{{csrf_token()}}', 
 			},
 			success:function(response){
@@ -1922,22 +1928,24 @@
 		 	}
 	 	}
 
-	 	if(dis != undefined){
-	 		if($('#dis_amt').val() != ''){
-	 			if(dis == '' || dis == '%'){
-	 				sub_tot_dis = (price * dis_val) /100;
-	 				$('#dis_amt_span').html($('#dis_amt').val() + ' %');
-		 		}else{
-		 			sub_tot_dis = dis_val;
-					$('#dis_amt_span').html('$ ' + $('#dis_amt').val());
-		 		}
-		 		$('#dis_amt_val').val(sub_tot_dis);
-	 		}else{
-	 			$('#dis_amt_val').val(0);
-	 		}
-	 	}
-	 	
 	 	if($('#price').val() != ''){
+
+	 		if(dis != undefined){
+		 		if($('#dis_amt').val() != ''){
+		 			if(dis == '' || dis == '%'){
+		 				sub_tot_dis = (price * dis_val) /100;
+		 				alert(sub_tot_dis);
+		 				$('#dis_amt_span').html($('#dis_amt').val() + ' %');
+			 		}else{
+			 			sub_tot_dis = dis_val;
+						$('#dis_amt_span').html('$ ' + $('#dis_amt').val());
+			 		}
+			 		$('#dis_amt_val').val(sub_tot_dis);
+		 		}else{
+		 			$('#dis_amt_val').val(0);
+		 		}
+		 	}
+
 	 		if($("#tax").is(":checked")){
 	 			tax = 0;
 	 			$('#value_tax').val(0);
@@ -1966,12 +1974,44 @@
 	 		
 	 		tot = tax + tot ;
 	 		tot = tot.toFixed(2);
+	 		
 	 		$('#total_amount').html('$'+ tot);
 	 		$('#pricetotal').val(price.toFixed(2));
+	 		$('#orderType').val('membership');
 	 	}else{
+	 		tax = 0;
 	 		var productTotalPrice = parseFloat($('#productTotalPrices').val()) || 0;
-	 		$('#total_amount').html('$'+ productTotalPrice.toFixed(2));
-	 		$('#pricetotal').val(productTotalPrice.toFixed(2));
+	 		if(salestax != 0){
+	 			tax += (productTotalPrices*salestax)/100;
+	 		}
+
+	 		if(dis != undefined){
+		 		if($('#dis_amt').val() != ''){
+		 			if(dis == '' || dis == '%'){
+		 				sub_tot_dis = (productTotalPrice * dis_val) /100;
+		 				$('#dis_amt_span').html($('#dis_amt').val() + ' %');
+			 		}else{
+			 			sub_tot_dis = dis_val;
+						$('#dis_amt_span').html('$ ' + $('#dis_amt').val());
+			 		}
+			 		$('#dis_amt_val').val(sub_tot_dis);
+		 		}else{
+		 			$('#dis_amt_val').val(0);
+		 		}
+		 	}
+		 	tax = parseFloat(tax.toFixed(2));
+
+	 		var tot = productTotalPrice + tax - parseFloat(sub_tot_dis);
+	 		tot = tot.toFixed(2);
+	 		$('#total_amount').html('$'+ tot);
+	 		$('#pricetotal').val(productTotalPrice);
+	 		
+	 		$('#value_tax').val(tax);
+			$('#taxvalspan').html('$'+tax);
+	 		if(tot != 0){
+				$('#addToOrder').prop('disabled', false);
+	 		}
+	 		$('#orderType').val('product');
 	 	}
 
 	 	if(chk == 'qty'){
