@@ -124,7 +124,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
                 }
             }
         }
-      
+        echo $chk;
         return $chk; 
         
     }
