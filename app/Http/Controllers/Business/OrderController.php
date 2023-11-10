@@ -74,8 +74,8 @@ class OrderController extends BusinessBaseController
             $user_type = 'customer';
             $customer = $customerdata = $request->current_company->customers->find($request->cus_id);
             @$customer->create_stripe_customer_id();
-            if($customer->parent_cus_id){
-                return redirect(route('business.orders.create', ['cus_id' => $customer->parent_cus_id, 'participate_id' => $request->cus_id]));
+            if($customer->parent_cus_id && $request->redirected != 1){
+                return redirect(route('business.orders.create', ['cus_id' => $customer->parent_cus_id, 'participate_id' => $request->cus_id, 'redirected' => true]));
             }
 
             $username  =  @$customerdata->fname.' '. @$customerdata->lname;
