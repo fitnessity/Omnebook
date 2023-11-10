@@ -289,6 +289,7 @@
                 checked_at: $(this).is(':checked') ? date : null,
             },
             success:function(response) {
+            	alert(response);
             	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}',chkInID,cus_id,chk,'',response);
                 //location.reload()
             },

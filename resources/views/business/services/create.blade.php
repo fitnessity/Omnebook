@@ -878,7 +878,7 @@
                                                                                                 <ul id="catUl{{$i}}">
                                                                                                     <!-- <li><a href="" data-bs-toggle="modal" data-bs-target=".tax{{$i}}">
                                                                                                         <i class="fas fa-plus text-muted"></i>Taxes</a></li> -->
-                                                                                                    <li><a onclick="scheduleLink('{{@$category->cid}}','{{@$category->id}}');"><i class="fas fa-plus text-muted"></i>Schedule</a></li>
+                                                                                                   <!-- <li><a onclick="scheduleLink('{{@$category->cid}}','{{@$category->id}}');"><i class="fas fa-plus text-muted"></i>Schedule</a></li> -->
                                                                                                     <li class="non-collapsing" data-bs-toggle="collapse" data-bs-target><a onclick=" return add_another_price_duplicate_category({{$i}});" ><i class="fas fa-plus text-muted"></i>Duplicate Entire Category</a></li>
                                                                                                     @if($i!=0)
                                                                                                     <li class="dropdown-divider"></li>
