@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
+        "barryvdh/laravel-dompdf": "^2.0",
         "braintree/braintree_php": "^6.4",
         "doctrine/dbal": "^2.6",
         "fideloper/proxy": "^4.0",
@@ -23,7 +24,8 @@
         "sendgrid/sendgrid": "~7",
         "sentry/sentry-laravel": "^3.1",
         "stripe/stripe-php": "^7.100",
-        "twilio/sdk": "^6.9"
+        "twilio/sdk": "^6.9",
+        "yajra/laravel-datatables-oracle": "^9.21"
     },
     "require-dev": {
         "facade/ignition": "^1.4",
@@ -35,7 +37,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "extra": {
         "laravel": {
