@@ -4,6 +4,7 @@
 /public/storage
 /public/log
 /public/uploads
+/public/ExcelUpload
 /braintree
 /storage/*.key
 /vendor
