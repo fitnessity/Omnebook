@@ -351,9 +351,46 @@ class Customer extends Authenticatable
         }
     }
 
-    public function charge($amount){
-        // charge on default card
-        // add charge history(id amount strip_transaction_id credit_card_number status charge_class charge_id created_at updated_at)
+    public function charge($amount, $kind){
+        $payment_method = $this->StripePaymentMethods()->get()->last();
+
+        if($payment_method){
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+
+            $paymentIntent = $stripe->paymentIntents->create([
+                'amount' =>  round($amount *100),
+                'currency' => 'usd',
+                'customer' => $this->stripe_customer_id,
+                'payment_method' => $payment_method->payment_id,
+                'off_session' => true,
+                'confirm' => true,
+                'metadata' => []
+            ]);
+
+            if($paymentIntent->status == 'succeeded'){
+
+                $this->Transaction()->create([
+                    'user_type' => 'Customer',
+                    'user_id' => $this->id,
+                    'item_type'=> 'Customer',
+                    'item_id'=> $this->id,
+                    'channel'=> 'stripe',
+                    'kind'=> $kind,
+                    'transaction_id'=> $paymentIntent->id,
+                    'stripe_payment_method_id'=> $payment_method->payment_id,
+                    'amount'=> $amount,
+                    'qty'=> 1,
+                    'status'=> 'complete',
+                    'payload'=> json_encode($paymentIntent)
+                ]);
+                return true;
+            }else{
+                return false;
+            }
+
+        }else{
+            return false;
+        }
     }
 
     public function is_active(){

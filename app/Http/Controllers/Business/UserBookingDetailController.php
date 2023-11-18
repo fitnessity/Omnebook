@@ -88,9 +88,25 @@ class UserBookingDetailController extends Controller
     public function terminate(Request $request, $business_id){
         $company = $request->current_company->findOrFail($business_id);
         $customer = $company->customers()->findOrFail($request->customer_id);
-        //$booking_status = $customer->bookingStatus()->findOrFail($request->booking_id);
+
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
-        $booking_detail->update(["status" => 'cancel' ,'terminate_reason' => $request->terminate_reason,'terminated_at' => date('Y-m-d',strtotime($request->terminated_at)),'terminate_fee' => $request->terminate_fee,'terminate_comment' =>$request->terminate_comment]);
+        
+        if($booking_detail->can_terminate()){
+            if($request->terminate_fee > 0){
+                if($customer->charge($request->terminate_fee, 'terminate')){
+                    $booking_detail->update(["status" => 'cancel' ,
+                                            'expired_at' => date('Y-m-d',strtotime($request->terminated_at)),
+                                            'terminate_reason' => $request->terminate_reason,
+                                            'terminated_at' => date('Y-m-d',strtotime($request->terminated_at)),
+                                            'terminate_fee' => $request->terminate_fee,
+                                            'terminate_comment' =>$request->terminate_comment]);
+                }else{
+                    return response()->json(['message' => 'charge user failed.'], 400);
+                }
+            }
+        }else{
+            return response()->json(['message' => 'is not acive membership, can not terminate.'], 400);
+        }
     }
 
     public function void(Request $request, $business_id, $booking_id){

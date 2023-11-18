@@ -57,9 +57,10 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('orders', 'UserBookingDetailController')->only(['index', 'update', 'destroy']);
     Route::post('refund', 'UserBookingDetailController@refund')->name('refund');
     Route::post('suspend', 'UserBookingDetailController@suspend')->name('suspend');
-    Route::post('terminate', 'UserBookingDetailController@terminate')->name('terminate');
+
     Route::post('booking_details/{id}/void', 'UserBookingDetailController@void')->name('void');
     Route::post('booking_details/{id}/refund', 'UserBookingDetailController@refund')->name('refund');
+    Route::post('booking_details/{id}/terminate', 'UserBookingDetailController@terminate')->name('terminate');
     Route::get('customers/card_editing_form', 'CustomerController@card_editing_form')->name('customers.card_editing_form');
     Route::get('customers/import', 'CustomerController@importcustomer')->name('customers.import');
     Route::any('customers/refresh_payment_methods', 'CustomerController@refresh_payment_methods')->name('customers.refresh_payment_methods');
