@@ -247,20 +247,12 @@ class Customer extends Authenticatable
     }
 
     public function active_memberships($sport = null){
-        //echo $this->id;exit;
 
-        $company = $this->company_information;
-        $now = Carbon::now();
-        $results = UserBookingDetail::where(['user_booking_details.user_type' => 'customer','user_booking_details.user_id' => $this->id])->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->where('user_booking_details.business_id', $company->id);
-        
-        if($this->user_id == Auth::user()->id){
-            $results = $results->join('user_booking_status as ubs','user_booking_details.booking_id', '=', 'ubs.id')->orwhere(['ubs.user_id' => Auth::user()->id])->where('user_booking_details.business_id', $company->id);
-        }
+        $used_user_booking_detail_ids = $this->BookingCheckinDetails()->whereRaw('booking_detail_id is not null')->where('after_use_session_amount', 0)->pluck('booking_detail_id')->toArray();
 
-        $results = $results->select('user_booking_details.*', DB::raw('(CASE WHEN bcd.checkin_date IS NOT NULL AND bcd.checkin_date != CURDATE() AND bcd.checkin_date >= CURDATE() THEN COUNT(bcd.use_session_amount) ELSE 0 END) as checkin_count'))->join('booking_checkin_details as bcd', 'user_booking_details.id', '=', 'bcd.booking_detail_id')->havingRaw('(user_booking_details.pay_session - checkin_count) > 0')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'))->where('user_booking_details.business_id', $company->id)->where('user_booking_details.order_type', 'Membership')->groupBy('user_booking_details.id')->whereDate('user_booking_details.expired_at', '>', $now->format('Y-m-d'));
-
-       
-        //print_r($results->get());exit; 
+        $results = $this->bookingDetail()->whereRaw('(user_booking_details.expired_at > ? or user_booking_details.expired_at is null)', Carbon::now()->format('Y-m-d'))
+                                         ->whereNotIn('user_booking_details.id', $used_user_booking_detail_ids);
+ 
         return $results; 
     }
 
@@ -316,8 +308,7 @@ class Customer extends Authenticatable
     }
 
     public function complete_booking_details(){
-        $company = $this->company_information;
-        $booking_details = UserBookingDetail::where('business_id', $company->id)->where(['user_type'=>'customer','user_id'=>$this->id])->where('user_booking_details.order_type', 'Membership')->whereRaw('((pay_session <= 0 or pay_session is null) or expired_at < now())');
+        $booking_details = $this->bookingDetail()->whereNotIn('id', $this->active_memberships()->pluck('id')->toArray());
 
         return $booking_details;
     }
