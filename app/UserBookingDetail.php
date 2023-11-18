@@ -478,6 +478,14 @@ class UserBookingDetail extends Model
             return False;
         }
     }
+
+    public function can_terminate(){
+        return $this->can_refund() && $this->status == 'active';
+    }
+
+    public function can_suspend(){
+        return $this->can_refund() && $this->status == 'active';
+    }
     
 
 }

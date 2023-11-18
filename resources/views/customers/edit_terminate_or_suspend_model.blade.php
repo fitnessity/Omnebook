@@ -10,10 +10,10 @@
 			<div class="col-lg-6 col-md-6">
 				<div class="modal-side-title">
 					<h4> Membership Status: 
-					@if($booking_detail->expired_at > date('Y-m-d')) 
+					@if($booking_detail->status == 'active') 
 						<span class="font-green"> Active </span> 
 					@else
-						<span class="font-red"> InActive </span> 
+						<span class="font-red"> {{$booking_detail->status}} </span> 
 					@endif
 					</h4>
 				</div>
@@ -240,104 +240,107 @@
 				<h4 class="edit-booking-title">Edit Section </h4>
 				<p class="text-center">Use this section to edit the membership details you need below</p>
 			</div>
-			<div class="radio-text">
-				<form action="">
-					<input type="radio" id="suspend" name="fav_language" value="suspend" @if($booking_detail->status == 'suspend') checked @endif>
-					<label for="void">Suspend/Freeze (Seeting a membership or contract suspension will freeze this membership for a duration of time.)</label>
-				</form>
-			</div>
-			<div class="refund-details refund-method"> 
-				<label>Reason for Suspension: </label>
-				<textarea class="form-control" rows="2" name="suspension_reason" id="suspension_reason" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->suspend_reason}}</textarea>
-			</div>
-			<?php  $suspensionStartDate = $booking_detail->suspend_started != '' ? $booking_detail->suspend_started : date('m/d/Y');  
+			@if($booking_detail->can_suspend())
+				<div class="radio-text">
+					<form action="">
+						<input type="radio" id="suspend" name="fav_language" value="suspend" @if($booking_detail->status == 'suspend') checked @endif>
+						<label for="void">Suspend/Freeze (Seeting a membership or contract suspension will freeze this membership for a duration of time.)</label>
+					</form>
+				</div>
+				<div class="refund-details refund-method"> 
+					<label>Reason for Suspension: </label>
+					<textarea class="form-control" rows="2" name="suspension_reason" id="suspension_reason" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->suspend_reason}}</textarea>
+				</div>
+				<?php  $suspensionStartDate = $booking_detail->suspend_started != '' ? $booking_detail->suspend_started : date('m/d/Y');  
 
-				$suspensionEndDate = $booking_detail->suspend_ended != '' ? $booking_detail->suspend_ended : date('m/d/Y'); 
-			?>
-			<div class="row">
-				<div class="col-lg-6 col-sm-6 col-md-6">
-					<div class="refund-details refund-method">
-						<label>Suspension Start Date: </label>
+					$suspensionEndDate = $booking_detail->suspend_ended != '' ? $booking_detail->suspend_ended : date('m/d/Y'); 
+				?>
+				<div class="row">
+					<div class="col-lg-6 col-sm-6 col-md-6">
+						<div class="refund-details refund-method">
+							<label>Suspension Start Date: </label>
+							<div class="input-group">
+								<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input" value="{{$suspensionStartDate}}">
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6 col-sm-6 col-md-6">
+						<div class="refund-details refund-method">
+							<label>Suspension End Date:</label>
+							<div class="input-group">
+								<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input" value="{{$suspensionStartDate}}" value="{{$suspensionEndDate}}">
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6  col-md-6 col-sm-6">
+						<div class="refund-details mb-10"> 
+							<label>Suspension Fee: </label>
+							<input class="form-control" type="text" id="suspension_fee" name="suspension_fee" placeholder="$" value="{{$booking_detail->suspend_fee}}">
+						</div>
+					</div>
+					<div class="col-lg-6 col-sm-6 col-md-6">
+						<div class="refundcomment">
+							<label>Leave a comment:</label>
+							<textarea class="form-control" rows="1" name="suspension_comment" id="suspension_comment" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->suspend_comment}}</textarea>
+						</div>
+					</div>
+					<div class="col-lg-12 col-xs-12">
+						<button type="button" class="btn btn-red float-end" id=""  data-behavior="suspend_order_detail" data-booking-detail-id = "{{$booking_detail->id}}"  data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Suspend/Freeze</button>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-5 col-sm-5 col-xs-5 col-5">
+						<div class="red-separator mt-7"></div>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-2 col-2 text-center">
+						<label> OR </label>
+					</div>
+					<div class="col-md-5 col-sm-5 col-xs-5 col-5">
+						<div class="red-separator mt-7"></div>
+					</div>
+				</div>
+			@endif
+			@if($booking_detail->can_terminate())
+				<div class="radio-text">
+					<form action="">
+						<input type="radio" id="termination" name="fav_language" value="termination" @if($booking_detail->status == 'cancel') checked @endif>
+						<label for="void">Terminate/Cancel (Terminate/Cancel this membership)	  </label>
+					</form>
+				</div>
+				<div class="refund-details refund-method mb-10"> 
+					<label>Reason for Termination:  </label>
+					<textarea class="form-control" rows="2" name="terminate_reason" id="terminate_reason" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->terminate_reason}}</textarea>
+				</div>
+				
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+						<label>Termination  Date:</label>
 						<div class="input-group">
-							<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input" value="{{$suspensionStartDate}}">
+							<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input" value="{{date('m/d/Y')}}" >
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+						<div class="mb-10"> 
+							<label>Termination Fee: </label>
+							<input class="form-control" type="text" id="terminate_fee" name="terminate_fee" placeholder="$" value="{{$booking_detail->terminate_fee}}">
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-6 col-sm-6 col-md-6">
-					<div class="refund-details refund-method">
-						<label>Suspension End Date:</label>
-						<div class="input-group">
-							<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input" value="{{$suspensionStartDate}}" value="{{$suspensionEndDate}}">
+											
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+						<div class="refundcomment">
+							<label>Leave a comment:</label>
+							<textarea class="form-control" rows="2" name="terminate_comment" id="terminate_comment" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->terminate_comment}}</textarea>
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+						<div class="refundcomment refund-note">
+							<p>By clicking terminate, you will be removing all remaining contract &amp; membership agreements, payment agreements &amp; scheduled recurring payments. </p>
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-6  col-md-6 col-sm-6">
-					<div class="refund-details mb-10"> 
-						<label>Suspension Fee: </label>
-						<input class="form-control" type="text" id="suspension_fee" name="suspension_fee" placeholder="$" value="{{$booking_detail->suspend_fee}}">
-					</div>
-				</div>
-				<div class="col-lg-6 col-sm-6 col-md-6">
-					<div class="refundcomment">
-						<label>Leave a comment:</label>
-						<textarea class="form-control" rows="1" name="suspension_comment" id="suspension_comment" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->suspend_comment}}</textarea>
-					</div>
-				</div>
-				<div class="col-lg-12 col-xs-12">
-					<button type="button" class="btn btn-red float-end" id=""  data-behavior="suspend_order_detail" data-booking-detail-id = "{{$booking_detail->id}}"  data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Suspend/Freeze</button>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-5 col-sm-5 col-xs-5 col-5">
-					<div class="red-separator mt-7"></div>
-				</div>
-				<div class="col-md-2 col-sm-2 col-xs-2 col-2 text-center">
-					<label> OR </label>
-				</div>
-				<div class="col-md-5 col-sm-5 col-xs-5 col-5">
-					<div class="red-separator mt-7"></div>
-				</div>
-			</div>
-			
-			<div class="radio-text">
-				<form action="">
-					<input type="radio" id="termination" name="fav_language" value="termination" @if($booking_detail->status == 'cancel') checked @endif>
-					<label for="void">Terminate/Cancel (Terminate/Cancel this membership)	  </label>
-				</form>
-			</div>
-			<div class="refund-details refund-method mb-10"> 
-				<label>Reason for Termination:  </label>
-				<textarea class="form-control" rows="2" name="terminate_reason" id="terminate_reason" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->terminate_reason}}</textarea>
-			</div>
-			
-			<div class="row">
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-					<label>Termination  Date:</label>
-					<div class="input-group">
-						<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input" value="{{date('m/d/Y')}}" >
-					</div>
-				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-					<div class="mb-10"> 
-						<label>Termination Fee: </label>
-						<input class="form-control" type="text" id="terminate_fee" name="terminate_fee" placeholder="$" value="{{$booking_detail->terminate_fee}}">
-					</div>
-				</div>
-			</div>
-										
-			<div class="row">
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-					<div class="refundcomment">
-						<label>Leave a comment:</label>
-						<textarea class="form-control" rows="2" name="terminate_comment" id="terminate_comment" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->terminate_comment}}</textarea>
-					</div>
-				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-					<div class="refundcomment refund-note">
-						<p>By clicking terminate, you will be removing all remaining contract &amp; membership agreements, payment agreements &amp; scheduled recurring payments. </p>
-					</div>
-				</div>
-			</div>
+			@endif
 		</div>
 	</div>
 </div>
@@ -375,9 +378,9 @@
 	    });
 	});
 
-    $(document).on('click', "[data-behavior~=terminate_order_detail]", function(){
+	$("[data-behavior~=terminate_order_detail]").click(function(e){
         $.ajax({
-            url: "/business/{{$business_id}}/terminate/",
+            url: "/business/{{$business_id}}/booking_details/" + $(this).data('booking-id') + '/terminate',
             type: "POST",
             data:{
                 _token: '{{csrf_token()}}', 
@@ -388,6 +391,10 @@
                 terminate_comment: $('#terminate_comment').val(),
                 customer_id:  $(this).data('customer-id'),
                 booking_id:  $(this).data('booking-id'),
+            },
+			error: function(xhr, status, error){
+            	var errorMessage = JSON.parse(xhr.responseText);
+            	alert(errorMessage.message);
             },
             success:function(response) {
                 location.reload()
