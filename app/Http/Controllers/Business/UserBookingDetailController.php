@@ -67,14 +67,57 @@ class UserBookingDetailController extends Controller
 
         $customer = $company->customers()->findOrFail($request->customer_id);
 
+        $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
 
-        $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
+        if($booking_detail->can_refund()){
+            
+            if($request->refund_method == 'credit'){
+                $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
 
-        if($transaction->can_refund()){
-            $transaction->refund(); 
+                if($transaction->can_refund()){
+                    
+                    if(!$transaction->refund($request->refund_amount ? $request->refund_amount : Null)){
+                        return response()->json(['message' => 'refund failed.'], 400);
+                    }
+
+                }else{
+                    return response()->json(['message' => 'not pay by credit card ot transction can not found'], 400);
+                }
+            }
+
+            $result = [
+                'status' => 'cancel',
+                'expired_at' => date('Y-m-d',strtotime($request->refund_date)),
+                "refund_amount" => $request->refund_amount,
+                "refund_method" => $request->refund_method,
+                "refund_date" => date('Y-m-d',strtotime($request->refund_date)),
+                "refund_reason" => $request->refund_reason,
+            ];
+            // $booking_detail->refund();
+            $booking_detail->update($result);
         }else{
-            return response()->json(['message' => 'transction can not found'], 400);
+            return response()->json(['message' => 'membership can not found'], 400);
         }
+        // $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
+
+        // if($transaction->can_refund()){
+        //     var_dump('refund');
+        //     // if refund_method is credit
+        //     if($transaction->refund_method == 'credit'){
+        //         $customer->charge($transaction->amount, 'refund');
+        //     }
+
+        //     // $transaction->refund(); 
+
+        //     // $booking_detail->update(["status" => 'cancel' ,
+        //     //                         'expired_at' => date('Y-m-d',strtotime($request->terminated_at)),
+        //     //                         'terminate_reason' => $request->terminate_reason,
+        //     //                         'terminated_at' => date('Y-m-d',strtotime($request->terminated_at)),
+        //     //                         'terminate_fee' => $request->terminate_fee,
+        //     //                         'terminate_comment' =>$request->terminate_comment]);
+        // }else{
+        //     return response()->json(['message' => 'transction can not found'], 400);
+        // }
     } 
 
     public function suspend(Request $request, $business_id){

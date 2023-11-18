@@ -171,7 +171,7 @@ class Transaction extends Model
 
     }
 
-    public function refund(){
+    public function refund( $amount = null){
         
         $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->item_id)->first();
 
@@ -195,15 +195,23 @@ class Transaction extends Model
                 $stripe->transfers->createReversal($transfer_id);
             }
 
+            $parameters = [
+                'payment_intent' => $transaction->transaction_id,
+            ];
 
-            $refund = $stripe->refunds->create([
-              'payment_intent' => $transaction->transaction_id
-            ]);
+            if($amount){
+                $parameters['amount'] = $amount * 100;
+            }
+
+            $refund = $stripe->refunds->create($parameters);
 
             if($refund['status']=='succeeded'){
                 $transaction->update(["status" => 'refund_complete', 'refund_amount' => $refund['amount']/100]);
                 $booking_status = UserBookingStatus::where('id', $this->item_id)->orderby('created_at','desc')->first();
                 $booking_status->UserBookingDetail()->update(["status" => 'refund']);
+                return true;
+            }else{
+                return false;
             }
             
         }
