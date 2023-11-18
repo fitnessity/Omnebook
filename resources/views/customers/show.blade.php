@@ -809,11 +809,25 @@
 																											<td>{{$history->getPmtMethod()}}</td>
 																											<td>${{$history->amount}}</td>
 																											<td>{{$history->item_description(request()->business_id)['qty']}}</td>
-																											<td>Refund | Void</td>
+																											<td>
+																												@if($history->can_void() && $history->item_type=="UserBookingStatus")
+																													<a href="#" data-booking-detail-id="{{$history->item_id}}" data-behavior="transaction_void" data-customer-id = "{{$customerdata->id}}">Void</a>
+																												@endif
+
+																												@if($history->can_refund())
+																													<a href="#" data-booking-detail-id="{{$history->item_id}}" data-behavior="transaction_refund" data-customer-id = "{{$customerdata->id}}">Refund</a>
+																												@endif
+
+																												@if($history->status == 'refund_complete')
+																													Refunded
+																												@endif
+
+
+																											</td>
 																											<td><a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$customerdata->id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
 																											</td>
 																										</tr>
-																										@endif
+
 																									@endforeach
 																								</tbody>
 																							</table>
@@ -1379,6 +1393,49 @@
 </div>
 
 @include('layouts.business.footer')
+	<script type="text/javascript">
+
+		$("[data-behavior~=transaction_void]").click(function(e){
+			e.preventDefault();
+
+	        $.ajax({
+	            url: "/business/{{request()->business_id}}/booking_details/" + $(this).data('booking-detail-id') + '/void',
+	            method: "POST",
+	            data:{
+	                _token: '{{csrf_token()}}', 
+	                customer_id: $(this).data('customer-id')
+	            },
+	            error: function(xhr, status, error){
+	            	var errorMessage = JSON.parse(xhr.responseText);
+	            	alert(errorMessage.message);
+	            },
+	            success:function(response) {
+	                location.reload()
+	            },
+	        });
+	    });
+
+		$("[data-behavior~=transaction_refund]").click(function(e){
+			e.preventDefault();
+
+	        $.ajax({
+	            url: "/business/{{request()->business_id}}/booking_details/" + $(this).data('booking-detail-id') + '/refund',
+	            method: "POST",
+	            data:{
+	                _token: '{{csrf_token()}}', 
+	                customer_id: $(this).data('customer-id')
+	            },
+	            error: function(xhr, status, error){
+	            	var errorMessage = JSON.parse(xhr.responseText);
+	            	alert(errorMessage.message);
+	            },
+	            success:function(response) {
+	            	console.log(response)
+	                // location.reload()
+	            },
+	        });
+	    });
+	</script>
 	<script>
 		$(document).ready(function () {
 			var business_id = '{{request()->business_id}}';

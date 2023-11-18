@@ -146,7 +146,6 @@ class PaymentController extends Controller {
                         'addOnservice_total' => $addOnServicePrice,
                     ]);
 
-                    $booking_detail->transfer_to_provider();
 
                     $price_detail = $cartService->getPriceDetail($item['priceid']);
 
@@ -464,7 +463,6 @@ class PaymentController extends Controller {
                         'addOnservice_total' =>  $addOnServicePrice,
                     ]);
 
-                    $booking_detail->transfer_to_provider();
 
                     $price_detail = $cartService->getPriceDetail($item['priceid']);
 

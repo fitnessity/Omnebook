@@ -73,6 +73,20 @@ class Kernel extends ConsoleKernel
             }
         })->daily();
 
+
+        $schedule->call(function () {
+            $transactions = Transaction::where(['status' => 'requires_capture'])->get();
+
+            foreach($transactions as $transaction){
+                try {
+                    $transaction->capture();
+
+                }catch (Exception $e) {
+                    $errormsg = $e->getError()->message;
+                }
+            }
+        })->daily();
+
         $schedule->call(function () {
             $transactions = Transaction::where(['status' => 'requires_capture'])->get();
             foreach($transactions as $transaction){
