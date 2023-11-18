@@ -277,7 +277,7 @@
 				</div>
 				<div class="refund-details refund-date"> 
 					<label>Refund Issue Date: </label>
-						<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input active" value="{{date('m/d/Y')}}">
+						<input type="text" id="refund_date" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input active" value="{{date('m/d/Y')}}">
 				</div>
 				<div class="refund-details refund-amount"> 
 					<label>Refund Amount:  </label>
@@ -286,7 +286,10 @@
 				</div>
 				<div class="refund-details refund-method"> 
 					<label>Refund Method: </label>
-					<textarea class="form-control" rows="2" name="refund_method" id="refund_method" placeholder="Refund Method" maxlength="500">{{$booking_detail->refund_method}}</textarea>
+					<select class="form-control" id="refund_method" name="refund_method">
+						<option value="cash">Cash</option>
+						<option value="credit" selected>Credit</option>
+						<option value="other">Other</option>
 				</div>
 				<div class="refund-details text-center">
 					<textarea class="form-control" rows="2" name="refund_reason" id="refund_reason" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->refund_reason}}</textarea>
@@ -324,21 +327,25 @@
         });
     });
 
-    $(document).on('click', "[data-behavior~=refund_order_detail]", function(){
+	$("[data-behavior~=refund_order_detail]").click(function(e){
         $.ajax({
-            url: "/business/{{$business_id}}/refund/",
+            url: "/business/{{$business_id}}/booking_details/" + $(this).data('booking-id') + '/refund',
             type: "POST",
             data:{
                 _token: '{{csrf_token()}}', 
-                booking_detail_id: $(this).data('booking-detail-id'),
-                refund_reason: $('#refund_reason').val(),
-                refunddate: $('#refunddate').val(),
-                refund_amount: $('#refund_amount').val(),
-                refund_method: $('#refund_method').val(),
                 customer_id:  $(this).data('customer-id'),
-                booking_id:  $(this).data('booking-id'),
+				refund_amount: $('#refund_amount').val(),
+				refund_method: $('#refund_method').val(),
+				refund_date: $('#refund_date').val(),
+				refund_reason: $('#refund_reason').val(),
+				booking_detail_id: $(this).data('booking-detail-id')
+            },
+            error: function(xhr, status, error){
+            	var errorMessage = JSON.parse(xhr.responseText);
+            	alert(errorMessage.message);
             },
             success:function(response) {
+
                 location.reload()
             },
         });
