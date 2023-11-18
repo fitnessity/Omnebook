@@ -11,10 +11,10 @@
 			<div class="col-lg-6 col-md-6">
 				<div class="modal-side-title">
 					<h4> Membership Status: 
-					@if($booking_detail->expired_at > date('Y-m-d')) 
+					@if($booking_detail->status == 'active') 
 						<span class="font-green"> Active </span> 
 					@else
-						<span class="font-red"> InActive </span> 
+						<span class="font-red"> {{$booking_detail->status}} </span> 
 					@endif
 					</h4>
 				</div>
@@ -241,57 +241,58 @@
 				<h4 class="edit-booking-title">Edit Section </h4>
 				<p class="text-center">Use this section to edit the membership details you need below</p>
 			</div>
-			<div class="radio-text">
-				<form action="">
-					<input type="radio" id="void" name="fav_language" value="void" @if($booking_detail->status == 'void') checked @endif>
-					<label for="void">Void This Sale (Made a booking mistake? Training or testing a sale? You can void this membership.)</label>
-				</form>
-			</div>
-			<div class="void-box">
-				<div class="void-transaction">
-					<p>Voiding this transaction will delete this record from your system, You will not be able to undo this once you agree to void.</p>
-					<button type="button" class="btn btn-red" id="" data-behavior="destroy_order_detail" data-booking-detail-id = "{{$booking_detail->id}}" data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Yes, Void This Sale</button>
+			@if($booking_detail->can_void())
+				<div class="radio-text">
+					<form action="">
+						<label for="void">Void This Sale (Made a booking mistake? Training or testing a sale? You can void this membership.) before 01/01/2024</label>
+					</form>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-5 col-sm-5 col-xs-5 col-5">
-					<div class="red-separator mt-7"></div>
+				<div class="void-box">
+					<div class="void-transaction">
+						<p>Voiding this transaction will delete this record from your system, You will not be able to undo this once you agree to void.</p>
+						<button type="button" class="btn btn-red" id="" data-behavior="destroy_order_detail" data-booking-detail-id = "{{$booking_detail->id}}" data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Yes, Void This Sale</button>
+					</div>
 				</div>
-				<div class="col-md-2 col-sm-2 col-xs-2 col-2 text-center">
-					<label> OR </label>
+				<div class="row">
+					<div class="col-md-5 col-sm-5 col-xs-5 col-5">
+						<div class="red-separator mt-7"></div>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-2 col-2 text-center">
+						<label> OR </label>
+					</div>
+					<div class="col-md-5 col-sm-5 col-xs-5 col-5">
+						<div class="red-separator mt-7"></div>
+					</div>
 				</div>
-				<div class="col-md-5 col-sm-5 col-xs-5 col-5">
-					<div class="red-separator mt-7"></div>
+			@endif
+			@if($booking_detail->can_refund())
+				<div class="radio-text">
+					<form action="">
+					 	<label for="void">Issue a Refund</label>
+					</form>
 				</div>
-			</div>
-
-			<div class="radio-text">
-				<form action="">
-					<input type="radio" id="refund" name="fav_language" value="refund" @if($booking_detail->status == 'refund') checked @endif>
-				 	<label for="void">Issue a Refund</label>
-				</form>
-			</div>
-			<div class="refund-details"> 
-				<label>Total Amount Paid: </label>
-				<span> ${{$booking_detail->booking->amount}} (Original payment method: {{$booking_detail->booking->getstripecard()}})  </span>
-			</div>
-			<div class="refund-details refund-date"> 
-				<label>Refund Issue Date: </label>
-					<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input active" value="{{date('m/d/Y')}}">
-			</div>
-			<div class="refund-details refund-amount"> 
-				<label>Refund Amount:  </label>
-				<input class="form-control" type="text" id="refund_amount" name="refund_amount" placeholder="20" value="{{$booking_detail->refund_amount}}">
-				<h4>(Refund amount can’t be greater than the total amount paid)</h4>
-			</div>
-			<div class="refund-details refund-method"> 
-				<label>Refund Method: </label>
-				<textarea class="form-control" rows="2" name="refund_method" id="refund_method" placeholder="Refund Method" maxlength="500">{{$booking_detail->refund_method}}</textarea>
-			</div>
-			<div class="refund-details text-center">
-				<textarea class="form-control" rows="2" name="refund_reason" id="refund_reason" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->refund_reason}}</textarea>
-				<button type="button" class="btn btn-red mt-10 float-end" id="" data-behavior="refund_order_detail" data-booking-detail-id = "{{$booking_detail->id}}" data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Issue The Refund</button>
-			</div>
+				<div class="refund-details"> 
+					<label>Total Amount Paid: </label>
+					<span> ${{$booking_detail->booking->amount}} (Original payment method: {{$booking_detail->booking->getstripecard()}})  </span>
+				</div>
+				<div class="refund-details refund-date"> 
+					<label>Refund Issue Date: </label>
+						<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input active" value="{{date('m/d/Y')}}">
+				</div>
+				<div class="refund-details refund-amount"> 
+					<label>Refund Amount:  </label>
+					<input class="form-control" type="text" id="refund_amount" name="refund_amount" placeholder="20" value="{{$booking_detail->refund_amount}}">
+					<h4>(Refund amount can’t be greater than the total amount paid)</h4>
+				</div>
+				<div class="refund-details refund-method"> 
+					<label>Refund Method: </label>
+					<textarea class="form-control" rows="2" name="refund_method" id="refund_method" placeholder="Refund Method" maxlength="500">{{$booking_detail->refund_method}}</textarea>
+				</div>
+				<div class="refund-details text-center">
+					<textarea class="form-control" rows="2" name="refund_reason" id="refund_reason" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->refund_reason}}</textarea>
+					<button type="button" class="btn btn-red mt-10 float-end" id="" data-behavior="refund_order_detail" data-booking-detail-id = "{{$booking_detail->id}}" data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Issue The Refund</button>
+				</div>
+			@endif
 		</div>
 	</div>
 </div>
@@ -303,15 +304,19 @@
         maxDate:'01/01/2050'
     });
 
-	$(document).on('click', "[data-behavior~=destroy_order_detail]", function(e){
+	$("[data-behavior~=destroy_order_detail]").click(function(e){
 		e.preventDefault();
+
         $.ajax({
-            url: "/business/{{$business_id}}/orders/" + $(this).data('booking-id'),
-            method: "DELETE",
+            url: "/business/{{$business_id}}/booking_details/" + $(this).data('booking-id') + '/void',
+            method: "POST",
             data:{
                 _token: '{{csrf_token()}}', 
-                customer_id:  $(this).data('customer-id'),
-                booking_detail_id:  $(this).data('booking-detail-id'),
+                customer_id: $(this).data('customer-id')
+            },
+            error: function(xhr, status, error){
+            	var errorMessage = JSON.parse(xhr.responseText);
+            	alert(errorMessage.message);
             },
             success:function(response) {
                 location.reload()

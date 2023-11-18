@@ -136,7 +136,7 @@ class Customer extends Authenticatable
 
     public function Transaction()
     {
-        return $this->hasMany(Transaction::class,'user_id');
+        return $this->hasMany(Transaction::class,'user_id')->where('user_type','customer');
     }
 
     public function BookingCheckinDetails()
@@ -302,9 +302,12 @@ class Customer extends Authenticatable
 	   }
 	   
     }
+    public function purchase_history(){
+        return $this->transaction()->where('user_type','customer')->whereIn('status',['complete', 'requires_capture', 'refund_complete']);
+    }
 
     public function total_spend(){
-        $purchase_history = $this->transaction()->where('user_type','customer')->get();
+        $purchase_history = $this->transaction()->where('user_type','customer')->where('status','complete')->get();
         $sum = 0;
         foreach($purchase_history as $item){
             $sum += $item->amount;

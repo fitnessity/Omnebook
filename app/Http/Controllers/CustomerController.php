@@ -105,7 +105,8 @@ class CustomerController extends Controller {
         }
         $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
         $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->get() : [];
-        $purchase_history = @$customerdata != '' ?  @$customerdata->Transaction()->orderby('id', 'desc')->get() : [];
+        $purchase_history = @$customerdata != '' ?  @$customerdata->purchase_history()->get() : [];
+
        
         $complete_booking_details = @$customerdata != '' ? $customerdata->complete_booking_details()->get() : [];
         $strpecarderror = '';
