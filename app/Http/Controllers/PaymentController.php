@@ -144,11 +144,11 @@ class PaymentController extends Controller {
                         'addOnservice_ids' =>@$item['addOnServicesId'],
                         'addOnservice_qty' => @$item['addOnServicesQty'],
                         'addOnservice_total' => $addOnServicePrice,
+                        'order_type' => 'Membership',
                     ]);
 
 
                     $price_detail = $cartService->getPriceDetail($item['priceid']);
-
                     $re_i = 0;
                     $date = new Carbon;
                     $stripe_id = $stripe_charged_amount = $payment_method= '';
@@ -461,6 +461,7 @@ class PaymentController extends Controller {
                         'addOnservice_ids' =>@$item['addOnServicesId'],
                         'addOnservice_qty' => @$item['addOnServicesQty'],
                         'addOnservice_total' =>  $addOnServicePrice,
+                        'order_type' => 'Membership',
                     ]);
 
 

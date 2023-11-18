@@ -473,8 +473,8 @@ class BookingRepository
     public function getreceipemailtbody($oid,$orderdetailid){
         $booking_status = UserBookingStatus::where('id',$oid)->first();
         $booking_details = UserBookingDetail::where('id',$orderdetailid)->first();
-        $business_services = $booking_details->business_services;
-        $businessuser = $booking_details->business_services->company_information;
+        $business_services = @$booking_details->business_services;
+        $businessuser = @$booking_details->company_information;
         $BusinessPriceDetails = $booking_details->business_price_detail;
         $qty = $booking_details->getparticipate();
         
@@ -524,24 +524,24 @@ class BookingRepository
         //$bookingUrl = "{{route('personal.orders.index', ['business_id' =>".$businessuser->id.",serviceType'=>'experience','tab'=>".$tab."])}}";
 
         if($tab != ''){
-            $bookingUrl = env('APP_URL')."/personal/orders?business_id=".$businessuser->id."&serviceType=".$business_services->service_type."&tab=".$tab;
+            $bookingUrl = env('APP_URL')."/personal/orders?business_id=".$businessuser->id."&serviceType=".@$business_services->service_type."&tab=".$tab;
         }else{
-            $bookingUrl = env('APP_URL')."/personal/orders?business_id=".$businessuser->id."&serviceType=".$business_services->service_type;
+            $bookingUrl = env('APP_URL')."/personal/orders?business_id=".$businessuser->id."&serviceType=".@$business_services->service_type;
         }
 
         $one_array =[];
         $one_array = array (
             "provider_Name" => $businessuser->dba_business_name,  
             "booking_ID" => $booking_status->order_id,  
-            "program_Name" => $business_services->program_name,   
-            "category" => $BusinessPriceDetails->business_price_details_ages->category_title,   
-            "price_Option" => $BusinessPriceDetails->price_title,  
+            "program_Name" => @$business_services->program_name,   
+            "category" => @$BusinessPriceDetails->business_price_details_ages->category_title,   
+            "price_Option" => @$BusinessPriceDetails->price_title,  
             "sessions" => $booking_details->pay_session,  
-            "membership" => $BusinessPriceDetails->membership_type,  
+            "membership" => @$BusinessPriceDetails->membership_type,  
             "quantity" => $qty ,  
             "participate" => $participate,  
-            "activity_Type" => $business_services->sport_activity,  
-            "service_Type" => $business_services->service_type,  
+            "activity_Type" => @$business_services->sport_activity,  
+            "service_Type" => @$business_services->service_type,  
             "membership_Duration" => $booking_details->expired_duration,  
             "purchase_Date" => date('m-d-Y',strtotime($booking_details->created_at)),  
             "membership_Activation_Date" =>  $contract_date,   
