@@ -143,4 +143,89 @@ class Transaction extends Model
             return Customer::where(['email'=>@$user->email ,'fname' => @$user->firstname ,'lname' => @$user->lastname ,'business_id' =>$business_id])->first();
         }
     }
+
+    public function can_void(){
+        return $this->status == 'requires_capture';
+    }
+
+    public function can_refund(){
+        return $this->kind == 'card' && $this->amount != $this->refund_amount && $this->status != 'requires_capture' && $this->status != 'refund_complete';
+    }
+
+    public function void(){
+        
+        $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->item_id)->first();
+
+        if($transaction && $transaction->status == 'requires_capture'){
+            $stripe = new \Stripe\StripeClient(
+                config('constants.STRIPE_KEY')
+            );
+            $cancelPaymentIntent = $stripe->paymentIntents->cancel($transaction->transaction_id, []);
+            if($cancelPaymentIntent['status']=='canceled'){
+                $transaction->update(["status" => 'canceled']);
+                $booking_status = UserBookingStatus::where('id', $this->item_id)->orderby('created_at','desc')->first();
+                $booking_status->UserBookingDetail()->update(["status" => 'void']);
+            }
+            
+        }
+
+    }
+
+    public function refund(){
+        
+        $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->item_id)->first();
+
+
+        if($transaction){
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            $payment_intent = $stripe->paymentIntents->retrieve(
+              $transaction->transaction_id,
+              []
+            );
+            $transfer_group = $payment_intent['transfer_group'];
+
+            if($transfer_group){
+                $transfers = $stripe->transfers->all([
+                 'limit' => 3,
+                 'transfer_group' => $transfer_group
+                ]); 
+
+                $transfer_id = $transfers->data[0]['id'];
+
+                $stripe->transfers->createReversal($transfer_id);
+            }
+
+
+            $refund = $stripe->refunds->create([
+              'payment_intent' => $transaction->transaction_id
+            ]);
+
+            if($refund['status']=='succeeded'){
+                $transaction->update(["status" => 'refund_complete', 'refund_amount' => $refund['amount']/100]);
+                $booking_status = UserBookingStatus::where('id', $this->item_id)->orderby('created_at','desc')->first();
+                $booking_status->UserBookingDetail()->update(["status" => 'refund']);
+            }
+            
+        }
+
+    }
+
+    public function capture(){
+        
+        $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->item_id)->first();
+
+        if($transaction && $transaction->status == 'requires_capture'){
+            $stripe = new \Stripe\StripeClient(
+                config('constants.STRIPE_KEY')
+            );
+            $capturePaymentIntent = $stripe->paymentIntents->capture($transaction->transaction_id, []);
+            if($capturePaymentIntent['status']=='succeeded'){
+                $transaction->update(["status" => 'complete']);
+                $booking_status = UserBookingStatus::where('id', $this->item_id)->orderby('created_at','desc')->first();
+                $booking_status->UserBookingDetail()->update(["status" => 'active']);
+            }
+            
+        }
+
+    }
 }

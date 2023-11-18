@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
-use App\{UserBookingDetail,UserBookingStatus};
+use App\{UserBookingDetail,UserBookingStatus, Transaction};
 
 class UserBookingDetailController extends Controller
 {
@@ -61,13 +61,20 @@ class UserBookingDetailController extends Controller
         $booking_detail->update(["status" => 'void']);
     }
  
-    public function refund(Request $request, $business_id){
+    public function refund(Request $request, $business_id, $booking_id){
+
         $company = $request->current_company->findOrFail($business_id);
+
         $customer = $company->customers()->findOrFail($request->customer_id);
-        //$booking_status = $customer->bookingStatus()->findOrFail($request->booking_id);
-        $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
-        $booking_detail->update(["status" => 'refund' ,'refund_reason' => $request->refund_reason,'refund_date' => date('Y-m-d',strtotime($request->refunddate)),'refund_amount' => $request->refund_amount,'refund_method' =>$request->refund_method ]);
-        $customer->refund();
+
+
+        $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
+
+        if($transaction->can_refund()){
+            $transaction->refund(); 
+        }else{
+            return response()->json(['message' => 'transction can not found'], 400);
+        }
     } 
 
     public function suspend(Request $request, $business_id){
@@ -84,5 +91,20 @@ class UserBookingDetailController extends Controller
         //$booking_status = $customer->bookingStatus()->findOrFail($request->booking_id);
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
         $booking_detail->update(["status" => 'cancel' ,'terminate_reason' => $request->terminate_reason,'terminated_at' => date('Y-m-d',strtotime($request->terminated_at)),'terminate_fee' => $request->terminate_fee,'terminate_comment' =>$request->terminate_comment]);
+    }
+
+    public function void(Request $request, $business_id, $booking_id){
+        $company = $request->current_company->findOrFail($business_id);
+
+        $customer = $company->customers()->findOrFail($request->customer_id);
+
+
+        $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
+
+        if($transaction->can_void()){
+            $transaction->void(); 
+        }else{
+            return response()->json(['message' => 'transction not found or already complete, can only refund'], 400);
+        }
     }
 }

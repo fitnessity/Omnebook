@@ -424,7 +424,6 @@ class CalendarController extends Controller
                 'activity_days'=>@$item['activity_days'],
                 'order_from' => "Calendar Order"
             ]);
-            $booking_detail->transfer_to_provider();
             $bookidarray [] = $booking_detail->id;
 
             $qty_c = $CheckoutCalendarCartService->getQtyPriceByItem($item)['qty'];
