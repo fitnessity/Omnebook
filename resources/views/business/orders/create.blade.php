@@ -19,6 +19,9 @@
 	input:disabled{
 	    background-color:white;
 	}
+	.hide{
+		display: none;
+	}
    
 </style>
 
@@ -1126,6 +1129,9 @@
 																	</div>
 																</div>
 																@endif
+																<div class='col-md-12  error form-group hide'>
+																	<div class="alert-danger alert"></div>
+																</div>
 																<input type="hidden" name="grand_total" id="grand_total" value="{{$grand_total}}">
 																<input type="hidden" name="cash_change" id="cash_change" value="">
 																<input type="hidden" name="card_id" id="card_id" value="">
