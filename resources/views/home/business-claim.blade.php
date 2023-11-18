@@ -32,25 +32,9 @@
                         <h1>Let’s look up your business</h1>
                         <p>Your business may already be on Fitnessity. Type in your business name. It will come up automtically if it's listed already. if not, you can add it now.</p>
                         <div class="formfield-block">
-                            <!--<label>City Name</label>-->
-
-                            <!-- <input id="pac-input1" type="text" class="form-control" placeholder="Search City Name" oninput="$('#option-box').empty();$('#business_name').val('');" /> -->
-                           <!--  <input id="pac-input1" type="text" class="form-control" placeholder="Search City Name" />
-
-                            <div id="city-box">
-
-                            </div> -->
-                                <!--<label>Business Name</label>-->
-                                <input id="business_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Your Business Name Here" />
-                                <div id="option-box">
-                                </div>
-
-                            <!--<button type="button">CONTINUE</button>-->
-
-                            <!-- <div class="addbusiness-block">
-                                <p>Didn't find your business? Add it Fitnessity for Free</p>
-                                <button type="button" onclick="redirect_to_detail()">Add Business</button>
-                            </div> -->
+                            <input id="business_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Your Business Name Here" />
+                            <div id="option-box">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -72,6 +56,25 @@
     </div>
 </div>
 
+<!-- <div class="modal fade opnmodal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 text-center"> 
+                        <a class="btn btn-red" onclick="doLogin()">Login</a>
+                        <a class="btn btn-red" onclick="doOnBoard()">OnBoarded Process</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ -->
 @include('layouts.footer')
 
 <script>
@@ -124,7 +127,6 @@
 
         /* Business Name */
         $("#business_name").keyup(function() {
-          
             $.ajax({
                 type: "POST",
                 url: "/searchbussinessaction",
@@ -145,9 +147,13 @@
 </script>
 
 <script>
+    var globalCid;
+    var globalStatus;
     function searchclick(status,cid){
         $("#business_name").val($(this).attr('data-num'));
         $("#option-box").hide();
+        globalCid = cid; // Store cid in the global variable
+        globalStatus = status; // Store cid in the global variable
         if ("{{Auth::check()}}") {
             if(status == 0){
                 window.location.href = "claim-your-business-detail"+"/"+cid;
@@ -158,16 +164,29 @@
             if(status == 1){
                 window.location.href = "already-claim-business";
             }else{
-                $.ajax({
-                    url: "/set-session-for-claim/"+cid+"/"+status,
-                    type:"GET",
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    success:function(response){
-                        window.location.href = "/userlogin";
-                    },
-                });
+                /*$('.opnmodal').modal('show');*/
+                doLogin(cid);
             }
         }
+    }
+
+    /*function doOnBoard(){
+        var url = '{{route('onboard_process.welcome',['cid' => 'cidval'])}}'
+        url = url.replace('cidval' ,globalCid );
+        window.location.href = url
+        //window.location.href = "/onboard_process?cid="+globalCid;
+    }*/
+
+
+    function doLogin(cid){
+        $.ajax({
+            url: "/set-session-for-claim/"+cid+"/"+globalStatus,
+            type:"GET",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success:function(response){
+                window.location.href = "/userlogin?cid="+cid;
+            },
+        });
     }
 
     function setValueInput(setValueInput1, valueid, type) {

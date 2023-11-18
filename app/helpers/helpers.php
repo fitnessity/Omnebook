@@ -2,7 +2,7 @@
 
     use Carbon\Carbon;
     use App\Repositories\{ReviewRepository,UserRepository,NetworkRepository};
-    use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction};
+    use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction,Products};
 
     function getUserRatings($user_id)
     {
@@ -38,7 +38,31 @@
                 $text .= $qty[$key].' x '.$aOService->service_name.' = $'. $price.'<br>';
             }
         }else{
-            $text = "—";
+            $text = "N/A";
+        }
+        return $text;
+    }
+
+    function getProducts($ids,$qtys,$types)
+    {
+        $text = '';$price = 0;
+        if($ids!= '') {
+            $ids = explode(',', $ids);
+            $qty = explode(',', $qtys);
+            $type = explode(',', $types);
+            foreach ($ids as $key => $id) {
+                $product = Products::find($id);
+                if($type[$key] == 'rent'){
+                    $price =  $product->rental_price * $qty[$key];
+                    $rentText =  '( Rental Duration is '.$product->rental_duration .' )';
+                }else{
+                    $price =  $product->sale_price * $qty[$key];
+                    $rentText = '';
+                }
+                $text .= $qty[$key].' x '.$product->name.' = $'. $price.'<br>'.$rentText.'<br>';
+            }
+        }else{
+            $text = "N/A";
         }
         return $text;
     }
@@ -51,6 +75,7 @@
             'fname' => $user->firstname,
             'lname' => $user->lastname,
             'email' => $user->email,
+            'primary_account' => @$user->primary_account ?? 0,
             'phone_number' => $user->phone_number,
             'emergency_contact' => $user->emergency_contact,
             'relationship' => $user->relationship,
@@ -64,15 +89,18 @@
         return $createCustomerForBusiness;
     }
 
-    function getFamilyMember(){
+    function getFamilyMember($cid = null){
         $user = Auth::user();
         $businessCustomer = $customers = [];
         /*$company = $user->company;
         foreach($company as $key=>$c){
             $businessCustomer[] = $c->customers()->where('user_id', $user->id)->pluck('id')->toArray();
         }*/
-
-        $company = $user->current_company;
+        if($cid){
+            $company = $user->company()->where('id',$cid)->first();
+        }else{
+            $company = $user->current_company;
+        }
         if($company != ''){
             $businessCustomer = $company->customers()->where('user_id', $user->id)->pluck('id')->toArray();
             //print_r($businessCustomer);exit;
@@ -121,6 +149,7 @@
             'lname' => ($detail->lastname) ? $detail->lastname : '',
             'username' => $detail->username,
             'email' => $detail->email,
+            'primary_account' => @$detail->primary_account ?? 0,
             'country' => 'US',
             'status' => 0,
             'phone_number' => $detail->phone_number,
@@ -145,6 +174,7 @@
                 'gender' => $member->gender,
                 'user_id' => NULL, //this is null bcz of user is not created at 
                 'parent_cus_id'=> $customer->id ,
+                'primary_account' => 0,
                 'relationship' =>$member->relationship
             ]);
         }
@@ -172,12 +202,6 @@
             })->get();
 
         foreach($paymentHistory as $data){
-            /*if($data->user_type == 'Customer'){
-                $userId = $customer->id;
-            }else{
-                $userId = $detail->id;
-            }*/
-
             Transaction::create([
                 'item_id' => $data->item_id,
                 'user_type' => 'Customer',
@@ -199,6 +223,56 @@
     function getUserbookingDetail($sid,$cid)
     {
         return App\UserBookingDetail::where(['sport'=> $sid ,'user_id'=>$cid])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->orderby('created_at','desc')->get();
+    }
+
+    function getGroupByPriceOption($cdt)
+    {
+        $cardPriceOption = [];
+        if(!empty($cdt)){
+            foreach ($cdt as $key => $data){
+                if($data->item_type == 'UserBookingStatus'){
+                    $bDetails = $data->UserBookingStatus->UserBookingDetail;
+                    foreach ($bDetails as $key => $dt) 
+                    {
+                        $name = $dt->business_price_detail_with_trashed->price_title;
+                        $cardPriceOption[$name][] = $data;
+                    }
+                }else{
+                    $bDetails = $data->Recurring->UserBookingDetail;
+                    if($bDetails != ''){
+                        $name = $bDetails->business_price_detail_with_trashed->price_title;
+                        $cardPriceOption[$name][] = $data;
+                    }
+                }
+            }
+        }
+
+        return $cardPriceOption;
+    }
+
+    function getGroupByCategoty($cdt)
+    {
+        $cardCategoty = [];
+        if(!empty($cdt)){
+            foreach ($cdt as $key => $data){
+                if($data->item_type == 'UserBookingStatus'){
+                    $bDetails = $data->UserBookingStatus->UserBookingDetail;
+                    foreach ($bDetails as $key => $dt) 
+                    {
+                        $name = $dt->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
+                        $cardCategoty[$name][] = $data;
+                    }
+                }else{
+                    $bDetails = $data->Recurring->UserBookingDetail;
+                    if($bDetails != ''){
+                        $name = $bDetails->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
+                        $cardCategoty[$name][] = $data;
+                    }
+                }
+            }
+        }
+
+        return $cardCategoty;
     }
 
 ?>

@@ -99,26 +99,26 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
         $bookingDetail = UserBookingDetail::where(['user_id' =>$request->customer_id])->whereDate('expired_at','>=',date('Y-m-d'))->get();
         $chk = 0;
-        foreach($bookingDetail as $detail){
-            $reminingSession = $detail->getremainingsession();
-            if($reminingSession > 0){
-                $chk = 1;
-                $chkCheckInDetails = BookingCheckinDetails::where(['booking_detail_id' =>$detail->id,'checkin_date' => $request->checkin_date, 'business_activity_scheduler_id' => $business_activity_scheduler->id])->first();
-                if($chkCheckInDetails == ''){
-                    $status = BookingCheckinDetails::create([
-                        'customer_id' => $request->customer_id,
-                        'booking_detail_id' => $detail->id,
-                        'checkin_date' => $request->checkin_date,
-                        'business_activity_scheduler_id' => $business_activity_scheduler->id,
-                        'source_type' => 'in_person',
-                        'use_session_amount' => 0,
-                    ]);
-
-                    return $chk;
+        if($bookingDetail->isNotEmpty()){
+            foreach($bookingDetail as $detail){
+                $reminingSession = $detail->getremainingsession();
+                if($reminingSession > 0){
+                    $chk = 1;
+                    $chkCheckInDetails = BookingCheckinDetails::where(['booking_detail_id' =>$detail->id,'checkin_date' => $request->checkin_date, 'business_activity_scheduler_id' => $business_activity_scheduler->id])->first();
+                    if($chkCheckInDetails == ''){
+                        $status = BookingCheckinDetails::create([
+                            'customer_id' => $request->customer_id,
+                            'booking_detail_id' => $detail->id,
+                            'checkin_date' => $request->checkin_date,
+                            'business_activity_scheduler_id' => $business_activity_scheduler->id,
+                            'source_type' => 'in_person',
+                            'use_session_amount' => 0,
+                        ]);
+                        return $chk;
+                    }
                 }
             }
         }
-      
         return $chk; 
         
     }
@@ -262,7 +262,8 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         $idsArray = explode(',', $id);
         $company = $request->current_company;
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
-        $business_checkin_detail = BookingCheckinDetails::whereIn('booking_detail_id', $idsArray)->whereDate('checkin_date', $request->date)->delete();
+        /*$business_checkin_detail = BookingCheckinDetails::whereIn('booking_detail_id', $idsArray)->whereDate('checkin_date', $request->date)->get();*/
+        BookingCheckinDetails::whereIn('id', $idsArray)->whereDate('checkin_date', $request->date)->delete();
         //$business_checkin_detail->delete();
     }
 
@@ -276,6 +277,6 @@ class SchedulerCheckinDetailController extends BusinessBaseController
 
 
     public function changeInstructor(Request $request , $business_id, $scheduler_id){
-        BookingCheckinDetails::where(['business_activity_scheduler_id'=> $scheduler_id, 'checkin_date' =>date('Y-m-d')])->update(['instructor_id' => $request->insID]);
+        BookingCheckinDetails::where(['business_activity_scheduler_id'=> $scheduler_id, 'checkin_date' =>date('Y-m-d')])->update(['instructor_id' => implode(',' , $request->insID)]);
     }
 }

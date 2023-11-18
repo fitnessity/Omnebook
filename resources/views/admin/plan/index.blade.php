@@ -1,30 +1,13 @@
 @extends('admin.layouts.layout')
-
-
-
 @section('content')
 
-      
-
     <div id="systemMessage"></div>
-
     <p>
-
         <a href="{!! route('create-new-membership-plan') !!}" class="btn btn-success">Add New</a>
-
     </p>
 
-
-
     <div class="panel panel-default">
-
-
-
-        <div class="panel-heading">
-
-            List
-
-        </div>
+        <div class="panel-heading">List</div>
 
         <div class="panel-body">
 
@@ -43,12 +26,6 @@
               </select>
 
             </div>
-
-            <!-- <div class="col-md-2" style="float:right;">
-
-              <input type="text" name="filter-title" id="filter-title" class="form-control">
-
-            </div> -->
 
           </div>
 
@@ -71,7 +48,7 @@
 
                       <th>Price Per Month</th>
 
-                      <th>Quote Per Month</th>
+                      <th>Price Per Year</th>
 
                       <th>Description</th>
 
@@ -103,23 +80,23 @@
 
                                 <td><a href="\admin\plans\edit\{{$value->id}}" title="Click to edit {{@$value->title}}">{{@$value->title}}</a></td>
 
-                  <td>{{ $value->price_per_month}}</td>
+                              <td>{{ $value->price_per_month}}</td>
 
-                  <td>{{ $value->quote_per_month}}</td>
+                              <td>{{ $value->price_per_year}}</td>
 
-                  <td>{{ $value->description}}</td>
+                              <td>{{ $value->description}}</td>
 
-                  <td>
+                              <td>
 
-                    @if($value->is_deleted == 0)
+                              @if($value->is_deleted == 0)
 
-                      <span class="booking-booked-text">Yes</span>
+                                <span class="booking-booked-text">Yes</span>
 
-                    @else
+                              @else
 
-                      <span class="booking-rejected-text">No</span>
+                              <span class="booking-rejected-text">No</span>
 
-                    @endif
+                            @endif
 
                   </td>
 

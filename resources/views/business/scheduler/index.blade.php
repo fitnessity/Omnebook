@@ -52,9 +52,16 @@
 											</form>
 
 											<h6 class="text-uppercase fw-semibold mt-4 mb-3 text-muted"></h6>
+
+											@php $scduleIds= ''; @endphp
+											@foreach ($schedules as $i=>$schedule)
+												@php 
+													$scduleIds .= $schedule->id.',';
+												@endphp
+											@endforeach
 											<div class="col-12">
 												<div class="text-right">
-													<input type="checkbox" id="delete" name="delete" value="delete">
+													<button type="button" class="btn btn-red" data-behavior="ajax_html_modal" data-url="{{route('business.schedulers.cancel_all', ['schedulerId' => rtrim($scduleIds, ','), 'date' => $filterDate->format('m/d/Y'), 'return_url' => url()->full()])}}">Cancel All Activity</button>
 												</div>
 											</div>
 											@php $total_reservations = 0; @endphp
@@ -69,12 +76,6 @@
 														<p class="text-muted mb-0">{{date('h:i A', strtotime($schedule['shift_end']))}}</p>
 													</div>
 													<div class="flex-shrink-0 avatar-sm ms-3">
-														<!-- <a href="{{route('business.schedulers.checkin_details.index',['scheduler'=>$schedule->id, 'date' =>$filterDate->format('m/d/Y')])}}" class="cursor-pointer">
-															<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4">
-																{{$schedule->spots_left($filterDate)}}/{{$schedule->spots_available}}
-															</span>
-														</a> -->
-
 														<a class="cursor-pointer" onclick="getCheckInDetails({{$schedule->id}},'{{$filterDate->format("m/d/Y")}}','','','','','')">
 															<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4">
 																{{$schedule->spots_left($filterDate)}}/{{$schedule->spots_available}}
@@ -88,7 +89,11 @@
 														<p class="text-muted mb-0">with {{$schedule->company_information->public_company_name}} @if($schedule->business_service()->exists()) {{$schedule->business_service->activity_location}} @endif </p>
 													</div>
 													<div class="flex-grow-auto ms-3">
-														<!-- <p class="font-red mb-0">Activity Canceled </p> -->
+														@if($schedule->activity_cancel->where('cancel_date',date('Y-m-d'))->first())
+															@if($schedule->activity_cancel->where('cancel_date',date('Y-m-d'))->first()->cancel_date_chk == 1)
+																<p class="font-red mb-0 fs-17 act-cancel-p">Activity Cancelled </p>
+															@endif
+														@endif
 													</div>
 													<div class="flex-grow-1 ms-3">
 														<a class="float-end" href="#" data-bs-toggle="modal" data-bs-target=".activity-scheduler{{$i}}"><i class="ri-more-fill"></i></a>
@@ -120,9 +125,8 @@
 																				<tr>
 																					<td>
 																						<label class="overlay-activity-label">
-																							@if ($schedule_end < time()) 			Activity Completed 
-																							@elseif($cancelchk != '') 
-																								Activity Canceled  
+																							@if ($schedule_end < time()) 	Activity Completed 
+																							@elseif($cancelchk != '') Activity Canceled  
 																							@else Activity Remaining @endif</label>
 																					</td>
 																					<td>
@@ -148,8 +152,19 @@
 																						?>
 																						<div class="scheduled-btns">
 																	                  <a class="btn-red mb-10 text-center" href="{{route('business.services.create',['serviceType'=>$serviceType,'serviceId'=>$serviceId])}}" target="_blank">Edit</a>
-
-																	                  <button type="button" class="btn-black" data-behavior="ajax_html_modal" data-url="{{route('business.schedulers.delete_modal', ['schedulerId' => $schedule->id, 'date' => $filterDate->format('m/d/Y'), 'return_url' => url()->full()])}}"  @if($schedule_end < time()) disabled @endif>Cancel</button>
+																	                  @if ($schedule_end > time()) 
+																		                  <button type="button" class="btn-black" data-behavior="ajax_html_modal" data-url="{{route('business.schedulers.delete_modal', ['schedulerId' => $schedule->id, 'date' => $filterDate->format('m/d/Y'), 'return_url' => url()->full()])}}" >
+																		                  	@if($schedule->activity_cancel->where('cancel_date',date('Y-m-d'))->first())
+																										@if($schedule->activity_cancel->where('cancel_date',date('Y-m-d'))->first()->cancel_date_chk == 1)
+																											Uncanel 
+																										@else
+																											Cancel
+																										@endif
+																									@else
+																										Cancel
+																									@endif
+																								</button>
+																	                  @endif
 																	               </div>
 																					</td>
 																				</tr>

@@ -4,8 +4,9 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\{UserBookingDetail,Recurring};
+use App\{UserBookingDetail,Recurring,Transaction,BookingCheckinDetails};
 use DB;
+use Carbon\Carbon;
 
 class Kernel extends ConsoleKernel
 {
@@ -28,13 +29,16 @@ class Kernel extends ConsoleKernel
     {
         //$schedule->command('stripe:cron')->everyMinute();
 
-        /*$schedule->call(function () {
+        $schedule->call(function () {
             $user_booking_details = UserBookingDetail::whereRaw("transfer_provider_status is NULL or transfer_provider_status !='paid'");
-
             foreach($user_booking_details->get() as $user_booking_detail){
-                $user_booking_detail->transfer_to_provider();
+                try {
+                    $user_booking_detail->transfer_to_provider();
+                }catch (Exception $e) {
+                    $errormsg = $e->getError()->message;
+                }
             }
-        })->everyTenMinutes();*/
+        })->everyTenMinutes();
 
         $schedule->call(function () {
             $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->where('attempt' ,'<' ,3)->where('status','!=','Completed')->orderBy('created_at','desc')->get();
@@ -44,7 +48,7 @@ class Kernel extends ConsoleKernel
             }
         })->everyMinute();
 
-        /*$schedule->call(function () {
+        $schedule->call(function () {
             $userBookingDetails = UserBookingDetail::whereDate("expired_at", ">=" ,date('Y-m-d'))->get();
             foreach($userBookingDetails as $userBookingDetail){
                 $userBookingDetail->membershipOrSessionAboutToExpireAlert('membership');
@@ -67,9 +71,31 @@ class Kernel extends ConsoleKernel
             foreach($userBookingDetails as $userBookingDetail){
                 $userBookingDetail->membershipExpiredAlert('membership');
             }
-        })->daily();*/
-       // $schedule->command('stripe:cron')->everyMinute()->appendOutputTo('/storage/logs/getlogContent.log'));
+        })->daily();
 
+        $schedule->call(function () {
+            $transactions = Transaction::where(['status' => 'requires_capture'])->get();
+            foreach($transactions as $transaction){
+                try {
+                    $transaction->capture();
+                }catch (Exception $e) {
+                    $errormsg = $e->getError()->message;
+                }
+            }
+        })->daily();
+
+        $schedule->call(function () {
+            $today = Carbon::now()->format('Y-m-d');
+            $checkinDateFiveDaysAfter = Carbon::now()->addDays(5)->format('Y-m-d');
+            $checkinDateDayBefore = Carbon::now()->addDay()->format('Y-m-d');
+            $checkinData = BookingCheckinDetails::whereDate('checkin_date', $checkinDateFiveDaysAfter)
+                ->orWhereDate('checkin_date', $checkinDateDayBefore)
+                ->orWhereDate('checkin_date', $today)
+                ->get();
+            foreach($checkinData as $cid){
+                $cid->reminderaboutReservation();
+            }
+        })->daily();
     }
 
     protected function scheduleTimezone()

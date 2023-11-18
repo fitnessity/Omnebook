@@ -117,6 +117,10 @@ class BusinessPriceDetails extends Model
         return $this->belongsTo(BusinessServices::class, 'serviceid'); 
     }
 
+    public function CompanyInformation(){
+        return $this->belongsTo(CompanyInformation::class, 'cid'); 
+    }
+
     public function getCurrentPrice($type,$date){
         switch ($type) {
             case 'adult':

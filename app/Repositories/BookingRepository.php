@@ -301,11 +301,11 @@ class BookingRepository
         $booking_status = UserBookingStatus::where('id',$oid)->first();
         $booking_details = UserBookingDetail::where('id',$orderdetailid)->first();
         $business_services = $booking_details->business_services_with_trashed;
-        $businessuser= $booking_details->business_services_with_trashed->company_information;
-        $BusinessPriceDetails = $booking_details->business_price_detail_with_trashed;
-        $categoty_name = $BusinessPriceDetails->business_price_details_ages_with_trashed->category_title;
-        $schedulerdata = $booking_details->business_activity_scheduler;
-        $remaining = $booking_details->getremainingsession();
+        $businessuser= @$booking_details->business_services_with_trashed->company_information;
+        $BusinessPriceDetails = @$booking_details->business_price_detail_with_trashed;
+        $categoty_name = @$BusinessPriceDetails->business_price_details_ages_with_trashed->category_title;
+        $schedulerdata = @$booking_details->business_activity_scheduler;
+        $remaining = @$booking_details->getremainingsession();
         if(@$businessuser->logo != "") {
             if (file_exists( public_path() . '/uploads/profile_pic/thumb/' . @$businessuser->logo)) {
                $com_pic = url('/public/uploads/profile_pic/thumb/' . @$businessuser->logo);
@@ -322,29 +322,27 @@ class BookingRepository
             $SpotsLeftdis =  @$schedulerdata['spots_available'] - $totalquantity;
         }
 
-        $time='';
+        $time= $expdate = '';
+        
         if(@$schedulerdata->set_duration != ''){
             $time = $schedulerdata->get_clean_duration();
         }
-        $expdate = '';
+
         if($time == ''){
             $expdate  = $booking_details->expired_at;
             $time = $booking_details->expired_duration;
         }
-
+        
+        $sub_totprice = $tot_amount_cart = 0;
 
         $booking_details_for_sub_total = UserBookingDetail::where('booking_id',$booking_status->id)->get();
-        $sub_totprice = 0;
         foreach( $booking_details_for_sub_total as $bds){
             $sub_totprice += $bds->total();
         }
 
-        $tot_amount_cart = 0;
-        if(@$booking_status->amount != ''){
-            $tot_amount_cart = @$booking_status->amount;
-        }
+        $tot_amount_cart = @$booking_status->amount ?? 0;
         
-        $qty = $booking_details->getparticipate();
+        $qty = $booking_details->getparticipate() ?? 'N/A';
         $discount =  $service_fee = $tax_for_this = $tip =0;
         $totprice_for_this = $booking_details->total();
         if(@$booking_status->user_type == 'user'){
@@ -370,13 +368,9 @@ class BookingRepository
 
         $parti_data = '';
 
-        if($qty == ''){
-            $qty = "—";
-        }
-
         $parti_data = $booking_details->decodeparticipate();
         $to_rem = 0;
-        $created_at = $order_id =  $program_name = $end_activity_date = $bookedtime = $sport_activity = $select_service_type = $activity_for = $activity_location = $price_opt = $shift_start = "—"; 
+        $created_at = $order_id = $end_activity_date = $bookedtime = $sport_activity = $select_service_type = $activity_for = $activity_location = $price_opt = $shift_start = "—"; 
         if(@$booking_status->order_id != ''){
             $order_id = @$booking_status->order_id;
         }
@@ -385,10 +379,8 @@ class BookingRepository
             $to_rem = $remaining.' / '.@$booking_details->pay_session;
         }
         
-        if(@$business_services->program_name != ''){
-            $program_name = @$business_services->program_name;
-        }
-
+        $program_name = @$business_services->program_name;
+        
         if(@$schedulerdata->end_activity_date != ''){
             $end_activity_date = date('d-m-Y', strtotime(@$schedulerdata->end_activity_date));
         }
@@ -405,21 +397,12 @@ class BookingRepository
             $bookedtime = date('d-m-Y', strtotime(@$booking_details->bookedtime));
         }
 
-        if(@$business_services->sport_activity != ''){
-            $sport_activity = $business_services->sport_activity;
-        }
-
-        if(@$business_services->select_service_type != ''){
-            $select_service_type = $business_services->select_service_type;
-        }
-
-        if(@$business_services->activity_for != ''){
-            $activity_for = $business_services->activity_for;
-        }
-
-        if(@$business_services->activity_location != ''){
-            $activity_location = $business_services->activity_location;
-        }
+        
+        $sport_activity = @$business_services->sport_activity;
+        $select_service_type = @$business_services->select_service_type;
+        $activity_for = @$business_services->activity_for;
+        $activity_location = @$business_services->activity_location;
+        
 
         if(@$BusinessPriceDetails->price_title != ''){
             $price_opt = @$BusinessPriceDetails->price_title.' - '.@$BusinessPriceDetails->pay_session.' Sessions';
@@ -432,24 +415,30 @@ class BookingRepository
         $addOnServicesId = $booking_details->addOnservice_ids;
         $addOnServicesQty = $booking_details->addOnservice_qty;
         $addOnPrice= $booking_details->addOnservice_total ?? 0;
+
+        $productIds = $booking_details->productIds;
+        $productQtys = $booking_details->productQtys;
+        $productTypes= $booking_details->productTypes;
+        $productPrice= $booking_details->productTotalPrices ?? 0;
+
         $pmt_type = $booking_status->getPaymentDetail();
         //var_dump($pmt_type);
         $last4 = $pmt_type;
 
         $one_array = array (
             "com_pic" => $com_pic,
-            'program_name' =>$program_name,
-            'sport_activity' =>$sport_activity,
-            'select_service_type' =>$select_service_type,
-            'activity_location' =>$activity_location,
-            'end_activity_date' =>$end_activity_date,
+            'program_name' =>$program_name ?? 'N/A',
+            'sport_activity' =>$sport_activity ?? 'N/A',
+            'select_service_type' =>$select_service_type ?? 'N/A',
+            'activity_location' =>$activity_location ?? 'N/A',
+            'end_activity_date' =>$end_activity_date ?? 'N/A',
             'created_at' =>$created_at,
             'bookedtime' =>$bookedtime,
             "confirm_id" => $order_id,
             "time" => $time,
-            "activity_for" => $activity_for,
-            "qty" => $qty,
-            "parti_data" => $parti_data,
+            "activity_for" => $activity_for ?? 'N/A',
+            "qty" => $qty ?? 'N/A',
+            "parti_data" => $parti_data ?? 'N/A',
             "last4" => $last4,
             "pmt_type" => $pmt_type,
             "shift_start" => $shift_start,
@@ -457,21 +446,25 @@ class BookingRepository
             "tax_for_this" => @$tax_for_this,
             "price_opt" => @$price_opt ,
             "BusinessPriceDetails" => $BusinessPriceDetails,
-            "pay_session" => $booking_details['pay_session'],
+            "pay_session" => $booking_details['pay_session'] ? $booking_details['pay_session'].' Session' : 'N/A',
             "to_rem" => @$to_rem ,
             "totprice_for_this" => $totprice_for_this,
             "nameofbookedby" => $nameofbookedby,
-            "company_name" =>  @$businessuser->dba_business_name,
+            "company_name" =>  @$businessuser->dba_business_name ?? 'N/A',
             "amount" =>   $booking_status->amount,
             "discount" =>  $discount ,
             "tip" =>  $tip,
             "service_fee" =>  $service_fee,
-            "categoty_name" =>   $categoty_name,
+            "categoty_name" =>   $categoty_name ?? 'N/A',
             "booking_id" =>   $oid,
             "order_id" => $orderdetailid,
             "addOnServicesId" => $addOnServicesId,
             "addOnServicesQty" => $addOnServicesQty,
             "addOnPrice" => $addOnPrice,
+            "productPrice" => $productPrice,
+            "productIds" => $productIds,
+            "productQtys" => $productQtys,
+            "productTypes" => $productTypes,
         );
        /*$arayy =array_values(array_unique($one_array, SORT_REGULAR));*/
         return $one_array;

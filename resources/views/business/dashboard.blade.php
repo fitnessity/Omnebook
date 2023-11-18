@@ -51,6 +51,66 @@
                         <div class="col">
                             <div class="h-100">
                                 <div class="row mb-3 pb-1">
+									<div class="col-6">
+										<div class="remaining-days mb-15">
+											<div class="row y-middle" style="margin-top:5px;margin-bottom: 5px;">
+												<div class="col-lg-2 col-md-2 col-3">
+													<center>
+														<div class="avatar-xs flex-shrink-0">
+															<span class="avatar-title bg-primary rounded-circle fs-15">14</span>
+														</div>
+														<div class="days-left">
+															<p>Days Left</p>
+														</div>
+													</center>
+												</div>
+												<div class="col-lg-10 col-md-10 col-9">	
+													<p class="fs-13">
+														You have 14 days remaining in your 14 day free trial. To keep using TeamUp after the trial period, enter your <a href="#"> payment details.</a> If you have any questions, please don't hesitate to <a href="#"> contact us</a>! 
+													</p>
+												</div>
+                                                <?php  ?>
+											<!--<div class="col-lg-12 col-md-12 col-12">
+													<div class="chat-with-us text-center">
+														<p>Need help getting started ?</p>
+														<button type="submit" class="btn btn-red">Chat with us </button>
+													</div>
+												</div> -->
+												<?php  ?>
+											</div>
+										</div>
+									</div>
+									<div class="col-6">
+                                        <div class="card">
+                                            <div class="card-body p-0">
+                                                <div class="alert alert-warning border-0 rounded-0 m-0 d-flex align-items-center" role="alert">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle text-warning me-2 icon-sm"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                                    <div class="flex-grow-1 text-truncate">
+                                                        Your free trial expired in <b>17</b> days.
+                                                    </div>
+                                                    <div class="flex-shrink-0">
+                                                        <a href="#" class="text-reset text-decoration-underline"><b>Upgrade</b></a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row align-items-end">
+                                                    <div class="col-sm-8">
+                                                        <div class="p-3">
+                                                            <p class="fs-16 lh-base">Upgrade your plan from a <span class="fw-semibold">Free trial</span>, to ‘Premium Plan’ <i class="mdi mdi-arrow-right"></i></p>
+                                                            <div class="mt-3">
+                                                                <a href="#" class="btn btn-success">Upgrade Account!</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="px-3">
+                                                            <img src="http://dev.fitnessity.co/dashboard-design/images/user-illustarator-2.png" class="img-fluid" alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end card-body-->
+                                        </div>
+                                    </div>
                                     <div class="col-12">
                                         <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                                             <div class="flex-grow-1">
@@ -145,6 +205,7 @@
                                                     <div>
                                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$bookingCount}}">{{$bookingCount}}</span></h4>
                                                         <a href="{{route('business.schedulers.index',['business_id'=>$business_id])}}" class="text-decoration-underline" target="_blank">View Bookings</a>
+                                                        <!-- <a onclick="getbookingmodel();" class="text-decoration-underline" target="_blank">View Bookings</a> -->
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-info rounded fs-3">
@@ -299,7 +360,7 @@
                                                                 {{date('M',strtotime($startDate))}} to {{date('M',strtotime($endDate))}},
                                                                 {{date('Y',strtotime($startDate))}} 
                                                             @endif</h4>
-															<h4 class="fs-22 fw-semibold ff-secondary scheduled-payments">$<span class="counter-value" data-target="{{$totalRecurringPmt}}">{{$totalRecurringPmt}}</span></h4>
+															<h4 class="fs-22 fw-semibold ff-secondary scheduled-payments">$<span class="counter-value" data-target="{{$recurringAmount}}">{{$recurringAmount}}</span></h4>
 															<p class="mb-0">Scheduled Payments </p>
 														</div>
 													</div>
@@ -320,7 +381,7 @@
 																<div class="card-body" style="z-index:1 ;">
 																	<div class="d-flex align-items-center">
 																		<div class="flex-grow-1 overflow-hidden">
-																			<h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="{{$compltedpmtcnt}}">{{$compltedpmtcnt}}</span></h4>
+																			<h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="{{$completeRecurringAmount}}">{{$completeRecurringAmount}}</span></h4>
 																			<p class="fw-medium text-muted text-truncate mb-0">Paid So Far </p>
 																		</div>
 																		<div class="flex-shrink-0">
@@ -348,7 +409,7 @@
 																<div class="card-body" style="z-index:1 ;">
 																	<div class="d-flex align-items-center">
 																		<div class="flex-grow-1 overflow-hidden">
-																			<h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="{{$remainigpmtcnt}}">{{$remainigpmtcnt}}</span></h4>
+																			<h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="{{$reminingRecurringAmount}}">{{$reminingRecurringAmount}}</span></h4>
 																			<p class="fw-medium text-muted text-truncate mb-0">Owed </p>
 																		</div>
 																		<div class="flex-shrink-0">
@@ -567,8 +628,8 @@
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
                                                             <h6 class="mb-1 lh-base">{{$tb->booking->order_id}}</h6>
-                                                            <p class="text-muted mb-1"><b>Activity : </b>{{$tb->business_services->program_name}} </p>
-                                                            <p class="text-muted mb-1"><b>Price : </b> ${{$tb->subtotal + $tb->getperoderprice() }}</p>
+                                                            <p class="text-muted mb-1"><b>Activity : </b>{{@$tb->business_services->program_name}} </p>
+                                                            <p class="text-muted mb-1"><b>Price : </b> ${{@$tb->subtotal + $tb->getperoderprice() }}</p>
                                                             <small class="mb-0 text-muted">{{date('H:i A' ,strtotime($tb->created_at))}} Today</small>
                                                         </div>
                                                     </div>
@@ -796,7 +857,6 @@
                                                     </div>
                                                 </div>
                                             @endforeach
-                                            
                                         </div>
 
                                         <div class="card sidebar-alert bg-light border-0 text-center mx-4 mb-0 mt-3">
@@ -809,21 +869,21 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div> <!-- end card-->
                             </div> <!-- end .rightbar-->
                         </div> <!-- end col -->
                     </div>
-                </div>
-                <!-- container-fluid -->
+                </div><!-- container-fluid -->
+            </div><!-- End Page-content -->
+        </div><!-- end main content-->
+    </div><!-- END layout-wrapper -->
+	<div class="modal fade view-booking" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-80">
+            <div class="modal-content" id="bookingmodel">
             </div>
-            <!-- End Page-content -->
         </div>
-        <!-- end main content-->
-    </div>
-    <!-- END layout-wrapper -->
-	
+    </div> 
 <div class="modal fade monthly-financial" tabindex="-1" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-80">
 		<div class="modal-content">
@@ -939,15 +999,32 @@
         date1 = '{{$startDateCalendar}}';
         date2 = '{{$endDateCalendar}}';
 		flatpickr(".flatpickr-range", {
+            altInput: true,
 	        mode:  "range",
-	        dateFormat: "m-d-Y",
+            altFormat: "m-d-Y",
+	        dateFormat: "Y-m-d",
 	        maxDate: "01-01-2050",
             defaultDate: [date1, date2],
             onChange: function(selectedDates, dateStr, instance) {
                 window.location.href= '/dashboard/'+dateStr;
             },
-	     });
+	   });
 
+        function getbookingmodel(){
+            $.ajax({
+                url:"{{route('getBookingList')}}",
+                type:"get",
+                data:{
+                    startDate:'{{$startDate}}',
+                    endDate:'{{$endDate}}',
+                    cid:'{{$business_id}}',
+                },
+                success:function(data){
+                    $('#bookingmodel').html(data);
+                    $('.view-booking').modal('show');
+                }
+            });
+        }
 
 		function activityschedule(type,date){
 			$.ajax({
@@ -978,12 +1055,12 @@
 		    draw_chart_donut_revenue({{$in_person}}, {{$online}},'');
 		    draw_chart_donut_category({{$ptdata}},{{$clsdata}},{{$expdata}},{{$evdata}},{{$prdata}},'');
 		    <?php 
-		    	$comp_color = $completedtdata <= 20 ? '#FA4443':'#3577f1';
-		    	$rem_color = $remainingdata <= 20 ? '#FA4443':'#3577f1';
+		    	$comp_color = $completedRecPercentage <= 20 ? '#FA4443':'#3577f1';
+		    	$rem_color = $remainingRecPercentage <= 20 ? '#FA4443':'#3577f1';
 		    ?>
 
-		    draw_chart_radial_bar({{$completedtdata}},'new_jobs_chart' ,'{{$comp_color}}');
-		    draw_chart_radial_bar({{$remainingdata}},'rejected_chart','{{$rem_color}}');
+		    draw_chart_radial_bar({{$completedRecPercentage}},'new_jobs_chart' ,'{{$comp_color}}');
+		    draw_chart_radial_bar({{$remainingRecPercentage}},'rejected_chart','{{$rem_color}}');
             category =["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 		    draw_chart_combo('','' , category);
 		});

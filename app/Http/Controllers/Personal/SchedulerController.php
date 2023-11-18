@@ -90,14 +90,12 @@ class SchedulerController extends Controller
         $UserBookingDetails = '';
         $today = date('Y-m-d');
         
-        $UserBookingDetails = $customer->bookingDetail()
-            ->where('sport',$request->serviceID)
-            ->when($request->oid, function($query) use($request){
+        $UserBookingDetails = $customer->bookingDetail()->when($request->oid, function($query) use($request){
                 $query->where('id', $request->oid);
-            })
-            ->when($request->priceId, function ($query) use ($request) {
+            })->when($request->priceId, function ($query) use ($request) {
                 $query->where('priceid', $request->priceId);
             })
+            //->where('sport',$request->serviceID)
             ->orderby('created_at','desc')->first();
         if($UserBookingDetails != ''){
             $sendmail = 0;
@@ -117,7 +115,7 @@ class SchedulerController extends Controller
                 $chkData = $UserBookingDetails->BookingCheckinDetails()->whereDate('business_activity_scheduler_id',0)->where(['checkin_date' =>null])->first();
                 if($chkData != ''){
                     $chkData->update(["business_activity_scheduler_id"=>$request->timeid,
-                        "checkin_date"=>$request->date]);
+                        "checkin_date"=>$request->date, "instructor_id"=>@$activitySchedulerData->instructure_ids]);
                     $sendmail = 1;
                 }else{
                     // echo $UserBookingDetails.'<br>';
@@ -127,6 +125,7 @@ class SchedulerController extends Controller
                     if($UserBookingDetails->BookingCheckinDetails()->count() < $UserBookingDetails->pay_session){
                         BookingCheckinDetails::create([
                             "business_activity_scheduler_id"=>$request->timeid, 
+                            "instructor_id"=>@$activitySchedulerData->instructure_ids, 
                             "customer_id" => $customer->id,
                             'booking_detail_id'=> $UserBookingDetails->id,
                             "checkin_date"=>$request->date,

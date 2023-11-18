@@ -211,7 +211,8 @@ class PaymentController extends Controller {
                     }
 
                     BookingCheckinDetails::create([
-                        'business_activity_scheduler_id' => $activityScheduler->id,
+                        'business_activity_scheduler_id' => @$activityScheduler->id,
+                        'instructor_id' => @$activityScheduler->instructure_ids,
                         'customer_id' => $d['id'],
                         'booking_detail_id' => $booking_detail->id,
                         'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),
@@ -528,7 +529,8 @@ class PaymentController extends Controller {
                     }
 
                     BookingCheckinDetails::create([
-                        'business_activity_scheduler_id' => $activityScheduler->id,
+                        'business_activity_scheduler_id' => @$activityScheduler->id,
+                        'instructor_id' => @$activityScheduler->instructure_ids,
                         'customer_id' => $d['id'],
                         'booking_detail_id' => $booking_detail->id,
                         'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),

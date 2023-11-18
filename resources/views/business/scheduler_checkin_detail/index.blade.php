@@ -38,12 +38,21 @@
 	</div>
 	<div class="col-md-4 col-sm-4 col-12">	
 		<div class="mb-3 select-staff-member">
-			<select name="activity_type" class="form-select" id="" onchange="changeInstructor(this.value)">
-				<option value="">Select Staff Member</option>
-				@foreach($staffMember as $sm)
-					<option value="{{$sm->id}}" @if($instructor_id == $sm->id) selected @endif>{{$sm->full_name}}</option>
+
+			<select name="instructure[]" id="instructure" multiple >
+              	@foreach($staffMember as $sm)
+					<option value="{{$sm->id}}">{{$sm->full_name}}</option>
 				@endforeach
-			</select>
+            </select>
+
+			<script type="text/javascript">
+				const instructure  = '{{ @$instructor_id }}';
+				const insIds  = instructure ? instructure.split(',') : [];
+				const s  = new SlimSelect({
+				   select: '#instructure'
+				});
+				s.set(insIds);
+			</script>
 		</div>
 	</div>
 	<div class="col-md-8 col-sm-8 col-12">	
@@ -118,7 +127,12 @@
 								<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" data-cus-id="{{$cus->id}}">
 									<option value="" @if(!@$firstCheckInDetail->order_detail) selected @endif>Choose option</option>
 									@foreach($cus->active_memberships()->get() as $bookingDetail)
-										@php $checkInIds .= $bookingDetail->id.','; @endphp
+										@php 
+											$cCheckin = $bookingDetail->BookingCheckinDetails->where('checkin_date', $filter_date->format('Y-m-d'))->first();
+											if($cCheckin){
+												$checkInIds .= $cCheckin->id.','; 
+											}
+										@endphp
                                         <option value="{{$bookingDetail->id}}" @if(@$firstCheckInDetail->order_detail->id == $bookingDetail->id) selected @endif checkInId="{{$cus->getCheckInId($bookingDetail->id, $filter_date->format('Y-m-d'))}}">
                                                 {{@$bookingDetail->business_price_detail_with_trashed->price_title}} 
                                         </option>
@@ -158,7 +172,9 @@
 											<li><a href="{{route('business.orders.create',['cus_id' => $cus->id])}}"><i class="fas fa-plus text-muted"></i>Purchase</a></li>
 											<li><a href="{{route('business_customer_show',['business_id' => request()->current_company->id, 'id'=> $cus->id])}}" target="_blank" ><i class="fas fa-plus text-muted"></i>View Account</a></li>
 											<li>
-												<a href="#" data-behavior="delete_checkin_detail" data-booking-checkin-detail-id="{{@$checkInIds}}"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a>
+												<a href="#" data-behavior="delete_checkin_detail" @if($checkInIds == '')
+													data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" @else 
+													data-booking-checkin-detail-id="{{@$checkInIds}}" @endif ><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a>
 											</li>
 										</ul>
 									</div>
@@ -218,28 +234,6 @@
         };
     });
 
-	function changeInstructor(value){
-		date = "{{$filter_date->format('Y-m-d')}}";
-		today = "{{$today}}";
-		if(today == date){
-			$.ajax({
-				url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/change_instructor",
-		        method: "POST",
-		        data: { 
-		            _token: '{{csrf_token()}}',  
-		            date: date, 
-		            insID: value, 
-		        },
-		        success: function(html){
-		        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','','','');
-		            //location.reload();
-		        }
-			})
-		}else{
-			alert("You can't change instructor at this time.");
-		}
-	}
-
 	$('[data-behavior~=delete_checkin_detail]').click(function(e){
 	    e.preventDefault()
     	$.ajax({
@@ -273,7 +267,6 @@
                 serviceId: "{{$business_activity_scheduler->serviceid}}",
             },
             success: function(html){
-                //location.reload();	
                 getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','',html,'');
         	}
     	})
@@ -334,4 +327,30 @@
     	$('.checkinDetails').modal('hide');
     }
 
+    var ins = new SlimSelect({
+      	select: '#instructure'
+   	});
+
+   	$('#instructure').on('change', function() {
+    	var selectedValues = ins.selected();
+    	date = "{{$filter_date->format('Y-m-d')}}";
+		today = "{{$today}}";
+		if(today == date){
+			$.ajax({
+				url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/change_instructor",
+		        method: "POST",
+		        data: { 
+		            _token: '{{csrf_token()}}',  
+		            date: date, 
+		            insID: selectedValues, 
+		        },
+		        success: function(html){
+		        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','','','');
+		            //location.reload();
+		        }
+			})
+		}else{
+			alert("You can't change instructor at this time.");
+		}
+	  });
 </script>
