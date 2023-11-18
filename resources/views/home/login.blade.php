@@ -63,7 +63,11 @@ if(!empty(@$response)){
                     </div>
                     <a class="forgotpass" data-behavior="ajax_html_modal" data-url="{{route('jsModalpassword')}}">Forgot Password?</a>
                     <p class="already">Don't have an account?
-                        <a href="{{ Config::get('constants.SITE_URL') }}/registration">SIGN UP</a>
+                        @if(@$onboardCid)
+                            <a href="{{ Config::get('constants.SITE_URL') }}/welcome_provider?cid={{@$onboardCid}}">SIGN UP</a>
+                        @else
+                            <a href="{{ Config::get('constants.SITE_URL') }}/registration">SIGN UP</a>
+                        @endif
                     </p>
                 </form>
             </div>

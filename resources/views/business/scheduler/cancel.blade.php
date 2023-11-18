@@ -19,7 +19,7 @@
          </div>
       </div>
    </div>
-   <hr style="border: 1px solid #efefef; width: 107%; margin-left: -15px; margin-top: 15px;">
+   <hr style="border: 1px solid #efefef; width: 107%;" class="ml-15 mt-15">
    <div class="row">
       <div class="col-md-12">
          <h5 class="modal-title mb-10">Alert others of the cancellations</h5> 
@@ -27,8 +27,8 @@
             <input type="checkbox" id="email_Instructor" name="email_Instructor" value="1"{{$emailInstructor}}>
             <label for="email_Instructor">Email Instructor</label><br>
             <input type="checkbox" id="email_clients" name="email_clients" value="1"{{$emailClients}}>
-            <label for="email_clients">You have {{$schedule->spots_reserved($cancelDate)}} clients registered </label><br>
             <label class="alert-label"> Alert registed clients with an email</label><br>
+            <label for="email_clients">You have {{$schedule->spots_reserved($cancelDate)}} clients registered </label><br>
          </div>
          <button type="submit" class="btn btn-red float-right">Submit</a>
       </div>

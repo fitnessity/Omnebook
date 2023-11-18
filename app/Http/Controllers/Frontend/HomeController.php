@@ -288,6 +288,7 @@ class HomeController extends Controller {
                 $userObj->lastname = ($postArr['lastname']) ? $postArr['lastname'] : '';
                 $userObj->username = $postArr['username'];
                 $userObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
+                $userObj->primary_account = $postArr['primary_account'] ?? 0;
                 $userObj->email = $postArr['email'];
                 $userObj->stripe_customer_id = $stripe_customer_id;
                 $userObj->role = 'customer';

@@ -298,4 +298,99 @@ class SGMailService{
 		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-eeca6da4bb6240d48abb661c49489afa');
 	}
 
+	public static function sendEmailCustomerforScheduleChange($emailDetail){
+		if($emailDetail['companydata']->logo == ''){
+           	$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
+        }else{
+        	$ImageUrl = Storage::URL($emailDetail['companydata']->logo);
+        }
+		$substitutions = [
+			'CustomerName'  => $emailDetail['userdata']->full_name,
+			'ProviderName'  => $emailDetail['companydata']->full_name,
+			'date'  => $emailDetail['date'],
+			'time'  => $emailDetail['time'],
+			'ProgramName'  => $emailDetail['pName'],
+			'CompanyName'  => @$emailDetail['companydata']->public_company_name,
+			'CompanyImage'  =>$ImageUrl,
+			'CompanyAddress'  => @$emailDetail['companydata']->company_address(),
+			'CompanyEmail'  => @$emailDetail['companydata']->business_email,
+			'CompanyPhone'  => @$emailDetail['companydata']->business_phone,
+			'CompanyWebsite'  => @$emailDetail['companydata']->business_website,
+			'url'  => env('APP_URL').'/personal/orders',
+		];
+
+		if(@$emailDetail['mail_type'] == 'cancel'){
+			$temId = 'd-dd435190a3b44ff98ec810294f65dbdb';
+		}else{
+			$temId = 'd-004ade55ee214ea6917945a6c5de0f0b';
+		}
+	
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,$temId);
+	}
+
+	public static function sendEmailInstructorforScheduleChange($emailDetail){
+		if($emailDetail['companydata']->logo == ''){
+           	$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
+        }else{
+        	$ImageUrl = Storage::URL($emailDetail['companydata']->logo);
+        }
+		$substitutions = [
+			'StaffName'  => $emailDetail['insdata']->full_name,
+			'ProviderName'  => $emailDetail['companydata']->full_name,
+			'date'  => $emailDetail['date'],
+			'time'  => $emailDetail['time'],
+			'ProgramName'  => $emailDetail['pName'],
+			'CompanyName'  => @$emailDetail['companydata']->public_company_name,
+			'CompanyImage'  =>$ImageUrl,
+			'CompanyAddress'  => @$emailDetail['companydata']->company_address(),
+			'CompanyEmail'  => @$emailDetail['companydata']->business_email,
+			'CompanyPhone'  => @$emailDetail['companydata']->business_phone,
+			'CompanyWebsite'  => @$emailDetail['companydata']->business_website,
+			'url'  => env('APP_URL').'/personal/orders',
+		];
+		
+		if(@$emailDetail['mail_type'] == 'cancel'){
+			$temId = 'd-f086a22e6a274b5cae7dec27ad318922';
+		}else{
+			$temId = 'd-2a8a34f6ffe1496eb2b09443af202749';
+		}
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,$temId);
+	}
+
+	public static function sendEmailCustomerforReminder($emailDetail){
+		if($emailDetail['companydata']->logo == ''){
+           	$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
+        }else{
+        	$ImageUrl = Storage::URL($emailDetail['companydata']->logo);
+        }
+		$substitutions = [
+			'CustomerName'  => $emailDetail['userdata']->full_name,
+			'ProviderName'  => $emailDetail['companydata']->full_name,
+			'date'  => $emailDetail['date'],
+			'time'  => $emailDetail['time'],
+			'ProgramName'  => $emailDetail['pName'],
+			'CompanyName'  => @$emailDetail['companydata']->public_company_name,
+			'CompanyImage'  =>$ImageUrl,
+			'CompanyAddress'  => @$emailDetail['companydata']->company_address(),
+			'CompanyEmail'  => @$emailDetail['companydata']->business_email,
+			'CompanyPhone'  => @$emailDetail['companydata']->business_phone,
+			'CompanyWebsite'  => @$emailDetail['companydata']->business_website,
+			'url'  => env('APP_URL').'/personal/orders',
+		];
+		
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-274e9b0ca44141349045585c87c9f988');
+	}
+
+
+	public static function sendEmailToCustomerforClaim($emailDetail){
+		$substitutions = [
+			'BusinessName'  => @$emailDetail['companydata']->public_company_name,
+			'BusinessAddress'  => @$emailDetail['companydata']->company_address(),
+			'BusinessEmail'  => @$emailDetail['email'],
+			'BusinessPhone'  => @$emailDetail['companydata']->business_phone,
+			'url'  => env('APP_URL').'/claim-your-business',
+		];
+		
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-738442a2400549d99833777bdb13bee0');
+	}
 }

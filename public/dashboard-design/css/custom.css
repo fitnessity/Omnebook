@@ -17,14 +17,14 @@ a:hover{
 }
 .dash-sidebar-menu{
 	 display: block;
-	 margin-top: 70px;
+	  margin-top: 70px; 
 }
 .add-client{
 	display: block;
 	text-align: center;
 	padding: 7px 21px;
 	color: #fff;
-	border-radius: 4px;
+	border-radius: 10px;
 	background: #ed1b24;
 	margin-left: 15px;
 	font-size: 14px;
@@ -301,7 +301,7 @@ header{ position: fixed !important; }
 	text-align: center;
 	padding: 7px 21px;
 	color: #fff;
-	border-radius: 4px;
+	border-radius: 10px;
 	background: #ed1b24;
 	font-size: 14px;
 }
@@ -619,7 +619,7 @@ header{ position: fixed !important; }
 	border: none;
 	padding: 7px 21px;
 	color: #fff;
-	border-radius: 4px;
+	border-radius: 10px;
 	font-size: 14px;
 	cursor: pointer;
 }
@@ -1092,7 +1092,7 @@ header{ position: fixed !important; }
 }
 .select-event{
 	padding: 5px 14px;
-	border-radius: 3px;
+	border-radius: 10px;
 }
 .box-footer{
 	text-align: center;
@@ -3574,7 +3574,7 @@ div#termsdiv{order: 4;}
 	text-align: left;
 }
 .booking-activity span{
-	color: #fff;
+	color: #000;
 }
 .purchase-history{
 	box-shadow: var(--vz-box-shadow);
@@ -3587,14 +3587,17 @@ div#termsdiv{order: 4;}
 	padding-top: 8px;
 }
 .body-bg-gradient{
-	background-image: linear-gradient(#b30004, #480003, #111224);
+	/* background-image: linear-gradient(#b30004, #480003, #111224); */
+	background: #fff;
+	border: 1px solid #000;
+	border-radius: 10px;
 }
 .v-booking a{
-	color: #fff;
+	color: #ed1b24;
 	font-weight: bold;
 }
 .v-schedule a{
-	color: #fff;
+	color: #ed1b24;
 	font-weight: bold;
 }
 .v-booking a:hover{
@@ -5060,6 +5063,237 @@ div#termsdiv{order: 4;}
 	margin-bottom: 0px;
 	padding: 3px 0;
 }
+.participant-selection.btn-group .qty .minus {
+  position: relative;
+}
+.participant-selection.btn-group .minus.bg-darkbtn.addonminus i {
+  font-size: 13px;
+  top: 8px;
+  left: 9px;
+  position: absolute;
+}
+.participant-selection.btn-group .qty .plus {
+  position: relative;
+}
+.participant-selection.btn-group .plus.bg-darkbtn.addonplus i {
+  font-size: 13px;
+  top: 8px;
+  left: 9px;
+  position: absolute;
+}
+.claiming-boxn {
+	padding: 20px 20px 20px 20px;
+	margin-bottom: 30px;
+	background: #fff;
+	border-radius: 8px;
+	border: 1px solid #e8e8e8;
+	box-shadow: 0px 13px 20px 0px rgba(0, 0, 0, 0.10);
+}
+.claiming-boxn h4 {
+  font-weight: 700;
+  color: #ea1237;
+  margin-bottom: 15px;
+}
+.claiming-boxn h4 i {
+  margin-right: 6px;
+  font-size: 25px;
+  width: 30px;
+  text-align: center;
+}
+.claiming-business-block p {
+  margin-bottom: 15px;
+}
+.claiming-boxn form {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.claiming-boxn form .form-group {
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.claiming-boxn form .form-group span {
+  font-size: 15px;
+  font-weight: 500;
+}
+.claiming-boxn form .form-group span {
+  font-size: 15px;
+  font-weight: 500;
+}
+.claiming-boxn form .btnsend {
+  padding: 3px 20px;
+  background: #ea1237;
+  color: #fff;
+  border-radius: 8px;
+}
+.modal-60{
+	max-width: 60%;
+}
+.reports-title{
+	font-size: 16px;
+}
+.report-links a{
+	color: #000;
+	font-size: 15px;
+}
+.report-links{
+	padding: 5px;
+	border-bottom: 1px solid var(--vz-border-color);
+	width: 100%;
+}
+.box-border{
+	border: 1px solid #e8e9e9;
+}
+.remove-border{
+	border-bottom: none !important;
+}
+.report-links a:hover{
+	color: #ed1b24;
+}
+.category-search{
+	width: 225px;
+	float: right;
+}
+
+#product-description {
+	width: 100%; 
+	position:relative;
+}
+#product-description .d-text {
+	margin-bottom: 5px; 
+	color: #000; 
+	position:relative; 
+	font-size: 14px; 
+	display: block;
+}
+#product-description .show-more {
+	color: #777; 
+	position:relative; 
+	font-size: 12px; 
+	padding-top: 5px; 
+	cursor: pointer;
+}
+#product-description .show-more:hover { 
+    color: #ea1515;
+}
+#product-description .show-more-height { 
+	height: 19px; 
+	overflow:hidden; 
+}
+.minus.bg-darkbtn.prominus{
+	position: relative
+}
+.minus.bg-darkbtn.prominus i{
+	font-size: 13px;
+	top: 8px;
+	left: 9px;
+	position: absolute;
+}
+.plus.bg-darkbtn.proplus{
+	position: relative
+}
+.plus.bg-darkbtn.proplus i{
+	font-size: 13px;
+	top: 8px;
+	left: 9px;
+	position: absolute;
+}
+.check-box-primary-account{
+	width: auto !important;
+	display: inline-block !important;
+	min-height: 9px !important;
+}
+.check-box-info label{
+	display: inline-block !important;
+}
+.check-box-info{
+	width: 70%;
+	margin: 10px auto;
+}
+.custom-search-icon{
+	top: 13px !important;
+}
+/* .switch-account-dropdown{
+	transform: translate(62px, 40px) !important;
+	inset: 10px 80px auto auto !important;
+} */
+.switch-account-dropdown li a i{
+	margin-right: 10px;
+}
+.account-switchh{
+	font-size: 11px;
+	margin-left: 24px;
+}
+.btn-switch-business{
+	background: #f3f3f9;
+	color: #000;
+	border: none;
+}
+.btn-switch-business:hover{
+	background: #f3f3f9;
+}
+.remaining-days{   
+	background-color: #fff5da;
+	padding: 15px;
+}
+.days-left p{
+	margin-bottom: 0px;
+	font-size: 13px;
+	font-weight: 500;
+	text-transform: uppercase;
+} 
+.chat-with-us p{
+	text-align: center;
+	color: #868686;
+	font-size: 13px;
+	font-weight: 500;
+	margin-bottom: 9px;
+}
+.subscriptions-info h1{
+	font-size: 16px;
+	font-weight: 600;
+}
+.subscriptions-info {
+	display: grid;
+}
+.subscriptions-info span{
+	font-size: 14px;
+}
+.invoices-select{
+	display: flex;
+}
+.width-30{
+	width: 30%;
+}
+.invoices-select label{
+	line-height: 2;
+}
+.mt-70{
+	margin-top: 70px;
+}
+.one-latter{
+	display: inline-block;
+}
+.bg-danger-red{
+	background: #ed1b24;
+} 
+.act-cancel-p{
+	background: #ccc;
+	padding: 5px;
+}
+.btn-booking-activity{
+	background: #484848;
+	border: none;
+	border-radius: .25rem;
+	color: #fff;
+}
+.btn-booking-activity:hover{
+	color: #fff;
+}
+
+
+
 
 
 /* header class */
@@ -5077,7 +5311,7 @@ div#termsdiv{order: 4;}
 	align-items: center;
 }
 .btn.business-sp.btn-style-two{
-		display: flex;
+	display: flex;
 	justify-content: center;
 	align-items: center;
 }

@@ -44,24 +44,10 @@ class CustomerController extends Controller {
     public function index(Request $request, $business_id){
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
-
-        // $customers = $company->customers()->limit(10)->orderBy('fname');
 	    $customers = $company->customers()->orderBy('fname');
-        /*if($request->fname){
-            $customers = $customers->whereRaw('LOWER(`fname`) LIKE ?', [ '%'. strtolower($request->fname) .'%' ]);
-        }*/
+        
         if($request->term){
-            /*$customers = $customers->where('business_id', $business_id)
-                ->where(function ($query) use ($request) {
-                    $term = strtolower($request->term);
-                    $query->whereRaw('LOWER(`fname`) LIKE ?', ['%' . $term . '%'])
-                          ->orWhereRaw('LOWER(`lname`) LIKE ?', ['%' . $term . '%'])
-                          ->orWhereRaw('LOWER(`email`) LIKE ?', ['%' . $term . '%'])
-                          ->orWhereRaw('LOWER(`phone_number`) LIKE ?', ['%' . $term . '%']);
-                });*/
-
             $searchValues = preg_split('/\s+/', $request->term, -1, PREG_SPLIT_NO_EMPTY); 
-            
             $customers = $customers->where('business_id', $business_id)
                 ->where(function ($q) use ($searchValues) {
                     $serch1 = @$searchValues[0] != '' ? @$searchValues[0] : '';
@@ -83,11 +69,11 @@ class CustomerController extends Controller {
                         ->orWhere('phone_number', 'like', "%{$serch1}%");
                     }  
                 });
-                //print_r($customers);exit;
         }
 
         if($request->customer_id){
             $customers = $customers->where('id',$request->customer_id);
+
         }
 
         $customers = $customers->get();
@@ -114,6 +100,9 @@ class CustomerController extends Controller {
         $company = $user->businesses()->findOrFail($business_id);
         $terms = $company->business_terms->first();
         $customerdata = $company->customers->find($id);
+        if(!$customerdata){
+            return redirect()->route('business_customer_index');
+        }
         $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
         $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->get() : [];
         $purchase_history = @$customerdata != '' ?  @$customerdata->Transaction()->orderby('id', 'desc')->get() : [];
@@ -470,7 +459,13 @@ class CustomerController extends Controller {
         $customer = Customer::find($request->cid);
         $parentCustomer = Customer::find($request->currentCid);
         if($parentCustomer->parent_cus_id != $customer->id && $customer->parent_cus_id != $customer->id){
-            $customer->update(['parent_cus_id' => $request->currentCid]);
+            $parentCustomer = Customer::find($request->currentCid);
+            if($parentCustomer->parent_cus_id != ''){
+                $pid = $parentCustomer->parent_cus_id;
+            }else{
+                $pid = $request->currentCid;
+            }
+            $customer->update(['parent_cus_id' => $pid]);
         }
     }
 
@@ -492,7 +487,6 @@ class CustomerController extends Controller {
                     $customerdata->card_stripe_id,
                     []
                 );
-                
             }
 
             try{
@@ -512,13 +506,11 @@ class CustomerController extends Controller {
                         'name' =>  $request->owner,
                     ],
                 ]);
-                //print_r($carddetails);
                 $customer_source = $stripe->customers->createSource(
                     $stripe_customer_id,
                     [ 'source' =>$carddetails->id]
                 );
 
-               /* print_r($carddetails);exit;*/
                 $cust = Customer::find($request->cus_id);
                 $data = array(
                     "card_stripe_id"=>$carddetails['card']->id,
@@ -527,10 +519,8 @@ class CustomerController extends Controller {
                 $cust = Customer::find($request->cus_id);
                 $cust->update($data);
             }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException | \Exception $e) {
-                //$errormsg = $e->getError()->message;
-                    $statusmsg = "Your card is not valid.";
-              // Since it's a decline, \Stripe\Exception\CardException will be caught
-              Session::put('strpecarderror', $statusmsg);
+                $statusmsg = "Your card is not valid.";
+                Session::put('strpecarderror', $statusmsg);
             }   
         }elseif($request->chk == 'update_personal'){
             $data = $request->all();
@@ -553,17 +543,22 @@ class CustomerController extends Controller {
                 $data['terms_contract'] = date('Y-m-d');
             }
             
-            
             $position = array_search(request()->_token, $data);
             $position1 = array_search(request()->cus_id, $data);
             unset($data[$position]);
             unset($data[$position1]);
             
             $cust = Customer::find($request->cus_id);
+            if($request->primary_account == 1){
+                $data['parent_cus_id'] = NULL;
+                 $data['primary_account']  = 1;
+            }else{
+                $data['primary_account'] = 0;
+            }
+
+            User::where(['email' => $cust['email'] , 'id' => $cust['user_id']])->update(['primary_account' => $data['primary_account'] ]);
             $cust->update($data);
         }
-        
-        $cust = Customer::find($request->cus_id);
         
         return redirect()->route('business_customer_show',['business_id' => $cust->company_information->id, 'id'=>$request->cus_id]);
     }
@@ -601,7 +596,6 @@ class CustomerController extends Controller {
                 'email' => $getreceipemailtbody['email']);
             $status  = SGMailService::sendBookingReceipt($emailDetail);
         }
-
         return $status;
     }
 
@@ -664,7 +658,6 @@ class CustomerController extends Controller {
                         'last4'=> $data->last4,
                     ]);
                 }
-                
             }
 
             $paymentHistory = Transaction::where('user_type', 'User')
@@ -693,7 +686,6 @@ class CustomerController extends Controller {
                         'payload'=> $data->payload
                     ]);
                 }
-                
             }
         }
         
@@ -765,6 +757,5 @@ class CustomerController extends Controller {
             'termsText' => $termsText
         );
         $status  = SGMailService::sendTermsMail($emailDetail);
-
     }
 }

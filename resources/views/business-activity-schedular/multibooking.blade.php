@@ -72,7 +72,15 @@
 										foreach($cList->BusinessActivityScheduler as $sc){
 											if($sc->end_activity_date >= $filter_date->format('Y-m-d') && $sc->starting <= $filter_date->format('Y-m-d')){
 												if(strpos($sc->activity_days, $filter_date->format('l')) !== false){
-													$sche_ary [] = $sc;
+
+													$cancelSc = $sc->activity_cancel->where('cancel_date',date('Y-m-d'))->first();
+													$hide_cancel = @$cancelSc->hide_cancel_on_schedule;
+													if(@$cancelSc->cancel_date_chk == 0 ){
+														$hide_cancel = 0;
+													}
+													if($hide_cancel == '' || $hide_cancel != 1){
+														$sche_ary [] = $sc;
+													}
 												}
 											}
 										} 
@@ -114,7 +122,7 @@
 															$SpotsLeftdis = $scary->spots_available - $bookedspot;
 															
 													        $cancel_chk = 0;
-															$canceldata = App\ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id])->first();
+															$canceldata = App\ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id,'cancel_date_chk'=>1])->first();
 															$date = $filter_date->format('Y-m-d');
 															$time = $scary->shift_start;
 															$st_time = date('Y-m-d H:i:s', strtotime("$date $time"));
@@ -128,13 +136,18 @@
 															if($SpotsLeftdis == 0){
 																$grayBtnChk = 2;
 															}
+															if($canceldata != ''){
+																$grayBtnChk = 3;
+																$class = 'post-btn-gray';
+															}
 														@endphp
 														<div class="col-lg-4 col-md-3 col-sm-5 col-xs-6">
 															<div class="multiple0select btn-group w-100">
 																<div class="select">
-																	<input type="checkbox" id="item_{{$s}}{{$scary->id}}" class="checkboxchk" data-pname="{{$ser->program_name}}" data-toa="{{$timeOfActivity}}" data-chk="{{$grayBtnChk}}" data-sid="{{$ser->id}}" data-scid="{{$scary->id}}" data-catId="{{$scary->category_id}}" {{ $SpotsLeftdis == 0 ? "disabled" : ''}}>
+																	<input type="checkbox" id="item_{{$s}}{{$scary->id}}" class="checkboxchk" data-pname="{{$ser->program_name}}" data-toa="{{$timeOfActivity}}" data-chk="{{$grayBtnChk}}" data-sid="{{$ser->id}}" data-scid="{{$scary->id}}" data-catId="{{$scary->category_id}}" {{ $SpotsLeftdis == 0 ? "disabled" : ''}} {{ $canceldata != '' ?  "disabled" : ''}}>
 																	<label class="btn button_select" for="item_{{$s}}{{$scary->id}}">{{$timeOfActivity}} <br>{{$duration}}</label>
 																	<span>{{ $SpotsLeftdis == 0 ? "Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</span>
+																	<label class="font-red">{{ $canceldata != '' ? "Cancelled" : ''}}</label>
 																</div>
 															</div>
 														</div>
@@ -157,7 +170,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="calendar-footer mt-10">
-							<label><span id="timeSlotCnt">{{count($finalSessionAry)}}</span>-Time Slot Added  </label> 
+							<label><span id="timeSlotCntUpdate">{{count($finalSessionAry)}}</span>-Time Slot Added  </label> 
 							<!-- <a href="#" class="showall-btn" data-toggle="modal" data-target="#review_selections" >Review Selections</a> -->
 							<a class="showall-btn" data-behavior="ajax_html_modal" data-url="{{route('getReviewData' ,['cid'=> @$customer->id,'business_id'=> @$company->id])}}" data-modal-width="1000px"data-modal-chkBackdrop="1" id="reviewData">Review Selections</a>
 						</div>
@@ -248,7 +261,7 @@
 					category_id:catId,
 				},
 				success:function(data){
-					$('#timeSlotCnt').html(data);
+					$('#timeSlotCntUpdate').html(data);
 				}
 			});
 		}
@@ -320,7 +333,7 @@
 						//window.location.reload();
 						$('#reviewData').click();
 					}else{
-						$('#timeSlotCnt').html(response);
+						$('#timeSlotCntUpdate').html(response);
 					}
 				}
 			});

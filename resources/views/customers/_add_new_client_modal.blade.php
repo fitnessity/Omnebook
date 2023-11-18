@@ -6,7 +6,6 @@
 
 @php $business_id = Auth::user()->cid; @endphp
 
-
 <div class="modal fade new-client-steps" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
 	<div class="modal-dialog modal-dialog-centered modal-80">
 		<div class="modal-content">
@@ -23,7 +22,7 @@
 							</div>
 						</div>
 						<div class="manage-customer-from">
-							<div id="divstep1" style="display: block;">
+							<div id="divstep1" style="display: block ;">
 								<form id="frmregister" method="post">
 									<h4 class="heading-step">Step 1</h4>
 									<div id="systemMessage" class="alert-msgs font-red"></div>
@@ -35,6 +34,11 @@
 									<input type="email" name="email" id="email" class="myemail" size="30" placeholder="Email-Address" maxlength="80" autocomplete="off">
 									<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
 									<input type="text" class="form-control border-0 dash-filter-picker flatpiker-with-border flatpickr-range-birthdate" id="dob" name="dob" placeholder="Birthday">
+
+									<div class="form-group check-box-info">
+										<input class="check-box-primary-account" type="checkbox" id="primaryAccountHolder" name="primaryAccountHolder" value="1">
+										<label for="primaryAccountHolder"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" title="You are paying for yourself and all added family members.">(i)</span></label>
+									</div>
 									
 									<div class="row check-txt-center">
 										<div class="col-lg-8 col-md-12 col-9">
@@ -184,7 +188,7 @@
 								</form>
 							</div>
 							
-							<div id="divstep5" style="display: none;">
+							<div id="divstep5" style="display: none ;">
 								<form action="#" id="familyform">
 									<h4 class="heading-step">Step 5</h4>
 									<div class="sign-step_5">
@@ -212,12 +216,14 @@
 														<div class="accordion" id="default-accordion-example">
 															<div class="accordion-item shadow">
 																<h2 class="accordion-header" id="heading0">
-																	<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0" aria-expanded="true" aria-controls="collapse0">
-																		Family Member #1
-																	</button>
+																	<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0" aria-expanded="true" aria-controls="collapse0">Family Member #1</button>
 																</h2>
 																<div id="collapse0" class="accordion-collapse collapse show" aria-labelledby="heading0" data-bs-parent="#default-accordion-example">
 																	<div class="accordion-body">
+																		<div class="form-group check-box-info">
+																			<input class="check-box-primary-account" type="checkbox" id="primaryAccount" name="primaryAccount" value="1">
+																			<label for="primaryAccount"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" title="Choose the primary account holder to determine whose card covers bookings for up to two family members (e.g., Mom or Dad). All cards stored under the primary account will be available at checkout.">(i)</span></label>
+																		</div>
 																		<div class="form-group">
 																			<input type="text" name="fname[]" id="fname" class="form-control first_name required" placeholder="First Name">
 																			<span class="error" id="err_fname"></span>
@@ -227,7 +233,7 @@
 																			<span class="error" id="err_lname"></span>
 																		</div>
 																		<div>
-																			<input type="text" class="form-control border-0 dash-filter-picker flatpiker-with-border flatpickr-range-birthdate" name="birthdate" id="birthdate"  placeholder="Birthday">
+																			<input type="text" class="form-control border-0 dash-filter-picker flatpiker-with-border" name="birthdate[]" id="birthdate"  placeholder="Birthday">
 																		</div>
 																		<div class="form-group">
 																			<select name="gender[]" id="gender" class="form-select gender" required="">
@@ -273,8 +279,8 @@
 																			<span class="error" id="err_emergency_email"></span>
 																		</div>
 																		<div class="form-group">
-																			<select name="emergency_relation[]" id="emergency_relation" class="form-select emergency_relation required">
-																				<option value="">Select Relationship</option>
+																			<select name="emergency_relation[]" id="emergency_relation" class="form-select emergency_relation">
+																				<option value="">Select Emergency Relationship</option>
 																				<option value="Brother">Brother</option>
 																				<option value="Sister">Sister</option>
 																				<option value="Father">Father</option>
@@ -345,8 +351,9 @@
 											  	<div id="error-message1" class="alert alert-danger" role="alert" style="display: none;"></div>
 											  	<div id="payment-element1" style="margin-top: 8px;"></div>
 											</div>
-											<div class="text-center mt-10">
-										  		<button class="btn btn-red" type="submit" id="submit1">Add on file</button>
+											<div class="text-center mt-25">
+										  		<button class="btn btn-red mr-5" type="submit" id="submit1">Add on file</button>
+										  		<button type="button" class="btn btn-red" id="skip7_next">Skip</button>
 										  	</div>
 										</form>
 									</div>
@@ -379,14 +386,16 @@
 <script>
 
 	flatpickr('.flatpickr-range-birthdate',{
-		dateFormat: "m/d/Y",
+		altInput: true,
+		altFormat: "m/d/Y",
+		dateFormat: "Y-m-d",
         maxDate: "today",
 	});
 
 	$(document).on('focus', '#birthdate', function(e){
         //jQuery.noConflict();
         $(this).flatpickr( { 
-           dateFormat: "m/d/Y",
+			dateFormat: "m/d/Y",
         	maxDate: "today",
         });
     });
@@ -641,6 +650,11 @@
     	//window.location.href = '/business/{{$business_id}}/customers/'+$('#cust_id').val();
     });
 
+    $(document).on('click', '#skip7_next', function () {
+    	window.location.href = '/business/{{$business_id}}/customers/'+$('#cust_id').val();
+    });
+
+
     function getAge() {
         var dateString = document.getElementById("dob").value;
         var today = new Date();
@@ -671,7 +685,11 @@
         re = re.replaceAll("collapse"+old_cnt,"collapse"+cnt);
         re = re.replaceAll("birthday_date"+old_cnt,"birthday_date"+cnt);
         re = re.replaceAll("Family Member #"+cnt,"Family Member #"+txtcount);
-        $('#familymaindiv').append(re);
+        var $data = $(re);
+       	$data.find('.check-box-info').remove();
+       	var modifiedData = $data[0].outerHTML;
+
+        $('#familymaindiv').append(modifiedData);
         $('.relationship').each(function(e) {
         	$(this).removeClass("font-red");
         });
@@ -685,7 +703,7 @@
         $('#familycnt').val(cnt);
 	});
 
-	$(document).on("click",'#request_access_btn',function(e){
+	$(document).on("click",'.request_access_btn',function(e){
 		$.ajax({
             url: "{{route('sendgrantaccessmail')}}",
             method: "POST",
@@ -702,7 +720,7 @@
               	}else if(response == 'success'){
               		$('.errclass').removeClass('error');
               		$('.errclass').addClass('font-green');
-              		$('.errclass').html("<p>Email Successfully Sent..</p>");
+              		$('.errclass').html('<p>Email Successfully Sent..</p><a class="request_access_btn">Resend Email</a>');
               	}else{
               		$('.errclass').html("<p>Can't Send Mail to your mail..</p>");
               	}
@@ -858,6 +876,7 @@ $(document).ready(function() {
       $(a.target).prev('.panel-heading').removeClass('active');
     });
 });
+
 </script>
 
 <script type="text/javascript">

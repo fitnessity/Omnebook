@@ -24,8 +24,11 @@ class LoginController extends Controller {
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
         }
+
+        $onboardCid = $request->cid;
     	return view('home.login',[
-            'cart' => $cart
+            'cart' => $cart,
+            'onboardCid' => $onboardCid
         ]);
     }
 	/*public function leftpanel()

@@ -96,7 +96,7 @@
                     </div>
                     <div class="col-md-12">
                         <div class="mt-15 price-selection">
-                            <input type="radio" id="freeprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="freeprice" {{@$price->dispaly_section == 'free' ? 'checked' : ''}}>
+                            <input type="radio" id="freeprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="freeprice" {{@$price->dispaly_section == 'freeprice' ? 'checked' : ''}}>
                             <label class="recurring-pmt">Free</label>
                                             
                             <input type="radio" id="weekdayprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekdayprice" {{@$price->dispaly_section == 'weekdayprice' ? 'checked' : ''}}>
@@ -106,7 +106,7 @@
                             <label class="recurring-pmt">Weekend Price</label>
                         </div>
                     </div>
-                    <div class="col-md-12 displaysectiondiv{{$i}}{{$j}}">
+                    <div class="col-md-12 displaysectiondiv{{$i}}{{$j}} {{@$price->dispaly_section == 'freeprice' ? 'd-none' : ''}}" >
                         <div class="choose-age price-selection">
                             <p>Select who this price option is for. (choose all that apply)</p>
                             <input type="checkbox" id="all{{$i}}{{$j}}" name="all{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="all" >

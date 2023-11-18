@@ -37,7 +37,7 @@
 						<div class="row mb-3">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								<div class="page-heading">
-									<label>Check Out Register </label>
+									<label>Point of Sale </label>
 								</div>
 							</div>
 						</div>
@@ -271,13 +271,9 @@
 
 																<div class="col-md-4 col-sm-4 col-xs-12">
 																	<div class="select0service mb-10">
-																		<label>Select Product  </label>
-																		<select name="product_list" id="product_list" class="form-select" onchange="loaddropdown('product',this,this.value);">
-																			<option value="">Select</option>
-																			@foreach($products as $pro)
-																				<option value="{{$pro->id}}">{{$pro->name}}</option>
-																			@endforeach
-																		</select>
+																		<label>Select Product</label>
+																		<!-- <button type="button" data-bs-toggle="modal" data-bs-target="#addproduct" class="btn btn-red width-100 search-add-client"> Select </button> -->
+																		<button type="button" onclick="openProductModal('{{$companyId}}' , '' ,'','','','','')" class="btn btn-red width-100 search-add-client"> Select </button>
 																	</div>
 																</div>
 															</div>
@@ -401,6 +397,7 @@
 															@csrf
 															<input type="hidden" name="chk" value="activity_purchase">
 															<input type="hidden" name="value_tax" id="value_tax" value="0">
+															<input type="hidden" name="value_tax_activity" id="value_tax_activity" value="0">
 															<input type="hidden" name="type" value="{{$user_type}}">
 															<input type="hidden" name="pageid" value="{{$pageid}}">
 															<input type="hidden" name="pid" id="pid" value="">
@@ -427,6 +424,19 @@
 															<input type="hidden" name="addOnServicesId" value="" id="addOnServicesId" />
 										                    <input type="hidden" name="addOnServicesQty" value="" id="addOnServicesQty" />
 										                    <input type="hidden" name="addOnServicesTotalPrice" value="0" id="addOnServicesTotalPrice" />
+										                    <input type="hidden" name="aos_details" value="" id="aos_details" />
+
+										                    <input type="hidden" name="product_details" value="" id="product_details" />
+										                    <input type="hidden" name="productIds" value="" id="productIds" />
+										                    <input type="hidden" name="productQtys" value="" id="productQtys" />
+
+										                    <input type="hidden" name="productSize" value="" id="productSize" />
+										                    <input type="hidden" name="productColor" value="" id="productColor" />
+										                    <input type="hidden" name="productTypes" value="" id="productTypes" />
+										                    <input type="hidden" name="productTotalPrices" value="0" id="productTotalPrices" />
+
+										                    <input type="hidden" name="orderType" value="" id="orderType" />
+
 															<div class="check-client-info">
 																<div class="row payment-detials">
 																	<div class="col-md-6 col-sm-6 col-xs-6 col-6"> 
@@ -458,7 +468,14 @@
 																	</div>
 																	
 																	<div class="col-md-6 col-sm-6 col-xs-6 col-6"> 
-																		<label>Product</label>
+																		<label>Add On Service Details</label>
+																	</div>
+																	<div class="col-md-6 col-sm-6 col-xs-6 col-6"> 
+																		<span id="aosdetails"></span>
+																	</div>
+
+																	<div class="col-md-6 col-sm-6 col-xs-6 col-6"> 
+																		<label>Products Details</label>
 																	</div>
 																	<div class="col-md-6 col-sm-6 col-xs-6 col-6"> 
 																		<span id="products"></span>
@@ -525,8 +542,8 @@
 																			<label for="tax"> No Tax</label><br>
 																		</div>
 																	</div>
-																	<input type="hidden" name="duestax" id="duestax" value="">
-																	<!-- <input type="hidden" name="salestax" id="salestax" value=""> -->
+																	<input type="hidden" name="duestax" id="duestax" value="{{@$company->dues_tax}}">
+																	<input type="hidden" name="salestax" id="salestax" value="{{@$company->sales_tax}}">
 																	<div class="col-md-6 col-sm-6 col-xs-6 col-6"> 
 																		<span id="taxvalspan">$0.00</span>
 																	</div>
@@ -539,7 +556,7 @@
 																	</div>
 																</div>
 															</div>
-															<button type="submit" class="btn btn-red btn-search-checkout mb-00" id="">Add To Order </button>
+															<button type="submit" class="btn btn-red btn-search-checkout mb-00" id="addToOrder" disabled>Add To Order </button>
 														</form>
 													</div>
 													
@@ -556,7 +573,7 @@
 															<div class="col-md-12 col-xs-12">
 																<div class="check-client-info-box">
 																	@php 
-																		$i=1; $subtotal =0; $tip =$discount = $taxes = $service_fee= 0; $checkout_btun_chk =  $addOnPrice =0;  $hasActivityPurchase = false; @endphp
+																		$i=1; $subtotal = $tip =$discount = $taxes = $service_fee = $checkout_btun_chk = $addOnPrice = $productPrice = 0;  $hasActivityPurchase = false; @endphp
 																	@if(!empty($cart))
 																		@foreach($cart['cart_item'] as $i=>$item)
 																			@php 
@@ -564,16 +581,17 @@
 																				$hasActivityPurchase = true;
 																				$subtotal += $item['totalprice'] ;
 																				$addOnPrice += $item['addOnServicesTotalPrice'] ;
+																				$productPrice += $item['productTotalPrices'] ;
 																				$tip += $item['tip'];
 																				$discount += $item['discount'];
 																				$taxval = $item["tax"];
 																				$participate = @$item["participate_from_checkout_regi"]['pc_name'];
 																				$taxes += $taxval;
 																				$act = BusinessServices::where('id', $item["code"])->first();
-																				$serprice =$act->price_details->find($item['priceid']);
-																				$serpricecate =$act->businessPriceDetailsAges->find(@$serprice->category_id);
+																				$serprice = $act != '' ? @$act->price_details->find(@$item['priceid']) : '';
+																				$serpricecate = $act != '' ? $act->businessPriceDetailsAges->find(@$serprice->category_id) : '';
 
-																				$total =($item['totalprice'] + $item['tip']  - $item['discount'] ) + $taxval + $item['addOnServicesTotalPrice'] ;
+																				$total =($item['totalprice'] + $item['tip']  - $item['discount'] ) + $taxval ;
 																				$iprice = number_format($total,0, '.', '');
 																			@endphp
 																			<input type="hidden" name="itemid[]" value="<?= $item["code"]; ?>" />
@@ -585,11 +603,11 @@
 																			<input type="hidden" name="itemparticipate[]" id="itemparticipate" value="" />
 																			<div class="d-flex">
 																				<div class="close-cross-icon mr-10"> 
-																					<a class="p-red-color editcartitemaks" data-toggle="modal" data-priceid="{{$item['priceid']}}" data-pageid="{{$pageid}}" data-customerId="{{$item['customerId']}}"> 
+																					<a class="p-red-color editcartitemaks" data-toggle="modal" data-priceid="{{$item['priceid']}}" data-pageid="{{$pageid}}" data-customerId="{{$item['customerId']}}" data-orderType = "{{$item['orderType']}}"> 
 																					<i class="fas fa-pencil-alt"></i></a>
 																				</div>
 																				<div class="close-cross-icon-trash">
-																					<a href="{{route('business.removeFromCartForCheckout',['priceid'=>$item['priceid'],'pageid'=>$pageid ,'customerID'=>$item['customerId'],])}}" class="p-red-color">
+																					<a href="{{route('business.removeFromCartForCheckout',['priceid'=>@$item['priceid'],'pageid'=>$pageid ,'customerID'=>$item['customerId'],'orderType' =>@$item['orderType'], ])}}" class="p-red-color">
 																					<i class="fas fa-trash-alt"></i></a>
 																				</div>
 																			</div>
@@ -600,35 +618,49 @@
 																						<label>Program Name: </label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{$act->program_name}} </span>
+																						<span>{{@$act->program_name ?? 'N/A'}} </span>
 																					</div>
 																					
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<label>Catagory: </label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{@$serpricecate->category_title}}</span>
+																						<span>{{@$serpricecate->category_title ?? 'N/A'}}</span>
 																					</div>
 																					
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<label>Price Option:</label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{@$serprice['price_title']}} - {{@$serprice['pay_session']}} Sessions</span>
+																						<span>@if(@$serprice['pay_session']) {{@$serprice['price_title']}} - {{@$serprice['pay_session']}} Sessions @else N/A @endif</span>
 																					</div>
 																					
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<label>Membership Option:</label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{@$serprice['membership_type']}}</span>
+																						<span>{{ @$serprice['membership_type'] != '' ? @$serprice['membership_type'] :  "N/A" }}</span>
 																					</div>
 
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<label>Number Of Seesion:</label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{@$item['p_session']}}</span>
+																						<span>{{ @$item['p_session'] ?? "N/A" }}</span>
+																					</div>
+
+																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
+																						<label>Add On Service Details:</label>
+																					</div>
+																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
+																						<span>{!! !empty(@$item['aos_details']) ? @$item['aos_details'] : 'N/A' !!}</span>
+																					</div>
+
+																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
+																						<label>Product Details:</label>
+																					</div>
+																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
+																						<span>{!! !empty(@$item['product_details']) ? @$item['product_details'] : 'N/A' !!}</span>
 																					</div>
 
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
@@ -651,16 +683,16 @@
 																						<label>Duration:</label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{$item['actscheduleid']}}</span>
+																						<span>{{ @$serprice['actscheduleid'] != '' ? @$serprice['actscheduleid'] :  "N/A" }} </span>
 																					</div>
 
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<label>Starts On:</label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{date('m/d/Y',strtotime($item['sesdate']))}}</span>
+																						<span>{{ $item['sesdate'] ? date('m/d/Y',strtotime($item['sesdate'])) : "N/A"}}</span>
 																					</div>
-																					@php  $expired_at = '';
+																					@php  $expired_at = 'N/A';
 																						$explodetime = explode(' ',$item['actscheduleid']);
 																						if(!empty($explodetime) && array_key_exists(1, $explodetime)){
 																							$daynum = '+'.$explodetime[0].' '.strtolower($explodetime[1]);
@@ -671,13 +703,27 @@
 																						<label>Expires On:</label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{$expired_at}}</span>
+																						<span>{{$expired_at ?? N/A}}</span>
 																					</div>
 																					
 																					<div class="col-md-12 col-sm-12 col-xs-12">
 																						<div class="black-sparetor"></div>
 																					</div>
-																					
+
+																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
+																						<label class="total0spretor">Add On Sevice Amount: </label>
+																					</div>
+																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
+																						<span class="total0spretor">${{$item['addOnServicesTotalPrice'] }}</span>
+																					</div>
+
+																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
+																						<label class="total0spretor">Product Amount: </label>
+																					</div>
+																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
+																						<span class="total0spretor">${{$item['productTotalPrices'] }}</span>
+																					</div>
+
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<label class="total0spretor">Tip Amount: </label>
 																					</div>
@@ -696,7 +742,7 @@
 																						<label>Taxes (NYC): </label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>${{$taxval}}</span>
+																						<span>${{number_format($taxval, 2, '.', '')}}</span>
 																					</div>
 																					
 																					<div class="col-md-12 col-sm-12 col-xs-12">
@@ -731,7 +777,7 @@
 															if($subtotal != $discount){
 																$service_fee = (($subtotal + $tip - $discount) * Auth::User()->recurring_fee) / 100;
 
-																$grand_total = ($subtotal + $tip + $taxes + $addOnPrice) - $discount;
+																$grand_total = ($subtotal + $tip + $taxes) - $discount;
 																$grand_total = number_format($grand_total, 2, '.', '');
 															}else{
 																$grand_total = $subtotal  = $tax_ser_fees = 0 ;
@@ -1060,7 +1106,7 @@
 																				</div>
 																			</div>	
 																			<div class='form-row row'>
-																				<div class='col-md-12 form-group d-none'>
+																				<div class='col-md-12 form-group error d-none'>
 																					<div class='alert-danger alert'>Fix the errors before you begin.</div>
 																				</div>
 																			</div>
@@ -1070,15 +1116,15 @@
 																</div>
 
 																@if (session('stripeErrorMsg'))
-																	<div class="col-md-12">
-																		<div class='form-row row'>
-																			<div class='col-md-12  error form-group'>
-																				<div class="alert-danger alert">
-																					{{ session('stripeErrorMsg') }}
-																				</div>
+																<div class="col-md-12">
+																	<div class='form-row row'>
+																		<div class='col-md-12  error form-group'>
+																			<div class="alert-danger alert">
+																				{{ session('stripeErrorMsg') }}
 																			</div>
 																		</div>
 																	</div>
+																</div>
 																@endif
 																<input type="hidden" name="grand_total" id="grand_total" value="{{$grand_total}}">
 																<input type="hidden" name="cash_change" id="cash_change" value="">
@@ -1125,12 +1171,13 @@
         <div class="modal-dialog counter-modal-size modal-70">
             <div class="modal-content">
                 <div class="modal-header p-3">
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+					<!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button> -->
+					<button type="button" onclick="saveparticipateajax(1);"  class="btn-close" aria-label="Close" id="close-modal" ></button>
 				</div>   
                 <div class="modal-body conuter-body" id="Countermodalbodyajax">
                	</div>            
                 <div class="modal-footer conuter-body">
-                    <button type="button" onclick="saveparticipateajax();" class="btn btn-red">Save</button>
+                    <button type="button" onclick="saveparticipateajax(1);" class="btn btn-red">Save</button>
                 </div>
          	</div>                                                                       
         </div>                                          
@@ -1175,16 +1222,33 @@
 	    	</div>                                                                       
 	    </div>                                          
 	</div>
+	
+	<div class="modal fade" id="addproduct" tabindex="-1" aria-modal="true" role="dialog">
+	    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-60">
+	        <div class="modal-content">
+				<div class="modal-header p-3">
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+				</div>  
+	            <div class="modal-body conuter-body" id="modalbodyProduct">
+	            </div>            
+	            <div class="modal-footer conuter-body">
+	                <button type="button" data-bs-dismiss="modal" class="btn btn-red rev-submit-btn">Save</button>
+	            </div>
+	    	</div>                                                                       
+	    </div>                                          
+	</div>
 
 <script>
-	flatpickr(".flatpickr-range", {
+    flatpickr(".flatpickr-range", {
         dateFormat: "m/d/Y",
         maxDate: "01/01/2050",
 	});
 </script>
+
 <script>
+	var business_id = '{{$companyId}}';
 	$(document).ready(function () {
-		var business_id = '{{$companyId}}';
+	
 		var url = "{{ url('/business/business_id/customers') }}";
 		url = url.replace('business_id', business_id);
 
@@ -1227,11 +1291,28 @@
 			if (!uniqueAids[id]) {
 		      	uniqueAids[id] = true; // Mark aid as unique
 		    }
-
 		    var commaSeparatedAids = Object.keys(uniqueAids).join(',');
-		    $('#addOnServicesId'+chk).val(commaSeparatedAids);
+		    var existingIds =$('#addOnServicesId'+chk).val();
+
+		    var addOnServicesArray = existingIds.split(',').filter(function(value, index, self) {
+			    return self.indexOf(value) === index;
+			});
+
+			var commaSeparatedAidsArray = commaSeparatedAids.split(',').filter(function(value, index, self) {
+			    return self.indexOf(value) === index;
+			});
+
+			var mergedArray = addOnServicesArray.concat(commaSeparatedAidsArray).filter(function(value, index, self) {
+			    return self.indexOf(value) === index;
+			});
+		
+			var mergedString = mergedArray.join(',');
+
+			mergedString = mergedString.replace(/^,/, '');
+		    $('#addOnServicesId'+chk).val(mergedString);
 		    setAddOnServiceTotal(chk);
 		});
+
     	$(document).on('click','.addonminus',function(){
     		id = $(this).attr('aid');
     		chk = $(this).attr('chk');
@@ -1246,9 +1327,64 @@
 			}
 			
 		    var commaSeparatedAids = Object.keys(uniqueAids).join(',');
+		    commaSeparatedAids = commaSeparatedAids.replace(/^,/, '');
 		    $('#addOnServicesId'+chk).val(commaSeparatedAids);
 
 		    setAddOnServiceTotal(chk);
+	    });
+
+	    var uniquePids = {};
+		$(document).on('click','.proplus',function(){
+			id = $(this).attr('aid');
+			chk = $(this).attr('chk');
+			remining = $(this).attr('remining');
+			currentValue = $('#product_'+id).val();
+			if(remining != 0 && currentValue < remining){
+				$('#product_'+id).val(parseInt($('#product_'+id).val()) + 1 );
+				if (!uniquePids[id]) {
+			      	uniquePids[id] = true; // Mark aid as unique
+			    }
+			    var commaSeparatedAids = Object.keys(uniquePids).join(',');
+			    var existingIds =$('#productIds'+chk).val();
+
+			    var productsArray = existingIds.split(',').filter(function(value, index, self) {
+				    return self.indexOf(value) === index;
+				});
+
+				var commaSeparatedAidsArray = commaSeparatedAids.split(',').filter(function(value, index, self) {
+				    return self.indexOf(value) === index;
+				});
+
+				var mergedArray = productsArray.concat(commaSeparatedAidsArray).filter(function(value, index, self) {
+				    return self.indexOf(value) === index;
+				});
+			
+				var mergedString = mergedArray.join(',');
+
+				mergedString = mergedString.replace(/^,/, '');
+			    $('#productIds'+chk).val(mergedString);
+			    setProductTotal(chk);
+			}
+		});
+
+		$(document).on('click','.prominus',function(){
+			id = $(this).attr('aid');
+			chk = $(this).attr('chk');
+			remining = $(this).attr('remining');
+			if(remining != 0){
+				if (!uniquePids[id]) {
+		      		uniquePids[id] = true; // Mark aid as unique
+			    }
+				$('#product_'+id).val(parseInt($('#product_'+id).val()) - 1 );
+				if ($('#product_'+id).val() <= 0) {
+					$('#product_'+id).val(0);
+			    	delete uniquePids[id];
+				}
+			    var commaSeparatedAids = Object.keys(uniquePids).join(',');
+			    commaSeparatedAids = commaSeparatedAids.replace(/^,/, '');
+			    $('#productIds'+chk).val(commaSeparatedAids);
+		    	setProductTotal(chk);
+			}
 	    });
 
 	    $('#adultcnt').prop('readonly', true);
@@ -1284,10 +1420,52 @@
 			}
 	    });
 	});
+	
+	function openProductModal(cid,ids,chk,productQtys,productSize,productColor,productTypes) {
+		$('#modalbodyProduct').html('');
+		$.ajax({
+			url: '{{route("business.open-product-modal")}}',
+			type: 'get',
+			data:  {
+				'ids':ids,
+				'cid':cid,
+				'chk':chk,
+				'productQtys':productQtys,
+				'productSize':productSize,
+				'productColor':productColor,
+				'productTypes':productTypes,
+			},
+			success:function(data){
+				$('#modalbodyProduct').html(data);
+				$('#addproduct').modal('show');
+			}
+		});
+	}
 
-	function  setAddOnServiceTotal(chk) {
+	function getProduct(pid,cid,chk){
+		let categoryId = $('#category').val();
+		$.ajax({
+			url: '{{route("business.order-product-details")}}',
+			type: 'get',
+			data:  {
+				'pid':pid,
+				'cid':cid,
+				'chk':chk,
+				'categoryId':categoryId,
+			},
+			success:function(data){
+				$('#productDetails').append(data);
+			},
+		});
+	}
+
+	function getList(id,cid,chk) {
+		getProduct(id,cid,chk)
+	}
+	
+	function setAddOnServiceTotal(chk) {
 		var totalQty =  0;
-		var sQty = '';
+		var sQty = name = '';
 		var addOnServicesId = $('#addOnServicesId'+chk).val();
 		var idArray = addOnServicesId.split(','); 
 		for (var i = 0; i < idArray.length; i++) {
@@ -1295,20 +1473,95 @@
 		    qty  = parseFloat($('#add-one' + idArray[i]).val()) || 0;
 		    price = parseFloat($('#add-one' + idArray[i]).attr('apirce')) || 0;
 			totalQty += qty * price;
+			name +=  $('#add-one' + idArray[i]).attr('sname') + ' X '+ qty + ' = $' +  (qty * price) + ' <br>';
 		}
 		if (sQty.endsWith(",")) {
 		  	sQty = sQty.slice(0, -1);
 		}
 		sQty = (addOnServicesId != '') ? sQty : '';
 		$('#addOnServicesQty'+chk).val(sQty);
-		$('#addOnServicesTotalPrice'+chk).val(totalQty);		
-		gettotal('','');
+		$('#addOnServicesTotalPrice'+chk).val(totalQty);
+		$('#aosdetails'+chk).html(name);
+		$('#aos_details'+chk).val(name);
+		if(chk == 'ajax'){
+			saveparticipateajax(1);
+		}else{
+			gettotal('','');
+		}
 	}
+
+	function setProductTotal(chk) {
+		var totalQty =  0;
+		var sQty = sType = name = size = color = '';
+		var productIds = $('#productIds'+chk).val();
+		var idArray = productIds.split(','); 
+		if(productIds){
+			for (var i = 0; i < idArray.length; i++) {
+				var currentProductId = idArray[i];
+				if ($('#product_' + idArray[i]).val() !== undefined) {
+		            sQty += $('#product_' + idArray[i]).val() + ',';
+		            qty  = parseFloat($('#product_' + idArray[i]).val()) || 0;
+		            price = parseFloat($('#product_' + idArray[i]).attr('apirce')) || 0;
+					totalQty += qty * price;
+					name +=  $('#product_' + idArray[i]).attr('pname') + ' X '+ qty + ' = $' +  (qty * price)+' <br>';
+		        }
+		        
+		        if ($('#product_' + idArray[i]).attr('ptype') !== undefined) {
+		            sType += $('#product_' + idArray[i]).attr('ptype') + ',';
+		            if($('#product_' + idArray[i]).attr('ptype') == 'rent' ){
+		            	name += ' ( Rental Duration is ' + $('#rental_duration'+idArray[i]).val() +' )<br>';
+		            }
+		        }
+
+		        if ($('#size' + idArray[i]).val() !== undefined) {
+		            size += $('#size' + idArray[i]).val() + ',';
+		        }
+		        
+		        if ($('#color' + idArray[i]).val() !== undefined) {
+		            color += $('#color' + idArray[i]).val() + ',';
+		        } 
+		        if ($('#product_' + idArray[i]).val() == undefined && $('#product_' + idArray[i]).attr('ptype') == undefined && $('#size' + idArray[i]).val() == undefined && $('#color' + idArray[i]).val()  == undefined) {
+		            productIds = productIds.replace(new RegExp('\\b' + currentProductId + '\\b'), '').replace(/^,|,$/g, '');
+		        }
+			}
+			$('#productIds'+chk).val(productIds);
+			if (sQty.endsWith(",")) {
+			  	sQty = sQty.slice(0, -1);
+			}
+
+			if (size.endsWith(",")) {
+			  	size = size.slice(0, -1);
+			}
+
+			if (color.endsWith(",")) {
+			  	color = color.slice(0, -1);
+			}
+
+			if (sType.endsWith(",")) {
+			  	sType = sType.slice(0, -1);
+			}
+			sQty = (productIds != '') ? sQty : '';
+		}
+		
+		$('#productQtys'+chk).val(sQty);
+		$('#productSize'+chk).val(size);
+		$('#productColor'+chk).val(color);
+		$('#products'+chk).html(name);
+		$('#product_details'+chk).val(name);
+		$('#productTypes'+chk).val(sType);
+		$('#productTotalPrices'+chk).val(totalQty);		
+		if(chk == 'ajax'){
+			saveparticipateajax(1);
+		}else{
+			gettotal('','');
+		}
+	}
+
 </script>
 
 <script type="text/javascript">
 	$(function() {
-		stripe = Stripe('{{ env("STRIPE_PKEY") }}');	
+		stripe = Stripe('{{env("STRIPE_PKEY")}}');	
 		const client_secret = '{{$intent ? $intent->client_secret : null}}';
 		const options = {
 		  clientSecret: client_secret,
@@ -1334,7 +1587,7 @@
 			var cardinfoRadio = $('input[name=cardinfo]:checked', '#payment-form').val();
 
 			if(cash_amt <= 0 && cc_amt <=0 && cc_new_card_amt <=0 && check_amt <=0 && cardinfoRadio!= 'comp'){
-				$('.error').removeClass('hide').find('.alert').text('Choose payment method first');
+				$('.error').removeClass('d-none').find('.alert').text('Choose correct payment method first');
 				$('#checkout-button').html('Complete Payment').prop('disabled', false);
 				return false;
 			}
@@ -1389,6 +1642,7 @@
 	    });
 	});
 </script>
+
 <script>
 	$(document).ready(function () {
 
@@ -1431,6 +1685,7 @@
 		var priceid = $(this).attr('data-priceid');
 		var pageid = $(this).attr('data-pageid');
 		var customerId = $(this).attr('data-customerId');
+		var orderType = $(this).attr('data-orderType');
 		$.ajax({
 			url: '{{route("business.editcartmodel")}}',
 			type: 'post',
@@ -1439,6 +1694,7 @@
 				'pageid':pageid,
 				'customerId':customerId,
 				'companyId': '{{$companyId}}',
+				'orderType': orderType,
 				_token: '{{csrf_token()}}', 
 			},
 			success:function(response){
@@ -1468,7 +1724,11 @@
 			infcnt = 0;
 		}
 
-		if(parseInt(aducnt) + parseInt(childcnt) + parseInt(infcnt) > 1){
+		if(parseInt(aducnt) + parseInt(childcnt) + parseInt(infcnt) == 0){
+			$('#addToOrder').prop('disabled', true);
+			alert("Please select participate.");
+		}else if(parseInt(aducnt) + parseInt(childcnt) + parseInt(infcnt) > 1){
+			$('#addToOrder').prop('disabled', true);
 			alert("You can select only 1 participate.");
 		}else{
 
@@ -1486,7 +1746,7 @@
 			var pay_session = $('#session_val').val();
 		
 			if(typeof(aduprice) != "undefined" && aduprice != null && aduprice != ''){
-				totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
+				totalpriceadult = parseInt(aducnt)*parseFloat(aduprice);
 				if(aducnt != 0){
 					adult = '<span>Adults x '+aducnt+'</span><br>';
 				}
@@ -1494,14 +1754,14 @@
 			}
 
 			if(typeof(childprice) != "undefined" && childprice != null && childprice != ''){
-				totalpricechild = parseInt(childcnt)*parseInt(childprice);
+				totalpricechild = parseInt(childcnt)*parseFloat(childprice);
 				if(childcnt != 0){
 					child = '<span>Kids x  '+childcnt+'</span><br>';
 				}
 				$('#childpricequantity').val(childcnt);
 			}
 			if(typeof(infantprice) != "undefined" && infantprice != null && infantprice != ''){
-				totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
+				totalpriceinfant = parseInt(infcnt)*parseFloat(infantprice);
 				if(infcnt != 0){
 					infant = '<span>Infants x  '+infcnt+'</span>';
 				}
@@ -1512,7 +1772,7 @@
 			$('#cartinfantprice').val(infantprice);
 			$('#cartchildprice').val(childprice);
 
-			totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
+			totalprice = parseFloat(totalpriceadult)+parseFloat(totalpricechild)+parseFloat(totalpriceinfant);
 		
 			$('#price').val(totalprice);
 			$('#p_session').val(pay_session);
@@ -1523,88 +1783,8 @@
 			gettotal('','')
 			$("#addpartcipate").modal('hide');
 			$("#addpartcipate").removeClass('show');
+			$('#addToOrder').prop('disabled', false);
 		}
-	}
-
-	function saveparticipateajax (){
-		var aducnt = $('#adultcntajax').val();
-		var childcnt = $('#childcntajax').val();
-		var infcnt = $('#infantcntajax').val();
-		if(typeof(aducnt) == 'undefined'){
-			aducnt = 0;
-		}
-		if(typeof(childcnt) == 'undefined'){
-			childcnt = 0;
-		}
-		if(typeof(infcnt) == 'undefined'){
-			infcnt = 0;
-		}
-
-		if(parseInt(aducnt) + parseInt(childcnt) + parseInt(infcnt) > 1){
-			alert("You can select only 1 participate.");
-		}else{
-			var totalprice = 0;
-			var totalpriceadult = 0;
-			var totalpricechild = 0;
-			var totalpriceinfant = 0; 
-			var aduprice = $('#adultpriceajax').val();
-			var childprice = $('#childpriceajax').val();
-			var infantprice = $('#infantpriceajax').val();
-		
-			if(typeof(aduprice) != "undefined" && aduprice != null && aduprice != ''){
-				totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
-			}
-
-			if(typeof(childprice) != "undefined" && childprice != null && childprice != ''){
-				totalpricechild = parseInt(childcnt)*parseInt(childprice);
-			}
-			if(typeof(infantprice) != "undefined" && infantprice != null && infantprice != ''){
-				totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
-			}
-			
-			$('#adupricequantityajax').val(aducnt);
-			$('#childpricequantityajax').val(childcnt);
-			$('#infantpricequantityajax').val(infcnt);
-			$('#cartadupriceajax').val(aduprice);
-			$('#cartinfantpriceajax').val(infantprice);
-			$('#cartchildpriceajax').val(childprice);
-
-			totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
-		
-			$('#priceajax').val(totalprice);
-			$('#p_sessionajax').val($('#session_valajax').val());
-			$('#pricetotalajax').val(totalprice);
-			$('.participateclosebtnajax').click();
-			get_total_ajax();
-			$("#addpartcipateajax").modal('hide');
-			$("#addpartcipateajax").removeClass('show');
-			$("#editcartitempp").modal('show');
-		}
-	}
-
-	function get_total_ajax() {
-		tax =salestax= duestax= 0;
-		//salestax = $('#salestaxajax').val();
-		duestax = $('#duestaxajax').val();
-		/*if(salestax == ''){
-			salestax = 0;
-		}*/
-		if(duestax == ''){
-			duestax = 0;
-		}
-		var price = parseInt($('#priceajax').val());
-		if($("#taxajax").is(":checked")){
- 			tax = 0;
- 			$('#value_taxajax').val(0);
- 		}else{
- 			if(duestax != 0){
-	 			tax += (price*duestax)/100;
-	 		}
-	 		/*if(salestax != 0){
-	 			tax += (price*salestax)/100;
-	 		}*/
-	 		$('#value_taxajax').val(tax);
- 		}
 	}
 
 	function changevalue(){
@@ -1623,71 +1803,6 @@
 
 	function  changeduration() {
 		$('#actscheduleidajax').val($('#duration_intajax').val() +' '+ $('#duration_dropdownajax').val());
-	}
-
-	function loaddropdownajax(chk,val,id){
-
-		var selectedText = val.options[val.selectedIndex].innerHTML;
-		if(chk == 'program'){
-			$('#pidajax').val(id);
-			$('#category_listajax').html('');
-			$('#priceopt_listajax').html('');
-			$('#membership_opt_listajax').html('');
-			$('.addondataajax').html('');
-		}
-		if(chk == 'category'){
-			$('#categoryidajax').val(id);
-			$('#priceopt_listajax').html('');
-			$('#membership_opt_listajax').html('');
-		}
-		if(chk == 'priceopt'){
-			$('#priceidajax').val(id);
-			$('#membership_opt_listajax').html('');
-		}
-		if(chk == 'duration'){
-			$('#actscheduleidajax').val($('#duration_intajax').val() +' '+ id);
-		}
-
-		$.ajax({
-			url: '{{route("getdropdowndata")}}',
-			type: 'get',
-			data:  {
-				'sid':id,
-				'chk':chk,
-				'type':'ajax',
-				'page':'checkout',
-				'user_type':'{{$user_type}}',
-			},
-			success:function(data){
-
-				if(chk == 'program'){
-					$('#category_listajax').html(data);
-				}
-				if(chk == 'category'){
-					var data1 = data.split('~~');
-					$('#priceopt_listajax').html(data1[0]);
-
-					var splittax =  data1[1].split('^^');
-					$('#duestaxajax').val(splittax[0]);
-
-					var splitforaddon =  splittax[1].split('^!^');
-					$('#salestaxajax').val(splitforaddon[0]);
-					$('.addondataajax').html(splitforaddon[1]);
-
-				}
-				if(chk == 'priceopt'){
-					$('#pricedivajax').html('');
-					var data1 = data.split('~~');
-					$('#membership_opt_listajax').html(data1[0]);
-					var part = data1[1].split('^^');
-					$('#pricedivajax').html(part[0]);
-					var second = part[1].split('!!');
-					$('#duration_intajax').val(second[0]);
-					$('#duration_dropdownajax').val(second[1]);
-					$('#actscheduleidajax').val(second[0]+ ' ' + second[1]);
-				}
-			}
-		});
 	}
 
 	function loaddropdown(chk,val,id){
@@ -1751,9 +1866,9 @@
 					$('#priceopt_list').html(data1[0]);
 
 					var splittax =  data1[1].split('^^');
-					$('#duestax').val(splittax[0]);
+					//$('#duestax').val(splittax[0]);
 					var splitforaddon =  splittax[1].split('^!^');
-					$('#salestax').val(splitforaddon[0]);
+					//$('#salestax').val(splitforaddon[0]);
 					$('.addondata').html(splitforaddon[1]);
 
 				}
@@ -1786,20 +1901,17 @@
 	}
 
 	function gettotal(chk,dropval){
-		var dis_val = 0;
-		var tip_val = 0;
-		var sub_tot = 0;
-		var sub_tot_tip = 0;
-		var sub_tot_dis = tax =salestax= duestax= 0;
+		var dis_val = tip_val = sub_tot = sub_tot_tip = sub_tot_dis = tax =salestax= duestax= 0;
 
-		var price = parseInt($('#price').val()) || 0; 
+		var price = parseFloat($('#price').val()) || 0; 
+		var productTotalPrices = parseFloat($('#productTotalPrices').val()) || 0; 
 		var dis = $('#dis_amt_drop').val() || '';
 	 	var tip = $('#tip_amt_drop').val() || '';
 	 	
 	 	dis_val  = parseFloat($('#dis_amt').val()) || 0; 
 		tip_val = parseFloat($('#tip_amt').val()) || 0;
 		duestax =  parseFloat($('#duestax').val()) || 0;
-		//salestax = parseFloat($('#salestax').val()) || 0;
+		salestax = parseFloat($('#salestax').val()) || 0;
 
 		if(tip != undefined){
 	 		if($('#tip_amt').val() != ''){
@@ -1816,48 +1928,90 @@
 		 	}
 	 	}
 
-	 	if(dis != undefined){
-	 		if($('#dis_amt').val() != ''){
-	 			if(dis == '' || dis == '%'){
-	 				sub_tot_dis = (price * dis_val) /100;
-	 				$('#dis_amt_span').html($('#dis_amt').val() + ' %');
-		 		}else{
-		 			sub_tot_dis = dis_val;
-					$('#dis_amt_span').html('$ ' + $('#dis_amt').val());
-		 		}
-		 		$('#dis_amt_val').val(sub_tot_dis);
-	 		}else{
-	 			$('#dis_amt_val').val(0);
-	 		}
-	 	}
-	 	
 	 	if($('#price').val() != ''){
+
+	 		if(dis != undefined){
+		 		if($('#dis_amt').val() != ''){
+		 			if(dis == '' || dis == '%'){
+		 				sub_tot_dis = (price * dis_val) /100;
+		 				alert(sub_tot_dis);
+		 				$('#dis_amt_span').html($('#dis_amt').val() + ' %');
+			 		}else{
+			 			sub_tot_dis = dis_val;
+						$('#dis_amt_span').html('$ ' + $('#dis_amt').val());
+			 		}
+			 		$('#dis_amt_val').val(sub_tot_dis);
+		 		}else{
+		 			$('#dis_amt_val').val(0);
+		 		}
+		 	}
+
 	 		if($("#tax").is(":checked")){
 	 			tax = 0;
 	 			$('#value_tax').val(0);
+	 			$('#value_tax_activity').val(0);
 	 		}else{
 	 			if(duestax != 0){
 		 			tax += (price*duestax)/100;
+		 			$('#value_tax_activity').val(tax.toFixed(2));
 		 		}
-		 		/*if(salestax != 0){
-		 			tax += (price*salestax)/100;
-		 		}*/
-		 		$('#value_tax').val(tax);
+		 		if(salestax != 0){
+		 			tax += (productTotalPrices*salestax)/100;
+		 		}
+
+		 		$('#value_tax').val(tax.toFixed(2));
 	 		}
 	 		
-	 		$('#taxvalspan').html('$'+tax);
+	 		$('#taxvalspan').html('$'+tax.toFixed(2));
+
+	 		var addOnServicesTotalPrice = parseFloat($('#addOnServicesTotalPrice').val()) || 0;
+	 		var productTotalPrice = parseFloat($('#productTotalPrices').val()) || 0;
+	 		price = price + addOnServicesTotalPrice + productTotalPrice;
 	 		var tot = price + sub_tot_tip - sub_tot_dis;
 	 		if(dropval !=''){
 	 			tot = dropval * tot;
 	 		}
 	 		
 	 		tot = tax + tot ;
+	 		tot = tot.toFixed(2);
+	 		
+	 		$('#total_amount').html('$'+ tot);
+	 		$('#pricetotal').val(price.toFixed(2));
+	 		$('#orderType').val('membership');
+	 	}else{
+	 		tax = 0;
+	 		var productTotalPrice = parseFloat($('#productTotalPrices').val()) || 0;
+	 		if(salestax != 0){
+	 			tax += (productTotalPrices*salestax)/100;
+	 		}
 
-	 		var addOnServicesTotalPrice = parseFloat($('#addOnServicesTotalPrice').val()) || 0;
-	 		tot = (addOnServicesTotalPrice != '') ? ( tot + addOnServicesTotalPrice) : tot; 
+	 		if(dis != undefined){
+		 		if($('#dis_amt').val() != ''){
+		 			if(dis == '' || dis == '%'){
+		 				sub_tot_dis = (productTotalPrice * dis_val) /100;
+		 				$('#dis_amt_span').html($('#dis_amt').val() + ' %');
+			 		}else{
+			 			sub_tot_dis = dis_val;
+						$('#dis_amt_span').html('$ ' + $('#dis_amt').val());
+			 		}
+			 		$('#dis_amt_val').val(sub_tot_dis);
+		 		}else{
+		 			$('#dis_amt_val').val(0);
+		 		}
+		 	}
+		 	tax = parseFloat(tax.toFixed(2));
+
+	 		var tot = productTotalPrice + tax - parseFloat(sub_tot_dis);
 	 		tot = tot.toFixed(2);
 	 		$('#total_amount').html('$'+ tot);
-	 		$('#pricetotal').val(price);
+	 		$('#pricetotal').val(productTotalPrice);
+	 		
+	 		$('#value_tax').val(tax);
+			$('#taxvalspan').html('$'+tax);
+	 		if(tot != 0){
+				$('#addToOrder').prop('disabled', false);
+	 		}
+	 		$('#orderType').val('product');
 	 	}
 
 	 	if(chk == 'qty'){
@@ -1872,12 +2026,12 @@
 		var sub_tot = 0;
 		var sub_tot_tip = 0;
 		var sub_tot_dis = tax = 0;
-		var price = parseInt($('#priceajax').val());
+		var price = parseFloat($('#priceajax').val());
 		var dis = $('#dis_amt_dropajax').val();
 	 	var tip = $('#tip_amt_dropajax').val();
 	 	
-	 	dis_val  = parseInt($('#dis_amtajax').val());
-		tip_val =parseInt($('#tip_amtajax').val());
+	 	dis_val  = parseFloat($('#dis_amtajax').val());
+		tip_val =parseFloat($('#tip_amtajax').val());
 		if(tip != undefined){
 	 		if($('#tip_amtajax').val() != ''){
 		 		if(tip == '' || tip == '%'){
@@ -2036,58 +2190,6 @@
 </script>
 
 <script type="text/javascript">
-    $("#taxajax").click(function () {
-        get_total_ajax();
-    });
-    document.getElementById("priceajax").onkeyup = function() {
-        var price = parseFloat($(this).val());
-        $("#pricetotalajax").val(price);
-        var chkadu = chkchild = chkinfant = 0;
-        var qty = uniqueprice = 0;
-        if($("#adupricequantityajax").val() != "" && $("#adupricequantityajax").val() != 0 && $("#adultpriceajax").val() != ""){
-            qty += parseInt($("#adupricequantityajax").val());
-            chkadu = 1;
-        }if($("#childpricequantityajax").val() != "" && $("#childpricequantityajax").val() != 0 && $("#childpriceajax").val() != ""){
-            qty += parseInt($("#childpricequantityajax").val());
-            chkchild = 1;
-        }if($("#infantpricequantityajax").val() != "" && $("#infantpricequantityajax").val() != 0 && $("#infantprice").val() != ""){
-               qty += parseInt($("#infantpricequantityajax").val());
-               chkinfant = 1;
-        }
-        if(qty != 0 && price != 0 && price != "undefined"){
-            uniqueprice = parseFloat(price/parseFloat(qty));
-        }
-        if(chkadu == 1  && $("#adultpriceajax").val() != ""){
-            $("#cartadupriceajax").val(uniqueprice);
-        }
-        if(chkchild == 1 && $("#childpriceajax").val() != ""){
-            $("#cartchildpriceajax").val(uniqueprice);
-        }
-        if(chkinfant == 1 && $("#infantpriceajax").val() != ""){
-            $("#cartinfantpriceajax").val(uniqueprice);
-        }
-        get_total_ajax();
-    };
-</script>
-
-
-<script type="text/javascript">
-    $(".dobdate").keyup(function(){
-      if ($(this).val().length == 2){
-          $(this).val($(this).val() + "/");
-      }else if ($(this).val().length == 5){
-          $(this).val($(this).val() + "/");
-      }
-  	});
-
-    $(".birthday").keyup(function(){
-        if ($(this).val().length == 2){
-            $(this).val($(this).val() + "/");
-        }else if ($(this).val().length == 5){
-            $(this).val($(this).val() + "/");
-        }
-    });
-
     function sendemail(){
         $('.reviewerro').html('');
         var email = $('#receipt_email').val();
@@ -2124,20 +2226,6 @@
             });
         }
     }
-
-    function getAge() {
-        var dateString = document.getElementById("dob").value;
-        var today = new Date();
-        var birthDate = new Date(dateString);
-        var age = today.getFullYear() - birthDate.getFullYear();
-        if(age < 13)
-        {
-            var agechk = '0';
-        } else {
-           var agechk = '1';
-        }
-        return agechk;
-    }
 </script>
 
 <script type="text/javascript">
@@ -2149,6 +2237,99 @@
             $("#option-box").hide();
         }
     });
+</script>
+
+<script type="text/javascript">
+
+	function saveparticipateajax(chk){
+		var aducnt = $('#adultcntajax').val();
+		var childcnt = $('#childcntajax').val();
+		var infcnt = $('#infantcntajax').val();
+		if(typeof(aducnt) == 'undefined'){
+			aducnt = 0;
+		}
+		if(typeof(childcnt) == 'undefined'){
+			childcnt = 0;
+		}
+		if(typeof(infcnt) == 'undefined'){
+			infcnt = 0;
+		}
+
+		if(parseInt(aducnt) + parseInt(childcnt) + parseInt(infcnt) > 1){
+			alert("You can select only 1 participate.");
+		}else{
+			var totalprice = 0;
+			var totalpriceadult = 0;
+			var totalpricechild = 0;
+			var totalpriceinfant = 0; 
+			var aduprice = $('#adultpriceajax').val();
+			var childprice = $('#childpriceajax').val();
+			var infantprice = $('#infantpriceajax').val();
+		
+			if(typeof(aduprice) != "undefined" && aduprice != null && aduprice != ''){
+				totalpriceadult = parseInt(aducnt)*parseFloat(aduprice);
+			}
+
+			if(typeof(childprice) != "undefined" && childprice != null && childprice != ''){
+				totalpricechild = parseInt(childcnt)*parseFloat(childprice);
+			}
+			if(typeof(infantprice) != "undefined" && infantprice != null && infantprice != ''){
+				totalpriceinfant = parseInt(infcnt)*parseFloat(infantprice);
+			}
+			
+			$('#adupricequantityajax').val(aducnt);
+			$('#childpricequantityajax').val(childcnt);
+			$('#infantpricequantityajax').val(infcnt);
+			$('#cartadupriceajax').val(aduprice);
+			$('#cartinfantpriceajax').val(infantprice);
+			$('#cartchildpriceajax').val(childprice);
+
+			totalprice = parseFloat(totalpriceadult)+parseFloat(totalpricechild)+parseFloat(totalpriceinfant);
+			
+			var addOnServicesTotalPrice = parseFloat($('#addOnServicesTotalPriceajax').val()) || 0;
+	 		var productTotalPrice = parseFloat($('#productTotalPricesajax').val()) || 0;
+	 		totalprice = totalprice + addOnServicesTotalPrice + productTotalPrice;
+
+			$('#priceajax').val(totalprice);
+			$('#p_sessionajax').val($('#session_valajax').val());
+			$('#pricetotalajax').val(totalprice);
+			$('.participateclosebtnajax').click();
+			get_total_ajax(chk);
+			$("#addpartcipateajax").modal('hide');
+			$("#addpartcipateajax").removeClass('show');
+			$("#editcartitempp").modal('show');
+		}
+	}
+
+	function get_total_ajax(chk) {
+		tax = salestax = duestax= 0;
+		var salestax = parseFloat($('#salestaxajax').val()) || 0;
+    	var duestax = parseFloat($('#duestaxajax').val()) || 0;
+		var price = parseFloat($('#priceajax').val())|| 0;
+		var productTotalPrices = parseFloat($('#productTotalPricesajax').val())|| 0;
+		var actTax = parseFloat($('#value_tax_activityajax').val()) || 0;
+
+		if($("#taxajax").is(":checked")){
+ 			tax = 0;
+ 			$('#value_taxajax').val(0);
+ 		}else{
+ 			if(chk == 1){
+ 				tax += actTax;
+ 				if(salestax != 0){
+		 			tax += (productTotalPrices*salestax)/100;
+		 		}
+ 			}else{
+ 				if(duestax != 0){
+		 			tax += (price*duestax)/100;
+		 		}
+		 		if(salestax != 0){
+		 			tax += (productTotalPrices*salestax)/100;
+		 		}
+ 			}
+
+	 		$('#value_taxajax').val(tax.toFixed(2));
+ 		}
+	}
 </script>
 
 @include('layouts.business.footer')
