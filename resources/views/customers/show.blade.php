@@ -269,7 +269,7 @@
 																	<div class="accordion-item shadow">
 																		<h2 class="accordion-header" id="accordionnesting2Example1">
 																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting2Examplecollapse1" aria-expanded="false" aria-controls="accor_nesting2Examplecollapse1">
-																				Account Details
+																				Membership Details (Show Total Memberships)
 																			</button>
 																		</h2>
 																		<div id="accor_nesting2Examplecollapse1" class="accordion-collapse collapse " aria-labelledby="accordionnesting2Example1" data-bs-parent="#accordionnesting2">
@@ -1018,7 +1018,7 @@
 																	<div class="accordion-item shadow">
 																		<h2 class="accordion-header" id="accordionnesting10Example2">
 																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting10Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting10Examplecollapse2">
-																				Customer Notes & Alerts
+																				Customer Notes & Alerts (Total Notes)
 																			</button>
 																		</h2>
 																		<div id="accor_nesting10Examplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnesting10Example2" data-bs-parent="#accordionnesting10">
@@ -1044,7 +1044,7 @@
 																	<div class="accordion-item shadow">
 																		<h2 class="accordion-header" id="accordionnesting11Example2">
 																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting11Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting11Examplecollapse2">
-																				Agreed on Terms, Contracts, & Liability Waiver
+																				Documents & Contracts
 																			</button>
 																		</h2>
 																		<div id="accor_nesting11Examplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnesting11Example2" data-bs-parent="#accordionnesting11">

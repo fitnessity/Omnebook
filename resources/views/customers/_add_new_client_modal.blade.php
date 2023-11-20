@@ -33,7 +33,7 @@
 									<!-- <input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off"> -->
 									<input type="email" name="email" id="email" class="myemail" size="30" placeholder="Email-Address" maxlength="80" autocomplete="off">
 									<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
-									<input type="text" class="form-control border-0 dash-filter-picker flatpiker-with-border flatpickr-range-birthdate" id="dob" name="dob" placeholder="Birthday">
+									<input type="text" class="form-control border-0 dash-filter-picker flatpiker-with-border add-client-birthdate" id="dob" name="dob" placeholder="Birthday">
 
 									<div class="form-group check-box-info">
 										<input class="check-box-primary-account" type="checkbox" id="primaryAccountHolder" name="primaryAccountHolder" value="1">
@@ -385,7 +385,7 @@
 
 <script>
 
-	flatpickr('.flatpickr-range-birthdate',{
+	flatpickr('.add-client-birthdate',{
 		altInput: true,
 		altFormat: "m/d/Y",
 		dateFormat: "Y-m-d",
