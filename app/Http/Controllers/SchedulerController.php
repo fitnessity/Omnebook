@@ -192,7 +192,7 @@ class SchedulerController extends Controller
           $odetail = explode("," , $request->orderdetalidary);
           foreach($odetail as $od){
                $book_data = UserBookingDetail::getbyid($od);
-               $cid = $book_data->business_services->company_information->id;
+               $cid = @$book_data->business_id;
                $newary = array($cid=>array("oid"=>$od,"cid"=> $cid,"booking_id"=>$request->booking_id));
                if(in_array( $cid ,array_keys($compare_chk))){
                     foreach($compare_chk  as $chk){
