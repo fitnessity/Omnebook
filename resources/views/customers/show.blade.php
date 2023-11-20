@@ -800,7 +800,7 @@
 																									</tr>
 																								</thead>
 																								<tbody>
-																									@foreach ($purchase_history as $history) 
+																									@foreach($purchase_history as $history) 
 																										@if($history->item_description(request()->business_id)['itemDescription'] != '')
 																										<tr>
 																											<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
@@ -828,7 +828,6 @@
 																											</td>
 																										</tr>
 																										@endif
-
 																									@endforeach
 																								</tbody>
 																							</table>
