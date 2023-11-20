@@ -153,14 +153,16 @@
                                                             General Info
                                                         </a>
                                                     </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" data-bs-toggle="tab" href="#addproduct-inventorycount" role="tab">
-                                                            Inventory Count
-                                                        </a>
-                                                    </li>
+                                                    
         											<li class="nav-item">
                                                         <a class="nav-link" data-bs-toggle="tab" href="#addproduct-details" role="tab">
                                                             Product Details
+                                                        </a>
+                                                    </li>
+
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" data-bs-toggle="tab" href="#addproduct-inventorycount" role="tab">
+                                                            Inventory Count
                                                         </a>
                                                     </li>
                                                 </ul>
