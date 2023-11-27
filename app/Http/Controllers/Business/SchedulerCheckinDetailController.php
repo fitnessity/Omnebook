@@ -54,10 +54,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         if($request->chk === '0'){
             session()->flash('error', 'Check Out successful');
         }
-        if($request->msg == '0'){
-            session()->flash('error', 'There is no membership available for this customer');
-        }
-
+    
         if($request->chkInMsg == '2'){
             session()->flash('error', "There is no spot available so you can't checkIn in this class.");
         }
@@ -99,6 +96,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         $customer = $company->customers()->findOrFail($request->customer_id);
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
         $bookingDetail = UserBookingDetail::where(['user_id' =>$request->customer_id])->whereDate('expired_at','>=',date('Y-m-d'))->get();
+
         
         $status = BookingCheckinDetails::create([
             'customer_id' => $customer->id,
@@ -109,7 +107,6 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         ]);
 
         return 1; 
-        
     }
 
     /**

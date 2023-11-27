@@ -255,5 +255,9 @@ class DesignController extends Controller {
 	public function subscriptions_payments(Request $request){
         return view('design.subscriptions_payments');
     }
+	
+	public function documents_contracts(Request $request){
+        return view('design.documents_contracts');
+    }
 }
 

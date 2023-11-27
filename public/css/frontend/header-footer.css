@@ -1,12 +1,17 @@
 header {
+  position: fixed !important;
+}
+header {
     float: left;
     width: 100%;
-    background: rgba(24, 24, 24, .9);
+    background: #ffffff; 
     padding: 10px 0!important;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 9;
+	border-bottom: 1px solid #e5e5e5;
+	box-shadow: 0 0 6px 3px rgba(0, 0, 0, 0.12);
 }
 .menu_nav {
     display: flex;
@@ -50,7 +55,8 @@ header .logo img {
 	padding: 8px 40px;
 	width: 100%;
 	color: #2e2e2e;
-	border-radius: 5px;
+	border-radius: 10px;
+	border: 1px solid #000;
 }
 #suggesstion-box{ 
 	background-color: #ffffff; 
@@ -94,18 +100,20 @@ header .header-right {
 	margin-right: 15px;
 	font-size: 14px;
 	padding: 9px 12px;
+	color: #000 !important;
 }
+
 .btn-list-business{
-	border: 1px solid #fff !important;
-	color: #fff;
+	border: 1px solid #000 !important;
+	color: #000;
 	text-transform: uppercase;
-	border-radius: 0px !important;
+	border-radius: 10px !important;
 	background-color: transparent;
 	padding: 9px 12px;
 }
 a.btn-style-two {
 	color: #fff;
-	border-radius: 0px !important;
+	border-radius: 10px !important;
 	background-color: transparent;
 	padding: 9px 12px;
 	background-color: #f91942 !important;
@@ -345,14 +353,16 @@ button.header-right-menu {
     background: #cb3e2d
 }
 .btn-list-business:hover {
-  color: #f53b49;
-  background: none;
-  border: 1px solid #f53b49 !important;
+  color: #fff;
+  background: #000;
+  border: 1px solid #000 !important;
 }
 .btn-style-two:hover {
   color: #fff;
 }
-
+.userblock .login_links a {
+  color: #000 !important;
+}
 /************* footer *************/
 
 .footer-logo {
@@ -395,7 +405,7 @@ footer .footer-logo button {
     width: 100%;
 }
 footer {
-    background: #151820;
+    background: #000; 
     float: left;
     width: 100%;
     padding: 50px 50px 50px;

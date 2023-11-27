@@ -40,4 +40,19 @@ class FeaturesController extends Controller
 
         return redirect()->route('features.index');   
     }
+
+    public function update($id, Request $request)
+    {
+        $status = $this->features->update($id,[
+            'tooltip_text' => $request->tooltip_text,
+        ]);
+
+        if($status)
+        {
+            session(['key' => 'success']);
+            session(['msg' => 'Features Updated Succesfully !']);    
+        }
+
+        return redirect()->route('features.index');
+    }
 }
