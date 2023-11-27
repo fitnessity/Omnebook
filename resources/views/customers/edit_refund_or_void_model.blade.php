@@ -273,7 +273,7 @@
 				</div>
 				<div class="refund-details"> 
 					<label>Total Amount Paid: </label>
-					<span> ${{$booking_detail->booking->amount}} (Original payment method: {{$booking_detail->booking->getstripecard()}})  </span>
+					<span> ${{$booking_detail->booking->amount}} (Original payment method: {{$booking_detail->booking->getPaymentDetail()}})  </span>
 				</div>
 				<div class="refund-details refund-date"> 
 					<label>Refund Issue Date: </label>
@@ -287,8 +287,8 @@
 				<div class="refund-details refund-method"> 
 					<label>Refund Method: </label>
 					<select class="form-control" id="refund_method" name="refund_method">
+						<option value="credit" selected>Credit Card ({{$booking_detail->booking->getPaymentDetail()}})</option>
 						<option value="cash">Cash</option>
-						<option value="credit" selected>Credit</option>
 						<option value="other">Other</option>
 				</div>
 				<div class="refund-details text-center">

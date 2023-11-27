@@ -260,7 +260,7 @@
 						<div class="refund-details refund-method">
 							<label>Suspension Start Date: </label>
 							<div class="input-group">
-								<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input" value="{{$suspensionStartDate}}">
+								<input type="text" id="suspensionstartdate" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input" value="{{$suspensionStartDate}}">
 							</div>
 						</div>
 					</div>
@@ -268,7 +268,7 @@
 						<div class="refund-details refund-method">
 							<label>Suspension End Date:</label>
 							<div class="input-group">
-								<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input" value="{{$suspensionStartDate}}" value="{{$suspensionEndDate}}">
+								<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input" id="suspensionenddate" value="{{$suspensionEndDate}}">
 							</div>
 						</div>
 					</div>
@@ -316,7 +316,7 @@
 					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 						<label>Termination  Date:</label>
 						<div class="input-group">
-							<input type="text" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input" value="{{date('m/d/Y')}}" >
+							<input type="text" id="terminate_date" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input" value="{{date('m/d/Y')}}" >
 						</div>
 					</div>
 					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -357,9 +357,9 @@
         maxDate:'01/01/2050'
     });
 
-	$(document).on('click', "[data-behavior~=suspend_order_detail]", function(){
+	$("[data-behavior~=suspend_order_detail]").click(function(e){
 	    $.ajax({
-	        url: "/business/{{$business_id}}/suspend/",
+			url: "/business/{{$business_id}}/booking_details/" + $(this).data('booking-id') + '/suspend',
 	        type: "POST",
 	        data:{
 	            _token: '{{csrf_token()}}', 
@@ -372,9 +372,13 @@
 	            customer_id:  $(this).data('customer-id'),
 	            booking_id:  $(this).data('booking-id'),
 	        },
-	        success:function(response) {
-	            location.reload()
-	        },
+	        error: function(xhr, status, error){
+            	var errorMessage = JSON.parse(xhr.responseText);
+            	alert(errorMessage.message);
+            },
+            success:function(response) {
+                location.reload()
+            },
 	    });
 	});
 
@@ -386,7 +390,7 @@
                 _token: '{{csrf_token()}}', 
                 booking_detail_id: $(this).data('booking-detail-id'),
                 terminate_reason: $('#terminate_reason').val(),
-                terminated_at: $('#terminationdate').val(),
+                terminated_at: $('#terminate_date').val(),
                 terminate_fee: $('#terminate_fee').val(),
                 terminate_comment: $('#terminate_comment').val(),
                 customer_id:  $(this).data('customer-id'),

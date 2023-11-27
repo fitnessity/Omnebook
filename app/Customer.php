@@ -250,7 +250,7 @@ class Customer extends Authenticatable
 
         $used_user_booking_detail_ids = $this->BookingCheckinDetails()->whereRaw('booking_detail_id is not null')->where('after_use_session_amount', 0)->pluck('booking_detail_id')->toArray();
 
-        $results = $this->bookingDetail()->whereRaw('(user_booking_details.expired_at > ? or user_booking_details.expired_at is null)', Carbon::now()->format('Y-m-d'))
+        $results = $this->bookingDetail()->where('status', 'active')->whereRaw('(user_booking_details.expired_at > ? or user_booking_details.expired_at is null)', Carbon::now()->format('Y-m-d'))
                                          ->whereNotIn('user_booking_details.id', $used_user_booking_detail_ids);
  
         return $results; 

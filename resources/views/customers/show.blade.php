@@ -291,7 +291,9 @@
 																											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting4Examplecollapsea{{$i}}" aria-expanded="false" aria-controls="accor_nesting4Examplecollapse2">
 																												<div class="container-fluid nopadding">
 																													<div class="row mini-stats-wid d-flex align-items-center ">
-																														<div class="col-lg-6 col-md-6 col-8"> {{$booking_detail->business_services_with_trashed->program_name}} - {{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </div>
+																														<div class="col-lg-6 col-md-6 col-8"> 
+																															{{$booking_detail->business_services_with_trashed->program_name}} - {{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}}
+																														</div>
 																														<div class="col-lg-6 col-md-6 col-4">
 																															<div class="multiple-options">
 																																<div class="setting-icon">
@@ -543,7 +545,26 @@
 																												<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting01Examplecollapsec{{$i}}" aria-expanded="false" aria-controls="accor_nesting01Examplecollapsec{{$i}}">
 																													 <div class="container-fluid nopadding">
 																														<div class="row mini-stats-wid d-flex align-items-center ">
-																															<div class="col-lg-6 col-md-6 col-8">{{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </div>
+																															<div class="col-lg-6 col-md-6 col-8">
+																																{{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}}
+																																
+																																@if($booking_detail->status == 'refund')
+																																	| Status: Refunded on {{date('m/d/Y',strtotime($booking_detail->refund_date))}}	
+																																@endif
+
+																																@if($booking_detail->status == 'terminate')
+																																	| Status: Terminated on {{date('m/d/Y',strtotime($booking_detail->terminated_at))}}	
+																																@endif
+
+																																@if($booking_detail->status == 'suspend')
+																																	| Status: Freeze from {{date('m/d/Y',strtotime($booking_detail->suspend_started))}}	to {{date('m/d/Y',strtotime($booking_detail->suspend_ended))}}
+																																	
+																																@endif
+
+																																@if($booking_detail->status == 'void')
+																																	| Status: Void
+																																@endif
+																															</div>
 																															<div class="col-lg-6 col-md-6 col-4">
 																																<div class="multiple-options">
 																																	<div class="setting-icon">
