@@ -89,8 +89,8 @@
 														<p class="text-muted mb-0">with {{$schedule->company_information->public_company_name}} @if($schedule->business_service()->exists()) {{$schedule->business_service->activity_location}} @endif </p>
 													</div>
 													<div class="flex-grow-auto ms-3">
-														@if($schedule->activity_cancel->where('cancel_date',date('Y-m-d'))->first())
-															@if($schedule->activity_cancel->where('cancel_date',date('Y-m-d'))->first()->cancel_date_chk == 1)
+														@if($schedule->activity_cancel->where('cancel_date',$filterDate->format('Y-m-d'))->first())
+															@if($schedule->activity_cancel->where('cancel_date',$filterDate->format('Y-m-d'))->first()->cancel_date_chk == 1)
 																<p class="font-red mb-0 fs-17 act-cancel-p">Activity Cancelled </p>
 															@endif
 														@endif
@@ -214,7 +214,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="myModalLabel">Activity Scheduler Check-In</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					<button type="button" class="btn-close" onclick="window.location.reload()"></button>
 			</div>
 			<div class="modal-body" id="checkInHtml">
 

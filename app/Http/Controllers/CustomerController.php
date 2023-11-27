@@ -18,7 +18,7 @@ use Session,Redirect,DB,Input,Response,Auth,Hash,Validator,View,Mail,Str,Config,
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\{CustomerRepository,BookingRepository,UserRepository};
-use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation,ExcelUploadTracker,UserFamilyDetail,Transaction,StripePaymentMethod};
+use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation,ExcelUploadTracker,UserFamilyDetail,Transaction,StripePaymentMethod,CustomersDocuments,CustomerNotes};
 
 use Illuminate\Support\Facades\Storage;
 
@@ -73,7 +73,6 @@ class CustomerController extends Controller {
 
         if($request->customer_id){
             $customers = $customers->where('id',$request->customer_id);
-
         }
 
         $customers = $customers->get();
@@ -120,6 +119,10 @@ class CustomerController extends Controller {
             $request->session()->forget('recurringPayment');
         }
 
+
+        $documents = CustomersDocuments::where(['customer_id'=>$id])->get();
+        $notes = CustomerNotes::where(['customer_id'=>$id])->get();
+
         return view('customers.show', [
             'customerdata'=>$customerdata,
             'strpecarderror'=>$strpecarderror,
@@ -128,7 +131,9 @@ class CustomerController extends Controller {
             'purchase_history' => $purchase_history,
             'active_memberships' => $active_memberships,
             'complete_booking_details' => $complete_booking_details,
-            'auto_pay_payment_msg' =>$auto_pay_payment_msg
+            'auto_pay_payment_msg' =>$auto_pay_payment_msg,
+            'documents' =>$documents,
+            'notes' =>$notes,
         ]);
     }
 
@@ -756,5 +761,67 @@ class CustomerController extends Controller {
             'termsText' => $termsText
         );
         $status  = SGMailService::sendTermsMail($emailDetail);
+    }
+
+    public function uploadDocument(Request $request, $business_id){
+        $path = $request->file('file')->store('Customer-Documents');
+        $create = CustomersDocuments::create([
+            'user_id' => Auth::user()->id, 
+            'staff_id' => session('StaffLogin') ?? '', 
+            'business_id' => $business_id,
+            'customer_id' => $request->id,
+            'title' => $request->title,
+            'path' => $path
+        ]);
+
+        if($create){
+            return response()->json(['status'=>200,'message'=>'Document Added Successfully.']);
+        }else{
+            return response()->json(['status'=>500,'message'=>'Something Went Wrong.']);
+        }
+    }
+
+    public function removeDoc($business_id, $id){
+        $docs = CustomersDocuments::find($id);
+        Storage::disk('s3')->delete($docs->path);
+        $docs->delete();
+    }
+
+    public function removenote($business_id, $id){
+        $note = CustomerNotes::find($id);
+        @$note->delete();
+    }
+
+    public function addNotes(Request $request, $business_id){
+        $note = CustomerNotes::updateOrCreate(
+            ['id' =>  $request->id],
+            [
+                'user_id' => Auth::user()->id, 
+                'business_id' => $business_id,
+                'customer_id' => $request->cid,
+                'note' => $request->notes,
+                'due_date' => $request->due_date,
+                'time' => $request->time,
+                'display_chk' => $request->displayChk ?? 0,
+            ]
+        );
+
+        if($note){
+            $word = $request->id ? 'updated' : 'Added';
+            return response()->json(['status'=>200,'message'=>'Note '.$word.' Successfully.']);
+        }else{
+            return response()->json(['status'=>500,'message'=>'Something Went Wrong.']);
+        }
+    }
+
+    public function updateNote(Request $request, $business_id){
+        $business = Auth::user()->current_company;
+        $ids = explode(',', $request->input('id'));
+        $business->CustomerNotes()->whereIn('id', $ids)->update(['status' => 1]);
+    }
+
+    public function getNote($business_id,$cusId, $id = null){
+        $note = CustomerNotes::find($id);
+        return view('customers._note' ,compact('note','cusId'));
     }
 }

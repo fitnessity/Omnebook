@@ -144,6 +144,7 @@ class PaymentController extends Controller {
                         'addOnservice_ids' =>@$item['addOnServicesId'],
                         'addOnservice_qty' => @$item['addOnServicesQty'],
                         'addOnservice_total' => $addOnServicePrice,
+                        'order_type' => 'Membership',
                     ]);
 
 
@@ -461,6 +462,7 @@ class PaymentController extends Controller {
                         'addOnservice_ids' =>@$item['addOnServicesId'],
                         'addOnservice_qty' => @$item['addOnServicesQty'],
                         'addOnservice_total' =>  $addOnServicePrice,
+                        'order_type' => 'Membership',
                     ]);
 
 
