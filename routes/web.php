@@ -25,6 +25,10 @@ Route::any('/getCardForm','OnBoardedController@getCardForm')->name('onboard_proc
 Route::any('/doLoginProcess','OnBoardedController@doLoginProcess')->name('doLoginProcess');
 Route::any('/storeCards','OnBoardedController@storeCards')->name('storeCards');
 
+Route::resource('choose-plan', 'MembershipPlanController')->only(['index', 'create','store','update','destroy']);
+Route::any('/getCardForm','MembershipPlanController@getCardForm')->name('choose-plan.getCardForm');
+
+
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
     // Scheduler
     Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
@@ -157,6 +161,7 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/reports','DesignController@reports')->name('reports'); 
 	Route::get('/settings','DesignController@settings')->name('settings'); 
 	Route::get('/subscriptions_payments','DesignController@subscriptions_payments')->name('subscriptions_payments'); 
+	Route::get('/documents_contracts','DesignController@documents_contracts')->name('documents_contracts'); 
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -213,6 +218,16 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
         Route::get('/customers/{id}/visit_modal','CustomerController@visit_modal')->name('visit_modal');
         Route::get('/customers/{id}/visit_autopaymodel','CustomerController@visit_autopaymodel')->name('visit_autopaymodel');
+
+        Route::post('/customers/upload_docs','CustomerController@uploadDocument')->name('upload_docs');
+        Route::get('/removeDoc/{id}','CustomerController@removeDoc')->name('removeDoc');
+
+        Route::get('/customer/{cid}/getNote/{id?}','CustomerController@getNote')->name('getNote');
+
+        Route::post('/customers/add-notes','CustomerController@addNotes')->name('add_notes'); 
+        Route::get('/removenote/{id}','CustomerController@removenote')->name('removenote');
+        Route::post('/updateNote/','CustomerController@updateNote')->name('updateNote');
+
         Route::get('/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');
         Route::get('/void_or_refund_modal','CustomerController@void_or_refund_modal')->name('void_or_refund_modal');
         Route::get('/terminate_or_suspend_modal','CustomerController@terminate_or_suspend_modal')->name('terminate_or_suspend_modal');
@@ -534,7 +549,15 @@ Route::group(array('prefix' => 'admin'), function(){
     //features
     Route::get('/features/', 'Admin\FeaturesController@index')->name('features.index');
     Route::get('/features/edit/{id}', 'Admin\FeaturesController@edit')->name('features.edit');
+    Route::post('/features/update/{id}', 'Admin\FeaturesController@update')->name('features.update'); 
 
+     //promo_codes
+    Route::get('/promo_codes/', 'Admin\PromoCodesController@index')->name('promo_codes.index');
+    Route::get('/promo_codes/create', 'Admin\PromoCodesController@create')->name('promo_codes.create'); 
+    Route::post('/promo_codes/store', 'Admin\PromoCodesController@store')->name('promo_codes.store');  
+    Route::get('/promo_codes/edit/{id}', 'Admin\PromoCodesController@edit')->name('promo_codes.edit');
+    Route::post('/promo_codes/update/{id}', 'Admin\PromoCodesController@update')->name('promo_codes.update');
+    Route::get('/promo_codes/delete/{id}', 'Admin\PromoCodesController@delete')->name('promo_codes.delete');
 
 	//fees
 	Route::get('/fees', 'Admin\FeesController@index')->name('fees');
