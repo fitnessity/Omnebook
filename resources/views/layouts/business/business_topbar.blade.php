@@ -209,7 +209,7 @@
 							</div>
 						</div> -->
 
-						<div class="dropdown topbar-head-dropdown ms-1 header-item">
+						<!-- <div class="dropdown topbar-head-dropdown ms-1 header-item">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" id="page-header-cart-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
 								<i class='bx bx-shopping-bag fs-22'></i>
 								<span class="position-absolute topbar-badge cartitem-badge fs-10 translate-middle badge rounded-pill bg-info">5</span>
@@ -355,7 +355,7 @@
 									</a>
 								</div>
 							</div>
-						</div>
+						</div>-->
 
 						<div class="ms-1 header-item d-none d-sm-flex">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-toggle="fullscreen">
@@ -372,7 +372,7 @@
 						<div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
 								<i class='bx bx-bell fs-22'></i>
-								<span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">3<span class="visually-hidden">unread messages</span></span>
+								<span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">{{count(getNotesNotification())}}<span class="visually-hidden">unread messages</span></span>
 							</button>
 							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
 
@@ -382,9 +382,9 @@
 											<div class="col">
 												<h6 class="m-0 fs-16 fw-semibold text-white"> Notifications </h6>
 											</div>
-											<div class="col-auto dropdown-tabs">
+											<!-- <div class="col-auto dropdown-tabs">
 												<span class="badge badge-soft-light fs-13"> 4 New</span>
-											</div>
+											</div> -->
 										</div>
 									</div>
 
@@ -392,242 +392,124 @@
 										<ul class="nav nav-tabs dropdown-tabs nav-tabs-custom" data-dropdown-tabs="true" id="notificationItemsTab" role="tablist">
 											<li class="nav-item waves-effect waves-light">
 												<a class="nav-link active" data-bs-toggle="tab" href="#all-noti-tab" role="tab" aria-selected="true">
-													All (4)
+													All ({{count(getNotesNotification())}})
 												</a>
 											</li>
 											<li class="nav-item waves-effect waves-light">
 												<a class="nav-link" data-bs-toggle="tab" href="#messages-tab" role="tab" aria-selected="false">
-													Messages
+													Messages (0)
 												</a>
 											</li>
 											<li class="nav-item waves-effect waves-light">
 												<a class="nav-link" data-bs-toggle="tab" href="#alerts-tab" role="tab" aria-selected="false">
-													Alerts
+													Alerts ({{count(getNotesNotification())}})
 												</a>
 											</li>
 										</ul>
 									</div>
-
 								</div>
 
 								<div class="tab-content position-relative" id="notificationItemsTabContent">
 									<div class="tab-pane fade show active py-2 ps-2" id="all-noti-tab" role="tabpanel">
 										<div data-simplebar style="max-height: 300px;" class="pe-2">
-											<div class="text-reset notification-item d-block dropdown-item position-relative">
-												<div class="d-flex">
-													<div class="avatar-xs me-3">
-														<span class="avatar-title bg-soft-info text-info rounded-circle fs-16">
-															<i class="bx bx-badge-check"></i>
-														</span>
-													</div>
-													<div class="flex-1">
-														<a href="#!" class="stretched-link">
-															<h6 class="mt-0 mb-2 lh-base">Your <b>Elite</b> author Graphic
-																Optimization <span class="text-secondary">reward</span> is
-																ready!
-															</h6>
-														</a>
-														<p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-															<span><i class="mdi mdi-clock-outline"></i> Just 30 sec ago</span>
-														</p>
-													</div>
-													<div class="px-2 fs-15">
-														<div class="form-check notification-check">
-															<input class="form-check-input" type="checkbox" value="" id="all-notification-check01">
-															<label class="form-check-label" for="all-notification-check01"></label>
+											@forelse(getNotesNotification() as $n)
+												<div class="text-reset notification-item d-block dropdown-item">
+													<div class="d-flex">
+														@if($n->customer->profile_pic_url)
+															<img src="{{$n->customer->profile_pic_url}}" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+														@else
+															<div class="avatar-xs me-3">
+																<span class="avatar-title bg-soft-danger text-danger rounded-circle fs-14">{{$n->customer->first_letter}}</span>
+															</div>
+														@endif
+														<div class="flex-1">
+															<div class="">
+																<div class="row">
+																	<div class="col-md-7">
+																		<a href="{{route('business_customer_show' ,['business_id'=> Auth::user()->cid, 'id' =>$n->customer->id])}}" >
+																			<h6 class="mt-0 mb-1 fs-13 fw-semibold">{{$n->customer->full_name}}</h6>
+																		</a>
+
+																	</div>
+																	<div class="col-md-2">
+																		<a href="{{route('business_customer_show' ,['business_id'=> Auth::user()->cid, 'id' =>$n->customer->id])}}" class="mb-0">View</a>
+																	</div>
+																	<div class="col-md-3">
+																		<a onclick="deleteNoteFromNotification({{$n->id}},{{$n->business_id}})" class="mb-0">Delete</a>
+																	</div>
+																</div>
+															</div>
+															<div class="fs-13 text-muted mb-0 notetxt">
+																{!!$n->limit_note_character!!}
+															</div>
+															<p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+																<span><i class="mdi mdi-clock-outline"></i> {{$n->timeAgo()}}</span>
+															</p>
 														</div>
 													</div>
 												</div>
-											</div>
-
-											<div class="text-reset notification-item d-block dropdown-item position-relative">
-												<div class="d-flex">
-													<img src="" class="me-3 rounded-circle avatar-xs" alt="user-pic">
-													<div class="flex-1">
-														<a href="#!" class="stretched-link">
-															<h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
-														</a>
-														<div class="fs-13 text-muted">
-															<p class="mb-1">Answered to your comment on the cash flow forecast's
-																graph 🔔.</p>
-														</div>
-														<p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-															<span><i class="mdi mdi-clock-outline"></i> 48 min ago</span>
-														</p>
-													</div>
-													<div class="px-2 fs-15">
-														<div class="form-check notification-check">
-															<input class="form-check-input" type="checkbox" value="" id="all-notification-check02">
-															<label class="form-check-label" for="all-notification-check02"></label>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="text-reset notification-item d-block dropdown-item position-relative">
-												<div class="d-flex">
-													<div class="avatar-xs me-3">
-														<span class="avatar-title bg-soft-danger text-danger rounded-circle fs-16">
-															<i class='bx bx-message-square-dots'></i>
-														</span>
-													</div>
-													<div class="flex-1">
-														<a href="#!" class="stretched-link">
-															<h6 class="mt-0 mb-2 fs-13 lh-base">You have received <b class="text-success">20</b> new messages in the conversation
-															</h6>
-														</a>
-														<p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-															<span><i class="mdi mdi-clock-outline"></i> 2 hrs ago</span>
-														</p>
-													</div>
-													<div class="px-2 fs-15">
-														<div class="form-check notification-check">
-															<input class="form-check-input" type="checkbox" value="" id="all-notification-check03">
-															<label class="form-check-label" for="all-notification-check03"></label>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="text-reset notification-item d-block dropdown-item position-relative">
-												<div class="d-flex">
-													<img src="" class="me-3 rounded-circle avatar-xs" alt="user-pic">
-													<div class="flex-1">
-														<a href="#!" class="stretched-link">
-															<h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
-														</a>
-														<div class="fs-13 text-muted">
-															<p class="mb-1">We talked about a project on linkedin.</p>
-														</div>
-														<p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-															<span><i class="mdi mdi-clock-outline"></i> 4 hrs ago</span>
-														</p>
-													</div>
-													<div class="px-2 fs-15">
-														<div class="form-check notification-check">
-															<input class="form-check-input" type="checkbox" value="" id="all-notification-check04">
-															<label class="form-check-label" for="all-notification-check04"></label>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="my-3 text-center view-all">
-												<button type="button" class="btn btn-soft-success waves-effect waves-light">View
-													All Notifications <i class="ri-arrow-right-line align-middle"></i></button>
-											</div>
+											@empty
+											@endforelse
 										</div>
-
 									</div>
 
 									<div class="tab-pane fade py-2 ps-2" id="messages-tab" role="tabpanel" aria-labelledby="messages-tab">
 										<div data-simplebar style="max-height: 300px;" class="pe-2">
-											<div class="text-reset notification-item d-block dropdown-item">
-												<div class="d-flex">
-													<img src="" class="me-3 rounded-circle avatar-xs" alt="user-pic">
-													<div class="flex-1">
-														<a href="#!" class="stretched-link">
-															<h6 class="mt-0 mb-1 fs-13 fw-semibold">James Lemire</h6>
-														</a>
-														<div class="fs-13 text-muted">
-															<p class="mb-1">We talked about a project on linkedin.</p>
-														</div>
-														<p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-															<span><i class="mdi mdi-clock-outline"></i> 30 min ago</span>
-														</p>
-													</div>
-													<div class="px-2 fs-15">
-														<div class="form-check notification-check">
-															<input class="form-check-input" type="checkbox" value="" id="messages-notification-check01">
-															<label class="form-check-label" for="messages-notification-check01"></label>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="text-reset notification-item d-block dropdown-item">
-												<div class="d-flex">
-													<img src="" class="me-3 rounded-circle avatar-xs" alt="user-pic">
-													<div class="flex-1">
-														<a href="#!" class="stretched-link">
-															<h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
-														</a>
-														<div class="fs-13 text-muted">
-															<p class="mb-1">Answered to your comment on the cash flow forecast's
-																graph 🔔.</p>
-														</div>
-														<p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-															<span><i class="mdi mdi-clock-outline"></i> 2 hrs ago</span>
-														</p>
-													</div>
-													<div class="px-2 fs-15">
-														<div class="form-check notification-check">
-															<input class="form-check-input" type="checkbox" value="" id="messages-notification-check02">
-															<label class="form-check-label" for="messages-notification-check02"></label>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="text-reset notification-item d-block dropdown-item">
-												<div class="d-flex">
-													<img src="" class="me-3 rounded-circle avatar-xs" alt="user-pic">
-													<div class="flex-1">
-														<a href="#!" class="stretched-link">
-															<h6 class="mt-0 mb-1 fs-13 fw-semibold">Kenneth Brown</h6>
-														</a>
-														<div class="fs-13 text-muted">
-															<p class="mb-1">Mentionned you in his comment on 📃 invoice #12501.
-															</p>
-														</div>
-														<p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-															<span><i class="mdi mdi-clock-outline"></i> 10 hrs ago</span>
-														</p>
-													</div>
-													<div class="px-2 fs-15">
-														<div class="form-check notification-check">
-															<input class="form-check-input" type="checkbox" value="" id="messages-notification-check03">
-															<label class="form-check-label" for="messages-notification-check03"></label>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="text-reset notification-item d-block dropdown-item">
-												<div class="d-flex">
-													<img src="" class="me-3 rounded-circle avatar-xs" alt="user-pic">
-													<div class="flex-1">
-														<a href="#!" class="stretched-link">
-															<h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
-														</a>
-														<div class="fs-13 text-muted">
-															<p class="mb-1">We talked about a project on linkedin.</p>
-														</div>
-														<p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-															<span><i class="mdi mdi-clock-outline"></i> 3 days ago</span>
-														</p>
-													</div>
-													<div class="px-2 fs-15">
-														<div class="form-check notification-check">
-															<input class="form-check-input" type="checkbox" value="" id="messages-notification-check04">
-															<label class="form-check-label" for="messages-notification-check04"></label>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="my-3 text-center view-all">
+										
+											<!-- <div class="my-3 text-center view-all">
 												<button type="button" class="btn btn-soft-success waves-effect waves-light">View
 													All Messages <i class="ri-arrow-right-line align-middle"></i></button>
-											</div>
+											</div> -->
 										</div>
 									</div>
-									<div class="tab-pane fade p-4" id="alerts-tab" role="tabpanel" aria-labelledby="alerts-tab"></div>
 
-									<div class="notification-actions" id="notification-actions">
-										<div class="d-flex text-muted justify-content-center">
-											Select <div id="select-content" class="text-body fw-semibold px-1">0</div> Result 
-											<!-- <button type="button" class="btn btn-link link-danger p-0 ms-3" data-bs-toggle="modal" data-bs-target="#removeNotificationModal">Remove</button> -->
+									<div class="tab-pane fade py-2 ps-2" id="alerts-tab" role="tabpanel" aria-labelledby="alerts-tab">
+										<div data-simplebar style="max-height: 300px;">
+											@forelse(getNotesNotification() as $n)
+												<input type="hidden" id="alertIds" value="{{ implode(',', getNotesNotification()->pluck('id')->toArray())}}">
+												<div class="text-reset notification-item d-block dropdown-item">
+													<div class="d-flex">
+														@if($n->customer->profile_pic_url)
+															<img src="{{$n->customer->profile_pic_url}}" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+														@else
+															<div class="avatar-xs me-3">
+																<span class="avatar-title bg-soft-danger text-danger rounded-circle fs-14">{{$n->customer->first_letter}}</span>
+															</div>
+														@endif
+														<div class="flex-1">
+															<div class="">
+																<div class="row">
+																	<div class="col-md-7">
+																		<a href="{{route('business_customer_show' ,['business_id'=> Auth::user()->cid, 'id' =>$n->customer->id])}}" >
+																			<h6 class="mt-0 mb-1 fs-13 fw-semibold">{{$n->customer->full_name}}</h6>
+																		</a>
+
+																	</div>
+																	<div class="col-md-2">
+																		<a href="{{route('business_customer_show' ,['business_id'=> Auth::user()->cid, 'id' =>$n->customer->id])}}" class="mb-0">View</a>
+																	</div>
+																	<div class="col-md-3">
+																		<a onclick="deleteNoteFromNotification({{$n->id}},{{$n->business_id}})" class="mb-0">Delete</a>
+																	</div>
+																</div>
+															</div>
+															<div class="fs-13 text-muted mb-0 notetxt">
+																{!!$n->limit_note_character!!}
+															</div>
+															<p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+																<span><i class="mdi mdi-clock-outline"></i> {{$n->timeAgo()}}</span>
+															</p>
+														</div>
+													</div>
+												</div>
+											@empty
+											@endforelse
+
+											@if(getNotesNotification())
+												<div class="text-center">
+													<button type="button" class="btn btn-red text-center clearAlert">Clear All Alerts</button>
+												</div>
+											@endif
 										</div>
 									</div>
 								</div>
@@ -695,63 +577,88 @@
 		<!-- Vertical Overlay-->
         <div class="vertical-overlay"></div>
 <script type="text/javascript">
+
+	function deleteNoteFromNotification(id,cid){
+		let text = "You are about to delete the Notes from Notification. Are you sure you want to continue?";
+		if (confirm(text)) {
+	      $.ajax({
+	         type: 'POST',
+	         url: '/business/'+cid+'/updateNote/',
+	         data:{
+	         	'_token':'{{csrf_token()}}',
+	         	'id':id,
+	         	'status': '1',
+	         },
+	         success: function (data) {
+	            window.location.reload();
+	         }
+	      });
+	   }
+	}
+
 	$(document).ready(function () {
-        	var business_id = '{{Auth::user()->cid}}';
-        	var url = "{{ url('/business/business_id/customers') }}";
-        	url = url.replace('business_id', business_id);
+     	var business_id = '{{Auth::user()->cid}}';
+     	var url = "{{ url('/business/business_id/customers') }}";
+     	url = url.replace('business_id', business_id);
 
-        	$( "#serchclient_navbar" ).autocomplete({
-            source: url,
-            focus: function( event, ui ) {
-                 return false;
-            },
-            select: function( event, ui ) {
-                window.location.href = "/business/"+business_id+"/customers/"+ui.item.id;
-                 return false;
-            }
-        	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-            let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
+     	$( "#serchclient_navbar" ).autocomplete({
+         source: url,
+         focus: function( event, ui ) {
+              return false;
+         },
+         select: function( event, ui ) {
+             window.location.href = "/business/"+business_id+"/customers/"+ui.item.id;
+              return false;
+         }
+     	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+         let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
 
-            if(item.profile_pic_url){
-                profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
-            }
+         if(item.profile_pic_url){
+             profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
+         }
 
-            var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
-                      '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
-                      '<p class="pstyle liaddress">' + item.email +'</p>' + 
-                      '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
-           
-            return $( "<li></li>" )
-                    .data( "item.autocomplete", item )
-                    .append(inner_html)
-                    .appendTo( ul );
-        	};
+         var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
+                   '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
+                   '<p class="pstyle liaddress">' + item.email +'</p>' + 
+                   '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
+        
+         return $( "<li></li>" )
+                 .data( "item.autocomplete", item )
+                 .append(inner_html)
+                 .appendTo( ul );
+     	};
 
-        	$( "#serchclient_navbar1" ).autocomplete({
-            source: url,
-            focus: function( event, ui ) {
-                 return false;
-            },
-            select: function( event, ui ) {
-                window.location.href = "/business/"+business_id+"/customers/"+ui.item.id;
-                 return false;
-            }
-        	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-            let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
+     	$( "#serchclient_navbar1" ).autocomplete({
+         source: url,
+         focus: function( event, ui ) {
+              return false;
+         },
+         select: function( event, ui ) {
+             window.location.href = "/business/"+business_id+"/customers/"+ui.item.id;
+              return false;
+         }
+     	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+         let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
 
-            if(item.profile_pic_url){
-                profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
-            }
+         if(item.profile_pic_url){
+             profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
+         }
 
-            var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
-                      '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
-                      '<p class="pstyle liaddress">' + item.email +'</p>' + 
-                      '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
-           
-            return $( "<li></li>" )
-                    .data( "item.autocomplete", item )
-                    .append(inner_html)
-                    .appendTo( ul );
-        	};
-      });
+         var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
+                   '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
+                   '<p class="pstyle liaddress">' + item.email +'</p>' + 
+                   '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
+        
+         return $( "<li></li>" )
+                 .data( "item.autocomplete", item )
+                 .append(inner_html)
+                 .appendTo( ul );
+     	};
+
+     	$('.clearAlert').click(function(e){
+     		var id = $('#alertIds').val();  
+     		deleteNoteFromNotification(id,'{{Auth::user()->cid}}');
+     	});
+   });
+
 </script>

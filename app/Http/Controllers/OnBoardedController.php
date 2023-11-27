@@ -34,6 +34,18 @@ class OnBoardedController extends Controller {
             $user = Auth::user();
         }
 
+        if($request->displaystep){
+            if($cid == ''){
+                if($user){
+                    @$user->update(['show_step' => 1]);
+                }else{
+                    return redirect('/onboard_process');
+                }
+            }else{
+                return redirect('/onboard_process?cid='.$cid);
+            }
+        }
+        
         if($request->show == 3 ){
             $user->update(['show_step' => 3]);
             return redirect('/onboard_process?cid='.$cid.'&id='.$user->id);
@@ -277,6 +289,7 @@ class OnBoardedController extends Controller {
             Auth::loginUsingId($company->user_id);
         }
         if($request->redirect == 'dashboard'){
+            Auth::user()->update(['cid' => $request->cid]);
             return redirect()->route('business_dashboard');
         }else{
             return redirect()->route('business.service.select' ,['business_id' => $request->cid]);

@@ -54,10 +54,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         if($request->chk === '0'){
             session()->flash('error', 'Check Out successful');
         }
-        if($request->msg == '0'){
-            session()->flash('error', 'There is no membership available for this customer');
-        }
-
+    
         if($request->chkInMsg == '2'){
             session()->flash('error', "There is no spot available so you can't checkIn in this class.");
         }
@@ -98,12 +95,12 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         $company = $request->current_company;
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
         $bookingDetail = UserBookingDetail::where(['user_id' =>$request->customer_id])->whereDate('expired_at','>=',date('Y-m-d'))->get();
-        $chk = 0;
+        $chk = 1;
         if($bookingDetail->isNotEmpty()){
             foreach($bookingDetail as $detail){
                 $reminingSession = $detail->getremainingsession();
                 if($reminingSession > 0){
-                    $chk = 1;
+                    //$chk = 1;
                     $chkCheckInDetails = BookingCheckinDetails::where(['booking_detail_id' =>$detail->id,'checkin_date' => $request->checkin_date, 'business_activity_scheduler_id' => $business_activity_scheduler->id])->first();
                     if($chkCheckInDetails == ''){
                         $status = BookingCheckinDetails::create([
@@ -118,9 +115,17 @@ class SchedulerCheckinDetailController extends BusinessBaseController
                     }
                 }
             }
-        }
-        return $chk; 
-        
+        }else{
+            BookingCheckinDetails::create([
+                'customer_id' => $request->customer_id,
+                'booking_detail_id' => NULL,
+                'checkin_date' => $request->checkin_date,
+                'business_activity_scheduler_id' => $business_activity_scheduler->id,
+                'source_type' => 'in_person',
+                'use_session_amount' => 0,
+            ]);
+            return $chk;
+        } 
     }
 
     /**

@@ -28,28 +28,77 @@
         <div class="container-fluid">
             <div id="two-column-menu">
             </div>
-            <ul class="navbar-nav dash-sidebar-menu" id="navbar-nav">
+            <ul class="navbar-nav dash-sidebar-account-menu" id="navbar-nav">
 				<li class="menu-title border-bottom">
-					<span class="font-white switch-business" data-key="t-menu">Nipa's Account</span>
+					<span class="font-white switch-business" data-key="t-menu">Welcome Nipa </span>
 				</li>
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
-                        <img src="{{asset('/public/img/menu-icon1.svg')}}" alt="Fitnessity"> <span data-key="t-dashboards">User Profile</span>
-                    </a>
-                </li>
-				
 				<li class="nav-item">
-                    <a class="nav-link menu-link " href="" aria-controls="sidebarUI">
-                        <img src="{{asset('/public/img/calender.png')}}" alt="Fitnessity"> <span data-key="t-base-ui"> Calender</span>
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/social-profile.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">View Social Profile</span>
                     </a>
                 </li>
-				
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/edit-2.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Edit Profile & Password</span>
+                    </a>
+                </li>
 				<li class="nav-item">
                     <a class="nav-link menu-link" href="" aria-controls="sidebarLanding">
                         <img src="{{asset('/public/img/menu-icon5.svg')}}" alt="Fitnessity"> <span data-key="t-landing">Manage Accounts</span>
                     </a>
                 </li>
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarUI">
+                        <img src="{{asset('/public/img/calender.png')}}" alt="Fitnessity"> <span data-key="t-base-ui"> Calender</span>
+                    </a>
+                </li>
+                <!--<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/menu-icon1.svg')}}" alt="Fitnessity"> <span data-key="t-dashboards">User Profile</span>
+                    </a>
+                </li>-->
+				
+				<!-- <li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarUI">
+                        <img src="{{asset('/public/img/calender.png')}}" alt="Fitnessity"> <span data-key="t-base-ui"> Calender</span>
+                    </a>
+                </li> -->
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/booking-2.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Bookings & Memberships</span>
+                    </a>
+                </li>
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/payment.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Payment History</span>
+                    </a>
+                </li>
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/schedule-1.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Schedule</span>
+                    </a>
+                </li>
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/attendance.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Attendance & Belt </span>
+                    </a>
+                </li>
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/credit-card.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Credit Card </span>
+                    </a>
+                </li>
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/notes.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Notes & Alerts </span>
+                    </a>
+                </li>
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/doc.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Documents & Contracts  </span>
+                    </a>
+                </li>				
               
                 <li class="nav-item">
                     <a class="nav-link menu-link " >
@@ -67,7 +116,46 @@
                     <a class="nav-link menu-link " >
                         <img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Following</span>
                     </a>
-                </li>              
+                </li>    
+
+				<li class="menu-title"><span data-key="t-menu">Connected Family Member</span></li>
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/edit-2.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Edit Profile</span>
+                    </a>
+                </li>
+				<li class="nav-item">
+                    <a class="nav-link menu-link" href="" aria-controls="sidebarLanding">
+                        <img src="{{asset('/public/img/menu-icon5.svg')}}" alt="Fitnessity"> <span data-key="t-landing">Manage Accounts</span>
+                    </a>
+                </li>
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/booking-2.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Bookings & Memberships</span>
+                    </a>
+                </li>
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/schedule-1.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Schedule</span>
+                    </a>
+                </li>
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/attendance.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Attendance & Belt </span>
+                    </a>
+                </li>
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/notes.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Notes & Alerts </span>
+                    </a>
+                </li>
+				<li class="nav-item">
+                    <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
+                        <img src="{{asset('/public/img/doc.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Documents & Contracts  </span>
+                    </a>
+                </li>
+				
+				
             </ul>
         </div>
         <!-- Sidebar -->
