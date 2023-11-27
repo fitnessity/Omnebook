@@ -149,7 +149,6 @@ class PaymentController extends Controller {
 
 
                     $price_detail = $cartService->getPriceDetail($item['priceid']);
-
                     $re_i = 0;
                     $date = new Carbon;
                     $stripe_id = $stripe_charged_amount = $payment_method= '';
