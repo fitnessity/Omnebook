@@ -11,10 +11,8 @@
     }
     $companyList = Auth::user()->company()->select('id','logo','company_name')->get();
     $company = Auth::user()->current_company;
-    $dba_business_name = '';
-    if($company != ''){
-        $dba_business_name =  $company->dba_business_name != '' ? $company->dba_business_name : $company->company_name;
-    }
+    $businessName = $company != '' ? @$company->public_company_name : '';
+    $businessImage = $company != '' ? @$company->getCompanyImage() : '';
 ?>
 
 <div class="app-menu navbar-menu" >
@@ -22,25 +20,15 @@
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
         <a href="#" class="logo logo-dark">
-            <span class="logo-sm">
-                <img src="" alt="" height="22">
-            </span>
-            <span class="logo-lg">
-                <img src="" alt="" height="17">
-            </span>
+            <span class="logo-sm"><img src="" alt="" height="22"></span>
+            <span class="logo-lg"><img src="" alt="" height="17"></span>
         </a>
         <!-- Light Logo-->
         <a href="#" class="logo logo-light">
-            <span class="logo-sm">
-                <img src="" alt="" height="22">
-            </span>
-            <span class="logo-lg">
-                <img src="" alt="" height="17">
-            </span>
+            <span class="logo-sm"><img src="" alt="" height="22"> </span>
+            <span class="logo-lg"><img src="" alt="" height="17"></span>
         </a>
-        <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
-            <i class="ri-record-circle-line"></i>
-        </button>
+        <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover"> <i class="ri-record-circle-line"></i> </button>
     </div>
 
     <div id="scrollbar">
@@ -49,66 +37,53 @@
             </div>
 			<div class="live-preview text-center">
 				<div class="dropdown mt-70">
-					<button class="btn btn-switch-business dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">
-						Fitness Pvt. Ltd.
-					</button>
+					<button class="btn btn-switch-business dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">{{$businessName}}</button>
 					<ul class="dropdown-menu dropdown-menu-dark switch-account-dropdown" aria-labelledby="dropdownMenuButton21">
+                        @if($companyId)
 						<li>
-							<a class="dropdown-item" href="#">
-								<img src="https://fitnessity-production.s3.amazonaws.com/company/pHSVR4Hvc7abvaVqPG3zk3tUJjbJNCdEMfKuCM1j.jpg" alt="" class="avatar-xs rounded-circle me-2 shadow">
-								<label class="fs-12">Fitness Pvt. Ltd.</label>
+							<a class="dropdown-item" onclick="changeCompany({{$companyId}})">
+                                @if($businessImage)
+                                    <img src="{{$businessImage}}" alt="" class="avatar-xs rounded-circle me-2 shadow">
+                                @else
+                                    <div class="avatar-xs me-2 one-latter">
+                                        <span class="avatar-title rounded-circle bg-danger-red text-white">{{@$company->cname_first_letter}}</span>
+                                    </div>
+                                @endif
+
+								<label class="fs-12">{{$businessName}}</label>
 							</a>
 						</li>
+                        @endif
 						<li>
-							<a class="dropdown-item active" href="#"><i class="fa fa-user"></i> Nipa Soni <br><span class="account-switchh"> Personal Account </span> </a>
+							<a class="dropdown-item active" href="{{url('/family-member')}}"><i class="fa fa-user"></i> {{Auth::user()->full_name}} <br><span class="account-switchh"> Personal Account </span> </a>
 						</li>
 						<li> <hr class="dropdown-divider"></li>
-						
+						@forelse(@$companyList as $list)
 						<li>
-							<a class="dropdown-item" href="#">
+							<a class="dropdown-item" onclick="changeCompany({{$list->id}})">
 								<div class="avatar-xs me-2 one-latter">
-									<span class="avatar-title rounded-circle bg-danger-red text-white">
-										A
-									</span>
+                                    @if( Storage::disk('s3')->exists($list->logo))
+                                        <img src="{{Storage::URL($list->logo)}}" alt="" class="avatar-xs rounded-circle me-2 shadow">
+                                    @else
+                                        <span class="avatar-title rounded-circle bg-danger-red text-white">{{$list->cname_first_letter}}</span>
+                                    @endif
+									
 								</div>
-								<label class="fs-12">Alex Lansky Personal Training</label>
+								<label class="fs-12">{{$list->company_name}}</label>
 							</a>
 						</li>
-						<li>
-							<a class="dropdown-item" href="#">
-								<div class="avatar-xs me-2 one-latter">
-									<span class="avatar-title rounded-circle bg-danger-red text-white">
-										C
-									</span>
-								</div>
-								<label class="fs-12">Chiara Gorodesky</label>
-							</a>
-						</li>
-						<li>
-							<a class="dropdown-item" href="#">
-								<div class="avatar-xs me-2 one-latter">
-									<span class="avatar-title rounded-circle bg-danger-red text-white">
-										A
-									</span>
-								</div>
-								<label class="fs-12">arya pvt lmt</label>
-							</a>
-						</li>
+                        @empty
+                        @endforelse
 						<li> <hr class="dropdown-divider"></li>
 						<li>
-							<a class="dropdown-item" href="#"><i class="fas fa-plus"></i> New Business Account </a>
+							<a class="dropdown-item" href="{{route('personal.company.create')}}" ><i class="fas fa-plus"></i> New Business Account </a>
 						</li>
 						<li> <hr class="dropdown-divider"></li>
-						<li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+						<li><a class="dropdown-item" href="{{ Config::get('constants.SITE_URL') }}/userlogout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
 					</ul>
 				</div>
 			</div> 
             <ul class="navbar-nav dash-sidebar-menu" id="navbar-nav">
-				<li class="menu-title border-bottom">
-					<span class="font-white switch-business" data-key="t-menu">{{$dba_business_name}}
-						<a href="" data-bs-toggle="modal" data-bs-target=".switch-business-modal">(switch)</a>
-					</span>
-				</li>
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName()=='business_dashboard') active @endif" href="{{route('business_dashboard')}}" aria-controls="sidebarDashboards">
@@ -220,36 +195,7 @@
 
     <div class="sidebar-background"></div>
 </div>
-<div class="modal fade switch-business-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="myModalLabel">Select Business</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-                @foreach($companyList as $list)
-				<a class="business-click" onclick="changeCompany({{$list->id}})">
-    				<div class="row y-middle divider">
-    					<div class="col-md-2 col-2">
-    						<div class="select-business">
-                                @if( Storage::disk('s3')->exists($list->logo))
-    							    <img src="{{Storage::URL($list->logo)}}" alt="Fitness pvt company, llc" >
-                                @else
-                                    <div class="company-list-text mb-10"><p class="character">{{$list->cname_first_letter}}</p></div>
-                                @endif
-    						</div>
-    					</div>		
-    					<div class="col-md-5 col-8">
-    						<label class="business-name">{{$list->company_name}}</label>
-    					</div>
-    				</div>
-				</a>
-                @endforeach
-			</div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+
 <script>
     function changeCompany(id) {
         location.href = '/dashboard/dates=/'+id;

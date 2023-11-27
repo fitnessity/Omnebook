@@ -24,7 +24,7 @@
 								<h4 class="fs-18 mb-5 mt-5">Select Account To Manage</h4>
 								<div class="profile-user position-relative d-inline-block mx-auto mb-4 ml-1 mr-1">
 									<img src="https://fitnessity-production.s3.amazonaws.com/customer/IUwmNesKNJtrlzkSgjex1bzQoXhtvteofsrr44qQ.jpg" class="rounded-circle avatar-xl img-thumbnail user-profile-image  shadow" alt="user-profile-image">
-									<div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+									<!--<div class="avatar-xs p-0 rounded-circle profile-photo-edit">
 										<label class="profile-photo-edit photo-option-set avatar-xs">
 											<span class="avatar-title rounded-circle bg-light text-body shadow">
 												<div class="multiple-options multi-oops">
@@ -46,7 +46,7 @@
 												</div>
 											</span>
 										</label>
-									</div>
+									</div>-->
 									<div class="manage-account-name">
 										<h5 class="mb-1 mt-2">Nipa Soni</h5>
 									</div>
@@ -55,7 +55,7 @@
 
 								<div class="profile-user position-relative d-inline-block mx-auto mb-4 ml-1 mr-1">
 									<img src="https://fitnessity-production.s3.amazonaws.com/activity/5gmokEA2e4XKU4TSPDErZfFKJyYImLAVbVwXQHlk.jpg" class="rounded-circle avatar-xl img-thumbnail user-profile-image  shadow" alt="user-profile-image">
-									<div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+									<!-- <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
 										<label class="profile-photo-edit photo-option-set avatar-xs">
 											<span class="avatar-title rounded-circle bg-light text-body shadow">
 												<div class="multiple-options multi-oops">
@@ -77,7 +77,7 @@
 												</div>
 											</span>
 										</label>
-									</div>
+									</div>-->
 									<div class="manage-account-name">
 										<h5 class="mb-1 mt-2">Ankita Patel</h5>
 									</div>
@@ -85,7 +85,7 @@
 
 								<div class="profile-user position-relative d-inline-block mx-auto mb-4 ml-1 mr-1">
 									<img src="https://fitnessity-production.s3.amazonaws.com/activity/0BONWLWRLmu672gJmdMvxmoVTIYgfey3X23klhXE.jpg" class="rounded-circle avatar-xl img-thumbnail user-profile-image  shadow" alt="user-profile-image">
-									<div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+									<!-- <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
 										<label class="profile-photo-edit photo-option-set avatar-xs">
 											<span class="avatar-title rounded-circle bg-light text-body shadow">
 												<div class="multiple-options multi-oops">
@@ -107,7 +107,7 @@
 												</div>
 											</span>
 										</label>
-									</div>
+									</div> -->
 									<div class="manage-account-name">
 										<h5 class="mb-1 mt-2">Purvi Patel</h5>
 									</div>
@@ -115,7 +115,7 @@
 
 								<div class="profile-user position-relative d-inline-block mx-auto mb-4 ml-1 mr-1">
 									<img src="https://fitnessity-production.s3.amazonaws.com/activity/agnLoERqZaRjzjKffSzxzq2BH54AekTZJQ4bH4ol.jpg" class="rounded-circle avatar-xl img-thumbnail user-profile-image  shadow" alt="user-profile-image">
-									<div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+									<!--<div class="avatar-xs p-0 rounded-circle profile-photo-edit">
 										<label class="profile-photo-edit photo-option-set avatar-xs">
 											<span class="avatar-title rounded-circle bg-light text-body shadow">
 												<div class="multiple-options multi-oops">
@@ -137,7 +137,7 @@
 												</div>
 											</span>
 										</label>
-									</div>
+									</div> -->
 									<div class="manage-account-name">
 										<h5 class="mb-1 mt-2">Alia Bhatt</h5>
 									</div>
@@ -147,7 +147,7 @@
 									<div class="rounded-circle avatar-xl img-thumbnail user-profile-image shadow no-img-latter">
 										<p class="character character-renovate">OA</p>
 									</div>
-									<div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+									<!-- <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
 										<label class="profile-photo-edit photo-option-set avatar-xs">
 											<span class="avatar-title rounded-circle bg-light text-body shadow">
 												<div class="multiple-options multi-oops">
@@ -169,7 +169,7 @@
 												</div>
 											</span>
 										</label>
-									</div>
+									</div> -->
 									<div class="manage-account-name">
 										<h5 class="mb-1 mt-2">Olivia Anderson</h5>
 									</div>

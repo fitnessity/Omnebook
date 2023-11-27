@@ -2,7 +2,7 @@
 
 @section('content')
 
-    {!! Form::open(array('id' => 'editFeatures', 'route' => ['update-plan', $features->id] , 'files' => true)) !!}
+    {!! Form::open(array('id' => 'editFeatures', 'route' => ['features.update', $features->id] , 'files' => true)) !!}
    
         <div class="panel panel-default">
             <div class="panel-heading">Edit</div>
@@ -10,20 +10,20 @@
                 <div class="row">
                     <div class="col-xs-12 form-group {{ $errors->has('name') ? ' has-error' : '' }} ">
                         {!! Form::label('name', 'Name', ['class' => 'control-label']) !!} <span class="color-red">*</span>
-                        {!! Form::text('name', $features->name, ['id' => 'name', 'required' =>'required', 'class' => 'form-control', 'placeholder' => '' ,]) !!}
+                        {!! Form::text('name', $features->name, ['id' => 'name', 'required' =>'required', 'class' => 'form-control', 'placeholder' => '' , 'disabled' => 'disabled', ]) !!}
                         <p class="help-block"></p>
-                            @if($errors->has('name'))
-                                <p class="help-block">
-                                    {{ $errors->first('name') }}
-                                </p>
-                            @endif
+                        @if($errors->has('name'))
+                            <p class="help-block">
+                                {{ $errors->first('name') }}
+                            </p>
+                        @endif
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-12 form-group {{ $errors->has('tooltip_text') ? ' has-error' : '' }} ">
                         {!! Form::label('tooltip_text', 'Tooltip Text', ['class' => 'control-label']) !!} <span class="color-red">*</span>
-                        {!! Form::text('tooltip_text', $features->tooltip_text, ['id' => 'tooltip_text', 'required' =>'required', 'class' => 'form-control', 'placeholder' => '']) !!}
+                        {!! Form::text('tooltip_text', $features->tooltip_text, ['id' => 'tooltip_text', 'required' =>'required', 'class' => 'form-control', 'placeholder' => 'Tooltip']) !!}
                         <p class="help-block"></p>
                         @if($errors->has('tooltip_text'))
                             <p class="help-block">

@@ -125,24 +125,28 @@
 								</div>
 							</td>
 							<td>
-								<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" data-cus-id="{{$cus->id}}">
-									<option value="" @if(!@$firstCheckInDetail->order_detail) selected @endif>Choose option</option>
-									@foreach($cus->active_memberships()->get() as $bookingDetail)
-										@php 
-											$cCheckin = $bookingDetail->BookingCheckinDetails->where('checkin_date', $filter_date->format('Y-m-d'))->first();
-											if($cCheckin){
-												$checkInIds .= $cCheckin->id.','; 
-											}
-										@endphp
-                                        <option value="{{$bookingDetail->id}}" @if(@$firstCheckInDetail->order_detail->id == $bookingDetail->id) selected @endif checkInId="{{$cus->getCheckInId($bookingDetail->id, $filter_date->format('Y-m-d'))}}">
-                                                {{@$bookingDetail->business_price_detail_with_trashed->price_title}} 
-                                        </option>
-                     				@endforeach
-								</select>
+								@if($cus->active_memberships()->get()->isNotEmpty())
+									<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" data-cus-id="{{$cus->id}}">
+										<option value="" @if(!@$firstCheckInDetail->order_detail) selected @endif>Choose option</option>
+										@foreach($cus->active_memberships()->get() as $bookingDetail)
+											@php 
+												$cCheckin = $bookingDetail->BookingCheckinDetails->where('checkin_date', $filter_date->format('Y-m-d'))->first();
+												if($cCheckin){
+													$checkInIds .= $cCheckin->id.','; 
+												}
+											@endphp
+	                                        <option value="{{$bookingDetail->id}}" @if(@$firstCheckInDetail->order_detail->id == $bookingDetail->id) selected @endif checkInId="{{$cus->getCheckInId($bookingDetail->id, $filter_date->format('Y-m-d'))}}">
+	                                                {{@$bookingDetail->business_price_detail_with_trashed->price_title}} 
+	                                        </option>
+	                     				@endforeach
+									</select>
+								@else
+									<p class="font-red">No Membership</p>
+								@endif
 							</td>
-							<td>
+							<td class="modal-check-width">
 								<div class="check-cancel width-105">
-									@if(@$firstCheckInDetail->order_detail && @$firstCheckInDetail->checkin_date <= date('Y-m-d')) 
+									@if(@$firstCheckInDetail->order_detail && @$firstCheckInDetail->checkin_date <= date('Y-m-d') && $cus->active_memberships()->get()->isNotEmpty()) 
 										@php  
 											$datetime = new DateTime(@$firstCheckInDetail->checkin_date.' '.$business_activity_scheduler->shift_start);
 											$formattedDatetime = $datetime->format('Y-m-d H:i:s');
@@ -151,7 +155,7 @@
 									@endif 
 									<label for="checkin" class="mb-0 mmt-10">Check In</label><br>
 
-									@if(@$firstCheckInDetail->order_detail && @$firstCheckInDetail->checkin_date == date('Y-m-d'))
+									@if(@$firstCheckInDetail->order_detail && @$firstCheckInDetail->checkin_date == date('Y-m-d') && $cus->active_memberships()->get()->isNotEmpty())
 					                    <input type="checkbox"  onclick="call()" name="late_cancel" value="0" data-behavior="ajax_html_modal" data-url="{{route('business.scheduler_checkin_details.latecencel_modal', ['id' => @$firstCheckInDetail->id, 'scheduler_id' => $business_activity_scheduler->id])}}"  data-modal-width = "500px" data-booking-detail-id="{{@$firstCheckInDetail->order_detail->id}}"
 					                        @if(@$firstCheckInDetail->no_show_action) checked @endif >
 					                @endif 

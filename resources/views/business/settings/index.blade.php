@@ -118,14 +118,14 @@
 													<div class="card card-body box-border">
 														<div class="d-grid align-items-center">
 															<div class="report-links">
-																<a href="#">Manage Subscription Plan</a>
+																<a href="#">Manage Account</a>
 															</div>
-															<div class="report-links">
+															<!-- <div class="report-links">
 																<a href="#">Manage Card On File</a>
 															</div>
 															<div class="report-links remove-border">
 																<a href="#">Payment History</a>
-															</div>
+															</div> -->
 														</div>
 													</div>												
 												</div>

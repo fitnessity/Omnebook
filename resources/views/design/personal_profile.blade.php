@@ -107,7 +107,7 @@ fitnessityofficial">
 											<i class="far fa-user"></i> Change Password
 										</a>
 									</li>
-									<li class="nav-item">
+									<!--<li class="nav-item">
 										<a class="nav-link" data-bs-toggle="tab" href="#cardInfo" role="tab">
 											<i class="far fa-credit-card"></i> Credit Card Info 
 										</a>
@@ -116,7 +116,7 @@ fitnessityofficial">
 										<a class="nav-link" data-bs-toggle="tab" href="#paymenthistory" role="tab">
 											<i class="fas fa-file-invoice-dollar"></i> Payment History 
 										</a>
-									</li>
+									</li>-->
 								</ul>
 							</div>
 							<div class="card-body">
