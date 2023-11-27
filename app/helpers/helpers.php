@@ -2,7 +2,7 @@
 
     use Carbon\Carbon;
     use App\Repositories\{ReviewRepository,UserRepository,NetworkRepository};
-    use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction,Products};
+    use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction,Products,CustomerNotes};
 
     function getUserRatings($user_id)
     {
@@ -273,6 +273,10 @@
         }
 
         return $cardCategoty;
+    }
+
+    function getNotesNotification(){
+        return CustomerNotes::where(['user_id'=> Auth::user()->id , 'business_id' => Auth::user()->cid ])->where('status',0)->whereDate('due_date' , date('Y-m-d'))->where('time' ,'>=',now()->toTimeString())->orderby('created_at','desc')->get() ;
     }
 
 ?>

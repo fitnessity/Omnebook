@@ -303,7 +303,7 @@ $total_quantity = 0;
 						<div class="menu_nav">
                 
 						<div class="logo-header">
-						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo.png') }}"> </a>
+						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo1_black.png') }}"> </a>
 						</div>
 					
 						<div class="top-area">
@@ -371,7 +371,7 @@ $total_quantity = 0;
 									} 
 									$total_quantity = count($newcart["cart_item"]);?>
 							<a class="btn-cart" href="{{route('carts_index')}}">
-								<img src="{{ asset('/public/images/shoping-cart-header.png') }}" alt="cart"><span id="cart-item">
+								<img src="{{ asset('/public/images/shoping-cart-header-black.png') }}" alt="cart"><span id="cart-item">
 									 {{$total_quantity}}</span>
                                 <!--<img src="{{ asset('/public/images/cart-icon.png') }}" alt="cart"><span id="cart-item">0</span>-->
                             </a>
@@ -380,7 +380,7 @@ $total_quantity = 0;
                         	@if(Auth::check())
 						 	<div class="userblock mobile-none">
                         		<div class="login_links" onclick="openNav()">
-                                	<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}"
+                                	<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon-black.png') }}"
                                      alt="Fitnessity" >
                                 </div>
 								<nav class="pc-sidebar">
@@ -411,14 +411,14 @@ $total_quantity = 0;
                                                     	<span class="pc-micon"><i class="fa fa-user"></i></span>
                                                       	<a href="{{route('profile-viewbusinessProfile')}}" style="color: white;">Business Profile</a>
                                                     </li><?php */?>
-                                                    <li class="pc-link">
+                                                    <!--<li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;">Manage Personal Profile</a>
-                                                    </li>
+                                                    </li> -->
 													<!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
                                                     </li> -->
 													<li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('family-member.index')}}" style="color: white;">Manage Accounts</a>
+                                                    	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('family-member.index')}}" style="color: white;">Account Information</a>
                                                     </li>
 													<!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
@@ -475,7 +475,7 @@ $total_quantity = 0;
 							<!-- old nav -->
                          	<div class="userblock">
                         		<div class="login_links">
-									<img class="sign-in-header" src="{{ asset('/public/images/login-header.png') }}" alt="cart">
+									<img class="sign-in-header" src="{{ asset('/public/images/login-header-black.png') }}" alt="cart">
 									<a href="{{ Config::get('constants.SITE_URL') }}/userlogin">Sign in or </a> 
 									<a href="{{ Config::get('constants.SITE_URL') }}/registration"> Register </a>
 									<!--<img src="{{ asset('/public/images/user-icon.png') }}" alt="">-->

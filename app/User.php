@@ -43,7 +43,6 @@ class User extends Authenticatable
 
     public $timestamps = false;
     
-    
     public static function boot(){
         parent::boot();
 
@@ -59,7 +58,6 @@ class User extends Authenticatable
             }
         });
     }
-    
 
     public function getAgeAttribute()
     {
@@ -202,6 +200,11 @@ class User extends Authenticatable
     public function customers()
     {
         return $this->hasMany(Customer::class,'user_id');
+    }
+
+    public function CustomerPlanDetails()
+    {
+        return $this->hasMany(CustomerPlanDetails::class,'user_id');
     }
 
     public function BusinessPriceDetailsAges()
@@ -365,6 +368,15 @@ class User extends Authenticatable
 
     public function stripePaymentMethods(){
         return StripePaymentMethod::where('user_type', 'User')->where('user_id', $this->id);
+    }
+
+    public function chkDaysLeft(){
+        $data = $this->CustomerPlanDetails()->whereDate('expire_date','>=',date('Y-m-d'))->latest()->first();
+        if($data){
+            $expireDate = \Carbon\Carbon::parse(@$data->expire_date);
+            $remining = now()->diffInDays($expireDate) ;
+        }
+        return $remining ?? 0;
     }
 
 }

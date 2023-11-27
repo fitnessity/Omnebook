@@ -391,6 +391,11 @@ class SGMailService{
 			'url'  => env('APP_URL').'/claim-your-business',
 		];
 		
-		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-738442a2400549d99833777bdb13bee0');
+		SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-738442a2400549d99833777bdb13bee0');
+		$substitutions1 = [
+			'profile'  => env('APP_URL').'/personal/company/create?company='.@$emailDetail['companydata']->id,
+		];
+
+		SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-63efeb6f57be45079692fcae3f63147c');
 	}
 }

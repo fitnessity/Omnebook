@@ -99,6 +99,9 @@
 	.mt--25 {  margin-top: 25px;}
 	.pro-background-overlay{width: 97%;}
 	.up-down-sp {  padding: 20px 30px 20px 30px;}
+	.classes-list{padding: 5px 0px;}
+	.links-set a{font-size: 14px;}
+	.setoflinkes{display: block;}
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){
@@ -336,6 +339,9 @@
 	.pro-background-overlay{width: 94%;}
 	.up-down-sp {padding: 20px 30px 20px 30px;}
 	.joinus-box{padding: 40px 30px 40px 30px;}
+	.classes-list{padding: 5px 0px;}
+	.links-set a{font-size: 14px;}
+	.setoflinkes{display: block;}
 }
 
 @media screen and (min-width: 351px) and (max-width: 370px){
