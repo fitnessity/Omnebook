@@ -134,6 +134,12 @@
           </a>
         </li>
 
+        <li class="{{ $request->segment(2) == 'promo_codes' ? 'active' : '' }}">
+          <a href="/admin/promo_codes/">
+            <i class="fa fa-list-alt"></i> <span>Manage Promo Codes</span>  
+          </a>
+        </li>
+
         <li class="{{ $request->segment(2) == 'features' ? 'active' : '' }}">
           <a href="/admin/features">
             <i class="fa fa-list-alt"></i> <span>Manage Features</span>  
