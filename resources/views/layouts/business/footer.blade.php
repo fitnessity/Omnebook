@@ -313,7 +313,7 @@
     <!-- App js -->
     <script src="{{asset('/public/dashboard-design/js/app.js')}}"></script> 
     <!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
-    <script src="{{asset('/public/js/slimselect.min.js')}}"></script>
+ 
 	
 	
 	<!-- list.js min js -->
