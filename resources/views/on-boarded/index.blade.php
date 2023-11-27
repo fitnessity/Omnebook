@@ -593,7 +593,6 @@
 											<div class="row">
 												<div class="booking-titles text-center">
 													<h4 class="fs-18">Plans & Pricing</h4>
-													<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
 												</div>
 												<div class="price-switch">
 													<div class="row">
@@ -642,7 +641,7 @@
 																			{!! $p->description !!}
 																		</div>
 																		<div class="width-100">
-																			<a onclick="getPlan(1,'{{$cid}}','{{$p->price_per_month}}')" class="btn btn-red mt-25 width-100" >Your Current Plan </a>
+																			<a onclick="getPlan({{$p->id}},'{{$cid}}','{{$p->price_per_month}}')" class="btn btn-red mt-25 width-100" >Your Current Plan </a>
 																		</div>
 																	</div>
 																</div>
@@ -686,7 +685,9 @@
 																						</div>
 																						@foreach($features as $key=>$f)
 																						<div class="custom-table-data">
-																							<label>{{$f->name}}</label>
+																							<label>{{$f->name}}  
+																							<span type="button" class="plan-tlp" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="	{{$f->tooltip_text}}" data-bs-original-title="{{$f->tooltip_text}}"><i class="fas fa-info"></i></span>
+																						</label>
 																						</div>
 																						@endforeach
 																						<div class="custom-table-data-footer">
