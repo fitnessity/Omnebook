@@ -820,7 +820,7 @@
 																									</tr>
 																								</thead>
 																								<tbody>
-																									@foreach ($purchase_history as $history) 
+																									@foreach($purchase_history as $history) 
 																										@if($history->item_description(request()->business_id)['itemDescription'] != '')
 																										<tr>
 																											<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
@@ -848,7 +848,6 @@
 																											</td>
 																										</tr>
 																										@endif
-
 																									@endforeach
 																								</tbody>
 																							</table>
@@ -1038,6 +1037,7 @@
 																	<div class="accordion-item shadow">
 																		<h2 class="accordion-header" id="accordionnesting10Example2">
 																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting10Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting10Examplecollapse2">
+
 																				<div class="container-fluid nopadding">
 																				   <div class="row y-middle">
 																					   <div class="col-lg-6 col-md-6 col-8">
