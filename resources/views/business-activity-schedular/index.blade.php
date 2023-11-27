@@ -125,9 +125,9 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																	<div class="col-md-12 col-xs-12">
 																		<label>Category Name: </label> <span>{{@$cList->category_title}}</span>
 																	</div>
-																	<div class="col-md-12 col-xs-12">
+																	<!-- <div class="col-md-12 col-xs-12">
 																		<label>Instructor: </label> <span>@if($ser->BusinessStaff != '') {{ucfirst($ser->BusinessStaff->full_name)}}  @else N/A @endif</span>
-																	</div>
+																	</div> -->
 																</div>
 															</div>
 														</div>
@@ -166,6 +166,8 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																				$grayBtnChk = 3;
 																				$class = 'post-btn-gray';
 																			}
+
+																			$insName = $scary->getInstructure();
 																		@endphp
 																		<div class="col-md-4 col-sm-5 col-xs-12">
 																			<div class="classes-time">
@@ -174,6 +176,8 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																					"Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</label>
 
 																				<label class="font-red">{{ $canceldata != '' ? "Cancelled" : ''}}</label>
+
+																				<label>{{ $insName }}</label>
 																			</div>
 																		</div>
 																	@endforeach

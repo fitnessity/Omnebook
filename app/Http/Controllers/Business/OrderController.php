@@ -47,7 +47,6 @@ class OrderController extends BusinessBaseController
             if (Session::has('cart_item_for_checkout')) {
                 session()->forget('cart_item_for_checkout');
             }
-            
         }
 
         if (session()->has('cart_item_for_checkout')) {
@@ -479,14 +478,21 @@ class OrderController extends BusinessBaseController
             }
 
             if(@$item['orderType'] == 'Membership'){
-                BookingCheckinDetails::create([
-                    'business_activity_scheduler_id' => 0,
-                    'customer_id' => $cUid,
-                    'booking_detail_id' => $booking_detail->id,
-                    'checkin_date' => NULL,
-                    'use_session_amount' => 0,
-                    'source_type' => 'in_person',
-                ]);
+                $checkInDetail = BookingCheckinDetails::where(['customer_id'=>$cUid,'booking_detail_id' => NULL])->first();
+                if($checkInDetail){
+                    $checkInDetail->update([
+                        'booking_detail_id'=>$booking_detail->id,
+                    ]);
+                }else{
+                    BookingCheckinDetails::create([
+                        'business_activity_scheduler_id' => 0,
+                        'customer_id' => $cUid,
+                        'booking_detail_id' => $booking_detail->id,
+                        'checkin_date' => NULL,
+                        'use_session_amount' => 0,
+                        'source_type' => 'in_person',
+                    ]);
+                }
             }
 
             /*$businessService = $checkoutRegisterCartService->getbusinessService($item['code']); 
@@ -506,15 +512,6 @@ class OrderController extends BusinessBaseController
 
             SGMailService::confirmationMail($email_detail);*/
         }
-
-        BookingCheckinDetails::create([
-                'business_activity_scheduler_id' => 0,
-                'customer_id' => $cUid,
-                'booking_detail_id' => $booking_detail->id,
-                'checkin_date' => NULL,
-                'use_session_amount' => 0,
-                'source_type' => 'in_person',
-            ]);
 
         session()->forget('cart_item_for_checkout');
         session()->put('ordermodelary', $bookidarray);

@@ -11,7 +11,7 @@ use Auth,Response,Redirect,Validator,Input,Image,File,DB,DateTime,Config,Storage
 use Carbon\Carbon;
 use Illuminate\Support\Facades\{Gate,Log};
 
-use App\{PageAttachment,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,BusinessActivityScheduler,PageLike,Notification,Sports,BusinessReview,BusinessPostViews,UserFollow,UserBookingStatus,UserBookingDetail,MailService,User,UserService,UserProfessionalDetail,PagePost,PagePostComments,PagePostCommentsLike,PagePostLikes,PagePostSave,CompanyInformation,Miscellaneous,BusinessServiceReview,Transaction};
+use App\{PageAttachment,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,BusinessActivityScheduler,PageLike,Notification,Sports,BusinessReview,BusinessPostViews,UserFollow,UserBookingStatus,UserBookingDetail,MailService,User,UserService,UserProfessionalDetail,PagePost,PagePostComments,PagePostCommentsLike,PagePostLikes,PagePostSave,CompanyInformation,Miscellaneous,BusinessServiceReview,Transaction,CustomerPlanDetails};
 
 class BusinessController extends Controller
 {
@@ -23,7 +23,7 @@ class BusinessController extends Controller
 
     public function dashboard(Request $request ,$dates= null, $id= null){
 
-        $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales =  $in_person =$online = $customerCount = $remainingRecPercentage = $completedRecPercentage = $previousTotalSales = $totalsalePercentage =  $customerCountPercentage = $bookingCountPercentage = $totalRecurringPmt = $compltedpmtcnt = $remainigpmtcnt =$recurringAmount = $completeRecurringAmount = $reminingRecurringAmount = 0;
+        $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales =  $in_person =$online = $customerCount = $remainingRecPercentage = $completedRecPercentage = $previousTotalSales = $totalsalePercentage =  $customerCountPercentage = $bookingCountPercentage = $totalRecurringPmt = $compltedpmtcnt = $remainigpmtcnt =$recurringAmount = $completeRecurringAmount = $reminingRecurringAmount = $left_days = 0;
 
         $ptdata1= $expiringMembership = $activitySchedule = $topBookedPriceId=$todayBooking =  $services = $topBookedCategories = $notificationAry = $transaction = $businessServices = $usDetail = [];
 
@@ -31,6 +31,8 @@ class BusinessController extends Controller
             User::where('id',Auth::user()->id)->update(['cid'=> $id]);
             return redirect(route('business_dashboard'));
         }
+
+        $activePlan = Auth::user()->CustomerPlanDetails()->where('amount','!=',0)->whereDate('expire_date','>=',date('Y-m-d'))->whereDate('starting_date','<=',date('Y-m-d'))->latest()->first();
 
         $startDate = Carbon::now()->firstOfMonth()->format('Y-m-d');
         $endDate = Carbon::now()->lastOfMonth()->format('Y-m-d');
@@ -258,7 +260,7 @@ class BusinessController extends Controller
 
         /*print_r($notificationAry);*/
        
-        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingRecPercentage','completedRecPercentage','totalsalePercentage','bookingCountPercentage','customerCountPercentage','todayBooking','services','startDate','endDate','topBookedCategories','notificationAry' ,'startDateCalendar','endDateCalendar','completeRecurringAmount','reminingRecurringAmount','recurringAmount'));
+        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingRecPercentage','completedRecPercentage','totalsalePercentage','bookingCountPercentage','customerCountPercentage','todayBooking','services','startDate','endDate','topBookedCategories','notificationAry' ,'startDateCalendar','endDateCalendar','completeRecurringAmount','reminingRecurringAmount','recurringAmount','left_days','activePlan'));
     }
 
     public function getBookingList(Request $request){

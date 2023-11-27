@@ -140,6 +140,8 @@
 																$grayBtnChk = 3;
 																$class = 'post-btn-gray';
 															}
+
+															$insName = $scary->getInstructure()
 														@endphp
 														<div class="col-lg-4 col-md-3 col-sm-5 col-xs-6">
 															<div class="multiple0select btn-group w-100">
@@ -148,6 +150,7 @@
 																	<label class="btn button_select" for="item_{{$s}}{{$scary->id}}">{{$timeOfActivity}} <br>{{$duration}}</label>
 																	<span>{{ $SpotsLeftdis == 0 ? "Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</span>
 																	<label class="font-red">{{ $canceldata != '' ? "Cancelled" : ''}}</label>
+																	<span>{{ $insName }}</span>
 																</div>
 															</div>
 														</div>
