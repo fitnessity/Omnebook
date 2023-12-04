@@ -118,7 +118,10 @@
 			<div class="row">
 				<div class="col-12">
 					<div class="text-right">
-						<a href="{{route('onboard_process.index' ,['cid' => $cid ,'displaystep' => 1])}}" class="btn btn-red">Get Started</a>
+						<button  onclick="redirectToOnboardProcess('{{ route('onboard_process.index', ['cid' => $cid, 'displaystep' => 1]) }}')" class="btn btn-red" @if($user && !$activePlan) disabled @endif>Get Started</button>
+						@if($user && !$activePlan) 
+							<h3 class="fs-16 font-red">You have no active plan. Please <a href="{{route('choose-plan.index')}}" class="text-decoration-underline" >buy plan</a>.</h3>
+						@endif
 					</div> 
 				</div>
 			</div>
@@ -126,8 +129,12 @@
 	</div><!-- End Page-content -->
 </div><!-- END layout-wrapper -->
 	
-	
-	
-	
 @include('layouts.business.footer')
+
+<script>
+  function redirectToOnboardProcess(url) {
+    window.location.href = url;
+  }
+</script>
+
 @endsection
