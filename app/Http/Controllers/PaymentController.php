@@ -26,8 +26,7 @@ class PaymentController extends Controller {
 
     public function __construct(BookingRepository $bookings) {
         
-        $this->middleware('auth', ['except' => ['getBladeDetail1','profileDetail', 'SendVerificationlinkCall', 'SendVerificationlinkMsg', 'makeCall', 'generateVoiceMessage', 'sendCustomMessage', 'getBladeDetail', 'newFUn', 'getBusinessClaim', 'getStateList', 'getCityList', 'familyProfileUpdate', 'submitFamilyForm', 'submitFamilyFormWithSkip', 'check', 'deleteCompany', 'submitFamilyForm1', 'skipFamilyForm1', 'getBusinessClaimDetaill', 'businessClaim', 'getLocationBusinessClaimDetaill', 'VerifySendVerificationlink', 'searchResultLocation', 'searchResultLocation1','profileView','sendmail','mailtemplate','about','postDetail']]);
-
+        $this->middleware('auth');
         $this->bookings = $bookings;
         $this->arr = [];        
     }
@@ -565,7 +564,7 @@ class PaymentController extends Controller {
                         "phone" => @$company->business_phone, 
                         "email" => @$MailCustomer->email, 
                         "website" => @$company->business_website, 
-                        "MapImage" => 'https://maps.googleapis.com/maps/api/staticmap?center='.@$company->latitude.','.@$company->longitude.'&zoom=15&size=600x300&maptype=roadmap&markers=color:red|'.@$company->latitude.','.@$company->longitude.'&key=AIzaSyBHm1RdzTbNsr9qm-AEfdreOWihD-oHN9A',
+                        "MapImage" => 'https://maps.googleapis.com/maps/api/staticmap?center='.@$company->latitude.','.@$company->longitude.'&zoom=15&size=600x300&maptype=roadmap&markers=color:red|'.@$company->latitude.','.@$company->longitude.'&key='.env('GOOGLE_MAP_KEY'),
                         "thingsToKnow" => @$businessTerms->houserules, 
                         "CancellationText" => @$businessTerms->cancelation, 
                         "RefundText" => @$businessTerms->refundpolicytext);
@@ -651,6 +650,8 @@ class PaymentController extends Controller {
                 $stripePaymentMethod->last4 = $payment_method['card']['last4'];
                 $stripePaymentMethod->save();
 
+                $user->update(['default_card'=>$payment_method['card']['last4']]);
+                
                 $customer = Customer::where(['fname' =>$user->firstname,'lname' =>$user->lastname, 'email' => $user->email])->get();
 
                 if ($stripePaymentMethod->wasRecentlyCreated && !empty($customer) ) {
@@ -666,6 +667,7 @@ class PaymentController extends Controller {
                             'exp_year' => $payment_method['card']['exp_year'],
                             'last4' => $payment_method['card']['last4'],
                         ]);
+
                     }
                 }
             }

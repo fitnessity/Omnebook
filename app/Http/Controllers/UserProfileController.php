@@ -8827,11 +8827,22 @@ class UserProfileController extends Controller {
         CompanyInformation::where('id',$request->cid)->update(['claim_business_verification_code'=>$random]);
         $details = [];
         $data = CompanyInformation::where('id',$request->cid)->first();
-        $details = array(
-            "random_code" => $random,
-            "email" =>$data->business_email
-        );
-        $success = MailService::sendEmailclaimvarification($details);
+        if($request->type == 'email'){
+            $details = array(
+                "random_code" => $random,
+                "email" =>$data->business_email
+            );
+            $success = MailService::sendEmailclaimvarification($details);
+        }else if($request->type == 'phone'){
+            $phone_number = str_replace([' ','(',')','-'],'',$data->business_phone);
+            $phone_number = '+1'.$phone_number;
+            $success = $this->sendMessage($random,$phone_number);
+        }else{
+            $phone_number = str_replace([' ','(',')','-'],'',$data->business_phone);
+            $phone_number = '+1'.$phone_number;
+            $success = $this->makeCalluser($random,$phone_number);
+        }
+        
         return $success;
     }
 
@@ -8902,8 +8913,8 @@ class UserProfileController extends Controller {
         return $msg;
     }
 
-    public function business_claim_varification($cid){
-        return view('home.business-claim-varification',compact('cid'));
+    public function business_claim_varification($cid,$type){
+        return view('home.business-claim-varification',compact('cid','type'));
     } 
 
     public function varify_code_to_claim_business(Request $request){

@@ -7,7 +7,7 @@
         <div class="panel-heading">List</div>
         <div class="panel-body">
 
-        {!! Form::open(array('route' => 'delete-plans', 'id' => 'planlist')) !!}
+       
             <div class="table-responsive">
               <table id="plan_list" class="table table-bordered table-striped {{ count($features) > 0 ? 'datatable' : '' }} table-hover ">
                 <thead>
@@ -37,7 +37,6 @@
                 </tbody>
             </table>
             </div>
-        {!! Form::close() !!}
         </div>
     </div>
 

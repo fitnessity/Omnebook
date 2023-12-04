@@ -53,17 +53,20 @@
 
 											<h6 class="text-uppercase fw-semibold mt-4 mb-3 text-muted"></h6>
 
-											@php $scduleIds= ''; @endphp
-											@foreach ($schedules as $i=>$schedule)
-												@php 
-													$scduleIds .= $schedule->id.',';
-												@endphp
-											@endforeach
-											<div class="col-12">
-												<div class="text-right">
-													<button type="button" class="btn btn-red" data-behavior="ajax_html_modal" data-url="{{route('business.schedulers.cancel_all', ['schedulerId' => rtrim($scduleIds, ','), 'date' => $filterDate->format('m/d/Y'), 'return_url' => url()->full()])}}">Cancel All Activity</button>
+											@php
+											   $scheduleIds = implode(',', $schedules->pluck('id')->toArray());
+											@endphp
+
+											<div class="row">
+												<div class="col-md-12">
+													<div class="text-right">
+														<button type="button" class="btn btn-red" data-behavior="ajax_html_modal" data-url="{{route('business.schedulers.cancel_all', ['schedulerId' => rtrim($scheduleIds, ','), 'date' => $filterDate->format('m/d/Y'), 'return_url' => url()->full()])}}">Cancel All Activity Of Today</button>
+													
+														<button type="button" class="btn btn-red" data-behavior="ajax_html_modal" data-url="{{route('business.schedulers.cancel_all_by_date', ['activity_type'=>request()->activity_type, 'return_url' => url()->full()])}}">Cancel Multiple Days</button>
+													</div>
 												</div>
 											</div>
+											
 											@php $total_reservations = 0; @endphp
 											@foreach ($schedules as $i=>$schedule)
 												@php 
@@ -89,8 +92,8 @@
 														<p class="text-muted mb-0">with {{$schedule->company_information->public_company_name}} @if($schedule->business_service()->exists()) {{$schedule->business_service->activity_location}} @endif </p>
 													</div>
 													<div class="flex-grow-auto ms-3">
-														@if($schedule->activity_cancel->where('cancel_date',date('Y-m-d'))->first())
-															@if($schedule->activity_cancel->where('cancel_date',date('Y-m-d'))->first()->cancel_date_chk == 1)
+														@if($schedule->activity_cancel->where('cancel_date',$filterDate->format('Y-m-d'))->first())
+															@if($schedule->activity_cancel->where('cancel_date',$filterDate->format('Y-m-d'))->first()->cancel_date_chk == 1)
 																<p class="font-red mb-0 fs-17 act-cancel-p">Activity Cancelled </p>
 															@endif
 														@endif
@@ -154,8 +157,8 @@
 																	                  <a class="btn-red mb-10 text-center" href="{{route('business.services.create',['serviceType'=>$serviceType,'serviceId'=>$serviceId])}}" target="_blank">Edit</a>
 																	                  @if ($schedule_end > time()) 
 																		                  <button type="button" class="btn-black" data-behavior="ajax_html_modal" data-url="{{route('business.schedulers.delete_modal', ['schedulerId' => $schedule->id, 'date' => $filterDate->format('m/d/Y'), 'return_url' => url()->full()])}}" >
-																		                  	@if($schedule->activity_cancel->where('cancel_date',date('Y-m-d'))->first())
-																										@if($schedule->activity_cancel->where('cancel_date',date('Y-m-d'))->first()->cancel_date_chk == 1)
+																		                  	@if($schedule->activity_cancel->where('cancel_date',$filterDate->format('Y-m-d'))->first())
+																										@if($schedule->activity_cancel->where('cancel_date',$filterDate->format('Y-m-d'))->first()->cancel_date_chk == 1)
 																											Uncanel 
 																										@else
 																											Cancel
@@ -214,7 +217,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="myModalLabel">Activity Scheduler Check-In</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					<button type="button" class="btn-close" onclick="window.location.reload()"></button>
 			</div>
 			<div class="modal-body" id="checkInHtml">
 

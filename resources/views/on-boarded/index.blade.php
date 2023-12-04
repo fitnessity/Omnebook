@@ -226,7 +226,7 @@
 														<div class="col-lg-4 col-md-4">
 															<div class="mb-3">
 																<label class="form-label">Favorite Activities </label>
-																<input type="text" class="form-control" id="favorit_activity" name="favorit_activity" value="{{@$user->favorit_activity}}">
+																<input type="text" class="form-control" id="favorit_activity" name="favorit_activity" value="{{@$user->favorit_activity}}" placeholder="ex: Yoga, MMA, Adventure Sports, Soccer">
 															</div>
 														</div>
 														
@@ -347,6 +347,7 @@
 														                                    <a class="font-red" onclick="resendOtp();">Resend</a>
 														                                    <div class="fs-16" id="otpMsg"></div>
 														                                </div>
+														                                <input type="hidden" id="otpType" value="">
 														                            </div>
 														                        </div>
 														                    </div>
@@ -473,6 +474,7 @@
 																<label class="form-label">Business Username <span class="font-red">*</span></label>
 																			
 																<input type="text" class="form-control" id="businessUserName" name="businessUserName" required value="{{@$companyDetail->business_user_tag}}">
+																<div class="fs-11 font-red chkBusinessUsername"></div>
 																<div class="invalid-feedback">Please username</div>
 															</div>
 														</div>
@@ -593,7 +595,6 @@
 											<div class="row">
 												<div class="booking-titles text-center">
 													<h4 class="fs-18">Plans & Pricing</h4>
-													<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
 												</div>
 												<div class="price-switch">
 													<div class="row">
@@ -642,7 +643,7 @@
 																			{!! $p->description !!}
 																		</div>
 																		<div class="width-100">
-																			<a onclick="getPlan(1,'{{$cid}}','{{$p->price_per_month}}')" class="btn btn-red mt-25 width-100" >Your Current Plan </a>
+																			<a onclick="getPlan({{$p->id}},'{{$cid}}','{{$p->price_per_month}}')" class="btn btn-red mt-25 width-100" >Your Current Plan </a>
 																		</div>
 																	</div>
 																</div>
@@ -686,7 +687,9 @@
 																						</div>
 																						@foreach($features as $key=>$f)
 																						<div class="custom-table-data">
-																							<label>{{$f->name}}</label>
+																							<label>{{$f->name}}  
+																							<span type="button" class="plan-tlp" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="	{{$f->tooltip_text}}" data-bs-original-title="{{$f->tooltip_text}}"><i class="fas fa-info"></i></span>
+																						</label>
 																						</div>
 																						@endforeach
 																						<div class="custom-table-data-footer">
@@ -949,12 +952,15 @@
 	function resendOtp(){
         var _token = $("input[name='_token']").val();
         var cid ='{{$cid}}';
+        var type = $('#otpType').val();
+      
         $.ajax({
             url: "/resend-otp-for-claim",
             type:"POST",
             headers: {'X-CSRF-TOKEN': _token},
             data:{
-                cid:cid
+                cid:cid,
+                type:type
             },
             success:function(response){
                 $('#otpMsg').removeClass('font-red').addClass('font-green').html('Text message sent! Enter the code above.');
@@ -1039,6 +1045,7 @@
 	                },
 	                success:function(response){
 	                    if(response == 'Success'){
+	                    	$('#otpType').val(type_enter);
 	                        $('#error-email').removeClass('font-red').addClass('font-green').find('h5').text('OTP successfully sent. Please enter the OTP below.');
 	                    }else{
 	                    	$('#error-email').removeClass('font-green').addClass('font-red').find('h5').text("We can't send otp on your email..");
@@ -1067,6 +1074,7 @@
                 },
                 success:function(response){
                 	if(response == 'Success'){
+                		$('#otpType').val(type_enter);
                     	$('#error-phone').removeClass('font-red').addClass('font-green').removeClass('d-none').find('h5').text("OTP successfully sent. Please enter the OTP below.");
                     }else{
                     	$('#error-phone').removeClass('font-green').addClass('font-red').find('h5').text("We can't send otp on your phone number..");
@@ -1092,6 +1100,7 @@
                 },
                 success:function(response){
                     if(response == 'Success'){
+                    	$('#otpType').val(type_enter);
                     	$('#error-call').removeClass('font-red').addClass('font-green').removeClass('d-none').find('h5').text("OTP successfully sent. Please enter the OTP below.");
                     }else{
                     	$('#error-call').removeClass('font-green').addClass('font-red').find('h5').text("We can't call on your phone number..");
@@ -1186,6 +1195,10 @@
             }
         });
 
+        if($('.chkBusinessUsername').html() != ''){
+        	valid = 1;
+        }
+
    		if (valid != 1) {
             e.preventDefault(); 
             var posturl = '/onboard_process/store';
@@ -1211,6 +1224,33 @@
 	            }
 	        });
        	}
+    });
+
+    $('#businessUserName').on('input', function() {
+    	$('.chkBusinessUsername').html("");
+    	$('#businessUserName').css('border-color','ced4da');
+    });
+
+    $('#businessUserName').on('blur', function() {
+        var posturl = 'userNamevalidation';
+        $.ajax({
+            url: posturl,
+            type: 'get',
+            dataType: 'json',
+            data: {
+            	userName: $('#businessUserName').val(),
+            	_token :'{{csrf_token()}}'
+            },  
+            beforeSend: function () {
+                $(".chkBusinessUsername").html('');
+            },             
+            success: function (response) { 
+            	if(response.msg){ 
+            		$('#businessUserName').css('border-color','f06548');
+                	$(".chkBusinessUsername").html(response.msg);  
+            	}                
+            }
+        });
     });
 </script>
 

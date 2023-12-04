@@ -92,8 +92,7 @@ class BusinessActivityScheduler extends Model
             return $business_activity_schedulers->whereRaw("activity_days like ? and shift_start > ? and shift_start <= ?", ['%'.$start_datetime->format('l').'%', $start_datetime->format("H:i"), $end_datetime->format("H:i")]);
         }else{
             return $business_activity_schedulers->whereRaw("((activity_days like ? and shift_start > ?) or ((activity_days like ? and shift_start <= ?)))", ['%'.$start_datetime->format('l').'%', $start_datetime->format("H:i"), '%'.$end_datetime->format('l').'%', $end_datetime->format("H:i")]);
-        }
-                                       
+        }                                   
     }
 
     public static function allday($datetime){
@@ -250,5 +249,22 @@ class BusinessActivityScheduler extends Model
         }
 
         return trim($string);
+    }
+
+    public function getInstructure($date){
+        $name = '';
+        $checkInData = BookingCheckinDetails::where('business_activity_scheduler_id' ,$this->id)->whereDate('checkin_date',$date)->first();
+        $ids = @$checkInData->instructor_id ?? $this->instructure_ids;
+        if($ids){
+            foreach(explode(',',$ids) as $id){
+                $staff = BusinessStaff::find($id);
+                if($staff){
+                    $name .= $staff->full_name.', ';
+                }
+            }
+        }
+
+        $name = rtrim($name, ', ');
+        return $name;
     }
 }
