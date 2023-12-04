@@ -92,7 +92,7 @@
 				  	<tr>
 						<th>No</th>
 						<th>Client</th>
-						<th>Options</th>
+						<th>Membership Options</th>
 						<th>Check In</th>
 						<th>Remaining </th>
 						<th>Expiration</th>
@@ -146,7 +146,7 @@
 							</td>
 							<td class="modal-check-width">
 								<div class="check-cancel width-105">
-									@if(@$firstCheckInDetail->order_detail && @$firstCheckInDetail->checkin_date <= date('Y-m-d') && $cus->active_memberships()->get()->isNotEmpty()) 
+									@if(@$firstCheckInDetail->order_detail && $cus->active_memberships()->get()->isNotEmpty()) 
 										@php  
 											$datetime = new DateTime(@$firstCheckInDetail->checkin_date.' '.$business_activity_scheduler->shift_start);
 											$formattedDatetime = $datetime->format('Y-m-d H:i:s');
@@ -340,7 +340,7 @@
     	var selectedValues = ins.selected();
     	date = "{{$filter_date->format('Y-m-d')}}";
 		today = "{{$today}}";
-		if(today == date){
+		if(date >= today){
 			$.ajax({
 				url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/change_instructor",
 		        method: "POST",
@@ -351,7 +351,6 @@
 		        },
 		        success: function(html){
 		        	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}','','','','','');
-		            //location.reload();
 		        }
 			})
 		}else{

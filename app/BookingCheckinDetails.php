@@ -30,10 +30,14 @@ class BookingCheckinDetails extends Model
                             $id= $userBookingDetail->user_id;
                         }
                     }
-                    $model->instructor_id = @$userBookingDetail->business_services->instructor_id;
+                    //$model->instructor_id = @$userBookingDetail->business_services->instructor_id;
                 }
                 $id = @$id != '' ? @$id : 0;
                 $model->booked_by_customer_id = $id;
+
+                if($model->business_activity_scheduler_id){
+                    $model->instructor_id = $model->scheduler != '' ? $model->scheduler->instructure_ids : '';
+                }
             }else{
                 $model->before_use_session_amount = 0;
                 $model->after_use_session_amount = 0;

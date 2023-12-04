@@ -251,9 +251,10 @@ class BusinessActivityScheduler extends Model
         return trim($string);
     }
 
-    public function getInstructure(){
-        $ids = $this->instructure_ids;
+    public function getInstructure($date){
         $name = '';
+        $checkInData = BookingCheckinDetails::where('business_activity_scheduler_id' ,$this->id)->whereDate('checkin_date',$date)->first();
+        $ids = @$checkInData->instructor_id ?? $this->instructure_ids;
         if($ids){
             foreach(explode(',',$ids) as $id){
                 $staff = BusinessStaff::find($id);
@@ -262,8 +263,8 @@ class BusinessActivityScheduler extends Model
                 }
             }
         }
-        $name = rtrim($name, ', ');
 
+        $name = rtrim($name, ', ');
         return $name;
     }
 }
