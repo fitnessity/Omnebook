@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Http\Request;
-use App\{User,CompanyInformation,CustomerPlanDetails,Transaction,StripePaymentMethod,Plan};
+use App\{User,CompanyInformation,CustomerPlanDetails,Transaction,StripePaymentMethod,Plan,PromoCodes};
 use App\Repositories\FeaturesRepository;
 use Str;
 use DateTime;
+use Carbon\Carbon;
 
 class MembershipPlanController extends Controller {
 
@@ -21,80 +22,114 @@ class MembershipPlanController extends Controller {
 
     public function index(Request $request) { 
         $plans = Plan::get();
+        $currentPlan = Auth::user()->currentPlan();
         $features = $this->features->getAllFeatures();
-        return view('membership-plan.index',compact('plans','features'));
+        return view('membership-plan.index',compact('plans','features','currentPlan'));
     }
 
     public function store(Request $request){
         //print_r($request->all());exit;
-        $currentDate = new DateTime();
-        $sDate = $currentDate->format('Y-m-d');
-    }
-
-    public function storePlan(Request $request){
-        $currentDate = new DateTime();
-        $sDate = $currentDate->format('Y-m-d');
-        $currentDate->modify('+14 days');
-        $eDate = $currentDate->format('Y-m-d');
-
-        $company = CompanyInformation::find($request->cid);
-        $user = User::find($company->user_id);
-
-        $chkPlan = CustomerPlanDetails::where(['user_id' => $user->id])->whereDate('expire_date' ,'=', $eDate)->first();
-        if($chkPlan == ''){
-            CustomerPlanDetails::create([
-                'user_id'=> $user->id,
-                'plan_id'=> $request->id,
-                'starting_date'=> $sDate,
-                'expire_date'=> $eDate
-            ]);
+        $user = Auth::user();
+        if($request->type == 'month'){
+            $eDate = Carbon::now()->addMonth()->format('Y-m-d');
+            $sDate = Carbon::now()->format('Y-m-d');
+        }else{
+            $eDate = Carbon::now()->addYear()->format('Y-m-d');
+            $sDate = Carbon::now()->format('Y-m-d');
         }
-        $user->update(['show_step' => 6]);
+
+       /* $chkPlan = CustomerPlanDetails::where(['user_id' => $user->id])->whereDate('starting_date' ,'=', $sDate)->whereDate('expire_date' ,'=', $eDate)->first();*/
+       
+        $paymentIntentData = [
+            'amount' => round($request->total * 100),
+            'currency' => 'usd',
+            'customer' => $user->stripe_customer_id,
+            'off_session' => true,
+            'confirm' => true,
+            'metadata' => [],
+        ];
+
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        if ($request->has('cardinfo')) {
+            $paymentIntentData['payment_method'] = $request->cardinfo;
+        } else {
+            $paymentIntentData['payment_method'] = $request->new_card_payment_method_id;
+            if ($request->save_card != 1) {
+                $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $request->new_card_payment_method_id)->firstOrFail();
+                $stripePaymentMethod->delete();
+            }
+        }
+
+        try {
+            $paymentIntent = $stripe->paymentIntents->create($paymentIntentData);
+            if ($paymentIntent['status'] == 'succeeded') {
+                
+                CustomerPlanDetails::create([
+                    'user_id' => $user->id,
+                    'plan_id' => $request->plan,
+                    'amount' => $request->total,
+                    'starting_date' => $sDate,
+                    'expire_date' => $eDate,
+                    'payment_for' => $request->type,
+                    'price' => $request->price,
+                    'discount' => $request->discount,
+                    'promo_code_id' => $request->promo_code_id,
+                    'promo_code_name' => $request->promo_code_name,
+                    'payment_id' => $paymentIntent["id"],
+                    'payload' =>json_encode($paymentIntent,true),
+                ]);
+
+                $user->update(['default_card'=>$paymentIntent['charges']['data'][0]['payment_method_details']['card']['last4']]);
+                
+            }
+        } catch (\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
+            $errormsg = "Your card is not connected with your account. Please add your card again.";
+            return redirect('/choose-plan')->with('stripeErrorMsg', $errormsg);
+        } catch (\Exception $e) {
+            $errormsg = $e->getError()->message;
+            return redirect('/choose-plan')->with('stripeErrorMsg', $errormsg);
+        }   
+
+        return redirect()->route('business.subscription.index',['business_id' =>  Auth::user()->cid]);     
     }
 
     public function getCardForm(Request $request){
         $user = Auth::user();
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        $intent = $stripe->setupIntents->create(
-          [
-            'customer' => @$user->stripe_customer_id,
-            'payment_method_types' => ['card'],
-          ]
-        );
+        $intent = $stripe->setupIntents->create([
+                'customer' => @$user->stripe_customer_id,
+                'payment_method_types' => ['card']
+            ]);
 
+        $plan = Plan::find($request->id);
+        $total = $request->type == 'year' ? $plan->price_per_year : $plan->price_per_month;
+        $total = $total ?? 0;
         $cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id', $user->id)->get();
-        return view('membership-plan.card_form', compact('intent','user','cardInfo'));
+        return view('membership-plan.card_form', compact('intent','user','cardInfo','request','total'));
     }
 
-    public function storeCards(Request $request){
-        $company = CompanyInformation::find($request->cid);
-        $user = User::where('id', $company->user_id)->first();
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        $payment_methods = $stripe->paymentMethods->all(['customer' => $user->stripe_customer_id, 'type' => 'card']);
-        $fingerprints = [];
-        foreach($payment_methods as $payment_method){
-            $fingerprint = $payment_method['card']['fingerprint'];
-            if (in_array($fingerprint, $fingerprints, true)) {
-                $deletePaymentMethod = StripePaymentMethod::where('payment_id', $payment_method['id'])->first();
-                if($deletePaymentMethod != ''){
-                    $deletePaymentMethod->delete();
-                }
-            } else {
-                $fingerprints[] = $fingerprint;
-                $stripePaymentMethod = StripePaymentMethod::firstOrNew([
-                    'payment_id' => $payment_method['id'],
-                    'user_type' => 'User',
-                    'user_id' => $user->id,
-                ]);
-
-                $stripePaymentMethod->pay_type = $payment_method['type'];
-                $stripePaymentMethod->brand = $payment_method['card']['brand'];
-                $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
-                $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
-                $stripePaymentMethod->last4 = $payment_method['card']['last4'];
-                $stripePaymentMethod->save();
+    public function checkPromoCode(Request $request){
+        $data = PromoCodes::where('code',$request->pCode)->first();
+        if($data){
+            if($data->price_in =='$'){
+                $dis = $data->price;
+                $totalAfterDiscount = $request->price - $data->price;
+            }else{
+                $dis = ($data->price * $request->price)/100;
+                $totalAfterDiscount = $request->price - (($data->price * $request->price)/100);
             }
+            $responseArray = [
+                'status' => 'success',
+                'dis' => $dis,
+                'totalAfterDiscount' => $totalAfterDiscount,
+                'pCodeName' => $data->code,
+                'pCodeId' => $data->id,
+            ];
+        }else{
+            $responseArray = [
+                'status' => 'not'
+            ];
         }
-        return redirect('/onboard_process?show=5&cid='.$request->cid);
+        return json_encode($responseArray);
     }
 }   

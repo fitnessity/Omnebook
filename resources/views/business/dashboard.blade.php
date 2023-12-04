@@ -51,7 +51,7 @@
                         <div class="col">
                             <div class="h-100">
                                 <div class="row mb-3 pb-1">
-                                    @if(!$activePlan || Auth::user()->chkDaysLeft() < 14)
+                                    @if(!$activePlan && Auth::user()->chkDaysLeft() < 14)
 									<div class="col-6">
 										<div class="remaining-days mb-15">
 											<div class="row y-middle" style="margin-top:5px;margin-bottom: 5px;">
@@ -67,7 +67,7 @@
 												</div>
 												<div class="col-lg-10 col-md-10 col-9">	
 													<p class="fs-13">
-														You have {{Auth::user()->chkDaysLeft()}} days remaining in your @if($activePlan) plan. @else 14 day free trial. To keep using TeamUp after the trial period, enter your <a href="#"> payment details.</a> If you have any questions, please don't hesitate to <a href="#"> contact us</a>! @endif 
+														You have {{Auth::user()->chkDaysLeft()}} days remaining in your @if($activePlan) plan. @else 14 day free trial. To keep using TeamUp after the trial period, enter your <a href="{{route('creditCardInfo')}}"> payment details.</a> <?php /*?>If you have any questions, please don't hesitate to <a href="{{route('contact-us')}}"> contact us</a>!<?php */?> @endif 
 													</p>
 												</div>
 											</div>

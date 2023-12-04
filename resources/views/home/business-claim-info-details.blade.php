@@ -29,9 +29,7 @@
 </style>
 <?php
     use App\CompanyInformation;
-    $phone_number = '';
-    $extension = '';
-    $email = '';
+    $phone_number = $extension = $email = $user = $activePlan ='';
     $val = "null";
     $data = CompanyInformation::where('id',$cid)->first();
    
@@ -50,7 +48,15 @@
             $arr_email = explode("@", $email);
             $extension = 'username@'.$arr_email[1];
         }
-        
+
+        if(Auth::check()){
+            $user = Auth::user();
+        }
+
+        if($user){
+            $user->update(['show_step' =>1]);
+            $activePlan = $user->CustomerPlanDetails()->where('amount','!=',0)->whereDate('expire_date','>=',date('Y-m-d'))->whereDate('starting_date','<=',date('Y-m-d'))->latest()->first();
+        }
     }
 ?>
 <div class="claiming-section claimyour-business" style="background-image: url(../img/claim-a-business-design.jpg);">
@@ -62,13 +68,15 @@
             <h3>CLAIMING YOUR BUSINESS LISTING</h3>
 
             <p>
-                Let's get started! By continuing, you agree to Fitnessity's <a href="#"> Terms of Service</a> and Fitnessity's <a href="#">Privacy Policy</a>. You are claiming as <b>{{Auth::user()->email}}</b>.You represent that you are the owner/representative to claim this account on behalf of this business. 
+                Let's get started! By continuing, you agree to Fitnessity's <a href="{{url('/terms-condition')}}"> Terms of Service</a> and Fitnessity's <a href="{{url('/privacy-policy')}}">Privacy Policy</a>. You are claiming as <b>{{Auth::user()->email}}</b>.You represent that you are the owner/representative to claim this account on behalf of this business. 
             </p>
 
             <h5>How Would You Would Like to Verify Ownership of {{$data->dba_business_name}}</h5>
-
+            @if($user && !$activePlan) 
+                <h3 class="fs-16 font-red">You have no active plan. Please <a href="{{route('choose-plan.index')}}" >buy plan.</a></h3>
+            @endif
             <div id="error-email" style="display: none">
-                    <h5 class="Alertred">Your Email Is Not Match With Our Data. You Can't Claim This Business..</h5>
+                <h5 class="Alertred">Your Email Is Not Match With Our Data. You Can't Claim This Business..</h5>
             </div>
             <input type="hidden" name="cid" id="cid" value="{{$cid}}">
             @if($email != '')
@@ -83,7 +91,7 @@
                        <!--  <span>@gmail.com</span> -->
                         <span class="text-danger" id="email-error"></span>
                     </div>
-                    <input type="submit" value="Send" class="btnsend">
+                    <button type="submit" value="Send" class="btnsend" @if($user && !$activePlan) disabled @endif >Send</button>
                 </form>
             </div>
             @endif
@@ -99,7 +107,7 @@
                         <span>Send text to: +1 {{$phone_number}}</span>
                         <input type="hidden" name="phone_num" id="phone_num" class="form-control" value="{{$phone_number}}">
                     </div>
-                    <input type="submit" value="Send" class="btnsend">
+                    <button type="submit" value="Send" class="btnsend" @if($user && !$activePlan) disabled @endif >Send</button>
                 </form>
                 <br>
                 <!-- <h5>Note: Please add Your Country Code before Phone Number.</h5> -->
@@ -117,7 +125,7 @@
                         <span>Call this number: + 1 {{$phone_number}}</span>
                        <!-- <input type="number" name="" id="" class="form-control" placeholder="555-555-5555">-->
                     </div>
-                    <input type="submit" value="Send" class="btnsend">
+                    <button type="submit" value="Send" class="btnsend" @if($user && !$activePlan) disabled @endif >Send</button>
                 </form>
             </div> 
             @endif
@@ -158,7 +166,7 @@
                 },
                 success:function(response){
                     if(response == 'Success'){
-                        window.location.href = '/business-claim-varification/'+cid;
+                        window.location.href = '/business-claim-varification/'+cid+'/'+type_enter;
                     }else{
                         $('#error-email').show();
                     }
@@ -183,7 +191,7 @@
                 },
                 success:function(response){
                     if(response == 'Success'){
-                        window.location.href = '/business-claim-varification/'+cid;
+                        window.location.href = '/business-claim-varification/'+cid+'/'+type_enter;
                     }else{
                         $('#error-phone').show();
                     }
@@ -208,7 +216,7 @@
                 },
                 success:function(response){
                     if(response == 'Success'){
-                        window.location.href = '/business-claim-varification/'+cid;
+                        window.location.href = '/business-claim-varification/'+cid+'/'+type_enter;
                     }else{
                         $('#error-call').show();
                     }
