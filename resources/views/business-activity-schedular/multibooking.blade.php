@@ -73,7 +73,7 @@
 											if($sc->end_activity_date >= $filter_date->format('Y-m-d') && $sc->starting <= $filter_date->format('Y-m-d')){
 												if(strpos($sc->activity_days, $filter_date->format('l')) !== false){
 
-													$cancelSc = $sc->activity_cancel->where('cancel_date',date('Y-m-d'))->first();
+													$cancelSc = $sc->activity_cancel->where('cancel_date',$filter_date->format('Y-m-d'))->first();
 													$hide_cancel = @$cancelSc->hide_cancel_on_schedule;
 													if(@$cancelSc->cancel_date_chk == 0 ){
 														$hide_cancel = 0;
@@ -141,7 +141,7 @@
 																$class = 'post-btn-gray';
 															}
 
-															$insName = $scary->getInstructure()
+															$insName = $scary->getInstructure($filter_date->format('Y-m-d'));
 														@endphp
 														<div class="col-lg-4 col-md-3 col-sm-5 col-xs-6">
 															<div class="multiple0select btn-group w-100">

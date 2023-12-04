@@ -8,8 +8,10 @@
    <div class="row">
       <div class="col-md-12">
          <div class="">
-            <input type="checkbox" id="cancel_date_chk" name="cancel_date_chk" value="1" {{$cancelDateChk}}>
-            <label for="cancel_date_chk"> Cancel this activity for today only</label><br>
+            @if(@$cancelDateChk == 'checked')
+               <input type="checkbox" id="un_cancel_date_chk" name="un_cancel_date_chk" value="1" >
+               <label for="un_cancel_date_chk"> UnCancel this activity</label><br>
+            @endif 
 
             <input type="radio" id="show_cancel_on_schedule" name="chk_cancel_on_schedule" value="1" {{$showCancelOnSchedule}}>
             <label for="show_cancel_on_schedule">Show cancellation on schedule</label><br>
