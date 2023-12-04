@@ -706,6 +706,7 @@ header{ position: fixed !important; }
 .btn:disabled{
 	background-color: #787878;
 	border-color: #787878;
+    color: #fff;
 }
 .priceoptionsettings .setting-icon > ul{
 	width: 235px;
@@ -1867,7 +1868,9 @@ padding: 0px 0px 3px 2px !important; */
 	position: absolute;
 }
 .page-content{
-	min-height: 1130px;
+	min-height: 1190px;
+	z-index: -11;
+	position: relative;
 }
 .font-green{
 	color: #009f0a;
@@ -2086,8 +2089,7 @@ padding: 0px 0px 3px 2px !important; */
   margin-top: 7px;
 }
 .membership-save {
-  width: 50%;
-  margin-top: 359px;
+  margin-top: 100px;
 }
 .activation-date {
   border-bottom: 1px solid #d1d7dc;
@@ -2130,13 +2132,11 @@ padding: 0px 0px 3px 2px !important; */
 }
 .refund-date input{
   display: inline-block;
-  width: 35%;
 }
 .refund-date label{
 	display: inline-block;
 }
 .refund-amount input {
-  width: 35%;
   display: inline-block;
 }
 .refund-amount h4 {
@@ -5327,6 +5327,7 @@ div#termsdiv{order: 4;}
 }
 .links-set label{
 	margin-bottom: 0px;
+	margin-left: 5px;
 }
 .notetxt p{
 	margin-bottom: 5px;
@@ -5397,10 +5398,85 @@ div#termsdiv{order: 4;}
 .hide {
   display: none;
 }
+.card-btns {
+  background: #f1f8ff;
+  border: 1px solid #a1d0ff;
+  padding: 6px 23px;
+  border-radius: 8px;
+}
+
+.side-dropdown {
+	width: 100%;
+	height: auto;
+	display: flex;
+	flex-direction: column;
+	padding: 15px;
+}
+.side-dropdown .form {
+	display: flex;
+	position: relative;
+}
+.side-dropdown .form input {
+	border: none;
+	color: #fff;
+	cursor: pointer;
+}
+.side-dropdown .form .button-1 {
+	position: absolute;
+	right: 0;
+	top: 7px;
+	border: none;
+	padding: 0px 15px;
+	color: #000;
+	cursor: pointer;
+	background: none;
+}
+.side-dropdown .form .button-1 .fa-chevron-down {
+	transform: rotate(0deg);
+	transition: all 0.6s;
+}
+.side-dropdown .form .button-1 .fa-chevron-down.active {
+    transform: rotate(180deg);
+}
+.side-dropdown .form .button-1 input{
+	border: none;
+	padding: 20px 5px;
+	color: #000;
+	cursor: pointer;
+}
+.side-dropdown .form .button-1:focus {
+	outline: none;
+}	
+.dropdownList {
+	display: none;
+}
+.dropdownList li {
+	padding: 5px;
+	margin-left: 16px;
+	display: flex;
+}
+.drop-header{ 
+	font-weight: 600;
+	font-size: 16px;
+	display: inline-block;
+}
+.font-bold{
+	font-weight: bold;
+}
+.title-sp-customer-terminate{
+	margin-bottom: 20px;
+}
+.border-bottom-documents{
+	border-bottom: 1px solid var(--vz-border-color);
+}
+.mb-5{
+	margin-bottom: 5px !important;
+}
+.mt-5{
+	margin-top: 5px !important;
+}
 
 /* header class */
-
-
 .userblock .login_links a {
   color: #fff;
   font-size: 16px;
@@ -5418,3 +5494,9 @@ div#termsdiv{order: 4;}
 	align-items: center;
 }
 /* header class */
+#signatureCanvas {
+  border: 1px solid #000;
+}
+.width-345{
+	max-width: 345px;
+}

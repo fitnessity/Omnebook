@@ -102,6 +102,8 @@
 	.classes-list{padding: 5px 0px;}
 	.links-set a{font-size: 14px;}
 	.setoflinkes{display: block;}
+	.custom-table-header{height: 75px;}
+	.badge-soft-red{font-size: 9px;}
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){
@@ -283,7 +285,8 @@
 	.membership-save { width: 100%; margin-top: 20px;}
 	.mt-150 {  margin-top: 30px;}
 	.refund-date { width: 100%;}
-	.refund-amount input {  width: 61%;}
+	.refund-amount input {  width: 100%;}
+	.refund-method select{width: 100%;}
 	.mmb-10{margin-bottom: 10px;}
 	.layout-rightside-col .layout-rightside{margin-right: -13px;}
 	.ticket-summery h4{padding: 15px 0;}
