@@ -4,7 +4,7 @@
     use App\UserBookingDetail;
     use App\Repositories\BookingRepository;
     $booking_repo = new BookingRepository;
-    $totaltax = $subtotaltax = $tot_dis = $tot_tip = $service_fee = 0;
+    $totaltax = $subtotaltax = $tot_dis = $tot_tip = $service_fee = $grand_total=0;
     $idarry = ''; 
 @endphp
 
@@ -48,6 +48,7 @@
                     $total = ($odt['totprice_for_this'] - $odt['discount']);
                     $subtotaltax += $total;
                     $per_total = $total;
+                    $grand_total += $per_total + $odt['tax_for_this'] + $odt['tip'] +  $odt['service_fee']- $odt['discount'];
                 @endphp
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
@@ -241,7 +242,7 @@
         </div>
         @php $idarry = rtrim($idarry,','); @endphp
 
-        <input type="hidden" name="booking_id" id="booking_id" value="{{$order_detail->booking_id}}"> 
+        <input type="hidden" name="booking_id" id="booking_id" value="{{@$order_detail->booking_id}}"> 
         <input type="hidden" name="orderdetalidary[]" id="orderdetalidary" value="{{$idarry}}"> 
         <div class="main-separator mb-10">
             <div class="row">
@@ -252,7 +253,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">{{ $odt['pmt_type']}}</span>
+                        <span class="highlight-fonts">{{ @$odt['pmt_type']}}</span>
                     </div>
                 </div>
             </div>
@@ -267,7 +268,12 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">${{UserBookingDetail::where('booking_id', $orderId)->sum('tip')}}</span>
+                        <span class="highlight-fonts">$ 
+                            @if($type == 'UserBookingStatus') 
+                                {{ UserBookingDetail::where('booking_id', $orderId)->sum('tip') }}
+                            @else 
+                                {{ UserBookingDetail::where('id', $orderId)->sum('tip') }}
+                            @endif  </span>
                     </div>
                 </div>
             </div>
@@ -282,7 +288,12 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">${{UserBookingDetail::where('booking_id', $orderId)->sum('discount')}}</span>
+                        <span class="highlight-fonts">$  
+                            @if($type == 'UserBookingStatus') 
+                                {{ UserBookingDetail::where('booking_id', $orderId)->sum('discount') }}
+                            @else 
+                                {{ UserBookingDetail::where('id', $orderId)->sum('discount')}} 
+                            @endif  </span>
                     </div>
                 </div>
             </div>
@@ -292,18 +303,23 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class=" text-left">
-                        <label class="highlight-fonts">TAXES AND FEES</label>
+                        <label class="highlight-fonts">TAXES AND FEES {{$orderId}}</label>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">${{ (UserBookingDetail::where('booking_id', $orderId)->sum('tax') )}}</span>
+                        <span class="highlight-fonts">$  
+                            @if($type == 'UserBookingStatus')
+                                {{ UserBookingDetail::where('booking_id', $orderId)->sum('tax') }} 
+                            @else 
+                                {{ UserBookingDetail::where('id', $orderId)->sum('tax') }}
+                            @endif </span>
                     </div>
                 </div>
             </div>
         </div>
                 
-        <div class="main-separator mb-10">
+        <!-- <div class="main-separator mb-10">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class=" text-left">
@@ -312,11 +328,11 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">${{ ($odt['amount'] - UserBookingDetail::where('booking_id', $orderId)->sum('subtotal') )}}</span>
+                        <span class="highlight-fonts">${{ (@$odt['amount'] - UserBookingDetail::where('booking_id', $orderId)->sum('subtotal') )}}</span>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
                 
         <div class="main-separator mb-10">
             <div class="row">
@@ -327,7 +343,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">${{$odt['amount']}}</span>
+                        <span class="highlight-fonts">${{@$grand_total}}</span>
                     </div>
                 </div>
             </div>  

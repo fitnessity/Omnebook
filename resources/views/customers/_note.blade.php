@@ -47,7 +47,7 @@
 			<label id="noteMessage" class="font-16"></label>
 		</div>
 
-		<button type="button" id="add-note" class="btn btn-primary btn-red">Add Note</button>
+		<button type="button" id="add-note" class="btn btn-primary btn-red"> {{ @$note ? "Update" : "Add" }} Note</button>
 	</div>
 
 <script type="text/javascript">
