@@ -2124,34 +2124,34 @@
 																													<li class="pc-caption">
 																														<input type="checkbox" id="price1" name="price1" value="Bike">
 																														<label for="price1">  price option 1 </label>
-																													</li>
-																													<li class="pc-caption">
-																														<input type="checkbox" id="price2" name="price2" value="Bike">
-																														<label for="price2"> price option 2 </label>
-																													</li>																												
+																													</li>																											
 																												</ul>
-																												
-																												<ul class="schedule-class-navbar">																													
-																													<li class="pc-caption mb-10">
-																														<input type="checkbox" id="cat" name="cat" value="Bike">
-																														<label for="cat">Kickboxing  </label>
-																													</li>
-																													<li class="pc-caption">
-																														<input type="checkbox" id="price1" name="price1" value="Bike">
-																														<label for="price1">6 Months Membership (Recurring) $99 </label>
-																													</li>
-																													<li class="pc-caption">
-																														<input type="checkbox" id="price2" name="price2" value="Bike">
-																														<label for="price2"> 6 Months Membership (PIF) $1250</label>
-																													</li>
-																													<li class="pc-caption">
-																														<input type="checkbox" id="price2" name="price2" value="Bike">
-																														<label for="price2">1 Year Membership (Recurring) $150</label>
-																													</li>
-																													<li class="pc-caption">
-																														<input type="checkbox" id="price2" name="price2" value="Bike">
-																														<label for="price2">1 Year Membership (PIF) $1950 </label>
-																													</li>	
+																												<div class="side-dropdown">
+																													<div class="form">
+																														<input class="mr-5" type="checkbox" id="cat" name="cat" value="Bike">
+																														<label for="cat" class="drop-header">Kickboxing  </label>
+																														<button class="button-1"> <i class="fas fa-chevron-down fa-sm"></i></button>
+																													</div>
+																													<ul class="dropdownList">
+																														<li>
+																															<input type="checkbox" id="price1" name="price1" value="Bike">
+																															<label for="price1">6 Months Membership (Recurring) $99 </label>
+																														</li>
+																														<li>
+																															<input type="checkbox" id="price2" name="price2" value="Bike">
+																															<label for="price2"> 6 Months Membership (PIF) $1250</label>
+																														</li>
+																														<li>
+																															<input type="checkbox" id="price2" name="price2" value="Bike">
+																															<label for="price2">1 Year Membership (Recurring) $150</label>
+																														</li>
+																														<li>
+																															<input type="checkbox" id="price2" name="price2" value="Bike">
+																															<label for="price2">1 Year Membership (PIF) $1950 </label>
+																														</li>
+																													</ul>
+																												</div>
+																												<ul class="schedule-class-navbar">		
 																													<li class="pc-caption">
 																														<div class="d-relative">
 																															<div class="sche-submit">
@@ -2475,6 +2475,16 @@
 		</div><!-- /.modal-dialog -->
 	</div>
 	@include('layouts.business.footer')
+
+<script>
+$(function () {
+	$(".button-1").click(function (e) {
+		e.preventDefault();
+		$(".dropdownList").slideToggle(500);
+		$(".fa-chevron-down").toggleClass("active");
+	});
+});
+</script>
 
 <script>
 function openNavv() {

@@ -27,7 +27,7 @@
 							<div class="col-md-12">
 								<div class="card">
 									<div class="card-header align-items-center d-flex">
-										<h4 class="card-title mb-0 flex-grow-1">Active Subscriptions</h4>
+										<h4 class="card-title mb-0 flex-grow-1"> </h4>
 										<div class="flex-shrink-0">
 											<div class="form-check form-switch form-switch-right form-switch-md">
 												<label class="form-label text-muted text-uppercase">Card Number</label>
@@ -36,33 +36,65 @@
 												</div>
 											</div>
 										</div>
-										<div class="flex-shrink-1">
-											<i class="fas fa-pencil-alt fs-15"></i>
+										<div class="flex-shrink-1 ">
+											<div data-bs-toggle="modal" data-bs-target=".editcard">
+												<i class="fas fa-pencil-alt fs-15"></i>
+											</div>
 										</div>
 									</div>
 									<div class="card-body card-350-body mb-25">
 										<div class="row">
 											<div class="col-xxl-12 col-lg-12 col-md-12 col-sm-12">
-												<div class="subscriptions-info mt-10 mb-10">
-													<h1>Standard Support</h1>
-													<span>Billed on the 25th of the month: 0.00 USD / Month </span>
-													<span>Darryl Phipps, Account #: 1587142</span>
+												<div class="row y-middle mmb-10">
+													<div class="col-lg-9 col-md-7">
+														<div class="subscriptions-info mt-10 mb-10">
+															<h1>Basic</h1>
+															<span>Billed on the 25th of the month: 0.00 USD / Month </span>
+															<span>Darryl Phipps, Account #: 1587142</span>
+														</div>
+													</div>
+													<div class="col-lg-3 col-md-5">
+														<div class="text-right">
+															<button class="btn btn-red">Current Plan </button>
+															<button class="btn btn-black">Switch Plan</button>
+														</div>
+													</div>
 												</div>
-												<div class="dropdown-divider"></div>
 												
-												<div class="subscriptions-info mt-10 mb-10">
-													<h1>Fitnessity Ultimate 2.0</h1>
-													<span>Billed on the 25th of the month: 0.00 USD / Month </span>
-													<span>Darryl Phipps, Account #: 1587142</span>
-												</div>
 												<div class="dropdown-divider"></div>
+												<!--<div class="row y-middle mmb-10">
+													<div class="col-lg-9 col-md-7">
+														<div class="subscriptions-info mt-10 mb-10">
+															<h1>Fitnessity Ultimate 2.0</h1>
+															<span>Billed on the 25th of the month: 0.00 USD / Month </span>
+															<span>Darryl Phipps, Account #: 1587142</span>
+														</div>
+													</div>
+													<div class="col-lg-3 col-md-5">
+														<div class="text-right">
+															<button class="btn btn-red">Current Plan </button>
+															<button class="btn btn-black">Switch Plan</button>
+														</div>
+													</div>
+												</div>
+												<div class="dropdown-divider"></div>-->
+												<!--<div class="row y-middle mmb-10">
+													<div class="col-lg-9 col-md-7">
+														<div class="subscriptions-info mt-10 mb-10">
+															<h1>Payment Processing</h1>
+															<span>Billed on the 25th of the month: 0.00 USD / Month </span>
+															<span>Darryl Phipps, Account #: 1587142</span>
+														</div>
+													</div>
+													<div class="col-lg-3 col-md-5">
+														<div class="text-right">
+															<button class="btn btn-red">Current Plan </button>
+															<button class="btn btn-black">Switch Plan</button>
+														</div>
+													</div>
+												</div>
+												<div class="dropdown-divider"></div>-->
 												
-												<div class="subscriptions-info mt-10 mb-10">
-													<h1>Payment Processing</h1>
-													<span>Billed on the 25th of the month: 0.00 USD / Month </span>
-													<span>Darryl Phipps, Account #: 1587142</span>
-												</div>
-												<div class="dropdown-divider"></div>
 											</div>
 										</div>
 									</div><!-- end cardbody -->
@@ -131,7 +163,22 @@
      </div><!-- end main content-->
 </div><!-- END layout-wrapper -->
 	
-	
+<!--	<div class="modal fade editcard" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="myModalLabel"> </h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary btn-red">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>-->
 	
 	@include('layouts.business.footer')
 
