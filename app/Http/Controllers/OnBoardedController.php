@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\URL;
 use Auth;
 use Illuminate\Http\Request;
 use App\{User,CompanyInformation,CustomerPlanDetails,Transaction,StripePaymentMethod,Plan};
 use App\Repositories\FeaturesRepository;
 use Str;
 use DateTime;
+use Session;
 
 class OnBoardedController extends Controller {
 
@@ -64,7 +66,6 @@ class OnBoardedController extends Controller {
 
     public function store(Request $request){
         //print_r($request->all());    exit;
-
 
         $userDt = User::find($request->id);
         $companyDt = CompanyInformation::find($request->cid);
@@ -137,7 +138,7 @@ class OnBoardedController extends Controller {
                 "longitude" => $request->blon,
                 "additional_address" => $request->additionalAddress,
                 "neighborhood" => $request->neighborhood,
-                "business_phone" => $request->businessPhone,
+                "business_phone" => $request->business_phone,
                 "business_email" => $request->businessEmail,
                 "business_website" => $request->website,
                 "business_type" => $request->businessType,
@@ -164,10 +165,18 @@ class OnBoardedController extends Controller {
         $cid = $request->cid;
         $company = CompanyInformation::where('id', $cid)->first();
         $user = User::find(@$company->user_id);
+        if(Auth::check()){
+            $user = Auth::user();
+        }
+
         if($user){
             $user->update(['show_step' =>1]);
+            $activePlan = $user->CustomerPlanDetails()->where('amount','!=',0)->whereDate('expire_date','>=',date('Y-m-d'))->whereDate('starting_date','<=',date('Y-m-d'))->latest()->first();
         }
-        return view('on-boarded.welcome_provider',compact('cid'));
+
+        $activePlan = @$activePlan ?? '';
+        session()->put('redirectToOnboard', URL::full());
+        return view('on-boarded.welcome_provider',compact('cid','activePlan','user'));
     }
 
     public function stripeDashboard(Request $request){
