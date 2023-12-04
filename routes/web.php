@@ -26,7 +26,8 @@ Route::any('/doLoginProcess','OnBoardedController@doLoginProcess')->name('doLogi
 Route::any('/storeCards','OnBoardedController@storeCards')->name('storeCards');
 
 Route::resource('choose-plan', 'MembershipPlanController')->only(['index', 'create','store','update','destroy']);
-Route::any('/getCardForm','MembershipPlanController@getCardForm')->name('choose-plan.getCardForm');
+Route::any('/getCardFormPlan','MembershipPlanController@getCardForm')->name('choose-plan.getCardForm');
+Route::any('/checkPromoCode','MembershipPlanController@checkPromoCode')->name('choose-plan.checkPromoCode');
 
 
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
@@ -34,6 +35,10 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
     Route::get('schedulers/cancel_all', 'SchedulerController@cancel_all')->name('schedulers.cancel_all');
     Route::post('cancel-all-activity', 'SchedulerController@cancel_all_store')->name('cancel_all_store');
+
+    Route::get('schedulers/cancel_all_date', 'SchedulerController@cancel_all_by_date')->name('schedulers.cancel_all_by_date');
+    Route::post('cancel-all-activity-by-date', 'SchedulerController@cancel_all_by_date_store')->name('cancel_all_by_date_store');
+
     Route::resource('schedulers', 'SchedulerController')->only(['index', 'create','store','update','destroy']);
 
     // Scheduler Checkin Details
@@ -102,6 +107,10 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('settings', 'SettingsController')->only(['index']);
 
     Route::resource('tax','TaxController')->only(['index','store']);
+    Route::resource('subscription','SubcriptionController')->only(['index','store']);
+    Route::post('/subscription/update-card','SubcriptionController@update_card')->name('subscription.update-card');
+    Route::post('get_plan_html','SubcriptionController@get_plan_html')->name('get_plan_html');
+    Route::get('/subscription/export','SubcriptionController@export')->name('subscription.export');
 
 });
 
@@ -163,6 +172,7 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/settings','DesignController@settings')->name('settings'); 
 	Route::get('/subscriptions_payments','DesignController@subscriptions_payments')->name('subscriptions_payments'); 
 	Route::get('/documents_contracts','DesignController@documents_contracts')->name('documents_contracts'); 
+    Route::get('/invoice_details','DesignController@invoice_details')->name('invoice_details'); 
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -222,6 +232,7 @@ Route::group(['middleware' => ['auth']], function(){
 
         Route::post('/customers/upload_docs','CustomerController@uploadDocument')->name('upload_docs');
         Route::get('/removeDoc/{id}','CustomerController@removeDoc')->name('removeDoc');
+        Route::get('/download/{id}', 'CustomerController@download')->name('download');
 
         Route::get('/customer/{cid}/getNote/{id?}','CustomerController@getNote')->name('getNote');
 
@@ -326,7 +337,7 @@ Route::any('/varify-email-for-claim-business','UserProfileController@varify_emai
 Route::any('/resend-otp-for-claim','UserProfileController@resendOpt')->name('resendOpt');
 
 
-Route::any('/business-claim-varification/{cid}','UserProfileController@business_claim_varification')->name('business_claim_varification');
+Route::any('/business-claim-varification/{cid}/{type}','UserProfileController@business_claim_varification')->name('business_claim_varification');
 
 Route::any('/blade-check/{company_id}','UserProfileController@getBladeDetail1')->name('companypage');
 Route::any('/already-claim-business','HomeController@already_claim_business')->name('already_claim_business');
@@ -421,6 +432,7 @@ Route::get('/all-trainings', 'Frontend\HomeController@all_trainings');
 Route::get('/all-sports', 'Frontend\HomeController@all_sports');
 Route::get('/registration/{id?}', 'Frontend\HomeController@registration')->name('registration');
 Route::get('emailvalidation', 'Frontend\HomeController@emailvalidation')->name('emailvalidation');
+Route::get('userNamevalidation', 'Frontend\HomeController@userNamevalidation')->name('userNamevalidation');
 
 Route::post('/auth/registration', 'Frontend\HomeController@postRegistration')->name('auth/registration');
 Route::post('/user/resendverify', 'Frontend\HomeController@VerifyCodeResend');
@@ -559,6 +571,14 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('/promo_codes/edit/{id}', 'Admin\PromoCodesController@edit')->name('promo_codes.edit');
     Route::post('/promo_codes/update/{id}', 'Admin\PromoCodesController@update')->name('promo_codes.update');
     Route::get('/promo_codes/delete/{id}', 'Admin\PromoCodesController@delete')->name('promo_codes.delete');
+
+    //on-board-questions
+    Route::get('/on-board-questions/', 'Admin\OnboardQuestionsController@index')->name('on_board_questions.index');
+    Route::get('/on-board-questions/create', 'Admin\OnboardQuestionsController@create')->name('on_board_questions.create'); 
+    Route::post('/on-board-questions/store', 'Admin\OnboardQuestionsController@store')->name('on_board_questions.store');  
+    Route::get('/on-board-questions/edit/{id}', 'Admin\OnboardQuestionsController@edit')->name('on_board_questions.edit');
+    Route::post('/on-board-questions/update/{id}', 'Admin\OnboardQuestionsController@update')->name('on_board_questions.update');
+    Route::get('/on-board-questions/delete/{id}', 'Admin\OnboardQuestionsController@delete')->name('on_board_questions.delete');
 
 	//fees
 	Route::get('/fees', 'Admin\FeesController@index')->name('fees');
@@ -1037,7 +1057,7 @@ Route::get('/be-a-part', 'PageController@GetPageBeaPart');
 Route::get('/hire-trainer', 'PageController@GetPageHireTrainer');
 Route::get('/store', 'PageController@GetPageStore');
 Route::get('/jobs', 'PageController@GetPageJobs');
-Route::get('/contact-us', 'PageController@GetPageContactUs');
+Route::get('/contact-us', 'PageController@GetPageContactUs')->name('contact-us');
 Route::get('/help', 'PageController@get_qa')->name('q');
 Route::post('/getans', 'PageController@getans')->name('qanw');
 Route::get('/customer-support', 'PageController@CustomerSupport')->name('customer');

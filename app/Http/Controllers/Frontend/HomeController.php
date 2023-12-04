@@ -229,6 +229,18 @@ class HomeController extends Controller {
 
     }
 
+    public function userNamevalidation(Request $request) {
+        $postArr = $request->all();
+        $business = CompanyInformation::where('business_user_tag' ,$request->userName)->first();
+        if($business){
+            $response = array(
+                'type' => 'danger',
+                'msg' => 'User name is already taken by another provider.',
+            );
+            return Response::json($response);
+        }
+    }
+
     public function postRegistration(Request $request) {
         $postArr = $request->all();
         $rules = [

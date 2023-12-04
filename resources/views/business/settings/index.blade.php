@@ -118,7 +118,7 @@
 													<div class="card card-body box-border">
 														<div class="d-grid align-items-center">
 															<div class="report-links">
-																<a href="#">Manage Account</a>
+																<a href="{{route('business.subscription.index')}}">Manage Account</a>
 															</div>
 															<!-- <div class="report-links">
 																<a href="#">Manage Card On File</a>

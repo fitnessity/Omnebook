@@ -13,8 +13,6 @@ class PromoCodes extends Model
      * @var string
      */
     protected $table = 'promo_codes';
-
-    public $timestamps = false;
     
     /**
      * The attributes that are mass assignable.

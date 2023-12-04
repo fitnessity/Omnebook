@@ -9,15 +9,21 @@
     <!-- ============================================================== -->
     <div class="main-content">
 		<div class="page-content">
-            <div class="container-fluid">
-               <div class="row mb-3">
+         <div class="container-fluid">
+            <div class="row mb-3">
 					<div class="col-12">
-						<div class="page-heading">
-							<label>Pricing Plans</label>
-						</div>
+						<div class="page-heading"><label>Pricing Plans</label></div>
 					</div>
-                </div><!--end row-->
-				
+            </div><!--end row-->
+
+				@if (session('stripeErrorMsg'))
+              <div class='form-row row'>
+	               <div class='col-md-12 error form-group'>
+	                    <div class='alert-danger alert'> {{ session('stripeErrorMsg') }}</div>
+	               </div>
+	            </div>
+          	@endif
+
 				<div class="row">
 					<div class="col-12">
 						<div class="card">
@@ -26,11 +32,11 @@
 								<div class="price-switch">
 									<div class="row">
 										<div class="col-md-12">
-											 <div class="top">
+											<div class="top">
 												<div class="toggle-btn">
 													<span>Monthly</span>
 													<label class="switch">
-														<input type="checkbox" id="checbox" onclick="check()" ; />
+														<input type="checkbox" id="plan_time" onclick="check();"/>
 														<span class="slider round"></span>
 													</label>
 													<span>Annual</span>
@@ -44,9 +50,7 @@
 												@foreach($plans as $p)
 													<div class="col-lg-4 col-md-6 col-sm-6 mb-20">
 														<div class="packages">
-															<div>
-																<img src="{{$p->getPic()}}" alt="">
-															</div>
+															<div><img src="{{$p->getPic()}}" alt=""></div>
 															<div class="basic-plan">
 																<h1>{{$p->title}}</h1>
 																<p>{{$p->heading}}</p>
@@ -64,17 +68,15 @@
 																	<label class="text1">USD {{$p->price_per_year}}/Year</label>
 																</div>
 															</div>
-
-							
-															<div class="v-plan-details">
-																{!! $p->description !!}
-															</div>
+				
+															<div class="v-plan-details">{!! $p->description !!}</div>
 															<div class="width-100">
-																<button onclick="getCardModal('{{$p->id}}','{{$p->price_per_month}}')" class="btn btn-red mt-25 width-100"  @if($p->price_per_month == 0) disabled @endif>Your Current Plan </button>
+																<?php /*?><button onclick="getCardModal('{{$p->id}}','{{$p->price_per_month}}')" class="btn btn-red mt-25 width-100"  @if($p->price_per_month == 0) disabled @endif> @if($p->id == @$currentPlan->plan_id) Current Plan @else Choose Plan  @endif</button><?php */?>
+                                                                <button onclick="getCardModal('{{$p->id}}','{{$p->price_per_month}}')" class="btn btn-red mt-25 width-100"  @if($p->id == @$currentPlan->plan_id) disabled @endif> @if($p->id == @$currentPlan->plan_id) Current Plan @else Choose Plan  @endif</button>
 															</div>
 														</div>
 													</div>
-													@endforeach
+												@endforeach
 											</div>
 										</div>
 									</div>
@@ -100,7 +102,7 @@
 							<div class="card-body">	
 								<div class="booking-titles text-center mt-70">
 									<h4 class="fs-18">Pick a plan that works best for you</h4>
-									<p>Stay cool, we have a 48-hour money back guarantee!</p>
+									<?php /*?><p>Stay cool, we have a 48-hour money back guarantee!</p><?php */?>
 								</div>
 								<div class="row">
 									<div class="col-lg-12">	 
@@ -129,21 +131,14 @@
 															<span class="text-muted fs-12 mb-0 text-uppercase"> @if($p->price_per_month != 0) ${{$p->price_per_month}}/MONTH @else FREE @endif  </span>
 														</div>
 														<div class="custom-table-data">
-															<div class="check-right">
-																<i class="fas fa-check"></i>
-															</div>
+															<div class="check-right"><i class="fas fa-check"></i></div>
 														</div>
 														@foreach(json_decode(@$p->featurs_details) as $i=> $f)
 														<div class="custom-table-data">
-
 															@if($f == 'Yes')
-															<div class="check-right">
-																<i class="fas fa-check"></i>
-															</div>
+																<div class="check-right"><i class="fas fa-check"></i></div>
 															@elseif($f == 'No')
-															<div class="check-wrong">
-																<i class="fas fa-times"></i>
-															</div>
+																<div class="check-wrong"><i class="fas fa-times"></i></div>
 															@elseif($f == 'Add On')
 																<span class="badge badge-soft-red p-2"> ADD-ON AVAILABLE </span>
 															@else
@@ -152,7 +147,8 @@
 														</div>
 														@endforeach
 														<div class="custom-table-data-footer">
-															<button onclick="getCardModal('{{$p->id}}','{{$p->price_per_month}}')"  class="btn btn-red" @if($p->price_per_month == 0) disabled @endif> Choose Plan </button>
+															<?php /*?><button onclick="getCardModal('{{$p->id}}','{{$p->price_per_month}}')"  class="btn btn-red" @if($p->price_per_month == 0) disabled @endif> @if($p->id == @$currentPlan->plan_id) Current Plan @else Choose Plan  @endif </button><?php */?>
+                                                            <button onclick="getCardModal('{{$p->id}}','{{$p->price_per_month}}')"  class="btn btn-red" @if($p->id == @$currentPlan->plan_id) disabled @endif> @if($p->id == @$currentPlan->plan_id) Current Plan @else Choose Plan  @endif </button>
 														</div>
 													</div>
 												@endforeach
@@ -241,7 +237,7 @@
 	@include('layouts.business.footer')
 <script>
 	function check() {
-	  	var checkBox = document.getElementById("checbox");
+	  	var checkBox = document.getElementById("plan_time");
 	  	var text1 = $(".text1");
 	  	var text2 = $(".text2");
 
@@ -256,10 +252,18 @@
 	check();
 
 	function getCardModal(id,price){
+		var type = '';
+		if ($("#plan_time").is(":checked")) {
+			type = 'year';
+	   } else {
+	   	type = 'month';
+	   } 
+
 		$.ajax({
             url: '{{route("choose-plan.getCardForm")}}',
             type: 'GET',
             data: {
+            	'type':type,
             	'id':id,
             }, 
             success: function (response) {

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Response;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 /*use PhpOffice\PhpSpreadsheet\Writer\Xlsx*/;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
@@ -14,7 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Exports\ExportCustomer;
 use App\Imports\{CustomerImport,ImportMembership,customerAtendanceImport};
 use Maatwebsite\Excel\HeadingRowImport;
-use Session,Redirect,DB,Input,Response,Auth,Hash,Validator,View,Mail,Str,Config,Excel,SplFileInfo;
+use Session,Redirect,DB,Input,Auth,Hash,Validator,View,Mail,Str,Config,Excel,SplFileInfo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\{CustomerRepository,BookingRepository,UserRepository};
@@ -25,17 +26,17 @@ use Illuminate\Support\Facades\Storage;
 use Request as resAll;
 
 class CustomerController extends Controller {
-	/**
+    /**
      * The user repository instance.
      *
      * @var CustomerRepository
      */
 
- 	protected $customers;
+    protected $customers;
     protected $company;
     public $error = '';
 
- 	public function __construct(CustomerRepository $customers,BookingRepository $bookings,UserRepository $users) {
+    public function __construct(CustomerRepository $customers,BookingRepository $bookings,UserRepository $users) {
         $this->middleware('auth');
         $this->customers = $customers;
         $this->bookings = $bookings;
@@ -44,7 +45,7 @@ class CustomerController extends Controller {
     public function index(Request $request, $business_id){
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
-	    $customers = $company->customers()->orderBy('fname');
+        $customers = $company->customers()->orderBy('fname');
         
         if($request->term){
             $searchValues = preg_split('/\s+/', $request->term, -1, PREG_SPLIT_NO_EMPTY);
@@ -103,7 +104,7 @@ class CustomerController extends Controller {
             return redirect()->route('business_customer_index');
         }
         $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
-        $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->get() : [];
+        $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->orderBy('created_at','desc')->get() : [];
         $purchase_history = @$customerdata != '' ?  @$customerdata->purchase_history()->get() : [];
 
        
@@ -147,15 +148,15 @@ class CustomerController extends Controller {
             $data_cus = User::where('firstname', 'LIKE', "%{$query}%")->orWhere('lastname', 'LIKE', "%{$query}%")->orWhere('username', 'LIKE', "%{$query}%")->get();
            
             foreach($data_cus as $cuss)
-            {	
+            {   
                 $array_data [] = array(
-	                "name"=>$cuss->fname .' '.$cuss->lname , 
-	                "cus_id"=>$cuss->id,
-	                "image" => $cuss->profile_pic,
+                    "name"=>$cuss->fname .' '.$cuss->lname , 
+                    "cus_id"=>$cuss->id,
+                    "image" => $cuss->profile_pic,
                     "email" => $cuss->email,
                     "phone_number" => $cuss->phone_number,
                     "age" => $cuss->getcustage(),
-	            );
+                );
             }
 
             sort($array_data);
@@ -168,11 +169,11 @@ class CustomerController extends Controller {
                         <div class="row rowclass-controller">
                             <div class="col-md-2">';
                             if($row['image'] != ''){
-                            	$output .='<img src="'.asset('/customers/images/'.$row['image']).'">';
+                                $output .='<img src="'.asset('/customers/images/'.$row['image']).'">';
                             }else{
-                            	$output .='<div class="company-profile-img-controller">';
-										$pf=substr($row['name'], 0, 1);
-								$output .='<p class="img-controller">'.$pf.'</p></div>';
+                                $output .='<div class="company-profile-img-controller">';
+                                        $pf=substr($row['name'], 0, 1);
+                                $output .='<p class="img-controller">'.$pf.'</p></div>';
                             }
                             $age = '';
                             if($row['age'] != '—'){
@@ -707,8 +708,16 @@ class CustomerController extends Controller {
 
     public function receiptmodel($orderId,$customer){
         $customerData = Customer::where('id',$customer)->first();
-        $bookingArray = UserBookingDetail::where('booking_id',$orderId)->pluck('id')->toArray();
-        return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $orderId ]);
+        $transaction = Transaction::where('item_id',$orderId)->first();
+        if(@$transaction->item_type == 'UserBookingStatus'){
+            $oid = $orderId;
+            $bookingArray = UserBookingDetail::where('booking_id',$oid)->pluck('id')->toArray();
+        }else{
+            $orderId = @$transaction->Recurring->booking_detail_id;
+            $oid = $orderId;
+            $bookingArray = UserBookingDetail::where('id',$orderId)->pluck('id')->toArray();
+        }
+        return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $oid ,'type' =>$transaction->item_type]);
     }
 
     public function loadView(Request $request)
@@ -781,11 +790,25 @@ class CustomerController extends Controller {
         }
     }
 
+    public function download($business_id,$id)
+    {
+        $document = CustomersDocuments::findOrFail($id);
+        $filePath = Storage::url($document->path);
+        $name = str_replace("Customer-Documents/", "", $document->path);
+        $imageContent = file_get_contents($filePath);
+        $headers = [
+            'Content-Type'        => 'image/jpeg', // Change the content type based on your image type
+            'Content-Disposition' => 'attachment; filename='.$name,
+        ];
+        return Response::make($imageContent, 200, $headers);
+    }
+
     public function removeDoc($business_id, $id){
         $docs = CustomersDocuments::find($id);
         Storage::disk('s3')->delete($docs->path);
         $docs->delete();
     }
+
 
     public function removenote($business_id, $id){
         $note = CustomerNotes::find($id);
@@ -803,6 +826,7 @@ class CustomerController extends Controller {
                 'due_date' => $request->due_date,
                 'time' => $request->time,
                 'display_chk' => $request->displayChk ?? 0,
+                'status' => 1,
             ]
         );
 

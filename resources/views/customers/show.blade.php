@@ -311,8 +311,9 @@
 																											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting4Examplecollapsea{{$i}}" aria-expanded="false" aria-controls="accor_nesting4Examplecollapse2">
 																												<div class="container-fluid nopadding">
 																													<div class="row mini-stats-wid d-flex align-items-center ">
-																														<div class="col-lg-6 col-md-6 col-8"> {{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </div>
-																														<div class="col-lg-6 col-md-6 col-4">
+																														<div class="col-lg-10 col-md-10 col-8"> {{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} |Started On {{date('m/d/Y',strtotime(@$booking_detail->contract_date))}} | Expires On {{date('m/d/Y',strtotime(@$booking_detail->expired_at))}} </div>
+																														
+																														<div class="col-lg-2 col-md-2 col-4">
 																															<div class="multiple-options">
 																																<div class="setting-icon">
 																																	<i class="ri-more-fill"></i>
@@ -322,15 +323,15 @@
 																					                                       	</i> View Visits </a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-100"> <i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
 																																			</i>Edit Booking </a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-100"> <i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
 																																			</i>Refund or Void</a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('terminate_or_suspend_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-100"> <i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('terminate_or_suspend_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
 																																			</i>Suspend or Terminate</a>
 																																		</li>
 																																		<li>
@@ -563,31 +564,35 @@
 																												<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting01Examplecollapsec{{$i}}" aria-expanded="false" aria-controls="accor_nesting01Examplecollapsec{{$i}}">
 																													 <div class="container-fluid nopadding">
 																														<div class="row mini-stats-wid d-flex align-items-center ">
-																															<div class="col-lg-6 col-md-6 col-8">
+																															<div class="col-lg-8 col-md-8 col-8">
 																																{{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}}
 																																
 																																@if($booking_detail->status == 'refund')
-																																	| Status: Refunded on {{date('m/d/Y',strtotime($booking_detail->refund_date))}}	
+																																	  | <span class="font-red">  Status: Refunded on {{date('m/d/Y',strtotime($booking_detail->refund_date))}}	</span>
 																																@endif
 
 																																@if($booking_detail->status == 'terminate')
-																																	| Status: Terminated on {{date('m/d/Y',strtotime($booking_detail->terminated_at))}}	
+																																	| <span class="font-red">  Status: Terminated on {{date('m/d/Y',strtotime($booking_detail->terminated_at))}}	</span>
 																																@endif
 
 																																@if($booking_detail->status == 'suspend')
-																																	| Status: Freeze from {{date('m/d/Y',strtotime($booking_detail->suspend_started))}}	to {{date('m/d/Y',strtotime($booking_detail->suspend_ended))}}
+																																	| <span class="font-red"> Status: Freeze from {{date('m/d/Y',strtotime($booking_detail->suspend_started))}}	to {{date('m/d/Y',strtotime($booking_detail->suspend_ended))}}</span>
 																																	
 																																@endif
 
 																																@if($booking_detail->status == 'void')
-																																	| Status: Void
-																																@endif
+																																	| <span class="font-red">  Status: Void </span>
+																																@endif						
 																															</div>
-																															<div class="col-lg-6 col-md-6 col-4">
+																															<div class="col-lg-4 col-md-4 col-4">
 																																<div class="multiple-options">
 																																	<div class="setting-icon">
 																																		<i class="ri-more-fill"></i>
 																																		<ul>
+																																			<li>
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-100"> <i class="fas fa-plus text-muted">
+																																			</i>Edit Booking </a>
+																																		</li>
 																																			<li><a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id])}}" data-modal-width="modal-70" >
 																																					<i class="fas fa-plus text-muted"></i> View Visits </a>
 																																			</li>
@@ -1276,8 +1281,8 @@
 																										<div class="setting-icon">
 																											<i class="ri-more-fill"></i>
 																											  <ul>
-																													<li><a href="{{Storage::url($d->path)}}" target="_blank"><i class="fas fa-plus text-muted"></i>Download</a></li>
-																													<li><a onclick="deleteDoc({{$d->id}})"><i class="fas fa-plus text-muted"></i>Delete</a></li>
+																											  		<li><a href="{{ route('download', ['id' => $d->id]) }}" target="_blank"><i class="fas fa-plus text-muted"></i>Download</a></li>
+																													<li><a onclick="deleteDoc({{$d->id}})"><i class="fas fa-plus text-muted"></i>Delete </a></li>
 																												</ul>
 																										</div>
 																									</div>
@@ -1472,7 +1477,7 @@
 	<div class="modal-dialog modal-dialog-centered modal-30">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="myModalLabel">Add Note</h5>
+				<h5 class="modal-title note-title" id="myModalLabel">Add Note</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			
@@ -1603,6 +1608,11 @@
          url: '/business/'+'{{request()->business_id}}'+'/customer/'+'{{$customerdata->id}}'+'/getNote/'+id,
          success: function (data) {
             $('#noteHtml').html(data);
+            if(id){
+            	$('.note-title').html('Edit Note');
+            }else{
+            	$('.note-title').html('Add Note');
+            }
             $('.notes').modal('show');
          }
 	   });
@@ -1613,7 +1623,7 @@
       $('#upload-pdf').click(function(){
         	if(docToUpload == ''){
         		$('.err').html('Select file to upload.');
-        	}else if(ext != 'pdf'){
+        	}else if(ext != 'pdf' && ext != 'jpg' && ext != 'jpeg' && ext != 'png'){
             	$('.err').html('File format is not supported.')
         	}else{
         		$('.err').html('');
@@ -1639,7 +1649,7 @@
                      $('#docMessage').html(response.message);
                      setTimeout(function() {
 						        window.location.reload();
-						   }, 2000);
+						   }, 1000);
                   }
                   else{
                 		$('#docMessage').addClass('font-red font-16');

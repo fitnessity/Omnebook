@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',  'password','new_password_key','is_deleted','isguestuser','fitnessity_fee','recurring_fee','firstname','lastname','birthdate','cid','bstep','serviceid','servicetype','stripe_connect_id','stripe_customer_id','username','gender','email','phone_number','profile_pic','address','city','state','country','zipcode','activated','show_step','dobstatus','buddy_key','primary_account'
+        'name',  'password','new_password_key','is_deleted','isguestuser','fitnessity_fee','recurring_fee','firstname','lastname','birthdate','cid','bstep','serviceid','servicetype','stripe_connect_id','stripe_customer_id','username','gender','email','phone_number','profile_pic','address','city','state','country','zipcode','activated','show_step','dobstatus','buddy_key','primary_account','default_card'
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -202,11 +202,6 @@ class User extends Authenticatable
         return $this->hasMany(Customer::class,'user_id');
     }
 
-    public function CustomerPlanDetails()
-    {
-        return $this->hasMany(CustomerPlanDetails::class,'user_id');
-    }
-
     public function BusinessPriceDetailsAges()
     {
         return $this->hasMany(BusinessPriceDetailsAges::class,'userid');
@@ -253,7 +248,10 @@ class User extends Authenticatable
         return $this->hasMany(UserCertification::class);
     }
 
-
+    public function CustomerPlanDetails()
+    {
+        return $this->hasMany(CustomerPlanDetails::class ,'user_id');
+    }
 
     public function service()
     {
@@ -370,13 +368,21 @@ class User extends Authenticatable
         return StripePaymentMethod::where('user_type', 'User')->where('user_id', $this->id);
     }
 
+    public function currentPlan(){
+        return $this->CustomerPlanDetails()->latest()->first();
+    }
+
     public function chkDaysLeft(){
-        $data = $this->CustomerPlanDetails()->whereDate('expire_date','>=',date('Y-m-d'))->latest()->first();
+        //$data = $this->CustomerPlanDetails()->whereDate('expire_date','>=',date('Y-m-d'))->latest()->first();
+        $data = $this->currentPlan();
         if($data){
             $expireDate = \Carbon\Carbon::parse(@$data->expire_date);
-            $remining = now()->diffInDays($expireDate) ;
+            $remining = now()->diffInDays($expireDate) + 1 ;
+			//echo $remining;
         }
         return $remining ?? 0;
     }
+
+    
 
 }
