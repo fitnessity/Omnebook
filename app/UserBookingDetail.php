@@ -277,7 +277,6 @@ class UserBookingDetail extends Model
         $pay_session = $this->pay_session;
         //$checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->whereNotNull('checked_at')->count();
         $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->sum('use_session_amount');
-
         // $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])
         //             ->where('checkin_date' ,'!=',NULL)
         //             ->whereNotNull('checked_at')
@@ -459,6 +458,35 @@ class UserBookingDetail extends Model
             
         }
     }
+
+    public function can_void(){
+        $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->userBookingStatus->id)->first();
+
+        if($transaction && $transaction->status == 'requires_capture'){
+            return True;
+        }else{
+            return False;
+        }
+    }
+
+    public function can_refund(){
+        $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->userBookingStatus->id)->first();
+
+        if($transaction && $transaction->status == 'complete'){
+            return True;
+        }else{
+            return False;
+        }
+    }
+
+    public function can_terminate(){
+        return $this->can_refund() && $this->status == 'active';
+    }
+
+    public function can_suspend(){
+        return $this->can_refund() && $this->status == 'active';
+    }
+    
 
 }
 

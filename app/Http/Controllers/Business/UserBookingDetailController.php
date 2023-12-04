@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
-use App\{UserBookingDetail,UserBookingStatus};
+use App\{UserBookingDetail,UserBookingStatus, Transaction};
 
 class UserBookingDetailController extends Controller
 {
@@ -61,28 +61,127 @@ class UserBookingDetailController extends Controller
         $booking_detail->update(["status" => 'void']);
     }
  
-    public function refund(Request $request, $business_id){
+    public function refund(Request $request, $business_id, $booking_id){
+
         $company = $request->current_company->findOrFail($business_id);
+
         $customer = $company->customers()->findOrFail($request->customer_id);
-        //$booking_status = $customer->bookingStatus()->findOrFail($request->booking_id);
+
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
-        $booking_detail->update(["status" => 'refund' ,'refund_reason' => $request->refund_reason,'refund_date' => date('Y-m-d',strtotime($request->refunddate)),'refund_amount' => $request->refund_amount,'refund_method' =>$request->refund_method ]);
-        $customer->refund();
+
+        if($booking_detail->can_refund()){
+            
+            if($request->refund_method == 'credit'){
+                $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
+
+                if($transaction->can_refund()){
+                    
+                    if(!$transaction->refund($request->refund_amount ? $request->refund_amount : Null)){
+                        return response()->json(['message' => 'refund failed.'], 400);
+                    }
+
+                }else{
+                    return response()->json(['message' => 'not pay by credit card ot transction can not found'], 400);
+                }
+            }
+
+            $result = [
+                'status' => 'refund',
+                'expired_at' => date('Y-m-d',strtotime($request->refund_date)),
+                "refund_amount" => $request->refund_amount,
+                "refund_method" => $request->refund_method,
+                "refund_date" => date('Y-m-d',strtotime($request->refund_date)),
+                "refund_reason" => $request->refund_reason,
+            ];
+            // $booking_detail->refund();
+            $booking_detail->update($result);
+        }else{
+            return response()->json(['message' => 'membership can not found'], 400);
+        }
+        // $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
+
+        // if($transaction->can_refund()){
+        //     var_dump('refund');
+        //     // if refund_method is credit
+        //     if($transaction->refund_method == 'credit'){
+        //         $customer->charge($transaction->amount, 'refund');
+        //     }
+
+        //     // $transaction->refund(); 
+
+        //     // $booking_detail->update(["status" => 'cancel' ,
+        //     //                         'expired_at' => date('Y-m-d',strtotime($request->terminated_at)),
+        //     //                         'terminate_reason' => $request->terminate_reason,
+        //     //                         'terminated_at' => date('Y-m-d',strtotime($request->terminated_at)),
+        //     //                         'terminate_fee' => $request->terminate_fee,
+        //     //                         'terminate_comment' =>$request->terminate_comment]);
+        // }else{
+        //     return response()->json(['message' => 'transction can not found'], 400);
+        // }
     } 
 
     public function suspend(Request $request, $business_id){
         $company = $request->current_company->findOrFail($business_id);
         $customer = $company->customers()->findOrFail($request->customer_id);
-        //$booking_status = $customer->bookingStatus()->findOrFail($request->booking_id);
+
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
-        $booking_detail->update(["status" => 'suspend' ,'suspend_reason' => $request->suspension_reason,'suspend_started' => date('Y-m-d',strtotime($request->suspensionstartdate)),'suspend_ended' =>date('Y-m-d',strtotime($request->suspensionenddate)) ,'suspend_fee' => $request->suspension_fee,'suspend_comment' =>$request->suspension_comment]);
+
+        if($booking_detail->can_suspend()){
+            if($request->suspension_fee > 0){
+                if($customer->charge($request->suspension_fee, 'terminate')){
+                    $booking_detail->update(["status" => 'suspend' ,
+                                            'suspend_reason' => $request->suspension_reason,
+                                            'suspend_started' => date('Y-m-d',strtotime($request->suspensionstartdate)),
+                                            'suspend_ended' =>date('Y-m-d',strtotime($request->suspensionenddate)) ,
+                                            'suspend_fee' => $request->suspension_fee,
+                                            'suspend_comment' =>$request->suspension_comment]);
+                }else{
+                    return response()->json(['message' => 'charge user failed.'], 400);
+                }
+            }
+        }else{
+            return response()->json(['message' => 'is not acive membership, can not suspend.'], 400);
+        }
+        
     } 
 
     public function terminate(Request $request, $business_id){
         $company = $request->current_company->findOrFail($business_id);
         $customer = $company->customers()->findOrFail($request->customer_id);
-        //$booking_status = $customer->bookingStatus()->findOrFail($request->booking_id);
+
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
-        $booking_detail->update(["status" => 'cancel' ,'terminate_reason' => $request->terminate_reason,'terminated_at' => date('Y-m-d',strtotime($request->terminated_at)),'terminate_fee' => $request->terminate_fee,'terminate_comment' =>$request->terminate_comment]);
+
+        if($booking_detail->can_terminate()){
+            if($request->terminate_fee > 0){
+                if($customer->charge($request->terminate_fee, 'terminate')){
+                    $booking_detail->update(["status" => 'terminate' ,
+                                            'expired_at' => date('Y-m-d',strtotime($request->terminated_at)),
+                                            'terminate_reason' => $request->terminate_reason,
+                                            'terminated_at' => date('Y-m-d',strtotime($request->terminated_at)),
+                                            'terminate_fee' => $request->terminate_fee,
+                                            'terminate_comment' =>$request->terminate_comment]);
+                }else{
+                    return response()->json(['message' => 'charge user failed.'], 400);
+                }
+            }
+        }else{
+            return response()->json(['message' => 'is not acive membership, can not terminate.'], 400);
+        }
+    }
+
+    public function void(Request $request, $business_id, $booking_id){
+        $company = $request->current_company->findOrFail($business_id);
+
+        $customer = $company->customers()->findOrFail($request->customer_id);
+        
+
+        $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
+
+        if($transaction->can_void()){
+            $transaction->void(); 
+            $customer->bookingDetail()->where('booking_id', $booking_id)->update(["status" => 'void']);
+        }else{
+            return response()->json(['message' => 'transction not found or already complete, can only refund'], 400);
+        }
     }
 }

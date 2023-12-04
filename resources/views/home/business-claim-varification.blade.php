@@ -113,12 +113,14 @@
     function resendOtp(){
         var _token = $("input[name='_token']").val();
         var cid = $('#cid').val();
+        var type = '{{$type}}';
         $.ajax({
             url: "/resend-otp-for-claim",
             type:"POST",
             headers: {'X-CSRF-TOKEN': _token},
             data:{
-                cid:cid
+                cid:cid,
+                type:type
             },
             success:function(response){
                 $('#otpMsg').removeClass('font-red').addClass('font-green').html('Text message sent! Enter the code above.');

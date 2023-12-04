@@ -20,6 +20,7 @@
 		}
 	}
 </style>
+
 	@include('layouts.business.business_topbar')
    <div class="main-content printnone">
 		<div class="page-content">
@@ -229,6 +230,16 @@
 																											<span>$ {{$customerdata->total_spend()}}</span>
 																										</div>
 																									</div>
+
+																									<div class="row mb-10">
+																										<div class="col-lg-6 col-sm-6">
+																											<label class="font-black">Total Attendance</label>
+																										</div>
+																										<div class="col-lg-6 col-sm-6">
+																											<span>{{$customerdata->visits_count()}}</span>
+																										</div>
+																									</div>
+
 																								</div>
 																								<div class="col-lg-6">
 																									<div class="row mb-10">
@@ -255,6 +266,15 @@
 																											<span>{{$customerdata->expired_soon()}}</span>
 																										</div>
 																									</div>
+
+																									<div class="row mb-10">
+																										<div class="col-lg-6 col-sm-6">
+																											<label class="font-black">Completed Membership</label>
+																										</div>
+																										<div class="col-lg-6 col-sm-6">
+																											<span>{{$customerdata->complete_booking_details()->count()}}</span>
+																										</div>
+																									</div>
 																								</div>
 																							</div>
 																						</div>
@@ -269,7 +289,7 @@
 																	<div class="accordion-item shadow">
 																		<h2 class="accordion-header" id="accordionnesting2Example1">
 																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting2Examplecollapse1" aria-expanded="false" aria-controls="accor_nesting2Examplecollapse1">
-																				Account Details
+																				Membership Details 
 																			</button>
 																		</h2>
 																		<div id="accor_nesting2Examplecollapse1" class="accordion-collapse collapse " aria-labelledby="accordionnesting2Example1" data-bs-parent="#accordionnesting2">
@@ -291,34 +311,35 @@
 																											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting4Examplecollapsea{{$i}}" aria-expanded="false" aria-controls="accor_nesting4Examplecollapse2">
 																												<div class="container-fluid nopadding">
 																													<div class="row mini-stats-wid d-flex align-items-center ">
-																														<div class="col-lg-6 col-md-6 col-8"> {{$booking_detail->business_services_with_trashed->program_name}} - {{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </div>
-																														<div class="col-lg-6 col-md-6 col-4">
+																														<div class="col-lg-10 col-md-10 col-8"> {{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} |Started On {{date('m/d/Y',strtotime(@$booking_detail->contract_date))}} | Expires On {{date('m/d/Y',strtotime(@$booking_detail->expired_at))}} </div>
+																														
+																														<div class="col-lg-2 col-md-2 col-4">
 																															<div class="multiple-options">
 																																<div class="setting-icon">
 																																	<i class="ri-more-fill"></i>
 																																	<ul>
 																																		<li>
-																					                                       	<a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}" data-modal-width="modal-70" ><i class="fas fa-plus text-muted">
+																					                                       	<a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id])}}" data-modal-width="modal-70" ><i class="fas fa-plus text-muted">
 																					                                       	</i> View Visits </a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => $booking_detail->id , 'booking_id' => $booking_detail->booking_id])}}" data-modal-width="modal-100"> <i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
 																																			</i>Edit Booking </a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => $booking_detail->id , 'booking_id' => $booking_detail->booking_id])}}" data-modal-width="modal-100"> <i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
 																																			</i>Refund or Void</a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('terminate_or_suspend_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => $booking_detail->id , 'booking_id' => $booking_detail->booking_id])}}" data-modal-width="modal-100"> <i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('terminate_or_suspend_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
 																																			</i>Suspend or Terminate</a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
 																																			</i>Autopay Schedule</a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id ,'type'=>'history'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'history'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
 																																			</i>Autopay History</a>
 																																		</li>
 																																	</ul>
@@ -337,13 +358,13 @@
 																															<div class="row">
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="inner-accordion-titles">
-																																		<label>{{$booking_detail->business_services_with_trashed->program_name}}</label>	
+																																		<label>{{@$booking_detail->business_services_with_trashed->program_name}}</label>	
 																																	</div>
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="inner-accordion-titles float-end text-right line-break">
-																																		<span>Remaining {{$booking_detail->getRemainingSessionAfterAttend()}}/{{$booking_detail->pay_session}}</span> 
-																																		<a class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=> $booking_detail->booking_id ,'customer'=>$customerdata->id ])}}" data-item-type="no" data-modal-width="modal-70" >
+																																		<span>Remaining {{@$booking_detail->getRemainingSessionAfterAttend()}}/{{@$booking_detail->pay_session}}</span> 
+																																		<a class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=> @$booking_detail->booking_id ,'customer'=>$customerdata->id ])}}" data-item-type="no" data-modal-width="modal-70" >
 																																			<i class="far fa-file-alt" aria-hidden="true"></i></a>
 																																	</div>
 																																</div>
@@ -360,7 +381,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span> {{$booking_detail->booking->order_id}} </span>
+																																	<span> {{@$booking_detail->booking->order_id}} </span>
 																																</div>
 																															</div>
 																														
@@ -371,7 +392,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span> ${{$booking_detail->booking->amount}} </span>
+																																	<span> ${{@$booking_detail->booking->amount}} </span>
 																																</div>
 																															</div>
 																														
@@ -382,7 +403,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span>{{$booking_detail->booking->getPaymentDetail()}}</span>
+																																	<span>{{@$booking_detail->booking->getPaymentDetail()}}</span>
 																																</div>
 																															</div>
 																														
@@ -393,7 +414,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span>{{$booking_detail->getRemainingSessionAfterAttend()}}/{{$booking_detail->pay_session}}</span>
+																																	<span>{{@$booking_detail->getRemainingSessionAfterAttend()}}/{{@$booking_detail->pay_session}}</span>
 																																</div>
 																															</div>
 																														
@@ -404,7 +425,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span>{{$booking_detail->business_services_with_trashed->program_name}} </span>
+																																	<span>{{@$booking_detail->business_services_with_trashed->program_name}} </span>
 																																</div>
 																															</div>
 
@@ -415,7 +436,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span>{{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </span>
+																																	<span>{{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </span>
 																																</div>
 																															</div>
 
@@ -426,7 +447,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span>{{$booking_detail->business_price_detail_with_trashed->price_title}} </span>
+																																	<span>{{@$booking_detail->business_price_detail_with_trashed->price_title}} </span>
 																																</div>
 																															</div>
 																															
@@ -437,7 +458,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span> {{date('m/d/Y',strtotime($booking_detail->contract_date))}}</span>
+																																	<span> {{date('m/d/Y',strtotime(@$booking_detail->contract_date))}}</span>
 																																</div>
 																															</div>
 
@@ -448,7 +469,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span> {{date('m/d/Y',strtotime($booking_detail->expired_at))}}</span>
+																																	<span> {{date('m/d/Y',strtotime(@$booking_detail->expired_at))}}</span>
 																																</div>
 																															</div>
 																														
@@ -459,11 +480,11 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span>{{date('m/d/Y',strtotime($booking_detail->created_at))}}</span>
+																																	<span>{{date('m/d/Y',strtotime(@$booking_detail->created_at))}}</span>
 																																</div>
 																															</div>
 																															
-																															@if ($booking_detail->business_services_with_trashed)
+																															@if (@$booking_detail->business_services_with_trashed)
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="line-break">
 																																	<label>BOOKING TIME: </label>
@@ -471,12 +492,12 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span> {{date('h:i A', strtotime($booking_detail->business_services_with_trashed->shift_start))}}</span>
+																																	<span> {{date('h:i A', strtotime(@$booking_detail->business_services_with_trashed->shift_start))}}</span>
 																																</div>
 																															</div>
 																															@endif
 
-																															@if ($booking_detail->customer)
+																															@if (@$booking_detail->customer)
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="line-break">
 																																		<label>BOOKED BY:</label>
@@ -484,12 +505,12 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
-																																		<span>{{$booking_detail->customer->fname}} {{$booking_detail->customer->lname}} (In person)</span>
+																																		<span>{{@$booking_detail->customer->fname}} {{@$booking_detail->customer->lname}} (In person)</span>
 																																	</div>
 																																</div>
 																															@endif
 																															
-																															@if ($booking_detail->business_services_with_trashed)
+																															@if (@$booking_detail->business_services_with_trashed)
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="line-break">
 																																		<label>ACTIVITY TYPE:</label>
@@ -497,12 +518,12 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
-																																		<span>{{$booking_detail->business_services_with_trashed->sport_activity}}</span>
+																																		<span>{{@$booking_detail->business_services_with_trashed->sport_activity}}</span>
 																																	</div>
 																																</div>
 																															@endif
 
-																															@if ($booking_detail->business_services_with_trashed)
+																															@if (@$booking_detail->business_services_with_trashed)
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="line-break">
 																																		<label>SERVICE TYPE:</label>
@@ -510,7 +531,7 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
-																																		<span>{{$booking_detail->business_services_with_trashed->formal_service_types()}}</span>
+																																		<span>{{@$booking_detail->business_services_with_trashed->formal_service_types()}}</span>
 																																	</div>
 																																</div>
 																															@endif
@@ -543,21 +564,44 @@
 																												<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting01Examplecollapsec{{$i}}" aria-expanded="false" aria-controls="accor_nesting01Examplecollapsec{{$i}}">
 																													 <div class="container-fluid nopadding">
 																														<div class="row mini-stats-wid d-flex align-items-center ">
-																															<div class="col-lg-6 col-md-6 col-8">{{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </div>
-																															<div class="col-lg-6 col-md-6 col-4">
+																															<div class="col-lg-8 col-md-8 col-8">
+																																{{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}}
+																																
+																																@if($booking_detail->status == 'refund')
+																																	  | <span class="font-red">  Status: Refunded on {{date('m/d/Y',strtotime($booking_detail->refund_date))}}	</span>
+																																@endif
+
+																																@if($booking_detail->status == 'terminate')
+																																	| <span class="font-red">  Status: Terminated on {{date('m/d/Y',strtotime($booking_detail->terminated_at))}}	</span>
+																																@endif
+
+																																@if($booking_detail->status == 'suspend')
+																																	| <span class="font-red"> Status: Freeze from {{date('m/d/Y',strtotime($booking_detail->suspend_started))}}	to {{date('m/d/Y',strtotime($booking_detail->suspend_ended))}}</span>
+																																	
+																																@endif
+
+																																@if($booking_detail->status == 'void')
+																																	| <span class="font-red">  Status: Void </span>
+																																@endif						
+																															</div>
+																															<div class="col-lg-4 col-md-4 col-4">
 																																<div class="multiple-options">
 																																	<div class="setting-icon">
 																																		<i class="ri-more-fill"></i>
 																																		<ul>
-																																			<li><a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id])}}" data-modal-width="modal-70" >
+																																			<li>
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-100"> <i class="fas fa-plus text-muted">
+																																			</i>Edit Booking </a>
+																																		</li>
+																																			<li><a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id])}}" data-modal-width="modal-70" >
 																																					<i class="fas fa-plus text-muted"></i> View Visits </a>
 																																			</li>
 																																			<li>
-																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
+																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
 																																				</i>Autopay Schedule</a>
 																																			</li>
 																																			<li>
-																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => $booking_detail->id ,'type'=>'history'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
+																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'history'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
 																																				</i>Autopay History</a>
 																																			</li>
 																																		</ul>
@@ -592,7 +636,7 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
-																																		<span> {{$booking_detail->booking->order_id}} </span>
+																																		<span> {{@$booking_detail->booking->order_id}} </span>
 																																	</div>
 																																</div>
 																															
@@ -603,7 +647,7 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
-																																		<span>  ${{$booking_detail->booking->amount}} </span>
+																																		<span>  ${{@$booking_detail->booking->amount}} </span>
 																																	</div>
 																																</div>
 																															
@@ -614,11 +658,11 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
-																																		<span>{{$booking_detail->booking->getPaymentDetail()}}</span>
+																																		<span>{{@$booking_detail->booking->getPaymentDetail()}}</span>
 																																	</div>
 																																</div>
 																																
-																																@if ($booking_detail->business_price_detail_with_trashed)
+																																@if (@$booking_detail->business_price_detail_with_trashed)
 																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																		<div class="line-break">
 																																			<label>TOTAL REMAINING:</label>
@@ -626,7 +670,7 @@
 																																	</div>
 																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																		<div class="float-end line-break text-right">
-																																			<span>{{$booking_detail->getRemainingSessionAfterAttend()}}/{{$booking_detail->pay_session}}</span>
+																																			<span>{{@$booking_detail->getRemainingSessionAfterAttend()}}/{{@$booking_detail->pay_session}}</span>
 																																		</div>
 																																	</div>
 																																@endif
@@ -638,8 +682,8 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
-																																		@if ($booking_detail->business_services_with_trashed)
-																																			<span>{{$booking_detail->business_services_with_trashed->program_name}} </span>
+																																		@if (@$booking_detail->business_services_with_trashed)
+																																			<span>{{@$booking_detail->business_services_with_trashed->program_name}} </span>
 																																		@endif
 																																	</div>
 																																</div>
@@ -673,7 +717,7 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
-																																		<span> {{date('m/d/Y',strtotime($booking_detail->contract_date))}}</span>
+																																		<span> {{date('m/d/Y',strtotime(@$booking_detail->contract_date))}}</span>
 																																	</div>
 																																</div>
 																															
@@ -684,7 +728,7 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
-																																		<span> {{date('m/d/Y',strtotime($booking_detail->expired_at))}}</span>
+																																		<span> {{date('m/d/Y',strtotime(@$booking_detail->expired_at))}}</span>
 																																	</div>
 																																</div>
 																															
@@ -695,11 +739,11 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
-																																		<span>{{date('m/d/Y',strtotime($booking_detail->created_at))}}</span>
+																																		<span>{{date('m/d/Y',strtotime(@$booking_detail->created_at))}}</span>
 																																	</div>
 																																</div>
 																																
-																																@if ($booking_detail->business_services_with_trashed)
+																																@if (@$booking_detail->business_services_with_trashed)
 																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																		<div class="line-break">
 																																			<label>BOOKING TIME: </label>
@@ -707,11 +751,11 @@
 																																	</div>
 																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																		<div class="float-end line-break text-right">
-																																			<span> {{date('h:i A', strtotime($booking_detail->business_services_with_trashed->shift_start))}}</span>
+																																			<span> {{date('h:i A', strtotime(@$booking_detail->business_services_with_trashed->shift_start))}}</span>
 																																		</div>
 																																	</div>
 																																@endif
-																																@if ($booking_detail->customer)
+																																@if (@$booking_detail->customer)
 																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																		<div class="line-break">
 																																			<label>BOOKED BY:</label>
@@ -719,12 +763,12 @@
 																																	</div>
 																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																		<div class="float-end line-break text-right">
-																																			<span>{{$booking_detail->customer->fname}} {{$booking_detail->customer->lname}} (In person)</span>
+																																			<span>{{@$booking_detail->customer->fname}} {{@$booking_detail->customer->lname}} (In person)</span>
 																																		</div>
 																																	</div>
 																																@endif
 																																
-																																@if ($booking_detail->business_services_with_trashed)
+																																@if (@$booking_detail->business_services_with_trashed)
 																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																		<div class="line-break">
 																																			<label>ACTIVITY TYPE:</label>
@@ -732,12 +776,12 @@
 																																	</div>
 																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																		<div class="float-end line-break text-right">
-																																			<span>{{$booking_detail->business_services_with_trashed->sport_activity}}</span>
+																																			<span>{{@$booking_detail->business_services_with_trashed->sport_activity}}</span>
 																																		</div>
 																																	</div>
 																																@endif
 																																
-																																@if ($booking_detail->business_services_with_trashed)
+																																@if (@$booking_detail->business_services_with_trashed)
 																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																		<div class="line-break">
 																																			<label>SERVICE TYPE:</label>
@@ -745,7 +789,7 @@
 																																	</div>
 																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																		<div class="float-end line-break text-right">
-																																			<span>{{$booking_detail->business_services_with_trashed->formal_service_types()}}</span>
+																																			<span>{{@$booking_detail->business_services_with_trashed->formal_service_types()}}</span>
 																																		</div>
 																																	</div>
 																																@endif
@@ -800,7 +844,7 @@
 																									</tr>
 																								</thead>
 																								<tbody>
-																									@foreach ($purchase_history as $history) 
+																									@foreach($purchase_history as $history) 
 																										@if($history->item_description(request()->business_id)['itemDescription'] != '')
 																										<tr>
 																											<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
@@ -809,7 +853,15 @@
 																											<td>{{$history->getPmtMethod()}}</td>
 																											<td>${{$history->amount}}</td>
 																											<td>{{$history->item_description(request()->business_id)['qty']}}</td>
-																											<td>Refund | Void</td>
+																											<td>
+																												@if(($history->can_void() && $history->item_type=="UserBookingStatus") || ($history->can_refund()))
+																													<a href="#" data-behavior="ajax_html_modal" data-url="{{route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => $booking_detail->id , 'booking_id' => $booking_detail->booking_id])}}" data-modal-width="modal-100">Void</a>
+																												@else
+																													{{$history->status}}
+																												@endif
+
+
+																											</td>
 																											<td><a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$customerdata->id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
 																											</td>
 																										</tr>
@@ -894,7 +946,7 @@
 																	<div class="accordion-item shadow">
 																		<h2 class="accordion-header" id="accordionnesting6Example2">
 																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting6Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting6Examplecollapse2">
-																				View Visits
+																				Attendance History
 																			</button>
 																		</h2>
 																		<div id="accor_nesting6Examplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnesting6Example2" data-bs-parent="#accordionnesting6">
@@ -953,12 +1005,12 @@
 																		<h2 class="accordion-header" id="accordionnesting9Example2">
 																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting9Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting9Examplecollapse2">
 																				<div class="container-fluid nopadding">
-																				  <div class="row y-middle">
-																					  <div class="col-lg-6 col-md-6 col-8">
-																						  Credit Card Info     <span class="font-green ml-15">  CC  </span>  ({{$customerdata->stripePaymentMethods()->count()}})   
-																					  </div>
-																					  <div class="col-lg-6 col-md-6 col-4">
-																						  <div class="multiple-options">
+																				   <div class="row y-middle">
+																					   <div class="col-lg-6 col-md-6 col-8">
+																						  	Credit Card Info     <span class="font-green ml-15">  CC  </span>  ({{$customerdata->stripePaymentMethods()->count()}})   
+																					   </div>
+																					   <div class="col-lg-6 col-md-6 col-4">
+																						  	<div class="multiple-options">
 																							  <div class="setting-icon">
 																								  <i class="ri-more-fill"></i>
 																								  <ul>
@@ -968,9 +1020,9 @@
 																									</li>
 																								  </ul>
 																							  </div>
-																						  </div>
-																					  </div>
-																				  </div>
+																						  	</div>
+																					   </div>
+																				   </div>
 																				</div>
 																			</button>
 																		</h2>
@@ -1003,23 +1055,57 @@
 																	<div class="accordion-item shadow">
 																		<h2 class="accordion-header" id="accordionnesting10Example2">
 																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting10Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting10Examplecollapse2">
-																				Customer Notes & Alerts
+
+																				<div class="container-fluid nopadding">
+																				   <div class="row y-middle">
+																					   <div class="col-lg-6 col-md-6 col-8">
+																							Customer Notes & Alerts ({{count($notes)}})
+																						</div>
+																						<div class="col-lg-6 col-md-6 col-4">
+																							<div class="multiple-options">
+																								<div class="setting-icon">
+																									<i class="ri-more-fill"></i>
+																									  <ul>
+																											<li><a onclick="getNote('');"><i class="fas fa-plus text-muted"></i>Add</a></li>
+																										</ul>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
 																			</button>
 																		</h2>
 																		<div id="accor_nesting10Examplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnesting10Example2" data-bs-parent="#accordionnesting10">
 																			<div class="accordion-body">
 																				<div class="container-fluid nopadding">
-																					<div class="row">
-																						<form action="{{route('business.customers.update', ['customer' => $customerdata->id])}}" method="POST">
-																							@csrf
-																							@method('PUT')
-																							<div class="col-lg-12">
-																								<textarea class="form-control mb-10" name="notes" rows="4">{{$customerdata->notes}} </textarea>
+																					<div class="row">	
+																						@forelse($notes as $n)
+																							
+																							<div class="row">
+																								<div class="col-md-10">
+																									<div class="row">
+																										<div class="col-md-3">{!!$n->limit_note_character!!}</div>
+																										<div class="col-md-2">{{date('M d, Y', strtotime($n->created_at))}} </div>
+																										<div class="col-md-2">Due {{date('M d, Y', strtotime($n->due_date))}} , {{ date('h:i A', strtotime($n->time))}} </div>
+																										<div class="col-md-2">{{ $n->display_chk == 0 ? "Not" : ''}} visible to member</div>
+																										<div class="col-md-3">Added by {{$n->User->full_name}}</div>
+																									</div>
+																								</div>
+																								
+																								<div class="col-md-2">
+																									<div class="multiple-options">
+																										<div class="setting-icon">
+																											<i class="ri-more-fill"></i>
+																											  <ul>
+																													<li><a onclick="getNote({{$n->id}})"><i class="fas fa-plus text-muted"></i>Edit</a></li>
+																													<li><a onclick="deleteNote({{$n->id}})"><i class="fas fa-plus text-muted"></i>Delete</a></li>
+																												</ul>
+																										</div>
+																									</div>
+																								</div>
 																							</div>
-																							<div class="col-lg-12">
-																								<button type="submit" class="btn btn-red float-end">Submit</button>
-																							</div>
-																						</form>
+																						@empty
+																							No Notes added yet.
+																						@endforelse
 																					</div>
 																				</div>
 																			</div>
@@ -1029,7 +1115,7 @@
 																	<div class="accordion-item shadow">
 																		<h2 class="accordion-header" id="accordionnesting11Example2">
 																			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting11Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting11Examplecollapse2">
-																				Agreed on Terms, Contracts, & Liability Waiver
+																				Documents & Contracts
 																			</button>
 																		</h2>
 																		<div id="accor_nesting11Examplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnesting11Example2" data-bs-parent="#accordionnesting11">
@@ -1161,6 +1247,53 @@
 																						</div>
 																					</div>
 																				</div>
+
+																				<div class="accordion-item shadow">
+																					<h2 class="accordion-header" id="accordionnesting">
+																						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting" aria-expanded="false" aria-controls="accor_nesting">
+																							<div class="container-fluid nopadding">
+																								<div class="row  y-middle">
+																									<div class="col-lg-6 col-md-6 col-8"> Documents
+																									</div>
+																									<div class="col-lg-6 col-md-6 col-4">
+																										<div class="multiple-options">
+																											<div class="setting-icon">
+																												<i class="ri-more-fill"></i>
+																												  <ul>
+																														<li><a href="#" data-bs-toggle="modal" data-bs-target=".documents"><i class="fas fa-plus text-muted"></i>Add</a></li>
+																													</ul>
+																											</div>
+																										</div>
+																									</div>
+																								</div>
+																							</div>
+																						</button>
+																					</h2>
+																					<div id="accor_nesting" class="accordion-collapse collapse" aria-labelledby="accordionnesting" data-bs-parent="#accordionnesting8">
+																						<div class="accordion-body">
+																							@forelse($documents as $d)
+																							<div class="row">
+																								<div class="col-md-3"><i class="fas fa-download"></i> {{$d->title}}</div>
+																								<div class="col-md-3"><i class="fas fa-paperclip"></i> Uploaded on {{date('m/d/Y', strtotime($d->created_at))}}</div>
+																								<div class="col-md-3"> Uploaded by {{@$d->uploaded_by}}</div>
+																								<div class="col-md-3">
+																									<div class="multiple-options">
+																										<div class="setting-icon">
+																											<i class="ri-more-fill"></i>
+																											  <ul>
+																											  		<li><a href="{{ route('download', ['id' => $d->id]) }}" target="_blank"><i class="fas fa-plus text-muted"></i>Download</a></li>
+																													<li><a onclick="deleteDoc({{$d->id}})"><i class="fas fa-plus text-muted"></i>Delete </a></li>
+																												</ul>
+																										</div>
+																									</div>
+																								</div>
+																							</div>
+																							@empty
+																								No Documents added yet.
+																							@endforelse
+																						</div>
+																					</div>
+																				</div>
 																			</div>
 																		</div>
 																	</div>
@@ -1209,7 +1342,7 @@
 					<div class="row">
 						<div class="col-lg-6 col-md-6 col-sm-6">
 							<div class="mb-10">
-								<label>	First Name</label>
+								<label>First Name</label>
 								<input class="form-control" type="text" id="fname" name="fname" placeholder="First name" value="{{$customerdata->fname}}">
 							</div>
 						</div>
@@ -1310,6 +1443,50 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div class="modal fade documents" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
+	<div class="modal-dialog modal-dialog-centered modal-30">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Upload Document</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-6">
+						<div class="mb-10">
+							<label>Document Title</label>
+							<input class="form-control" type="text" id="docTitle" name="docTitle" placeholder="Enter Document Title..." value="">
+						</div>
+						<div class="mb-10">
+							<input type="file" class="form-control mt-10" name="document" id="file" onchange="readURL(this)">
+						</div>
+						<p class='err mt-10 font-red'></p>
+						<label id="docMessage" class="font-16"></label>
+					</div>
+				</div>					
+			</div>
+			<div class="modal-footer">
+				<button type="button" id="upload-pdf" class="btn btn-primary btn-red">Add Document</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade notes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
+	<div class="modal-dialog modal-dialog-centered modal-30">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title note-title" id="myModalLabel">Add Note</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			
+			<div class="modal-body" id="noteHtml">		
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="modal fade terms" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-50">
 		<div class="modal-content">
@@ -1379,6 +1556,157 @@
 </div>
 
 @include('layouts.business.footer')
+
+<script>
+	var docToUpload = '';
+	var ext = '';
+
+	function readURL(input) {
+	   if (input.files && input.files[0]) {
+	      const name = input.files[0].name;
+	  		const lastDot = name.lastIndexOf('.');
+	  		const fileName = name.substring(0, lastDot);
+	   	ext = name.substring(lastDot + 1);
+	   	var reader = new FileReader();
+         reader.onload = function (e) {
+             
+         };
+         docToUpload = input.files[0];
+         reader.readAsDataURL(input.files[0]);
+      }
+	}
+
+	function deleteDoc(id){
+		let text = "You are about to delete the document. Are you sure you want to continue?";
+		if (confirm(text)) {
+	      $.ajax({
+	         type: 'GET',
+	         url: '/business/'+'{{request()->business_id}}'+'/removeDoc/'+id,
+	         success: function (data) {
+	            window.location.reload();
+	         }
+	      });
+	   }
+	}
+
+	function deleteNote(id){
+		let text = "You are about to delete the Note. Are you sure you want to continue?";
+		if (confirm(text)) {
+	      $.ajax({
+	         type: 'GET',
+	         url: '/business/'+'{{request()->business_id}}'+'/removenote/'+id,
+	         success: function (data) {
+	            window.location.reload();
+	         }
+	      });
+	   }
+	}
+
+	function getNote(id){
+		$.ajax({
+         type: 'GET',
+         url: '/business/'+'{{request()->business_id}}'+'/customer/'+'{{$customerdata->id}}'+'/getNote/'+id,
+         success: function (data) {
+            $('#noteHtml').html(data);
+            if(id){
+            	$('.note-title').html('Edit Note');
+            }else{
+            	$('.note-title').html('Add Note');
+            }
+            $('.notes').modal('show');
+         }
+	   });
+	}
+
+	$(document).ready(function () {
+
+      $('#upload-pdf').click(function(){
+        	if(docToUpload == ''){
+        		$('.err').html('Select file to upload.');
+        	}else if(ext != 'pdf' && ext != 'jpg' && ext != 'jpeg' && ext != 'png'){
+            	$('.err').html('File format is not supported.')
+        	}else{
+        		$('.err').html('');
+         	var formdata = new FormData();
+         	formdata.append('file',docToUpload);
+         	formdata.append('id','{{$customerdata->id}}');
+         	formdata.append('title',$('#docTitle').val());
+          	formdata.append('_token','{{csrf_token()}}')
+          	$.ajax({
+               url: '{{route('upload_docs')}}',
+               type:'post',
+               dataType: 'json',
+               enctype: 'multipart/form-data',
+               data:formdata,
+               processData: false,
+               contentType: false,
+               headers: {'X-CSRF-TOKEN': $("#_token").val()},
+               success: function (response) { 
+               	$('#docMessage').removeClass();
+                  if(response.status == 200){
+                     $('#docMessage').addClass('font-green font-16');
+                     $('#docTitle').val('');
+                     $('#docMessage').html(response.message);
+                     setTimeout(function() {
+						        window.location.reload();
+						   }, 1000);
+                  }
+                  else{
+                		$('#docMessage').addClass('font-red font-16');
+                		$('#docMessage').html(response.message).addClass('alert alert-danger alert-dismissible');
+                  }
+                  $('#file').val('')
+               }
+         	});
+        	}
+    	});
+   });
+</script>
+
+	<script type="text/javascript">
+
+		$("[data-behavior~=transaction_void]").click(function(e){
+			e.preventDefault();
+
+	        $.ajax({
+	            url: "/business/{{request()->business_id}}/booking_details/" + $(this).data('booking-detail-id') + '/void',
+	            method: "POST",
+	            data:{
+	                _token: '{{csrf_token()}}', 
+	                customer_id: $(this).data('customer-id')
+	            },
+	            error: function(xhr, status, error){
+	            	var errorMessage = JSON.parse(xhr.responseText);
+	            	alert(errorMessage.message);
+	            },
+	            success:function(response) {
+	                location.reload()
+	            },
+	        });
+	    });
+
+		$("[data-behavior~=transaction_refund]").click(function(e){
+			e.preventDefault();
+
+	        $.ajax({
+	            url: "/business/{{request()->business_id}}/booking_details/" + $(this).data('booking-detail-id') + '/refund',
+	            method: "POST",
+	            data:{
+	                _token: '{{csrf_token()}}', 
+	                customer_id: $(this).data('customer-id')
+	            },
+	            error: function(xhr, status, error){
+	            	var errorMessage = JSON.parse(xhr.responseText);
+	            	alert(errorMessage.message);
+	            },
+	            success:function(response) {
+	            	console.log(response)
+	                // location.reload()
+	            },
+	        });
+	    });
+	</script>
+
 	<script>
 		$(document).ready(function () {
 			var business_id = '{{request()->business_id}}';
@@ -1646,6 +1974,4 @@
     	}
 	</script>
 
-	<!-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('AUTO_COMPLETE_ADDRESS_GOOGLE_KEY') }}&callback=initMap" async defer></script>
- -->	
 @endsection

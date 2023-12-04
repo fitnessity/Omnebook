@@ -153,61 +153,61 @@
 						</div>
 
 						<div class="dropdown ms-1 topbar-head-dropdown header-item">
-							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<!-- <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<img src="{{asset('/public/dashboard-design/images/us.svg')}}" alt="user-image" class="rounded" height="20">
-							</button>
+							</button> -->
 							<div class="dropdown-menu dropdown-menu-end">
 
 								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language py-2" data-lang="en" title="English">
+								<!-- <a href="javascript:void(0);" class="dropdown-item notify-item language py-2" data-lang="en" title="English">
 									<img src="{{asset('/public/dashboard-design/images/us.svg')}}" alt="user-image" class="me-2 rounded" height="18">
 									<span class="align-middle">English</span>
-								</a>
+								</a> -->
 
 								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp" title="Spanish">
+								<!-- <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp" title="Spanish">
 									<img src="{{asset('/public/dashboard-design/images/spain.svg')}}" alt="user-image" class="me-2 rounded" height="18">
 									<span class="align-middle">Española</span>
-								</a>
+								</a> -->
 
 								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr" title="German">
+								<!-- <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr" title="German">
 									<img src="{{asset('/public/dashboard-design/images/germany.svg')}}" alt="user-image" class="me-2 rounded" height="18"> <span class="align-middle">Deutsche</span>
-								</a>
+								</a> -->
 
 								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it" title="Italian">
+								<!-- <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it" title="Italian">
 									<img src="{{asset('/public/dashboard-design/images/italy.svg')}}" alt="user-image" class="me-2 rounded" height="18">
 									<span class="align-middle">Italiana</span>
-								</a>
+								</a> -->
 
 								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru" title="Russian">
+								<!-- <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru" title="Russian">
 									<img src="{{asset('/public/dashboard-design/images/russia.svg')}}" alt="user-image" class="me-2 rounded" height="18">
 									<span class="align-middle">русский</span>
-								</a>
+								</a> -->
 
 								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ch" title="Chinese">
+								<!-- <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ch" title="Chinese">
 									<img src="{{asset('/public/dashboard-design/images/china.svg')}}" alt="user-image" class="me-2 rounded" height="18">
 									<span class="align-middle">中国人</span>
-								</a>
+								</a> -->
 
 								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="fr" title="French">
+								<!-- <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="fr" title="French">
 									<img src="{{asset('/public/dashboard-design/images/french.svg')}}" alt="user-image" class="me-2 rounded" height="18">
 									<span class="align-middle">français</span>
-								</a>
+								</a> -->
 
 								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ar" title="Arabic">
+								<!-- <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ar" title="Arabic">
 									<img src="{{asset('/public/dashboard-design/images/ae.svg')}}" alt="user-image" class="me-2 rounded" height="18">
 									<span class="align-middle">Arabic</span>
-								</a>
+								</a> -->
 							</div>
 						</div>
 
-						<div class="dropdown topbar-head-dropdown ms-1 header-item">
+						<!-- <div class="dropdown topbar-head-dropdown ms-1 header-item">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<i class='bx bx-category-alt fs-22'></i>
 							</button>
@@ -268,9 +268,9 @@
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> -->
 
-						<div class="dropdown topbar-head-dropdown ms-1 header-item">
+						<!-- <div class="dropdown topbar-head-dropdown ms-1 header-item">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" id="page-header-cart-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
 								<i class='bx bx-shopping-bag fs-22'></i>
 								<span class="position-absolute topbar-badge cartitem-badge fs-10 translate-middle badge rounded-pill bg-info">5</span>
@@ -416,7 +416,7 @@
 									</a>
 								</div>
 							</div>
-						</div>
+						</div> -->
 
 						<div class="ms-1 header-item d-none d-sm-flex">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-toggle="fullscreen">
@@ -783,9 +783,9 @@
                                                             </div>
                                                         </div>
                                                         <!--end col-->
-                                                        <div class="col-auto">
+                                                        <!-- <div class="col-auto">
                                                             <button type="button" class="btn btn-soft-success shadow-none"><i class="ri-add-circle-line align-middle me-1"></i> Add Product</button>
-                                                        </div>
+                                                        </div> -->
                                                         <!--end col-->
                                                         <div class="col-auto">
                                                             <button type="button" class="btn btn-soft-info btn-icon waves-effect waves-light layout-rightside-btn shadow-none"><i class="ri-pulse-line"></i></button>

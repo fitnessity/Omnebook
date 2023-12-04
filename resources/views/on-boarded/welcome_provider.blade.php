@@ -23,24 +23,11 @@
 								</div>
 							</div>
 							<div class="col-7">
-								<div class="row y-middle">
-									<div class="col-8">
-										<div class="onboared-steps mb-15">
-											<label>1 Tell us about your business</label>
-										</div>
-									</div>
-									<div class="col-4">
-										<div class="onboard-img mb-15">
-											<img src="{{url('dashboard-design/images/onboard-1.png')}}" alt="">
-										</div>
-									</div>
-								</div>
-								
-								<div class="dropdown-divider mb-15"> </div>
+
 								<div class="row y-middle">
 									<div class="col-8">
 										<div class="onboared-steps">
-											<label>2 Tell us about you</label>
+											<label>1 Tell us about you</label>
 										</div>
 									</div>
 									<div class="col-4">
@@ -49,12 +36,40 @@
 										</div>
 									</div>
 								</div>
+
+								<div class="dropdown-divider mb-15"> </div>
+								<div class="row y-middle">
+									<div class="col-8">
+										<div class="onboared-steps mb-15">
+											<label>2 Claim Your Business (If you are claiming your business)</label>
+										</div>
+									</div>
+									<div class="col-4">
+										<div class="onboard-img mb-15">
+											<img src="{{url('dashboard-design/images/claim-1.png')}}" alt="">
+										</div>
+									</div>
+								</div>
+
+								<div class="dropdown-divider mb-15"> </div>
+								<div class="row y-middle">
+									<div class="col-8">
+										<div class="onboared-steps mb-15">
+											<label>3 Tell us about your business</label>
+										</div>
+									</div>
+									<div class="col-4">
+										<div class="onboard-img mb-15">
+											<img src="{{url('dashboard-design/images/onboard-1.png')}}" alt="">
+										</div>
+									</div>
+								</div>
 											
 								<div class="dropdown-divider mb-15"> </div>
 								<div class="row y-middle">
 									<div class="col-8">
 										<div class="onboared-steps">
-											<label>3 Tell us where to send your money</label>
+											<label>4 Tell us where to send your money</label>
 										</div>
 									</div>
 									<div class="col-4">
@@ -68,12 +83,26 @@
 								<div class="row y-middle">
 									<div class="col-8">
 										<div class="onboared-steps">
-											<label>4 Choose your membership option</label>
+											<label>5 Choose your membership option</label>
 										</div>
 									</div>
 									<div class="col-4">
 										<div class="onboard-img mb-15">
 											<img src="{{url('dashboard-design/images/onboard-4.png')}}" alt="">
+										</div>
+									</div>
+								</div>
+
+								<div class="dropdown-divider mb-15"> </div>
+								<div class="row y-middle">
+									<div class="col-8">
+										<div class="onboared-steps">
+											<label>6 Get Started</label>
+										</div>
+									</div>
+									<div class="col-4">
+										<div class="onboard-img mb-15">
+											<img src="{{url('dashboard-design/images/start.png')}}" alt="">
 										</div>
 									</div>
 								</div>
@@ -89,7 +118,10 @@
 			<div class="row">
 				<div class="col-12">
 					<div class="text-right">
-						<a href="{{route('onboard_process.index' ,['cid' => $cid])}}" class="btn btn-red">Get Started</a>
+						<button  onclick="redirectToOnboardProcess('{{ route('onboard_process.index', ['cid' => $cid, 'displaystep' => 1]) }}')" class="btn btn-red" @if($user && !$activePlan) disabled @endif>Get Started</button>
+						@if($user && !$activePlan) 
+							<h3 class="fs-16 font-red">You have no active plan. Please <a href="{{route('choose-plan.index')}}" class="text-decoration-underline" >buy plan</a>.</h3>
+						@endif
 					</div> 
 				</div>
 			</div>
@@ -97,8 +129,12 @@
 	</div><!-- End Page-content -->
 </div><!-- END layout-wrapper -->
 	
-	
-	
-	
 @include('layouts.business.footer')
+
+<script>
+  function redirectToOnboardProcess(url) {
+    window.location.href = url;
+  }
+</script>
+
 @endsection

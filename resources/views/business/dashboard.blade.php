@@ -51,13 +51,14 @@
                         <div class="col">
                             <div class="h-100">
                                 <div class="row mb-3 pb-1">
+                                    @if(!$activePlan && Auth::user()->chkDaysLeft() < 14)
 									<div class="col-6">
 										<div class="remaining-days mb-15">
 											<div class="row y-middle" style="margin-top:5px;margin-bottom: 5px;">
 												<div class="col-lg-2 col-md-2 col-3">
 													<center>
 														<div class="avatar-xs flex-shrink-0">
-															<span class="avatar-title bg-primary rounded-circle fs-15">14</span>
+															<span class="avatar-title bg-primary rounded-circle fs-15">{{Auth::user()->chkDaysLeft()}}</span>
 														</div>
 														<div class="days-left">
 															<p>Days Left</p>
@@ -66,17 +67,9 @@
 												</div>
 												<div class="col-lg-10 col-md-10 col-9">	
 													<p class="fs-13">
-														You have 14 days remaining in your 14 day free trial. To keep using TeamUp after the trial period, enter your <a href="#"> payment details.</a> If you have any questions, please don't hesitate to <a href="#"> contact us</a>! 
+														You have {{Auth::user()->chkDaysLeft()}} days remaining in your @if($activePlan) plan. @else 14 day free trial. To keep using TeamUp after the trial period, enter your <a href="{{route('creditCardInfo')}}"> payment details.</a> <?php /*?>If you have any questions, please don't hesitate to <a href="{{route('contact-us')}}"> contact us</a>!<?php */?> @endif 
 													</p>
 												</div>
-                                                <?php  ?>
-											<!--<div class="col-lg-12 col-md-12 col-12">
-													<div class="chat-with-us text-center">
-														<p>Need help getting started ?</p>
-														<button type="submit" class="btn btn-red">Chat with us </button>
-													</div>
-												</div> -->
-												<?php  ?>
 											</div>
 										</div>
 									</div>
@@ -84,12 +77,12 @@
                                         <div class="card">
                                             <div class="card-body p-0">
                                                 <div class="alert alert-warning border-0 rounded-0 m-0 d-flex align-items-center" role="alert">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle text-warning me-2 icon-sm"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle text-warning me-2 icon-sm"></svg>
                                                     <div class="flex-grow-1 text-truncate">
-                                                        Your free trial expired in <b>17</b> days.
+                                                        Your @if(!$activePlan) free trial @else plan @endif expired in <b>{{Auth::user()->chkDaysLeft()}}</b> days.
                                                     </div>
                                                     <div class="flex-shrink-0">
-                                                        <a href="#" class="text-reset text-decoration-underline"><b>Upgrade</b></a>
+                                                        <a href="{{route('choose-plan.index')}}" class="text-reset text-decoration-underline"><b>Upgrade</b></a>
                                                     </div>
                                                 </div>
 
@@ -98,19 +91,21 @@
                                                         <div class="p-3">
                                                             <p class="fs-16 lh-base">Upgrade your plan from a <span class="fw-semibold">Free trial</span>, to ‘Premium Plan’ <i class="mdi mdi-arrow-right"></i></p>
                                                             <div class="mt-3">
-                                                                <a href="#" class="btn btn-success">Upgrade Account!</a>
+                                                                <a href="{{route('choose-plan.index')}}" class="btn btn-success">Upgrade Account!</a>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <div class="px-3">
-                                                            <img src="http://dev.fitnessity.co/dashboard-design/images/user-illustarator-2.png" class="img-fluid" alt="">
+                                                            <img src="{{url('dashboard-design/images/user-illustarator-2.png')}}" class="img-fluid" alt="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div> <!-- end card-body-->
                                         </div>
                                     </div>
+                                    @endif
+
                                     <div class="col-12">
                                         <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                                             <div class="flex-grow-1">
@@ -605,7 +600,7 @@
                                         </div>
 									</div>
 								</div>
-								</div>
+								</div> 
 							</div> <!-- end .h-100-->
                         </div> <!-- end col -->
 

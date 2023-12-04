@@ -1983,7 +1983,7 @@
 	 		
 	 		$('#total_amount').html('$'+ tot);
 	 		$('#pricetotal').val(price.toFixed(2));
-	 		$('#orderType').val('membership');
+	 		$('#orderType').val('Membership');
 	 	}else{
 	 		tax = 0;
 	 		var productTotalPrice = parseFloat($('#productTotalPrices').val()) || 0;
@@ -2017,7 +2017,7 @@
 	 		if(tot != 0){
 				$('#addToOrder').prop('disabled', false);
 	 		}
-	 		$('#orderType').val('product');
+	 		$('#orderType').val('Product');
 	 	}
 
 	 	if(chk == 'qty'){

@@ -66,7 +66,7 @@ class LoginController extends Controller {
                 $_SESSION["myses"] = $request->user();
                // $request->session()->flash('alert-success', 'Welcome '.$postArr['email']);
                 $claim = 'not set';
-                $claim_cid = $claim_status = $claim_cname = $claim_welcome = $claim_company = $checkoutsession  = $schedule = '';
+                $claim_cid = $claim_status = $claim_cname = $claim_welcome = $claim_company = $checkoutsession  = $schedule =$onboard = '';
                 if(session()->has('claim_business_page')) {
                 	$claim = 'set';
                     $claim_cid = session()->get('claim_cid');
@@ -91,6 +91,9 @@ class LoginController extends Controller {
                 if(session()->has('schedule')) {
                     $schedule = session()->get('schedule');
                 }
+                if(session()->has('redirectToOnboard')){
+                    $onboard = session()->get('redirectToOnboard');
+                }
                /* $response = array(
                     'type' => 'success',
                     'msg' => 'You are logged in successfully',
@@ -103,6 +106,10 @@ class LoginController extends Controller {
                     'claim_company' => $claim_company,
                     'd'=>$request->user()
                 );*/
+
+                if($onboard != ''){
+                    return redirect($onboard);
+                }
 
                 if($request->redirect){
                     return redirect($request->redirect);

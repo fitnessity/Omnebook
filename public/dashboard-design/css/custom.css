@@ -17,7 +17,7 @@ a:hover{
 }
 .dash-sidebar-menu{
 	 display: block;
-	  margin-top: 70px; 
+	 /* margin-top: 70px; */
 }
 .add-client{
 	display: block;
@@ -706,6 +706,7 @@ header{ position: fixed !important; }
 .btn:disabled{
 	background-color: #787878;
 	border-color: #787878;
+    color: #fff;
 }
 .priceoptionsettings .setting-icon > ul{
 	width: 235px;
@@ -1867,7 +1868,9 @@ padding: 0px 0px 3px 2px !important; */
 	position: absolute;
 }
 .page-content{
-	min-height: 1000px;
+	min-height: 1190px;
+	z-index: -11;
+	position: relative;
 }
 .font-green{
 	color: #009f0a;
@@ -2086,8 +2089,7 @@ padding: 0px 0px 3px 2px !important; */
   margin-top: 7px;
 }
 .membership-save {
-  width: 50%;
-  margin-top: 359px;
+  margin-top: 100px;
 }
 .activation-date {
   border-bottom: 1px solid #d1d7dc;
@@ -2130,13 +2132,11 @@ padding: 0px 0px 3px 2px !important; */
 }
 .refund-date input{
   display: inline-block;
-  width: 35%;
 }
 .refund-date label{
 	display: inline-block;
 }
 .refund-amount input {
-  width: 35%;
   display: inline-block;
 }
 .refund-amount h4 {
@@ -2385,7 +2385,7 @@ padding: 0px 0px 3px 2px !important; */
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  padding: var(--card-padding);
+  padding: 15px;
   transition: border-color 0.2s ease-out;
   height: 100px;
   margin: auto;
@@ -2798,7 +2798,7 @@ padding: 0px 0px 3px 2px !important; */
 	color: #484f56;
 }
 .nav-tabs-custom .nav-item .nav-link{
-  color: #212529;
+  color: #fff;
 }
 .nav-tabs-custom .nav-item .nav-link.active{
   color: #ed1b24;
@@ -3632,7 +3632,7 @@ div#termsdiv{order: 4;}
 .price-switch input, .price-switch label {
   display: inline-block;
   vertical-align: middle;
-  margin: 10px 0;
+  /* margin: 10px 0; */
 }
 
 
@@ -5214,10 +5214,10 @@ div#termsdiv{order: 4;}
 .custom-search-icon{
 	top: 13px !important;
 }
-/* .switch-account-dropdown{
-	transform: translate(62px, 40px) !important;
-	inset: 10px 80px auto auto !important;
-} */
+ .switch-account-dropdown{
+	transform: translate(130px, 40px) !important;
+	inset: 0px 130px auto auto !important;
+} 
 .switch-account-dropdown li a i{
 	margin-right: 10px;
 }
@@ -5291,14 +5291,192 @@ div#termsdiv{order: 4;}
 .btn-booking-activity:hover{
 	color: #fff;
 }
+.modal-check-width{
+	width: 15%;
+}
+.dash-sidebar-account-menu{
+	margin-top: 70px;
+}
+.plan-tlp{
+	background: #ed1b24;
+	border-radius: 100%;
+	font-size: 11px;
+	color: #fff;
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	text-align: center;
+}
+.plan-tlp i{
+	font-size: 10px;
+	margin-top: 2px;
+}
+.contact-info-1 label{
+	font-size: 14px;
+	margin-bottom: 0px;
+}
+.contact-info-1 span{
+	font-size: 14px;
+}
+.mb-5x{
+	margin-bottom: 5px;
+}
+.classes-list{
+	padding: 5px 15px;
+	border-bottom: 1px solid #e9ebec;
+}
+.links-set label{
+	margin-bottom: 0px;
+	margin-left: 5px;
+}
+.notetxt p{
+	margin-bottom: 5px;
+}
+.displayChk0 label{
+	display: inline;
+}
+.ml-5{
+	margin-left: 5px;
+}
+.service-sidepanel{
+	width: 0;
+	position: fixed;
+	z-index: 9999;
+	height: 100%;
+	top: 0;
+	right: 0;
+	background-color: #f6f6f6;
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 10px;
+}
 
+.sc{
+	overflow: hidden !important;
+	overflow-anchor: none;
+	touch-action: auto;
+}
+.cancel {
+  color: #000;
+  padding: 15px;
+} 
+.serviceclass-sidebar ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+.serviceclass-sidebar .pc-caption {
+  color: #000;
+  display: block;
+  padding: 5px 28px 0px;
+  text-align: center;
+  font-size: 15px;
+}
+.schedule-class-navbar{
+	padding: 15px;
+}
+.schedule-class-navbar li span{
+	color: #000;
+}
+.d-relative{
+	display: relative;
+}
+.sche-submit{
+	position: absolute;
+	bottom: 4%;
+}
+.side-cross{
+	display: block;    
+	padding: 15px;
+}
+.side a{
+	color: #000;
+}
+.setoflinkes{
+	display: flex;
+}
+.hide {
+  display: none;
+}
+.card-btns {
+  background: #f1f8ff;
+  border: 1px solid #a1d0ff;
+  padding: 6px 23px;
+  border-radius: 8px;
+}
 
-
-
+.side-dropdown {
+	width: 100%;
+	height: auto;
+	display: flex;
+	flex-direction: column;
+	padding: 15px;
+}
+.side-dropdown .form {
+	display: flex;
+	position: relative;
+}
+.side-dropdown .form input {
+	border: none;
+	color: #fff;
+	cursor: pointer;
+}
+.side-dropdown .form .button-1 {
+	position: absolute;
+	right: 0;
+	top: 7px;
+	border: none;
+	padding: 0px 15px;
+	color: #000;
+	cursor: pointer;
+	background: none;
+}
+.side-dropdown .form .button-1 .fa-chevron-down {
+	transform: rotate(0deg);
+	transition: all 0.6s;
+}
+.side-dropdown .form .button-1 .fa-chevron-down.active {
+    transform: rotate(180deg);
+}
+.side-dropdown .form .button-1 input{
+	border: none;
+	padding: 20px 5px;
+	color: #000;
+	cursor: pointer;
+}
+.side-dropdown .form .button-1:focus {
+	outline: none;
+}	
+.dropdownList {
+	display: none;
+}
+.dropdownList li {
+	padding: 5px;
+	margin-left: 16px;
+	display: flex;
+}
+.drop-header{ 
+	font-weight: 600;
+	font-size: 16px;
+	display: inline-block;
+}
+.font-bold{
+	font-weight: bold;
+}
+.title-sp-customer-terminate{
+	margin-bottom: 20px;
+}
+.border-bottom-documents{
+	border-bottom: 1px solid var(--vz-border-color);
+}
+.mb-5{
+	margin-bottom: 5px !important;
+}
+.mt-5{
+	margin-top: 5px !important;
+}
 
 /* header class */
-
-
 .userblock .login_links a {
   color: #fff;
   font-size: 16px;
@@ -5316,3 +5494,9 @@ div#termsdiv{order: 4;}
 	align-items: center;
 }
 /* header class */
+#signatureCanvas {
+  border: 1px solid #000;
+}
+.width-345{
+	max-width: 345px;
+}

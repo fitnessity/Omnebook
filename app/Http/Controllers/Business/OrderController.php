@@ -47,7 +47,6 @@ class OrderController extends BusinessBaseController
             if (Session::has('cart_item_for_checkout')) {
                 session()->forget('cart_item_for_checkout');
             }
-            
         }
 
         if (session()->has('cart_item_for_checkout')) {
@@ -211,9 +210,11 @@ class OrderController extends BusinessBaseController
                         'off_session' => true,
                         'confirm' => true,
                         'metadata' => [],
+                        'capture_method' => 'manual',
                     ]);
 
-                    if($onFilePaymentIntent['status']=='succeeded'){
+
+                    if($onFilePaymentIntent['status']=='requires_capture'){
                         $transactions[] = [
                             'channel' =>'stripe',
                             'kind' => 'card',
@@ -221,7 +222,7 @@ class OrderController extends BusinessBaseController
                             'stripe_payment_method_id' => $onFilePaymentMethodId ,
                             'amount' => $onFileTotal,
                             'qty' =>'1',
-                            'status' =>'complete',
+                            'status' =>'requires_capture',
                             'refund_amount' => 0,
                             'payload' =>json_encode($onFilePaymentIntent,true),
                         ];
@@ -250,6 +251,7 @@ class OrderController extends BusinessBaseController
                         'off_session' => true,
                         'confirm' => true,
                         'metadata' => [],
+                        'capture_method' => 'manual',
                     ]);
 
                     if(!$request->has('save_card')){
@@ -258,7 +260,7 @@ class OrderController extends BusinessBaseController
                         $stripePaymentMethod->delete();
                     }
 
-                    if($newCardPaymentIntent['status']=='succeeded'){
+                    if($newCardPaymentIntent['status']=='requires_capture'){
                         $transactions[] = [
                             'channel' =>'stripe',
                             'kind' => 'card',
@@ -266,9 +268,10 @@ class OrderController extends BusinessBaseController
                             'stripe_payment_method_id' => $newCardPaymentMethodId,
                             'amount' => $newCardTotal,
                             'qty' =>'1',
-                            'status' =>'complete',
+                            'status' =>'requires_capture',
                             'refund_amount' => 0,
                             'payload' =>json_encode($newCardPaymentIntent,true),
+                            'capture_method' => 'manual',
                         ];
                     }
                 }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
@@ -322,7 +325,6 @@ class OrderController extends BusinessBaseController
         ]);
 
         foreach($transactions as $transaction){
-            
             $tran_data = Transaction::create(array_merge($transaction, [ 
                 'user_type' => 'customer',
                 'user_id' => $customer->id,
@@ -386,7 +388,6 @@ class OrderController extends BusinessBaseController
                 'order_type' => @$item['orderType'],
             ]);
 
-            $booking_detail->transfer_to_provider();
             $bookidarray [] = $booking_detail->id;
 
             $qty_c = $checkoutRegisterCartService->getQtyPriceByItem($item)['qty'];
@@ -477,14 +478,21 @@ class OrderController extends BusinessBaseController
             }
 
             if(@$item['orderType'] == 'Membership'){
-                BookingCheckinDetails::create([
-                    'business_activity_scheduler_id' => 0,
-                    'customer_id' => $cUid,
-                    'booking_detail_id' => $booking_detail->id,
-                    'checkin_date' => NULL,
-                    'use_session_amount' => 0,
-                    'source_type' => 'in_person',
-                ]);
+                $checkInDetail = BookingCheckinDetails::where(['customer_id'=>$cUid,'booking_detail_id' => NULL])->first();
+                if($checkInDetail){
+                    $checkInDetail->update([
+                        'booking_detail_id'=>$booking_detail->id,
+                    ]);
+                }else{
+                    BookingCheckinDetails::create([
+                        'business_activity_scheduler_id' => 0,
+                        'customer_id' => $cUid,
+                        'booking_detail_id' => $booking_detail->id,
+                        'checkin_date' => NULL,
+                        'use_session_amount' => 0,
+                        'source_type' => 'in_person',
+                    ]);
+                }
             }
 
             /*$businessService = $checkoutRegisterCartService->getbusinessService($item['code']); 

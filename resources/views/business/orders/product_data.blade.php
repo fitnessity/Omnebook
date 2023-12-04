@@ -1,6 +1,6 @@
 <div class="col-md-12 col-sm-12 col-xs-12 border-bottom mt-10">
 	<div class="row">
-		<div class="col-md-10 col-sm-18 col-xs-6 col-6">
+		<div class="col-lg-9 col-md-8 col-sm-12 col-xs-6 col-6">
 			<div class="counter-titles mb-15">
 				<p class="fs-15">{{$product->name}} (This product is for @if($product->product_type == "both" ) both rent and sale. (Rental Duration is {{$product->rental_duration}}) @elseif($product->product_type == "sale") sale. @else rent (Rental Duration is {{$product->rental_duration}} ) @endif) <span class="font-red">@if($reminingQty == 0) Sold Out @elseif($reminingQty <= $lowAlertQty ) Only {{$reminingQty}} remining.@endif </span></p>
 			</div>
@@ -13,7 +13,7 @@
 
 		@endphp
 		<input type="hidden" id="rental_duration{{$product->id}}" value="{{$product->rental_duration}}">
-		<div class="col-md-2 col-sm-2 col-xs-6 col-6">
+		<div class="col-lg-3 col-md-4 col-sm-2 col-xs-6 col-6">
 			<div class="qty counter-txt mb-15">
 				<span class="minus bg-darkbtn prominus" aid="{{$product->id}}" chk="{{$chk}}" remining="{{$reminingQty}}"><i class="fa fa-minus"></i></span>
 				<input type="text" class="count" id="product_{{$product->id}}" min="0" value="{{$qty}}" readonly="" apirce="{{$pPrice}}" ptype="{{$pType}}" pname = "{{$product->name}}">
