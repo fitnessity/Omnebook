@@ -1869,8 +1869,6 @@ padding: 0px 0px 3px 2px !important; */
 }
 .page-content{
 	min-height: 1190px;
-	z-index: -11;
-	position: relative;
 }
 .font-green{
 	color: #009f0a;
