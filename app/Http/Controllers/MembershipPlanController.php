@@ -49,48 +49,70 @@ class MembershipPlanController extends Controller {
             'metadata' => [],
         ];
 
+        $stripPayment = 0;
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        if ($request->has('cardinfo')) {
+        if ($request->cardinfo != '') {
             $paymentIntentData['payment_method'] = $request->cardinfo;
-        } else {
+            $stripPayment = 1;
+        } else if($request->new_card_payment_method_id != '') {
             $paymentIntentData['payment_method'] = $request->new_card_payment_method_id;
             if ($request->save_card != 1) {
                 $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $request->new_card_payment_method_id)->firstOrFail();
                 $stripePaymentMethod->delete();
             }
+            $stripPayment = 1;
+        }else{
+            CustomerPlanDetails::create([
+                'user_id' => $user->id,
+                'plan_id' => $request->plan,
+                'amount' => $request->total,
+                'starting_date' => $sDate,
+                'expire_date' => $eDate,
+                'payment_for' => $request->type,
+                'price' => $request->total,
+                'discount' => $request->discount ?? 0,
+                'promo_code_id' => $request->promo_code_id,
+                'promo_code_name' => $request->promo_code_name,
+                'payment_id' =>'',
+                'payload' =>'',
+            ]);
         }
 
-        try {
-            $paymentIntent = $stripe->paymentIntents->create($paymentIntentData);
-            if ($paymentIntent['status'] == 'succeeded') {
-                
-                CustomerPlanDetails::create([
-                    'user_id' => $user->id,
-                    'plan_id' => $request->plan,
-                    'amount' => $request->total,
-                    'starting_date' => $sDate,
-                    'expire_date' => $eDate,
-                    'payment_for' => $request->type,
-                    'price' => $request->price,
-                    'discount' => $request->discount,
-                    'promo_code_id' => $request->promo_code_id,
-                    'promo_code_name' => $request->promo_code_name,
-                    'payment_id' => $paymentIntent["id"],
-                    'payload' =>json_encode($paymentIntent,true),
-                ]);
+        if($stripPayment == 1){
+            try {
+                $paymentIntent = $stripe->paymentIntents->create($paymentIntentData);
+                if ($paymentIntent['status'] == 'succeeded') {
+                    
+                    CustomerPlanDetails::create([
+                        'user_id' => $user->id,
+                        'plan_id' => $request->plan,
+                        'amount' => $request->total,
+                        'starting_date' => $sDate,
+                        'expire_date' => $eDate,
+                        'payment_for' => $request->type,
+                        'price' => $request->price,
+                        'discount' => $request->discount,
+                        'promo_code_id' => $request->promo_code_id,
+                        'promo_code_name' => $request->promo_code_name,
+                        'payment_id' => $paymentIntent["id"],
+                        'payload' =>json_encode($paymentIntent,true),
+                    ]);
 
-                $user->update(['default_card'=>$paymentIntent['charges']['data'][0]['payment_method_details']['card']['last4']]);
-                
-            }
-        } catch (\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
-            $errormsg = "Your card is not connected with your account. Please add your card again.";
-            return redirect('/choose-plan')->with('stripeErrorMsg', $errormsg);
-        } catch (\Exception $e) {
-            $errormsg = $e->getError()->message;
-            return redirect('/choose-plan')->with('stripeErrorMsg', $errormsg);
-        }   
-
-        return redirect()->route('business.subscription.index',['business_id' =>  Auth::user()->cid]);     
+                    $user->update(['default_card'=>$paymentIntent['charges']['data'][0]['payment_method_details']['card']['last4']]);
+                    
+                }
+            } catch (\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
+                $errormsg = "Your card is not connected with your account. Please add your card again.";
+                return redirect('/choose-plan')->with('stripeErrorMsg', $errormsg);
+            } catch (\Exception $e) {
+                $errormsg = $e->getError()->message;
+                return redirect('/choose-plan')->with('stripeErrorMsg', $errormsg);
+            } 
+            return redirect()->route('business.subscription.index',['business_id' =>  Auth::user()->cid]);  
+        }else{
+            return '/business/'.Auth::user()->cid.'/subscription'; 
+        }
+   
     }
 
     public function getCardForm(Request $request){
@@ -105,7 +127,8 @@ class MembershipPlanController extends Controller {
         $total = $request->type == 'year' ? $plan->price_per_year : $plan->price_per_month;
         $total = $total ?? 0;
         $cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id', $user->id)->get();
-        return view('membership-plan.card_form', compact('intent','user','cardInfo','request','total'));
+        $cards = View('membership-plan.cards',['cardInfo' =>$cardInfo])->render();
+        return view('membership-plan.card_form', compact('intent','user','cardInfo','request','total','cards'));
     }
 
     public function checkPromoCode(Request $request){
@@ -131,5 +154,12 @@ class MembershipPlanController extends Controller {
             ];
         }
         return json_encode($responseArray);
+    }
+
+    public function getCardData(){
+        $user = Auth::user();
+        $cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id', $user->id)->get();
+        $cards = View('membership-plan.cards',['cardInfo' =>$cardInfo])->render();
+        return $cards;
     }
 }   

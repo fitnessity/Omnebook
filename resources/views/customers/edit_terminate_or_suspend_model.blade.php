@@ -390,6 +390,9 @@
 						@endif
 						</div>
 						<div class="tab-pane" id="Suspension_history" role="tabpanel">
+							<div class="suspension-history">
+								<label>There is no Suspension history</label>
+							</div>
 						</div>
 					</div>
 				</div>

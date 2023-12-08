@@ -28,6 +28,7 @@ Route::any('/storeCards','OnBoardedController@storeCards')->name('storeCards');
 Route::resource('choose-plan', 'MembershipPlanController')->only(['index', 'create','store','update','destroy']);
 Route::any('/getCardFormPlan','MembershipPlanController@getCardForm')->name('choose-plan.getCardForm');
 Route::any('/checkPromoCode','MembershipPlanController@checkPromoCode')->name('choose-plan.checkPromoCode');
+Route::any('/getCardData','MembershipPlanController@getCardData')->name('choose-plan.getCardData');
 
 
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
@@ -120,6 +121,7 @@ Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware
     Route::resource('schedulers', 'SchedulerController')->only(['index','create','update','destroy','store']);  
     Route::any('all_activity_schedule', 'SchedulerController@allActivitySchedule')->name('allActivitySchedule');
     Route::resource('company', 'CompanyController')->only(['index','create','edit', 'update', 'destroy', 'store']);
+    Route::resource('profile', 'ProfileController')->only(['index','create','edit', 'update', 'destroy', 'store']);
 });
 
 Route::name('design.')->prefix('/design')->middleware('auth')->group(function () {
@@ -173,6 +175,8 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/subscriptions_payments','DesignController@subscriptions_payments')->name('subscriptions_payments'); 
 	Route::get('/documents_contracts','DesignController@documents_contracts')->name('documents_contracts'); 
     Route::get('/invoice_details','DesignController@invoice_details')->name('invoice_details'); 
+	Route::get('/announcement_news','DesignController@announcement_news')->name('announcement_news'); 
+	Route::get('/task','DesignController@task')->name('task');
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -223,6 +227,11 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/getExpiringMembership', 'BusinessController@getExpiringMembership')->name('getExpiringMembership');
     Route::get('/bookingchart', 'BusinessController@bookingchart')->name('bookingchart');
     
+
+    Route::get('/download/{id}', 'CustomerController@download')->name('download');
+    Route::get('/image-proxy', 'CustomerController@imageProxy');
+    Route::get('/removeDoc/{id}','CustomerController@removeDoc')->name('removeDoc');
+
     Route::prefix('/business/{business_id}')->middleware('auth', 'business_scope')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
         Route::delete('/customers/delete/{id}','CustomerController@delete')->name('business_customer_delete');
@@ -231,8 +240,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/customers/{id}/visit_autopaymodel','CustomerController@visit_autopaymodel')->name('visit_autopaymodel');
 
         Route::post('/customers/upload_docs','CustomerController@uploadDocument')->name('upload_docs');
-        Route::get('/removeDoc/{id}','CustomerController@removeDoc')->name('removeDoc');
-        Route::get('/download/{id}', 'CustomerController@download')->name('download');
+        Route::get('/requestSign/{id}', 'CustomerController@requestSign')->name('requestSign');
 
         Route::get('/customer/{cid}/getNote/{id?}','CustomerController@getNote')->name('getNote');
 
@@ -1127,6 +1135,10 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::post('/fullcalenderAjax', 'UserProfileController@cajax')->name('fullcalenderAjax');
+
+Route::get('/personal-profile/documents-contract', 'UserProfileController@documents_contract');
+Route::post('/save-signature', 'UserProfileController@savesignature')->name('save.signature');
+
 Route::get('/personal-profile/favorite', 'UserProfileController@favorite');
 Route::get('/personal-profile/followers', 'UserProfileController@followers');
 Route::get('/personal-profile/following', 'UserProfileController@following');

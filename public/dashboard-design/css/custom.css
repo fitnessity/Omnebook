@@ -1576,7 +1576,7 @@ header{ position: fixed !important; }
 }
 .accordion-button:not(.collapsed){
 	background-color: rgba(237, 36, 45, 0.05);
-	color: #ed1b24;
+	color: #000;
 }
 .signup-step-btn button{
 	font-size: 14px;
@@ -3013,10 +3013,11 @@ div#termsdiv{order: 4;}
   border-collapse: collapse;
 }
 .chat-conversation {
-  height: calc(130vh - 299px);
+  height: calc(155vh - 299px);
 }
 .chat-leftsidebar{
-	height: calc(130vh - 70px - 60px - 8px);
+	/* height: calc(130vh - 70px - 60px - 8px); */
+	height: auto;
 }
 .user-chat {
 	background-color: var(--vz-body-bg) !important;
@@ -5500,3 +5501,88 @@ div#termsdiv{order: 4;}
 .width-345{
 	max-width: 345px;
 }
+.suspension-history{
+	text-align: center;
+	padding: 25px;	
+}
+.header-img-announcement img{
+	min-height: 250px;
+	height: 250px;
+	width: 100%;
+}
+.header-img-announcement::before{
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	opacity: .1;
+	background: linear-gradient(to top,#505051,#ed1b24);
+}
+.announcement-banner label{
+	font-size: 30px;
+	font-weight: 600;
+	text-align: center;
+	margin-top: -185px;
+}
+.announcement-banner {
+	text-align: center;
+}
+.top-area-announcement{
+	display: contents;
+	vertical-align: middle;
+	width: 100%;
+}
+.top-search-announcement {
+	text-align: left;
+	width: 50%;
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.top-search-announcement form {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  margin-bottom: 0px;
+  margin-top: -115px;
+}
+.top-search-announcement form input {
+  background: white;
+  border: medium none;
+  font-size: 13px;
+  padding: 8px 40px;
+  width: 100%;
+  color: #2e2e2e;
+  border-radius: 10px;
+  border: 1px solid #000;
+}
+#suggesstion-box-announcement {
+  background-color: #ffffff;
+}
+.top-search-announcement button {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  color: #000;
+  font-size: 15px;
+  position: absolute;
+  left: 6px;
+  top: 47%;
+  transform: translateY(-50%);
+  padding: 9px;
+  border: none;
+}
+.announcement-day{
+	display: grid;
+}
+.announcement-day span{
+	font-size: 15px;
+	color: #ed1b24;
+}
+.announcement-heading h5{
+	color: #000;
+}
+.border-left{
+	border-left: 1px solid #e9ebec;
+}
+	

@@ -61,7 +61,7 @@
 																@if(@$currentPlan)
 																	<h1>{{@$currentPlan ? @$currentPlan->plan->title : 'N/A'}}</h1>
 																	<span>
-																			Billed on the {{ date('m/d/Y',strtotime($currentPlan->starting_date)) }}: ${{$currentPlan->amount}} @if($currentPlan->payment_for) / {{ucfirst($currentPlan->payment_for)}} @endif
+																			Billed on {{ date('m/d/Y',strtotime($currentPlan->starting_date)) }}: ${{$currentPlan->amount}} @if($currentPlan->payment_for) / {{ucfirst($currentPlan->payment_for)}} @endif
 																	</span>
 																@else
 																	<h1>There is no active plan available.</h1>

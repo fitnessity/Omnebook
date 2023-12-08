@@ -61,7 +61,8 @@ class OnBoardedController extends Controller {
         $show = @$user->show_step ?? 1;
         $plans = Plan::get();
         $features = $this->features->getAllFeatures();
-        return view('on-boarded.index',compact('show','cid','companyDetail','user','id','show','plans','features'));
+        $freePlan = Plan::where(['price_per_month'=>0 , 'price_per_year' => 0])->first();
+        return view('on-boarded.index',compact('show','cid','companyDetail','user','id','show','plans','features','freePlan'));
     }
 
     public function store(Request $request){

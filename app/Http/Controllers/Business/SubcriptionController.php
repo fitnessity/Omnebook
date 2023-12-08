@@ -21,8 +21,8 @@ class SubcriptionController extends Controller {
 		$cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id', Auth::user()->id)->get();
 		$cardForm = view('business.settings.subscriptions.card_form',['cardInfo'=>$cardInfo ,'intent'=>$intent,'user'=>Auth::user()])->render(); 
 
-		$plans = CustomerPlanDetails::where('user_id',Auth::user()->id)->get();
-		$years = CustomerPlanDetails::where('user_id',Auth::user()->id)->selectRaw('YEAR(starting_date) as year')->distinct()->pluck('year')->toArray();
+		$plans = CustomerPlanDetails::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->get();
+		$years = CustomerPlanDetails::where('user_id',Auth::user()->id)->selectRaw('YEAR(starting_date) as year')->orderBy('created_at','desc')->distinct()->pluck('year')->toArray();
 
         $currentPlan = CustomerPlanDetails::where('user_id',Auth::user()->id)->latest()->first();
 
@@ -42,12 +42,11 @@ class SubcriptionController extends Controller {
     	if($request->year != 'all'){
     		$plans = $plans->whereYear('starting_date',$request->year);
     	}
-    	$plans = $plans->get();
+    	$plans = $plans->orderBy('created_at','desc')->get();
     	return view('business.settings.subscriptions._plan_data',compact('plans'))->render();
     }
 
     public function export(Request $request){
-
         $user = Auth::user();
         $plan = CustomerPlanDetails::find($request->id);
         $paymentIntent = json_decode($plan->payload);
