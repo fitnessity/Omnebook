@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
 use Storage;
 use App\StripePaymentMethod;
+use Auth;
 
 class User extends Authenticatable
 {
@@ -19,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',  'password','new_password_key','is_deleted','isguestuser','fitnessity_fee','recurring_fee','firstname','lastname','birthdate','cid','bstep','serviceid','servicetype','stripe_connect_id','stripe_customer_id','username','gender','email','phone_number','profile_pic','address','city','state','country','zipcode','activated','show_step','dobstatus','buddy_key','primary_account','default_card'
+        'name',  'password','new_password_key','is_deleted','isguestuser','fitnessity_fee','recurring_fee','firstname','lastname','birthdate','cid','bstep','serviceid','servicetype','stripe_connect_id','stripe_customer_id','username','gender','email','phone_number','profile_pic','address','city','state','country','zipcode','activated','show_step','dobstatus','buddy_key','primary_account','default_card','quick_intro', 'favorit_activity' ,'business_info'
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -205,6 +206,11 @@ class User extends Authenticatable
     public function BusinessPriceDetailsAges()
     {
         return $this->hasMany(BusinessPriceDetailsAges::class,'userid');
+    } 
+
+    public function CustomersDocuments()
+    {
+        return $this->hasMany(CustomersDocuments::class,'user_id');
     }
 
     public function AddOnService()
@@ -376,13 +382,32 @@ class User extends Authenticatable
         //$data = $this->CustomerPlanDetails()->whereDate('expire_date','>=',date('Y-m-d'))->latest()->first();
         $data = $this->currentPlan();
         if($data){
-            $expireDate = \Carbon\Carbon::parse(@$data->expire_date);
-            $remining = now()->diffInDays($expireDate) + 1 ;
-			//echo $remining;
+            if(@$data->expire_date > date('Y-m-d')){
+                $expireDate = \Carbon\Carbon::parse(@$data->expire_date);
+                $remining = now()->diffInDays($expireDate) + 1 ;
+            }
         }
         return $remining ?? 0;
+    } 
+    public function planDateDiffrence(){
+        $data = $this->currentPlan();
+        if($data){
+            if(@$data->expire_date > date('Y-m-d')){
+                $startDate = \Carbon\Carbon::parse(@$data->starting_date);
+                $expireDate = \Carbon\Carbon::parse(@$data->expire_date);
+                $diffrence = $startDate->diffInDays($expireDate) + 1 ;
+            }
+        }
+        return $diffrence ?? 0;
     }
 
-    
-
+    public function freeTrial(){
+        $data = $this->currentPlan();
+        if(@$data->amount == 0){
+            if(Auth::user()->planDateDiffrence() < 14){
+                return 'free';
+            }
+        }
+        return '';
+    }
 }

@@ -656,7 +656,7 @@
 																				<div class="free-trial-text">
 																					<h3> Still not convinced? Start with a 14-day FREE trial! </h3>
 																					<p>You will get full access to all the features for 14 days. </p>
-																					<a onclick="getPlan(1,'{{$cid}}',0)"class="btn btn-red "> Start-14-day FREE trial </a>
+																					<a onclick="getPlan('{{@$freePlan->id}}','{{$cid}}',0)"class="btn btn-red "> Start-14-day FREE trial </a>
 																				</div>
 																			</div>
 																			<div class="col-lg-4 col-md-5 col-sm-12">

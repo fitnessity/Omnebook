@@ -155,7 +155,7 @@
 									@endif 
 									<label for="checkin" class="mb-0 mmt-10">Check In</label><br>
 
-									@if(@$firstCheckInDetail->order_detail && @$firstCheckInDetail->checkin_date == date('Y-m-d') && $cus->active_memberships()->get()->isNotEmpty())
+									@if(@$firstCheckInDetail->order_detail && $cus->active_memberships()->get()->isNotEmpty())
 					                    <input type="checkbox"  onclick="call()" name="late_cancel" value="0" data-behavior="ajax_html_modal" data-url="{{route('business.scheduler_checkin_details.latecencel_modal', ['id' => @$firstCheckInDetail->id, 'scheduler_id' => $business_activity_scheduler->id])}}"  data-modal-width = "500px" data-booking-detail-id="{{@$firstCheckInDetail->order_detail->id}}"
 					                        @if(@$firstCheckInDetail->no_show_action) checked @endif >
 					                @endif 
