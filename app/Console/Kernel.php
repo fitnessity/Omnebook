@@ -4,7 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\{UserBookingDetail,Recurring,Transaction,BookingCheckinDetails};
+use App\{UserBookingDetail,Recurring,Transaction,BookingCheckinDetails,CustomerPlanDetails};
 use DB;
 use Carbon\Carbon;
 
@@ -108,6 +108,17 @@ class Kernel extends ConsoleKernel
                 ->get();
             foreach($checkinData as $cid){
                 $cid->reminderaboutReservation();
+            }
+        })->daily();
+
+        $schedule->call(function () {
+            $today = Carbon::now()->format('Y-m-d');
+            $autoPaymentUserDetails = CustomerPlanDetails::whereIn('id', function ($query) {
+                $query->selectRaw('MAX(id)')->from('customer_plan_details')->groupBy('user_id');
+            })->where('amount',0)->where('expire_date','<',date('Y-m-d'))->get();
+
+            foreach($autoPaymentUserDetails as $d){
+                $d->autoPayment();
             }
         })->daily();
     }

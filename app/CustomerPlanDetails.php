@@ -33,4 +33,20 @@ class CustomerPlanDetails extends Model
     public function plan() {
         return $this->belongsTo(Plan::class, 'plan_id');
     }
+
+    public function autoPayment(){
+        $plan = Plan::where('price_per_month',0)->first();
+        $eDate = Carbon::now()->addMonth()->format('Y-m-d');
+        $sDate = Carbon::now()->format('Y-m-d');
+        CustomerPlanDetails::create([
+            'user_id' => $this->user_id,
+            'plan_id' => $plan->id,
+            'amount' => 0,
+            'starting_date' => $sDate,
+            'expire_date' => $eDate,
+            'payment_for' => 'month',
+            'price' => 0,
+            'discount' =>  0,
+        ]);
+    }
 }

@@ -72,7 +72,7 @@
 															<div class="v-plan-details">{!! $p->description !!}</div>
 															<div class="width-100">
 																<?php /*?><button onclick="getCardModal('{{$p->id}}','{{$p->price_per_month}}')" class="btn btn-red mt-25 width-100"  @if($p->price_per_month == 0) disabled @endif> @if($p->id == @$currentPlan->plan_id) Current Plan @else Choose Plan  @endif</button><?php */?>
-                                                                <button onclick="getCardModal('{{$p->id}}','{{$p->price_per_month}}')" class="btn btn-red mt-25 width-100"  @if($p->id == @$currentPlan->plan_id) disabled @endif> @if($p->id == @$currentPlan->plan_id) Current Plan @else Choose Plan  @endif</button>
+                                                <button onclick="getCardModal('{{$p->id}}','{{$p->price_per_month}}')" class="btn btn-red mt-25 width-100 @if($p->id == @$currentPlan->plan_id) {{$currentPlan->payment_for ?? 'month'}} @endif"  @if($p->id == @$currentPlan->plan_id) disabled @endif id="plnbtn2"> @if($p->id == @$currentPlan->plan_id) Current Plan @else Choose Plan  @endif</button>
 															</div>
 														</div>
 													</div>
@@ -148,7 +148,7 @@
 														@endforeach
 														<div class="custom-table-data-footer">
 															<?php /*?><button onclick="getCardModal('{{$p->id}}','{{$p->price_per_month}}')"  class="btn btn-red" @if($p->price_per_month == 0) disabled @endif> @if($p->id == @$currentPlan->plan_id) Current Plan @else Choose Plan  @endif </button><?php */?>
-                                                            <button onclick="getCardModal('{{$p->id}}','{{$p->price_per_month}}')"  class="btn btn-red" @if($p->id == @$currentPlan->plan_id) disabled @endif> @if($p->id == @$currentPlan->plan_id) Current Plan @else Choose Plan  @endif </button>
+                                             <button onclick="getCardModal('{{$p->id}}','{{$p->price_per_month}}')"  class="btn btn-red @if($p->id == @$currentPlan->plan_id) {{$currentPlan->payment_for ?? 'month'}} @endif" @if($p->id == @$currentPlan->plan_id) disabled @endif  id="plnbtn1"> @if($p->id == @$currentPlan->plan_id) Current Plan @else Choose Plan  @endif </button>
 														</div>
 													</div>
 												@endforeach
@@ -236,15 +236,20 @@
 	
 	@include('layouts.business.footer')
 <script>
+
 	function check() {
 	  	var checkBox = document.getElementById("plan_time");
 	  	var text1 = $(".text1");
 	  	var text2 = $(".text2");
 
 	  	if (checkBox.checked) {
+	  		$('.year').prop('disabled',true)
+	  		$('.month').prop('disabled',false);
 	    	text1.css("display", "block");
 	    	text2.css("display", "none");
 	  	} else {
+	  		$('.year').prop('disabled',false)
+	  		$('.month').prop('disabled',true);
 	    	text1.css("display", "none");
 	    	text2.css("display", "block");
 	  	}
@@ -259,7 +264,8 @@
 	   	type = 'month';
 	   } 
 
-		$.ajax({
+	   if(price != 0){
+	   	$.ajax({
             url: '{{route("choose-plan.getCardForm")}}',
             type: 'GET',
             data: {
@@ -271,6 +277,23 @@
             	$('.card-form').modal('show');
             }
         });
+	   }else{
+	   	if(confirm('This is free plan. Are you sure you want to proceed?')){
+		   	$.ajax({
+	            url: '{{route("choose-plan.store")}}',
+	            type: 'POST',
+	            data: {
+	            	'_token':'{{csrf_token()}}',
+	            	'type':type,
+	            	'plan':id,
+	            	'total':price,
+	            }, 
+	            success: function (response) {
+	            	window.location = response;	
+	            }
+	        });
+		  	}
+	   }
 	}
 </script>
 

@@ -51,59 +51,65 @@
                         <div class="col">
                             <div class="h-100">
                                 <div class="row mb-3 pb-1">
-                                    @if(!$activePlan && Auth::user()->chkDaysLeft() < 14)
-									<div class="col-6">
-										<div class="remaining-days mb-15">
-											<div class="row y-middle" style="margin-top:5px;margin-bottom: 5px;">
-												<div class="col-lg-2 col-md-2 col-3">
-													<center>
-														<div class="avatar-xs flex-shrink-0">
-															<span class="avatar-title bg-primary rounded-circle fs-15">{{Auth::user()->chkDaysLeft()}}</span>
-														</div>
-														<div class="days-left">
-															<p>Days Left</p>
-														</div>
-													</center>
-												</div>
-												<div class="col-lg-10 col-md-10 col-9">	
-													<p class="fs-13">
-														You have {{Auth::user()->chkDaysLeft()}} days remaining in your @if($activePlan) plan. @else 14 day free trial. To keep using TeamUp after the trial period, enter your <a href="{{route('creditCardInfo')}}"> payment details.</a> <?php /*?>If you have any questions, please don't hesitate to <a href="{{route('contact-us')}}"> contact us</a>!<?php */?> @endif 
-													</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-6">
-                                        <div class="card">
-                                            <div class="card-body p-0">
-                                                <div class="alert alert-warning border-0 rounded-0 m-0 d-flex align-items-center" role="alert">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle text-warning me-2 icon-sm"></svg>
-                                                    <div class="flex-grow-1 text-truncate">
-                                                        Your @if(!$activePlan) free trial @else plan @endif expired in <b>{{Auth::user()->chkDaysLeft()}}</b> days.
+                                    @if(Auth::user()->currentPlan()->amount == 0 || Auth::user()->chkDaysLeft() < 14)
+                                      
+    									<div class="col-6">
+                                            @if(Auth::user()->freeTrial() == 'free')
+    										<div class="remaining-days mb-15">
+    											<div class="row y-middle" style="margin-top:5px;margin-bottom: 5px;">
+    												<div class="col-lg-2 col-md-2 col-3">
+    													<center>
+    														<div class="avatar-xs flex-shrink-0">
+    															<span class="avatar-title bg-primary rounded-circle fs-15">{{Auth::user()->chkDaysLeft()}}</span>
+    														</div>
+    														<div class="days-left">
+    															<p>Days Left</p>
+    														</div>
+    													</center>
+    												</div>
+    												<div class="col-lg-10 col-md-10 col-9">	
+    													<p class="fs-13">
+                                                            You have {{Auth::user()->chkDaysLeft()}}  left in your @if($activePlan) plan. @else free trial. @endif To keep experiences all the features after the trial period, evert payment details and select a plan now to begin after your @if($activePlan) plan @else trial. @endif is over.
+    													</p>
+    												</div>
+    											</div>
+    										</div>
+                                            @endif
+    									</div>
+                                        
+                                        @if(Auth::user()->planDateDiffrence() >= 14)
+    									<div class="col-6">
+                                            <div class="card">
+                                                <div class="card-body p-0">
+                                                    <div class="alert alert-warning border-0 rounded-0 m-0 d-flex align-items-center" role="alert">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle text-warning me-2 icon-sm"></svg>
+                                                        <div class="flex-grow-1 text-truncate">
+                                                            Your plan expired in <b>{{Auth::user()->chkDaysLeft()}}</b> days.
+                                                        </div>
+                                                        <div class="flex-shrink-0">
+                                                            <a href="{{route('choose-plan.index')}}" class="text-reset text-decoration-underline"><b>Upgrade</b></a>
+                                                        </div>
                                                     </div>
-                                                    <div class="flex-shrink-0">
-                                                        <a href="{{route('choose-plan.index')}}" class="text-reset text-decoration-underline"><b>Upgrade</b></a>
-                                                    </div>
-                                                </div>
 
-                                                <div class="row align-items-end">
-                                                    <div class="col-sm-8">
-                                                        <div class="p-3">
-                                                            <p class="fs-16 lh-base">Upgrade your plan from a <span class="fw-semibold">Free trial</span>, to ‘Premium Plan’ <i class="mdi mdi-arrow-right"></i></p>
-                                                            <div class="mt-3">
-                                                                <a href="{{route('choose-plan.index')}}" class="btn btn-success">Upgrade Account!</a>
+                                                    <div class="row align-items-end">
+                                                        <div class="col-sm-8">
+                                                            <div class="p-3">
+                                                                <p class="fs-16 lh-base">@if(Auth::user()->chkDaysLeft() != 0) Upgrade your limited features free plan of Pay-As-You Go to the "Basic or Pro plan" @else Upgrade your free trial plan. @endif </p>
+                                                                <div class="mt-3">
+                                                                    <a href="{{route('choose-plan.index')}}" class="btn btn-success">Upgrade Account!</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="px-3">
+                                                                <img src="{{url('dashboard-design/images/user-illustarator-2.png')}}" class="img-fluid" alt="">
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="px-3">
-                                                            <img src="{{url('dashboard-design/images/user-illustarator-2.png')}}" class="img-fluid" alt="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> <!-- end card-body-->
+                                                </div> <!-- end card-body-->
+                                            </div>
                                         </div>
-                                    </div>
+                                        @endif
                                     @endif
 
                                     <div class="col-12">

@@ -41,29 +41,8 @@
                 </div>
             </div> 
 
-            <div class="row">
-                @foreach($cardInfo as $card) 
-                    @php $brandname = strtolower($card['brand']); @endphp
-                    <div class="col-md-6">
-                        <label class="pay-card" style="color:#ffffff; background-image: url(/public/img/visa-card-bg.jpg );">
-                            <input name="cardinfo" class="payment-radio" type="radio" value="{{$card['payment_id']}}">
-                            <span class="plan-details">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="cart-name">
-                                            <span>{{$brandname}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="cart-num">
-                                            <span>XXXX XXXX XXXX {{$card['last4']}}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </span>
-                        </label>
-                    </div>
-                @endforeach
+            <div class="row" id="cards-details">
+                {!!$cards!!}
             </div>
         
             <div class="row">
@@ -106,6 +85,31 @@
 </form>
 
 <script type="text/javascript">
+
+    $(document).on("click", "[data-behavior~=delete_card]", function(e){
+        e.preventDefault()
+        if (confirm('You are sure to delete card?')) {
+            var cardid = $(this).data("cardid");
+            $.ajax({
+                type: 'post',
+                url: $(this).data('url'),
+                data: {
+                    _token: '{{csrf_token()}}',
+                    cardid:cardid
+                },
+                success: function(data) {
+                    $.ajax({
+                        type: 'get',
+                        url: '/getCardData',
+                        success: function(response) {
+                            $('#cards-details').html(response);
+                        }
+                    });
+                }
+            });
+        } 
+    });
+
     $(function() {
         stripe = Stripe('{{ env("STRIPE_PKEY") }}');  
         const client_secret = '{{$intent ? $intent->client_secret : null}}';
@@ -128,6 +132,7 @@
             $('#checkout-button').html('loading...').prop('disabled', true);
             var cardinfoRadio = document.querySelector( 'input[name="cardinfo"]:checked');
             var save_cardRadio = document.querySelector( 'input[name="save_card"]:checked');
+            var total = $('#total').val();
       
             if(save_cardRadio == null) {
                 $('#save_card').val(0);
@@ -135,7 +140,7 @@
                 $('#save_card').val(1);
             }
          
-           if(cardinfoRadio == null) {
+            if(cardinfoRadio == null && total != 0) {
                 var $form  = $(".validation"),
                 inputVal = ['input[type=email]', 'input[type=password]','input[type=text]', 'input[type=file]','textarea'].join(', '),
                 $inputs       = $form.find('.required').find(inputVal),
