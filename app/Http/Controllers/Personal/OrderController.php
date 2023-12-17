@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Personal;
 use App\Http\Controllers\Personal\PersonalBaseController;
 use Illuminate\Http\Request;
 use Auth;
-use App\{MailService,user,Customer};
-use App\Repositories\{BusinessServiceRepository,BookingRepository,CustomerRepository,UserRepository};
+use App\{Customer,User,BusinessServices};
+
+use App\Repositories\{BookingRepository};
 
 class OrderController extends PersonalBaseController
 {
@@ -16,53 +17,48 @@ class OrderController extends PersonalBaseController
      * @return \Illuminate\Http\Response
      */
 
-    protected $business_service_repo;
-    protected $customers;
-    protected $users;
     protected $booking_repo;
 
-    public function __construct(BusinessServiceRepository $business_service_repo ,CustomerRepository $customers,UserRepository $users,BookingRepository $booking_repo)
+    public function __construct(BookingRepository $booking_repo)
     {        
-        $this->business_service_repo = $business_service_repo;
-        $this->users = $users;
-        $this->customers = $customers;
         $this->booking_repo = $booking_repo;
     }
+
 
     public function index(Request $request)
     {
         $user = Auth::user();
-        if($request->business_id){
-            $customer = Customer::where(['business_id'=>$request->business_id,'user_id'=>$user->id])->first();
-            /*echo $customer;exit;*/
-            $bookingDetails = [];
-            $bookingDetails =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,@$customer);
-            //print_r($bookingDetails);exit;
-            $currentbookingstatus =[];
-            $currentbookingstatus = $this->booking_repo->currentTab($request->serviceType,$request->business_id,@$customer);
-            //print_r($currentbookingstatus );exit;
-            $tabval = $request->tab; 
+        $business = $user->company()->where('id',request()->business_id)->first();
+        if(!request()->business_id){
+            return redirect()->route('personal.manage-account.index');
+        }
 
-            return view('personal.orders.index', [
-                'bookingDetails' => $bookingDetails,
-                'currentbookingstatus'=>$currentbookingstatus, 
-                'tabval'=>$tabval, 
-                'customer'=>$customer, 
-                'business'=>[]]);
+        if($request->customer_id){
+            if(request()->type == 'user'){
+                $familyMember = Auth::user()->user_family_details()->where('id',request()->customer_id)->first();
+                $user = User::where(['firstname'=> @$familyMember->first_name, 'lastname'=>@$familyMember->last_name, 'email'=>@$familyMember->email])->first();
+                $customer = Customer::where(['user_id' => @$user->id])->first();
+                $name = @$familyMember->full_name;
+            }else{
+                $customer = Customer::find(request()->customer_id);
+                $name = @$customer->full_name;
+            }   
         }else{
-            $company_information = [];
-            $customer = $user->customers;
-            foreach($customer as $cs){
-                $company_information []= $cs->company_information;
-            }
-    
-            $business = array_unique($company_information, SORT_REGULAR);
-            return view('personal.orders.index',[ 
-                'business'=>$business, 
-                'tabval'=>'', 
-                'bookingDetail' => [],
-                'customer' => '']);
-        }      
+            $customer = Customer::where(['business_id'=>$request->business_id,'user_id'=>Auth::user()->id])->first();
+            $name = @$customer->full_name;
+        }
+
+        $bookingDetails = $currentBooking =  [];
+        $bookingDetails =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,@$customer);
+      
+        $currentBookingData = $this->booking_repo->currentTab($request->serviceType,$request->business_id,@$customer);
+        foreach($currentBookingData as $i=>$book_details){
+            $currentBooking[@$book_details->business_services_with_trashed->id .'!~!'.@$book_details->business_services_with_trashed->program_name] [] = $book_details;
+        }
+
+        $tabval = $request->tab; 
+
+        return view('personal.orders.index', compact('bookingDetails','currentBooking','tabval','customer','name','business'));
     }
 
     /**
@@ -129,5 +125,69 @@ class OrderController extends PersonalBaseController
     public function destroy($id)
     {
         //
+    }
+
+    public function searchActivity(Request $request){
+        $serviceType = $request->serviceType;
+        
+        if(!$request->customerId){
+            $customer = Auth::user()->customers()->where('business_id' ,$request->businessId)->first();
+            $customerID = @$customer->id;
+        }else{
+            $customerID = $request->customerId;
+        }
+
+        $orderDetails = [];
+        $tabName = $request->type;
+        if($customerID){
+            if($request->type == 'current'){
+                $bDetails = $this->booking_repo->currentTab($request->serviceType,$request->business_id,@$customer);
+            }else{
+                $bookingDetails =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,@$customer);
+                $bDetails = $this->booking_repo->tabFilterData($bookingDetails,$tabName,request()->serviceType ,date('Y-m-d'));
+            }
+
+            foreach($bDetails as $bd){
+                if($request->text != ''){
+                    $activity = BusinessServices::where('id',$bd->sport)->where('program_name', 'like', '%'.$request->text.'%')->withTrashed()->first();
+                }else{
+                    $activity = BusinessServices::where('id',$bd->sport)->withTrashed()->first();
+                }
+                if($activity){
+                    $orderDetails[@$bd->business_services_with_trashed->id .'!~!'.@$bd->business_services_with_trashed->program_name] [] = $bd;
+                }
+            }
+
+            //print_r($orderDetails);exit();
+
+            return view('personal.orders.user_booking_detail',compact('orderDetails','tabName'))->render();
+        }
+    }
+
+    public function grantAccess(Request $request){
+        if($request->status == 'deny'){
+            $customers = Customer::where('id',$request->customerId)->update(['user_id'=> null]); 
+            if($request->type){
+                return Redirect()->route('personal.orders.index',['business_id'=>$request->business_id ,'customer_id' =>$request->customerId,'type'=>$request->type]);
+            }else{
+                return Redirect()->route('personal.orders.index',['business_id'=>$request->business_id ]);
+            }
+        }else{
+            if($request->customer_id){
+                $customers = Customer::where(['business_id'=>$request->business_id ,'id'=>$request->customer_id])->first();
+                $customers->update(['user_id'=> $customers->id]);
+            }else{
+                $user = Auth::user();
+                $customer = Customer::where(['business_id'=>$request->business_id ,'email' =>$user->email ])->first();
+                $customer->update(['user_id'=> $user->id]);
+            }
+            
+            if($request->type){
+                return Redirect()->route('personal.orders.index',['business_id'=>$request->business_id ,'customer_id' =>$request->customerId,'type'=>$request->type]);
+            }else{
+                return Redirect()->route('personal.orders.index',['business_id'=>$request->business_id ]);
+            }
+        }
+
     }
 }

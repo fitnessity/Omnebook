@@ -8,8 +8,20 @@ use App\{Customer,UserFamilyDetail,CompanyInformation};
 class FamilyMemberController extends Controller
 {
 
+    protected $user;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            return $next($request);
+        });
+
+        // You can also apply additional middleware or other constructor logic here
+    }
+    
 	public function index(Request $request){
-        $loggedinUser = Auth::user();
+        $loggedinUser = $this->user;
         $UserFamilyDetails = $familyDetails = [];
         if(count($loggedinUser->company) ==  0){
             $userfamily = $loggedinUser->user_family_details;

@@ -55,9 +55,16 @@ class BusinessActivitySchedulerController extends Controller
         }
 
         if($request->customer_id){
-            $customer = Customer::where('id',$request->customer_id)->first();
-            $memberships = $customer->active_memberships()->pluck('sport')->unique();
-            $business_services = $company->service()->whereIn('id', $memberships)->get();
+            if(request()->type == 'user'){
+                $familyMember = Auth::user()->user_family_details()->where('id',request()->customer_id)->first();
+                $user = User::where(['firstname'=> @$familyMember->first_name, 'lastname'=>@$familyMember->last_name, 'email'=>@$familyMember->email])->first();
+                $customer = Customer::where(['user_id' => @$user->id])->first();
+            }else{
+                $customer = Customer::where('id',$request->customer_id)->first();
+            }
+            
+            $memberships = @$customer->active_memberships()->pluck('sport')->unique();
+            $business_services = $company->service()->whereIn('id', @$memberships)->get();
         }
 
         if($request->business_service_id){
@@ -179,7 +186,7 @@ class BusinessActivitySchedulerController extends Controller
             }
         }else{
             $customer = $request->user()->customers()->find($request->cid);
-            $active_memberships = $customer->active_memberships()->where('user_booking_details.user_id',$request->cid)->get();
+            $active_memberships = $customer ? @$customer->active_memberships()->where('user_booking_details.user_id',$request->cid)->get() : [];
             foreach($active_memberships as $active_membership){
                 $remainingSession = $active_membership->getremainingsession();
                 if($remainingSession > 0 && $active_membership->business_price_detail){

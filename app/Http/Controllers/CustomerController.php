@@ -8,7 +8,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use Aws\S3\S3Client;
 use App\Jobs\{ProcessAttendanceExcelData,ProcessCustomerExcelData,ProcessMembershipExcelData};
-
+use GuzzleHttp\Client;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -19,7 +19,7 @@ use Session,Redirect,DB,Input,Auth,Hash,Validator,View,Mail,Str,Config,Excel,Spl
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\{CustomerRepository,BookingRepository,UserRepository};
-use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation,ExcelUploadTracker,UserFamilyDetail,Transaction,StripePaymentMethod,CustomersDocuments,CustomerNotes};
+use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation,ExcelUploadTracker,UserFamilyDetail,Transaction,StripePaymentMethod,CustomersDocuments,CustomerNotes,CustomerDocumentsRequested};
 
 use Illuminate\Support\Facades\Storage;
 
@@ -123,7 +123,6 @@ class CustomerController extends Controller {
 
         $documents = CustomersDocuments::where(['customer_id'=>$id])->get();
         $notes = CustomerNotes::where(['customer_id'=>$id])->get();
-
         return view('customers.show', [
             'customerdata'=>$customerdata,
             'strpecarderror'=>$strpecarderror,
@@ -537,22 +536,8 @@ class CustomerController extends Controller {
                 $data['birthdate'] = date('Y-m-d',strtotime($request->birthdate));
             }
 
-            if(@$data['terms_covid'] != ''){
-                $data['terms_covid'] = date('Y-m-d');
-            }
-
-            if(@$data['terms_liability'] != ''){
-                $data['terms_liability'] = date('Y-m-d');
-            }
-
-            if(@$data['terms_contract'] != ''){
-                $data['terms_contract'] = date('Y-m-d');
-            }
-            
-            $position = array_search(request()->_token, $data);
-            $position1 = array_search(request()->cus_id, $data);
-            unset($data[$position]);
-            unset($data[$position1]);
+            unset($data['_token']);
+            unset($data['cus_id']);
             
             $cust = Customer::find($request->cus_id);
             if($request->primary_account == 1){
@@ -564,6 +549,14 @@ class CustomerController extends Controller {
 
             User::where(['email' => $cust['email'] , 'id' => $cust['user_id']])->update(['primary_account' => $data['primary_account'] ]);
             $cust->update($data);
+        }elseif($request->chk == 'update_terms'){
+            $data = $request->all();
+            $covid = (@$data['terms_covid'] == 1) ? date('Y-m-d'): '';
+            $liability = (@$data['terms_liability'] == 1) ? date('Y-m-d'): '';
+            $contract = (@$data['terms_contract'] == 1) ? date('Y-m-d'): '';
+            $cust = Customer::find($request->cus_id);
+            $cust->update(['terms_covid' =>$covid,'terms_liability' =>$liability,'terms_contract' =>$contract,]);
+
         }
         
         return redirect()->route('business_customer_show',['business_id' => $cust->company_information->id, 'id'=>$request->cus_id]);
@@ -700,24 +693,32 @@ class CustomerController extends Controller {
     public function remove_grant_access(Request $request, $id,$customerId,$type = null){
         $customers = Customer::where('id',$customerId)->update(['user_id'=> null]); 
         if($request->type){
-            return Redirect()->route('personal.orders.index',['business_id'=>$id ]);
+            return Redirect()->route('personal.orders.index',['business_id'=>$id ,'customer_id' =>$customerId]);
         }else{
             return Redirect()->route('personal.family_members.index',['business_id'=>$id,'customerId'=>$customerId]);
         }
     }
 
-    public function receiptmodel($orderId,$customer){
+    public function receiptmodel($orderId,$customer,$isFrom = null){
         $customerData = Customer::where('id',$customer)->first();
         $transaction = Transaction::where('item_id',$orderId)->first();
-        if(@$transaction->item_type == 'UserBookingStatus'){
-            $oid = $orderId;
-            $bookingArray = UserBookingDetail::where('booking_id',$oid)->pluck('id')->toArray();
+
+        if(!$isFrom){
+            if(@$transaction->item_type == 'UserBookingStatus'){
+                $oid = $orderId;
+                $bookingArray = UserBookingDetail::where('booking_id',$oid)->pluck('id')->toArray();
+            }else{
+                $orderId = @$transaction->Recurring->booking_detail_id;
+                $oid = $orderId;
+                $bookingArray = UserBookingDetail::where('id',$orderId)->pluck('id')->toArray();
+            }
+            $transactionType = @$transaction->item_type;
         }else{
-            $orderId = @$transaction->Recurring->booking_detail_id;
-            $oid = $orderId;
+             $oid = $orderId;
             $bookingArray = UserBookingDetail::where('id',$orderId)->pluck('id')->toArray();
+            $transactionType = 'Membership';
         }
-        return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $oid ,'type' =>$transaction->item_type]);
+        return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $oid ,'type' =>$transactionType]);
     }
 
     public function loadView(Request $request)
@@ -773,7 +774,7 @@ class CustomerController extends Controller {
     }
 
     public function uploadDocument(Request $request, $business_id){
-        $path = $request->file('file')->store('Customer-Documents');
+        $path = $request->hasFile('file') ? $request->file('file')->store('Customer-Documents') : '';
         $create = CustomersDocuments::create([
             'user_id' => Auth::user()->id, 
             'staff_id' => session('StaffLogin') ?? '', 
@@ -790,7 +791,40 @@ class CustomerController extends Controller {
         }
     }
 
-    public function download($business_id,$id)
+    public function uploadDocsName(Request $request){
+        //print_r($request->all());exit;
+        $document = CustomersDocuments::find($request->docId);
+        for($i=0; $i<count($request->docName);$i++){
+            if($request->docName[$i] != ''){
+                CustomerDocumentsRequested::updateOrCreate([
+                        'id' => $request->contentID[$i],
+                    ],
+                    [
+                        'user_id' => @$document->user_id,
+                        'business_id' => @$document->business_id,
+                        'customer_id' => @$document->customer_id,
+                        'doc_id' => $request->docId,
+                        'content' => $request->docName[$i],
+                    ]
+                );  
+            }
+        }
+
+        $request->session()->flash('success', 'Documents Content Added successfully.');
+        return redirect()->route('business_customer_show',['business_id'=>@$document->business_id ,'id'=> @$document->customer_id]);
+    }
+
+    public function docContent($id){
+        $content = CustomerDocumentsRequested::where('doc_id',$id)->get();
+        return view('customers.documents_contents',compact('content','id'))->render();
+    }
+
+    public function requestSign($business_id,$id){
+        $document = CustomersDocuments::findOrFail($id);
+        $document->update(['status' =>1]);
+    }
+
+    public function download($id)
     {
         $document = CustomersDocuments::findOrFail($id);
         $filePath = Storage::url($document->path);
@@ -802,8 +836,8 @@ class CustomerController extends Controller {
         ];
         return Response::make($imageContent, 200, $headers);
     }
-
-    public function removeDoc($business_id, $id){
+   
+    public function removeDoc($id){
         $docs = CustomersDocuments::find($id);
         Storage::disk('s3')->delete($docs->path);
         $docs->delete();

@@ -35,4 +35,8 @@ class CustomersDocuments extends Model
     public function BusinessStaff(){
         return $this->belongsTo(BusinessStaff::class, 'staff_id');
     }
+
+    public function CustomerDocumentsRequested(){
+        return $this->hasMany(CustomerDocumentsRequested::class, 'doc_id');
+    }
 }

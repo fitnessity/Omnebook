@@ -117,11 +117,47 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
 
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
     Route::resource('orders', 'OrderController')->only(['index','show']);
+    Route::post('/orders/search-activity', 'OrderController@searchActivity')->name('orders.searchActivity');
+    Route::get('/grant-access-customer', 'OrderController@grantAccess')->name('grantAccess');
+    
+
     Route::resource('family_members', 'FamilyMemberController')->only(['index','show']);
     Route::resource('schedulers', 'SchedulerController')->only(['index','create','update','destroy','store']);  
     Route::any('all_activity_schedule', 'SchedulerController@allActivitySchedule')->name('allActivitySchedule');
     Route::resource('company', 'CompanyController')->only(['index','create','edit', 'update', 'destroy', 'store']);
     Route::resource('profile', 'ProfileController')->only(['index','create','edit', 'update', 'destroy', 'store']);
+
+    Route::any('user_family_profile/update', 'ProfileController@userFamilyProfileUpdate')->name('user_family_profile.update');
+     Route::any('customer_profile/update', 'ProfileController@customerProfileUpdate')->name('customer_profile.update');
+    Route::any('provider', 'ProfileController@provider')->name('provider');
+
+    Route::post('/get-contact-info', 'ProfileController@contactInfo')->name('get-contact-info');
+
+    Route::resource('documents-contract', 'DocumentController')->only(['index','create','edit', 'update', 'destroy', 'store']);
+    Route::any('getContent/{id}/{type}', 'DocumentController@getContent')->name('getContent');
+    Route::get('/download/{id}', 'DocumentController@download')->name('download');
+    Route::get('/documents-contract/export','DocumentController@export')->name('export');
+    Route::post('/save-signature', 'DocumentController@savesignature')->name('save.signature');
+    Route::get('/image-proxy', 'DocumentController@imageProxy');
+
+    Route::post('/update-portfolio', 'ProfileController@updatePortfolio')->name('updatePortfolio');
+    Route::get('/following', 'ProfileController@following')->name('following');
+    Route::post('/following-update', 'ProfileController@followingUpdate')->name('following-update');
+    Route::get('/followers', 'ProfileController@followers')->name('followers');
+    Route::post('/followers-update', 'ProfileController@followersUpdate')->name('followers-update');
+    Route::post('/remove_follower', 'ProfileController@removefollower')->name('remove_follower');
+    Route::post('/follow_back', 'ProfileController@followBack')->name('follow_back');
+    Route::get('/favourite', 'ProfileController@favourite')->name('favourite');
+    Route::post('/service_fav', 'ProfileController@serviceFavourite')->name('service_fav');
+
+    Route::get('/credit-cards', 'ProfileController@creditCards')->name('credit-cards');
+    Route::post('/card-delete', 'ProfileController@cardDelete')->name('cardDelete');
+    Route::get('/cards-save', 'ProfileController@cardsSave')->name('cards-save');
+
+    Route::get('/payment-history', 'ProfileController@paymentHistory')->name('payment-history');
+
+    Route::resource('manage-account', 'ManageAccountController')->only(['index','create','edit', 'update', 'destroy', 'store']);
+    Route::resource('calendar', 'CalendarController')->only(['index','create','edit', 'update', 'destroy', 'store']);
 });
 
 Route::name('design.')->prefix('/design')->middleware('auth')->group(function () {
@@ -177,6 +213,8 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/invoice_details','DesignController@invoice_details')->name('invoice_details'); 
 	Route::get('/announcement_news','DesignController@announcement_news')->name('announcement_news'); 
 	Route::get('/task','DesignController@task')->name('task');
+	Route::get('/attendance_belt','DesignController@attendance_belt')->name('attendance_belt');
+	Route::get('/announcements_provider','DesignController@announcements_provider')->name('announcements_provider');
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -229,8 +267,9 @@ Route::group(['middleware' => ['auth']], function(){
     
 
     Route::get('/download/{id}', 'CustomerController@download')->name('download');
-    Route::get('/image-proxy', 'CustomerController@imageProxy');
     Route::get('/removeDoc/{id}','CustomerController@removeDoc')->name('removeDoc');
+    Route::post('/uploadDocsName','CustomerController@uploadDocsName')->name('uploadDocsName');
+    Route::get('/docContent/{id}','CustomerController@docContent')->name('docContent');
 
     Route::prefix('/business/{business_id}')->middleware('auth', 'business_scope')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
@@ -1123,10 +1162,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/sendemailofreceipt', 'BookingController@sendemailofreceipt')->name('sendemailofreceipt');
     Route::get('/getreceiptmodel', 'BookingController@getreceiptmodel')->name('getreceiptmodel');
     Route::get('/getRescheduleModel', 'BookingController@getRescheduleModel')->name('getRescheduleModel');
-    Route::post('/datefilterdata', 'BookingController@datefilterdata')->name('datefilterdata');
-    Route::post('/searchfilteractivty', 'BookingController@searchfilteractivty')->name('searchfilteractivty');
-    Route::post('/searchfilterdata', 'BookingController@searchfilterdata')->name('searchfilterdata');
-    Route::get('/cancelbooking', 'BookingController@cancelbooking')->name('cancelbooking');
+     Route::get('/cancelbooking', 'BookingController@cancelbooking')->name('cancelbooking');
     Route::get('/getbookingmodeldata', 'BookingController@getbookingmodeldata')->name('getbookingmodeldata');
 
     Route::resource('/family-member', 'FamilyMemberController')->only(['index','store','update','destroy']);
@@ -1136,8 +1172,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::post('/fullcalenderAjax', 'UserProfileController@cajax')->name('fullcalenderAjax');
 
-Route::get('/personal-profile/documents-contract', 'UserProfileController@documents_contract');
-Route::post('/save-signature', 'UserProfileController@savesignature')->name('save.signature');
 
 Route::get('/personal-profile/favorite', 'UserProfileController@favorite');
 Route::get('/personal-profile/followers', 'UserProfileController@followers');
@@ -1220,7 +1254,7 @@ Route::group(['middleware' => ['auth']], function()
 {
     Route::get('/grant_access/{id}/{business_id}','CustomerController@grant_access')->name('grant_access');
     Route::get('/remove_grant_access/{id?}/{customerId?}','CustomerController@remove_grant_access')->name('remove_grant_access');
-    Route::get('/receiptmodel/{orderId}/{customer}', 'CustomerController@receiptmodel')->name('receiptmodel');
+    Route::get('/receiptmodel/{orderId}/{customer}/{isfrom?}', 'CustomerController@receiptmodel')->name('receiptmodel');
     Route::get('/exportcustomer/{chk?}/{id?}','CustomerController@export')->name('export');
     Route::get('/sendemailtocutomer','CustomerController@sendemailtocutomer')->name('sendemailtocutomer');
     Route::post('/import-customer','CustomerController@importcustomer')->name('importcustomer');
