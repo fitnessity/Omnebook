@@ -1087,6 +1087,7 @@ input:disabled{
 ?>
  <script>
 	var active_days = JSON.parse('<?php echo json_encode($result)?>');
+	// console.log(active_days);
 	const days = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',]
 	$( function() {
 		$( "#actfildate_forcart" ).datepicker( { 
@@ -1096,15 +1097,17 @@ input:disabled{
         	yearRange: "1960:2060",
         	dateFormat: "M-dd-yy",
         	beforeShowDay: function(date){
-        		for(var i=0; i<active_days.length; i++){
-        			start = new Date(active_days[i][0] + " 00:00:00");
-        			end = new Date(active_days[i][1] + " 00:00:00");
 
-        			if(date >= start && date <= end){
-        				if(active_days[i][2].match(days[date.getDay()])){
+        		for(var i=0; i<active_days.length; i++){
+					var start = new Date(active_days[i][0]);
+					var end = new Date(active_days[i][1]);
+
+					if (date >= start && date <= end) {
+						if(active_days[i][2].match(days[date.getDay()])){
         					return [1];	
         				}
-        			}
+					}
+
         		}
         		return [0];
         	}
