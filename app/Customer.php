@@ -83,7 +83,7 @@ class Customer extends Authenticatable
 
 
     public function stripePaymentMethods(){
-        return StripePaymentMethod::where('user_type', 'Customer')->where('user_id', $this->id);
+        return StripePaymentMethod::whereRaw('((user_type = "User" and user_id = ?) or (user_type = "Customer" and user_id = ?))', [$this->user_id, $this->id]);
     }
     public function getProfilePicUrlAttribute()
     {
