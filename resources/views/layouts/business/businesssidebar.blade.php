@@ -141,6 +141,10 @@
                                     </a>
                                 </li>
                             @endif
+							<!--<li class="nav-item">
+								<a href="#" class="nav-link " data-key="t-signup"> Manage Announcements 
+								</a>
+							</li> -->
                         </ul>
                     </div>
                 </li>

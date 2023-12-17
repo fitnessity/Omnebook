@@ -2,10 +2,8 @@
 
 @php
     use App\UserBookingDetail;
-    use App\Repositories\BookingRepository;
-    $booking_repo = new BookingRepository;
-    $totaltax = $subtotaltax = $tot_dis = $tot_tip = $service_fee = $grand_total=0;
-    $idarry = ''; 
+    $totalTax  = $totDis = $totTip = $grandTotal=0;
+    $idArry = ''; 
 @endphp
 
 <div class="row">
@@ -37,19 +35,14 @@
     <div class="col-lg-8">
         <div class="modal-booking-info mmt-10 imt-10 main-separator mb-25">
             @foreach($array as $or)
-                @php 
-                    $order_detail = UserBookingDetail::where('id',$or)->first();
-                    $idarry .= $or.',';
-                    $odt = $booking_repo->getorderdetailsfromodid($order_detail->booking_id,$or);
-                    $totaltax += $odt['tax_for_this'];
-                    $tot_dis += $odt['discount'];
-                    $tot_tip += $odt['tip'];
-                    $service_fee += $odt['service_fee'];
-                    $total = ($odt['totprice_for_this'] - $odt['discount']);
-                    $subtotaltax += $total;
-                    $per_total = $total;
-                    $grand_total += $per_total + $odt['tax_for_this'] + $odt['tip'] +  $odt['service_fee']- $odt['discount'];
-                @endphp
+                <?php 
+                    $orderDetail = UserBookingDetail::find($or);
+                    $idArry .= $or.',';
+                    $totalTax += number_format($orderDetail->tax + $orderDetail->service_fee ,2);
+                    $totDis +=  number_format($orderDetail->discount,2);
+                    $totTip +=  number_format($orderDetail->tip,2);
+                    $grandTotal +=  number_format($orderDetail->subtotal,2);
+                ?>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="text-left space-bottom">
@@ -58,7 +51,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $odt['confirm_id']}}</span>
+                            <span>{{ $orderDetail->userBookingStatus->order_id}}</span>
                         </div>
                     </div>
                     
@@ -69,7 +62,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $odt['company_name']}}</span>
+                            <span>{{ $orderDetail->company_information->company_name}}</span>
                         </div>
                     </div>
                     
@@ -80,7 +73,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $odt['program_name']}}</span>
+                            <span>{{ $orderDetail->business_services_with_trashed->program_name}}</span>
                         </div>
                     </div>
                     
@@ -91,7 +84,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $odt['categoty_name']}}</span>
+                            <span>{{ $orderDetail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}}</span>
                         </div>
                     </div>
                     
@@ -102,7 +95,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{@$odt['BusinessPriceDetails']['price_title']}}</span>
+                            <span>{{$orderDetail->business_price_detail_with_trashed->price_title}}</span>
                         </div>
                     </div>
                     
@@ -113,7 +106,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{@$odt['pay_session']}} Session</span>
+                            <span>{{$orderDetail->pay_session}} Session</span>
                         </div>
                     </div>
                     
@@ -124,7 +117,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{$odt['BusinessPriceDetails']['membership_type']}}</span>
+                            <span>{{$orderDetail->business_price_detail_with_trashed->membership_type}}</span>
                         </div>
                     </div>
                     
@@ -135,7 +128,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $odt['qty']}}</span>
+                            <span>{{ $orderDetail->getparticipate()}}</span>
                         </div>
                     </div>
                     
@@ -146,7 +139,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $odt['parti_data']}}</span>
+                            <span>{{ $orderDetail->decodeparticipate()}}</span>
                         </div>
                     </div>
                     
@@ -157,7 +150,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $odt['sport_activity']}}</span>
+                            <span>{{ $orderDetail->business_services_with_trashed->sport_activity}}</span>
                         </div>
                     </div>
                     
@@ -168,7 +161,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $odt['select_service_type']}}</span>
+                            <span>{{$orderDetail->business_services_with_trashed->select_service_type}}</span>
                         </div>
                     </div>
                     
@@ -179,7 +172,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{$order_detail->expired_duration != '' ? $order_detail->expired_duration : "—"}}</span>
+                            <span>{{$orderDetail->expired_duration ??  "—"}}</span>
                         </div>
                     </div>
                     
@@ -190,7 +183,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{$odt['created_at']}}</span>
+                            <span>{{date('m-d-Y',strtotime($orderDetail->created_at))}}</span>
                         </div>
                     </div>
                     
@@ -201,7 +194,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{date('d-m-Y',strtotime($order_detail->contract_date))}}</span>
+                            <span>{{date('d-m-Y',strtotime($orderDetail->contract_date))}}</span>
                         </div>
                     </div>
                     
@@ -212,7 +205,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{date('d-m-Y',strtotime($order_detail->expired_at))}}</span>
+                            <span>{{date('d-m-Y',strtotime($orderDetail->expired_at))}}</span>
                         </div>
                     </div>
                     
@@ -223,27 +216,27 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span class="highlight-fonts">${{$odt['totprice_for_this']}}</span>
+                            <span class="highlight-fonts">${{$orderDetail->total()}}</span>
                         </div>
                     </div>
                     
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="text-left space-bottom">
                             <label class="highlight-fonts">TOTAL:</label>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span class="highlight-fonts">${{$per_total}}</span>
+                            <span class="highlight-fonts">${{$orderDetail->subtotal}}</span>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             @endforeach
         </div>
-        @php $idarry = rtrim($idarry,','); @endphp
+        @php $idArry = rtrim($idArry,','); @endphp
 
-        <input type="hidden" name="booking_id" id="booking_id" value="{{@$order_detail->booking_id}}"> 
-        <input type="hidden" name="orderdetalidary[]" id="orderdetalidary" value="{{$idarry}}"> 
+        <input type="hidden" name="booking_id" id="booking_id" value="{{@$orderDetail->booking_id}}"> 
+        <input type="hidden" name="orderdetalidary[]" id="orderdetalidary" value="{{$idArry}}"> 
         <div class="main-separator mb-10">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
@@ -253,7 +246,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">{{ @$odt['pmt_type']}}</span>
+                        <span class="highlight-fonts">{{ $orderDetail->userBookingStatus->getPaymentDetail()}}</span>
                     </div>
                 </div>
             </div>
@@ -268,12 +261,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">$ 
-                            @if($type == 'UserBookingStatus') 
-                                {{ UserBookingDetail::where('booking_id', $orderId)->sum('tip') }}
-                            @else 
-                                {{ UserBookingDetail::where('id', $orderId)->sum('tip') }}
-                            @endif  </span>
+                        <span class="highlight-fonts">$ {{$totTip}}</span>
                     </div>
                 </div>
             </div>
@@ -288,12 +276,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">$  
-                            @if($type == 'UserBookingStatus') 
-                                {{ UserBookingDetail::where('booking_id', $orderId)->sum('discount') }}
-                            @else 
-                                {{ UserBookingDetail::where('id', $orderId)->sum('discount')}} 
-                            @endif  </span>
+                        <span class="highlight-fonts">$ {{$totDis}} </span>
                     </div>
                 </div>
             </div>
@@ -303,36 +286,17 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class=" text-left">
-                        <label class="highlight-fonts">TAXES AND FEES {{$orderId}}</label>
+                        <label class="highlight-fonts">TAXES AND FEES</label>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">$  
-                            @if($type == 'UserBookingStatus')
-                                {{ UserBookingDetail::where('booking_id', $orderId)->sum('tax') }} 
-                            @else 
-                                {{ UserBookingDetail::where('id', $orderId)->sum('tax') }}
-                            @endif </span>
+                        <span class="highlight-fonts">$ {{$totalTax}}</span>
                     </div>
                 </div>
             </div>
         </div>
                 
-        <!-- <div class="main-separator mb-10">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                    <div class=" text-left">
-                        <label class="highlight-fonts">MERCHANT FEE</label>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                    <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">${{ (@$odt['amount'] - UserBookingDetail::where('booking_id', $orderId)->sum('subtotal') )}}</span>
-                    </div>
-                </div>
-            </div>
-        </div> -->
                 
         <div class="main-separator mb-10">
             <div class="row">
@@ -343,7 +307,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">${{@$grand_total}}</span>
+                        <span class="highlight-fonts">${{@$grandTotal}}</span>
                     </div>
                 </div>
             </div>  

@@ -219,11 +219,11 @@
 										  <a href="{{route('profile-viewbusinessProfile')}}" style="color: white;">Business Profile</a>
 									 </li><?php */?>
 									 <li class="pc-link">
-										 <span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;"> Manage Personal Profile</a>
+										 <span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{url('/personal/profile')}}" style="color: white;"> Manage Personal Profile</a>
 									  </li>
 									
 									<li class="pc-link">
-										<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('family-member.index')}}" style="color: white;"> Manage Accounts</a>
+										<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('personal.manage-account.index')}}" style="color: white;"> Manage Accounts</a>
 									</li>
 									
 									<li class="pc-link">

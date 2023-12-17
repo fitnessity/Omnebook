@@ -742,54 +742,17 @@
 																		<p>Let us help answer the most common questions. </p>
 																	</div>
 																	<div class="accordion accordion-border-box" id="genques-accordion">
-																		<div class="accordion-item shadow">
-																			<h2 class="accordion-header" id="genques-headingOne">
-																				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseOne" aria-expanded="true" aria-controls="genques-collapseOne">
-																					What counts towards the 100 responses limit?
-																				</button>
-																			</h2>
-																			<div id="genques-collapseOne" class="accordion-collapse collapse" aria-labelledby="genques-headingOne" data-bs-parent="#genques-accordion">
-																				<div class="accordion-body">
-																					Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus, varius pulvinar diam eros in elit. Pellentesque convallis laoreet laoreet.Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus, varius pulvinar diam eros in elit. Pellentesque convallis laoreet laoreet.
+																		@forelse(@$faqs as $i=>$f)
+																			<div class="accordion-item shadow">
+																				<h2 class="accordion-header" id="genques-heading{{$i}}">
+																					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapse{{$i}}" aria-expanded="false" aria-controls="genques-collapse{{$i}}">{{$f->title}}</button>
+																				</h2>
+																				<div id="genques-collapse{{$i}}" class="accordion-collapse collapse" aria-labelledby="genques-heading{{$i}}" data-bs-parent="#genques-accordion">
+																					<div class="accordion-body">{!!$f->content!!}</div>
 																				</div>
 																			</div>
-																		</div>
-																		<div class="accordion-item shadow">
-																			<h2 class="accordion-header" id="genques-headingTwo">
-																				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseTwo" aria-expanded="false" aria-controls="genques-collapseTwo">
-																					How do you process payments?
-																				</button>
-																			</h2>
-																			<div id="genques-collapseTwo" class="accordion-collapse collapse" aria-labelledby="genques-headingTwo" data-bs-parent="#genques-accordion">
-																				<div class="accordion-body">
-																					We accept Visa®, MasterCard®, American Express®, and PayPal®. So you can be confident that your credit card information will be kept safe and secure.
-																				</div>
-																			</div>
-																		</div>
-																		<div class="accordion-item shadow">
-																			<h2 class="accordion-header" id="genques-headingThree">
-																				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseThree" aria-expanded="false" aria-controls="genques-collapseThree">
-																					What payment methods do you accept?
-																				</button>
-																			</h2>
-																			<div id="genques-collapseThree" class="accordion-collapse collapse" aria-labelledby="genques-headingThree" data-bs-parent="#genques-accordion">
-																				<div class="accordion-body">
-																					Checkout accepts all types of credit and debit cards.
-																				</div>
-																			</div>
-																		</div>
-																		<div class="accordion-item shadow">
-																			<h2 class="accordion-header" id="genques-headingFour">
-																				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseFour" aria-expanded="false" aria-controls="genques-collapseFour">
-																					Do you have a money-back guarantee?
-																				</button>
-																			</h2>
-																			<div id="genques-collapseFour" class="accordion-collapse collapse" aria-labelledby="genques-headingFour" data-bs-parent="#genques-accordion">
-																				<div class="accordion-body">
-																					Yes. You may request a refund within 30 days of your purchase without any additional explanations.
-																				</div>
-																			</div>
-																		</div>
+																		@empty
+																		@endforelse
 																	</div><!--end accordion-->
 																</div>
 															</div>

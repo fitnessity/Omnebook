@@ -83,60 +83,7 @@
 								<i class='bx bx-message-square-add fs-22' ></i>
 							</button>
 						</div>
-						<div class="dropdown ms-1 topbar-head-dropdown header-item">
-							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<img src="{{asset('/public/dashboard-design/images/us.svg')}}" alt="user-image" class="rounded" height="20">
-							</button>
-							<div class="dropdown-menu dropdown-menu-end">
-
-								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language py-2" data-lang="en" title="English">
-									<img src="{{asset('/public/dashboard-design/images/us.svg')}}" alt="user-image" class="me-2 rounded" height="18">
-									<span class="align-middle">English</span>
-								</a>
-
-								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp" title="Spanish">
-									<img src="{{asset('/public/dashboard-design/images/spain.svg')}}" alt="user-image" class="me-2 rounded" height="18">
-									<span class="align-middle">Española</span>
-								</a>
-
-								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr" title="German">
-									<img src="{{asset('/public/dashboard-design/images/germany.svg')}}" alt="user-image" class="me-2 rounded" height="18"> <span class="align-middle">Deutsche</span>
-								</a>
-
-								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it" title="Italian">
-									<img src="{{asset('/public/dashboard-design/images/italy.svg')}}" alt="user-image" class="me-2 rounded" height="18">
-									<span class="align-middle">Italiana</span>
-								</a>
-
-								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru" title="Russian">
-									<img src="{{asset('/public/dashboard-design/images/russia.svg')}}" alt="user-image" class="me-2 rounded" height="18">
-									<span class="align-middle">русский</span>
-								</a>
-
-								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ch" title="Chinese">
-									<img src="{{asset('/public/dashboard-design/images/china.svg')}}" alt="user-image" class="me-2 rounded" height="18">
-									<span class="align-middle">中国人</span>
-								</a>
-
-								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="fr" title="French">
-									<img src="{{asset('/public/dashboard-design/images/french.svg')}}" alt="user-image" class="me-2 rounded" height="18">
-									<span class="align-middle">français</span>
-								</a>
-
-								<!-- item-->
-								<a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ar" title="Arabic">
-									<img src="{{asset('/public/dashboard-design/images/ae.svg')}}" alt="user-image" class="me-2 rounded" height="18">
-									<span class="align-middle">Arabic</span>
-								</a>
-							</div>
-						</div>
+					
 
 						<!--<div class="dropdown topbar-head-dropdown ms-1 header-item">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -679,71 +626,8 @@
 		    </div>
 		</div>
 
-		@include('customers._add_new_client_modal')
-
-
 		@include('layouts.profile.left_panel')
 
 		<!-- Vertical Overlay-->
         <div class="vertical-overlay"></div>
-<script type="text/javascript">
-	$(document).ready(function () {
-        	var business_id = '{{Auth::user()->cid}}';
-        	var url = "{{ url('/business/business_id/customers') }}";
-        	url = url.replace('business_id', business_id);
 
-        	$( "#serchclient_navbar" ).autocomplete({
-            source: url,
-            focus: function( event, ui ) {
-                 return false;
-            },
-            select: function( event, ui ) {
-                window.location.href = "/business/"+business_id+"/customers/"+ui.item.id;
-                 return false;
-            }
-        	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-            let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
-
-            if(item.profile_pic_url){
-                profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
-            }
-
-            var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
-                      '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
-                      '<p class="pstyle liaddress">' + item.email +'</p>' + 
-                      '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
-           
-            return $( "<li></li>" )
-                    .data( "item.autocomplete", item )
-                    .append(inner_html)
-                    .appendTo( ul );
-        	};
-
-        	$( "#serchclient_navbar1" ).autocomplete({
-            source: url,
-            focus: function( event, ui ) {
-                 return false;
-            },
-            select: function( event, ui ) {
-                window.location.href = "/business/"+business_id+"/customers/"+ui.item.id;
-                 return false;
-            }
-        	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-            let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
-
-            if(item.profile_pic_url){
-                profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
-            }
-
-            var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
-                      '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
-                      '<p class="pstyle liaddress">' + item.email +'</p>' + 
-                      '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
-           
-            return $( "<li></li>" )
-                    .data( "item.autocomplete", item )
-                    .append(inner_html)
-                    .appendTo( ul );
-        	};
-      });
-</script>

@@ -263,5 +263,21 @@ class DesignController extends Controller {
 	public function invoice_details(Request $request){
         return view('design.invoice_details');
     }
+	
+	public function announcement_news(Request $request){
+        return view('design.announcement_news');
+    }
+	
+	public function task(Request $request){
+        return view('design.task');
+    }
+	
+	public function attendance_belt(Request $request){
+        return view('design.attendance_belt');
+    }
+	
+	public function announcements_provider(Request $request){
+        return view('design.announcements_provider');
+    }
 }
 

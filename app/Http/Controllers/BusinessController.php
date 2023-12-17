@@ -77,6 +77,7 @@ class BusinessController extends Controller
                   $join->on('ubd.booking_id', '=', 'ubs.id')
                       ->where('ubd.business_id', '=', $business_id);
               })->whereDate('transaction.created_at', '>=', $startDate)->whereDate('transaction.created_at', '<=', $endDate)->sum('transaction.amount');
+              
             $previousTotalSales = Transaction::select('transaction.*')
               ->where('item_type', 'UserBookingStatus')
               ->where('kind','!=' ,'comp')

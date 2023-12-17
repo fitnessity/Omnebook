@@ -418,7 +418,7 @@ $total_quantity = 0;
                                                     	<span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
                                                     </li> -->
 													<li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('family-member.index')}}" style="color: white;">Account Information</a>
+                                                    	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('personal.manage-account.index')}}" style="color: white;">Account Information</a>
                                                     </li>
 													<!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-envelope" aria-hidden="true"></i></span>

@@ -8,7 +8,7 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\{PlanRepository,ProfessionalRepository,BookingRepository,UserRepository};
-use App\{Fit_background_check_faq,Fit_vetted_business_faq,MailService,Evident,Evidents,Sports,ProfileSave,InstantForms,Languages,UserFavourite,UserFollow,UserFollower,Review,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,BusinessActivityScheduler,ProfileFollow,ProfileFav,InquiryBox,ProfileView,PostLike,PostReport,PostComment,PostCommentLike,PagePost,PagePostSave,Notification,BusinessServicesFavorite,UserBookingStatus,UserBookingDetail,ProfilePostViews,BusinessPostViews,StripePaymentMethod,BusinessClaim,Miscellaneous,User,UserEmploymentHistory,UserEducation,UserCertification,UserService,UserSecurityQuestion,UserMembership,UserProfessionalDetail,UserSkillAward,UserFamilyDetail,UserCustomerDetail,BusinessPriceDetailsAges,AddrStates,AddrCities,ProfilePost,Event,Transaction,Customer,SGMailService};
+use App\{Fit_background_check_faq,Fit_vetted_business_faq,MailService,Evident,Evidents,Sports,ProfileSave,InstantForms,Languages,UserFavourite,UserFollow,UserFollower,Review,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,BusinessActivityScheduler,ProfileFollow,ProfileFav,InquiryBox,ProfileView,PostLike,PostReport,PostComment,PostCommentLike,PagePost,PagePostSave,Notification,BusinessServicesFavorite,UserBookingStatus,UserBookingDetail,ProfilePostViews,BusinessPostViews,StripePaymentMethod,BusinessClaim,Miscellaneous,User,UserEmploymentHistory,UserEducation,UserCertification,UserService,UserSecurityQuestion,UserMembership,UserProfessionalDetail,UserSkillAward,UserFamilyDetail,UserCustomerDetail,BusinessPriceDetailsAges,AddrStates,AddrCities,ProfilePost,Event,Transaction,Customer,SGMailService,CustomersDocuments};
 use App\Repositories\SportsRepository;
 use App\Mail\BusinessVerifyMail;
 use Twilio\Rest\Client;
@@ -3114,7 +3114,7 @@ class UserProfileController extends Controller {
         //DB::update('update users_follow set follow_id = "0" where  user_id = "' . $remove_id . '"');
     }
 
-    public function Punfollow_company(Request $request) {
+    public function unfollow_company(Request $request) {
 
         $unfollow_id = $request->fid;
         $loggedId = Auth::user()->id;
@@ -3134,7 +3134,7 @@ class UserProfileController extends Controller {
         return Response::json($response);
     }
 
-    public function Pfollow_back(Request $request) {
+    public function follow_back(Request $request) {
         if( !empty($request->id) ){ $follow_id = $request->id; } else{ $follow_id =0; }
         $user_id = $request->userid;
 

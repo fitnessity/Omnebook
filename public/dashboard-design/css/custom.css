@@ -5522,11 +5522,18 @@ div#termsdiv{order: 4;}
 	font-size: 30px;
 	font-weight: 600;
 	text-align: center;
-	margin-top: -185px;
+	margin-bottom: 25px;
 }
 .announcement-banner {
 	text-align: center;
 }
+.announcement-text-format{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
 .top-area-announcement{
 	display: contents;
 	vertical-align: middle;
@@ -5534,7 +5541,6 @@ div#termsdiv{order: 4;}
 }
 .top-search-announcement {
 	text-align: left;
-	width: 50%;
 	position: absolute;
 	left: 50%;
 	transform: translate(-50%, -50%);
@@ -5544,14 +5550,12 @@ div#termsdiv{order: 4;}
   position: relative;
   width: 100%;
   margin-bottom: 0px;
-  margin-top: -115px;
 }
 .top-search-announcement form input {
   background: white;
   border: medium none;
   font-size: 13px;
   padding: 8px 40px;
-  width: 100%;
   color: #2e2e2e;
   border-radius: 10px;
   border: 1px solid #000;
@@ -5583,4 +5587,31 @@ div#termsdiv{order: 4;}
 .border-left{
 	border-left: 1px solid #e9ebec;
 }
-	
+.c-padding{
+	padding: 4px 20px;
+}
+.width-75per{
+	width: 75%;
+}
+.offcanvas-end-accountinfo{
+	top: 0;
+	right: 0;
+	width: 700px !important;
+}
+.attendance-title h3{
+	font-size: 18px;
+	margin-bottom: 0px;
+}
+.attendance-count label{
+	font-size: 17px;
+	text-transform: uppercase;
+}
+.attendance-count span{
+	font-size: 25px;
+}
+.mt-8{
+	margin-top: 8px;
+}
+.selected-date{
+	display: grid;
+}

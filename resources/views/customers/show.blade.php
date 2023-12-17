@@ -35,6 +35,12 @@
 									</div>
 								</div>
 							</div>
+
+							@if(session('success'))
+							    <div class="alert alert-success">
+							        {{ session('success') }}
+							    </div>
+							@endif
 							<div class="row">
 								<div class="col-xl-12">
 									<div class="card">
@@ -1154,7 +1160,7 @@
 																							</div>
 																							<div class="col-lg-10 col-md-10 col-10">
 																								<span> 2. </span>
-																								<span>Liability Waiver agreed on @if(@$customerdata->terms_liability != '') {{date('m/d/Y',strtotime(@$customerdata->terms_liability))}} @endif  </span>
+																								<span>Liability Waiver @if(@$customerdata->terms_liability != '')  agreed on {{date('m/d/Y',strtotime(@$customerdata->terms_liability))}} @endif  </span>
 																							</div>
 																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
@@ -1177,7 +1183,7 @@
 																							</div>
 																							<div class="col-lg-10 col-md-10 col-10">
 																								<span>3. </span>
-																								<span>Contract Terms  agreed on @if(@$customerdata->terms_contract != '') {{date('m/d/Y',strtotime(@$customerdata->terms_contract))}} @endif</span>
+																								<span>Contract Terms @if(@$customerdata->terms_contract != '') agreed on {{date('m/d/Y',strtotime(@$customerdata->terms_contract))}} @endif</span>
 																							</div>
 																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
@@ -1273,7 +1279,7 @@
 																						<div class="accordion-body">
 																							@forelse($documents as $d)
 																							<div class="row">
-																								<div class="col-md-3"><i class="fas fa-download"></i> {{$d->title}}</div>
+																								<div class="col-md-3"><a  @if(!$d->CustomerDocumentsRequested->isEmpty()) href="#" onclick="event.preventDefault(); openDocumentModal('{{$d->id}}','load')"  @elseif($d->path) href="{{ route('download', ['id' => $d->id]) }}" target="_blank" @endif  ><i class="fas fa-download"></i> {{$d->title}}</a></div>
 																								<div class="col-md-3"><i class="fas fa-paperclip"></i> Uploaded on {{date('m/d/Y', strtotime($d->created_at))}}</div>
 																								<div class="col-md-3"> Uploaded by {{@$d->uploaded_by}}</div>
 																								<div class="col-md-3">
@@ -1281,7 +1287,17 @@
 																										<div class="setting-icon">
 																											<i class="ri-more-fill"></i>
 																											  <ul>
-																											  		<li><a href="{{ route('download', ['id' => $d->id]) }}" target="_blank"><i class="fas fa-plus text-muted"></i>Download</a></li>
+																											  		@if($d->status == 0)
+																											  		<li><a onclick="requestSign({{$d->id}})"><i class="fas fa-plus text-muted"></i>Request Signature</a></li>
+																											  		@elseif($d->status == 1)
+																											  		<li><a><i class="fas fa-plus text-muted"></i>Signature Requested</a></li>
+																											  		@else
+																											  			<li><a><i class="fas fa-plus text-muted"></i>Signature Signed</a></li>
+																											  		@endif
+
+																											  		<li><a onclick="openModalDoc({{$d->id}})"><i class="fas fa-plus text-muted"></i>Request Document</a></li>
+
+																											  		<li><a @if(!$d->CustomerDocumentsRequested->isEmpty())  onclick="event.preventDefault(); openDocumentModal('{{$d->id}}','load')"  @elseif($d->path) href="{{ route('download', ['id' => $d->id]) }}" target="_blank" @endif ><i class="fas fa-plus text-muted"></i>Download</a></li>
 																													<li><a onclick="deleteDoc({{$d->id}})"><i class="fas fa-plus text-muted"></i>Delete </a></li>
 																												</ul>
 																										</div>
@@ -1376,9 +1392,9 @@
 							<div class="mb-10">
 								<label>	Gender </label>
 								<div>
-								<input type="radio" name="gender" value="male" {{$customerdata->gender == 'male' ? "checked" : '' }}> Male
-								<input type="radio" name="gender" value="female" {{$customerdata->gender == 'female' ? "checked" : '' }}> Female
-								<input type="radio" name="gender" value="other" {{$customerdata->gender == 'other' ? "checked" : '' }}> Other
+								<input type="radio" name="gender" value="male" {{strtolower($customerdata->gender) == 'male' ? "checked" : '' }}> Male
+								<input type="radio" name="gender" value="female" {{strtolower($customerdata->gender) == 'female' ? "checked" : '' }}> Female
+								<input type="radio" name="gender" value="other" {{strtolower($customerdata->gender) == 'other' ? "checked" : '' }}> Other
 								</div>
 							</div>
 						</div>
@@ -1497,7 +1513,7 @@
 			<form action="{{route('update_customer')}}" method="post" enctype="multipart/form-data">
 				@csrf
 				<input type="hidden" id="cus_id" name="cus_id" value="{{$customerdata->id}}">
-				<input type="hidden" id="chk" name="chk" value="update_personal">
+				<input type="hidden" id="chk" name="chk" value="update_terms">
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-lg-12">
@@ -1540,8 +1556,7 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->	
 
-
-<div class="modal fade checkinDetails" tabindex="-1" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+<div class="modal fade checkinDetails" tabindex="-1" aria-labelledby="mySmallModalLabel" >
 	<div class="modal-dialog modal-dialog-centered modal-70">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -1549,6 +1564,34 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body" id="checkInHtml">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade modalDocument" tabindex="-1" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Documents</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="modalDocumentHtml">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade modalDocumentDisplay" tabindex="-1" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-dialog-centered modal-70" id="doc-width">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Documents</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="modalDocumentDisplayHtml">
 
 			</div>
 		</div>
@@ -1576,12 +1619,61 @@
       }
 	}
 
+	function openDocumentModal(id,type){
+		$.ajax({
+         type: 'GET',
+         url: '/personal/getContent/'+id+'/'+type,
+         success: function (response) {
+         	if(type == 'upload'){
+         		if(!$('#doc-width').hasClass('modal-70')){
+         			$('#doc-width').addClass('modal-70');
+         		}
+         	}else{
+         		$('#doc-width').removeClass('modal-70');
+         	}
+            $('#modalDocumentDisplayHtml').html(response);
+				$('.modalDocumentDisplay').modal('show');
+         }
+      });
+	}
+
+	function requestSign(id){
+		$.ajax({
+         type: 'GET',
+         url: '/business/'+'{{request()->business_id}}'+'/requestSign/'+id,
+         success: function (data) {
+            window.location.reload();
+         }
+      });
+	}
+
+	function openModalDoc(id){
+		$.ajax({
+         type: 'GET',
+         url: '/docContent/'+id,
+         success: function (response) {
+            $('#modalDocumentHtml').html(response);
+				$('.modalDocument').modal('show');
+         }
+      });
+	}
+
+	function requestDoc(id){
+		$.ajax({
+         type: 'GET',
+         url: '/business/'+'{{request()->business_id}}'+'/requestDoc/'+id,
+         success: function (data) {
+            window.location.reload();
+         }
+      });
+	}
+
 	function deleteDoc(id){
 		let text = "You are about to delete the document. Are you sure you want to continue?";
 		if (confirm(text)) {
 	      $.ajax({
 	         type: 'GET',
-	         url: '/business/'+'{{request()->business_id}}'+'/removeDoc/'+id,
+	         url: '/removeDoc/'+id,
 	         success: function (data) {
 	            window.location.reload();
 	         }
@@ -1621,11 +1713,7 @@
 	$(document).ready(function () {
 
       $('#upload-pdf').click(function(){
-        	if(docToUpload == ''){
-        		$('.err').html('Select file to upload.');
-        	}else if(ext != 'pdf' && ext != 'jpg' && ext != 'jpeg' && ext != 'png'){
-            	$('.err').html('File format is not supported.')
-        	}else{
+        	
         		$('.err').html('');
          	var formdata = new FormData();
          	formdata.append('file',docToUpload);
@@ -1658,7 +1746,6 @@
                   $('#file').val('')
                }
          	});
-        	}
     	});
    });
 </script>

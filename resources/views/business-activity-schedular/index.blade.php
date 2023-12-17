@@ -438,9 +438,18 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 
 	$( ".datepicker" ).change(function(){
 		var date  = $(this).val();
-		var businessId = '{{$businessId}}';
-		var serviceType = '{{$serviceType}}';
-		window.location = '/business_activity_schedulers/'+businessId+'?stype=' + serviceType+'&date='+date;
+		var currentUrl = window.location.href;
+		var url = new URL(currentUrl);
+		var params = new URLSearchParams(url.search);
+		if (params.has('date')) {
+            params.set('date', date);
+        } else {
+            params.append('date', date);
+        }
+
+        url.search = params.toString();
+        var updatedUrl = url.toString();
+		window.location = updatedUrl;
     });
 </script>
 

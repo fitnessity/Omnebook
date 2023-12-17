@@ -199,7 +199,7 @@
 									 </li> -->
 
 									<li class="pc-link">
-										<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('family-member.index')}}" style="color: white;"> Manage Accounts</a>
+										<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('personal.manage-account.index')}}" style="color: white;"> Manage Accounts</a>
 									</li>
 								
 									<!-- <li class="pc-link">
@@ -284,6 +284,7 @@
 <!-- Sticky Footer new design -->
    <!-- JAVASCRIPT -->
    
+   <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap" async defer></script>
     <script src="{{asset('/public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('/public/dashboard-design/js/simplebar.min.js')}}"></script>
     <script src="{{asset('/public/dashboard-design/js/waves.min.js')}}"></script>
@@ -437,7 +438,7 @@ function closeMobileNav() {
     $(document).on('click', '[data-behavior~=send_receipt]', function(e){
         var item_type = $(this).data('item-type');
         e.preventDefault()
-        if(item_type == 'no' || item_type == 'Membership'){
+        /*if(item_type == 'no' || item_type == 'Membership'){*/
             var width = $(this).data('modal-width');
             if(width == undefined){
                 width = 'modal-50';
@@ -450,9 +451,9 @@ function closeMobileNav() {
                     $('#ajax_html_modal').modal('show')
                 }
             });
-        }else{
+        /*}else{
             alert("This is a Recurring Payment. A receipt is only for Membership or Activity Purchase.");
-        }
+        }*/
     });
 
 	$(document).on('focus', '[data-behavior~=text-phone]', function(e){

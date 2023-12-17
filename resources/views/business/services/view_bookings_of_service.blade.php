@@ -23,6 +23,17 @@
                     <label>Total Bookings:</label> <span>{{count($data)}}</span>
                 </div>
             </div>
+
+            <div class="col-md-3">
+                <label>Category</label>
+                <div class="form-group mmt-10">
+                    <select class="form-select" name="category" id="category">
+                        @foreach($categoryList as $c)
+                        <option value="{{$c->id}}">{{$c->category_title}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
         </div>
 
         <div class="row g-3 mb-10 align-items-center">
@@ -42,7 +53,7 @@
               <li class="nav-item" role="presentation">
                 <button class="nav-link fonts-red @if($type == '') active @endif " id="all" data-bs-toggle="tab" type="button" role="tab" onclick="getbookingmodel({{$sid}},'ajax' ,'','');">All</button>
               </li>
-              
+                
             </ul>
         </div>
 
