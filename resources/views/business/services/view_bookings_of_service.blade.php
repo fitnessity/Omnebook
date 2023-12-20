@@ -27,7 +27,8 @@
             <div class="col-md-3">
                 <label>Category</label>
                 <div class="form-group mmt-10">
-                    <select class="form-select" name="category" id="category">
+                    <select class="form-select" name="category" id="category" onchange="getbookingmodel({{$sid}},'ajax' ,'category','')">
+                        <option value="all">All</option>
                         @foreach($categoryList as $c)
                         <option value="{{$c->id}}">{{$c->category_title}}</option>
                         @endforeach
@@ -36,7 +37,7 @@
             </div>
         </div>
 
-        <div class="row g-3 mb-10 align-items-center">
+        <div class="row g-3 mb-10 align-items-center tablist">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
                 <button class="nav-link @if($type == 'date') active @endif fonts-red" id="today" data-bs-toggle="tab" type="button" role="tab" onclick="getbookingmodel({{$sid}},'simple' ,'date' ,'');">Today</button>

@@ -285,8 +285,10 @@ class ProfileController extends Controller
         
         if($continue == 1){
             $customer = @$user->customers;
-            foreach($customer as $cs){
-                $company_information []= $cs->company_information;
+            if($customer){
+                foreach($customer as $cs){
+                    $company_information []= $cs->company_information;
+                }
             }
         }
         

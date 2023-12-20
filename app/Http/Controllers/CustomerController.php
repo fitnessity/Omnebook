@@ -19,7 +19,7 @@ use Session,Redirect,DB,Input,Auth,Hash,Validator,View,Mail,Str,Config,Excel,Spl
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\{CustomerRepository,BookingRepository,UserRepository};
-use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation,ExcelUploadTracker,UserFamilyDetail,Transaction,StripePaymentMethod,CustomersDocuments,CustomerNotes,CustomerDocumentsRequested};
+use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation,ExcelUploadTracker,UserFamilyDetail,Transaction,StripePaymentMethod,CustomersDocuments,CustomerNotes,CustomerDocumentsRequested,Notification};
 
 use Illuminate\Support\Facades\Storage;
 
@@ -122,6 +122,7 @@ class CustomerController extends Controller {
 
 
         $documents = CustomersDocuments::where(['customer_id'=>$id])->get();
+        $lastBooking = $customerdata->bookingDetail()->orderby('created_at','desc')->first();
         $notes = CustomerNotes::where(['customer_id'=>$id])->get();
         return view('customers.show', [
             'customerdata'=>$customerdata,
@@ -134,6 +135,7 @@ class CustomerController extends Controller {
             'auto_pay_payment_msg' =>$auto_pay_payment_msg,
             'documents' =>$documents,
             'notes' =>$notes,
+            'lastBooking' =>$lastBooking,
         ]);
     }
 
@@ -783,8 +785,10 @@ class CustomerController extends Controller {
             'title' => $request->title,
             'path' => $path
         ]);
-
         if($create){
+            if($request->sign == 1){
+                $this->requestSign($business_id , $create->id);
+            }
             return response()->json(['status'=>200,'message'=>'Document Added Successfully.']);
         }else{
             return response()->json(['status'=>500,'message'=>'Something Went Wrong.']);
@@ -794,21 +798,40 @@ class CustomerController extends Controller {
     public function uploadDocsName(Request $request){
         //print_r($request->all());exit;
         $document = CustomersDocuments::find($request->docId);
-        for($i=0; $i<count($request->docName);$i++){
-            if($request->docName[$i] != ''){
-                CustomerDocumentsRequested::updateOrCreate([
-                        'id' => $request->contentID[$i],
-                    ],
-                    [
-                        'user_id' => @$document->user_id,
-                        'business_id' => @$document->business_id,
-                        'customer_id' => @$document->customer_id,
-                        'doc_id' => $request->docId,
-                        'content' => $request->docName[$i],
-                    ]
-                );  
+        if(!empty($request->docName)){
+            for($i=0; $i< count($request->docName);$i++){
+                if($request->docName[$i] != ''){
+                    $data = CustomerDocumentsRequested::updateOrCreate([
+                            'id' => $request->contentID[$i],
+                        ],
+                        [
+                            'user_id' => @$document->user_id,
+                            'business_id' => @$document->business_id,
+                            'customer_id' => @$document->customer_id,
+                            'doc_id' => $request->docId,
+                            'content' => $request->docName[$i],
+                        ]
+                    ); 
+
+                    if($request->contentID[$i]){
+                        Notification::updateOrCreate([
+                            'display_date' => date('Y-m-d'),
+                            'table_id' => $data->id,
+                            'table' => 'CustomerDocumentsRequested',
+                            'business_id' => $document->business_id,
+                        ],[
+                            'user_id' => $document->user_id , 'customer_id' => $document->customer_id , 'display_date' => date('Y-m-d') , 'table_id' => $data->id , 'table' => 'CustomerDocumentsRequested',  'display_time' =>date('H:i'), 'business_id' => $document->business_id,'type' => 'personal','status'=>'Alert'
+                        ]); 
+                    }
+                }
             }
         }
+
+
+        if(!empty($request->deletIds)){
+            CustomerDocumentsRequested::whereIn('id', $request->deletIds)->delete();
+        }   
+        
 
         $request->session()->flash('success', 'Documents Content Added successfully.');
         return redirect()->route('business_customer_show',['business_id'=>@$document->business_id ,'id'=> @$document->customer_id]);
@@ -820,8 +843,20 @@ class CustomerController extends Controller {
     }
 
     public function requestSign($business_id,$id){
-        $document = CustomersDocuments::findOrFail($id);
+        $document = CustomersDocuments::find($id);
         $document->update(['status' =>1]);
+
+        Notification::create([
+            'user_id' => Auth::user()->id,
+            'customer_id' =>  $document->customer_id,
+            'table_id' => $document->id,
+            'table' =>  'CustomersDocuments',
+            'display_date' => date('Y-m-d'),
+            'display_time' => date("H:i"),
+            'type' => 'personal',
+            'business_id' => $document->business_id,
+            'status'  =>  'Alert'
+        ]);
     }
 
     public function download($id)
@@ -864,6 +899,28 @@ class CustomerController extends Controller {
             ]
         );
 
+        $data = ['user_id' => $note->user_id , 'customer_id' => $note->customer_id , 'display_date' => $note->due_date , 'table_id' => $note->id , 'table' => 'CustomerNotes',  'display_time' => $note->time, 'business_id' => $note->business_id,'type' => 'business','status'=>'Alert'];
+
+        if($note->display_chk == 1){
+            $data['type'] = 'personal';
+            Notification::updateOrCreate([
+                'display_date' => $note->due_date,
+                'table_id' => $note->id,
+                'table' => 'CustomerNotes',
+                'type' => 'personal',
+                'business_id' => $note->business_id,
+            ],$data);
+        }
+
+        $data['type'] = 'business';
+        Notification::updateOrCreate([
+                'display_date' => $note->due_date,
+                'table_id' => $note->id,
+                'table' => 'CustomerNotes',
+                'type' => 'business',
+                'business_id' => $note->business_id,
+            ],$data);
+        
         if($note){
             $word = $request->id ? 'updated' : 'Added';
             return response()->json(['status'=>200,'message'=>'Note '.$word.' Successfully.']);

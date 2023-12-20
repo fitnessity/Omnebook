@@ -208,6 +208,8 @@
 	.searchbox .form-control.padding-lrtb { padding: 10px 0 10px;}
 	.searchbox .form-control.padding-lrtb-one {padding: 10px 0px 10px 0px;}
 	.searchbox {  padding: 10px 15px;}
+	.width-345 { max-width: 345px;}
+	
 }
 
 @media screen and (max-width: 699px){ 
@@ -345,12 +347,14 @@
 	.classes-list{padding: 5px 0px;}
 	.links-set a{font-size: 14px;}
 	.setoflinkes{display: block;}
+	.width-345 { max-width: 100%;}
 }
 
 @media screen and (min-width: 351px) and (max-width: 370px){
 	.btn-previous {  width: 100% !important;  display: inline-block !important;}
 	.btn-grp button {padding: 15px 11px;}
 	header .header-right .header-bottom-sp{margin-bottom: 6px;}
+	table.dataTable.nowrap th, table.dataTable.nowrap td{white-space: unset !important;}
 }
 
 @media screen and (min-width: 280px) and (max-width: 350px){

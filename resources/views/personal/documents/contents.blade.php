@@ -6,16 +6,16 @@
 			@csrf
 			<input type="hidden" name="id" name="id" value="{{$c->id}}">
 			<div class="row y-middle">
-				<div class="col-md-4">
-					<lable> {{$c->content}}</lable>
+				<div class="col-md-4 col-sm-4 col-9">
+					<label>{{$c->content}}</label>
 				</div>
 				
-				<div class="col-md-3">
+				<div class="col-md-3 col-sm-3 col-3">
 					@if($c->path)
 						<a href="{{Storage::URL($c->path)}}" target="_blank" class="mr-10"><i class="fas fa-eye"></i> View </a>
 					@endif
 				</div>
-				<div class="col-md-5">
+				<div class="col-md-5 col-sm-5 col-12">
 					<input type="hidden" name="old_profile_pic" value="">
 					<div class="avatar-xs p-0 rounded-circle profile-photo-edit">
 						<input id="profile-img-file-input" name ="image" type="file" class="profile-img-file-input" data-cid="{{$c->id}}">
