@@ -52,7 +52,6 @@
 									</div>	
 								</form>
 							</div>
-							
 							<div id="divstep2" style="display: none;">
 								<form action="#">
 									<div class="sign-step_2">
@@ -82,8 +81,7 @@
 										</div>
 									</div>
 								</form>
-							</div>
-							
+							</div>							
 							<div id="divstep3" style="display: none;">
 
 								<form action="#">

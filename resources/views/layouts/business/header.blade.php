@@ -2,7 +2,6 @@
 use App\User;
 $total_quantity = 0;
 ?>
-
 <!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
@@ -39,13 +38,13 @@ $total_quantity = 0;
         <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
 		<link rel="stylesheet" href="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
 		<!--datatable css-->
-		<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+		<link href="{{asset('/public/dashboard-design/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
 		<!--datatable responsive css-->
-		<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
-		<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
-		
+		<link href="{{asset('/public/dashboard-design/css/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+		<link href="{{asset('/public/dashboard-design/css/buttons.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+				
         <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
-         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+         <script src="{{asset('/public/dashboard-design/js/jquery-3.6.4.min.js')}}"></script>
            <script src="{{asset('/public/js/slimselect.min.js')}}"></script>
 		<script src="{{env('APP_URL')}}/public/js/ratings.js"></script>
         <style>/*
