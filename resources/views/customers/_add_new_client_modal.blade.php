@@ -10,7 +10,7 @@
 	<div class="modal-dialog modal-dialog-centered modal-80">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="window.location.reload()"></button>
 			</div>
 			<div class="modal-body body-tbm">
 				<div class="row">
@@ -744,7 +744,7 @@
         		$('.request-access').css('display','block');
         		$('.request-access').html('<p>To import the name, contact information, family members and credit card information for '+ ui.item.firstname + ' ' +  ui.item.lastname +', they must authorize you access.</p><label>Steps </label><div class="request-step"><p>1. Click the Request Access button below. </p><p>2. Fitnessity will send an email to the customer to authorize you access.</p><p>3. Once authorization has been granted, the sync button will turn green, and you can sync the information immediately.</p><button type="button" style="margin-bottom: 10px;" class="signup-new request_access_btn" id="request_access_btn">Request Access</button></div><div class="error text-center errclass"></div>');
                  return false;
-	        }
+	        },
     	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
     		 let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.firstname.charAt(0).toUpperCase() + '</p></div></div> ';
 
@@ -863,7 +863,9 @@
     }
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{env('AUTO_COMPLETE_ADDRESS_GOOGLE_KEY')}}&callback=initMap" async defer></script>
+<!-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{env('AUTO_COMPLETE_ADDRESS_GOOGLE_KEY')}}&callback=initMap" async defer></script>
+ -->
+
 
 <script>
 $(document).ready(function() {
@@ -889,10 +891,7 @@ $(document).ready(function() {
 	        },
 	    };
 
-	    // Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 3
 	    const elements1 = stripe1.elements(options1);
-
-	    // Create and mount the Payment Element
 	    const paymentElement1 = elements1.create('payment');
 	    paymentElement1.mount('#payment-element1');
 
@@ -904,7 +903,6 @@ $(document).ready(function() {
 	        $('#submit1').text('loading...')
 
 	        const {error} = await stripe1.confirmSetup({
-	        //Elements` instance that was used to create the Payment Element
 	            elements: elements1,
 	            confirmParams: {
 	                return_url: '{{ route('business.customers.refresh_payment_methods',['business_id' => $business_id ])}}?customer_id=' + cus_id,
@@ -912,21 +910,14 @@ $(document).ready(function() {
 	        });
 
 	        if (error) {
-	          // This point will only be reached if there is an immediate error when
-	          // confirming the payment. Show error to your customer (for example, payment
-	          // details incomplete)  
 	          const messageContainer1 = document.querySelector('#error-message1');
 	          messageContainer1.textContent = error.message;
 	          $('#error-message1').show();
 
 	        } else {
-	          	// Your customer will be redirected to your `return_url`. For some payment
-	          	// methods like iDEAL, your customer will be redirected to an intermediate
-	          	// site first to authorize the payment, then redirected to the `return_url`.
+	          	
 	        }
 	        $('#submit1').text('Add on file')
 	    });
   	}
 </script>
-
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" ></script> -->

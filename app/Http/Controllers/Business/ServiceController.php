@@ -182,7 +182,6 @@ class ServiceController extends BusinessBaseController
            /* print_r($serviceData);exit;*/
         }
 
-
         if($request->step != '3'){
              if($serviceId != 0){
                 $service = $thisService->update($serviceData);
