@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Personal;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth,Redirect,Storage,Hash,Response;
-use App\{CustomersDocuments,CustomerDocumentsRequested,BusinessTerms,Customer,UserFamilyDetail};
+use App\{CustomersDocuments,CustomerDocumentsRequested,BusinessTerms,Customer,UserFamilyDetail,Notification};
 use \PDF;
 use GuzzleHttp\Client;
 
@@ -41,10 +41,10 @@ class DocumentController extends Controller
             return $query->where('business_id', $request->business_id);
         })->get();
         //where('status',1)
-        
 
-        $lastbooking = $customer->bookingDetail()->orderby('created_at','desc')->first();
-        return view('personal.documents.index',compact('documents','customer','lastbooking'));
+        $terms = BusinessTerms::where('cid' ,$request->business_id)->first();
+        $lastBooking = $customer->bookingDetail()->orderby('created_at','desc')->first();
+        return view('personal.documents.index',compact('documents','customer','lastBooking','terms'));
     }
 
     /**
@@ -101,6 +101,18 @@ class DocumentController extends Controller
         $imageName = '';
         if($request->hasFile('image')){
             $imageName = $request->file('image')->store('documents');
+
+            Notification::create([
+                'user_id' => Auth::user()->id,
+                'customer_id' => $content->customer_id,
+                'table_id' => $content->id,
+                'table' =>  'CustomerDocumentsRequested',
+                'display_date' => date('Y-m-d'),
+                'display_time' => date("H:i"),
+                'type' => 'business',
+                'business_id' => $content->business_id,
+                'status'  =>  'Alert'
+            ]);
         }else{
             $imageName = $request->old_profile_pic;
         }
@@ -190,20 +202,40 @@ class DocumentController extends Controller
             Storage::disk('s3')->put($filename, $image);
             if($request->type) {
                 if($request->type == 'terms'){
-                    $customer->update(['terms_sign_path'=> $filename]);
+                    $customer->update(['terms_sign_path'=> $filename ,'terms_condition' =>date('Y-m-d') ]);
                 }else if($request->type == 'contract'){
-                    $customer->update(['contract_sign_path'=> $filename]);
+                    $customer->update(['contract_sign_path'=> $filename,'terms_contract' =>date('Y-m-d')]);
                 }else if($request->type == 'liability'){
-                    $customer->update(['liability_sign_path'=> $filename]);
+                    $customer->update(['liability_sign_path'=> $filename,'terms_liability' =>date('Y-m-d')]);
                 }else if($request->type == 'covid'){
-                    $customer->update(['covid_sign_path'=> $filename]);
+                    $customer->update(['covid_sign_path'=> $filename,'terms_covid' =>date('Y-m-d')]);
                 }else {
-                    $customer->update(['refund_sign_path'=> $filename]);
+                    $customer->update(['refund_sign_path'=> $filename,'terms_refund' =>date('Y-m-d')]);
                 }
+
+                $tableId = $customer->id;
+                $table = 'Customer';
+                $businessId =  $customer->business_id;
+
             }else{
                 Storage::delete($documents->sign_path); 
                 $documents->update(['sign_date'=> date('Y-m-d') ,'sign_path'=> $filename]);
+                $tableId =  $documents->id;
+                $table =  'CustomersDocuments';
+                $businessId =  $documents->business_id;
             }
+
+            Notification::create([
+                'user_id' => Auth::user()->id,
+                'customer_id' =>  $customer->id,
+                'table_id' => $tableId,
+                'table' =>  $table,
+                'display_date' => date('Y-m-d'),
+                'display_time' => date("H:i"),
+                'type' => 'business',
+                'business_id' =>  $businessId,
+                'status'  =>  'Alert'
+            ]);
         }
     }
 

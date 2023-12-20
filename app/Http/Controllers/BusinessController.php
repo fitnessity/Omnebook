@@ -264,6 +264,10 @@ class BusinessController extends Controller
         return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingRecPercentage','completedRecPercentage','totalsalePercentage','bookingCountPercentage','customerCountPercentage','todayBooking','services','startDate','endDate','topBookedCategories','notificationAry' ,'startDateCalendar','endDateCalendar','completeRecurringAmount','reminingRecurringAmount','recurringAmount','left_days','activePlan'));
     }
 
+    public function notification_delete(Request $request){
+        Notification::where(['id'=>$request->id])->delete();
+    }
+
     public function getBookingList(Request $request){
        /* $programName = $this->businessservice->findById($request->sid)->program_name;
         $date = date('m-d-Y',strtotime($request->date));
@@ -1078,8 +1082,8 @@ class BusinessController extends Controller
             if(isset($company['company_images']) && $company['company_images'] != null) {
             	$company['company_images'] = json_decode($company['company_images']);
             }
-            $max_price = UserService::where('company_id', $company['id'])->max('price');
-            $min_price = UserService::where('company_id', $company['id'])->min('price');
+            $max_price = UserService::where('company_id', @$company['id'])->max('price');
+            $min_price = UserService::where('company_id', @$company['id'])->min('price');
 
             $user_professional_detail = UserProfessionalDetail::where('company_id', $page_id)->first();
 			
@@ -1159,7 +1163,7 @@ class BusinessController extends Controller
         $companyData = $serviceData = $servicePrice = $businessSpec = $services = $max_price = $min_price = [];
         $company['company_images'] = [];
 		
-		if(!empty($company)) {
+		if($company) {
             $userId = $company->user_id;
         
             $business_details = BusinessCompanyDetail::where('cid', $page_id)->get();
@@ -1306,7 +1310,7 @@ class BusinessController extends Controller
 				'user_id' => $pageid,
 				'sender_id' => $userid,
 				'type' => '1',
-				'notification_type' => '1',
+				//'notification_type' => '1',
 				'status' => 0,
 			]);
 			$response = array( 'type' => 'success' );

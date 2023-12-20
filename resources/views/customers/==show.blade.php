@@ -1496,7 +1496,7 @@
 				</div>					
 			</div>
 			<div class="modal-footer">
-				<button type="button" id="upload-pdf" class="btn btn-primary btn-red upload-pdf">Add Document</button>
+				<button type="button" id="upload-pdf" class="btn btn-primary btn-red">Add Document</button>
 			</div>
 		</div>
 	</div>
@@ -1723,43 +1723,46 @@
 	   });
 	}
 
-	$('.upload-pdf').click(function(){
-     		$('.err').html('');
-     		var signature = ($('#signature').val() !== undefined && $('#signature').val() !== null) ? $('#signature').val() : 0;
-      	var formdata = new FormData();
-      	formdata.append('file',docToUpload);
-      	formdata.append('sign',signature);
-      	formdata.append('id','{{$customerdata->id}}');
-      	formdata.append('title',$('#docTitle').val());
-       	formdata.append('_token','{{csrf_token()}}')
-       	$.ajax({
-            url: '{{route('upload_docs')}}',
-            type:'post',
-            dataType: 'json',
-            enctype: 'multipart/form-data',
-            data:formdata,
-            processData: false,
-            contentType: false,
-            headers: {'X-CSRF-TOKEN': $("#_token").val()},
-            success: function (response) { 
-            	$('#docMessage').removeClass();
-               if(response.status == 200){
-                  $('#docMessage').addClass('font-green font-16');
-                  $('#docTitle').val('');
-                  $('#docMessage').html(response.message);
-                  setTimeout(function() {
-					        window.location.reload();
-					   }, 1000);
-               }
-               else{
-             		$('#docMessage').addClass('font-red font-16');
-             		$('#docMessage').html(response.message).addClass('alert alert-danger alert-dismissible');
-               }
-               $('#file').val('')
-            }
-      	});
-    	});
+	$(document).ready(function () {
 
+      $('#upload-pdf').click(function(){
+        	
+        		$('.err').html('');
+        		var signature = ($('#signature').val() !== undefined && $('#signature').val() !== null) ? $('#signature').val() : 0;
+         	var formdata = new FormData();
+         	formdata.append('file',docToUpload);
+         	formdata.append('sign',signature);
+         	formdata.append('id','{{$customerdata->id}}');
+         	formdata.append('title',$('#docTitle').val());
+          	formdata.append('_token','{{csrf_token()}}')
+          	$.ajax({
+               url: '{{route('upload_docs')}}',
+               type:'post',
+               dataType: 'json',
+               enctype: 'multipart/form-data',
+               data:formdata,
+               processData: false,
+               contentType: false,
+               headers: {'X-CSRF-TOKEN': $("#_token").val()},
+               success: function (response) { 
+               	$('#docMessage').removeClass();
+                  if(response.status == 200){
+                     $('#docMessage').addClass('font-green font-16');
+                     $('#docTitle').val('');
+                     $('#docMessage').html(response.message);
+                     setTimeout(function() {
+						        window.location.reload();
+						   }, 1000);
+                  }
+                  else{
+                		$('#docMessage').addClass('font-red font-16');
+                		$('#docMessage').html(response.message).addClass('alert alert-danger alert-dismissible');
+                  }
+                  $('#file').val('')
+               }
+         	});
+    	});
+   });
 </script>
 
 	<script type="text/javascript">

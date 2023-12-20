@@ -51,7 +51,7 @@
                         <div class="col">
                             <div class="h-100">
                                 <div class="row mb-3 pb-1">
-                                    @if(Auth::user()->currentPlan()->amount == 0 || Auth::user()->chkDaysLeft() < 14)
+                                    @if((Auth::user()->currentPlan() && Auth::user()->currentPlan()->amount == 0 )|| Auth::user()->chkDaysLeft() < 14)
                                       
     									<div class="col-6">
                                             @if(Auth::user()->freeTrial() == 'free')
@@ -69,7 +69,7 @@
     												</div>
     												<div class="col-lg-10 col-md-10 col-9">	
     													<p class="fs-13">
-                                                            You have {{Auth::user()->chkDaysLeft()}}  left in your @if($activePlan) plan. @else free trial. @endif To keep experiences all the features after the trial period, evert payment details and select a plan now to begin after your @if($activePlan) plan @else trial. @endif is over.
+                                                            You have {{Auth::user()->chkDaysLeft()}}  left in your @if($activePlan) plan. @else free trial. @endif To keep experiences all the features after the trial period, evert payment details and select a plan now to begin after your @if($activePlan) plan @else trial @endif is over.
     													</p>
     												</div>
     											</div>

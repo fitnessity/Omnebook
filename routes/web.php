@@ -215,6 +215,9 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/task','DesignController@task')->name('task');
 	Route::get('/attendance_belt','DesignController@attendance_belt')->name('attendance_belt');
 	Route::get('/announcements_provider','DesignController@announcements_provider')->name('announcements_provider');
+    Route::get('/announcements_provider_category','DesignController@announcements_provider_category')->name('announcements_provider_categorys');
+	Route::get('/announce_pro_add_category','DesignController@announce_pro_add_category')->name('announce_pro_add_category');
+	Route::get('/announce_pro_add_announcements','DesignController@announce_pro_add_announcements')->name('announce_pro_add_announcements');
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -260,6 +263,8 @@ Route::get('/getAddOnData', 'ActivityController@getAddOnData')->name('getAddOnDa
 
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/dashboard/{date?}/{id?}', 'BusinessController@dashboard')->name('business_dashboard');
+
+    Route::post('/notification/delete/', 'BusinessController@notification_delete')->name('notification_delete');
     Route::get('/getBookingList', 'BusinessController@getBookingList')->name('getBookingList');
     Route::post('/getscheduleactivity', 'BusinessController@getscheduleactivity')->name('getscheduleactivity');
     Route::post('/getExpiringMembership', 'BusinessController@getExpiringMembership')->name('getExpiringMembership');

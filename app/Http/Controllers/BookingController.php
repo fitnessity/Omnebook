@@ -47,7 +47,7 @@ class BookingController extends Controller {
         $sid = $request->sid;
         $type = $request->type;
         $categoryList  = [];
-       // $categoryList = $activity->price_details()->business_price_details_ages;
+        $categoryList = $activity->BusinessPriceDetailsAges;
         return view('business.services.view_bookings_of_service', compact('data', 'date', 'programName', 'sid' ,'type','categoryList'));
     }
 

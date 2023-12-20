@@ -19,4 +19,8 @@ class CustomerDocumentsRequested extends Model
     public function CustomersDocuments() {
         return $this->belongsTo(CustomersDocuments::class, 'doc_id');
     }
+
+    public function Customer(){
+        return $this->belongsTo(Customer::class,'customer_id');
+    }
 }
