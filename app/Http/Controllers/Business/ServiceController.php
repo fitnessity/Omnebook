@@ -25,7 +25,6 @@ class ServiceController extends BusinessBaseController
             $displayModal =  Session::get('scheduleEdit');
             Session::forget('scheduleEdit');
         }
-
         return view('business.services.index', compact('companyName','companyId', 'services','displayModal'));
     }
     /**
@@ -181,7 +180,6 @@ class ServiceController extends BusinessBaseController
 
            /* print_r($serviceData);exit;*/
         }
-
 
         if($request->step != '3'){
              if($serviceId != 0){
