@@ -175,7 +175,7 @@
     <!-- END layout-wrapper -->
 
     @include('layouts.business.footer')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
     <script>
         
         $(document).ready(function() {
@@ -195,7 +195,10 @@
                     $('#bookingmodel').html('');
                 }
             }
-            //alert(date);
+
+            var category = $('#category').val();
+            var type = (type === 'category') ? ($('.nav-link.active').attr('id') === 'all' ? '' : $('.nav-link.active').attr('id')) : type;
+
             $.ajax({
                 url:"{{route('getbookingmodeldata')}}",
                 xhrFields: {
@@ -206,6 +209,7 @@
                     sid:sid,
                     date:date,
                     type:type,
+                    category:category,
                 },
                 success:function(data){
                     $('.moreoptions'+sid).modal('hide');
