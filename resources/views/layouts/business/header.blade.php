@@ -38,8 +38,9 @@ $total_quantity = 0;
         
         <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
 		<link rel="stylesheet" href="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-           <script src="{{asset('/public/js/slimselect.min.js')}}"></script>
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
+        <script src="{{asset('/public/dashboard-design/js/jquery-3.6.4.min.js')}}"></script>
+        <script src="{{asset('/public/js/slimselect.min.js')}}"></script>
 		<script src="{{env('APP_URL')}}/public/js/ratings.js"></script>
         <style>/*
             .btn-style-one {
