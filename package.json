@@ -24,6 +24,6 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "colorette": "^1.2.1"
+        "colorette": "^1.4.0"
     }
 }
