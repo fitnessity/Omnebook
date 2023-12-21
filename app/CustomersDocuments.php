@@ -39,4 +39,14 @@ class CustomersDocuments extends Model
     public function CustomerDocumentsRequested(){
         return $this->hasMany(CustomerDocumentsRequested::class, 'doc_id');
     }
+
+    public function checkUploadDocument(){
+        $docrRequest = $this->CustomerDocumentsRequested;
+        foreach ($docrRequest as $value) {
+            if($value->path){
+                return true;
+            }
+        }
+        return false;
+    }
 }

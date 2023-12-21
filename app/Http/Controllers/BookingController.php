@@ -42,13 +42,14 @@ class BookingController extends Controller {
     public function getbookingmodeldata(Request $request){
         $activity = $this->businessservice->findById($request->sid);
         $programName = $activity->program_name;
+        $categoryId = $request->categoryId;
         $date = date('m-d-Y',strtotime($request->date));
-        $data = $this->bookings->getbusinessbookingsdata($request->sid,date('Y-m-d',strtotime($request->date)) ,$request->type );
+        $data = $this->bookings->getbusinessbookingsdata($request->sid,date('Y-m-d',strtotime($request->date)) ,$request->type,$categoryId );
         $sid = $request->sid;
         $type = $request->type;
         $categoryList  = [];
         $categoryList = $activity->BusinessPriceDetailsAges;
-        return view('business.services.view_bookings_of_service', compact('data', 'date', 'programName', 'sid' ,'type','categoryList'));
+        return view('business.services.view_bookings_of_service', compact('data', 'date', 'programName', 'sid' ,'type','categoryList','categoryId'));
     }
 
     public function getRescheduleModel(Request $request){

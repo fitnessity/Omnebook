@@ -617,6 +617,7 @@ class CustomerController extends Controller {
         $bId = Crypt::decryptString($business_id);
         $user = User::where('id',$user_id)->first();
         $chk = Customer::where('user_id' , $user->id)->first();
+
         if($chk == ''){
             profileSyncToBusiness($bId, $user);
         }else{
@@ -668,7 +669,7 @@ class CustomerController extends Controller {
             })->get();
 
             foreach($paymentHistory as $data){
-            $history = Transaction::where(['user_id' =>$chk->id ,'user_type'=>'Customer'])->first();
+                $history = Transaction::where(['user_id' =>$chk->id ,'user_type'=>'Customer'])->first();
                 if($history == ''){
                     Transaction::create([
                         'item_id' => $data->item_id,
@@ -688,6 +689,19 @@ class CustomerController extends Controller {
                 }
             }
         }
+
+
+        Notification::create([
+            'user_id' => Auth::user()->id,
+            'customer_id' =>  NULL,
+            'table_id' => Auth::user()->id,
+            'table' =>  'User',
+            'display_date' => date('Y-m-d'),
+            'display_time' => date("H:i"),
+            'type' => 'business',
+            'business_id' =>  $bId,
+            'status'  =>  'Alert'
+        ]);
         
         return Redirect()->route('personal.orders.index');
     }

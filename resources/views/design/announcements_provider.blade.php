@@ -26,7 +26,7 @@
 								<div class="row y-middle">
 									<div class="col-sm-auto">
 										<div class="mb-20">
-											<a href="http://dev.fitnessity.co/design/announce_pro_add_announcements" type="button" class="btn btn-red"><i class="ri-add-line align-bottom me-1"></i> Add Announcement </a>
+											<button type="button" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#add_announcements"><i class="ri-add-line align-bottom me-1"></i> Add Announcement</button>
 										</div>
 									</div>
 									<div class="col-sm-auto">
@@ -374,7 +374,93 @@
 	</div>
 </div><!-- END layout-wrapper -->
 
-
+<!-- Modal -->
+<div class="modal fade" id="add_announcements" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-50">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="staticBackdropLabel">Required Settings</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="" autocomplete="off" class="needs-validation" novalidate="">
+					<div class="row y-middle">
+						<div class="col-lg-12">
+							<div class="mb-3">
+								<label class="form-label">Title</label>
+								<input type="text" class="form-control" required="">
+								<div class="float-right">Max to be <span id="programDescLeft"> 50</span></div>
+							</div>
+						</div>
+						<div class="col-lg-12">
+							<div class="form-group mb-3">
+								<label class="form-label">Short Description</label>
+								<textarea class="form-control" id="" placeholder="Enter your description" rows="2"></textarea>
+								<div class="float-right">Max to be <span id="programDescLeft"> 200</span></div>
+							</div>
+						</div>
+						<div class="col-lg-12">
+							<div class="form-group mb-3">
+								<label class="form-label">Category</label>
+								<select name="relationship[0]" id="relationship[0]" class="form-select" required="required">
+									<option value="" selected="">Select Category</option>
+									<option value="">Option 1</option>
+									<option value="">Option 2</option>
+									<option value="">Option 3</option>
+									<option value="">Option 4</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+							<div class="form-group mb-3">
+								<label class="form-label">Start Date</label>
+								<input type="text" class="form-control flatpickr" data-provider="flatpickr" id="JoiningdatInput" data-date-format="d M, Y" data-deafult-date="24 Nov, 2021" placeholder="Select date" />
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+							<div class="form-group mb-3">
+								<label class="form-label">Start Time</label>
+								<input type="text" class="form-control" id="" value="">
+							</div>
+						</div>
+										
+						<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+							<div class="form-group mb-3">
+								<label class="form-label">End Date</label>
+								<input type="text" class="form-control end-flatpickr" data-provider="flatpickr" id="JoiningdatInput" data-date-format="d M, Y" data-deafult-date="24 Nov, 2021" placeholder="Select date" />
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+							<div class="form-group mb-3">
+								<label class="form-label">End Time</label>
+								<input type="text" class="form-control" id="" value="">
+							</div>
+						</div>
+						<div class="col-lg-12 col-md-6 col-sm-6 col-12">
+							<div class="form-group mb-3">
+								<input type="checkbox" id="Expire1" name="Expire1" value="Expire">
+									<label for="Expire1"> Does This Announcement Expire ? 
+										 <i class="fas fa-info-circle fs-15" data-bs-toggle="tooltip" data-bs-placement="right" title="Set your expiration time and date if you want this announcement to expire. This will remove it from the client announcement portal"></i>
+									</label>
+							</div>
+						</div>
+						<div class="col-lg-12">
+							<div class="">
+								<label class="form-label">Announcement</label>
+								<div id="ckeditor-classic">
+									<p>Tommy Hilfiger men striped pink sweatshirt. Crafted with cotton. Material composition is 100% organic cotton. This is one of the world’s leading designer lifestyle brands and is internationally recognized for celebrating the essence of classic American cool style, featuring preppy with a twist designs.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>	
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-red">Submit</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 @include('layouts.business.footer')
 

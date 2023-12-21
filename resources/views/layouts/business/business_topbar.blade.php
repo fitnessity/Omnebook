@@ -172,6 +172,11 @@
 																$firstLetter = $n->CustomerDocumentsRequested->Customer->first_letter;
 																$fullName = $n->CustomerDocumentsRequested->Customer->full_name;
 																$text = $n->CustomerDocumentsRequested->content .' is uploded by '.$fullName;
+															}else if($n->table == 'User'){
+																$profilePic = $n->User->getPic();
+																$firstLetter = $n->User->first_letter;
+																$fullName = $n->User->full_name;
+																$text = 'Granted Access by '.$fullName.' on '.date('m/d/Y',strtotime($n->display_date));
 															}
 														@endphp
 														@if($profilePic)
@@ -185,13 +190,13 @@
 															<div class="">
 																<div class="row">
 																	<div class="col-md-7">
-																		<a href="{{route('business_customer_show' ,['business_id'=> Auth::user()->cid, 'id' =>$n->customer_id])}}" >
+																		<a @if($n->table != 'User') href="{{route('business_customer_show' ,['business_id'=> Auth::user()->cid, 'id' =>$n->customer_id])}}" @endif >
 																			<h6 class="mt-0 mb-1 fs-13 fw-semibold">{{$fullName}}</h6>
 																		</a>
 
 																	</div>
 																	<div class="col-md-2">
-																		<a href="{{route('business_customer_show' ,['business_id'=> Auth::user()->cid, 'id' =>$n->customer_id])}}" class="mb-0">View</a>
+																		 @if($n->table != 'User') <a href="{{route('business_customer_show' ,['business_id'=> Auth::user()->cid, 'id' =>$n->customer_id])}}" class="mb-0">View</a> @endif 
 																	</div>
 																	<div class="col-md-3">
 																		<a onclick="deleteNoteFromNotification({{$n->id}})" class="mb-0">Delete</a>
@@ -249,6 +254,11 @@
 																$firstLetter = $n->CustomerDocumentsRequested->Customer->first_letter;
 																$fullName = $n->CustomerDocumentsRequested->Customer->full_name;
 																$text = $n->CustomerDocumentsRequested->content .' is uploded by '.$fullName;
+															}else if($n->table == 'User'){
+																$profilePic = $n->User->getPic();
+																$firstLetter = $n->User->first_letter;
+																$fullName = $n->User->full_name;
+																$text = 'Granted Access by '.$fullName.' on '.date('m/d/Y',strtotime($n->display_date));
 															}
 														@endphp
 														@if($profilePic)
@@ -262,13 +272,13 @@
 															<div class="">
 																<div class="row">
 																	<div class="col-md-7">
-																		<a href="{{route('business_customer_show' ,['business_id'=> Auth::user()->cid, 'id' =>$n->customer_id])}}" >
+																		<a @if($n->table != 'User') href="{{route('business_customer_show' ,['business_id'=> Auth::user()->cid, 'id' =>$n->customer_id])}}" @endif  >
 																			<h6 class="mt-0 mb-1 fs-13 fw-semibold">{{$fullName}}</h6>
 																		</a>
 
 																	</div>
 																	<div class="col-md-2">
-																		<a href="{{route('business_customer_show' ,['business_id'=> Auth::user()->cid, 'id' =>$n->customer_id])}}" class="mb-0">View</a>
+																		<a @if($n->table != 'User') href="{{route('business_customer_show' ,['business_id'=> Auth::user()->cid, 'id' =>$n->customer_id])}}" @endif  class="mb-0">View</a>
 																	</div>
 																	<div class="col-md-3">
 																		<a onclick="deleteNoteFromNotification({{$n->id}})" class="mb-0">Delete</a>

@@ -1120,7 +1120,7 @@ class BookingRepository
         return $return;
     }
     
-    public function getbusinessbookingsdata($sid,$date,$type){
+    public function getbusinessbookingsdata($sid,$date,$type,$categoryId){
         $currentDate = Carbon::now(); 
         switch ($type) {
             case 'date':
@@ -1139,10 +1139,8 @@ class BookingRepository
         $userBookingDetail = [];
         $checkInDetail = BookingCheckinDetails::where(function ($query) use ($date, $type, $sid) {
                 $query->when($type === 'week', function ($q) use ($date) {
-
                     $weekStart = Carbon::parse($date)->startOfWeek();
                     $weekEnd = Carbon::parse($date)->endOfWeek();
-
                     $q->whereBetween('checkin_date', [$weekStart, $weekEnd]);
                 })
                 ->when($type === 'month', function ($q) use ($date) {
@@ -1157,12 +1155,6 @@ class BookingRepository
             ->where('bd.sport',$sid)
             ->select('booking_checkin_details.*', 'bd.id as bdid', 'bd.sport')->orderBy('bd.bookedtime', 'desc')
             ->get();
-
-        /*foreach($checkInDetail as $detail){
-            if($detail->UserBookingDetail != ''){
-               $userBookingDetail [] = $detail->UserBookingDetail;
-            }
-        }*/
 
         return $checkInDetail;
     }

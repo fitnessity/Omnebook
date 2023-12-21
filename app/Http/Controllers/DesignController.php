@@ -284,12 +284,9 @@ class DesignController extends Controller {
         return view('design.announcements_provider_category');
     }
 	
-	public function announce_pro_add_category(Request $request){
-        return view('design.announce_pro_add_category');
+	public function customer_dashboard(Request $request){
+        return view('design.customer_dashboard');
     }
 	
-	public function announce_pro_add_announcements(Request $request){
-        return view('design.announce_pro_add_announcements');
-    }
 }
 
