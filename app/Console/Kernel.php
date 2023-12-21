@@ -36,6 +36,7 @@ class Kernel extends ConsoleKernel
                     $user_booking_detail->transfer_to_provider();
                 }catch (Exception $e) {
                     $errormsg = $e->getError()->message;
+                    var_dump($errormsg);
                 }
             }
         })->everyTenMinutes();
@@ -73,20 +74,6 @@ class Kernel extends ConsoleKernel
             }
         })->daily();
 
-
-        $schedule->call(function () {
-            $transactions = Transaction::where(['status' => 'requires_capture'])->get();
-
-            foreach($transactions as $transaction){
-                try {
-                    $transaction->capture();
-
-                }catch (Exception $e) {
-                    $errormsg = $e->getError()->message;
-                }
-            }
-        })->daily();
-
         $schedule->call(function () {
             $transactions = Transaction::where(['status' => 'requires_capture'])->get();
             foreach($transactions as $transaction){
@@ -94,6 +81,7 @@ class Kernel extends ConsoleKernel
                     $transaction->capture();
                 }catch (Exception $e) {
                     $errormsg = $e->getError()->message;
+                    var_dump($errormsg);
                 }
             }
         })->daily();
