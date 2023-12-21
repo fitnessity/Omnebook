@@ -29,7 +29,6 @@
 											<button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-red">
 												<i class="ri-add-line align-bottom me-1"></i>Add Categories 
 											</button>
-											<a href="http://dev.fitnessity.co/design/announce_pro_add_category" class="btn btn-red"><i class="ri-add-line align-bottom me-1"></i> Add Categories </a>
 										</div>
 									</div>
 									<div class="col-sm-auto">

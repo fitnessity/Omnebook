@@ -22,7 +22,11 @@ class Notification extends Model
     }
 
     public function Customer(){
-        return $this->belongsTo(Customer::class,'table_id');
+        return $this->belongsTo(Customer::class,'customer_id');
+    }
+
+    public function User(){
+        return $this->belongsTo(User::class,'user_id');
     }
 
     public function CustomerDocumentsRequested(){

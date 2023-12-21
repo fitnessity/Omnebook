@@ -2796,7 +2796,7 @@ padding: 0px 0px 3px 2px !important; */
 	color: #484f56;
 }
 .nav-tabs-custom .nav-item .nav-link{
-  color: #fff;
+  color: #000;
 }
 .nav-tabs-custom .nav-item .nav-link.active{
   color: #ed1b24;
@@ -5614,4 +5614,10 @@ div#termsdiv{order: 4;}
 }
 .selected-date{
 	display: grid;
+}
+.cus-provider-logo img{
+	width: 185px;
+}
+.cus-provider-logo{
+	text-align: right;
 }

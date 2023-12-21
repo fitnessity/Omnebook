@@ -277,9 +277,9 @@
 
     function getNotificationDashboard($type = null){
         $notifications = Notification::orderby('id','desc')->whereDate('display_date', '=', now())
-            ->whereTime('display_time', '<=', now()->format('H:i'))->where(['user_id'=> Auth::user()->id , 'business_id' => Auth::user()->cid ])->where('type','business')
+            ->whereTime('display_time', '<=', now()->format('H:i'))->where([ 'business_id' => Auth::user()->cid ])->where('type','business')
             ->orWhere(function ($query) {
-                $query->whereDate('display_date', '<=', now())->where(['user_id'=> Auth::user()->id , 'business_id' => Auth::user()->cid ])->where('type','business');
+                $query->whereDate('display_date', '<=', now())->where([ 'business_id' => Auth::user()->cid ])->where('type','business');
             });
         if($type){
             $notifications->where('status','Alert');

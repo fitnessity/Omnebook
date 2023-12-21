@@ -52,7 +52,7 @@
 										
 										<div  class="col-lg-2 col-md-2 col-sm-3 col-8">
 											@if(!$d->CustomerDocumentsRequested->isEmpty())
-												<button type="button" class="btn btn-red mb-5 mmt-10 mmb-10" onclick="openDocumentModal('{{$d->id}}','upload')">Upload Document </button>
+												<button type="button" class="btn btn-red mb-5 mmt-10 mmb-10" onclick="openDocumentModal('{{$d->id}}','{{ $d->checkUploadDocument() == 1 ? "load" : "upload"}}')"> @if($d->checkUploadDocument() == 1) Edit @else Upload @endif Document</button>
 
 											@endif
 										</div>

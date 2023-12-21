@@ -196,9 +196,6 @@
                 }
             }
 
-            var category = $('#category').val();
-            var type = (type === 'category') ? ($('.nav-link.active').attr('id') === 'all' ? '' : $('.nav-link.active').attr('id')) : type;
-
             $.ajax({
                 url:"{{route('getbookingmodeldata')}}",
                 xhrFields: {
@@ -209,7 +206,7 @@
                     sid:sid,
                     date:date,
                     type:type,
-                    category:category,
+                    categoryId:($('#category').val() == 'all') ? '' : $('#category').val(),
                 },
                 success:function(data){
                     $('.moreoptions'+sid).modal('hide');
