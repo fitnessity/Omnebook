@@ -1021,7 +1021,7 @@
 																								  <i class="ri-more-fill"></i>
 																								  <ul>
 																									<li>
-																										<a href="#" data-modal-width=" " data-behavior="ajax_html_modal" data-url="{{route('business.customers.card_editing_form', ['customer_id' => $customerdata->id, 'return_url' => url()->full()])}}">
+																										<a href="#" data-reload="1" data-modal-width=" " data-behavior="ajax_html_modal" data-url="{{route('business.customers.card_editing_form', ['customer_id' => $customerdata->id, 'return_url' => url()->full()])}}" >
 																										<i class="fas fa-plus text-muted"></i>Add</a>
 																									</li>
 																								  </ul>
