@@ -39,7 +39,7 @@
 	<div class="modal-dialog modal-dialog-centered" id="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-btn-modal"></button>
 			</div>
 			<div class="modal-body"></div>
 		</div>
@@ -356,15 +356,15 @@
 	<script src="{{asset('/public/dashboard-design/js/form-wizard.init.js')}}"></script>
 	
 	 <!--datatable js-->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/jquery.dataTables.min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/dataTables.bootstrap5.min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/dataTables.responsive.min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/dataTables.buttons.min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/buttons.print.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/js/datatable/buttons.html5.min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/vfs_fonts.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/pdfmake.min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/jszip.min.js')}}"></script>    
 
     <script src="assets/js/pages/datatables.init.js"></script>
   
@@ -427,6 +427,7 @@ function closeMobileNav() {
 		$("#modal-dialog").removeClass();
 		$("#modal-dialog").addClass('modal-dialog modal-dialog-centered');
         var width = $(this).data('modal-width');
+        var reload = $(this).data('reload');
         if(width == undefined){
             width = 'modal-50';
         }
@@ -437,6 +438,11 @@ function closeMobileNav() {
             success: function(html){
             	$('#ajax_html_modal .modal-body').html(html)
                 $('#ajax_html_modal .modal-dialog').addClass(width);
+                if(reload == 1 ){
+                	$('#close-btn-modal').attr('onclick', 'window.location.reload()');
+                }else{
+                	$('#close-btn-modal').removeAttr('onclick');
+                }
             	if(chkbackdrop == 1){
             		$('#ajax_html_modal').modal({ backdrop: 'static', keyboard: false });
         		}else{
