@@ -23,7 +23,7 @@
 											<div class="mx-line d-inline-block mmt-10">
 												<label class="mr-10-title">{{@$bs->business_services_with_trashed->program_name}}</label>
 												<label>Remaining: {{@$bs->getremainingsession()}}/{{@$bs['pay_session']}} |</label>
-												<label>Expiration: {{date('m/d/Y',strtotime(@$bs->expired_at))}} {{@$bs->userBookingStatus->SingleTransaction->id}}</label>
+												<label>Expiration: {{date('m/d/Y',strtotime(@$bs->expired_at))}}</label>
 											</div>
 										</div>
 										<div class="col-lg-2 col-md-3 col-8">

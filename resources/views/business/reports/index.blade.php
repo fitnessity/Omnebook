@@ -64,13 +64,13 @@
 												<div class="card card-body box-border">
 													<div class="d-grid align-items-center">
 														<div class="report-links">
-															<a href="#">Bookings Today</a>
+															<a href="{{route('business.todays_booking.index')}}">Bookings Today</a>
 														</div>
 														<div class="report-links">
-															<a href="#">Bookings By Category</a>
+															<a href="{{route('business.booking_category')}}">Bookings By Category</a>
 														</div>
 														<div class="report-links remove-border">
-															<a href="#">Bookings History</a>
+															<a href="{{route('business.booking_history')}}">Bookings History</a>
 														</div>
 													</div>
 												</div>												
@@ -87,16 +87,16 @@
 												<div class="card card-body box-border">
 													<div class="d-grid align-items-center">
 														<div class="report-links">
-															<a href="#">Inactive Clients</a>
+															<a href="{{route('business.client.index')}}">Inactive Clients</a>
 														</div>
 														<div class="report-links">
 															<a href="#">Attendance</a>
 														</div>
 														<div class="report-links">
-															<a href="#">Client Birthday List</a>
+															<a href="{{route('business.client.birthday')}}">Client Birthday List</a>
 														</div>
 														<div class="report-links">
-															<a href="#">New Clients</a>
+															<a href="{{route('business.client.new_client')}}">New Clients</a>
 														</div>
 														<div class="report-links">
 															<a href="#">Cancellations & No Shows</a>

@@ -79,12 +79,13 @@ class Customer extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['age', 'profile_pic_url', 'full_name', 'first_letter'];
+    protected $appends = ['age', 'profile_pic_url', 'full_name', 'first_letter' ,'company_name'];
 
 
     public function stripePaymentMethods(){
         return StripePaymentMethod::whereRaw('((user_type = "User" and user_id = ?) or (user_type = "Customer" and user_id = ?))', [$this->user_id, $this->id]);
     }
+
     public function getProfilePicUrlAttribute()
     {
         $profile_pic = '';
@@ -105,6 +106,10 @@ class Customer extends Authenticatable
 
     public function getFullNameAttribute(){
         return $this->fname . ' ' . $this->lname;
+    }
+
+    public function getCompanyNameAttribute(){
+        return $this->company_information->company_name ?? 'N/A';
     }
 
     public function getFirstLetterAttribute(){
@@ -248,11 +253,11 @@ class Customer extends Authenticatable
         return $result->count();
     }
 
-    public function active_memberships($sport = null){
-
+    public function active_memberships($sport = null,$expireDate= null){
+        $expireDate = $expireDate ??  Carbon::now()->format('Y-m-d');
         $used_user_booking_detail_ids = $this->BookingCheckinDetails()->whereRaw('booking_detail_id is not null')->where('after_use_session_amount', 0)->pluck('booking_detail_id')->toArray();
 
-        $results = $this->bookingDetail()->where('order_type','membership')->where('status', 'active')->whereRaw('(user_booking_details.expired_at > ? or user_booking_details.expired_at is null)', Carbon::now()->format('Y-m-d'))
+        $results = $this->bookingDetail()->where('order_type','membership')->where('status', 'active')->whereRaw('(user_booking_details.expired_at > ? or user_booking_details.expired_at is null)', $expireDate)
                                          ->whereNotIn('user_booking_details.id', $used_user_booking_detail_ids);
  
         return $results; 
@@ -396,11 +401,17 @@ class Customer extends Authenticatable
     }
 
     public function is_active(){
-        $checkindetail = BookingCheckinDetails::where('customer_id', $this->id)->whereDate("checkin_date",">=", Carbon::now()->subMonths(3))->orderby('checkin_date','desc')->first();
-        if( $checkindetail != ''){
-            return true;
+        $checkindetail = BookingCheckinDetails::where('customer_id', $this->id)->orderby('checkin_date','desc');
+        $chk = $checkindetail->get();
+        if($chk->isNotEmpty()){
+            $detail = $checkindetail->whereDate("checkin_date",">=", Carbon::now()->subMonths(3))->first();
+            if( $detail != ''){
+                return 'Active';
+            }else{
+                return 'InActive';
+            }
         }else{
-            return false;
+            return 'Prospect';
         }
     }
 

@@ -355,6 +355,7 @@
 	.btn-grp button {padding: 15px 11px;}
 	header .header-right .header-bottom-sp{margin-bottom: 6px;}
 	table.dataTable.nowrap th, table.dataTable.nowrap td{white-space: unset !important;}
+	.ph-provider {  margin-right: 0;}
 }
 
 @media screen and (min-width: 280px) and (max-width: 350px){
@@ -362,7 +363,8 @@
 	.add-category-btn{font-size: 13px; padding: 7px 8px; line-height: 27px;}
 	.card-350-body{padding-left: 7px !important; padding-right: 7px !important;}
 	.btn-previous {  width: 100% !important;  display: inline-block !important;}
-}
+	.ph-provider {  margin-right: 0;}
+} 
 
 @media screen and (max-width: 280px){
 	.flip-view{display: block !important; }
@@ -377,6 +379,7 @@
 	.modal-80 {  max-width: 100%;}
 	.add-category-btn{padding: 6px 9px; line-height: 31px; font-size: 13px;}
 	.card-350-body{padding-left: 3px; padding-right: 3px;}
+	.ph-provider {  margin-right: 0;}
 }
 
 @media screen and (min-width: 625px) and (max-width: 675px){

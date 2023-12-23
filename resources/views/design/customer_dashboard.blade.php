@@ -8,7 +8,17 @@
 		<div class="page-content">
 			<div class="container-fluid">
 				<div class="row mb-3">
-					<div class="col-6">
+					<div class="col-12">
+						<div class="text-center">
+							<div class="page-heading ph-provider">
+								<label>Lorem Ipsum</label>
+							</div>
+							<div class="cus-provider-logo">
+								<img src="http://dev.fitnessity.co//public/images/fitnessity_logo1_black.png">
+							</div>
+						</div>
+					</div>
+					<!--<div class="col-6">
 						<div class="page-heading">
 							<label>Lorem Ipsum</label>
 						</div>
@@ -17,7 +27,7 @@
 						<div class="cus-provider-logo">
 							<img src="http://dev.fitnessity.co//public/images/fitnessity_logo1_black.png">
 						</div>
-					</div>				
+					</div>-->
 				</div><!--end row-->
 				<div class="row mb-3 pb-1">
 					<div class="col-12">
@@ -58,8 +68,7 @@
 						</div><!-- end card -->
 					</div><!-- end col -->
 
-					<div class="col-xl-3 col-md-6">
-						<!-- card -->
+					<!--<div class="col-xl-3 col-md-6">
 						<div class="card card-animate">
 							<div class="card-body">
 								<div class="d-flex align-items-center">
@@ -81,9 +90,9 @@
 										</span>
 									</div>
 								</div>
-							</div><!-- end card body -->
-						</div><!-- end card -->
-					</div><!-- end col -->
+							</div>
+						</div>
+					</div> -->
 
 					<div class="col-xl-3 col-md-6">
 						<!-- card -->
@@ -108,8 +117,8 @@
 										</span>
 									</div>
 								</div>
-							</div><!-- end card body -->
-						</div><!-- end card -->
+							</div>
+						</div>
 					</div><!-- end col -->
 
 					<!--<div class="col-xl-3 col-md-6">
@@ -150,54 +159,62 @@
 							</div><!-- end card-header -->
 
 							<div class="card-body">
-								<div class="d-flex align-middle y-middle">
-									<div class="flex-shrink-0">
-										<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648221-snow ski.jpg" class="avatar-md rounded img-fluid shadow" style="height: 60px;" alt="">
-									</div>
-									<div class="flex-grow-0 ms-3">
-										<h6 class="mb-1 lh-base">Total Active Memberships <span class="font-red">(0)</span></h6>
-										<p class="text-muted fs-12 mb-0">Dec 12, 2021 <i class="mdi mdi-circle-medium align-middle mx-1"></i>09:22 AM</p>
-									</div>
-									<div class="flex-grow-1 ms-3 text-end">
-										<button type="button" class="btn btn-red">View</button>
-									</div>
-								</div><!-- end -->
-								<div class="d-flex mt-4 y-middle">
-									<div class="flex-shrink-0">
-										<img src="https://fitnessity-production.s3.amazonaws.com/activity/hRaDXKY7LX9XAuBp73XuNI4tlzMaJTpN1DC5vnqw.jpg" class="avatar-md rounded img-fluid shadow" style="height: 60px;" alt="">
-									</div>
-									<div class="flex-grow-0 ms-3">
-										<h6 class="mb-1 lh-base"> Notes & Alerts <span class="font-red">(0)</span> </h6>
-										<p class="text-muted fs-12 mb-0">Dec 03, 2021 <i class="mdi mdi-circle-medium align-middle mx-1"></i>12:09 PM</p>
-									</div>
-									<div class="flex-grow-1 ms-3 text-end">
-										<button type="button" class="btn btn-red">View</button>
-									</div>
-								</div><!-- end -->
-								<div class="d-flex mt-4 y-middle">
-									<div class="flex-shrink-0">
-										<img src="https://fitnessity-production.s3.amazonaws.com/activity/SlRSfhii37WWCZHnJVKAAfAelsHJstTCzG6W3Y9R.webp" class="avatar-md rounded img-fluid shadow" style="height: 60px;" alt="">
-									</div>
-									<div class="flex-grow-0 ms-3">
-										<h6 class="mb-1 lh-base">Announcements & News <span class="font-red">(0)</span></h6>
-										<p class="text-muted fs-12 mb-0">Nov 22, 2021 <i class="mdi mdi-circle-medium align-middle mx-1"></i>11:47 AM</p>
-									</div>
-									<div class="flex-grow-1 ms-3 text-end">
-										<button type="button" class="btn btn-red">View</button>
-									</div>
-								</div><!-- end -->
-								<div class="d-flex mt-4 y-middle">
-									<div class="flex-shrink-0">
-										<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="avatar-md rounded img-fluid shadow" style="height: 60px;" alt="">
-									</div>
-									<div class="flex-grow-0 ms-3">
-										<h6 class="mb-1 lh-base">Documents & Terms Alerts <span class="font-red">(0)</span></h6>
-										<p class="text-muted fs-12 mb-0">Nov 18, 2021 <i class="mdi mdi-circle-medium align-middle mx-1"></i>06:13 PM</p>
-									</div>
-									<div class="flex-grow-1 ms-3 text-end">
-										<button type="button" class="btn btn-red">View</button>
-									</div>
-								</div><!-- end -->
+								<div class="dashed-border">
+									<div class="d-flex mb-3 align-middle y-middle">
+										<div class="flex-shrink-0">
+											<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648221-snow ski.jpg" class="avatar-md rounded img-fluid shadow" style="height: 60px;" alt="">
+										</div>
+										<div class="flex-grow-0 ms-3">
+											<h6 class="mb-1 lh-base">Total Active Memberships <span class="font-red">(0)</span></h6>
+											<p class="text-muted fs-12 mb-0">Dec 12, 2021 <i class="mdi mdi-circle-medium align-middle mx-1"></i>09:22 AM</p>
+										</div>
+										<div class="flex-grow-1 ms-3 text-end">
+											<button type="button" class="btn btn-red">View</button>
+										</div>
+									</div><!-- end -->
+								</div>
+								<div class="dashed-border">
+									<div class="d-flex mt-3 mb-3 y-middle">
+										<div class="flex-shrink-0">
+											<img src="https://fitnessity-production.s3.amazonaws.com/activity/hRaDXKY7LX9XAuBp73XuNI4tlzMaJTpN1DC5vnqw.jpg" class="avatar-md rounded img-fluid shadow" style="height: 60px;" alt="">
+										</div>
+										<div class="flex-grow-0 ms-3">
+											<h6 class="mb-1 lh-base"> Notes & Alerts <span class="font-red">(0)</span> </h6>
+											<p class="text-muted fs-12 mb-0">Dec 03, 2021 <i class="mdi mdi-circle-medium align-middle mx-1"></i>12:09 PM</p>
+										</div>
+										<div class="flex-grow-1 ms-3 text-end">
+											<button type="button" class="btn btn-red">View</button>
+										</div>
+									</div><!-- end -->
+								</div>
+								<div class="dashed-border">
+									<div class="d-flex mt-3 mb-3 y-middle">
+										<div class="flex-shrink-0">
+											<img src="https://fitnessity-production.s3.amazonaws.com/activity/SlRSfhii37WWCZHnJVKAAfAelsHJstTCzG6W3Y9R.webp" class="avatar-md rounded img-fluid shadow" style="height: 60px;" alt="">
+										</div>
+										<div class="flex-grow-0 ms-3">
+											<h6 class="mb-1 lh-base">Announcements & News <span class="font-red">(0)</span></h6>
+											<p class="text-muted fs-12 mb-0">Nov 22, 2021 <i class="mdi mdi-circle-medium align-middle mx-1"></i>11:47 AM</p>
+										</div>
+										<div class="flex-grow-1 ms-3 text-end">
+											<button type="button" class="btn btn-red">View</button>
+										</div>
+									</div><!-- end -->
+								</div>
+								<div class="dashed-border">
+									<div class="d-flex mt-4 mb-3 y-middle">
+										<div class="flex-shrink-0">
+											<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="avatar-md rounded img-fluid shadow" style="height: 60px;" alt="">
+										</div>
+										<div class="flex-grow-0 ms-3">
+											<h6 class="mb-1 lh-base">Documents & Terms Alerts <span class="font-red">(0)</span></h6>
+											<p class="text-muted fs-12 mb-0">Nov 18, 2021 <i class="mdi mdi-circle-medium align-middle mx-1"></i>06:13 PM</p>
+										</div>
+										<div class="flex-grow-1 ms-3 text-end">
+											<button type="button" class="btn btn-red">View</button>
+										</div>
+									</div><!-- end -->
+								</div>
 							</div><!-- end card body -->
 						</div><!-- end card -->
 					</div><!-- end col -->
@@ -214,7 +231,7 @@
 									</div>
 								</div>
 								<div class="d-flex align-middle y-middle">
-									<div class="flex-shrink-0">
+									<div class="flex-shrink-1">
 										<h6 class="mb-1 lh-base fs-14">8/7 <i class="mdi mdi-circle-medium align-middle mx-1"></i>8am - Vinyasa Flow - Malibu Beach Yoga </h6>
 									</div>
 									<div class="flex-grow-1 ms-3 text-end">
