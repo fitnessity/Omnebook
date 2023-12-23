@@ -39,7 +39,7 @@
 	<div class="modal-dialog modal-dialog-centered" id="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-btn-modal"></button>
 			</div>
 			<div class="modal-body"></div>
 		</div>
@@ -415,6 +415,7 @@ function closeMobileNav() {
 		$("#modal-dialog").removeClass();
 		$("#modal-dialog").addClass('modal-dialog modal-dialog-centered');
         var width = $(this).data('modal-width');
+        var reload = $(this).data('reload');
         if(width == undefined){
             width = 'modal-50';
         }
@@ -425,6 +426,11 @@ function closeMobileNav() {
             success: function(html){
             	$('#ajax_html_modal .modal-body').html(html)
                 $('#ajax_html_modal .modal-dialog').addClass(width);
+                if(reload == 1 ){
+                	$('#close-btn-modal').attr('onclick', 'window.location.reload()');
+                }else{
+                	$('#close-btn-modal').removeAttr('onclick');
+                }
             	if(chkbackdrop == 1){
             		$('#ajax_html_modal').modal({ backdrop: 'static', keyboard: false });
         		}else{
