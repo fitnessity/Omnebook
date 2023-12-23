@@ -199,7 +199,7 @@
 									 </li> -->
 
 									<li class="pc-link">
-										<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('personal.manage-account.index')}}" style="color: white;"> Manage Accounts</a>
+										<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('family-member.index')}}" style="color: white;"> Manage Accounts</a>
 									</li>
 								
 									<!-- <li class="pc-link">
@@ -284,7 +284,6 @@
 <!-- Sticky Footer new design -->
    <!-- JAVASCRIPT -->
    
-   <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap" async defer></script>
     <script src="{{asset('/public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('/public/dashboard-design/js/simplebar.min.js')}}"></script>
     <script src="{{asset('/public/dashboard-design/js/waves.min.js')}}"></script>
@@ -314,6 +313,8 @@
     <!-- App js -->
     <script src="{{asset('/public/dashboard-design/js/app.js')}}"></script> 
     <!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+ 
+	
 	
 	<!-- list.js min js -->
 	<script src="{{asset('/public/dashboard-design/js/list.min.js')}}"></script>
@@ -354,19 +355,6 @@
 	<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>
 	
 	<script src="{{asset('/public/dashboard-design/js/form-wizard.init.js')}}"></script>
-	
-	 <!--datatable js-->
-	<script src="{{asset('/public/dashboard-design/js/datatable/jquery.dataTables.min.js')}}"></script>
-	<script src="{{asset('/public/dashboard-design/js/datatable/dataTables.bootstrap5.min.js')}}"></script>
-	<script src="{{asset('/public/dashboard-design/js/datatable/dataTables.responsive.min.js')}}"></script>
-	<script src="{{asset('/public/dashboard-design/js/datatable/dataTables.buttons.min.js')}}"></script>
-	<script src="{{asset('/public/dashboard-design/js/datatable/buttons.print.min.js')}}"></script>
-    <script src="{{asset('/public/dashboard-design/js/datatable/buttons.html5.min.js')}}"></script>
-	<script src="{{asset('/public/dashboard-design/js/datatable/vfs_fonts.js')}}"></script>
-	<script src="{{asset('/public/dashboard-design/js/datatable/pdfmake.min.js')}}"></script>
-	<script src="{{asset('/public/dashboard-design/js/datatable/jszip.min.js')}}"></script>    
-
-    <script src="assets/js/pages/datatables.init.js"></script>
   
  <!-- new design end -->
 
@@ -455,7 +443,7 @@ function closeMobileNav() {
     $(document).on('click', '[data-behavior~=send_receipt]', function(e){
         var item_type = $(this).data('item-type');
         e.preventDefault()
-        /*if(item_type == 'no' || item_type == 'Membership'){*/
+        if(item_type == 'no' || item_type == 'Membership'){
             var width = $(this).data('modal-width');
             if(width == undefined){
                 width = 'modal-50';
@@ -468,9 +456,9 @@ function closeMobileNav() {
                     $('#ajax_html_modal').modal('show')
                 }
             });
-        /*}else{
+        }else{
             alert("This is a Recurring Payment. A receipt is only for Membership or Activity Purchase.");
-        }*/
+        }
     });
 
 	$(document).on('focus', '[data-behavior~=text-phone]', function(e){
