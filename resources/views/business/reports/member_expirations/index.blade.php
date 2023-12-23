@@ -311,7 +311,7 @@
 	    	if(type == 'excel'){
 	    		filename = 'membership.xlsx';
 	    	}else if(type == 'pdf'){
-	    		filename = 'sample.pdf';
+	    		filename = 'membership.pdf';
 	    	}
 	
 	    	var link = document.createElement('a');

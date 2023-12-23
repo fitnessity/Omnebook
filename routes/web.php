@@ -102,6 +102,16 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('/getCards','CreditCardReportController@getCards')->name('credit_card_report.getCards');
     Route::get('/getMoreCards','CreditCardReportController@getMoreCards')->name('credit_card_report.getMoreCards');
     Route::get('/credit_cards/export','CreditCardReportController@export')->name('credit_card_report.export');
+
+    Route::get('/todays_booking/','BookingReportController@index')->name('todays_booking.index');    
+    Route::get('/booking-category/','BookingReportController@booking_category')->name('booking_category');    
+    Route::get('/booking-history/','BookingReportController@booking_history')->name('booking_history');    
+    Route::get('/todays_booking/export','BookingReportController@export')->name('todays_booking.export');
+
+    Route::get('/inactive-client/','ClientReportController@index')->name('client.index');
+    Route::get('/new-client/','ClientReportController@newClient')->name('client.new_client');
+    Route::get('/new-client/export','ClientReportController@export')->name('new_client.export');
+    Route::get('/clients-birthday/','ClientReportController@clientbirthday')->name('client.birthday');
     
 
     Route::resource('reports', 'ReportsController')->only(['index']);

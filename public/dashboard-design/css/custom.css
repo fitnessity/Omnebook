@@ -5618,6 +5618,13 @@ div#termsdiv{order: 4;}
 .cus-provider-logo img{
 	width: 185px;
 }
+.dashed-border{
+	border-bottom: 1px dashed #878a99;
+}
+.ph-provider{
+	display: inline-block;
+	margin-right: 35px;	
+}
 .cus-provider-logo{
-	text-align: right;
+	display: inline-block;
 }
