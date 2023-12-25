@@ -190,7 +190,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="text-center">
-					<p class="fs-14">You are about to remove your sync with Fitness {{$business->public_company_name}} denying access, the provider will no longer be able to link with your account. This allows the provider to automatically update your account and booking information with them.</p>
+					<p class="fs-14">You are about to remove your sync with Fitness {{@$business->public_company_name}} denying access, the provider will no longer be able to link with your account. This allows the provider to automatically update your account and booking information with them.</p>
 					<a class="addbusiness-btn-modal btn btn-red" href="{{route('personal.grantAccess',['business_id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => request()->type,'status' =>'deny'])}}">Deny Access</a>
 				</div>
 			</div>

@@ -157,5 +157,4 @@
 		</div>
 	</div>
 @empty
-	No booking available for today 
 @endforelse

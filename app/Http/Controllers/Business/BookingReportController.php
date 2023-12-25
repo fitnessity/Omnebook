@@ -31,9 +31,10 @@ class BookingReportController extends BusinessBaseController
             $compareStartDt->addDay();
         }
 
-         $sortedDates = array_reverse($dates);
+        $sortedDates = array_reverse($dates);
         $bookings = UserBookingDetail::where(['business_id'=> $business_id,'order_type'=>'Membership'])->orderBy('created_at','desc')->whereDate('created_at', '>=', $filterStartDate)->whereDate('created_at', '<=', $filterEndDate);
-    	return view('business.reports.booking.index',compact('bookings','filterStartDate','filterEndDate','sortedDates'));
+        $displayChk = 1;
+    	return view('business.reports.booking.index',compact('bookings','filterStartDate','filterEndDate','sortedDates','displayChk'));
     }
 
 
@@ -53,7 +54,8 @@ class BookingReportController extends BusinessBaseController
 
         $sortedDates = array_reverse($dates);
         $bookings = UserBookingDetail::where(['business_id'=> $business_id,'order_type'=>'Membership'])->orderBy('created_at','desc')->whereDate('created_at', '>=', $filterStartDate)->whereDate('created_at', '<=', $filterEndDate);
-        return view('business.reports.booking.booking_category',compact('bookings','filterStartDate','filterEndDate','sortedDates'));
+        $displayChk = 1;
+        return view('business.reports.booking.booking_category',compact('bookings','filterStartDate','filterEndDate','sortedDates','displayChk'));
     }
 
     public function booking_history(Request $request,$business_id){
@@ -73,8 +75,8 @@ class BookingReportController extends BusinessBaseController
         $sortedDates = array_reverse($dates);
           
         $bookings = UserBookingDetail::where(['business_id'=> $business_id,'order_type'=>'Membership'])->orderBy('created_at','desc')->whereDate('created_at', '>=', $filterStartDate)->whereDate('created_at', '<=', $filterEndDate);
-
-        return view('business.reports.booking.booking_history',compact('bookings','filterStartDate','filterEndDate','sortedDates')); 
+        $displayChk = 1;
+        return view('business.reports.booking.booking_history',compact('bookings','filterStartDate','filterEndDate','sortedDates','displayChk')); 
     }
 
     public function export(Request $request,$business_id){

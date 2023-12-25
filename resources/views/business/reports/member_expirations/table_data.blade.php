@@ -26,7 +26,7 @@
 					</tr>
 					 @php $counter++; @endphp
 				@empty
-					<tr> <td colspan="6"></td> </tr>
+					<tr> <td colspan="6">No Expiration Memberships To Display </td> </tr>
 				@endforelse
 			</tbody>
 		</table>

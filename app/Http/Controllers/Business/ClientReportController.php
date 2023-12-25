@@ -20,7 +20,7 @@ class ClientReportController extends BusinessBaseController
 
     public function index(Request $request,$business_id)
     {
-        $date = date("Y-m-d");
+        $date = new DateTime();
         $filterStartDate = $request->startDate != '' ? Carbon::parse($request->startDate) : Carbon::parse($date);
         $filterEndDate = $request->endDate !=  '' ? Carbon::parse($request->endDate) : Carbon::parse($date);
 
@@ -35,9 +35,76 @@ class ClientReportController extends BusinessBaseController
         $sortedDates = array_reverse($dates);
 
         $clients = Customer::where(['business_id'=> $business_id])->get();
-        return view('business.reports.client.index',compact('clients','filterStartDate','filterEndDate','sortedDates'));
+        return view('business.reports.client.index',compact('clients','filterStartDate','filterEndDate','sortedDates','date'));
     }
 
+    public function clients($days,$edate,$sDate, $business_id){
+
+        $booking = Customer::where(['business_id'=> $business_id])->get();
+
+        if($days == 'all') {
+            if($edate != '' && $edate < date('Y-m-d')){
+                $enddate = $edate;
+            }else{
+                $enddate = date('Y-m-d');
+            }
+            $clients = $booking->whereDate('expired_at', '<',$enddate);
+        }
+
+        /*else if($days == 'today'){
+            if($edate != '' && $edate == date('Y-m-d')){
+                $enddate = $edate;
+            }else{
+                $enddate = date('Y-m-d');
+            }
+            $clients = $booking->whereDate('expired_at', '=',$enddate);
+        }else{
+            if($edate != ''){
+                $enddate = $edate;
+            }else{
+                $enddate = date('Y-m-d', strtotime("+".$days." days"));
+            }
+            $clients = $booking->whereDate('expired_at', '<=',$enddate);
+        }
+        
+        if($sDate != ''){
+            $clients = $clients->whereDate('expired_at', '>=', $sDate);
+        }elseif($days != 'all'){
+            $clients = $clients->whereDate('expired_at', '>=', date('Y-m-d'));
+        }*/
+        
+        return  $clients;
+    }
+
+
+    public function getInactiveClients(Request $request , $business_id){
+        //print_r($request->all());exit;
+        $type = $request->days;
+
+        $expiringclients = Customer::where(['business_id'=> $business_id])->get();
+        $clients = $expiringclients->filter(function ($item) use($request){
+            return $item->is_active($request->type,$request->startDate, $request->endDate) == 0;
+        });
+        if($request->limit == ''){
+            $clients = $clients->take(10);
+        }
+        return view('business.reports.client.table_data',compact('clients','type'));
+    }
+
+    public function getMoreInactiveClients(Request $request , $business_id)
+    {
+        $type = $request->days;
+        $expiringclients = Customer::where(['business_id'=> $business_id])->get();
+        $offset = $request->get('offset', 0); // Offset for pagination, passed from the frontend
+        $limit = 10; // Number of records to load per request
+      
+        $clients = $expiringclients->filter(function ($item) use($request){
+            return $item->is_active($request->type,$request->startDate, $request->endDate) == 0;
+        });
+        $clients = $clients->take($offset);
+        return view('business.reports.client.table_data',compact('clients','type'));
+    }
+    
     public function newClient(Request $request,$business_id){
         $endDate = date("Y-m-t");
         $firstDate = date('Y-m-01');

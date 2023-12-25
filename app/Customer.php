@@ -404,14 +404,10 @@ class Customer extends Authenticatable
         $checkindetail = BookingCheckinDetails::where('customer_id', $this->id)->orderby('checkin_date','desc');
         $chk = $checkindetail->get();
         if($chk->isNotEmpty()){
-            $detail = $checkindetail->whereDate("checkin_date",">=", Carbon::now()->subMonths(3))->first();
-            if( $detail != ''){
-                return 'Active';
-            }else{
-                return 'InActive';
-            }
+            $detail = $checkindetail->whereDate("checkin_date",">=",Carbon::now()->subMonths(3))->first();
+            return $detail != '' ? 'Active' : 'InActive';
         }else{
-            return 'Prospect';
+           return $this->created_at >= Carbon::now()->subMonths(3) ? 'Prospect' : 'InActive';
         }
     }
 
@@ -470,6 +466,17 @@ class Customer extends Authenticatable
     public function getCheckInId($bookingId,$date){
         $checkInDetail = $this->BookingCheckinDetails()->where('booking_detail_id',$bookingId)->whereDate('checkin_date' ,$date)->first();
         return @$checkInDetail->id;
+    }
+
+    public function get_Inactive($type,$startDate, $endDate){
+        $checkindetail = BookingCheckinDetails::where('customer_id', $this->id)->orderby('checkin_date','desc');
+        $chk = $checkindetail->get();
+        if($chk->isNotEmpty()){
+            $detail = $checkindetail->whereDate("checkin_date",">=",Carbon::parse($startDate)->subMonths(3))->whereDate("checkin_date","<=",Carbon::parse($endDate)->subMonths(3))->first();
+            return $detail != '' ? 1 : 0;
+        }else{
+           return $this->created_at >= Carbon::parse($startDate)->subMonths(3) ? 1 : 0;
+        }
     }
     
 }
