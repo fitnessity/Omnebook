@@ -109,9 +109,12 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/todays_booking/export','BookingReportController@export')->name('todays_booking.export');
 
     Route::get('/inactive-client/','ClientReportController@index')->name('client.index');
+    Route::post('/get-inactive-clients/','ClientReportController@getInactiveClients')->name('client.get-inactive-clients');
+    Route::get('/get-more-inactive-clients/','ClientReportController@getMoreInactiveClients')->name('client.getMoreInactiveClients');
     Route::get('/new-client/','ClientReportController@newClient')->name('client.new_client');
     Route::get('/new-client/export','ClientReportController@export')->name('new_client.export');
     Route::get('/clients-birthday/','ClientReportController@clientbirthday')->name('client.birthday');
+
     
 
     Route::resource('reports', 'ReportsController')->only(['index']);

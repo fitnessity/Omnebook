@@ -54,11 +54,10 @@
 															<span class="avatar-title bg-primary rounded-circle fs-2">1</span>
 														</div>
 														<div class="flex-grow-1 ms-3 sale-date">
-															<h2 class="mb-0">Choose Dates</h2>
+															<h2 class="mb-0">Choose Date Range</h2>
 														</div>
 													</div>  
 													<form method="GET">
-														<input type="hidden" name="filterOptions" id="filterOptionsvalue" value="{{request()->filterOptions}}">
 														<div class="row d-flex align-items-center">
 															<div class="col-lg-3 col-md-4 col-sm-4">
 																<label> Start Date </label>
@@ -66,7 +65,7 @@
 															<div class="col-lg-7 col-md-8 col-sm-8">
 																<div class="form-group mb-10">	
 																	<div class="input-group">
-																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="startDate" id="startDate"  readonly="readonly" value="{{$filterStartDate}}" placeholder="StartDate">
+																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="startDate" id="startDate"  readonly="readonly" placeholder="StartDate" value="">
 																		<div class="input-group-text bg-primary border-primary text-white">
 																			<i class="ri-calendar-2-line"></i>
 																		</div>
@@ -81,7 +80,7 @@
 															<div class="col-lg-7 col-md-8 col-sm-8">
 																<div class="form-group mb-25">	
 																	<div class="input-group">
-																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="endDate" id="endDate"  readonly="readonly" value="{{$filterEndDate}}"  placeholder="StartDate">
+																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="endDate" id="endDate"  readonly="readonly" value="" placeholder="EndDate">
 																		<div class="input-group-text bg-primary border-primary text-white">
 																			<i class="ri-calendar-2-line"></i>
 																		</div>
@@ -91,7 +90,7 @@
 														</div>
 														<div class="row justify-content-md-center">
 															<div class="col-lg-6">
-																<a class="btn btn-black w-100 mb-25" data-behavior="on_change_submit" id="generateReport"> Generate Reports </a>
+																<a class="btn btn-black w-100 mb-25" data-behavior="on_change_submit"> Generate Reports </a>
 															</div>
 														</div>
 													</form>
@@ -101,9 +100,13 @@
 												<div class="card-body border-end-left">
 													<div class="d-flex align-items-center mb-25">
 														<div class="avatar-sm flex-shrink-0">
-															<span class="avatar-title bg-primary rounded-circle fs-2">2</span>
+															<span class="avatar-title bg-primary rounded-circle fs-2">
+																2
+															</span>
 														</div>
-														<div class="flex-grow-1 ms-3 sale-date"><h2 class="mb-0">Export Options</h2></div>
+														<div class="flex-grow-1 ms-3 sale-date">
+															<h2 class="mb-0">Export Options</h2>
+														</div>
 													</div> 	
 													<div class="row justify-content-md-center">
 														<div class="col-lg-6">
@@ -121,64 +124,61 @@
 												</div>
 											</div>
 										</div>
-									</div><!-- end card -->
+									</div>
+									<!-- end card -->
 								</div><!-- end col -->
 							</div>
 
 							<div class="row exclude-from-print mt-5">
-								@foreach($sortedDates as $y=>$date)
-								@php  $newDate = $date->subMonths(1)->format('Y-m-d');  @endphp
-								@if($clients->isNotEmpty())
-									<div class="col-xl-12">
-										<div class="card">
-											<div class="card-header align-items-center d-flex">
-												<h4 class="card-title mb-0 flex-grow-1" id="headingDate">{{$date->format('l, F j, Y')}}</h4>
-											</div><!-- end card header -->
-											<div class="card-body">
-												<input type="hidden" id="type" value="">
-											   <div class="live-preview">
-													<div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnesting">
-														<div class="membership-expirations-table">
-															<div class="table-responsive">
-																<table class="table mb-0">
-																	<thead>
-																		<tr>
-																			<th>No</th>
-																			<th>Name</th>
-																			<th>Email </th>
-																			<th>Birthday</th>
-																			<th>Phone Number</th>
-																			<th>Customers Since</th>
-																			<th></th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		@forelse($clients as $i=>$list)
-																			@if(count($list->active_memberships('',$newDate)->get()) == 0)
-																			<tr>
-																				<td>{{$i+1}}</td>
-																				<td><a href="{{url('business/'.request()->business_id.'/customers/'.@$list->id)}}" class="fw-medium" target="_blank">  {{@$list->full_name}}  </a> </td>
-																				<td>{{@$list->email}}</td>
-																				<td>{{date('m/d/Y',strtotime($list->birthdate))}}</td>
-																				<td>{{@$list->phone_number ?? 'N/A'}}</td>
-																				<td>{{date('m/d/Y',strtotime($list->created_at))}}</td>
-																				<td><a href="{{url('business/'.request()->business_id.'/customers/'.@$list->id)}}"> View </a></td>
-																			</tr>
-																			@endif
-																		@empty
-																			<tr> <td colspan="6"></td> </tr>
-																		@endforelse
-																	</tbody>
-																</table>
-															</div>
+								<div class="col-xl-12">
+									<div class="card">
+										<div class="card-header align-items-center d-flex">
+											<h4 class="card-title mb-0 flex-grow-1" id="headingDate">{{$date->format('l, F j, Y')}}</h4>
+										</div><!-- end card header -->
+										<div class="card-body">
+											<input type="hidden" id="type" value="">
+										   <div class="live-preview">
+												<div class="accordion custom-accordionwithicon accordion-border-box" id="accordionnesting">
+													<div class="accordion-item shadow">
+														<h2 class="accordion-header" id="accordionnestingExampletoday">
+															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapsetoday" aria-expanded="false" aria-controls="accor_nestingExamplecollapsetoday"  onclick="getData('today','')" id="todaydaysbtn">Inactivte Today</button>
+														</h2>
+														<div id="accor_nestingExamplecollapsetoday" class="accordion-collapse collapse scroll-customer" aria-labelledby="accordionnestingExampletoday" data-bs-parent="#accordionnesting">
+															<div class="accordion-body" id="targetDivtoday"></div>
+														</div>
+													</div>
+
+													<div class="accordion-item shadow">
+														<h2 class="accordion-header" id="accordionnestingExample30">
+															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse30" aria-expanded="false" aria-controls="accor_nestingExamplecollapse30"  onclick="getData('30','')" id="30daysbtn">Inactivte In 30 Days</button>
+														</h2>
+														<div id="accor_nestingExamplecollapse30" class="accordion-collapse collapse scroll-customer" aria-labelledby="accordionnestingExample30" data-bs-parent="#accordionnesting">
+															<div class="accordion-body" id="targetDiv30"></div>
+														</div>
+													</div>
+
+													<div class="accordion-item shadow">
+														<h2 class="accordion-header" id="accordionnestingExample90">
+															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse90" aria-expanded="false" aria-controls="accor_nestingExamplecollapse90"  onclick="getData('90','')" id="90daysbtn"> Inactivte In 90 Days </button>
+														</h2>
+														<div id="accor_nestingExamplecollapse90" class="accordion-collapse collapse scroll-customer" aria-labelledby="accordionnestingExample90" data-bs-parent="#accordionnesting">
+															<div class="accordion-body" id="targetDiv90"></div>
+														</div>
+													</div>
+
+													<div class="accordion-item shadow">
+														<h2 class="accordion-header" id="accordionnestingExampleall">
+															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapseall" aria-expanded="false" aria-controls="accor_nestingExamplecollapseall" onclick="getData('all','')" id="alldaysbtn"> All Inactivte Members </button>
+														</h2>
+														<div id="accor_nestingExamplecollapseall" class="accordion-collapse collapse scroll-customer" aria-labelledby="accordionnestingExampleall" data-bs-parent="#accordionnesting">
+															<div class="accordion-body" id="targetDivall"></div>
 														</div>
 													</div>
 												</div>
-											</div><!-- end card-body -->
-										</div><!-- end card -->
-									</div>
-								@endif
-								@endforeach
+											</div>
+										</div><!-- end card-body -->
+									</div><!-- end card -->
+								</div><!--end col-->
 							</div><!--end row-->						
 						</div> <!-- end .h-100-->
                </div> <!-- end col -->
@@ -192,6 +192,71 @@
 	
 <script>
 
+	let offset  = 10;
+ 	var isLoading = false;
+
+	function getData(days,limit){
+		let startDate = $('#startDate').val();
+		let endDate = $('#endDate').val();
+		$('#type').val(days);
+		offset = 10;
+		isLoading = false;
+		$.ajax({
+	  		type: "post",
+         url: "{{route('business.client.get-inactive-clients')}}",
+         data: {
+         	endDate: endDate,
+         	startDate: startDate,
+         	days: days,
+         	limit: limit,
+         	_token: '{{csrf_token()}}',
+         },
+         success: function(response){
+         	$('#targetDiv'+days).html(response);
+         }
+		});
+	}	
+
+	$(document).ready(function () {
+      $(window).scroll(function () {
+      	var type = $('#type').val();
+   		if(type != ''){
+	         if ($(window).scrollTop() + $(window).height() > $("#accor_nestingExamplecollapse"+type).height()) {
+	            // Check if not already loading more records and not all records are loaded
+	            if (!isLoading && offset !== -1) {
+	               loadMoreRecords(type);
+	            }
+	         }
+	      }
+      });
+   });
+
+   function loadMoreRecords(days) {
+   	let startDate = $('#startDate').val();
+		let endDate = $('#endDate').val();
+     	isLoading = true;
+     	$.ajax({
+         url: "{{route('business.client.getMoreInactiveClients')}}",
+         method: 'GET',
+         data: { 
+         	offset: offset,
+         	endDate: endDate,
+         	startDate: startDate,
+         	days: days,
+         },
+         success: function (response) {
+            if (response != '') {
+               $('#targetDiv'+days).html(response);
+               offset = offset + 10;
+               isLoading = false;
+            }else {
+               // All records have been loaded
+               offset = -1;
+            }
+         }
+     });
+   }
+
    flatpickr(".flatpickr-range", {
    	altInput: true,
    	altFormat: "m/d/Y",
@@ -200,13 +265,20 @@
 	});
 
 	$(document).on('click', '[data-behavior~=on_change_submit]', function(e){
-		e.preventDefault()
-		$(this).parents('form').submit();
-	});
+		const sdate = formatDate($('#startDate').val());
+		const edate = formatDate($('#endDate').val());
+		if(sdate && edate){
+		 	e.preventDefault()
+			getData('today');
+			$('#todaydaysbtn').removeClass('collapsed');
+			$('#30daysbtn, #90daysbtn, #alldaysbtn').addClass('collapsed');
 
-	$(document).on('change', '[data-behavior~=on_change_submit]', function(e){
-		$('#filterOptionsvalue').val(this.value);
-		$('#generateReport').click();
+			$('#accor_nestingExamplecollapse30, #accor_nestingExamplecollapse90, #accor_nestingExamplecollapseall').removeClass('show');
+			$('#accor_nestingExamplecollapsetoday').addClass('show');
+			$('#headingDate').html(sdate + ' to ' + edate);
+		}else{
+			alert('Please Select Date Range.');
+		}
 	});
 
 	function formatDate(dateString) {
@@ -216,20 +288,30 @@
 	}
 
 	function exportData(){
-		let startDate = '<?= $filterStartDate ? $filterStartDate->format("Y-m-d") : ''; ?>' || $('#startDate').val();
-		let endDate = '<?= $filterEndDate ? $filterEndDate->format("Y-m-d") : ''; ?>' ||  $('#endDate').val();
+		$('#todaydaysbtn, #30daysbtn, #90daysbtn, #alldaysbtn').removeClass('collapsed');
+		$('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30, #accor_nestingExamplecollapse90, #accor_nestingExamplecollapseall').removeClass('scroll-customer');
+		$('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30, #accor_nestingExamplecollapse90, #accor_nestingExamplecollapseall').addClass('show');
+		getData('today' ,'all');
+		getData('30' ,'all');
+		getData('90' ,'all');
+		getData('all' ,'all');
+
+		let startDate = $('#startDate').val();
+		let endDate = $('#endDate').val();
 		var type = $('#exportOptions').val();
       var filename =  '';
 
 		if(type != '' && type != 'print'){
 
-			var downloadUrl = '{{ route("business.new_client.export") }}' + '?clientType=inactive&type=' + type +'&endDate=' + endDate +
-		        '&startDate=' + startDate;
+			var downloadUrl = '{{ route("business.member_expirations.export") }}' +
+	        '?endDate=' + endDate +
+	        '&startDate=' + startDate +
+	        '&type=' + type;
 
 	    	if(type == 'excel'){
-	    		filename = 'inactive-cleint.xlsx';
+	    		filename = 'in-active.xlsx';
 	    	}else if(type == 'pdf'){
-	    		filename = 'inactive-cleint.pdf';
+	    		filename = 'in-active.pdf';
 	    	}
 	
 	    	var link = document.createElement('a');
@@ -244,6 +326,12 @@
 			}, 1000);
 
 			setTimeout(function() {
+				$('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30, #accor_nestingExamplecollapse90, #accor_nestingExamplecollapseall').addClass('scroll-customer');
+				$('#accor_nestingExamplecollapseall').addClass('scroll-customer');
+				$('#accor_nestingExamplecollapseall').addClass('scroll-customer');
+				$('#accor_nestingExamplecollapseall').addClass('scroll-customer');
+				$('#todaydaysbtn, #30daysbtn, #90daysbtn, #alldaysbtn').addClass('collapsed');
+				$('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30, #accor_nestingExamplecollapse90, #accor_nestingExamplecollapseall').removeClass('show');
 			}, 2000);
 		}
 	}

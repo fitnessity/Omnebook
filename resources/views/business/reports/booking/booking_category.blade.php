@@ -174,7 +174,7 @@
 												          	}
 												         @endphp
 												         @if(count($bookingService) > 0 )
-												         	@php $counter = 0; @endphp
+												         	@php $counter = 0; $displayChk = 0; @endphp
 												         	@foreach($bookingService as $i=>$data)
 												         	<div class="accordion-item shadow">
 	                                                <h2 class="accordion-header" id="headingS{{$counter}}{{$y}}">
@@ -200,7 +200,7 @@
 												          	}
 												         @endphp
 												         @if(count($bookingPriceOption) > 0 )
-												         	@php $counter = 0; @endphp
+												         	@php $counter = 0; $displayChk = 0; @endphp
 												         	@foreach($bookingPriceOption as $i=>$data)
 												         	<div class="accordion-item shadow">
 	                                                <h2 class="accordion-header" id="headingOP{{$counter}}{{$y}}">
@@ -226,7 +226,7 @@
 												          	}
 												         @endphp
 												         @if(count($bookingCategory) > 0 )
-												         	@php $counter = 0; @endphp
+												         	@php $counter = 0; $displayChk = 0; @endphp
 												         	@foreach($bookingCategory as $i=>$data)
 												         	<div class="accordion-item shadow">
 	                                                <h2 class="accordion-header" id="headingC{{$counter}}{{$y}}">
@@ -249,6 +249,16 @@
 									</div>
 								@endif
 								@endforeach
+
+								@if($displayChk == 1)
+								<div class="col-xl-12">
+									<div class="card">
+										<div class="mt-10 mb-10 ml-5">
+											<span class="mr-10 ml-5" >No Bookings To Display</span>
+										</div>
+									</div>
+								</div>
+								@endif
 							</div><!--end row-->						
 						</div> <!-- end .h-100-->
                </div> <!-- end col -->
