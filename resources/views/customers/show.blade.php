@@ -854,7 +854,7 @@
 																											<td>${{$history->amount}}</td>
 																											<td>{{$history->item_description(request()->business_id)['qty']}}</td>
 																											<td>
-																												@if(($history->can_void() && $history->item_type=="UserBookingStatus") || ($history->can_refund()))
+																												@if(($history->can_void() && $history->item_type=="UserBookingStatus") || ($history->can_refund() && $history->item_type=="UserBookingStatus"))
 																													<?php
 																													$detail = $history->userBookingStatus->UserBookingDetail->first();
 																													?>
