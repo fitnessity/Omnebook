@@ -1007,7 +1007,10 @@
 	        maxDate: "2050-01-01",
             defaultDate: [date1, date2],
             onChange: function(selectedDates, dateStr, instance) {
-                window.location.href= '/dashboard/'+dateStr;
+                url = '/dashboard/'+dateStr;
+                setTimeout(function() {
+                    window.location.href = url;
+                }, 1000);
             },
 	   });
 

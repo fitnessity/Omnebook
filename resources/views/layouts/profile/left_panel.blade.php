@@ -64,12 +64,20 @@
 				</li>
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
 
+                @if(request()->business_id) 
+                    <li class="nav-item">
+                        <a class="nav-link menu-link {{ request()->is('*dashboard*') ? 'active' : '' }}" href="{{ url('/personal/dashboard') . '?' . http_build_query(['business_id' => request()->business_id, 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}" aria-controls="sidebarDashboards">
+                            <img src="{{asset('/public/img/social-profile.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Dashboard</span>
+                        </a>
+                    </li>
+                @endif
+
                 @if(!request()->customer_id)
-				<li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('profile-viewProfile')}}" aria-controls="sidebarDashboards">
-                        <img src="{{asset('/public/img/social-profile.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">View Social Profile</span>
-                    </a>
-                </li>
+    				<li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('profile-viewProfile')}}" aria-controls="sidebarDashboards">
+                            <img src="{{asset('/public/img/social-profile.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">View Social Profile</span>
+                        </a>
+                    </li>
                 @endif
 				<li class="nav-item">
                     <a class="nav-link menu-link {{ request()->is('*profile*') ? 'active' : '' }}" href="{{ url('/personal/profile') . '?' . http_build_query([ 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}" aria-controls="sidebarDashboards">
@@ -108,7 +116,7 @@
                         </a>
                     </li>
     				<li class="nav-item">
-                        <a class="nav-link menu-link {{ request()->is('*attendance*') ? 'active' : '' }}" href="" aria-controls="sidebarDashboards">
+                        <a class="nav-link menu-link {{ request()->is('*attendance-belt*') ? 'active' : '' }}"  href="{{ url('/personal/attendance-belt') . '?' . http_build_query(['business_id' => request()->business_id, 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}" aria-controls="sidebarDashboards">
                             <img src="{{asset('/public/img/attendance.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Attendance & Belt </span>
                         </a>
                     </li>
@@ -126,13 +134,13 @@
 				@if(request()->business_id)
                     @if(!request()->customer_id)
                     <li class="nav-item">
-                        <a class="nav-link menu-link {{ request()->is('*announcement*') ? 'active' : '' }}" >
+                        <a class="nav-link menu-link {{ request()->is('*announcement*') ? 'active' : '' }}" href="{{route('personal.announcement-news' ,['business_id' => request()->business_id])}}" >
                             <img src="{{asset('/public/img/announcement.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Announcement & News</span>
                         </a>
                     </li> 
                     @endif
     				<li class="nav-item">
-                        <a class="nav-link menu-link {{ request()->is('*notes*') ? 'active' : '' }}" href="" aria-controls="sidebarDashboards">
+                        <a class="nav-link menu-link {{ request()->is('*notes*') ? 'active' : '' }}" href="{{ url('/personal/notes-alerts') . '?' . http_build_query([ 'business_id' => request()->business_id ,'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}" aria-controls="sidebarDashboards">
                             <img src="{{asset('/public/img/notes.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Notes & Alerts </span>
                         </a>
                     </li>

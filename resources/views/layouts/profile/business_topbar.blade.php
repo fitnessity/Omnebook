@@ -42,6 +42,9 @@
 	
 	<!-- app css 
 	<link href="{{asset('/public/dashboard-design/css/app.min.css')}}" rel="stylesheet" type="text/css" />-->
+
+	<!-- Color Piker Css-->
+    <link href="{{asset('/public/dashboard-design/css/nano.min.css')}}" rel="stylesheet" type="text/css" />
 </head>
 
  <!-- Begin page -->
@@ -148,19 +151,19 @@
 																$firstLetter = $n->CustomerDocumentsRequested->Customer->first_letter;
 																$fullName = $n->CustomerDocumentsRequested->Customer->full_name;
 																$text = $n->CustomerDocumentsRequested->content .' is required to be uploaded.';
-																$link = "/personal/documents-contract?business_id=".$n->business_id."&customer_id".$n->customer_id;
+																$link = "/personal/documents-contract?business_id=".$n->business_id."&customer_id=".$n->customer_id;
 															}else if($n->table == 'CustomersDocuments'){
 																$profilePic = $n->CustomersDocuments->Customer->profile_pic_url;
 																$firstLetter = $n->CustomersDocuments->Customer->first_letter;
 																$fullName = $n->CustomersDocuments->Customer->full_name;
 																$text = $n->CustomersDocuments->title .' is required to be signed.';
-																$link = "/personal/documents-contract?business_id=".$n->business_id."&customer_id".$n->customer_id;
+																$link = "/personal/documents-contract?business_id=".$n->business_id."&customer_id=".$n->customer_id;
 															}else if($n->table == 'CustomerNotes'){
 																$profilePic = $n->CustomerNotes->customer->profile_pic_url;
 																$firstLetter = $n->CustomerNotes->customer->first_letter;
 																$fullName = $n->CustomerNotes->customer->full_name;
-																$text = $n->CustomerNotes->limit_note_character;
-																$link = '';
+																$text = $n->CustomerNotes->title;
+																$link = "/personal/notes-alerts?business_id=".$n->business_id."&customer_id=".$n->customer_id;
 															}
 
 														@endphp
@@ -174,16 +177,16 @@
 														<div class="flex-1">
 															<div class="">
 																<div class="row">
-																	<div class="col-md-7">
+																	<div class="col-md-7 col-12">
 																		<a href="{{$link}}" >
 																			<h6 class="mt-0 mb-1 fs-13 fw-semibold">{{$fullName}}</h6>
 																		</a>
 
 																	</div>
-																	<div class="col-md-2">
+																	<div class="col-md-2 col-2">
 																		<a href="{{$link}}" class="mb-0">View</a>
 																	</div>
-																	<div class="col-md-3">
+																	<div class="col-md-3 col-3">
 																		<a onclick="deleteNoteFromNotification({{$n->id}})" class="mb-0">Delete</a>
 																	</div>
 																</div>
@@ -250,16 +253,16 @@
 														<div class="flex-1">
 															<div class="">
 																<div class="row">
-																	<div class="col-md-7">
+																	<div class="col-md-7 col-12">
 																		<a href="{{$link}}" >
 																			<h6 class="mt-0 mb-1 fs-13 fw-semibold">{{$fullName}}</h6>
 																		</a>
 
 																	</div>
-																	<div class="col-md-2">
+																	<div class="col-md-2 col-2">
 																		<a href="{{$link}}" class="mb-0">View</a>
 																	</div>
-																	<div class="col-md-3">
+																	<div class="col-md-3 col-3">
 																		<a onclick="deleteNoteFromNotification({{$n->id}})" class="mb-0">Delete</a>
 																	</div>
 																</div>
@@ -278,7 +281,7 @@
 
 											@if(count(getNotificationPersonal('Alert')) > 0)
 												<div class="text-center">
-													<button type="button" class="btn btn-red text-center clearAlert">Clear All Alerts121</button>
+													<button type="button" class="btn btn-red text-center clearAlert">Clear All Alerts</button>
 												</div>
 											@endif
 										</div>

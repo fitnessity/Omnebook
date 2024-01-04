@@ -168,7 +168,7 @@
 														<div class="col-lg-4 col-md-4">
 															<div class="mb-3">
 																<label class="form-label"> Address </label>
-																<input type="text" class="form-control" id="address" name="address" required oninput="initializeAutocomplete('address', 'city', 'state', 'country', 'zipcode', 'lat', 'lon')" value="{{@$user->address}}">
+																<input type="text" class="form-control" id="address" name="address" required oninput="initMapCall('address', 'city', 'state', 'country', 'zipcode', 'lat', 'lon')" value="{{@$user->address}}">
 																<div class="invalid-feedback">Please enter an address</div>
 															</div>
 															<div id="map"></div>
@@ -401,7 +401,7 @@
 															<div class="mb-3">
 																<label class="form-label">Business Address <span class="font-red">*</span></label>
 																			
-																<input type="text" class="form-control" id="bAddress" name="bAddress" required oninput="initializeAutocomplete('bAddress', 'bcity', 'bstate', 'bcountry', 'bzipcode', 'blat', 'blon')" value="{{@$companyDetail->address}}">
+																<input type="text" class="form-control" id="bAddress" name="bAddress" required oninput="initMapCall('bAddress', 'bcity', 'bstate', 'bcountry', 'bzipcode', 'blat', 'blon')" value="{{@$companyDetail->address}}">
 																<div class="invalid-feedback">Please enter business address</div>
 															</div>
 														</div>
@@ -1215,86 +1215,6 @@
             }
         });
     });
-</script>
-
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{env('GOOGLE_MAP_KEY')}}" async defer></script>
-
-<script type="text/javascript">
-	function initializeAutocomplete(addressInputID, cityElementID, stateElementID, countryElementID, zipcodeElementID, latElementID, lonElementID) {
-	    var map = new google.maps.Map(document.getElementById('map'), {
-	        center: {lat: -33.8688, lng: 151.2195},
-	        zoom: 13
-	    });
-
-	    var input = document.getElementById(addressInputID);
-	    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-	    var autocomplete = new google.maps.places.Autocomplete(input);
-	    autocomplete.bindTo('bounds', map);
-	    var infowindow = new google.maps.InfoWindow();
-	    var marker = new google.maps.Marker({
-	        map: map,
-	        anchorPoint: new google.maps.Point(0, -29)
-	    });
-
-	    var address = '';
-        var badd = '';
-        var sublocality_level_1 = '';
-
-	    autocomplete.addListener('place_changed', function() {
-	        infowindow.close();
-	        marker.setVisible(false);
-	        var place = autocomplete.getPlace();
-	        if (!place.geometry) {
-	            window.alert("Autocomplete's returned place contains no geometry");
-	            return;
-	        }
-
-	        // (Rest of your code...)
-
-	        // Location details
-	        for (var i = 0; i < place.address_components.length; i++) {
-	            if(place.address_components[i].types[0] == 'postal_code'){
-	                $('#' + zipcodeElementID).val(place.address_components[i].long_name);
-	            }
-
-	            if(place.address_components[i].types[0] == 'locality'){
-	                $('#' + cityElementID).val(place.address_components[i].long_name);
-	            }
-
-	            if(place.address_components[i].types[0] == 'sublocality_level_1'){
-	                sublocality_level_1 = place.address_components[i].long_name;
-	            }
-
-	            if(place.address_components[i].types[0] == 'street_number'){
-	               badd = place.address_components[i].long_name ;
-	            }
-
-	            if(place.address_components[i].types[0] == 'route'){
-	               badd += ' '+place.address_components[i].long_name ;
-	            } 
-
-	            if(place.address_components[i].types[0] == 'country'){
-	                $('#'+countryElementID).val(place.address_components[i].long_name);
-	            }
-
-	            if(place.address_components[i].types[0] == 'administrative_area_level_1'){
-	              $('#'+stateElementID).val(place.address_components[i].long_name);
-	            }
-
-	            // (Continue with other elements...)
-	        }
-
-	        if(badd == ''){
-	          	$('#'+addressInputID).val(sublocality_level_1);
-	        }else{
-	          	$('#'+addressInputID).val(badd);
-	        }
-
-	        $('#'+latElementID).val(place.geometry.location.lat());
-        	$('#'+lonElementID).val(place.geometry.location.lng());
-	        // (Rest of your code...)
-	    });
-	}
 </script>
 
 @include('layouts.business.footer')

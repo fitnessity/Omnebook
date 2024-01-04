@@ -52,7 +52,7 @@
 										
 										<div  class="col-lg-2 col-md-2 col-sm-3 col-8">
 											@if(!$d->CustomerDocumentsRequested->isEmpty())
-												<button type="button" class="btn btn-red mb-5 mmt-10 mmb-10" onclick="openDocumentModal('{{$d->id}}','{{ $d->checkUploadDocument() == 1 ? "load" : "upload"}}')"> @if($d->checkUploadDocument() == 1) Edit @else Upload @endif Document</button>
+												<button type="button" class="btn btn-red mb-5 mmt-10 mmb-10" onclick="openDocumentModal('{{$d->id}}','{{ $d->checkUploadDocument() == 1 ? "load" : "upload"}}')"> @if($d->checkUploadDocument() == 1) Edit Document @else Document Requested @endif </button>
 
 											@endif
 										</div>
@@ -301,11 +301,11 @@
 </div>	
 
 <div class="modal fade modalDocument" tabindex="-1" aria-labelledby="mySmallModalLabel">
-	<div class="modal-dialog modal-dialog-centered modal-70" id="doc-width">
+	<div class="modal-dialog modal-dialog-centered modal-50" id="doc-width">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="myModalLabel">Documents</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				<h5 class="modal-title" id="myModalLabel">Requested Documents</h5>
+					<button type="button" class="btn-close"  aria-label="Close"  onclick="window.location.reload()"></button>
 			</div>
 			<div class="modal-body" id="modalDocumentHtml">
 
@@ -349,13 +349,9 @@
          type: 'GET',
          url: '/personal/getContent/'+id+'/'+type,
          success: function (response) {
-         	if(type == 'upload'){
-         		if(!$('#doc-width').hasClass('modal-70')){
-         			$('#doc-width').addClass('modal-70');
-         		}
-         	}else{
-         		$('#doc-width').removeClass('modal-70');
-         	}
+         	
+         		$('#doc-width').addClass('modal-50');
+         	
             $('#modalDocumentHtml').html(response);
 				$('.modalDocument').modal('show');
          }
