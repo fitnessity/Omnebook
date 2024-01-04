@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Personal;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth,Redirect,Storage,Hash,Response;
-use App\{UserFollow,BusinessServicesFavorite,StripePaymentMethod,User,CompanyInformation,Customer,Transaction};
+use App\{UserFollow,BusinessServicesFavorite,StripePaymentMethod,User,CompanyInformation,Customer,Transaction,CustomerNotes,Recurring,CustomersDocuments,Announcement,BookingCheckinDetails};
+use App\Repositories\{BookingRepository};
 
 class ProfileController extends Controller
 {
@@ -16,13 +17,79 @@ class ProfileController extends Controller
      */
 
     protected $user;
+    protected $booking_repo;
 
-    public function __construct() {
+    public function __construct(BookingRepository $booking_repo) {
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
             return $next($request);
         });
+         $this->booking_repo = $booking_repo;
     }
+
+    public function dashboard(Request $request)
+    {
+        $business = CompanyInformation::find($request->business_id);
+        if($request->customer_id){
+            if(request()->type == 'user'){
+                $familyMember = $this->user->user_family_details()->where('id',request()->customer_id)->first();
+                $user = User::where(['firstname'=> @$familyMember->first_name, 'lastname'=>@$familyMember->last_name, 'email'=>@$familyMember->email])->first();
+                $customer = Customer::where(['user_id' => @$user->id])->first();
+                $name = @$familyMember->full_name;
+            }else{
+                $customer = Customer::find(request()->customer_id);
+                $name = @$customer->full_name;
+            }
+        }else{
+            $customer = Customer::where(['business_id'=>$request->business_id,'user_id'=>Auth::user()->id])->first();
+            $name = @$customer->full_name;
+        }
+
+        $attendanceCnt = BookingCheckinDetails::where('customer_id' ,@$customer->id)->whereMonth('checkin_date', '>=', date('m'))->whereMonth('checkin_date', '<=', date('m'))->whereNotNull('checked_at')->count();
+        $attendanceCntPre = BookingCheckinDetails::where('customer_id' ,@$customer->id)->whereMonth('checkin_date', '>=', date('m') - 1)->whereMonth('checkin_date', '<=', date('m') - 1 )->whereNotNull('checked_at')->count();
+        $attendancePct =  $attendanceCntPre != 0 ? number_format(($attendanceCnt - $attendanceCntPre)*100/$attendanceCntPre,2,'.','') : 0;
+
+        $bookingCnt = $business->UserBookingDetails()->where('user_id' ,@$customer->id)->whereMonth('created_at', '>=', date('m'))->whereMonth('created_at', '<=', date('m'))->count();
+        $bookingCntPre = $business->UserBookingDetails()->where('user_id' ,@$customer->id)->whereMonth('created_at', '>=', date('m') - 1)->whereMonth('created_at', '<=', date('m') - 1)->count();
+        $bookingPct =  $bookingCntPre != 0 ? number_format(($bookingCnt - $bookingCntPre)*100/$bookingCntPre,2,'.','') : 0;
+
+        $notesCnt = CustomerNotes::where(['customer_id'=> @$customer->id ,'display_chk' => 1])->orderby('due_date','desc')->whereDate('due_date', '=', now())->whereTime('time', '<=', now()->format('H:i'))
+                ->orWhere(function ($query) use($customer) {
+                    $query->whereDate('due_date', '<=', now())->where('customer_id', @$customer->id )->where('display_chk' ,1);
+                })->where('business_id', $request->business_id)->count();
+
+        $notesCntNew = CustomerNotes::where(['customer_id'=> @$customer->id ,'display_chk' => 1])->orderby('due_date','desc')->whereDate('due_date', '=', now())->whereTime('time', now()->format('H:i'))
+                ->orWhere(function ($query) use($customer) {
+                    $query->whereDate('due_date', now())->where('customer_id', @$customer->id )->where('display_chk' ,1);
+                })->where('business_id', $request->business_id)->count();
+
+        $expiredCards = StripePaymentMethod::where(['user_id'=> @$customer->id, 'user_type' => 'Customer'])->where('exp_year','<=', date('Y'))->where('exp_month','<', date('m'))->count();
+        $missedPayments = Recurring::where(['user_id'=> @$customer->id, 'user_type' => 'Customer'])->where('status' ,'!=','Completed')->whereDate('payment_date' ,'<' ,date('Y-m-d'))->count();
+
+        $notesCnt += $expiredCards;
+        $notesCnt += $missedPayments;
+
+        $activeMembershipCnt = count($this->booking_repo->currentTab($request->serviceType,$request->business_id,@$customer));
+        $activeMembershipCntNew = $business->UserBookingDetails()->where('user_id' ,@$customer->id)->whereDate('created_at', date('Y-m-d'))->count();
+
+        $docCnt =  $documents = CustomersDocuments::where('customer_id',  @$customer->id)->where('business_id', $request->business_id)->count();
+
+        $docCntNew =  $documents = CustomersDocuments::where('customer_id',  @$customer->id)->where('business_id', $request->business_id)->whereDate('created_at',date('Y-m-d'))->count();
+
+        $announcemetCnt = Announcement::where(['business_id' => $request->business_id, 'status' => 'active'])
+                ->where(function ($query) {
+                    $query->whereDate('announcement_date', '<=', date('Y-m-d'))->whereTime('announcement_time', '<=', date('H:i'));
+                    })->orWhere(function ($query) {
+                        $query->whereDate('announcement_date', '<=', date('Y-m-d'))->whereNull('announcement_time');
+                })->count();
+
+        $announcemetCntNew = Announcement::where(['business_id' => $request->business_id, 'status' => 'active'])->whereDate('announcement_date', date('Y-m-d'))->count();
+
+        $classes = BookingCheckinDetails::where('customer_id' ,@$customer->id)->whereDate('checkin_date' , '>=' , date('Y-m-d'))->get();
+
+        return view('personal.profile.dashboard',compact('name','notesCnt','activeMembershipCnt','docCnt','docCntNew','announcemetCnt','attendanceCnt','announcemetCntNew','bookingCnt','bookingPct','classes','attendancePct','business','notesCntNew','activeMembershipCntNew'));
+    }
+
 
     public function index(Request $request)
     {
@@ -90,7 +157,7 @@ class ProfileController extends Controller
      */
     public function update(Request $request, $id)
     {   //print_r($request->all());exit;
-        $user = Auth::user();
+        $user =  $this->user;
         $success = $fail = '';
         if($request->type == 'details'){
             $this->validate($request, [
@@ -266,12 +333,14 @@ class ProfileController extends Controller
         $company_information = [];$continue = 0;
         if($request->customer_id){
             if($request->type == 'user'){
-                $familyMember = Auth::user()->user_family_details()->where('id',request()->customer_id)->first();
+                $familyMember =  $this->user->user_family_details()->where('id',request()->customer_id)->first();
                 $user = User::where(['firstname'=> @$familyMember->first_name, 'lastname'=>@$familyMember->last_name, 'email'=>@$familyMember->email])->first();
                 $continue = 1;
+                $id = @$user->id;
             }else{
                 $customerDetail  = Customer::find($request->customer_id);
                 $user = $customerDetail->user;
+                $id = @$user->id;
                 if($user){
                     $continue = 1;
                 }else{
@@ -279,7 +348,8 @@ class ProfileController extends Controller
                 }
             }
         }else{
-            $user = Auth::user();
+            $user = $this->user;
+            $id = $user->id;
             $continue = 1;
         }
         
@@ -291,11 +361,11 @@ class ProfileController extends Controller
                 }
             }
         }
-        
-        $url = url()->current();
-        $separator = (parse_url($url, PHP_URL_QUERY) == null) ? '?' : '&';
+
+        /*$url = url()->current();
+        $separator = (parse_url($url, PHP_URL_QUERY) == null) ? '?' : '&';*/
         $business = array_unique($company_information, SORT_REGULAR);
-        return view('personal.provider.index',compact('business','separator','url'));
+        return view('personal.provider.index',compact('business','id'));
     }
 
     public function contactInfo(Request $request){
@@ -309,7 +379,7 @@ class ProfileController extends Controller
         unset($data['id']);
         unset($data['type']);
         //print_r($data);
-        $user = Auth::user();
+        $user =  $this->user;
         $user->update($data);
     }
 
@@ -332,7 +402,7 @@ class ProfileController extends Controller
         $user = $this->user;
         $favDetail = BusinessServicesFavorite::select("business_services.id", "business_services.program_name", 
         "business_services.profile_pic", "business_services.sport_activity", "business_services_favorite.service_id", 
-        "business_services_favorite.user_id")->join("business_services", "business_services_favorite.service_id", "=", "business_services.id")->where("business_services_favorite.user_id", Auth::user()->id)->get();
+        "business_services_favorite.user_id")->join("business_services", "business_services_favorite.service_id", "=", "business_services.id")->where("business_services_favorite.user_id",  $this->user->id)->get();
         return view('personal.profile.favourite',compact('user','favDetail'));
     }
 
@@ -370,7 +440,7 @@ class ProfileController extends Controller
     }
 
     public function followingUpdate(Request $request){
-        $delete = UserFollow::where('user_id', Auth::user()->id)->where('follower_id', $request->fid)->delete();
+        $delete = UserFollow::where('user_id',  $this->user->id)->where('follower_id', $request->fid)->delete();
         if($delete){
             $response = array(
                 'type' => 'success',
@@ -394,7 +464,7 @@ class ProfileController extends Controller
             $status='unlike';
         }else{
             $data=array(
-                "user_id" => Auth::user()->id,
+                "user_id" =>  $this->user->id,
                 "service_id" => $ser_id,
             );
             BusinessServicesFavorite::create($data);
@@ -539,4 +609,6 @@ class ProfileController extends Controller
        
         return view('personal.profile.payment_history', compact('transactionDetail')); 
     }
+
+
 }

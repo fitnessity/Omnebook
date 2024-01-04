@@ -90,7 +90,8 @@ class CalendarController extends Controller
                 "shift_start"=>$dt['shift_start'],
                 "shift_end"=>$dt['shift_end'],
                 "time"=>$time,
-                "start"=>$dt['start'],
+                "start"=>$dt['start'].'T'.date("h:i:s", strtotime( $dt["shift_start"]) ),
+                "end"=>$dt['start'].'T'.date("h:i:s", strtotime( $dt["shift_end"]) ),
                 "full_name"=>$full_name);
 
             $dataAry [] =array(

@@ -1089,7 +1089,7 @@
 																							<div class="row">
 																								<div class="col-md-10">
 																									<div class="row">
-																										<div class="col-md-3">{!!$n->limit_note_character!!}</div>
+																										<div class="col-md-3">{!!$n->title!!}</div>
 																										<div class="col-md-2">{{date('M d, Y', strtotime($n->created_at))}} </div>
 																										<div class="col-md-2">Due {{date('M d, Y', strtotime($n->due_date))}} , {{ date('h:i A', strtotime($n->time))}} </div>
 																										<div class="col-md-2">{{ $n->display_chk == 0 ? "Not" : ''}} visible to member</div>
@@ -1273,7 +1273,8 @@
 																											<div class="setting-icon">
 																												<i class="ri-more-fill"></i>
 																												  <ul>
-																														<li><a href="#" data-bs-toggle="modal" data-bs-target=".documents"><i class="fas fa-plus text-muted"></i>Add</a></li>
+																														<li><a href="#" data-bs-toggle="modal" data-bs-target=".documents"><i class="fas fa-plus text-muted"></i>Add New Document</a></li>
+																														<li><a href="#/" onclick="openModalDoc()" ><i class="fas fa-plus text-muted"></i>Request A Document</a></li>
 																													</ul>
 																											</div>
 																										</div>
@@ -1284,27 +1285,62 @@
 																					</h2>
 																					<div id="accor_nesting" class="accordion-collapse collapse" aria-labelledby="accordionnesting" data-bs-parent="#accordionnesting8">
 																						<div class="accordion-body">
+																							<div class="row mb-15">
+																								<div class="col-md-3"> <span class="fs-14 font-black"> Document Name </span></div>
+																								<div class="col-md-3"><span class="fs-14 font-black"> Uploaded On </span></div>
+																								<div class="col-md-2"> <span class="fs-14 font-black">Uploaded By </span></div>
+																								<div class="col-md-3"><span class="fs-14 font-black"> Status </span></div>
+																							</div>
 																							@forelse($documents as $d)
 																							<div class="row">
-																								<div class="col-md-3"><a  @if(!$d->CustomerDocumentsRequested->isEmpty()) href="#" onclick="event.preventDefault(); openDocumentModal('{{$d->id}}','load')"  @elseif($d->path) href="{{ route('download', ['id' => $d->id]) }}" target="_blank" @endif  ><i class="fas fa-download"></i> {{$d->title}}</a></div>
-																								<div class="col-md-3"><i class="fas fa-paperclip"></i> Uploaded on {{date('m/d/Y', strtotime($d->created_at))}}</div>
-																								<div class="col-md-3"> Uploaded by {{@$d->uploaded_by}}</div>
 																								<div class="col-md-3">
+																									<a  @if(!$d->CustomerDocumentsRequested->isEmpty()) href="#" onclick="event.preventDefault(); openDocumentModal('{{$d->id}}','load')"  @elseif($d->path) href="{{ route('download', ['id' => $d->id]) }}" target="_blank" @endif  ><i class="fas fa-download"></i> {{$d->title}}</a>
+																								</div>
+
+																								<div class="col-md-3">
+																									<i class="fas fa-paperclip"></i>
+																									{{date('m/d/Y', strtotime($d->created_at))}}
+																								</div>
+																								<div class="col-md-2">{{@$d->uploaded_by}}</div>
+																								<div class="col-md-3"> 
+																									@if($d->status == 1)
+																										@if($d->sign_requested_date && !$d->sign_date)
+																							            <span class="font-red">Sign Requested on {{ date('m/d/Y' , strtotime($d->sign_requested_date)) }}</span>
+																							         @endif
+																							         @if($d->sign_date)
+																							            <span class="font-green">Signed On {{ date('m/d/Y' , strtotime($d->sign_date)) }}</span>
+																							         @endif 
+																							      @endif
+
+																							      @if(!$d->CustomerDocumentsRequested->isEmpty()) 
+																							       	@if($d->doc_requested_date && !$d->doc_completed_date)
+																							            <span class="font-red">Document Requested on {{ date('m/d/Y' , strtotime($d->doc_requested_date)) }}</span>
+																							         @endif
+																							         @if($d->doc_completed_date)
+																							            <span class="font-green">Document Request Completed On {{ date('m/d/Y' , strtotime($d->doc_completed_date)) }}</span>
+																							         @endif
+																							      @endif 
+																							   </div>
+																								<div class="col-md-1">
 																									<div class="multiple-options">
 																										<div class="setting-icon">
 																											<i class="ri-more-fill"></i>
 																											  <ul>
-																											  		@if($d->status == 0)
-																											  		<li><a onclick="requestSign({{$d->id}})"><i class="fas fa-plus text-muted"></i>Request Signature</a></li>
-																											  		@elseif($d->status == 1)
-																											  		<li><a><i class="fas fa-plus text-muted"></i>Signature Requested</a></li>
-																											  		@else
-																											  			<li><a><i class="fas fa-plus text-muted"></i>Signature Signed</a></li>
-																											  		@endif
 
-																											  		<li><a onclick="openModalDoc({{$d->id}})"><i class="fas fa-plus text-muted"></i>Request Document</a></li>
-
-																											  		<li><a @if(!$d->CustomerDocumentsRequested->isEmpty())  onclick="event.preventDefault(); openDocumentModal('{{$d->id}}','load')"  @elseif($d->path) href="{{ route('download', ['id' => $d->id]) }}" target="_blank" @endif ><i class="fas fa-plus text-muted"></i>Download</a></li>
+																											  		@if($d->CustomerDocumentsRequested->isEmpty())
+																												  		@if($d->status == 0)
+																												  			<li><a onclick="requestSign({{$d->id}})"><i class="fas fa-plus text-muted"></i>Request Signature</a></li>
+																												  		@elseif($d->status == 1)
+																												  			<li><a><i class="fas fa-plus text-muted"></i>Signature Requested</a></li>
+																												  		@else
+																												  			<li><a><i class="fas fa-plus text-muted"></i>Signature Signed</a></li>
+																												  		@endif
+																												  	@endif
+																											  		<!-- <li><a onclick="openModalDoc({{$d->id}})"><i class="fas fa-plus text-muted"></i>Request Document</a></li> -->
+																											  		<li>
+																											  			<a @if(!$d->CustomerDocumentsRequested->isEmpty())  onclick="event.preventDefault(); openDocumentModal('{{$d->id}}','load')"  @elseif($d->path) href="{{ route('download', ['id' => $d->id]) }}" target="_blank" @endif ><i class="fas fa-plus text-muted"></i>Download
+																											  			</a>
+																											  		</li>
 																													<li><a onclick="deleteDoc({{$d->id}})"><i class="fas fa-plus text-muted"></i>Delete </a></li>
 																												</ul>
 																										</div>
@@ -1601,7 +1637,7 @@
 	<div class="modal-dialog modal-dialog-centered modal-70" id="doc-width">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="myModalLabel">Documents</h5>
+				<h5 class="modal-title" id="myModalLabel">Requested Documents</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body" id="modalDocumentDisplayHtml">
@@ -1614,6 +1650,7 @@
 @include('layouts.business.footer')
 
 <script>
+	
 	var docToUpload = '';
 	var ext = '';
 
@@ -1637,12 +1674,13 @@
          type: 'GET',
          url: '/personal/getContent/'+id+'/'+type,
          success: function (response) {
+         	$('#doc-width').removeClass('modal-50');
          	if(type == 'upload'){
          		if(!$('#doc-width').hasClass('modal-70')){
          			$('#doc-width').addClass('modal-70');
          		}
          	}else{
-         		$('#doc-width').removeClass('modal-70');
+         		$('#doc-width').addClass('modal-50');
          	}
             $('#modalDocumentDisplayHtml').html(response);
 				$('.modalDocumentDisplay').modal('show');
@@ -1660,10 +1698,11 @@
       });
 	}
 
-	function openModalDoc(id){
+	function openModalDoc(){
+		var cust_id =  '{{$customerdata->id}}'
 		$.ajax({
          type: 'GET',
-         url: '/docContent/'+id,
+         url: '/docContent/'+cust_id,
          success: function (response) {
             $('#modalDocumentHtml').html(response);
 				$('.modalDocument').modal('show');

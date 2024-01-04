@@ -137,6 +137,38 @@ class Transaction extends Model
         return $arry;
     }
 
+    public function getBookingStatus(){
+        $status = '';
+        if($this->item_type == 'UserBookingStatus'){
+            if($this->userBookingStatus != ''){
+                if(!empty($this->userBookingStatus->UserBookingDetail)){
+                    foreach($this->userBookingStatus->UserBookingDetail as $key => $bd){
+                        $status .= (count($this->userBookingStatus->UserBookingDetail) >1) ? ($key+1).'. ' : '';
+                        $status .= $this->getStatus($bd->status).'<br>';
+                    }
+                }
+            }
+            return $status ?? "N/A";
+        }else if ($this->item_type == 'Recurring') {
+            if($this->Recurring->UserBookingDetail){
+                $bd = $this->Recurring->UserBookingDetail;
+                return $this->getStatus($bd->status);
+            }
+        }
+    }
+
+    public function getStatus($name){
+        if($name == 'void'){
+            return 'Suspended';
+        }else if($name == 'refund'){
+            return 'Refunded';
+        }else if($name == 'terminate' || $name == 'cancel'){
+            return 'Terminated';
+        }else {
+            return 'Successful';
+        }
+    }
+
     public function getCustomer($business_id){
         if($this->user_type == 'customer'){
             return $this->Customer;

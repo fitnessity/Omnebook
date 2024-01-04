@@ -5615,9 +5615,148 @@ div#termsdiv{order: 4;}
 .selected-date{
 	display: grid;
 }
-.cus-provider-logo img{
+/*.cus-provider-logo img{
 	width: 185px;
-}
+}*/
 .cus-provider-logo{
 	text-align: right;
+}
+.border-bottom-grey{
+	border-bottom: 1px solid #01010129;
+}
+.teakwondo label{
+  font-size: 16px;
+  text-transform: uppercase; 
+}
+.greybox{
+  padding: 10px 0;
+  border-bottom: 1px solid #e8e8e8;
+}
+.cgreen{
+  background: rgb(0, 128, 0);
+  padding: 10px;
+}
+.cyellow{
+  background: rgb(236, 233, 9);
+  padding: 10px 0;
+}
+.inner-belt{
+  border: 2px solid rgb(241, 3, 3);
+}
+.cblack{
+  background: #000;
+  padding: 11px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cred{
+  background: #f70000;
+  padding: 11px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.vertical-inner-belt{
+  border-left: 2px solid #fff;
+  height: 25px;
+  margin-top: -15px;
+  margin-bottom: -15px;
+}
+table.dataTable.nowrap td {
+  white-space: normal;
+}
+input[type="time"]::-webkit-calendar-picker-indicator {
+  display: block;
+}
+.round-circle{
+  border-radius: 100%;
+  width: 25px;
+  height: 25px;
+}
+.lh-24{
+  line-height: 24px;
+}
+.w-50px{
+  width: 50px;
+}
+.input-group-text{
+  padding: 11px 0.9rem;
+}
+
+
+/*    =========== ck-editor css============  */
+.ck-content ul {
+    list-style-type: disc; 
+}
+
+.centered-image {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+   }
+
+
+/*    =========== end ck-editor css============  */
+
+
+.dashed-border{
+	border-bottom: 1px dashed #878a99;
+}
+.ph-provider{
+	display: inline-block;
+	margin-right: 35px;	
+}
+.cus-provider-logo{
+	display: inline-block;
+}
+
+/*start sticky footer */
+
+.desktop-none-customer {
+  display: none;
+}
+.navbar {
+  margin: 0;
+}
+.shortcut-sticky {
+  text-align: center;
+  margin-top: 17px;
+  margin-bottom: 8px;
+}
+
+.shortcut-sticky a {
+  display: grid;
+  background: none;
+  color: #f91942;
+}
+.shortcut-sticky a i {
+  font-size: 16px;
+}
+
+.shortcut-sticky a label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #000;
+}
+.navbar-fixed-bottom {
+  bottom: 0;
+  margin-bottom: 0;
+  border-width: 1px 0 0;
+}
+.navbar-fixed-top, .navbar-fixed-bottom {
+  position: fixed;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+}
+.pc-link .pc-micon img {
+  vertical-align: inherit;
+  width: 17px;
+  display: inline-block;
+}
+/* end sticky footer */
+
+.w-100px{
+  width: 100px;
 }

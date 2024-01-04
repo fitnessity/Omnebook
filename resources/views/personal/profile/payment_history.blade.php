@@ -36,13 +36,12 @@
 														<th>Pay Method</th>
 														<th>Price</th>
 														<th>Qty</th>
-														<th>Refund/Void</th>
+														<th>Status</th>
 														<th>Receipt</th>
 													</tr>
 												</thead>
 												<tbody id="tbodydetail">
 													@forelse($transactionDetail as $history )
-														
 														<tr>
 															<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
 															<td>{!!$history->item_description(request()->business_id)['itemDescription']!!} </td>
@@ -50,13 +49,13 @@
 															<td>{{$history->getPmtMethod()}}</td>
 															<td>${{$history->amount}}</td>
 															<td>{{$history->item_description(request()->business_id)['qty']}}</td>
-															<td>Refund | Void</td>
+															<td>{!!$history->getBookingStatus()!!}</td>
 															<td><a  class="mailRecipt" data-behavior="send_receipt"  data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$history->user_id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
 															</td>
 														</tr>
 													@empty 
 														<tr> <td colspan="8">Payment History Is Not Available</td></tr>
-                                            		@endforelse
+                                       @endforelse
 												</tbody>
 											</table>
 											<div class="float-right">

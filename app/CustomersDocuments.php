@@ -43,10 +43,10 @@ class CustomersDocuments extends Model
     public function checkUploadDocument(){
         $docrRequest = $this->CustomerDocumentsRequested;
         foreach ($docrRequest as $value) {
-            if($value->path){
-                return true;
+            if (empty($value->path)) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }

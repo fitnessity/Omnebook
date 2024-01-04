@@ -26,6 +26,11 @@
 	<div class="row">
 		<div class="col-lg-12 col-md-12 col-sm-12">
 			<div class="mb-10">
+				<lable >Title</lable>
+				<input type="text" name="title" id="title" class="form-control" value="{{@$note->title}}" placeholder="Title">
+			</div>
+			<div class="mb-10">
+				<lable >Notes</lable>
 				<textarea name="notes" id="ckeditornotes">{!!@$note->note!!}</textarea>
 			</div>
 			<div  class="mb-10 displayChk0">
@@ -51,9 +56,9 @@
 	</div>
 
 <script type="text/javascript">
-	let theEditor; var checkboxStatus;
+	 var checkboxStatus;
 	$(document).ready(function () {
-
+		let theEditor;
 	   ClassicEditor.create(document.querySelector("#ckeditornotes")).then(function(e) {
 			e.ui.view.editable.element.style.height = "150px"
 			theEditor = e;
@@ -62,13 +67,14 @@
 		});
 
 		$("#displayChk").change(function() {
-         checkboxStatus = this.checked ? 1 : 0;
-      });
+         	checkboxStatus = this.checked ? 1 : 0;
+      	});
 
       $('#add-note').click(function(){
-      	if(theEditor.getData() != '' && $('#due_date').val() != '') {
+      	if(theEditor.getData() != '' && $('#due_date').val() != '' && $('#title').val()) {
       		var formdata = new FormData();
 	      	formdata.append('id','{{@$note->id}}');
+	      	formdata.append('title',$('#title').val());
 	      	formdata.append('notes',theEditor.getData());
 	      	formdata.append('displayChk',checkboxStatus ?? 0);
 	      	formdata.append('due_date',$('#due_date').val());
@@ -90,7 +96,7 @@
 	                  $('#noteHtml').html('<p class="font-green font-16 text-center">'+response.message+'<p>');
 	                  setTimeout(function() {
 						        window.location.reload();
-						   }, 2000);
+						   }, 1500);
 	               }
 	               else{
 	             		$('#noteMessage').addClass('font-red font-16');
@@ -99,7 +105,7 @@
 	            }
 	      	});
 	      }else{
-	         $('#noteMessage').html('Please fill details like note and Due Date').addClass('font-red font-16 alert alert-danger alert-dismissible');
+	         $('#noteMessage').html('Please fill details like note and Due Date and Title').addClass('font-red font-16 alert alert-danger alert-dismissible');
 	      }
     	});
 	});
