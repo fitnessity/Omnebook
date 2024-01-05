@@ -41,7 +41,7 @@
 															<a href="{{route('business.credit_card_report.index')}}">Credit Card Expirations</a>
 														</div>
 														<div class="report-links">
-															<a href="#">Recurring Payments Details</a>
+															<a href="{{route('business.recurring_payments.index')}}">Recurring Payments Details</a>
 														</div>
 														<div class="report-links">
 															<a href="#">Tax Reports</a>
@@ -119,24 +119,22 @@
 												<div class="card card-body box-border">
 													<div class="d-grid align-items-center">
 														<div class="report-links">
-															<a href="#">Active Memberships</a>
+															<a href="{{route('business.active-membership.index')}}">Active Memberships</a>
 														</div>
 														<div class="report-links">
-															<a href="#">Active Memberships Not Being Used</a>
-														</div>
-														<!-- <div class="report-links">
-															<a href="">Total Memberships</a>
-														</div> -->
-														<div class="report-links">
-															<a href="#">Memberships Paused</a>
+															<a href="{{route('business.activity-not-used')}}">Active Memberships Not Being Used</a>
 														</div>
 														<div class="report-links">
-															<a href="#">Memberships Terminated</a>
+															<a href="{{route('business.membership-paused')}}">Memberships Paused</a>
+														</div>
+														<div class="report-links">
+															<a href="{{route('business.membership-terminated')}}">Memberships Terminated</a>
 														</div>
 														<div class="report-links">
 															<a href="{{route('business.member_expirations.index')}}">Expired Memberships</a>
 														</div>
 														<div class="report-links remove-border">
+															<!-- <a href="{{route('business.membership-popular')}}">Membership Options by Popularity</a> -->
 															<a href="#">Membership Options by Popularity</a>
 														</div>
 													</div>
