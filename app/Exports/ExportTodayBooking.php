@@ -22,7 +22,8 @@ class ExportTodayBooking implements FromCollection, WithHeadings
     public function collection()
     {   
         $formattedData = [
-            ['',' Today\s bookings',''],
+            [''],
+            ['','','','','','','','Booking Information',''],
             [''],
             [ 'BOOKING CONFIRMATION #', 'TOTAL PRICE', 'PRICE OPTION', 'PAYMENT TYPE','TOTAL REMAINING','PROGRAM NAME','EXPIRATION DATE','DATE BOOKED','RESERVED DATE','BOOKED BY','ACTIVITY TYPE','SERVICE TYPE','ACTIVITY LOCATION','ACTIVITY DURATION','GREAT FOR','PARTICIPANTS','WHO IS PARTICIPATING?','ADD-ON SERVICES'],
             $this->transformData($this->bookDetails),

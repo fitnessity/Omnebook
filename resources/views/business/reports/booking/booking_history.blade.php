@@ -311,9 +311,9 @@
 		        '&startDate=' + startDate;
 
 	    	if(type == 'excel'){
-	    		filename = 'bookingtoday.xlsx';
+	    		filename = 'booking-info.xlsx';
 	    	}else if(type == 'pdf'){
-	    		filename = 'bookingtoday.pdf';
+	    		filename = 'booking-info.pdf';
 	    	}
 	
 	    	var link = document.createElement('a');

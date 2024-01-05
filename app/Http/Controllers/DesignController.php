@@ -287,6 +287,10 @@ class DesignController extends Controller {
 	public function customer_dashboard(Request $request){
         return view('design.customer_dashboard');
     }
+
+    public function pdf_booking(Request $request){
+        return view('design.pdf_booking');
+    }
 	
 }
 

@@ -5,7 +5,7 @@ namespace App;
 
 
 use App\{User,SGMailService};
-use Auth;
+use Auth,Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -104,6 +104,14 @@ class UserBookingDetail extends Model
 
     public function provider_get_total(){
         return $this->total() - $this->platform_total();
+    }
+
+    public function getActivityPic(){
+        if(Storage::disk('s3')->exists($this->business_services_with_trashed->first_profile_pic())) {
+            return Storage::url($this->business_services_with_trashed->first_profile_pic()); 
+        }else {
+            return env('APP_URL').'/images/service-nofound.jpg';
+        } 
     }
 
     public function userBookingDetailQty(){

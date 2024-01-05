@@ -85,20 +85,13 @@ class BookingReportController extends BusinessBaseController
 
         $type = $request->type;
         if($type == 'excel'){
-            return Excel::download(new ExportTodayBooking($bookings), 'bookingtoday.xlsx');
+            return Excel::download(new ExportTodayBooking($bookings), 'booking-info.xlsx');
         }elseif($type == 'pdf'){
-            /*$data = [
-                'title' => 'Membership Details',
-                'dates' => $dates,
-                'expiringMembershipTdy' => $filteredMembershipTdy,
-                'expiringMembershipAll' => $filteredMembershipsAll,
-                'expiringMembershipThd' => $filteredMembershipsThd,
-                'expiringMembershipNid' => $filteredMembershipsNid,
-                'startDate'=>$request->startDate,
-                'endDate'=>$request->endDate,
+            $data = [
+                'bookings'=>$bookings,
             ];
-            $pdf = PDF::loadView('business.reports.member_expirations.pdf_view', $data);
-            return $pdf->download('Membership.pdf');*/
+            $pdf = PDF::loadView('business.reports.booking.pdf_view_booking', $data);
+            return $pdf->download('booking-info.pdf');
         }
     }
 }

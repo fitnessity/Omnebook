@@ -103,6 +103,8 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/getMoreCards','CreditCardReportController@getMoreCards')->name('credit_card_report.getMoreCards');
     Route::get('/credit_cards/export','CreditCardReportController@export')->name('credit_card_report.export');
 
+     Route::get('/recurring-payments/','RecurringPaymentReportController@index')->name('recurring_payments.index');    
+
     Route::get('/todays_booking/','BookingReportController@index')->name('todays_booking.index');    
     Route::get('/booking-category/','BookingReportController@booking_category')->name('booking_category');    
     Route::get('/booking-history/','BookingReportController@booking_history')->name('booking_history');    
@@ -115,8 +117,13 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/new-client/export','ClientReportController@export')->name('new_client.export');
     Route::get('/clients-birthday/','ClientReportController@clientbirthday')->name('client.birthday');
 
-    
+    Route::get('active-membership','ActiveMembershipController@index')->name('active-membership.index');
+    Route::get('active-activity-not-used','ActiveMembershipController@activeMembershipNotUsed')->name('activity-not-used');
+    Route::get('membership-paused','ActiveMembershipController@membershipPaused')->name('membership-paused');
+    Route::get('membership-terminated','ActiveMembershipController@membershipTerminated')->name('membership-terminated');
+    Route::get('membership-popular','ActiveMembershipController@membershipPopular')->name('membership-popular');
 
+    Route::get('active-membership/export','ActiveMembershipController@export')->name('active-membership.export');
     Route::resource('reports', 'ReportsController')->only(['index']);
     Route::resource('settings', 'SettingsController')->only(['index']);
 
@@ -230,6 +237,7 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/announcements_provider','DesignController@announcements_provider')->name('announcements_provider');
     Route::get('/announcements_provider_category','DesignController@announcements_provider_category')->name('announcements_provider_categorys');
 	Route::get('/customer_dashboard','DesignController@customer_dashboard')->name('customer_dashboard');
+    Route::get('/pdf_booking','DesignController@pdf_booking')->name('pdf_booking');
 	
 });
 

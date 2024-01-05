@@ -33,7 +33,7 @@
 								</div>
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 									<div class="page-heading">
-										<label>Bookings By Category</label>
+										<label>Membership Options by Popularity</label>
 									</div>
 								</div><!--end col-->
 							</div><!--end row-->
@@ -114,8 +114,8 @@
 															<div class="form-group mb-10">
 																<select class="form-select" id="filterOptions" required="" data-behavior="on_change_submit">
 																	<option value="">Show All</option>
+																	<option value="category" {{request()->filterOptions == 'category' ? 'selected' : ''}}>Booking By Category</option>
 																	<option value="service" {{request()->filterOptions == 'service' ? 'selected' : ''}}>Booking By Service</option>
-																	<option value="priceOption" {{request()->filterOptions == 'priceOption' ? 'selected' : ''}}>Booking By Price Option</option>
 																</select>
 															</div>
 														</div>
@@ -143,8 +143,8 @@
 												</div>
 											</div>
 										</div>
-									</div><!-- end card -->
-								</div><!-- end col -->
+									</div>
+								</div>
 							</div>
 
 							<div class="row exclude-from-print mt-5">
@@ -157,7 +157,7 @@
 									<div class="col-xl-12">
 										<div class="card">
 											<div class="card-header align-items-center d-flex">
-												<h4 class="card-title mb-0 flex-grow-1" id="headingDate">{{$date->format('l, F j, Y')}}</h4>
+												<h4 class="card-title mb-0 flex-grow-1" id="headingDate">{{$date->format('l, F j, Y')}}  </h4>
 											</div><!-- end card header -->
 											<div class="card-body">
 												<input type="hidden" id="type" value="">
@@ -189,33 +189,7 @@
 	                                             @php $counter++; @endphp
 	                                             @endforeach
 	                                          @endif
-	                                       @elseif(request()->filterOptions == 'priceOption')
-															@php
-																$bookingPriceOption = [];
-																$bookingData = $bookingData->filter(function ($item) {
-													            return $item->business_price_detail_with_trashed;
-													         });
-																foreach ($bookingData as $key => $dt){
-	                                        			$bookingPriceOption[$dt->business_price_detail_with_trashed->price_title][] = $dt;
-												          	}
-												         @endphp
-												         @if(count($bookingPriceOption) > 0 )
-												         	@php $counter = 0; $displayChk = 0; @endphp
-												         	@foreach($bookingPriceOption as $i=>$data)
-												         	<div class="accordion-item shadow">
-	                                                <h2 class="accordion-header" id="headingOP{{$counter}}{{$y}}">
-	                                                   <button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOP{{$counter}}{{$y}}" aria-expanded="false" aria-controls="collapseOP{{$counter}}{{$y}}">{{$i}}</button>
-	                                                </h2>
-	                                                <div id="collapseOP{{$counter}}{{$y}}" class="accordion-collapse collapse buttonaccodiandiv" aria-labelledby="headingOP{{$counter}}{{$y}}" data-bs-parent="#default-accordion-example">
-	                                                   <div class="accordion-body">
-	                                                   	@include('business.reports.booking.booking_detail',['bookDetails' =>$data,'dateKey' =>$y ,'loopkey'=>$counter])
-	                                                   </div>
-	                                                </div>
-	                                             </div>
-	                                             @php $counter++; @endphp
-	                                             @endforeach
-	                                          @endif
-														@else
+	                                       @elseif(request()->filterOptions == 'category')
 															@php
 																$bookingCategory = [];
 																$bookingData = $bookingData->filter(function ($item) {
@@ -241,16 +215,42 @@
 	                                             @php $counter++; @endphp
 	                                             @endforeach
 	                                          @endif
+	                                       @else
+															@php
+																$bookingPriceOption = [];
+																$bookingData = $bookingData->filter(function ($item) {
+													            return $item->business_price_detail_with_trashed;
+													         });
+																foreach ($bookingData as $key => $dt){
+	                                        			$bookingPriceOption[$dt->business_price_detail_with_trashed->price_title][] = $dt;
+												          	}
+												         @endphp
+												         @if(count($bookingPriceOption) > 0 )
+												         	@php $counter = 0; $displayChk = 0; @endphp
+												         	@foreach($bookingPriceOption as $i=>$data)
+												         	<div class="accordion-item shadow">
+	                                                <h2 class="accordion-header" id="headingOP{{$counter}}{{$y}}">
+	                                                   <button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOP{{$counter}}{{$y}}" aria-expanded="false" aria-controls="collapseOP{{$counter}}{{$y}}">{{$i}}</button>
+	                                                </h2>
+	                                                <div id="collapseOP{{$counter}}{{$y}}" class="accordion-collapse collapse buttonaccodiandiv" aria-labelledby="headingOP{{$counter}}{{$y}}" data-bs-parent="#default-accordion-example">
+	                                                   <div class="accordion-body">
+	                                                   	@include('business.reports.booking.booking_detail',['bookDetails' =>$data,'dateKey' =>$y ,'loopkey'=>$counter])
+	                                                   </div>
+	                                                </div>
+	                                             </div>
+	                                             @php $counter++; @endphp
+	                                             @endforeach
+	                                          @endif
 														@endif
 													</div>
 												</div>
-											</div><!-- end card-body -->
-										</div><!-- end card -->
+											</div>
+										</div>
 									</div>
 								@endif
 								@endforeach
 
-								@if($displayChk == 1)
+								@if(@$displayChk == 1)
 								<div class="col-xl-12">
 									<div class="card">
 										<div class="mt-10 mb-10 ml-5">
@@ -259,9 +259,9 @@
 									</div>
 								</div>
 								@endif
-							</div><!--end row-->						
-						</div> <!-- end .h-100-->
-               </div> <!-- end col -->
+							</div>					
+						</div> 
+               </div> 
             </div>
          </div><!-- container-fluid -->
       </div><!-- End Page-content -->
@@ -270,72 +270,6 @@
     
 @include('layouts.business.footer')
 	
-<script>
-
-   flatpickr(".flatpickr-range", {
-   	altInput: true,
-   	altFormat: "m/d/Y",
-     	dateFormat: "Y-m-d",
-     	maxDate: "2050-01-01"
-	});
-
-	$(document).on('click', '[data-behavior~=on_change_submit]', function(e){
-		e.preventDefault()
-		$(this).parents('form').submit();
-	});
-
-	$(document).on('change', '[data-behavior~=on_change_submit]', function(e){
-		$('#filterOptionsvalue').val(this.value);
-		$('#generateReport').click();
-	});
-
-	function formatDate(dateString) {
-    	const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-   	const formattedDate = new Date(dateString).toLocaleDateString(undefined, options);
-    	return formattedDate;
-	}
-
-	function exportData(){
-		let startDate = '<?= $filterStartDate ? $filterStartDate->format("Y-m-d") : ''; ?>' || $('#startDate').val();
-		let endDate = '<?= $filterEndDate ? $filterEndDate->format("Y-m-d") : ''; ?>' ||  $('#endDate').val();
-		var type = $('#exportOptions').val();
-      var filename =  '';
-
-		if(type != '' && type != 'print'){
-
-			var downloadUrl = '{{ route("business.todays_booking.export") }}' + '?type=' + type +'&endDate=' + endDate +
-		        '&startDate=' + startDate;
-
-	    	if(type == 'excel'){
-	    		filename = 'booking-info.xlsx';
-	    	}else if(type == 'pdf'){
-	    		filename = 'booking-info.pdf';
-	    	}
-	
-	    	var link = document.createElement('a');
-	    	link.href = downloadUrl;
-	    	link.download = filename;
-	    	document.body.appendChild(link);
-	    	link.click();
-	    	document.body.removeChild(link);
-		}else if(type == 'print'){
-
-			$('#accordionnesting').removeClass('collapsed');
-			$('#accor_nestingExamplecollapsetoday').removeClass('scroll-customer');
-			$('#accor_nestingExamplecollapsetoday, .buttonaccodiandiv').addClass('show');
-		
-			setTimeout(function() {
-				print();
-			}, 1000);
-
-			setTimeout(function() {
-				$('#accor_nestingExamplecollapsetoday, .buttonaccodiandiv').addClass('scroll-customer');
-				$('#accordionnesting').addClass('collapsed');
-				$('#accor_nestingExamplecollapsetoday, .buttonaccodiandiv').removeClass('show');
-			}, 2000);
-		}
-	}
-
-</script>
+@include('business.reports.membership.membership_script',['filterStartDate'=>$filterStartDate ,'filterEndDate' =>$filterEndDate ,'page' => ''])
 
 @endsection
