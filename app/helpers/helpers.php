@@ -288,8 +288,8 @@
     }
 
     function getNotificationPersonal($type=null){
+        echo Auth::user();exit;
         $customers = Auth::user()->customers();
-        echo $customers;
         if($customers != ''){
             $customersId =  @$customers->pluck('id')->toArray();
             $notifications = Notification::orderby('updated_at','desc')->whereDate('display_date', '=', now())
