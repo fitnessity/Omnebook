@@ -27,7 +27,7 @@ class CalendarController extends Controller
     public function index(Request $request)
     {
         $familyDetails = $companies = [];
-
+         $ids = [];
         if($request->customer_id){
             if(request()->type == 'user'){
                 $familyMember = Auth::user()->user_family_details()->where('id',$request->customer_id)->first();
@@ -99,8 +99,8 @@ class CalendarController extends Controller
                 'id'  => $dt['id'],
                 'title'  => $dt['title']. ' \n '.date("h:i a", strtotime( $dt["shift_start"] )).' - '.$time . ' \n '.$full_name,  
                 'description' => $dt['title']. ' <br> '.date("h:i a", strtotime($dt["shift_start"])).' - '.$time . ' <br> '.$full_name,  
-                'start'  => $dt['start'].' '.date("h:i", strtotime( $dt["shift_start"]) ),
-                'end'  => $dt["start"].' '.date("h:i", strtotime( $dt["shift_end"]) ),
+                'start'  => $dt['start'].'T'.date("h:i", strtotime( $dt["shift_start"]) ),
+                'end'  => $dt["start"].'T'.date("h:i", strtotime( $dt["shift_end"]) ),
             );
         }
 
