@@ -298,7 +298,8 @@ class BusinessController extends Controller
     }
 
     public function notification_delete(Request $request){
-        Notification::where(['id'=>$request->id])->delete();
+        $idsArray = explode(',', $request->id);
+        Notification::whereIn('id',$idsArray)->delete();
     }
 
     public function getBookingList(Request $request){
