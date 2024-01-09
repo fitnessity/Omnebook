@@ -54,10 +54,11 @@
                                                                     <div class="form-group mb-10">
                                                                         <select class="form-select" id="companies"  onChange="updateBusinessId(this.value)">
                                                                             <option value="all"> ALL</option>
-                                                                            @forelse($companies as $c)
-                                                                              <option value="{{ $c->id}}" @if(request()->business_id == $c->id) selected @endif> {{$c->public_company_name}}</option> 
-                                                                            @empty
-                                                                            @endforelse
+                                                                            @if(!empty($companies))
+                                                                                @foreach($companies as $c)
+                                                                                  <option value="{{ $c->id}}" @if(request()->business_id == $c->id) selected @endif> {{$c->public_company_name}}</option> 
+                                                                                @endforeach
+                                                                            @endif
                                                                         </select>
                                                                     </div>
                                                                 </div>
