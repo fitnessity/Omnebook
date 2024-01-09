@@ -15,7 +15,6 @@ class AddDisplayTimeSenderIdInNotifications extends Migration
     {
         Schema::table('notification', function (Blueprint $table) {
             $table->string('display_time',255)->nullable()->after('display_date');
-            $table->integer('sender_id')->nullable()->after('status');
         });
     }
 
