@@ -65,7 +65,7 @@
 
 					<div class="d-flex align-items-center">
 
-						<div class="dropdown d-md-none topbar-head-dropdown header-item">
+						<!-- <div class="dropdown d-md-none topbar-head-dropdown header-item">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<i class="bx bx-search fs-22"></i>
 							</button>
@@ -81,11 +81,11 @@
 								</form>
 							</div>
 						</div>
-						<div>
+						<div> 
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none desktop-add-client-none" data-bs-toggle="modal" data-bs-target=".new-client-steps">
 								<i class='bx bx-message-square-add fs-22' ></i>
 							</button>
-						</div>
+						</div>-->
 					
 						<div class="ms-1 header-item d-none d-sm-flex">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-toggle="fullscreen">
@@ -238,7 +238,7 @@
 																$profilePic = $n->CustomerNotes->customer->profile_pic_url;
 																$firstLetter = $n->CustomerNotes->customer->first_letter;
 																$fullName = $n->CustomerNotes->customer->full_name;
-																$text = $n->CustomerNotes->limit_note_character;
+																$text = $n->CustomerNotes->title;
 																$link = '';
 															}
 

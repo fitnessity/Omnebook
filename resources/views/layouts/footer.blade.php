@@ -177,7 +177,7 @@
 		<div class="shortcut-sticky">
 			<a href="{{route('personal.orders.index')}}" class="short-links">
 				<i class="fas fa-info"></i>
-				<label>Account</label>
+				<label>Accounts</label>
 			</a>
 		</div>
 	</div>

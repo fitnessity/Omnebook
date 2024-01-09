@@ -22,6 +22,7 @@
 								<h4 class="card-title mb-0 flex-grow-1">Documents</h4>
 							</div><!-- end card header -->
 							<div class="card-body">
+
 								@forelse($documents as $d)
 									<div class="row y-middle border-bottom-documents mt-5">
 										<div class="col-lg-3 col-md-2 col-sm-2 col-12">
@@ -343,6 +344,12 @@
 @include('layouts.business.footer')
 
 <script type="text/javascript">
+	$(document).ready(function() {
+		$('.sign').modal({
+        backdrop: 'static',
+        keyboard: false
+    	});
+   });
 
 	function openDocumentModal(id,type){
 		$.ajax({
@@ -357,21 +364,6 @@
          }
       });
 	}
-
-   function openTermsModal(id,path,type){
- 		context.clearRect(0, 0, canvas.width, canvas.height);
-    	$('#saveSignature').attr('data-did',id);
-    	$('#saveSignature').attr('data-type',type);
-    	loadImage(path);
-    	$('.sign').modal('show');
-   }
-
-   function openModal(id,path){
- 		context.clearRect(0, 0, canvas.width, canvas.height);
-    	$('#saveSignature').attr('data-did',id);
-    	loadImage(path);
-    	$('.sign').modal('show');
-   }
 
 	function deleteDoc(id,cid){
 		let text = "You are about to delete the document. Are you sure you want to continue?";
@@ -406,116 +398,125 @@
 		$('.modalTerms').modal('show');
 	}
 
+
+
 </script>
 
 <script>
 
-	// Get the canvas element and create a drawing context
-	const canvas = document.getElementById('signatureCanvas');
-	const context = canvas.getContext('2d');
+        const canvas = document.getElementById('signatureCanvas');
+        const ctx = canvas.getContext('2d');
+        var drawing = false;
 
-	let isDrawing = false;
-	let lastX = 0;
-	let lastY = 0;
+         function startDrawing(e) {
+            e.preventDefault();
+            var pos = getMouseOrTouchPos(canvas, e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+            drawing = true;
+         }
 
-	// Add event listeners to track mouse movements
-	canvas.addEventListener('mousedown', startDrawing);
-	canvas.addEventListener('mousemove', draw);
-	canvas.addEventListener('mouseup', stopDrawing);
-	canvas.addEventListener('mouseout', stopDrawing);
-	canvas.addEventListener('touchstart', startDrawing);
-	canvas.addEventListener('touchmove', draw);
-	canvas.addEventListener('touchend', stopDrawing);
-	canvas.addEventListener('touchcancel', stopDrawing);
+         function draw(e) {
+            e.preventDefault();
+            if (!drawing) return;
 
-	// Function to start drawing
-	function startDrawing(event) {
-  		var isTouch = event.type.startsWith('touch'); // Check if it's a touch event
-  
-  		if (isTouch) {
-		    var touch = event.touches[0]; // Get the first touch point
-		    lastX = touch.clientX;
-		    lastY = touch.clientY;
-		} else {
-		    lastX = event.offsetX;
-		    lastY = event.offsetY;
-		}
+            var pos = getMouseOrTouchPos(canvas, e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+         }
+
+         function stopDrawing(e) {
+            e.preventDefault();
+            drawing = false;
+        }
+
+        function getMouseOrTouchPos(canvas, e) {
+            var rect = canvas.getBoundingClientRect();
+            var clientX, clientY;
+
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        // Add unified event listeners
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+        canvas.addEventListener('touchcancel', stopDrawing);
+
+        	const clearButton = document.getElementById('clearButton');
+			clearButton.addEventListener('click', clearCanvas);
+
+			function clearCanvas() {
+		  		ctx.clearRect(0, 0, canvas.width, canvas.height);
+			}
+
+			$('#saveSignature').click(function() {
+	    	// Convert the canvas to an image (data URL)
+		    	var signatureDataUrl = canvas.toDataURL();
+
+		    	// Submit the signature using AJAX
+	   	 	$.ajax({
+		        type: 'POST',
+		        url: "{{ route('personal.save.signature') }}",
+		        data: {
+		            _token: "{{ csrf_token() }}",
+		            signature: signatureDataUrl,
+		            id: $('#saveSignature').attr('data-did'),
+		            type: $('#saveSignature').attr('data-type'),
+		            cus_id: '{{@$customer->id}}',
+		        },
+		        success: function(response) {
+		            alert('Signature saved successfully.');
+		            window.location.reload();
+		        },
+		        error: function(error) {
+		            alert('Error saving signature.');
+		        }
+	    		});
+    		});
+
+			function  loadImage(imageData) {
+	        var proxyUrl = 'image-proxy?url=' + encodeURIComponent(imageData);
+	        var img = new Image();
+	        img.crossOrigin = 'anonymous'; // Enable CORS for the image
+	        img.onload = function() {
+	            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+	        };
+	        img.src = proxyUrl;
+	    	}
     
-  		isDrawing = true;
-  		// [lastX, lastY] = [event.offsetX, event.offsetY];
-	}
 
-	// Function to draw
-	function draw(event) {
-	  	if (!isDrawing) return;
-	  	var isTouch = event.type.startsWith('touch'); // Check if it's a touch event
-	  	var x, y;
 
-	  	if (isTouch) {
-		    var touch = event.touches[0]; // Get the first touch point
-		    x = touch.clientX;
-		    y = touch.clientY;
-		} else {
-		    x = event.offsetX;
-		    y = event.offsetY;
-		}
-	  
-	  	context.beginPath();
-	  	context.moveTo(lastX, lastY);
-	  	context.lineTo(x, y);
-	  	context.stroke();
-	  
-	  	lastX = x;
-	  	lastY = y;
-	}
+   	function openTermsModal(id,path,type){
+		 		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		    	$('#saveSignature').attr('data-did',id);
+		    	$('#saveSignature').attr('data-type',type);
+		    	loadImage(path);
+		    	$('.sign').modal('show');
+		   }
 
-	// Function to stop drawing
-	function stopDrawing() {
-  		isDrawing = false;
-	}
-
-	// Clear the canvas when the clear button is clicked
-	const clearButton = document.getElementById('clearButton');
-	clearButton.addEventListener('click', clearCanvas);
-
-	function clearCanvas() {
-  		context.clearRect(0, 0, canvas.width, canvas.height);
-	}
-
-	$('#saveSignature').click(function() {
-    	// Convert the canvas to an image (data URL)
-    	var signatureDataUrl = canvas.toDataURL();
-
-    	// Submit the signature using AJAX
-   	 	$.ajax({
-	        type: 'POST',
-	        url: "{{ route('personal.save.signature') }}",
-	        data: {
-	            _token: "{{ csrf_token() }}",
-	            signature: signatureDataUrl,
-	            id: $('#saveSignature').attr('data-did'),
-	            type: $('#saveSignature').attr('data-type'),
-	            cus_id: '{{@$customer->id}}',
-	        },
-	        success: function(response) {
-	            alert('Signature saved successfully.');
-	            window.location.reload();
-	        },
-	        error: function(error) {
-	            alert('Error saving signature.');
-	        }
-    	});
-    });
-
-    function  loadImage(imageData) {
-        var proxyUrl = 'image-proxy?url=' + encodeURIComponent(imageData);
-        var img = new Image();
-        img.crossOrigin = 'anonymous'; // Enable CORS for the image
-        img.onload = function() {
-            context.drawImage(img, 0, 0, canvas.width, canvas.height);
-        };
-        img.src = proxyUrl;
-    }
-
+		   function openModal(id,path){
+		 		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		    	$('#saveSignature').attr('data-did',id);
+		    	loadImage(path);
+		    	$('.sign').modal('show');
+		   }
 </script>
+
 @endsection

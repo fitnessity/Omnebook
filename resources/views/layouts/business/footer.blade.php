@@ -39,7 +39,7 @@
 	<div class="modal-dialog modal-dialog-centered" id="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-btn-modal"></button>
 			</div>
 			<div class="modal-body"></div>
 		</div>
@@ -150,7 +150,7 @@
 		<div class="shortcut-sticky">
 			<a href="{{route('personal.orders.index')}}" class="short-links">
 				<i class="fas fa-info"></i>
-				<label>Bookings</label>
+				<label>Accounts</label>
 			</a>
 		</div>
 	</div>
@@ -271,7 +271,8 @@
 
 <!-- Sticky Footer new design -->
    <!-- JAVASCRIPT -->
-   
+   <script src="{{asset('/public/dashboard-design/js/jquery-ui.min.js')}}"></script>
+
   <!--  <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap" async defer></script> -->
   
     <script src="{{asset('/public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
@@ -363,9 +364,9 @@
 
  <!-- new design end -->
 
-<?php /*
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>owl.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.flexslider.js"></script>
+<?php /*
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>lightbox.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>sly.min.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>home.js"></script>
@@ -522,6 +523,7 @@ function closeMobileNav() {
 		$("#modal-dialog").removeClass();
 		$("#modal-dialog").addClass('modal-dialog modal-dialog-centered');
         var width = $(this).data('modal-width');
+        var reload = $(this).data('reload');
         if(width == undefined){
             width = 'modal-50';
         }
@@ -532,8 +534,16 @@ function closeMobileNav() {
             success: function(html){
             	$('#ajax_html_modal .modal-body').html(html)
                 $('#ajax_html_modal .modal-dialog').addClass(width);
+                if(reload == 1 ){
+                	$('#close-btn-modal').attr('onclick', 'window.location.reload()');
+                }else{
+                	$('#close-btn-modal').removeAttr('onclick');
+                }
+
             	if(chkbackdrop == 1){
             		$('#ajax_html_modal').modal({ backdrop: 'static', keyboard: false });
+            		$('#ajax_html_modal').modal('show')
+
         		}else{
                     $('#ajax_html_modal').modal('show')
         		}

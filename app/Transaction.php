@@ -20,9 +20,21 @@ class Transaction extends Model
         'user_type', 'user_id', 'item_type','item_id', 'channel','kind','transaction_id','amount','qty','status','refund_amount','payload','stripe_payment_method_id'
     ];
 
+     protected $appends = ['customer_id'];
+
     /**
      * Get the user that owns the task.
      */
+
+    public function getCustomerIdAttribute()
+    {
+        if($this->user_type == 'user'){
+            $customer = Customer::where('user_id' ,$this->user_id)->first();
+            return @$customer->id;
+        }else{
+            return $this->user_id;
+        }
+    }
 
     public function User(){
         return $this->belongsTo(User::class,'user_id');

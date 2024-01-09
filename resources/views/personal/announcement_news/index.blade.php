@@ -42,7 +42,7 @@
 											<div class="row">
 												<div class="col-lg-3 col-md-3 col-12">
 													<div class="text-right">
-														<input type="text" class="form-control flatpickr" placeholder="Select date" id="announcement-date" value="{{request()->date}}" />
+														<input type="text" class="form-control flatpickr" placeholder="Select date" id="announcement-date" value="{{request()->date ?? date('Y-m-d')}}" />
 													</div>
 												</div>
 											</div>

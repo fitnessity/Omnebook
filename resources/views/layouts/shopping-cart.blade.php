@@ -151,13 +151,13 @@
 																		<div class="hstack gap-3 px-3 mx-n3">
 																			<select class="form-select fs-13 familypart" name="participat[]" id="participats" >
 
-																				<option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">Choose or Add Participant</option>
+																				<option value="" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">Choose or Add Participant</option>
 	                                            								
 	                                            								<option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">{{Auth::user()->firstname}} {{ Auth::user()->lastname }}</option>
-	                                            								<?php foreach($family as $fa){ ?>   
-									                                            	<option value="{{$fa['id']}}"  data-name="{{$fa['fname']}}  {{$fa['lname']}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-age="" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="{{$fa['type']}}">
+	                                            									@foreach($family as $fa)
+									                                            		<option value="{{$fa['id']}}"  data-name="{{$fa['fname']}}  {{$fa['lname']}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-age="" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="{{$fa['type']}}">
 									                                                    {{$fa['fname']}} {{$fa['lname']}}</option>
-									                                            <?php } ?>
+									                                            	@endforeach
 
 	                                           	 								<option value="addparticipate">+ Add New Participant</option>
 																			</select>
@@ -625,6 +625,10 @@
 																<i class="fas fa-arrow-right label-icon align-bottom fs-16 ms-2"></i> Check out
 															</button>
 														</div>
+														<div class="text-end mb-4">
+															<span class="font-red fs-14 d-none participateAlert">Please Select Who Is Participating.</span>
+														</div>
+														
 													</div>
 												</div>
 											</div>
@@ -866,7 +870,6 @@
             }
         })
     });
-
 </script>
 	
 <script type="text/javascript">
@@ -988,6 +991,23 @@
                 });
             @endif
         });
+
+        $('form').submit(function() {
+		    var isValid = true;
+
+		    $('.familypart').each(function() {
+		      	var selectedValue = $(this).val();
+		      	if (!selectedValue || selectedValue === 'addparticipate') {
+		      		$('.participateAlert').removeClass('d-none');
+			        isValid = false;
+			        return false; 
+			    }else{
+			    	$('.participateAlert').addClass('d-none');
+			    }
+		    });
+
+		    return isValid;
+		});
     });
 </script>
 

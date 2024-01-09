@@ -37,7 +37,7 @@
 										</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" data-bs-toggle="tab" href="#Alerts" role="tab" aria-selected="false">
+										<a class="nav-link" data-bs-toggle="tab" href="#Curriculum" role="tab" aria-selected="false">
                                             Curriculum
 										</a>
 									</li>
@@ -88,14 +88,14 @@
                                                                             <div class="accordion-body">
                                                                                 <div class="greybox mb-10">
                                                                                     <div class="row">
-                                                                                        <div class="col-lg-1">
+                                                                                        <div class="col-lg-1 col-md-3 col-sm-3 col-6">
                                                                                             <div class="cgreen">
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="col-lg-3">
+                                                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-6">
                                                                                             <label>Green</label>
                                                                                         </div>
-                                                                                        <div class="col-lg-8">
+                                                                                        <div class="col-lg-8 col-sm-6 col-md-6 col-12">
                                                                                             <div class="float-end"><label class="fs-16 mb-0">1 <span class="fs-13">Members</span></label></div>
                                                                                         </div>
                                                                                     </div>
@@ -103,16 +103,16 @@
                                                                                 
                                                                                 <div class="greybox mb-10">
                                                                                     <div class="row">
-                                                                                        <div class="col-lg-1">
+                                                                                        <div class="col-lg-1 col-md-3 col-sm-3 col-6">
                                                                                             <div class="cyellow">
                                                                                                 <div class="inner-belt">                                                                                                    
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="col-lg-3">
+                                                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-6">
                                                                                             <label>Yellow /Red Top</label>
                                                                                         </div>
-                                                                                        <div class="col-lg-8">
+                                                                                        <div class="col-lg-8 col-sm-6 col-md-6 col-12">
                                                                                             <div class="float-end"><label class="fs-16 mb-0">0 <span class="fs-13">Members</span></label></div>
                                                                                         </div>
                                                                                     </div>
@@ -120,16 +120,16 @@
 
                                                                                 <div class="greybox mb-10">
                                                                                     <div class="row">
-                                                                                        <div class="col-lg-1">
+                                                                                        <div class="col-lg-1 col-md-3 col-sm-3 col-6">
                                                                                             <div class="cblack">
                                                                                                 <div class="vertical-inner-belt">                                                                                                    
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="col-lg-3">
+                                                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-6">
                                                                                             <label>Black 1st Dan</label>
                                                                                         </div>
-                                                                                        <div class="col-lg-8">
+                                                                                        <div class="col-lg-8 col-sm-6 col-md-6 col-12">
                                                                                             <div class="float-end"><label class="fs-16 mb-0">0 <span class="fs-13">Members</span></label></div>
                                                                                         </div>
                                                                                     </div>
@@ -137,7 +137,7 @@
 
                                                                                 <div class="greybox mb-10">
                                                                                     <div class="row">
-                                                                                        <div class="col-lg-1">
+                                                                                        <div class="col-lg-1 col-md-3 col-sm-3 col-6">
                                                                                             <div class="cblack">
                                                                                                 <div class="vertical-inner-belt mr-5">                                                                                                    
                                                                                                 </div>
@@ -145,10 +145,10 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="col-lg-3">
+                                                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-6">
                                                                                             <label>Black 2nd Dan</label>
                                                                                         </div>
-                                                                                        <div class="col-lg-8">
+                                                                                        <div class="col-lg-8 col-sm-6 col-md-6 col-12">
                                                                                             <div class="float-end"><label class="fs-16 mb-0">0 <span class="fs-13">Members</span></label></div>
                                                                                         </div>
                                                                                     </div>
@@ -156,7 +156,7 @@
 
                                                                                 <div class="greybox mb-10">
                                                                                     <div class="row">
-                                                                                        <div class="col-lg-1">
+                                                                                        <div class="col-lg-1 col-md-3 col-sm-3 col-6">
                                                                                             <div class="cblack">
                                                                                                 <div class="vertical-inner-belt mr-5">                                                                                                    
                                                                                                 </div>
@@ -170,10 +170,10 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="col-lg-3">
+                                                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-6">
                                                                                             <label>Black 5th Dan</label>
                                                                                         </div>
-                                                                                        <div class="col-lg-8">
+                                                                                        <div class="col-lg-8 col-sm-6 col-md-6 col-12">
                                                                                             <div class="float-end"><label class="fs-16 mb-0">1 <span class="fs-13">Members</span></label></div>
                                                                                         </div>
                                                                                     </div>
@@ -192,12 +192,319 @@
                                             <!-- end card body -->
                                         </div>
 									</div>
-									<div class="tab-pane" id="Alerts" role="tabpanel">
+									<div class="tab-pane" id="Curriculum" role="tabpanel">
 										<div class="row">
 											<div class="col-xxl-12 col-lg-12">
 												<div class="card">
 													<div class="card-body">
-														<label>Cooming Soon</label>
+                                                        <ul class="nav nav-tabs mb-3" role="tablist">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active" data-bs-toggle="tab" href="#Library" role="tab" aria-selected="false">
+                                                                    Library
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" data-bs-toggle="tab" href="#Categories" role="tab" aria-selected="false">
+                                                                    Categories
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" data-bs-toggle="tab" href="#Ratings" role="tab" aria-selected="false">
+                                                                    Star Ratings
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" data-bs-toggle="tab" href="#Certificates" role="tab" aria-selected="false">
+                                                                    Certificates
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                        <div class="tab-content text-muted">
+                                                            <div class="tab-pane active" id="Library" role="tabpanel">
+                                                                <div class="row">
+                                                                    <div class="col-xl-12">
+                                                                        <div class="card">
+                                                                            <div class="card-body">
+                                                                                <div class="live-preview">
+                                                                                    <div class="accordion custom-accordionwithicon accordion-border-box" id="accordionnesting">
+                                                                                        <div class="accordion-item shadow">
+                                                                                            <h2 class="accordion-header" id="accordionnestingExample1">
+                                                                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse1" aria-expanded="true" aria-controls="accor_nestingExamplecollapse1">
+                                                                                                    <div class="container-fluid nopadding">
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-6">
+                                                                                                                Show Skills
+                                                                                                            </div>
+                                                                                                            <div class="col-6">
+                                                                                                                <div class="float-end mr-15"><label class="fs-16">1 <span class="fs-13">Skills</span></label></div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </button>
+                                                                                            </h2>
+                                                                                            <div id="accor_nestingExamplecollapse1" class="accordion-collapse collapse show" aria-labelledby="accordionnestingExample1" data-bs-parent="#accordionnesting">
+                                                                                                <div class="accordion-body">
+                                                                                                    <div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnesting2">
+                                                                                                        <div class="accordion-item shadow">
+                                                                                                            <h2 class="accordion-header" id="accordionnesting2Example1">
+                                                                                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting2Examplecollapse1" aria-expanded="true" aria-controls="accor_nesting2Examplecollapse1">
+                                                                                                                    <div class="container-fluid nopadding">
+                                                                                                                        <div class="row">
+                                                                                                                            <div class="col-6">
+                                                                                                                                White
+                                                                                                                            </div>
+                                                                                                                            <div class="col-6">
+                                                                                                                                <div class="float-end mr-15 pluse-modal" data-bs-toggle="modal" data-bs-target="#plusModal">
+                                                                                                                                    <i class="fas fa-plus-square"></i>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </button>
+                                                                                                            </h2>
+                                                                                                            <div id="accor_nesting2Examplecollapse1" class="accordion-collapse collapse show" aria-labelledby="accordionnesting2Example1" data-bs-parent="#accordionnesting2">
+                                                                                                                <div class="accordion-body">
+                                                                                                                    <div class="row">
+                                                                                                                        <div class="col-lg-6">
+                                                                                                                            <div class="skills-edit mb-25">
+                                                                                                                                <div class="row">
+                                                                                                                                    <div class="col-lg-8 col-md-8 col-sm-8 col-6">
+                                                                                                                                        <label class="mb-0">Front Snap Kick</label>
+                                                                                                                                    </div>
+                                                                                                                                    <div class="col-lg-4 col-md-4 col-sm-4 col-6">
+                                                                                                                                        <div class="text-end">
+                                                                                                                                            <button class="btn btn-sm btn-soft-danger remove-list" data-bs-toggle="modal" data-bs-target="#removeTaskItemModal" data-remove-id="15"><i class="ri-delete-bin-5-fill align-bottom"></i></button>
+                                                                                                                                            <button class="btn btn-sm btn-soft-grey edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15"><i class="ri-pencil-fill align-bottom"></i></button>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                        <div class="col-lg-6">
+                                                                                                                            <div class="skills-edit mb-25">
+                                                                                                                                <div class="row">
+                                                                                                                                    <div class="col-lg-8 col-md-8 col-sm-8 col-6">
+                                                                                                                                        <label class="mb-0">Upperward Block</label>
+                                                                                                                                    </div>
+                                                                                                                                    <div class="col-lg-4 col-md-4 col-sm-4 col-6">
+                                                                                                                                        <div class="text-end">
+                                                                                                                                            <button class="btn btn-sm btn-soft-danger remove-list" data-bs-toggle="modal" data-bs-target="#removeTaskItemModal" data-remove-id="15"><i class="ri-delete-bin-5-fill align-bottom"></i></button>
+                                                                                                                                            <button class="btn btn-sm btn-soft-grey edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15"><i class="ri-pencil-fill align-bottom"></i></button>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <div class="accordion nesting4-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnesting4">
+                                                                                                                        <div class="accordion-item shadow">
+                                                                                                                            <h2 class="accordion-header" id="accordionnesting4Example2">
+                                                                                                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting4Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting4Examplecollapse2">
+                                                                                                                                    <div class="container-fluid nopadding">
+                                                                                                                                        <div class="row">
+                                                                                                                                            <div class="col-6">
+                                                                                                                                                 Blocks
+                                                                                                                                            </div>
+                                                                                                                                            <div class="col-6">
+                                                                                                                                                <div class="float-end mr-15 pluse-modal" data-bs-toggle="modal" data-bs-target="#plusModal">
+                                                                                                                                                    <i class="fas fa-plus-square"></i>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                </button>
+                                                                                                                            </h2>
+                                                                                                                            <div id="accor_nesting4Examplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnesting4Example2" data-bs-parent="#accordionnesting4">
+                                                                                                                                <div class="accordion-body">
+
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div><!-- end card-body -->
+                                                                        </div><!-- end card -->
+                                                                    </div>
+                                                                    <!--end col-->
+                                                                </div>
+                                                                <!--end row-->
+                                                            </div>
+                                                            <div class="tab-pane" id="Categories" role="tabpanel">
+                                                                <div class="card">
+                                                                    <div class="card-header align-items-center text-end">
+                                                                        <div>
+                                                                            <button type="button" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#addcat">
+                                                                                Add Catagory
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <div class="mb-25">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-12">
+                                                                                    <div class="text-center title-sparetor mb-25">
+                                                                                        <label class="fs-19 font-red">Martial Arts</label>
+                                                                                    </div>                                                                                
+                                                                                </div>
+                                                                                <div class="col-lg-6">
+                                                                                    <div class="skills-edit mb-10">
+                                                                                        <div class="row">
+                                                                                            <div class="col-lg-8 col-md-8 col-sm-8 col-6">
+                                                                                                <label class="mb-0">Kicks</label>
+                                                                                            </div>
+                                                                                            <div class="col-lg-4 col-md-4 col-sm-4 col-6">
+                                                                                                <div class="text-end">
+                                                                                                    <button class="btn btn-sm btn-soft-danger remove-list" data-bs-toggle="modal" data-bs-target="#removeTaskItemModal" data-remove-id="15"><i class="ri-delete-bin-5-fill align-bottom"></i></button>
+                                                                                                    <button class="btn btn-sm btn-soft-grey edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15"><i class="ri-pencil-fill align-bottom"></i></button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div> 
+                                                                                </div>
+                                                                                <div class="col-lg-6">
+                                                                                    <div class="skills-edit mb-10">
+                                                                                        <div class="row">
+                                                                                            <div class="col-lg-8 col-md-8 col-sm-8 col-6">
+                                                                                                <label class="mb-0">Blocks</label>
+                                                                                            </div>
+                                                                                            <div class="col-lg-4 col-md-4 col-sm-4 col-6">
+                                                                                                <div class="text-end">
+                                                                                                    <button class="btn btn-sm btn-soft-danger remove-list" data-bs-toggle="modal" data-bs-target="#removeTaskItemModal" data-remove-id="15"><i class="ri-delete-bin-5-fill align-bottom"></i></button>
+                                                                                                    <button class="btn btn-sm btn-soft-grey edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15"><i class="ri-pencil-fill align-bottom"></i></button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div> 
+                                                                                </div>
+                                                                                <div class="col-lg-6">
+                                                                                    <div class="skills-edit mb-10">
+                                                                                        <div class="row">
+                                                                                            <div class="col-lg-8 col-md-8 col-sm-8 col-6">
+                                                                                                <label class="mb-0">Punches</label>
+                                                                                            </div>
+                                                                                            <div class="col-lg-4 col-md-4 col-sm-4 col-6">
+                                                                                                <div class="text-end">
+                                                                                                    <button class="btn btn-sm btn-soft-danger remove-list" data-bs-toggle="modal" data-bs-target="#removeTaskItemModal" data-remove-id="15"><i class="ri-delete-bin-5-fill align-bottom"></i></button>
+                                                                                                    <button class="btn btn-sm btn-soft-grey edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15"><i class="ri-pencil-fill align-bottom"></i></button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div> 
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="mb-25">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-12">
+                                                                                    <div class="text-center title-sparetor mb-25">
+                                                                                        <label class="fs-19 font-red">Fitness Training</label>
+                                                                                    </div>                                                                                
+                                                                                </div>
+                                                                                <div class="col-lg-6">
+                                                                                    <div class="skills-edit mb-10">
+                                                                                        <div class="row">
+                                                                                            <div class="col-lg-8 col-md-8 col-sm-8 col-6">
+                                                                                                <label class="mb-0">Bicep Curl Rep</label>
+                                                                                            </div>
+                                                                                            <div class="col-lg-4 col-md-4 col-sm-4 col-6">
+                                                                                                <div class="text-end">
+                                                                                                    <button class="btn btn-sm btn-soft-danger remove-list" data-bs-toggle="modal" data-bs-target="#removeTaskItemModal" data-remove-id="15"><i class="ri-delete-bin-5-fill align-bottom"></i></button>
+                                                                                                    <button class="btn btn-sm btn-soft-grey edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15"><i class="ri-pencil-fill align-bottom"></i></button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div> 
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="mb-25">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-12">
+                                                                                    <div class="text-center title-sparetor mb-25">
+                                                                                        <label class="fs-19 font-red">Yoga & Pilates</label>
+                                                                                    </div>                                                                                
+                                                                                </div>
+                                                                                <div class="col-lg-6">
+                                                                                    <div class="skills-edit mb-10">
+                                                                                        <div class="row">
+                                                                                            <div class="col-lg-8 col-md-8 col-sm-8 col-6">
+                                                                                                <label class="mb-0">Opening Sequence</label>
+                                                                                            </div>
+                                                                                            <div class="col-lg-4 col-md-4 col-sm-4 col-6">
+                                                                                                <div class="text-end">
+                                                                                                    <button class="btn btn-sm btn-soft-danger remove-list" data-bs-toggle="modal" data-bs-target="#removeTaskItemModal" data-remove-id="15"><i class="ri-delete-bin-5-fill align-bottom"></i></button>
+                                                                                                    <button class="btn btn-sm btn-soft-grey edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15"><i class="ri-pencil-fill align-bottom"></i></button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div> 
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="tab-pane" id="Ratings" role="tabpanel">
+                                                                <h6 class="fs-15">Choose the number of stars in your rating system</h6>
+                                                                <div class="fs-19 align-middle text-warning">
+                                                                    <i class="ri-star-fill"></i>
+                                                                    <i class="ri-star-fill"></i>
+                                                                    <i class="ri-star-fill"></i>
+                                                                    <i class="ri-star-fill"></i>
+                                                                    <i class="ri-star-fill"></i>
+                                                                </div>
+                                                                <div class="mb-15">
+                                                                    <label class="fs-15">Star Rating Descriptions</label>
+                                                                    
+                                                                </div>
+                                                                <div class="d-flex fs-17 mb-15">
+                                                                    <label class="mr-10">1</label>
+                                                                    <i class="ri-star-fill text-warning mr-10"></i>
+                                                                    <label class="mr-10">=</label>
+                                                                    <input type="text" class="form-control mr-10 w-250" value="" required="">
+                                                                </div>
+                                                                <div class="d-flex fs-17 mb-15">
+                                                                    <label class="mr-10">2</label>
+                                                                    <i class="ri-star-fill text-warning mr-10"></i>
+                                                                    <label class="mr-10">=</label>
+                                                                    <input type="text" class="form-control mr-10 w-250" value="" required="">
+                                                                </div>
+                                                                <div class="d-flex fs-17 mb-15">
+                                                                    <label class="mr-10">3</label>
+                                                                    <i class="ri-star-fill text-warning mr-10"></i>
+                                                                    <label class="mr-10">=</label>
+                                                                    <input type="text" class="form-control mr-10 w-250" value="" required="">
+                                                                </div>
+                                                                <div class="d-flex fs-17 mb-15">
+                                                                    <label class="mr-10">4</label>
+                                                                    <i class="ri-star-fill text-warning mr-10"></i>
+                                                                    <label class="mr-10">=</label>
+                                                                    <input type="text" class="form-control mr-10 w-250" value="" required="">
+                                                                </div>
+                                                                <div class="d-flex fs-17 mb-15">
+                                                                    <label class="mr-10">5</label>
+                                                                    <i class="ri-star-fill text-warning mr-10"></i>
+                                                                    <label class="mr-10">=</label>
+                                                                    <input type="text" class="form-control mr-10 w-250" value="" required="">
+                                                                </div>
+                                                                <button type="button" class="btn btn-red">Save changes</button>
+                                                            </div>
+                                                            <div class="tab-pane" id="Certificates" role="tabpanel">
+                                                                <h6>Comming Soon</h6>
+                                                            </div>
+                                                        </div>
+
 													</div><!-- end card-body -->
 												</div><!-- end card -->
 											</div>
@@ -213,5 +520,121 @@
 	</div><!-- end main content-->
 	
 </div><!-- END layout-wrapper -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="addcat" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addcatLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addcatLabel">Add Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="javascript:void(0);">
+                    <div class="steps-title mmb-10">
+					    <div class="mb-3">
+					        <label for="JoiningdatInput" class="form-label">Type</label>
+						    <select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
+						        <option value=""> Martial Arts </option>
+						        <option value="">Fitness Training</option>
+                                <option value="">Yoga & Pilates</option>
+						    </select>
+					    </div>
+				    </div>
+                    <div class="mb-3">
+			            <label for="firstnameInput" class="form-label">Title <span class="font-red">*</span></label>
+				        <input type="text" class="form-control">
+				    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-red">Save Category</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="plusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable width-40">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Skill</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="javascript:void(0);">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label for="firstnameInput" class="form-label">Title</label>
+                                <input type="text" class="form-control" value="Dave">
+                            </div>
+                            <div class="mb-3">
+                                <label for="JoiningdatInput" class="form-label">Program</label>
+                                <select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
+                                    <option value="">Taekwondo</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 custom-check-dropdwon">
+                                <div id="list1" class="dropdown-check-list" tabindex="100">
+                                    <span class="anchor">Select Fruits</span>
+                                    <ul class="items">
+                                        <li><input type="checkbox" />White </li>
+                                        <li><input type="checkbox" />Yellow</li>
+                                        <li><input type="checkbox" />White / Yellow Tip</li>
+                                        <li><input type="checkbox" />Green</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <input type="checkbox">
+                                <label class="form-label">Visible on gym schedule </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label for="JoiningdatInput" class="form-label">Measure</label>
+                                <select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
+                                    <option value=""> Repetitions</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="JoiningdatInput" class="form-label">Category</label>
+                                <select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
+                                    <option value="">Blocks</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <input type="checkbox">
+                                <label class="form-label">Set as promotion requirement</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div id="ckeditor-classic">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-red">Save Skill</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @include('layouts.business.footer')
+
+<script>
+var checkList = document.getElementById('list1');
+checkList.getElementsByClassName('anchor')[0].onclick = function(evt) {
+  if (checkList.classList.contains('visible'))
+    checkList.classList.remove('visible');
+  else
+    checkList.classList.add('visible');
+}
+</script>
 @endsection

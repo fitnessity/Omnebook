@@ -8,6 +8,7 @@ $total_quantity = 0;
     <head>
         <title>Fitnessity</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta content="charset=utf-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="description" content=" Fitnessity: Because Fitness=Necessity ">
