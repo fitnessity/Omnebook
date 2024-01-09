@@ -364,8 +364,7 @@ class ProfileController extends Controller
 
         /*$url = url()->current();
         $separator = (parse_url($url, PHP_URL_QUERY) == null) ? '?' : '&';*/
-        $business = array_unique($company_information, SORT_REGULAR);
-        print_r($business);exit;
+        $business = array_values(array_filter(array_unique($company_information, SORT_REGULAR)));
         return view('personal.provider.index',compact('business','id'));
     }
 
