@@ -28,8 +28,10 @@
 								</div>
 								<div class="row">
 									@forelse($business as $bs)
-									@php $customer = ($bs->customers != '') ? $bs->customers->where('user_id',@$id)->first() : '' ;
-									$customerId = @$customer->id; @endphp
+									@php 
+										$customer = ($bs->customers->isNotEmpty()) ? $bs->customers->where('user_id', $id)->first() : null;
+										$customerId = ($customer) ? $customer->id : '' ;
+									@endphp
 									<div class="col-lg-4 col-md-6 col-sm-6 col-12">
 										<div class="card-body purchase-history mt-5 body-bg-gradient">
 											<div class="d-flex flex-column h-100">

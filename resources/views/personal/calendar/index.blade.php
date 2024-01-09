@@ -54,7 +54,7 @@
                                                                     <div class="form-group mb-10">
                                                                         <select class="form-select" id="companies"  onChange="updateBusinessId(this.value)">
                                                                             <option value="all"> ALL</option>
-                                                                            @if(!empty($companies))
+                                                                            @if($companies->isNotEmpty())
                                                                                 @foreach($companies as $c)
                                                                                   <option value="{{ $c->id}}" @if(request()->business_id == $c->id) selected @endif> {{$c->public_company_name}}</option> 
                                                                                 @endforeach
