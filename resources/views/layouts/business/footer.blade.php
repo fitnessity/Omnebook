@@ -539,7 +539,6 @@ function closeMobileNav() {
                 }else{
                 	$('#close-btn-modal').removeAttr('onclick');
                 }
-
             	if(chkbackdrop == 1){
             		$('#ajax_html_modal').modal({ backdrop: 'static', keyboard: false });
             		$('#ajax_html_modal').modal('show')
