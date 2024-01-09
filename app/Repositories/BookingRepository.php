@@ -132,7 +132,9 @@ class BookingRepository
     } 
 
     public function otherTab($serviceType,$business_id,$customer){
-        $checkInDetail = BookingCheckinDetails::where('customer_id',@$customer->id)->orWhere('booked_by_customer_id',@$customer->id)->get();
+        $checkInDetail = BookingCheckinDetails::where('customer_id',@$customer->id)
+        //->orWhere('booked_by_customer_id',@$customer->id)
+        ->get();
         return $checkInDetail;
     }
 
@@ -192,7 +194,7 @@ class BookingRepository
                     $userBookinDetail = $userBookinDetail->whereRaw('(expired_at < now())');
                 }
             }else{
-                $userBookinDetail =  UserBookingDetail::join('business_services as bs', 'user_booking_details.sport', '=', 'bs.id')->where('bs.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id)->select('user_booking_details.*','bs.id as activity_id','bs.service_type');
+                $userBookinDetail =  UserBookingDetail::where('user_booking_details.user_id' ,'!=' , '')->join('business_services as bs', 'user_booking_details.sport', '=', 'bs.id')->where('bs.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id)->select('user_booking_details.*','bs.id as activity_id','bs.service_type');
                 if($chkVal == 'past'){
                     $userBookinDetail = $userBookinDetail->whereRaw('(user_booking_details.expired_at < now())');
                 }
@@ -1120,7 +1122,7 @@ class BookingRepository
         return $return;
     }
     
-    public function getbusinessbookingsdata($sid,$date,$type){
+    public function getbusinessbookingsdata($sid,$date,$type,$categoryId){
         $currentDate = Carbon::now(); 
         switch ($type) {
             case 'date':
@@ -1139,10 +1141,8 @@ class BookingRepository
         $userBookingDetail = [];
         $checkInDetail = BookingCheckinDetails::where(function ($query) use ($date, $type, $sid) {
                 $query->when($type === 'week', function ($q) use ($date) {
-
                     $weekStart = Carbon::parse($date)->startOfWeek();
                     $weekEnd = Carbon::parse($date)->endOfWeek();
-
                     $q->whereBetween('checkin_date', [$weekStart, $weekEnd]);
                 })
                 ->when($type === 'month', function ($q) use ($date) {
@@ -1157,12 +1157,6 @@ class BookingRepository
             ->where('bd.sport',$sid)
             ->select('booking_checkin_details.*', 'bd.id as bdid', 'bd.sport')->orderBy('bd.bookedtime', 'desc')
             ->get();
-
-        /*foreach($checkInDetail as $detail){
-            if($detail->UserBookingDetail != ''){
-               $userBookingDetail [] = $detail->UserBookingDetail;
-            }
-        }*/
 
         return $checkInDetail;
     }

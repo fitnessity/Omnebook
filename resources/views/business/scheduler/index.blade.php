@@ -73,6 +73,7 @@
 												@php 
 													$total_reservations += $schedule->spots_reserved($filterDate);
 													$schedule_end = strtotime($filterDate->format('Y/m/d').' '.$schedule['shift_end']);
+													$insName = $schedule->getInstructure($filterDate->format('Y-m-d'))
 											 	@endphp
 												<div class="mini-stats-wid d-flex align-items-center mt-3 scheduler-box">
 													<div class="flex-shrink-0 right-spretar">
@@ -88,7 +89,7 @@
 													</div>
 													<div class="flex-grow-auto ms-3">
 														<h3 class="fs-15 mb-1"> @if($schedule->business_service()->exists())  {{$schedule->businessPriceDetailsAges->category_title}} @endif </h3>
-														<p class="mb-1"> @if($schedule->business_service()->exists()) {{$schedule->business_service->program_name}} @endif @if($schedule->businessPriceDetailsAges()->exists()) @endif  </p> 
+														<p class="mb-1"> {{$insName != '' ? 'with '.$insName : ''}} <!-- @if($schedule->business_service()->exists()) {{$schedule->business_service->program_name}} @endif @if($schedule->businessPriceDetailsAges()->exists()) @endif -->  </p> 
 														
 														<p class="text-muted mb-0">with {{$schedule->company_information->public_company_name}} @if($schedule->business_service()->exists()) {{$schedule->business_service->activity_location}} @endif </p>
 													</div>

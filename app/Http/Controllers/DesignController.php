@@ -263,5 +263,53 @@ class DesignController extends Controller {
 	public function invoice_details(Request $request){
         return view('design.invoice_details');
     }
+	
+	public function announcement_news(Request $request){
+        return view('design.announcement_news');
+    }
+	
+	public function task(Request $request){
+        return view('design.task');
+    }
+	
+	public function attendance_belt(Request $request){
+        return view('design.attendance_belt');
+    }
+	
+	public function announcements_provider(Request $request){
+        return view('design.announcements_provider');
+    }
+	
+	public function announcements_provider_category(Request $request){
+        return view('design.announcements_provider_category');
+    }
+	
+	public function customer_dashboard(Request $request){
+        return view('design.customer_dashboard');
+    }
+	
+	public function notes_alerts(Request $request){
+        return view('design.notes_alerts');
+    }
+	
+	public function pdf_booking(Request $request){
+        return view('design.pdf_booking');
+    }
+
+    public function provider_adds_belt_rank_skills(Request $request){
+        return view('design.provider_adds_belt_rank_skills');
+    }
+
+    public function provider_edit_belt_rank_skills(Request $request){
+        return view('design.provider_edit_belt_rank_skills');
+    }
+
+    public function client_promote_belt(Request $request){
+        return view('design.client_promote_belt');
+    }
+
+    public function manually_promote(Request $request){
+        return view('design.manually_promote');
+    }
 }
 

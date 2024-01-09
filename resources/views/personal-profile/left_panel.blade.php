@@ -8,12 +8,19 @@
 				<ul class="metismenu" id="side-menu">
                             <li class="menu-title">{{Auth::User()->firstname}}'s Account</li>
 
-                            <li class=" {{ (request()->is('personal-profile/user-profile*')) ? 'active' : '' }}">
+                            <!-- <li class=" {{ (request()->is('personal-profile/user-profile*')) ? 'active' : '' }}">
                                 <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/user-profile">
                                     <img src="{{ url('public/img/menu-icon1.svg') }}" alt="">
                                     <span>User Profile</span>
                                 </a>
+                            </li> -->
+                             <li class=" {{ (request()->is('personal/profile*')) ? 'active' : '' }}">
+                                <a href="{{ Config::get('constants.SITE_URL') }}/personal/profile">
+                                    <img src="{{ url('public/img/menu-icon1.svg') }}" alt="">
+                                    <span>User Profile</span>
+                                </a>
                             </li>
+                            
                             <?php ?>
                             
                             <li class=" {{ (request()->is('personal-profile/calendar*')) ? 'active' : '' }}">
@@ -72,6 +79,13 @@
                                     <span>Following</span>
                                 </a>
                             </li> 
+
+                            <!-- <li class="">
+                                <a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/documents-contract">
+                                    <img src="{{ url('public/img/menu-icon1.svg') }}" alt="">
+                                    <span>Documents & Contracts  </span>
+                                </a>
+                            </li>  -->
                         </ul>
 			</div>
 		</div>

@@ -28,7 +28,7 @@
 				</div>
 				
 				<div class="row">
-					<div class="col-xxl-3">
+					<div class="col-xxl-3 col-lg-3">
 						<div class="card mt-n5">
 							<div class="card-body p-4">
 								<div class="text-center">
@@ -94,7 +94,7 @@ fitnessityofficial">
 						<!--end card-->
 					</div>
 					<!--end col-->
-					<div class="col-xxl-9">
+					<div class="col-xxl-9 col-lg-9">
 						<div class="card mt-xxl-n5">
 							<div class="card-header">
 								<ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
@@ -104,7 +104,7 @@ fitnessityofficial">
 										</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" data-bs-toggle="tab" href="#changePassword" role="tab">
+										<a class="nav-link text-black" data-bs-toggle="tab" href="#changePassword" role="tab">
 											<i class="far fa-user"></i> Change Password
 										</a>
 									</li>
