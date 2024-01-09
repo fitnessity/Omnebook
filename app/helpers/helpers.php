@@ -288,8 +288,6 @@
     }
 
     function getNotificationPersonal($type=null){
-        echo "huuh";
-        echo Auth::user();exit;
         $customers = Auth::user()->customers();
         if($customers != ''){
             $customersId =  @$customers->pluck('id')->toArray();
