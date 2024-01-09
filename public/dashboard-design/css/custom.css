@@ -5975,6 +5975,15 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .activity-schedule-tabs .nav-tabs > li.active > a:active{
 	color: #ea1515;
 }
+
+.activity-schedule-tabs .nav-tabs .nav-link.active{
+	color: #ea1515
+}
+
+.activity-schedule-tabs .nav-tabs li.active a{
+	color: #ea1515
+}
+
 .classes-info{
 	border-right: 1px solid #d1d0d0;
 }

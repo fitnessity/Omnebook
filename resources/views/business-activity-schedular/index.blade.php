@@ -215,7 +215,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 			<div class="modal-body" id="receiptbody">
             	<div class="row">
             		<div class="col-md-12 text-center">
-                       <label class="pay-confirm "></label>
+                       <label class="pay-confirm fs-17"></label>
                     </div>
             	</div>
             </div>
@@ -360,7 +360,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 			},
 			success: function (response) { //alert(response);
 				if(response == 'success'){
-					$('.pay-confirm').addClass('green-fonts');
+					$('.pay-confirm').addClass('font-green');
 					$('.pay-confirm').html('Confirm your reservation for '+activityName+' on '+date+' at '+time);
 					$('#success-reservation').modal('show');
 					$('#ajax_html_modal').modal('hide');

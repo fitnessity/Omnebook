@@ -601,7 +601,11 @@ class ProfileController extends Controller
 
         $query2->leftJoin("recurring as rt", "transaction.item_id", "=", "rt.id")
             ->orWhere(function ($query) use ($business_id) {
-                $query->where('rt.business_id', $business_id);
+                $query->where('rt.business_id', $business_id)->join("user_booking_details as rusd", function ($join) use ($business_id) {
+                    $join->on("rt.booking_detail_id", "=", "rusd.id")->where('rusd.business_id', $business_id)
+                        ->where('rusd.order_type', 'Membership')
+                        ->whereNotNull('rusd.id');
+                    });
             });
 
         $transactionDetail = $query2->select('transaction.*')->orderBy('transaction.created_at', 'DESC')->paginate(10);
