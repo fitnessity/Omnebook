@@ -289,8 +289,8 @@
 
     function getNotificationPersonal($type=null){
         $customers = Auth::user()->customers();
-
-        if($customers){
+        echo $customer;
+        if($customers != ''){
             $customersId =  @$customers->pluck('id')->toArray();
             $notifications = Notification::orderby('updated_at','desc')->whereDate('display_date', '=', now())
                 ->whereTime('display_time', '<=', now()->format('H:i'))->whereIn('customer_id',$customersId )->where('type','personal')
