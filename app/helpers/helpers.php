@@ -288,6 +288,7 @@
     }
 
     function getNotificationPersonal($type=null){
+        $notifications = [];
         /*$customers = Auth::user()->customers;
         if($customers != ''){
             $customersId =  @$customers->pluck('id')->toArray();
@@ -302,7 +303,7 @@
             return $notifications->get();
         }*/
        
-       return '';
+       return $notifications;
     }
 
     
