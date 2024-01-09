@@ -36,8 +36,7 @@ class AnnouncementController  extends Controller
                     $query->whereDate('announcement_date', '<=', date('Y-m-d'))
                         ->whereTime('announcement_time', '<=', date('H:i'));
                 })->orWhere(function ($query) {
-                    $query->whereDate('announcement_date', '<=', date('Y-m-d'))
-                        ->whereNull('announcement_time');
+                    $query->whereDate('announcement_date', '<=', date('Y-m-d'));
                 });
             })
             ->when($request->category, function ($query) use ($request) {
