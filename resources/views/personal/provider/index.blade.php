@@ -40,9 +40,9 @@
 															<div class="flex-grow-1 text-center">
 																<h5 class="mb-1 fs-15"><a href="#" class="text-red fs-18">{{ $bs->public_company_name}}</a></h5>
 																<div class="d-grid booking-activity">
-																	<span> Active Memberships: {{$bs->active_memberships_count_by_user_id(@$customerId)}}</span>
+																	<span> Active Memberships: @if($customer)  {{$customer->active_memberships()->count()}} @else 0 @endif </span>
 																	<span> Completed Memberships: {{$bs->completed_memberships_count_by_user_id(@$customerId)}}</span>
-																	<span> Expiring Memberships: {{$bs->expired_soon_memberships_count_by_user_id(@$customerId)}}</span>
+																	<span> Expiring Memberships: @if($customer)  {{$customer->expired_soon()}} @else 0 @endif </span>
 																	<span> Attenance: {{$bs->visits_count_by_user_id(@$customerId)}} </span>
 																	<span> Notes & Alerts: {{$bs->notes_count_by_user_id(@$customerId)}} </span>
 																</div>
