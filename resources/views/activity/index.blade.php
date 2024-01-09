@@ -285,7 +285,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
-				<div class="nav-sliders-activites">
+				<div class="nav-sliders-activites activity-z-index">
 					<label>{{count($thismonthactivity)}} Results </label>
 					<a href="{{route('activities_index',['filtervalue'=> 'thismonth'])}}" >Show all</a>
 				</div>
@@ -488,7 +488,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
-				<div class="nav-sliders-activites">
+				<div class="nav-sliders-activites activity-z-index ">
 					<label>{{count($mostpopularactivity)}} Results </label>
 					<a href="{{route('activities_index',['filtervalue'=> 'most_popular'])}}">Show All </a>
 				</div>
@@ -693,7 +693,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
-				<div class="nav-sliders-activites">
+				<div class="nav-sliders-activites activity-z-index ">
 					<label>{{count($Trainers_coachesacitvity)}} Results </label>
 					<a href="{{route('activities_index',['filtervalue'=> 'trainers_coaches'])}}">Show All </a>
 				</div>
@@ -889,7 +889,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
-				<div class="nav-sliders-activites">
+				<div class="nav-sliders-activites activity-z-index ">
 					<label>{{count($Ways_To_Workout)}} Results </label>
 					<a href="{{route('activities_index',['filtervalue'=> 'ways_to_workout'])}}">Show All </a>
 				</div>
@@ -1090,7 +1090,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
-				<div class="nav-sliders-activites">
+				<div class="nav-sliders-activites activity-z-index ">
 					<label>{{count($Fun_Activities)}} Results </label>
 					<a href="{{route('activities_index',['filtervalue'=> 'active_wth_fun_things_to_do'])}}">Show All </a>
 				</div>
@@ -1289,7 +1289,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
-				<div class="nav-sliders-activites">
+				<div class="nav-sliders-activites activity-z-index ">
 					<label>{{count($events_activity)}} Results </label>
 					<a href="{{route('activities_index',['filtervalue'=> 'events_in_your_area'])}}">Show All </a>
 				</div>
@@ -1490,7 +1490,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
-				<div class="nav-sliders-activites">
+				<div class="nav-sliders-activites activity-z-index ">
 					<label>{{count($allactivities) }} Results </label>
 					<a href="{{route('activities_index',['filtervalue'=> 'all'])}}">Show All </a>
 				</div>

@@ -27,6 +27,19 @@ class Recurring extends Authenticatable
      */
     protected $fillable = [ 'booking_detail_id', 'user_id', 'user_type', 'business_id', 'payment_date', 'amount', 'tax', 'charged_amount', 'payment_method', 'stripe_payment_id', 'status','transfer_provider_status','provider_amount','provider_transaction_id','attempt'];
 
+    protected $appends = ['total_amount' ,'card'];
+
+    public function getTotalAmountAttribute(){
+        return number_format($this->amount + $this->tax,2);
+    }
+
+    public function getCardAttribute(){
+        $transaction = Transaction::where(['item_id' => $this->id ,'item_type' => 'Recurring'])->first();
+        if($transaction){
+            $card = $transaction->getPmtMethod();
+        }
+        return $card ?? 'N/A';
+    }
 
     public function company_information(){
         return $this->belongsTo(CompanyInformation::class, 'business_id');

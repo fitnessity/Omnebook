@@ -43,7 +43,7 @@
                         	</div>
                         </div>
                     @empty
-						<p class="notimeoption">No time option available Select category to view available times</p>
+						<p class="notimeoption">No time option available. Select category to view available times</p>
 					@endforelse
 				</div>
 			
@@ -216,7 +216,7 @@
                     <input type="hidden" name="actscheduleid" value="{{$scheduleId}}" id="actscheduleid" /> 
                     <input type="hidden" name="timechk" value="{{$timeChk }}" id="timechk" />
                     <input type="hidden" name="sesdate" value="{{date('Y-m-d',strtotime($activityDate))}}" id="sesdate" />
-                    <input type="hidden" name="cate_title" value="{{$categoryId}}" id="categoryTitle" />
+                    <input type="hidden" name="cate_title" id="cate_title"  value="{{$categoryId}}" id="categoryTitle" />
                     <input type="hidden" name="addOnServicesId" value="" id="addOnServicesId" />
                     <input type="hidden" name="addOnServicesQty" value="" id="addOnServicesQty" />
                     <input type="hidden" name="addOnServicesTotalPrice" value="0" id="addOnServicesTotalPrice" />

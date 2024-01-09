@@ -20,9 +20,21 @@ class Transaction extends Model
         'user_type', 'user_id', 'item_type','item_id', 'channel','kind','transaction_id','amount','qty','status','refund_amount','payload','stripe_payment_method_id'
     ];
 
+     protected $appends = ['customer_id'];
+
     /**
      * Get the user that owns the task.
      */
+
+    public function getCustomerIdAttribute()
+    {
+        if($this->user_type == 'user'){
+            $customer = Customer::where('user_id' ,$this->user_id)->first();
+            return @$customer->id;
+        }else{
+            return $this->user_id;
+        }
+    }
 
     public function User(){
         return $this->belongsTo(User::class,'user_id');
@@ -104,35 +116,69 @@ class Transaction extends Model
         }else if ($this->item_type == 'Recurring') {
             $bookingData = $this->Recurring->UserBookingDetail;
             if($bookingData != ''){
-                $text ='<a href="'.url('business/'.@$bookingData->business_id.'/customers/'.@$bookingData->Customer->id).'" class="fw-medium">';
-                if($chk == 'no'){
-                    $customer .= @$bd->Customer !='' ? '1. '.@$bookingData->Customer->full_name.'<br>' : "1. N/A<br>";
-                }else{
-                    $customer .= @$bookingData->Customer !='' ? '1. '.$text .''.@$bookingData->Customer->full_name.'</a><br>' :"1. N/A<br>";
-                }
+                if($bookingData->business_id == $chkBusiness){
+                    $text ='<a href="'.url('business/'.@$bookingData->business_id.'/customers/'.@$bookingData->Customer->id).'" class="fw-medium">';
+                    if($chk == 'no'){
+                        $customer .= @$bd->Customer !='' ? '1. '.@$bookingData->Customer->full_name.'<br>' : "1. N/A<br>";
+                    }else{
+                        $customer .= @$bookingData->Customer !='' ? '1. '.$text .''.@$bookingData->Customer->full_name.'</a><br>' :"1. N/A<br>";
+                    }
 
-                $activityName = $bookingData->business_services_with_trashed->program_name;
-                $categoryName = $bookingData->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
-                $priceOption = $bookingData->business_price_detail_with_trashed->price_title;
-                $itemDescription = $activityName.' ('.$categoryName.') ,'.$priceOption;
-                $itemPrice .= $this->Recurring->amount != '' ? '$'.$this->Recurring->amount .'<br>' : '$0<br>';
-                $itemSubTotal .=  $this->Recurring->amount != '' ? '$'.($this->Recurring->amount + $this->Recurring->tax) .'<br>' : '$0<br>';
-                
-                $itemDis .= '$0<br>';
-                $itemTax .= '$' . ($this->Recurring->tax ?? 0) . '<br>';
-                $addOnTotal .= '$0<br>';
-                            
-                $location .= @$bookingData->company_information != '' ? @$bookingData->company_information->public_company_name.'<br>' : '<br>';
-                $totalTax += $this->Recurring->tax ?? 0;
-                $totalDis +=  0;
-                $totalPaid += ($this->Recurring->amount + $this->Recurring->tax) ?? 0;
-                $notes .= $bookingData->note != '' ? $bookingData->note.'<br>' : 'N/A<br>';
-                $qty++;
+                    $activityName = $bookingData->business_services_with_trashed->program_name;
+                    $categoryName = $bookingData->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
+                    $priceOption = $bookingData->business_price_detail_with_trashed->price_title;
+                    $itemDescription = $activityName.' ('.$categoryName.') ,'.$priceOption;
+                    $itemPrice .= $this->Recurring->amount != '' ? '$'.$this->Recurring->amount .'<br>' : '$0<br>';
+                    $itemSubTotal .=  $this->Recurring->amount != '' ? '$'.($this->Recurring->amount + $this->Recurring->tax) .'<br>' : '$0<br>';
+                    
+                    $itemDis .= '$0<br>';
+                    $itemTax .= '$' . ($this->Recurring->tax ?? 0) . '<br>';
+                    $addOnTotal .= '$0<br>';
+                                
+                    $location .= @$bookingData->company_information != '' ? @$bookingData->company_information->public_company_name.'<br>' : '<br>';
+                    $totalTax += $this->Recurring->tax ?? 0;
+                    $totalDis +=  0;
+                    $totalPaid += ($this->Recurring->amount + $this->Recurring->tax) ?? 0;
+                    $notes .= $bookingData->note != '' ? $bookingData->note.'<br>' : 'N/A<br>';
+                    $qty++;
+                }
             }
         }
         
         $arry = array("qty"=>$qty,"itemDescription"=>$itemDescription,"itemPrice"=> $itemPrice ?? 0,"itemSubTotal"=> $itemSubTotal ?? 0,"itemDis"=> $itemDis ?? 0,"itemTax"=> $itemTax ?? 0,"location"=> $location  ?? 'N/A',"totalTax"=> $totalTax ?? 0, "totalDis"=> $totalDis ?? 0,"totalPaid"=> $totalPaid  ?? 0,'notes'=>$notes ,'customer' => $customer);
         return $arry;
+    }
+
+    public function getBookingStatus(){
+        $status = '';
+        if($this->item_type == 'UserBookingStatus'){
+            if($this->userBookingStatus != ''){
+                if(!empty($this->userBookingStatus->UserBookingDetail)){
+                    foreach($this->userBookingStatus->UserBookingDetail as $key => $bd){
+                        $status .= (count($this->userBookingStatus->UserBookingDetail) >1) ? ($key+1).'. ' : '';
+                        $status .= $this->getStatus($bd->status).'<br>';
+                    }
+                }
+            }
+            return $status ?? "N/A";
+        }else if ($this->item_type == 'Recurring') {
+            if($this->Recurring->UserBookingDetail){
+                $bd = $this->Recurring->UserBookingDetail;
+                return $this->getStatus($bd->status);
+            }
+        }
+    }
+
+    public function getStatus($name){
+        if($name == 'void'){
+            return 'Suspended';
+        }else if($name == 'refund'){
+            return 'Refunded';
+        }else if($name == 'terminate' || $name == 'cancel'){
+            return 'Terminated';
+        }else {
+            return 'Successful';
+        }
     }
 
     public function getCustomer($business_id){

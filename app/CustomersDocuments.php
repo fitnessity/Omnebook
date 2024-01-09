@@ -35,4 +35,18 @@ class CustomersDocuments extends Model
     public function BusinessStaff(){
         return $this->belongsTo(BusinessStaff::class, 'staff_id');
     }
+
+    public function CustomerDocumentsRequested(){
+        return $this->hasMany(CustomerDocumentsRequested::class, 'doc_id');
+    }
+
+    public function checkUploadDocument(){
+        $docrRequest = $this->CustomerDocumentsRequested;
+        foreach ($docrRequest as $value) {
+            if (empty($value->path)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

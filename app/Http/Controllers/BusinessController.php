@@ -11,7 +11,7 @@ use Auth,Response,Redirect,Validator,Input,Image,File,DB,DateTime,Config,Storage
 use Carbon\Carbon;
 use Illuminate\Support\Facades\{Gate,Log};
 
-use App\{PageAttachment,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,BusinessActivityScheduler,PageLike,Notification,Sports,BusinessReview,BusinessPostViews,UserFollow,UserBookingStatus,UserBookingDetail,MailService,User,UserService,UserProfessionalDetail,PagePost,PagePostComments,PagePostCommentsLike,PagePostLikes,PagePostSave,CompanyInformation,Miscellaneous,BusinessServiceReview,Transaction,CustomerPlanDetails};
+use App\{PageAttachment,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,BusinessActivityScheduler,PageLike,Notification,Sports,BusinessReview,BusinessPostViews,UserFollow,UserBookingStatus,UserBookingDetail,MailService,User,UserService,UserProfessionalDetail,PagePost,PagePostComments,PagePostCommentsLike,PagePostLikes,PagePostSave,CompanyInformation,Miscellaneous,BusinessServiceReview,Transaction,CustomerPlanDetails,Customer,BusinessStaff};
 
 class BusinessController extends Controller
 {
@@ -46,7 +46,9 @@ class BusinessController extends Controller
         $endDateCalendar = array_key_exists(1,$date) ? $date[1] : Carbon::now()->lastOfMonth()->format('Y-m-d');
         
         $startDateMonth = Carbon::parse($startDate)->format('m'); 
+        $startDateYear = Carbon::parse($startDate)->format('Y'); 
         $endDateMonth =  Carbon::parse($endDate)->format('m');
+        $endDateYear =  Carbon::parse($endDate)->format('Y');
 
         $business = Auth::user()->current_company;
         $business_id =  @$business->id;
@@ -58,11 +60,12 @@ class BusinessController extends Controller
         if(@$business != ''){
             $services = $business->service()->orderby('created_at')->take(5)->get();
 
-            $customerCount = @$business->customers()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->count();
-            $priviousCustomerCount = @$business->customers()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->count();
+            $customerCount = @$business->customers()->whereYear('created_at', '>=', $startDateYear)->whereMonth('created_at', '>=', $startDateMonth)->whereYear('created_at', '<=', $endDateYear)->whereMonth('created_at', '<=', $endDateMonth)->count();
+
+            $priviousCustomerCount = @$business->customers()->whereYear('created_at', '>=', $startDateYear)->whereMonth('created_at', '>=', $startDateMonth - 1)->whereYear('created_at', '<=', $endDateYear - 1)->whereMonth('created_at', '<=', $endDateMonth)->count();
             $bookingCount = $business->UserBookingDetails()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->count();
             $priviousBookingCount = $business->UserBookingDetails()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->count();
-            $todayBooking = @$business->UserBookingDetails()->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate)->get();
+            $todayBooking = @$business->UserBookingDetails()->whereDate('created_at', '=', date('Y-m-d'))->get();
             
             $customerCountPercentage =  $priviousCustomerCount != 0 ? number_format(($customerCount - $priviousCustomerCount)*100/$priviousCustomerCount,2,'.','') : 0;
             $bookingCountPercentage = $priviousBookingCount != 0 ? number_format(($bookingCount - $priviousBookingCount)*100/$priviousBookingCount,2,'.',''): 0; 
@@ -170,7 +173,6 @@ class BusinessController extends Controller
             $recurringAmount = number_format($recurringAmount,2,'.','');
             $reminingRecurringAmount = number_format($reminingRecurringAmount,2,'.','');
             $completeRecurringAmount = number_format($completeRecurringAmount,2,'.','');
-                  
         }
         
         $topBookedPriceId = array_values(array_unique($topBookedPriceId));
@@ -194,6 +196,15 @@ class BusinessController extends Controller
         array_multisort($key_values, SORT_DESC, $topBookedCategories);
 
         $pagepostIds = PagePost::where(['page_id'=>$business_id,'user_id' =>Auth::user()->id])->pluck('id');   
+
+        $expiredMembership = UserBookingDetail::where(['business_id'=>$business_id])->whereDate('expired_at', '>=', $startOfWeek)->whereDate('expired_at', '<=', $endOfWeek)->get();
+        $clientsBirthdayList  = Customer::where(['business_id'=>$business_id])->whereMonth('birthdate', '=', now()->month)->get();
+
+        $staffsBirthdayList  = BusinessStaff::where(['business_id'=>$business_id])->whereMonth('birthdate', '=', now()->month)->get();
+        
+        $newClients = Customer::where(['business_id'=>$business_id])->whereDate('created_at', '>=', $startOfWeek)->whereDate('created_at', '<=', $endOfWeek)->get();
+
+        $cardDetails = Customer::where('business_id',$business_id)->leftJoin('stripe_payment_methods as spm' , 'spm.user_id' ,'=' ,'customers.id')->where('spm.user_type','Customer')->whereYear('spm.exp_year', '=', now()->year)->whereMonth('exp_month', '=', now()->month)->get();
 
         $comments = PagePostComments::whereIn('post_id',$pagepostIds)
                     ->where('user_id','!=',Auth::user()->id)
@@ -227,8 +238,31 @@ class BusinessController extends Controller
             ];
         };
 
+        foreach ($newClients as $nc) {
+            $notificationAry[] = $formatNotification($nc, $nc, 'client',' added as a client.');
+        }
+
+        foreach ($clientsBirthdayList as $cbl) {
+            $birthdayInCurrentYear = Carbon::createFromDate(now()->year, date('m', strtotime($cbl->birthdate)),date('d', strtotime($cbl->birthdate)));
+            $notificationAry[] = $formatNotification($cbl, $cbl, 'client',"'s birthday on ". $birthdayInCurrentYear->format('m/d/Y'));
+        }
+
+        foreach ($staffsBirthdayList as $sbl) {
+            $birthdayInCurrentYear = Carbon::createFromDate(now()->year, date('m', strtotime($sbl->birthdate)),date('d', strtotime($sbl->birthdate)));
+            $notificationAry[] = $formatNotification($sbl, $sbl, 'staff',"'s birthday on ".$birthdayInCurrentYear->format('m/d/Y'));
+        }
+
         foreach ($comments as $com) {
             $notificationAry[] = $formatNotification($com->user, $com, 'comment',' commented on your post.');
+        }
+
+        foreach ($expiredMembership as $em) {
+            $name = $em->business_price_detail->price_title.'('.$em->business_services->program_name.')';
+            $notificationAry[] = $formatNotification($em->Customer, $em, 'booking',"'s membership of  ".$name." is expired on ". date('m/d/Y' ,strtotime($em->expired_at)));
+        }
+
+        foreach ($cardDetails as $cd) {
+            $notificationAry[] = $formatNotification($em->Customer, $cd, 'card', "'s card is expired on this month");
         }
 
         foreach ($postlikes as $pl) {
@@ -261,6 +295,10 @@ class BusinessController extends Controller
         /*print_r($notificationAry);*/
        
         return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingRecPercentage','completedRecPercentage','totalsalePercentage','bookingCountPercentage','customerCountPercentage','todayBooking','services','startDate','endDate','topBookedCategories','notificationAry' ,'startDateCalendar','endDateCalendar','completeRecurringAmount','reminingRecurringAmount','recurringAmount','left_days','activePlan'));
+    }
+
+    public function notification_delete(Request $request){
+        Notification::where(['id'=>$request->id])->delete();
     }
 
     public function getBookingList(Request $request){
@@ -1077,8 +1115,8 @@ class BusinessController extends Controller
             if(isset($company['company_images']) && $company['company_images'] != null) {
             	$company['company_images'] = json_decode($company['company_images']);
             }
-            $max_price = UserService::where('company_id', $company['id'])->max('price');
-            $min_price = UserService::where('company_id', $company['id'])->min('price');
+            $max_price = UserService::where('company_id', @$company['id'])->max('price');
+            $min_price = UserService::where('company_id', @$company['id'])->min('price');
 
             $user_professional_detail = UserProfessionalDetail::where('company_id', $page_id)->first();
 			
@@ -1158,7 +1196,7 @@ class BusinessController extends Controller
         $companyData = $serviceData = $servicePrice = $businessSpec = $services = $max_price = $min_price = [];
         $company['company_images'] = [];
 		
-		if(!empty($company)) {
+		if($company) {
             $userId = $company->user_id;
         
             $business_details = BusinessCompanyDetail::where('cid', $page_id)->get();
@@ -1305,7 +1343,7 @@ class BusinessController extends Controller
 				'user_id' => $pageid,
 				'sender_id' => $userid,
 				'type' => '1',
-				'notification_type' => '1',
+				//'notification_type' => '1',
 				'status' => 0,
 			]);
 			$response = array( 'type' => 'success' );

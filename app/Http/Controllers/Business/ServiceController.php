@@ -369,7 +369,7 @@ class ServiceController extends BusinessBaseController
 
     public function getSectionValue($request, $i, $y, $section, $fieldPrefix,$displaySection)
     {   
-        if ($displaySection != 'freeprice') {
+        if($displaySection != 'freeprice') {
             if ($request->input($section . $i . $y) == $section) {
                 return $request->input($fieldPrefix . $i . $y);
             }

@@ -419,7 +419,7 @@ input:disabled{
 						</div>
 					</div>
 				</div>
-				<div class="activered text-center mb-10" id="spoterror"></div>
+				
             	<div class="mainboxborder">	
 					<div class="row">
 
@@ -443,6 +443,10 @@ input:disabled{
 							$totalquantity = 0;
 						@endphp 
 						<div id="updatefilterforcart">
+						</div>
+						<div class="col-md-12">
+							<div class="font-red text-center mb-10" id="spoterror">
+							</div>
 						</div>
 					</div>  
 				</div>
@@ -780,7 +784,23 @@ input:disabled{
 			
 			if(timechk == 1){
 				if(totalQty == 0){
-					$('#spoterror').html("Please select a participate.");
+					var message = '';
+
+					if($('#cate_title').val() == ''){
+						message = "Please select category. <br> <span class='fs-12'>Note: If the category is not available or the activity time has passed, please select another date.</span>";
+					}else if($('#priceid').val() == ''){
+						message = "Please select price option. <br> <span class='fs-12'>Note: If price option is not available then try another category.</span>";
+					}else if($('#actscheduleid').val() == ''){
+						if($('.notimeoption').html() != '' && $('.notimeoption').html() != undefined ){
+							message = "<br>Please select time. <br> <span class='fs-12'>Note: If time is not available then try another category.</span>";
+						}else{
+							message = "<br>Please select time.";
+						}
+					}else{
+						message = "Please select a participate.";
+					}
+					
+					$('#spoterror').html(message);
 				}else if(totalQty > maxQty ){
 					$('#spoterror').html("You have "+maxQty+" sports left.");
 				}else{
@@ -1087,6 +1107,7 @@ input:disabled{
 ?>
  <script>
 	var active_days = JSON.parse('<?php echo json_encode($result)?>');
+	// console.log(active_days);
 	const days = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',]
 	$( function() {
 		$( "#actfildate_forcart" ).datepicker( { 
@@ -1096,15 +1117,17 @@ input:disabled{
         	yearRange: "1960:2060",
         	dateFormat: "M-dd-yy",
         	beforeShowDay: function(date){
-        		for(var i=0; i<active_days.length; i++){
-        			start = new Date(active_days[i][0] + " 00:00:00");
-        			end = new Date(active_days[i][1] + " 00:00:00");
 
-        			if(date >= start && date <= end){
-        				if(active_days[i][2].match(days[date.getDay()])){
+        		for(var i=0; i<active_days.length; i++){
+					var start = new Date(active_days[i][0]);
+					var end = new Date(active_days[i][1]);
+
+					if (date >= start && date <= end) {
+						if(active_days[i][2].match(days[date.getDay()])){
         					return [1];	
         				}
-        			}
+					}
+
         		}
         		return [0];
         	}

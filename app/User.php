@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',  'password','new_password_key','is_deleted','isguestuser','fitnessity_fee','recurring_fee','firstname','lastname','birthdate','cid','bstep','serviceid','servicetype','stripe_connect_id','stripe_customer_id','username','gender','email','phone_number','profile_pic','address','city','state','country','zipcode','activated','show_step','dobstatus','buddy_key','primary_account','default_card','quick_intro', 'favorit_activity' ,'business_info'
+        'name',  'password','new_password_key','is_deleted','isguestuser','fitnessity_fee','recurring_fee','firstname','lastname','birthdate','cid','bstep','serviceid','servicetype','stripe_connect_id','stripe_customer_id','username','gender','email','phone_number','profile_pic','address','city','state','country','zipcode','activated','show_step','dobstatus','buddy_key','primary_account','default_card','quick_intro', 'favorit_activity' ,'business_info','cover_photo','website','twitter','insta','facebook',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -90,6 +90,15 @@ class User extends Authenticatable
         }
 
         return $profile_pic;
+    }
+
+    public function getCoverPic(){
+       $cover_photo = '';
+        if(Storage::disk('s3')->exists($this->cover_photo)){
+            $cover_photo = Storage::url($this->cover_photo);
+        }
+
+        return $cover_photo;
     }
 
     public function getaddress(){
@@ -348,6 +357,7 @@ class User extends Authenticatable
         return $this->hasMany(UserFollower::class, 'follower_id', 'id');
     }
 
+  
     public function getcustage(){
         if($this->birthdate != null){
             return Carbon::parse($this->birthdate)->age;
@@ -404,7 +414,7 @@ class User extends Authenticatable
     public function freeTrial(){
         $data = $this->currentPlan();
         if(@$data->amount == 0){
-            if(Auth::user()->planDateDiffrence() < 14){
+            if(Auth::user()->planDateDiffrence() <= 15){
                 return 'free';
             }
         }

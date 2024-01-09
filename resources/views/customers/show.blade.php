@@ -35,6 +35,12 @@
 									</div>
 								</div>
 							</div>
+
+							@if(session('success'))
+							    <div class="alert alert-success">
+							        {{ session('success') }}
+							    </div>
+							@endif
 							<div class="row">
 								<div class="col-xl-12">
 									<div class="card">
@@ -1086,7 +1092,7 @@
 																							<div class="row">
 																								<div class="col-md-10">
 																									<div class="row">
-																										<div class="col-md-3">{!!$n->limit_note_character!!}</div>
+																										<div class="col-md-3">{!!$n->title!!}</div>
 																										<div class="col-md-2">{{date('M d, Y', strtotime($n->created_at))}} </div>
 																										<div class="col-md-2">Due {{date('M d, Y', strtotime($n->due_date))}} , {{ date('h:i A', strtotime($n->time))}} </div>
 																										<div class="col-md-2">{{ $n->display_chk == 0 ? "Not" : ''}} visible to member</div>
@@ -1134,7 +1140,7 @@
 																						<div class="row">
 																							<div class="col-lg-10 col-md-10 col-10">
 																								<span>1.</span>
-																								<span>Covid-19 Protocols agreed on @if(@$customerdata->terms_covid != '') {{date('m/d/Y',strtotime(@$customerdata->terms_covid))}} @endif </span>
+																								<span>Covid-19 Protocols @if(@$customerdata->terms_covid != '') Agreed & Signed on  {{date('m/d/Y',strtotime(@$customerdata->terms_covid))}} @endif </span>
 																							</div>
 																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
@@ -1157,7 +1163,7 @@
 																							</div>
 																							<div class="col-lg-10 col-md-10 col-10">
 																								<span> 2. </span>
-																								<span>Liability Waiver agreed on @if(@$customerdata->terms_liability != '') {{date('m/d/Y',strtotime(@$customerdata->terms_liability))}} @endif  </span>
+																								<span>Liability Waiver @if(@$customerdata->terms_liability != '')  Agreed & Signed on {{date('m/d/Y',strtotime(@$customerdata->terms_liability))}} @endif  </span>
 																							</div>
 																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
@@ -1180,7 +1186,7 @@
 																							</div>
 																							<div class="col-lg-10 col-md-10 col-10">
 																								<span>3. </span>
-																								<span>Contract Terms  agreed on @if(@$customerdata->terms_contract != '') {{date('m/d/Y',strtotime(@$customerdata->terms_contract))}} @endif</span>
+																								<span>Contract Terms @if(@$customerdata->terms_contract != '') Agreed & Signed on {{date('m/d/Y',strtotime(@$customerdata->terms_contract))}} @endif</span>
 																							</div>
 																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
@@ -1201,9 +1207,12 @@
 																									</div>
 																								</div>
 																							</div>
+																							@php 
+																								$refundDate = @$lastBooking->created_at != '' ? date('m/d/Y',strtotime(@$lastBooking->created_at)) : date('m/d/Y',strtotime(@$customerdata->terms_refund)); 
+																							@endphp
 																							<div class="col-lg-10 col-md-10 col-10">
 																								<span>4. </span>
-																								<span>Refund Policy </span>
+																								<span>Refund Policy @if(@$refundDate) agreed on {{$refundDate}} @endif</span>
 																							</div>
 																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
@@ -1224,9 +1233,13 @@
 																									</div>
 																								</div>
 																							</div>
+
+																							@php 
+																								$termsDate = @$lastBooking->created_at != '' ? date('m/d/Y',strtotime(@$lastBooking->created_at)) : date('m/d/Y',strtotime(@$customerdata->terms_condition)); 
+																							@endphp
 																							<div class="col-lg-10 col-md-10 col-10">
 																								<span>5. </span>
-																								<span>Terms, Conditions, FAQ </span>
+																								<span>Terms, Conditions, FAQ @if(@$termsDate) agreed on {{$refundDate}} @endif</span>
 																							</div>
 																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
@@ -1263,7 +1276,8 @@
 																											<div class="setting-icon">
 																												<i class="ri-more-fill"></i>
 																												  <ul>
-																														<li><a href="#" data-bs-toggle="modal" data-bs-target=".documents"><i class="fas fa-plus text-muted"></i>Add</a></li>
+																														<li><a href="#" data-bs-toggle="modal" data-bs-target=".documents"><i class="fas fa-plus text-muted"></i>Add New Document</a></li>
+																														<li><a href="#/" onclick="openModalDoc()" ><i class="fas fa-plus text-muted"></i>Request A Document</a></li>
 																													</ul>
 																											</div>
 																										</div>
@@ -1274,17 +1288,62 @@
 																					</h2>
 																					<div id="accor_nesting" class="accordion-collapse collapse" aria-labelledby="accordionnesting" data-bs-parent="#accordionnesting8">
 																						<div class="accordion-body">
+																							<div class="row mb-15">
+																								<div class="col-md-3"> <span class="fs-14 font-black"> Document Name </span></div>
+																								<div class="col-md-3"><span class="fs-14 font-black"> Uploaded On </span></div>
+																								<div class="col-md-2"> <span class="fs-14 font-black">Uploaded By </span></div>
+																								<div class="col-md-3"><span class="fs-14 font-black"> Status </span></div>
+																							</div>
 																							@forelse($documents as $d)
 																							<div class="row">
-																								<div class="col-md-3"><i class="fas fa-download"></i> {{$d->title}}</div>
-																								<div class="col-md-3"><i class="fas fa-paperclip"></i> Uploaded on {{date('m/d/Y', strtotime($d->created_at))}}</div>
-																								<div class="col-md-3"> Uploaded by {{@$d->uploaded_by}}</div>
 																								<div class="col-md-3">
+																									<a  @if(!$d->CustomerDocumentsRequested->isEmpty()) href="#" onclick="event.preventDefault(); openDocumentModal('{{$d->id}}','load')"  @elseif($d->path) href="{{ route('download', ['id' => $d->id]) }}" target="_blank" @endif  ><i class="fas fa-download"></i> {{$d->title}}</a>
+																								</div>
+
+																								<div class="col-md-3">
+																									<i class="fas fa-paperclip"></i>
+																									{{date('m/d/Y', strtotime($d->created_at))}}
+																								</div>
+																								<div class="col-md-2">{{@$d->uploaded_by}}</div>
+																								<div class="col-md-3"> 
+																									@if($d->status == 1)
+																										@if($d->sign_requested_date && !$d->sign_date)
+																							            <span class="font-red">Sign Requested on {{ date('m/d/Y' , strtotime($d->sign_requested_date)) }}</span>
+																							         @endif
+																							         @if($d->sign_date)
+																							            <span class="font-green">Signed On {{ date('m/d/Y' , strtotime($d->sign_date)) }}</span>
+																							         @endif 
+																							      @endif
+
+																							      @if(!$d->CustomerDocumentsRequested->isEmpty()) 
+																							       	@if($d->doc_requested_date && !$d->doc_completed_date)
+																							            <span class="font-red">Document Requested on {{ date('m/d/Y' , strtotime($d->doc_requested_date)) }}</span>
+																							         @endif
+																							         @if($d->doc_completed_date)
+																							            <span class="font-green">Document Request Completed On {{ date('m/d/Y' , strtotime($d->doc_completed_date)) }}</span>
+																							         @endif
+																							      @endif 
+																							   </div>
+																								<div class="col-md-1">
 																									<div class="multiple-options">
 																										<div class="setting-icon">
 																											<i class="ri-more-fill"></i>
 																											  <ul>
-																											  		<li><a href="{{ route('download', ['id' => $d->id]) }}" target="_blank"><i class="fas fa-plus text-muted"></i>Download</a></li>
+
+																											  		@if($d->CustomerDocumentsRequested->isEmpty())
+																												  		@if($d->status == 0)
+																												  			<li><a onclick="requestSign({{$d->id}})"><i class="fas fa-plus text-muted"></i>Request Signature</a></li>
+																												  		@elseif($d->status == 1)
+																												  			<li><a><i class="fas fa-plus text-muted"></i>Signature Requested</a></li>
+																												  		@else
+																												  			<li><a><i class="fas fa-plus text-muted"></i>Signature Signed</a></li>
+																												  		@endif
+																												  	@endif
+																											  		<!-- <li><a onclick="openModalDoc({{$d->id}})"><i class="fas fa-plus text-muted"></i>Request Document</a></li> -->
+																											  		<li>
+																											  			<a @if(!$d->CustomerDocumentsRequested->isEmpty())  onclick="event.preventDefault(); openDocumentModal('{{$d->id}}','load')"  @elseif($d->path) href="{{ route('download', ['id' => $d->id]) }}" target="_blank" @endif ><i class="fas fa-plus text-muted"></i>Download
+																											  			</a>
+																											  		</li>
 																													<li><a onclick="deleteDoc({{$d->id}})"><i class="fas fa-plus text-muted"></i>Delete </a></li>
 																												</ul>
 																										</div>
@@ -1379,9 +1438,9 @@
 							<div class="mb-10">
 								<label>	Gender </label>
 								<div>
-								<input type="radio" name="gender" value="male" {{$customerdata->gender == 'male' ? "checked" : '' }}> Male
-								<input type="radio" name="gender" value="female" {{$customerdata->gender == 'female' ? "checked" : '' }}> Female
-								<input type="radio" name="gender" value="other" {{$customerdata->gender == 'other' ? "checked" : '' }}> Other
+								<input type="radio" name="gender" value="male" {{strtolower($customerdata->gender) == 'male' ? "checked" : '' }}> Male
+								<input type="radio" name="gender" value="female" {{strtolower($customerdata->gender) == 'female' ? "checked" : '' }}> Female
+								<input type="radio" name="gender" value="other" {{strtolower($customerdata->gender) == 'other' ? "checked" : '' }}> Other
 								</div>
 							</div>
 						</div>
@@ -1464,13 +1523,19 @@
 						<div class="mb-10">
 							<input type="file" class="form-control mt-10" name="document" id="file" onchange="readURL(this)">
 						</div>
+						<div class="mb-10">
+							<div class="form-check form-switch form-switch-right form-switch-md">
+	                     <label> Signature Needed </label>
+	                     <input class="custom-switch form-check-input" type="checkbox" name="signature" id="signature" value="1">
+                     </div>
+						</div>
 						<p class='err mt-10 font-red'></p>
 						<label id="docMessage" class="font-16"></label>
 					</div>
 				</div>					
 			</div>
 			<div class="modal-footer">
-				<button type="button" id="upload-pdf" class="btn btn-primary btn-red">Add Document</button>
+				<button type="button" id="upload-pdf" class="btn btn-primary btn-red upload-pdf">Add Document</button>
 			</div>
 		</div>
 	</div>
@@ -1500,7 +1565,7 @@
 			<form action="{{route('update_customer')}}" method="post" enctype="multipart/form-data">
 				@csrf
 				<input type="hidden" id="cus_id" name="cus_id" value="{{$customerdata->id}}">
-				<input type="hidden" id="chk" name="chk" value="update_personal">
+				<input type="hidden" id="chk" name="chk" value="update_terms">
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-lg-12">
@@ -1543,8 +1608,7 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->	
 
-
-<div class="modal fade checkinDetails" tabindex="-1" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+<div class="modal fade checkinDetails" tabindex="-1" aria-labelledby="mySmallModalLabel" >
 	<div class="modal-dialog modal-dialog-centered modal-70">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -1558,9 +1622,38 @@
 	</div>
 </div>
 
+<div class="modal fade modalDocument" tabindex="-1" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Documents</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="modalDocumentHtml">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade modalDocumentDisplay" tabindex="-1" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-dialog-centered modal-70" id="doc-width">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Requested Documents</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="modalDocumentDisplayHtml">
+
+			</div>
+		</div>
+	</div>
+</div>
+
 @include('layouts.business.footer')
 
 <script>
+	
 	var docToUpload = '';
 	var ext = '';
 
@@ -1579,12 +1672,63 @@
       }
 	}
 
+	function openDocumentModal(id,type){
+		$.ajax({
+         type: 'GET',
+         url: '/personal/getContent/'+id+'/'+type,
+         success: function (response) {
+         	$('#doc-width').removeClass('modal-50');
+         	if(type == 'upload'){
+         		if(!$('#doc-width').hasClass('modal-70')){
+         			$('#doc-width').addClass('modal-70');
+         		}
+         	}else{
+         		$('#doc-width').addClass('modal-50');
+         	}
+            $('#modalDocumentDisplayHtml').html(response);
+				$('.modalDocumentDisplay').modal('show');
+         }
+      });
+	}
+
+	function requestSign(id){
+		$.ajax({
+         type: 'GET',
+         url: '/business/'+'{{request()->business_id}}'+'/requestSign/'+id,
+         success: function (data) {
+            window.location.reload();
+         }
+      });
+	}
+
+	function openModalDoc(){
+		var cust_id =  '{{$customerdata->id}}'
+		$.ajax({
+         type: 'GET',
+         url: '/docContent/'+cust_id,
+         success: function (response) {
+            $('#modalDocumentHtml').html(response);
+				$('.modalDocument').modal('show');
+         }
+      });
+	}
+
+	function requestDoc(id){
+		$.ajax({
+         type: 'GET',
+         url: '/business/'+'{{request()->business_id}}'+'/requestDoc/'+id,
+         success: function (data) {
+            window.location.reload();
+         }
+      });
+	}
+
 	function deleteDoc(id){
 		let text = "You are about to delete the document. Are you sure you want to continue?";
 		if (confirm(text)) {
 	      $.ajax({
 	         type: 'GET',
-	         url: '/business/'+'{{request()->business_id}}'+'/removeDoc/'+id,
+	         url: '/removeDoc/'+id,
 	         success: function (data) {
 	            window.location.reload();
 	         }
@@ -1621,49 +1765,43 @@
 	   });
 	}
 
-	$(document).ready(function () {
-
-      $('#upload-pdf').click(function(){
-        	if(docToUpload == ''){
-        		$('.err').html('Select file to upload.');
-        	}else if(ext != 'pdf' && ext != 'jpg' && ext != 'jpeg' && ext != 'png'){
-            	$('.err').html('File format is not supported.')
-        	}else{
-        		$('.err').html('');
-         	var formdata = new FormData();
-         	formdata.append('file',docToUpload);
-         	formdata.append('id','{{$customerdata->id}}');
-         	formdata.append('title',$('#docTitle').val());
-          	formdata.append('_token','{{csrf_token()}}')
-          	$.ajax({
-               url: '{{route('upload_docs')}}',
-               type:'post',
-               dataType: 'json',
-               enctype: 'multipart/form-data',
-               data:formdata,
-               processData: false,
-               contentType: false,
-               headers: {'X-CSRF-TOKEN': $("#_token").val()},
-               success: function (response) { 
-               	$('#docMessage').removeClass();
-                  if(response.status == 200){
-                     $('#docMessage').addClass('font-green font-16');
-                     $('#docTitle').val('');
-                     $('#docMessage').html(response.message);
-                     setTimeout(function() {
-						        window.location.reload();
-						   }, 1000);
-                  }
-                  else{
-                		$('#docMessage').addClass('font-red font-16');
-                		$('#docMessage').html(response.message).addClass('alert alert-danger alert-dismissible');
-                  }
-                  $('#file').val('')
+	$('.upload-pdf').click(function(){
+     		$('.err').html('');
+     		var signature = ($('#signature').val() !== undefined && $('#signature').val() !== null) ? $('#signature').val() : 0;
+      	var formdata = new FormData();
+      	formdata.append('file',docToUpload);
+      	formdata.append('sign',signature);
+      	formdata.append('id','{{$customerdata->id}}');
+      	formdata.append('title',$('#docTitle').val());
+       	formdata.append('_token','{{csrf_token()}}')
+       	$.ajax({
+            url: '{{route('upload_docs')}}',
+            type:'post',
+            dataType: 'json',
+            enctype: 'multipart/form-data',
+            data:formdata,
+            processData: false,
+            contentType: false,
+            headers: {'X-CSRF-TOKEN': $("#_token").val()},
+            success: function (response) { 
+            	$('#docMessage').removeClass();
+               if(response.status == 200){
+                  $('#docMessage').addClass('font-green font-16');
+                  $('#docTitle').val('');
+                  $('#docMessage').html(response.message);
+                  setTimeout(function() {
+					        window.location.reload();
+					   }, 1000);
                }
-         	});
-        	}
+               else{
+             		$('#docMessage').addClass('font-red font-16');
+             		$('#docMessage').html(response.message).addClass('alert alert-danger alert-dismissible');
+               }
+               $('#file').val('')
+            }
+      	});
     	});
-   });
+
 </script>
 
 	<script type="text/javascript">
