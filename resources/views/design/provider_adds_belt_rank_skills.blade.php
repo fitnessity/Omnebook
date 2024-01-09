@@ -207,17 +207,7 @@
                                                                 <a class="nav-link" data-bs-toggle="tab" href="#Library" role="tab" aria-selected="false">
                                                                     Skills Library
                                                                 </a>
-                                                            </li>                                                            
-                                                            <li class="nav-item">
-                                                                <a class="nav-link" data-bs-toggle="tab" href="#Ratings" role="tab" aria-selected="false">
-                                                                    Star Ratings
-                                                                </a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link" data-bs-toggle="tab" href="#Certificates" role="tab" aria-selected="false">
-                                                                    Certificates
-                                                                </a>
-                                                            </li>
+                                                            </li>    
                                                         </ul>
                                                         <div class="tab-content text-muted">
                                                             <div class="tab-pane active" id="Categories" role="tabpanel">
@@ -454,55 +444,7 @@
                                                                     <!--end col-->
                                                                 </div>
                                                                 <!--end row-->
-                                                            </div>                                                            
-                                                            <div class="tab-pane" id="Ratings" role="tabpanel">
-                                                                <h6 class="fs-15">Choose the number of stars in your rating system</h6>
-                                                                <div class="fs-19 align-middle text-warning">
-                                                                    <i class="ri-star-fill"></i>
-                                                                    <i class="ri-star-fill"></i>
-                                                                    <i class="ri-star-fill"></i>
-                                                                    <i class="ri-star-fill"></i>
-                                                                    <i class="ri-star-fill"></i>
-                                                                </div>
-                                                                <div class="mb-15">
-                                                                    <label class="fs-15">Star Rating Descriptions</label>
-                                                                    
-                                                                </div>
-                                                                <div class="d-flex fs-17 mb-15">
-                                                                    <label class="mr-10">1</label>
-                                                                    <i class="ri-star-fill text-warning mr-10"></i>
-                                                                    <label class="mr-10">=</label>
-                                                                    <input type="text" class="form-control mr-10 w-250" value="" required="">
-                                                                </div>
-                                                                <div class="d-flex fs-17 mb-15">
-                                                                    <label class="mr-10">2</label>
-                                                                    <i class="ri-star-fill text-warning mr-10"></i>
-                                                                    <label class="mr-10">=</label>
-                                                                    <input type="text" class="form-control mr-10 w-250" value="" required="">
-                                                                </div>
-                                                                <div class="d-flex fs-17 mb-15">
-                                                                    <label class="mr-10">3</label>
-                                                                    <i class="ri-star-fill text-warning mr-10"></i>
-                                                                    <label class="mr-10">=</label>
-                                                                    <input type="text" class="form-control mr-10 w-250" value="" required="">
-                                                                </div>
-                                                                <div class="d-flex fs-17 mb-15">
-                                                                    <label class="mr-10">4</label>
-                                                                    <i class="ri-star-fill text-warning mr-10"></i>
-                                                                    <label class="mr-10">=</label>
-                                                                    <input type="text" class="form-control mr-10 w-250" value="" required="">
-                                                                </div>
-                                                                <div class="d-flex fs-17 mb-15">
-                                                                    <label class="mr-10">5</label>
-                                                                    <i class="ri-star-fill text-warning mr-10"></i>
-                                                                    <label class="mr-10">=</label>
-                                                                    <input type="text" class="form-control mr-10 w-250" value="" required="">
-                                                                </div>
-                                                                <button type="button" class="btn btn-red">Save changes</button>
-                                                            </div>
-                                                            <div class="tab-pane" id="Certificates" role="tabpanel">
-                                                                <h6>Comming Soon</h6>
-                                                            </div>
+                                                            </div> 
                                                         </div>
 
 													</div><!-- end card-body -->
