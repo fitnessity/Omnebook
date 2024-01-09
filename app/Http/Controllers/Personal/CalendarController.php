@@ -26,7 +26,7 @@ class CalendarController extends Controller
 
     public function index(Request $request)
     {
-        $familyDetails = $companies = [];
+        $familyDetails = $companyInformation = [];
          $ids = [];
         if($request->customer_id){
             if(request()->type == 'user'){
@@ -41,7 +41,7 @@ class CalendarController extends Controller
             $user = Auth::user();
             $customer = $user->customers;
             foreach($customer as $cs){
-                $companies[] = $cs->company_information;
+                $companyInformation[] = $cs->company_information;
             }
                 
             $customer =  $request->business_id ? $customer->where('business_id' ,$request->business_id) : $customer;     
@@ -56,6 +56,7 @@ class CalendarController extends Controller
             }
         }
 
+        $companies = array_values(array_filter(array_unique($companyInformation, SORT_REGULAR)));
        
         $data = UserBookingStatus::selectRaw('chkdetails.id, ser.program_name as title, ser_sche.shift_start, ser_sche.shift_end, ser_sche.set_duration,chkdetails.checkin_date as start,bdetails.user_id')
                 ->join("user_booking_details as bdetails", DB::raw('bdetails.booking_id'), '=', 'user_booking_status.id')
