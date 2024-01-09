@@ -28,7 +28,8 @@
 								</div>
 								<div class="row">
 									@forelse($business as $bs)
-									@php $customer = ($bs->customers != '') ? @$bs->customers->where('user_id',@$id)->first() : '' ; @endphp
+									@php $customer = ($bs->customers != '') ? $bs->customers->where('user_id',@$id)->first() : '' ;
+									$customerId = @$customer->id; @endphp
 									<div class="col-lg-4 col-md-6 col-sm-6 col-12">
 										<div class="card-body purchase-history mt-5 body-bg-gradient">
 											<div class="d-flex flex-column h-100">
@@ -36,11 +37,11 @@
 													<div class="flex-grow-1 text-center">
 														<h5 class="mb-1 fs-15"><a href="#" class="text-red fs-18">{{ $bs->public_company_name}}</a></h5>
 														<div class="d-grid booking-activity">
-															<span> Active Memberships: {{$bs->active_memberships_count_by_user_id(@$customer->id)}}</span>
-															<span> Completed Memberships: {{$bs->completed_memberships_count_by_user_id(@$customer->id)}}</span>
-															<span> Expiring Memberships: {{$bs->expired_soon_memberships_count_by_user_id(@$customer->id)}}</span>
-															<span> Attenance: {{$bs->visits_count_by_user_id(@$customer->id)}} </span>
-															<span> Notes & Alerts: {{$bs->notes_count_by_user_id(@$customer->id)}} </span>
+															<span> Active Memberships: {{$bs->active_memberships_count_by_user_id(@$customerId)}}</span>
+															<span> Completed Memberships: {{$bs->completed_memberships_count_by_user_id(@$customerId)}}</span>
+															<span> Expiring Memberships: {{$bs->expired_soon_memberships_count_by_user_id(@$customerId)}}</span>
+															<span> Attenance: {{$bs->visits_count_by_user_id(@$customerId)}} </span>
+															<span> Notes & Alerts: {{$bs->notes_count_by_user_id(@$customerId)}} </span>
 														</div>
 													</div>
 												</div>
