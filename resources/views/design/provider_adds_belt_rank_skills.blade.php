@@ -198,16 +198,16 @@
 												<div class="card">
 													<div class="card-body">
                                                         <ul class="nav nav-tabs mb-3" role="tablist">
-                                                            <li class="nav-item">
-                                                                <a class="nav-link active" data-bs-toggle="tab" href="#Library" role="tab" aria-selected="false">
-                                                                    Library
-                                                                </a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link" data-bs-toggle="tab" href="#Categories" role="tab" aria-selected="false">
+                                                         <li class="nav-item">
+                                                                <a class="nav-link active" data-bs-toggle="tab" href="#Categories" role="tab" aria-selected="false">
                                                                     Categories
                                                                 </a>
                                                             </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" data-bs-toggle="tab" href="#Library" role="tab" aria-selected="false">
+                                                                    Skills Library
+                                                                </a>
+                                                            </li>                                                            
                                                             <li class="nav-item">
                                                                 <a class="nav-link" data-bs-toggle="tab" href="#Ratings" role="tab" aria-selected="false">
                                                                     Star Ratings
@@ -220,124 +220,7 @@
                                                             </li>
                                                         </ul>
                                                         <div class="tab-content text-muted">
-                                                            <div class="tab-pane active" id="Library" role="tabpanel">
-                                                                <div class="row">
-                                                                    <div class="col-xl-12">
-                                                                        <div class="card">
-                                                                            <div class="card-body">
-                                                                                <div class="live-preview">
-                                                                                    <div class="accordion custom-accordionwithicon accordion-border-box" id="accordionnesting">
-                                                                                        <div class="accordion-item shadow">
-                                                                                            <h2 class="accordion-header" id="accordionnestingExample1">
-                                                                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse1" aria-expanded="true" aria-controls="accor_nestingExamplecollapse1">
-                                                                                                    <div class="container-fluid nopadding">
-                                                                                                        <div class="row">
-                                                                                                            <div class="col-6">
-                                                                                                                Show Skills
-                                                                                                            </div>
-                                                                                                            <div class="col-6">
-                                                                                                                <div class="float-end mr-15"><label class="fs-16">1 <span class="fs-13">Skills</span></label></div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </button>
-                                                                                            </h2>
-                                                                                            <div id="accor_nestingExamplecollapse1" class="accordion-collapse collapse show" aria-labelledby="accordionnestingExample1" data-bs-parent="#accordionnesting">
-                                                                                                <div class="accordion-body">
-                                                                                                    <div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnesting2">
-                                                                                                        <div class="accordion-item shadow">
-                                                                                                            <h2 class="accordion-header" id="accordionnesting2Example1">
-                                                                                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting2Examplecollapse1" aria-expanded="true" aria-controls="accor_nesting2Examplecollapse1">
-                                                                                                                    <div class="container-fluid nopadding">
-                                                                                                                        <div class="row">
-                                                                                                                            <div class="col-6">
-                                                                                                                                White
-                                                                                                                            </div>
-                                                                                                                            <div class="col-6">
-                                                                                                                                <div class="float-end mr-15 pluse-modal" data-bs-toggle="modal" data-bs-target="#plusModal">
-                                                                                                                                    <i class="fas fa-plus-square"></i>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                </button>
-                                                                                                            </h2>
-                                                                                                            <div id="accor_nesting2Examplecollapse1" class="accordion-collapse collapse show" aria-labelledby="accordionnesting2Example1" data-bs-parent="#accordionnesting2">
-                                                                                                                <div class="accordion-body">
-                                                                                                                    <div class="row">
-                                                                                                                        <div class="col-lg-6">
-                                                                                                                            <div class="skills-edit mb-25">
-                                                                                                                                <div class="row">
-                                                                                                                                    <div class="col-lg-8 col-md-8 col-sm-8 col-6">
-                                                                                                                                        <label class="mb-0">Front Snap Kick</label>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="col-lg-4 col-md-4 col-sm-4 col-6">
-                                                                                                                                        <div class="text-end">
-                                                                                                                                            <button class="btn btn-sm btn-soft-danger remove-list" data-bs-toggle="modal" data-bs-target="#removeTaskItemModal" data-remove-id="15"><i class="ri-delete-bin-5-fill align-bottom"></i></button>
-                                                                                                                                            <button class="btn btn-sm btn-soft-grey edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15"><i class="ri-pencil-fill align-bottom"></i></button>
-                                                                                                                                        </div>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                        <div class="col-lg-6">
-                                                                                                                            <div class="skills-edit mb-25">
-                                                                                                                                <div class="row">
-                                                                                                                                    <div class="col-lg-8 col-md-8 col-sm-8 col-6">
-                                                                                                                                        <label class="mb-0">Upperward Block</label>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="col-lg-4 col-md-4 col-sm-4 col-6">
-                                                                                                                                        <div class="text-end">
-                                                                                                                                            <button class="btn btn-sm btn-soft-danger remove-list" data-bs-toggle="modal" data-bs-target="#removeTaskItemModal" data-remove-id="15"><i class="ri-delete-bin-5-fill align-bottom"></i></button>
-                                                                                                                                            <button class="btn btn-sm btn-soft-grey edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15"><i class="ri-pencil-fill align-bottom"></i></button>
-                                                                                                                                        </div>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                    <div class="accordion nesting4-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnesting4">
-                                                                                                                        <div class="accordion-item shadow">
-                                                                                                                            <h2 class="accordion-header" id="accordionnesting4Example2">
-                                                                                                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting4Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting4Examplecollapse2">
-                                                                                                                                    <div class="container-fluid nopadding">
-                                                                                                                                        <div class="row">
-                                                                                                                                            <div class="col-6">
-                                                                                                                                                 Blocks
-                                                                                                                                            </div>
-                                                                                                                                            <div class="col-6">
-                                                                                                                                                <div class="float-end mr-15 pluse-modal" data-bs-toggle="modal" data-bs-target="#plusModal">
-                                                                                                                                                    <i class="fas fa-plus-square"></i>
-                                                                                                                                                </div>
-                                                                                                                                            </div>
-                                                                                                                                        </div>
-                                                                                                                                    </div>
-                                                                                                                                </button>
-                                                                                                                            </h2>
-                                                                                                                            <div id="accor_nesting4Examplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnesting4Example2" data-bs-parent="#accordionnesting4">
-                                                                                                                                <div class="accordion-body">
-
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div><!-- end card-body -->
-                                                                        </div><!-- end card -->
-                                                                    </div>
-                                                                    <!--end col-->
-                                                                </div>
-                                                                <!--end row-->
-                                                            </div>
-                                                            <div class="tab-pane" id="Categories" role="tabpanel">
+                                                            <div class="tab-pane active" id="Categories" role="tabpanel">
                                                                 <div class="card">
                                                                     <div class="card-header align-items-center text-end">
                                                                         <div>
@@ -455,6 +338,123 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="tab-pane" id="Library" role="tabpanel">
+                                                                <div class="row">
+                                                                    <div class="col-xl-12">
+                                                                        <div class="card">
+                                                                            <div class="card-body">
+                                                                                <div class="live-preview">
+                                                                                    <div class="accordion custom-accordionwithicon accordion-border-box" id="accordionnesting">
+                                                                                        <div class="accordion-item shadow">
+                                                                                            <h2 class="accordion-header" id="accordionnestingExample1">
+                                                                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse1" aria-expanded="true" aria-controls="accor_nestingExamplecollapse1">
+                                                                                                    <div class="container-fluid nopadding">
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-6">
+                                                                                                                Show Skills
+                                                                                                            </div>
+                                                                                                            <div class="col-6">
+                                                                                                                <div class="float-end mr-15"><label class="fs-16">1 <span class="fs-13">Skills</span></label></div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </button>
+                                                                                            </h2>
+                                                                                            <div id="accor_nestingExamplecollapse1" class="accordion-collapse collapse show" aria-labelledby="accordionnestingExample1" data-bs-parent="#accordionnesting">
+                                                                                                <div class="accordion-body">
+                                                                                                    <div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnesting2">
+                                                                                                        <div class="accordion-item shadow">
+                                                                                                            <h2 class="accordion-header" id="accordionnesting2Example1">
+                                                                                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting2Examplecollapse1" aria-expanded="true" aria-controls="accor_nesting2Examplecollapse1">
+                                                                                                                    <div class="container-fluid nopadding">
+                                                                                                                        <div class="row">
+                                                                                                                            <div class="col-6">
+                                                                                                                                White
+                                                                                                                            </div>
+                                                                                                                            <div class="col-6">
+                                                                                                                                <div class="float-end mr-15 pluse-modal" data-bs-toggle="modal" data-bs-target="#plusModal">
+                                                                                                                                    <i class="fas fa-plus-square"></i>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </button>
+                                                                                                            </h2>
+                                                                                                            <div id="accor_nesting2Examplecollapse1" class="accordion-collapse collapse show" aria-labelledby="accordionnesting2Example1" data-bs-parent="#accordionnesting2">
+                                                                                                                <div class="accordion-body">
+                                                                                                                    <div class="row">
+                                                                                                                        <div class="col-lg-6">
+                                                                                                                            <div class="skills-edit mb-25">
+                                                                                                                                <div class="row">
+                                                                                                                                    <div class="col-lg-8 col-md-8 col-sm-8 col-6">
+                                                                                                                                        <label class="mb-0">Front Snap Kick</label>
+                                                                                                                                    </div>
+                                                                                                                                    <div class="col-lg-4 col-md-4 col-sm-4 col-6">
+                                                                                                                                        <div class="text-end">
+                                                                                                                                            <button class="btn btn-sm btn-soft-danger remove-list" data-bs-toggle="modal" data-bs-target="#removeTaskItemModal" data-remove-id="15"><i class="ri-delete-bin-5-fill align-bottom"></i></button>
+                                                                                                                                            <button class="btn btn-sm btn-soft-grey edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15"><i class="ri-pencil-fill align-bottom"></i></button>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                        <div class="col-lg-6">
+                                                                                                                            <div class="skills-edit mb-25">
+                                                                                                                                <div class="row">
+                                                                                                                                    <div class="col-lg-8 col-md-8 col-sm-8 col-6">
+                                                                                                                                        <label class="mb-0">Upperward Block</label>
+                                                                                                                                    </div>
+                                                                                                                                    <div class="col-lg-4 col-md-4 col-sm-4 col-6">
+                                                                                                                                        <div class="text-end">
+                                                                                                                                            <button class="btn btn-sm btn-soft-danger remove-list" data-bs-toggle="modal" data-bs-target="#removeTaskItemModal" data-remove-id="15"><i class="ri-delete-bin-5-fill align-bottom"></i></button>
+                                                                                                                                            <button class="btn btn-sm btn-soft-grey edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15"><i class="ri-pencil-fill align-bottom"></i></button>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <div class="accordion nesting4-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnesting4">
+                                                                                                                        <div class="accordion-item shadow">
+                                                                                                                            <h2 class="accordion-header" id="accordionnesting4Example2">
+                                                                                                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting4Examplecollapse2" aria-expanded="false" aria-controls="accor_nesting4Examplecollapse2">
+                                                                                                                                    <div class="container-fluid nopadding">
+                                                                                                                                        <div class="row">
+                                                                                                                                            <div class="col-6">
+                                                                                                                                                 Blocks
+                                                                                                                                            </div>
+                                                                                                                                            <div class="col-6">
+                                                                                                                                                <div class="float-end mr-15 pluse-modal" data-bs-toggle="modal" data-bs-target="#plusModal">
+                                                                                                                                                    <i class="fas fa-plus-square"></i>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                </button>
+                                                                                                                            </h2>
+                                                                                                                            <div id="accor_nesting4Examplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnesting4Example2" data-bs-parent="#accordionnesting4">
+                                                                                                                                <div class="accordion-body">
+
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div><!-- end card-body -->
+                                                                        </div><!-- end card -->
+                                                                    </div>
+                                                                    <!--end col-->
+                                                                </div>
+                                                                <!--end row-->
+                                                            </div>                                                            
                                                             <div class="tab-pane" id="Ratings" role="tabpanel">
                                                                 <h6 class="fs-15">Choose the number of stars in your rating system</h6>
                                                                 <div class="fs-19 align-middle text-warning">
