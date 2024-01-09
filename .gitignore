@@ -4,6 +4,7 @@
 /public/storage
 /public/log
 /public/uploads
+/bootstrap/cache
 /public/ExcelUpload
 /braintree
 /storage/*.key
@@ -26,7 +27,10 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 storage/framework/laravel-excel/*
-/bootstrap/cache/*
+<<<<<<< HEAD
+=======
+
+>>>>>>> d39eae9093c73faf1b62cd19778dfa0df8eb1477
 
 # Compiled Java class files
 *.class

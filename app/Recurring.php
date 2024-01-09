@@ -113,7 +113,8 @@ class Recurring extends Authenticatable
        
         $cardID =  $this->payment_method;
         $cardID = $cardID != ''  ?  $cardID : $stripeCardID;
-        
+        $this->attempt += 1;
+
         if($cardID != '' && $stripeCustomerId != ''){
             
             try {
@@ -130,7 +131,7 @@ class Recurring extends Authenticatable
                 $this->stripe_payment_id = $paymentIntent->id;
                 $this->charged_amount = round($totalPrice)/100;
                 $this->status = 'Completed';
-                $this->attempt += 1;
+                
             
                 $transactiondata = array( 
                     'user_type' => $this->user_type ,
@@ -151,11 +152,7 @@ class Recurring extends Authenticatable
                 $this->charged();
             }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e ) {
                 $this->payment_method = NULL;
-                $this->attempt += 1;
                 $this->status = "Retry";
-            }catch (Exception $e) {
-                $this->status = "Retry";
-                $this->attempt += 1;
             }finally {
                 $this->save();
 
@@ -194,7 +191,7 @@ class Recurring extends Authenticatable
                 }
             }
         }else{
-            $this->status = "Retry";
+            $this->status = "Failed";
             $this->save();
         }
     }
@@ -212,35 +209,33 @@ class Recurring extends Authenticatable
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $company_information = $this->company_information;
         $transfer_amount = $this->provider_get_total();
-        try {
-            $transfer_amount = $this->provider_get_total();
-            $stripe_account  = $stripe->accounts->retrieveCapability(
-                $company_information->stripe_connect_id,
-                'transfers',
-                []
-            );
 
-            $payment_intent = $stripe->paymentIntents->retrieve(
-                $this->stripe_payment_id,
-                []
-            );
+        $transfer_amount = $this->provider_get_total();
+        $stripe_account  = $stripe->accounts->retrieveCapability(
+            $company_information->stripe_connect_id,
+            'transfers',
+            []
+        );
 
-            if($stripe_account['status'] == 'active'){
-                    
-                $transfer = $stripe->transfers->create([
-                    'amount' => $transfer_amount * 100,
-                    'currency' => 'usd',
-                    'source_transaction' => $payment_intent->charges->data[0]->id,
-                    'destination' => $company_information->stripe_connect_id,
-                ]);
+        $payment_intent = $stripe->paymentIntents->retrieve(
+            $this->stripe_payment_id,
+            []
+        );
 
-                if($transfer->id){
-                    $this->update(['transfer_provider_status'=>'paid', 'provider_amount' => $transfer_amount ,'provider_transaction_id' => $transfer->id]);
-                }
+        if($stripe_account['status'] == 'active'){
+                
+            $transfer = $stripe->transfers->create([
+                'amount' => $transfer_amount * 100,
+                'currency' => 'usd',
+                'source_transaction' => $payment_intent->charges->data[0]->id,
+                'destination' => $company_information->stripe_connect_id,
+            ]);
 
+            if($transfer->id){
+                $this->update(['transfer_provider_status'=>'paid', 'provider_amount' => $transfer_amount ,'provider_transaction_id' => $transfer->id]);
             }
-        } catch(\Stripe\Exception\CardException  | \Stripe\Exception\InvalidRequestException | \Exception $e) {
-        } 
+
+        }
     }
 
 }

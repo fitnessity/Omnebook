@@ -860,8 +860,11 @@
 																											<td>${{$history->amount}}</td>
 																											<td>{{$history->item_description(request()->business_id)['qty']}}</td>
 																											<td>
-																												@if(($history->can_void() && $history->item_type=="UserBookingStatus") || ($history->can_refund()))
-																													<a href="#" data-behavior="ajax_html_modal" data-url="{{route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => $booking_detail->id , 'booking_id' => $booking_detail->booking_id])}}" data-modal-width="modal-100">Void</a>
+																												@if(($history->can_void() && $history->item_type=="UserBookingStatus") || ($history->can_refund() && $history->item_type=="UserBookingStatus"))
+																													<?php
+																													$detail = $history->userBookingStatus->UserBookingDetail->first();
+																													?>
+																													<a href="#" data-behavior="ajax_html_modal" data-url="{{route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => $detail->id , 'booking_id' => $history->item_id])}}" data-modal-width="modal-100">Void</a>
 																												@else
 																													{{$history->status}}
 																												@endif
@@ -1021,7 +1024,7 @@
 																								  <i class="ri-more-fill"></i>
 																								  <ul>
 																									<li>
-																										<a href="#" data-modal-width=" " data-behavior="ajax_html_modal" data-url="{{route('business.customers.card_editing_form', ['customer_id' => $customerdata->id, 'return_url' => url()->full()])}}">
+																										<a href="#" data-reload="1" data-modal-width=" " data-behavior="ajax_html_modal" data-url="{{route('business.customers.card_editing_form', ['customer_id' => $customerdata->id, 'return_url' => url()->full()])}}" >
 																										<i class="fas fa-plus text-muted"></i>Add</a>
 																									</li>
 																								  </ul>
