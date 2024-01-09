@@ -201,8 +201,8 @@
 
 									<div class="tab-pane fade py-2 ps-2" id="alerts-tab" role="tabpanel" aria-labelledby="alerts-tab">
 										<div data-simplebar style="max-height: 300px;">
+											<input type="hidden" id="alertIds" value="{{ implode(',', getNotificationDashboard('Alert')->pluck('id')->toArray())}}">
 											@forelse(getNotificationDashboard('Alert') as $n)
-												<input type="hidden" id="alertIds" value="{{ implode(',', getNotificationDashboard('Alert')->pluck('id')->toArray())}}">
 												<div class="text-reset notification-item d-block dropdown-item">
 													<div class="d-flex">
 														@php
@@ -268,7 +268,7 @@
 
 											@if(count(getNotificationDashboard('Alert')) > 0)
 												<div class="text-center">
-													<button type="button" class="btn btn-red text-center clearAlert">Clear All Alerts</button>
+													<button type="button" class="btn btn-red text-center clearAlert" onclick="clearAlert()">Clear All Alerts</button>
 												</div>
 											@endif
 										</div>
@@ -331,6 +331,11 @@
 			   }
 			}
 
+			function clearAlert(){
+				var id = $('#alertIds').val();  
+     		deleteNoteFromNotification(id);
+			}
+
 			$(document).ready(function () {
 		     	var business_id = '{{Auth::user()->cid}}';
 		     	var url = "{{ url('/business/business_id/customers') }}";
@@ -389,11 +394,6 @@
 		                 .append(inner_html)
 		                 .appendTo( ul );
 		     	};
-
-		     	$('.clearAlert').click(function(e){
-		     		var id = $('#alertIds').val();  
-		     		deleteNoteFromNotification(id);
-		     	});
 		   });
 
 		</script>
