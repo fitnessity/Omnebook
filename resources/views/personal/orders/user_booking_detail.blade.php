@@ -26,7 +26,7 @@
 													<label>Remaining: {{@$bs->getremainingsession()}}/{{@$bs->pay_session}} |</label>
 													<label>Expiration: {{date('m/d/Y',strtotime(@$bs->expired_at))}} |</label>
 												</div>
-												@if($tabName != 'current') 
+												@if($tabName != 'current' && $tabName != 'past') 
 													<div>
 														@if(@$bs->getReserveData('reserve_date') != '—') 
 															<label>Reserved Date: {{@$bs->getReserveData('reserve_date')}}  | </label>

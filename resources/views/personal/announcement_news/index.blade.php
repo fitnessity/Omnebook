@@ -96,7 +96,7 @@
 	    baseUrl = baseUrl.replace(/(\?|&)category=[^&]*(&|$)/g, '$2');
 	    baseUrl = baseUrl.replace(/(\?|&)date=[^&]*(&|$)/g, '$2');
 		var date = $('#announcement-date').val();
-		if(date){
+		if(date && date != '{{date("Y-m-d")}}'){
 			baseUrl += (baseUrl.includes('?') ? '&' : '?') + "date=" + date;
 		}
 	    if (id !== 'all' && id != '') {
