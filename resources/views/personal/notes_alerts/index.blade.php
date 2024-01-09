@@ -73,7 +73,7 @@
 												</div>
 
 												@empty
-													No Notes Available
+													<p>No Notes Available</p>
 												@endforelse
 											</div>
 										</div>
