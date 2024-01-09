@@ -718,7 +718,6 @@ class CustomerController extends Controller {
     public function receiptmodel($orderId,$customer,$isFrom = null){
         $customerData = Customer::where('id',$customer)->first();
         $transaction = Transaction::where('item_id',$orderId)->first();
-
         if(!$isFrom){
             if(@$transaction->item_type == 'UserBookingStatus'){
                 $oid = $orderId;

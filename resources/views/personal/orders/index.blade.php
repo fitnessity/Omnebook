@@ -24,26 +24,27 @@
 								<div class="row">
 									<div class="col-lg-12 col-md-6 col-12">
 										<div class="form-group mmt-10 desktop-none-booking">
-											<select class="form-select" name="frm_class_meets" id="frm_class_meets">
-												<option selected="" value="All">All</option>
-												<option value="Personal Trainer">Personal Trainer </option>
-												<option value="Classes">Classes </option>
-												<option value="Events">Events</option>
-												<option value="Experiences">Experiences </option>
+											<select class="form-select" name="filterOption" id="filterOption" onchange="changeType(this)">
+												<option value="all" @if(request()->serviceType == '' || request()->serviceType == 'all') selected @endif>All</option>
+												<option value="individual" @if(request()->serviceType == 'individual') selected @endif>Personal Trainer </option>
+												<option value="classes" @if(request()->serviceType == 'classes') selected @endif>Classes </option>
+												<option value="events" @if(request()->serviceType == 'events') selected @endif>Events</option>
+												<option value="experience" @if(request()->serviceType == 'experience') selected @endif>Experiences </option>
 											</select>
 										</div>
 									</div>
 									<div class="col-lg-12 col-md-6 col-12">
 										<div class="form-group mmt-10 desktop-none-booking">
-											<select class="form-select" name="frm_class_meets" id="frm_class_meets">
-												<option selected="" value="Current">Current</option>
-												<option value="Today">Today </option>
-												<option value="Upcoming">Upcoming</option>
-												<option value="Past">Past</option>
+											<select class="form-select" name="changeTab" id="changeTab" onchange="changeTab(this.value ,'mobile')">
+												<option value="current">Active Memberships</option>
+												<option value="today">Today </option>
+												<option value="upcoming">Upcoming</option>
+												<option value="past">Past</option>
 											</select>
 										</div>
 									</div>
 								</div>
+
 								<div class="nav-custom-grey nav-custom mb-3">
 									<div class="row">
 										<div class="col-lg-6">
@@ -65,16 +66,16 @@
 											<!-- Nav tabs -->
 											<ul class="nav nav-pills float-right mobile-none" role="tablist">
 												<li class="nav-item">
-													<a class="nav-link active" data-bs-toggle="tab" href="#nav-current" role="tab" onclick="changeTab('curernt')">Active Bookings</a>
+													<a class="nav-link active" data-bs-toggle="tab" href="#nav-current" role="tab" onclick="changeTab('curernt','')">Active Memberships</a>
 												</li>
 												<li class="nav-item">
-													<a class="nav-link" data-bs-toggle="tab" href="#nav-today" role="tab" onclick="changeTab('today')">Today</a>
+													<a class="nav-link" data-bs-toggle="tab" href="#nav-today" role="tab" onclick="changeTab('today','')">Today</a>
 												</li>
 												<li class="nav-item">
-													<a class="nav-link" data-bs-toggle="tab" href="#nav-upcoming" role="tab" onclick="changeTab('upcoming')">Upcoming</a>
+													<a class="nav-link" data-bs-toggle="tab" href="#nav-upcoming" role="tab" onclick="changeTab('upcoming','')">Upcoming</a>
 												</li>
 												<li class="nav-item">
-													<a class="nav-link" data-bs-toggle="tab" href="#nav-past" role="tab" onclick="changeTab('past')">Past</a>
+													<a class="nav-link" data-bs-toggle="tab" href="#nav-past" role="tab" onclick="changeTab('past','')">Past</a>
 												</li>
 											</ul>
 										</div>
@@ -190,7 +191,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="text-center">
-					<p class="fs-14">You are about to remove your sync with Fitness {{$business->public_company_name}} denying access, the provider will no longer be able to link with your account. This allows the provider to automatically update your account and booking information with them.</p>
+					<p class="fs-14">You are about to remove your sync with Fitness {{@$business->public_company_name}} denying access, the provider will no longer be able to link with your account. This allows the provider to automatically update your account and booking information with them.</p>
 					<a class="addbusiness-btn-modal btn btn-red" href="{{route('personal.grantAccess',['business_id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => request()->type,'status' =>'deny'])}}">Deny Access</a>
 				</div>
 			</div>
@@ -227,8 +228,25 @@
 
 	}
 
-	function changeTab(type){
+	function changeType(type){
+		var selectedValue = type.value;
+		if(selectedValue == 'all'){
+			selectedValue = '';
+		}
+		var currentUrl = window.location.href;
+		var url = new URL(currentUrl);
+		url.searchParams.set('serviceType', selectedValue);
+		window.location.href = url.toString();
+	}
+
+	function changeTab(type,from){
 		$('#serchType').val(type);
+		if(from == 'mobile'){
+			$('.nav-link').removeClass('active');
+			$('[data-bs-toggle="tab"][href="#nav-' + type + '"]').addClass('active');
+	        $('.tab-pane').removeClass('active');
+         	$('#nav-' + type).addClass('active');
+		}
 	}
 	
 	function serchByActivty(){

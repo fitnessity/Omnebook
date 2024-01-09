@@ -202,7 +202,7 @@ class BusinessActivitySchedulerController extends Controller
         
         if($html != ''){
 
-            $data .='<select class="mb-10 form-control" id="priceId" onchange="getRemainingSession()">'.$html.'</select><div class="font-red text-center" id="remainingSession">'.$remaining.' Session Remaining.</div>';
+            $data .='<select class="mb-10 form-select" id="priceId" onchange="getRemainingSession()">'.$html.'</select><div class="font-red text-center" id="remainingSession">'.$remaining.' Session Remaining.</div>';
         }
         return $data;
     }
