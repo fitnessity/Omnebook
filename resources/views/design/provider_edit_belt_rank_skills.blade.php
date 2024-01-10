@@ -34,32 +34,74 @@
 													</select>
 												</div>
 											</div>
-                                     	</div>
-                                    	<div class="col-lg-3 col-md-6">
+                                     	</div>                                   	
+
+										
+
+										<div class="col-lg-3 col-md-6">
 											<div class="steps-title mmb-10">
-												<div class="mb-3">
-													<label for="JoiningdatInput" class="form-label">Level / Rank Style</label>
-													<select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
-														<option value=""> Solid Color </option>
-														<option value="">Normal Color</option>
-													</select>
+											<div class="mb-3">
+													<div class="form-check form-switch form-switch-dark form-check-right">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="SwitchCheck7" checked="">    
+														<label  class="form-check-label" for="SwitchCheck7">Auto Assign Initial Rank</label>                                                    
+                                                    </div>												
 												</div>
-											</div>
-                                    	</div> <!--end col-->
-                                    	<div class="col-lg-3 col-md-6">
-											<div class="steps-title mmb-10">
 												<div class="mb-3">
-													<label for="JoiningdatInput" class="form-label">Secondary Color</label>
+													<label for="JoiningdatInput" class="form-label">Promotion Setting</label>
 													<select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
-														<option value=""> Middle of the rank </option>
-														<option value="">First rank</option>
+														<option value="">Manual Promotions </option>
+														<option value="">Automatically Promotions</option>
 													</select>
 												</div>
 											</div>
                                 		</div><!--end col-->
 
-										<div class="col-lg-4 col-md-6">
+										<div class="col-lg-3 col-md-6">
 											<div class="steps-title mmb-10">
+												<div class="mb-3">
+													<label for="JoiningdatInput" class="form-label">Promotion Type</label>
+													<div class="row">
+														<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+															<div class="mb-25">
+																<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+																<label for="vehicle1"> Belt Ranks</label>
+															</div>
+														</div>
+														<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+															<div class="text-end">
+																<button class="btn btn-sm btn-soft-grey edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15"><i class="ri-pencil-fill align-bottom"></i></button>
+															</div>															
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+															<div class="mb-25">
+																<input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+																<label for="vehicle2">Star Rating</label>
+															</div>
+														</div>
+														<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+															<div class="text-end">
+																<button class="btn btn-sm btn-soft-grey edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15"><i class="ri-pencil-fill align-bottom"></i></button>
+															</div>															
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+															<div class="mb-25">
+																<input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
+																<label for="vehicle3">Certificates</label>
+															</div>
+														</div>
+														<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+															<div class="text-end">
+																<button class="btn btn-sm btn-soft-grey edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15"><i class="ri-pencil-fill align-bottom"></i></button>
+															</div>															
+														</div>
+													</div>													
+												</div>
+											</div>
+											<!--<div class="steps-title mmb-10">
 												<div class="mb-3">
 													<label for="JoiningdatInput" class="form-label">Promotion Requirements</label>
 													<div class="row">
@@ -86,26 +128,8 @@
 													</div>
 													
 												</div>
-											</div>
+											</div> -->
                                 		</div>
-
-										<div class="col-lg-3 col-md-6">
-											<div class="steps-title mmb-10">
-											<div class="mb-3">
-													<div class="form-check form-switch form-switch-dark form-check-right">
-                                                        <input class="form-check-input" type="checkbox" role="switch" id="SwitchCheck7" checked="">    
-														<label  class="form-check-label" for="SwitchCheck7">Auto Assign Initial Rank</label>                                                    
-                                                    </div>												
-												</div>
-												<div class="mb-3">
-													<label for="JoiningdatInput" class="form-label">Promotion Setting</label>
-													<select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
-														<option value="">Manual Promotions </option>
-														<option value="">Automatically Promotions</option>
-													</select>
-												</div>
-											</div>
-                                		</div><!--end col-->
 
                                     	<div class="col-lg-12">
                                         	<div class="hstack gap-2 justify-content-end">
@@ -148,11 +172,37 @@
 											<div class="card-header">
 												<!--<h4 class="card-title mb-0 flex-grow-1">Levels / Ranks</h4> -->
 												<div class="row">
-													<div class="col-lg-12">
+													<div class="col-lg-8">
+													<label class="font-black">Create/Edit Promotion Type</label>
+														<div class="row">
+															<div class="col-lg-3 col-md-6">
+																<div class="steps-title mmb-10">
+																	<div class="mb-3">
+																		<label for="JoiningdatInput" class="form-label">Level / Rank Style</label>
+																		<select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
+																			<option value=""> Solid Color </option>
+																			<option value="">Normal Color</option>
+																		</select>
+																	</div>
+																</div>
+															</div> <!--end col-->
+															<div class="col-lg-3 col-md-6">
+																<div class="steps-title mmb-10">
+																	<div class="mb-3">
+																		<label for="JoiningdatInput" class="form-label">Secondary Color</label>
+																		<select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
+																			<option value=""> Middle of the rank </option>
+																			<option value="">First rank</option>
+																		</select>
+																	</div>
+																</div>
+															</div><!--end col-->
+														</div>													
+													</div>
+													<div class="col-lg-4">
 														<div class="text-end">
 															<button type="button" class="btn btn-red">Add Ranks</button>
-														</div>
-														
+														</div>														
 													</div>
 												</div>
 											</div>
@@ -433,7 +483,28 @@
                                     	<button type="button" class="btn btn-red">Save changes</button>
                                 	</div>
                                 	<div class="tab-pane" id="Certificates" role="tabpanel">
-										<h6>Comming Soon</h6>
+										<form action="javascript:void(0);">
+											<div class="row">
+												<div class="col-lg-3">
+													<div class="mb-3">
+														<label for="firstnameInput" class="form-label">Category</label>
+														<input type="text" class="form-control" value="Taekwondo">
+													</div>
+												</div>
+												<div class="col-lg-3">
+													<div class="mb-3">
+														<label for="firstnameInput" class="form-label">Certificate Title</label>
+														<input type="text" class="form-control">
+													</div>
+												</div>
+												<div class="col-lg-3">
+													<div class="mb-3">
+														<label for="firstnameInput" class="form-label">Upload Certificate</label>
+                                                   		<input class="form-control" type="file" id="formFile">                                                
+													</div>
+												</div>
+											</div>
+										<form> 
                               		</div>
                            		</div>
                       		</div><!-- end card-body -->
@@ -447,6 +518,49 @@
 	</div><!-- end main content-->
 	
 </div><!-- END layout-wrapper -->
+<!-- Modal -->
+<div class="modal fade" id="createTask" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+    	<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="staticBackdropLabel">Promotion Requirements</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="mb-3">
+						<div class="row">
+							<div class="col-lg-6 col-md-12 col-12">
+								<div>
+									<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+									<label for="vehicle1">Sessions</label><br>
+									<input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+									<label for="vehicle2">Hours</label><br>
+									<input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
+									<label for="vehicle3">Days in Rank</label><br> 
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-12 col-12">
+								<div>
+									<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+									<label for="vehicle1">Days Attended</label><br>
+									<input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+									<label for="vehicle2">Skill Requirements</label><br>
+									<input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
+									<label for="vehicle3">Minimum Age</label><br> 
+								</div>
+							</div>
+						</div>
+					</div>						
+				<form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-red" data-bs-dismiss="modal">Save</button>
+			</div>
+   		</div>
+  	</div>
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="skills" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">

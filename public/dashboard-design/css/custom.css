@@ -5863,7 +5863,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   color: #fff;
 }
 
-
+.bg-primary-purple {
+  --vz-bg-opacity: 1;
+  background-color: rgba(var(--vz-primary-rgb),var(--vz-bg-opacity)) !important;
+}
 
 
 
