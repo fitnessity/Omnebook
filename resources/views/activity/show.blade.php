@@ -422,7 +422,6 @@ input:disabled{
 				
             	<div class="mainboxborder">	
 					<div class="row">
-
 						<div class="col-md-12 col-sm-12 col-xs-12">
 							<div class="">
 								<h3 class="date-title mt-10 mb-10"></h3>
@@ -444,11 +443,13 @@ input:disabled{
 						@endphp 
 						<div id="updatefilterforcart">
 						</div>
+					</div> 
+					<div class="row">
 						<div class="col-md-12">
 							<div class="font-red text-center mb-10" id="spoterror">
 							</div>
 						</div>
-					</div>  
+					</div> 
 				</div>
 	        </div>	
 
@@ -797,7 +798,7 @@ input:disabled{
 							message = "<br>Please select time.";
 						}
 					}else{
-						message = "Please select a participate.";
+						message = "Please select a participant.";
 					}
 					
 					$('#spoterror').html(message);

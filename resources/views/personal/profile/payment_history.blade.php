@@ -43,14 +43,14 @@
 												<tbody id="tbodydetail">
 													@forelse($transactionDetail as $history )
 														<tr>
-															<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
-															<td>{!!$history->item_description(request()->business_id)['itemDescription']!!} </td>
-															<td>{{$history->item_type_terms()}}</td>
-															<td>{{$history->getPmtMethod()}}</td>
-															<td>${{$history->amount}}</td>
-															<td>{{$history->item_description(request()->business_id)['qty']}}</td>
-															<td>{!!$history->getBookingStatus()!!}</td>
-															<td><a  class="mailRecipt" data-behavior="send_receipt"  data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$history->customer_id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
+															<td>{{$history['created_at']}}</td>
+															<td>{!!$history['itemDescription']!!} </td>
+															<td>{{$history['item_type_terms']}}</td>
+															<td>{{$history['getPmtMethod']}}</td>
+															<td>${{$history['amount']}}</td>
+															<td>{{$history['qty']}}</td>
+															<td>{!!$history['getBookingStatus']!!}</td>
+															<td><a  class="mailRecipt" data-behavior="send_receipt"  data-url="{{route('receiptmodel',['orderId'=>$history['item_id'],'customer'=>$history['customer_id']])}}" data-item-type="{{$history['item_type_terms']}}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
 															</td>
 														</tr>
 													@empty 

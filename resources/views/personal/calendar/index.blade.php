@@ -170,48 +170,11 @@
         });
         calendar.fullCalendar('refetchEvents');
     }
-
-    /*$('.fc-widget-content').hover(function(){
-        if(!$(this).html()){    
-            for(i=0;i<7;i++){
-                $(this).append('<td class="temp-cell" style="border: 0px; width:'+(Number($('.fc-day').width())+3)+'px"></td>');
-            }
-
-            $(this).children('td').each(function(){
-                $(this).hover(function(){
-                    $(this).html('<div class=current-time>'+$(this).parent().parent().data('time').substring(0,5)+'</div>');
-                },function(){
-                    $(this).html('');
-                });
-            });
-        }
-    },function(){
-        $(this).children('.temp-cell').remove();
-    });*/
     
     $(document).on({
         mouseenter: function() {
-            //$(this).css('background-color', 'lightblue');
-            /*let cellWidth = $('th.fc-day-header').width();
-            let cellHeight = $(this).height();
-            let columnCount = $('thead table.fc-col-header th.fc-col-header-cell').children().length;
-
-            if (!$(this).html()) {
-                for (var i = 0; i < columnCount; i++) {
-                    $(this).append('<td class="temp-cell" style="border:0px; height:' + (cellHeight - 1) + 'px;width:' + (cellWidth + 3) + 'px"></td>');
-                }
-            }
-            $(this).children('td').each(function() {
-                $(this).hover(function() {
-                    let dtime = $(this).parent().data('time').slice(0, -3);
-                    $(this).html('<div class="current-time">' + dtime + '</div>');
-                }, function() {
-                    $(this).html('');
-                });
-            });*/
             if(!$(this).html()){    
             for(i=0;i<7;i++){
-                //$(this).append('<td class="temp-cell" style="border: 0px; width:'+(Number($('.fc-day').width())+3)+'px"></td>');
                 $(this).append('<td class="temp-cell" style="border: 0px; width:'+(Number($('.fc-day-header').width())+3)+'px"></td>');
             }
 
@@ -236,20 +199,8 @@
         }
 
     }, '.fc-widget-content');
- /*$('.fc-slats td.fc-widget-content:not(.fc-axis)').hover(
-            alert('hii')
-        );*/
+
     $(document).ready(function () {
-
-       /* $('.fc-slats td.fc-widget-content:not(.fc-axis)').on('mouseenter', function() {
-            alert('inn')
-            $(this).css('background-color', '#cccccc');
-          }).on('mouseleave', function() {
-            $(this).css('background-color', '');
-          });*/
-
-
-
         var fullaryData = [
           @foreach($fullary as $dt)
             {
@@ -260,7 +211,6 @@
             },
             @endforeach
         ];
-      /*  console.log(fullaryData);*/
 
         initializeCalendar(fullaryData);
     });
