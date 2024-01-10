@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Personal;
-
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth,Redirect,Storage,Hash,Response;
@@ -573,44 +574,74 @@ class ProfileController extends Controller
         if(!request()->business_id){
             return redirect()->route('personal.manage-account.index');
         }
-        $customers = $user->customers()->where('business_id',request()->business_id)->pluck('id')->toArray();
-        $customer_ids = implode(',',$customers);
+        $customers = $user->customers()->where('business_id',request()->business_id)->first();
+        $customer_ids = @$customers->id;
 
         $business_id = request()->business_id;
 
-        $query2 = Transaction::where(['transaction.user_type' => 'user', 'transaction.user_id' => $this->user->id])
-            ->leftJoin("user_booking_status as ubs", "transaction.item_id", "=", "ubs.id")->join("user_booking_details as usd", function ($join) use ($business_id) {
-                    $join->on("ubs.id", "=", "usd.booking_id")->where('usd.business_id', $business_id)
-                        ->where('usd.order_type', 'Membership')
-                        ->whereNotNull('usd.id');
-            });
+        $status = Transaction::select('transaction.*')->where('item_type', 'UserBookingStatus')
+              ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+              ->join('user_booking_details as ubd', function($join) use ($business_id,$customer_ids) {
+                    $join->on('ubd.booking_id', '=', 'ubs.id')
+                        ->where('ubd.order_type', 'Membership')
+                        ->where('ubd.user_id', $customer_ids)
+                        ->where('ubd.business_id', '=', $business_id);
+              })->get();
 
-        if ($customer_ids) {
-            $query2->orWhere(function ($subquery) use ($customer_ids,$business_id) {
-                $subquery->where('transaction.user_type', 'customer')
-                    ->whereIn('transaction.user_id', explode(',', $customer_ids))
-                    ->leftJoin("user_booking_status as ubs1", "transaction.item_id", "=", "ubs1.id")
-                    ->join("user_booking_details as usd1", function ($join) use ($business_id) {
-                        $join->on("ubs1.id", "=", "usd1.booking_id")
-                            ->where('usd1.business_id', $business_id)
-                            ->where('usd1.order_type', 'Membership')
-                            ->whereNotNull('usd1.id');
-                    });
-            });
+        $recurring = Transaction::select('transaction.*')->Where('item_type', 'Recurring')
+                    ->join('recurring as re', 're.id', '=', 'transaction.item_id')->where('re.business_id', '=', $business_id)->where('re.user_id', $customer_ids)->get();
+
+
+        //$mergedArray = array_merge($status, $recurring);
+        $statusArray = $recurringArray  = []; 
+        foreach ($status as $history) {
+            $statusArray[] = [ 
+                    "created_at" =>date('m/d/Y', strtotime($history->created_at)),
+                    'itemDescription' => $history->item_description($business_id)['itemDescription'],
+                    'item_type_terms' => $history->item_type_terms(),
+                    'getPmtMethod' => $history->getPmtMethod(),
+                    'amount' => $history->amount,
+                    'qty' => $history->item_description($business_id)['qty'],
+                    'getBookingStatus' => $history->getBookingStatus(),
+                    'item_id' => $history->item_id,
+                    'customer_id' => $history->customer_id,
+                    'id' => $history->id,
+                ];
         }
 
-        $query2->leftJoin("recurring as rt", "transaction.item_id", "=", "rt.id")
-            ->orWhere(function ($query) use ($business_id) {
-                $query->where('rt.business_id', $business_id)->join("user_booking_details as rusd", function ($join) use ($business_id) {
-                    $join->on("rt.booking_detail_id", "=", "rusd.id")->where('rusd.business_id', $business_id)
-                        ->where('rusd.order_type', 'Membership')
-                        ->whereNotNull('rusd.id');
-                    });
-            });
+        foreach ($recurring as $history) {
+            $recurringArray[] = [ 
+                    "created_at" =>date('m/d/Y', strtotime($history->created_at)),
+                    'itemDescription' => $history->item_description($business_id)['itemDescription'],
+                    'item_type_terms' => $history->item_type_terms(),
+                    'getPmtMethod' => $history->getPmtMethod(),
+                    'amount' => $history->amount,
+                    'qty' => $history->item_description($business_id)['qty'],
+                    'getBookingStatus' => $history->getBookingStatus(),
+                    'item_id' => $history->item_id,
+                    'customer_id' => $history->customer_id,
+                    'id' => $history->id,
+                ];
+        }
+        
+        $mergedArray = array_merge($statusArray, $recurringArray);
+        usort($mergedArray, function ($a, $b) {
+            return strtotime($b['created_at']) - strtotime($a['created_at']);
+        });
 
-        $transactionDetail = $query2->select('transaction.*')->orderBy('transaction.created_at', 'DESC')->paginate(10);
+        $mergedCollection = collect($mergedArray)->sortByDesc('created_at');
+        $perPage = 10; // specify the number of items per page
+        $currentPage = request()->get('page', 1); // get the current page from the request
+        $paginatedData = array_slice($mergedArray,($currentPage - 1) * $perPage, $perPage);
+        $transactionDetail = new \Illuminate\Pagination\LengthAwarePaginator(
+            $paginatedData,
+            count($mergedCollection),
+            $perPage,
+            $currentPage
+        );
 
-       
+        //print_r($transactionDetail);exit;
+        $transactionDetail->setPath(url()->current());
         return view('personal.profile.payment_history', compact('transactionDetail')); 
     }
 
