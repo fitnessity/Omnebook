@@ -3,12 +3,12 @@
   <div id="error-message" class="alert alert-danger" role="alert" style="display: none;"></div>
   <div id="payment-element" style="margin-top: 8px;"></div>
    
-  <button class="btn btn-red" type="submit" id="submit">Add on file</button>
+  <div class="text-center mt-10"><button class="btn btn-red align-center" type="submit" id="submit">Add on file</button></div>
 </form>
 
 <script type="text/javascript" >
-  const stripe = Stripe('{{ env('STRIPE_PKEY') }}');
-  const options = {
+  const stripe_bcus = Stripe('{{ env('STRIPE_PKEY') }}');
+  const options_bcus = {
     clientSecret: '{{$intent['client_secret']}}',
     appearance: {
       theme: 'flat'
@@ -16,32 +16,32 @@
   };
 
   // Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 3
-  const elements = stripe.elements(options);
+  const elements_bcus = stripe_bcus.elements(options_bcus);
 
   // Create and mount the Payment Element
-  const paymentElement = elements.create('payment');
-  paymentElement.mount('#payment-element');
+  const paymentElement_bcus = elements_bcus.create('payment');
+  paymentElement_bcus.mount('#payment-element');
 
-  const form = document.getElementById('payment-form');
+  const form_bcus = document.getElementById('payment-form');
 
-  form.addEventListener('submit', async (event) => {
+  form_bcus.addEventListener('submit', async (event) => {
     event.preventDefault();
     $('#submit').text('loading...')
 
-    const {error} = await stripe.confirmSetup({
+    const {error_bcus} = await _bcus.confirmSetup({
       //`Elements` instance that was used to create the Payment Element
-      elements,
+      elements_bcus,
       confirmParams: {
         return_url: '{{route('business.customers.refresh_payment_methods', ['customer_id' => request()->customer_id])}}&return_url={{request()->return_url}}',
       }
     });
 
-    if (error) {
+    if (error_bcus) {
       // This point will only be reached if there is an immediate error when
       // confirming the payment. Show error to your customer (for example, payment
       // details incomplete)  
-      const messageContainer = document.querySelector('#error-message');
-      messageContainer.textContent = error.message;
+      const messageContainer_bcus = document.querySelector('#error-message');
+      messageContainer_bcus.textContent = error_bcus.message;
       $('#error-message').show();
 
     } else {

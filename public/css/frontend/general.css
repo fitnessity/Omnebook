@@ -24987,3 +24987,9 @@ padding-left: 0px;
 	display: inline-block !important;
 	min-height: 9px !important;
 }
+
+
+
+.activity-z-index a{
+    z-index: 8;
+}

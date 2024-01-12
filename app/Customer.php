@@ -57,7 +57,7 @@ class Customer extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'business_id','fname','lname', 'email','birthdate', 'phone_number','relationship','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id','card_stripe_id','card_token_id','stripe_customer_id','terms_covid','terms_liability','terms_contract', 'user_id','emergency_contact','emergency_relation','emergency_email','emergency_name','primary_account'
+        'business_id','fname','lname', 'email','birthdate', 'phone_number','relationship','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id','card_stripe_id','card_token_id','stripe_customer_id','terms_covid','terms_liability','terms_contract', 'user_id','emergency_contact','emergency_relation','emergency_email','emergency_name','primary_account','terms_sign_path','contract_sign_path','liability_sign_path','covid_sign_path','refund_sign_path',
     ];
 
     /**
@@ -83,13 +83,15 @@ class Customer extends Authenticatable
 
 
     public function stripePaymentMethods(){
-        return StripePaymentMethod::where('user_type', 'Customer')->where('user_id', $this->id);
+        return StripePaymentMethod::whereRaw('((user_type = "User" and user_id = ?) or (user_type = "Customer" and user_id = ?))', [$this->user_id, $this->id]);
     }
     public function getProfilePicUrlAttribute()
     {
-        if($this->profile_pic){
-            return Storage::url($this->profile_pic);
+        $profile_pic = '';
+        if(Storage::disk('s3')->exists($this->profile_pic)){
+            $profile_pic = Storage::url($this->profile_pic);
         }
+        return $profile_pic;
     }
 
     public function getAgeAttribute()

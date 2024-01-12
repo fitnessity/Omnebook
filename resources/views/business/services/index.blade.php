@@ -195,7 +195,7 @@
                     $('#bookingmodel').html('');
                 }
             }
-            //alert(date);
+
             $.ajax({
                 url:"{{route('getbookingmodeldata')}}",
                 xhrFields: {
@@ -206,6 +206,7 @@
                     sid:sid,
                     date:date,
                     type:type,
+                    categoryId:($('#category').val() == 'all') ? '' : $('#category').val(),
                 },
                 success:function(data){
                     $('.moreoptions'+sid).modal('hide');

@@ -2,7 +2,7 @@
 
     use Carbon\Carbon;
     use App\Repositories\{ReviewRepository,UserRepository,NetworkRepository};
-    use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction,Products,CustomerNotes};
+    use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction,Products,CustomerNotes,Notification};
 
     function getUserRatings($user_id)
     {
@@ -275,8 +275,58 @@
         return $cardCategoty;
     }
 
-    function getNotesNotification(){
-        return CustomerNotes::where(['user_id'=> Auth::user()->id , 'business_id' => Auth::user()->cid ])->where('status',0)->whereDate('due_date' , date('Y-m-d'))->where('time' ,'>=',now()->toTimeString())->orderby('created_at','desc')->get() ;
+    function getNotificationDashboard($type = null){
+        $notifications = Notification::orderby('id','desc')->whereDate('display_date', '=', now())
+            ->whereTime('display_time', '<=', now()->format('H:i'))->where([ 'business_id' => Auth::user()->cid ])->where('type','business')
+            ->orWhere(function ($query) {
+                $query->whereDate('display_date', '<=', now())->where([ 'business_id' => Auth::user()->cid ])->where('type','business');
+            });
+        if($type){
+            $notifications->where('status','Alert');
+        }
+        return $notifications->get();
+    }
+
+    function getNotificationPersonal($type=null){
+       
+        $customers = Auth::user()->customers;
+        if($customers != ''){
+            $customersId =  @$customers->pluck('id')->toArray();
+            $notifications = Notification::orderby('updated_at','desc')->whereDate('display_date', '=', now())
+                ->whereTime('display_time', '<=', now()->format('H:i'))->whereIn('customer_id',$customersId )->where('type','personal')
+                ->orWhere(function ($query) use($customersId) {
+                    $query->whereDate('display_date', '<=', now())->whereIn('customer_id', $customersId )->where('type','personal');
+                });
+            if($type){
+                $notifications->where('status','Alert');
+            }
+            return $notifications->get();
+        }
+       
+       return $notifications = array();
+    }
+
+    
+
+    function timeAgo($created_at){
+        $date = Carbon::parse($created_at);
+        $minutesDifference = $date->diffInMinutes(now());
+
+        if ($minutesDifference < 60) {
+            return $minutesDifference . ' minutes ago';
+        }elseif ($minutesDifference < 1440) { // 1440 minutes in a day (24 hours)
+            $hours = floor($minutesDifference / 60);
+            return $hours . ' hours ago';
+        }elseif ($minutesDifference < 43200) { // 43200 minutes in a month (30 days)
+            $days = floor($minutesDifference / 1440);
+            return $days . ' days ago';
+        }elseif ($minutesDifference < 525600) { // 525600 minutes in a year (365 days)
+            $months = floor($minutesDifference / 43200);
+            return $months . ' months ago';
+        }else {
+            $years = floor($minutesDifference / 525600);
+            return $years . ' years ago';
+        }
     }
 
 ?>
