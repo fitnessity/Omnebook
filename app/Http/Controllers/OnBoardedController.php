@@ -175,9 +175,9 @@ class OnBoardedController extends Controller {
         }
 
         if($user){
+            $company = $user->company;
             $user->update(['show_step' =>1]);
             $activePlan = $user->CustomerPlanDetails()->where('amount','!=',0)->whereDate('expire_date','>=',date('Y-m-d'))->whereDate('starting_date','<=',date('Y-m-d'))->latest()->first();
-            $company = $user->company;
         }
 
         $company = $user->company;
