@@ -19,15 +19,15 @@
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
-        <a href="#" class="logo logo-dark">
+        <!-- <a href="#" class="logo logo-dark">
             <span class="logo-sm"><img src="" alt="" height="22"></span>
             <span class="logo-lg"><img src="" alt="" height="17"></span>
-        </a>
+        </a>-->
         <!-- Light Logo-->
-        <a href="#" class="logo logo-light">
+        <!-- <a href="#" class="logo logo-light">
             <span class="logo-sm"><img src="" alt="" height="22"> </span>
             <span class="logo-lg"><img src="" alt="" height="17"></span>
-        </a>
+        </a>  -->
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover"> <i class="ri-record-circle-line"></i> </button>
     </div>
 
@@ -141,6 +141,10 @@
                                     </a>
                                 </li>
                             @endif
+							<!--<li class="nav-item">
+								<a href="#" class="nav-link " data-key="t-signup"> Manage Announcements 
+								</a>
+							</li> -->
                         </ul>
                     </div>
                 </li>
@@ -163,6 +167,13 @@
                         <img src="{{asset('/public/img/calender.png')}}" alt="Fitnessity"> <span data-key="t-base-ui"> Calender</span>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link @if(Route::current()->getName() == 'business.announcement.index' ) tab-active @endif" @if($companyId) href="{{route('business.announcement.index')}}" @endif aria-controls="sidebarUI">
+                        <img src="{{asset('/public/img/calender.png')}}" alt="Fitnessity"> <span data-key="t-base-ui"> Announcement </span>
+                    </a>
+                </li>
+
                 @if(!Session('StaffLogin'))
                     <li class="nav-item">
                         <a class="nav-link menu-link" @if($companyId) href="{{route('stripe-dashboard')}}" aria-controls="sidebarAdvanceUI"  @endif target="_blank">

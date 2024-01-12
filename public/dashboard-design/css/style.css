@@ -319,6 +319,7 @@ body{
     -webkit-box-shadow:var(--vz-box-shadow);
     box-shadow:var(--vz-box-shadow)
 }
+
 @media (min-width:768px){
     #page-topbar{
         left:250px

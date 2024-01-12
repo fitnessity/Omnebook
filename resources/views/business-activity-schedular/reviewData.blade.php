@@ -1,8 +1,7 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="review-header mb-20 mt-10">
-			<h4 class="modal-title" style="">Confirm Your Booking Selection For</h4>
-			<h4 class="modal-title" style="">{{$company->company_name}}</h4>
+			<h4 class="modal-title text-center" >Confirm Your Booking Selection For {{$company->company_name}}</h4>
 		</div>
 	</div>
 </div>
@@ -12,7 +11,7 @@
 <div class="mb-20 font-green" id="successMsg"></div>
 <div class="row">
 	<div class="col-md-12">
-		<div class="table-responsive confirm-booking purchase-history review-data">
+		<div class="table-responsive confirm-booking review-data">
 			<table style="width:100%" class="table mb-0">
 				<tr>
 					<th>No</th>
@@ -57,7 +56,7 @@
 				        <div class="text-center">
 				        	{!! $data != '' ? $data : '<p> No MemberShip Available</p>' !!}
 
-				        	<div class="time-slots-saprator mb-20"></div><a href="/activity-details/{{$sesAry['serviceID']}}" class="btn btn-lp" target="_blank">Purchase A Membership.</a>
+				        	<div class="time-slots-saprator mb-20"></div><a href="/activity-details/{{$sesAry['serviceID']}}" class="btn btn-red" target="_blank">Purchase A Membership</a>
 				        </div>
 				    </td>
 					<td><button class="btn-delete font-red" onclick="confirmdelete({{$sesAry['serviceID']}},'{{$sesAry["date"]}}' ,{{$sesAry['timeId']}} , 0);"> Delete </button></td>
@@ -68,7 +67,7 @@
 	</div>
 </div>
 <div class="modal-footer mt-20">
-	<button type="button" @if(count($finalSessionAry) > 0 ) onclick="confirmSchedule('{{count($finalSessionAry)}}');" @endif class="btn btn-lp">Confirm Booking</button>
+	<button type="button" @if(count($finalSessionAry) > 0 ) onclick="confirmSchedule('{{count($finalSessionAry)}}');" @endif class="btn btn-red">Confirm Booking</button>
 </div>
 
 <script type="text/javascript">

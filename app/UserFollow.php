@@ -30,11 +30,24 @@ class UserFollow extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'user_id');
     }
 
     public function followinfo()
     {
         return $this->belongsTo(User::class, 'follow_id', 'id');
+    }
+
+    public function followerinfo()
+    {
+        return $this->belongsTo(User::class, 'follower_id', 'id');
+    }
+
+    public function getUser(){
+       return  User::where('id',$this->user_id)->first();
+    }     
+
+    public function isfollow(){
+        return count(UserFollow::where("follower_id",$this->user_id)->get());
     }
 }

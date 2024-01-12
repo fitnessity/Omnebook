@@ -60,6 +60,11 @@ class UserBookingStatus extends Model
         return $this->hasMany(Transaction::class,'item_id')->where('item_type','UserBookingStatus');
     }
 
+    public function SingleTransaction()
+    {
+        return $this->hasOne(Transaction::class,'item_id');
+    }
+
     public function businessuser()
     {
         return $this->belongsTo(User::class, 'business_id');

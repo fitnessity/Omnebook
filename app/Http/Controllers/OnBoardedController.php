@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\URL;
 use Auth;
 use Illuminate\Http\Request;
-use App\{User,CompanyInformation,CustomerPlanDetails,Transaction,StripePaymentMethod,Plan};
+use App\{User,CompanyInformation,CustomerPlanDetails,Transaction,StripePaymentMethod,Plan,OnboardQuestions};
 use App\Repositories\FeaturesRepository;
 use Str;
 use DateTime;
@@ -62,7 +62,11 @@ class OnBoardedController extends Controller {
         $plans = Plan::get();
         $features = $this->features->getAllFeatures();
         $freePlan = Plan::where(['price_per_month'=>0 , 'price_per_year' => 0])->first();
-        return view('on-boarded.index',compact('show','cid','companyDetail','user','id','show','plans','features','freePlan'));
+        $faqs = OnboardQuestions::get();
+        if (session()->has('redirectToOnboard')) {
+            session()->forget('redirectToOnboard');
+        }
+        return view('on-boarded.index',compact('show','cid','companyDetail','user','id','show','plans','features','freePlan','faqs'));
     }
 
     public function store(Request $request){
@@ -161,8 +165,6 @@ class OnBoardedController extends Controller {
 
         return response()->json($data); 
     }
-
-   
 
     public function stripeDashboard(Request $request){
         $stripe_client = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));

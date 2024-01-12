@@ -146,6 +146,12 @@
           </a>
         </li>
 
+        <li class="{{ $request->segment(2) == 'on-board-questions' ? 'active' : '' }}">
+          <a href="/admin/on-board-questions">
+            <i class="fa fa-list-alt"></i> <span>On Board FAQ's</span>  
+          </a>
+        </li>
+
         <li class="{{ $request->segment(2) == 'sports' ? 'active' : '' }}">
           <a href="/admin/sports">
             <i class="fa fa-futbol-o"></i> <span>Manage Sports</span>  
