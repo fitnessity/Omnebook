@@ -148,16 +148,12 @@
 							</div>
 
 							<div class="row exclude-from-print mt-5">
-								@foreach($sortedDates as $y=>$date)
-								@php 
-									$bookingData = clone $bookings; // Create a fresh copy of the query
-					        		$bookingData = $bookingData->whereDate('created_at',$date->format('Y-m-d'))->get();
-								@endphp
-								@if($bookingData->isNotEmpty())
+								
+								@if($bookings->isNotEmpty())
 									<div class="col-xl-12">
 										<div class="card">
 											<div class="card-header align-items-center d-flex">
-												<h4 class="card-title mb-0 flex-grow-1" id="headingDate">{{$date->format('l, F j, Y')}}  </h4>
+												<h4 class="card-title mb-0 flex-grow-1" id="headingDate">{{$filterStartDate->format('l, F j, Y')}} to  {{$filterEndDate->format('l, F j, Y')}}  </h4>
 											</div><!-- end card header -->
 											<div class="card-body">
 												<input type="hidden" id="type" value="">
@@ -166,21 +162,21 @@
 														@if(request()->filterOptions == 'service')
 															@php
 																$bookingService = [];
-																$bookingData = $bookingData->filter(function ($item) {
+																$bookings = $bookings->filter(function ($item) {
 													            return $item->business_services_with_trashed;
 													         });
-																foreach ($bookingData as $key => $dt){
+																foreach ($bookings as $key => $dt){
 	                                        			$bookingService[$dt->business_services_with_trashed->program_name][] = $dt;
 												          	}
 												         @endphp
 												         @if(count($bookingService) > 0 )
-												         	@php $counter = 0; $displayChk = 0; @endphp
+												         	@php $counter = 0; @endphp
 												         	@foreach($bookingService as $i=>$data)
 												         	<div class="accordion-item shadow">
-	                                                <h2 class="accordion-header" id="headingS{{$counter}}{{$y}}">
-	                                                   <button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#collapseS{{$counter}}{{$y}}" aria-expanded="false" aria-controls="collapseS{{$counter}}{{$y}}">{{$i}}</button>
+	                                                <h2 class="accordion-header" id="headingS{{$counter}}">
+	                                                   <button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#collapseS{{$counter}}" aria-expanded="false" aria-controls="collapseS{{$counter}}">{{$i}} ({{count($data)}})</button>
 	                                                </h2>
-	                                                <div id="collapseS{{$counter}}{{$y}}" class="accordion-collapse collapse buttonaccodiandiv" aria-labelledby="headingS{{$counter}}{{$y}}" data-bs-parent="#default-accordion-example">
+	                                                <div id="collapseS{{$counter}}" class="accordion-collapse collapse buttonaccodiandiv" aria-labelledby="headingS{{$counter}}" data-bs-parent="#default-accordion-example">
 	                                                   <div class="accordion-body">
 	                                                   	@include('business.reports.booking.booking_detail',['bookDetails' =>$data,'dateKey' =>$y ,'loopkey'=>$counter])
 	                                                   </div>
@@ -192,21 +188,21 @@
 	                                       @elseif(request()->filterOptions == 'category')
 															@php
 																$bookingCategory = [];
-																$bookingData = $bookingData->filter(function ($item) {
+																$bookings = $bookings->filter(function ($item) {
 													            return $item->business_price_detail_with_trashed && $item->business_price_detail_with_trashed->business_price_details_ages_with_trashed;
 													         });
-																foreach ($bookingData as $key => $dt){
-	                                        			$bookingCategory[$dt->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title][] = $dt;
+																foreach ($bookings as $key => $dt){
+	                                        			$bookingCategory[$dt->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title .' - '.$dt->business_services->program_name][] = $dt;
 												          	}
 												         @endphp
 												         @if(count($bookingCategory) > 0 )
-												         	@php $counter = 0; $displayChk = 0; @endphp
+												         	@php $counter = 0; @endphp
 												         	@foreach($bookingCategory as $i=>$data)
 												         	<div class="accordion-item shadow">
-	                                                <h2 class="accordion-header" id="headingC{{$counter}}{{$y}}">
-	                                                   <button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#collapseC{{$counter}}{{$y}}" aria-expanded="false" aria-controls="collapseC{{$counter}}{{$y}}">{{$i}}</button>
+	                                                <h2 class="accordion-header" id="headingC{{$counter}}">
+	                                                   <button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#collapseC{{$counter}}" aria-expanded="false" aria-controls="collapseC{{$counter}}">{{$i}} ({{count($data)}})</button>
 	                                                </h2>
-	                                                <div id="collapseC{{$counter}}{{$y}}" class="accordion-collapse collapse buttonaccodiandiv" aria-labelledby="headingC{{$counter}}{{$y}}" data-bs-parent="#default-accordion-example">
+	                                                <div id="collapseC{{$counter}}" class="accordion-collapse collapse buttonaccodiandiv" aria-labelledby="headingC{{$counter}}" data-bs-parent="#default-accordion-example">
 	                                                   <div class="accordion-body">
 	                                                   	@include('business.reports.booking.booking_detail',['bookDetails' =>$data,'dateKey' =>$y ,'loopkey'=>$counter])
 	                                                   </div>
@@ -218,23 +214,23 @@
 	                                       @else
 															@php
 																$bookingPriceOption = [];
-																$bookingData = $bookingData->filter(function ($item) {
+																$bookings = $bookings->filter(function ($item) {
 													            return $item->business_price_detail_with_trashed;
 													         });
-																foreach ($bookingData as $key => $dt){
-	                                        			$bookingPriceOption[$dt->business_price_detail_with_trashed->price_title][] = $dt;
+																foreach ($bookings as $key => $dt){
+	                                        			$bookingPriceOption[$dt->business_price_detail_with_trashed->price_title.' - '.$dt->business_services->program_name][] = $dt;
 												          	}
 												         @endphp
 												         @if(count($bookingPriceOption) > 0 )
-												         	@php $counter = 0; $displayChk = 0; @endphp
+												         	@php $counter = 0; @endphp
 												         	@foreach($bookingPriceOption as $i=>$data)
 												         	<div class="accordion-item shadow">
-	                                                <h2 class="accordion-header" id="headingOP{{$counter}}{{$y}}">
-	                                                   <button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOP{{$counter}}{{$y}}" aria-expanded="false" aria-controls="collapseOP{{$counter}}{{$y}}">{{$i}}</button>
+	                                                <h2 class="accordion-header" id="headingOP{{$counter}}">
+	                                                   <button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOP{{$counter}}" aria-expanded="false" aria-controls="collapseOP{{$counter}}">{{$i}} ({{count($data)}})</button>
 	                                                </h2>
-	                                                <div id="collapseOP{{$counter}}{{$y}}" class="accordion-collapse collapse buttonaccodiandiv" aria-labelledby="headingOP{{$counter}}{{$y}}" data-bs-parent="#default-accordion-example">
+	                                                <div id="collapseOP{{$counter}}" class="accordion-collapse collapse buttonaccodiandiv" aria-labelledby="headingOP{{$counter}}" data-bs-parent="#default-accordion-example">
 	                                                   <div class="accordion-body">
-	                                                   	@include('business.reports.booking.booking_detail',['bookDetails' =>$data,'dateKey' =>$y ,'loopkey'=>$counter])
+	                                                   	@include('business.reports.booking.booking_detail',['bookDetails' =>$data,'dateKey' =>'price','loopkey'=>$counter])
 	                                                   </div>
 	                                                </div>
 	                                             </div>
@@ -248,17 +244,6 @@
 										</div>
 									</div>
 								@endif
-								@endforeach
-
-								@if(@$displayChk == 1)
-								<div class="col-xl-12">
-									<div class="card">
-										<div class="mt-10 mb-10 ml-5">
-											<span class="mr-10 ml-5" >No Bookings To Display</span>
-										</div>
-									</div>
-								</div>
-								@endif
 							</div>					
 						</div> 
                </div> 
@@ -270,6 +255,9 @@
     
 @include('layouts.business.footer')
 	
-@include('business.reports.membership.membership_script',['filterStartDate'=>$filterStartDate ,'filterEndDate' =>$filterEndDate ,'page' => ''])
+@include('layouts.business.footer')
+	@php $downloadUrl = route("business.active-membership.export"); @endphp
+
+@include('business.reports.membership.membership_script',['filterStartDate'=>$filterStartDate ,'filterEndDate' =>$filterEndDate ,'page' => 'popular','excelFileName' =>'Popular-Membership.xlsx','pdfFileName' =>'Popular-Membership.pdf' ,'downloadUrl' =>$downloadUrl ])
 
 @endsection

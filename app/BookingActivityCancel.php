@@ -24,7 +24,7 @@ class BookingActivityCancel extends Model
 
      */
 
-    public $timestamps = false;
+    public $timestamps = true;
     protected $table = 'booking_activity_cancel';
 	protected $fillable = [
         'booking_id', 'order_detail_id','cancel_charge_action','cancel_charge_amt','stripe_id'

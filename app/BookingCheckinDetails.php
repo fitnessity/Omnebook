@@ -110,6 +110,18 @@ class BookingCheckinDetails extends Model
         }
     }
 
+
+    public function cancel_term(){
+        if($this->no_show_action == 'deduct'){
+            return 'Deduct Membership';
+        }else if($this->no_show_action == 'charge_fee'){
+            return 'Charge Fee';
+        }else{
+            return 'No Charges Applied';
+        }
+    }
+
+
     public static function checkCustomerInClass($scheduleId,$date){
         $pos = strpos($date, ' ');
         $result = substr($date, 0, $pos);

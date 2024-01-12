@@ -163,7 +163,7 @@
 																			<tr>
 																				<td>{{$i+1}}</td>
 																				<td><a href="{{url('business/'.request()->business_id.'/customers/'.@$list->id)}}" class="fw-medium" target="_blank">  {{@$list->full_name}}  </a> </td>
-																				<td>{{@$list->email}}</td>
+																				<td>{{@$list->email ? @$list->email : "N/A"}}</td>
 																				<td>{{date('m/d/Y',strtotime($list->birthdate))}}</td>
 																				<td>{{@$list->phone_number ?? "N/A"}}</td>
 																				<td>{{date('m/d/Y',strtotime($list->created_at))}}</td>
