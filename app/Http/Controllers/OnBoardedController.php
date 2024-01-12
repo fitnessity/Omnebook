@@ -166,26 +166,6 @@ class OnBoardedController extends Controller {
         return response()->json($data); 
     }
 
-    public function welcome(Request $request){
-        $cid = $request->cid;
-        $company = CompanyInformation::where('id', $cid)->first();
-        $user = User::find(@$company->user_id);
-        if(Auth::check()){
-            $user = Auth::user();
-        }
-
-        if($user){
-            $company = $user->company;
-            $user->update(['show_step' =>1]);
-            $activePlan = $user->CustomerPlanDetails()->where('amount','!=',0)->whereDate('expire_date','>=',date('Y-m-d'))->whereDate('starting_date','<=',date('Y-m-d'))->latest()->first();
-        }
-
-        $company = $user->company;
-        $activePlan = @$activePlan ?? '';
-        session()->put('redirectToOnboard', URL::full());
-        return view('on-boarded.welcome_provider',compact('cid','activePlan','user','company'));
-    }
-
     public function stripeDashboard(Request $request){
         $stripe_client = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $company = CompanyInformation::where('id', $request->cid)->first();
