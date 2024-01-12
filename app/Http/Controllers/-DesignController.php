@@ -287,29 +287,10 @@ class DesignController extends Controller {
 	public function customer_dashboard(Request $request){
         return view('design.customer_dashboard');
     }
-	
-	public function notes_alerts(Request $request){
-        return view('design.notes_alerts');
-    }
-	
-	public function pdf_booking(Request $request){
+
+    public function pdf_booking(Request $request){
         return view('design.pdf_booking');
     }
-
-    public function provider_adds_belt_rank_skills(Request $request){
-        return view('design.provider_adds_belt_rank_skills');
-    }
-
-    public function provider_edit_belt_rank_skills(Request $request){
-        return view('design.provider_edit_belt_rank_skills');
-    }
-
-    public function client_promote_belt(Request $request){
-        return view('design.client_promote_belt');
-    }
-
-    public function manually_promote(Request $request){
-        return view('design.manually_promote');
-    }
+	
 }
 

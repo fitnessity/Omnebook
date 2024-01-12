@@ -274,6 +274,9 @@
     
 @include('layouts.business.footer')
 	
-@include('business.reports.membership.membership_script',['filterStartDate'=>$filterStartDate ,'filterEndDate' =>$filterEndDate ,'page' => ''])
+@php $downloadUrl = route("business.active-membership.export"); @endphp
+
+@include('business.reports.membership.membership_script',['filterStartDate'=>$filterStartDate ,'filterEndDate' =>$filterEndDate ,'page' => '','excelFileName' =>'Active-Membership.xlsx','pdfFileName' =>'Active-Membership.pdf' ,'downloadUrl' =>$downloadUrl ])
+
 
 @endsection

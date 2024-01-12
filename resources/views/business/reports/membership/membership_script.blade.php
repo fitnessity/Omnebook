@@ -26,13 +26,13 @@
 		if(type != '' && type != 'print'){
 
 			var page = '<?= $page ? '&page='.$page : ''; ?>' ;
-			var downloadUrl = '{{ route("business.active-membership.export") }}' + '?type=' + type +'&endDate=' + endDate +
+			var downloadUrl = '{{$downloadUrl}}' + '?type=' + type +'&endDate=' + endDate +
 		        '&startDate=' + startDate + page;
 
 	    	if(type == 'excel'){
-	    		filename = 'membership.xlsx';
+	    		filename = '{{$excelFileName}}';
 	    	}else if(type == 'pdf'){
-	    		filename = 'membership.pdf';
+	    		filename = '{{$pdfFileName}}';
 	    	}
 	
 	    	var link = document.createElement('a');

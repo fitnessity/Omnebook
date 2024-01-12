@@ -43,11 +43,11 @@
 														<div class="report-links">
 															<a href="{{route('business.recurring_payments.index')}}">Recurring Payments Details</a>
 														</div>
-														<div class="report-links">
+														<!-- <div class="report-links">
 															<a href="#">Tax Reports</a>
-														</div>
+														</div> -->
 														<div class="report-links remove-border">
-															<a href="#">Refund Details</a>
+															<a href="{{route('business.refund.index')}}">Refund Details</a>
 														</div>
 													</div>
 												</div>												
@@ -89,9 +89,9 @@
 														<div class="report-links">
 															<a href="{{route('business.client.index')}}">Inactive Clients</a>
 														</div>
-														<div class="report-links">
+														<!-- <div class="report-links">
 															<a href="#">Attendance</a>
-														</div>
+														</div> -->
 														<div class="report-links">
 															<a href="{{route('business.client.birthday')}}">Client Birthday List</a>
 														</div>
@@ -99,11 +99,11 @@
 															<a href="{{route('business.client.new_client')}}">New Clients</a>
 														</div>
 														<div class="report-links">
-															<a href="#">Cancellations & No Shows</a>
+															<a href="{{route('business.client.cancellation_noshow')}}">Cancellations & No Shows</a>
 														</div>
-														<div class="report-links remove-border">
+														<!-- <div class="report-links remove-border">
 															<a href="#">Referral Details</a>
-														</div>
+														</div> -->
 													</div>
 												</div>												
 											</div>
@@ -134,8 +134,7 @@
 															<a href="{{route('business.member_expirations.index')}}">Expired Memberships</a>
 														</div>
 														<div class="report-links remove-border">
-															<!-- <a href="{{route('business.membership-popular')}}">Membership Options by Popularity</a> -->
-															<a href="#">Membership Options by Popularity</a>
+															<a href="{{route('business.membership-popular')}}">Membership Options by Popularity</a>
 														</div>
 													</div>
 												</div>												

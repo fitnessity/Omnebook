@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Business\BusinessBaseController;
 use Illuminate\Http\Request;
 use Auth,DateTime,Carbon\Carbon;
-use App\{Exports\ExportClient,Customer};
+use App\{Exports\ExportCancellationNoShow,Customer,BookingCheckinDetails};
 use Maatwebsite\Excel\HeadingRowImport;
 use Excel, Response,\PDF;
 
@@ -16,24 +16,29 @@ class ClientReportController extends BusinessBaseController
      * @return \Illuminate\Http\Response
      */
 
+    public function __construct()
+    {  
+        $this->endDate = date("Y-m-t");
+        $this->firstDate = date('Y-m-d');
+    }
 
+    public function getDatesArray($startDate, $filterStartDate, $filterEndDate ){
+        $compareStartDt = $startDate != '' ? Carbon::parse($filterStartDate) : Carbon::parse($this->firstDate);
+        $dates =  [];
+
+        while ($compareStartDt <= $filterEndDate) {
+            $dates[] = $compareStartDt->copy(); 
+            $compareStartDt->addDay();
+        }
+        return array_reverse($dates);
+    }
 
     public function index(Request $request,$business_id)
     {
         $date = new DateTime();
         $filterStartDate = $request->startDate != '' ? Carbon::parse($request->startDate) : Carbon::parse($date);
         $filterEndDate = $request->endDate !=  '' ? Carbon::parse($request->endDate) : Carbon::parse($date);
-
-        $compareStartDt = $request->startDate != '' ? Carbon::parse($filterStartDate) : Carbon::parse($date);
-        $dates = $reportData = [];
-
-        while ($compareStartDt <= $filterEndDate) {
-            $dates[] = $compareStartDt->copy(); 
-            $compareStartDt->addDay();
-        }
-
-        $sortedDates = array_reverse($dates);
-
+        $sortedDates = $this->getDatesArray($request->startDate , $filterStartDate, $filterEndDate);
         $clients = Customer::where(['business_id'=> $business_id])->get();
         return view('business.reports.client.index',compact('clients','filterStartDate','filterEndDate','sortedDates','date'));
     }
@@ -106,46 +111,87 @@ class ClientReportController extends BusinessBaseController
     }
     
     public function newClient(Request $request,$business_id){
-        $endDate = date("Y-m-t");
-        $firstDate = date('Y-m-01');
-        $filterStartDate = $request->startDate != '' ? Carbon::parse($request->startDate) : Carbon::parse($firstDate);
-        $filterEndDate = $request->endDate !=  '' ? Carbon::parse($request->endDate) : Carbon::parse($endDate);
-
-        $compareStartDt = $request->startDate != '' ? Carbon::parse($filterStartDate) : Carbon::parse($firstDate);
-        $dates = $reportData = [];
-
-        while ($compareStartDt <= $filterEndDate) {
-            $dates[] = $compareStartDt->copy(); 
-            $compareStartDt->addDay();
-        }
+        $filterStartDate = $request->startDate != '' ? Carbon::parse($request->startDate) : Carbon::parse($this->firstDate);
+        $filterEndDate = $request->endDate !=  '' ? Carbon::parse($request->endDate) : Carbon::parse($this->endDate);
 
         $clients = Customer::where(['business_id'=> $business_id])->orderBy('created_at','desc')->whereDate('created_at', '>=', $filterStartDate)->whereDate('created_at', '<=', $filterEndDate);
-        $sortedDates = array_reverse($dates);
+         $sortedDates = $this->getDatesArray($request->startDate , $filterStartDate, $filterEndDate);
         return view('business.reports.client.new_client',compact('clients','filterStartDate','filterEndDate','sortedDates'));
     }
 
     public function clientbirthday(Request $request,$business_id){
-        $endDate = date("Y-m-t");
-        $firstDate = date('Y-m-01');
-        $filterStartDate = $request->startDate != '' ? Carbon::parse($request->startDate) : Carbon::parse($firstDate);
-        $filterEndDate = $request->endDate !=  '' ? Carbon::parse($request->endDate) : Carbon::parse($endDate);
-
-        $compareStartDt = $request->startDate != '' ? Carbon::parse($filterStartDate) : Carbon::parse($firstDate);
-        $dates = $reportData = [];
-
-        while ($compareStartDt <= $filterEndDate) {
-            $dates[] = $compareStartDt->copy(); 
-            $compareStartDt->addDay();
-        }
+        $filterStartDate = $request->startDate != '' ? Carbon::parse($request->startDate) : Carbon::parse($this->firstDate);
+        $filterEndDate = $request->endDate !=  '' ? Carbon::parse($request->endDate) : Carbon::parse($this->endDate);
 
         $starMonth = $filterStartDate->month;
         $endMonth = $filterStartDate->month;
 
         $clients = Customer::where(['business_id'=> $business_id])->orderBy('created_at','desc')->whereMonth('birthdate', '>=', $starMonth)->whereMonth('birthdate', '<=', $endMonth);
 
-        $sortedDates = array_reverse($dates);
+        $sortedDates = $this->getDatesArray($request->startDate , $filterStartDate, $filterEndDate);
         return view('business.reports.client.client_birthday',compact('clients','filterStartDate','filterEndDate','sortedDates'));
     }   
+
+    public function cancellationNoShow(Request $request,$business_id){
+        $endDate = new DateTime(date("Y-m-d"));
+        $firstDate = new DateTime(date('Y-m-01'));
+        return view('business.reports.client.cancellations_no_show',compact('endDate','firstDate'));
+    }   
+
+
+    public function getData($type,$business_id,$endDate,$startDate){
+        if($type == 'NoShow'){
+            $bookings = BookingCheckinDetails::join('user_booking_details as ubd','booking_checkin_details.booking_detail_id','=', 'ubd.id')->where('ubd.business_id' ,$business_id)->whereDate('booking_checkin_details.checkin_date', '>=', $startDate)->whereDate('booking_checkin_details.checkin_date', '<', $endDate)->orderBy('booking_checkin_details.checkin_date','desc');
+        }else{
+            $bookings = BookingCheckinDetails::join('user_booking_details as ubd','booking_checkin_details.booking_detail_id','=', 'ubd.id')->where('ubd.business_id' ,$business_id)->whereDate('booking_checkin_details.checkin_date', '>=', $startDate)->whereDate('booking_checkin_details.checkin_date', '<', $endDate)->orderBy('booking_checkin_details.checkin_date','desc')->whereNotNull('no_show_action');
+        }
+        return $bookings;
+    }
+
+    public function getCancellationNoShowData(Request $request,$business_id){
+        $type = $request->type;
+        $bookings = $this->getData($type,$business_id,$request->endDate,$request->startDate)->get();
+        if($request->limit == ''){
+            $bookings = $bookings->take(10);
+        }
+        //print_r($bookings);exit;
+        return view('business.reports.client.cancellation_table_data',compact('bookings','type','business_id'));
+    }
+
+    public function getMoreCancellationNoShowData(Request $request,$business_id)
+    {
+        $type = $request->type;
+        $bookings = $this->getData($type,$business_id,$request->endDate,$request->startDate)->get();
+        $offset = $request->get('offset', 0); 
+        $limit = 10; 
+        $bookings = $bookings->take($offset);
+        return view('business.reports.client.cancellation_table_data',compact('bookings','type','business_id'));
+    }
+
+    public function cancellationExport(Request $request,$business_id){
+        $noShow = $this->getData('NoShow',$business_id,$request->endDate,$request->startDate)->get();
+        $cancel = $this->getData('Cancellation',$business_id,$request->endDate,$request->startDate)->get();
+        if($request->type == 'excel'){
+            return Excel::download(new ExportCancellationNoShow($noShow ,$cancel), 'Cancellation-NoShow.xlsx');
+        }elseif($request->type == 'pdf'){
+            if($request->endDate && $request->startDate){
+                $ed = new DateTime($request->endDate);
+                $sd = new DateTime($request->startDate);
+                $dates = $sd->format('l, F j, Y').' to '.$ed->format('l, F j, Y');
+            }else{
+                $ed = new DateTime();
+                $dates = $ed->format('l, F j, Y');                
+            } 
+
+            $data = [
+                'noShow'=>$noShow,
+                'dates' => $dates,
+                'cancel'=>$cancel,
+            ];
+            $pdf = PDF::loadView('business.reports.client.cancellation_pdf_view', $data);
+            return $pdf->download('Cancellation-NoShow.pdf');
+        }
+    }
 
     public function export(Request $request,$business_id){
 

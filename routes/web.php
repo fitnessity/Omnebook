@@ -116,12 +116,17 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/new-client/','ClientReportController@newClient')->name('client.new_client');
     Route::get('/new-client/export','ClientReportController@export')->name('new_client.export');
     Route::get('/clients-birthday/','ClientReportController@clientbirthday')->name('client.birthday');
+    Route::get('/cancellations-noshows/','ClientReportController@cancellationNoShow')->name('client.cancellation_noshow');
+    Route::post('/getCancellationNoShowData/','ClientReportController@getCancellationNoShowData')->name('client.getCancellationNoShowData');
+    Route::get('/getMoreCancellationNoShowData/','ClientReportController@getMoreCancellationNoShowData')->name('client.getMoreCancellationNoShowData');
+
+    Route::get('/cancellation/export','ClientReportController@cancellationExport')->name('cancellation.export');
 
     Route::get('active-membership','ActiveMembershipController@index')->name('active-membership.index');
     Route::get('active-activity-not-used','ActiveMembershipController@activeMembershipNotUsed')->name('activity-not-used');
     Route::get('membership-paused','ActiveMembershipController@membershipPaused')->name('membership-paused');
     Route::get('membership-terminated','ActiveMembershipController@membershipTerminated')->name('membership-terminated');
-    Route::get('membership-popular','ActiveMembershipController@membershipPopular')->name('membership-popular');
+    Route::get('membership-options-by-popularity','ActiveMembershipController@membershipPopular')->name('membership-popular');
 
     Route::get('active-membership/export','ActiveMembershipController@export')->name('active-membership.export');
     Route::resource('reports', 'ReportsController')->only(['index']);
@@ -132,6 +137,10 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('/subscription/update-card','SubcriptionController@update_card')->name('subscription.update-card');
     Route::post('get_plan_html','SubcriptionController@get_plan_html')->name('get_plan_html');
     Route::get('/subscription/export','SubcriptionController@export')->name('subscription.export');
+
+     Route::get('/refund-details','RefundReportController@index')->name('refund.index');
+     Route::get('/refund-details/export','RefundReportController@export')->name('refund.export');
+
 
 });
 
@@ -237,7 +246,11 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/announcements_provider','DesignController@announcements_provider')->name('announcements_provider');
     Route::get('/announcements_provider_category','DesignController@announcements_provider_category')->name('announcements_provider_categorys');
 	Route::get('/customer_dashboard','DesignController@customer_dashboard')->name('customer_dashboard');
-    Route::get('/pdf_booking','DesignController@pdf_booking')->name('pdf_booking');
+    Route::get('/pdf_booking','DesignController@pdf_booking')->name('pdf_booking');    
+    Route::get('/provider_adds_belt_rank_skills','DesignController@provider_adds_belt_rank_skills')->name('provider_adds_belt_rank_skills');
+    Route::get('/provider_edit_belt_rank_skills','DesignController@provider_edit_belt_rank_skills')->name('provider_edit_belt_rank_skills');
+    Route::get('/client_promote_belt','DesignController@client_promote_belt')->name('client_promote_belt');
+    Route::get('/manually_promote','DesignController@manually_promote')->name('manually_promote');
 	
 });
 

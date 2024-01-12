@@ -1,7 +1,7 @@
 @forelse($bookDetails as $y=>$bs)
 	<div class="accordion-item shadow">
-		<h2 class="accordion-header" id="accordionnesting{{$dateKey}}{{$y}}_{{@$loopkey}}">
-			<button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingcollapse{{$dateKey}}{{$y}}_{{@$loopkey}}" aria-expanded="true" aria-controls="accor_nestingcollapse{{$dateKey}}{{$y}}_{{@$loopkey}}">
+		<h2 class="accordion-header" id="accordionnesting{{@$dateKey}}{{$y}}_{{@$loopkey}}">
+			<button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingcollapse{{@$dateKey}}{{$y}}_{{@$loopkey}}" aria-expanded="true" aria-controls="accor_nestingcollapse{{@$dateKey}}{{$y}}_{{@$loopkey}}">
 				<div class="container-fluid nopadding">
 					<div class="row y-middle">
 						<div class="col-lg-9 col-md-6 col-12 mobile0view-flex">
@@ -21,7 +21,7 @@
 				</div>
 			</button>
 		</h2>
-		<div id="accor_nestingcollapse{{$dateKey}}{{$y}}_{{@$loopkey}}" class="accordion-collapse collapse buttonaccodiandiv" aria-labelledby="accordionnesting{{$dateKey}}{{$y}}_{{@$loopkey}}" data-bs-parent="#default-accordion-example">
+		<div id="accor_nestingcollapse{{@$dateKey}}{{$y}}_{{@$loopkey}}" class="accordion-collapse collapse buttonaccodiandiv" aria-labelledby="accordionnesting{{@$dateKey}}{{$y}}_{{@$loopkey}}" data-bs-parent="#default-accordion-example">
 			<div class="accordion-body">
 				<div class="booking-activity-details">
 					<div class="row">
