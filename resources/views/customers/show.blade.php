@@ -213,11 +213,8 @@
 																											<label class="font-black">Status</label>
 																										</div>
 																										<div class="col-lg-6 col-sm-6">
-																											@if($customerdata->is_active() == 0)
-																												<span class="red-fonts">InActive</span>
-																											@else
-																												<span class="green-fonts">Active</span>
-																											@endif
+																												<span class="@if($customerdata->is_active() == 'InActive') font-red-fonts @else font-green @endif ">{{$customerdata->is_active()}}</span>
+																											
 																										</div>
 																									</div>
 																									<div class="row mb-10">
@@ -1021,7 +1018,7 @@
 																								  <i class="ri-more-fill"></i>
 																								  <ul>
 																									<li>
-																										<a href="#" data-modal-width=" " data-behavior="ajax_html_modal" data-url="{{route('business.customers.card_editing_form', ['customer_id' => $customerdata->id, 'return_url' => url()->full()])}}">
+																										<a href="#" data-reload="1" data-modal-width=" " data-behavior="ajax_html_modal" data-url="{{route('business.customers.card_editing_form', ['customer_id' => $customerdata->id, 'return_url' => url()->full()])}}" >
 																										<i class="fas fa-plus text-muted"></i>Add</a>
 																									</li>
 																								  </ul>
