@@ -209,7 +209,8 @@
 	.searchbox .form-control.padding-lrtb-one {padding: 10px 0px 10px 0px;}
 	.searchbox {  padding: 10px 15px;}
 	.width-345 { max-width: 345px;}
-	
+	.desktop-none-customer {display: block !important;  }
+	.navbar-menu{ z-index: 2000 !important;	overflow: scroll;  position: fixed; top: 0;}
 }
 
 @media screen and (max-width: 699px){ 
@@ -348,6 +349,10 @@
 	.links-set a{font-size: 14px;}
 	.setoflinkes{display: block;}
 	.width-345 { max-width: 100%;}
+	.desktop-none-customer {display: block !important;  }
+	.width-40 {	max-width: 100%; }
+	.navbar-menu{ z-index: 2000 !important;	overflow: scroll;  position: fixed; top: 0;}
+	.w-250 {width: 180px;  }
 }
 
 @media screen and (min-width: 351px) and (max-width: 370px){

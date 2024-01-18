@@ -28,7 +28,7 @@
 									@forelse($cardInfo as $card) 
 									    <div class="col-lg-3 col-sm-6">
 										    <div class="cards-block dispalycard" style="cursor: pointer" data-name="{{$card['name']}}" data-cvv="" data-cnumber="{{$card['last4']}}" data-month="{{$card['exp_month']}}" data-year="{{$card['exp_year']}}" data-type="{{strtolower($card['brand'])}}" data-id="{{$card['id']}}" data-ptype="update">
-											    <div class="cards-content" style="background-image: url(http://dev.fitnessity.co/public/img/visa-card-bg.jpg );">
+											    <div class="cards-content" style="background-image: url('/public/img/visa-card-bg.jpg');">
 		                                            <img src="{{ url('/public/images/creditcard/'.strtolower($card['brand']).'.jpg') }}" alt="">
 		                                            <span>{{$card['name']}}</span>
 		                                            <p>{{ucfirst(strtolower($card['brand']))}}</p>
@@ -43,7 +43,7 @@
 									@endforelse
 									<div class="col-lg-3 col-sm-6">
 										<div class="cards-block addcard" style="cursor: pointer" data-name="" data-cvv="" data-cnumber="" data-month="" data-year="" data-type="" data-ptype="insert">
-                                            <div class="cards-content" style=" background-image: url(http://dev.fitnessity.co/public/img/visa-card-bg.jpg);">
+                                            <div class="cards-content" style=" background-image: url('/public/img/visa-card-bg.jpg');">
                                                 <span style="text-align: center">Add New Card</span>
                                             </div>
                                         </div>

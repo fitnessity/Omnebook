@@ -15,6 +15,25 @@ use App\Http\Controllers\Customers_Auth\HomeController;
 use App\Http\Controllers\Products\ProductController;
 
 
+//to clear catch
+use Illuminate\Support\Facades\Artisan;
+
+
+Route::get('/clear-cache', function () {
+    // Clear all cache
+    Artisan::call('cache:clear');
+
+    // Clear specific cache (e.g., route cache)
+    Artisan::call('route:clear');
+
+    // Clear all cached configuration files
+    Artisan::call('config:clear');
+
+    return 'Cache cleared successfully.';
+});
+//end
+
+
 Route::get('/invitation/accept','HomeController@invitation_accept')->name('invitation_accept');
 Route::any('/welcome_provider/','OnBoardedController@welcome')->name('onboard_process.welcome');
 Route::get('/onboard_process/','OnBoardedController@index')->name('onboard_process.index');
@@ -148,6 +167,12 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('/subscription/update-card','SubcriptionController@update_card')->name('subscription.update-card');
     Route::post('get_plan_html','SubcriptionController@get_plan_html')->name('get_plan_html');
     Route::get('/subscription/export','SubcriptionController@export')->name('subscription.export');
+    Route::resource('announcement', 'AnnouncementController')->only(['index','create','show','edit','store','update', 'destroy']);
+
+    Route::post('/announcement-upload', 'AnnouncementController@upload')->name('announcement-upload');
+
+    Route::resource('announcement-category', 'AnnouncementCategoryController')->only(['index','create','show','store','update']);
+    Route::get('announcement-category/delete/{id}', 'AnnouncementCategoryController@destroy')->name('announcement-category.destroy');
 
     Route::get('/refund-details','RefundReportController@index')->name('refund.index');
     Route::get('/refund-details/export','RefundReportController@export')->name('refund.export');
@@ -169,10 +194,13 @@ Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware
     Route::resource('profile', 'ProfileController')->only(['index','create','edit', 'update', 'destroy', 'store']);
 
     Route::any('user_family_profile/update', 'ProfileController@userFamilyProfileUpdate')->name('user_family_profile.update');
-     Route::any('customer_profile/update', 'ProfileController@customerProfileUpdate')->name('customer_profile.update');
+    Route::any('customer_profile/update', 'ProfileController@customerProfileUpdate')->name('customer_profile.update');
     Route::any('provider', 'ProfileController@provider')->name('provider');
 
     Route::post('/get-contact-info', 'ProfileController@contactInfo')->name('get-contact-info');
+    Route::any('/dashboard', 'ProfileController@dashboard')->name('dashboard');
+
+    Route::resource('attendance-belt', 'AttendanceController')->only(['index','create','edit', 'update', 'destroy', 'store']);
 
     Route::resource('documents-contract', 'DocumentController')->only(['index','create','edit', 'update', 'destroy', 'store']);
     Route::any('getContent/{id}/{type}', 'DocumentController@getContent')->name('getContent');
@@ -199,6 +227,10 @@ Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware
 
     Route::resource('manage-account', 'ManageAccountController')->only(['index','create','edit', 'update', 'destroy', 'store']);
     Route::resource('calendar', 'CalendarController')->only(['index','create','edit', 'update', 'destroy', 'store']);
+    Route::get('/announcement-news', 'AnnouncementController@index')->name('announcement-news');
+    Route::post('/announcement-date-filter', 'AnnouncementController@dateFilter')->name('announcement_date_filter');
+    Route::get('/notes-alerts', 'NotesAlertsController@index')->name('notes-alerts');
+
 });
 
 Route::name('design.')->prefix('/design')->middleware('auth')->group(function () {
@@ -258,12 +290,14 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 	Route::get('/announcements_provider','DesignController@announcements_provider')->name('announcements_provider');
     Route::get('/announcements_provider_category','DesignController@announcements_provider_category')->name('announcements_provider_categorys');
 	Route::get('/customer_dashboard','DesignController@customer_dashboard')->name('customer_dashboard');
-    Route::get('/pdf_booking','DesignController@pdf_booking')->name('pdf_booking');    
+
+	Route::get('/notes_alerts','DesignController@notes_alerts')->name('notes_alerts');
+	Route::get('/pdf_booking','DesignController@pdf_booking')->name('pdf_booking');
+
     Route::get('/provider_adds_belt_rank_skills','DesignController@provider_adds_belt_rank_skills')->name('provider_adds_belt_rank_skills');
     Route::get('/provider_edit_belt_rank_skills','DesignController@provider_edit_belt_rank_skills')->name('provider_edit_belt_rank_skills');
     Route::get('/client_promote_belt','DesignController@client_promote_belt')->name('client_promote_belt');
     Route::get('/manually_promote','DesignController@manually_promote')->name('manually_promote');
-	
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -320,7 +354,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/download/{id}', 'CustomerController@download')->name('download');
     Route::get('/removeDoc/{id}','CustomerController@removeDoc')->name('removeDoc');
     Route::post('/uploadDocsName','CustomerController@uploadDocsName')->name('uploadDocsName');
-    Route::get('/docContent/{id}','CustomerController@docContent')->name('docContent');
+    Route::get('/docContent/{id?}','CustomerController@docContent')->name('docContent');
 
     Route::prefix('/business/{business_id}')->middleware('auth', 'business_scope')->group(function () {
         Route::get('/customers','CustomerController@index')->name('business_customer_index');

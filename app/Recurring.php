@@ -26,11 +26,9 @@ class Recurring extends Authenticatable
      * @var array
      */
     protected $fillable = [ 'booking_detail_id', 'user_id', 'user_type', 'business_id', 'payment_date', 'amount', 'tax', 'charged_amount', 'payment_method', 'stripe_payment_id', 'status','transfer_provider_status','provider_amount','provider_transaction_id','attempt'];
-
     protected $appends = ['total_amount' ,'card','customer_name' ,'customer_id','membership_name'];
-
-
      public function getTotalAmountAttribute(){
+
         return number_format($this->amount + $this->tax,2);
     }
 
@@ -41,6 +39,7 @@ class Recurring extends Authenticatable
         }
         return $card ?? 'N/A';
     }
+
 
     public function getMembershipNameAttribute(){
         return $this->UserBookingDetail->business_services_with_trashed->program_name.' ('.$this->UserBookingDetail->business_price_detail_with_trashed->price_title.')';

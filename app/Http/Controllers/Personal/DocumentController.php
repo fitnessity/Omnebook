@@ -113,6 +113,11 @@ class DocumentController extends Controller
                 'business_id' => $content->business_id,
                 'status'  =>  'Alert'
             ]);
+
+            $count = CustomerDocumentsRequested::where('doc_id', $content->doc_id)->whereNotNull('path')->count();
+            if ($count == 0) {
+                CustomersDocuments::where('id',$content->doc_id)->update(['doc_completed_date' => date('Y-m-d')]);
+            }
         }else{
             $imageName = $request->old_profile_pic;
         }

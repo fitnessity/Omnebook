@@ -1,5 +1,6 @@
 <div class="calendar-body">
-    <h3>{{$ser_data->program_name}}</h3>
+    <h3 >{{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}}</h3>
+    <p>{{$ser_data->program_name}}</p>
     <p>{{$ser_data->company_information->dba_business_name}}</p>
     <p class="calendar-address">{{$ser_data->company_information->company_address()}}</p>
    <div class="calendar-time">
@@ -16,7 +17,7 @@
         </div>
         <div class="col-md-6 col-6">
             <div class="calendar-btns">
-                <a class="btn btn-red float-end" href="{{route('business_customer_show', ['business_id' => $ser_data->cid,'id'=>$booking_detail->user_id])}}" target="_blank">View Booking</a> 
+                <a class="btn btn-red float-end" href="{{route('personal.orders.index', ['business_id' => $ser_data->cid])}}" target="_blank">View Booking</a> 
             </div>
         </div>
     </div>

@@ -1,207 +1,216 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
 @section('content')
+@include('layouts.profile.business_topbar')
 
-<div class="container-fluid p-0 inner-top-activity">
-	<div class="row">
-		<div class="col-md-7 col-xs-12 col-md-offset-3-custom">
-			<div class="custom-multiple-book">
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="valor-mix-title">
+	<div class="main-content">
+		<div class="page-content">
+	        <div class="container-fluid">
+	           <div class="row mb-3">
+					<div class="col-12">
+						<div class="page-heading text-center">
 							<h2>{{$company->company_name}}</h2>
 							<p>Booking Schedule for {{ucwords(@$customer->full_name)}}</p>
 						</div>
 					</div>
-				</div>
+	            </div><!--end row-->
+				
 				<div class="row">
-					<div class="col-md-12 col-sm-12 col-xs-12 text-right">
-						<div class="calendar-icon">
-							<input type="text" name="date" class="date datepicker" readonly placeholder="DD/MM/YYYY" />
-						</div>
-					</div>
-				</div>
-				<div class="">
-					<ul class="nav nav-tabs calendar-nav-tabs" role="tablist">
-						<div class="owl_1 owl-carousel owl-theme ">
-							@foreach($days as $i=>$date)
-								<div class="item">
-									<li @if($filter_date->format('Y-m-d') == $date->format('Y-m-d')) class="active" @endif><a  href="{{$request->fullUrlWithQuery(['date' => $date->format('Y-m-d')])}}" role="tab">{{$date->format("D d")}}</a></li>
-								</div>
-							@endforeach
-						</div>
-					</ul>
-				</div>
-				<div class="tab-content">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="multiple-slots">
-								<h3>Reserve Multiple Time Slots</h3>
-								<p> Select dates and time slots you would like to reserve. Once you’re done, review and confirm your selections </p>
-							</div>
-						</div>
-					</div>
-					<div id="tab" class="tab-pane fade active in" role="tabpanel">
-						<div class="row mb-10">
-							<div class="col-md-4 col-sm-4 col-xs-12">
-								<div class="checkout-sapre-tor"></div>
-							</div>
-							<div class="col-md-4 col-sm-4 col-xs-12 valor-mix-title nopadding">
-								<label>Activities on {{$filter_date->format("l, F j")}}</label>
-							</div>
-							<div class="col-md-4 col-sm-4 col-xs-12">
-								<div class="checkout-sapre-tor"></div>
-							</div>
-						</div>
-
-						@foreach($services as $ser)
-							@php  
-								$categoryList = [];
-								if($priceid != ''){
-									$pricelist =  @$ser->price_details()->find($priceid);
-									if(@$pricelist->business_price_details_ages != ''){
-										$categoryList []= @$pricelist->business_price_details_ages;
-									}
-								}else{
-									$categoryList = @$ser->BusinessPriceDetailsAges;
-								}
-							@endphp
-							@if(!empty($categoryList) && count($categoryList)>0)
-								@foreach($categoryList as $cList)
-									@php  $sche_ary = [];
-										foreach($cList->BusinessActivityScheduler as $sc){
-											if($sc->end_activity_date >= $filter_date->format('Y-m-d') && $sc->starting <= $filter_date->format('Y-m-d')){
-												if(strpos($sc->activity_days, $filter_date->format('l')) !== false){
-
-													$cancelSc = $sc->activity_cancel->where('cancel_date',$filter_date->format('Y-m-d'))->first();
-													$hide_cancel = @$cancelSc->hide_cancel_on_schedule;
-													if(@$cancelSc->cancel_date_chk == 0 ){
-														$hide_cancel = 0;
-													}
-													if($hide_cancel == '' || $hide_cancel != 1){
-														$sche_ary [] = $sc;
-													}
-												}
-											}
-										} 
-										if(!empty($sche_ary)){
-									@endphp
-									<div class="row">
-										<div class="col-md-6 col-sm-6 col-xs-12">
-											<div class="classes-info remove-line mb-10">
+					<div class="col-12 ">
+						<div class="card">
+							<div class="container p-0 inner-top-activity">
+								<div class="row">
+									<div class="col-md-12 col-xs-12">
+										<div class="custom-multiple-book">
+											<div class="row">
+												<div class="col-md-12 col-sm-12 col-xs-12 text-right">
+													<div class="calendar-icon">
+														<input type="text" name="date" class="date datepicker" readonly placeholder="DD/MM/YYYY" />
+													</div>
+												</div>
+											</div>
+											<div class="">
+												<ul class="nav nav-tabs calendar-nav-tabs" role="tablist">
+													<div class="owl_1 owl-carousel owl-theme ">
+														@foreach($days as $i=>$date)
+															<div class="item">
+																<li @if($filter_date->format('Y-m-d') == $date->format('Y-m-d')) class="active" @endif><a  href="{{$request->fullUrlWithQuery(['date' => $date->format('Y-m-d')])}}" role="tab">{{$date->format("D d")}}</a></li>
+															</div>
+														@endforeach
+													</div>
+												</ul>
+											</div>
+											<div class="tab-content">
 												<div class="row">
-													<div class="col-md-12 col-xs-12">
-														<div class="text-left line-height-1">
-															<h2>{{$ser->sport_activity}}</h2>
-															<label>Program Name: </label> <span> {{$ser->program_name}}</span>
+													<div class="col-md-12">
+														<div class="multiple-slots text-center mt-10">
+															<h3>Reserve Multiple Time Slots</h3>
+															<p> Select dates and time slots you would like to reserve. Once you’re done, review and confirm your selections </p>
 														</div>
 													</div>
-													<div class="col-md-12 col-xs-12">
-														<div class="text-left line-height-1">
-															<label>Category Name: </label> <span>{{@$cList->category_title}}</span>
+												</div>
+												<div id="tab" class="tab-pane active" role="tabpanel">
+													<div class="row mb-10">
+														<div class="col-md-4 col-sm-4 col-xs-12">
+															<div class="checkout-sapre-tor"></div>
+														</div>
+														<div class="col-md-4 col-sm-4 col-xs-12 valor-mix-title nopadding">
+															<label>Activities on {{$filter_date->format("l, F j")}}</label>
+														</div>
+														<div class="col-md-4 col-sm-4 col-xs-12">
+															<div class="checkout-sapre-tor"></div>
 														</div>
 													</div>
-													<div class="col-md-12 col-xs-12">
-														<div class="text-left line-height-1">
-															<label>Instructor: </label> <span>@if($ser->BusinessStaff != '') {{ucfirst($ser->BusinessStaff->full_name)}}  @else N/A @endif</span>
-														</div>
+
+													@foreach($services as $ser)
+														@php  
+															$categoryList = [];
+															if($priceid != ''){
+																$pricelist =  @$ser->price_details()->find($priceid);
+																if(@$pricelist->business_price_details_ages != ''){
+																	$categoryList []= @$pricelist->business_price_details_ages;
+																}
+															}else{
+																$categoryList = @$ser->BusinessPriceDetailsAges;
+															}
+														@endphp
+														@if(!empty($categoryList) && count($categoryList)>0)
+															@foreach($categoryList as $cList)
+																@php  $sche_ary = [];
+																	foreach($cList->BusinessActivityScheduler as $sc){
+																		if($sc->end_activity_date >= $filter_date->format('Y-m-d') && $sc->starting <= $filter_date->format('Y-m-d')){
+																			if(strpos($sc->activity_days, $filter_date->format('l')) !== false){
+
+																				$cancelSc = $sc->activity_cancel->where('cancel_date',$filter_date->format('Y-m-d'))->first();
+																				$hide_cancel = @$cancelSc->hide_cancel_on_schedule;
+																				if(@$cancelSc->cancel_date_chk == 0 ){
+																					$hide_cancel = 0;
+																				}
+																				if($hide_cancel == '' || $hide_cancel != 1){
+																					$sche_ary [] = $sc;
+																				}
+																			}
+																		}
+																	} 
+																	if(!empty($sche_ary)){
+																@endphp
+																<div class="row">
+																	<div class="col-md-6 col-sm-6 col-xs-12">
+																		<div class="classes-info remove-line mb-10">
+																			<div class="row">
+																				<div class="col-md-12 col-xs-12">
+																					<div class="text-left line-height-1 ">
+																						<label class="fs-16">Category Name: </label> <span class="fs-16">{{@$cList->category_title}}</span>
+																					</div>
+																				</div>
+																				<div class="col-md-12 col-xs-12">
+																					<div class="text-left line-height-1">
+																						<label>Program Name: </label> <span> {{$ser->program_name}}</span>
+																					</div>
+																				</div>
+																				<div class="col-md-12 col-xs-12">
+																					<div class="text-left line-height-1">
+																						<label>Activity: </label> <span> {{$ser->sport_activity}}</span>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-md-6 col-sm-6 col-xs-12">
+																		<div class="row calendar-separator-line">
+																			@if(!empty($sche_ary))
+																				@foreach($sche_ary as $s=>$scary)
+																					@php 
+																						$duration = $scary->get_duration();
+																						$SpotsLeftdis = 0;
+																						$bs = new  \App\Repositories\BookingRepository;
+																						$bookedspot = $bs->gettotalbooking($scary->id,$filter_date->format('Y-m-d')); 
+																						$SpotsLeftdis = $scary->spots_available - $bookedspot;
+																						
+																				        $cancel_chk = 0;
+																						$canceldata = App\ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id,'cancel_date_chk'=>1])->first();
+																						$date = $filter_date->format('Y-m-d');
+																						$time = $scary->shift_start;
+																						$st_time = date('Y-m-d H:i:s', strtotime("$date $time"));
+																						$current  = date('Y-m-d H:i:s');
+																						$difference = round((strtotime($st_time) - strtotime($current))/3600, 1);
+																						$timeOfActivity = date('h:i a', strtotime($scary->shift_start));
+																						$grayBtnChk = 0;
+																						if($filter_date->format('Y-m-d') == date('Y-m-d') && $st_time < $current){
+																							$grayBtnChk = 1;
+																						}
+																						if($SpotsLeftdis == 0){
+																							$grayBtnChk = 2;
+																						}
+																						if($canceldata != ''){
+																							$grayBtnChk = 3;
+																							$class = 'post-btn-gray';
+																						}
+
+																						$insName = $scary->getInstructure($filter_date->format('Y-m-d'));
+																					@endphp
+																					<div class="col-lg-4 col-md-5 col-sm-5 col-xs-6">
+																						<div class="multiple0select btn-group w-100">
+																							<div class="select">
+																								<input type="checkbox" id="item_{{$s}}{{$scary->id}}" class="checkboxchk" data-pname="{{$ser->program_name}}" data-toa="{{$timeOfActivity}}" data-chk="{{$grayBtnChk}}" data-sid="{{$ser->id}}" data-scid="{{$scary->id}}" data-catId="{{$scary->category_id}}" {{ $SpotsLeftdis == 0 ? "disabled" : ''}} {{ $canceldata != '' ?  "disabled" : ''}}>
+																								<label class="btn button_select" for="item_{{$s}}{{$scary->id}}">{{$timeOfActivity}} <br>{{$duration}}</label>
+																								<span>{{ $SpotsLeftdis == 0 ? "Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</span>
+																								<label class="font-red">{{ $canceldata != '' ? "Cancelled" : ''}}</label>
+																								<span>{{ $insName }}</span>
+																							</div>
+																						</div>
+																					</div>
+																				@endforeach
+																			@else
+																				<div class="col-md-12 col-sm-6 col-xs-12 noschedule">No Time available</div>
+																			@endif
+																		</div>
+																	</div>
+																	<div class="col-md-12 col-xs-12">
+																		<div class="checkout-sapre-tor"></div>
+																	</div>
+																</div>
+																@php } @endphp
+															@endforeach
+														@endif
+													@endforeach
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-12">
+													<div class="calendar-footer mt-10">
+														<label><span id="timeSlotCntUpdate">{{count($finalSessionAry)}}</span>-Time Slot Added  </label> 
+														<a class="showall-btn" data-behavior="ajax_html_modal" data-url="{{route('getReviewData' ,['cid'=> @$customer->id,'business_id'=> @$company->id])}}" data-reload ="1" data-modal-width="modal-80" data-modal-chkBackdrop="1" id="reviewData">Review Selections</a>
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-6 col-sm-6 col-xs-12">
-											<div class="row calendar-separator-line">
-												@if(!empty($sche_ary))
-													@foreach($sche_ary as $s=>$scary)
-														@php 
-															$duration = $scary->get_duration();
-
-															$SpotsLeftdis = 0;
-															$bs = new  \App\Repositories\BookingRepository;
-															$bookedspot = $bs->gettotalbooking($scary->id,$filter_date->format('Y-m-d')); 
-															$SpotsLeftdis = $scary->spots_available - $bookedspot;
-															
-													        $cancel_chk = 0;
-															$canceldata = App\ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id,'cancel_date_chk'=>1])->first();
-															$date = $filter_date->format('Y-m-d');
-															$time = $scary->shift_start;
-															$st_time = date('Y-m-d H:i:s', strtotime("$date $time"));
-															$current  = date('Y-m-d H:i:s');
-															$difference = round((strtotime($st_time) - strtotime($current))/3600, 1);
-															$timeOfActivity = date('h:i a', strtotime($scary->shift_start));
-															$grayBtnChk = 0;
-															if($filter_date->format('Y-m-d') == date('Y-m-d') && $st_time < $current){
-																$grayBtnChk = 1;
-															}
-															if($SpotsLeftdis == 0){
-																$grayBtnChk = 2;
-															}
-															if($canceldata != ''){
-																$grayBtnChk = 3;
-																$class = 'post-btn-gray';
-															}
-
-															$insName = $scary->getInstructure($filter_date->format('Y-m-d'));
-														@endphp
-														<div class="col-lg-4 col-md-3 col-sm-5 col-xs-6">
-															<div class="multiple0select btn-group w-100">
-																<div class="select">
-																	<input type="checkbox" id="item_{{$s}}{{$scary->id}}" class="checkboxchk" data-pname="{{$ser->program_name}}" data-toa="{{$timeOfActivity}}" data-chk="{{$grayBtnChk}}" data-sid="{{$ser->id}}" data-scid="{{$scary->id}}" data-catId="{{$scary->category_id}}" {{ $SpotsLeftdis == 0 ? "disabled" : ''}} {{ $canceldata != '' ?  "disabled" : ''}}>
-																	<label class="btn button_select" for="item_{{$s}}{{$scary->id}}">{{$timeOfActivity}} <br>{{$duration}}</label>
-																	<span>{{ $SpotsLeftdis == 0 ? "Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</span>
-																	<label class="font-red">{{ $canceldata != '' ? "Cancelled" : ''}}</label>
-																	<span>{{ $insName }}</span>
-																</div>
-															</div>
-														</div>
-													@endforeach
-												@else
-													<div class="col-md-12 col-sm-6 col-xs-12 noschedule">No Time available</div>
-												@endif
-											</div>
-										</div>
-										<div class="col-md-12 col-xs-12">
-											<div class="checkout-sapre-tor"></div>
-										</div>
 									</div>
-									@php } @endphp
-								@endforeach
-							@endif
-						@endforeach
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="calendar-footer mt-10">
-							<label><span id="timeSlotCntUpdate">{{count($finalSessionAry)}}</span>-Time Slot Added  </label> 
-							<!-- <a href="#" class="showall-btn" data-toggle="modal" data-target="#review_selections" >Review Selections</a> -->
-							<a class="showall-btn" data-behavior="ajax_html_modal" data-url="{{route('getReviewData' ,['cid'=> @$customer->id,'business_id'=> @$company->id])}}" data-modal-width="1000px"data-modal-chkBackdrop="1" id="reviewData">Review Selections</a>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
+            </div><!-- container-fluid -->
+        </div><!-- End Page-content -->
+    </div><!-- end main content-->
+</div><!-- END layout-wrapper -->
+
+<div class="modal fade compare-model  modal-middle in selectbooking"  tabindex="-1" aria-labelledby="mySmallModalLabel" data-bs-focus="false"  aria-hidden="true" >
+	<div class="modal-dialog modal-dialog-centered" id="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="btn-close manage-customer-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
+			<div class="modal-body" id='select-booking-type'>
+            </div>
 		</div>
 	</div>
 </div>
 
-<div class="modal fade compare-model modal-middle in selectbooking">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" > 
-                <div class="closebtn">
-                    <button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-            </div>
-            <div class="modal-body" id="select-booking-type">
-            </div>
-        </div>
-    </div>
-</div>
 
 
-@include('layouts.footer')
+@include('layouts.business.footer')
 <script>
 	$(function() {
 		$( ".date" ).datepicker({

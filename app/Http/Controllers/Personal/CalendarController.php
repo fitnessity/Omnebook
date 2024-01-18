@@ -26,8 +26,8 @@ class CalendarController extends Controller
 
     public function index(Request $request)
     {
-        $familyDetails = $companies = [];
-
+        $familyDetails = $companyInformation = [];
+         $ids = [];
         if($request->customer_id){
             if(request()->type == 'user'){
                 $familyMember = Auth::user()->user_family_details()->where('id',$request->customer_id)->first();
@@ -41,7 +41,7 @@ class CalendarController extends Controller
             $user = Auth::user();
             $customer = $user->customers;
             foreach($customer as $cs){
-                $companies[] = $cs->company_information;
+                $companyInformation[] = $cs->company_information;
             }
                 
             $customer =  $request->business_id ? $customer->where('business_id' ,$request->business_id) : $customer;     
@@ -56,6 +56,7 @@ class CalendarController extends Controller
             }
         }
 
+        $companies = array_values(array_filter(array_unique($companyInformation, SORT_REGULAR)));
        
         $data = UserBookingStatus::selectRaw('chkdetails.id, ser.program_name as title, ser_sche.shift_start, ser_sche.shift_end, ser_sche.set_duration,chkdetails.checkin_date as start,bdetails.user_id')
                 ->join("user_booking_details as bdetails", DB::raw('bdetails.booking_id'), '=', 'user_booking_status.id')
@@ -90,7 +91,8 @@ class CalendarController extends Controller
                 "shift_start"=>$dt['shift_start'],
                 "shift_end"=>$dt['shift_end'],
                 "time"=>$time,
-                "start"=>$dt['start'],
+                "start"=>$dt['start'].'T'.date("h:i:s", strtotime( $dt["shift_start"]) ),
+                "end"=>$dt['start'].'T'.date("h:i:s", strtotime( $dt["shift_end"]) ),
                 "full_name"=>$full_name);
 
             $dataAry [] =array(
@@ -98,8 +100,8 @@ class CalendarController extends Controller
                 'id'  => $dt['id'],
                 'title'  => $dt['title']. ' \n '.date("h:i a", strtotime( $dt["shift_start"] )).' - '.$time . ' \n '.$full_name,  
                 'description' => $dt['title']. ' <br> '.date("h:i a", strtotime($dt["shift_start"])).' - '.$time . ' <br> '.$full_name,  
-                'start'  => $dt['start'].' '.date("h:i", strtotime( $dt["shift_start"]) ),
-                'end'  => $dt["start"].' '.date("h:i", strtotime( $dt["shift_end"]) ),
+                'start'  => $dt['start'].'T'.date("h:i", strtotime( $dt["shift_start"]) ),
+                'end'  => $dt["start"].'T'.date("h:i", strtotime( $dt["shift_end"]) ),
             );
         }
 

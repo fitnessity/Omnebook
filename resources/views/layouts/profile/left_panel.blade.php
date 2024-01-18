@@ -64,15 +64,23 @@
 				</li>
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
 
+                @if(request()->business_id) 
+                    <li class="nav-item">
+                        <a class="nav-link menu-link {{ request()->is('*dashboard*') ? 'active' : '' }}" href="{{ url('/personal/dashboard') . '?' . http_build_query(['business_id' => request()->business_id, 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}" aria-controls="sidebarDashboards">
+                            <img src="{{asset('/public/img/social-profile.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Dashboard</span>
+                        </a>
+                    </li>
+                @endif
+
                 @if(!request()->customer_id)
-				<li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('profile-viewProfile')}}" aria-controls="sidebarDashboards">
-                        <img src="{{asset('/public/img/social-profile.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">View Social Profile</span>
-                    </a>
-                </li>
+    				<li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('profile-viewProfile')}}" aria-controls="sidebarDashboards">
+                            <img src="{{asset('/public/img/social-profile.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">View Social Profile</span>
+                        </a>
+                    </li>
                 @endif
 				<li class="nav-item">
-                    <a class="nav-link menu-link {{ request()->is('*profile*') ? 'active' : '' }}" href="{{ url('/personal/profile') . '?' . http_build_query([ 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}" aria-controls="sidebarDashboards">
+                    <a class="nav-link menu-link {{ request()->is('*profile*') ? 'active' : '' }}" href="{{ url('/personal/profile') . '?' . http_build_query([ 'business_id' => request()->business_id,'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}" aria-controls="sidebarDashboards">
                         <img src="{{asset('/public/img/edit-2.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">  @if(request()->customer_id) Edit Profile @else Edit Profile & Password @endif</span>
                     </a>
                 </li>
@@ -103,13 +111,13 @@
                     </li>
                     @endif
     				<li class="nav-item">
-                        <a class="nav-link menu-link {{ request()->is('*business_activity_schedulers*') ? 'active' : '' }}" href="{{ url('/business_activity_schedulers/'.request()->business_id) . '?' . http_build_query([ 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null,]) }}" aria-controls="sidebarDashboards">
+                        <a class="nav-link menu-link {{ request()->is('*business_activity_schedulers*') || request()->is('*multibooking*')   ? 'active' : '' }}" href="{{ url('/business_activity_schedulers/'.request()->business_id) . '?' . http_build_query([ 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null,]) }}" aria-controls="sidebarDashboards">
                             <img src="{{asset('/public/img/schedule-1.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Schedule</span>
                         </a>
                     </li>
     				<li class="nav-item">
-                        <a class="nav-link menu-link {{ request()->is('*attendance*') ? 'active' : '' }}" href="" aria-controls="sidebarDashboards">
-                            <img src="{{asset('/public/img/attendance.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Attendance & Belt </span>
+                        <a class="nav-link menu-link {{ request()->is('*attendance-belt*') ? 'active' : '' }}"  href="{{ url('/personal/attendance-belt') . '?' . http_build_query(['business_id' => request()->business_id, 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}" aria-controls="sidebarDashboards">
+                            <img src="{{asset('/public/img/attendance.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Attendance & Promotions </span>
                         </a>
                     </li>
 
@@ -117,7 +125,7 @@
 
                 @if(!request()->customer_id)
 				<li class="nav-item">
-                    <a class="nav-link menu-link {{ request()->is('*credit-cards*') ? 'active' : '' }}" href="{{route('personal.credit-cards')}}" aria-controls="sidebarDashboards">
+                    <a class="nav-link menu-link {{ request()->is('*credit-cards*') ? 'active' : '' }}" href="{{url('personal/credit-cards'). '?' . http_build_query(['business_id' => request()->business_id]) }}" aria-controls="sidebarDashboards">
                         <img src="{{asset('/public/img/credit-card.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Credit Card </span>
                     </a>
                 </li>  
@@ -126,13 +134,13 @@
 				@if(request()->business_id)
                     @if(!request()->customer_id)
                     <li class="nav-item">
-                        <a class="nav-link menu-link {{ request()->is('*announcement*') ? 'active' : '' }}" >
+                        <a class="nav-link menu-link {{ request()->is('*announcement*') ? 'active' : '' }}" href="{{route('personal.announcement-news' ,['business_id' => request()->business_id])}}" >
                             <img src="{{asset('/public/img/announcement.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Announcement & News</span>
                         </a>
                     </li> 
                     @endif
     				<li class="nav-item">
-                        <a class="nav-link menu-link {{ request()->is('*notes*') ? 'active' : '' }}" href="" aria-controls="sidebarDashboards">
+                        <a class="nav-link menu-link {{ request()->is('*notes*') ? 'active' : '' }}" href="{{ url('/personal/notes-alerts') . '?' . http_build_query([ 'business_id' => request()->business_id ,'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}" aria-controls="sidebarDashboards">
                             <img src="{{asset('/public/img/notes.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Notes & Alerts </span>
                         </a>
                     </li>
@@ -146,19 +154,19 @@
                 
                 @if(!request()->customer_id)
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ request()->is('*favourite*') ? 'active' : '' }}" href="{{route('personal.favourite')}}" >
+                    <a class="nav-link menu-link {{ request()->is('*favourite*') ? 'active' : '' }}" href="{{url('personal/favourite'). '?' . http_build_query(['business_id' => request()->business_id]) }}" >
                         <img src="{{asset('/public/img/favorite.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Favorite</span>
                     </a>
                 </li>
 				
 				<li class="nav-item">
-                    <a class="nav-link menu-link {{ request()->is('*followers*') ? 'active' : '' }}" href="{{route('personal.followers')}}" >
+                    <a class="nav-link menu-link {{ request()->is('*followers*') ? 'active' : '' }}" href="{{url('personal/followers'). '?' . http_build_query(['business_id' => request()->business_id]) }}" >
                         <img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Followers</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ request()->is('*following*') ? 'active' : '' }}" href="{{route('personal.following')}}">
+                    <a class="nav-link menu-link {{ request()->is('*following*') ? 'active' : '' }}" href="{{url('personal/following'). '?' . http_build_query(['business_id' => request()->business_id]) }}">
                         <img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Following</span>
                     </a>
                 </li> 

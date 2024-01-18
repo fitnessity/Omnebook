@@ -288,17 +288,22 @@
     }
 
     function getNotificationPersonal($type=null){
-        $customersId = Auth::user()->customers()->pluck('id')->toArray();
-      
-        $notifications = Notification::orderby('updated_at','desc')->whereDate('display_date', '=', now())
+       
+        $customers = Auth::user()->customers;
+        if($customers != ''){
+            $customersId =  @$customers->pluck('id')->toArray();
+            $notifications = Notification::orderby('updated_at','desc')->whereDate('display_date', '=', now())
                 ->whereTime('display_time', '<=', now()->format('H:i'))->whereIn('customer_id',$customersId )->where('type','personal')
                 ->orWhere(function ($query) use($customersId) {
                     $query->whereDate('display_date', '<=', now())->whereIn('customer_id', $customersId )->where('type','personal');
                 });
-        if($type){
-            $notifications->where('status','Alert');
+            if($type){
+                $notifications->where('status','Alert');
+            }
+            return $notifications->get();
         }
-        return $notifications->get();
+       
+       return $notifications = array();
     }
 
     
