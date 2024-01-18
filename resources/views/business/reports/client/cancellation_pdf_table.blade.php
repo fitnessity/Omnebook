@@ -6,7 +6,10 @@
 			<th>Membership Name</th>
 			<th>Check In Date</th>
 			@if($type == 'Cancellation')
+				<th>Total Cancellation</th>
 				<th>Cancellation Action</th>
+			@else
+				<th>Total No Show</th>
 			@endif
 		</tr>
 		@php $counter = 1; @endphp
@@ -17,7 +20,10 @@
 				<td>{{$list->UserBookingDetail->business_services->program_name}} - {{$list->UserBookingDetail->business_price_detail->price_title}}</td>
 				<td>{{date('m-d-Y', strtotime($list->checkin_date))}}</td>
 				@if($type == 'Cancellation')
+					<td>{{$list->cancel_count}}</td>
 					<td>{{$list->cancel_term()}} @if($list->no_show_action == 'charge_fee') "Charge Fee :".$list->no_show_charged @endif</td>
+				@else
+					<td>{{$list->noshow_count}}</td>
 				@endif
 			</tr>
 			 @php $counter++; @endphp

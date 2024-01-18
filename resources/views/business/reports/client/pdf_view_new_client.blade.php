@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ $title }}</title>
+    <title>{{ @$title }}</title>
     <style>
 		table {
 		  border-collapse: collapse;
@@ -29,15 +29,21 @@
 			margin-bottom: 0px;
 			font-size: 17px;
 		}
+		.font-green{
+			color: green;
+		}
+		.font-red{
+			color: red;
+		}
         
 </style>
 </head>
 <body>
 	<div class="reports-card-header">
-		<h4>{{$title}}</h4>
+		<h4>{{@$title}}</h4>
 	</div>
     
-	@if(count($clients) > 0)
+	@if(!empty(@$clients))
 		<div class="pdf-table">
 			<table>
 				<tr>
@@ -46,7 +52,9 @@
 					<th>Email</th>
 					<th>Birthday</th>
 					<th>Phone Number</th>
-					<th>@if($clientType == 'inactive') Last Membership complated Date  @else Customers Since @endif</th>
+					@if($clientType == 'inactive') <th> Last Attended </th> @endif
+					<th>Customers Since</th>
+					@if($clientType == 'new')<th> Status</th> @endif
 				</tr>
 				@forelse($clients as $i=>$list)
 					<tr>
@@ -55,7 +63,9 @@
 						<td>{{@$list->email}}</td>
 						<td>{{date('m/d/Y',strtotime($list->birthdate))}}</td>
 						<td>{{@$list->phone_number ??  "N/A"}}</td>
-						<td> @if($clientType == 'inactive') @else {{date('m/d/Y',strtotime($list->created_at))}} @endif</td>
+						@if($clientType == 'inactive') <td>  {{@$list->last_attend_date != 'N/A' ? date('m/d/Y',strtotime($list->last_attend_date)): 'N/A'}} </td> @endif
+						<td>{{date('m/d/Y',strtotime($list->created_at))}} </td>
+						@if($clientType == 'new')<td class="@if($list->is_active() == 'InActive' ) font-red @else font-green @endif ">{{($list->is_active() == 'Active' ? 'Member' : $list->is_active())}}</td>@endif
 					</tr>
 				@empty
 					<tr> <td colspan="6"></td></tr>

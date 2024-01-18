@@ -65,7 +65,7 @@
 															<div class="col-lg-7 col-md-8 col-sm-8">
 																<div class="form-group mb-10">	
 																	<div class="input-group">
-																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="startDate" id="startDate"  readonly="readonly" placeholder="StartDate" value="">
+																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="startDate" id="startDate"  readonly="readonly" placeholder="StartDate" value="{{$filterStartDate->format('Y-m-01')}}">
 																		<div class="input-group-text bg-primary border-primary text-white">
 																			<i class="ri-calendar-2-line"></i>
 																		</div>
@@ -80,7 +80,7 @@
 															<div class="col-lg-7 col-md-8 col-sm-8">
 																<div class="form-group mb-25">	
 																	<div class="input-group">
-																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="endDate" id="endDate"  readonly="readonly" value="" placeholder="EndDate">
+																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="endDate" id="endDate"  readonly="readonly" value="{{$filterEndDate->format('Y-m-d')}}" placeholder="EndDate">
 																		<div class="input-group-text bg-primary border-primary text-white">
 																			<i class="ri-calendar-2-line"></i>
 																		</div>
@@ -90,7 +90,7 @@
 														</div>
 														<div class="row justify-content-md-center">
 															<div class="col-lg-6">
-																<a class="btn btn-black w-100 mb-25" data-behavior="on_change_submit"> Generate Reports </a>
+																<button type="button" class="btn btn-black w-100 mb-25" data-behavior="on_change_submit" id="generate_btn"> Generate Reports </button>
 															</div>
 														</div>
 													</form>
@@ -118,7 +118,7 @@
 																	<option value="pdf">Export to PDF</option>
 																</select>
 															</div>
-															<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();">Go!</button>
+															<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();" id="go_btn" >Go!</button>
 														</div>
 													</div>
 												</div>
@@ -133,7 +133,7 @@
 								<div class="col-xl-12">
 									<div class="card">
 										<div class="card-header align-items-center d-flex">
-											<h4 class="card-title mb-0 flex-grow-1" id="headingDate">{{$date->format('l, F j, Y')}}</h4>
+											<h4 class="card-title mb-0 flex-grow-1" id="headingDate">{{$filterStartDate->format('l, F j, Y')}} to {{$filterEndDate->format('l, F j, Y')}}</h4>
 										</div><!-- end card header -->
 										<div class="card-body">
 											<input type="hidden" id="type" value="">
@@ -191,11 +191,12 @@
 @include('layouts.business.footer')
 	
 <script>
-
+	let today = daysthree = daysnty = daysall = 0;
 	let offset  = 10;
  	var isLoading = false;
 
 	function getData(days,limit){
+		$('#targetDiv'+days).html('');
 		let startDate = $('#startDate').val();
 		let endDate = $('#endDate').val();
 		$('#type').val(days);
@@ -213,6 +214,16 @@
          },
          success: function(response){
          	$('#targetDiv'+days).html(response);
+         	if(days == 'today'){
+         		today = 1;
+         	}else if(days == '30'){
+         		daysthree = 1;
+         	}else if(days == '90'){
+         		daysnty = 1;
+         	}else{
+         		daysall = 1;
+         	}
+         	return 'success';
          }
 		});
 	}	
@@ -265,6 +276,8 @@
 	});
 
 	$(document).on('click', '[data-behavior~=on_change_submit]', function(e){
+		$('#generate_btn').html('Loading..');
+		$("#generate_btn").prop("disabled", true);
 		const sdate = formatDate($('#startDate').val());
 		const edate = formatDate($('#endDate').val());
 		if(sdate && edate){
@@ -279,6 +292,9 @@
 		}else{
 			alert('Please Select Date Range.');
 		}
+
+		$('#generate_btn').html('Generate Reports'); 
+		$("#generate_btn").prop("disabled", false);
 	});
 
 	function formatDate(dateString) {
@@ -288,30 +304,24 @@
 	}
 
 	function exportData(){
-		$('#todaydaysbtn, #30daysbtn, #90daysbtn, #alldaysbtn').removeClass('collapsed');
-		$('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30, #accor_nestingExamplecollapse90, #accor_nestingExamplecollapseall').removeClass('scroll-customer');
-		$('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30, #accor_nestingExamplecollapse90, #accor_nestingExamplecollapseall').addClass('show');
-		getData('today' ,'all');
-		getData('30' ,'all');
-		getData('90' ,'all');
-		getData('all' ,'all');
-
 		let startDate = $('#startDate').val();
 		let endDate = $('#endDate').val();
 		var type = $('#exportOptions').val();
+      if(type){
+			$('#go_btn').html('Loading..'); 
+			$("#go_btn").prop("disabled", true);
+		}
       var filename =  '';
-
 		if(type != '' && type != 'print'){
-
-			var downloadUrl = '{{ route("business.member_expirations.export") }}' +
+			var downloadUrl = '{{ route("business.client.export") }}' +
 	        '?endDate=' + endDate +
 	        '&startDate=' + startDate +
 	        '&type=' + type;
 
 	    	if(type == 'excel'){
-	    		filename = 'in-active.xlsx';
+	    		filename = 'InActiveClient.xlsx';
 	    	}else if(type == 'pdf'){
-	    		filename = 'in-active.pdf';
+	    		filename = 'InActiveClient.pdf';
 	    	}
 	
 	    	var link = document.createElement('a');
@@ -320,19 +330,37 @@
 	    	document.body.appendChild(link);
 	    	link.click();
 	    	document.body.removeChild(link);
-		}else if(type == 'print'){
-			setTimeout(function() {
-				print();
-			}, 1000);
 
-			setTimeout(function() {
-				$('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30, #accor_nestingExamplecollapse90, #accor_nestingExamplecollapseall').addClass('scroll-customer');
-				$('#accor_nestingExamplecollapseall').addClass('scroll-customer');
-				$('#accor_nestingExamplecollapseall').addClass('scroll-customer');
-				$('#accor_nestingExamplecollapseall').addClass('scroll-customer');
-				$('#todaydaysbtn, #30daysbtn, #90daysbtn, #alldaysbtn').addClass('collapsed');
-				$('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30, #accor_nestingExamplecollapse90, #accor_nestingExamplecollapseall').removeClass('show');
-			}, 2000);
+	    	setInterval(() => {
+		    	$('#go_btn').html('Go!'); 
+						$("#go_btn").prop("disabled", false);
+			}, 15000); 
+
+		}else if(type == 'print'){
+			$('#todaydaysbtn, #30daysbtn, #90daysbtn, #alldaysbtn').removeClass('collapsed');
+			$('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30, #accor_nestingExamplecollapse90, #accor_nestingExamplecollapseall').removeClass('scroll-customer');
+			$('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30, #accor_nestingExamplecollapse90, #accor_nestingExamplecollapseall').addClass('show');
+
+			getData('today', 'all');
+		   getData('30', 'all');
+		   getData('90', 'all');
+		   getData('all', 'all');
+
+			const checkPromises = setInterval(() => {
+		   	if(today == 1  && daysthree==1 &&  daysnty == 1 && daysall == 1){
+		   			clearInterval(checkPromises);
+	               print();
+	               $('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30, #accor_nestingExamplecollapse90, #accor_nestingExamplecollapseall').addClass('scroll-customer');
+	               $('#accor_nestingExamplecollapseall').addClass('scroll-customer');
+	               $('#accor_nestingExamplecollapseall').addClass('scroll-customer');
+	               $('#accor_nestingExamplecollapseall').addClass('scroll-customer');
+	               $('#todaydaysbtn, #30daysbtn, #90daysbtn, #alldaysbtn').addClass('collapsed');
+	               $('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30, #accor_nestingExamplecollapse90, #accor_nestingExamplecollapseall').removeClass('show');
+	               $('#go_btn').html('Go!'); 
+						$("#go_btn").prop("disabled", false);
+						today = daysthree = daysnty = daysall = 0;
+				}
+	      }, 1000); 
 		}
 	}
 

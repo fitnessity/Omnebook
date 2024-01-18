@@ -9,6 +9,8 @@
 
 	$(document).on('click', '[data-behavior~=on_change_submit]', function(e){
 		e.preventDefault()
+		$('#generateReport').html('Loading..');
+		$("#generateReport").prop("disabled", true);
 		$(this).parents('form').submit();
 	});
 
@@ -21,14 +23,17 @@
 		let startDate = '<?= $filterStartDate ? $filterStartDate->format("Y-m-d") : ''; ?>' || $('#startDate').val();
 		let endDate = '<?= $filterEndDate ? $filterEndDate->format("Y-m-d") : ''; ?>' ||  $('#endDate').val();
 		var type = $('#exportOptions').val();
+		if(type){
+			$('#go_btn').html('Loading..'); 
+			$("#go_btn").prop("disabled", true);
+		}
+		
       var filename =  '';
-
 		if(type != '' && type != 'print'){
 
 			var page = '<?= $page ? '&page='.$page : ''; ?>' ;
 			var downloadUrl = '{{$downloadUrl}}' + '?type=' + type +'&endDate=' + endDate +
 		        '&startDate=' + startDate + page;
-
 	    	if(type == 'excel'){
 	    		filename = '{{$excelFileName}}';
 	    	}else if(type == 'pdf'){
@@ -46,7 +51,7 @@
 			$('#accordionnesting').removeClass('collapsed');
 			$('#accor_nestingExamplecollapsetoday').removeClass('scroll-customer');
 			$('#accor_nestingExamplecollapsetoday, .buttonaccodiandiv').addClass('show');
-		
+			
 			setTimeout(function() {
 				print();
 			}, 1000);
@@ -56,7 +61,13 @@
 				$('#accordionnesting').addClass('collapsed');
 				$('#accor_nestingExamplecollapsetoday, .buttonaccodiandiv').removeClass('show');
 			}, 2000);
+			
 		}
+
+		setTimeout(function() {
+				$('#go_btn').html('Go!'); 
+				$("#go_btn").prop("disabled", false);
+		}, 3000);
 	}
 
 </script>

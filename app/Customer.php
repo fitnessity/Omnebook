@@ -79,7 +79,7 @@ class Customer extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['age', 'profile_pic_url', 'full_name', 'first_letter' ,'company_name'];
+    protected $appends = ['age', 'profile_pic_url', 'full_name', 'first_letter' ,'company_name','last_attend_date'];
 
 
     public function stripePaymentMethods(){
@@ -95,6 +95,12 @@ class Customer extends Authenticatable
         return $profile_pic;
     }
 
+    public function getLastAttendDateAttribute()
+    {
+        $lastAttend = $this->BookingCheckinDetails()->whereNotNull('checked_at')->orderby('checkin_date','desc')->first();
+        return @$lastAttend->checkin_date ?? "N/A";
+    }
+
     public function getAgeAttribute()
     {
         if($this->birthdate != null){
@@ -105,7 +111,7 @@ class Customer extends Authenticatable
     }
 
     public function getFullNameAttribute(){
-        return $this->fname . ' ' . $this->lname;
+        return ucfirst($this->fname) . ' ' . ucfirst($this->lname);
     }
 
     public function getCompanyNameAttribute(){
@@ -400,11 +406,20 @@ class Customer extends Authenticatable
         }
     }
 
-    public function is_active(){
+    public function is_active($startDate = null, $endDate = null){
+        if(!$startDate){
+            $startDate = Carbon::now()->subMonths(3);
+        }
+
         $checkindetail = BookingCheckinDetails::where('customer_id', $this->id)->orderby('checkin_date','desc');
         $chk = $checkindetail->get();
         if($chk->isNotEmpty()){
-            $detail = $checkindetail->whereDate("checkin_date",">=",Carbon::now()->subMonths(3))->first();
+            $detail = $checkindetail->whereDate("checkin_date",">=",$startDate);
+            if($endDate){
+                $detail = $checkindetail->whereDate("checkin_date","<=",$endDate);
+            }
+
+            $detail = $detail->first();
             return $detail != '' ? 'Active' : 'InActive';
         }else{
            return $this->created_at >= Carbon::now()->subMonths(3) ? 'Prospect' : 'InActive';

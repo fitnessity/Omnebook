@@ -91,7 +91,7 @@
 														</div>
 														<div class="row justify-content-md-center">
 															<div class="col-lg-6">
-																<a class="btn btn-black w-100 mb-25" data-behavior="on_change_submit" id="generateReport"> Generate Reports </a>
+																<button type="button" class="btn btn-black w-100 mb-25" data-behavior="on_change_submit" id="generateReport"> Generate Reports </button>
 															</div>
 														</div>
 													</form>
@@ -115,7 +115,7 @@
 																	<option value="pdf">Export to PDF</option>
 																</select>
 															</div>
-															<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();">Go!</button>
+															<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();" id="go_btn">Go!</button>
 														</div>
 													</div>
 												</div>
@@ -152,6 +152,7 @@
 																			<th>Birthday  </th>
 																			<th>Phone Number  </th>
 																			<th>Customers Since</th>
+																			<th>Status</th>
 																			<th></th>
 																		</tr>
 																	</thead>
@@ -164,6 +165,7 @@
 																				<td>{{date('m/d/Y',strtotime($list->birthdate))}}</td>
 																				<td>{{@$list->phone_number ?? 'N/A'}}</td>
 																				<td>{{date('m/d/Y',strtotime($list->created_at))}}</td>
+																				<td class="@if($list->is_active() == 'InActive') font-red @else font-green @endif ">{{$list->is_active() == 'Active' ? 'Member' : $list->is_active()}}</td>
 																				<td><a href="{{url('business/'.request()->business_id.'/customers/'.@$list->id)}}"> View </a></td>
 																			</tr>
 																		@empty
@@ -202,6 +204,8 @@
 
 	$(document).on('click', '[data-behavior~=on_change_submit]', function(e){
 		e.preventDefault()
+		$('#generateReport').html('Loading..');
+		$("#generateReport").prop("disabled", true);
 		$(this).parents('form').submit();
 	});
 
@@ -220,8 +224,12 @@
 		let startDate = '<?= $filterStartDate ? $filterStartDate->format("Y-m-d") : ''; ?>' || $('#startDate').val();
 		let endDate = '<?= $filterEndDate ? $filterEndDate->format("Y-m-d") : ''; ?>' ||  $('#endDate').val();
 		var type = $('#exportOptions').val();
-      var filename =  '';
+		if(type){
+			$('#go_btn').html('Loading..'); 
+			$("#go_btn").prop("disabled", true);
+		}
 
+      var filename =  '';
 		if(type != '' && type != 'print'){
 
 			var downloadUrl = '{{ route("business.new_client.export") }}' + '?clientType=new&type=' + type +'&endDate=' + endDate +
@@ -247,6 +255,12 @@
 			setTimeout(function() {
 			}, 2000);
 		}
+
+		setTimeout(function() {
+				$('#go_btn').html('Go!'); 
+				$("#go_btn").prop("disabled", false);
+		}, 3000);
+
 	}
 
 </script>

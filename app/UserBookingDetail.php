@@ -37,6 +37,14 @@ class UserBookingDetail extends Model
 
      */
 
+    protected $appends = ['last_attended'];
+
+
+    public function getLastAttendedAttribute(){
+        $checkIn = $this->BookingCheckinDetails()->latest()->first();
+        return ($checkIn != '') ? date('m/d/Y',strtotime(@$checkIn->checkin_date)) : 'N/A';
+    }
+
     public function getBookingCheckinDetails(){
        $data = BookingCheckinDetails::where('booking_detail_id',$this->id)->whereMonth('checked_at', date('m'))->first();
        return @$data->checked_at;

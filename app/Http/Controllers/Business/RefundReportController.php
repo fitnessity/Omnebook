@@ -48,7 +48,7 @@ class RefundReportController extends BusinessBaseController
         $bookings = $this->RawQueryFunction($business_id , $request->startDate , $request->endDate)->get();
         $type = $request->type;
         if($type == 'excel'){
-            return Excel::download(new ExportTodayBooking($bookings), 'Refund-Membership.xlsx');
+            return Excel::download(new ExportTodayBooking($bookings,''), 'Refund-Membership.xlsx');
         }elseif($type == 'pdf'){
             $data = [
                 'bookings'=>$bookings,

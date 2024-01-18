@@ -91,7 +91,7 @@
 														</div>
 														<div class="row justify-content-md-center">
 															<div class="col-lg-6">
-																<a class="btn btn-black w-100 mb-25" data-behavior="on_change_submit" id="generateReport"> Generate Reports </a>
+																<button type="button" class="btn btn-black w-100 mb-25" data-behavior="on_change_submit" id="generateReport"> Generate Reports </button>
 															</div>
 														</div>
 													</form>
@@ -116,7 +116,6 @@
 																	<option value="">Show All</option>
 																	<option value="category" {{request()->filterOptions == 'category' ? 'selected' : ''}}>Booking By Category</option>
 																	<option value="service" {{request()->filterOptions == 'service' ? 'selected' : ''}}>Booking By Service</option>
-																	<option value="priceOption" {{request()->filterOptions == 'priceOption' ? 'selected' : ''}}>Booking By Price Option</option>
 																</select>
 															</div>
 														</div>
@@ -138,7 +137,7 @@
 																	<option value="pdf">Export to PDF</option>
 																</select>
 															</div>
-															<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();">Go!</button>
+															<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();"id="go_btn"> Go!</button>
 														</div>
 													</div>
 												</div>
@@ -153,6 +152,9 @@
 								@php 
 									$bookingData = clone $bookings; // Create a fresh copy of the query
 					        		$bookingData = $bookingData->whereDate('terminated_at',$date->format('Y-m-d'))->get();
+					        		$bookingData = $bookingData->filter(function ($item) {
+						            return $item->business_price_detail_with_trashed && $item->business_price_detail_with_trashed->business_price_details_ages_with_trashed  && $item->Customer && $item->business_services_with_trashed ;
+						         });
 								@endphp
 								@if($bookingData->isNotEmpty())
 									<div class="col-xl-12">
@@ -167,9 +169,6 @@
 														@if(request()->filterOptions == 'service')
 															@php
 																$bookingService = [];
-																$bookingData = $bookingData->filter(function ($item) {
-													            return $item->business_services_with_trashed;
-													         });
 																foreach ($bookingData as $key => $dt){
 	                                        			$bookingService[$dt->business_services_with_trashed->program_name][] = $dt;
 												          	}
@@ -179,11 +178,11 @@
 												         	@foreach($bookingService as $i=>$data)
 												         	<div class="accordion-item shadow">
 	                                                <h2 class="accordion-header" id="headingS{{$counter}}{{$y}}">
-	                                                   <button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#collapseS{{$counter}}{{$y}}" aria-expanded="false" aria-controls="collapseS{{$counter}}{{$y}}">{{$i}}</button>
+	                                                   <button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#collapseS{{$counter}}{{$y}}" aria-expanded="false" aria-controls="collapseS{{$counter}}{{$y}}">{{$i}} ({{count($data)}})</button>
 	                                                </h2>
 	                                                <div id="collapseS{{$counter}}{{$y}}" class="accordion-collapse collapse buttonaccodiandiv" aria-labelledby="headingS{{$counter}}{{$y}}" data-bs-parent="#default-accordion-example">
 	                                                   <div class="accordion-body">
-	                                                   	@include('business.reports.booking.booking_detail',['bookDetails' =>$data,'dateKey' =>$y ,'loopkey'=>$counter])
+	                                                   	@include('business.reports.membership.table_data',['bookDetails' =>$data, 'business_id' => request()->business_id])
 	                                                   </div>
 	                                                </div>
 	                                             </div>
@@ -193,9 +192,6 @@
 	                                       @elseif(request()->filterOptions == 'category')
 															@php
 																$bookingCategory = [];
-																$bookingData = $bookingData->filter(function ($item) {
-													            return $item->business_price_detail_with_trashed && $item->business_price_detail_with_trashed->business_price_details_ages_with_trashed;
-													         });
 																foreach ($bookingData as $key => $dt){
 	                                        			$bookingCategory[$dt->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title][] = $dt;
 												          	}
@@ -205,23 +201,20 @@
 												         	@foreach($bookingCategory as $i=>$data)
 												         	<div class="accordion-item shadow">
 	                                                <h2 class="accordion-header" id="headingC{{$counter}}{{$y}}">
-	                                                   <button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#collapseC{{$counter}}{{$y}}" aria-expanded="false" aria-controls="collapseC{{$counter}}{{$y}}">{{$i}}</button>
+	                                                   <button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#collapseC{{$counter}}{{$y}}" aria-expanded="false" aria-controls="collapseC{{$counter}}{{$y}}">{{$i}} ({{count($data)}})</button>
 	                                                </h2>
 	                                                <div id="collapseC{{$counter}}{{$y}}" class="accordion-collapse collapse buttonaccodiandiv" aria-labelledby="headingC{{$counter}}{{$y}}" data-bs-parent="#default-accordion-example">
 	                                                   <div class="accordion-body">
-	                                                   	@include('business.reports.booking.booking_detail',['bookDetails' =>$data,'dateKey' =>$y ,'loopkey'=>$counter])
+	                                                   	@include('business.reports.membership.table_data',['bookDetails' =>$data, 'business_id' => request()->business_id])
 	                                                   </div>
 	                                                </div>
 	                                             </div>
 	                                             @php $counter++; @endphp
 	                                             @endforeach
 	                                          @endif
-	                                       @elseif(request()->filterOptions == 'priceOption')
+	                                       @else
 															@php
 																$bookingPriceOption = [];
-																$bookingData = $bookingData->filter(function ($item) {
-													            return $item->business_price_detail_with_trashed;
-													         });
 																foreach ($bookingData as $key => $dt){
 	                                        			$bookingPriceOption[$dt->business_price_detail_with_trashed->price_title][] = $dt;
 												          	}
@@ -231,20 +224,17 @@
 												         	@foreach($bookingPriceOption as $i=>$data)
 												         	<div class="accordion-item shadow">
 	                                                <h2 class="accordion-header" id="headingOP{{$counter}}{{$y}}">
-	                                                   <button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOP{{$counter}}{{$y}}" aria-expanded="false" aria-controls="collapseOP{{$counter}}{{$y}}">{{$i}}</button>
+	                                                   <button class="accordion-button collapsed buttonaccodian" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOP{{$counter}}{{$y}}" aria-expanded="false" aria-controls="collapseOP{{$counter}}{{$y}}">{{$i}} ({{count($data)}})</button>
 	                                                </h2>
 	                                                <div id="collapseOP{{$counter}}{{$y}}" class="accordion-collapse collapse buttonaccodiandiv" aria-labelledby="headingOP{{$counter}}{{$y}}" data-bs-parent="#default-accordion-example">
 	                                                   <div class="accordion-body">
-	                                                   	@include('business.reports.booking.booking_detail',['bookDetails' =>$data,'dateKey' =>$y ,'loopkey'=>$counter])
+	                                                   	@include('business.reports.membership.table_data',['bookDetails' =>$data, 'business_id' => request()->business_id])
 	                                                   </div>
 	                                                </div>
 	                                             </div>
 	                                             @php $counter++; @endphp
 	                                             @endforeach
 	                                          @endif
-														@else
-															@php $displayChk = 0; @endphp
-															@include('business.reports.booking.booking_detail',['bookDetails' =>$bookingData,'dateKey' =>$y])
 														@endif
 													</div>
 												</div>
@@ -276,6 +266,6 @@
 	
 @php $downloadUrl = route("business.active-membership.export"); @endphp
 
-@include('business.reports.membership.membership_script',['filterStartDate'=>$filterStartDate ,'filterEndDate' =>$filterEndDate ,'page' => 'terminate' ,'excelFileName' =>'Terminate-Membership.xlsx','pdfFileName' =>'Terminate-Membership.pdf' ,'downloadUrl' =>$downloadUrl ])
+@include('business.reports.script',['filterStartDate'=>$filterStartDate ,'filterEndDate' =>$filterEndDate ,'page' => 'terminate' ,'excelFileName' =>'Terminate-Membership.xlsx','pdfFileName' =>'Terminate-Membership.pdf' ,'downloadUrl' =>$downloadUrl ])
 
 @endsection

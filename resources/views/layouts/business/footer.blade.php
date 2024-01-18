@@ -348,7 +348,8 @@
 	 
 	 <!-- fgEmojiPicker js -->
 	 <script src="{{asset('/public/dashboard-design/js/fgEmojiPicker.js')}}"></script>
-	
+	 <script src="{{asset('/public/dashboard-design/js/emojionearea.js')}}"></script>
+
 	<!-- chat init js -->
 	<script src="{{asset('/public/dashboard-design/js/chat.init.js')}}"></script>
 	<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>

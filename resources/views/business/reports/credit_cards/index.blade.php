@@ -65,7 +65,7 @@
 															<div class="col-lg-7 col-md-8 col-sm-8">
 																<div class="form-group mb-10">	
 																	<div class="input-group">
-																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="startDate" id="startDate"  readonly="readonly" placeholder="StartDate" value="">
+																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="startDate" id="startDate"  readonly="readonly" placeholder="StartDate" value="{{date('Y-m-01')}}">
 																		<div class="input-group-text bg-primary border-primary text-white">
 																			<i class="ri-calendar-2-line"></i>
 																		</div>
@@ -80,7 +80,7 @@
 															<div class="col-lg-7 col-md-8 col-sm-8">
 																<div class="form-group mb-25">	
 																	<div class="input-group">
-																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="endDate" id="endDate"  readonly="readonly" value="" placeholder="EndDate">
+																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="endDate" id="endDate"  readonly="readonly" value="{{date('Y-m-t')}}" placeholder="EndDate">
 																		<div class="input-group-text bg-primary border-primary text-white">
 																			<i class="ri-calendar-2-line"></i>
 																		</div>
@@ -96,7 +96,7 @@
 														
 														<div class="row justify-content-md-center">
 															<div class="col-lg-6">
-																<a class="btn btn-black w-100 mb-25" data-behavior="on_change_submit"> Generate Reports </a>
+																<button type="button" class="btn btn-black w-100 mb-25" data-behavior="on_change_submit" id="generate_btn"> Generate Reports </button>
 															</div>
 														</div>
 													</form>
@@ -124,7 +124,7 @@
 																	<option value="pdf">Export to PDF</option>
 																</select>
 															</div>
-															<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();">Go!</button>
+															<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();"id="go_btn"> Go!</button>
 														</div>
 													</div>
 												</div>
@@ -253,6 +253,8 @@
 	});
 
 	$(document).on('click', '[data-behavior~=on_change_submit]', function(e){
+		$('#generate_btn').html('Loading..');
+		$("#generate_btn").prop("disabled", true);
 		const sdate = formatDate($('#startDate').val());
 		const edate = formatDate($('#endDate').val());
 		if(sdate && edate){
@@ -267,6 +269,9 @@
 		}else{
 			alert('Please Select Date Range.');
 		}
+
+		$('#generate_btn').html('Generate Reports'); 
+		$("#generate_btn").prop("disabled", false);
 	});
 
 	function formatDate(dateString) {
@@ -276,6 +281,7 @@
 	}
 
 	function exportData(){
+		
 		$('#todaydaysbtn, #30daysbtn').removeClass('collapsed');
 		$('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30').removeClass('scroll-customer');
 		$('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30').addClass('show');
@@ -285,19 +291,21 @@
 		let startDate = $('#startDate').val();
 		let endDate = $('#endDate').val();
 		var type = $('#exportOptions').val();
-      	var filename =  '';
-
+		if(type){
+			$('#go_btn').html('Loading..'); 
+			$("#go_btn").prop("disabled", true);
+		}
+      var filename =  '';
 		if(type != '' && type != 'print'){
-
-			var downloadUrl = '{{ route("business.member_expirations.export") }}' +
+			var downloadUrl = '{{ route("business.credit_card_report.export") }}' +
 	        '?endDate=' + endDate +
 	        '&startDate=' + startDate +
 	        '&type=' + type;
 
 	    	if(type == 'excel'){
-	    		filename = 'membership.xlsx';
+	    		filename = 'Credit-Card.xlsx';
 	    	}else if(type == 'pdf'){
-	    		filename = 'sample.pdf';
+	    		filename = 'Credit-Card.pdf';
 	    	}
 	
 	    	var link = document.createElement('a');
@@ -317,6 +325,11 @@
 				$('#accor_nestingExamplecollapsetoday, #accor_nestingExamplecollapse30').removeClass('show');
 			}, 2000);
 		}
+
+		setTimeout(function() {
+				$('#go_btn').html('Go!'); 
+				$("#go_btn").prop("disabled", false);
+		}, 3000);
 	}
 
 </script>

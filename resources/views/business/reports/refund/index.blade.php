@@ -91,7 +91,7 @@
 													</div>
 													<div class="row justify-content-md-center">
 														<div class="col-lg-6">
-															<a class="btn btn-black w-100 mb-25" data-behavior="on_change_submit" id="generateReport"> Generate Reports </a>
+															<button type="button" class="btn btn-black w-100 mb-25" data-behavior="on_change_submit" id="generateReport"> Generate Reports </button>
 														</div>
 													</div>
 												</form>
@@ -138,7 +138,7 @@
 																<option value="pdf">Export to PDF</option>
 															</select>
 														</div>
-														<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();">Go!</button>
+														<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();" id="go_btn">Go!</button>
 													</div>
 												</div>
 											</div>
@@ -276,6 +276,6 @@
 	
 @php $downloadUrl = route("business.refund.export"); @endphp
 
-@include('business.reports.membership.membership_script',['filterStartDate'=>$filterStartDate ,'filterEndDate' =>$filterEndDate ,'page' => 'refund','excelFileName' =>'membership.xlsx','pdfFileName' =>'membership.pdf' ,'downloadUrl' =>$downloadUrl ])
+@include('business.reports.script',['filterStartDate'=>$filterStartDate ,'filterEndDate' =>$filterEndDate ,'page' => 'refund','excelFileName' =>'membership.xlsx','pdfFileName' =>'membership.pdf' ,'downloadUrl' =>$downloadUrl ])
 
 @endsection
