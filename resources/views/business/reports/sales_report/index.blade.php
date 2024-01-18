@@ -161,7 +161,7 @@
 					        $cardDetails2 = clone $cardReportubs; // Create a fresh copy of the query
 					        $cardDetails2 = $cardDetails2->whereDate('transaction.created_at','=', $date->format('Y-m-d'));
 
-					        $cardDetails = $cardDetails1->get()->merge($cardDetails2->get());
+					        $cardDetails = $cardDetails1->get()->concat($cardDetails2->get());
 					       
 					        $cashData = clone $cashReport; // Create a fresh copy of the query
 					        $cashData = $cashData->whereDate('transaction.created_at','=', $date->format('Y-m-d'))->get();
