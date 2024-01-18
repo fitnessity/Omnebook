@@ -20,9 +20,21 @@ class Transaction extends Model
         'user_type', 'user_id', 'item_type','item_id', 'channel','kind','transaction_id','amount','qty','status','refund_amount','payload','stripe_payment_method_id'
     ];
 
+     protected $appends = ['customer_id'];
+
     /**
      * Get the user that owns the task.
      */
+
+    public function getCustomerIdAttribute()
+    {
+        if($this->user_type == 'user'){
+            $customer = Customer::where('user_id' ,$this->user_id)->first();
+            return @$customer->id;
+        }else{
+            return $this->user_id;
+        }
+    }
 
     public function User(){
         return $this->belongsTo(User::class,'user_id');
@@ -135,6 +147,38 @@ class Transaction extends Model
         
         $arry = array("qty"=>$qty,"itemDescription"=>$itemDescription,"itemPrice"=> $itemPrice ?? 0,"itemSubTotal"=> $itemSubTotal ?? 0,"itemDis"=> $itemDis ?? 0,"itemTax"=> $itemTax ?? 0,"location"=> $location  ?? 'N/A',"totalTax"=> $totalTax ?? 0, "totalDis"=> $totalDis ?? 0,"totalPaid"=> $totalPaid  ?? 0,'notes'=>$notes ,'customer' => $customer);
         return $arry;
+    }
+
+    public function getBookingStatus(){
+        $status = '';
+        if($this->item_type == 'UserBookingStatus'){
+            if($this->userBookingStatus != ''){
+                if(!empty($this->userBookingStatus->UserBookingDetail)){
+                    foreach($this->userBookingStatus->UserBookingDetail as $key => $bd){
+                        $status .= (count($this->userBookingStatus->UserBookingDetail) >1) ? ($key+1).'. ' : '';
+                        $status .= $this->getStatus($bd->status).'<br>';
+                    }
+                }
+            }
+            return $status ?? "N/A";
+        }else if ($this->item_type == 'Recurring') {
+            if($this->Recurring->UserBookingDetail){
+                $bd = $this->Recurring->UserBookingDetail;
+                return $this->getStatus($bd->status);
+            }
+        }
+    }
+
+    public function getStatus($name){
+        if($name == 'void'){
+            return 'Suspended';
+        }else if($name == 'refund'){
+            return 'Refunded';
+        }else if($name == 'terminate' || $name == 'cancel'){
+            return 'Terminated';
+        }else {
+            return 'Successful';
+        }
     }
 
     public function getCustomer($business_id){

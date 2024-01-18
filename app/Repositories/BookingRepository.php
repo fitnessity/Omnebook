@@ -132,7 +132,9 @@ class BookingRepository
     } 
 
     public function otherTab($serviceType,$business_id,$customer){
-        $checkInDetail = BookingCheckinDetails::where('customer_id',@$customer->id)->orWhere('booked_by_customer_id',@$customer->id)->get();
+        $checkInDetail = BookingCheckinDetails::where('customer_id',@$customer->id)
+        //->orWhere('booked_by_customer_id',@$customer->id)
+        ->get();
         return $checkInDetail;
     }
 
@@ -192,7 +194,7 @@ class BookingRepository
                     $userBookinDetail = $userBookinDetail->whereRaw('(expired_at < now())');
                 }
             }else{
-                $userBookinDetail =  UserBookingDetail::join('business_services as bs', 'user_booking_details.sport', '=', 'bs.id')->where('bs.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id)->select('user_booking_details.*','bs.id as activity_id','bs.service_type');
+                $userBookinDetail =  UserBookingDetail::where('user_booking_details.user_id' ,'!=' , '')->join('business_services as bs', 'user_booking_details.sport', '=', 'bs.id')->where('bs.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id)->select('user_booking_details.*','bs.id as activity_id','bs.service_type');
                 if($chkVal == 'past'){
                     $userBookinDetail = $userBookinDetail->whereRaw('(user_booking_details.expired_at < now())');
                 }

@@ -27,38 +27,43 @@
 									<p>Select a provider to make reservation, view your bookings and memberships, payment history, news and more.</p>
 								</div>
 								<div class="row">
-									@forelse($business as $bs)
-									<div class="col-lg-4 col-md-6 col-sm-6 col-12">
-										<div class="card-body purchase-history mt-5 body-bg-gradient">
-											<div class="d-flex flex-column h-100">
-												<div class="d-flex mb-2">
-													<div class="flex-grow-1 text-center">
-														<h5 class="mb-1 fs-15"><a href="#" class="text-red fs-18">{{ $bs->public_company_name}}</a></h5>
-														<div class="d-grid booking-activity">
-															<span> Active Memberships: {{$bs->completed_memberships_count_by_user_id()}}</span>
-															<span> Completed Memberships: {{$bs->completed_memberships_count_by_user_id()}}</span>
-															<span> Expiring Memberships: {{$bs->expired_soon_memberships_count_by_user_id()}}</span>
-															<span> Attenance: {{$bs->visits_count_by_user_id()}} </span>
-															<span> Notes & Alerts: 0</span>
+									@if(!empty($business))
+										@foreach($business as $bs)
+											@php 
+												$customer = ($bs->customers->isNotEmpty()) ? $bs->customers->where('user_id', $id)->first() : null;
+												$customerId = ($customer) ? $customer->id : '' ;
+											@endphp
+											<div class="col-lg-4 col-md-6 col-sm-6 col-12">
+												<div class="card-body purchase-history mt-5 body-bg-gradient">
+													<div class="d-flex flex-column h-100">
+														<div class="d-flex mb-2">
+															<div class="flex-grow-1 text-center">
+																<h5 class="mb-1 fs-15"><a href="#" class="text-red fs-18">{{ $bs->public_company_name}}</a></h5>
+																<div class="d-grid booking-activity">
+																	<span> Active Memberships: {{$bs->active_memberships_count_by_user_id(@$customerId)}}</span>
+																	<span> Completed Memberships: {{$bs->completed_memberships_count_by_user_id(@$customerId)}}</span>
+																	<span> Expiring Memberships: {{$bs->expired_soon_memberships_count_by_user_id(@$customerId)}}</span>
+																	<span> Attenance: {{$bs->visits_count_by_user_id(@$customerId)}} </span>
+																	<span> Notes & Alerts: {{$bs->notes_count_by_user_id(@$customerId)}} </span>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="text-right"></div>
+													<div class="card-footer bg-transparent border-top-dashed pt-8 footer-padding-remove">
+														<div class="d-flex align-items-center">
+															<div class="flex-grow-1 v-booking">
+																<button type="button" class="btn btn-red float-left" onClick="getInfo({{$bs->id}})">Contact Info</button> 
+															</div>
+															<div class="flex-shrink-0">
+																<a href="{{route('personal.dashboard' ,['business_id' => $bs->id,'customer_id' => request()->customer_id ,'type' => request()->type])}}" class="btn btn-red">Select</a>
+															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-											<div class="text-right"></div>
-											<div class="card-footer bg-transparent border-top-dashed pt-8 footer-padding-remove">
-												<div class="d-flex align-items-center">
-													<div class="flex-grow-1 v-booking">
-														<button type="button" class="btn btn-red float-left" onClick="getInfo({{$bs->id}})">Contact Info</button> 
-													</div>
-													<div class="flex-shrink-0">
-														<a href="{{request()->fullUrlWithQuery(['business_id' => $bs->id])}}" class="btn btn-red">Select</a>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									@empty
-									@endforelse
+										@endforeach
+									@endif
 								</div>
                             </div>							
 						</div>

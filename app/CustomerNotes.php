@@ -15,7 +15,7 @@ class CustomerNotes extends Model
     protected $appends = ['limit_note_character'];
 
     public function getLimitNoteCharacterAttribute(){
-        return Str::limit($this->note, 60, '...');
+        return Str::words($this->note, 4, '...');
     }
 
 	public function company() {

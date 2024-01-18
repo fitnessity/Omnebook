@@ -63,7 +63,7 @@
 							</div>
 						</div><!--end card-->
 
-						<div class="card">
+						<!-- <div class="card">
 							<div class="card-body">
 								<div class="d-flex align-items-center mb-4">
 									<div class="flex-grow-1">
@@ -104,7 +104,8 @@
 									<input type="text" class="form-control" id="facebook" placeholder="Facebook" value="{{$user->facebook}}">
 								</div>
 							</div>
-						</div><!--end card-->
+						</div> -->
+						<!--end card-->
 					</div><!--end col-->
 
 					

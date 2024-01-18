@@ -16,20 +16,30 @@
 							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting2Examplecollapse{{$accId}}_{{$tabName}}_{{$y}}" aria-expanded="true" aria-controls="accor_nesting2Examplecollapse{{$accId}}_{{$tabName}}_{{$y}}">
 								<div class="container-fluid nopadding">
 									<div class="row y-middle">
-										<div class="col-lg-9 col-md-6 col-12 mobile0view-flex">
+										<div class="col-lg-9 col-md-6 col-12 mobile0view-flex y-middle">
 											<div class="d-inline-block">
 												<img src="@if(Storage::disk('s3')->exists(@$bs->business_services_with_trashed->first_profile_pic())) {{ Storage::url($bs->business_services_with_trashed->first_profile_pic()) }} @else {{ asset('/images/service-nofound.jpg')}} @endif" alt="" class="rounded avatar-sm shadow mr-5"> 
 											</div>
 											<div class="mx-line d-inline-block mmt-10">
-												<label class="mr-10-title">{{@$bs->business_services_with_trashed->program_name}}</label>
-												<label>Remaining: {{@$bs->getremainingsession()}}/{{@$bs['pay_session']}} |</label>
-												<label>Expiration: {{date('m/d/Y',strtotime(@$bs->expired_at))}}</label>
+												<div>
+													<label>{{@$bs->business_services_with_trashed->program_name}} |</label>
+													<label>Remaining: {{@$bs->getremainingsession()}}/{{@$bs->pay_session}} |</label>
+													<label>Expiration: {{date('m/d/Y',strtotime(@$bs->expired_at))}} |</label>
+												</div>
+												@if($tabName != 'current' && $tabName != 'past') 
+													<div>
+														@if(@$bs->getReserveData('reserve_date') != '—') 
+															<label>Reserved Date: {{@$bs->getReserveData('reserve_date')}}  | </label>
+															<label>Reserved Time: {{@$bs->getReserveData('reserve_time')}}  </label> 
+														@endif
+													</div>
+												@endif
 											</div>
 										</div>
 										<div class="col-lg-2 col-md-3 col-8">
 											@if($tabName != 'past')
 												<div class="mmt-10">
-													<a type="button" class="btn btn-red" onClick="redirectUrl(this.getAttribute('data-url'))" data-url="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' =>$bs['user_id'] ] )}}">Reserve Now</a>
+													<a type="button" class="btn btn-red" onClick="redirectUrl(this.getAttribute('data-url'))" data-url="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' =>$bs['user_id'] ] )}}"> @if($tabName != 'current') Reschedule @else Reserve Now @endif</a>
 
 													<!-- <a class="btn btn-red" href="#"  data-bs-toggle="modal" data-bs-target=".selectbooking">Reserve Now</a> -->
 												</div>		
@@ -44,8 +54,6 @@
 														<li>
 															<a class="openreceiptmodel set-file-icon" data-behavior="ajax_html_modal" data-url="{{url('/receiptmodel/'.$bs->id.'/'.$bs->user_id.'/booking')}}" data-item-type="Membership" data-modal-width="modal-70"><i class="ffas fa-plus text-muted" aria-hidden="true"></i>Receipt </a>
 														</li>
-														<!-- <li class="dropdown-divider"></li>
-														<li><a href=""><i class="ri-delete-bin-fill align-bottom text-muted"></i>Delete</a></li> -->
 													</ul>
 												</div>
 											</div>

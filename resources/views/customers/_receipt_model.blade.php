@@ -211,15 +211,17 @@
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="text-left space-bottom">
-                            <label class="highlight-fonts">PRICE:</label>
+                            <label>PRICE:</label>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span class="highlight-fonts">${{$orderDetail->total()}}</span>
+                            <span>${{$orderDetail->total()}}</span>
                         </div>
                     </div>
-                    
+                    @if (!$loop->last)
+                        <div class="main-separator mb-10"></div>
+                    @endif
                     <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="text-left space-bottom">
                             <label class="highlight-fonts">TOTAL:</label>
@@ -241,12 +243,12 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class=" text-left">
-                        <label class="highlight-fonts">PAYMENT METHOD</label>
+                        <label class="font-red">PAYMENT METHOD</label>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">{{ $orderDetail->userBookingStatus->getPaymentDetail()}}</span>
+                        <span class="font-red">{{ $orderDetail->userBookingStatus->getPaymentDetail()}}</span>
                     </div>
                 </div>
             </div>
@@ -256,12 +258,12 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class=" text-left">
-                        <label class="highlight-fonts">TIP AMOUNT</label>
+                        <label class="font-red">TIP AMOUNT</label>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">$ {{$totTip}}</span>
+                        <span class="font-red">$ {{$totTip}}</span>
                     </div>
                 </div>
             </div>
@@ -271,12 +273,12 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class=" text-left">
-                        <label class="highlight-fonts">DISCOUNT</label>
+                        <label class="font-red">DISCOUNT</label>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">$ {{$totDis}} </span>
+                        <span class="font-red">$ {{$totDis}} </span>
                     </div>
                 </div>
             </div>
@@ -286,12 +288,12 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class=" text-left">
-                        <label class="highlight-fonts">TAXES AND FEES</label>
+                        <label class="font-red">TAXES AND FEES</label>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">$ {{$totalTax}}</span>
+                        <span class="font-red">$ {{$totalTax}}</span>
                     </div>
                 </div>
             </div>
@@ -302,12 +304,12 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class=" text-left">
-                        <label class="highlight-fonts">TOTAL AMOUNT PAID</label>
+                        <label class="font-red">TOTAL AMOUNT PAID</label>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                     <div class="float-end line-break text-right">
-                        <span class="highlight-fonts">${{@$grandTotal}}</span>
+                        <span class="font-red">${{@$grandTotal}}</span>
                     </div>
                 </div>
             </div>  

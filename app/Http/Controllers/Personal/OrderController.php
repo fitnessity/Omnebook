@@ -188,6 +188,5 @@ class OrderController extends PersonalBaseController
                 return Redirect()->route('personal.orders.index',['business_id'=>$request->business_id ]);
             }
         }
-
     }
 }

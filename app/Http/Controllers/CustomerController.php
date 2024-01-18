@@ -718,7 +718,6 @@ class CustomerController extends Controller {
     public function receiptmodel($orderId,$customer,$isFrom = null){
         $customerData = Customer::where('id',$customer)->first();
         $transaction = Transaction::where('item_id',$orderId)->first();
-
         if(!$isFrom){
             if(@$transaction->item_type == 'UserBookingStatus'){
                 $oid = $orderId;
@@ -811,7 +810,7 @@ class CustomerController extends Controller {
 
     public function uploadDocsName(Request $request){
         //print_r($request->all());exit;
-        $document = CustomersDocuments::find($request->docId);
+        /*$document = CustomersDocuments::find($request->docId);
         if(!empty($request->docName)){
             for($i=0; $i< count($request->docName);$i++){
                 if($request->docName[$i] != ''){
@@ -840,25 +839,52 @@ class CustomerController extends Controller {
                 }
             }
         }
-
-
         if(!empty($request->deletIds)){
             CustomerDocumentsRequested::whereIn('id', $request->deletIds)->delete();
-        }   
-        
+        } */  
+
+        $customer = Customer::find($request->customerId);
+        $document = CustomersDocuments::create([
+            'user_id' => Auth::user()->id, 
+            'staff_id' => session('StaffLogin') ?? '', 
+            'business_id' => $customer->business_id,
+            'customer_id' => $request->customerId,
+            'title' => $request->title,
+            'doc_requested_date' => date('Y-m-d'),
+        ]);
+
+        if(!empty($request->docName)){
+            for($i=0; $i< count($request->docName);$i++){
+                if($request->docName[$i] != ''){
+                    $data = CustomerDocumentsRequested::Create([
+                            'user_id' => @$document->user_id,
+                            'business_id' => @$document->business_id,
+                            'customer_id' => @$document->customer_id,
+                            'doc_id' => $document->id,
+                            'content' => $request->docName[$i],
+                        ]
+                    ); 
+
+                    Notification::Create([
+                        'user_id' => $document->user_id , 'customer_id' => $document->customer_id , 'display_date' => date('Y-m-d') , 'table_id' => $data->id , 'table' => 'CustomerDocumentsRequested',  'display_time' =>date('H:i'), 'business_id' => $document->business_id,'type' => 'personal','status'=>'Alert'
+                    ]); 
+                    
+                }
+            }
+        }
 
         $request->session()->flash('success', 'Documents Content Added successfully.');
         return redirect()->route('business_customer_show',['business_id'=>@$document->business_id ,'id'=> @$document->customer_id]);
     }
 
-    public function docContent($id){
-        $content = CustomerDocumentsRequested::where('doc_id',$id)->get();
-        return view('customers.documents_contents',compact('content','id'))->render();
+    public function docContent($customerId){
+        //$content = CustomerDocumentsRequested::where('doc_id',$id)->get();
+        return view('customers.documents_contents',compact('customerId'))->render();
     }
 
     public function requestSign($business_id,$id){
         $document = CustomersDocuments::find($id);
-        $document->update(['status' =>1]);
+        $document->update(['status' =>1 ,'sign_requested_date' => date('Y-m-d')]);
 
         Notification::create([
             'user_id' => Auth::user()->id,
@@ -905,6 +931,7 @@ class CustomerController extends Controller {
                 'user_id' => Auth::user()->id, 
                 'business_id' => $business_id,
                 'customer_id' => $request->cid,
+                'title' => $request->title,
                 'note' => $request->notes,
                 'due_date' => $request->due_date,
                 'time' => $request->time,
