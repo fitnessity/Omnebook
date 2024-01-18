@@ -49,7 +49,7 @@
 								</thead>
 								<tbody>
 									<tr>
-										<td><p class="mb-0 {{ $customer->is_active() == 0 ? 'font-red' : 'font-green'}}">{{ $customer->is_active() == 0 ? "InActive" : "Active"}}</p>
+										<td><p class="mb-0 {{ $customer->is_active() == 'InActive' ? 'font-red' : 'font-green'}}">{{ $customer->is_active()}}</p>
 										</td>
 										<td>
 											<p class="mb-0">{{$customer->active_memberships()->get()->count()}}</p>

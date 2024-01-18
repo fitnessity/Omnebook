@@ -5,7 +5,7 @@ namespace App;
 
 
 use App\{User,SGMailService};
-use Auth;
+use Auth,Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -36,6 +36,14 @@ class UserBookingDetail extends Model
      * Get the user that owns the education.
 
      */
+
+    protected $appends = ['last_attended'];
+
+
+    public function getLastAttendedAttribute(){
+        $checkIn = $this->BookingCheckinDetails()->latest()->first();
+        return ($checkIn != '') ? date('m/d/Y',strtotime(@$checkIn->checkin_date)) : 'N/A';
+    }
 
     public function getBookingCheckinDetails(){
        $data = BookingCheckinDetails::where('booking_detail_id',$this->id)->whereMonth('checked_at', date('m'))->first();
@@ -104,6 +112,14 @@ class UserBookingDetail extends Model
 
     public function provider_get_total(){
         return $this->total() - $this->platform_total();
+    }
+
+    public function getActivityPic(){
+        if(Storage::disk('s3')->exists($this->business_services_with_trashed->first_profile_pic())) {
+            return Storage::url($this->business_services_with_trashed->first_profile_pic()); 
+        }else {
+            return env('APP_URL').'/images/service-nofound.jpg';
+        } 
     }
 
     public function userBookingDetailQty(){
@@ -292,25 +308,24 @@ class UserBookingDetail extends Model
     public function getReserveData($feildName)
     {
         $reserve_data = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->orderBy('checkin_date','desc')->first();
-        $reserve_date = $reserve_time = $check_in_time ="—";
         if($reserve_data != ''){
             $start = date('h:i A', strtotime(@$reserve_data->scheduler->shift_start));
             $end = date('h:i A', strtotime(@$reserve_data->scheduler->shift_end));
             if($reserve_data->checkin_date != '')
-                $reserve_date = date('m-d-Y',strtotime($reserve_data->checkin_date));
+                $reserve_date = date('m/d/Y',strtotime($reserve_data->checkin_date));
             if($reserve_data->checked_at != '')
-                $check_in_time = date('m-d-Y',strtotime($reserve_data->checked_at));
+                $check_in_time = date('m/d/Y',strtotime($reserve_data->checked_at));
             $reserve_time = $start .' to '.$end;
         }
 
         if($feildName == 'reserve_date'){
-            return $reserve_date;
+            return $reserve_date ?? "N/A";
         }
         if($feildName == 'check_in_time'){
-            return $check_in_time;
+            return $check_in_time ?? "N/A";
         }
         if($feildName == 'reserve_time'){
-            return $reserve_time;
+            return $reserve_time ?? "N/A";
         }
         
     }
@@ -402,7 +417,7 @@ class UserBookingDetail extends Model
                 "ProgramName"=> @$business_services->program_name,
                 "CategoryName"=> @$business_price_details_ages->category_title,
                 "PriceOptionName"=> @$business_price_detail->price_title,
-                "ExpirationDate"=> date('m-d-Y' ,strtotime($this->expired_at)),
+                "ExpirationDate"=> date('m/d/Y' ,strtotime($this->expired_at)),
                 "ProviderPhoneNumber"=> $company->business_phone,
                 "ProviderEmail"=> $company->business_email,
                 "ProviderAddress"=> $company->company_address(),
@@ -434,7 +449,7 @@ class UserBookingDetail extends Model
                 "ProgramName"=> $this->business_services->program_name,
                 "CategoryName"=> $business_price_details_ages->category_title,
                 "PriceOptionName"=> @$business_price_detail->price_title,
-                "ExpirationDate"=> date('m-d-Y' ,strtotime($this->expired_at)),
+                "ExpirationDate"=> date('m/d/Y' ,strtotime($this->expired_at)),
             );
 
             $email_detail_customer = array(
@@ -446,7 +461,7 @@ class UserBookingDetail extends Model
                 "ProgramName"=> $this->business_services->program_name,
                 "CategoryName"=> $business_price_details_ages->category_title,
                 "PriceOptionName"=> @$business_price_detail->price_title,
-                "ExpirationDate"=> date('m-d-Y' ,strtotime($this->expired_at)),
+                "ExpirationDate"=> date('m/d/Y' ,strtotime($this->expired_at)),
                 "ProviderPhoneNumber"=> $company->business_phone,
                 "ProviderEmail"=> $company->business_email,
                 "ProviderAddress"=> $company->company_address(),

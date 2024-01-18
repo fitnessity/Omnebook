@@ -36,16 +36,8 @@
 											</div>
                                      	</div>                                   	
 
-										
-
 										<div class="col-lg-3 col-md-6">
-											<div class="steps-title mmb-10">
-											<div class="mb-3">
-													<div class="form-check form-switch form-switch-dark form-check-right">
-                                                        <input class="form-check-input" type="checkbox" role="switch" id="SwitchCheck7" checked="">    
-														<label  class="form-check-label" for="SwitchCheck7">Auto Assign Initial Rank</label>                                                    
-                                                    </div>												
-												</div>
+											<div class="steps-title mmb-10">												
 												<div class="mb-3">
 													<label for="JoiningdatInput" class="form-label">Promotion Setting</label>
 													<select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
@@ -53,13 +45,19 @@
 														<option value="">Automatically Promotions</option>
 													</select>
 												</div>
+												<div class="mb-3">
+													<div class="form-check form-switch form-switch-dark form-check-right">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="SwitchCheck7" checked="">    
+														<label  class="form-check-label" for="SwitchCheck7">Auto Assign Initial Rank</label>                                                    
+                                                    </div>												
+												</div>
 											</div>
                                 		</div><!--end col-->
 
 										<div class="col-lg-3 col-md-6">
 											<div class="steps-title mmb-10">
 												<div class="mb-3">
-													<label for="JoiningdatInput" class="form-label">Promotion Type</label>
+													<label for="JoiningdatInput" class="form-label">Program Type</label>
 													<div class="row">
 														<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 															<div class="mb-25">
@@ -146,9 +144,18 @@
 				<div class="row">
 					<div class="col-xxl-12">
                 		<div class="card">
+							<div class="card-header align-items-center d-flex">
+                                <h4 class="card-title mb-0 flex-grow-1">Create/Edit Promotion Type</h4>
+                            </div>
+						
                         	<div class="card-body">
                         		<!-- Nav tabs -->
                         		<ul class="nav nav-tabs mb-3" role="tablist">
+									<li class="nav-item">
+                                    	<a class="nav-link" data-bs-toggle="tab" href="#Courses" role="tab" aria-selected="false">
+											Courses
+                                  		 </a>
+                               		</li>
                                 	<li class="nav-item">
                                     	<a class="nav-link active" data-bs-toggle="tab" href="#Ranks" role="tab" aria-selected="false">
 											Levels / Ranks
@@ -164,16 +171,23 @@
 											Certificates
                                    		</a>
                                 	</li>
+									<li class="nav-item">
+                                    	<a class="nav-link" data-bs-toggle="tab" href="#Awards" role="tab" aria-selected="false">
+											Awards
+                                   		</a>
+                                	</li>
                             	</ul>
                            		<!-- Tab panes -->
                             	<div class="tab-content  text-muted">
+									<div class="tab-pane" id="Courses" role="tabpanel">
+										
+                              		</div>
                                		<div class="tab-pane active" id="Ranks" role="tabpanel">
 									   <div class="">
 											<div class="card-header">
 												<!--<h4 class="card-title mb-0 flex-grow-1">Levels / Ranks</h4> -->
 												<div class="row">
 													<div class="col-lg-8">
-													<label class="font-black">Create/Edit Promotion Type</label>
 														<div class="row">
 															<div class="col-lg-3 col-md-6">
 																<div class="steps-title mmb-10">
@@ -500,6 +514,30 @@
 												<div class="col-lg-3">
 													<div class="mb-3">
 														<label for="firstnameInput" class="form-label">Upload Certificate</label>
+                                                   		<input class="form-control" type="file" id="formFile">                                                
+													</div>
+												</div>
+											</div>
+										<form> 
+                              		</div>
+									<div class="tab-pane" id="Awards" role="tabpanel">
+										<form action="javascript:void(0);">
+											<div class="row">
+												<div class="col-lg-3">
+													<div class="mb-3">
+														<label for="firstnameInput" class="form-label">Category</label>
+														<input type="text" class="form-control" value="Taekwondo">
+													</div>
+												</div>
+												<div class="col-lg-3">
+													<div class="mb-3">
+														<label for="firstnameInput" class="form-label">Awards Title</label>
+														<input type="text" class="form-control">
+													</div>
+												</div>
+												<div class="col-lg-3">
+													<div class="mb-3">
+														<label for="firstnameInput" class="form-label">Upload Awards</label>
                                                    		<input class="form-control" type="file" id="formFile">                                                
 													</div>
 												</div>

@@ -49,7 +49,8 @@
 													@for($asciiValue = ord('A'); $asciiValue <= ord('Z'); $asciiValue++)
 														<div class="accordion-item shadow">
 															<h2 class="accordion-header" id="accordionnestingExample{{chr($asciiValue)}}">
-																<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse{{chr($asciiValue)}}" aria-expanded="false" aria-controls="accor_nestingExamplecollapse{{chr($asciiValue)}}" onclick="getData('{{chr($asciiValue)}}')">{{chr($asciiValue)}}</button></h2>
+																<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse{{chr($asciiValue)}}" aria-expanded="false" aria-controls="accor_nestingExamplecollapse{{chr($asciiValue)}}" onclick="getData('{{chr($asciiValue)}}')">{{chr($asciiValue)}}</button>
+															</h2>
 															<div id="accor_nestingExamplecollapse{{chr($asciiValue)}}" class="accordion-collapse collapse scroll-customer" aria-labelledby="accordionnestingExample{{chr($asciiValue)}}" data-bs-parent="#accordionnesting">
 																<div class="accordion-body" id="targetDiv{{chr($asciiValue)}}"></div>
 															</div>
