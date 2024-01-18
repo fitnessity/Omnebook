@@ -26,13 +26,13 @@ class ExportCancellationNoShow implements FromCollection, WithHeadings
         $formattedData = [
             ['','Cancellation',''],
             [''],
-            [ 'Name', 'Membership Name', 'Check In Date' ,'Cancellation Action'],
+            [ 'Name', 'Membership Name', 'Check In Date' ,'Total Cancellation','Cancellation Action'],
             $this->transformData($this->cancel,'cancel') ?? "No Memberships To Display",
             [''],
             [''],
             ['','No-Show',''],
             [''],
-             [ 'Name', 'Membership Name', 'Check In Date' ],
+             [ 'Name', 'Membership Name', 'Check In Date' ,'Total No Show' ,''],
             $this->transformData($this->noShow,''),
         ];
 
@@ -52,7 +52,8 @@ class ExportCancellationNoShow implements FromCollection, WithHeadings
                 $item->customer->full_name,
                 $item->UserBookingDetail->business_services->program_name.' - '.$item->UserBookingDetail->business_price_detail->price_title,
                 $item->checkin_date ? date('m/d/Y', strtotime($item->checkin_date)) : '',
-                $type == 'cancel' ?  $item->cancel_term() (($item->no_show_action == 'charge_fee') ? ' Charge Fee '.$item->no_show_charged : '' ) : '',
+                $type == 'cancel' ?   $item->cancel_count : $item->noshow_count,
+                $type == 'cancel' ?  $item->cancel_term().' '.($item->no_show_action == 'charge_fee') ? ' Charge Fee '.$item->no_show_charged : ''  : '',
             ];
         })->toArray();
     }

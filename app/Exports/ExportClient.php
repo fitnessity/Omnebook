@@ -28,7 +28,7 @@ class ExportClient implements FromCollection, WithHeadings
         $formattedData = [
             ['',$this->heading,''],
             [''],
-            [ 'Company Name', 'Client Name', 'Email', 'Birth Date','Phone Number','Member Since'],
+            [ 'Company Name', 'Client Name', 'Email', 'Birth Date','Phone Number','Member Since' , ($this->clientsType == 'new' ? 'Status' :'')],
             $this->transformData($this->clients,$this->clientsType),
             [''],
         ];
@@ -44,7 +44,7 @@ class ExportClient implements FromCollection, WithHeadings
 
     private function transformData($data,$type)
     {
-        return collect($data)->map(function($item, $key) {
+        return collect($data)->map(function($item, $key) use($type){
             return [
                 @$item->company_name,
                 @$item->full_name,
@@ -52,6 +52,7 @@ class ExportClient implements FromCollection, WithHeadings
                 date('m/d/Y',strtotime(@$item->birthdate)),
                 @$item->phone_number ?? "N/A",
                 date('m/d/Y',strtotime(@$item->created_at)),
+                $type == 'new' ? ($item->is_active() == 'Active' ? 'Member' : $item->is_active): '',
             ];
         })->toArray();
     }

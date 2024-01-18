@@ -43,6 +43,9 @@
 														<div class="report-links">
 															<a href="{{route('business.recurring_payments.index')}}">Recurring Payments Details</a>
 														</div>
+														<div class="report-links">
+															<a href="{{route('business.money_owed.index')}}">Money Owed Details</a>
+														</div>
 														<!-- <div class="report-links">
 															<a href="#">Tax Reports</a>
 														</div> -->
@@ -168,7 +171,7 @@
 												<div class="card card-body box-border">
 													<div class="d-grid align-items-center">
 														<div class="report-links remove-border">
-															<a href="#">Online Reviews</a>
+															<a href="{{route('business.online-review.index')}}">Online Reviews</a>
 														</div>
 													</div>
 												</div>												

@@ -14,9 +14,11 @@ class ExportTodayBooking implements FromCollection, WithHeadings
     */
 
     protected $bookDetails;
+    protected $page;
 
-    function __construct($bookDetails) {
+    function __construct($bookDetails,$page) {
         $this->bookDetails = $bookDetails;
+        $this->page = $page;
     }
 
     public function collection()
@@ -25,8 +27,8 @@ class ExportTodayBooking implements FromCollection, WithHeadings
             [''],
             ['','','','','','','','Booking Information',''],
             [''],
-            [ 'BOOKING CONFIRMATION #', 'TOTAL PRICE', 'PRICE OPTION', 'PAYMENT TYPE','TOTAL REMAINING','PROGRAM NAME','EXPIRATION DATE','DATE BOOKED','RESERVED DATE','BOOKED BY','ACTIVITY TYPE','SERVICE TYPE','ACTIVITY LOCATION','ACTIVITY DURATION','GREAT FOR','PARTICIPANTS','WHO IS PARTICIPATING?','ADD-ON SERVICES'],
-            $this->transformData($this->bookDetails),
+            [ 'Client', 'Purchase Date', 'Expiration date', 'Purchase Amount','Status',(($this->page =='not_used') ?'Last Attended':'')],
+            $this->transformData($this->bookDetails,$this->page),
             [''],
         ];
 
@@ -39,28 +41,16 @@ class ExportTodayBooking implements FromCollection, WithHeadings
     }
 
 
-    private function transformData($data)
+    private function transformData($data,$page)
     {
-        return collect($data)->map(function($item, $key) {
+        return collect($data)->map(function($item, $key) use ($page){
             return [
-                @$item->booking->order_id,
-                @$item->booking->getPaymentDetail() != 'Comp' ? @$item->subtotal : 0,
-                @$item->business_price_detail_with_trashed->price_title.'-'.@$item->pay_session.' Sessions',
-                @$item->pay_session.' Sessions',
-                @$item->getremainingsession().'/'.@$item->pay_session,
-                @$item->business_services_with_trashed->program_name,
+                @$item->Customer->full_name,
+                date('m/d/Y',strtotime(@$item->contract_date)),
                 date('m/d/Y',strtotime(@$item->expired_at)),
-                date('m/d/Y',strtotime(@$item->created_at)),
-                @$item->getReserveData('reserve_date'),
-                @$item->booking->full_name,
-                @$item->business_services_with_trashed->sport_activity,
-                @$item->business_services_with_trashed->select_service_type ?? "N/A" ,
-                @$item->business_services_with_trashed->activity_location,
-                @$item->getReserveData('reserve_time'),
-                @$item->business_services_with_trashed->activity_for,
-                @$item->getparticipate(),
-                @$item->decodeparticipate(),
-                getAddonService(@$item->addOnservice_ids,@$item->addOnservice_qty),
+                $item->subtotal,
+                $item->status,
+                $page == 'not_used' ? $item->last_attended : '',
             ];
         })->toArray();
     }

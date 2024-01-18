@@ -43,7 +43,7 @@ class ActiveMembershipController extends BusinessBaseController
         $filterStartDate = $request->startDate != '' ? Carbon::parse($request->startDate) : Carbon::parse($this->firstDate);
         $filterEndDate = $request->endDate !=  '' ? Carbon::parse($request->endDate) : Carbon::parse($this->endDate);
         $sortedDates = $this->getDatesArray($request->startDate , $filterStartDate, $filterEndDate);
-        $bookings = $this->RawQueryFunction($business_id , $filterStartDate , $filterEndDate ,'expired_at');
+        $bookings = $this->RawQueryFunction($business_id , $filterStartDate , $filterEndDate ,'expired_at')->where('status' ,'Active');
     	return view('business.reports.membership.index',compact('bookings','filterStartDate','filterEndDate','sortedDates','displayChk'));
     }
 
@@ -78,10 +78,11 @@ class ActiveMembershipController extends BusinessBaseController
     }
 
     public function membershipPopular(Request $request,$business_id){
+        $displayChk = 1;
         $filterStartDate = $request->startDate != '' ? Carbon::parse($request->startDate) : Carbon::parse(date('Y-m-01'));
         $filterEndDate = $request->endDate !=  '' ? Carbon::parse($request->endDate) : Carbon::parse($this->endDate);
         $bookings = $this->RawQueryFunction($business_id , $filterStartDate , $filterEndDate ,'created_at')->get();
-        return view('business.reports.membership.membership_popular',compact('bookings','filterStartDate','filterEndDate'));
+        return view('business.reports.membership.membership_popular',compact('bookings','filterStartDate','filterEndDate','displayChk'));
     }
 
     public function export(Request $request,$business_id){
@@ -91,28 +92,50 @@ class ActiveMembershipController extends BusinessBaseController
             $oneMonthAgo = Carbon::parse($request->startDate)->subDays(30)->format('Y-m-d');
             $bookings = $bookings->join('booking_checkin_details as bcd' ,'bcd.booking_detail_id', '=' ,'user_booking_details.id')->select('user_booking_details.*')->where('bcd.checked_at', '<', $oneMonthAgo)->whereNotNull('bcd.checkin_date');
             $fileName = 'Not-Used-Membership';
+            $title = 'Not Used Membership Report';
         }elseif($request->page == 'terminate'){
-            $bookings = UserBookingDetail::where(['business_id'=> $business_id,'order_type'=>'Membership'])->orderBy('terminated_at','desc')->whereDate('terminated_at', '>=',  $request->startDate )->whereDate('terminated_at', '<=', $request->endDate)->where('status','terminate');
+            $bookings = $this->RawQueryFunction($business_id , $request->startDate , $request->endDate ,'terminated_at')->where('status','terminate');
             $fileName = 'Terminate-Membership';
+            $title = 'Terminate Membership Report';
         }elseif($request->page == 'paused'){
-            $bookings = UserBookingDetail::where(['business_id'=> $business_id,'order_type'=>'Membership'])->orderBy('suspend_started','desc')->whereDate('suspend_started', '>=', $request->startDate)->whereDate('suspend_started', '<=', $request->endDate)->where('status','suspend');
+            $bookings = $this->RawQueryFunction($business_id , $request->startDate , $request->endDate ,'suspend_started')->where('status','suspend');
             $fileName = 'Paused-Membership';
+            $title = 'Paused Membership Report';
         }elseif($request->page == 'popular'){
-            $bookings = UserBookingDetail::where(['business_id'=> $business_id,'order_type'=>'Membership'])->orderBy('priceid','desc')->whereDate('created_at', '>=', $request->startDate)->whereDate('created_at', '<=', $request->endDate);
+            $bookings = $this->RawQueryFunction($business_id , $request->startDate , $request->endDate ,'created_at');
             $fileName = 'Popular-Membership';
+            $title = 'Popular Membership Report';
         }else{
-             $fileName = 'Active-Membership';
+            $bookings = $bookings->where('status' ,'Active');
+            $fileName = 'Active-Membership';
+            $title = 'Active Membership Report';
         }
 
-        $bookings = $bookings->get();
+        $bookings = $bookings->get()->filter(function($item){
+            return $item->Customer;
+        });
         $type = $request->type;
         if($type == 'excel'){
-            return Excel::download(new ExportTodayBooking($bookings), $fileName.'.xlsx');
+            return Excel::download(new ExportTodayBooking($bookings,$request->page), $fileName.'.xlsx');
         }elseif($type == 'pdf'){
+
+            if($request->endDate && $request->startDate){
+                $ed = new DateTime($request->endDate);
+                $sd = new DateTime($request->startDate);
+                $dates = $sd->format('l, F j, Y').' to '.$ed->format('l, F j, Y');
+            }else{
+                $ed = new DateTime();
+                $dates = $ed->format('l, F j, Y');                
+            } 
+
             $data = [
                 'bookings'=>$bookings,
+                'page'=>$request->page,
+                'title'=>$title,
+                'dates'=>$dates,
+                'business_id'=>$business_id,
             ];
-            $pdf = PDF::loadView('business.reports.booking.pdf_view_booking', $data);
+            $pdf = PDF::loadView('business.reports.membership.pdf_view', $data);
             return $pdf->download($fileName.'.pdf');
         }
     }

@@ -27,6 +27,45 @@ class Recurring extends Authenticatable
      */
     protected $fillable = [ 'booking_detail_id', 'user_id', 'user_type', 'business_id', 'payment_date', 'amount', 'tax', 'charged_amount', 'payment_method', 'stripe_payment_id', 'status','transfer_provider_status','provider_amount','provider_transaction_id','attempt'];
 
+    protected $appends = ['total_amount' ,'card','customer_name' ,'customer_id','membership_name'];
+
+
+     public function getTotalAmountAttribute(){
+        return number_format($this->amount + $this->tax,2);
+    }
+
+    public function getCardAttribute(){
+        $transaction = Transaction::where(['item_id' => $this->id ,'item_type' => 'Recurring'])->first();
+        if($transaction){
+            $card = $transaction->getPmtMethod();
+        }
+        return $card ?? 'N/A';
+    }
+
+    public function getMembershipNameAttribute(){
+        return $this->UserBookingDetail->business_services_with_trashed->program_name.' ('.$this->UserBookingDetail->business_price_detail_with_trashed->price_title.')';
+    }
+
+    public function getCustomerNameAttribute(){
+        if($this->user_type == 'user'){
+            $user = User::find($this->user_id);
+            $customer = Customer::where(['user_id'=>@$user->user_id, 'email' => @$user->email])->first();
+            return @$customer->full_name;
+        }else{
+            $customer = Customer::find($this->user_id);
+            return @$customer->full_name;
+        }
+    }
+
+    public function getCustomerIdAttribute(){
+        if($this->user_type == 'user'){
+            $user = User::find($this->user_id);
+            $customer = Customer::where(['user_id'=>@$user->user_id, 'email' => @$user->email])->first();
+            return @$customer->id;
+        }else{
+            return $this->user_id;
+        }
+    }
 
     public function company_information(){
         return $this->belongsTo(CompanyInformation::class, 'business_id');

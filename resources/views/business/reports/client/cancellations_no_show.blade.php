@@ -33,7 +33,7 @@
 								</div>
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 									<div class="page-heading">
-										<label>Membership Expirations</label>
+										<label>Cancellations & No Shows</label>
 									</div>
 								</div><!--end col-->
 							</div><!--end row-->
@@ -90,7 +90,7 @@
 														</div>
 														<div class="row justify-content-md-center">
 															<div class="col-lg-6">
-																<a class="btn btn-black w-100 mb-25" data-behavior="on_change_submit"> Generate Reports </a>
+																<button type="button" class="btn btn-black w-100 mb-25" data-behavior="on_change_submit" id="generateReport"> Generate Reports </button>
 															</div>
 														</div>
 													</form>
@@ -118,7 +118,7 @@
 																	<option value="pdf">Export to PDF</option>
 																</select>
 															</div>
-															<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();">Go!</button>
+															<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();" id="go_btn">Go!</button>
 														</div>
 													</div>
 												</div>
@@ -198,6 +198,9 @@
          	$('#targetDiv'+type).html(response);
          }
 		});
+
+		$('#generateReport').html('Generate Reports'); 
+		$("#generateReport").prop("disabled", false);
 	}	
 
 	$(document).ready(function () {
@@ -248,6 +251,8 @@
 	});
 
 	$(document).on('click', '[data-behavior~=on_change_submit]', function(e){
+		$('#generateReport').html('Loading..');
+		$("#generateReport").prop("disabled", true);
 		const sdate = formatDate($('#startDate').val());
 		const edate = formatDate($('#endDate').val());
 		if(sdate && edate){
@@ -279,8 +284,12 @@
 		let startDate = $('#startDate').val();
 		let endDate = $('#endDate').val();
 		var type = $('#exportOptions').val();
-      var filename =  '';
+		if(type){
+			$('#go_btn').html('Loading..'); 
+			$("#go_btn").prop("disabled", true);
+		}
 
+      var filename =  '';
 		if(type != '' && type != 'print'){
 
 			var downloadUrl = '{{ route("business.cancellation.export") }}' +
@@ -311,6 +320,11 @@
 				$('#accor_nestingExamplecollapseCancellation, #accor_nestingExamplecollapseNoShow').removeClass('show');
 			}, 2000);
 		}
+
+		setTimeout(function() {
+				$('#go_btn').html('Go!'); 
+				$("#go_btn").prop("disabled", false);
+		}, 3000);
 	}
 
 </script>

@@ -103,7 +103,15 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/getMoreCards','CreditCardReportController@getMoreCards')->name('credit_card_report.getMoreCards');
     Route::get('/credit_cards/export','CreditCardReportController@export')->name('credit_card_report.export');
 
-     Route::get('/recurring-payments/','RecurringPaymentReportController@index')->name('recurring_payments.index');    
+    Route::get('/recurring-payments/','RecurringPaymentReportController@index')->name('recurring_payments.index');    
+    Route::post('/recurring_payments/getMemberships','RecurringPaymentReportController@getMemberships')->name('recurring_payments.getMemberships');
+    Route::get('/recurring_payments/getMoreMemberships','RecurringPaymentReportController@getMoreMemberships')->name('recurring_payments.getMoreMemberships');
+    Route::get('/recurring_payments/export','RecurringPaymentReportController@export')->name('recurring_payments.export');
+
+    Route::get('/money-owed/','MoneyOwedReportController@index')->name('money_owed.index'); 
+    Route::post('money-owed/getMemberships','MoneyOwedReportController@getMemberships')->name('money_owed.getMemberships');
+    Route::get('/money-owed/getMoreMemberships','MoneyOwedReportController@getMoreMemberships')->name('money_owed.getMoreMemberships');
+    Route::get('/money-owed/export','MoneyOwedReportController@export')->name('money_owed.export');
 
     Route::get('/todays_booking/','BookingReportController@index')->name('todays_booking.index');    
     Route::get('/booking-category/','BookingReportController@booking_category')->name('booking_category');    
@@ -111,6 +119,9 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/todays_booking/export','BookingReportController@export')->name('todays_booking.export');
 
     Route::get('/inactive-client/','ClientReportController@index')->name('client.index');
+    Route::get('/inactive-client/export','ClientReportController@inactiveCleintExport')->name('client.export');
+    Route::get('/check-pdf-status','ClientReportController@checkPdfStatus')->name('check-pdf-status');
+
     Route::post('/get-inactive-clients/','ClientReportController@getInactiveClients')->name('client.get-inactive-clients');
     Route::get('/get-more-inactive-clients/','ClientReportController@getMoreInactiveClients')->name('client.getMoreInactiveClients');
     Route::get('/new-client/','ClientReportController@newClient')->name('client.new_client');
@@ -138,10 +149,11 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('get_plan_html','SubcriptionController@get_plan_html')->name('get_plan_html');
     Route::get('/subscription/export','SubcriptionController@export')->name('subscription.export');
 
-     Route::get('/refund-details','RefundReportController@index')->name('refund.index');
-     Route::get('/refund-details/export','RefundReportController@export')->name('refund.export');
+    Route::get('/refund-details','RefundReportController@index')->name('refund.index');
+    Route::get('/refund-details/export','RefundReportController@export')->name('refund.export');
 
-
+    Route::get('/online-review','OnlineReviewController@index')->name('online-review.index');
+    Route::get('/online-review/export','OnlineReviewController@export')->name('online-review.export');
 });
 
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
