@@ -216,7 +216,17 @@
 														<div class="accordion" id="default-accordion-example">
 															<div class="accordion-item shadow">
 																<h2 class="accordion-header" id="heading0">
-																	<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0" aria-expanded="true" aria-controls="collapse0">Family Member #1</button>
+																	<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0" aria-expanded="true" aria-controls="collapse0">
+																		<div class="container-fluid nopadding">
+																			<div class="row"> 
+																				<div class="col-lg-6 col-md-6 col-8"> Family Member #1 </div> 
+																				<div class="col-lg-6 col-md-6 col-4"> 
+																					<div class="multiple-options"  id="deletediv0"> 
+																					</div> 
+																				</div> 
+																			</div>
+																		</div>
+																	</button>
 																</h2>
 																<div id="collapse0" class="accordion-collapse collapse show" aria-labelledby="heading0" data-bs-parent="#default-accordion-example">
 																	<div class="accordion-body">
@@ -647,13 +657,11 @@
     	$("#divstep5").css("display","none");
 		$("#divstep6").css("display","block");
 		executeScript($('#cust_id').val());
-    	//window.location.href = '/business/{{$business_id}}/customers/'+$('#cust_id').val();
     });
 
     $(document).on('click', '#skip7_next', function () {
     	window.location.href = '/business/{{$business_id}}/customers/'+$('#cust_id').val();
     });
-
 
     function getAge() {
         var dateString = document.getElementById("dob").value;
@@ -669,7 +677,12 @@
         return agechk;
     }
 
-   
+    function deletediv(i){
+    	var cnt = $('#familycnt').val();
+    	cnt--;
+    	$('#familycnt').val(cnt);
+    	$('#familydiv'+i).remove();
+    }
 
 	$(document).on("click",'#add_family',function(e){
 		var cnt = $('#familycnt').val();
@@ -684,12 +697,15 @@
         var re = data.replaceAll("heading"+old_cnt,"heading"+cnt);
         re = re.replaceAll("collapse"+old_cnt,"collapse"+cnt);
         re = re.replaceAll("birthday_date"+old_cnt,"birthday_date"+cnt);
+        re = re.replaceAll("deletediv"+old_cnt,"deletediv"+cnt);
         re = re.replaceAll("Family Member #"+cnt,"Family Member #"+txtcount);
         var $data = $(re);
        	$data.find('.check-box-info').remove();
        	var modifiedData = $data[0].outerHTML;
 
         $('#familymaindiv').append(modifiedData);
+        $('#deletediv'+cnt).html('<div class="setting-icon"> <i class="ri-more-fill"></i> <ul> <li><a onclick="deletediv('+cnt+')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li></ul></div>');
+
         $('.relationship').each(function(e) {
         	$(this).removeClass("font-red");
         });
