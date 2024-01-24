@@ -27,7 +27,7 @@ class RecurringPaymentReportController extends BusinessBaseController
     public function membership($type,$endDate,$startDate,$business_id,$status){
         return Recurring::where('business_id',$business_id)->whereDate('payment_date','>=', $startDate)->whereDate('payment_date','<=', $endDate)
             ->when($status,function($query) use($status){
-                $query->where('status',$status);
+                $query->whereIn('status',$status);
             });
     }
 
@@ -38,17 +38,17 @@ class RecurringPaymentReportController extends BusinessBaseController
                 $endDate = $this->endDate;
                 $startDate = $this->currentDate;
             }
-            $data = $this->membership($type,$endDate,$startDate,$business_id,'Scheduled');
+            $data = $this->membership($type,$endDate,$startDate,$business_id,['Scheduled']);
         }elseif ($type == 'onToday') {
             if($endDate == '' && $startDate == ''){
                 $endDate = $startDate  = $this->currentDate;
             }
-            $data = $this->membership($type,$endDate,$startDate,$business_id,'Completed');
+            $data = $this->membership($type,$endDate,$startDate,$business_id,['Completed']);
         }elseif ($type == 'FailedPayment') {
             if($endDate == '' && $startDate == ''){
                 $endDate = $startDate  = $this->currentDate;
             }
-            $data = $this->membership($type,$endDate,$startDate,$business_id,'Retry');
+            $data = $this->membership($type,$endDate,$startDate,$business_id,['Retry','Failed']);
         }elseif ($type == 'All') {
             if($endDate == '' && $startDate == ''){
                 $endDate = $startDate  = $this->currentDate;
@@ -59,7 +59,7 @@ class RecurringPaymentReportController extends BusinessBaseController
                 $endDate = $this->endDate;
                 $startDate = $this->firstDate;
             }
-            $data = $this->membership($type,$endDate,$startDate,$business_id,'Retry')->join('booking_checkin_details as cid','cid.booking_detail_id' ,'=','recurring.booking_detail_id')->whereDate('cid.checkin_date','>=' ,$startDate)->whereDate('cid.checkin_date','<=' ,$endDate)->whereNotNull('cid.checked_at');
+            $data = $this->membership($type,$endDate,$startDate,$business_id,['Retry','Failed'])->join('booking_checkin_details as cid','cid.booking_detail_id' ,'=','recurring.booking_detail_id')->whereDate('cid.checkin_date','>=' ,$startDate)->whereDate('cid.checkin_date','<=' ,$endDate)->whereNotNull('cid.checked_at');
         }
         $data =$data->orderBy('payment_date' ,'desc')->get()->filter(function ($item) {
             return $item->customer_name;
