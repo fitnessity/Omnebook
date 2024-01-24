@@ -179,7 +179,7 @@ class OnBoardedController extends Controller {
             $activePlan = $user->CustomerPlanDetails()->where('amount','!=',0)->whereDate('expire_date','>=',date('Y-m-d'))->whereDate('starting_date','<=',date('Y-m-d'))->latest()->first();
             $company = $user->company;
         }
-
+        //$company = $user->company;
         $activePlan = @$activePlan ?? '';
         session()->put('redirectToOnboard', URL::full());
         return view('on-boarded.welcome_provider',compact('cid','activePlan','user'));

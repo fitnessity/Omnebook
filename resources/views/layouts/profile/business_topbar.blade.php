@@ -24,6 +24,7 @@
 	
 	<!-- icon -->
 	<link href="{{asset('/public/dashboard-design/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
+	<link href="{{asset('/public/dashboard-design/css/icons.css')}}" rel="stylesheet" type="text/css" />
 
 	<link href="{{asset('/public/css/slimselect.min.css')}}" rel="stylesheet" type="text/css" />
 	<link href="{{asset('/public/js/select/select.css')}}" rel="stylesheet" type="text/css" />
@@ -39,6 +40,9 @@
 	
 	<!-- glightbox css -->
 	<link href="{{asset('/public/dashboard-design/css/glightbox.min.css')}}" rel="stylesheet" type="text/css" />
+	
+	<!-- Emoji icons -->
+	<link href="{{asset('/public/dashboard-design/css/emojionearea.min.css')}}" rel="stylesheet" type="text/css" />
 	
 	<!-- app css 
 	<link href="{{asset('/public/dashboard-design/css/app.min.css')}}" rel="stylesheet" type="text/css" />-->

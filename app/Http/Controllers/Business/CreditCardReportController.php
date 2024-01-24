@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Business\BusinessBaseController;
 use Illuminate\Http\Request;
-use Response;
-use Auth;
-use DB;
-use DateTime;
-use App\StripePaymentMethod;
+use Response,Auth,DB,DateTime,\PDF,Excel;
+use App\{StripePaymentMethod,Exports\ExportCreditCards};
 
 class CreditCardReportController extends BusinessBaseController
 {
@@ -39,7 +36,7 @@ class CreditCardReportController extends BusinessBaseController
                 $enddate = date('Y-m-d');
                 $formattedDate = date('Y-m', strtotime($enddate));
             }
-            $cardsquery = $cardsDetails->where(DB::raw("CONCAT(exp_year, '-', LPAD(exp_month, 2, '0'))"), $dynamicDate);
+            $cardsquery = $cardsDetails->where(DB::raw("CONCAT(exp_year, '-', LPAD(exp_month, 2, '0'))"), $formattedDate);
         }else{
             if($edate != ''){
             	$formattedDate = date('Y-m', strtotime($edate));
@@ -53,9 +50,11 @@ class CreditCardReportController extends BusinessBaseController
     	
         if($sDate != ''){
         	$formattedDate = date('Y-m', strtotime($sDate));
-       
-            $cardsquery = $cardsDetails->where(DB::raw("CONCAT(exp_year, '-', LPAD(exp_month, 2, '0'))"), '>=', $formattedDate); 
-     	}
+     	}else{
+            $formattedDate = date('Y-m', strtotime(date('Y-m-d')));
+        }
+
+        $cardsquery = $cardsDetails->where(DB::raw("CONCAT(exp_year, '-', LPAD(exp_month, 2, '0'))"), '>=', $formattedDate); 
 	    return  $cardsquery;
     }
 
@@ -68,5 +67,28 @@ class CreditCardReportController extends BusinessBaseController
         $expiringcards = $expiringcards->orderby('exp_year','desc')->get();
         $cards = $expiringcards->take($offset);
     	return view('business.reports.credit_cards.table_data',compact('cards','type','business_id'));
+    }
+
+    public function export(Request $request,$business_id){
+        $expiringCards = $this->cards('all',$request->endDate,$request->startDate,$business_id)->orderby('exp_year','desc')->get();
+        if($request->type == 'excel'){
+            return Excel::download(new ExportCreditCards($expiringCards), 'Credit-Card.xlsx');
+        }elseif($request->type == 'pdf'){
+            if($request->endDate && $request->startDate){
+                $ed = new DateTime($request->endDate);
+                $sd = new DateTime($request->startDate);
+                $dates = $sd->format('l, F j, Y').' to '.$ed->format('l, F j, Y');
+            }else{
+                $ed = new DateTime();
+                $dates = $ed->format('l, F j, Y');                
+            } 
+
+            $data = [
+                'expiringCards'=>$expiringCards,
+                'dates'=>$dates
+            ];
+            $pdf = PDF::loadView('business.reports.credit_cards.pdf_view', $data);
+            return $pdf->download('Credit-Card.pdf');
+        }
     }
 }

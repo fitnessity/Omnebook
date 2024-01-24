@@ -213,11 +213,8 @@
 																											<label class="font-black">Status</label>
 																										</div>
 																										<div class="col-lg-6 col-sm-6">
-																											@if($customerdata->is_active() == 0)
-																												<span class="red-fonts">InActive</span>
-																											@else
-																												<span class="green-fonts">Active</span>
-																											@endif
+																												<span class="@if($customerdata->is_active() == 'InActive') font-red-fonts @else font-green @endif ">{{$customerdata->is_active()}}</span>
+																											
 																										</div>
 																									</div>
 																									<div class="row mb-10">

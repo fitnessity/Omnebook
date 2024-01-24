@@ -19,9 +19,10 @@ class UserBookingStatus extends Model
      use SoftDeletes;
     protected $table = 'user_booking_status';
 	protected $fillable = [
-        'booking_type', 'user_id', 'customer_id', 'business_id','status','service_id','rejected_reason','stripe_id','stripe_status',
-		'currency_code','amount', 'order_id', 'bookedtime','user_type','pmt_method','pmt_json','retrun_cash','order_type'
+        'booking_type', 'user_id', 'customer_id', 'business_id','status','service_id','rejected_reason','stripe_id','stripe_status','currency_code','amount', 'order_id', 'bookedtime','user_type','pmt_method','pmt_json','retrun_cash','order_type'
     ];
+
+    protected $appends = ['full_name'];
 
     public static function boot(){
         parent::boot();
@@ -39,6 +40,14 @@ class UserBookingStatus extends Model
     /**
      * Get the user that owns the task.
      */
+
+    function getFullNameAttribute() {
+        if($this->user_type == 'user'){
+            return $this->user->firstname;
+        }else{
+            return $this->customer ? $this->customer->fname : '';
+        }
+    }
 
     public function BookingActivityCancel(){
         return $this->hasMany(BookingActivityCancel::class,'booking_id');

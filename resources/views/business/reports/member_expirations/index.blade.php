@@ -65,7 +65,7 @@
 															<div class="col-lg-7 col-md-8 col-sm-8">
 																<div class="form-group mb-10">	
 																	<div class="input-group">
-																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="startDate" id="startDate"  readonly="readonly" placeholder="StartDate" value="">
+																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="startDate" id="startDate"  readonly="readonly" placeholder="StartDate" value="{{date('Y-m-01')}}">
 																		<div class="input-group-text bg-primary border-primary text-white">
 																			<i class="ri-calendar-2-line"></i>
 																		</div>
@@ -80,7 +80,7 @@
 															<div class="col-lg-7 col-md-8 col-sm-8">
 																<div class="form-group mb-25">	
 																	<div class="input-group">
-																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="endDate" id="endDate"  readonly="readonly" value="" placeholder="EndDate">
+																		<input type="text" class="form-control border-0 flatpickr-range flatpiker-with-border" name="endDate" id="endDate"  readonly="readonly" value="{{$today->format('Y-m-d')}}" placeholder="EndDate">
 																		<div class="input-group-text bg-primary border-primary text-white">
 																			<i class="ri-calendar-2-line"></i>
 																		</div>
@@ -311,7 +311,7 @@
 	    	if(type == 'excel'){
 	    		filename = 'membership.xlsx';
 	    	}else if(type == 'pdf'){
-	    		filename = 'sample.pdf';
+	    		filename = 'membership.pdf';
 	    	}
 	
 	    	var link = document.createElement('a');
