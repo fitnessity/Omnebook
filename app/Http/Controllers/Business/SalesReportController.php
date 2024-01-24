@@ -141,7 +141,7 @@ class SalesReportController extends BusinessBaseController
                     ->whereDate('transaction.created_at', '>=', $request->startDate)
                     ->whereDate('transaction.created_at', '<=', $request->endDate)->orderBy('transaction.created_at', 'Desc');
 
-               $cardReport = $cardReportubs->get()->merge($cardReportrec->get());
+               $cardReport = $cardReportubs->get()->concat($cardReportrec->get());
      
                $cashReport  = $cashReport->filter(function ($item) {
                     $userBookingDetailCount = count($item->userBookingStatus->UserBookingDetail);
