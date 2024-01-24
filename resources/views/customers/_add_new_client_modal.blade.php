@@ -53,38 +53,7 @@
 								</form>
 							</div>
 							
-							<div id="divstep2" style="display: none;">
-								<form action="#">
-									<div class="sign-step_2">
-										<div class="filledstep-bar">
-											<div class="row">
-												<div class="col-sm-12">
-													<span class="filledstep"></span>
-													<span class=""></span>
-													<span class=""></span>
-													<span class=""></span>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-12">
-												<div class="error" id="systemMessage"></div>
-												<div class="prfle-wrap">
-													<img src="" alt="">
-												</div>
-												<div class="reg-email-step2"></div>
-												<h2>Welcome to Fitnessity</h2>
-												<p>Your answer to the next few question will help us find the right ideas for you</p>
-												<div class="signup-step-btn">
-													<button type="button" class="signup-new btn-red" id="step2_next">Next</button>
-												</div>
-											</div>
-										</div>
-									</div>
-								</form>
-							</div>
-							
-							<div id="divstep3" style="display: none;">
+							<div id="divstep3" style="display: block;">
 
 								<form action="#">
 									<input type="hidden" name="cust_id" id="cust_id" value="">
@@ -126,7 +95,7 @@
 								</form>
 							</div>
 							
-							<div id="divstep4" style="display: none;">
+							<div id="divstep4" style="display: block;">
 								<form action="#">
 									<h4 class="heading-step">Step 3</h4>
 									<div class="sign-step_4">
@@ -188,7 +157,7 @@
 								</form>
 							</div>
 							
-							<div id="divstep5" style="display: none ;">
+							<div id="divstep5" style="display: block ;">
 								<form action="#" id="familyform">
 									<h4 class="heading-step">Step 5</h4>
 									<div class="sign-step_5">

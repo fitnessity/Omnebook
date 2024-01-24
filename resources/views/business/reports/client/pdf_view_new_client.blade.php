@@ -57,16 +57,18 @@
 					@if($clientType == 'new')<th> Status</th> @endif
 				</tr>
 				@forelse($clients as $i=>$list)
+					@if($list)
 					<tr>
 						<td>{{$i+1}}</td>
 						<td>{{@$list->full_name}}</td>
 						<td>{{@$list->email}}</td>
-						<td>{{date('m/d/Y',strtotime($list->birthdate))}}</td>
+						<td>{{date('m/d/Y',strtotime(@$list->birthdate))}}</td>
 						<td>{{@$list->phone_number ??  "N/A"}}</td>
-						@if($clientType == 'inactive') <td>  {{@$list->last_attend_date != 'N/A' ? date('m/d/Y',strtotime($list->last_attend_date)): 'N/A'}} </td> @endif
-						<td>{{date('m/d/Y',strtotime($list->created_at))}} </td>
+						@if($clientType == 'inactive') <td>   </td> @endif
+						<td>{{date('m/d/Y',strtotime(@$list->created_at))}} </td>
 						@if($clientType == 'new')<td class="@if($list->is_active() == 'InActive' ) font-red @else font-green @endif ">{{($list->is_active() == 'Active' ? 'Member' : $list->is_active())}}</td>@endif
 					</tr>
+					@endif
 				@empty
 					<tr> <td colspan="6"></td></tr>
 				@endforelse

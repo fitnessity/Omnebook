@@ -202,8 +202,6 @@ class ServiceController extends BusinessBaseController
 
                 $idary_price = $user->BusinessPriceDetails()->where(['cid'=> $companyid,'serviceid' => $serviceId])->pluck('id')->toArray();
 
-
-
                 for($i=0; $i < $paycount; $i++) {
                     $idary_cat1[] =  $request->cat_id_db[$i] ?? '';
                     $businessages= [
@@ -217,11 +215,8 @@ class ServiceController extends BusinessBaseController
                     ];
 
                     $createOrUpdate = BusinessPriceDetailsAges::updateOrCreate(['id' => $request->cat_id_db[$i]], $businessages);
-
                     //print_r($createOrUpdate);
-
                     $cat_new_id = $createOrUpdate->id; 
-        
                     $age_cnt = $request->input('priceCount'.$i);
                     if($age_cnt >= 0){
                         for($y=0; $y <= $age_cnt; $y++) {
@@ -290,21 +285,28 @@ class ServiceController extends BusinessBaseController
                                 "pay_session" => $request->input('pay_session_'.$i.$y),
                                 "price_title" => $request->input('price_title_'.$i.$y),
 
-                                "adult_cus_weekly_price" =>  $this->getSectionValue($request, $i, $y, 'adult', 'adult_cus_weekly_price_', $displaySection),
-                                "adult_weekend_price_diff" =>  $this->getSectionValue($request, $i, $y, 'adult', 'adult_weekend_price_diff_', $displaySection),
-                                "adult_discount" =>  $this->getSectionValue($request, $i, $y, 'adult', 'adult_discount_', $displaySection),
-                                "adult_estearn" =>  $this->getSectionValue($request, $i, $y, 'adult', 'adult_estearn_', $displaySection),
-                                "weekend_adult_estearn" =>  $this->getSectionValue($request, $i, $y, 'adult', 'weekend_adult_estearn_', $displaySection),
-                                "child_cus_weekly_price" =>  $this->getSectionValue($request, $i, $y, 'child', 'child_cus_weekly_price_', $displaySection),
-                                "child_discount" =>  $this->getSectionValue($request, $i, $y, 'child', 'child_discount_', $displaySection),
-                                "child_weekend_price_diff" =>  $this->getSectionValue($request, $i, $y, 'child', 'child_weekend_price_diff_', $displaySection),
-                                "child_estearn" =>  $this->getSectionValue($request, $i, $y, 'child', 'child_estearn_', $displaySection),
-                                "weekend_child_estearn" =>  $this->getSectionValue($request, $i, $y, 'child', 'weekend_child_estearn_', $displaySection),
-                                "infant_cus_weekly_price" =>  $this->getSectionValue($request, $i, $y, 'infant', 'infant_cus_weekly_price_', $displaySection),
-                                "infant_weekend_price_diff" =>  $this->getSectionValue($request, $i, $y, 'infant', 'infant_weekend_price_diff_', $displaySection),
-                                "infant_discount" =>  $this->getSectionValue($request, $i, $y, 'infant', 'infant_discount_', $displaySection),
-                                "infant_estearn" =>  $this->getSectionValue($request, $i, $y, 'infant', 'infant_estearn_', $displaySection),
-                                "weekend_infant_estearn" =>  $this->getSectionValue($request, $i, $y, 'infant', 'weekend_infant_estearn_', $displaySection), 
+                                "adult_cus_weekly_price" =>  ($displaySection != 'freeprice') ? $request->input('adult_cus_weekly_price_'.$i.$y) : '',
+                                "adult_weekend_price_diff" =>  ($displaySection != 'freeprice') ? $request->input('adult_weekend_price_diff_'.$i.$y) : '' ,
+                                "adult_discount" => ($displaySection != 'freeprice') ? $request->input('adult_discount_'.$i.$y) : '' ,
+
+                                "child_cus_weekly_price" =>  ($displaySection != 'freeprice') ? $request->input('child_cus_weekly_price_'.$i.$y) : '',
+                                "child_weekend_price_diff" =>  ($displaySection != 'freeprice') ? $request->input('child_weekend_price_diff_'.$i.$y) : '' ,
+                                "child_discount" => ($displaySection != 'freeprice') ? $request->input('child_discount_'.$i.$y) : '' ,
+
+                                 "infant_cus_weekly_price" =>  ($displaySection != 'freeprice') ? $request->input('infant_cus_weekly_price_'.$i.$y) : '',
+                                "infant_weekend_price_diff" =>  ($displaySection != 'freeprice') ? $request->input('infant_weekend_price_diff_'.$i.$y) : '' ,
+                                "infant_discount" => ($displaySection != 'freeprice') ? $request->input('infant_discount_'.$i.$y) :'',
+                                
+                    
+
+                                /*"adult_estearn" =>  $this->getSectionValue($request, $i, $y, 'adult', 'adult_estearn_', $displaySection),*/
+                               /* "weekend_adult_estearn" =>  $this->getSectionValue($request, $i, $y, 'adult', 'weekend_adult_estearn_', $displaySection),*/
+                                
+                                /*"child_estearn" =>  $this->getSectionValue($request, $i, $y, 'child', 'child_estearn_', $displaySection),
+                                "weekend_child_estearn" =>  $this->getSectionValue($request, $i, $y, 'child', 'weekend_child_estearn_', $displaySection),*/
+                               
+                               /* "infant_estearn" =>  $this->getSectionValue($request, $i, $y, 'infant', 'infant_estearn_', $displaySection),
+                                "weekend_infant_estearn" =>  $this->getSectionValue($request, $i, $y, 'infant', 'weekend_infant_estearn_', $displaySection), */
                             ];
                             
                             $createOrUpdate = BusinessPriceDetails::updateOrCreate(['id' => $request->input('price_id_db_' . $i . $y)], $businessPrice);

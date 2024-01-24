@@ -52,7 +52,6 @@
                             <div class="h-100">
                                 <div class="row mb-3 pb-1">
                                     @if((Auth::user()->currentPlan() && Auth::user()->currentPlan()->amount == 0 )|| Auth::user()->chkDaysLeft() < 14)
-                                      
     									<div class="col-6">
                                             @if(Auth::user()->freeTrial() == 'free')
     										<div class="remaining-days mb-15">
@@ -139,10 +138,10 @@
                                                         </div>
                                                         <!-- <div class="col-auto">
                                                             <button type="button" class="btn btn-soft-success shadow-none"><i class="ri-add-circle-line align-middle me-1"></i> Add Product</button>
-                                                        </div> -->
+                                                        </div> 
                                                         <div class="col-auto">
                                                             <button type="button" class="btn btn-soft-info btn-icon waves-effect waves-light layout-rightside-btn shadow-none"><i class="ri-pulse-line"></i></button>
-                                                        </div>
+                                                        </div>-->
                                                     </div>
                                                 </form>
                                             </div>

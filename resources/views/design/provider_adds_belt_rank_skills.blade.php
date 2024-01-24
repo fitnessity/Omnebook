@@ -8,13 +8,13 @@
 		<div class="page-content">
 			<div class="container-fluid">
 				<div class="row mb-3">
-					<div class="col-6">
+					<div class="col-lg-6 col-md-9 col-sm-12 col-12">
 						<div class="page-heading">
 							<label>Manage Students Promotions & Workouts</label>
                             <p>Manage workouts, belt ranks, promotions, curriculums, certifications and awards for your students</p>
 						</div>
 					</div>
-                    <div class="col-6">
+                    <div class="col-lg-6 col-md-3 col-sm-12 col-12">
                         <div class="service-create">
                             <button type="button" class="btn btn-red">Add Program</button>
 					    </div>
@@ -61,10 +61,10 @@
                                             </div><!-- end card header -->
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <div class="col-lg-2 col-xxl-2">
+                                                    <div class="col-lg-2 col-md-6 col-sm-6 col-xxl-2">
                                                         <button type="button" class="btn btn-red mr-5  w-100 mb-25" data-bs-toggle="modal" data-bs-target="#exampleModal">Promote</button>
                                                     </div>
-                                                    <div class="col-lg-3 col-xxl-2">
+                                                    <div class="col-lg-3 col-md-6 col-sm-6 col-xxl-2">
                                                         <button type="button" class="btn btn-red mr-5 w-100 mb-25">Update Progress</button>
                                                     </div>
                                                     <!--<div class="col-lg-3 col-xxl-2">
@@ -107,7 +107,7 @@
                                                                 </div>
                                                             </th>
                                                             <td>Nipa Soni</td>
-                                                            <td><div class="d-flex"><div class="cgreen w-50px mr-5"></div> <span class="lh-24">Green Belt</span></div></td>
+                                                            <td><div class="d-flex w-ipad w-fold"><div class="cgreen w-50px mr-5"></div> <span class="lh-24">Green Belt</span></div></td>
                                                             <td>11/19/2023</td>
                                                             <td>0</td>
                                                             <td>0</td>
@@ -127,7 +127,7 @@
                                                             </th>
                                                             <td>Ankita Patel</td>
                                                             <td>
-                                                                <div class="d-flex">
+                                                                <div class="d-flex w-ipad w-fold">
                                                                     <div class="cyellow w-50px mr-5">
                                                                         <div class="inner-belt">                                                                                                    
                                                                         </div>
@@ -154,7 +154,7 @@
                                                             </th>
                                                             <td>Purvi Patel</td>
                                                             <td>
-                                                                <div class="d-flex">
+                                                                <div class="d-flex w-ipad w-fold">
                                                                     <div class="cred w-50px mr-5">
                                                                     </div>
                                                                     <span class="lh-24">Red Belt</span>
@@ -1514,7 +1514,7 @@
 @include('layouts.business.footer')
 <script>
 	new DataTable('#announcement_list', {
-		responsive: true
+		responsive: true        
 	});
 </script>
 <script>

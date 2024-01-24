@@ -141,7 +141,7 @@
 												<div class="accordion custom-accordionwithicon accordion-border-box" id="accordionnesting">
 													<div class="accordion-item shadow">
 														<h2 class="accordion-header" id="accordionnestingExampletoday">
-															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapsetoday" aria-expanded="false" aria-controls="accor_nestingExamplecollapsetoday"  onclick="getData('today','')" id="todaydaysbtn">Inactivte Today</button>
+															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapsetoday" aria-expanded="false" aria-controls="accor_nestingExamplecollapsetoday"  onclick="getData('today','')" id="todaydaysbtn">Inactive Today</button>
 														</h2>
 														<div id="accor_nestingExamplecollapsetoday" class="accordion-collapse collapse scroll-customer" aria-labelledby="accordionnestingExampletoday" data-bs-parent="#accordionnesting">
 															<div class="accordion-body" id="targetDivtoday"></div>
@@ -150,7 +150,7 @@
 
 													<div class="accordion-item shadow">
 														<h2 class="accordion-header" id="accordionnestingExample30">
-															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse30" aria-expanded="false" aria-controls="accor_nestingExamplecollapse30"  onclick="getData('30','')" id="30daysbtn">Inactivte In 30 Days</button>
+															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse30" aria-expanded="false" aria-controls="accor_nestingExamplecollapse30"  onclick="getData('30','')" id="30daysbtn">Inactive In 30 Days</button>
 														</h2>
 														<div id="accor_nestingExamplecollapse30" class="accordion-collapse collapse scroll-customer" aria-labelledby="accordionnestingExample30" data-bs-parent="#accordionnesting">
 															<div class="accordion-body" id="targetDiv30"></div>
@@ -159,7 +159,7 @@
 
 													<div class="accordion-item shadow">
 														<h2 class="accordion-header" id="accordionnestingExample90">
-															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse90" aria-expanded="false" aria-controls="accor_nestingExamplecollapse90"  onclick="getData('90','')" id="90daysbtn"> Inactivte In 90 Days </button>
+															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse90" aria-expanded="false" aria-controls="accor_nestingExamplecollapse90"  onclick="getData('90','')" id="90daysbtn"> Inactive In 90 Days </button>
 														</h2>
 														<div id="accor_nestingExamplecollapse90" class="accordion-collapse collapse scroll-customer" aria-labelledby="accordionnestingExample90" data-bs-parent="#accordionnesting">
 															<div class="accordion-body" id="targetDiv90"></div>
@@ -168,7 +168,7 @@
 
 													<div class="accordion-item shadow">
 														<h2 class="accordion-header" id="accordionnestingExampleall">
-															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapseall" aria-expanded="false" aria-controls="accor_nestingExamplecollapseall" onclick="getData('all','')" id="alldaysbtn"> All Inactivte Members </button>
+															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapseall" aria-expanded="false" aria-controls="accor_nestingExamplecollapseall" onclick="getData('all','')" id="alldaysbtn"> All Inactive Members </button>
 														</h2>
 														<div id="accor_nestingExamplecollapseall" class="accordion-collapse collapse scroll-customer" aria-labelledby="accordionnestingExampleall" data-bs-parent="#accordionnesting">
 															<div class="accordion-body" id="targetDivall"></div>

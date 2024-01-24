@@ -20,10 +20,12 @@ class GeneratePdf implements ShouldQueue
      * @return void
      */
      protected $data;
+     protected $fileName;
 
-    public function __construct($data)
+    public function __construct($data,$fileName)
     {
         $this->data = $data;
+        $this->fileName = $fileName;
     }
 
     /**
@@ -36,9 +38,9 @@ class GeneratePdf implements ShouldQueue
         
         $this->data->chunk(100, function ($chunk) {
             try {
-                $pdf = PDF::loadView('business.reports.client.pdf_view_new_client', ['data' => $chunk]); 
-                Storage::disk('pdf')->put('filename.pdf','');
-                $pdf->save('../public/pdf/filename.pdf');
+                $pdf = PDF::loadView('business.reports.client.pdf_view_new_client', ['data' => $chunk ,'title' => 'InActive Clients Report','clientType'=>'inactive']); 
+                /*Storage::disk('pdf')->put('filename.pdf','');*/
+                $pdf->save('pdf/'.$this->fileName);
             } catch (\Exception $e) {
                 \Log::error('PDF generation error: ' . $e->getMessage());
             }

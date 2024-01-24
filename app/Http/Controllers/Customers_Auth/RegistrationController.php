@@ -6,21 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use Redirect;
-use Response;
 use App\Api;
-use Str;
-use App\MailService;
-use DB;
-use Validator;
-use Input;
-use App\Customer;
-use App\UserBookingDetail;
-use App\User;
-use App\CustomerFamilyDetail;
-
-use App\Miscellaneous;
-use App\SGMailService;
+use Str,DB,Validator,Input,Redirect,Storage,Response;
+use App\{Customer,UserBookingDetail,User,CustomerFamilyDetail,Miscellaneous,SGMailService};
 use App\Repositories\CustomerRepository;
 
 class RegistrationController extends Controller
@@ -45,9 +33,10 @@ class RegistrationController extends Controller
     }
 
 	public function postRegistrationCustomer(Request $request) {
+        //print_r($request->all());exit;
         $postArr = $request->all();
         $user = Auth::user();
-        $company = $user->businesses->find($request->business_id);
+        $company = $user->businesses->find(Auth::user()->cid);
 
         $rules = [
             'firstname' => 'required',
@@ -95,7 +84,6 @@ class RegistrationController extends Controller
             };
             
             if (count($postArr) > 0) {
-
                 \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
                 $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
 
@@ -107,7 +95,15 @@ class RegistrationController extends Controller
                     ]);
                 $stripe_customer_id = $customer->id;  
 
-                $random_password = Str::random(8);
+                if($request->password){
+                    $random_password = $request->password;
+                }else{
+                    $random_password = Str::random(8);    
+                }
+               
+                $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->signpath));
+                $filename = 'signatures/signature_' . time() . '.png';
+                Storage::disk('s3')->put($filename, $image);
 
                 $customerObj = New Customer();
                 $customerObj->business_id = $company->id;
@@ -116,11 +112,32 @@ class RegistrationController extends Controller
                 $customerObj->password = Hash::make($random_password);
                 $customerObj->email = $postArr['email'];
                 $customerObj->primary_account = $request->primaryAccountHolder ?? 0;
-                $customerObj->country = 'US';
                 $customerObj->status = 0;
                 $customerObj->phone_number = $postArr['contact'];
                 $customerObj->birthdate = $postArr['dob'];
                 $customerObj->stripe_customer_id = $stripe_customer_id;
+
+                $customerObj->gender=@$request->gender;
+                $customerObj->get_fitnessity_info_from = @$request->know_from;
+
+                $customerObj->address = @$request->address;
+                $customerObj->country = @$request->country;
+                $customerObj->city = @$request->city;
+                $customerObj->state = @$request->state;
+                $customerObj->zipcode = @$request->zipcode;
+
+                $customerObj->terms_covid = date('Y-m-d');
+                $customerObj->terms_liability = date('Y-m-d');
+                $customerObj->terms_contract = date('Y-m-d');
+                $customerObj->terms_condition = date('Y-m-d');
+                $customerObj->terms_refund = date('Y-m-d');
+
+                $customerObj->terms_sign_path = $filename;
+                $customerObj->contract_sign_path = $filename;
+                $customerObj->liability_sign_path = $filename;
+                $customerObj->refund_sign_path = $filename;
+                $customerObj->covid_sign_path = $filename;
+
 
                 $fitnessity_user = User::where('email', $postArr['email'])->first();
 
@@ -159,11 +176,63 @@ class RegistrationController extends Controller
     
                 $customerObj->save();
                 if ($customerObj) {    
-                    $status = SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id'],$random_password); 
+
+                    $parentId = NULL;
+                    $currentCustomer = $customerObj;
+                    for($i=0;$i<=$request->familycnt;$i++){
+                        if($request->fname[$i] != ''){
+                            $date = NULL;
+                            if($request->birthdate[$i] != ''){
+                                $date = $request->birthdate[$i];
+                            }
+                            if($request->primaryAccount == 1 && $currentCustomer->primary_account != 1){
+                                if($i == 0){
+                                    $parentId = NULL;
+                                    $isParentAccount = 1;
+                                }
+                            }else{
+                                $parentId = $currentCustomer->id;
+                                $isParentAccount = 0;
+                            }
+
+                            $customerFamily = New Customer();
+                            $customerFamily->parent_cus_id = $parentId;
+                            $customerFamily->primary_account = $isParentAccount;
+                            $customerFamily->business_id = $company->id;
+                            $customerFamily->fname = $request->fname[$i];
+                            $customerFamily->lname = $request->lname[$i];
+                            $customerFamily->relationship = $request->relationship[$i];
+                            $customerFamily->email = $request->emailid[$i];
+                            $customerFamily->country = 'US';
+                            $customerFamily->status = 0;
+                            $customerFamily->phone_number = $request->mphone[$i];
+                            $customerFamily->birthdate = $date;
+                            $customerFamily->emergency_contact = $request->emergency_phone[$i];
+                            $customerFamily->emergency_name = $request->emergency_name[$i];
+                            $customerFamily->emergency_email = $request->emergency_email[$i];
+                            $customerFamily->emergency_relation = $request->emergency_relation[$i];
+                            $customerFamily->gender =  $request->familygender[$i];
+                            $customerFamily->save();
+
+                            if($request->primaryAccount == 1 && $currentCustomer->primary_account != 1){
+                                if($i == 0){
+                                   $parentId = $customerFamily->id;
+                                   $currentCustomer->update(['parent_cus_id' =>$parentId]);
+                                }
+                            }
+                            if ($customerFamily) {      
+                                SGMailService::sendWelcomeMailToCustomer($customerFamily->id,$company->id,'');
+                            }
+                        }
+                    }
+
+                    session()->put('success-register', '1');
+
+                    $status = SGMailService::sendWelcomeMailToCustomer($customerObj->id,Auth::user()->cid,$random_password); 
                     $response = array(
                         'id'=>$customerObj->id,
                         'type' => 'success',
-                        'msg' => 'Customer Successfully Registered.',
+                        'msg' => 'Registration was successful.',
                     );
                     return Response::json($response);
                 } else {
@@ -173,6 +242,8 @@ class RegistrationController extends Controller
                     );
                     return Response::json($response);
                 }
+
+
             } else {
                 $response = array(
                     'type' => 'danger',

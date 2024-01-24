@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Auth,DateTime,Carbon\Carbon;
 use App\{Exports\ExportCancellationNoShow,Exports\ExportClient,Customer,BookingCheckinDetails};
 use Maatwebsite\Excel\HeadingRowImport;
-use Excel, Response,\PDF;
+use Excel, Response,\PDF,Storage;
 use App\Jobs\GeneratePdf;
 
 class ClientReportController extends BusinessBaseController
@@ -136,35 +136,113 @@ class ClientReportController extends BusinessBaseController
 
 
     public function inactiveCleintExport(Request $request , $business_id){
-        $clients = $this->client('all',$request->startDate,$request->endDate,$business_id);
+       /* $clients = $this->client('all',$request->startDate,$request->endDate,$business_id);
         $thirtydays = $this->client('30',$request->startDate,$request->endDate,$business_id);
         $ninetydays = $this->client('90',$request->startDate,$request->endDate,$business_id);
-        $today = $this->client('today',$request->startDate,$request->endDate,$business_id);
+        $today = $this->client('today',$request->startDate,$request->endDate,$business_id);*/
+
         if($request->type == 'excel'){
             return Excel::download(new ExportClient($clients,$thirtydays,$ninetydays,$today), 'InActiveClients.xlsx');
         }elseif($request->type == 'pdf'){
             ini_set('memory_limit', '-1');
             ini_set("max_execution_time", "3600");
 
-            GeneratePdf::dispatch($clients);
+            $expiringclients = Customer::where('business_id', $business_id)->leftJoin('booking_checkin_details', 'customers.id', '=', 'booking_checkin_details.customer_id');
 
-            /*$data = [
+            /*$endDate = carbon::parse($request->endDate)->addMonth(1);
+            $startDate = $request->startDate;
+            $thirtydays = $expiringclients->where(function ($query) use ($endDate, $startDate) {
+                    $query->where(function ($subquery) use ($endDate, $startDate) {
+                        $subquery->where('booking_checkin_details.checked_at', '>=', $startDate)
+                            ->where('booking_checkin_details.checked_at', '<=', $endDate);
+                    })->orWhereNull('booking_checkin_details.checked_at');
+                })->orWhereNotExists(function ($query) {
+                    $query->select(\DB::raw(1))
+                        ->from('user_booking_details')
+                        ->whereColumn('customers.id', 'user_booking_details.user_id');
+            });*/
+            /*->select('customers.*')->distinct()->get();
+    
+            $thirtydays = $thirtydays->filter(function ($item) use($endDate,$startDate){
+                return  $item->last_attend_date != 'N/A'  &&  $item->last_attend_date >= $startDate &&  $item->last_attend_date <= $endDate;
+            });*/
+
+            //way 4
+            $endDate = $request->endDate;
+            $startDate = $request->startDate;
+            $thirtydays = $expiringclients->where(function ($query) use ($endDate, $startDate) {
+                    $query->where(function ($subquery) use ($endDate, $startDate) {
+                        $subquery->where('booking_checkin_details.checked_at', '>', $startDate)
+                            ->where('booking_checkin_details.checked_at', '<', $endDate);
+                    })->orWhereNull('booking_checkin_details.checked_at');
+                })->orWhereNotExists(function ($query) {
+                    $query->select(\DB::raw(1))
+                        ->from('user_booking_details')
+                        ->whereColumn('customers.id', 'user_booking_details.user_id');
+                })->select('customers.*')->distinct()->get();
+
+            $thirtydays = $thirtydays->filter(function ($item) use ($endDate, $startDate) {
+                return $item->last_attend_date != $startDate &&  $item->last_attend_date != $endDate;
+            });
+
+
+            Storage::put('public/pdf/InActiveClients.pdf', '');
+            GeneratePdf::dispatch($thirtydays,'InActiveClients.pdf');
+            return response()->download(public_path('pdf/InActiveClients.pdf'));
+            //way 1
+            /*$perPage = 1000; 
+            $currentPage = 1;
+            $pdfAry = [];
+            do {
+                Storage::put('public/pdf/pdf_'.$currentPage.'.pdf', '');
+                $clients = $thirtydays->select('customers.*')->distinct()->offset(($currentPage-1) * $perPage)->limit($perPage)->get();
+                $clients = $clients->filter(function ($item) use ($endDate, $startDate) {
+                    return $item->last_attend_date != $startDate &&  $item->last_attend_date != $endDate;
+                });
+
+                //print_r($clients);exit();
+                $pdfContent = PDF::loadView('business.reports.client.pdf_view_new_client', [
+                    'clients' => $clients,
+                    'title' => 'InActive Clients Report',
+                    'clientType'=>'inactive']);
+
+
+                // $pdf = PDF::loadView('business.reports.client.pdf_view_new_client', [
+                //     'clients' => $clients,
+                //     'title' => 'InActive Clients Report',
+                //     'clientType'=>'inactive']);
+
+                // Save the PDF or return as a response
+                $pdfContent->save('pdf/pdf_'.$currentPage.'.pdf');
+                //Storage::append('public/pdf/pdf_'.$currentPage.'.pdf', $pdfContent);
+
+                $pdfAry [] = 'pdf_'.$currentPage.'.pdf';
+                $currentPage++;
+            } while (!empty($clients));
+
+            print_r($pdfAry);*/
+
+            //way 2
+
+            /* $data = [
                 'title' => 'InActive Clients Report',
-                'clients'=>$clients,
+                'clients'=>$thirtydays,
                 'clientType'=>'inactive',
             ];
             $pdf = PDF::loadView('business.reports.client.pdf_view_new_client', $data);*/
 
-            /*$chunkSize = 100; // Adjust based on your needs
+           
+            //way 3
+            /*$chunkSize = 1000; // Adjust based on your needs
             $pdf = PDF::loadView('business.reports.client.pdf_view_new_client');
             $pdf->setPaper('A4', 'landscape'); 
-            $clients->chunk($chunkSize, function ($clients) use ($pdf) {
-                print_r($clients);exit;
+            $thirtydays->chunk($chunkSize, function ($clients) use ($pdf) {
+                //print_r($clients);exit;
                 // Pass the current chunk of records to the view
                 $data = [
                         'title' => 'InActive Clients Report',
                         'clientType'=>'inactive',
-                        'clients' => $records,
+                        'clients' => $clients,
                     ];
 
                 // Append a new page with the current chunk of records to the PDF
@@ -177,15 +255,16 @@ class ClientReportController extends BusinessBaseController
 
             // Save or output the final PDF
             $filename = "InActiveClients.pdf";
-            $pdf->save(storage_path('app/'.$filename));*/
+            $pdf->save('public/pdf/'.$filename);
 
-            //return $pdf->download('InActiveClients.pdf');
-             //return response()->download(storage_path('pdf/filename.pdf'));
-            return redirect()->route('business.check-pdf-status');
+            return $pdf->download('public/pdf/InActiveClients.pdf');*/
+            //return response()->download('filename.pdf');
+             //return response()->download(storage_path('app/public/pdf/filename.pdf'));
+            /*return redirect()->route('business.check-pdf-status');*/
         }
     }
     
-    public function checkPdfStatus($business_id)
+    /*public function checkPdfStatus($business_id)
     {
         $pdfFilePath = storage_path('app/public/pdf/filename.pdf');
 
@@ -194,7 +273,7 @@ class ClientReportController extends BusinessBaseController
         } else {
             return "PDF is still being generated. Please wait.";
         }
-    }
+    }*/
 
     public function newClient(Request $request,$business_id){
         $filterStartDate = $request->startDate != '' ? Carbon::parse($request->startDate) : Carbon::parse($this->firstDate);

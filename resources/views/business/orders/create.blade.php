@@ -1940,7 +1940,6 @@
 		 		if($('#dis_amt').val() != ''){
 		 			if(dis == '' || dis == '%'){
 		 				sub_tot_dis = (price * dis_val) /100;
-		 				alert(sub_tot_dis);
 		 				$('#dis_amt_span').html($('#dis_amt').val() + ' %');
 			 		}else{
 			 			sub_tot_dis = dis_val;
