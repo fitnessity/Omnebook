@@ -55,9 +55,7 @@ class HomeController extends Controller {
                 }
             }
         }
-        
         $all_categories = SportsCategories::where('is_deleted', "0")->get();
-        /*$most_searched_sports = Sports::latest()->limit(6)->get();*/
         $most_searched_sports = Sports::orderBy('id','DESC')->get();
         $fitnessity_data = Cms::where('status', '1')
                         ->where('content_alias', 'fitnessity')->get();
@@ -73,15 +71,7 @@ class HomeController extends Controller {
         $onlines = Online::limit(9)->get();
         $persons = Person::limit(9)->get();
         $discovers = Discover::limit(6)->get();
-        /*$count_trainer = Trainer::count();*/
-        //$count_online = Online::count();
-        /*$count_activity = BusinessServices::where('is_active',1)->count();
-        $count_business = CompanyInformation::where('is_verified',1)->count();*/
-        //$count_business = BusinessClaim::count();
-       /* $count_userbooking = UserBookingDetail::count();*/
-		
-		/*$count_location =  BusinessCompanyDetail::distinct()->count('ZipCode');*/
-
+       
         $hometracker = HomeTracker::where('id',1)->first();
         $count_trainer = $hometracker->trainers;
         $count_location = $hometracker->locations;

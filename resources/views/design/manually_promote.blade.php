@@ -25,17 +25,17 @@
                                 <table id="announcement_list" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th data-ordering="false">Client Name</th>
-                                            <th data-ordering="false">Current Level</th>
-                                            <th data-ordering="false">Skills Completed </th>
-                                            <th data-ordering="false">Promote</th>
-                                            <th data-ordering="false">Progress </th>
+                                            <th data-priority="1">Client Name</th>
+                                            <th >Current Level</th>
+                                            <th >Skills Completed </th>
+                                            <th  >Promote</th>
+                                            <th data-priority="2">Progress </th>
                                         </tr>
                                     </thead>
                                     <tbody>										
                                         <tr>
                                             <td>Nipa Soni</td>
-                                            <td><div class="d-flex"><div class="cgreen w-50px mr-5"></div> <span class="lh-24">Green Belt</span></div></td>
+                                            <td><div class="d-flex space-set"><div class="cgreen w-50px mr-5"></div> <span class="lh-24">Green Belt</span></div></td>
                                             <td>00/00</td>
                                             <td><button type="button" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#updatebelt">Update</button></td>
                                             <td>
@@ -73,24 +73,24 @@
             <div class="modal-body">
                 <div class="level-listing">
                     <div class="row">
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 col-md-3 col-sm-4 col-4">
                             <div>
                                 <label>Current Level</label>
                             </div>
                         </div>
-                        <div class="col-lg-9">
-                            <div class="d-flex"><div class="cgreen w-50px mr-5"></div> <span class="lh-24">Green Belt</span></div>
+                        <div class="col-lg-9 col-md-9 col-sm-8 col-8">
+                            <div class="d-flex"><div class="cgreen modal-belt mr-5"></div> <span class="lh-24">Green Belt</span></div>
                         </div>
                     </div>
                 </div>
                 <div class="p-a15 dashed-border">
                     <div class="row">
-                        <div class="col-lg-1">
+                        <div class="col-lg-1 col-2">
                             <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
                         </div>
-                        <div class="col-lg-11">
+                        <div class="col-lg-11 col-10">
                             <div class="d-flex">
-                                <div class="cyellow w-50px mr-5">
+                                <div class="cyellow modal-belt mr-5">
                                     <div class="inner-belt">                                                                                                    
                                     </div>
                                 </div>
@@ -101,12 +101,12 @@
                 </div>
                 <div class="p-a15 dashed-border">
                     <div class="row">
-                        <div class="col-lg-1">
+                        <div class="col-lg-1 col-2">
                             <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
                         </div>
-                        <div class="col-lg-11">
+                        <div class="col-lg-11 col-10">
                             <div class="d-flex">
-                                <div class="cred w-50px mr-5">
+                                <div class="cred modal-belt mr-5">
                                 </div>
                                 <span class="lh-24">Red Belt</span>
                             </div>
@@ -211,10 +211,10 @@
                                                                         <div class="dashed-border mb-3">
                                                                             <label>Attendance Attend 100 Classes</label>
                                                                             <div class="row y-middle mb-4">
-                                                                                <div class="col-lg-1">
+                                                                                <div class="col-lg-1 col-md-1 col-sm-1 col-2">
                                                                                     <i class="far fa-check-circle mr-15 fs-16"></i>
                                                                                 </div>
-                                                                                <div class="col-lg-11">
+                                                                                <div class="col-lg-11 col-md-10 col-sm-10 col-10">
                                                                                     <div class="progress bg-soft-primary">
                                                                                         <div class="progress-bar bg-primary-purple bg-gradient" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
                                                                                     </div>
@@ -224,10 +224,10 @@
                                                                         <div class="dashed-border mb-3">
                                                                             <label>Attendance be at this level for 6 months</label>
                                                                             <div class="row y-middle  mb-4">
-                                                                                <div class="col-lg-1">
+                                                                                <div class="col-lg-1 col-md-1 col-sm-1 col-2">
                                                                                     <i class="far fa-check-circle mr-15 fs-16"></i>
                                                                                 </div>
-                                                                                <div class="col-lg-11">
+                                                                                <div class="col-lg-11 col-md-10 col-sm-10 col-10">
                                                                                     <div class="progress bg-soft-primary">
                                                                                         <div class="progress-bar bg-primary-purple bg-gradient" role="progressbar" style="width: 25%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
                                                                                     </div>
@@ -560,9 +560,9 @@ $(document).ready(function() {
 });
 </script>
 <script>
-	new DataTable('#announcement_list', {
-		responsive: true
-	});
+    $('#announcement_list').DataTable( {
+    responsive: true,
+} );	
 </script>
 <script>
     $('.data').hide()

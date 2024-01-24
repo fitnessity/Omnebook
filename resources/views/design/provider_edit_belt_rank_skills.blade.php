@@ -238,13 +238,13 @@
 															<tbody>
 																<tr class="sortable-row">
 																	<td class="width-15 rank">
-																		<div class="d-inline-block"><input type="text" class="form-control"></div>
+																		<div class="d-inline-block"><input type="text" class="form-control" style="width: 200px;"></div>
 																	</td>
 																	<td>
 																		<div class="cgreen"></div>
 																	</td>
 																	<td>
-																		<div class="d-inline-block mr-10">
+																		<div class="d-inline-block mr-10" style="width: 70px;">
 																			<select name="activity_type" class="form-select">
 																				<option value="">0</option>
 																				<option value="">1</option>
@@ -300,7 +300,7 @@
 
 																<tr class="sortable-row">
 																	<td class="width-15 rank">
-																		<div class="d-inline-block"><input type="text" class="form-control"></div>
+																		<div class="d-inline-block"><input type="text" class="form-control" style="width: 200px;"></div>
 																	</td>
 																	<td>
 																		<div class="cyellow">
@@ -309,7 +309,7 @@
 																		</div>
 																	</td>
 																	<td>
-																		<div class="d-inline-block mr-10">
+																		<div class="d-inline-block mr-10" style="width: 70px;">
 																			<select name="activity_type" class="form-select">
 																				<option value="">0</option>
 																				<option value="">1</option>
@@ -365,7 +365,7 @@
 
 																<tr class="sortable-row">
 																	<td class="width-15 rank">
-																		<div class="d-inline-block"><input type="text" class="form-control"></div>
+																		<div class="d-inline-block"><input type="text" class="form-control" style="width: 200px;"></div>
 																	</td>
 																	<td>
 																		<div class="cblack">
@@ -382,7 +382,7 @@
 																		</div>
 																	</td>
 																	<td>
-																		<div class="d-inline-block mr-10">
+																		<div class="d-inline-block mr-10" style="width: 70px;">
 																			<select name="activity_type" class="form-select">
 																				<option value="">0</option>
 																				<option value="">1</option>
@@ -620,18 +620,22 @@
 							</div>
 						</div>
 						<div class="col-lg-6">
-							<select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
-								<option value=""> Select Category </option>
-								<option value="">Option 1</option>
-								<option value="">Option 2</option>
-							</select>
+							<div class="mb-3">
+								<select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
+									<option value=""> Select Category </option>
+									<option value="">Option 1</option>
+									<option value="">Option 2</option>
+								</select>
+							</div>
 						</div>
 						<div class="col-lg-6">
-							<select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
-								<option value=""> All Ranks / Levels </option>
-								<option value="">Option 1</option>
-								<option value="">Option 2</option>
-							</select>
+							<div class="mb-3">
+								<select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
+									<option value=""> All Ranks / Levels </option>
+									<option value="">Option 1</option>
+									<option value="">Option 2</option>
+								</select>
+							</div>
 						</div>
 					</div>
 				<form>
@@ -648,18 +652,22 @@
 							</div>
 						</div>
 						<div class="col-lg-6">
-							<select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
-								<option value="">Upperward Block</option>
-								<option value="">Option 1</option>
-								<option value="">Option 2</option>
-							</select>
+							<div class="mb-3">
+								<select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
+									<option value="">Upperward Block</option>
+									<option value="">Option 1</option>
+									<option value="">Option 2</option>
+								</select>
+							</div>
 						</div>
 						<div class="col-lg-6">
-							<select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
-								<option value="">Front Snap Kick</option>
-								<option value="">Option 1</option>
-								<option value="">Option 2</option>
-							</select>
+							<div class="mb-3">
+								<select name="activity_type" data-behavior="on_change_submit" class="form-select" id="choices-publish-status-input" data-choices="" data-choices-search-false="">
+									<option value="">Front Snap Kick</option>
+									<option value="">Option 1</option>
+									<option value="">Option 2</option>
+								</select>
+							</div>
 						</div>
 					</div>
 				<form>

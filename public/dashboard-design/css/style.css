@@ -11285,13 +11285,13 @@ span.flatpickr-weekday{
     }
 }
 .auth-one-bg{
-    background-image:url(../images/auth-one-bg.jpg);
-    background-position:center;
+    background-image:url(../images/reg.jpg);
+    background-position:top;
     background-size:cover
 }
 .auth-one-bg .bg-overlay{
     background:-webkit-gradient(linear,left top,right top,from(#41319c),to(#4b38b3));
-    background:linear-gradient(to right,#41319c,#4b38b3);
+    background: linear-gradient(to right,#fbfbfb,#aeaeae);
     opacity:.9
 }
 .shape{

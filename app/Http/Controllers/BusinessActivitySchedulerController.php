@@ -85,12 +85,12 @@ class BusinessActivitySchedulerController extends Controller
             $days[] = $d->modify('+'.($i+$shift).' day');
         }
 
-        $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('end_activity_date', 'desc')->get();
-        $services = [];
+        $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('shift_start', 'asc')->get();
 
+        $services = [];
         //print_r($bookschedulers);exit;
         foreach($bookschedulers as $bs){
-            $services []= $bs->business_service;
+            $services [] = $bs->business_service;
         }
         $services = array_unique($services);
         // /print_r( $services);exit;
@@ -261,7 +261,7 @@ class BusinessActivitySchedulerController extends Controller
             $business_services = $company->service()->whereIn('id', $memberships)->get();
         }
 
-        $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('end_activity_date', 'desc')->get();
+        $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('shift_start', 'asc')->get();
 
         $services = [];
         foreach($bookschedulers as $bs){

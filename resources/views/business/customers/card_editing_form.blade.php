@@ -21,16 +21,15 @@
   // Create and mount the Payment Element
   const paymentElement_bcus = elements_bcus.create('payment');
   paymentElement_bcus.mount('#payment-element');
-
   const form_bcus = document.getElementById('payment-form');
 
   form_bcus.addEventListener('submit', async (event) => {
     event.preventDefault();
     $('#submit').text('loading...')
 
-    const {error_bcus} = await _bcus.confirmSetup({
+    const {error_bcus} = await stripe_bcus.confirmSetup({
       //`Elements` instance that was used to create the Payment Element
-      elements_bcus,
+       elements: elements_bcus,
       confirmParams: {
         return_url: '{{route('business.customers.refresh_payment_methods', ['customer_id' => request()->customer_id])}}&return_url={{request()->return_url}}',
       }

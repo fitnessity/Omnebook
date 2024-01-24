@@ -232,12 +232,6 @@
 											$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
 										@endphp
 										<div class="activity-information activites-height">
-											<span><a  @if (Auth::check())  
-	                                    		href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-	                                		@else 
-	                                    	href="{{ route('userlogin') }}"  
-	                                		@endif
-	                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
 											<span><a 
 												@if (Auth::check())  
 				                           href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
@@ -247,6 +241,13 @@
 				                        
 				                        target="_blank">{{ $service['program_name'] }}</a>
 											</span>
+											<span><a  @if (Auth::check())  
+	                                    		href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
+	                                		@else 
+	                                    	href="{{ route('userlogin') }}"  
+	                                		@endif
+	                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
+											
 											<p>{{ $service->formal_service_types() }} | {{ $service['sport_activity'] }}</p>
 										</div>
 										<hr>
