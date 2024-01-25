@@ -64,12 +64,12 @@
 
           <div class="row">
             <div class="col-xs-12 form-group {{ $errors->has('price') ? ' has-error' : '' }}">
-                {!! Form::label('price', 'Price Per Month ($)', ['class' => 'control-label']) !!} 
-                {!! Form::number('price', old('price') ? old('price') : 1, ['min' => 1, 'id' => 'price','class' => 'form-control', 'placeholder' => '']) !!}
+                {!! Form::label('link', 'Link', ['class' => 'control-label']) !!} 
+                {!! Form::text('link', old('link'), ['id' => 'link', 'class' => 'form-control', 'placeholder' => '']) !!}
                 <p class="help-block"></p>
-                    @if($errors->has('price'))
+                    @if($errors->has('link'))
                         <p class="help-block">
-                            {{ $errors->first('price') }}
+                            {{ $errors->first('link') }}
                         </p>
                     @endif
             </div>

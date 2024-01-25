@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-lg-10 col-md-10">
                     <div class="title">
-                        <h3 class="f-16">Find Activities Starting In The Next 8 Hrs for {{date('l, F,d,Y' ,$date)}}</h3>
+                        <h3 class="f-16">Find Activities Starting In The Next 8 Hrs for {{date('l, F d, Y' ,$date)}}</h3>
                     </div>
                 </div>
 
