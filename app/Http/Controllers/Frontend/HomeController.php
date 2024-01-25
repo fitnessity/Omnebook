@@ -61,32 +61,20 @@ class HomeController extends Controller {
                         ->where('content_alias', 'fitnessity')->get();
 
         $bepart_data = Cms::where('status', '1')
-                        ->where('content_alias', 'be_a_part')->get();
+                        ->where('content_alias', 'be_a_part')->first();
 						
-		$why_fitnessity = Cms::where('status', '1')
-                        ->where('content_alias', 'about_us')->get();
+		$whyFitnessity = Cms::where('status', '1')
+                        ->where('content_alias', 'about_us')->first();
 		
         $sliders = Slider::get();
         $trainers = Trainer::limit(5)->get();
         $onlines = Online::limit(9)->get();
         $persons = Person::limit(9)->get();
         $discovers = Discover::limit(6)->get();
-       
-        $hometracker = HomeTracker::where('id',1)->first();
-        $count_trainer = $hometracker->trainers;
-        $count_location = $hometracker->locations;
-        $count_activity = $hometracker->activities;
-        $count_business = $hometracker->businesses;
-        $count_userbooking = $hometracker->bookings;
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
         $nxtact = BusinessServices::where('business_services.is_active', 1)->get();
         $current_date = new DateTime();
         $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtact->pluck('id'))->limit(3)->get();
         return view('home.index1', [
-            'cart' => $cart,
             'serviceData' => $serviceData,
             'companyData' => $companyData,
             'servicePrice' => $servicePrice,
@@ -99,13 +87,8 @@ class HomeController extends Controller {
             'onlines' => $onlines,
             'persons' => $persons,
             'discovers' => $discovers,
-            'count_trainer' => $count_trainer,
-            'count_activity' => $count_activity,
-            'count_business' => $count_business,
-            'count_userbooking' => $count_userbooking,
             'bepart_data' => $bepart_data,
-			'count_location' => $count_location,
-			'why_fitnessity' => $why_fitnessity,
+			'whyFitnessity' => $whyFitnessity,
             'bookschedulers'=>$bookschedulers,
             'current_date' => $current_date,
         ]);

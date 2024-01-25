@@ -6324,7 +6324,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   top: 0;
 }
 .page-content-register{
-  padding: calc(40px + 6.5rem) calc(1.5rem * .5) 60px calc(1.5rem * .5);
+  padding: calc(0px + 6.5rem) calc(1.5rem * .5) 90px calc(1.5rem * .5);
 }
 .z-1{
   z-index: 1;
@@ -6342,17 +6342,17 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   color: #ed1b24;
 }
 .reg-up-img img{
-  width: 200px;
-  height: 200px;
-  max-height: 200px;
+  width: 270px;
+  height: 270px;
+  max-height: 270px;
 }
 .m-b-50{
   margin-bottom: 50px;
 }
 .sign-up-img img{
-  width: 280px;
-  height: 280px;
-  max-height: 280px;
+  width: 260px;
+  height: 260px;
+  max-height: 260px;
 }
 .cross-check{
   padding: 0 35px;
@@ -6407,4 +6407,29 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   margin: 5px 10px;
   vertical-align: top;
   position: relative;
+}
+.self-check-sp{
+  margin-bottom: 70px;
+}
+.mb-70{
+  margin-bottom: 70px;
+}
+.mt-70{
+  margin-top: 70px;
+}
+.inner-btn{
+  background: #ed1b24;
+  border-radius: 0px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.inner-btn i{
+  color: #fff;
+}
+.number_format p {
+  display: block;
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 50px;
+  color: #ea1515;
 }

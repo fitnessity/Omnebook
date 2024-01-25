@@ -283,7 +283,7 @@ $total_quantity = 0;
         <?php 
         $companyid = (isset($companyid) && $companyid != "") ? $companyid : 0;
         $module = explode(".co/", url()->current());?>
-        <header>
+        <header @if(  request()->is('*register_ep*')) class="d-none" @endif>
 			<div class="container-fluid printnone">
 				<div class="row">
 					<div class="col-lg-12">

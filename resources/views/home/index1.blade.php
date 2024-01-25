@@ -29,16 +29,13 @@
                                                 <div id="suggesstion-box-search-activity"></div>
                                             </div>
                                             <div class="col-lg-4 col-sm-4 col-md-4 col-6">
-                                                <input type="hidden" name="address" id="b_city1" >
-                                                <input type="text" name="" id="b_address1"  class="form-control no-side-border padding-lrtb" placeholder="Search by country, city, state, zip" oninput="initMapCall('b_address1', 'b_city1', 'b_state1', 'country1', 'b_zipcode1', 'lat', 'lon')">
+                                                <input type="text" name="address"  id="b_address1"  class="form-control no-side-border padding-lrtb" placeholder="Search by country, city, state, zip" oninput="initMapCall1()" value="">
                                                 <div id="map" class="d-none p-relative" style="overflow: hidden;"></div>
                                                 <div id="suggesstion-box-search-location"></div>
-                                                <input type="hidden"  name="City" id="b_city1" value="">
-                                                <input type="hidden"  name="State" id="b_state1" value="">
-                                                <input type="hidden"  name="Country" id="country1" value="">
-                                                <input type="hidden"  name="ZipCode" id="b_zipcode1" value="">
-                                                <input type="hidden"  name="lat" id="lat" value="">
-                                                <input type="hidden"  name="lon" id="lon" value="">
+                                                <input type="hidden"  name="city" id="b_city1" value="">
+                                                <input type="hidden"  name="state" id="b_state1" value="">
+                                                <input type="hidden"  name="country" id="country1" value="">
+                                                <input type="hidden"  name="zip_code" id="b_zipcode1" value="">
                                             </div>
                                             <div class="col-lg-2 col-sm-4 col-md-2 col-12">
                                                 <button type="submit" class="btn btn-red" class="form-control"><i class="fa fa-search livesearch"></i>Search</button>
@@ -222,6 +219,7 @@
             </div>
         </div>
         
+        @if($whyFitnessity)
         <div class="hpt-100 hpb-100">
             <div class="container">
                 <div class="row">
@@ -233,78 +231,19 @@
                     </div>
                     <div class="col-lg-8 hpl-50">
                         <div class="amazonaws">
-                            <img src="{{asset('uploads/discover/thumb/activity-relarted.jpg')}}" >
+                            <img src="{{ asset('public/uploads/cms/'.$whyFitnessity->banner_image) }}" >
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="info-imgs mt--25">
-                            <img src="{{asset('uploads/discover/thumb/1649648221-snow ski.jpg')}}">
+                            <img src="{{ asset('public/'.$whyFitnessity->video) }}">
                         </div>
                     </div>
                     <div class="col-lg-8 hpl-50">
                         <div class="row">
-                            <div class="col-lg-6">
-                                <div class="services-item mt-25 mb-15">
-                                    <div class="number_format">
-                                        <label>1.</label>
-                                    </div>
-                                    <div class="info-content">
-                                        <div class="services-text">
-                                            <h3 class="title">A simple way to book active experiences online</h3>
-                                        </div>
-                                        <div class="services-desc">
-                                            <p>Finding the right activity, workout, trainer or adventure can be overwhelming and time-consuming. Browse thousands active experiences from personal training, coaching, fitness classes, adventures & tours & much more.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">  
-                                <div class="services-item mt-25 mb-15">
-                                    <div class="number_format">
-                                        <label>2.</label>
-                                    </div>
-                                    <div class="info-content">
-                                        <div class="services-text">
-                                            <h3 class="title">A seamless booking process that saves time </h3>
-                                        </div>
-                                        <div class="services-desc">
-                                            <p>Book for yourself or a family in one go. Choose an unlimited amount of activities or products and add it to the cart. Fitnessity handles all scheduling, and payments securely on your behalf. </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             
-                            <div class="col-lg-6">  
-                                <div class="services-item mb-15">
-                                    <div class="number_format">
-                                        <label>3.</label>
-                                    </div>
-                                    <div class="info-content">
-                                        <div class="services-text">
-                                            <h3 class="title">Compare programs and prices</h3>
-                                        </div>
-                                        <div class="services-desc">
-                                            <p>With the 'Add to Compare' feature, you can compare up to 3 activities and service providers, viewing details about the various programs, staff, reviews, prices, certifications, and much more.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-lg-6">  
-                                <div class="services-item mb-15">
-                                    <div class="number_format">
-                                        <label>4.</label>
-                                    </div>
-                                    <div class="info-content">
-                                        <div class="services-text">
-                                            <h3 class="title">Get Motivated </h3>
-                                        </div>
-                                        <div class="services-desc">
-                                            <p>Whether you like to participate in activities one-on-one, with family, friends, or in a group, let Fitnessity be your accountability partner. Join the active community on the only dedicated social network for fitness. Network, share, comment & meet like-minded people interested in getting or staying active. Find your new fit fam at Fitnessity!</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {!!$whyFitnessity->content!!}
+
                             <div class="col-lg-12">
                                 <div class="text-center">
                                     @if(Auth::check())
@@ -314,12 +253,12 @@
                                     @endif
                                 </div>
                             </div>
-                            
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        @endif
         
         <div class="bg-grey hpt-100 hpb-100">
             <div class="container-fluid">
@@ -330,85 +269,26 @@
                             <p> Get connected to Activities you love or explore a new one</p>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-sm-6 col-md-6">
-                        <div class="fit-project-item mb-30">
-                            <a href="/activities/trainers_coaches">
-                                <div class="project-img">
-                                    <img src="{{asset('uploads/discover/thumb/1649648909-tennis 1.jpg')}}" alt="images">
-                                    <div class="discover-title">
-                                        <h2>Book a Personal Trainer</h2>
+
+                    @foreach($sliders as $slider)
+                        <div class="col-lg-3 col-sm-6 col-md-6">
+                            <div class="fit-project-item mb-30">
+                                <a href="{{$slider->link}}">
+                                    <div class="project-img">
+                                        <img src="{{asset('/public/uploads/slider/thumb/'.$slider->image)}}" alt="images">
+                                        <div class="discover-title">
+                                            <h2>{{$slider->title}}</h2>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="project-content"> 
-                                    <div class="project-inner">
-                                        <span class="category">
-                                            Take your training to a new level with one-on-one lessons from from top trainers, coaches, instructors, and therapists.
-                                        </span>
+                                    <div class="project-content"> 
+                                        <div class="project-inner">
+                                            <span class="category">{{$slider->stext}} </span>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                        </div>                      
-                    </div>
-                    
-                    <div class="col-lg-3 col-sm-6 col-md-6">
-                        <div class="fit-project-item mb-30">
-                            <a href="/activities/ways_to_workout">
-                                <div class="project-img">
-                                    <img src="{{asset('uploads/discover/thumb/1649648481-yoga classes.jpg')}}" alt="images">
-                                    <div class="discover-title">
-                                        <h2>Book Fitness Classes</h2>
-                                    </div>
-                                </div>
-                                <div class="project-content"> 
-                                    <div class="project-inner">
-                                        <span class="category">
-                                            Participate in group classes that you love or discover new, hard-to-find favorites.
-                                        </span>
-                                    </div>
-                                </div>
-                            </a>
+                                </a>
+                            </div>                      
                         </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-sm-6 col-md-6">
-                        <div class="fit-project-item mb-30">
-                            <a href="/activities/active_wth_fun_things_to_do">
-                                <div class="project-img">
-                                    <img src="{{asset('uploads/discover/thumb/1649648221-snow ski.jpg')}}" alt="images">
-                                    <div class="discover-title">
-                                        <h2>Find Adventure Experiences</h2>
-                                    </div>
-                                </div>
-                                <div class="project-content"> 
-                                    <div class="project-inner">
-                                        <span class="category">
-                                            Turn your weekend or vacation into and adventure.
-                                        </span>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-sm-6 col-md-6">
-                        <div class="fit-project-item mb-30">
-                            <a href="/activities/events_in_your_area">
-                                <div class="project-img">
-                                    <img src="{{asset('uploads/discover/thumb/1649648161-soccer coaches.jpg')}}" alt="images">
-                                    <div class="discover-title">
-                                        <h2>Find Activities for Kids</h2>
-                                    </div>
-                                </div>
-                                <div class="project-content"> 
-                                    <div class="project-inner">
-                                        <span class="category">
-                                            Find activities to keep your kids engaged, active, and in shape.
-                                        </span>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -441,38 +321,32 @@
             </div>
         </div>
         
-        <div class="hpt-100 hpb-100 joinus-bg-image">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="up-down-sp">
-                            <div class="joinus-box">
-                                <div class="join-title mb-5">
-                                    <h1>Join us <span>It's Easy</span></h1>
-                                </div>
-                                <div class="join-box-text">
-                                    <p>One platform for your complete active lifestyle.</p>
-                                    <p>We take care of all your bookings, scheduling, payments, and vetting of service providers.</p>
-                                    <p>Fitnessity is the simplest way to find your next activity.</p>
-                                    
-                                    <ul class="mb-4">
-                                        <li>Search and choose an activity </li>
-                                        <li>Compare providers and services</li>
-                                        <li>Book your activity... and get moving</li>
-                                    </ul>
+        @if($bepart_data)
+            <div class="hpt-100 hpb-100 joinus-bg-image">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="up-down-sp">
+                                <div class="joinus-box">
+                                    <div class="join-title mb-5">
+                                        <h1>{{ $bepart_data->content_title }} <span>It's Easy</span></h1>
+                                    </div>
+                                    <div class="join-box-text">
+                                        {!!$bepart_data->content!!}
 
-                                    @if(Auth::check())
-                                        <a class="btn btn-red" href="/activities">START TODAY</a>
-                                    @else
-                                        <a href="{{route('registration')}}" class="btn btn-red">START TODAY</a>
-                                    @endif
+                                        @if(Auth::check())
+                                            <a class="btn btn-red" href="/activities">START TODAY</a>
+                                        @else
+                                            <a href="{{route('registration')}}" class="btn btn-red">START TODAY</a>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div><!-- End Page-content -->
 </div><!-- END layout-wrapper -->
 
@@ -499,5 +373,82 @@
         $("#activity_label").val($(this).attr('data-num'));
         $("#suggesstion-box-search-activity").hide();
     });
+
+     function initMapCall1() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -33.8688, lng: 151.2195},
+            zoom: 13
+        });
+
+        var input = document.getElementById('b_address1');
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed', function() {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+
+            marker.setIcon(({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            var address = '';
+            var badd = '';
+            var sublocality_level_1 = '';
+            if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindow.open(map, marker);
+
+            // Location details
+            for (var i = 0; i < place.address_components.length; i++) {
+              //alert(place.address_components[i].types[0]);
+                if(place.address_components[i].types[0] == 'locality'){
+                    $('#b_city1').val(place.address_components[i].long_name);
+                }
+                if(place.address_components[i].types[0] == 'country'){
+                    $('#country1').val(place.address_components[i].long_name);
+                }
+                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
+                  $('#b_state1').val(place.address_components[i].long_name);
+                }
+                if(place.address_components[i].types[0] == 'postal_code'){
+                  $('#b_zipcode1').val(place.address_components[i].long_name);
+                }
+            }
+        });
+    }
+
 </script>
 @endsection
