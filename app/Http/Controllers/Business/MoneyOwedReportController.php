@@ -44,7 +44,7 @@ class MoneyOwedReportController extends BusinessBaseController
             if($endDate == '' && $startDate == ''){
                 $endDate = $startDate  = $this->currentDate;
             }
-            $data = $this->membership($type,$endDate,$startDate)->select('transaction.*')->where('status','!=','complete');
+            $data = $this->membership($type,$endDate,$startDate)->select('transaction.*');
         }else {
             if(($endDate == '' && $startDate == '') ||  ($endDate == $this->currentDate && $startDate == $this->currentDate)){
                 $endDate = $this->endDate;
