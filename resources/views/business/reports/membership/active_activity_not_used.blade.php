@@ -152,7 +152,7 @@
 								@php 
 									$oneMonthAgo = $date->copy()->subDays(30)->format('Y-m-d');
 									$bookingData = clone $bookings; // Create a fresh copy of the query
-					        		$bookingData = $bookingData->whereDate('expired_at',$date->format('Y-m-d'))->where('bcd.checked_at', '<', $oneMonthAgo)->whereNotNull('bcd.checkin_date')->get();
+					        		$bookingData = $bookingData->whereDate('expired_at',$date->format('Y-m-d'))->where('bcd.checked_at', '<', $oneMonthAgo)->whereNotNull('bcd.checkin_date')->groupBy('id')->get();
 					        		$bookingData = $bookingData->filter(function ($item) {
 						            return $item->business_price_detail_with_trashed && $item->business_price_detail_with_trashed->business_price_details_ages_with_trashed  && $item->Customer && $item->business_services_with_trashed ;
 						         });
