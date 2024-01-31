@@ -49,8 +49,42 @@
                 </div>
             </div>
         </div>
-        
-         <div class="hpb-100">
+            
+        <div class="bg-grey hpt-100 hpb-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="home-main-title mb-30">
+                            <h2>View All Activities</h2>
+                        </div>
+                    </div>  
+                    
+                    @php $asi=0; @endphp
+                    @foreach($activitySlider as $i=>$sldr)
+                        @php if($i == 5){
+                                $asi = 0;
+                            }
+                        @endphp
+                        <div class=" @if($asi == 0) col-lg-6 col-md-6 @else col-lg-3 col-md-3 @endif col-sm-6 col-xs-12 col-12 ">
+                            <div class="taxonomy-item taxonomy-card">
+                                <a class="taxonomy-link hover-effect" href="{{env('APP_URL')}}{{@$sldr['link']}}">
+                                    <div class="taxonomy-title">{{@$sldr['title']}} </div>
+                                    <img class="img-responsive" src="{{asset('uploads/slider/thumb/'.@$sldr['image'])}}">
+                                </a>
+                            </div>
+                        </div>
+                        @php $asi++; @endphp
+                    @endforeach
+                    
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 text-center">
+                        <a href="{{url('/activities')}}" class="btn btn-red fs-15 btn-w-130 mt-30">Find More</a>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="hpb-100">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12 col-xs-12 nopadding">
@@ -79,8 +113,8 @@
                                 </div>
                                 <div class="taxonomy-item-content">
                                     <h3 class="taxonomy-title">
-                                        <a href="#">{{$city}}</a>
-                                        <a href="#">United States</a>
+                                        <a href="/activities/?city={{$city}}">{{$city}}</a>
+                                        <a href="/activities/?country={{countryName($city)}}">{{countryName($city)}}</a>
                                     </h3>
                                     <div class="taxonomy-description">{{cityCount($city)}} Activities</div>
                                 </div>
