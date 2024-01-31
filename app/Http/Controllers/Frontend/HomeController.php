@@ -15,7 +15,7 @@ use Response;
 use Str;
 use DB;
 use App\Repositories\{UserRepository,ReviewRepository,SportsCategoriesRepository,SportsRepository,ProfessionalRepository};
-use App\{Slider,SportsCategories,Cms,Sports,Trainer,Online,BusinessClaim,UserBookingDetail,Person,Discover,Miscellaneous,Languages,Api,MailService,User,BusinessServices,CompanyInformation,BusinessPriceDetails,BusinessService,BusinessCompanyDetail,BusinessActivityScheduler,HomeTracker,SGMailService,Customer};
+use App\{ActivitySlider,Slider,SportsCategories,Cms,Sports,Trainer,Online,BusinessClaim,UserBookingDetail,Person,Discover,Miscellaneous,Languages,Api,MailService,User,BusinessServices,CompanyInformation,BusinessPriceDetails,BusinessService,BusinessCompanyDetail,BusinessActivityScheduler,HomeTracker,SGMailService,Customer};
 use View;
 use DateTime;
 
@@ -32,65 +32,26 @@ class HomeController extends Controller {
         $this->users = $users;
     }
     public function index(Request $request) {
-        $companyData = $servicePrice = $businessSpec = [];
-        $serviceData = BusinessServices::where('instant_booking', 1)->get();
-        if (isset($serviceData)) {
-            foreach ($serviceData as $service) {
-                $company = CompanyInformation::where('id', $service['cid'])->get();
-                $company = isset($company[0]) ? $company[0] : [];
-                if(!empty($company)) {
-                	$companyData[$company['id']][] = $company;
-                }
-                
-                $price = BusinessPriceDetails::where('cid', $service['cid'])->get();
-                $price = isset($price[0]) ? $price[0] : [];
-                if(!empty($company)) {
-                	$servicePrice[$company['id']][] = $price;
-                }
-                
-                $business_spec = BusinessService::where('cid', $service['cid'])->get();
-                $business_spec = isset($business_spec[0]) ? $business_spec[0] : [];
-                if(!empty($company)) {
-                	$businessSpec[$company['id']][] = $business_spec;
-                }
-            }
-        }
-        $all_categories = SportsCategories::where('is_deleted', "0")->get();
-        $most_searched_sports = Sports::orderBy('id','DESC')->get();
-        $fitnessity_data = Cms::where('status', '1')
-                        ->where('content_alias', 'fitnessity')->get();
-
-        $bepart_data = Cms::where('status', '1')
-                        ->where('content_alias', 'be_a_part')->first();
-						
-		$whyFitnessity = Cms::where('status', '1')
-                        ->where('content_alias', 'about_us')->first();
-		
+        $bepart_data = Cms::where('status', '1')->where('content_alias', 'be_a_part')->first();
+		$whyFitnessity = Cms::where('status', '1')->where('content_alias', 'about_us')->first();
+        $connectBusiness = Cms::where('status', '1')->where('content_alias', 'connect_business')->first();
+        $topBanner = Cms::where('status', '1') ->where('content_alias', 'banner_search_title')->first();
         $sliders = Slider::get();
-        $trainers = Trainer::limit(5)->get();
-        $onlines = Online::limit(9)->get();
-        $persons = Person::limit(9)->get();
-        $discovers = Discover::limit(6)->get();
+        $activitySlider = ActivitySlider::get();
         $nxtact = BusinessServices::where('business_services.is_active', 1)->get();
         $current_date = new DateTime();
         $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtact->pluck('id'))->limit(3)->get();
+        $top4Cities = CompanyInformation::groupBy('city')->whereNotNull('city')->join('business_services as bs' ,'bs.cid' ,'=' , 'company_informations.id')->where('bs.is_active',1)->select('city', DB::raw('count(*) as total'))->orderBy('total', 'desc')->take(4)->pluck('city');
         return view('home.index1', [
-            'serviceData' => $serviceData,
-            'companyData' => $companyData,
-            'servicePrice' => $servicePrice,
-            'businessSpec' => $businessSpec,
-            'sports_categories' => $all_categories,
             'sliders' => $sliders,
-            'most_searched_sports' => $most_searched_sports,
-            'fitnessity_data' => $fitnessity_data,
-            'trainers' => $trainers,
-            'onlines' => $onlines,
-            'persons' => $persons,
-            'discovers' => $discovers,
+            'activitySlider' => $activitySlider,
             'bepart_data' => $bepart_data,
 			'whyFitnessity' => $whyFitnessity,
+            'connectBusiness' => $connectBusiness,
+            'topBanner' => $topBanner,
             'bookschedulers'=>$bookschedulers,
             'current_date' => $current_date,
+            'top4Cities' => $top4Cities,
         ]);
     }
     public function leftpanel() 

@@ -301,6 +301,7 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/manually_promote','DesignController@manually_promote')->name('manually_promote');
 
     Route::get('/register_ep','DesignController@register_ep')->name('register_ep');
+    Route::get('/check_in_settings','DesignController@check_in_settings')->name('check_in_settings');
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -728,6 +729,15 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('/slider/edit/{id}', 'Frontend\SliderController@edit');
     Route::post('/slider/update/{id}', 'Frontend\SliderController@update')->name('update-slider'); 
     Route::get('/slider/delete/{id}', 'Frontend\SliderController@delete');
+
+    // Slider
+    Route::get('/activity-slider', 'Frontend\ActivitySliderController@index')->name('activity-slider');
+    Route::get('/activity-slider/create', 'Frontend\ActivitySliderController@create')->name('create-new-activity-slider'); 
+    Route::post('/activity-slider/store', 'Frontend\ActivitySliderController@store')->name('create-activity-slider');
+    Route::DELETE('/activity-slider/delete-slider', 'Frontend\ActivitySliderController@delete')->name('delete-activity-slider');
+    Route::get('/activity-slider/edit/{id}', 'Frontend\ActivitySliderController@edit');
+    Route::post('/activity-slider/update/{id}', 'Frontend\ActivitySliderController@update')->name('update-activity-slider'); 
+    Route::get('/activity-slider/delete/{id}', 'Frontend\ActivitySliderController@delete');
 
 	
 

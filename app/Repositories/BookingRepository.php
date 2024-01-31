@@ -186,23 +186,30 @@ class BookingRepository
                 $full_ary[] =  $chkD;
             }
         }
-        //print_r($full_ary);
+
         foreach($full_ary as $chkInDetail) { 
+            $bookingId = $chkInDetail->booking_detail_id;
             if($serviceType== null || $serviceType == 'all'){
-                $userBookinDetail = UserBookingDetail::where('id',$chkInDetail->booking_detail_id);
+                $userBookinDetail = UserBookingDetail::where('id',$bookingId);
                 if($chkVal == 'past'){
-                    $userBookinDetail = $userBookinDetail->whereRaw('(expired_at < now())');
+                    $userBookinDetail = $userBookinDetail->where(function ($query) use($bookingId) {
+                            $query->where('status', 'active')
+                                ->where('expired_at', '<', now())->where('id',$bookingId);
+                        })->orWhere('status', 'terminate')->where('id',$bookingId);
                 }
             }else{
-                $userBookinDetail =  UserBookingDetail::where('user_booking_details.user_id' ,'!=' , '')->join('business_services as bs', 'user_booking_details.sport', '=', 'bs.id')->where('bs.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id)->select('user_booking_details.*','bs.id as activity_id','bs.service_type');
+                $userBookinDetail =  UserBookingDetail::where('user_booking_details.user_id' ,'!=' , '')->join('business_services as bs', 'user_booking_details.sport', '=', 'bs.id')->where('bs.service_type',$serviceType)->where('user_booking_details.id',$bookingId)->select('user_booking_details.*','bs.id as activity_id','bs.service_type');
                 if($chkVal == 'past'){
-                    $userBookinDetail = $userBookinDetail->whereRaw('(user_booking_details.expired_at < now())');
+                    $userBookinDetail = $userBookinDetail->where(function ($query) use($bookingId) {
+                            $query->where('user_booking_details.status', 'active')
+                                ->where('user_booking_details.expired_at', '<', now())->where('user_booking_details.id',$bookingId);
+                        })->orWhere('user_booking_details.status', 'terminate')->where('user_booking_details.id',$bookingId);
                 }
             }
-            
-            $userBookinDetail = $userBookinDetail->first();
-            if(!empty($userBookinDetail) ){
-                $bookingDetail [] = $userBookinDetail;
+
+            $detail = $userBookinDetail->first();
+            if(!empty($detail) ){
+                $bookingDetail [] = $detail;
             }
         }
 

@@ -31,11 +31,19 @@
 																<label>Remaining: {{@$bs->getremainingsession()}}/{{@$bs->pay_session}} |</label>
 																<label>Expiration: {{date('m/d/Y',strtotime(@$bs->expired_at))}} |</label>
 															</div>
+															@if($tabName == 'past') 
+																<div>
+																	@if(@$bs->getReserveData('reserve_date') != '—') 
+																		<label class="font-red mt-5">Status: Terminated on 01/30/2024	{{date('m/d/Y',strtotime(@$bs->terminated_at))}} </label> 
+																	@endif
+																</div>
+															@endif
+
 															@if($tabName != 'current' && $tabName != 'past') 
 																<div>
 																	@if(@$bs->getReserveData('reserve_date') != '—') 
-																		<label>Reserved Date: {{@$bs->getReserveData('reserve_date')}}  | </label>
-																		<label>Reserved Time: {{@$bs->getReserveData('reserve_time')}}  </label> 
+																		<label class="mt-5">Reserved Date: {{@$bs->getReserveData('reserve_date')}}  | </label>
+																		<label class=" mt-5">Reserved Time: {{@$bs->getReserveData('reserve_time')}}  </label> 
 																	@endif
 																</div>
 															@endif

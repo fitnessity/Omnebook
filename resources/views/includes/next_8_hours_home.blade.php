@@ -25,6 +25,7 @@
 				</div>
 
 				@foreach($bookschedulers as $bookscheduler)
+                @php    $price_all = $bookscheduler->business_service->min_price(); @endphp
 				<div class="col-lg-4 col-md-6 col-sm-6 col-12">
                     <div class="find-activity">
                         <div class="row y-middle">
@@ -69,7 +70,9 @@
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-6 activites-price-details">
                                         <div class="dollar-person">
-                                            <span>From ${{$bookscheduler->price_detail()}}/Person</span>
+                                            @if($price_all != '')
+                                                <span>From {!!$price_all!!}/Person</span>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-6 activites-price-details-left">

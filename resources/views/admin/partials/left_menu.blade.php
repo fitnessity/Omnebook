@@ -54,6 +54,12 @@
           <a href="/admin/slider">
             <i class="fa fa-sliders"></i> <span>Manage Slider</span>  
           </a>
+        </li> 
+
+        <li class="{{ $request->segment(2) == 'activity-slider' ? 'active' : '' }}">
+          <a href="/admin/activity-slider">
+            <i class="fa fa-sliders"></i> <span>Manage Activity Slider</span>  
+          </a>
         </li>
         <li class="{{ $request->segment(2) == 'business_post' ? 'active' : '' }}">
           <a href="{{route('admin/businesspost')}}">

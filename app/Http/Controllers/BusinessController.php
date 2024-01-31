@@ -257,7 +257,7 @@ class BusinessController extends Controller
         }
 
         foreach ($expiredMembership as $em) {
-            $name = @$em->business_price_detail->price_title.'('.$em->business_services->program_name.')';
+            $name = @$em->business_price_detail->price_title.'('.@$em->business_services->program_name.')';
             $notificationAry[] = $formatNotification($em->Customer, $em, 'booking',"'s membership of  ".$name." is expired on ". date('m/d/Y' ,strtotime($em->expired_at)));
         }
 

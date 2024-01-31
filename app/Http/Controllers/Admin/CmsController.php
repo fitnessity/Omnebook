@@ -16,6 +16,7 @@ use DB;
 use Validator;
 use Image;
 use File;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CmsController extends Controller
 {   
@@ -171,13 +172,18 @@ class CmsController extends Controller
         return Validator::make($data, [            
             'edit_title' => 'required|max:255',
             'edit_content' => 'required',
-            'banner_image' => 'image|mimes:jpeg,jpg,bmp,png|max:1024',
-            'Video' => 'video|mimes:mp4|max:1024',
+            /*'banner_image' => 'image|mimes:jpeg,jpg,bmp,png|max:1024',
+            'Video' => 'video|mimes:mp4|max:1024',*/
         ],
         [
             'edit_title.required' => 'Provide a content title',
             'edit_content.required' => 'Provide a content',
         ]);
+    }
+
+    protected function throwValidationException(Request $request, $validator)
+    {
+        throw new HttpResponseException(response()->json(['error' => $validator->errors()], 422));
     }
 }
 

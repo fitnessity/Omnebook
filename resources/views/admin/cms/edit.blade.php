@@ -8,7 +8,7 @@
        
 		<div class="panel panel-default">
         	<div class="panel-heading">
-          		Edit {{$detail->content_title}}
+          		Edit 
         	</div>
         	<div class="panel-body">
           		<div class="row">
