@@ -37,7 +37,8 @@ class HomeController extends Controller {
         $connectBusiness = Cms::where('status', '1')->where('content_alias', 'connect_business')->first();
         $topBanner = Cms::where('status', '1') ->where('content_alias', 'banner_search_title')->first();
         $sliders = Slider::get();
-        $activitySlider = ActivitySlider::get();
+        $activitySlider = ActivitySlider::all();
+        
         $nxtact = BusinessServices::where('business_services.is_active', 1)->get();
         $current_date = new DateTime();
         $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtact->pluck('id'))->limit(3)->get();
