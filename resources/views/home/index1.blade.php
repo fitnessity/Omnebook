@@ -9,13 +9,13 @@
                 <div class="row mb-3">
                     <div class="col-lg-7 col-12">
                         <div class="banner0fonts">
-                            <label class="fs-65 mb-15">Find Next Place <br> To <span class="font-red"> Visit </span></label>
-                            <p class="fs-15">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                            <label class="fs-65 mb-15">{!!$topBanner->content_title!!}</label>
+                            {!!$topBanner->content!!}
                         </div>
                     </div>
                     <div class="col-lg-5 col-12">
                         <div class="banner-img">
-                            <img src="{{asset('uploads/slider/thumb/1646832387-yoga%20classes.jpg')}}">
+                            <img src="{{ asset('public/uploads/cms/'.$topBanner->banner_image) }}">
                         </div>
                     </div>
                     <div class="col-lg-9 col-12">
@@ -59,16 +59,24 @@
                         </div>
                     </div>  
                     
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
-                        <div class="taxonomy-item taxonomy-card">
-                            <a class="taxonomy-link hover-effect" href="{{url('/activities/active_wth_fun_things_to_do')}}">
-                                <div class="taxonomy-title">Stay Active With Fun Things To Do </div>
-                                <img class="img-responsive" src="{{asset('uploads/slider/thumb/1648141166-snowboarding.jpg')}}">
-                            </a>
+                    @php $asi=0; @endphp
+                    @foreach($activitySlider as $i=>$slider)
+                        @php if($i == 5){
+                                $asi = 0;
+                            }
+                        @endphp
+                        <div class=" @if($asi == 0) col-lg-6 col-md-6 @else col-lg-3 col-md-3 @endif col-sm-6 col-xs-12 col-12 ">
+                            <div class="taxonomy-item taxonomy-card">
+                                <a class="taxonomy-link hover-effect" href="{{url($slider->link)}}">
+                                    <div class="taxonomy-title">{{$slider->title}} </div>
+                                    <img class="img-responsive" src="{{asset('uploads/slider/thumb/'.$slider->image)}}">
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                        @php $asi++;@endphp
+                    @endforeach
                     
-                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 col-12">
+                   <!--  <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 col-12">
                         <div class="taxonomy-item taxonomy-card">
                             <a class="taxonomy-link hover-effect" href="#">
                                 <div class="taxonomy-title">Products & Gear</div>
@@ -111,7 +119,7 @@
                                 <img class="img-responsive" src="{{asset('uploads/slider/thumb/1646834734-ACTIVITES BACKGROUND.jpg')}}">
                             </a>
                         </div>
-                    </div>
+                    </div> -->
                     
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 text-center">
                         <a href="{{url('/activities')}}" class="btn btn-red fs-15 btn-w-130 mt-30">Find More</a>
@@ -133,88 +141,32 @@
         
         <div class="bg-grey hpt-100 hpb-100">
             <div class="container">
-                <div class="row">
+                <div class="row justify-content-md-center">
                     <div class="col-lg-12">
                         <div class="home-main-title mb-30">
                             <h2>Discover Our Top Destinations</h2>
                         </div>
                     </div>      
                     
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="taxonomy-item taxonomy-item-v2">
-                            <div class="taxonomy-item-image">
-                                <a class="taxonomy-link hover-effect" href="#">
-                                    <img class="img-responsive" src="{{asset('uploads/slider/thumb/1646834734-ACTIVITES BACKGROUND.jpg')}}">
-                                </a>    
-                            </div>
-                            <div class="taxonomy-item-content">
-                                <h3 class="taxonomy-title">
-                                    <a href="#">New York City</a>
-                                    <a href="#">United States</a>
-                                </h3>
-                                <div class="taxonomy-description">
-                                    5 Activities
+                    @foreach($top4Cities as $city)
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                            <div class="taxonomy-item taxonomy-item-v2">
+                                <div class="taxonomy-item-image">
+                                    <a class="taxonomy-link hover-effect" href="/activities/?city={{$city}}">
+                                        <img class="img-responsive" src="{{asset('uploads/slider/thumb/1646834734-ACTIVITES BACKGROUND.jpg')}}">
+                                    </a>    
+                                </div>
+                                <div class="taxonomy-item-content">
+                                    <h3 class="taxonomy-title">
+                                        <a href="#">{{$city}}</a>
+                                        <a href="#">United States</a>
+                                    </h3>
+                                    <div class="taxonomy-description">{{cityCount($city)}} Activities</div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endforeach
                     
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="taxonomy-item taxonomy-item-v2">
-                            <div class="taxonomy-item-image">
-                                <a class="taxonomy-link hover-effect" href="#">
-                                    <img class="img-responsive" src="{{asset('uploads/slider/thumb/1646835416-soccer coaches.jpg')}}">
-                                </a>    
-                            </div>
-                            <div class="taxonomy-item-content">
-                                <h3 class="taxonomy-title">
-                                    <a href="#">Los Angeles</a>
-                                    <a href="#">United States</a>
-                                </h3>
-                                <div class="taxonomy-description">
-                                    10 Activities
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="taxonomy-item taxonomy-item-v2">
-                            <div class="taxonomy-item-image">
-                                <a class="taxonomy-link hover-effect" href="#">
-                                    <img class="img-responsive" src="{{asset('uploads/slider/thumb/1646832387-yoga classes.jpg')}}">
-                                </a>    
-                            </div>
-                            <div class="taxonomy-item-content">
-                                <h3 class="taxonomy-title">
-                                    <a href="#">Chicago</a>
-                                    <a href="#">United States</a>
-                                </h3>
-                                <div class="taxonomy-description">
-                                    7 Activities
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="taxonomy-item taxonomy-item-v2">
-                            <div class="taxonomy-item-image">
-                                <a class="taxonomy-link hover-effect" href="#">
-                                    <img class="img-responsive" src="{{asset('uploads/slider/thumb/1648141166-snowboarding.jpg')}}">
-                                </a>    
-                            </div>
-                            <div class="taxonomy-item-content">
-                                <h3 class="taxonomy-title">
-                                    <a href="#">Miami</a>
-                                    <a href="#">United States</a>
-                                </h3>
-                                <div class="taxonomy-description">
-                                    7 Activities
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -224,24 +176,43 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-4">
-                        <div class="fitness-title mb-5">
-                            <h1>Why <span>Fitnessity?</span></h1>
-                        </div>
-                        
+                        @if($bepart_data)
+                            <div class="">
+                                <div class="join-title mb-5">
+                                    <h1>{!! $bepart_data->content_title !!}</h1>
+                                </div>
+                                <div class="join-box-text mb-25">
+                                    {!!$bepart_data->content!!}
+
+                                    @if(Auth::check())
+                                        <a class="btn btn-red" href="/activities">START TODAY</a>
+                                    @else
+                                        <a href="{{route('registration')}}" class="btn btn-red">START TODAY</a>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
                     </div>
+
+
                     <div class="col-lg-8 hpl-50">
-                        <div class="amazonaws">
+                        <div class="amazonaws mb-10">
                             <img src="{{ asset('public/uploads/cms/'.$whyFitnessity->banner_image) }}" >
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="info-imgs mt--25">
+                        <div class="info-imgs">
                             <img src="{{ asset('public/'.$whyFitnessity->video) }}">
                         </div>
                     </div>
                     <div class="col-lg-8 hpl-50">
                         <div class="row">
-                            
+                            <div class="col-lg-12">
+                                <div class="fitness-title mb-5 mt-10">
+                                    <h1>Why <span>Fitnessity?</span></h1>
+                                </div>
+                            </div>
+                                
                             {!!$whyFitnessity->content!!}
 
                             <div class="col-lg-12">
@@ -293,35 +264,29 @@
             </div>
         </div>
         
-        <div class="hpt-100 hpb-100 ">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="providers-bg-image">
-                            <div class="pro-background-overlay"></div>
-                            <div class="fit-widget-container">
-                                <h2>Are You a Local Business?</h2>
-                                <p>Join the community of hundreds of flourishing local business in your city.</p>
-                                <div>
-                                    @if(Auth::check())
-                                        @if(count(Auth::user()->company) > 0)
-                                            <a class="btn btn-red" href="{{route('personal.company.create')}}">Get Started</a>
-                                        @else
-                                            <a class="btn btn-red" href="/activities">Get Started</a>
-                                        @endif
-                                    @else
-                                        <a href="{{route('registration')}}" class="btn btn-red btn-w-130 fs-15 mr-10 mb-10">Get Started</a>
-                                    @endif
-                                    <a href="{{route('businessClaim')}}" class="btn btn-border-white btn-w-180 fs-15 mb-10">Claim Your Business</a>
+
+        @if($connectBusiness)
+            <div class="hpt-100 hpb-100 ">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="providers-bg-image" style="background-image: url('public/uploads/cms/{{$connectBusiness->banner_image}}');">
+                                <div class="pro-background-overlay"></div>
+                                <div class="fit-widget-container">
+                                    <h2>{!! $connectBusiness->content_title !!}</h2>
+                                     {!!$connectBusiness->content!!}
+                                    <div>
+                                        <a href="{{route('businessClaim')}}" class="btn btn-border-white btn-w-180 fs-15 mb-10">List My Business</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
         
-        @if($bepart_data)
+        <!-- @if($bepart_data)
             <div class="hpt-100 hpb-100 joinus-bg-image">
                 <div class="container">
                     <div class="row">
@@ -346,7 +311,7 @@
                     </div>
                 </div>
             </div>
-        @endif
+        @endif -->
     </div><!-- End Page-content -->
 </div><!-- END layout-wrapper -->
 
@@ -375,6 +340,11 @@
     });
 
      function initMapCall1() {
+        $('#activity_label').val('');
+        $('#b_city1').val('');
+        $('#b_state1').val('');
+        $('#country1').val('');
+        $('#b_zipcode1').val('');
         var map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: -33.8688, lng: 151.2195},
             zoom: 13

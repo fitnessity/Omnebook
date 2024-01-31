@@ -51,6 +51,10 @@
 	<!-- Color Piker Css-->
     <link href="{{asset('/public/dashboard-design/css/nano.min.css')}}" rel="stylesheet" type="text/css" />
 
+	<!-- filepond -->
+	<link rel="stylesheet" href="{{asset('/public/dashboard-design/filepond/filepond.min.css')}}" type="text/css" />
+	<link rel="stylesheet" href="{{asset('/public/dashboard-design/filepond/filepond-plugin-image-preview.min.css')}}" type="text/css" />
+	
 </head>
 
  <!-- Begin page -->

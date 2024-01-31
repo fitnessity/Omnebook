@@ -100,14 +100,14 @@
 							<div class="card-body">
 								<div class="d-flex align-items-center">
 									<div class="white-box flex-grow-1 overflow-hidden">
-										<p class="fw-medium text-muted text-truncate mb-0">Self Check-In</p>
+										<p class="fw-medium text-muted text-truncate mb-0">Self Check-In Options</p>
 									</div>
 								</div>
 								<div class="d-flex align-items-end justify-content-between mt-4">
-									<div>
-										<p>4 Digit Code: 3456</p>
-										<p>Phone: 555-555-5555</p>
-										<p>Email: 123@anytoen.com</p>
+									<div class="fout-digit-info">
+										<p> <b>4 Digit Code: </b> 3456</p>
+										<p> <b>Phone: </b> 555-555-5555</p>
+										<p> <b>Email: </b> 123@anytoen.com</p>
 									</div>
 								</div>
 							</div>

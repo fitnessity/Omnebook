@@ -224,15 +224,19 @@
 										<span class="pc-micon"><i class="fas fa-clipboard-list"></i></span>
 										<a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;"> Create A Business</a>
 									</li>
-									<li class="pc-link">
-										<span class="pc-micon"><i class="fa fa-tasks"></i></span>@if(count(Auth::user()->company) > 0)<a href="{{route('business_dashboard')}}"  style="color: white;">Manage My Business</a>@endif
-									</li>
 
-									@if(!Session('StaffLogin'))
+									@if(count(Auth::user()->company) > 0)
 										<li class="pc-link">
-											<span class="pc-micon"><i class="fa fa-tasks"></i></span>@if(count(Auth::user()->company) > 0)<a href="{{route('staff_login')}}"  style="color: white;">Staff Login</a>@endif
+											<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('business_dashboard')}}"  style="color: white;">Manage My Business</a>
 										</li>
+
+										@if(!Session('StaffLogin'))
+											<li class="pc-link">
+												<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('staff_login')}}"  style="color: white;">Staff Login</a>
+											</li>
+										@endif
 									@endif
+
 
 									<li><div class="border-sidebar"></div></li>
 									<li class="lp-per-pro"> <span>Support </span> </li>
@@ -370,6 +374,14 @@
     <script src="{{asset('/public/dashboard-design/js/pickr.min.js')}}"></script>
     <script src="{{asset('/public/dashboard-design/js/form-pickers.init.js')}}"></script>
 
+    <!-- filepond -->
+    <script src="{{asset('/public/dashboard-design/filepond/filepond.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/filepond/filepond-plugin-image-preview.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/filepond/filepond-plugin-file-validate-size.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/filepond/filepond-plugin-image-exif-orientation.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/filepond/filepond-plugin-file-encode.min.js')}}"></script>
+
+    <script src="{{asset('/public/dashboard-design/js/form-file-upload.init.js')}}"></script> 
  <!-- new design end -->
 
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>owl.js"></script>

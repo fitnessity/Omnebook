@@ -1716,6 +1716,8 @@
 <script type="text/javascript">
 
 	function saveparticipate(){
+
+		var customerId = '{{request()->cus_id}}';
 		$('#qty').html('');
 		var aducnt = $('#adultcnt').val();
 		var childcnt = $('#childcnt').val();
@@ -1789,7 +1791,10 @@
 			gettotal('','')
 			$("#addpartcipate").modal('hide');
 			$("#addpartcipate").removeClass('show');
-			$('#addToOrder').prop('disabled', false);
+			if(customerId){
+				$('#addToOrder').prop('disabled', false);
+			}
+			
 		}
 	}
 

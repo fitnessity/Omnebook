@@ -138,6 +138,14 @@ class BusinessServices extends Model
             $service->favourites->each(function($favourite) {
                 $favourite->delete();
             });
+
+            $service->UserBookingDetails->each(function($detail) {
+                $detail->terminated_at = date('Y-m-d');
+                $detail->terminate_reason = 'We would like to inform you that this activity has been closed by company.';
+                $detail->terminate_comment = 'If you have any questions or need additional assistance, please don\'t hesitate to reach out to our support team.';
+                $detail->status = 'terminate';
+                $detail->update();
+            });
         });
     }
     
@@ -184,7 +192,7 @@ class BusinessServices extends Model
     }
 
     public function UserBookingDetails(){
-        return $this->hasMany(UserBookingDetails::class, 'sport');
+        return $this->hasMany(UserBookingDetail::class, 'sport');
     }
 
     public function reviews_score()

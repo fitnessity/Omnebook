@@ -2,7 +2,7 @@
 
     use Carbon\Carbon;
     use App\Repositories\{ReviewRepository,UserRepository,NetworkRepository};
-    use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction,Products,CustomerNotes,Notification};
+    use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction,Products,CustomerNotes,Notification,CompanyInformation,BusinessServices};
 
     function getUserRatings($user_id)
     {
@@ -327,6 +327,13 @@
             $years = floor($minutesDifference / 525600);
             return $years . ' years ago';
         }
+    }
+
+    function cityCount($city){
+        $company = CompanyInformation::where('city',$city)->pluck('id')->toArray();
+        //print_r($company);
+        $count =  BusinessServices::whereIn('cid',$company)->count();
+        return $count;
     }
 
 ?>

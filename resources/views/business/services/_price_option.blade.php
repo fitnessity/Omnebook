@@ -91,35 +91,39 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-12">
-                        <p class="info-txt-price">You can set your prices to be the same or different based on age, the weekday or the weekend. To add prices for children or infants, click on the box.</p>
+                    <div class="col-lg-12 mt-15">
+                        <span class="fs-15 font-red">Set Your Price</span>
+                        <p class="info-txt-price mb-10">You can set your prices to be the same or different based on age, the weekday or the weekend. To add prices for children or infants, click on the box.</p>
                     </div>
-                    <div class="col-md-12">
-                        <div class="mt-15 price-selection">
-                            <input type="radio" id="freeprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="freeprice" {{@$price->dispaly_section == 'freeprice' ? 'checked' : ''}}>
-                            <label class="recurring-pmt">Free</label>
-                                            
-                            <input type="radio" id="weekdayprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekdayprice" {{@$price->dispaly_section == 'weekdayprice' ? 'checked' : ''}}>
-                            <label class="recurring-pmt">Everyday Price</label>
-                                            
-                            <input type="radio" id="weekendprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekendprice"  {{(@$price->dispaly_section == 'weekendprice' || @$price->dispaly_section == '' )? 'checked' : ''}} >
-                            <label class="recurring-pmt">Weekend Price</label>
+
+                    <div class="col-md-12 service-back-box">
+                        <div>
+                            <div class="mt-15 price-selection">
+                                <input type="radio" id="freeprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="freeprice" {{@$price->dispaly_section == 'freeprice' ? 'checked' : ''}}>
+                                <label class="recurring-pmt">Free</label>
+                                                
+                                <input type="radio" id="weekdayprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekdayprice" {{(@$price->dispaly_section == 'weekdayprice' || @$price->dispaly_section == '' ) ? 'checked' : ''}}>
+                                <label class="recurring-pmt">Everyday Price</label>
+                                                
+                                <input type="radio" id="weekendprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekendprice"  {{(@$price->dispaly_section == 'weekendprice') ? 'checked' : ''}} >
+                                <label class="recurring-pmt">Weekend Price</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-12 displaysectiondiv{{$i}}{{$j}} {{@$price->dispaly_section == 'freeprice' ? 'd-none' : ''}}" >
-                        <div class="choose-age price-selection">
-                            <p>Select who this price option is for. (choose all that apply)</p>
-                            <input type="checkbox" id="all{{$i}}{{$j}}" name="all{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="all"  {{( (@$price->adult_cus_weekly_price == '' && @$price->child_cus_weekly_price == '' && @$price->infant_cus_weekly_price == '') || (@$price->adult_cus_weekly_price != '' && @$price->child_cus_weekly_price != '' && @$price->infant_cus_weekly_price != '') ) ? 'checked': '' }}>
-                            <label class="recurring-pmt">All</label>
-                            
-                            <input type="checkbox" id="adult{{$i}}{{$j}}" name="adult{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="adult" {{(@$price->adult_cus_weekly_price != '' || @$price == '') ? 'checked': ''}}>
-                            <label class="recurring-pmt">Adults (12 and up)</label>
-                                            
-                            <input type="checkbox" id="child{{$i}}{{$j}}" name="child{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="child" {{@$price->child_cus_weekly_price != '' ? 'checked': ''}}>
-                            <label class="recurring-pmt">Children (2 to 12)</label>
-                                            
-                            <input type="checkbox" id="infant{{$i}}{{$j}}" name="infant{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="infant" {{@$price->infant_cus_weekly_price != '' ? 'checked': ''}}>
-                            <label class="recurring-pmt">Infants ( 2 and Under)</label>
+                        <div class="displaysectiondiv{{$i}}{{$j}} {{@$price->dispaly_section == 'freeprice' ? 'd-none' : ''}}" >
+                            <div class="choose-age price-selection">
+                                <p>Select who this price option is for. (choose all that apply)</p>
+                                <input type="checkbox" id="all{{$i}}{{$j}}" name="all{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="all"  {{(@$price->adult_cus_weekly_price != '' && @$price->child_cus_weekly_price != '' && @$price->infant_cus_weekly_price != '') ? 'checked': '' }}>
+                                <label class="recurring-pmt">All</label>
+                                
+                                <input type="checkbox" id="adult{{$i}}{{$j}}" name="adult{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="adult" {{(@$price->adult_cus_weekly_price != '' || @$price == '') ? 'checked': ''}}>
+                                <label class="recurring-pmt">Adults (12 and up)</label>
+                                                
+                                <input type="checkbox" id="child{{$i}}{{$j}}" name="child{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="child" {{@$price->child_cus_weekly_price != '' ? 'checked': ''}}>
+                                <label class="recurring-pmt">Children (2 to 12)</label>
+                                                
+                                <input type="checkbox" id="infant{{$i}}{{$j}}" name="infant{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="infant" {{@$price->infant_cus_weekly_price != '' ? 'checked': ''}}>
+                                <label class="recurring-pmt">Infants ( 2 and Under)</label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -283,7 +287,7 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="serviceprice mt-10">
+                        <div class="serviceprice mt-20">
                             <h3>When Does This Price Setting Expire</h3>
                         </div>
                     </div>

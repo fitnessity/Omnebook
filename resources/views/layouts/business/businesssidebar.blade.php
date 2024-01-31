@@ -187,6 +187,22 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                        <i class="mdi mdi-account-circle-outline"></i> <span data-key="t-dashboards">Self Check-In</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarDashboards">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-analytics"> Check-In Portal </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-crm">Check-In Settings </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li> <!-- end Dashboard Menu -->
+
 				<li class="nav-item">
 					<a class="nav-link menu-link @if(Route::current()->getName()=='business.reports.index') tab-active @endif" @if($companyId) href="{{ route('business.reports.index') }}"   @endif aria-controls="sidebarForms">
 						<img src="{{asset('/public/img/salesreports1.png')}}" alt="Fitnessity"> <span data-key="t-forms">Reports</span><span class="badge badge-pill bg-success" data-key="t-new">New</span>
