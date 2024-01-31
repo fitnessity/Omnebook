@@ -161,7 +161,7 @@
                                         <a href="#">{{$city}}</a>
                                         <a href="#">United States</a>
                                     </h3>
-                                    <div class="taxonomy-description">{{cityCount($city)}} Activities</div>
+                                    <div class="taxonomy-description"> Activities</div>
                                 </div>
                             </div>
                         </div>
