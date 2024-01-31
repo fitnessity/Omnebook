@@ -336,4 +336,8 @@
         return $count;
     }
 
+    function countryName($city){
+       return CompanyInformation::where('city',$city)->pluck('country')->first();
+        
+    }
 ?>

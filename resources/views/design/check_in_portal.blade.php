@@ -13,7 +13,7 @@
                         <div class="row mb-3">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								<div class="page-heading">
-									<label>Check-in Settings</label>
+									<label>Check-in Portal</label>
 								</div>
 							</div>
 							
@@ -24,13 +24,71 @@
                         <div class="row">
                             <div class="col-xl-3 col-lg-4">
                                 <div class="card">
-                                    <div class="card-header">
-                                        <div class="d-flex mb-3">
-                                            <div class="flex-grow-1">
-                                                <h5 class="fs-16">Filters</h5>
+                                    <div class="card-body border-bottom-grey">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="text-center">
+                                                    <label class="fs-15">Scheduled Bookings</label>
+                                                    <div>
+                                                        <button type="button" class="btn btn-red">Check-In</button>
+                                                    </div>
+                                                </div>                                                
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="card-body border-bottom-grey">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="text-center">
+                                                    <label class="fs-15">Missed Payments</label>
+                                                    <div>
+                                                        <button type="button" class="btn btn-red">Resolve</button>
+                                                    </div>
+                                                </div>                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body border-bottom-grey">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="text-center">
+                                                    <label class="fs-15">Documents Needed Signed</label>
+                                                    <div>
+                                                        <button type="button" class="btn btn-red">Review & Sign</button>
+                                                    </div>
+                                                </div>                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body border-bottom-grey">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="text-center">
+                                                    <label class="fs-15">Notes</label>
+                                                    <div>
+                                                        <button type="button" class="btn btn-red">View</button>
+                                                    </div>
+                                                </div>                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="text-center">
+                                                    <label class="fs-15">Announcements</label>
+                                                    <div>
+                                                        <button type="button" class="btn btn-red">View</button>
+                                                    </div>
+                                                </div>                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <!-- end card -->
                             </div>
