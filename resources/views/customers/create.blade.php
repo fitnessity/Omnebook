@@ -656,7 +656,9 @@
         $(document).on('focus', '#birthdate', function(e){
             //jQuery.noConflict();
             $(this).flatpickr( { 
-                dateFormat: "m/d/Y",
+                altInput: true,
+                altFormat: "m/d/Y",
+                dateFormat: "Y-m-d",
                 maxDate: "today",
             });
         });

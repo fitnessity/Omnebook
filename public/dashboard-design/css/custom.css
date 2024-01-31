@@ -4510,7 +4510,7 @@ div#termsdiv{order: 4;}
 }
 .page-content-home{
 	background: #fff;
-	padding: calc(40px + 6.5rem) calc(0rem * .5) 0px calc(0rem * .5);
+	padding: calc(0px + 4rem) calc(0rem * .5) 0px calc(0rem * .5);
 }
 .bg-grey{
 	background-color: #F7F8F9;
@@ -6610,15 +6610,15 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 {
   background-repeat: no-repeat;
   background-position: center bottom;
-  background-size: cover;
+  background-size: 100% 100%;
 }
 .home-banner-title
 {
-  padding: 220px 0 100px;
+  padding: 220px 0 220px;
 }
 .pro-background-overlay-banner{
   background-color: transparent;
-  background-image: linear-gradient(102deg, #fff 38%, #FFFFFF00 94%);
+  background-image: linear-gradient(102deg, #fff 28%, transparent 50%);
   opacity: 0.94;
   transition: background 0.3s, border-radius 0.3s, opacity 0.3s;
   height: 100%;
@@ -6631,7 +6631,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .fit-widget-container-banner{
   text-align: left;
   position: relative;
-  margin-left: 125px;
 }
 .fit-widget-container-banner label
 {
@@ -6639,5 +6638,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   font-weight: 700;
   line-height: 75px;
   color: #000;
-  margin-bottom: 2px;
+}
+.fit-widget-container-banner label span{
+  color: #ed1b24;
+}
+.fit-widget-container-banner p{
+  font-size: 16px;
 }

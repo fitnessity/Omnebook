@@ -15,6 +15,7 @@
 	.desktop-none-booking{display: none;}
 	.dots {  overflow-x: visible !important;}
 	.self-check-sp { margin-bottom: 40px; }
+	.home-banner-title{  padding: 150px 0 150px;}
 }
 
 @media screen and (min-width: 768px) and (max-width: 992px){
@@ -106,7 +107,9 @@
 	.custom-table-header{height: 75px;}
 	.badge-soft-red{font-size: 9px;}
 	.w-ipad{width: 225px;}
-	
+	.bg-cover{background-size: cover;}
+	.pro-background-overlay-banner{background-image: linear-gradient(102deg, #fff 18%, transparent 37%);}
+	.home-banner-title{ padding: 150px 0 150px; }
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){
@@ -360,7 +363,10 @@
 	.space-set{width: 100% !important;}
 	.w-50px {width: 120px; }
 	.modal-belt{width: 50px;}
-
+	.home-banner-title{  padding: 150px 0 150px;}
+	.searchbox .form-control.padding-lrtb-one{  padding: 20px 0px 20px 0px; }
+	.searchbox .btn{padding: 15px 15px;}
+	.bg-cover{background-size: cover;}
 }
 
 @media screen and (min-width: 351px) and (max-width: 370px){

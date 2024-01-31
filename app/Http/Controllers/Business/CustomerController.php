@@ -11,6 +11,7 @@ use App\StripePaymentMethod;
 use Illuminate\Support\Facades\Storage;
 use App\{ExcelUploadTracker};
 use Excel;
+use Session;
 use App\Imports\{CustomerImport,ImportMembership,customerAtendanceImport};
 use App\Jobs\{ProcessAttendanceExcelData,ProcessCustomerExcelData,ProcessMembershipExcelData};
 
@@ -150,6 +151,7 @@ class CustomerController extends Controller
         }
         // echo $request->return_url;exit;
         if($request->return_url){
+            Session::put(['cardSuccessMsg' => 1]);
             return redirect($request->return_url);
         }else{
             return redirect()->route('business_customer_create',['business_id' => $customer->business_id]);
