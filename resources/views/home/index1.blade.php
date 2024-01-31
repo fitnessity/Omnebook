@@ -9,13 +9,13 @@
                 <div class="row mb-3">
                     <div class="col-lg-7 col-12">
                         <div class="banner0fonts">
-                            <label class="fs-65 mb-15">{!!$topBanner->content_title!!}</label>
-                            {!!$topBanner->content!!}
+                            <label class="fs-65 mb-15">{!!@$topBanner->content_title!!}</label>
+                            {!!@$topBanner->content!!}
                         </div>
                     </div>
                     <div class="col-lg-5 col-12">
                         <div class="banner-img">
-                            <img src="{{ asset('public/uploads/cms/'.$topBanner->banner_image) }}">
+                            <img src="{{ asset('public/uploads/cms/'.@$topBanner->banner_image) }}">
                         </div>
                     </div>
                     <div class="col-lg-9 col-12">
@@ -50,42 +50,9 @@
             </div>
         </div>
         
-        <div class="bg-grey hpt-100 hpb-100">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="home-main-title mb-30">
-                            <h2>View All Activities</h2>
-                        </div>
-                    </div>  
-                    
-                    @php $asi=0; @endphp
-                    @foreach($activitySlider as $i=>$slider)
-                        @php if($i == 5){
-                                $asi = 0;
-                            }
-                        @endphp
-                        <div class=" @if($asi == 0) col-lg-6 col-md-6 @else col-lg-3 col-md-3 @endif col-sm-6 col-xs-12 col-12 ">
-                            <div class="taxonomy-item taxonomy-card">
-                                <a class="taxonomy-link hover-effect" href="{{url($slider->link)}}">
-                                    <div class="taxonomy-title">{{$slider->title}} </div>
-                                    <img class="img-responsive" src="{{asset('uploads/slider/thumb/'.$slider->image)}}">
-                                </a>
-                            </div>
-                        </div>
-                        @php $asi++;@endphp
-                    @endforeach
-                    
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 text-center">
-                        <a href="{{url('/activities')}}" class="btn btn-red fs-15 btn-w-130 mt-30">Find More</a>
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
 
-      
-    
+
+   
     </div><!-- End Page-content -->
 </div><!-- END layout-wrapper -->
 
