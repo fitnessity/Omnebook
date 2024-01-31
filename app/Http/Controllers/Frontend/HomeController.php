@@ -33,15 +33,28 @@ class HomeController extends Controller {
     }
     public function index(Request $request) {
         $bepart_data = Cms::where('status', '1')->where('content_alias', 'be_a_part')->first();
+        print_r($bepart_data);
 		$whyFitnessity = Cms::where('status', '1')->where('content_alias', 'about_us')->first();
+         print_r($whyFitnessity);
         $connectBusiness = Cms::where('status', '1')->where('content_alias', 'connect_business')->first();
+         print_r($connectBusiness);
         $topBanner = Cms::where('status', '1') ->where('content_alias', 'banner_search_title')->first();
+         print_r($topBanner);
         $sliders = Slider::get();
+         print_r($sliders);
         $activitySlider = ActivitySlider::get();
+         print_r($activitySlider);
         $nxtact = BusinessServices::where('business_services.is_active', 1)->get();
+         print_r($nxtact);
         $current_date = new DateTime();
         $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtact->pluck('id'))->limit(3)->get();
+
+        print_r($bookschedulers);
+
         $top4Cities = CompanyInformation::groupBy('city')->whereNotNull('city')->join('business_services as bs' ,'bs.cid' ,'=' , 'company_informations.id')->where('bs.is_active',1)->select('city', DB::raw('count(*) as total'))->orderBy('total', 'desc')->take(4)->pluck('city');
+
+         print_r($top4Cities);
+          exit;
         return view('home.index1', [
             'sliders' => $sliders,
             'activitySlider' => $activitySlider,
@@ -53,6 +66,7 @@ class HomeController extends Controller {
             'current_date' => $current_date,
             'top4Cities' => $top4Cities,
         ]);
+       
     }
     public function leftpanel() 
     {
