@@ -50,8 +50,161 @@
             </div>
         </div>
         
+         <div class="hpb-100">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12 col-xs-12 nopadding">
+                        @include('includes.next_8_hours_home') 
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-grey hpt-100 hpb-100">
+            <div class="container">
+                <div class="row justify-content-md-center">
+                    <div class="col-lg-12">
+                        <div class="home-main-title mb-30">
+                            <h2>Discover Our Top Destinations</h2>
+                        </div>
+                    </div>      
+                    
+                    @foreach($top4Cities as $city)
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                            <div class="taxonomy-item taxonomy-item-v2">
+                                <div class="taxonomy-item-image">
+                                    <a class="taxonomy-link hover-effect" href="/activities/?city={{$city}}">
+                                        <img class="img-responsive" src="{{asset('uploads/slider/thumb/1646834734-ACTIVITES BACKGROUND.jpg')}}">
+                                    </a>    
+                                </div>
+                                <div class="taxonomy-item-content">
+                                    <h3 class="taxonomy-title">
+                                        <a href="#">{{$city}}</a>
+                                        <a href="#">United States</a>
+                                    </h3>
+                                    <div class="taxonomy-description">{{cityCount($city)}} Activities</div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                    
+                </div>
+            </div>
+        </div>
+        
+        @if($whyFitnessity)
+        <div class="hpt-100 hpb-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        @if($bepart_data)
+                            <div class="">
+                                <div class="join-title mb-5">
+                                    <h1>{!! $bepart_data->content_title !!}</h1>
+                                </div>
+                                <div class="join-box-text mb-25">
+                                    {!!$bepart_data->content!!}
+
+                                    @if(Auth::check())
+                                        <a class="btn btn-red" href="/activities">START TODAY</a>
+                                    @else
+                                        <a href="{{route('registration')}}" class="btn btn-red">START TODAY</a>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
+                    </div>
 
 
+                    <div class="col-lg-8 hpl-50">
+                        <div class="amazonaws mb-10">
+                            <img src="{{ asset('public/uploads/cms/'.$whyFitnessity->banner_image) }}" >
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="info-imgs">
+                            <img src="{{ asset('public/'.$whyFitnessity->video) }}">
+                        </div>
+                    </div>
+                    <div class="col-lg-8 hpl-50">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="fitness-title mb-5 mt-10">
+                                    <h1>Why <span>Fitnessity?</span></h1>
+                                </div>
+                            </div>
+                                
+                            {!!$whyFitnessity->content!!}
+
+                            <div class="col-lg-12">
+                                <div class="text-center">
+                                    @if(Auth::check())
+                                        <a class="btn btn-red" href="/activities">Join Today</a>
+                                    @else
+                                        <a class="btn btn-red" href="{{route('registration')}}">Join Today</a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+        
+        <div class="bg-grey hpt-100 hpb-100">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="home-main-title mb-30">
+                            <h2>Discover Activities</h2>
+                            <p> Get connected to Activities you love or explore a new one</p>
+                        </div>
+                    </div>
+
+                    @foreach($sliders as $slider)
+                        <div class="col-lg-3 col-sm-6 col-md-6">
+                            <div class="fit-project-item mb-30">
+                                <a href="{{$slider->link}}">
+                                    <div class="project-img">
+                                        <img src="{{asset('/public/uploads/slider/thumb/'.$slider->image)}}" alt="images">
+                                        <div class="discover-title">
+                                            <h2>{{$slider->title}}</h2>
+                                        </div>
+                                    </div>
+                                    <div class="project-content"> 
+                                        <div class="project-inner">
+                                            <span class="category">{{$slider->stext}} </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>                      
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        @if($connectBusiness)
+            <div class="hpt-100 hpb-100 ">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="providers-bg-image" style="background-image: url('public/uploads/cms/{{@$connectBusiness->banner_image}}');">
+                                <div class="pro-background-overlay"></div>
+                                <div class="fit-widget-container">
+                                    <h2>{!!@ $connectBusiness->content_title !!}</h2>
+                                     {!!@$connectBusiness->content!!}
+                                    <div>
+                                        <a href="{{route('businessClaim')}}" class="btn btn-border-white btn-w-180 fs-15 mb-10">List My Business</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
    
     </div><!-- End Page-content -->
 </div><!-- END layout-wrapper -->
