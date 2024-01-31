@@ -154,6 +154,14 @@ class CustomerController extends Controller {
         $documents = CustomersDocuments::where(['customer_id'=>$id])->get();
         $lastBooking = $customerdata->bookingDetail()->orderby('created_at','desc')->first();
         $notes = CustomerNotes::where(['customer_id'=>$id])->get();
+
+        $cardSuccessMsg =0;
+
+        if(Session::has('cardSuccessMsg')){
+            $cardSuccessMsg = 1;
+            Session::forget('cardSuccessMsg');
+        }
+
         return view('customers.show', [
             'customerdata'=>$customerdata,
             'strpecarderror'=>$strpecarderror,
@@ -166,6 +174,7 @@ class CustomerController extends Controller {
             'documents' =>$documents,
             'notes' =>$notes,
             'lastBooking' =>$lastBooking,
+            'cardSuccessMsg' =>$cardSuccessMsg,
         ]);
     }
 

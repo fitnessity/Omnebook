@@ -8,15 +8,34 @@
 		<div class="container-fuild">
 			<div class="bg-cover home-banner-title" style="background-image: url(http://dev.fitnessity.co//public/dashboard-design/images/multi-img-banner.jpg);">
 				<div class="pro-background-overlay-banner"></div>
-				<div class="row">
-					<div class="col-lg-7">
-						<div class="fit-widget-container-banner">
-							<label class="fs-65 mb-15">Find Next Place <br> To <span class="font-red"> Visit </span></label>
-							<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+				<div class="container">
+					<div class="row">
+						<div class="col-xxl-9 col-lg-9 col-md-12">
+							<div class="fit-widget-container-banner">
+								<label class="fs-65 mb-15">Find Next Place <br> To <span> Visit </span></label>
+								<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+							</div>
+							<div class="mt-25">
+								<div class="searchwrapper shadow">
+									<div class="searchbox">
+										<div class="row">
+											<div class="col-lg-6 col-sm-12 col-md-6 col-12">
+												<input type="text" class="form-control padding-lrtb-one" placeholder="Search by Activity, Business, Person, Username">
+											</div>
+											<div class="col-lg-4 col-sm-12 col-md-4 col-12">
+												<input type="text" class="form-control no-side-border padding-lrtb" placeholder="Search by country, city, state, zip">
+											</div>
+											<div class="col-lg-2 col-sm-12 col-md-2 col-12">
+												<button type="button" class="btn btn-red" class="form-control"><i class="fa fa-search livesearch"></i>Search</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
 						</div>
 					</div>
-				</div>
-				
+				</div>			
 			</div>
 		</div>
 			<!--<div class="container">
