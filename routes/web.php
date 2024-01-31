@@ -302,6 +302,7 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
 
     Route::get('/register_ep','DesignController@register_ep')->name('register_ep');
     Route::get('/check_in_settings','DesignController@check_in_settings')->name('check_in_settings');
+    Route::get('/check_in_portal','DesignController@check_in_portal')->name('check_in_portal');
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
