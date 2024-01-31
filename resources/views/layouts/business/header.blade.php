@@ -281,7 +281,7 @@ $total_quantity = 0;
         <?php 
         $companyid = (isset($companyid) && $companyid != "") ? $companyid : 0;
         $module = explode(".co/", url()->current());?>
-        <header>
+        <header @if(  request()->is('*register_ep*')) class="d-none" @endif>
 			<div class="container-fluid printnone">
 				<div class="row">
 					<div class="col-lg-12">
@@ -389,9 +389,19 @@ $total_quantity = 0;
 													<li class="lp-per-pro"> <span>Business Center </span></li>
 													<li class="pc-link"><span class="pc-micon"><i class="fas fa-clipboard-list"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">Create A Business</a>
                                                     </li>
-                                                    <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fa fa-tasks"></i></span>@if(count(Auth::user()->company) > 0)<a href="{{route('business_dashboard')}}"  style="color: white;">Manage My Business</a>@else<a href="{{route('staff_login')}}"  style="color: white;">Staff Login</a>@endif
-                                                    </li>
+
+                                                    @if(count(Auth::user()->company) > 0)
+	                                                    <li class="pc-link">
+															<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('business_dashboard')}}"  style="color: white;">Manage My Business</a>
+														</li>
+
+														@if(!Session('StaffLogin'))
+															<li class="pc-link">
+																<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('staff_login')}}"  style="color: white;">Staff Login</a>
+															</li>
+														@endif
+													@endif
+                                                  
 													<li><div class="border-sidebar"></div></li>
 													<li class="lp-per-pro"> <span>Support </span> </li>
 													<li class="pc-link">

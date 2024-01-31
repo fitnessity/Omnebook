@@ -29,8 +29,6 @@
 	<link rel="stylesheet" type="text/css" href="{{asset('/public/js/select/select.css')}}" />
 	<!-- icon -->
 	<link rel="stylesheet" type="text/css" href="{{asset('/public/dashboard-design/css/icons.min.css')}}" />
-
-
 </head>
 @section('content')
 
@@ -2328,6 +2326,7 @@
 											</div><!-- end card header -->
 
 											<div class="card-body">
+												<div class="mb-10 fs-15"><a class="mr-5">Share <i class="fas fa-share-alt"></i></a></div>
 												<div class="live-preview">
 													<div class="accordion" id="stepFive">
 														<div class="accordion-item shadow">

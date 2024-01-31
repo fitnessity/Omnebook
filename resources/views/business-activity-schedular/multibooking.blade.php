@@ -61,119 +61,128 @@
 															<div class="checkout-sapre-tor"></div>
 														</div>
 													</div>
-
+													@php $categoryList = []; @endphp
 													@foreach($services as $ser)
 														@php  
-															$categoryList = [];
 															if($priceid != ''){
 																$pricelist =  @$ser->price_details()->find($priceid);
 																if(@$pricelist->business_price_details_ages != ''){
-																	$categoryList []= @$pricelist->business_price_details_ages;
+																	$categoryList [] = @$pricelist->business_price_details_ages;
 																}
 															}else{
-																$categoryList = @$ser->BusinessPriceDetailsAges;
+																foreach(@$ser->BusinessPriceDetailsAges as $cat){
+																	$categoryList [] = $cat;
+																}
 															}
 														@endphp
-														@if(!empty($categoryList) && count($categoryList)>0)
-															@foreach($categoryList as $cList)
-																@php  $sche_ary = [];
-																	foreach($cList->BusinessActivityScheduler as $sc){
-																		if($sc->end_activity_date >= $filter_date->format('Y-m-d') && $sc->starting <= $filter_date->format('Y-m-d')){
-																			if(strpos($sc->activity_days, $filter_date->format('l')) !== false){
+													@endforeach
 
-																				$cancelSc = $sc->activity_cancel->where('cancel_date',$filter_date->format('Y-m-d'))->first();
-																				$hide_cancel = @$cancelSc->hide_cancel_on_schedule;
-																				if(@$cancelSc->cancel_date_chk == 0 ){
-																					$hide_cancel = 0;
-																				}
-																				if($hide_cancel == '' || $hide_cancel != 1){
-																					$sche_ary [] = $sc;
-																				}
+													@php 	
+														$categoryListFull = collect($categoryList)->sortBy(function ($item){
+															    $earliestStartTime = $item->BusinessActivityScheduler->min('shift_start');
+															    return $earliestStartTime ?: PHP_INT_MAX;
+															});
+													@endphp 
+
+													@if(!empty($categoryListFull) && count($categoryListFull)>0)
+														@foreach($categoryListFull as $cList)
+															@php  $sche_ary = [];
+																foreach($cList->BusinessActivityScheduler as $sc){
+																	if($sc->end_activity_date >= $filter_date->format('Y-m-d') && $sc->starting <= $filter_date->format('Y-m-d')){
+																		if(strpos($sc->activity_days, $filter_date->format('l')) !== false){
+
+																			$cancelSc = $sc->activity_cancel->where('cancel_date',$filter_date->format('Y-m-d'))->first();
+																			$hide_cancel = @$cancelSc->hide_cancel_on_schedule;
+																			if(@$cancelSc->cancel_date_chk == 0 ){
+																				$hide_cancel = 0;
+																			}
+																			if($hide_cancel == '' || $hide_cancel != 1){
+																				$sche_ary [] = $sc;
 																			}
 																		}
-																	} 
-																	if(!empty($sche_ary)){
-																@endphp
-																<div class="row">
-																	<div class="col-md-6 col-sm-6 col-xs-12">
-																		<div class="classes-info remove-line mb-10">
-																			<div class="row">
-																				<div class="col-md-12 col-xs-12">
-																					<div class="text-left line-height-1 ">
-																						<label class="fs-16">Category Name: </label> <span class="fs-16">{{@$cList->category_title}}</span>
-																					</div>
+																	}
+																} 
+																if(!empty($sche_ary)){
+															@endphp
+															<div class="row">
+																<div class="col-md-6 col-sm-6 col-xs-12">
+																	<div class="classes-info remove-line mb-10">
+																		<div class="row">
+																			<div class="col-md-12 col-xs-12">
+																				<div class="text-left line-height-1 ">
+																					<label class="fs-16">Category Name: </label> <span class="fs-16">{{@$cList->category_title}}</span>
 																				</div>
-																				<div class="col-md-12 col-xs-12">
-																					<div class="text-left line-height-1">
-																						<label>Program Name: </label> <span> {{$ser->program_name}}</span>
-																					</div>
+																			</div>
+																			<div class="col-md-12 col-xs-12">
+																				<div class="text-left line-height-1">
+																					<label>Program Name: </label> <span> {{$cList->BusinessServices->program_name}}</span>
 																				</div>
-																				<div class="col-md-12 col-xs-12">
-																					<div class="text-left line-height-1">
-																						<label>Activity: </label> <span> {{$ser->sport_activity}}</span>
-																					</div>
+																			</div>
+																			<div class="col-md-12 col-xs-12">
+																				<div class="text-left line-height-1">
+																					<label>Activity: </label> <span> {{$cList->BusinessServices->sport_activity}}</span>
 																				</div>
 																			</div>
 																		</div>
 																	</div>
-																	<div class="col-md-6 col-sm-6 col-xs-12">
-																		<div class="row calendar-separator-line">
-																			@if(!empty($sche_ary))
-																				@foreach($sche_ary as $s=>$scary)
-																					@php 
-																						$duration = $scary->get_duration();
-																						$SpotsLeftdis = 0;
-																						$bs = new  \App\Repositories\BookingRepository;
-																						$bookedspot = $bs->gettotalbooking($scary->id,$filter_date->format('Y-m-d')); 
-																						$SpotsLeftdis = $scary->spots_available - $bookedspot;
-																						
-																				        $cancel_chk = 0;
-																						$canceldata = App\ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id,'cancel_date_chk'=>1])->first();
-																						$date = $filter_date->format('Y-m-d');
-																						$time = $scary->shift_start;
-																						$st_time = date('Y-m-d H:i:s', strtotime("$date $time"));
-																						$current  = date('Y-m-d H:i:s');
-																						$difference = round((strtotime($st_time) - strtotime($current))/3600, 1);
-																						$timeOfActivity = date('h:i a', strtotime($scary->shift_start));
-																						$grayBtnChk = 0;
-																						if($filter_date->format('Y-m-d') == date('Y-m-d') && $st_time < $current){
-																							$grayBtnChk = 1;
-																						}
-																						if($SpotsLeftdis == 0){
-																							$grayBtnChk = 2;
-																						}
-																						if($canceldata != ''){
-																							$grayBtnChk = 3;
-																							$class = 'post-btn-gray';
-																						}
+																</div>
+																<div class="col-md-6 col-sm-6 col-xs-12">
+																	<div class="row calendar-separator-line">
+																		@if(!empty($sche_ary))
+																			@foreach($sche_ary as $s=>$scary)
+																				@php 
+																					$duration = $scary->get_duration();
+																					$SpotsLeftdis = 0;
+																					$bs = new  \App\Repositories\BookingRepository;
+																					$bookedspot = $bs->gettotalbooking($scary->id,$filter_date->format('Y-m-d')); 
+																					$SpotsLeftdis = $scary->spots_available - $bookedspot;
+																					
+																			        $cancel_chk = 0;
+																					$canceldata = App\ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id,'cancel_date_chk'=>1])->first();
+																					$date = $filter_date->format('Y-m-d');
+																					$time = $scary->shift_start;
+																					$st_time = date('Y-m-d H:i:s', strtotime("$date $time"));
+																					$current  = date('Y-m-d H:i:s');
+																					$difference = round((strtotime($st_time) - strtotime($current))/3600, 1);
+																					$timeOfActivity = date('h:i a', strtotime($scary->shift_start));
+																					$grayBtnChk = 0;
+																					if($filter_date->format('Y-m-d') == date('Y-m-d') && $st_time < $current){
+																						$grayBtnChk = 1;
+																					}
+																					if($SpotsLeftdis == 0){
+																						$grayBtnChk = 2;
+																					}
+																					if($canceldata != ''){
+																						$grayBtnChk = 3;
+																						$class = 'post-btn-gray';
+																					}
 
-																						$insName = $scary->getInstructure($filter_date->format('Y-m-d'));
-																					@endphp
-																					<div class="col-lg-4 col-md-5 col-sm-5 col-xs-6">
-																						<div class="multiple0select btn-group w-100">
-																							<div class="select">
-																								<input type="checkbox" id="item_{{$s}}{{$scary->id}}" class="checkboxchk" data-pname="{{$ser->program_name}}" data-toa="{{$timeOfActivity}}" data-chk="{{$grayBtnChk}}" data-sid="{{$ser->id}}" data-scid="{{$scary->id}}" data-catId="{{$scary->category_id}}" {{ $SpotsLeftdis == 0 ? "disabled" : ''}} {{ $canceldata != '' ?  "disabled" : ''}}>
-																								<label class="btn button_select" for="item_{{$s}}{{$scary->id}}">{{$timeOfActivity}} <br>{{$duration}}</label>
-																								<span>{{ $SpotsLeftdis == 0 ? "Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</span>
-																								<label class="font-red">{{ $canceldata != '' ? "Cancelled" : ''}}</label>
-																								<span>{{ $insName }}</span>
-																							</div>
+																					$insName = $scary->getInstructure($filter_date->format('Y-m-d'));
+																				@endphp
+																				<div class="col-lg-4 col-md-5 col-sm-5 col-xs-6">
+																					<div class="multiple0select btn-group w-100">
+																						<div class="select">
+																							<input type="checkbox" id="item_{{$s}}{{$scary->id}}" class="checkboxchk" data-pname="{{$ser->program_name}}" data-toa="{{$timeOfActivity}}" data-chk="{{$grayBtnChk}}" data-sid="{{$ser->id}}" data-scid="{{$scary->id}}" data-catId="{{$scary->category_id}}" {{ $SpotsLeftdis == 0 ? "disabled" : ''}} {{ $canceldata != '' ?  "disabled" : ''}}>
+																							<label class="btn button_select" for="item_{{$s}}{{$scary->id}}">{{$timeOfActivity}} <br>{{$duration}}</label>
+																							<span>{{ $SpotsLeftdis == 0 ? "Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</span>
+																							<label class="font-red">{{ $canceldata != '' ? "Cancelled" : ''}}</label>
+																							<span>{{ $insName }}</span>
 																						</div>
 																					</div>
-																				@endforeach
-																			@else
-																				<div class="col-md-12 col-sm-6 col-xs-12 noschedule">No Time available</div>
-																			@endif
-																		</div>
-																	</div>
-																	<div class="col-md-12 col-xs-12">
-																		<div class="checkout-sapre-tor"></div>
+																				</div>
+																			@endforeach
+																		@else
+																			<div class="col-md-12 col-sm-6 col-xs-12 noschedule">No Time available</div>
+																		@endif
 																	</div>
 																</div>
-																@php } @endphp
-															@endforeach
-														@endif
-													@endforeach
+																<div class="col-md-12 col-xs-12">
+																	<div class="checkout-sapre-tor"></div>
+																</div>
+															</div>
+															@php } @endphp
+														@endforeach
+													@endif
 												</div>
 											</div>
 											<div class="row">

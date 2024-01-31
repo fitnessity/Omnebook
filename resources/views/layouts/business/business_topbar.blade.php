@@ -51,6 +51,10 @@
 	<!-- Color Piker Css-->
     <link href="{{asset('/public/dashboard-design/css/nano.min.css')}}" rel="stylesheet" type="text/css" />
 
+	<!-- filepond -->
+	<link rel="stylesheet" href="{{asset('/public/dashboard-design/filepond/filepond.min.css')}}" type="text/css" />
+	<link rel="stylesheet" href="{{asset('/public/dashboard-design/filepond/filepond-plugin-image-preview.min.css')}}" type="text/css" />
+	
 </head>
 
  <!-- Begin page -->
@@ -74,7 +78,8 @@
 							</div>
 						</form>
 						<div class="app-search">
-							<a href="#" class="add-client mobile-none"  data-bs-toggle="modal" data-bs-target=".new-client-steps">Add New Client</a>
+							<a href="{{route('business_customer_create' ,['business_id'=> Auth::user()->cid])}}" class="add-client mobile-none" >Add New Client</a>
+							<!-- <a href="#" class="add-client mobile-none"  data-bs-toggle="modal" data-bs-target=".new-client-steps">Add New Client</a> -->
 						</div>
 					</div>
 
@@ -279,6 +284,14 @@
 								</div>
 							</div>
 						</div>
+
+						<div class="ms-1 header-item d-none d-sm-flex">
+							<button type="button" class="btn btn-soft-info btn-icon waves-effect waves-light layout-rightside-btn shadow-none"><i class="ri-pulse-line"></i></button>
+							<!--<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode shadow-none">
+								<i class='bx bx-moon fs-22'></i>
+							</button> -->
+						</div>
+
 					</div>
 				</div>
 			</div>
@@ -308,8 +321,7 @@
 		    </div>
 		</div>
 
-		@include('customers._add_new_client_modal')
-
+	
 
 		@include('layouts.business.businesssidebar')
 

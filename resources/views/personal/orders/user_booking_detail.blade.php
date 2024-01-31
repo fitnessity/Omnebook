@@ -16,24 +16,40 @@
 							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting2Examplecollapse{{$accId}}_{{$tabName}}_{{$y}}" aria-expanded="true" aria-controls="accor_nesting2Examplecollapse{{$accId}}_{{$tabName}}_{{$y}}">
 								<div class="container-fluid nopadding">
 									<div class="row y-middle">
-										<div class="col-lg-9 col-md-6 col-12 mobile0view-flex y-middle">
-											<div class="d-inline-block">
-												<img src="@if(Storage::disk('s3')->exists(@$bs->business_services_with_trashed->first_profile_pic())) {{ Storage::url($bs->business_services_with_trashed->first_profile_pic()) }} @else {{ asset('/images/service-nofound.jpg')}} @endif" alt="" class="rounded avatar-sm shadow mr-5"> 
-											</div>
-											<div class="mx-line d-inline-block mmt-10">
-												<div>
-													<label>{{@$bs->business_services_with_trashed->program_name}} |</label>
-													<label>Remaining: {{@$bs->getremainingsession()}}/{{@$bs->pay_session}} |</label>
-													<label>Expiration: {{date('m/d/Y',strtotime(@$bs->expired_at))}} |</label>
-												</div>
-												@if($tabName != 'current' && $tabName != 'past') 
-													<div>
-														@if(@$bs->getReserveData('reserve_date') != '—') 
-															<label>Reserved Date: {{@$bs->getReserveData('reserve_date')}}  | </label>
-															<label>Reserved Time: {{@$bs->getReserveData('reserve_time')}}  </label> 
-														@endif
+										<div class="col-lg-9 col-md-7 col-12 mobile0view-flex y-middle">
+											<div class="container-fluid">
+												<div class="row y-middle">
+													<div class="col-lg-1 col-sm-2 col-4">
+														<div class="d-inline-block">
+															<img src="@if(Storage::disk('s3')->exists(@$bs->business_services_with_trashed->first_profile_pic())) {{ Storage::url($bs->business_services_with_trashed->first_profile_pic()) }} @else {{ asset('/images/service-nofound.jpg')}} @endif" alt="" class="rounded avatar-sm shadow mr-5"> 
+														</div>
 													</div>
-												@endif
+													<div class="col-lg-11 col-sm-10 col-8">
+														<div class="mx-line d-inline-block mmt-10">
+															<div>
+																<label>{{@$bs->business_services_with_trashed->program_name}} |</label>
+																<label>Remaining: {{@$bs->getremainingsession()}}/{{@$bs->pay_session}} |</label>
+																<label>Expiration: {{date('m/d/Y',strtotime(@$bs->expired_at))}} |</label>
+															</div>
+															@if($tabName == 'past') 
+																<div>
+																	@if(@$bs->getReserveData('reserve_date') != '—') 
+																		<label class="font-red mt-5">Status: Terminated on 01/30/2024	{{date('m/d/Y',strtotime(@$bs->terminated_at))}} </label> 
+																	@endif
+																</div>
+															@endif
+
+															@if($tabName != 'current' && $tabName != 'past') 
+																<div>
+																	@if(@$bs->getReserveData('reserve_date') != '—') 
+																		<label class="mt-5">Reserved Date: {{@$bs->getReserveData('reserve_date')}}  | </label>
+																		<label class=" mt-5">Reserved Time: {{@$bs->getReserveData('reserve_time')}}  </label> 
+																	@endif
+																</div>
+															@endif
+														</div>
+													</div>
+												</div>
 											</div>
 										</div>
 										<div class="col-lg-2 col-md-3 col-8">
@@ -46,7 +62,7 @@
 											@endif
 										</div>
 
-										<div class="col-lg-1 col-md-3 col-4">
+										<div class="col-lg-1 col-md-2 col-4">
 											<div class="multiple-options">
 												<div class="setting-icon">
 													<i class="ri-more-fill"></i>

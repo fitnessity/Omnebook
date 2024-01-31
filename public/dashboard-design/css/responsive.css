@@ -14,6 +14,7 @@
 @media screen and (min-width: 1200px) and (max-width: 1900px){
 	.desktop-none-booking{display: none;}
 	.dots {  overflow-x: visible !important;}
+	.self-check-sp { margin-bottom: 40px; }
 }
 
 @media screen and (min-width: 768px) and (max-width: 992px){
@@ -104,6 +105,8 @@
 	.setoflinkes{display: block;}
 	.custom-table-header{height: 75px;}
 	.badge-soft-red{font-size: 9px;}
+	.w-ipad{width: 225px;}
+	
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){
@@ -211,6 +214,7 @@
 	.width-345 { max-width: 345px;}
 	.desktop-none-customer {display: block !important;  }
 	.navbar-menu{ z-index: 2000 !important;	overflow: scroll;  position: fixed; top: 0;}
+	.w-fold{width: 250px;}
 }
 
 @media screen and (max-width: 699px){ 
@@ -353,6 +357,10 @@
 	.width-40 {	max-width: 100%; }
 	.navbar-menu{ z-index: 2000 !important;	overflow: scroll;  position: fixed; top: 0;}
 	.w-250 {width: 180px;  }
+	.space-set{width: 100% !important;}
+	.w-50px {width: 120px; }
+	.modal-belt{width: 50px;}
+
 }
 
 @media screen and (min-width: 351px) and (max-width: 370px){
@@ -361,6 +369,8 @@
 	header .header-right .header-bottom-sp{margin-bottom: 6px;}
 	table.dataTable.nowrap th, table.dataTable.nowrap td{white-space: unset !important;}
 	.ph-provider {  margin-right: 0;}
+	.space-set{width: 100% !important;}
+	.w-50px {width: 100px; }
 }
 
 @media screen and (min-width: 280px) and (max-width: 350px){

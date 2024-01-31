@@ -42,6 +42,10 @@ class CustomerController extends Controller {
         $this->bookings = $bookings;
     }
 
+    public function client(){
+        return view('customers.add_client');
+    }
+
     public function index(Request $request, $business_id){
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
@@ -86,6 +90,32 @@ class CustomerController extends Controller {
             'company' => $company,
             'customerCount' => $customerCount,
         ]); 
+    }
+
+    public function create(Request $request, $business_id){
+        $intent = $clientSecret = null;
+        $success = 0;
+        if(!$request->customer_id){
+            if (session()->has('success-register')) {
+                $success = session('success-register');
+            }
+            session()->forget('success-register');
+        }
+
+        $businessTerms = BusinessTerms::where('cid',$business_id)->first();
+        if($request->customer_id){
+            $customer = Customer::find($request->customer_id);
+            \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            if($customer->stripe_customer_id != ''){
+                $intent = $stripe->setupIntents->create([
+                    'payment_method_types' => ['card'],
+                    'customer' => $customer->stripe_customer_id,
+                ]);
+                $clientSecret = $intent['client_secret'];
+            } 
+        }
+        return view('customers.create',compact('clientSecret', 'business_id','success','businessTerms'));
     }
 
     public function delete(Request $request, $business_id){
@@ -405,20 +435,6 @@ class CustomerController extends Controller {
         return view('customers.edit_terminate_or_suspend_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id ,"customer_id"=>$request->id]);
     }
 
-    public function addcustomerfamily ($id){
-        $UserFamilyDetails  = [];
-        $customer = Customer::find($id);
-        $UserFamilyDetails  = $customer->get_families();
-        $companyId = $customer->business_id;
-            
-        return view('customers.==add_family', [
-            'UserFamilyDetails' => $UserFamilyDetails,
-            'companyId' => $companyId,
-            'parent_cus_id' => $id,
-        ]);
-        //return view('profiles.viewcustomer');
-    }
-
     public function add_family ($id){
         $UserFamilyDetails  = [];
         $customer = Customer::find($id);
@@ -434,24 +450,40 @@ class CustomerController extends Controller {
     }
 
     public function addFamilyMemberCustomer(Request $request) {
+        //print_r($request->all());
+        $idArray = [];
+        $parent_id = null;
         for ($i=0; $i <= $request->family_count ; $i++) { 
-            $update = [];
-            $update = [
-                'business_id' => $request['business_id'],
-                'fname' => $request['fname'][$i],
-                'lname' => $request['lname'][$i],
-                'email' => $request['email'][$i],
-                'phone_number' => $request['mobile'][$i],
-                'emergency_contact' => $request['emergency_contact'][$i],
-                'relationship' => $request['relationship'][$i],
-                'gender' => $request['gender'][$i],
-                'birthdate' => $request['birthdate'][$i] != '' ? date('Y-m-d',strtotime($request['birthdate'][$i])) : null,
-                'parent_cus_id' => $request['parent_cus_id'],
-            ];
+            $customer = Customer::firstOrNew(['id' => $request['cus_id'][$i]]);
 
-            Customer::updateOrInsert(['id'=> $request['cus_id'][$i] ] , $update);
+            $customer->fill([
+                'business_id'       => $request['business_id'],
+                'fname'             => $request['fname'][$i],
+                'lname'             => $request['lname'][$i],
+                'email'             => $request['email'][$i],
+                'phone_number'      => $request['mobile'][$i],
+                'emergency_contact' => $request['emergency_contact'][$i],
+                'relationship'      => $request['relationship'][$i],
+                'gender'            => $request['gender'][$i],
+                'birthdate'         => $request['birthdate'][$i] != '' ? date('Y-m-d', strtotime($request['birthdate'][$i])) : null,
+                'parent_cus_id'     => $request['parent_cus_id'],
+                'primary_account' => 0,
+            ])->save();
+
+            if (@$request['primaryAccountHolder'][$i] == 1 && $parent_id === null) {
+                $parent_id = $customer->id;
+            }else{
+                $idArray[$i][] = $customer->id;   
+            }
         }
 
+            /*echo $parent_id;
+            print_r($idArray);exit;*/
+        if($parent_id){
+            Customer::whereIn('id', $idArray)->update(['parent_cus_id' => $parent_id]);
+            Customer::where('id', $request['parent_cus_id'])->update(['parent_cus_id' => $parent_id,'primary_account' => 0]);
+            Customer::where('id', $parent_id)->update(['parent_cus_id' => null,'primary_account' => 1]);
+        }
         return Redirect::back();
     }
 
@@ -917,7 +949,6 @@ class CustomerController extends Controller {
         Storage::disk('s3')->delete($docs->path);
         $docs->delete();
     }
-
 
     public function removenote($business_id, $id){
         $note = CustomerNotes::find($id);

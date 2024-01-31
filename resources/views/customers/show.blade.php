@@ -45,7 +45,7 @@
 								<div class="col-xl-12">
 									<div class="card">
 										<div class="card-header align-items-center d-flex">
-											<h4 class="card-title mb-0 flex-grow-1">{{@$customerdata->full_name}}'s Account</h4>
+											<h4 class="card-title mb-0 flex-grow-1">{{@$customerdata->full_name}}'s Account </h4>
 										</div><!-- end card header -->
 										<div class="card-body">
 											<div class="live-preview">
@@ -82,7 +82,7 @@
 																						<!--end col-->
 																						<div class="col-lg-7 col-md-6 col-sm-5 col-xs-12 col-auto">
 																							<div class="p-2 mmt-10">
-																								<h3 class="mb-1">{{$customerdata->full_name}}</h3>
+																								<h3 class="mb-1">{{$customerdata->full_name}} @if($customerdata->primary_account == '1') <span class="font-green">(Primary Account)</span> @endif </h3>
 																							</div>
 																						</div>
 																						<!--end col-->
@@ -185,7 +185,7 @@
 																									</div>
 																									<div class="row mb-10"> 
 																										<div class="col-lg-5 col-sm-5">
-																											<label class="font-black">Customers Since :</label>
+																											<label class="font-black">Member Since :</label>
 																										</div>
 																										<div class="col-lg-7 col-sm-7">
 																											<span>{{date('m/d/Y',strtotime($customerdata->created_at))}}</span>
@@ -314,7 +314,7 @@
 																											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting4Examplecollapsea{{$i}}" aria-expanded="false" aria-controls="accor_nesting4Examplecollapse2">
 																												<div class="container-fluid nopadding">
 																													<div class="row mini-stats-wid d-flex align-items-center ">
-																														<div class="col-lg-10 col-md-10 col-8"> {{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} |Started On {{date('m/d/Y',strtotime(@$booking_detail->contract_date))}} | Expires On {{date('m/d/Y',strtotime(@$booking_detail->expired_at))}} </div>
+																														<div class="col-lg-10 col-md-10 col-8"> {{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} @if($booking_detail->contract_date) | Started On {{date('m/d/Y',strtotime(@$booking_detail->contract_date))}} @endif  @if($booking_detail->expired_at) | Expires On {{date('m/d/Y',strtotime(@$booking_detail->expired_at))}} @endif </div>
 																														
 																														<div class="col-lg-2 col-md-2 col-4">
 																															<div class="multiple-options">
@@ -461,7 +461,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span> {{date('m/d/Y',strtotime(@$booking_detail->contract_date))}}</span>
+																																	<span> @if($booking_detail->contract_date) {{date('m/d/Y',strtotime(@$booking_detail->contract_date))}} @else N/A  @endif</span>
 																																</div>
 																															</div>
 
@@ -472,7 +472,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span> {{date('m/d/Y',strtotime(@$booking_detail->expired_at))}}</span>
+																																	<span>@if($booking_detail->expired_at)  {{date('m/d/Y',strtotime(@$booking_detail->expired_at))}} @else N/A @endif</span>
 																																</div>
 																															</div>
 																														

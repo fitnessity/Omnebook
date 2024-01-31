@@ -138,6 +138,14 @@ class BusinessServices extends Model
             $service->favourites->each(function($favourite) {
                 $favourite->delete();
             });
+
+            $service->UserBookingDetails->each(function($detail) {
+                $detail->terminated_at = date('Y-m-d');
+                $detail->terminate_reason = 'We would like to inform you that this activity has been closed by company.';
+                $detail->terminate_comment = 'If you have any questions or need additional assistance, please don\'t hesitate to reach out to our support team.';
+                $detail->status = 'terminate';
+                $detail->update();
+            });
         });
     }
     
@@ -184,7 +192,7 @@ class BusinessServices extends Model
     }
 
     public function UserBookingDetails(){
-        return $this->hasMany(UserBookingDetails::class, 'sport');
+        return $this->hasMany(UserBookingDetail::class, 'sport');
     }
 
     public function reviews_score()
@@ -206,47 +214,62 @@ class BusinessServices extends Model
 
     public function min_price(){
         $pricearr =$discountPriceArr= [];
+        $priceVal = '';
         $priceAllArray = $this->price_details;
         if(!empty($priceAllArray)){
             foreach ($priceAllArray as $key => $value) {
                 $price = 0;
-                if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-                    if($value->adult_weekend_price_diff != ''){
-                        $price = $value->adult_weekend_price_diff;
-                        $discount = $value->adult_discount;
-                    }else if($value->child_weekend_price_diff != ''){
-                        $price = $value->child_weekend_price_diff;
-                        $discount = $value->child_discount;
-                    }else{
-                        $price = $value->infant_weekend_price_diff;
-                        $discount = $value->infant_discount;
-                    }
+    
+                if($value->adult_weekend_price_diff != ''){
+                    $priceWEnd = $value->adult_weekend_price_diff;
+                    $discountWEnd = $value->adult_discount;
+                }else if($value->child_weekend_price_diff != ''){
+                    $priceWEnd = $value->child_weekend_price_diff;
+                    $discountWEnd = $value->child_discount;
                 }else{
-                    if($value->adult_cus_weekly_price != ''){
-                        $price = $value->adult_cus_weekly_price;
-                        $discount = $value->adult_discount;
-                    }else if($value->child_cus_weekly_price != ''){
-                        $price = $value->child_cus_weekly_price;
-                        $discount = $value->child_discount;
-                    }else{
-                        $price = $value->infant_cus_weekly_price;
-                        $discount = $value->infant_discount;
-                    }
+                    $priceWEnd = $value->infant_weekend_price_diff;
+                    $discountWEnd = $value->infant_discount;
+                }
+              
+                if($value->adult_cus_weekly_price != ''){
+                    $priceWDay = $value->adult_cus_weekly_price;
+                    $discountWDay = $value->adult_discount;
+                }else if($value->child_cus_weekly_price != ''){
+                    $priceWDay = $value->child_cus_weekly_price;
+                    $discountWDay = $value->child_discount;
+                }else{
+                    $priceWDay = $value->infant_cus_weekly_price;
+                    $discountWDay = $value->infant_discount;
                 }
 
-                $pricearr[] = $price != '' ? $price : 0;
-                $discountPriceArr[] = ($price != '' &&  $discount != '') ? $price - ($price * $discount/100) : 0 ; 
+                if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+                    $price = $priceWEnd ?: $priceWDay ?: 0;
+                    $discountVal = $discountWEnd ?: $discountWDay ?: 0;
+                }else{
+                    $price = $priceWDay ?: $priceWEnd ?: 0;
+                    $discountVal = $discountWDay ?: $discountWEnd ?: 0;
+                }
+
+                if($price != 0){
+                    $pricearr[] =  $price;
+                } 
+
+                $dis = ($price != 0 && $discountVal != 0) ? $price - ($price * $discountVal / 100) : ($discountVal == 0 ? $price : 0);
+
+                if($dis != 0){
+                    $discountPriceArr[] =  $dis;
+                }
             }
         }
+        
         $priceAll = !empty($pricearr) ? min($pricearr) : '';
         $discountPrice = !empty($discountPriceArr) ? min($discountPriceArr) : '';
-
         if($priceAll != $discountPrice){
-            $price = ' <strike> $'.$priceAll.'</strike> $'.$discountPrice;
-        }else{
-            $price = ' $'.$priceAll;
+            $priceVal = ' <strike> $'.$priceAll.'</strike> $'.$discountPrice;
+        }else if($priceAll != 0){
+            $priceVal = ' $'.$priceAll;
         }
-        return $price;
+        return $priceVal ?? '';
     }
 
     public function profile_pictures(){

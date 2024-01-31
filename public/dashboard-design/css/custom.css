@@ -775,7 +775,6 @@ header{ position: fixed !important; }
 }
 .client-search span.search-widget-icon {
   position: absolute;
-  z-index: 10;
   font-size: 18px;
   line-height: 38px;
   left: 13px;
@@ -4826,7 +4825,7 @@ div#termsdiv{order: 4;}
 	 visibility: hidden;
 	 z-index: 1;
 	 left: 0;
-	 bottom: -100px;
+	 bottom: 0px;
 	 text-align: left;
 	 width: 100%;
 	 z-index: 11;
@@ -4863,6 +4862,10 @@ div#termsdiv{order: 4;}
 }
 .fit-project-item .project-content {
 	z-index: 1;
+}
+.fit-project-item a{
+  position: relative;
+  display: block;
 }
 
 
@@ -4975,7 +4978,7 @@ div#termsdiv{order: 4;}
 	width: 100%;
 }
 .providers-bg-image{
-	background-image: url("http://dev.fitnessity.co//public/dashboard-design/images/providers.jpg");
+	/* background-image: url("http://dev.fitnessity.co//public/dashboard-design/images/providers.jpg"); */
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -4988,7 +4991,7 @@ div#termsdiv{order: 4;}
 	opacity: 0.94;
 	transition: background 0.3s, border-radius 0.3s, opacity 0.3s;
 	height: 100%;
-	width: 100%;
+	width: 98%;
 	top: 0;
 	left: 11px;
 	position: absolute;
@@ -5012,6 +5015,7 @@ div#termsdiv{order: 4;}
 	color: #FFFFFF;
 	margin-bottom: 35px;
 }
+
 .btn-w-130{
 	width: 130px;
 }
@@ -5208,8 +5212,8 @@ div#termsdiv{order: 4;}
 	display: inline-block !important;
 }
 .check-box-info{
-	width: 70%;
-	margin: 10px auto;
+	width: 100%;
+	margin: 33px 0 auto;
 }
 .custom-search-icon{
 	top: 13px !important;
@@ -6294,3 +6298,345 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 /* activity scheduler */
 
+.modal-belt{width: 50px;}
+.add-client-sapre-tor{
+  border-bottom: 1px dashed #999;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.register-logo-middle img{
+  width: 270px;
+}
+.register-logo-middle{
+  text-align: center;
+}
+.mt-80{
+  margin-top: 80px;
+}
+.mb-95{
+  margin-bottom: 95px;
+}
+.mb-80{
+  margin-bottom: 80px;
+}
+.border-left-grey{
+  border-left: 1px solid #000;
+}
+.center-border{
+  position: absolute;
+  left: 50%;
+  top: 0;
+}
+.page-content-register{
+  padding: calc(0px + 6.5rem) calc(1.5rem * .5) 90px calc(1.5rem * .5);
+}
+.z-1{
+  z-index: 1;
+}
+.section-padding{
+  padding: 150px 0;
+}
+.mb-100{
+  margin-bottom: 100px;
+}
+.ui-menu.ui-widget {
+  z-index: 9999 !important;
+}
+.login-toure i{
+  color: #ed1b24;
+}
+.reg-up-img img{
+  width: 224px;
+  height: 224px;
+  max-height: 224px;
+}
+.m-b-50{
+  margin-bottom: 50px;
+}
+.sign-up-img img{
+  width: 260px;
+  height: 260px;
+  max-height: 260px;
+}
+.cross-check{
+  padding: 0 35px;
+}
+#suggesstion-box-search-activity #country-list {
+  top: 62px;
+  color: #000;
+}
+#country-list {
+  display: block;
+  top: 34px;
+  z-index: 999 !important;
+  background-color: #ffffff;
+  position: absolute;
+  padding: 10px 0px;
+  width: 100%;
+  color: #000;
+  height: 400px;
+  overflow: auto;
+}
+.row.cstm-bnner ul {
+  display: flex;
+  position: relative;
+  flex-flow: wrap;
+  justify-content: center;
+  padding: 0 40px;
+}
+#country-list li {
+  width: 100%;
+  text-align: left;
+  padding: 5px 10px;
+  border-bottom: 1px solid #eee;
+  list-style: none !important;
+}
+.cstm-bnner ul li:last-child {
+  position: relative;
+}
+
+.cstm-bnner ul li:last-child {
+  width: 100%;
+  margin-top: 10px;
+}
+.row.cstm-bnner li {
+  margin: 0;
+  width: 49.33%;
+  / width: 33.33%; /
+  position: relative;
+}
+.cstm-bnner ul li {
+  width: 20%;
+  display: inline-block;
+  margin: 5px 10px;
+  vertical-align: top;
+  position: relative;
+}
+.self-check-sp{
+  margin-bottom: 70px;
+}
+.mb-70{
+  margin-bottom: 70px;
+}
+.mt-70{
+  margin-top: 70px;
+}
+.inner-btn{
+  background: #ed1b24;
+  border-radius: 0px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.inner-btn i{
+  color: #fff;
+}
+.number_format p {
+  display: block;
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 50px;
+  color: #ea1515;
+}
+.fout-digit-info p{
+  margin-bottom: 5px;
+}
+/*------
+  # Toast Grid
+----*/
+
+.grid {
+  list-style: none;
+  margin-left: -20px;
+}
+
+.grid__col--1-of-3,
+.grid__col--2-of-6,
+.grid__col--4-of-12 {
+  width: 33.33333%;
+}
+
+.grid__col--1-of-4,
+.grid__col--2-of-8,
+.grid__col--3-of-12 {
+  width: 25%;
+}
+
+.grid__col {
+  box-sizing: border-box;
+  display: inline-block;
+  margin-right: -0.25em;
+  min-height: 1px;
+  padding-left: 20px;
+  vertical-align: top;
+}
+
+/*------
+  # Pincode
+----*/
+
+#numbers_check {
+  max-width: 300px;
+  padding: 0 20px;
+  margin: 0 auto;
+  position: relative;
+  display: block;
+  -webkit-transition: all 1s ease-out;
+  -moz-transition: all 1s ease-out;
+  transition: all 1s ease-out;
+  opacity: 1;
+}
+#numbers_check.hide {
+  opacity: 0.3;
+}
+
+#pincode_check button {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 10px;
+  background-color: rgba(249, 242, 242, 0.92);
+  border: 0;
+  color: #000;
+  font-size: 25px;
+  line-height: 50px;
+  border-radius: 100%;
+  opacity: 1;
+  outline: 0;
+}
+#pincode_check button:active {
+  background-color: #ed1b24;
+  outline: 0;
+}
+.modal-open .fixed-top {
+  padding-right: 0 !important;
+}
+.powerby img{
+  width: 240px;
+}
+.border-radius-0{
+  border-radius: 0px !important;
+}
+.middle-border{
+  border-bottom: 1px solid var(--vz-border-color);
+}
+.profile-photo-edit.logo-change{
+  left: 5px;
+  top: 10px;
+}
+.reg-up-check-setting img{
+  width: 195px;
+  height: 195px;
+  max-height: 195px;
+}
+.sign-up-check-settings img{
+  width: 190px;
+  height: 190px;
+  max-height: 190px;
+}
+
+
+.radio_container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #404040;
+  width: 100%;
+  border-radius: 9999px;
+  box-shadow: inset 0.5px 0.5px 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+.radio_container input[type="radio"] {
+  appearance: none;
+  display: none;
+}
+.radio_container input[type="checkbox"] {
+  appearance: none;
+  display: none;
+}
+
+.radio_container label {
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: inherit;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  /* border-radius: 9999px; */
+  overflow: hidden;
+  transition: linear 0.3s;
+  color: #fff;
+  margin-bottom: 0;
+}
+
+.radio_container input[type="radio"]:checked + label {
+  background-color: #ed1b24;
+  color: #fff;
+  transition: 0.3s;
+}
+
+.radio_container input[type="checkbox"]:checked + label {
+  background-color: #ed1b24;
+  color: #fff;
+  transition: 0.3s;
+}
+.border-bottom-or{
+  border-bottom: var(--vz-border-width) var(--vz-border-style) var(--vz-border-color) !important;
+}
+.or-text .or-set-btn{
+  background: #eaeaea;
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  text-align: center;
+  position: absolute;
+  left: 46%;
+  bottom: 0px;
+}
+.or-text .or-set-btn label{
+  padding: 4px;
+}
+.pt-15{
+  padding-top: 15px;
+}
+.pb-15{
+  padding-bottom: 15px;
+}
+.service-back-box{
+  background-color: rgba(237, 36, 45, 0.05);
+}
+.bg-cover
+{
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: cover;
+}
+.home-banner-title
+{
+  padding: 220px 0 100px;
+}
+.pro-background-overlay-banner{
+  background-color: transparent;
+  background-image: linear-gradient(102deg, #fff 38%, #FFFFFF00 94%);
+  opacity: 0.94;
+  transition: background 0.3s, border-radius 0.3s, opacity 0.3s;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0px;
+  position: absolute;
+  border-radius: 10px;
+}
+.fit-widget-container-banner{
+  text-align: left;
+  position: relative;
+  margin-left: 125px;
+}
+.fit-widget-container-banner label
+{
+  font-size: 65px;
+  font-weight: 700;
+  line-height: 75px;
+  color: #000;
+  margin-bottom: 2px;
+}

@@ -106,7 +106,7 @@
 																	<img src="{{Storage::URL($bookscheduler->business_service->first_profile_pic())}}" class="productImg">
 																</div>
 															@else
-																<img src="{{url('/images/service-nofound.jpg')}}}">
+																<img src="{{url('/images/service-nofound.jpg')}}">
 															@endif 
 														</div>
 														
@@ -147,14 +147,16 @@
 																	if($bookscheduler->company_information->dba_business_name == ''){
 																		$bookschedulercom_name = $bookscheduler->company_information->company_name;
 																	}
+																	$price_all = $bookscheduler->business_service->min_price();
 																@endphp
-																<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
 																<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+																<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
 																<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
 																<div class="dollar-person">
-																	<span><b>From ${{$bookscheduler->price_detail()}}</b>/Person</span>
+																	@if($price_all != '')
+																		<span>From {!!$price_all!!}/Person</span>
+																	@endif
 																</div>
-																
 															</div>
 
 															<div class="row">
@@ -194,7 +196,7 @@
 												<img src="{{Storage::URL($bookscheduler->business_service->first_profile_pic())}}" class="productImg">
 											</div>
 										@else
-											<img src="{{url('/images/service-nofound.jpg')}}}">
+											<img src="{{url('/images/service-nofound.jpg')}}">
 										@endif 
 									</div>
 									<div class="col-md-8 col-sm-8 activity-data">
@@ -231,16 +233,21 @@
 												if($bookscheduler->company_information->dba_business_name == ''){
 													$bookschedulercom_name = $bookscheduler->company_information->company_name;
 												}
+												$price_all = $bookscheduler->business_service->min_price();
 											@endphp
-											<span><a  href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}"target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
 											<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+
+											<span><a  href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}"target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
+											
 											<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
 											<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
 										</div>
 										<div class="row">
 											<div class="col-md-6 col-sm-6 col-xs-6 activites-price-details">
 											<div class="dollar-person">
-												<span>From ${{$bookscheduler->price_detail()}}/Person</span>
+												@if($price_all != '')
+													<span>From {!!$price_all!!}/Person</span>
+												@endif
 											</div>
 											</div>
 											<div class="col-md-6 col-sm-6 col-xs-6 activites-price-details-left">
@@ -318,7 +325,7 @@
 					                  $pic_image = explode(',',$service['profile_pic']);
 											$bookscheduler = App\BusinessActivityScheduler::where('serviceid', $service['id'])->orderBy('id', 'ASC')->first();
 											$time = @$bookscheduler != '' ? @$bookscheduler->get_duration() : '';
-											$price_all = $service->min_price();
+											$price_all = $bookscheduler->business_service->min_price();
 		                    	?>
 								
 									<div class="item">
@@ -451,12 +458,8 @@
 														$redlink = str_replace(" ","-",$companyname);
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
-														<span><a 
-							                                href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank">{{ $service['program_name'] }}</a>
-							                         	</span>
+														<span><a href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank"  class="companyalink">{{$companyname}}</a></span>
 														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}</p>
 													</div>
 													<hr>
@@ -650,13 +653,9 @@
 														$redlink = str_replace(" ","-",$companyname);
 													@endphp
 													<div class="activity-information activites-height">
-
-														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank" class="companyalink">{{$companyname}}</a></span>
-														<span><a 
-							                                href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank">{{ $service['program_name'] }}</a>
-							                         	</span>
+														<span><a href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank" class="companyalink">{{$companyname}}</a></span>
+														
 														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}</p>
 													</div>
 													<hr>
@@ -851,12 +850,9 @@
 														$redlink = str_replace(" ","-",$companyname);
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
-														<span><a 
-							                                href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank">{{ $service['program_name'] }}</a>
-							                         	</span>
+														<span><a href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank"  class="companyalink">{{$companyname}}</a></span>
+														
 														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}</p>
 													</div>
 													<hr>
@@ -1052,12 +1048,9 @@
 														$redlink = str_replace(" ","-",$companyname);
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
-														<span><a 
-							                                href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank">{{ $service['program_name'] }}</a>
-							                         	</span>
+														<span><a href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank"  class="companyalink">{{$companyname}}</a></span>
+														
 														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}</p>
 													</div>
 													<hr>
@@ -1256,8 +1249,9 @@
 														$redlink = str_replace(" ","-",$companyname);
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}"  target="_blank"  class="companyalink">{{$companyname}}</a></span>
 														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}"  target="_blank"  class="companyalink">{{$companyname}}</a></span>
+														
 														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}</p>
 													</div>
 													<hr>
@@ -1452,12 +1446,9 @@
 														$redlink = str_replace(" ","-",$companyname);
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
-														<span><a 
-							                                href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank">{{ $service['program_name'] }}</a>
-							                         	</span>
+														<span><a href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank"  class="companyalink">{{$companyname}}</a></span>
+														
 														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}</p>
 													</div>
 													<hr>
@@ -1654,12 +1645,10 @@
 														$redlink = str_replace(" ","-",$companyname);
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
-														<span><a 
-							                                href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank">{{ $service['program_name'] }}</a>
-							                         	</span>
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
+														
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank"  class="companyalink">{{$companyname}}</a></span>
+														
 														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}</p>
 													</div>
 													<hr>

@@ -33,7 +33,6 @@ Route::get('/clear-cache', function () {
 });
 //end
 
-
 Route::get('/invitation/accept','HomeController@invitation_accept')->name('invitation_accept');
 Route::any('/welcome_provider/','OnBoardedController@welcome')->name('onboard_process.welcome');
 Route::get('/onboard_process/','OnBoardedController@index')->name('onboard_process.index');
@@ -50,7 +49,9 @@ Route::any('/checkPromoCode','MembershipPlanController@checkPromoCode')->name('c
 Route::any('/getCardData','MembershipPlanController@getCardData')->name('choose-plan.getCardData');
 
 
+Route::get('/add-client','CustomerController@client')->name('client');
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
+
     // Scheduler
     Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
     Route::get('schedulers/cancel_all', 'SchedulerController@cancel_all')->name('schedulers.cancel_all');
@@ -298,6 +299,9 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/provider_edit_belt_rank_skills','DesignController@provider_edit_belt_rank_skills')->name('provider_edit_belt_rank_skills');
     Route::get('/client_promote_belt','DesignController@client_promote_belt')->name('client_promote_belt');
     Route::get('/manually_promote','DesignController@manually_promote')->name('manually_promote');
+
+    Route::get('/register_ep','DesignController@register_ep')->name('register_ep');
+    Route::get('/check_in_settings','DesignController@check_in_settings')->name('check_in_settings');
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -362,6 +366,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
         Route::get('/customers/{id}/visit_modal','CustomerController@visit_modal')->name('visit_modal');
         Route::get('/customers/{id}/visit_autopaymodel','CustomerController@visit_autopaymodel')->name('visit_autopaymodel');
+        Route::get('/create-customer/','CustomerController@create')->name('business_customer_create');
 
         Route::post('/customers/upload_docs','CustomerController@uploadDocument')->name('upload_docs');
         Route::get('/requestSign/{id}', 'CustomerController@requestSign')->name('requestSign');
@@ -724,6 +729,15 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('/slider/edit/{id}', 'Frontend\SliderController@edit');
     Route::post('/slider/update/{id}', 'Frontend\SliderController@update')->name('update-slider'); 
     Route::get('/slider/delete/{id}', 'Frontend\SliderController@delete');
+
+    // Slider
+    Route::get('/activity-slider', 'Frontend\ActivitySliderController@index')->name('activity-slider');
+    Route::get('/activity-slider/create', 'Frontend\ActivitySliderController@create')->name('create-new-activity-slider'); 
+    Route::post('/activity-slider/store', 'Frontend\ActivitySliderController@store')->name('create-activity-slider');
+    Route::DELETE('/activity-slider/delete-slider', 'Frontend\ActivitySliderController@delete')->name('delete-activity-slider');
+    Route::get('/activity-slider/edit/{id}', 'Frontend\ActivitySliderController@edit');
+    Route::post('/activity-slider/update/{id}', 'Frontend\ActivitySliderController@update')->name('update-activity-slider'); 
+    Route::get('/activity-slider/delete/{id}', 'Frontend\ActivitySliderController@delete');
 
 	
 

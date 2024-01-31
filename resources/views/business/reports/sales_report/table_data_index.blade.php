@@ -1,5 +1,5 @@
 <tr>
-	<td> {{date('m-d-Y',strtotime($dt->created_at))}}</td>
+	<td> {{date('m-d-Y',strtotime($dt->created_at))}} </td>
 	<td>{!!$dt->item_description($business_id)['customer']!!}</td>
 	<td>{!!$dt->item_description($business_id)['itemDescription']!!}</td>
 	<td>{!! @$dt->item_description($business_id)['location'] !!}</td>

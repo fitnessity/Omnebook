@@ -311,5 +311,13 @@ class DesignController extends Controller {
     public function manually_promote(Request $request){
         return view('design.manually_promote');
     }
+
+    public function register_ep(Request $request){
+        return view('design.register_ep');
+    }
+
+    public function check_in_settings(Request $request){
+        return view('design.check_in_settings');
+    }
 }
 
