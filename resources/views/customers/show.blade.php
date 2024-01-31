@@ -150,7 +150,7 @@
 																											<label class="font-black">Last Visited :</label>
 																										</div>
 																										<div class="col-lg-7 col-sm-7">
-																											<span>{{$customerdata->get_last_seen()}}</span>
+																											<span>{{$customerdata->get_last_seen() ?? 'N/A'}}</span>
 																										</div>
 																									</div>
 																									<div class="row mb-10">

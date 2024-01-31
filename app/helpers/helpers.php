@@ -329,11 +329,11 @@
         }
     }
 
-    function cityCount($city){
+   /* function cityCount($city){
         $company = CompanyInformation::where('city',$city)->pluck('id')->toArray();
         //print_r($company);
         $count =  BusinessServices::whereIn('cid',$company)->count();
         return $count;
-    }
+    }*/
 
 ?>
