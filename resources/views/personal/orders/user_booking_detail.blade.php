@@ -33,8 +33,8 @@
 															</div>
 															@if($tabName == 'past') 
 																<div>
-																	@if(@$bs->getReserveData('reserve_date') != '—') 
-																		<label class="font-red mt-5">Status: Terminated on 01/30/2024	{{date('m/d/Y',strtotime(@$bs->terminated_at))}} </label> 
+																	@if(@$bs->terminated_at) 
+																		<label class="font-red mt-5">Status: Terminated on {{date('m/d/Y',strtotime(@$bs->terminated_at))}} </label> 
 																	@endif
 																</div>
 															@endif
