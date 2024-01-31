@@ -319,5 +319,9 @@ class DesignController extends Controller {
     public function check_in_settings(Request $request){
         return view('design.check_in_settings');
     }
+
+    public function check_in_portal(Request $request){
+        return view('design.check_in_portal');
+    }
 }
 

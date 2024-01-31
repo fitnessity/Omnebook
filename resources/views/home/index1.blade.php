@@ -76,51 +76,6 @@
                         @php $asi++;@endphp
                     @endforeach
                     
-                   <!--  <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 col-12">
-                        <div class="taxonomy-item taxonomy-card">
-                            <a class="taxonomy-link hover-effect" href="#">
-                                <div class="taxonomy-title">Products & Gear</div>
-                                <img class="img-responsive" src="{{asset('uploads/discover/thumb/fitness-bodybuilding.jpg')}}">
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 col-12">
-                        <div class="taxonomy-item taxonomy-card">
-                            <a class="taxonomy-link hover-effect" href="{{url('/activities/events_in_your_area')}}">
-                                <div class="taxonomy-title">Find Events </div>
-                                <img class="img-responsive" src="{{asset('uploads/discover/thumb/1670251820-events.jpg')}}">
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 col-12">
-                        <div class="taxonomy-item taxonomy-card">
-                            <a class="taxonomy-link hover-effect" href="{{url('/activities/ways_to_workout')}}">
-                                <div class="taxonomy-title">Find Ways to Workout</div>
-                                <img class="img-responsive" src="{{asset('uploads/discover/thumb/1649648481-yoga classes.jpg')}}">
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 col-12">
-                        <div class="taxonomy-item taxonomy-card">
-                            <a class="taxonomy-link hover-effect" href="{{url('/activities/trainers_coaches')}}">
-                                <div class="taxonomy-title">Find A Personal Training Session </div>
-                                <img class="img-responsive" src="{{asset('uploads/discover/thumb/1665403648-1649648909-tennis 1.jpg')}}">
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
-                        <div class="taxonomy-item taxonomy-card">
-                            <a class="taxonomy-link hover-effect" href="{{url('/activities')}}">
-                                <div class="taxonomy-title">View All </div>
-                                <img class="img-responsive" src="{{asset('uploads/slider/thumb/1646834734-ACTIVITES BACKGROUND.jpg')}}">
-                            </a>
-                        </div>
-                    </div> -->
-                    
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 text-center">
                         <a href="{{url('/activities')}}" class="btn btn-red fs-15 btn-w-130 mt-30">Find More</a>
                     </div>
@@ -285,33 +240,7 @@
                 </div>
             </div>
         @endif
-        
-        <!-- @if($bepart_data)
-            <div class="hpt-100 hpb-100 joinus-bg-image">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="up-down-sp">
-                                <div class="joinus-box">
-                                    <div class="join-title mb-5">
-                                        <h1>{{ $bepart_data->content_title }} <span>It's Easy</span></h1>
-                                    </div>
-                                    <div class="join-box-text">
-                                        {!!$bepart_data->content!!}
-
-                                        @if(Auth::check())
-                                            <a class="btn btn-red" href="/activities">START TODAY</a>
-                                        @else
-                                            <a href="{{route('registration')}}" class="btn btn-red">START TODAY</a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif -->
+    
     </div><!-- End Page-content -->
 </div><!-- END layout-wrapper -->
 
