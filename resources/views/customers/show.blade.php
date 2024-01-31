@@ -41,6 +41,11 @@
 							        {{ session('success') }}
 							    </div>
 							@endif
+
+							@if($cardSuccessMsg == 1)
+							<div class="fs-15 font-green mb-10">Your Card is uploaded successfully.</div>
+						   @endif
+
 							<div class="row">
 								<div class="col-xl-12">
 									<div class="card">
