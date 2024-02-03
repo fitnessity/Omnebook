@@ -135,6 +135,14 @@
 				                        @elseif(session()->has('error'))
 				                        <div class="alert alert-danger fade in alert-dismissible show"> {{ session()->get('error') }}</div>
 				                        @endif
+
+				                        @error('newPassword')
+									        <div class="alert alert-danger">{{ $message }}</div>
+									    @enderror
+									    @error('confirmPassword')
+									        <div class="alert alert-danger">{{ $message }}</div>
+									    @enderror
+
 			                    	</div>
 									<div class="tab-pane active" id="personalDetails" role="tabpanel">
 										<form  action="{{Route('personal.profile.update',['profile'=> $user->id])}}" method="post" enctype="multipart/form-data">
@@ -285,12 +293,12 @@
                                          	</div>
                                          	<input type="hidden" name="type" value="password">
                                             <div class="row g-2">
-                                                <div class="col-lg-4">
+                                                <!-- <div class="col-lg-4">
                                                     <div>
                                                         <label for="currentPassword" class="form-label">Old Password<span class="font-red">*</span></label>
                                                         <input type="password" class="form-control" id="currentPassword"  name="currentPassword" placeholder="Enter current password"  required>
                                                     </div>
-                                                </div> <!--end col-->
+                                                </div> -->
 
                                                 <div class="col-lg-4">
                                                     <div>

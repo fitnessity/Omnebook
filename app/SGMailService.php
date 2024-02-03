@@ -280,6 +280,7 @@ class SGMailService{
 
 
 	public static function sendAutoPayFaildAlertToCustomer($emailDetail){
+
 		$substitutions = [
 			'CompanyImage'=> $emailDetail['CompanyImage'],
             'CompanyName'=> $emailDetail['CompanyName'],
@@ -298,7 +299,7 @@ class SGMailService{
 		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-eeca6da4bb6240d48abb661c49489afa');
 	}
 
-	public static function sendEmailCustomerforScheduleChange($emailDetail){
+	public static function bookingCancellationToCustomer($emailDetail){
 		if($emailDetail['companydata']->logo == ''){
            	$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
         }else{
@@ -316,7 +317,7 @@ class SGMailService{
 			'CompanyEmail'  => @$emailDetail['companydata']->business_email,
 			'CompanyPhone'  => @$emailDetail['companydata']->business_phone,
 			'CompanyWebsite'  => @$emailDetail['companydata']->business_website,
-			'url'  => env('APP_URL').'/personal/orders',
+			'url'  => env('APP_URL').'/personal/manage-account',
 		];
 
 		if(@$emailDetail['mail_type'] == 'cancel'){
@@ -328,7 +329,7 @@ class SGMailService{
 		return SGMailService::MailDetail($emailDetail['email'],$substitutions,$temId);
 	}
 
-	public static function sendEmailInstructorforScheduleChange($emailDetail){
+	public static function bookingCancellationToTrainer($emailDetail){
 		if($emailDetail['companydata']->logo == ''){
            	$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
         }else{
@@ -346,7 +347,7 @@ class SGMailService{
 			'CompanyEmail'  => @$emailDetail['companydata']->business_email,
 			'CompanyPhone'  => @$emailDetail['companydata']->business_phone,
 			'CompanyWebsite'  => @$emailDetail['companydata']->business_website,
-			'url'  => env('APP_URL').'/personal/orders',
+			'url'  =>'',
 		];
 		
 		if(@$emailDetail['mail_type'] == 'cancel'){
@@ -381,7 +382,6 @@ class SGMailService{
 		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-274e9b0ca44141349045585c87c9f988');
 	}
 
-
 	public static function sendEmailToCustomerforClaim($emailDetail){
 		$substitutions = [
 			'BusinessName'  => @$emailDetail['companydata']->public_company_name,
@@ -397,5 +397,82 @@ class SGMailService{
 		];
 
 		SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-63efeb6f57be45079692fcae3f63147c');
+	}
+
+	public static function creditCardExpiredToCustomer($emailDetail){
+		if($emailDetail['companydata']->logo == ''){
+           	$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
+        }else{
+        	$ImageUrl = Storage::URL($emailDetail['companydata']->logo);
+        }
+		$substitutions = [
+			'CustomerName'  => $emailDetail['userdata']->full_name,
+			'card'  => $emailDetail['card'],
+			'date'  => $emailDetail['date'],
+			'CompanyName'  => @$emailDetail['companydata']->public_company_name,
+			'CompanyImage'  =>$ImageUrl,
+			'address'  => @$emailDetail['companydata']->company_address(),
+			'CompanyEmail'  => @$emailDetail['companydata']->business_email,
+			'phone'  => @$emailDetail['companydata']->business_phone,
+			'website'  => env('APP_URL'),
+			'url'  => env('APP_URL').'personal/credit-cards',
+		];
+		SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-29d9884b534a491f9687f67bf5f3d7b0');
+	}
+
+	public static function creditCardExpiredToProvider($emailDetail){
+		
+		$substitutions = [
+			'CustomerName'  => $emailDetail['userdata']->full_name,
+			'ProviderName'  => $emailDetail['companydata']->full_name,
+			'card'  => $emailDetail['card'],
+			'date'  => $emailDetail['date'],
+			'CompanyName'  => @$emailDetail['companydata']->public_company_name,
+			'CompanyEmail'  => @$emailDetail['companydata']->business_email,
+		];
+
+		SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-cf063fc80c8c4efc92e8a59eade88ac1');
+	}
+
+	public static function creditCardExpiringToCustomer($emailDetail){
+		if($emailDetail['companydata']->logo == ''){
+           	$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
+        }else{
+        	$ImageUrl = Storage::URL($emailDetail['companydata']->logo);
+        }
+		$substitutions = [
+			'CustomerName'  => $emailDetail['userdata']->full_name,
+			'card'  => $emailDetail['card'],
+			'date'  => $emailDetail['date'],
+			'brand'  => $emailDetail['brand'],
+			'CompanyName'  => @$emailDetail['companydata']->public_company_name,
+			'CompanyImage'  =>$ImageUrl,
+			'address'  => @$emailDetail['companydata']->company_address(),
+			'CompanyEmail'  => @$emailDetail['companydata']->business_email,
+			'phone'  => @$emailDetail['companydata']->business_phone,
+			'website'  => env('APP_URL'),
+			'ProviderWebsite'  =>@$emailDetail['companydata']->business_website,
+			'url'  => env('APP_URL').'personal/credit-cards',
+		];
+		SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-2219dd86d875474ebf5584b4aaf5d850');
+	}
+
+	public static function creditCardExpiringToProvider($emailDetail){
+		if($emailDetail['companydata']->logo == ''){
+           	$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
+        }else{
+        	$ImageUrl = Storage::URL($emailDetail['companydata']->logo);
+        }
+		$substitutions = [
+			'CompanyImage'  =>$ImageUrl,
+			'CustomerName'  => $emailDetail['userdata']->full_name,
+			'ProviderName'  => $emailDetail['companydata']->full_name,
+			'card'  => $emailDetail['card'],
+			'date'  => $emailDetail['date'],
+			'brand'  => $emailDetail['brand'],
+			'CompanyName'  => @$emailDetail['companydata']->public_company_name,
+			'CompanyEmail'  => @$emailDetail['companydata']->business_email,
+		];
+		SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-0f5d87c2292941aab391e24c7f7a5751');
 	}
 }

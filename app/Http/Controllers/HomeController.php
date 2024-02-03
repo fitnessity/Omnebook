@@ -498,8 +498,9 @@ class HomeController extends Controller
     public function sendGrantAccessMail(Request $request){
     	$user = User::where('id',$request->id)->first();
     	$company = CompanyInformation::findOrFail($request->business_id);
-    	$customer = Customer::where('user_id' , $user->id)->first();
+    	$customer = Customer::where([ 'business_id'=>$company->id, 'fname'=>$user->firstname, 'lname'=>$user->lastname ,'email'=> $user->email, 'user_id' => $user->id])->first();
     	if($customer != ''){
+    		$customer->update(['profile_pic'=> $user->profile_pic]);
     		$familyMember = UserFamilyDetail::where(['user_id' => $user->id])->get();
             foreach($familyMember as $member){
                 $chk = Customer::where(['fname' =>$member->first_name ,'lname' =>$member->last_name])->first();
@@ -540,7 +541,7 @@ class HomeController extends Controller
                 }
             }
 
-            $paymentHistory = Transaction::where('user_type', 'User')
+            /*$paymentHistory = Transaction::where('user_type', 'User')
             ->where('user_id', $user->id)
             ->orWhere(function($subquery) use ($customer) {
                 $subquery->where('user_type', 'Customer')
@@ -566,8 +567,7 @@ class HomeController extends Controller
                         'payload'=> $data->payload
                     ]);
                 }
-                
-            }
+            }*/
     		return "already";
     	}else{
     		$data = array(

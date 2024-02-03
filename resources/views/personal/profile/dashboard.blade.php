@@ -59,8 +59,8 @@
 										<h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$attendanceCnt}}">{{$attendanceCnt}}</span></h4>
 									</div>
 									<div class="avatar-sm flex-shrink-0">
-										<span class="avatar-title bg-success rounded fs-3">
-											<i class="bx bx-dollar-circle"></i>
+										<span class="avatar-title bg-warning rounded fs-3">
+											<i class="bx bx-user-circle"></i>
 										</span>
 									</div>
 								</div>
@@ -102,7 +102,58 @@
 					
 
 				<div class="row">
-					<div class="col-lg-6">
+
+				<div class="col-xxl-12 col-lg-12">
+						<div class="card">
+							<div class="card-header align-items-center d-flex">
+								<h4 class="card-title mb-0 flex-grow-1">Your Upcoming Classes</h4>
+							</div><!-- end card-header -->
+
+							<div class="card-body">
+								<div class="d-flex align-middle y-middle">
+									<div class="row">
+										<div class="col-md-1 col-2"><h5 class="fs-15">Session</h5></div>
+										<div class="col-md-2 col-2"><h5 class="fs-15">Program Name </h5></div>															
+										<div class="col-md-3 col-3"><h5 class="fs-15">Time and Date</h5></div>					
+										<div class="col-md-3 col-4"><h5 class="fs-15">Membership</h5></div>
+										<div class="col-md-3 col-3"></div>
+								
+									@forelse(@$classes as $c)
+										@if($c->order_detail && $c->scheduler)
+										<div class="dashed-border mb-5 w-100">												
+											<div class="row y-middle">
+												<div class="col-md-1 col-2">
+													{{ @$c->order_detail->getremainingsession()."/".@$c->order_detail->pay_session }}
+												</div>
+												<div class="col-md-2 col-2">
+													Kickboxing Class
+												</div>
+												<div class="col-md-3 col-3">
+													02/21/2024 10:00 AM (45 Min)
+													<!-- {{ date('m/d/Y' ,strtotime($c->checkin_date))}}  {{ date("g:i A", strtotime(@$c->scheduler->shift_start))}} -->
+												</div>
+												<div class="col-md-3 col-3">
+													{{ @$c->order_detail->business_services_with_trashed->program_name }} - {{ @$c->order_detail->business_price_detail_with_trashed->price_title }}
+												</div>
+												<div class="col-md-3 col-4">
+													<div class="flex-grow-1 ms-3 text-end">
+														<a class="btn btn-red float-right mb-10" href="{{ url('/personal/orders') . '?' . http_build_query(['business_id' => request()->business_id, 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}">View Booking</a>
+														<a class="btn btn-red float-right mb-10 mr-10" href="http://dev.fitnessity.co/design/register_ep">Check-In</a>
+													</div>
+												</div>
+											</div>												
+										</div>
+										@endif
+									@empty
+										No Upcoming Class Available
+									@endforelse
+								</div><!-- end -->
+							</div><!-- end card body -->
+						</div><!-- end card -->
+					</div><!-- end col -->
+					</div>
+
+					<div class="col-xxl-8 col-lg-8">
 						<div class="card">
 							<div class="card-header align-items-center d-flex">
 								<h4 class="card-title mb-0 flex-grow-1">Important Alerts</h4>
@@ -164,55 +215,7 @@
 							</div><!-- end card body -->
 						</div><!-- end card -->
 					</div><!-- end col -->
-					<div class="col-lg-6">
-						<div class="card">
-							<div class="card-header align-items-center d-flex">
-								<h4 class="card-title mb-0 flex-grow-1">Your Upcoming Classes</h4>
-							</div><!-- end card-header -->
-
-							<div class="card-body">
-
-								<div class="d-flex align-middle y-middle">
-									<div class="row">
-										<div class="col-md-2 col-2"><h5 class="fs-15">Session</h5></div>
-										<div class="col-md-3 col-3"><h5 class="fs-15">Check-In Date & Start Time</h5></div>
-										<div class="col-md-4 col-4"><h5 class="fs-15">Activity - Price Option</h5>
-										<div class="col-md-3 col-3"></div>
-									</div>
-								
-									@forelse(@$classes as $c)
-										@if($c->order_detail && $c->scheduler)
-										<div class="dashed-border mb-5 w-100">
-												
-													<div class="row">
-														<div class="col-md-2 col-2">
-															{{ @$c->order_detail->getremainingsession()."/".@$c->order_detail->pay_session }}
-														</div>
-														<div class="col-md-3 col-3">
-															 {{ date('m/d/Y' ,strtotime($c->checkin_date))}}  {{ date("g:i A", strtotime(@$c->scheduler->shift_start))}}
-														</div>
-														<div class="col-md-4 col-3">
-															{{ @$c->order_detail->business_services_with_trashed->program_name }} - {{ @$c->order_detail->business_price_detail_with_trashed->price_title }}
-														</div>
-														<div class="col-md-3 col-4">
-															<div class="flex-grow-1 ms-3 text-end">
-																<a class="btn btn-red float-right mb-10" href="{{ url('/personal/orders') . '?' . http_build_query(['business_id' => request()->business_id, 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}">View Booking</a>
-															</div>
-														</div>
-													</div>
-												
-												
-													
-												
-										</div>
-										@endif
-									@empty
-										No Upcoming Class Available
-									@endforelse
-								</div><!-- end -->
-							</div><!-- end card body -->
-						</div><!-- end card -->
-					</div><!-- end col -->
+					
 				</div>
 			</div><!-- container-fluid -->
 		</div>

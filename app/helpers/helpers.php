@@ -155,7 +155,8 @@
             'phone_number' => $detail->phone_number,
             'birthdate' => $detail->birthdate,
             'user_id' => $detail->id,
-            'stripe_customer_id' => $detail->stripe_customer_id
+            'stripe_customer_id' => $detail->stripe_customer_id,
+            'profile_pic' => $detail->profile_pic,
         ]);
 
         $familyMember = UserFamilyDetail::where(['user_id' => $detail->id])->get();
@@ -287,11 +288,9 @@
         return $notifications->get();
     }
 
-    function getNotificationPersonal($type=null){
-       
-        $customers = Auth::user()->customers;
-        if($customers != ''){
-            $customersId =  @$customers->pluck('id')->toArray();
+    function getNotificationPersonal($type=null){   
+        $customersId = Customer::where('user_id' ,Auth::user()->id)->pluck('id')->toArray();
+        if(!empty($customersId)){
             $notifications = Notification::orderby('updated_at','desc')->whereDate('display_date', '=', now())
                 ->whereTime('display_time', '<=', now()->format('H:i'))->whereIn('customer_id',$customersId )->where('type','personal')
                 ->orWhere(function ($query) use($customersId) {

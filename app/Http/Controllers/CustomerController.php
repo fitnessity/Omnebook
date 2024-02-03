@@ -590,7 +590,7 @@ class CustomerController extends Controller {
                 $data['primary_account'] = 0;
             }
 
-            User::where(['email' => $cust['email'] , 'id' => $cust['user_id']])->update(['primary_account' => $data['primary_account'] ]);
+            User::where(['email' => $cust['email'] , 'id' => $cust['user_id']])->update(['primary_account' => $data['primary_account'] ,'profile_pic'=> $data['profile_pic'] ?? $cust->profile_pic ]);
             $cust->update($data);
         }elseif($request->chk == 'update_terms'){
             $data = $request->all();
@@ -657,11 +657,12 @@ class CustomerController extends Controller {
         $user_id = Crypt::decryptString($id);
         $bId = Crypt::decryptString($business_id);
         $user = User::where('id',$user_id)->first();
-        $chk = Customer::where('user_id' , $user->id)->first();
+        $chk = Customer::where('user_id' , @$user->id)->first();
 
         if($chk == ''){
             profileSyncToBusiness($bId, $user);
         }else{
+            $chk->update(['profile_pic'=> $user->profile_pic]);
             $familyMember = UserFamilyDetail::where(['user_id' => $user->id])->get();
             foreach($familyMember as $member){
                 $chkFamily = Customer::where(['fname' =>$member->first_name ,'lname' =>$member->last_name])->first();
@@ -702,7 +703,7 @@ class CustomerController extends Controller {
                 }
             }
 
-            $paymentHistory = Transaction::where('user_type', 'User')
+            /*$paymentHistory = Transaction::where('user_type', 'User')
             ->where('user_id', $user->id)
             ->orWhere(function($subquery) use ($chk) {
                 $subquery->where('user_type', 'Customer')
@@ -728,7 +729,7 @@ class CustomerController extends Controller {
                         'payload'=> $data->payload
                     ]);
                 }
-            }
+            }*/
         }
 
 

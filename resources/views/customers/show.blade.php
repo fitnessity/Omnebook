@@ -343,7 +343,7 @@
 																																			</i>Suspend or Terminate</a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80" data-reload="1"><i class="fas fa-plus text-muted">
 																																			</i>Autopay Schedule</a>
 																																		</li>
 																																		<li>
@@ -605,7 +605,7 @@
 																																					<i class="fas fa-plus text-muted"></i> View Visits </a>
 																																			</li>
 																																			<li>
-																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
+																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80" data-reload="1"><i class="fas fa-plus text-muted">
 																																				</i>Autopay Schedule</a>
 																																			</li>
 																																			<li>
