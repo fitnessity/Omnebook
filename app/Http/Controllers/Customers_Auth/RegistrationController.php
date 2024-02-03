@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Api;
 use Str,DB,Validator,Input,Redirect,Storage,Response;
-use App\{Customer,UserBookingDetail,User,CustomerFamilyDetail,Miscellaneous,SGMailService};
+use App\{Customer,UserBookingDetail,User,CustomerFamilyDetail,Miscellaneous,SGMailService,UserFamilyDetail};
 use App\Repositories\CustomerRepository;
 
 class RegistrationController extends Controller
@@ -223,6 +223,19 @@ class RegistrationController extends Controller
                             if ($customerFamily) {      
                                 SGMailService::sendWelcomeMailToCustomer($customerFamily->id,$company->id,'');
                             }
+
+                            UserFamilyDetail::create([
+                                'user_id' => $currentCustomer->user_id,
+                                'first_name' => $request->fname[$i],
+                                'last_name' => $request->lname[$i],
+                                'email' => $request->emailid[$i],
+                                'mobile' => $request->mphone[$i],
+                                'emergency_contact' =>$request->emergency_phone[$i],
+                                'relationship' =>  $request->relationship[$i],
+                                'gender' => $request->familygender[$i],
+                                'birthday' =>  $date,
+                                'emergency_contact_name' => $request->emergency_name[$i],
+                            ]);
                         }
                     }
 

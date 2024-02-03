@@ -161,6 +161,26 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-red">Check In</button>
+                <button type="button" class="btn btn-black" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Exit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Exit Front Desk Mode</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="fs-15">To deactivate front desk mode, please enter your password. Currently logged-in as Ankita Patel</p>
+                <input type="password" class="form-control">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-red" data-bs-dismiss="modal">Exit Front Desk Mode </button>
             </div>
         </div>
     </div>

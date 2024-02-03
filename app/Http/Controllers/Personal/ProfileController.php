@@ -189,21 +189,26 @@ class ProfileController extends Controller
             $success = 'Profile updated succesfully!';
             $fail = 'Problem in profile update.';
         }else if($request->type == 'password'){
-            $currentPassword = $user->password;
+
+            $this->validate($request, [
+                'newPassword' => 'required',
+                'confirmPassword' => 'required',
+            ]);
+
+            $status = $user->update(['password' => Hash::make($request->newPassword) ,'buddy_key' =>$request->newPassword]);
+            $success = 'Password has been changed successfully.';
+
+            /* $currentPassword = $user->password;
             if (Hash::check($request->newPassword, $currentPassword)) {
                 $status = $user->update(['password' => Hash::make($request->newPassword)]);
                 $success = 'Password has been changed successfully.';
             }else{
                 $fail = 'Problem in password change.Please check your old password and enter again.';
-            }
+            }*/
         }else if($request->type == 'portfolio'){
-            $data = $request->all();
-            unset($data['_token']);
-            unset($data['id']);
-            unset($data['type']);
+            $data = $request->except(['_token', 'id', 'type']);
             $user->update($data);
         }else{
-
             $profilePic = $coverPic ='';
             if($request->hasFile('profile_pic')){
                 $profilePic = $request->file('profile_pic')->store('customer');
@@ -222,7 +227,6 @@ class ProfileController extends Controller
             $fail = 'Problem in uploading profile photo.';
         }
         
-
         if(@$status)
             return Redirect::back()->with('success',$success);
         else

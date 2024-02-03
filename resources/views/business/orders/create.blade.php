@@ -686,7 +686,7 @@
 																						<label>Duration:</label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{ @$serprice['actscheduleid'] != '' ? @$serprice['actscheduleid'] :  "N/A" }} </span>
+																						<span>{{ @$item['actscheduleid'] != '' ? @$item['actscheduleid'] :  "N/A" }} </span>
 																					</div>
 
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">

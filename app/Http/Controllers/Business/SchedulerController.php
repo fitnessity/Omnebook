@@ -133,7 +133,7 @@ class SchedulerController extends BusinessBaseController
                          "mail_type"=>$mail_type,
                          "email"=>$userdata->email,
                     ];
-                    $status = SGMailService::sendEmailCustomerforScheduleChange($emailDetail);
+                    $status = SGMailService::bookingCancellationToCustomer($emailDetail);
                } 
           }
 
@@ -159,7 +159,7 @@ class SchedulerController extends BusinessBaseController
                                         "email"=>$insdata->email,
                                         "mail_type"=>$mail_type,
                                    ];
-                                   $status = SGMailService::sendEmailInstructorforScheduleChange($emailDetail);
+                                   $status = SGMailService::bookingCancellationToTrainer($emailDetail);
                               }
                          }
                     }
@@ -250,7 +250,7 @@ class SchedulerController extends BusinessBaseController
                          "mail_type"=>$mail_type,
                          "email"=>$userdata->email,
                     ];
-                    $status = SGMailService::sendEmailCustomerforScheduleChange($emailDetail);
+                    $status = SGMailService::bookingCancellationToCustomer($emailDetail);
                } 
           }
 
@@ -276,7 +276,7 @@ class SchedulerController extends BusinessBaseController
                                         "email"=>$insdata->email,
                                         "mail_type"=>$mail_type,
                                    ];
-                                   $status = SGMailService::sendEmailInstructorforScheduleChange($emailDetail);
+                                   $status = SGMailService::bookingCancellationToTrainer($emailDetail);
                               }
                          }
                     }
@@ -335,7 +335,7 @@ class SchedulerController extends BusinessBaseController
                               "mail_type"=>$mail_type,
                               "email"=> $cid->customer->email,
                          ];
-                         $status = SGMailService::sendEmailCustomerforScheduleChange($emailDetail);
+                         $status = SGMailService::bookingCancellationToCustomer($emailDetail);
                     } 
                }
 
@@ -357,7 +357,7 @@ class SchedulerController extends BusinessBaseController
                                              "email"=>$insdata->email,
                                              "mail_type"=>$mail_type,
                                         ];
-                                        $status = SGMailService::sendEmailInstructorforScheduleChange($emailDetail);
+                                        $status = SGMailService::bookingCancellationToTrainer($emailDetail);
                                    }
                               }
                          }

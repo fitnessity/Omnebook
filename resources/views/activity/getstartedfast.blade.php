@@ -242,7 +242,7 @@
 				                        target="_blank">{{ $service['program_name'] }}</a>
 											</span>
 											<span><a  @if (Auth::check())  
-	                                    		href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
+	                                    		href="{{ route('businessprofiletimeline',['user_name'=>str_replace(" ","-",$companyname),'id'=>$service['cid']])}}" 
 	                                		@else 
 	                                    	href="{{ route('userlogin') }}"  
 	                                		@endif

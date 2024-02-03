@@ -20,12 +20,15 @@
 				<label> Autopay Remaining</label>
 				<span>{{$remaining}}/{{$autopayListCnt}}</span>
 				
-				<!-- <label>Autopay History</label>
-				<a href="#"> View </a> -->
 			</div>
 		</div>
 	</div>
 </div>
+
+<div class="mt-10 mb-10">
+	<span class="fs-16" id="errmsgRecurring"></span>
+</div>
+
 <div class="scheduler-table">
 	<div class="table-responsive">
 		<table class="table mb-0">
@@ -34,7 +37,7 @@
 				<tr>
 					<th>No</th>
 					<th>Payment Date </th>
-					<th>Amount</th>
+					<th>Payable Amount</th>
 					<th>Tax </th>
 					<th>Charged Amount </th>
 					<th>Payment Method </th>
@@ -46,9 +49,7 @@
 			<tbody>
 				@foreach($autopayListScheduled as $key=>$list)
 					<tr>
-						<td>
-							{{$key + 1}}
-						</td>
+						<td>{{$key + 1}}</td>
 						<td>
 							<div class="special-date">
 								<input  type="text" class="form-control payment_date"  name="payment_date"  id="payment_date{{$list->id}}" placeholder="" autocomplete="off" value="{{date('m/d/Y' ,strtotime($list['payment_date']))}}">
@@ -57,11 +58,11 @@
 						<td> 
 							<div class="auto-amount">
 								<label>$</label>
-								<input type="text" class="form-control valid" name="amount"  id="amount{{$list->id}}" placeholder="0" value="{{$list['amount']}}">
+								<input type="text" class="form-control valid" name="amount"  id="amount{{$list->id}}" placeholder="0" value="{{$list->getTotalAmountAttribute()}}">
 							</div>
 						</td>
 						<td>${{$list['tax']}}</td>
-						<td>@if($list['charged_amount'] != '') ${{$list['charged_amount']}} @else $0 @endif</td>
+						<td>${{$list->getTotalAmountAttribute()}}</td>
 						<td> {{$list->getStripeCard() ?? "N/A" }} </td> 
 						<td>{{$list['status']}}</td>
 						<td><input type="checkbox" id="chkbox{{$list->id}}" name="chkboxes[]" class="custom_chkbox" value="{{$list->id}}"></td>
@@ -103,7 +104,7 @@
 @if($type == 'schedule')
 	<div class="col-md-12 text-right mt-10">
 		<button type="button" class="btn btn-red" data-behavior="delete_recurring_detail">Delete Checked Items</button> 
-		<button type="button" class="btn btn-black" data-behavior="pay_recurring_item">Pay Checked Items</button>							
+		<button type="button" class="btn btn-black" data-behavior="pay_recurring_item" id="payitems">Pay Checked Items</button>							
 	</div>
 @endif
 
@@ -156,6 +157,7 @@
 	    });
 	 	
 	 	$(document).on('click', '[data-behavior~=pay_recurring_item]', function(e){
+	 		e.stopPropagation();
 	        e.preventDefault()
 	        var ids = '';
 	       	var idsAry = [];
@@ -163,8 +165,8 @@
 		        idsAry.push($(this).val());
 		    });
 		    ids = idsAry.join(',');
-		   
 	        if(ids != ''){
+	        	$('#payitems').attr("disabled", true);
 		        $.ajax({
 		            url: "/business/{{$business_id}}/recurring/pay_recurring_item",
 		            method: "POST",
@@ -174,11 +176,16 @@
 		            },
 		            success: function(response){
 		            	if(response.message == 'success'){
-		            		location.reload();
+		            		$('#errmsgRecurring').addClass('font-green');
+		            		$('#errmsgRecurring').html('Auto Payment Successfully Done.');
+		            		setTimeout(function(e){
+		            			location.reload();
+		            		},2000);
 		            	}else{
-		            		alert(response.message);
+		            		$('#payitems').attr("disabled", false);
+		            		$('#errmsgRecurring').addClass('font-red');
+		            		$('#errmsgRecurring').html(response.message);
 		            	}
-		              	//location.reload();
 		            }
 		        })
 		   	}else{ alert("Please select items that you want to Pay. ")}

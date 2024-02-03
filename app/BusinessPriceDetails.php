@@ -23,7 +23,8 @@ class BusinessPriceDetails extends Model
      *
      * @var array
      */
-    protected $fillable = [
+    protected $guarded = [];
+    /*protected $fillable = [
 		'business_service_id',
         'userid',
         'cid',
@@ -97,7 +98,7 @@ class BusinessPriceDetails extends Model
         'recurring_recurring_pmt_infant',
         'recurring_total_contract_revenue_infant',
         'dispaly_section'
-    ];
+    ];*/
     
 
     public function business_price_details_ages(){
