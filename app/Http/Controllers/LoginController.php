@@ -36,8 +36,9 @@ class LoginController extends Controller {
      * Facebook Callback
      * @return type
      */
-    public function handleFacebookCallback() {        
-        $user = Socialite::driver('facebook')->stateless()->user();
+    public function handleFacebookCallback() {  
+        $user = Socialite::driver('facebook')->user();      
+        //$user = Socialite::driver('facebook')->stateless()->user();
         //$user = Socialite::driver('facebook')->redirect()->getTargetUrl();
         /*echo "<pre>";
         print_r($user);
@@ -45,8 +46,7 @@ class LoginController extends Controller {
         $this->_registerOrLoginUser($user);
         /*echo "aaa";
         exit;*/
-        return redirect('/profile/viewProfile');
-    }
+        return redirect()->route('homepage');
 
     /**
      * Google Login
@@ -63,7 +63,7 @@ class LoginController extends Controller {
     public function handleGoogleCallback() {
         $user = Socialite::driver('google')->user();
         $this->_registerOrLoginUser($user);
-        return redirect()->route('profile/viewProfile');
+        return redirect()->route('homepage');
     }
 
     protected function _registerOrLoginUser($data) {
@@ -72,12 +72,11 @@ class LoginController extends Controller {
             $user = new User();
             $user->username = $data->name;
             $user->email = $data->email;
-            $user->provider_id = $data->id;
+            //$user->provider_id = $data->id;
             $user->role = 'customer';
             $user->firstname = $data->name;
             $user->is_social_login = '1';
             $user->status = 'approved';
-            //$user->avatar = $data->avatar;
             $user->save();
         }
         Auth::login($user);
