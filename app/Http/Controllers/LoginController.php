@@ -37,7 +37,9 @@ class LoginController extends Controller {
      * @return type
      */
     public function handleFacebookCallback() {  
-        $user = Socialite::driver('facebook')->user();      
+        echo "hii";
+        $user = Socialite::driver('facebook')->user();    
+        echo $user;  
         //$user = Socialite::driver('facebook')->stateless()->user();
         //$user = Socialite::driver('facebook')->redirect()->getTargetUrl();
         /*echo "<pre>";
@@ -46,8 +48,8 @@ class LoginController extends Controller {
         $this->_registerOrLoginUser($user);
         /*echo "aaa";
         exit;*/
-        return redirect()->route('homepage');
-
+ 
+    }
     /**
      * Google Login
      * @return type
