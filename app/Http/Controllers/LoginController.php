@@ -39,7 +39,7 @@ class LoginController extends Controller {
     public function handleFacebookCallback() {  
         echo "hii";
         $user = Socialite::driver('facebook')->user();    
-        echo $user;  
+        print_r($user);
         //$user = Socialite::driver('facebook')->stateless()->user();
         //$user = Socialite::driver('facebook')->redirect()->getTargetUrl();
         /*echo "<pre>";
