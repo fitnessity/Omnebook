@@ -213,7 +213,7 @@ class Recurring extends Authenticatable
             }finally {
                 $this->save();
 
-                if($this->attempt != 0){
+                if($this->attempt != 'complete'){
                     SGMailService::sendAutoPayFaildAlertToProvider($emailDetailProvider);
                     SGMailService::sendAutoPayFaildAlertToCustomer($emailDetailCustomer);
                 }

@@ -102,9 +102,14 @@
                            
                             <!-- end card body -->
                         </div>
+                        <div class="col-lg-12">
                         <div class="text-right powerby">
-                            <img src="http://dev.fitnessity.co//public/images/fit-logo.png" alt="logo">
+                            <img class="mr-15" src="http://dev.fitnessity.co//public/images/fit-logo.png" alt="logo">
+                            <button type="button" class="btn btn-black" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Exit</button>
                         </div>
+                        </div>
+                        
+
                         <!-- end card -->
                     </div>
                 </div>
@@ -161,7 +166,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-red">Check In</button>
-                <button type="button" class="btn btn-black" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Exit</button>
             </div>
         </div>
     </div>

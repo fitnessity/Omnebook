@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\URL;
 use Auth;
 use Illuminate\Http\Request;
-use App\{User,CompanyInformation,CustomerPlanDetails,Transaction,StripePaymentMethod,Plan,OnboardQuestions};
+use App\{User,CompanyInformation,CustomerPlanDetails,Transaction,StripePaymentMethod,Plan,OnboardQuestions,SGMailService};
 use App\Repositories\FeaturesRepository;
 use Str;
 use DateTime;
@@ -74,11 +74,11 @@ class OnBoardedController extends Controller {
 
         $userDt = User::find($request->id);
         $companyDt = CompanyInformation::find($request->cid);
-
         if($request->step == 1){
 
             $show_step = 2;
-            if(Auth::check() || @$companyDt->id == ''){
+            $companyChk = CompanyInformation::where(['id'=>$request->cid , 'user_id' => $userDt->id])->first();
+            if(Auth::check() || $companyChk || @$companyDt->id == ''){
                 $show_step = 3;
             }
         
@@ -157,6 +157,11 @@ class OnBoardedController extends Controller {
             @$userDt->update(['show_step'=>4]);
 
             $companyDetail  =  CompanyInformation::updateOrCreate(['id' => $request->cid],$company);
+
+            if ($companyDetail->wasRecentlyCreated) {
+                SGMailService::welcomeMailOfNewBusinessToCustomer(['cid'=> $companyDetail->id,'email' => @$userDt->email]);
+            }
+
             $data = [
                 'cid' => $companyDetail->id,
                 'id' => $companyDetail->user_id,

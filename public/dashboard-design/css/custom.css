@@ -6661,3 +6661,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   font-size: 20px;
   font-weight: 600;
 }
+.space-btw{
+  margin-top: 70px;
+}
+.p-tb-10{
+  padding: 10px 0;
+}

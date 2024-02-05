@@ -4,7 +4,7 @@
 @include('layouts.business.new-header')
 
     <div class="page-content-home">
-        <div class="hpb-100">
+        <!-- <div class="hpb-100">
             <div class="container">
                 <div class="row mb-3">
                     <div class="col-lg-7 col-12">
@@ -48,8 +48,51 @@
                     </div>
                 </div>
             </div>
+        </div> -->
+        
+        <div class="container-fuild">
+            <div class="bg-cover home-banner-title" style="background-image: url({{ asset('public/uploads/cms/'.@$topBanner->banner_image) }});">
+                <div class="pro-background-overlay-banner"></div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xxl-9 col-lg-9 col-md-12">
+                            <div class="fit-widget-container-banner">
+                                <label class="fs-65 mb-15">{!!@$topBanner->content_title!!}</label>
+                                {!!@$topBanner->content!!}
+                            </div>
+                            <div class="mt-25">
+                                <div class="searchwrapper shadow">
+                                    <form id="searchform" method="get" action="/activities/">
+                                        <div class="searchbox">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-sm-12 col-md-6 col-12">
+                                                    <input name="label" id="activity_label" type="text" class="form-control padding-lrtb-one" placeholder="Search by Activity, Business, Person, Username">
+                                                    <div id="suggesstion-box-search-activity"></div>
+                                                </div>
+                                                <div class="col-lg-4 col-sm-12 col-md-4 col-12">
+                                                    <input name="address"  id="b_address1" type="text" class="form-control no-side-border padding-lrtb" placeholder="Search by country, city, state, zip" oninput="initMapCall1()" value="">
+                                                    <div id="map" class="d-none p-relative" style="overflow: hidden;"></div>
+                                                    <div id="suggesstion-box-search-location"></div>
+                                                    <input type="hidden"  name="city" id="b_city1" value="">
+                                                    <input type="hidden"  name="state" id="b_state1" value="">
+                                                    <input type="hidden"  name="country" id="country1" value="">
+                                                    <input type="hidden"  name="zip_code" id="b_zipcode1" value="">
+                                                </div>
+                                                <div class="col-lg-2 col-sm-12 col-md-2 col-12">
+                                                    <button type="submit" class="btn btn-red" class="form-control"><i class="fa fa-search livesearch"></i>Search</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>          
+            </div>
         </div>
-            
+
         <div class="bg-grey hpt-100 hpb-100">
             <div class="container">
                 <div class="row">

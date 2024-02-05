@@ -29,6 +29,13 @@ class SGMailService{
 		return $response;
 	}
 
+	public static function welcomeMailOfNewBusinessToCustomer($emailDetail){
+		$substitutions = [
+		    "url" => env('APP_URL').'/welcome_provider?cid='.$emailDetail['cid'],
+		];
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-63efeb6f57be45079692fcae3f63147c');
+	}
+
 	public static function sendBookingReceipt($emailDetail){
 		$notes = @$emailDetail['getreceipemailtbody']['notes'];
 		if($notes == ''){
@@ -277,7 +284,6 @@ class SGMailService{
 
 		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-b65d27b8ee91494ba9a4951108c103c1');
 	}
-
 
 	public static function sendAutoPayFaildAlertToCustomer($emailDetail){
 

@@ -132,8 +132,6 @@ class RecurringController extends Controller
             }
         }
         
-        $cardID = '';
-        
         $amount = number_format( $amount ,2,'.','');
         $emailDetailProvider = array(
             'CompanyImage'=> $company->getCompanyImage(),
@@ -207,8 +205,8 @@ class RecurringController extends Controller
             } 
         }else{
             Recurring::whereIn('id', $ids)->update(['status' => 'Retry']);
-           SGMailService::sendAutoPayFaildAlertToProvider($emailDetailProvider);
-           SGMailService::sendAutoPayFaildAlertToCustomer($emailDetailCustomer);
+            SGMailService::sendAutoPayFaildAlertToProvider($emailDetailProvider);
+            SGMailService::sendAutoPayFaildAlertToCustomer($emailDetailCustomer);
             return response()->json(['message' => 'Autopay payment is failed due to some reason. Please try again latter. ']);
         }
     }

@@ -101,13 +101,70 @@
 					</div><!-- end col -->
 					
 
-				<div class="row">
-
-				<div class="col-xxl-12 col-lg-12">
+					<div class="col-xxl-12 col-lg-12">
 						<div class="card">
 							<div class="card-header align-items-center d-flex">
+								<h4 class="card-title mb-0 flex-grow-1 font-red">Your Upcoming Classes</h4>
+							</div><!-- end card header -->
+
+							<div class="card-body">
+								<div class="live-preview">
+									<div class="table-responsive">
+										<table class="table align-middle table-nowrap mb-0">
+											<thead>
+												<tr>
+													<th scope="col">Session</th>
+													<th scope="col">Program Name </th>
+													<th scope="col">Time and Date</th>
+													<th scope="col">Membership</th>
+													<th scope="col"> </th>
+													<th scope="col"> </th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<th scope="row">4/5 </th>
+													<td>Kickboxing Class </td>
+													<td>02/21/2024 10:00 AM (45 Min) </td>
+													<td>Love Tennis - 45 Minute Private (5 Pack) </td>
+													<td>
+														<div class="">
+															<a class="btn btn-red" href="http://dev.fitnessity.co/design/register_ep">Check-In</a>
+														</div>
+													</td>
+													<td>
+														<div class="">
+															<a class="btn btn-red" href="http://dev.fitnessity.co/personal/orders?business_id=68">View Booking</a>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<th scope="row">9991/10000 </th>
+													<td>Kickboxing Class </td>
+													<td>02/21/2024 10:00 AM (45 Min) </td>
+													<td>Go Golfers - 30 Minute Private (01 Pack) </td>
+													<td>
+														<div class="">
+															<a class="btn btn-red" href="http://dev.fitnessity.co/design/register_ep">Check-In</a>
+														</div>
+													</td>
+													<td>
+														<div class="">
+															<a class="btn btn-red" href="http://dev.fitnessity.co/personal/orders?business_id=68">View Booking</a>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div><!-- end card-body -->
+						</div><!-- end card -->
+
+						<!--<div class="card">
+							<div class="card-header align-items-center d-flex">
 								<h4 class="card-title mb-0 flex-grow-1">Your Upcoming Classes</h4>
-							</div><!-- end card-header -->
+							</div>
 
 							<div class="card-body">
 								<div class="d-flex align-middle y-middle">
@@ -130,7 +187,7 @@
 												</div>
 												<div class="col-md-3 col-3">
 													02/21/2024 10:00 AM (45 Min)
-													<!-- {{ date('m/d/Y' ,strtotime($c->checkin_date))}}  {{ date("g:i A", strtotime(@$c->scheduler->shift_start))}} -->
+													<!-- {{ date('m/d/Y' ,strtotime($c->checkin_date))}}  {{ date("g:i A", strtotime(@$c->scheduler->shift_start))}} 
 												</div>
 												<div class="col-md-3 col-3">
 													{{ @$c->order_detail->business_services_with_trashed->program_name }} - {{ @$c->order_detail->business_price_detail_with_trashed->price_title }}
@@ -147,11 +204,10 @@
 									@empty
 										No Upcoming Class Available
 									@endforelse
-								</div><!-- end -->
-							</div><!-- end card body -->
-						</div><!-- end card -->
+								</div>
+							</div>
+						</div>  -->
 					</div><!-- end col -->
-					</div>
 
 					<div class="col-xxl-8 col-lg-8">
 						<div class="card">

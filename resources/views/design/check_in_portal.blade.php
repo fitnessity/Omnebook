@@ -46,7 +46,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="card-body border-bottom-grey">
+                                <!--<div class="card-body border-bottom-grey">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="text-center">
@@ -83,7 +83,7 @@
                                                 </div>                                                
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="card-body">
                                         <div class="row">
@@ -142,127 +142,133 @@
 													<div class="col-xxl-12 col-lg-12">
 														<div class="card">
 															<div class="card-header align-items-center d-flex">
-																<h4 class="card-title mb-0 flex-grow-1">Your Upcoming Classes</h4>
-															</div><!-- end card-header -->
+																<h4 class="card-title mb-0 flex-grow-1 font-red">Your Upcoming Classes</h4>
+															</div><!-- end card header -->
 
 															<div class="card-body">
-																<div class="d-flex align-middle y-middle">
-																	<div class="row">
-																		<div class="col-md-1 col-2"><h5 class="fs-15">Session</h5></div>
-																		<div class="col-md-2 col-2"><h5 class="fs-15">Program Name </h5></div>															
-																		<div class="col-md-3 col-3"><h5 class="fs-15">Time and Date</h5></div>					
-																		<div class="col-md-3 col-4"><h5 class="fs-15">Membership</h5></div>
-																		<div class="col-md-3 col-3"></div>
-																		<div class="dashed-border mb-5 w-100">												
-																			<div class="row y-middle">
-																				<div class="col-md-1 col-2">
-																					4/5
-																				</div>
-																				<div class="col-md-2 col-2">
-																					Kickboxing Class
-																				</div>
-																				<div class="col-md-3 col-3">
-																					02/21/2024 10:00 AM (45 Min)
-																					<!-- 02/21/2024  10:00 AM -->
-																				</div>
-																				<div class="col-md-3 col-3">
-																					Love Tennis - 45 Minute Private (5 Pack)
-																				</div>
-																				<div class="col-md-3 col-4">
-																					<div class="flex-grow-1 ms-3 text-end">
-																						<a class="btn btn-red float-right mb-10" href="http://dev.fitnessity.co/personal/orders?business_id=68">View Booking</a>
-																						<a class="btn btn-red float-right mb-10 mr-10" href="http://dev.fitnessity.co/design/register_ep">Check-In</a>
-																					</div>
-																				</div>
-																			</div>												
-																		</div>
-																		<div class="dashed-border mb-5 w-100">												
-																			<div class="row y-middle">
-																				<div class="col-md-1 col-2">
-																					9991/10000
-																				</div>
-																				<div class="col-md-2 col-2">
-																					Kickboxing Class
-																				</div>
-																				<div class="col-md-3 col-3">
-																					02/21/2024 10:00 AM (45 Min)
-																					<!-- 04/11/2024  2:30 AM -->
-																				</div>
-																				<div class="col-md-3 col-3">
-																					Go Golfers - 30 Minute Private (01 Pack)
-																				</div>
-																				<div class="col-md-3 col-4">
-																					<div class="flex-grow-1 ms-3 text-end">
-																						<a class="btn btn-red float-right mb-10" href="http://dev.fitnessity.co/personal/orders?business_id=68">View Booking</a>
-																						<a class="btn btn-red float-right mb-10 mr-10" href="http://dev.fitnessity.co/design/register_ep">Check-In</a>
-																					</div>
-																				</div>
-																			</div>												
-																		</div>
-																	</div><!-- end -->
-																</div><!-- end card body -->
-															</div><!-- end card -->
-														</div><!-- end col -->
+																<div class="live-preview">
+																	<div class="table-responsive">
+																		<table class="table align-middle table-nowrap mb-0">
+																			<thead>
+																				<tr>
+																					<th scope="col">Session</th>
+																					<th scope="col">Program Name </th>
+																					<th scope="col">Time and Date</th>
+																					<th scope="col">Membership</th>
+																					<th scope="col"> </th>
+																					<th scope="col"> </th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr>
+																					<th scope="row">4/5 </th>
+																					<td>Kickboxing Class </td>
+																					<td>02/21/2024 10:00 AM (45 Min) </td>
+																					<td>Love Tennis - 45 Minute Private (5 Pack) </td>
+																					<td>
+																						<div class="">
+																							<a class="btn btn-red" href="http://dev.fitnessity.co/design/register_ep">Check-In</a>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="">
+																							<a class="btn btn-red" href="http://dev.fitnessity.co/personal/orders?business_id=68">View Booking</a>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr>
+																					<th scope="row">9991/10000 </th>
+																					<td>Kickboxing Class </td>
+																					<td>02/21/2024 10:00 AM (45 Min) </td>
+																					<td>Go Golfers - 30 Minute Private (01 Pack) </td>
+																					<td>
+																						<div class="">
+																							<a class="btn btn-red" href="http://dev.fitnessity.co/design/register_ep">Check-In</a>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="">
+																							<a class="btn btn-red" href="http://dev.fitnessity.co/personal/orders?business_id=68">View Booking</a>
+																						</div>
+																					</td>
+																				</tr>
+																			</tbody>
+																		</table>
+																	</div>
+																</div>
+															</div><!-- end card-body -->
+														</div><!-- end card -->
 													</div>
 
 													<div class="col-xxl-12 col-lg-12">
-														<div class="card">
+														<div class="card space-btw">
 															<div class="card-header align-items-center d-flex">
-																<h4 class="card-title mb-0 flex-grow-1">Important Alerts</h4>
+																<h4 class="card-title mb-0 flex-grow-1 font-red">Important Alerts</h4>
 															</div><!-- end card-header -->
 
 															<div class="card-body">
-																<div class="dashed-border">
-																	<div class="d-flex align-middle y-middle mb-5">
-																		<div class="flex-shrink-0">
-																			<i class="fa fa-user fs-18"></i>
+																<div class="dashed-border p-tb-10">
+																	<div class="row y-middle">
+																		<div class="col-lg-8 col-md-8 col-sm-8 col-12">
+																			<div class="d-flex">
+																				<i class="fa fa-user fs-18"></i>
+																				<h6 class="mb-1 lh-base ms-3">Total Active Memberships <span class="font-red">(3)(0 New)</span></h6>
+																			</div>
 																		</div>
-																		<div class="flex-grow-0 ms-3">
-																			<h6 class="mb-1 lh-base">Total Active Memberships <span class="font-red">(3)(0 New)</span></h6>
+																		<div class="col-lg-4 col-md-4 col-sm-4 col-12">
+																			<div class="flex-grow-1 ms-3 text-end">
+																				<a class="btn btn-red" href="http://dev.fitnessity.co/personal/orders?business_id=68">View</a>
+																			</div>
 																		</div>
-																		<div class="flex-grow-1 ms-3 text-end">
-																			<a class="btn btn-red" href="http://dev.fitnessity.co/personal/orders?business_id=68">View</a>
-																		</div>
-																	</div><!-- end -->
+																	</div>
 																</div>
-																<div class="dashed-border">
-																	<div class="d-flex mt-4 y-middle mb-5">
-																		<div class="flex-shrink-0">
-																			<i class="fa fa-sticky-note fs-18"></i>
+
+																<div class="dashed-border p-tb-10">
+																	<div class="row y-middle">
+																		<div class="col-lg-8 col-md-8 col-sm-8 col-12">
+																			<div class="d-flex">
+																				<i class="fa fa-sticky-note fs-18"></i>
+																				<h6 class="mb-1 lh-base ms-3"> Notes &amp; Alerts <span class="font-red">(12)(0 New)</span> </h6>
+																			</div>
 																		</div>
-																		<div class="flex-grow-0 ms-3">
-																			<h6 class="mb-1 lh-base"> Notes &amp; Alerts <span class="font-red">(12)(0 New)</span> </h6>
+																		<div class="col-lg-4 col-md-4 col-sm-4 col-12">
+																			<div class="flex-grow-1 ms-3 text-end">
+																				<a class="btn btn-red" href="http://dev.fitnessity.co/personal/notes-alerts?business_id=68">View</a>
+																			</div>
 																		</div>
-																		<div class="flex-grow-1 ms-3 text-end">
-																			<a class="btn btn-red" href="http://dev.fitnessity.co/personal/notes-alerts?business_id=68">View</a>
-																		</div>
-																	</div><!-- end -->
+																	</div>
 																</div>
-																<div class="dashed-border">
-																	<div class="d-flex mt-4 y-middle mb-5">
-																		<div class="flex-shrink-0">
-																			<i class="fa fa-bullhorn fs-18"></i>
+
+																<div class="dashed-border p-tb-10">
+																	<div class="row y-middle">
+																		<div class="col-lg-8 col-md-8 col-sm-8 col-12">
+																			<div class="d-flex">
+																				<i class="fa fa-bullhorn fs-18"></i>
+																				<h6 class="mb-1 lh-base ms-3">Announcements &amp; News <span class="font-red">(4)(0 New)</span></h6>
+																			</div>
 																		</div>
-																		<div class="flex-grow-0 ms-3">
-																			<h6 class="mb-1 lh-base">Announcements &amp; News <span class="font-red">(4)(0 New)</span></h6>
+																		<div class="col-lg-4 col-md-4 col-sm-4 col-12">
+																			<div class="flex-grow-1 ms-3 text-end">
+																				<a class="btn btn-red" href="http://dev.fitnessity.co/personal/announcement-news?business_id=68">View</a>
+																			</div>
 																		</div>
-																		<div class="flex-grow-1 ms-3 text-end">
-																			<a class="btn btn-red" href="http://dev.fitnessity.co/personal/announcement-news?business_id=68">View</a>
-																		</div>
-																	</div><!-- end -->
+																	</div>
 																</div>
-																<div class="dashed-border">
-																	<div class="d-flex mt-4 y-middle mb-5">
-																		<div class="flex-shrink-0">
-																			<i class="fa fa-file fs-18"></i>
+
+																<div class="dashed-border p-tb-10">
+																	<div class="row y-middle">
+																		<div class="col-lg-8 col-md-8 col-sm-8 col-12">
+																			<div class="d-flex">
+																				<i class="fa fa-file fs-18"></i>
+																				<h6 class="mb-1 lh-base ms-3">Documents &amp; Terms Alerts <span class="font-red">(4)(0 New)</span></h6>
+																			</div>
 																		</div>
-																		<div class="flex-grow-0 ms-3">
-																			<h6 class="mb-1 lh-base">Documents &amp; Terms Alerts <span class="font-red">(4)(0 New)</span></h6>
+																		<div class="col-lg-4 col-md-4 col-sm-4 col-12">
+																			<div class="flex-grow-1 ms-3 text-end">
+																				<a class="btn btn-red" href="http://dev.fitnessity.co/personal/documents-contract?business_id=68">View</a>
+																			</div>
 																		</div>
-																		<div class="flex-grow-1 ms-3 text-end">
-																			<a class="btn btn-red" href="http://dev.fitnessity.co/personal/documents-contract?business_id=68">View</a>
-																		</div>
-																	</div><!-- end -->
+																	</div>
 																</div>
 															</div><!-- end card body -->
 														</div><!-- end card -->
