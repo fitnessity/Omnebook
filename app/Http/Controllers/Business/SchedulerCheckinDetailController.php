@@ -141,7 +141,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
      */
     public function update(Request $request, $business_id, $scheduler_id, $id)
     {
-
+        
         $company = $request->current_company;
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
         $business_checkin_detail = BookingCheckinDetails::whereRaw('1=1');
@@ -159,6 +159,12 @@ class SchedulerCheckinDetailController extends BusinessBaseController
             
             if($customerInClass  <  $business_activity_scheduler->spots_available){
                 $checkin->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
+                if($checkin->UserBookingDetail){
+                    $totalSession = $checkin->UserBookingDetail->pay_session;
+                    if($checkin->membership_checkin_count == 1 || $checkin->membership_checkin_count == $totalSession){
+                        SGMailService::leaveAReview(['companyName' =>  $company->public_company_name,'cid' => $business_id ,'email' => $checkin->customer->email]);
+                    }
+                }
                 $sendmail= 1;
             }else{
                 $sendmail= 2;

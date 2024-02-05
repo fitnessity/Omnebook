@@ -481,4 +481,13 @@ class SGMailService{
 		];
 		SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-0f5d87c2292941aab391e24c7f7a5751');
 	}
+
+	public static function leaveAReview($emailDetail){
+		$substitutions = [
+			'ProviderName'  => $emailDetail['companyName'],
+			'ReviewUrl'  =>env('APP_URL').'businessprofile/'.strtolower(str_replace(' ', '', $emailDetail['companyName'])).'/'.$emailDetail['cid'],
+			'ActivityUrl'  =>env('APP_URL').'activities',
+		];
+		SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-1906577086e847dba0d002c1b2854ed1');
+    }
 }
