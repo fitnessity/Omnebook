@@ -37,7 +37,8 @@ class LoginController extends Controller {
      * @return type
      */
     public function handleFacebookCallback() {  
-        $user = Socialite::driver('facebook')->user();    
+        $user = Socialite::driver('facebook')->user();
+        echo  $user;exit;     
         $this->_registerOrLoginUser($user);
         return redirect()->route('homepage');
  
@@ -61,14 +62,14 @@ class LoginController extends Controller {
     }
 
     protected function _registerOrLoginUser($data) {
-        $user = User::where('email', '=', $data->email)->first();
+        $user = User::where('email',$data->email)->first();
         if (!$user) {
             $user = new User();
             $user->username = $data->name;
             $user->email = $data->email;
-            //$user->provider_id = $data->id;
             $user->role = 'customer';
-            $user->firstname = $data->name;
+            $user->firstname = substr($data->name, 0, strpos($data->name, ' '));
+            $user->lastname = substr($data->name,strpos($data->name, ' ') + 1);
             $user->is_social_login = '1';
             $user->status = 'approved';
             $user->save();
