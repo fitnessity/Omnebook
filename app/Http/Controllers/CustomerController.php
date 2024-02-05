@@ -8,7 +8,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use Aws\S3\S3Client;
 use App\Jobs\{ProcessAttendanceExcelData,ProcessCustomerExcelData,ProcessMembershipExcelData};
-
+use GuzzleHttp\Client;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -19,7 +19,7 @@ use Session,Redirect,DB,Input,Auth,Hash,Validator,View,Mail,Str,Config,Excel,Spl
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\{CustomerRepository,BookingRepository,UserRepository};
-use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation,ExcelUploadTracker,UserFamilyDetail,Transaction,StripePaymentMethod,CustomersDocuments,CustomerNotes};
+use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation,ExcelUploadTracker,UserFamilyDetail,Transaction,StripePaymentMethod,CustomersDocuments,CustomerNotes,CustomerDocumentsRequested,Notification};
 
 use Illuminate\Support\Facades\Storage;
 
@@ -40,6 +40,10 @@ class CustomerController extends Controller {
         $this->middleware('auth');
         $this->customers = $customers;
         $this->bookings = $bookings;
+    }
+
+    public function client(){
+        return view('customers.add_client');
     }
 
     public function index(Request $request, $business_id){
@@ -88,6 +92,32 @@ class CustomerController extends Controller {
         ]); 
     }
 
+    public function create(Request $request, $business_id){
+        $intent = $clientSecret = null;
+        $success = 0;
+        if(!$request->customer_id){
+            if (session()->has('success-register')) {
+                $success = session('success-register');
+            }
+            session()->forget('success-register');
+        }
+
+        $businessTerms = BusinessTerms::where('cid',$business_id)->first();
+        if($request->customer_id){
+            $customer = Customer::find($request->customer_id);
+            \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            if($customer->stripe_customer_id != ''){
+                $intent = $stripe->setupIntents->create([
+                    'payment_method_types' => ['card'],
+                    'customer' => $customer->stripe_customer_id,
+                ]);
+                $clientSecret = $intent['client_secret'];
+            } 
+        }
+        return view('customers.create',compact('clientSecret', 'business_id','success','businessTerms'));
+    }
+
     public function delete(Request $request, $business_id){
         $customerdata = $this->customers->findById($request->id);
         if( $customerdata != ''){
@@ -122,7 +152,15 @@ class CustomerController extends Controller {
 
 
         $documents = CustomersDocuments::where(['customer_id'=>$id])->get();
+        $lastBooking = $customerdata->bookingDetail()->orderby('created_at','desc')->first();
         $notes = CustomerNotes::where(['customer_id'=>$id])->get();
+
+        $cardSuccessMsg =0;
+
+        if(Session::has('cardSuccessMsg')){
+            $cardSuccessMsg = 1;
+            Session::forget('cardSuccessMsg');
+        }
 
         return view('customers.show', [
             'customerdata'=>$customerdata,
@@ -135,6 +173,8 @@ class CustomerController extends Controller {
             'auto_pay_payment_msg' =>$auto_pay_payment_msg,
             'documents' =>$documents,
             'notes' =>$notes,
+            'lastBooking' =>$lastBooking,
+            'cardSuccessMsg' =>$cardSuccessMsg,
         ]);
     }
 
@@ -404,20 +444,6 @@ class CustomerController extends Controller {
         return view('customers.edit_terminate_or_suspend_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id ,"customer_id"=>$request->id]);
     }
 
-    public function addcustomerfamily ($id){
-        $UserFamilyDetails  = [];
-        $customer = Customer::find($id);
-        $UserFamilyDetails  = $customer->get_families();
-        $companyId = $customer->business_id;
-            
-        return view('customers.==add_family', [
-            'UserFamilyDetails' => $UserFamilyDetails,
-            'companyId' => $companyId,
-            'parent_cus_id' => $id,
-        ]);
-        //return view('profiles.viewcustomer');
-    }
-
     public function add_family ($id){
         $UserFamilyDetails  = [];
         $customer = Customer::find($id);
@@ -433,24 +459,40 @@ class CustomerController extends Controller {
     }
 
     public function addFamilyMemberCustomer(Request $request) {
+        //print_r($request->all());
+        $idArray = [];
+        $parent_id = null;
         for ($i=0; $i <= $request->family_count ; $i++) { 
-            $update = [];
-            $update = [
-                'business_id' => $request['business_id'],
-                'fname' => $request['fname'][$i],
-                'lname' => $request['lname'][$i],
-                'email' => $request['email'][$i],
-                'phone_number' => $request['mobile'][$i],
-                'emergency_contact' => $request['emergency_contact'][$i],
-                'relationship' => $request['relationship'][$i],
-                'gender' => $request['gender'][$i],
-                'birthdate' => $request['birthdate'][$i] != '' ? date('Y-m-d',strtotime($request['birthdate'][$i])) : null,
-                'parent_cus_id' => $request['parent_cus_id'],
-            ];
+            $customer = Customer::firstOrNew(['id' => $request['cus_id'][$i]]);
 
-            Customer::updateOrInsert(['id'=> $request['cus_id'][$i] ] , $update);
+            $customer->fill([
+                'business_id'       => $request['business_id'],
+                'fname'             => $request['fname'][$i],
+                'lname'             => $request['lname'][$i],
+                'email'             => $request['email'][$i],
+                'phone_number'      => $request['mobile'][$i],
+                'emergency_contact' => $request['emergency_contact'][$i],
+                'relationship'      => $request['relationship'][$i],
+                'gender'            => $request['gender'][$i],
+                'birthdate'         => $request['birthdate'][$i] != '' ? date('Y-m-d', strtotime($request['birthdate'][$i])) : null,
+                'parent_cus_id'     => $request['parent_cus_id'],
+                'primary_account' => 0,
+            ])->save();
+
+            if (@$request['primaryAccountHolder'][$i] == 1 && $parent_id === null) {
+                $parent_id = $customer->id;
+            }else{
+                $idArray[$i][] = $customer->id;   
+            }
         }
 
+            /*echo $parent_id;
+            print_r($idArray);exit;*/
+        if($parent_id){
+            Customer::whereIn('id', $idArray)->update(['parent_cus_id' => $parent_id]);
+            Customer::where('id', $request['parent_cus_id'])->update(['parent_cus_id' => $parent_id,'primary_account' => 0]);
+            Customer::where('id', $parent_id)->update(['parent_cus_id' => null,'primary_account' => 1]);
+        }
         return Redirect::back();
     }
 
@@ -537,22 +579,8 @@ class CustomerController extends Controller {
                 $data['birthdate'] = date('Y-m-d',strtotime($request->birthdate));
             }
 
-            if(@$data['terms_covid'] != ''){
-                $data['terms_covid'] = date('Y-m-d');
-            }
-
-            if(@$data['terms_liability'] != ''){
-                $data['terms_liability'] = date('Y-m-d');
-            }
-
-            if(@$data['terms_contract'] != ''){
-                $data['terms_contract'] = date('Y-m-d');
-            }
-            
-            $position = array_search(request()->_token, $data);
-            $position1 = array_search(request()->cus_id, $data);
-            unset($data[$position]);
-            unset($data[$position1]);
+            unset($data['_token']);
+            unset($data['cus_id']);
             
             $cust = Customer::find($request->cus_id);
             if($request->primary_account == 1){
@@ -564,6 +592,14 @@ class CustomerController extends Controller {
 
             User::where(['email' => $cust['email'] , 'id' => $cust['user_id']])->update(['primary_account' => $data['primary_account'] ]);
             $cust->update($data);
+        }elseif($request->chk == 'update_terms'){
+            $data = $request->all();
+            $covid = (@$data['terms_covid'] == 1) ? date('Y-m-d'): '';
+            $liability = (@$data['terms_liability'] == 1) ? date('Y-m-d'): '';
+            $contract = (@$data['terms_contract'] == 1) ? date('Y-m-d'): '';
+            $cust = Customer::find($request->cus_id);
+            $cust->update(['terms_covid' =>$covid,'terms_liability' =>$liability,'terms_contract' =>$contract,]);
+
         }
         
         return redirect()->route('business_customer_show',['business_id' => $cust->company_information->id, 'id'=>$request->cus_id]);
@@ -622,6 +658,7 @@ class CustomerController extends Controller {
         $bId = Crypt::decryptString($business_id);
         $user = User::where('id',$user_id)->first();
         $chk = Customer::where('user_id' , $user->id)->first();
+
         if($chk == ''){
             profileSyncToBusiness($bId, $user);
         }else{
@@ -673,7 +710,7 @@ class CustomerController extends Controller {
             })->get();
 
             foreach($paymentHistory as $data){
-            $history = Transaction::where(['user_id' =>$chk->id ,'user_type'=>'Customer'])->first();
+                $history = Transaction::where(['user_id' =>$chk->id ,'user_type'=>'Customer'])->first();
                 if($history == ''){
                     Transaction::create([
                         'item_id' => $data->item_id,
@@ -693,6 +730,19 @@ class CustomerController extends Controller {
                 }
             }
         }
+
+
+        Notification::create([
+            'user_id' => Auth::user()->id,
+            'customer_id' =>  NULL,
+            'table_id' => Auth::user()->id,
+            'table' =>  'User',
+            'display_date' => date('Y-m-d'),
+            'display_time' => date("H:i"),
+            'type' => 'business',
+            'business_id' =>  $bId,
+            'status'  =>  'Alert'
+        ]);
         
         return Redirect()->route('personal.orders.index');
     }
@@ -700,24 +750,31 @@ class CustomerController extends Controller {
     public function remove_grant_access(Request $request, $id,$customerId,$type = null){
         $customers = Customer::where('id',$customerId)->update(['user_id'=> null]); 
         if($request->type){
-            return Redirect()->route('personal.orders.index',['business_id'=>$id ]);
+            return Redirect()->route('personal.orders.index',['business_id'=>$id ,'customer_id' =>$customerId]);
         }else{
             return Redirect()->route('personal.family_members.index',['business_id'=>$id,'customerId'=>$customerId]);
         }
     }
 
-    public function receiptmodel($orderId,$customer){
+    public function receiptmodel($orderId,$customer,$isFrom = null){
         $customerData = Customer::where('id',$customer)->first();
         $transaction = Transaction::where('item_id',$orderId)->first();
-        if(@$transaction->item_type == 'UserBookingStatus'){
-            $oid = $orderId;
-            $bookingArray = UserBookingDetail::where('booking_id',$oid)->pluck('id')->toArray();
+        if(!$isFrom){
+            if(@$transaction->item_type == 'UserBookingStatus'){
+                $oid = $orderId;
+                $bookingArray = UserBookingDetail::where('booking_id',$oid)->pluck('id')->toArray();
+            }else{
+                $orderId = @$transaction->Recurring->booking_detail_id;
+                $oid = $orderId;
+                $bookingArray = UserBookingDetail::where('id',$orderId)->pluck('id')->toArray();
+            }
+            $transactionType = @$transaction->item_type;
         }else{
-            $orderId = @$transaction->Recurring->booking_detail_id;
-            $oid = $orderId;
+             $oid = $orderId;
             $bookingArray = UserBookingDetail::where('id',$orderId)->pluck('id')->toArray();
+            $transactionType = 'Membership';
         }
-        return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $oid ,'type' =>$transaction->item_type]);
+        return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $oid ,'type' =>$transactionType]);
     }
 
     public function loadView(Request $request)
@@ -773,7 +830,7 @@ class CustomerController extends Controller {
     }
 
     public function uploadDocument(Request $request, $business_id){
-        $path = $request->file('file')->store('Customer-Documents');
+        $path = $request->hasFile('file') ? $request->file('file')->store('Customer-Documents') : '';
         $create = CustomersDocuments::create([
             'user_id' => Auth::user()->id, 
             'staff_id' => session('StaffLogin') ?? '', 
@@ -782,15 +839,108 @@ class CustomerController extends Controller {
             'title' => $request->title,
             'path' => $path
         ]);
-
         if($create){
+            if($request->sign == 1){
+                $this->requestSign($business_id , $create->id);
+            }
             return response()->json(['status'=>200,'message'=>'Document Added Successfully.']);
         }else{
             return response()->json(['status'=>500,'message'=>'Something Went Wrong.']);
         }
     }
 
-    public function download($business_id,$id)
+    public function uploadDocsName(Request $request){
+        //print_r($request->all());exit;
+        /*$document = CustomersDocuments::find($request->docId);
+        if(!empty($request->docName)){
+            for($i=0; $i< count($request->docName);$i++){
+                if($request->docName[$i] != ''){
+                    $data = CustomerDocumentsRequested::updateOrCreate([
+                            'id' => $request->contentID[$i],
+                        ],
+                        [
+                            'user_id' => @$document->user_id,
+                            'business_id' => @$document->business_id,
+                            'customer_id' => @$document->customer_id,
+                            'doc_id' => $request->docId,
+                            'content' => $request->docName[$i],
+                        ]
+                    ); 
+
+                    if($request->contentID[$i]){
+                        Notification::updateOrCreate([
+                            'display_date' => date('Y-m-d'),
+                            'table_id' => $data->id,
+                            'table' => 'CustomerDocumentsRequested',
+                            'business_id' => $document->business_id,
+                        ],[
+                            'user_id' => $document->user_id , 'customer_id' => $document->customer_id , 'display_date' => date('Y-m-d') , 'table_id' => $data->id , 'table' => 'CustomerDocumentsRequested',  'display_time' =>date('H:i'), 'business_id' => $document->business_id,'type' => 'personal','status'=>'Alert'
+                        ]); 
+                    }
+                }
+            }
+        }
+        if(!empty($request->deletIds)){
+            CustomerDocumentsRequested::whereIn('id', $request->deletIds)->delete();
+        } */  
+
+        $customer = Customer::find($request->customerId);
+        $document = CustomersDocuments::create([
+            'user_id' => Auth::user()->id, 
+            'staff_id' => session('StaffLogin') ?? '', 
+            'business_id' => $customer->business_id,
+            'customer_id' => $request->customerId,
+            'title' => $request->title,
+            'doc_requested_date' => date('Y-m-d'),
+        ]);
+
+        if(!empty($request->docName)){
+            for($i=0; $i< count($request->docName);$i++){
+                if($request->docName[$i] != ''){
+                    $data = CustomerDocumentsRequested::Create([
+                            'user_id' => @$document->user_id,
+                            'business_id' => @$document->business_id,
+                            'customer_id' => @$document->customer_id,
+                            'doc_id' => $document->id,
+                            'content' => $request->docName[$i],
+                        ]
+                    ); 
+
+                    Notification::Create([
+                        'user_id' => $document->user_id , 'customer_id' => $document->customer_id , 'display_date' => date('Y-m-d') , 'table_id' => $data->id , 'table' => 'CustomerDocumentsRequested',  'display_time' =>date('H:i'), 'business_id' => $document->business_id,'type' => 'personal','status'=>'Alert'
+                    ]); 
+                    
+                }
+            }
+        }
+
+        $request->session()->flash('success', 'Documents Content Added successfully.');
+        return redirect()->route('business_customer_show',['business_id'=>@$document->business_id ,'id'=> @$document->customer_id]);
+    }
+
+    public function docContent($customerId){
+        //$content = CustomerDocumentsRequested::where('doc_id',$id)->get();
+        return view('customers.documents_contents',compact('customerId'))->render();
+    }
+
+    public function requestSign($business_id,$id){
+        $document = CustomersDocuments::find($id);
+        $document->update(['status' =>1 ,'sign_requested_date' => date('Y-m-d')]);
+
+        Notification::create([
+            'user_id' => Auth::user()->id,
+            'customer_id' =>  $document->customer_id,
+            'table_id' => $document->id,
+            'table' =>  'CustomersDocuments',
+            'display_date' => date('Y-m-d'),
+            'display_time' => date("H:i"),
+            'type' => 'personal',
+            'business_id' => $document->business_id,
+            'status'  =>  'Alert'
+        ]);
+    }
+
+    public function download($id)
     {
         $document = CustomersDocuments::findOrFail($id);
         $filePath = Storage::url($document->path);
@@ -802,13 +952,12 @@ class CustomerController extends Controller {
         ];
         return Response::make($imageContent, 200, $headers);
     }
-
-    public function removeDoc($business_id, $id){
+   
+    public function removeDoc($id){
         $docs = CustomersDocuments::find($id);
         Storage::disk('s3')->delete($docs->path);
         $docs->delete();
     }
-
 
     public function removenote($business_id, $id){
         $note = CustomerNotes::find($id);
@@ -822,6 +971,7 @@ class CustomerController extends Controller {
                 'user_id' => Auth::user()->id, 
                 'business_id' => $business_id,
                 'customer_id' => $request->cid,
+                'title' => $request->title,
                 'note' => $request->notes,
                 'due_date' => $request->due_date,
                 'time' => $request->time,
@@ -830,6 +980,28 @@ class CustomerController extends Controller {
             ]
         );
 
+        $data = ['user_id' => $note->user_id , 'customer_id' => $note->customer_id , 'display_date' => $note->due_date , 'table_id' => $note->id , 'table' => 'CustomerNotes',  'display_time' => $note->time, 'business_id' => $note->business_id,'type' => 'business','status'=>'Alert'];
+
+        if($note->display_chk == 1){
+            $data['type'] = 'personal';
+            Notification::updateOrCreate([
+                'display_date' => $note->due_date,
+                'table_id' => $note->id,
+                'table' => 'CustomerNotes',
+                'type' => 'personal',
+                'business_id' => $note->business_id,
+            ],$data);
+        }
+
+        $data['type'] = 'business';
+        Notification::updateOrCreate([
+                'display_date' => $note->due_date,
+                'table_id' => $note->id,
+                'table' => 'CustomerNotes',
+                'type' => 'business',
+                'business_id' => $note->business_id,
+            ],$data);
+        
         if($note){
             $word = $request->id ? 'updated' : 'Added';
             return response()->json(['status'=>200,'message'=>'Note '.$word.' Successfully.']);

@@ -770,3 +770,8 @@ a.active{
 .form-control.redClass{
     border: 2px solid red !important;
 }
+
+
+.fs-18{
+	font-size: 18px !important;
+}

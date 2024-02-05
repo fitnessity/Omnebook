@@ -476,7 +476,9 @@ class OrderController extends BusinessBaseController
                                 "tax" => $tax_recurring,
                                 "status" => $status,
                             );
-                            Recurring::create($recurring);
+                            if(!$isComp){
+                                Recurring::create($recurring);
+                            }
                         }
                     }
                 }

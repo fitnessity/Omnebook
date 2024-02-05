@@ -26,7 +26,45 @@ class Recurring extends Authenticatable
      * @var array
      */
     protected $fillable = [ 'booking_detail_id', 'user_id', 'user_type', 'business_id', 'payment_date', 'amount', 'tax', 'charged_amount', 'payment_method', 'stripe_payment_id', 'status','transfer_provider_status','provider_amount','provider_transaction_id','attempt'];
+    protected $appends = ['total_amount' ,'card','customer_name' ,'customer_id','membership_name'];
+     public function getTotalAmountAttribute(){
 
+        return number_format($this->amount + $this->tax,2);
+    }
+
+    public function getCardAttribute(){
+        $transaction = Transaction::where(['item_id' => $this->id ,'item_type' => 'Recurring'])->first();
+        if($transaction){
+            $card = $transaction->getPmtMethod();
+        }
+        return $card ?? 'N/A';
+    }
+
+
+    public function getMembershipNameAttribute(){
+        return $this->UserBookingDetail->business_services_with_trashed->program_name.' ('.$this->UserBookingDetail->business_price_detail_with_trashed->price_title.')';
+    }
+
+    public function getCustomerNameAttribute(){
+        if($this->user_type == 'user'){
+            $user = User::find($this->user_id);
+            $customer = Customer::where(['user_id'=>@$user->user_id, 'email' => @$user->email])->first();
+            return @$customer->full_name;
+        }else{
+            $customer = Customer::find($this->user_id);
+            return @$customer->full_name;
+        }
+    }
+
+    public function getCustomerIdAttribute(){
+        if($this->user_type == 'user'){
+            $user = User::find($this->user_id);
+            $customer = Customer::where(['user_id'=>@$user->user_id, 'email' => @$user->email])->first();
+            return @$customer->id;
+        }else{
+            return $this->user_id;
+        }
+    }
 
     public function company_information(){
         return $this->belongsTo(CompanyInformation::class, 'business_id');
@@ -100,7 +138,8 @@ class Recurring extends Authenticatable
        
         $cardID =  $this->payment_method;
         $cardID = $cardID != ''  ?  $cardID : $stripeCardID;
-        
+        $this->attempt += 1;
+
         if($cardID != '' && $stripeCustomerId != ''){
             
             try {
@@ -117,7 +156,7 @@ class Recurring extends Authenticatable
                 $this->stripe_payment_id = $paymentIntent->id;
                 $this->charged_amount = round($totalPrice)/100;
                 $this->status = 'Completed';
-                $this->attempt += 1;
+                
             
                 $transactiondata = array( 
                     'user_type' => $this->user_type ,
@@ -138,11 +177,7 @@ class Recurring extends Authenticatable
                 $this->charged();
             }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e ) {
                 $this->payment_method = NULL;
-                $this->attempt += 1;
                 $this->status = "Retry";
-            }catch (Exception $e) {
-                $this->status = "Retry";
-                $this->attempt += 1;
             }finally {
                 $this->save();
 
@@ -181,7 +216,7 @@ class Recurring extends Authenticatable
                 }
             }
         }else{
-            $this->status = "Retry";
+            $this->status = "Failed";
             $this->save();
         }
     }
@@ -199,35 +234,33 @@ class Recurring extends Authenticatable
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $company_information = $this->company_information;
         $transfer_amount = $this->provider_get_total();
-        try {
-            $transfer_amount = $this->provider_get_total();
-            $stripe_account  = $stripe->accounts->retrieveCapability(
-                $company_information->stripe_connect_id,
-                'transfers',
-                []
-            );
 
-            $payment_intent = $stripe->paymentIntents->retrieve(
-                $this->stripe_payment_id,
-                []
-            );
+        $transfer_amount = $this->provider_get_total();
+        $stripe_account  = $stripe->accounts->retrieveCapability(
+            $company_information->stripe_connect_id,
+            'transfers',
+            []
+        );
 
-            if($stripe_account['status'] == 'active'){
-                    
-                $transfer = $stripe->transfers->create([
-                    'amount' => $transfer_amount * 100,
-                    'currency' => 'usd',
-                    'source_transaction' => $payment_intent->charges->data[0]->id,
-                    'destination' => $company_information->stripe_connect_id,
-                ]);
+        $payment_intent = $stripe->paymentIntents->retrieve(
+            $this->stripe_payment_id,
+            []
+        );
 
-                if($transfer->id){
-                    $this->update(['transfer_provider_status'=>'paid', 'provider_amount' => $transfer_amount ,'provider_transaction_id' => $transfer->id]);
-                }
+        if($stripe_account['status'] == 'active'){
+                
+            $transfer = $stripe->transfers->create([
+                'amount' => $transfer_amount * 100,
+                'currency' => 'usd',
+                'source_transaction' => $payment_intent->charges->data[0]->id,
+                'destination' => $company_information->stripe_connect_id,
+            ]);
 
+            if($transfer->id){
+                $this->update(['transfer_provider_status'=>'paid', 'provider_amount' => $transfer_amount ,'provider_transaction_id' => $transfer->id]);
             }
-        } catch(\Stripe\Exception\CardException  | \Stripe\Exception\InvalidRequestException | \Exception $e) {
-        } 
+
+        }
     }
 
 }

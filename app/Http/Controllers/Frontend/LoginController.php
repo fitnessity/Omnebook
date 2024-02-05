@@ -31,10 +31,7 @@ class LoginController extends Controller {
             'onboardCid' => $onboardCid
         ]);
     }
-	/*public function leftpanel()
-	{
-		echo "hii";
-	}*/
+	
     public function postLogin(Request $request) {
         $postArr = $request->input();
     	//dd($postArr);
@@ -57,16 +54,12 @@ class LoginController extends Controller {
         } else {            
             if (Auth::attempt(['email' => $postArr['email'], 'password' => $postArr['password'], 'activated' => 1])) {
                 session_start();
-                /* $cart = [];
-                if ($request->session()->has('cart_item')) {
-                    $cart = $request->session()->get('cart_item');
-                }*/
+              
 				$user = Auth::user();
 				User::whereId($user->id)->update(['last_login' => date('Y-m-d H:i:s'),'last_ip'=>$request->ip()]);
                 $_SESSION["myses"] = $request->user();
-               // $request->session()->flash('alert-success', 'Welcome '.$postArr['email']);
                 $claim = 'not set';
-                $claim_cid = $claim_status = $claim_cname = $claim_welcome = $claim_company = $checkoutsession  = $schedule =$onboard = '';
+                $claim_cid = $claim_status = $claim_cname = $claim_welcome = $checkoutsession  = $schedule =$onboard = '';
                 if(session()->has('claim_business_page')) {
                 	$claim = 'set';
                     $claim_cid = session()->get('claim_cid');
@@ -80,10 +73,6 @@ class LoginController extends Controller {
                 if(session()->has('business_welcome')) {
                     $claim_welcome = session()->get('business_welcome');
                 }
-                if(session()->has('manage_company')) {
-                    $claim_company = session()->get('manage_company');
-                }
-
                 if(session()->has('checkoutsession')) {
                     $checkoutsession = session()->get('checkoutsession');
                 }
@@ -94,18 +83,6 @@ class LoginController extends Controller {
                 if(session()->has('redirectToOnboard')){
                     $onboard = session()->get('redirectToOnboard');
                 }
-               /* $response = array(
-                    'type' => 'success',
-                    'msg' => 'You are logged in successfully',
-                    'redirecturl' => '/',
-                    'claim' => $claim,
-                    'claim_cid' => $claim_cid,
-                    'claim_status' => $claim_status,
-                    'claim_cname' => $claim_cname,
-                    'claim_welcome' => $claim_welcome,
-                    'claim_company' => $claim_company,
-                    'd'=>$request->user()
-                );*/
 
                 if($onboard != ''){
                     return redirect($onboard);
@@ -116,16 +93,13 @@ class LoginController extends Controller {
                 }
                 if($claim  == 'set'){
                     return redirect('/claim/reminder/'.$claim_cname."/".$claim_cid); 
-                }else if($claim_welcome != ''){
+                }/*else if($claim_welcome != ''){
                     return redirect('/business-welcome');
-                }else if($claim_company != ''){
-                    return redirect('/manage/company');
-                }else if($checkoutsession != ''){
+                }*/else if($checkoutsession != ''){
                     return redirect('/carts');
                 }else if($schedule != ''){
                     return redirect('/business_activity_schedulers/'.$schedule);
                 }else{
-                    //return redirect()->route('profile-viewProfile');
                     return redirect()->route('homepage');
                 }
                /* return Response::json($response);*/
@@ -134,9 +108,7 @@ class LoginController extends Controller {
                     'type' => 'not_exists',
                     'msg' => 'User details not verified in our database.',
                 );
-                  return view('home.login',compact('response'));
-                //$request->session()->flash('error', 'User details not matched.');
-                /*return Response::json($response);*/
+                return view('home.login',compact('response'));
             }
         }
     }

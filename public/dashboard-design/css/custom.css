@@ -1870,7 +1870,6 @@ padding: 0px 0px 3px 2px !important; */
 	padding: 0;
 	position: absolute;
 }
-
 .font-green{
 	color: #009f0a;
 }
@@ -6645,6 +6644,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .fit-widget-container-banner p{
   font-size: 16px;
 }
+
 .page-heading span{
   padding: 4px 0px;
   margin-top: 10px;
@@ -6667,3 +6667,4 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .p-tb-10{
   padding: 10px 0;
 }
+

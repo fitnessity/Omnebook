@@ -51,8 +51,7 @@
                         <div class="col">
                             <div class="h-100">
                                 <div class="row mb-3 pb-1">
-                                    @if(Auth::user()->currentPlan()->amount == 0 || Auth::user()->chkDaysLeft() < 14)
-                                      
+                                    @if((Auth::user()->currentPlan() && Auth::user()->currentPlan()->amount == 0 )|| Auth::user()->chkDaysLeft() < 14)
     									<div class="col-6">
                                             @if(Auth::user()->freeTrial() == 'free')
     										<div class="remaining-days mb-15">
@@ -69,7 +68,7 @@
     												</div>
     												<div class="col-lg-10 col-md-10 col-9">	
     													<p class="fs-13">
-                                                            You have {{Auth::user()->chkDaysLeft()}}  left in your @if($activePlan) plan. @else free trial. @endif To keep experiences all the features after the trial period, evert payment details and select a plan now to begin after your @if($activePlan) plan @else trial. @endif is over.
+                                                            You have {{Auth::user()->chkDaysLeft()}}  left in your @if($activePlan) plan. @else free trial. @endif To keep experiences all the features after the trial period, evert payment details and select a plan now to begin after your @if($activePlan) plan @else trial @endif is over.
     													</p>
     												</div>
     											</div>
@@ -139,10 +138,10 @@
                                                         </div>
                                                         <!-- <div class="col-auto">
                                                             <button type="button" class="btn btn-soft-success shadow-none"><i class="ri-add-circle-line align-middle me-1"></i> Add Product</button>
-                                                        </div> -->
+                                                        </div> 
                                                         <div class="col-auto">
                                                             <button type="button" class="btn btn-soft-info btn-icon waves-effect waves-light layout-rightside-btn shadow-none"><i class="ri-pulse-line"></i></button>
-                                                        </div>
+                                                        </div>-->
                                                     </div>
                                                 </form>
                                             </div>
@@ -615,13 +614,13 @@
                             <div class="layout-rightside">
                                 <div class="card h-100 rounded-0">
                                     <div class="card-body p-0">
-                                            <div class="p-3">
-                                                <h6 class="text-muted mb-0 text-uppercase fw-semibold">Recent Activity</h6>
-                                            </div>
-                                            <div data-simplebar style="max-height: 410px;" class="p-3 pt-0">
-                                                <div class="acitivity-timeline acitivity-main">
-                                                    @foreach($todayBooking as $tb)
-                                                    <div class="acitivity-item d-flex">
+                                        <div class="p-3">
+                                            <h6 class="text-muted mb-0 text-uppercase fw-semibold">Recent Activity</h6>
+                                        </div>
+                                        <div data-simplebar style="max-height: 410px;" class="p-3 pt-0">
+                                            <div class="acitivity-timeline acitivity-main">
+                                                @foreach($todayBooking as $tb)
+                                                    <div class="acitivity-item d-flex  mb-5">
                                                         <div class="flex-shrink-0 avatar-xs acitivity-avatar">
                                                             <div class="avatar-title bg-soft-success text-success rounded-circle shadow">
                                                                 <i class="ri-shopping-cart-2-line"></i>
@@ -634,32 +633,32 @@
                                                             <small class="mb-0 text-muted">{{date('H:i A' ,strtotime($tb->created_at))}} Today</small>
                                                         </div>
                                                     </div>
-                                                    @endforeach
+                                                @endforeach
 
-                                                    @foreach($notificationAry as $nd)
-                                                        <div class="acitivity-item d-flex">
-                                                            <div class="flex-shrink-0">
-                                                                @if( $nd['image'] != '')
-                                                                    <img src="{{$nd['image']}}" alt="" class="avatar-xs rounded-circle acitivity-avatar shadow" />
-                                                                @else
-                                                                    <div class="avatar-xsmall">
-                                                                       <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$nd['fl']}}</span>
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-                                                            <div class="flex-grow-1 ms-3 mb-10">
-                                                                <h6 class="mb-1 lh-base">{{$nd['title']}}</h6>
-                                                                <p class="text-muted mb-2 fst-italic">@if($nd['type'] == 'comment') "{{$nd['text']}}" @else {!!$nd['text'] !!} @endif</p>
-                                                                <small class="mb-0 text-muted">{{$nd['date']}}</small>
-                                                            </div>
+                                                @foreach($notificationAry as $nd)
+                                                    <div class="acitivity-item d-flex mb-5">
+                                                        <div class="flex-shrink-0">
+                                                            @if( $nd['image'] != '')
+                                                                <img src="{{$nd['image']}}" alt="" class="avatar-xs rounded-circle acitivity-avatar shadow" />
+                                                            @else
+                                                                <div class="avatar-xsmall">
+                                                                   <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$nd['fl']}}</span>
+                                                                </div>
+                                                            @endif
                                                         </div>
-                                                    @endforeach
+                                                        <div class="flex-grow-1 ms-3 mb-10">
+                                                            <h6 class="mb-1 lh-base">{{$nd['title']}}</h6>
+                                                            <p class="text-muted mb-2 fst-italic">{!!$nd['text'] !!}</p>
+                                                            <small class="mb-0 text-muted">{{$nd['date']}}</small>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
 
-                                                    @if(count($notificationAry) == 0 && count($todayBooking) == 0)
-                                                       <p class="text-center mb-3">Not Available</p>
-                                                    @endif
-                                                </div>
+                                                @if(count($notificationAry) == 0 && count($todayBooking) == 0)
+                                                   <p class="text-center mb-3">Not Available</p>
+                                                @endif
                                             </div>
+                                        </div>
                                         <div class="p-3 mt-2">
                                             <h6 class="text-muted mb-3 text-uppercase fw-semibold">Top Booked Memberships
                                             </h6>
@@ -1004,10 +1003,13 @@
 	        mode:  "range",
             altFormat: "m-d-Y",
 	        dateFormat: "Y-m-d",
-	        maxDate: "01-01-2050",
+	        maxDate: "2050-01-01",
             defaultDate: [date1, date2],
             onChange: function(selectedDates, dateStr, instance) {
-                window.location.href= '/dashboard/'+dateStr;
+                url = '/dashboard/'+dateStr;
+                setTimeout(function() {
+                    window.location.href = url;
+                }, 1000);
             },
 	   });
 

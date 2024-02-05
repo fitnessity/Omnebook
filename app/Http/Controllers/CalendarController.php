@@ -83,8 +83,6 @@ class CalendarController extends Controller
     }
 
     public function eventmodelboxdata(Request $request){
-        /*$date = explode('T',$request->start);
-        echo $date[0];*/
         $html = ''; 
         $chkdetail = BookingCheckinDetails::find($request->id);
         if( $chkdetail != ''){
@@ -96,36 +94,7 @@ class CalendarController extends Controller
             }
             $participate = $booking_detail->decodeparticipate();
             if($ser_data != ''){
-                if(date('Y-m-d') > date('Y-m-d',strtotime($chkdetail->checkin_date) ) ){
-                    $tabval = "past";
-                }else if(date('Y-m-d') == date('Y-m-d',strtotime($chkdetail->checkin_date) ) ){
-                    $tabval = "today";
-                }else{
-                    $tabval = "upcoming";
-                }
-                $html .='<div class="calendar-body">
-                        <h3>'.$ser_data->program_name.'</h3>
-                        <p>'.$ser_data->company_information->dba_business_name.'</p>
-                        <p class="calendar-address">'.$ser_data->company_information->company_address().'</p>
-                       <div class="calendar-time">
-                            <label>Time: </label> <span>'.$time.'</span>
-                        </div>
-                        <div class="calendar-time">
-                            <label>Who\'s Participating: </label> <span>'.$participate.' </span>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 col-6">
-                                <div class="calendar-btns">
-                                   <a class="btn btn-black" href="'.route("business_activity_schedulers",['business_id' => $ser_data->cid, 'business_service_id' => $ser_data->id, 'stype' =>  $ser_data->service_type]).'" target="_blank">Reschedule</a> 
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-6">
-                                <div class="calendar-btns">
-                                    <a class="btn btn-red float-end" href="'.route("business_customer_show", ['business_id' => $ser_data->cid,'id'=>$booking_detail->user_id]).'" target="_blank">View Booking</a> 
-                                </div>
-                            </div>
-                        </div>
-                    </div>';
+                $html = view('personal.calendar.modal_data',compact('ser_data','time','participate','booking_detail'))->render();
             }
             
         }   

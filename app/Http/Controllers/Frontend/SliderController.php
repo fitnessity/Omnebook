@@ -69,7 +69,7 @@ class SliderController extends Controller
         $title = $arr['title'];
         $heading = $arr['heading'];
         $stext = $arr['stext'];
-        $price = $arr['price'];
+        $link = $arr['link'];
         
 
         if(@$arr['image']){

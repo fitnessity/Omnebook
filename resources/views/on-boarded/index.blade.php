@@ -168,7 +168,7 @@
 														<div class="col-lg-4 col-md-4">
 															<div class="mb-3">
 																<label class="form-label"> Address </label>
-																<input type="text" class="form-control" id="address" name="address" required oninput="initializeAutocomplete('address', 'city', 'state', 'country', 'zipcode', 'lat', 'lon')" value="{{@$user->address}}">
+																<input type="text" class="form-control" id="address" name="address" required oninput="initMapCall('address', 'city', 'state', 'country', 'zipcode', 'lat', 'lon')" value="{{@$user->address}}">
 																<div class="invalid-feedback">Please enter an address</div>
 															</div>
 															<div id="map"></div>
@@ -401,7 +401,7 @@
 															<div class="mb-3">
 																<label class="form-label">Business Address <span class="font-red">*</span></label>
 																			
-																<input type="text" class="form-control" id="bAddress" name="bAddress" required oninput="initializeAutocomplete('bAddress', 'bcity', 'bstate', 'bcountry', 'bzipcode', 'blat', 'blon')" value="{{@$companyDetail->address}}">
+																<input type="text" class="form-control" id="bAddress" name="bAddress" required oninput="initMapCall('bAddress', 'bcity', 'bstate', 'bcountry', 'bzipcode', 'blat', 'blon')" value="{{@$companyDetail->address}}">
 																<div class="invalid-feedback">Please enter business address</div>
 															</div>
 														</div>
@@ -742,54 +742,17 @@
 																		<p>Let us help answer the most common questions. </p>
 																	</div>
 																	<div class="accordion accordion-border-box" id="genques-accordion">
-																		<div class="accordion-item shadow">
-																			<h2 class="accordion-header" id="genques-headingOne">
-																				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseOne" aria-expanded="true" aria-controls="genques-collapseOne">
-																					What counts towards the 100 responses limit?
-																				</button>
-																			</h2>
-																			<div id="genques-collapseOne" class="accordion-collapse collapse" aria-labelledby="genques-headingOne" data-bs-parent="#genques-accordion">
-																				<div class="accordion-body">
-																					Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus, varius pulvinar diam eros in elit. Pellentesque convallis laoreet laoreet.Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus, varius pulvinar diam eros in elit. Pellentesque convallis laoreet laoreet.
+																		@forelse(@$faqs as $i=>$f)
+																			<div class="accordion-item shadow">
+																				<h2 class="accordion-header" id="genques-heading{{$i}}">
+																					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapse{{$i}}" aria-expanded="false" aria-controls="genques-collapse{{$i}}">{{$f->title}}</button>
+																				</h2>
+																				<div id="genques-collapse{{$i}}" class="accordion-collapse collapse" aria-labelledby="genques-heading{{$i}}" data-bs-parent="#genques-accordion">
+																					<div class="accordion-body">{!!$f->content!!}</div>
 																				</div>
 																			</div>
-																		</div>
-																		<div class="accordion-item shadow">
-																			<h2 class="accordion-header" id="genques-headingTwo">
-																				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseTwo" aria-expanded="false" aria-controls="genques-collapseTwo">
-																					How do you process payments?
-																				</button>
-																			</h2>
-																			<div id="genques-collapseTwo" class="accordion-collapse collapse" aria-labelledby="genques-headingTwo" data-bs-parent="#genques-accordion">
-																				<div class="accordion-body">
-																					We accept Visa®, MasterCard®, American Express®, and PayPal®. So you can be confident that your credit card information will be kept safe and secure.
-																				</div>
-																			</div>
-																		</div>
-																		<div class="accordion-item shadow">
-																			<h2 class="accordion-header" id="genques-headingThree">
-																				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseThree" aria-expanded="false" aria-controls="genques-collapseThree">
-																					What payment methods do you accept?
-																				</button>
-																			</h2>
-																			<div id="genques-collapseThree" class="accordion-collapse collapse" aria-labelledby="genques-headingThree" data-bs-parent="#genques-accordion">
-																				<div class="accordion-body">
-																					Checkout accepts all types of credit and debit cards.
-																				</div>
-																			</div>
-																		</div>
-																		<div class="accordion-item shadow">
-																			<h2 class="accordion-header" id="genques-headingFour">
-																				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseFour" aria-expanded="false" aria-controls="genques-collapseFour">
-																					Do you have a money-back guarantee?
-																				</button>
-																			</h2>
-																			<div id="genques-collapseFour" class="accordion-collapse collapse" aria-labelledby="genques-headingFour" data-bs-parent="#genques-accordion">
-																				<div class="accordion-body">
-																					Yes. You may request a refund within 30 days of your purchase without any additional explanations.
-																				</div>
-																			</div>
-																		</div>
+																		@empty
+																		@endforelse
 																	</div><!--end accordion-->
 																</div>
 															</div>
@@ -1252,86 +1215,6 @@
             }
         });
     });
-</script>
-
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{env('GOOGLE_MAP_KEY')}}" async defer></script>
-
-<script type="text/javascript">
-	function initializeAutocomplete(addressInputID, cityElementID, stateElementID, countryElementID, zipcodeElementID, latElementID, lonElementID) {
-	    var map = new google.maps.Map(document.getElementById('map'), {
-	        center: {lat: -33.8688, lng: 151.2195},
-	        zoom: 13
-	    });
-
-	    var input = document.getElementById(addressInputID);
-	    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-	    var autocomplete = new google.maps.places.Autocomplete(input);
-	    autocomplete.bindTo('bounds', map);
-	    var infowindow = new google.maps.InfoWindow();
-	    var marker = new google.maps.Marker({
-	        map: map,
-	        anchorPoint: new google.maps.Point(0, -29)
-	    });
-
-	    var address = '';
-        var badd = '';
-        var sublocality_level_1 = '';
-
-	    autocomplete.addListener('place_changed', function() {
-	        infowindow.close();
-	        marker.setVisible(false);
-	        var place = autocomplete.getPlace();
-	        if (!place.geometry) {
-	            window.alert("Autocomplete's returned place contains no geometry");
-	            return;
-	        }
-
-	        // (Rest of your code...)
-
-	        // Location details
-	        for (var i = 0; i < place.address_components.length; i++) {
-	            if(place.address_components[i].types[0] == 'postal_code'){
-	                $('#' + zipcodeElementID).val(place.address_components[i].long_name);
-	            }
-
-	            if(place.address_components[i].types[0] == 'locality'){
-	                $('#' + cityElementID).val(place.address_components[i].long_name);
-	            }
-
-	            if(place.address_components[i].types[0] == 'sublocality_level_1'){
-	                sublocality_level_1 = place.address_components[i].long_name;
-	            }
-
-	            if(place.address_components[i].types[0] == 'street_number'){
-	               badd = place.address_components[i].long_name ;
-	            }
-
-	            if(place.address_components[i].types[0] == 'route'){
-	               badd += ' '+place.address_components[i].long_name ;
-	            } 
-
-	            if(place.address_components[i].types[0] == 'country'){
-	                $('#'+countryElementID).val(place.address_components[i].long_name);
-	            }
-
-	            if(place.address_components[i].types[0] == 'administrative_area_level_1'){
-	              $('#'+stateElementID).val(place.address_components[i].long_name);
-	            }
-
-	            // (Continue with other elements...)
-	        }
-
-	        if(badd == ''){
-	          	$('#'+addressInputID).val(sublocality_level_1);
-	        }else{
-	          	$('#'+addressInputID).val(badd);
-	        }
-
-	        $('#'+latElementID).val(place.geometry.location.lat());
-        	$('#'+lonElementID).val(place.geometry.location.lng());
-	        // (Rest of your code...)
-	    });
-	}
 </script>
 
 @include('layouts.business.footer')

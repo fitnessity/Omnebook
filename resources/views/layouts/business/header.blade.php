@@ -8,6 +8,7 @@ $total_quantity = 0;
     <head>
         <title>Fitnessity</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta content="charset=utf-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="description" content=" Fitnessity: Because Fitness=Necessity ">
@@ -38,10 +39,16 @@ $total_quantity = 0;
         
         <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
 		<link rel="stylesheet" href="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
-        <script src="{{asset('/public/dashboard-design/js/jquery-3.6.4.min.js')}}"></script>
+
+		<!--datatable css-->
+		<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+		<!--datatable responsive css-->
+		<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+		<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+        <script src="{{env('APP_URL')}}/public/dashboard-design/js/jquery-3.6.4.min.js"></script>
         <script src="{{asset('/public/js/slimselect.min.js')}}"></script>
 		<script src="{{env('APP_URL')}}/public/js/ratings.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('AUTO_COMPLETE_ADDRESS_GOOGLE_KEY') }}" async defer></script>
         <style>/*
             .btn-style-one {
                 position: relative;
@@ -274,7 +281,7 @@ $total_quantity = 0;
         <?php 
         $companyid = (isset($companyid) && $companyid != "") ? $companyid : 0;
         $module = explode(".co/", url()->current());?>
-        <header>
+        <header @if(  request()->is('*register_ep*')) class="d-none" @endif>
 			<div class="container-fluid printnone">
 				<div class="row">
 					<div class="col-lg-12">
@@ -346,34 +353,55 @@ $total_quantity = 0;
                                                     	<span class="pc-micon"><i class="fa fa-user"></i></span>
                                                         <a href="{{route('profile-viewProfile')}}" style="color: white;">View Personal Profile</a>
                                                     </li>
-                                                   <!-- <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;">Manage Personal Profile</a>
-                                                    </li>-->
+
+                                                    <li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt=""></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
+													</li>
 
 													<li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('family-member.index')}}" style="color: white;">Account Information </a>
-                                                    </li>
+														<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt=""></span><a href="{{route('personal.manage-account.index')}}" style="color: white;">Manage Accounts</a>
+													</li>
+
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt=""></span><a href="{{ url('/personal/calendar')}}" style="color: white;">Calendar</a>
+													</li>
+
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt=""></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
+													</li>
+
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt=""></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
+													</li>
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt=""></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
+													</li>
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt=""></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
+													</li>
+                                                
 													<!-- <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
 															<a href="{{ Config::get('constants.SITE_URL') }}/booking-request" style="color: white;">Inbox</a>
                                                     </li> -->
 
-                                                    <!-- <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-file-alt"></i></span>
-															<a href="{{ route('personal.orders.index')}}" style="color: white;">Booking Info</a>
-                                                    </li> -->
-													
 													<li><div class="border-sidebar"></div></li>
 													<li class="lp-per-pro"> <span>Business Center </span></li>
-													<li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-clipboard-list"></i></span>
-                                                        <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">Create A Business</a>
+													<li class="pc-link"><span class="pc-micon"><i class="fas fa-clipboard-list"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">Create A Business</a>
                                                     </li>
-                                                    <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fa fa-tasks"></i></span>
-                                                    	<!-- <a href="{{route('manageCompany')}}" style="color: white;">Manage My Business</a> -->
-                                                    	<a @if(count(Auth::user()->company) > 0) href="{{route('business_dashboard')}}"  @else href="{{route('staff_login')}}" @endif style="color: white;">Staff Login</a>
-                                                    </li>
+
+                                                    @if(count(Auth::user()->company) > 0)
+	                                                    <li class="pc-link">
+															<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('business_dashboard')}}"  style="color: white;">Manage My Business</a>
+														</li>
+
+														@if(!Session('StaffLogin'))
+															<li class="pc-link">
+																<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('staff_login')}}"  style="color: white;">Staff Login</a>
+															</li>
+														@endif
+													@endif
+                                                  
 													<li><div class="border-sidebar"></div></li>
 													<li class="lp-per-pro"> <span>Support </span> </li>
 													<li class="pc-link">
@@ -392,7 +420,7 @@ $total_quantity = 0;
 												</ul>
 											</div>
 											<p class="pri-1"> <a href="{{ Config::get('constants.SITE_URL') }}/privacy-policy" style="color: white;"> Privacy </a> - <a href="{{ Config::get('constants.SITE_URL') }}/terms-condition" style="color: white;">Terms </a></p>
-											<p class="pri-2">Fitnessity, Inc 2021</p>
+											<p class="pri-2">Fitnessity, Inc {{date('Y')}}</p>
 										</div>
 									</div>
 								</nav>
@@ -631,7 +659,7 @@ function closeNav() {
 </script>
 
 <link href='{{asset("/public/css/frontend/jquery-ui.css")}}'  rel='stylesheet'>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script>
+<script src='{{asset("/public/dashboard-design/js/jquery-ui.min.js")}}'></script>
 <script type="text/javascript">
 $(document).ready(function () { 
 	$( ".birthdate" ).datepicker();

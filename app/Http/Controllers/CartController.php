@@ -36,6 +36,9 @@ class CartController extends Controller {
 		    }
 		}
 
+		if($user->stripe_customer_id == '')
+			$user->create_stripe_customer_id();
+		
 		$intent = null;
 		$intent = $stripe->setupIntents->create([
             'payment_method_types' => ['card'],

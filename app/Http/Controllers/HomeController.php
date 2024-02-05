@@ -538,7 +538,6 @@ class HomeController extends Controller
                         'last4'=> $data->last4,
                     ]);
                 }
-                
             }
 
             $paymentHistory = Transaction::where('user_type', 'User')

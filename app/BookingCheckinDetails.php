@@ -80,6 +80,18 @@ class BookingCheckinDetails extends Model
     ];
 
 
+    protected $appends = ['cancel_count' ,'noshow_count'];
+
+
+
+    public function getCancelCountAttribute(){
+        return BookingCheckinDetails::where('booking_detail_id',$this->booking_detail_id)->whereNull('checked_at')->whereNotNull('no_show_action')->count();
+    }
+
+    public function getNoShowCountAttribute(){
+        return BookingCheckinDetails::where('booking_detail_id',$this->booking_detail_id)->whereNull('checked_at')->whereNull('no_show_action')->count();
+    }
+
     public function UserBookingDetail(){
         return $this->belongsTo(UserBookingDetail::class,'booking_detail_id');
     }
@@ -109,6 +121,17 @@ class BookingCheckinDetails extends Model
             return 'No Show';
         }
     }
+
+    public function cancel_term(){
+        if($this->no_show_action == 'deduct'){
+            return 'Deduct Membership';
+        }else if($this->no_show_action == 'charge_fee'){
+            return 'Charge Fee';
+        }else{
+            return 'No Charges Applied';
+        }
+    }
+
 
     public static function checkCustomerInClass($scheduleId,$date){
         $pos = strpos($date, ' ');

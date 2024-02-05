@@ -39,7 +39,7 @@
 	<div class="modal-dialog modal-dialog-centered" id="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-btn-modal"></button>
 			</div>
 			<div class="modal-body"></div>
 		</div>
@@ -120,7 +120,7 @@
 </p>
 
 <!-- Sticky Footer -->
-<div  id="mysticky" class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm desktop-none" style="background: white;">
+<div  id="mystickyCustomer" class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm desktop-none-customer" style="background: white;">
   <div class="container">
 	<div class="col-xs-2">
 		<div class="shortcut-sticky ">
@@ -150,7 +150,7 @@
 		<div class="shortcut-sticky">
 			<a href="{{route('personal.orders.index')}}" class="short-links">
 				<i class="fas fa-info"></i>
-				<label>Bookings</label>
+				<label>Accounts</label>
 			</a>
 		</div>
 	</div>
@@ -171,7 +171,7 @@
 								<ul class="pc-navbar">
 									<li style="text-align: center;"> 
 										<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png')  }}"
-                                     alt="Fitnessity" >
+                                     alt="Fitnessity"  class="sidemenupic" >
 									</li>
 									<li class="pc-caption"><span> Welcome</span></li>
 									<li class="pc-caption-1">
@@ -185,49 +185,35 @@
 										<button class="btn-lp" type="button"><a style="color: white;" href="{{url('/activities')}}">Book An Activity </a> </button> 
 									</li>
 									<li class="pc-link">
-									   <span class="pc-micon"><i class="fa fa-user"></i></span><a href="{{route('profile-viewProfile')}}" style="color: white;"> View Personal Profile</a>
+									   <span class="pc-micon"><img src="{{asset('/public/img/social-profile.png')}}" alt=""></span><a href="{{route('profile-viewProfile')}}" style="color: white;"> View Personal Profile</a>
 									</li>
-									<?php /*?> <li class="pc-link">
-										  <span class="pc-micon"><i class="fa fa-user"></i></span>
-										  <a href="{{route('profile-viewbusinessProfile')}}" style="color: white;">Business Profile</a>
-									 </li><?php */?>
-									 <li class="pc-link">
-										 <span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;"> Manage Personal Profile</a>
-									  </li>
-									<!-- <li class="pc-link">
-										   <span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
-									 </li> -->
 
 									<li class="pc-link">
-										<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('family-member.index')}}" style="color: white;"> Manage Accounts</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt=""></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
+									</li>
+
+									<li class="pc-link">
+										<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt=""></span><a href="{{route('personal.manage-account.index')}}" style="color: white;"> Manage Accounts</a>
 									</li>
 								
-									<!-- <li class="pc-link">
-										<span class="pc-micon"><i class="fas fa-file-alt"></i></span> <a href="{{ route('personal.orders.index')}}" style="color: white;"> Booking Info</a>
-									</li> -->
-									<!-- <li class="pc-link">
-										<span class="pc-micon"><img src="{{ url('public/img/menu-icon2.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/payment-info" style="color: white;">Payment Info</a>
-									</li> -->
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calendar</a>
+										<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt=""></span>
+										<a href="{{ url('/personal/calendar')}}" style="color: white;">Calendar</a>
 									</li>
-									<!-- <li class="pc-link">
-										 <span class="pc-micon"><i class="fa fa-envelope" aria-hidden="true"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/booking-request" style="color: white;"> Inbox</a>
-									</li> -->
+
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{ url('public/img/menu-icon1.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/favorite" style="color: white;">Favorite</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt=""></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
+									</li>
+
+									<li class="pc-link">
+										<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt=""></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
 									</li>
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{ url('public/img/menu-icon1.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/followers" style="color: white;">Followers</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt=""></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
 									</li>
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{ url('public/img/menu-icon1.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/following" style="color: white;">Following</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt=""></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
 									</li>
-									
-									 <?php /*?><li class="pc-link">
-										 <span class="pc-micon"><img src="{{ url('public/img/menu-icon1.svg') }}" alt=""></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/user-profile" style="color: white;">User Profile</a>
-									</li><?php */?>
-									
 									
 									<!-- <li class="pc-link">
 											 <span class="pc-micon"><i class="fas fa-user-plus"></i></span><a href="#" style="color: white;">Invite Friends</a>
@@ -236,11 +222,22 @@
 									<li class="lp-per-pro"> <span>Business Center </span></li>
 									<li class="pc-link">
 										<span class="pc-micon"><i class="fas fa-clipboard-list"></i></span>
-										<a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">Create A Business</a>
+										<a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;"> Create A Business</a>
 									</li>
-									<li class="pc-link">
-										<span class="pc-micon"><i class="fa fa-tasks"></i></span><a style="color: white;" @if(count(Auth::user()->company) > 0) href="{{route('business_dashboard')}}"  @else href="{{route('staff_login')}}" @endif  >Staff Login</a>
-									</li>
+
+									@if(count(Auth::user()->company) > 0)
+										<li class="pc-link">
+											<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('business_dashboard')}}"  style="color: white;">Manage My Business</a>
+										</li>
+
+										@if(!Session('StaffLogin'))
+											<li class="pc-link">
+												<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('staff_login')}}"  style="color: white;">Staff Login</a>
+											</li>
+										@endif
+									@endif
+
+
 									<li><div class="border-sidebar"></div></li>
 									<li class="lp-per-pro"> <span>Support </span> </li>
 									<li class="pc-link">
@@ -263,7 +260,7 @@
 								</ul>
 							</div>
 							<p class="pri-1"> <a href="{{ Config::get('constants.SITE_URL') }}/privacy-policy" style="color: white;"> Privacy </a> - <a href="{{ Config::get('constants.SITE_URL') }}/terms-condition" style="color: white;">Terms </a></p>
-							<p class="pri-2">Fitnessity, Inc 2021</p>
+							<p class="pri-2">Fitnessity, Inc {{date('Y')}}</p>
 						</div>
 					</div>
 				</nav>
@@ -281,9 +278,14 @@
 	@endif
   </div>
 </div>
+
+
 <!-- Sticky Footer new design -->
    <!-- JAVASCRIPT -->
-   
+   <script src="{{asset('/public/dashboard-design/js/jquery-ui.min.js')}}"></script>
+
+  <!--  <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap" async defer></script> -->
+  
     <script src="{{asset('/public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('/public/dashboard-design/js/simplebar.min.js')}}"></script>
     <script src="{{asset('/public/dashboard-design/js/waves.min.js')}}"></script>
@@ -313,8 +315,6 @@
     <!-- App js -->
     <script src="{{asset('/public/dashboard-design/js/app.js')}}"></script> 
     <!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
- 
-	
 	
 	<!-- list.js min js -->
 	<script src="{{asset('/public/dashboard-design/js/list.min.js')}}"></script>
@@ -349,18 +349,44 @@
 	 
 	 <!-- fgEmojiPicker js -->
 	 <script src="{{asset('/public/dashboard-design/js/fgEmojiPicker.js')}}"></script>
-	
+	 <script src="{{asset('/public/dashboard-design/js/emojionearea.js')}}"></script>
+
 	<!-- chat init js -->
 	<script src="{{asset('/public/dashboard-design/js/chat.init.js')}}"></script>
 	<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>
 	
 	<script src="{{asset('/public/dashboard-design/js/form-wizard.init.js')}}"></script>
+	
+	 <!--datatable js-->
+	<script src="{{asset('/public/dashboard-design/js/datatable/jquery.dataTables.min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/dataTables.bootstrap5.min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/dataTables.responsive.min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/dataTables.buttons.min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/buttons.print.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/js/datatable/buttons.html5.min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/vfs_fonts.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/pdfmake.min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/datatable/jszip.min.js')}}"></script>    
+
+    <script src="assets/js/pages/datatables.init.js"></script>
   
+    <!-- init js -->
+    <script src="{{asset('/public/dashboard-design/js/pickr.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/js/form-pickers.init.js')}}"></script>
+
+    <!-- filepond -->
+    <script src="{{asset('/public/dashboard-design/filepond/filepond.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/filepond/filepond-plugin-image-preview.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/filepond/filepond-plugin-file-validate-size.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/filepond/filepond-plugin-image-exif-orientation.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/filepond/filepond-plugin-file-encode.min.js')}}"></script>
+
+    <script src="{{asset('/public/dashboard-design/js/form-file-upload.init.js')}}"></script> 
  <!-- new design end -->
 
-<?php /*
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>owl.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.flexslider.js"></script>
+<?php /*
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>lightbox.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>sly.min.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>home.js"></script>
@@ -375,6 +401,108 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/public/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>*/ ?>
+
+<script type="text/javascript">
+    	function initMapCall(addressInputID, cityElementID, stateElementID, countryElementID, zipcodeElementID, latElementID, lonElementID) {
+        	var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -33.8688, lng: 151.2195},
+            zoom: 13
+        	});
+
+        	var input = document.getElementById(addressInputID);
+        	map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        	var autocomplete = new google.maps.places.Autocomplete(input);
+        	autocomplete.bindTo('bounds', map);
+        	var infowindow = new google.maps.InfoWindow();
+        	var marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29)
+        	});
+
+        	autocomplete.addListener('place_changed', function() {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+
+            marker.setIcon(({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            var address = '';
+            var badd = '';
+            var sublocality_level_1 = '';
+            if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindow.open(map, marker);
+
+            // Location details
+            for (var i = 0; i < place.address_components.length; i++) {
+               if(place.address_components[i].types[0] == 'postal_code'){
+                  $('#' + zipcodeElementID).val(place.address_components[i].long_name);
+               }
+
+               if(place.address_components[i].types[0] == 'locality'){
+                  $('#' + cityElementID).val(place.address_components[i].long_name);
+               }
+
+               if(place.address_components[i].types[0] == 'sublocality_level_1'){
+                  sublocality_level_1 = place.address_components[i].long_name;
+               }
+
+               if(place.address_components[i].types[0] == 'street_number'){
+                  badd = place.address_components[i].long_name ;
+               }
+
+               if(place.address_components[i].types[0] == 'route'){
+                   badd += ' '+place.address_components[i].long_name ;
+               } 
+
+               if(place.address_components[i].types[0] == 'country'){
+	                $('#'+countryElementID).val(place.address_components[i].long_name);
+	            }
+
+               if(place.address_components[i].types[0] == 'administrative_area_level_1'){
+                  $('#'+stateElementID).val(place.address_components[i].long_name);
+               }
+            }
+
+            if(badd == ''){
+	          	$('#'+addressInputID).val(sublocality_level_1);
+	        	}else{
+	          	$('#'+addressInputID).val(badd);
+	        	}
+
+            $('#'+latElementID).val(place.geometry.location.lat());
+        		$('#'+lonElementID).val(place.geometry.location.lng());
+         });
+      }
+ 	</script>
+ 	
 <script>
 function openMobileNav() {
 	document.getElementById("myMobileSidepanel").style.width = "300px";
@@ -415,6 +543,7 @@ function closeMobileNav() {
 		$("#modal-dialog").removeClass();
 		$("#modal-dialog").addClass('modal-dialog modal-dialog-centered');
         var width = $(this).data('modal-width');
+        var reload = $(this).data('reload');
         if(width == undefined){
             width = 'modal-50';
         }
@@ -425,8 +554,15 @@ function closeMobileNav() {
             success: function(html){
             	$('#ajax_html_modal .modal-body').html(html)
                 $('#ajax_html_modal .modal-dialog').addClass(width);
+                if(reload == 1 ){
+                	$('#close-btn-modal').attr('onclick', 'window.location.reload()');
+                }else{
+                	$('#close-btn-modal').removeAttr('onclick');
+                }
             	if(chkbackdrop == 1){
             		$('#ajax_html_modal').modal({ backdrop: 'static', keyboard: false });
+            		$('#ajax_html_modal').modal('show')
+
         		}else{
                     $('#ajax_html_modal').modal('show')
         		}
@@ -437,7 +573,7 @@ function closeMobileNav() {
     $(document).on('click', '[data-behavior~=send_receipt]', function(e){
         var item_type = $(this).data('item-type');
         e.preventDefault()
-        if(item_type == 'no' || item_type == 'Membership'){
+        /*if(item_type == 'no' || item_type == 'Membership'){*/
             var width = $(this).data('modal-width');
             if(width == undefined){
                 width = 'modal-50';
@@ -450,9 +586,9 @@ function closeMobileNav() {
                     $('#ajax_html_modal').modal('show')
                 }
             });
-        }else{
+        /*}else{
             alert("This is a Recurring Payment. A receipt is only for Membership or Activity Purchase.");
-        }
+        }*/
     });
 
 	$(document).on('focus', '[data-behavior~=text-phone]', function(e){

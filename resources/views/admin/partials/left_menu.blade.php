@@ -54,6 +54,12 @@
           <a href="/admin/slider">
             <i class="fa fa-sliders"></i> <span>Manage Slider</span>  
           </a>
+        </li> 
+
+        <li class="{{ $request->segment(2) == 'activity-slider' ? 'active' : '' }}">
+          <a href="/admin/activity-slider">
+            <i class="fa fa-sliders"></i> <span>Manage Activity Slider</span>  
+          </a>
         </li>
         <li class="{{ $request->segment(2) == 'business_post' ? 'active' : '' }}">
           <a href="{{route('admin/businesspost')}}">
@@ -143,6 +149,12 @@
         <li class="{{ $request->segment(2) == 'features' ? 'active' : '' }}">
           <a href="/admin/features">
             <i class="fa fa-list-alt"></i> <span>Manage Features</span>  
+          </a>
+        </li>
+
+        <li class="{{ $request->segment(2) == 'on-board-questions' ? 'active' : '' }}">
+          <a href="/admin/on-board-questions">
+            <i class="fa fa-list-alt"></i> <span>On Board FAQ's</span>  
           </a>
         </li>
 

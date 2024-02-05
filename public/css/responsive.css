@@ -71,7 +71,7 @@
     .bepart_easy_content ul li {
         padding-right: 25% !important;
     }
-	.find-activity img {  width: 130px !important;  min-height: 141px !important; }
+	/* .find-activity img {  width: 130px !important;  min-height: 141px !important; } */
 	.instant-hire{ margin-top: 70px !important;}
 	.img-modal-left-bpage img {width: 100% !important; min-height: 101px !important;}
 }
@@ -546,6 +546,7 @@
 	.pr-100 {padding-right: 15px;}
 	.cart-success h5{margin-top: 20px;}
 	.cart-itme-img img{margin-bottom: 20px;}
+    .main-slider{margin-top: 150px;}
 
 }
 
@@ -1730,10 +1731,10 @@
 
 @media screen and (min-width:1920px) and (max-width:2500px){
 	.modal-dialog.modal-lg.business{width: 28% !important;}
-	.find-activity img{
+	/* .find-activity img{
 		width: 175px !important;
 		min-height: 157px !important;
-	}
+	} */
 	.activity-information{
 		margin-bottom: 15px !important;
 		margin-top: 15px !important;
@@ -2325,7 +2326,7 @@
 	.pairets{margin-top: 15px; margin-bottom: 0px;}
 	.show-all .header-bg-show .time-base {  float: none;}
 	.show-all .table-inner-data .mg-time {  font-size: 15px;}
-	.instant-hire{margin-top: 0px !important;}
+	.instant-hire{margin-top: 162px !important;}
 	.instant-section-info p{margin-top: 3px;}
 	.choose-sport-hire {  display: block !important;}
 	.activity-width{width: 100% !important;}
@@ -2435,7 +2436,7 @@
 	.btn-search-checkout {  width: 100%;}
 	.col-md-offset-3-custom {  margin-left: 0;}
 	.inner-top-activity {  margin-top: 0px;}
-	.classes-info { border-right: none;}
+	.classes-info { border-right: none !important;}
 	.nopadding{padding-left: 15px; padding-right: 15px;}
 	.changecalce label{margin-left: 0;}
 	.cash-tend{margin-left: 0px;}
@@ -2517,8 +2518,8 @@
 	.pc-sidebar .pc-link {display: flex !important;}
 	.pri-1 a{display: inline !important;}
 	.navbar-content a{color: #fff;}
-	.classes-time label{text-align: right; width: 50%; margin-top: 36px;}
-	.post-btn.activity-scheduler{width: 50%;}
+	.classes-time label{text-align: center; width: 100%; margin-top: 36px;}
+	.post-btn.activity-scheduler{width: 100% !important;}
 	.classes-time {  display: flex; }
 	.sacecard-title{font-size: 17px !important;}
 	.search-wid {width: 72% !important;}

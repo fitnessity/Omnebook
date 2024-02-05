@@ -57,10 +57,16 @@ class StaffController extends Controller
 
     public function login(Request $request)
     {
-    	$staff = BusinessStaff::where(['email'=>$request->email,'business_id'=>$request->cid,'buddy_key'=>$request->password])->first();
+        $company = CompanyInformation::whereRaw('LOWER(`company_name`) = ?', [strtolower($request->searchCompany)])->first();
+        
+        if($company == ''){
+            return redirect()->back()->with('errorMsg','Please check your company. We can\'t find this company.');
+        }
+
+    	$staff = BusinessStaff::where(['email'=>$request->email,'business_id'=>$company->id,'buddy_key'=>$request->password])->first();
 
     	if($staff == ''){
-    		return redirect()->back()->with('errorMsg','Please check Your company , Email and Password');
+    		return redirect()->back()->with('errorMsg','Email or Password doesn\'t match. Please check Your Email and Password.');
     	}
     	
     	$userDetail = $staff->CompanyInformation->users;
