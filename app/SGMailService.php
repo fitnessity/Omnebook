@@ -405,6 +405,17 @@ class SGMailService{
 		SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-63efeb6f57be45079692fcae3f63147c');
 	}
 
+	public static function creditCardExpiredORExpringToUser($emailDetail){
+		$substitutions = [
+			'CustomerName'  => $emailDetail['full_name'],
+			'card'  => $emailDetail['card'],
+			'brand'  => $emailDetail['brand'],
+			'website'  => env('APP_URL'),
+			'url'  => env('APP_URL').'personal/credit-cards',
+		];
+		SGMailService::MailDetail($emailDetail['email'],$substitutions,$emailDetail['temp_id']);
+	}
+
 	public static function creditCardExpiredToCustomer($emailDetail){
 		if($emailDetail['companydata']->logo == ''){
            	$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';

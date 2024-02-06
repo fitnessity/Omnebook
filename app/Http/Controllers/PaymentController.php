@@ -369,6 +369,7 @@ class PaymentController extends Controller {
                         $transactionstatus = Transaction::create($transactiondata);
                     }
                 }catch(\Stripe\Exception\CardException  $e) {
+                    print_r($e->getError());exit();
                     $errormsg = $e->getError()->message;
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }catch(\Stripe\Exception\InvalidRequestException $e) {

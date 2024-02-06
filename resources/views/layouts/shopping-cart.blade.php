@@ -537,13 +537,16 @@
 													<div class="col-6">
 														<label class="fs-15 float-end">${{$total_amount}}</label>
 													</div>
+													<div class="col-lg-12 col-12">
+														<div class="border-wid-grey"></div>
+													</div>
 													<div class="col-12">
+														<label class="fs-15">Terms & Agreement</label>
 														<div class="terms-wrap">
 															<input type="checkbox" id="terms_condition" name="terms_condition" value="">
 															<p class="cart-terms fs-13"> The provider(s) require that you agree to some terms and conditions before booking this activity. 
 															<br> <br> By checking this box, you {{$username}} agree on {{ date('m/d/Y')}} to the terms the provider(s) require upon booking. You agree that you are 18+ to book this activity. You also agree to the Fitnessity privacy policy & terms of agreement. </p>
 														</div>
-														<div id="error_check" style="display: none;"><p class="alertcolor font-14 pl-25 font-red">Please select Terms & Conditions</p></div>
 													</div>
 												</div>
 											</div>
@@ -620,15 +623,17 @@
 									                            </div>
 									                        </div>
 								                        @endif
+
+								                        <div id="error_check" class="d-none"><p class="font-14 font-red text-center">Please select Terms & Conditions.</p></div>
+														<div class="text-center mb-4">
+															<span class="font-red fs-14 d-none participateAlert">Please Select Who Is Participating.</span>
+														</div>
+
 														<div class="text-end mb-4">
 															<button class="btn btn-cart-checkout btn-label right ms-auto" type="submit"  id="checkout-button" @if($soldOutChk == 1 || $timeChk == 1) disabled @endif >
 																<i class="fas fa-arrow-right label-icon align-bottom fs-16 ms-2"></i> Check out
 															</button>
 														</div>
-														<div class="text-end mb-4">
-															<span class="font-red fs-14 d-none participateAlert">Please Select Who Is Participating.</span>
-														</div>
-														
 													</div>
 												</div>
 											</div>
@@ -714,10 +719,9 @@
 				<div class="modal-header">
 					<h5 class="modal-title" id="staticBackdropLabel">Leave a gift for your friends and family</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				  </div>
+				</div>
 
 	            <!-- Modal body -->
-	            
 	        	<div class="modal-body" id="leavegiftbody">
 	        	</div>					        
 	       	</div>
@@ -887,6 +891,7 @@
 		paymentElement.mount('#payment-element');
 
 	    var $form = $(".validation");
+	    $('#error_check').addClass('d-none');
 	    $('form.validation').bind('submit', function(e) {
 	    	e.preventDefault()
 	    	var $form = $(this);
@@ -895,7 +900,7 @@
 	        $('#checkout-button').html('loading...').prop('disabled', true);
 	        var check = document.querySelector( 'input[name="terms_condition"]:checked');
 	        if(check == null) {
-	            $('#error_check').show();
+	        	$('#error_check').removeClass('d-none');
 	            $('#checkout-button').html('<i class="fas fa-arrow-right label-icon align-bottom fs-16 ms-2"></i>Check Out').prop('disabled', false);
 	            return false;
 	        }
