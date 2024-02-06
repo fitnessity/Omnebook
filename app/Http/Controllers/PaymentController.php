@@ -372,6 +372,7 @@ class PaymentController extends Controller {
                     }
                 }catch(\Stripe\Exception\CardException  $e) {
                     $errormsg = $e->getError()->message;
+                      print_r($e->getError());exit();
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }catch(\Stripe\Exception\InvalidRequestException $e) {
                     $errormsg = "Your card is not connected with your account. Please add your card again.";
