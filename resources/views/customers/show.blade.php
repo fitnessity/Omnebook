@@ -343,7 +343,7 @@
 																																			</i>Suspend or Terminate</a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80" data-reload="1"><i class="fas fa-plus text-muted">
 																																			</i>Autopay Schedule</a>
 																																		</li>
 																																		<li>
@@ -605,7 +605,7 @@
 																																					<i class="fas fa-plus text-muted"></i> View Visits </a>
 																																			</li>
 																																			<li>
-																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
+																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80" data-reload="1"><i class="fas fa-plus text-muted">
 																																				</i>Autopay Schedule</a>
 																																			</li>
 																																			<li>
@@ -853,7 +853,7 @@
 																								</thead>
 																								<tbody>
 																									@foreach($purchase_history as $history) 
-																										@if($history->item_description(request()->business_id)['itemDescription'] != '')
+																										@if($history->item_description(request()->business_id)['itemDescription'] != '' )
 																										<tr>
 																											<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
 																											<td>{!!$history->item_description(request()->business_id)['itemDescription']!!}</td>
@@ -862,11 +862,9 @@
 																											<td>${{$history->amount}}</td>
 																											<td>{{$history->item_description(request()->business_id)['qty']}}</td>
 																											<td>
-																												@if(($history->can_void() && $history->item_type=="UserBookingStatus") || ($history->can_refund() && $history->item_type=="UserBookingStatus"))
-																													<?php
-																													$detail = $history->userBookingStatus->UserBookingDetail->first();
-																													?>
-																													<a href="#" data-behavior="ajax_html_modal" data-url="{{route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => $detail->id , 'booking_id' => $history->item_id])}}" data-modal-width="modal-100">Void</a>
+																												@if(($history->can_void() && $history->item_type=="UserBookingStatus") || ($history->can_refund()))
+																													<a href="#" data-behavior="ajax_html_modal" data-url="{{route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-100">Void</a>
+
 																												@else
 																													{{$history->status}}
 																												@endif
@@ -985,24 +983,26 @@
 																							</thead>
 																							<tbody>
 																								@foreach($visits as $visit)
-																									<tr>
-																										<td>{{date('m/d/Y',strtotime($visit->checkin_date))}}</td>
-																										<td>
-																											{{date('h:i A', strtotime($visit->checked_at))}}
-																										</td>
-																										<td>{{$visit->order_detail->business_services_with_trashed->program_name}}</td>
-																										<td>{{$visit->order_detail->business_price_detail_with_trashed->price_title}}</td>
-																										
-																										<td>
-																											@if($visit->status_term())
-																												{{$visit->status_term()}}
-																											@else
-																												<a class="font-red" onclick="getCheckInDetails({{$visit->order_detail->business_id}}, {{$visit->business_activity_scheduler_id}} ,'{{$visit->checkin_date}}','{{$customerdata->id}}');">Unprocess</a>
-																											@endif
+																								 	@if($visit->order_detail)
+																										<tr>
+																											<td>{{date('m/d/Y',strtotime($visit->checkin_date))}}</td>
+																											<td>
+																												{{date('h:i A', strtotime($visit->checked_at))}}
+																											</td>
+																											<td>{{$visit->order_detail->business_services_with_trashed->program_name}}</td>
+																											<td>{{$visit->order_detail->business_price_detail_with_trashed->price_title}}</td>
 																											
-																										</td>
-																										<td>{{ App\BusinessStaff::getinstructorname($visit->order_detail->business_services_with_trashed->instructor_id)}}</td>
-																									</tr>
+																											<td>
+																												@if($visit->status_term())
+																													{{$visit->status_term()}}
+																												@else
+																													<a class="font-red" onclick="getCheckInDetails({{$visit->order_detail->business_id}}, {{$visit->business_activity_scheduler_id}} ,'{{$visit->checkin_date}}','{{$customerdata->id}}');">Unprocess</a>
+																												@endif
+																												
+																											</td>
+																											<td>{{ App\BusinessStaff::getinstructorname($visit->order_detail->business_services_with_trashed->instructor_id)}}</td>
+																										</tr>
+																									@endif
 																								@endforeach
 																							</tbody>
 																						</table>

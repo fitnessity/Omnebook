@@ -16,7 +16,7 @@
 		}, 1500);
 	});
 
-	$(document).on('change', '[data-behavior~=on_change_submit]', function(e){
+	$(document).on('change', '[data-behavior~=on_change_dropdown]', function(e){
 		$('#filterOptionsvalue').val(this.value);
 		$('#generateReport').click();
 	});

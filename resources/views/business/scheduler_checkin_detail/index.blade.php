@@ -61,8 +61,6 @@
 				<div class="client-search">
 					<div class="position-relative">
 						<input type="text" id="search_postorder_client" name="fname" placeholder="Search for client" autocomplete="off" value="" class="form-control" data-customer-id = "">
-                      
-						<!-- <input type="text" class="form-control ui-autocomplete-input" placeholder="Search for client" autocomplete="off" id="search_postorder_client" value=""> -->
 						<span class="mdi mdi-magnify search-widget-icon"></span>
 						<span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-close-options"></span>
 					</div>
@@ -104,9 +102,17 @@
 						@php 
 							$firstCheckInDetail = '';
 							$rowRelation = $cus->BookingCheckinDetails();
-							// $firstCheckInDetail = $chkCusId != $cus->id ||  $chkInId == '' ? $rowRelation->whereDate('checkin_date', $filter_date->format('Y-m-d'))->where('business_activity_scheduler_id', $business_activity_scheduler->id)->first() : $rowRelation->where('id',$chkInId)->first();
 							$firstCheckInDetail = $rowRelation->whereDate('checkin_date', $filter_date->format('Y-m-d'))->where('business_activity_scheduler_id', $business_activity_scheduler->id)->first();
+
 							$checkInIds = '';
+							$activeMembershipCustomer = $cus->active_memberships()->get();
+
+							// if the customer has only 1 session remaining or the membership is only for 1 session then we have to display that activity also after check-in. because if that type of activity is checked-in then it's became an expired activity.
+
+							$todayCheckInDetails = App\UserBookingDetail::join('booking_checkin_details as bcd' ,'bcd.booking_detail_id' ,'=','user_booking_details.id')->where('bcd.customer_id',$cus->id)->whereDate('bcd.checked_at',date('Y-m-d'))->select('user_booking_details.*')->get();
+
+							$activeMembership = $activeMembershipCustomer->merge($todayCheckInDetails)->unique('id');
+
      					@endphp
 						<tr>
 							<td>{{$i+1}}</td>
@@ -125,10 +131,10 @@
 								</div>
 							</td>
 							<td>
-								@if($cus->active_memberships()->get()->isNotEmpty())
+								@if($activeMembership->isNotEmpty())
 									<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" data-cus-id="{{$cus->id}}">
 										<option value="" @if(!@$firstCheckInDetail->order_detail) selected @endif>Choose option</option>
-										@foreach($cus->active_memberships()->get() as $bookingDetail)
+										@foreach($activeMembership as $bookingDetail)
 											@php 
 												$cCheckin = $bookingDetail->BookingCheckinDetails->where('checkin_date', $filter_date->format('Y-m-d'))->first();
 												if($cCheckin){
@@ -146,7 +152,7 @@
 							</td>
 							<td class="modal-check-width">
 								<div class="check-cancel width-105">
-									@if(@$firstCheckInDetail->order_detail && $cus->active_memberships()->get()->isNotEmpty()) 
+									@if(@$firstCheckInDetail->order_detail && $activeMembership->isNotEmpty()) 
 										@php  
 											$datetime = new DateTime(@$firstCheckInDetail->checkin_date.' '.$business_activity_scheduler->shift_start);
 											$formattedDatetime = $datetime->format('Y-m-d H:i:s');
@@ -155,7 +161,7 @@
 									@endif 
 									<label for="checkin" class="mb-0 mmt-10">Check In</label><br>
 
-									@if(@$firstCheckInDetail->order_detail && $cus->active_memberships()->get()->isNotEmpty())
+									@if(@$firstCheckInDetail->order_detail && $activeMembership->isNotEmpty())
 					                    <input type="checkbox"  onclick="call()" name="late_cancel" value="0" data-behavior="ajax_html_modal" data-url="{{route('business.scheduler_checkin_details.latecencel_modal', ['id' => @$firstCheckInDetail->id, 'scheduler_id' => $business_activity_scheduler->id])}}"  data-modal-width = "500px" data-booking-detail-id="{{@$firstCheckInDetail->order_detail->id}}"
 					                        @if(@$firstCheckInDetail->no_show_action) checked @endif >
 					                @endif 

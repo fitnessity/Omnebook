@@ -84,6 +84,7 @@
             'gender' => $user->gender,
             'birthdate' => $user->birthdate,
             'stripe_customer_id' => $user->stripe_customer_id,
+            'request_status' =>1,
         ]);
 
         return $createCustomerForBusiness;
@@ -155,31 +156,39 @@
             'phone_number' => $detail->phone_number,
             'birthdate' => $detail->birthdate,
             'user_id' => $detail->id,
-            'stripe_customer_id' => $detail->stripe_customer_id
+            'stripe_customer_id' => $detail->stripe_customer_id,
+            'profile_pic' => $detail->profile_pic,
+            'stripe_customer_id' => $detail->stripe_customer_id,
+            'request_status' =>1,
         ]);
 
         $familyMember = UserFamilyDetail::where(['user_id' => $detail->id])->get();
 
         foreach($familyMember as $member){
-            Customer::create([
-                'business_id' => $businessId,
-                'fname' => $member->first_name,
-                'lname' => ($member->last_name) ? $member->last_name : '',
-                'username' => $member->first_name.' '.$member->last_name,
-                'email' => $member->email,
-                'country' => 'US',
-                'status' => 0,
-                'phone_number' => $member->mobile,
-                'birthdate' => $member->birthday,
-                'gender' => $member->gender,
-                'user_id' => NULL, //this is null bcz of user is not created at 
-                'parent_cus_id'=> $customer->id ,
-                'primary_account' => 0,
-                'relationship' =>$member->relationship
-            ]);
+            $chk = Customer::where(['business_id' =>$businessId  ,'fname' => $member->first_name,'lname' => $member->last_name ,'email' => $member->email])->first();
+            if(!$chk){
+                $familyCus = Customer::create([
+                    'business_id' => $businessId,
+                    'fname' => $member->first_name,
+                    'lname' => ($member->last_name) ? $member->last_name : '',
+                    'username' => $member->first_name.' '.$member->last_name,
+                    'email' => $member->email,
+                    'country' => 'US',
+                    'status' => 0,
+                    'phone_number' => $member->mobile,
+                    'birthdate' => $member->birthday,
+                    'gender' => $member->gender,
+                    'user_id' => NULL, //this is null bcz of user is not created at 
+                    'parent_cus_id'=> $customer->id ,
+                    'primary_account' => 0,
+                    'relationship' =>$member->relationship,
+                    'request_status' =>1,
+                ]);
+                $familyCus->create_stripe_customer_id();
+            }
         }
 
-        $cardData = StripePaymentMethod::where(['user_id' => $detail->id , 'user_type' => 'User' ])->get();
+        /*$cardData = StripePaymentMethod::where(['user_id' => $detail->id , 'user_type' => 'User' ])->get();
 
         foreach($cardData as $data){
             StripePaymentMethod::create([
@@ -192,15 +201,14 @@
                 'exp_year'=> $data->exp_year,
                 'last4'=> $data->last4,
             ]);
-        }
+        }*/
 
-        $paymentHistory = Transaction::where('user_type', 'User')
+        /*$paymentHistory = Transaction::where('user_type', 'User')
             ->where('user_id', $detail->id)
             ->orWhere(function($subquery) use ($customer) {
                 $subquery->where('user_type', 'Customer')
                     ->where('user_id', $customer->id);
             })->get();
-
         foreach($paymentHistory as $data){
             Transaction::create([
                 'item_id' => $data->item_id,
@@ -217,7 +225,7 @@
                 'refund_amount'=> $data->refund_amount,
                 'payload'=> $data->payload
             ]);
-        }
+        }*/
     }
 
     function getUserbookingDetail($sid,$cid)
@@ -287,11 +295,9 @@
         return $notifications->get();
     }
 
-    function getNotificationPersonal($type=null){
-       
-        $customers = Auth::user()->customers;
-        if($customers != ''){
-            $customersId =  @$customers->pluck('id')->toArray();
+    function getNotificationPersonal($type=null){   
+        $customersId = Customer::where('user_id' ,Auth::user()->id)->pluck('id')->toArray();
+        if(!empty($customersId)){
             $notifications = Notification::orderby('updated_at','desc')->whereDate('display_date', '=', now())
                 ->whereTime('display_time', '<=', now()->format('H:i'))->whereIn('customer_id',$customersId )->where('type','personal')
                 ->orWhere(function ($query) use($customersId) {

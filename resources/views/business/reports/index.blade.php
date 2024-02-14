@@ -49,8 +49,12 @@
 														<!-- <div class="report-links">
 															<a href="#">Tax Reports</a>
 														</div> -->
-														<div class="report-links remove-border">
+														<div class="report-links">
 															<a href="{{route('business.refund.index')}}">Refund Details</a>
+														</div>
+
+														<div class="report-links remove-border">
+															<a href="{{route('business.membership_revenue')}}">Memberships & Revenue Breakdown</a>
 														</div>
 													</div>
 												</div>												
@@ -115,7 +119,7 @@
 										<div class="row">
 											<div class="col-12 col-lg-4 col-md-4">
 												<div class="reports-title">
-													<label>Memberships </label>
+													<label>Memberships</label>
 												</div>
 											</div>
 											<div class="col-12 col-lg-6 col-md-8">

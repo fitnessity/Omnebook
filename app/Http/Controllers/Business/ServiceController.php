@@ -74,7 +74,7 @@ class ServiceController extends BusinessBaseController
      */
     public function store(Request $request)
     {
-        //print_r($request->all()); 
+        //print_r($request->all());exit(); 
         $profilePicture = $dayImage = $safe_varification ="";
 
         $user = Auth::user();
@@ -350,7 +350,7 @@ class ServiceController extends BusinessBaseController
         }   
     }
 
-    public function getRecurringValue($isRecurring, $request, $fieldPrefix, $i, $y)
+    function getRecurringValue($isRecurring, $request, $fieldPrefix, $i, $y)
     {
         if ($isRecurring == 1) {
             return $request->input($fieldPrefix . $i . $y);
@@ -358,7 +358,7 @@ class ServiceController extends BusinessBaseController
         return NULL;
     }
 
-    public function getRecurringCustomerChargeBy($isRecurring, $request, $numFieldPrefix, $timeFieldPrefix, $i, $y)
+    function getRecurringCustomerChargeBy($isRecurring, $request, $numFieldPrefix, $timeFieldPrefix, $i, $y)
     {
         if ($isRecurring == 1) {
             $numValue = $request->input($numFieldPrefix . $i . $y);
@@ -369,7 +369,7 @@ class ServiceController extends BusinessBaseController
         return NULL;
     }
 
-    public function getSectionValue($request, $i, $y, $section, $fieldPrefix,$displaySection)
+    function getSectionValue($request, $i, $y, $section, $fieldPrefix,$displaySection)
     {   
         if($displaySection != 'freeprice') {
             if ($request->input($section . $i . $y) == $section) {
@@ -380,7 +380,7 @@ class ServiceController extends BusinessBaseController
         return '';
     }
 
-    public function getDisplaySection($request, $i, $y)
+    function getDisplaySection($request, $i, $y)
     {
         $displaySection = $request->input('sectiondisplay'.$i.$y);
         if ($displaySection == 'freeprice') {

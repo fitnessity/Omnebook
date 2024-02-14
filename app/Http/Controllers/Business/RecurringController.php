@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
-use App\{Recurring,Transaction,StripePaymentMethod};
+use App\{Recurring,Transaction,StripePaymentMethod,Customer,SGMailService};
 
 class RecurringController extends Controller
 {
@@ -21,7 +21,7 @@ class RecurringController extends Controller
         $company = $user->businesses()->findOrFail($business_id);
         $customer = $company->customers->find($request->customer_id);
         $bookingDetail = $company->UserBookingDetails->find($request->booking_detail_id);
-        $autopayListScheduled = $bookingDetail->Recurring()->where('status', 'Scheduled')->orderby('payment_date')->get();
+        $autopayListScheduled = $bookingDetail->Recurring()->where('status','!=','Completed')->orderby('payment_date')->get();
         $autopayListHistory = $bookingDetail->Recurring()->where('status' , 'Completed')->orderby('payment_date')->get();
         $autopayListCnt =  $bookingDetail->Recurring()->count();
         $remaining = count($autopayListScheduled);
@@ -104,21 +104,64 @@ class RecurringController extends Controller
         }
     }
 
-
     public function pay_recurring_item(Request $request, $business_id){
-        //print_r($request->all());exit;
-        $amount = 0;
-        $stripeCustomerId = $cardID = '';
+
+        $company = $request->current_company;
+        $stripeCustomerId = $cardID = $customer = $priceOption = $category = '' ;  $amount = 0;   $cardDetails = [];
+        $ids = explode(',', $request->ids);
         $recurringDetails = Recurring::whereIn('id', $ids)->get();
         foreach ($recurringDetails as $recurringDetail) {
+            $customer = Customer::where('id' ,$recurringDetail->user_id)->first();
+            $priceOption = $recurringDetail->UserBookingDetail != '' ? $recurringDetail->UserBookingDetail->business_price_detail_with_trashed : '';
+            $category =  @$priceOption->business_price_details_ages_with_trashed;
+
             $amount += $recurringDetail->amount + $recurringDetail->tax;
             $stripeCustomerId = $recurringDetail->Customer != '' ? $recurringDetail->Customer->stripe_customer_id : '';
-            $cardDetails = StripePaymentMethod::where('user_id',$recurringDetail->user_id)->first();
-            $cardID = @$cardDetails->payment_id ?? '';
+            $cardDetails = StripePaymentMethod::whereRaw('((user_type = "User" and user_id = ?) or (user_type = "Customer" and user_id = ?))', [@$customer->user_id, $recurringDetail->user_id]);
+
+            //$cardDetails = StripePaymentMethod::where('user_id',$recurringDetail->user_id)->get();
         }
 
-        $amount = number_format( $amount ,2,'.','');
+        $chkCard = 1;
+        if(!empty($cardDetails) && $stripeCustomerId){
+            foreach($cardDetails as $card){
+                if($chkCard == 1){
+                    $cardID = $card->checkCardValidity($stripeCustomerId,$card->payment_id);
+                }
+                if($cardID){
+                    $chkCard = 0;
+                }
+            }
+        }
         
+        $amount = number_format( $amount ,2,'.','');
+        $emailDetailProvider = array(
+            'CompanyImage'=> $company->getCompanyImage(),
+            'CompanyName'=> $company->company_name,
+            'ProviderName'=> $company->full_name,
+            'CustomerName'=> @$customer->full_name,
+            'PriceOption'=> @$priceOption->price_title,
+            'CategoryName'=> @$category->category_title ,
+            'amount'=> $amount,
+            'email'=> $company->business_email,
+        );
+
+        $emailDetailCustomer = array(
+            'CompanyImage'=> $company->getCompanyImage(),
+            'CompanyName'=> $company->company_name,
+            'ProviderName'=> $company->full_name,
+            'address'=> $company->company_address(),
+            'ProviderEmail'=> $company->business_email,
+            'phone'=> $company->business_phone,
+            'CustomerName'=> @$customer->full_name,
+            'email'=> @$customer->email,
+            'PriceOption'=> @$priceOption->price_title,
+            'CategoryName'=> @$category->category_title ,
+            'amount'=> $amount,
+            'Website' => env('APP_URL'),
+            'url'=> env('APP_URL').'personal/manage-account',
+        );
+
         if($cardID != '' && $stripeCustomerId != ''){
             $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
             try {
@@ -135,7 +178,7 @@ class RecurringController extends Controller
                 foreach($ids as $id){
                     $update_recurring_detail = Recurring::findOrFail($id);
                     $charged_amt =  $update_recurring_detail->amount + $update_recurring_detail->tax;
-                    $update_recurring_detail->update(['charged_amount'=>$charged_amt, 'payment_method' =>'card' ,'stripe_payment_id' => $payment->id ,'status' => 'Completed']);
+                    $update_recurring_detail->update(['charged_amount'=>$charged_amt, 'payment_method' =>'card' ,'stripe_payment_id' => $payment->id ,'status' => 'Completed','payment_on' => date('Y-m-d')]);
 
                     $transactiondata = array( 
                         'user_type' =>$update_recurring_detail->user_type,
@@ -158,11 +201,15 @@ class RecurringController extends Controller
                 return response()->json(['message' => 'success']);
             }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException | \Exception $e) {
                 Recurring::whereIn('id', $ids)->update(['status' => 'Retry']);
+                SGMailService::sendAutoPayFaildAlertToProvider($emailDetailProvider);
+                SGMailService::sendAutoPayFaildAlertToCustomer($emailDetailCustomer);
                 return response()->json(['message' => 'Autopay payment is failed due to some reason. Please try again latter. ']);
             } 
         }else{
             Recurring::whereIn('id', $ids)->update(['status' => 'Retry']);
-             return response()->json(['message' => 'Autopay payment is failed due to some reason. Please try again latter. ']);
+            SGMailService::sendAutoPayFaildAlertToProvider($emailDetailProvider);
+            SGMailService::sendAutoPayFaildAlertToCustomer($emailDetailCustomer);
+            return response()->json(['message' => 'Autopay payment is failed due to some reason. Please try again latter. ']);
         }
     }
 }

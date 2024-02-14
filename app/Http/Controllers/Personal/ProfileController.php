@@ -50,7 +50,7 @@ class ProfileController extends Controller
         $attendanceCntPre = BookingCheckinDetails::where('customer_id' ,@$customer->id)->whereMonth('checkin_date', '>=', date('m') - 1)->whereMonth('checkin_date', '<=', date('m') - 1 )->whereNotNull('checked_at')->count();
         $attendancePct =  $attendanceCntPre != 0 ? number_format(($attendanceCnt - $attendanceCntPre)*100/$attendanceCntPre,2,'.','') : 0;
 
-        $bookingCnt = $business->UserBookingDetails()->where('user_id' ,@$customer->id)->whereMonth('created_at', '>=', date('m'))->whereMonth('created_at', '<=', date('m'))->count();
+        $bookingCnt = @$business->UserBookingDetails()->where('user_id' ,@$customer->id)->whereMonth('created_at', '>=', date('m'))->whereMonth('created_at', '<=', date('m'))->count();
         $bookingCntPre = $business->UserBookingDetails()->where('user_id' ,@$customer->id)->whereMonth('created_at', '>=', date('m') - 1)->whereMonth('created_at', '<=', date('m') - 1)->count();
         $bookingPct =  $bookingCntPre != 0 ? number_format(($bookingCnt - $bookingCntPre)*100/$bookingCntPre,2,'.','') : 0;
 
@@ -189,21 +189,26 @@ class ProfileController extends Controller
             $success = 'Profile updated succesfully!';
             $fail = 'Problem in profile update.';
         }else if($request->type == 'password'){
-            $currentPassword = $user->password;
+
+            $this->validate($request, [
+                'newPassword' => 'required',
+                'confirmPassword' => 'required',
+            ]);
+
+            $status = $user->update(['password' => Hash::make($request->newPassword) ,'buddy_key' =>$request->newPassword]);
+            $success = 'Password has been changed successfully.';
+
+            /* $currentPassword = $user->password;
             if (Hash::check($request->newPassword, $currentPassword)) {
                 $status = $user->update(['password' => Hash::make($request->newPassword)]);
                 $success = 'Password has been changed successfully.';
             }else{
                 $fail = 'Problem in password change.Please check your old password and enter again.';
-            }
+            }*/
         }else if($request->type == 'portfolio'){
-            $data = $request->all();
-            unset($data['_token']);
-            unset($data['id']);
-            unset($data['type']);
+            $data = $request->except(['_token', 'id', 'type']);
             $user->update($data);
         }else{
-
             $profilePic = $coverPic ='';
             if($request->hasFile('profile_pic')){
                 $profilePic = $request->file('profile_pic')->store('customer');
@@ -218,11 +223,12 @@ class ProfileController extends Controller
             }
 
             @$status = $user->update(['profile_pic' => $profilePic,'cover_photo' => $coverPic]);
+            $user->customers()->update(['profile_pic' => $profilePic ]);
+
             $success = 'Profile photo has been changed successfully.';
             $fail = 'Problem in uploading profile photo.';
         }
         
-
         if(@$status)
             return Redirect::back()->with('success',$success);
         else
@@ -520,35 +526,18 @@ class ProfileController extends Controller
                 }
             } else {
                 $fingerprints[] = $fingerprint;
-                $stripePaymentMethod = StripePaymentMethod::firstOrNew([
-                    'payment_id' => $payment_method['id'],
-                    'user_type' => 'User',
-                    'user_id' => $user->id,
-                ]);
-
-                $stripePaymentMethod->pay_type = $payment_method['type'];
-                $stripePaymentMethod->brand = $payment_method['card']['brand'];
-                $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
-                $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
-                $stripePaymentMethod->last4 = $payment_method['card']['last4'];
-                $stripePaymentMethod->save();
-
-                $customer = Customer::where(['fname' =>$user->firstname,'lname' =>$user->lastname, 'email' => $user->email])->get();
-
-                if ($stripePaymentMethod->wasRecentlyCreated && !empty($customer) ) {
-                  
-                    foreach($customer as $cus){
-                        $spmForCus = StripePaymentMethod::create([
-                            'payment_id' => $payment_method['id'],
-                            'user_type' => 'Customer',
-                            'user_id' => $cus->id,
-                            'pay_type' => $payment_method['type'],
-                            'brand' => $payment_method['card']['brand'],
-                            'exp_month' => $payment_method['card']['exp_month'],
-                            'exp_year' => $payment_method['card']['exp_year'],
-                            'last4' => $payment_method['card']['last4'],
-                        ]);
-                    }
+                $card = StripePaymentMethod::where(['payment_id'=>$payment_method['id']])->first();
+                if(!$card){
+                    $stripePaymentMethod = new StripePaymentMethod;
+                    $stripePaymentMethod->payment_id = $payment_method['id'];
+                    $stripePaymentMethod->user_type = 'User';
+                    $stripePaymentMethod->user_id = $user->id;
+                    $stripePaymentMethod->pay_type = $payment_method['type'];
+                    $stripePaymentMethod->brand = $payment_method['card']['brand'];
+                    $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
+                    $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
+                    $stripePaymentMethod->last4 = $payment_method['card']['last4'];
+                    $stripePaymentMethod->save();
                 }
             }
         }
@@ -565,7 +554,6 @@ class ProfileController extends Controller
     public function cardDelete(Request $request) {
         $user = User::where('id', $this->user->id)->first();
         $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $request->stripe_payment_method)->firstOrFail();
-
         $stripePaymentMethod->delete();
     }
 

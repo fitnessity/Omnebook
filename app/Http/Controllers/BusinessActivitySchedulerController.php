@@ -50,10 +50,12 @@ class BusinessActivitySchedulerController extends Controller
         $user = Auth::user();
         $userCompany = @$user->company ?? [];
         $customer = Customer::where(['user_id'=>@$user->id, 'business_id'=>$business_id])->first();
+
+
         if($user != '' && count($userCompany) == 0  && $request->customer_id == ''){
             $request->customer_id = $customer->id;
         }
-
+ 
         if($request->customer_id){
             if(request()->type == 'user'){
                 $familyMember = Auth::user()->user_family_details()->where('id',request()->customer_id)->first();
@@ -91,6 +93,10 @@ class BusinessActivitySchedulerController extends Controller
         //print_r($bookschedulers);exit;
         foreach($bookschedulers as $bs){
             $services [] = $bs->business_service;
+        }
+
+        if($user != '' && count($userCompany) == 0){
+            $request->customer_id = '';
         }
         $services = array_unique($services);
         // /print_r( $services);exit;
@@ -405,7 +411,7 @@ class BusinessActivitySchedulerController extends Controller
         $finalSessionAry = collect($sessionAry)->filter(function($ary) use ($cid) {
             return $ary['cid'] == $cid;
         })->all();
-        
+       // print_r($finalSessionAry);
         $company = CompanyInformation::find($business_id);
         return view('business-activity-schedular.reviewData',compact('finalSessionAry','company','cid'));
     }
@@ -502,7 +508,9 @@ class BusinessActivitySchedulerController extends Controller
         }
         session::put('multibooking', $sessionAry);
 
-        return "You booked schedule succesfully";
+        if(empty($sessionAry)){
+            return "You booked schedule succesfully";
+        }
     }
 
     public function setSessionOfSchedule(Request $request){

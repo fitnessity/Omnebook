@@ -324,9 +324,7 @@
 															                </form>
 															            </div> 
 															        @endif
-																	
-															        
-																	
+															
 															   </div>
 															   <div class="col-md-6">
 																	<div class="claiming-boxn mt-10">

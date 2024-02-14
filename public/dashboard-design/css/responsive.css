@@ -34,6 +34,7 @@
 	.addanother a{width: 100%; display: grid;}
 	.modal-80 {  max-width: 95%;}
 	.modal-70 {  max-width: 95%;}
+	.modal-40 {  max-width: 95%;}
 	.overlay-activity-label{width: auto !important;}
 	.scheduled-activity-info{margin-top: 7px !important;}
 	.manage-customer-from form input{width: 85%;}
@@ -291,6 +292,7 @@
 	.customer-modal-width { max-width: 100%;}
 	.mfloat-left{float: left !important;}
 	.modal-50 {  max-width: 100%;}
+	.modal-40 {  max-width: 100%;}
 	.side-border-right {  border-right: 0; padding-right: 0;}
 	.membership-save { width: 100%; margin-top: 20px;}
 	.mt-150 {  margin-top: 30px;}
@@ -377,6 +379,7 @@
 	.ph-provider {  margin-right: 0;}
 	.space-set{width: 100% !important;}
 	.w-50px {width: 100px; }
+	.powerby img{  width: 225px;}
 }
 
 @media screen and (min-width: 280px) and (max-width: 350px){

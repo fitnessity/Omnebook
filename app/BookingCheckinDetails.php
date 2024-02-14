@@ -80,9 +80,13 @@ class BookingCheckinDetails extends Model
     ];
 
 
-    protected $appends = ['cancel_count' ,'noshow_count'];
+    protected $appends = ['cancel_count' ,'noshow_count' ,'membership_checkin_count'];
 
 
+
+    public function getMembershipCheckinCountAttribute(){
+        return BookingCheckinDetails::where('booking_detail_id',$this->booking_detail_id)->whereNotNull('checked_at')->count();
+    }
 
     public function getCancelCountAttribute(){
         return BookingCheckinDetails::where('booking_detail_id',$this->booking_detail_id)->whereNull('checked_at')->whereNotNull('no_show_action')->count();

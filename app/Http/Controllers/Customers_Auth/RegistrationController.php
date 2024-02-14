@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Api;
 use Str,DB,Validator,Input,Redirect,Storage,Response;
-use App\{Customer,UserBookingDetail,User,CustomerFamilyDetail,Miscellaneous,SGMailService};
+use App\{Customer,UserBookingDetail,User,CustomerFamilyDetail,Miscellaneous,SGMailService,UserFamilyDetail};
 use App\Repositories\CustomerRepository;
 
 class RegistrationController extends Controller
@@ -56,16 +56,6 @@ class RegistrationController extends Controller
             );
             return Response::json($response);
         } else {
-
-            //check for unique customer name
-            /*if (!$this->customers->findUniquefeildPerBusiness($company->id, 'username',$postArr['username'])) {
-                $response = array(
-                    'type' => 'danger',
-                    'msg' => 'User name already exists. Please select different Name',
-                );
-                return Response::json($response);
-            };*/
-
             //check for unique email id
             if (!$this->customers->findUniquefeildPerBusiness($company->id, 'email',$postArr['email'])) {
                 $response = array(
@@ -116,7 +106,7 @@ class RegistrationController extends Controller
                 $customerObj->phone_number = $postArr['contact'];
                 $customerObj->birthdate = $postArr['dob'];
                 $customerObj->stripe_customer_id = $stripe_customer_id;
-
+                $customerObj->request_status = 1;
                 $customerObj->gender=@$request->gender;
                 $customerObj->get_fitnessity_info_from = @$request->know_from;
 
@@ -138,18 +128,14 @@ class RegistrationController extends Controller
                 $customerObj->refund_sign_path = $filename;
                 $customerObj->covid_sign_path = $filename;
 
-
-                $fitnessity_user = User::where('email', $postArr['email'])->first();
-
+                $fitnessity_user = User::where(['firstname'=> $postArr['firstname'],'lastname'=>$postArr['lastname'] ,'email' => $postArr['email']])->first();
                 if($fitnessity_user){
                     $ids = $fitnessity_user->orders()->get()->map(function($item){
                         return $item->id;
                     });
 
                     $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
-                        $query->select('id')
-                              ->from('business_services')
-                              ->where('cid', $company->id);
+                        $query->select('id')->from('business_services')->where('cid', $company->id);
                     })->whereIn('booking_id', $ids)->exists();
 
                     if($result){
@@ -166,7 +152,7 @@ class RegistrationController extends Controller
                     $userObj->buddy_key = $random_password;
                     $userObj->email = $postArr['email'];
                     $userObj->primary_account = $request->primaryAccountHolder ?? 0;
-                    $userObj->country = 'US';
+                    $userObj->country = 'United Status';
                     $userObj->phone_number = $postArr['contact'];
                     $userObj->birthdate = $postArr['dob'];
                     $userObj->stripe_customer_id = $stripe_customer_id;
@@ -181,10 +167,8 @@ class RegistrationController extends Controller
                     $currentCustomer = $customerObj;
                     for($i=0;$i<=$request->familycnt;$i++){
                         if($request->fname[$i] != ''){
-                            $date = NULL;
-                            if($request->birthdate[$i] != ''){
-                                $date = $request->birthdate[$i];
-                            }
+
+                            $date = $request->birthdate[$i] ?? NULL;
                             if($request->primaryAccount == 1 && $currentCustomer->primary_account != 1){
                                 if($i == 0){
                                     $parentId = NULL;
@@ -203,7 +187,7 @@ class RegistrationController extends Controller
                             $customerFamily->lname = $request->lname[$i];
                             $customerFamily->relationship = $request->relationship[$i];
                             $customerFamily->email = $request->emailid[$i];
-                            $customerFamily->country = 'US';
+                            $customerFamily->country = 'United Status';
                             $customerFamily->status = 0;
                             $customerFamily->phone_number = $request->mphone[$i];
                             $customerFamily->birthdate = $date;
@@ -212,17 +196,58 @@ class RegistrationController extends Controller
                             $customerFamily->emergency_email = $request->emergency_email[$i];
                             $customerFamily->emergency_relation = $request->emergency_relation[$i];
                             $customerFamily->gender =  $request->familygender[$i];
+                            $customerFamily->request_status =  1;
                             $customerFamily->save();
-
+                            $customerFamily->create_stripe_customer_id();
                             if($request->primaryAccount == 1 && $currentCustomer->primary_account != 1){
                                 if($i == 0){
                                    $parentId = $customerFamily->id;
                                    $currentCustomer->update(['parent_cus_id' =>$parentId]);
                                 }
                             }
+
                             if ($customerFamily) {      
                                 SGMailService::sendWelcomeMailToCustomer($customerFamily->id,$company->id,'');
                             }
+
+                            $is_user = User::where(['firstname'=> $request->fname[$i],'lastname'=> $request->lname[$i],'email' => $request->emailid[$i]])->first();
+
+                            if(!$is_user){
+                                $familyUser = New User();
+                                $familyUser->role = 'customer';
+                                $familyUser->firstname =  $request->fname[$i];
+                                $familyUser->lastname =  $request->lname[$i];
+                                $familyUser->username = $request->fname[$i].$request->lname[$i];
+                                $familyUser->password = Hash::make($random_password);
+                                $familyUser->buddy_key = $random_password;
+                                $familyUser->email = $request->emailid[$i];
+                                $familyUser->primary_account = $isParentAccount;
+                                $familyUser->country = 'United Status';
+                                $familyUser->phone_number = $request->mphone[$i];
+                                $familyUser->birthdate =  $date;
+                                $familyUser->gender = $request->familygender[$i];
+                                $familyUser->stripe_customer_id = $customerFamily->stripe_customer_id;
+                                $familyUser->save(); 
+                                $customerFamily->user_id = $familyUser->id;
+                            }else{
+                                $customerFamily->stripe_customer_id = @$is_user->stripe_customer_id;
+                                $customerFamily->user_id = @$is_user->id;
+                            }
+
+                            $customerFamily->save();
+
+                            UserFamilyDetail::create([
+                                'user_id' => $currentCustomer->user_id,
+                                'first_name' => $request->fname[$i],
+                                'last_name' => $request->lname[$i],
+                                'email' => $request->emailid[$i],
+                                'mobile' => $request->mphone[$i],
+                                'emergency_contact' =>$request->emergency_phone[$i],
+                                'relationship' =>  $request->relationship[$i],
+                                'gender' => $request->familygender[$i],
+                                'birthday' =>  $date,
+                                'emergency_contact_name' => $request->emergency_name[$i],
+                            ]);
                         }
                     }
 
@@ -328,7 +353,7 @@ class RegistrationController extends Controller
                 $customerObj->lname = $request->lname[$i];
                 $customerObj->relationship = $request->relationship[$i];
                 $customerObj->email = $request->emailid[$i];
-                $customerObj->country = 'US';
+                $customerObj->country = 'United Status';
                 $customerObj->status = 0;
                 $customerObj->phone_number = $request->mphone[$i];
                 $customerObj->birthdate = $date;
@@ -337,8 +362,10 @@ class RegistrationController extends Controller
                 $customerObj->emergency_email = $request->emergency_email[$i];
                 $customerObj->emergency_relation = $request->emergency_relation[$i];
                 $customerObj->gender =  $request->gender[$i];
+                $customerObj->request_status =  1;
                 $customerObj->save();
 
+                $customerObj->create_stripe_customer_id();
                 if($request->primaryAccount == 1 && $currentCustomer->primary_account != 1){
                     if($i == 0){
                        $parentId = $customerObj->id;
@@ -348,11 +375,34 @@ class RegistrationController extends Controller
                 if ($customerObj) {      
                     SGMailService::sendWelcomeMailToCustomer($customerObj->id,$postArr['business_id'],'');
                 }
+
+                $is_user = User::where('email', $request->emailid[$i])->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower( $request->fname[$i]), strtolower($request->lname[$i])])->first();
+
+                $is_user = User::where('email', $request->emailid[$i])->first();
+                if(!$is_user){
+                    $familyUser = New User();
+                    $familyUser->role = 'customer';
+                    $familyUser->firstname =  $request->fname[$i];
+                    $familyUser->lastname =  $request->lname[$i];
+                    $familyUser->username = $request->fname[$i].$request->lname[$i];
+                    /*$familyUser->password = Hash::make($random_password);
+                    $familyUser->buddy_key = $random_password;*/
+                    $familyUser->email = $request->emailid[$i];
+                    $familyUser->gender = $request->gender[$i];
+                    $familyUser->primary_account = $isParentAccount;
+                    $familyUser->country = 'United Status';
+                    $familyUser->phone_number = $request->mphone[$i];
+                    $familyUser->birthdate =  $date;
+                    $familyUser->stripe_customer_id =  $customerObj->stripe_customer_id;
+                    $familyUser->save(); 
+                    $customerObj->user_id =  $familyUser->id;
+                }else{
+                    $customerObj->user_id =  @$is_user->id;
+                }
+                $customerObj->save();
             }
         }
         
-
-        $url = '/viewcustomer/'.$request->cust_id;
         $response = array(
             'type' => 'success',
             'msg' => 'Successfully added family member',

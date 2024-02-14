@@ -4,7 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\{UserBookingDetail,Recurring,Transaction,BookingCheckinDetails,CustomerPlanDetails};
+use App\{UserBookingDetail,Recurring,Transaction,BookingCheckinDetails,CustomerPlanDetails,StripePaymentMethod};
 use DB;
 use Carbon\Carbon;
 
@@ -114,6 +114,28 @@ class Kernel extends ConsoleKernel
                 $d->autoPayment();
             }
         })->daily();
+
+
+        $schedule->call(function (){
+            $expiredCreditCards = StripePaymentMethod::where(function ($query) {
+                $query->where('exp_year', '<', Carbon::now()->year)
+                    ->orWhere(function ($query) {
+                        $query->where('exp_year', '=', Carbon::now()->year)
+                            ->where('exp_month', '<', Carbon::now()->month);
+                    });
+            })->get();
+            foreach($expiredCreditCards as $ecc){
+                $ecc->checkExpiredCard();
+            }
+        })->everyMinute();
+
+        $schedule->call(function (){
+            $expiringCreditCards = StripePaymentMethod::where('exp_year', '=', Carbon::now()->year)->where('exp_month', '=', Carbon::now()->month)->get();
+            //print_r($expiringCreditCards);exit;
+            foreach($expiringCreditCards as $ecc){
+                $ecc->checkExpiringCard();
+            }
+        })->everyMinute();
     }
 
     protected function scheduleTimezone()

@@ -162,7 +162,7 @@
 																				<div class="col-lg-4 col-md-5 col-sm-5 col-xs-6">
 																					<div class="multiple0select btn-group w-100">
 																						<div class="select">
-																							<input type="checkbox" id="item_{{$s}}{{$scary->id}}" class="checkboxchk" data-pname="{{$ser->program_name}}" data-toa="{{$timeOfActivity}}" data-chk="{{$grayBtnChk}}" data-sid="{{$ser->id}}" data-scid="{{$scary->id}}" data-catId="{{$scary->category_id}}" {{ $SpotsLeftdis == 0 ? "disabled" : ''}} {{ $canceldata != '' ?  "disabled" : ''}}>
+																							<input type="checkbox" id="item_{{$s}}{{$scary->id}}" class="checkboxchk" data-pname="{{$cList->BusinessServices->program_name}}" data-toa="{{$timeOfActivity}}" data-chk="{{$grayBtnChk}}" data-sid="{{$cList->BusinessServices->id}}" data-scid="{{$scary->id}}" data-catId="{{$scary->category_id}}" {{ $SpotsLeftdis == 0 ? "disabled" : ''}} {{ $canceldata != '' ?  "disabled" : ''}}>
 																							<label class="btn button_select" for="item_{{$s}}{{$scary->id}}">{{$timeOfActivity}} <br>{{$duration}}</label>
 																							<span>{{ $SpotsLeftdis == 0 ? "Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</span>
 																							<label class="font-red">{{ $canceldata != '' ? "Cancelled" : ''}}</label>

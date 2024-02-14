@@ -8935,7 +8935,7 @@ class UserProfileController extends Controller {
                 $detail_data_com = [];
                 $detail_data_com['company_data'] = CompanyInformation::where('id',$request->cid)->first();
                 $allDetail  = json_decode(json_encode($detail_data_com), true); ;
-                MailService::sendEmailafterclaimed($allDetail);
+                SGMailService::welcomeMailOfNewBusinessToCustomer(['cid'=> $request->cid,'email' => $user->email]);
                 $msg = 'Match';
             }else{
                 $msg = 'Not Match';
