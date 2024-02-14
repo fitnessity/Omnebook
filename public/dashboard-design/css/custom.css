@@ -1870,7 +1870,6 @@ padding: 0px 0px 3px 2px !important; */
 	padding: 0;
 	position: absolute;
 }
-
 .font-green{
 	color: #009f0a;
 }
@@ -6664,6 +6663,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .p-tb-10{
   padding: 10px 0;
 }
+
 .modal-40{
   max-width: 40%; 
 }
@@ -6721,4 +6721,5 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   border: none;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 
