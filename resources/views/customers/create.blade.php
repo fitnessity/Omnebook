@@ -606,7 +606,7 @@
                     success: function (response) {
                        
                         if (response.type === 'success') {
-                            if($('#buttonType').val('skip')){
+                            if($('#buttonType').val() == 'skip'){
                                 window.location.href = '/business/{{$business_id}}/create-customer';
                             }else{
                                 setTimeout(function() {
