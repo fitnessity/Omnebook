@@ -91,7 +91,7 @@
                                             </div>
                                             <form action="">
                                                 <div class="mb-3">
-                                                    <button type="button" class="btn-red-primary btn-red w-100"><i class="ri-add-line align-bottom me-1"></i>Create Account</button>
+                                                    <a href="http://dev.fitnessity.co/business/68/create-customer" class="btn-red-primary btn-red w-100"><i class="ri-add-line align-bottom me-1"></i>Create Account</a>
                                                 </div>                            
                                             </form>
                                         </div>
@@ -103,10 +103,10 @@
                             <!-- end card body -->
                         </div>
                         <div class="col-lg-12">
-                        <div class="text-right powerby">
-                            <img class="mr-15" src="http://dev.fitnessity.co//public/images/fit-logo.png" alt="logo">
-                            <button type="button" class="btn btn-black" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Exit</button>
-                        </div>
+                            <div class="text-right powerby">
+                                <img class="mr-15" src="http://dev.fitnessity.co//public/images/fit-logo.png" alt="logo">
+                                <button type="button" class="btn btn-black" data-bs-toggle="modal" data-bs-target="#exit">Exit</button>
+                            </div>
                         </div>
                         
 
@@ -172,19 +172,19 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="exit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Exit Front Desk Mode</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">Exit Check-In Portal</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="fs-15">To deactivate front desk mode, please enter your password. Currently logged-in as Ankita Patel</p>
+                <p class="fs-15">To deactivate the check-in portal , a staff member must enter their password. You are currently logged in as Ankita Patel.</p>
                 <input type="password" class="form-control">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-red" data-bs-dismiss="modal">Exit Front Desk Mode </button>
+                <button type="button" class="btn btn-red" data-bs-dismiss="modal">Exit Check-In Portal </button>
             </div>
         </div>
     </div>

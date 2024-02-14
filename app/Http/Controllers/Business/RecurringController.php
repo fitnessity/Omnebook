@@ -117,7 +117,9 @@ class RecurringController extends Controller
 
             $amount += $recurringDetail->amount + $recurringDetail->tax;
             $stripeCustomerId = $recurringDetail->Customer != '' ? $recurringDetail->Customer->stripe_customer_id : '';
-            $cardDetails = StripePaymentMethod::where('user_id',$recurringDetail->user_id)->get();
+            $cardDetails = StripePaymentMethod::whereRaw('((user_type = "User" and user_id = ?) or (user_type = "Customer" and user_id = ?))', [@$customer->user_id, $recurringDetail->user_id]);
+
+            //$cardDetails = StripePaymentMethod::where('user_id',$recurringDetail->user_id)->get();
         }
 
         $chkCard = 1;
@@ -176,7 +178,7 @@ class RecurringController extends Controller
                 foreach($ids as $id){
                     $update_recurring_detail = Recurring::findOrFail($id);
                     $charged_amt =  $update_recurring_detail->amount + $update_recurring_detail->tax;
-                    $update_recurring_detail->update(['charged_amount'=>$charged_amt, 'payment_method' =>'card' ,'stripe_payment_id' => $payment->id ,'status' => 'Completed']);
+                    $update_recurring_detail->update(['charged_amount'=>$charged_amt, 'payment_method' =>'card' ,'stripe_payment_id' => $payment->id ,'status' => 'Completed','payment_on' => date('Y-m-d')]);
 
                     $transactiondata = array( 
                         'user_type' =>$update_recurring_detail->user_type,

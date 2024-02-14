@@ -54,6 +54,7 @@
 	<!-- filepond -->
 	<link rel="stylesheet" href="{{asset('/public/dashboard-design/filepond/filepond.min.css')}}" type="text/css" />
 	<link rel="stylesheet" href="{{asset('/public/dashboard-design/filepond/filepond-plugin-image-preview.min.css')}}" type="text/css" />
+
 	
 </head>
 
@@ -209,7 +210,9 @@
 
 									<div class="tab-pane fade py-2 ps-2" id="alerts-tab" role="tabpanel" aria-labelledby="alerts-tab">
 										<div data-simplebar style="max-height: 300px;">
-											<input type="hidden" id="alertIds" value="{{ implode(',', getNotificationDashboard('Alert')->pluck('id')->toArray())}}">
+											@if(!empty(getNotificationDashboard('Alert')))
+												<input type="hidden" id="alertIds" value="{{ implode(',', getNotificationDashboard('Alert')->pluck('id')->toArray())}}">
+											@endif
 											@forelse(getNotificationDashboard('Alert') as $n)
 												<div class="text-reset notification-item d-block dropdown-item">
 													<div class="d-flex">

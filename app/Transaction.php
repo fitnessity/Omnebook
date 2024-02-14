@@ -84,7 +84,7 @@ class Transaction extends Model
                 $bookingData = $this->userBookingStatus->UserBookingDetail;
                 if(!empty($bookingData)){
                     foreach($bookingData as $key => $bd){
-                        if($bd->business_id == $chkBusiness){
+                        if($bd->business_id == $chkBusiness && $bd->order_type == 'Membership'){
                             $text ='<a href="'.url('business/'.@$bd->business_id.'/customers/'.@$bd->Customer->id).'" class="fw-medium">';
                             if($chk == 'no'){
                                 $customer .= @$bd->Customer !='' ? ($key+1).'. '.@$bd->Customer->full_name.'<br>' : ($key+1).". N/A<br>";
@@ -116,7 +116,7 @@ class Transaction extends Model
         }else if ($this->item_type == 'Recurring') {
             $bookingData = $this->Recurring->UserBookingDetail;
             if($bookingData != ''){
-                if($bookingData->business_id == $chkBusiness){
+                if($bookingData->business_id == $chkBusiness && $bookingData->order_type == 'Membership'){
                     $text ='<a href="'.url('business/'.@$bookingData->business_id.'/customers/'.@$bookingData->Customer->id).'" class="fw-medium">';
                     if($chk == 'no'){
                         $customer .= @$bd->Customer !='' ? '1. '.@$bookingData->Customer->full_name.'<br>' : "1. N/A<br>";

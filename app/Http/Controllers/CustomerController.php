@@ -460,7 +460,7 @@ class CustomerController extends Controller {
 
     public function addFamilyMemberCustomer(Request $request) {
         //print_r($request->all());
-        $idArray = [];
+        $idArray = $userIdArray = []; $userId = '';
         $parent_id = null;
         for ($i=0; $i <= $request->family_count ; $i++) { 
             $customer = Customer::firstOrNew(['id' => $request['cus_id'][$i]]);
@@ -477,6 +477,7 @@ class CustomerController extends Controller {
                 'birthdate'         => $request['birthdate'][$i] != '' ? date('Y-m-d', strtotime($request['birthdate'][$i])) : null,
                 'parent_cus_id'     => $request['parent_cus_id'],
                 'primary_account' => 0,
+                'request_status' => 1,
             ])->save();
 
             if (@$request['primaryAccountHolder'][$i] == 1 && $parent_id === null) {
@@ -484,11 +485,41 @@ class CustomerController extends Controller {
             }else{
                 $idArray[$i][] = $customer->id;   
             }
+
+            $customer->create_stripe_customer_id();
+
+            $is_user = User::where('email', $request['email'][$i])->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($request['fname'][$i]), strtolower($request['lname'][$i])])->first();
+            if(!$is_user){
+                $familyUser = New User();
+                $familyUser->role = 'customer';
+                $familyUser->firstname =  $request['fname'][$i];
+                $familyUser->lastname =  $request['lname'][$i];
+                $familyUser->username = $request['fname'][$i].$request['lname'][$i];
+                $familyUser->email = $request['email'][$i];
+                $familyUser->gender = $request['gender'][$i];
+                $familyUser->primary_account = 0;
+                $familyUser->country = 'United Status';
+                $familyUser->phone_number = $request['mobile'][$i];
+                $familyUser->birthdate =  $request['birthdate'][$i] != '' ? date('Y-m-d', strtotime($request['birthdate'][$i])) : null;
+                $familyUser->stripe_customer_id =  $customer->stripe_customer_id;
+                $familyUser->save(); 
+                $customer->user_id =  $familyUser->id;
+            }else{
+                $customer->user_id =  @$is_user->id;
+            }
+
+            if($parent_id != ''){
+                $userId = $customer->user_id;
+            }else{
+                $userIdArray[$i][] = $customer->user_id;   
+            }
+
+            $customer->save();
         }
 
-            /*echo $parent_id;
-            print_r($idArray);exit;*/
         if($parent_id){
+            User::whereIn('id', $userIdArray)->update(['primary_account' => 0]);
+            User::where('id', $userId)->update(['primary_account' => 1]);
             Customer::whereIn('id', $idArray)->update(['parent_cus_id' => $parent_id]);
             Customer::where('id', $request['parent_cus_id'])->update(['parent_cus_id' => $parent_id,'primary_account' => 0]);
             Customer::where('id', $parent_id)->update(['parent_cus_id' => null,'primary_account' => 1]);
@@ -657,16 +688,16 @@ class CustomerController extends Controller {
         $user_id = Crypt::decryptString($id);
         $bId = Crypt::decryptString($business_id);
         $user = User::where('id',$user_id)->first();
-        $chk = Customer::where('user_id' , @$user->id)->first();
+        $chk = Customer::where(['business_id' =>$bId  ,'email' => @$user->email,'fname' => @$user->first_name,'lname' => @$user->last_name])->first();
 
         if($chk == ''){
             profileSyncToBusiness($bId, $user);
         }else{
-            $chk->update(['profile_pic'=> $user->profile_pic]);
+            $chk->update(['profile_pic'=> $user->profile_pic ,'request_status' =>1]);
             $familyMember = UserFamilyDetail::where(['user_id' => $user->id])->get();
             foreach($familyMember as $member){
-                $chkFamily = Customer::where(['fname' =>$member->first_name ,'lname' =>$member->last_name])->first();
-                if($chkFamily == ''){
+                $chkFamily = Customer::whereRaw('LOWER(fname) = ? AND LOWER(lname) = ?', [strtolower($member->first_name), strtolower($member->last_name)])->where(['email' => $member->email ,'business_id' =>$bId ])->first();
+                if(!$chkFamily){
                     Customer::create([
                         'business_id' => $bId,
                         'fname' => $member->first_name,
@@ -680,12 +711,13 @@ class CustomerController extends Controller {
                         'gender' => $member->gender,
                         'user_id' => NULL, //this is null bcz of user is not created at 
                         'parent_cus_id'=> $chk->id ,
-                        'relationship' =>$member->relationship
+                        'relationship' =>$member->relationship,
+                        'request_status' =>1,
                     ]);
                 }
             }
 
-            $cardData = StripePaymentMethod::where(['user_id' => $user->id , 'user_type' => 'User' ])->get();
+            /*$cardData = StripePaymentMethod::where(['user_id' => $user->id , 'user_type' => 'User' ])->get();
 
             foreach($cardData as $data){
                 $stripData = StripePaymentMethod::where(['user_id' =>$chk->id ,'payment_id'=> $data->payment_id ,'exp_year' => $data->exp_year ,'last4' =>$data->last4])->first();
@@ -701,7 +733,7 @@ class CustomerController extends Controller {
                         'last4'=> $data->last4,
                     ]);
                 }
-            }
+            }*/
 
             /*$paymentHistory = Transaction::where('user_type', 'User')
             ->where('user_id', $user->id)

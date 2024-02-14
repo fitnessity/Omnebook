@@ -30,6 +30,42 @@ Route::get('/clear-cache', function () {
     Artisan::call('config:clear');
 
     return 'Cache cleared successfully.';
+
+    //print_r(App\Customer::where('user_id',NULL)->get());
+
+    /*foreach(App\UserBookingDetail::get() as $details){
+        $type = '';
+        if($details->qty){
+           $item = json_decode($details->qty,true);
+           foreach(['adult', 'child', 'infant'] as $key){
+                if(@$item[$key] != 0){
+                    if(!empty($type)) {
+                        $type .= ', ';
+                    }
+                    $type .= ucfirst($key);
+                }
+            }
+            $details->update(['membership_for'=>$type]);
+        }
+    }*/
+
+    /*$bookings = App\Recurring::select('booking_detail_id', DB::raw('MIN(payment_date) as min_payment_date'))
+        ->groupBy('booking_detail_id')
+        ->get();
+
+
+    foreach($bookings as $details){
+        App\Recurring::where(['booking_detail_id'=> $details->booking_detail_id ,'payment_date' =>$details->min_payment_date])->update(['payment_number' => 1]);
+    }*/
+
+    /*foreach(App\Recurring::get() as $details){
+        if($details->status == 'Completed'){
+            $details->update(['payment_on' => $details->payment_date]);
+        }else{
+            $details->update(['payment_on' => NULL]);
+        }
+       
+    }*/
 });
 //end
 
@@ -180,6 +216,9 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
 
     Route::get('/online-review','OnlineReviewController@index')->name('online-review.index');
     Route::get('/online-review/export','OnlineReviewController@export')->name('online-review.export');
+
+    Route::get('/membership-revenue/','MembershipRevenueReportController@index')->name('membership_revenue'); 
+    Route::get('/membership-revenue/export','MembershipRevenueReportController@export')->name('membership_revenue.export'); 
 });
 
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
@@ -232,77 +271,6 @@ Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware
     Route::post('/announcement-date-filter', 'AnnouncementController@dateFilter')->name('announcement_date_filter');
     Route::get('/notes-alerts', 'NotesAlertsController@index')->name('notes-alerts');
 
-});
-
-Route::name('design.')->prefix('/design')->middleware('auth')->group(function () {
-    Route::get('/orders','DesignController@orders')->name('orders');
-    Route::get('/add_family','DesignController@add_family')->name('add_family');
-    Route::get('/add_family_for_customer','DesignController@add_family_for_customer')->name('add_family_for_customer');
-    Route::get('/dashboard','DesignController@dashboard')->name('dashboard');
-    Route::get('/staff_login','DesignController@staff_login')->name('staff_login');
-    Route::get('/createNewBusinessProfile','DesignController@createNewBusinessProfile')->name('createNewBusinessProfile');
-    Route::get('/createNewBusinessProfileone','DesignController@createNewBusinessProfileone')->name('createNewBusinessProfileone');
-    Route::get('/createNewBusinessProfiletwo','DesignController@createNewBusinessProfiletwo')->name('createNewBusinessProfiletwo');
-    Route::get('/manage_activity','DesignController@manage_activity')->name('manage_activity');
-    Route::get('/manage_booking','DesignController@manage_booking')->name('manage_booking');
-    Route::get('/manage_company','DesignController@manage_company')->name('manage_company');
-    Route::get('/schedule_create','DesignController@schedule_create')->name('schedule_create');
-    Route::get('/company_setup','DesignController@company_setup')->name('company_setup');
-    Route::get('/checkin_details','DesignController@checkin_details')->name('checkin_details');
-    Route::get('/clients','DesignController@clients')->name('clients');
-    Route::get('/calendar','DesignController@calendar')->name('calendar');
-	Route::get('/clientsview','DesignController@clientsview')->name('clientsview');
-	Route::get('/addfamily','DesignController@addfamily')->name('addfamily');
-    Route::get('/manage_staff','DesignController@manage_staff')->name('manage_staff');
-	Route::get('/view_staff','DesignController@view_staff')->name('view_staff');
-	Route::get('/manage_product','DesignController@manage_product')->name('manage_product');
-	Route::get('/add_product','DesignController@add_product')->name('add_product');
-    Route::get('/sales_report','DesignController@sales_report')->name('sales_report');
-	Route::get('/shopping_cart','DesignController@shopping_cart')->name('shopping_cart');
-    Route::get('/book_multi_times','DesignController@book_multi_times')->name('book_multi_times');
-	Route::get('/instant_activity_details','DesignController@instant_activity_details')->name('instant_activity_details');
-	Route::get('/member_expirations','DesignController@member_expirations')->name('member_expirations');
-	Route::get('/chat_inbox','DesignController@chat_inbox')->name('chat_inbox');
-	Route::get('/edit_profile','DesignController@edit_profile')->name('edit_profile');
-	Route::get('/personal_profile','DesignController@personal_profile')->name('personal_profile');
-	Route::get('/provider_profile_calendar','DesignController@provider_profile_calendar')->name('provider_profile_calendar');
-	Route::get('/add_family_provider','DesignController@add_family_provider')->name('add_family_provider');
-	Route::get('/followers','DesignController@followers')->name('followers');
-	Route::get('/following','DesignController@following')->name('following');
-	Route::get('/favorite','DesignController@favorite')->name('favorite');
-	Route::get('/booking_info','DesignController@booking_info')->name('booking_info');
-	Route::get('/price_plan','DesignController@price_plan')->name('price_plan');
-	Route::get('/payment_info','DesignController@payment_info')->name('payment_info');  
-	Route::get('/booking_details','DesignController@booking_details')->name('booking_details');
-	Route::get('/creditcard_info','DesignController@creditcard_info')->name('creditcard_info');
-	Route::get('/o_payment_info','DesignController@o_payment_info')->name('o_payment_info');
-	Route::get('/o_card_info','DesignController@o_card_info')->name('o_card_info');
-	Route::get('/providers_onboarded','DesignController@providers_onboarded')->name('providers_onboarded');
-	Route::get('/onboarded_steps','DesignController@onboarded_steps')->name('onboarded_steps');   
-	Route::get('/home','DesignController@home')->name('home');  
-	Route::get('/reports','DesignController@reports')->name('reports'); 
-	Route::get('/settings','DesignController@settings')->name('settings'); 
-	Route::get('/subscriptions_payments','DesignController@subscriptions_payments')->name('subscriptions_payments'); 
-	Route::get('/documents_contracts','DesignController@documents_contracts')->name('documents_contracts'); 
-    Route::get('/invoice_details','DesignController@invoice_details')->name('invoice_details'); 
-	Route::get('/announcement_news','DesignController@announcement_news')->name('announcement_news'); 
-	Route::get('/task','DesignController@task')->name('task');
-	Route::get('/attendance_belt','DesignController@attendance_belt')->name('attendance_belt');
-	Route::get('/announcements_provider','DesignController@announcements_provider')->name('announcements_provider');
-    Route::get('/announcements_provider_category','DesignController@announcements_provider_category')->name('announcements_provider_categorys');
-	Route::get('/customer_dashboard','DesignController@customer_dashboard')->name('customer_dashboard');
-
-	Route::get('/notes_alerts','DesignController@notes_alerts')->name('notes_alerts');
-	Route::get('/pdf_booking','DesignController@pdf_booking')->name('pdf_booking');
-
-    Route::get('/provider_adds_belt_rank_skills','DesignController@provider_adds_belt_rank_skills')->name('provider_adds_belt_rank_skills');
-    Route::get('/provider_edit_belt_rank_skills','DesignController@provider_edit_belt_rank_skills')->name('provider_edit_belt_rank_skills');
-    Route::get('/client_promote_belt','DesignController@client_promote_belt')->name('client_promote_belt');
-    Route::get('/manually_promote','DesignController@manually_promote')->name('manually_promote');
-
-    Route::get('/register_ep','DesignController@register_ep')->name('register_ep');
-    Route::get('/check_in_settings','DesignController@check_in_settings')->name('check_in_settings');
-    Route::get('/check_in_portal','DesignController@check_in_portal')->name('check_in_portal');
 });
 
 Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
@@ -1403,11 +1371,86 @@ Route::post('/login','StaffController@login')->name('dologin');
 Route::post('/import-staff','StaffController@importstaff')->name('importstaff');
 
 
-Route::get('/addproducts',[ProductController::class,'addProduct'])->name('addproducts');
+//Route::get('/addproducts',[ProductController::class,'addProduct'])->name('addproducts');
 
 
-    //Route::resource('product', 'Products\ProductController')->only(['store','create']);
-    Route::post('products', 'Products\ProductController@store')->name('products');
+//Route::resource('product', 'Products\ProductController')->only(['store','create']);
+//Route::post('products', 'Products\ProductController@store')->name('products');
 
+
+Route::name('design.')->prefix('/design')->middleware('auth')->group(function () {
+    Route::get('/orders','DesignController@orders')->name('orders');
+    Route::get('/add_family','DesignController@add_family')->name('add_family');
+    Route::get('/add_family_for_customer','DesignController@add_family_for_customer')->name('add_family_for_customer');
+    Route::get('/dashboard','DesignController@dashboard')->name('dashboard');
+    Route::get('/staff_login','DesignController@staff_login')->name('staff_login');
+    Route::get('/createNewBusinessProfile','DesignController@createNewBusinessProfile')->name('createNewBusinessProfile');
+    Route::get('/createNewBusinessProfileone','DesignController@createNewBusinessProfileone')->name('createNewBusinessProfileone');
+    Route::get('/createNewBusinessProfiletwo','DesignController@createNewBusinessProfiletwo')->name('createNewBusinessProfiletwo');
+    Route::get('/manage_activity','DesignController@manage_activity')->name('manage_activity');
+    Route::get('/manage_booking','DesignController@manage_booking')->name('manage_booking');
+    Route::get('/manage_company','DesignController@manage_company')->name('manage_company');
+    Route::get('/schedule_create','DesignController@schedule_create')->name('schedule_create');
+    Route::get('/company_setup','DesignController@company_setup')->name('company_setup');
+    Route::get('/checkin_details','DesignController@checkin_details')->name('checkin_details');
+    Route::get('/clients','DesignController@clients')->name('clients');
+    Route::get('/calendar','DesignController@calendar')->name('calendar');
+    Route::get('/clientsview','DesignController@clientsview')->name('clientsview');
+    Route::get('/addfamily','DesignController@addfamily')->name('addfamily');
+    Route::get('/manage_staff','DesignController@manage_staff')->name('manage_staff');
+    Route::get('/view_staff','DesignController@view_staff')->name('view_staff');
+    Route::get('/manage_product','DesignController@manage_product')->name('manage_product');
+    Route::get('/add_product','DesignController@add_product')->name('add_product');
+    Route::get('/sales_report','DesignController@sales_report')->name('sales_report');
+    Route::get('/shopping_cart','DesignController@shopping_cart')->name('shopping_cart');
+    Route::get('/book_multi_times','DesignController@book_multi_times')->name('book_multi_times');
+    Route::get('/instant_activity_details','DesignController@instant_activity_details')->name('instant_activity_details');
+    Route::get('/member_expirations','DesignController@member_expirations')->name('member_expirations');
+    Route::get('/chat_inbox','DesignController@chat_inbox')->name('chat_inbox');
+    Route::get('/edit_profile','DesignController@edit_profile')->name('edit_profile');
+    Route::get('/personal_profile','DesignController@personal_profile')->name('personal_profile');
+    Route::get('/provider_profile_calendar','DesignController@provider_profile_calendar')->name('provider_profile_calendar');
+    Route::get('/add_family_provider','DesignController@add_family_provider')->name('add_family_provider');
+    Route::get('/followers','DesignController@followers')->name('followers');
+    Route::get('/following','DesignController@following')->name('following');
+    Route::get('/favorite','DesignController@favorite')->name('favorite');
+    Route::get('/booking_info','DesignController@booking_info')->name('booking_info');
+    Route::get('/price_plan','DesignController@price_plan')->name('price_plan');
+    Route::get('/payment_info','DesignController@payment_info')->name('payment_info');  
+    Route::get('/booking_details','DesignController@booking_details')->name('booking_details');
+    Route::get('/creditcard_info','DesignController@creditcard_info')->name('creditcard_info');
+    Route::get('/o_payment_info','DesignController@o_payment_info')->name('o_payment_info');
+    Route::get('/o_card_info','DesignController@o_card_info')->name('o_card_info');
+    Route::get('/providers_onboarded','DesignController@providers_onboarded')->name('providers_onboarded');
+    Route::get('/onboarded_steps','DesignController@onboarded_steps')->name('onboarded_steps');   
+    Route::get('/home','DesignController@home')->name('home');  
+    Route::get('/reports','DesignController@reports')->name('reports'); 
+    Route::get('/settings','DesignController@settings')->name('settings'); 
+    Route::get('/subscriptions_payments','DesignController@subscriptions_payments')->name('subscriptions_payments'); 
+    Route::get('/documents_contracts','DesignController@documents_contracts')->name('documents_contracts'); 
+    Route::get('/invoice_details','DesignController@invoice_details')->name('invoice_details'); 
+    Route::get('/announcement_news','DesignController@announcement_news')->name('announcement_news'); 
+    Route::get('/task','DesignController@task')->name('task');
+    Route::get('/attendance_belt','DesignController@attendance_belt')->name('attendance_belt');
+    Route::get('/announcements_provider','DesignController@announcements_provider')->name('announcements_provider');
+    Route::get('/announcements_provider_category','DesignController@announcements_provider_category')->name('announcements_provider_categorys');
+    Route::get('/customer_dashboard','DesignController@customer_dashboard')->name('customer_dashboard');
+
+    Route::get('/notes_alerts','DesignController@notes_alerts')->name('notes_alerts');
+    Route::get('/pdf_booking','DesignController@pdf_booking')->name('pdf_booking');
+
+    Route::get('/provider_adds_belt_rank_skills','DesignController@provider_adds_belt_rank_skills')->name('provider_adds_belt_rank_skills');
+    Route::get('/provider_edit_belt_rank_skills','DesignController@provider_edit_belt_rank_skills')->name('provider_edit_belt_rank_skills');
+    Route::get('/client_promote_belt','DesignController@client_promote_belt')->name('client_promote_belt');
+    Route::get('/manually_promote','DesignController@manually_promote')->name('manually_promote');
+
+    Route::get('/register_ep','DesignController@register_ep')->name('register_ep');
+    Route::get('/check_in_settings','DesignController@check_in_settings')->name('check_in_settings');
+    Route::get('/check_in_portal','DesignController@check_in_portal')->name('check_in_portal');
+    Route::get('/task_list','DesignController@task_list')->name('task_list');
+    Route::get('/integration_portal','DesignController@integration_portal')->name('integration_portal');
+    Route::get('/registration_widget','DesignController@registration_widget')->name('registration_widget');
+    Route::get('/schedule_widget','DesignController@schedule_widget')->name('schedule_widget');
+});
 
 ?>

@@ -55,7 +55,7 @@
 										<div class="col-lg-2 col-md-3 col-8">
 											@if($tabName != 'past')
 												<div class="mmt-10">
-													<a type="button" class="btn btn-red" onClick="redirectUrl(this.getAttribute('data-url'))" data-url="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' =>$bs['user_id'] ] )}}"> @if($tabName != 'current') Reschedule @else Reserve Now @endif</a>
+													<a type="button" class="btn btn-red" onClick="redirectUrl(this.getAttribute('data-url'))" data-url="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => ((request()->customer_id) ? $bs['user_id'] : '')] )}}"> @if($tabName != 'current') Reschedule @else Reserve Now @endif</a>
 
 													<!-- <a class="btn btn-red" href="#"  data-bs-toggle="modal" data-bs-target=".selectbooking">Reserve Now</a> -->
 												</div>		
@@ -211,7 +211,7 @@
 										<div class="col-12">
 											<div class="float-end mt-20">
 												@if($tabName !='past')
-													<a class="btn btn-red" href="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' =>$bs['user_id'] ] )}}" target="_blank">Schedule</a>
+													<a class="btn btn-red" href="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' =>((request()->customer_id) ? $bs['user_id'] : '') ] )}}" target="_blank">Schedule</a>
 												@endif
 												<a class="btn btn-black" href="{{env('APP_URL')}}/businessprofile/{{strtolower(str_replace(' ', '', $bs->company_information->public_company_name))}}/{{$bs->company_information->id}}" target="_blank">View Provider</a>
 											</div>

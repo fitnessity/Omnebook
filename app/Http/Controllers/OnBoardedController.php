@@ -77,7 +77,7 @@ class OnBoardedController extends Controller {
         if($request->step == 1){
 
             $show_step = 2;
-            $companyChk = CompanyInformation::where(['id'=>$request->cid , 'user_id' => $userDt->id])->first();
+            $companyChk = CompanyInformation::where(['id'=>$request->cid , 'user_id' => @$userDt->id])->first();
             if(Auth::check() || $companyChk || @$companyDt->id == ''){
                 $show_step = 3;
             }

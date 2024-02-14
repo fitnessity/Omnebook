@@ -223,6 +223,8 @@ class ProfileController extends Controller
             }
 
             @$status = $user->update(['profile_pic' => $profilePic,'cover_photo' => $coverPic]);
+            $user->customers()->update(['profile_pic' => $profilePic ]);
+
             $success = 'Profile photo has been changed successfully.';
             $fail = 'Problem in uploading profile photo.';
         }
@@ -524,35 +526,18 @@ class ProfileController extends Controller
                 }
             } else {
                 $fingerprints[] = $fingerprint;
-                $stripePaymentMethod = StripePaymentMethod::firstOrNew([
-                    'payment_id' => $payment_method['id'],
-                    'user_type' => 'User',
-                    'user_id' => $user->id,
-                ]);
-
-                $stripePaymentMethod->pay_type = $payment_method['type'];
-                $stripePaymentMethod->brand = $payment_method['card']['brand'];
-                $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
-                $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
-                $stripePaymentMethod->last4 = $payment_method['card']['last4'];
-                $stripePaymentMethod->save();
-
-                $customer = Customer::where(['fname' =>$user->firstname,'lname' =>$user->lastname, 'email' => $user->email])->get();
-
-                if ($stripePaymentMethod->wasRecentlyCreated && !empty($customer) ) {
-                  
-                    foreach($customer as $cus){
-                        $spmForCus = StripePaymentMethod::create([
-                            'payment_id' => $payment_method['id'],
-                            'user_type' => 'Customer',
-                            'user_id' => $cus->id,
-                            'pay_type' => $payment_method['type'],
-                            'brand' => $payment_method['card']['brand'],
-                            'exp_month' => $payment_method['card']['exp_month'],
-                            'exp_year' => $payment_method['card']['exp_year'],
-                            'last4' => $payment_method['card']['last4'],
-                        ]);
-                    }
+                $card = StripePaymentMethod::where(['payment_id'=>$payment_method['id']])->first();
+                if(!$card){
+                    $stripePaymentMethod = new StripePaymentMethod;
+                    $stripePaymentMethod->payment_id = $payment_method['id'];
+                    $stripePaymentMethod->user_type = 'User';
+                    $stripePaymentMethod->user_id = $user->id;
+                    $stripePaymentMethod->pay_type = $payment_method['type'];
+                    $stripePaymentMethod->brand = $payment_method['card']['brand'];
+                    $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
+                    $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
+                    $stripePaymentMethod->last4 = $payment_method['card']['last4'];
+                    $stripePaymentMethod->save();
                 }
             }
         }
@@ -569,7 +554,6 @@ class ProfileController extends Controller
     public function cardDelete(Request $request) {
         $user = User::where('id', $this->user->id)->first();
         $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $request->stripe_payment_method)->firstOrFail();
-
         $stripePaymentMethod->delete();
     }
 

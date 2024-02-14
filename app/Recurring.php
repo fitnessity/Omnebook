@@ -8,7 +8,7 @@ use File;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use DB;
-use App\{Transaction,User,Customer,SGMailService};
+use App\{Transaction,User,Customer,SGMailService,StripePaymentMethod};
 
 // /use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -25,7 +25,7 @@ class Recurring extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [ 'booking_detail_id', 'user_id', 'user_type', 'business_id', 'payment_date', 'amount', 'tax', 'charged_amount', 'payment_method', 'stripe_payment_id', 'status','transfer_provider_status','provider_amount','provider_transaction_id','attempt'];
+    protected $fillable = [ 'booking_detail_id', 'user_id', 'user_type', 'business_id', 'payment_date', 'amount', 'tax', 'charged_amount', 'payment_method', 'stripe_payment_id', 'status','transfer_provider_status','provider_amount','provider_transaction_id','attempt','payment_number','payment_on'];
     protected $appends = ['total_amount' ,'card','customer_name' ,'customer_id','membership_name'];
 
      public function getTotalAmountAttribute(){
@@ -110,15 +110,21 @@ class Recurring extends Authenticatable
                 $last4 = $payment_intent['charges']['data'][0]['payment_method_details']['card']['last4'];
                 $brand = $payment_intent['charges']['data'][0]['payment_method_details']['card']['brand'];
 
-                $card_id =  $brand.'  XXXX'.$last4;
+                $card_id =  ucfirst($brand).'  XXXX '.$last4;
             }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
             }catch(Exception $e){
             }
         }else{
-             $card_id = $payment_method;
+            $card = StripePaymentMethod::where('payment_id' , $payment_method)->first();
+            if($card){
+                $card_id = ucfirst($card->brand).'  XXXX '.@$card->last4;
+            }else{
+                $lastCard = StripePaymentMethod::where(['user_id' => $this->user_id ,'user_type' => 'Customer'])->latest()->first();
+                $card_id = (@$lastCard->last4) ? ucfirst($lastCard->brand).'  XXXX '.@$lastCard->last4 : '';
+            }
         }
 
-        return $card_id;
+        return $card_id ?? 'N/A';
     }
 
     public function createRecurringPayment(){
@@ -184,6 +190,7 @@ class Recurring extends Authenticatable
                 $this->stripe_payment_id = $paymentIntent->id;
                 $this->charged_amount = round($totalPrice)/100;
                 $this->status = 'Completed';
+                $this->payment_on = date('Y-m-d');
                 $this->attempt += 1;
             
                 $transactiondata = array( 

@@ -440,6 +440,7 @@ class OrderController extends BusinessBaseController
                                 $stripeChargedAmount = number_format($tran_data['amount'],2);
                                 $paymentDate = $date->format('Y-m-d');
                                 $status = 'Completed';
+                                $payment_number = '1';
                             }else{
                                 $Chk = explode(" ",$reCharge);
                                 $timeChk = @$Chk[1];
@@ -456,6 +457,7 @@ class OrderController extends BusinessBaseController
                                     $paymentDate = (Carbon::now()->addDays($addTime))->format('Y-m-d');
                                 }
                                 $status = 'Scheduled';
+                                $payment_number = NULL;
                             } 
 
                             $recurring = array(
@@ -470,6 +472,7 @@ class OrderController extends BusinessBaseController
                                 'stripe_payment_id'=> $stripeId,
                                 "tax" => $tax_recurring,
                                 "status" => $status,
+                                "payment_number" => $payment_number,
                             );
                             Recurring::create($recurring);
                         }

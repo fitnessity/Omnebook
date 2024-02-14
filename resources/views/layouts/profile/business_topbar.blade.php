@@ -221,7 +221,9 @@
 
 									<div class="tab-pane fade py-2 ps-2" id="alerts-tab" role="tabpanel" aria-labelledby="alerts-tab">
 										<div data-simplebar style="max-height: 300px;">
-											<input type="hidden" id="alertIds" value="{{ implode(',', getNotificationPersonal('Alert')->pluck('id')->toArray())}}">
+											@if(!empty(getNotificationPersonal('Alert')))
+												<input type="hidden" id="alertIds" value="{{ implode(',', getNotificationPersonal('Alert')->pluck('id')->toArray())}}">
+											@endif
 											@forelse(getNotificationPersonal('Alert') as $n)
 												<div class="text-reset notification-item d-block dropdown-item">
 													<div class="d-flex">

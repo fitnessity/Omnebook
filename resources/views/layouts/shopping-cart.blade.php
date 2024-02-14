@@ -891,12 +891,12 @@
 		paymentElement.mount('#payment-element');
 
 	    var $form = $(".validation");
-	    $('#error_check').addClass('d-none');
+	  
 	    $('form.validation').bind('submit', function(e) {
 	    	e.preventDefault()
 	    	var $form = $(this);
 	    	$('.error').addClass('hide').find('.alert').text('');
-
+	    	 $('#error_check').addClass('d-none');
 	        $('#checkout-button').html('loading...').prop('disabled', true);
 	        var check = document.querySelector( 'input[name="terms_condition"]:checked');
 	        if(check == null) {

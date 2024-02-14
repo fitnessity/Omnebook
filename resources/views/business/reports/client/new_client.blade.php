@@ -58,7 +58,6 @@
 														</div>
 													</div>  
 													<form method="GET">
-														<input type="hidden" name="filterOptions" id="filterOptionsvalue" value="{{request()->filterOptions}}">
 														<div class="row d-flex align-items-center">
 															<div class="col-lg-3 col-md-4 col-sm-4">
 																<label> Start Date </label>
@@ -207,11 +206,6 @@
 		$('#generateReport').html('Loading..');
 		$("#generateReport").prop("disabled", true);
 		$(this).parents('form').submit();
-	});
-
-	$(document).on('change', '[data-behavior~=on_change_submit]', function(e){
-		$('#filterOptionsvalue').val(this.value);
-		$('#generateReport').click();
 	});
 
 	function formatDate(dateString) {
