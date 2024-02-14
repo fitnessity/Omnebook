@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Artisan;
 
 
 Route::get('/clear-cache', function () {
-    // Clear all cache
+    /*// Clear all cache
     Artisan::call('cache:clear');
 
     // Clear specific cache (e.g., route cache)
@@ -29,11 +29,11 @@ Route::get('/clear-cache', function () {
     // Clear all cached configuration files
     Artisan::call('config:clear');
 
-    return 'Cache cleared successfully.';
+    return 'Cache cleared successfully.';*/
 
     //print_r(App\Customer::where('user_id',NULL)->get());
 
-    /*foreach(App\UserBookingDetail::get() as $details){
+    foreach(App\UserBookingDetail::get() as $details){
         $type = '';
         if($details->qty){
            $item = json_decode($details->qty,true);
@@ -47,25 +47,25 @@ Route::get('/clear-cache', function () {
             }
             $details->update(['membership_for'=>$type]);
         }
-    }*/
+    }
 
-    /*$bookings = App\Recurring::select('booking_detail_id', DB::raw('MIN(payment_date) as min_payment_date'))
+    $bookings = App\Recurring::select('booking_detail_id', DB::raw('MIN(payment_date) as min_payment_date'))
         ->groupBy('booking_detail_id')
         ->get();
 
 
     foreach($bookings as $details){
         App\Recurring::where(['booking_detail_id'=> $details->booking_detail_id ,'payment_date' =>$details->min_payment_date])->update(['payment_number' => 1]);
-    }*/
+    }
 
-    /*foreach(App\Recurring::get() as $details){
+    foreach(App\Recurring::get() as $details){
         if($details->status == 'Completed'){
             $details->update(['payment_on' => $details->payment_date]);
         }else{
             $details->update(['payment_on' => NULL]);
         }
        
-    }*/
+    }
 });
 //end
 
