@@ -323,5 +323,21 @@ class DesignController extends Controller {
     public function check_in_portal(Request $request){
         return view('design.check_in_portal');
     }
+
+    public function task_list(Request $request){
+        return view('design.task_list');
+    }
+
+    public function integration_portal(Request $request){
+        return view('design.integration_portal');
+    }
+
+    public function registration_widget(Request $request){
+        return view('design.registration_widget');
+    }
+
+    public function schedule_widget(Request $request){
+        return view('design.schedule_widget');
+    }
 }
 

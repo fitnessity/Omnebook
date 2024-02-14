@@ -222,7 +222,7 @@
                                                                                             </div>
                                                                                             <div class="col-md-4 col-lg-3"> 
                                                                                                 <div class="form-group check-box-info">
-                                                                                                    <input class="check-box-primary-account" type="checkbox" id="primaryAccount" name="primaryAccount" value="1">
+                                                                                                    <input class="check-box-primary-account primaryAcCheck" type="checkbox" id="primaryAccount" name="primaryAccount" value="1" >
                                                                                                     <label for="primaryAccount"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" title="Choose the primary account holder to determine whose card covers bookings for up to two family members (e.g., Mom or Dad). All cards stored under the primary account will be available at checkout.">(i)</span></label>
                                                                                                 </div>
                                                                                             </div>
@@ -337,9 +337,12 @@
                                                                     <div id="systemMessage" class="mb-10 fs-15 mb-10"></div>
                                                                 </div>
                                                                 <div class="col-md-12 col-lg-12 text-center">
-                                                                    <button type="button" class="btn btn-red" id="register_submit" onclick="$('#clientRegistration').submit();">Add Credit Card</button><br>
+                                                                    <button type="button" class="btn btn-red register_submit" id="register_submit" onclick="getType('submit');">Add Credit Card</button>
+                                                                    <button type="button" class="btn btn-red register_submit" id="register_skip" data-type="skip" onclick="getType('skip');">Skip</button>
                                                                 </div>
                                                             </div>
+
+                                                            <input type="hidden" name="buttonType" id="buttonType" value="">
                                                         </form>
                                                     @else
                                                         <input type="hidden" id="client_secret" value="{{@$clientSecret}}">
@@ -357,8 +360,9 @@
                                                             @endif
                                                             <form id="payment-form1" data-secret="{{@$clientSecret}}">
                                                                 <div>
-                                                                    <div id="error-message1" class="alert alert-danger" role="alert" style="display: none;"></div>
                                                                     <div id="payment-element1"></div>
+
+                                                                    <div id="error-message1" class="alert alert-danger mt-10" role="alert" style="display: none;"></div>
                                                                 </div>
                                                                 <div class="text-center mt-25">
                                                                     <button class="btn btn-red mr-5" type="submit" id="submitStripe">Add on file</button>
@@ -425,7 +429,7 @@
                 event.preventDefault();
                 $('#submitStripe').text('loading...')
 
-                const {error} = await stripe1.confirmSetup({
+                const {error: error} = await stripe1.confirmSetup({
                     elements: elements1,
                     confirmParams: {
                         return_url: '{{ route('business.customers.refresh_payment_methods',['business_id' => $business_id ])}}?customer_id=' + cus_id,
@@ -525,25 +529,6 @@
                     addressBusiness: 'required',
                     cityBusiness: 'required',
                     stateBusiness: 'required',
-                    /*password: {
-                        minlength: {
-                            depends: function(element) {
-                                // Check if the password field has a value
-                                return $('#password').val().length > 0;
-                            },
-                            param: 8
-                        }
-                    },
-                    confirmpassword: {
-                        equalTo: {
-                            depends: function(element) {
-                                // Check if the password field has a value
-                                return $('#password').val().length > 0;
-                            },
-                            param: "#password"
-                        }
-                    },*/
-
                     password: {
                         required: true,
                         minlength: 8
@@ -572,13 +557,6 @@
                     stateBusiness: {
                         required: "Enter your state.",
                     },
-                    /*password: {
-                        minlength: "Password must be at least 8 characters long"
-                    },
-                    confirmpassword: {
-                        equalTo: "Passwords do not match"
-                    }*/
-
                     password:  {
                         required: 'Please enter a password',
                         minlength: 'Password must be at least 8 characters long'
@@ -618,24 +596,27 @@
                     data: formData,
                     beforeSend: function () {
                         $("#termserror").html('');
-                        $('#register_submit').prop('disabled', true).css('background','#999999');
+                        $('.register_submit').prop('disabled', true).css('background','#999999');
                         $('#systemMessage').addClass('font-red');
                         $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
                     },
                     complete: function () {
-                    
-                        $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                        $('.register_submit').prop('disabled', false).css('background','#ed1b24');
                     },
                     success: function (response) {
                        
                         if (response.type === 'success') {
-                            setTimeout(function() {
-                                var currentURL = window.location.href;
-                                window.location.href = currentURL +"?step=2&customer_id="+response.id;
-                            }, 2000);
+                            if($('#buttonType').val('skip')){
+                                window.location.href = '/business/{{$business_id}}/create-customer';
+                            }else{
+                                setTimeout(function() {
+                                    var currentURL = window.location.href;
+                                    window.location.href = currentURL +"?step=2&customer_id="+response.id;
+                                }, 2000);
+                            }
                         } else {
                              $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                            $('.register_submit').prop('disabled', false).css('background','#ed1b24');
                         }
                     }
                 });
@@ -645,12 +626,22 @@
     </script>
 
     <script>
-
         flatpickr('.add-client-birthdate',{
             altInput: true,
             altFormat: "m/d/Y",
             dateFormat: "Y-m-d",
             maxDate: "today",
+            onChange: function(selectedDates, dateStr, instance) {
+                var age = calculateAge(dateStr);
+                if (age < 18) {
+                    $('.check-box-primary-account:first').prop('disabled', true);
+                    if ($('.check-box-primary-account:first').is(':checked')) {
+                        $('.check-box-primary-account:first').prop('checked', false);
+                    }
+                } else {
+                   $('.check-box-primary-account:first').prop('disabled', false);
+                }
+            }
         });
 
         $(document).on('focus', '#birthdate', function(e){
@@ -660,8 +651,31 @@
                 altFormat: "m/d/Y",
                 dateFormat: "Y-m-d",
                 maxDate: "today",
+                onChange: function(selectedDates, dateStr, instance) {
+                    var age = calculateAge(dateStr);
+                    if (age < 18) {
+                        $('.primaryAcCheck').prop('disabled', true);
+                        if ($('.primaryAcCheck:first').is(':checked')) {
+                            $('.primaryAcCheck:first').prop('checked', false);
+                        }
+                    } else {
+                       $('.primaryAcCheck').prop('disabled', false);
+                    }
+                }
             });
         });
+
+        function calculateAge(dateStr) {
+           var birthDate = new Date(dateStr);
+            var currentDate = new Date();
+            var age = currentDate.getFullYear() - birthDate.getFullYear();
+            var monthDiff = currentDate.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            return age;
+        }
 
         function deletediv(i){
             var cnt = $('#familycnt').val();
@@ -693,6 +707,7 @@
             re = re.replaceAll("birthday_date"+old_cnt,"birthday_date"+new_cnt);
             re = re.replaceAll("deletediv"+old_cnt,"deletediv"+new_cnt);
             re = re.replaceAll("Family Member #"+dataTxt,"Family Member #"+txtcount);
+            re = re.replaceAll("primaryAcCheck"+old_cnt,"primaryAcCheck"+new_cnt);
             var $data = $(re);
             $data.find('.check-box-info').remove();
             var modifiedData = $data[0].outerHTML;
@@ -727,6 +742,10 @@
             })
         });
 
+        function getType(type){
+            $('#buttonType').val(type);
+            $('#clientRegistration').submit();
+        }
     </script>
 @endif
 

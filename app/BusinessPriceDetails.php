@@ -24,82 +24,6 @@ class BusinessPriceDetails extends Model
      * @var array
      */
     protected $guarded = [];
-    /*protected $fillable = [
-		'business_service_id',
-        'userid',
-        'cid',
-        'serviceid',
-        'pay_chk',
-        'pay_session_type',
-        'pay_session',
-        'pay_price',
-        'pay_discountcat',
-        'pay_discounttype',
-        'pay_discount',
-        'pay_estearn',
-        'pay_setnum',
-        'pay_setduration',
-        'pay_after',
-		'fitnessity_fee',
-		'membership_type',
-        'category_id',
-        'price_title',
-        'adult_cus_weekly_price',
-        'adult_weekend_price_diff',
-        'adult_discount',
-        'adult_estearn',
-        'child_cus_weekly_price',
-        'child_weekend_price_diff',
-        'child_discount',
-        'child_estearn',
-        'infant_cus_weekly_price',
-        'infant_weekend_price_diff',
-        'infant_discount',
-        'infant_estearn',
-        'weekend_adult_estearn',
-        'weekend_infant_estearn',
-        'weekend_child_estearn',
-        'is_recurring_adult',
-        'recurring_price_adult',
-        'recurring_run_auto_pay_adult',
-        'recurring_cust_be_charge_adult',
-        'recurring_every_time_num_adult',
-        'recurring_every_time_adult',
-        'recurring_nuberofautopays_adult',
-        'recurring_happens_aftr_12_pmt_adult',
-        'recurring_client_be_charge_on_adult',
-        'recurring_first_pmt_adult',
-        'recurring_recurring_pmt_adult',
-        'recurring_total_contract_revenue_adult',
-
-        'is_recurring_child',
-        'recurring_price_child',
-        'recurring_run_auto_pay_child',
-        'recurring_cust_be_charge_child',
-        'recurring_every_time_num_child',
-        'recurring_every_time_child',
-        'recurring_nuberofautopays_child',
-        'recurring_happens_aftr_12_pmt_child',
-        'recurring_client_be_charge_on_child',
-        'recurring_first_pmt_child',
-        'recurring_recurring_pmt_child',
-        'recurring_total_contract_revenue_child',
-
-        'is_recurring_infant',
-        'recurring_price_infant',
-        'recurring_run_auto_pay_infant',
-        'recurring_cust_be_charge_infant',
-        'recurring_every_time_num_infant',
-        'recurring_every_time_infant',
-        'recurring_nuberofautopays_infant',
-        'recurring_happens_aftr_12_pmt_infant',
-        'recurring_client_be_charge_on_infant',
-        'recurring_first_pmt_infant',
-        'recurring_recurring_pmt_infant',
-        'recurring_total_contract_revenue_infant',
-        'dispaly_section'
-    ];*/
-    
 
     public function business_price_details_ages(){
         return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id');
@@ -174,4 +98,164 @@ class BusinessPriceDetails extends Model
         $date = new \DateTime($startDate);
         return $date->modify('+'.$this->pay_setnum.' '.$this->pay_setduration);
     }
+
+    public function getMembership($sDate,$eDate,$business_id){
+        return $this->UserBookingDetail()->whereDate('user_booking_details.created_at','>=',$sDate)->whereDate('user_booking_details.created_at','<=',$eDate)->get();
+    }
+
+    public function getMembershipQty($sDate,$eDate,$business_id){
+        $qty ='';
+        $sumQuantities = [ 'adult' => 0, 'child' => 0, 'infant' => 0 ];
+        foreach ($this->getMembership($sDate,$eDate,$business_id) as $m) {
+            $item = json_decode($m->qty,true);
+            foreach ($item as $type => $quantity) {
+                $sumQuantities[$type] += (int)$quantity;
+            }
+        }
+
+        foreach ($sumQuantities as $type => $sum) {
+            if($sum > 0){
+                if(!empty($qty)) {
+                    $qty .= ', ';
+                }
+                $qty .= ucfirst($type) . ': ' . $sum;
+            }
+        }
+
+        return $qty ?? 0;
+    }
+
+    public function getMembershipPrice($sDate,$eDate,$business_id){
+        $prices = [];
+        foreach ($this->getMembership($sDate, $eDate,$business_id) as $m) {
+            $item = json_decode($m->price, true);
+            foreach ($item as $key => $value) {
+                if ($value > 0 && !in_array(ucfirst($key) . ': $' . $value, $prices)) {
+                    $prices[] = ucfirst($key) . ': $' . $value;
+                }
+            }
+        }
+        return implode(', ', $prices) ?: '$0';
+    }
+
+    public function getMembershipRevenue($sDate,$eDate,$business_id){
+        $revenue = 0;
+        foreach ($this->getMembership($sDate,$eDate,$business_id) as $m) {
+            $item = json_decode($m->price,true);
+            foreach(['adult', 'child', 'infant'] as $key){
+                if(@$item[$key] > 0){
+                    $revenue += ($item[$key] ?? 0) ;
+                }
+            }
+        }
+        return $revenue;
+    }
+
+    public function getMembershipFor($sDate,$eDate,$business_id){
+       $types = [];
+        foreach ($this->getMembership($sDate,$eDate,$business_id) as $m) {
+            $item = json_decode($m->qty,true);
+            foreach(['adult', 'child', 'infant'] as $key){
+                if(@$item[$key] > 0 && !in_array(ucfirst($key), $types)){
+                    $types[] = ucfirst($key);
+                }
+            }
+        }
+       
+        return implode(', ', $types);
+    }
+
+    public function getRevenueByType($type,$sDate,$eDate,$business_id){
+        $revenue = 0;
+        foreach ($this->getMembership($sDate,$eDate,$business_id) as $m) {
+            $item = json_decode($m->price,true);
+            foreach(['adult', 'child', 'infant'] as $key){
+                if(@$item[$key] > 0 && $key == $type){
+                    $revenue += ($item[$key] ?? 0) ;
+                }
+            }
+        }
+        return $revenue;
+    } 
+
+
+    public function getRecurringMembership($sDate,$eDate,$business_id){
+        return UserBookingDetail::join('recurring as re' ,'re.booking_detail_id' ,'=','user_booking_details.id')->where(['user_booking_details.business_id'=>$business_id ,'user_booking_details.priceid'=>$this->id])->where('re.payment_number',NULL)->where('re.status','Completed')->whereDate('re.payment_on','>=',$sDate)->whereDate('re.payment_on','<=',$eDate)->orderBy('user_booking_details.membership_for')->get();
+    }
+
+    public function getRecurringMembershipQty($sDate,$eDate,$business_id){
+        $qty ='';
+        $sumQuantities = [ 'adult' => 0, 'child' => 0, 'infant' => 0 ];
+        foreach ($this->getRecurringMembership($sDate,$eDate,$business_id) as $m) {
+            $item = json_decode($m->qty,true);
+            foreach ($item as $type => $quantity) {
+                $sumQuantities[$type] += (int)$quantity;
+            }
+        }
+
+        foreach ($sumQuantities as $type => $sum) {
+            if($sum > 0){
+                if(!empty($qty)) {
+                    $qty .= ', ';
+                }
+                $qty .= ucfirst($type) . ': ' . $sum;
+            }
+        }
+
+        return $qty ?? 0;
+    }
+
+    public function getRecurringMembershipPrice($sDate,$eDate,$business_id){
+        $prices = [];
+        foreach ($this->getRecurringMembership($sDate, $eDate,$business_id) as $m) {
+            $item = json_decode($m->price, true);
+            foreach ($item as $key => $value) {
+                if ($value > 0 && !in_array(ucfirst($key) . ': $' . $value, $prices)) {
+                    $prices[] = ucfirst($key) . ': $' . $value;
+                }
+            }
+        }
+        return implode(', ', $prices) ?: '$0';
+    }
+
+    public function getRecurringMembershipRevenue($sDate,$eDate,$business_id){
+        $revenue = 0;
+        foreach ($this->getRecurringMembership($sDate,$eDate,$business_id) as $m) {
+            $item = json_decode($m->price,true);
+            foreach(['adult', 'child', 'infant'] as $key){
+                if(@$item[$key] > 0){
+                    $revenue += ($item[$key] ?? 0) ;
+                }
+            }
+        }
+        return $revenue;
+    }
+
+    public function getRecurringMembershipFor($sDate,$eDate,$business_id){
+       $types = [];
+        foreach ($this->getRecurringMembership($sDate,$eDate,$business_id) as $m) {
+            $item = json_decode($m->qty,true);
+            foreach(['adult', 'child', 'infant'] as $key){
+                if(@$item[$key] > 0 && !in_array(ucfirst($key), $types)){
+                    $types[] = ucfirst($key);
+                }
+            }
+        }
+       
+        return implode(', ', $types);
+    }
+
+    public function getRecurringRevenueByType($type,$sDate,$eDate,$business_id){
+        $revenue = 0;
+        foreach ($this->getRecurringMembership($sDate,$eDate,$business_id) as $m) {
+            $item = json_decode($m->price,true);
+            foreach(['adult', 'child', 'infant'] as $key){
+                if(@$item[$key] > 0 && $key == $type){
+                    $revenue += ($item[$key] ?? 0) ;
+                }
+            }
+        }
+        return $revenue;
+    }
+
 }

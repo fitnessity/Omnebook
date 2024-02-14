@@ -5872,9 +5872,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   background-color: rgba(var(--vz-primary-rgb),var(--vz-bg-opacity)) !important;
 }
 
-
-
-
 /* activity scheduler */
 
 .col-md-offset-3-custom {
@@ -6645,13 +6642,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .fit-widget-container-banner p{
   font-size: 16px;
 }
-.page-heading span{
+.page-subheading span{
   padding: 4px 0px;
   margin-top: 10px;
-  font-size: 19px;
+  font-size: 16px;
   font-weight: 500;
   color: #000;
-  text-transform: uppercase;
+  text-transform: capitalize;
 }
 .check-in-profile img{
   max-width: 165px;
@@ -6662,8 +6659,66 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   font-weight: 600;
 }
 .space-btw{
-  margin-top: 70px;
+  margin-top: 40px;
 }
 .p-tb-10{
   padding: 10px 0;
 }
+.modal-40{
+  max-width: 40%; 
+}
+.marge-customer-f-text{
+  color: #ea1515 !important;
+  font-size: 15px !important;
+}
+.fs-26{
+  font-size: 26px;
+}
+.bg-soft-grey{
+  background-color: rgba(230, 230, 230, 0.18) !important;
+}
+
+
+
+/* Picker */
+.pickesettings {
+  display: flex;
+  overflow: hidden;
+  border-radius: 6px;
+  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* Picker focus ring */
+.pickesettings:focus-within {
+  outline: 1px dotted #212121;
+  outline: 5px auto -webkit-focus-ring-color;
+}
+
+/* Inputs */
+.pickesettings input {
+  height: 40px;
+  border: none;
+  outline: 0;
+}
+
+/* Text field */
+.pickesettings input[type="text"] {
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Color picker */
+.pickesettings input[type="color"] {
+  width: 50px;
+  -webkit-appearance: none;
+}
+
+.pickesettings input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.pickesettings input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+

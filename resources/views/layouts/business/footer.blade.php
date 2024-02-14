@@ -382,6 +382,9 @@
     <script src="{{asset('/public/dashboard-design/filepond/filepond-plugin-file-encode.min.js')}}"></script>
 
     <script src="{{asset('/public/dashboard-design/js/form-file-upload.init.js')}}"></script> 
+
+    <script src="{{asset('/public/dashboard-design/js/password-addon.init.js')}}"></script> 
+    
  <!-- new design end -->
 
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>owl.js"></script>

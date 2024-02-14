@@ -20,7 +20,7 @@ class Customer extends Authenticatable
         parent::boot();
 
         self::creating(function($model){
-            $fitnessity_user = User::where('email', $model->email)->first();
+            $fitnessity_user = User::where(['email' => $model->email,'firstname' => $model->fname ,'lastname' => $model->lname])->first();
             if($fitnessity_user){
                 $model->user_id = $fitnessity_user->id;
             }
@@ -83,7 +83,25 @@ class Customer extends Authenticatable
 
 
     public function stripePaymentMethods(){
-        return StripePaymentMethod::whereRaw('((user_type = "User" and user_id = ?) or (user_type = "Customer" and user_id = ?))', [$this->user_id, $this->id]);
+
+        if($this->request_status == 1){
+            $ids = Customer::where('user_id',$this->user_id)->pluck('id')->toArray();
+
+            /*return StripePaymentMethod::whereRaw('((user_type = "User" and user_id = ?) or (user_type = "Customer" and user_id IN (?)))', [$this->user_id, $ids ]);*/
+
+            return StripePaymentMethod::where(function ($query) use ($ids) {
+                $query->where(function ($subquery) {
+                    $subquery->where('user_type', 'User')
+                        ->where('user_id', $this->user_id);
+                })->orWhere(function ($subquery) use ($ids) {
+                    $subquery->where('user_type', 'Customer')
+                        ->whereIn('user_id', $ids);
+                });
+            });
+
+        }else{
+            return StripePaymentMethod::whereRaw('((user_type = "User" and user_id = ?) or (user_type = "Customer" and user_id = ?))', [$this->user_id, $this->id]);
+        }
     }
 
     public function getProfilePicUrlAttribute()
@@ -282,21 +300,28 @@ class Customer extends Authenticatable
 
     function create_stripe_customer_id(){
 	   if( !empty($this->email) && $this->email != 'N/A' && $this->email != '-' &&  $this->stripe_customer_id == ''){
-            $FndCustomer = Customer::where(['fname' => $this->fname, 'lname' => $this->lname,'email' => $this->email])->whereNotNull('stripe_customer_id')->where('id', '!=', $this->id)->first();
+            $FndCustomer =  Customer::whereRaw('LOWER(fname) = ? AND LOWER(lname) = ?', [strtolower($this->fname), strtolower($this->lname)])->where(['email' => $this->email])->whereNotNull('stripe_customer_id')->where('id', '!=', $this->id)->first();
             if($FndCustomer == ''){
-                try {
-                    \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-                    $customer = \Stripe\Customer::create([
-                        'name' => $this->fname . ' '. $this->lname,
-                        'email'=> $this->email,
-                    ]);
-                    $this->stripe_customer_id = $customer->id;
+                $user = User::where(['firstname' => $this->fname, 'lastname' =>$this->lname, 'email' => $this->email])->first();
+                if($user){
+                    $this->stripe_customer_id = $user->stripe_customer_id;
                     $this->save();
-            
-                    return $customer->id;
-                    
-                } catch (Exception $e) {
-                    return '';
+                     return $customer->id;
+                }else{
+                    try {
+                        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+                        $customer = \Stripe\Customer::create([
+                            'name' => $this->fname . ' '. $this->lname,
+                            'email'=> $this->email,
+                        ]);
+                        $this->stripe_customer_id = $customer->id;
+                        $this->save();
+                
+                        return $customer->id;
+                        
+                    } catch (Exception $e) {
+                        return '';
+                    }
                 }
             }else{
                 $this->stripe_customer_id = $FndCustomer->stripe_customer_id;

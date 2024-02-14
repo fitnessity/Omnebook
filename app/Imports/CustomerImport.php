@@ -59,17 +59,20 @@ class CustomerImport implements ToModel,ToCollection, WithStartRow, WithChunkRea
     }
 
     public function model(array $row){
-        return new Customer([
-            'lname' => $row[0],
-            'fname' => $row[1],
-            'address' => $row[4],
-            'city' => $row[5],
-            'state' => $row[6],
-            'zipcode' => $row[7],
-            'country' => $row[8],
-            'email' => $row[12],
-            'phone_number' => $row[9],
-        ]);
+
+        if(Customer::where(['email'=>$row[12]])->first() == ''){
+            return new Customer([
+                'lname' => $row[0],
+                'fname' => $row[1],
+                'address' => $row[4],
+                'city' => $row[5],
+                'state' => $row[6],
+                'zipcode' => $row[7],
+                'country' => $row[8],
+                'email' => $row[12],
+                'phone_number' => $row[9],
+            ]);
+        }
     }
 
     public function chunkSize(): int

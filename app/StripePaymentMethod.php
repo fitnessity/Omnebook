@@ -38,6 +38,10 @@ class StripePaymentMethod extends Model
         return $this->belongsTo(Customer::class,'user_id');
     }
 
+    public function User(){
+        return $this->belongsTo(User::class,'user_id');
+    }
+
     public function checkCardValidity($id, $method)
     {
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));

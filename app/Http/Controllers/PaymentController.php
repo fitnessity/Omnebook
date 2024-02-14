@@ -175,6 +175,7 @@ class PaymentController extends Controller {
                                 $stripe_charged_amount = number_format($transactionstatus->amount,2);
                                 $paymentDate = $date->format('Y-m-d');
                                 $status = 'Completed';
+                                $payment_number = '1';
                             }else{
                                 $Chk = explode(" ",$reCharge);
                                 $timeChk = @$Chk[1];
@@ -189,6 +190,7 @@ class PaymentController extends Controller {
                                     $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
                                 }
                                 $status = 'Scheduled';
+                                $payment_number = NULL;
                             } 
 
                             $recurring = array(
@@ -203,6 +205,7 @@ class PaymentController extends Controller {
                                 'stripe_payment_id'=> $stripe_id,
                                 "tax" => $tax_recurring ,
                                 "status" => $status,
+                                "payment_number" => $payment_number,
                             );
                             Recurring::create($recurring);
                         }
@@ -496,6 +499,7 @@ class PaymentController extends Controller {
                                 $stripe_charged_amount = number_format($transactionstatus->amount,2);
                                 $paymentDate = $date->format('Y-m-d');
                                 $status = 'Completed';
+                                 $payment_number = '1';
                             }else{
                                 $Chk = explode(" ",$reCharge);
                                 $timeChk = @$Chk[1];
@@ -510,6 +514,7 @@ class PaymentController extends Controller {
                                     $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
                                 }
                                 $status = 'Scheduled';
+                                $payment_number = NULL;
                             } 
 
                             $recurring = array(
@@ -655,7 +660,7 @@ class PaymentController extends Controller {
 
                 $user->update(['default_card'=>$payment_method['card']['last4']]);
                 
-                $customer = Customer::where(['fname' =>$user->firstname,'lname' =>$user->lastname, 'email' => $user->email])->get();
+                /*$customer = Customer::where(['fname' =>$user->firstname,'lname' =>$user->lastname, 'email' => $user->email])->get();
 
                 if ($stripePaymentMethod->wasRecentlyCreated && !empty($customer) ) {
                   
@@ -672,7 +677,7 @@ class PaymentController extends Controller {
                         ]);
 
                     }
-                }
+                }*/
             }
         }
         if($request->return_url)

@@ -13,14 +13,16 @@
                         <div class="row mb-3">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								<div class="page-heading">
-									<label class="mb-0">Check-in Portal </label>
-									<span>Good 11:00, Ankita Patel</span>
+									<label class="mb-15">Check-in Portal </label>
 								</div>
-								<div class="page-heading">
-									<span>Date: 1/2/2024 Current Time: 5:15:17 PM</span>
+								<div class="page-subheading">
+									<span>Good Morning, Ankita Patel</span>
 								</div>
-								<div class="page-heading">
-									<span>Check-in to or see what's needs on your account with Fitnessity</span>
+								<div class="page-subheading">
+									<span>Date & Time: 1/2/2024, 5:15:17 PM</span>
+								</div>
+								<div class="page-subheading">
+									<span>Check-In. You can also quick check alerts and news from Fitnessity</span>
 								</div>
 							</div>
 							
@@ -89,10 +91,31 @@
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="text-center">
-                                                    <label class="fs-15">Announcements</label>
-                                                    <div>
-                                                        <button type="button" class="btn btn-red">View</button>
-                                                    </div>
+                                                    <label class="fs-15">Money Owed</label>
+													<div class="row y-middle">
+														<div class="col-lg-8 col-md-8 col-8">
+															<div class="mb-15">
+																<span>1. Missed Payment for $40</span>
+															</div>
+														</div>
+														<div class="col-lg-4 col-md-4 col-4">
+															<div class="mb-15">
+																<button type="button" class="btn btn-red"  data-bs-toggle="modal" data-bs-target="#payment-view">View</button>
+															</div>
+														</div>
+													</div>
+													<div class="row y-middle">
+														<div class="col-lg-8 col-md-8 col-8">
+															<div class="mb-15">
+																<span>2. Missed Payment for $150</span>
+															</div>
+														</div>
+														<div class="col-lg-4 col-md-4 col-4">
+															<div class="mb-15">
+																<button type="button" class="btn btn-red"  data-bs-toggle="modal" data-bs-target="#payment-view">View</button>
+															</div>
+														</div>
+													</div>
                                                 </div>                                                
                                             </div>
                                         </div>
@@ -1519,9 +1542,437 @@
                                                 <!-- end tab pane -->
 
                                                 <div class="tab-pane" id="productnav-published" role="tabpanel">
-                                                    <div class="py-4 text-center">
-                                                        <button type="button" class="btn btn-red fs-15 btn-w-130 mt-30" data-bs-toggle="modal" data-bs-target="#bookmodal">Book</button>
-                                                    </div>
+													<div class="row">
+														<div class="col-md-12 col-xs-12 ">
+															<div class="activity-schedule-tabs">
+																<ul class="nav nav-tabs" role="tablist">
+																	<li class="active">
+																		<a class="nav-link" href="#" aria-expanded="true"> ALL </a>
+																	</li>
+																	<li>
+																		<a class="nav-link" href="#" aria-expanded="true"> CLASSES </a>
+																	</li>
+																	<li>
+																		<a class="nav-link" href="#" aria-expanded="true"> PRIVATE LESSONS </a>
+																	</li>
+																	<li>
+																		<a class="nav-link" href="#" aria-expanded="true"> EVENTS </a>
+																	</li>
+																	<li>
+																		<a class="nav-link" href="#" aria-expanded="true"> EXPERIENCE </a>
+																	</li>
+																</ul>
+																<div class="tab-content">
+																	<div class="tab-pane  active " id="tabs-all" role="tabpanel">
+																		<div class="row">
+																			<div class="col-md-12 col-sm-12 col-xs-12 text-right">
+																				<div class="calendar-icon">
+																					<input type="text" name="date" class="date datepicker hasDatepicker" readonly="" placeholder="DD/MM/YYYY" id="dp1706696183062"><img class="ui-datepicker-trigger" src="/public/img/calendar-icon.png" alt="Select date" title="Select date">
+																				</div>
+																			</div>
+																		</div>
+																		<div class="row">
+																			<div class="owl-carousel owl-theme schedulers-arrows owl-loaded owl-drag">			
+																				<div class="item">
+																					<div class="pairets">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-01-31" class="calendar-btn">Wed 31</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-01" class="calendar-btn">Thu 01</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-02" class="calendar-btn">Fri 02</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-03" class="calendar-btn">Sat 03</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-04" class="calendar-btn">Sun 04</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-05" class="calendar-btn">Mon 05</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-06" class="calendar-btn">Tue 06</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-07" class="calendar-btn">Wed 07</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-08" class="calendar-btn">Thu 08</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-09" class="calendar-btn">Fri 09</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-10" class="calendar-btn">Sat 10</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-11" class="calendar-btn">Sun 11</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-12" class="calendar-btn">Mon 12</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-13" class="calendar-btn">Tue 13</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-14" class="calendar-btn">Wed 14</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-15" class="calendar-btn">Thu 15</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-16" class="calendar-btn">Fri 16</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-17" class="calendar-btn">Sat 17</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-18" class="calendar-btn">Sun 18</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-19" class="calendar-btn">Mon 19</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-20" class="calendar-btn">Tue 20</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-21" class="calendar-btn">Wed 21</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-22" class="calendar-btn">Thu 22</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-23" class="calendar-btn">Fri 23</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-24" class="calendar-btn">Sat 24</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-25" class="calendar-btn">Sun 25</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-26" class="calendar-btn">Mon 26</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-27" class="calendar-btn">Tue 27</a>
+																					</div>
+																				</div>
+																				<div class="item">
+																					<div class="pairets-inviable">
+																						<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-28" class="calendar-btn">Wed 28</a>
+																					</div>
+																				</div>
+																			</div>										
+																		</div>
+																	</div>
+																	<div class="tab-data">
+																		<div class="row">
+																			<div class="col-md-4 col-sm-4 col-xs-12">
+																				<div class="checkout-sapre-tor"></div>
+																			</div>
+																			<div class="col-md-4 col-sm-4 col-xs-12 valor-mix-title">
+																				<label>Activities on Wednesday, January 31</label>
+																			</div>
+																			<div class="col-md-4 col-sm-4 col-xs-12">
+																				<div class="checkout-sapre-tor"></div>
+																			</div>
+																		</div>
+																		<div class="activity-tabs">
+																			<div class="row">
+																				<div class="col-md-6 col-sm-6 col-xs-12">
+																					<div class="classes-info text-left">
+																						<div class="row">
+																							<div class="col-md-12 col-xs-12">
+																								<label class="fs-16">Category Name: </label> <span class="fs-16">Private Lessons Recurring Options</span>
+																							</div>
+																							<div class="col-md-12 col-xs-12 ">
+																								<label>Program Name: </label> <span> Love Tennis</span>
+																							</div>
+																							<div class="col-md-12 col-xs-12">
+																								<div class="text-left line-height-1">
+																									<label>Activity: </label> <span> Tennis</span>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-md-6 col-sm-6 col-xs-12">
+																					<div class="row">
+																						<div class="col-md-4 col-sm-5 col-xs-12">
+																							<div class="classes-time">
+																								<button class="post-btn post-btn-gray activity-scheduler" onclick="openPopUp(1173 , 158 ,'Kickboxing All Levels','01:15 am',1,'429');">01:15 am <br>1 hr</button>
+																								<label>2/2  Spots Left</label>
+																								<label>Mr. Phipps</label>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-md-12 col-xs-12">
+																					<div class="checkout-sapre-tor"></div>
+																				</div>
+																			</div> 
+																			<div class="row">
+																				<div class="col-md-6 col-sm-6 col-xs-12">
+																					<div class="classes-info text-left">
+																						<div class="row">
+																							<div class="col-md-12 col-xs-12">
+																								<label class="fs-16">Category Name: </label> <span class="fs-16">global acdamy</span>
+																							</div>
+																							<div class="col-md-12 col-xs-12 ">
+																								<label>Program Name: </label> <span> Go Golfers</span>
+																							</div>
+																							<div class="col-md-12 col-xs-12">
+																								<div class="text-left line-height-1">
+																									<label>Activity: </label> <span> Golf</span>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-md-6 col-sm-6 col-xs-12">
+																					<div class="row">
+																						<div class="col-md-4 col-sm-5 col-xs-12">
+																							<div class="classes-time">
+																								<button class="post-btn post-btn-gray activity-scheduler" onclick="openPopUp(1125 , 158 ,'Kickboxing All Levels','02:30 am',1,'364');">02:30 am <br>1 hr</button>
+																								<label>5/5  Spots Left</label>
+																								<label>Franecki Ardella, Discover Test</label>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-md-12 col-xs-12">
+																					<div class="checkout-sapre-tor"></div>
+																				</div>
+																			</div> 
+																			<div class="row">
+																				<div class="col-md-6 col-sm-6 col-xs-12">
+																					<div class="classes-info text-left">
+																						<div class="row">
+																							<div class="col-md-12 col-xs-12">
+																								<label class="fs-16">Category Name: </label> <span class="fs-16">1st river rafting</span>
+																							</div>
+																							<div class="col-md-12 col-xs-12 ">
+																								<label>Program Name: </label> <span> River Rafting</span>
+																							</div>
+																							<div class="col-md-12 col-xs-12">
+																								<div class="text-left line-height-1">
+																									<label>Activity: </label> <span> Rafting</span>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-md-6 col-sm-6 col-xs-12">
+																					<div class="row">
+																						<div class="col-md-4 col-sm-5 col-xs-12">
+																							<div class="classes-time">
+																								<button class="post-btn post-btn-gray activity-scheduler" onclick="openPopUp(1144 , 158 ,'Kickboxing All Levels','04:30 am',1,'384');">04:30 am <br>1 hr</button>
+																								<label>2/2  Spots Left</label>
+																								<label></label>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-md-12 col-xs-12">
+																					<div class="checkout-sapre-tor"></div>
+																				</div>
+																			</div> 
+																			<div class="row">
+																				<div class="col-md-6 col-sm-6 col-xs-12">
+																					<div class="classes-info text-left">
+																						<div class="row">
+																							<div class="col-md-12 col-xs-12">
+																								<label class="fs-16">Category Name: </label> <span class="fs-16">Private Lessons 30 Min. (1 Person)</span>
+																							</div>
+																							<div class="col-md-12 col-xs-12 ">
+																								<label>Program Name: </label> <span> Bucephalus Riding and Polo Club1</span>
+																							</div>
+																							<div class="col-md-12 col-xs-12">
+																								<div class="text-left line-height-1">
+																									<label>Activity: </label> <span> Horseback Riding</span>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-md-6 col-sm-6 col-xs-12">
+																					<div class="row">
+																						<div class="col-md-4 col-sm-5 col-xs-12">
+																							<div class="classes-time">
+																								<button class="post-btn  activity-scheduler" onclick="openPopUp(1139 , 158 ,'Kickboxing All Levels','09:15 am',0,'387');">09:15 am <br>1 hr</button>
+																								<label>10/10  Spots Left</label>
+																								<label>jack Black, Gimmy Ttouqe</label>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-md-12 col-xs-12">
+																					<div class="checkout-sapre-tor"> </div>
+																				</div>
+																			</div> 
+
+																			<div class="row">
+																				<div class="col-md-6 col-sm-6 col-xs-12">
+																					<div class="classes-info text-left">
+																						<div class="row">
+																							<div class="col-md-12 col-xs-12">
+																								<label class="fs-16">Category Name: </label> <span class="fs-16">rock and rock12</span>
+																							</div>
+																							<div class="col-md-12 col-xs-12 ">
+																								<label>Program Name: </label> <span> Rock Climbing At USA</span>
+																							</div>
+																							<div class="col-md-12 col-xs-12">
+																								<div class="text-left line-height-1">
+																									<label>Activity: </label> <span> Rock Climbing</span>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-md-6 col-sm-6 col-xs-12">
+																					<div class="row">
+																						<div class="col-md-4 col-sm-5 col-xs-12">
+																							<div class="classes-time">
+																								<button class="post-btn  activity-scheduler" onclick="openPopUp(1127 , 158 ,'Kickboxing All Levels','09:30 am',0,'385');">09:30 am <br>1 hr</button>
+																								<label>20/20  Spots Left</label>
+																								<label></label>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-md-12 col-xs-12">
+																					<div class="checkout-sapre-tor"></div>
+																				</div>
+																			</div> 
+																			<div class="row">
+																				<div class="col-md-6 col-sm-6 col-xs-12">
+																					<div class="classes-info text-left">
+																						<div class="row">
+																							<div class="col-md-12 col-xs-12">
+																								<label class="fs-16">Category Name: </label> <span class="fs-16">Kung Fu Fun</span>
+																							</div>
+																							<div class="col-md-12 col-xs-12 ">
+																								<label>Program Name: </label> <span> Kung Fu Gym</span>
+																							</div>
+																							<div class="col-md-12 col-xs-12">
+																								<div class="text-left line-height-1">
+																									<label>Activity: </label> <span> Gymnastics</span>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-md-6 col-sm-6 col-xs-12">
+																					<div class="row">
+																						<div class="col-md-4 col-sm-5 col-xs-12">
+																							<div class="classes-time">
+																								<button class="post-btn  activity-scheduler" onclick="openPopUp(1176 , 158 ,'Kickboxing All Levels','01:00 pm',0,'409');">01:00 pm <br>2 hr</button>
+																								<label>1/1  Spots Left</label>
+																								<label>Eric Smith</label>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-md-12 col-xs-12">
+																					<div class="checkout-sapre-tor"></div>
+																				</div>
+																			</div> 
+
+																			<div class="row">
+																				<div class="col-md-6 col-sm-6 col-xs-12">
+																					<div class="classes-info text-left">
+																						<div class="row">
+																							<div class="col-md-12 col-xs-12">
+																								<label class="fs-16">Category Name: </label> <span class="fs-16">Adult Program</span>
+																							</div>
+																							<div class="col-md-12 col-xs-12 ">
+																								<label>Program Name: </label> <span> Kickboxing All Levels</span>
+																							</div>
+																							<div class="col-md-12 col-xs-12">
+																								<div class="text-left line-height-1">
+																									<label>Activity: </label> <span> Kickboxing</span>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-md-6 col-sm-6 col-xs-12">
+																					<div class="row">
+																						<div class="col-md-4 col-sm-5 col-xs-12">
+																							<div class="classes-time">
+																								<button class="post-btn  activity-scheduler" onclick="openPopUp(1175 , 158 ,'Kickboxing All Levels','08:00 pm',0,'434');">08:00 pm <br>13 hr</button>
+																								<label>1/1  Spots Left</label>
+																								<label>Discover Test</label>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-md-12 col-xs-12">
+																					<div class="checkout-sapre-tor"></div>
+																				</div>
+																			</div> 
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
                                                 </div>
                                                 <!-- end tab pane --> 
 
@@ -1548,448 +1999,48 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="bookmodal" tabindex="-1" aria-labelledby="bookmodalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-70">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="bookmodalLabel">View Full Schedule </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12 col-xs-12 ">
-				        <div class="activity-schedule-tabs">
-						    <ul class="nav nav-tabs" role="tablist">
-							    <li class="active">
-								    <a class="nav-link" href="#" aria-expanded="true"> ALL </a>
-							    </li>
-							    <li>
-								    <a class="nav-link" href="#" aria-expanded="true"> CLASSES </a>
-								</li>
-							    <li>
-								    <a class="nav-link" href="#" aria-expanded="true"> PRIVATE LESSONS </a>
-							    </li>
-								<li>
-								    <a class="nav-link" href="#" aria-expanded="true"> EVENTS </a>
-								</li>
-							    <li>
-								    <a class="nav-link" href="#" aria-expanded="true"> EXPERIENCE </a>
-							    </li>
-						    </ul>
-						    <div class="tab-content">
-							    <div class="tab-pane  active " id="tabs-all" role="tabpanel">
-								    <div class="row">
-									    <div class="col-md-12 col-sm-12 col-xs-12 text-right">
-										    <div class="calendar-icon">
-											    <input type="text" name="date" class="date datepicker hasDatepicker" readonly="" placeholder="DD/MM/YYYY" id="dp1706696183062"><img class="ui-datepicker-trigger" src="/public/img/calendar-icon.png" alt="Select date" title="Select date">
-										    </div>
-									    </div>
-								    </div>
-							        <div class="row">
-									    <div class="owl-carousel owl-theme schedulers-arrows owl-loaded owl-drag">			
-                                            <div class="item">
-											    <div class="pairets">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-01-31" class="calendar-btn">Wed 31</a>
-										        </div>
-										    </div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-01" class="calendar-btn">Thu 01</a>
-											    </div>
-									        </div>
-											<div class="item">
-												<div class="pairets-inviable">
-											        <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-02" class="calendar-btn">Fri 02</a>
-											    </div>
-											</div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-03" class="calendar-btn">Sat 03</a>
-											    </div>
-										    </div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-04" class="calendar-btn">Sun 04</a>
-											    </div>
-										    </div>
-											<div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-05" class="calendar-btn">Mon 05</a>
-											    </div>
-										    </div>
-											<div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-06" class="calendar-btn">Tue 06</a>
-											    </div>
-											</div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-07" class="calendar-btn">Wed 07</a>
-										        </div>
-											</div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-08" class="calendar-btn">Thu 08</a>
-											    </div>
-											</div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-09" class="calendar-btn">Fri 09</a>
-										        </div>
-										    </div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-10" class="calendar-btn">Sat 10</a>
-											    </div>
-											</div>
-									        <div class="item">
-										        <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-11" class="calendar-btn">Sun 11</a>
-											    </div>
-										    </div>
-											<div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-12" class="calendar-btn">Mon 12</a>
-										        </div>
-										    </div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-13" class="calendar-btn">Tue 13</a>
-											    </div>
-										    </div>
-											<div class="item">
-											    <div class="pairets-inviable">
-													<a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-14" class="calendar-btn">Wed 14</a>
-											    </div>
-											</div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-15" class="calendar-btn">Thu 15</a>
-											    </div>
-										    </div>
-											<div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-16" class="calendar-btn">Fri 16</a>
-											    </div>
-										    </div>
-										    <div class="item">
-												<div class="pairets-inviable">
-											        <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-17" class="calendar-btn">Sat 17</a>
-											    </div>
-										    </div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-18" class="calendar-btn">Sun 18</a>
-												</div>
-										    </div>
-									        <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-19" class="calendar-btn">Mon 19</a>
-											    </div>
-										    </div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-20" class="calendar-btn">Tue 20</a>
-											    </div>
-										    </div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-21" class="calendar-btn">Wed 21</a>
-											    </div>
-											</div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-22" class="calendar-btn">Thu 22</a>
-											    </div>
-										    </div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-23" class="calendar-btn">Fri 23</a>
-											    </div>
-										    </div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-24" class="calendar-btn">Sat 24</a>
-										        </div>
-										    </div>
-									        <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-25" class="calendar-btn">Sun 25</a>
-										        </div>
-										    </div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-26" class="calendar-btn">Mon 26</a>
-											    </div>
-										    </div>
-											<div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-27" class="calendar-btn">Tue 27</a>
-											    </div>
-										    </div>
-										    <div class="item">
-											    <div class="pairets-inviable">
-												    <a href="http://dev.fitnessity.co/business_activity_schedulers/68?date=2024-02-28" class="calendar-btn">Wed 28</a>
-                                                </div>
-										    </div>
-                                        </div>										
-                                     </div>
-						        </div>
-							  	<div class="tab-data">
-								    <div class="row">
-									    <div class="col-md-4 col-sm-4 col-xs-12">
-										    <div class="checkout-sapre-tor"></div>
-									    </div>
-								        <div class="col-md-4 col-sm-4 col-xs-12 valor-mix-title">
-									        <label>Activities on Wednesday, January 31</label>
-							            </div>
-								        <div class="col-md-4 col-sm-4 col-xs-12">
-									        <div class="checkout-sapre-tor"></div>
-								        </div>
-							        </div>
-						            <div class="activity-tabs">
-                                        <div class="row">
-										    <div class="col-md-6 col-sm-6 col-xs-12">
-											    <div class="classes-info text-left">
-												    <div class="row">
-													    <div class="col-md-12 col-xs-12">
-														    <label class="fs-16">Category Name: </label> <span class="fs-16">Private Lessons Recurring Options</span>
-												        </div>
-													    <div class="col-md-12 col-xs-12 ">
-														    <label>Program Name: </label> <span> Love Tennis</span>
-													    </div>
-													    <div class="col-md-12 col-xs-12">
-														    <div class="text-left line-height-1">
-															    <label>Activity: </label> <span> Tennis</span>
-														    </div>
-													    </div>
-												    </div>
-											    </div>
-										    </div>
-										    <div class="col-md-6 col-sm-6 col-xs-12">
-											    <div class="row">
-                                                    <div class="col-md-4 col-sm-5 col-xs-12">
-													    <div class="classes-time">
-														    <button class="post-btn post-btn-gray activity-scheduler" onclick="openPopUp(1173 , 158 ,'Kickboxing All Levels','01:15 am',1,'429');">01:15 am <br>1 hr</button>
-														    <label>2/2  Spots Left</label>
-                                                            <label>Mr. Phipps</label>
-														</div>
-												    </div>
-                                                </div>
-										    </div>
-											<div class="col-md-12 col-xs-12">
-											    <div class="checkout-sapre-tor"></div>
-											</div>
-										</div> 
-										<div class="row">
-									        <div class="col-md-6 col-sm-6 col-xs-12">
-											    <div class="classes-info text-left">
-												    <div class="row">
-													    <div class="col-md-12 col-xs-12">
-														    <label class="fs-16">Category Name: </label> <span class="fs-16">global acdamy</span>
-													    </div>
-													    <div class="col-md-12 col-xs-12 ">
-													        <label>Program Name: </label> <span> Go Golfers</span>
-													    </div>
-												        <div class="col-md-12 col-xs-12">
-														    <div class="text-left line-height-1">
-															    <label>Activity: </label> <span> Golf</span>
-														    </div>
-													    </div>
-												    </div>
-											    </div>
-											</div>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-											    <div class="row">
-                                                    <div class="col-md-4 col-sm-5 col-xs-12">
-													    <div class="classes-time">
-														    <button class="post-btn post-btn-gray activity-scheduler" onclick="openPopUp(1125 , 158 ,'Kickboxing All Levels','02:30 am',1,'364');">02:30 am <br>1 hr</button>
-														    <label>5/5  Spots Left</label>
-														    <label>Franecki Ardella, Discover Test</label>
-													    </div>
-												    </div>
-                                                </div>
-                                            </div>
-										    <div class="col-md-12 col-xs-12">
-											    <div class="checkout-sapre-tor"></div>
-											</div>
-								        </div> 
-                                        <div class="row">
-									        <div class="col-md-6 col-sm-6 col-xs-12">
-											    <div class="classes-info text-left">
-												    <div class="row">
-													    <div class="col-md-12 col-xs-12">
-														    <label class="fs-16">Category Name: </label> <span class="fs-16">1st river rafting</span>
-													    </div>
-													    <div class="col-md-12 col-xs-12 ">
-														    <label>Program Name: </label> <span> River Rafting</span>
-												        </div>
-													    <div class="col-md-12 col-xs-12">
-														    <div class="text-left line-height-1">
-															    <label>Activity: </label> <span> Rafting</span>
-													        </div>
-													    </div>
-											        </div>
-												</div>
-											</div>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-											    <div class="row">
-                                                    <div class="col-md-4 col-sm-5 col-xs-12">
-													    <div class="classes-time">
-														    <button class="post-btn post-btn-gray activity-scheduler" onclick="openPopUp(1144 , 158 ,'Kickboxing All Levels','04:30 am',1,'384');">04:30 am <br>1 hr</button>
-													        <label>2/2  Spots Left</label>
-														    <label></label>
-													    </div>
-												    </div>
-                                                </div>
-										    </div>
-											<div class="col-md-12 col-xs-12">
-												<div class="checkout-sapre-tor"></div>
-									        </div>
-									    </div> 
-                                        <div class="row">
-									        <div class="col-md-6 col-sm-6 col-xs-12">
-											    <div class="classes-info text-left">
-												    <div class="row">
-													    <div class="col-md-12 col-xs-12">
-														    <label class="fs-16">Category Name: </label> <span class="fs-16">Private Lessons 30 Min. (1 Person)</span>
-													    </div>
-											            <div class="col-md-12 col-xs-12 ">
-														    <label>Program Name: </label> <span> Bucephalus Riding and Polo Club1</span>
-												        </div>
-													    <div class="col-md-12 col-xs-12">
-														    <div class="text-left line-height-1">
-															    <label>Activity: </label> <span> Horseback Riding</span>
-													        </div>
-													    </div>
-											        </div>
-											    </div>
-										    </div>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-											    <div class="row">
-                                                    <div class="col-md-4 col-sm-5 col-xs-12">
-													    <div class="classes-time">
-														    <button class="post-btn  activity-scheduler" onclick="openPopUp(1139 , 158 ,'Kickboxing All Levels','09:15 am',0,'387');">09:15 am <br>1 hr</button>
-														    <label>10/10  Spots Left</label>
-                                                            <label>jack Black, Gimmy Ttouqe</label>
-													    </div>
-												    </div>
-                                                </div>
-											</div>
-									        <div class="col-md-12 col-xs-12">
-											    <div class="checkout-sapre-tor"> </div>
-											</div>
-							            </div> 
-
-                                        <div class="row">
-										    <div class="col-md-6 col-sm-6 col-xs-12">
-											    <div class="classes-info text-left">
-													<div class="row">
-													    <div class="col-md-12 col-xs-12">
-														    <label class="fs-16">Category Name: </label> <span class="fs-16">rock and rock12</span>
-													    </div>
-													    <div class="col-md-12 col-xs-12 ">
-														    <label>Program Name: </label> <span> Rock Climbing At USA</span>
-													    </div>
-													    <div class="col-md-12 col-xs-12">
-														    <div class="text-left line-height-1">
-														        <label>Activity: </label> <span> Rock Climbing</span>
-														    </div>
-												        </div>
-												    </div>
-											    </div>
-											</div>
-										    <div class="col-md-6 col-sm-6 col-xs-12">
-											    <div class="row">
-                                                    <div class="col-md-4 col-sm-5 col-xs-12">
-													    <div class="classes-time">
-														    <button class="post-btn  activity-scheduler" onclick="openPopUp(1127 , 158 ,'Kickboxing All Levels','09:30 am',0,'385');">09:30 am <br>1 hr</button>
-														    <label>20/20  Spots Left</label>
-                                                            <label></label>
-													    </div>
-												    </div>
-                                                </div>
-									        </div>
-										    <div class="col-md-12 col-xs-12">
-											    <div class="checkout-sapre-tor"></div>
-										    </div>
-									    </div> 
-                                        <div class="row">
-										    <div class="col-md-6 col-sm-6 col-xs-12">
-											    <div class="classes-info text-left">
-												    <div class="row">
-														<div class="col-md-12 col-xs-12">
-													        <label class="fs-16">Category Name: </label> <span class="fs-16">Kung Fu Fun</span>
-													    </div>
-													    <div class="col-md-12 col-xs-12 ">
-														    <label>Program Name: </label> <span> Kung Fu Gym</span>
-													    </div>
-													    <div class="col-md-12 col-xs-12">
-														    <div class="text-left line-height-1">
-															    <label>Activity: </label> <span> Gymnastics</span>
-													        </div>
-													    </div>
-											        </div>
-											    </div>
-										    </div>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-											    <div class="row">
-                                                    <div class="col-md-4 col-sm-5 col-xs-12">
-													    <div class="classes-time">
-														    <button class="post-btn  activity-scheduler" onclick="openPopUp(1176 , 158 ,'Kickboxing All Levels','01:00 pm',0,'409');">01:00 pm <br>2 hr</button>
-															<label>1/1  Spots Left</label>
-														    <label>Eric Smith</label>
-														</div>
-												    </div>
-                                                </div>
-										    </div>
-										    <div class="col-md-12 col-xs-12">
-											    <div class="checkout-sapre-tor"></div>
-									        </div>
-									    </div> 
-
-                                        <div class="row">
-										    <div class="col-md-6 col-sm-6 col-xs-12">
-										        <div class="classes-info text-left">
-											        <div class="row">
-													    <div class="col-md-12 col-xs-12">
-														    <label class="fs-16">Category Name: </label> <span class="fs-16">Adult Program</span>
-													    </div>
-										                <div class="col-md-12 col-xs-12 ">
-														    <label>Program Name: </label> <span> Kickboxing All Levels</span>
-												        </div>
-												        <div class="col-md-12 col-xs-12">
-													        <div class="text-left line-height-1">
-															    <label>Activity: </label> <span> Kickboxing</span>
-														    </div>
-													    </div>
-											        </div>
-											    </div>
-										    </div>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-											    <div class="row">
-                                                    <div class="col-md-4 col-sm-5 col-xs-12">
-													    <div class="classes-time">
-														    <button class="post-btn  activity-scheduler" onclick="openPopUp(1175 , 158 ,'Kickboxing All Levels','08:00 pm',0,'434');">08:00 pm <br>13 hr</button>
-														    <label>1/1  Spots Left</label>
-													        <label>Discover Test</label>
-													    </div>
-											        </div>
-                                                </div>
-											</div>
-										    <div class="col-md-12 col-xs-12">
-												<div class="checkout-sapre-tor"></div>
-										    </div>
-										</div> 
-                                    </div>
-							    </div>
-						    </div>
-				        </div>
-				    </div>
-			    </div>
-            </div>
-        </div>
-    </div>
+<div class="modal fade" id="payment-view" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-70">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+           		<div class="live-preview">
+            		<div class="table-responsive">
+                    	<table class="table align-middle table-nowrap mb-0">
+                        	<thead>
+                            	<tr>
+                                	<th scope="col">Payment</th>
+                                 	<th scope="col">Status</th>
+                                   	<th scope="col">Failed or Missed</th>
+                                 	<th scope="col">Failed Payment date </th>
+                                  	<th scope="col"></th>
+                              	</tr>
+                           	</thead>
+                          	<tbody>
+                            	<tr>
+                                	<th scope="row"><a href="#" class="fw-medium">Abc</a></th>
+                                 	<td>Payed</td>
+                                  	<td>-</td>
+                                  	<td>-</td>
+                                	<td><a href="javascript:void(0);" class="link-dangure">Paynow <i class="ri-arrow-right-line align-middle"></i></a></td>
+                              	</tr>
+								  <tr>
+                                	<th scope="row"><a href="#" class="fw-medium">Xyz</a></th>
+                                 	<td>Payed</td>
+                                  	<td>-</td>
+                                  	<td>-</td>
+                                	<td><a href="javascript:void(0);" class="link-dangure">Paynow <i class="ri-arrow-right-line align-middle"></i></a></td>
+                              	</tr>
+                         	</tbody>
+                       	</table>
+                 	</div>
+               	</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 

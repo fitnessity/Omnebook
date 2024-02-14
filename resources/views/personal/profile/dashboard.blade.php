@@ -122,23 +122,28 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr>
-													<th scope="row">4/5 </th>
-													<td>Kickboxing Class </td>
-													<td>02/21/2024 10:00 AM (45 Min) </td>
-													<td>Love Tennis - 45 Minute Private (5 Pack) </td>
-													<td>
-														<div class="">
-															<a class="btn btn-red" href="http://dev.fitnessity.co/design/register_ep">Check-In</a>
-														</div>
-													</td>
-													<td>
-														<div class="">
-															<a class="btn btn-red" href="http://dev.fitnessity.co/personal/orders?business_id=68">View Booking</a>
-														</div>
-													</td>
-												</tr>
-												<tr>
+												@forelse(@$classes as $c)
+													<tr>
+														<th scope="row">{{@$c->order_detail->getremainingsession()."/".@$c->order_detail->pay_session}}</th>
+														<td>{{ @$c->order_detail->business_services_with_trashed->program_name }} </td>
+														<td>{{ date('m/d/Y' ,strtotime($c->checkin_date))}}  {{ date("g:i A", strtotime(@$c->scheduler->shift_start))}} </td>
+														<td> {{ @$c->order_detail->business_price_detail_with_trashed->price_title }}</td>
+														<td>
+															<div class="">
+																<a class="btn btn-red" href="http://dev.fitnessity.co/design/register_ep">Check-In</a>
+															</div>
+														</td>
+														<td>
+															<div class="">
+																<a class="btn btn-red" href="{{ url('/personal/orders') . '?' . http_build_query(['business_id' => request()->business_id, 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}">View Booking</a>
+															</div>
+														</td>
+													</tr>
+												@empty
+													<tr><td>No Upcoming Class Available</td></tr>
+												@endforelse
+												
+												<!-- <tr>
 													<th scope="row">9991/10000 </th>
 													<td>Kickboxing Class </td>
 													<td>02/21/2024 10:00 AM (45 Min) </td>
@@ -153,7 +158,7 @@
 															<a class="btn btn-red" href="http://dev.fitnessity.co/personal/orders?business_id=68">View Booking</a>
 														</div>
 													</td>
-												</tr>
+												</tr> -->
 											</tbody>
 										</table>
 									</div>
@@ -187,7 +192,7 @@
 												</div>
 												<div class="col-md-3 col-3">
 													02/21/2024 10:00 AM (45 Min)
-													<!-- {{ date('m/d/Y' ,strtotime($c->checkin_date))}}  {{ date("g:i A", strtotime(@$c->scheduler->shift_start))}} 
+													 {{ date('m/d/Y' ,strtotime($c->checkin_date))}}  {{ date("g:i A", strtotime(@$c->scheduler->shift_start))}} 
 												</div>
 												<div class="col-md-3 col-3">
 													{{ @$c->order_detail->business_services_with_trashed->program_name }} - {{ @$c->order_detail->business_price_detail_with_trashed->price_title }}

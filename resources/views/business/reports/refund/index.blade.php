@@ -112,7 +112,7 @@
 												<div class="row justify-content-md-center">
 													<div class="col-lg-6">
 														<div class="form-group mb-10">
-															<select class="form-select" id="filterOptions" required="" data-behavior="on_change_submit">
+															<select class="form-select" id="filterOptions" required="" data-behavior="on_change_dropdown">
 																<option value="">Show All</option>
 																<option value="category" {{request()->filterOptions == 'category' ? 'selected' : ''}}>Booking By Category</option>
 																<option value="service" {{request()->filterOptions == 'service' ? 'selected' : ''}}>Booking By Service</option>
