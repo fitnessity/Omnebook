@@ -155,8 +155,33 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row justify-content-md-center">
-                                            <div class="col-lg-12">
-                                               
+                                            <div class="col-lg-6">
+                                               <div class="d-grid schedule-wid-text">
+                                                    <span>12:00 PM -12:45 PM EST</span>
+                                                    <span>Kickboxing Level 1 & 2 (Mixed Level)</span>
+                                                    <label>Bernard Seaborn</label>
+
+                                               </div>
+                                               <div>
+                                                    <a class="Show">View Details</a>
+                                                    <a class="Hideschedule">Hide Details</a>
+                                                    <div id="targetone">
+                                                        <div class="widget-sche-show">
+                                                            <h3>Address: </h3><span>2067 Broadway 7th Floor, New York NY 10023</span>
+                                                        </div>
+                                                        <div class="widget-sche-show">
+                                                            <h3>Phone: </h3><span>569874523</span>
+                                                        </div>
+                                                        <div class="widget-sche-show">
+                                                            <p>This class is for both beginner and more experienced students.</p>
+                                                        </div>
+                                                    </div>
+                                               </div>                                               
+                                            </div>
+                                            <div class="col-lg-6">
+                                               <div>
+                                                <button href="#" class="btn btn-red">Register</button>
+                                               </div>
                                             </div>
                                         </div>
                                     </div>
@@ -455,10 +480,15 @@
 
 @include('layouts.business.footer')
 <script>
-     flatpickr(".flatpicker_birthdate1", {
-        dateFormat: "m/d/Y",
-        maxDate: "01/01/2050",
-    });
-
+$('.Show').click(function() {
+    $('#targetone').show(200);
+    $('.Show').hide(0);
+    $('.Hideschedule').show(0);
+});
+$('.Hideschedule').click(function() {
+    $('#targetone').hide(500);
+    $('.Show').show(0);
+    $('.Hideschedule').hide(0);
+});
 </script>
 @endsection

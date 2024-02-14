@@ -6721,4 +6721,26 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   border: none;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
+.schedule-wid-text span{
+  font-size: 15px;
+  line-height: 22px;
+}
+.schedule-wid-text label{
+  color: #9d9d9d;
+}
 
+#targetone {
+  display:none;
+  padding: 10px 0;
+}
+
+.Hideschedule
+{
+  display:none;
+}
+.widget-sche-show h3{
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-block;
+  margin-right: 5px;
+}
