@@ -35,22 +35,73 @@
 
                                 <div id="flush-collapseBrands" class="accordion-collapse collapse show" aria-labelledby="flush-headingBrands">
                                     <div class="accordion-body text-body pt-0">
-                                        <div class="gap-2 mt-3 filter-check">
-                                            <label for="">Header Image</label>
-                                            <input class="form-control" type="file" id="formFile">
+                                        <div class="mb-25">
+                                            <div class="gap-2 mt-3 filter-check">
+                                                <label class="font-15">Color Scheme</label>
+                                            </div>
+                                            <div class="gap-2 mt-3 filter-check">                                            
+                                                <label for="">Primary</label>
+                                                <div class="col-lg-auto">
+                                                    <div class="pickesettings">
+                                                        <input type="text" autocomplete="off" spellcheck="false">
+                                                        <input type="color" value="#FFB61A">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="gap-2 mt-3 filter-check">                                            
+                                                <label for="">Secondary</label>
+                                                <div class="col-lg-auto">
+                                                    <div class="pickesettings">
+                                                        <input type="text" autocomplete="off" spellcheck="false">
+                                                        <input type="color" value="#4b38b3">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="gap-2 mt-3 filter-check">                                            
+                                                <label for="">Secondary</label>
+                                                <div class="col-lg-auto">
+                                                    <div class="pickesettings">
+                                                        <input type="text" autocomplete="off" spellcheck="false">
+                                                        <input type="color" value="#ea1515">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>            
+                                        <div class="mb-25">
+                                            <div class="gap-2 mt-3 filter-check">                                            
+                                                <label for="">Font</label>
+                                                <select class="form-select" name="know_from">
+                                                    <option Selected>Arial</option>
+                                                    <option>Calibri</option>
+                                                    <option>Cambria</option>
+                                                    <option>Monospace</option>
+                                                </select>
+                                            </div>
+                                        </div>  
+                                        <div class="mb-25">
+                                            <div class="gap-2 mt-3 filter-check">                                            
+                                                <label for="">Button Text</label>
+                                                <select class="form-select" name="know_from">
+                                                    <option Selected>Register</option>
+                                                    <option>Enroll</option>
+                                                    <option>Sign Up</option>
+                                                </select>
+                                            </div>
+                                        </div> 
+                                        <div class="mb-25">
+                                            <div class="gap-2 mt-3 filter-check">                                            
+                                                <label for="">Button Style</label>
+                                                <div>
+                                                    <input type="radio" id="html" name="fav_language" value="HTML">
+                                                    <label for="html">Text only</label><br>
+                                                    <input type="radio" id="css" name="fav_language" value="CSS">
+                                                    <label for="css">Outline</label><br>
+                                                    <input type="radio" id="javascript" name="fav_language" value="JavaScript">
+                                                    <label for="javascript">Solid</label> 
+                                                </div>                                               
+                                            </div>
                                         </div>
-                                        <div class="gap-2 mt-3 filter-check">
-                                            <label for="">Header Text</label>
-                                            <textarea class="form-control" placeholder="" id="des-info-description-input" rows="3" required=""></textarea>
-                                        </div>
-                                        <div class="gap-2 mt-3 filter-check">
-                                            <label for="">Colors</label>
-                                            <p>By not setting a color, the defaults will be used.</p>
-                                            <label for="">Text</label>
-                                            <input type="color" class="form-control form-control-color w-100 mb-15" id="colorPicker" value="#364574">
-                                            <label for="">Button Background</label>
-                                            <input type="color" class="form-control form-control-color w-100" id="colorPicker" value="#354256">
-                                         </div>
+
                                     </div>                                    
                                 </div>
                             </div>
@@ -64,12 +115,37 @@
                                 <div id="flush-collapseDiscount" class="accordion-collapse collapse" aria-labelledby="flush-headingDiscount">
                                     <div class="accordion-body text-body pt-1">
                                         <div class="gap-2 mt-3 filter-check">
-                                            <label for="">Send Email Notifications</label>
                                             <div>
-                                                <button href="#" class="btn btn-red mb-15"><i class="ri-add-line align-bottom me-1"></i> Add an email</button>  
-                                                <p>When a new registration is added or a duplicate email is detected, we will send a notification email to these addresses. </p>
+                                                <button class="btn btn-red mb-15 w-100">Select Schedule Contents</button>  
                                             </div>                                                                                  
                                         </div>
+                                        <div class="mb-25">
+                                            <div class="gap-2 mt-3 filter-check">                                            
+                                                <label for="">Main Schedule</label>
+                                                <p>Select what you'd like to show in the main view of the schedule.</p>
+                                                <div>
+                                                    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+                                                    <label for="vehicle1">Staff </label><br>
+                                                    <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+                                                    <label for="vehicle2">Class type </label><br>
+                                                    <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
+                                                    <label for="vehicle3">Class level </label><br> 
+                                                </div>                                               
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-25">
+                                            <div class="gap-2 mt-3 filter-check">                                            
+                                                <label for="">Date Range</label>
+                                                <div>
+                                                    <input type="radio" id="html" name="fav_language" value="HTML">
+                                                    <label for="html">Week </label><br>
+                                                    <input type="radio" id="css" name="fav_language" value="CSS">
+                                                    <label for="css">Day</label><br>
+                                                </div>                                               
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -77,11 +153,38 @@
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="flush-headingRating">
                                     <button class="accordion-button bg-transparent shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseRating" aria-expanded="false" aria-controls="flush-collapseRating">
-                                        <span class="text-muted text-uppercase fs-12 fw-medium">Region</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
+                                        <span class="text-muted text-uppercase fs-12 fw-medium">Filters</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
                                     </button>
                                 </h2>
 
                                 <div id="flush-collapseRating" class="accordion-collapse collapse" aria-labelledby="flush-headingRating">
+                                    <div class="accordion-body text-body">
+                                        <div class="gap-2 filter-check">
+                                            <label for="">Select a maximum of 4</label>
+                                            <div>
+                                                <input type="radio" id="html" name="fav_language" value="HTML">
+                                                <label for="html">Class </label><br>
+                                                <input type="radio" id="css" name="fav_language" value="CSS">
+                                                <label for="css">Staff </label><br>
+                                                <input type="radio" id="javascript" name="fav_language" value="JavaScript">
+                                                <label for="javascript">Class Type</label> <br>
+                                                <input type="radio" id="javascript1" name="fav_language" value="JavaScript1">
+                                                <label for="javascript1">Class Level</label> 
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <!-- end accordion-item -->
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingregion">
+                                    <button class="accordion-button bg-transparent shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseregion" aria-expanded="false" aria-controls="flush-collapseregion">
+                                        <span class="text-muted text-uppercase fs-12 fw-medium">Region</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
+                                    </button>
+                                </h2>
+
+                                <div id="flush-collapseregion" class="accordion-collapse collapse" aria-labelledby="flush-headingregion">
                                     <div class="accordion-body text-body">
                                         <div class="gap-2 filter-check">
                                             <label for="">Language</label>
@@ -91,20 +194,6 @@
                                                 <option value="2">Arabela </option>
                                                 <option value="3">Egyptian Arabic </option>
                                                 <option value="3">Auslan </option>
-                                            </select>
-                                        </div>
-                                        <div class="gap-2 filter-check">
-                                            <label for="">Default Selected Country</label>
-                                            <select class="form-select mb-3" aria-label="Default select example">
-                                                <option selected="">United States </option>
-                                                <option value="1">Canada </option>
-                                                <option value="2">India </option>
-                                            </select>
-                                        </div>
-                                        <div class="gap-2 filter-check">
-                                            <label for="">Default Selected State</label>
-                                            <select class="form-select mb-3" aria-label="Default select example">
-                                                <option selected="">None Selected </option>
                                             </select>
                                         </div>
                                     </div>
@@ -125,12 +214,12 @@
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Preview</h4>
-                            <div class="flex-shrink-0">
+                            <!--<div class="flex-shrink-0">
                                 <div class="form-check form-switch form-switch-right form-switch-md">
                                     <label for="dropdown-base-example" class="form-label text-muted">Preview Size</label>
                                     <input class="form-check-input code-switcher" type="checkbox" id="dropdown-base-example">
                                 </div>
-                            </div>
+                            </div>-->
                         </div><!-- end card header -->
 
                         <div>
@@ -140,55 +229,245 @@
                                         <h4 class="card-title mb-0 flex-grow-1">Find Class</h4>
                                     </div>
                                     <div class="card-body">
-                                        <div class="row justify-content-md-center">
+                                        <div class="row">
+                                            <div class="activities_options col-md-2 col-sm-3 col-xs-6">
+                                                <div class="sports-list">
+                                                    <a href="#">All Activities</a>
+                                                </div>
+                                            </div>
+                                            <div class="activities_options col-md-2 col-sm-3 col-xs-6">
+                                                <div class="sports-list">
+                                                    <a href="#">Yoga</a>
+                                                </div>
+                                            </div>
+                                            <div class="activities_options col-md-2 col-sm-3 col-xs-6">
+                                                <div class="sports-list">
+                                                    <a href="#">Pilates</a>
+                                                </div>
+                                            </div>
+                                            <div class="activities_options col-md-2 col-sm-3 col-xs-6">
+                                                <div class="sports-list">
+                                                    <a href="#">Cardio</a>
+                                                </div>
+                                            </div>
+                                            <div class="activities_options col-md-2 col-sm-3 col-xs-6">
+                                                <div class="sports-list">
+                                                    <a href="#">Cycling</a>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-sm-3 col-xs-6 show_activities_options">
+                                                <div class="sports-list">
+                                                    <a href="#">More<i class="fas fa-caret-down"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="card-header bg-soft-grey">
+                                        <h4 class="card-title mb-0 flex-grow-1">Find Date</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-2 col-sm-2 col-xs-6">
+                                                <div class="pairets">
+                                                    <!-- <div class="pairets-inviable"> -->
+                                                    <a href="#" class="calendar-btn">Wed 14</a>
+                                                </div>
+                                            </div>
+                                                                    
+                                            <div class="col-md-2 col-sm-2 col-xs-6">
+                                                <div class="pairets-inviable">
+                                                    <!-- <div class="pairets-inviable"> -->
+                                                    <a href="#" class="calendar-btn">Thu 15</a>
+                                                </div>
+                                            </div>
+                                                                    
+                                            <div class="col-md-2 col-sm-2 col-xs-6">
+                                                <div class="pairets-inviable">
+                                                    <!-- <div class="pairets-inviable"> -->
+                                                    <a href="#" class="calendar-btn">Fri 16</a>
+                                                </div>
+                                            </div>
+                                                                    
+                                            <div class="col-md-2 col-sm-2 col-xs-6">
+                                                <div class="pairets-inviable">
+                                                    <!-- <div class="pairets-inviable"> -->
+                                                    <a href="#" class="calendar-btn">Sat 17</a>
+                                                </div>
+                                            </div>
+                                                                    
+                                            <div class="col-md-2 col-sm-2 col-xs-6">
+                                                <div class="pairets-inviable">
+                                                    <!-- <div class="pairets-inviable"> -->
+                                                    <a href="#" class="calendar-btn">Sun 18</a>
+                                                </div>
+                                            </div>
+                                                                    
+                                            <div class="col-md-2 col-sm-2 col-xs-6">
+                                                <div class="pairets-inviable">
+                                                    <!-- <div class="pairets-inviable"> -->
+                                                    <a href="#" class="calendar-btn">Mon 19</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       <!-- <div class="row justify-content-md-center">
                                             <div class="col-lg-12">
                                                 <div class="mt-3">
                                                     <input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y" data-deafult-date="24 01,2021" data-inline-date="true">
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>     
                                 <div>
                                     <div class="card-header bg-soft-grey">
-                                        <h4 class="card-title mb-0 flex-grow-1">Wednesday, February 7</h4>
+                                        <h4 class="card-title mb-0 flex-grow-1">Wednesday, February 14</h4>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body card-body-schedule show-all">
                                         <div class="row justify-content-md-center">
-                                            <div class="col-lg-6">
-                                               <div class="d-grid schedule-wid-text">
-                                                    <span>12:00 PM -12:45 PM EST</span>
-                                                    <span>Kickboxing Level 1 & 2 (Mixed Level)</span>
-                                                    <label>Bernard Seaborn</label>
-
-                                               </div>
-                                               <div>
-                                                    <a class="Show">View Details</a>
-                                                    <a class="Hideschedule">Hide Details</a>
-                                                    <div id="targetone">
-                                                        <div class="widget-sche-show">
-                                                            <h3>Address: </h3><span>2067 Broadway 7th Floor, New York NY 10023</span>
-                                                        </div>
-                                                        <div class="widget-sche-show">
-                                                            <h3>Phone: </h3><span>569874523</span>
-                                                        </div>
-                                                        <div class="widget-sche-show">
-                                                            <p>This class is for both beginner and more experienced students.</p>
-                                                        </div>
+                                            <div class="col-md-2 col-xs-12 col-sm-2">
+                                                <div class="table-inner-data">
+                                                    <span class="mg-time"> 06:30 AM </span>
+                                                    <div class="time-min">
+                                                        <span> 1 hour </span>
                                                     </div>
-                                               </div>                                               
+                                                </div>
                                             </div>
-                                            <div class="col-lg-6">
-                                               <div>
-                                                <button href="#" class="btn btn-red">Register</button>
-                                               </div>
+                                            <div class="col-md-6 col-xs-12 col-sm-5">
+                                                <div class="table-inner-data-sec">
+                                                    <img src="https://fitnessity-production.s3.amazonaws.com/activity/meka8JsFR68TpdRhatzxzZpTFPVUSvgEx1MGILm5.jpg" alt="Fitnessity">
+                                                    <div class="p-name">
+                                                        <h3>jumping 1</h3>
+                                                        <p> Personal Training | Bungee Jumping | Spot Available - 1/1
+                                                            </p>
+                                                                                                            
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1 col-xs-3 col-sm-2">
+                                                <div class="star-rest">
+                                                    <div class="activity-inner-data">
+                                                        <i class="fas fa-star"></i>
+                                                        <span> 5 </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1 col-xs-3 col-sm-1">
+                                                <div class="table-price">
+                                                    <span> $10 </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-xs-6 col-sm-2">
+                                                <div class="join-btn">
+                                                    <a class="btn btn-red" href="#">Book Now</a>
+                                                </div>
                                             </div>
                                         </div>
+                                        <div class="schedule-widget-sapre-tor"></div>
+                                    </div>
+
+                                    <div class="card-body card-body-schedule show-all">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="border-list">
+                                                    <div class="row">
+                                                        <div class="col-md-2 col-xs-12 col-sm-2">
+                                                            <div class="table-inner-data">
+                                                                <span class="mg-time"> 09:00 AM </span>
+                                                                <div class="time-min">
+                                                                    <span> 1 hour 15 minute </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-xs-12 col-sm-5">
+                                                            <div class="table-inner-data-sec">
+                                                                <img src="https://fitnessity-production.s3.amazonaws.com/activity/eisJPbu7UPhASgD4edJSOufZSXENkw3TkZV281HL.jpg" alt="Fitnessity">
+                                                                <div class="p-name">
+                                                                    <h3>Summer Camp at Valor</h3>
+                                                                    <p> Events | Day Camp | Spot Available - 200/200
+                                                                        </p>
+                                                                                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1 col-xs-3 col-sm-2">
+                                                            <div class="star-rest">
+                                                                <div class="activity-inner-data">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <span> 0 </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1 col-xs-3 col-sm-1">
+                                                            <div class="table-price">
+                                                                <span> $150 </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 col-xs-6 col-sm-2">
+                                                            <div class="join-btn">
+                                                                <a class="btn btn-red" href="#">Book Now</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="schedule-widget-sapre-tor"></div>
+                                    </div>
+
+                                    <div class="card-body card-body-schedule show-all">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="border-list">
+                                                    <div class="row">
+                                                        <div class="col-md-2 col-xs-12 col-sm-2">
+                                                            <div class="table-inner-data">
+                                                                <span class="mg-time"> 09:15 AM </span>
+                                                                <div class="time-min">
+                                                                    <span> 1 hour </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-xs-12 col-sm-5">
+                                                            <div class="table-inner-data-sec">
+                                                                <img src="https://fitnessity-production.s3.amazonaws.com/activity/wvahqhcKOL6C8NQ1IBqh3vtfVOc3MOAM3aarjoLf.jpg" alt="Fitnessity">
+                                                                <div class="p-name">
+                                                                    <h3>Bucephalus Riding and Polo Club1</h3>
+                                                                    <p> Events | Horseback Riding | Spot Available - 10/10
+                                                                        </p>
+                                                                                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1 col-xs-3 col-sm-2">
+                                                            <div class="star-rest">
+                                                                <div class="activity-inner-data">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <span> 0 </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1 col-xs-3 col-sm-1">
+                                                            <div class="table-price">
+                                                                <span> $10 </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 col-xs-6 col-sm-2">
+                                                            <div class="join-btn">
+                                                                <a class="btn btn-red" href="#">Book Now</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="schedule-widget-sapre-tor"></div>
                                     </div>
                                 </div>                             
                             </div>
 
-                            <div class="d-none code-view">
+                            <!--<div class="d-none code-view">
                                 <div class="row justify-content-md-center">
                                     <div class="col-lg-7">
                                         <form action="">
@@ -464,7 +743,7 @@
                                         </form>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                         </div><!-- end card-body -->
                     </div><!-- end card -->
                 </div> <!-- end col -->
@@ -490,5 +769,44 @@ $('.Hideschedule').click(function() {
     $('.Show').show(0);
     $('.Hideschedule').hide(0);
 });
+
+$('.Show1').click(function() {
+    $('#target_two').show(200);
+    $('.Show1').hide(0);
+    $('.Hideschedule_two').show(0);
+});
+$('.Hideschedule_two').click(function() {
+    $('#target_two').hide(500);
+    $('.Show1').show(0);
+    $('.Hideschedule_two').hide(0);
+});
+
+</script>
+
+<script>
+// Inputs
+const valueInput = document.querySelector('input[type="text"]');
+const colorInput = document.querySelector('input[type="color"]');
+
+// Sync the color from the picker
+const syncColorFromPicker = () => {
+  valueInput.value = colorInput.value;
+};
+
+// Sync the color from the field
+const syncColorFromText = () => {
+  colorInput.value = valueInput.value;
+};
+
+// Bind events to callbacks
+colorInput.addEventListener("input", syncColorFromPicker, false);
+valueInput.addEventListener("input", syncColorFromText, false);
+
+// Optional: Trigger the picker when the text field is focused
+valueInput.addEventListener("focus", () => colorInput.click(), false);
+
+// Refresh the text field
+syncColorFromPicker();
+
 </script>
 @endsection

@@ -150,9 +150,9 @@
 
 													<div class="accordion-item shadow">
 														<h2 class="accordion-header" id="accordionnestingExampledonToday">
-															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapsedonToday" aria-expanded="false" aria-controls="accor_nestingExamplecollapsedonToday"  onclick="getData('onToday','')" id="onTodaydaysbtn">Processed Payments</button>
+															<button class="accordion-button collapsed uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapseonToday" aria-expanded="false" aria-controls="accor_nestingExamplecollapseonToday"  onclick="getData('onToday','')" id="onTodaydaysbtn">Processed Payments</button>
 														</h2>
-														<div id="accor_nestingExamplecollapsedonToday" class="accordion-collapse collapse scroll-customer" aria-labelledby="accordionnestingExampledonToday" data-bs-parent="#accordionnesting">
+														<div id="accor_nestingExamplecollapseonToday" class="accordion-collapse collapse scroll-customer" aria-labelledby="accordionnestingExampledonToday" data-bs-parent="#accordionnesting">
 															<div class="accordion-body" id="targetDivonToday"></div>
 														</div>
 													</div>
@@ -282,7 +282,7 @@
 			$('#todaydaysbtn').removeClass('collapsed');
 			$('#onTodaydaysbtn, #FailedPaymentdaysbtn, #Alldaysbtn,#WhoOwnMoneydaysbtn').addClass('collapsed');
 
-			$('#accor_nestingExamplecollapsedonToday, #accor_nestingExamplecollapseFailedPayment, #accor_nestingExamplecollapseAll,#accor_nestingExamplecollapseWhoOwnMoney').removeClass('show')
+			$('#accor_nestingExamplecollapseonToday, #accor_nestingExamplecollapseFailedPayment, #accor_nestingExamplecollapseAll,#accor_nestingExamplecollapseWhoOwnMoney').removeClass('show')
 			$('#accor_nestingExamplecollapseUpcoming').addClass('show');
 			$('#headingDate').html(sdate + ' to ' + edate);
 		}else{
@@ -302,8 +302,8 @@
 		$('#go_btn').html('Loading..'); 
 		$("#go_btn").prop("disabled", true);
 		$('#Upcomingdaysbtn, #onTodaydaysbtn, #FailedPaymentdaysbtn, #Alldaysbtn ,#WhoOwnMoneydaysbtn').removeClass('collapsed');
-		$('#accor_nestingExamplecollapseUpcoming, #accor_nestingExamplecollapsedonToday, #accor_nestingExamplecollapseFailedPayment, #accor_nestingExamplecollapseAll,#accor_nestingExamplecollapseWhoOwnMoney').removeClass('scroll-customer');
-		$('#accor_nestingExamplecollapseUpcoming, #accor_nestingExamplecollapsedonToday, #accor_nestingExamplecollapseFailedPayment, #accor_nestingExamplecollapseAll,#accor_nestingExamplecollapseWhoOwnMoney').addClass('show');
+		$('#accor_nestingExamplecollapseUpcoming, #accor_nestingExamplecollapseonToday, #accor_nestingExamplecollapseFailedPayment, #accor_nestingExamplecollapseAll,#accor_nestingExamplecollapseWhoOwnMoney').removeClass('scroll-customer');
+		$('#accor_nestingExamplecollapseUpcoming, #accor_nestingExamplecollapseonToday, #accor_nestingExamplecollapseFailedPayment, #accor_nestingExamplecollapseAll,#accor_nestingExamplecollapseWhoOwnMoney').addClass('show');
 		getData('Upcoming' ,'all')
 		getData('onToday' ,'all');
 		getData('FailedPayment' ,'all');
@@ -340,9 +340,9 @@
 			}, 1000);
 
 			setTimeout(function() {
-				$('#accor_nestingExamplecollapseUpcoming, #accor_nestingExamplecollapsedonToday, #accor_nestingExamplecollapseFailedPayment, #accor_nestingExamplecollapseAll,#accor_nestingExamplecollapseWhoOwnMoney').addClass('scroll-customer');
+				$('#accor_nestingExamplecollapseUpcoming, #accor_nestingExamplecollapseonToday, #accor_nestingExamplecollapseFailedPayment, #accor_nestingExamplecollapseAll,#accor_nestingExamplecollapseWhoOwnMoney').addClass('scroll-customer');
 				$('#Upcomingdaysbtn, #onTodaydaysbtn #FailedPaymentdaysbtn, #Alldaysbtn ,#WhoOwnMoneydaysbtn').addClass('collapsed');
-				$('#accor_nestingExamplecollapseUpcoming, #accor_nestingExamplecollapsedonToday, #accor_nestingExamplecollapseFailedPayment, #accor_nestingExamplecollapseAll,#accor_nestingExamplecollapseWhoOwnMoney').removeClass('show');
+				$('#accor_nestingExamplecollapseUpcoming, #accor_nestingExamplecollapseonToday, #accor_nestingExamplecollapseFailedPayment, #accor_nestingExamplecollapseAll,#accor_nestingExamplecollapseWhoOwnMoney').removeClass('show');
 			}, 2000)
 		}
 

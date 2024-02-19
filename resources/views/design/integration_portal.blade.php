@@ -95,7 +95,43 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="links" role="tabpanel">
-                                    <h6>Comming soon</h6>
+                                   <!-- <div class="card bg-soft-grey ">
+                                        <div class="card-header align-items-center d-flex bg-soft-grey">
+                                            <h4 class="card-title mb-0 flex-grow-1">Create your link</h4>
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="live-preview">
+                                                <div class="row ">
+                                                    <div class="col-lg-3">
+                                                        <div class="mt-3 filter-check">
+                                                            <label for="">Link type</label>
+                                                            <select class="form-select mb-3" aria-label="Default select example">
+                                                                <option selected="">Login</option>                                                           
+                                                            </select>
+                                                        </div>
+                                                    </div>                                                  
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3">
+                                                        <div class="mt-3 filter-check">
+                                                            <label for="">Image URL </label>
+                                                            <input class="form-control" type="file" id="formFileMultiple" multiple="">
+                                                        </div>
+                                                    </div>                                                  
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3">
+                                                        <div class="mt-3 d-grid">
+                                                            <label for="">Preview</label>
+                                                            <button class="btn btn-red" data-bs-toggle="modal" data-bs-target="#login_preview"><i class="fas fa-user"></i></button>
+                                                        </div>
+                                                    </div>                                                  
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+
                                 </div>
                                 <div class="tab-pane" id="site_settings" role="tabpanel">
                                     <div class="">
@@ -313,6 +349,23 @@
 </div><!-- end main content-->	
 </div><!-- END layout-wrapper -->
 
+
+<!-- Modal -->
+<div class="modal fade" id="login_preview" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-70">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="preview-login">
+                    <img src="http://dev.fitnessity.co//public/images/register-bg.jpg">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="adduser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

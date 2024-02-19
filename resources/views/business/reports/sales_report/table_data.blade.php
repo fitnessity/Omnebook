@@ -1,7 +1,7 @@
 
 <tr>
     <td>{{date('m-d-Y',strtotime($dt->created_at))}}</td>
-    <td> {{@$dt->Customer->full_name ?? 'N/A'}}</td>
+    <td>{{@$dt->Customer->full_name ?? 'N/A'}}</td>
     <td>{!!$dt->item_description($business_id)['itemDescription']!!}</td>
     <td>{!! @$dt->item_description($business_id)['location'] !!}</td>
     <td>{!!$dt->item_description($business_id)['notes']!!}</td>

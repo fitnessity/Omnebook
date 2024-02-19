@@ -30,13 +30,20 @@ class BookingCheckinDetails extends Model
                             $id= $userBookingDetail->user_id;
                         }
                     }
+
                     //$model->instructor_id = @$userBookingDetail->business_services->instructor_id;
                 }
                 $id = @$id != '' ? @$id : 0;
                 $model->booked_by_customer_id = $id;
 
                 if($model->business_activity_scheduler_id){
-                    $model->instructor_id = $model->scheduler != '' ? $model->scheduler->instructure_ids : '';
+
+                    $checkInDetails = BookingCheckinDetails::where('business_activity_scheduler_id', $model->business_activity_scheduler_id)->where('checkin_date', $model->checkin_date)->whereNotNull('instructor_id')->first();
+                    if($checkInDetails){
+                        $model->instructor_id = $model->scheduler != '' ? $checkInDetails->instructor_id : '';
+                    }else{
+                        $model->instructor_id = $model->scheduler != '' ? $model->scheduler->instructure_ids : '';
+                    }
                 }
             }else{
                 $model->before_use_session_amount = 0;
@@ -55,7 +62,20 @@ class BookingCheckinDetails extends Model
                 $model->before_use_session_amount = 0;
                 $model->after_use_session_amount = 0;
             }
+            if($model->business_activity_scheduler_id){
+
+                $checkInDetails = BookingCheckinDetails::where('business_activity_scheduler_id', $model->business_activity_scheduler_id)->where('checkin_date', $model->checkin_date)->whereNotNull('instructor_id')->first();
+                if($checkInDetails){
+                    $model->instructor_id = $model->scheduler != '' ? $checkInDetails->instructor_id : '';
+                }else{
+                    $model->instructor_id = $model->scheduler != '' ? $model->scheduler->instructure_ids : '';
+                }
+
+                //$model->instructor_id = $model->scheduler != '' ? $model->scheduler->instructure_ids : '';
+            }
         });
+
+        
 
         self::updated(function($model){
             if($model->no_show_action == 'charge_fee'){

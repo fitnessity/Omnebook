@@ -23,6 +23,10 @@ class BusinessController extends Controller
 
     public function dashboard(Request $request ,$dates= null, $id= null){
 
+        if(count(Auth::user()->company) == 0){
+            return redirect('/personal/manage-account');
+        }
+
         $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales =  $in_person =$online = $customerCount = $remainingRecPercentage = $completedRecPercentage = $previousTotalSales = $totalsalePercentage =  $customerCountPercentage = $bookingCountPercentage = $totalRecurringPmt = $compltedpmtcnt = $remainigpmtcnt =$recurringAmount = $completeRecurringAmount = $reminingRecurringAmount = $left_days = 0;
 
         $ptdata1= $expiringMembership = $activitySchedule = $topBookedPriceId=$todayBooking =  $services = $topBookedCategories = $notificationAry = $transaction = $businessServices = $usDetail = [];
@@ -77,7 +81,7 @@ class BusinessController extends Controller
               ->where('kind','!=' ,'comp')
               ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
               ->join('user_booking_details as ubd', function($join) use ($business_id) {
-                  $join->on('ubd.booking_id', '=', 'ubs.id')
+                  $join->on('ubd.booking_id', '=', 'ubs.id')->where('ubd.order_type', 'Membership')
                       ->where('ubd.business_id', '=', $business_id);
               })->whereDate('transaction.created_at', '>=', $startDate)->whereDate('transaction.created_at', '<=', $endDate)->sum('transaction.amount');
             $previousTotalSales = Transaction::select('transaction.*')
@@ -85,7 +89,7 @@ class BusinessController extends Controller
               ->where('kind','!=' ,'comp')
               ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
               ->join('user_booking_details as ubd', function($join) use ($business_id) {
-                  $join->on('ubd.booking_id', '=', 'ubs.id')
+                  $join->on('ubd.booking_id', '=', 'ubs.id')->where('ubd.order_type', 'Membership')
                       ->where('ubd.business_id', '=', $business_id);
               })->whereDate('transaction.created_at','=',Carbon::now()->subMonth()->format('Y-m-d'))->sum('transaction.amount');
             $totalSalesforRecurring = Transaction::select('transaction.*')
@@ -137,42 +141,32 @@ class BusinessController extends Controller
                     ->whereDate('created_at', '<=', $endOfWeek)
                    ->orderby('created_at','desc')->get();
 
-            $recurringAmount = DB::table('recurring')
-                ->where('business_id',$business_id)
-                ->whereNotIn('id', function($query) {
-                    $query->select(DB::raw('MAX(id)'))
-                        ->from('recurring as sub')
-                        ->groupBy('booking_detail_id');
-                })->whereDate('payment_date', '>=', $startDate)->whereDate('payment_date', '<=', $endDate)->select(DB::raw('sum(amount+tax) AS total_sales'))->get();
-
+            //$recurringAmount = DB::table('recurring')->where('business_id',$business_id)->whereNull('payment_number')->whereDate('payment_date', '>=', $startDate)->whereDate('payment_date', '<=', $endDate)->select(DB::raw('sum(amount+tax) AS total_sales'))->get();
 
             $completeRecurringAmount = DB::table('recurring')
-                ->where('business_id',$business_id)
-                ->whereNotIn('id', function($query) {
-                    $query->select(DB::raw('MAX(id)'))
-                        ->from('recurring as sub')
-                        ->groupBy('booking_detail_id');
-                })->whereDate('payment_date', '>=', $startDate)->whereDate('payment_date', '<=', $endDate)->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Completed')->get();
+                ->where('business_id',$business_id)->whereNull('payment_number')->whereDate('payment_on', '>=', $startDate)->whereDate('payment_on', '<=', $endDate)
+                ->select(DB::raw('sum(amount+tax) AS total_sales'))
+                ->where('status' ,'Completed')->get();
 
             $reminingRecurringAmount = DB::table('recurring')
-                ->where('business_id',$business_id)
-                ->whereNotIn('id', function($query) {
-                    $query->select(DB::raw('MAX(id)'))
-                        ->from('recurring as sub')
-                        ->groupBy('booking_detail_id');
-                })->whereDate('payment_date', '>=', $startDate)->whereDate('payment_date', '<=', $endDate)->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'!=','Completed')->get();
+                ->where('business_id',$business_id)->whereNull('payment_number')->whereDate('payment_date', '>=', $startDate)->whereDate('payment_date', '<=', $endDate)->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'!=','Completed')->get();
+
+
+            //print_r($completeRecurringAmount);exit;
+            //print_r($reminingRecurringAmount);exit;
 
             $completeRecurringAmount = $completeRecurringAmount[0]->total_sales ?? 0;
             $reminingRecurringAmount = $reminingRecurringAmount[0]->total_sales ?? 0;
-            $recurringAmount = $recurringAmount[0]->total_sales ?? 0;
-
+           // $recurringAmount = $recurringAmount[0]->total_sales ?? 0;
+            $recurringAmount = $completeRecurringAmount + $reminingRecurringAmount;
             $completedRecPercentage = $recurringAmount != 0 ? ( $completeRecurringAmount / $recurringAmount)*100 : 0 ;
             $remainingRecPercentage = $recurringAmount != 0 ? ( $reminingRecurringAmount / $recurringAmount) *100 : 0   ;
             $completedRecPercentage = number_format($completedRecPercentage,2,'.','');
             $remainingRecPercentage = number_format($remainingRecPercentage,2,'.','');
-            $recurringAmount = number_format($recurringAmount,2,'.','');
             $reminingRecurringAmount = number_format($reminingRecurringAmount,2,'.','');
             $completeRecurringAmount = number_format($completeRecurringAmount,2,'.','');
+            
+            $recurringAmount = number_format($recurringAmount,2,'.','');
         }
         
         $topBookedPriceId = array_values(array_unique($topBookedPriceId));

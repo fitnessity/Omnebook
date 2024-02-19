@@ -21,8 +21,8 @@ class RecurringController extends Controller
         $company = $user->businesses()->findOrFail($business_id);
         $customer = $company->customers->find($request->customer_id);
         $bookingDetail = $company->UserBookingDetails->find($request->booking_detail_id);
-        $autopayListScheduled = $bookingDetail->Recurring()->where('status','!=','Completed')->orderby('payment_date')->get();
-        $autopayListHistory = $bookingDetail->Recurring()->where('status' , 'Completed')->orderby('payment_date')->get();
+        $autopayListScheduled = $bookingDetail->Recurring()->where('status','!=','Completed')->orderby('payment_on')->get();
+        $autopayListHistory = $bookingDetail->Recurring()->where('status' , 'Completed')->orderby('payment_on')->get();
         $autopayListCnt =  $bookingDetail->Recurring()->count();
         $remaining = count($autopayListScheduled);
         if($request->type == 'history'){
@@ -86,7 +86,7 @@ class RecurringController extends Controller
     public function update(Request $request, $business_id ,$id)
     {
         $rec = Recurring::where('id',$id)->first();
-        $rec->update(["payment_date" =>date('Y-m-d',strtotime($request->payment_date)) ,"amount" =>$request->amount]);
+        $rec->update(["payment_date" =>date('Y-m-d',strtotime($request->payment_date)),"payment_on" =>date('Y-m-d'),"amount" =>$request->amount]);
     }
 
     /**

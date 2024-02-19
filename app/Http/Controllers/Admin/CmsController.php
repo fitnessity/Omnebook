@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Repositories\CmsRepository;
-use App\User;
+use App\{User,Admin};
 use App\Cms;
 use Auth;
 use Redirect;
@@ -31,9 +31,9 @@ class CmsController extends Controller
     public function listCmsModules()
     {   
 
-        $loggedinAdmin = Auth::user();
+        $loggedinAdmin = auth()->guard('admin')->user();
 
-        if($loggedinAdmin->role == "admin"){
+        if($loggedinAdmin){
             
             $cmsModulesList = Cms::where('status','1')->get();
 
@@ -51,9 +51,9 @@ class CmsController extends Controller
     public function viewCmsModule($id)
     {
 
-        $loggedinAdmin =Auth::user();
+        $loggedinAdmin =auth()->guard('admin')->user();
         
-        if($loggedinAdmin->role == "admin"){
+        if($loggedinAdmin){
             
             $module_details = Cms::where('id',$id)->get();
             
@@ -73,9 +73,9 @@ class CmsController extends Controller
 
     public function postCmsModule(Request $request,$id)
     {   
-        $loggedinAdmin =Auth::user();
+        $loggedinAdmin = auth()->guard('admin')->user();
         
-        if($loggedinAdmin->role == "admin"){
+        if($loggedinAdmin){
             $input = $request->all();
             $validator = $this->cmsValidator($input);
         } else {
