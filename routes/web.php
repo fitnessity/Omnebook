@@ -33,7 +33,7 @@ Route::get('/clear-cache', function () {
 
     //print_r(App\Customer::where('user_id',NULL)->get());
 
-    foreach(App\UserBookingDetail::get() as $details){
+    /* done foreach(App\UserBookingDetail::get() as $details){
         $type = '';
         if($details->qty){
            $item = json_decode($details->qty,true);
@@ -65,7 +65,7 @@ Route::get('/clear-cache', function () {
             $details->update(['payment_on' => NULL]);
         }
        
-    }
+    }  done*/  
 });
 //end
 
@@ -273,21 +273,26 @@ Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware
 
 });
 
-Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
-Route::any('/schedule/multibooking/{business_id}/', 'BusinessActivitySchedulerController@multibooking')->name('multibooking');
-Route::post('/chkOrderAvailable', 'BusinessActivitySchedulerController@chkOrderAvailable')->name('chkOrderAvailable');
-Route::get('/chksession/{did}/{date?}/{timeId?}/{chk?}', 'BusinessActivitySchedulerController@chksession')->name('chksession');
-Route::post('/chkMultiBooking', 'BusinessActivitySchedulerController@chkMultiBooking')->name('chkMultiBooking');
 
-Route::post('/chkMultipleOrder', 'BusinessActivitySchedulerController@chkMultipleOrder')->name('chkMultipleOrder');
+Route::group(['middleware' => ['auth']], function(){
 
-Route::get('/getReviewData/{cid}/{business_id}', 'BusinessActivitySchedulerController@getReviewData')->name('getReviewData');
 
-Route::post('/deleteFromSession', 'BusinessActivitySchedulerController@deleteFromSession')->name('deleteFromSession');
+    Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
+    Route::any('/schedule/multibooking/{business_id}/', 'BusinessActivitySchedulerController@multibooking')->name('multibooking');
+    Route::post('/chkOrderAvailable', 'BusinessActivitySchedulerController@chkOrderAvailable')->name('chkOrderAvailable');
+    Route::get('/chksession/{did}/{date?}/{timeId?}/{chk?}', 'BusinessActivitySchedulerController@chksession')->name('chksession');
+    Route::post('/chkMultiBooking', 'BusinessActivitySchedulerController@chkMultiBooking')->name('chkMultiBooking');
 
-Route::post('/multibooking/save', 'BusinessActivitySchedulerController@save')->name('multibooking.save');
+    Route::post('/chkMultipleOrder', 'BusinessActivitySchedulerController@chkMultipleOrder')->name('chkMultipleOrder');
 
-Route::post('/setSessionOfSchedule/', 'BusinessActivitySchedulerController@setSessionOfSchedule')->name('setSessionOfSchedule');
+    Route::get('/getReviewData/{cid}/{business_id}', 'BusinessActivitySchedulerController@getReviewData')->name('getReviewData');
+
+    Route::post('/deleteFromSession', 'BusinessActivitySchedulerController@deleteFromSession')->name('deleteFromSession');
+
+    Route::post('/multibooking/save', 'BusinessActivitySchedulerController@save')->name('multibooking.save');
+
+    Route::post('/setSessionOfSchedule/', 'BusinessActivitySchedulerController@setSessionOfSchedule')->name('setSessionOfSchedule');
+});
 
 Route::resource('stripe_payment_methods', 'StripePaymentMethodController')->only(['destroy']);
 
