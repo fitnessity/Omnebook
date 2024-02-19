@@ -7,8 +7,8 @@
       <div class="user-panel">
         <div class="pull-left image">
           <?php
-          if(Auth::user()->profile_pic != '' && file_exists(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR.'thumb150'.DIRECTORY_SEPARATOR.Auth::user()->profile_pic)) {
-            echo '<img src="'.Config::get('constants.USER_IMAGE_THUMB150').Auth::user()->profile_pic.'" class="img-circle" />';
+          if(auth()->guard('admin')->user()->profile_pic != '' && file_exists(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR.'thumb150'.DIRECTORY_SEPARATOR.auth()->guard('admin')->user()->profile_pic)) {
+            echo '<img src="'.Config::get('constants.USER_IMAGE_THUMB150').auth()->guard('admin')->user()->profile_pic.'" class="img-circle" />';
           }
           else {
             echo '<img src="'.Config::get('constants.FRONT_IMAGE').'user.png" class="img-circle" />';
@@ -16,7 +16,7 @@
           ?>          
         </div>
         <div class="pull-left info">
-          <p>{{Auth::user()->firstname}} {{Auth::user()->lastname}}</p>
+          <p>{{auth()->guard('admin')->user()->firstname}} {{auth()->guard('admin')->user()->lastname}}</p>
           <!-- <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
         </div>
       </div>
@@ -116,7 +116,7 @@
         </li>
 
         <li class="{{ ($request->segment(2) == 'users' || $request->segment(2) == 'users') ? 'active' : '' }}">
-          <a href="/admin/users">
+          <a href="/admin/users"  target="_blank">
            <!--  <i class="fa fa-users"></i> <span>Manage Customers</span> --> 
            <i class="fa fa-users"></i> <span>Manage Users</span>   
           </a>

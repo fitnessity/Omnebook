@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\User;
+use App\Admin;
 use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -53,13 +53,16 @@ class AdminAuthController extends Controller
      */
     public function __construct(UserRepository $users)
     {
-        $this->middleware('guest', ['except' => 'getLogout']);
+        $this->middleware('admin', ['except' => 'getLogout']);
         $this->users = $users;
     }
 
     public function index()
     {
-        return view::make('admin.login');
+        if(auth()->guard('admin')->user()){
+            return Redirect('admin/dashboard');
+        }
+        return view('admin.login');
 
     }
 
@@ -122,12 +125,13 @@ class AdminAuthController extends Controller
             //$aa = Auth::attempt(['email' => $postArr['email'], 'password' => $postArr['password'], 'role' => "admin"]);
             //dd($aa)
             //echo bcrypt($postArr['password']);die;
-            if (Auth::attempt(['email' => $postArr['email'], 'password' => $postArr['password'], 'role' => "admin"])) {
+            if (auth()->guard('admin')->attempt(['email' => $postArr['email'], 'password' => $postArr['password']])) {
                 // The user is being remembered...
+             
                 session_start();
-                $_SESSION["myses"] = $request->user();
-                $user = Auth::user();
-                User::whereId($user->id)->update(['last_login' => date('Y-m-d H:i:s'),'last_ip'=>$request->ip()]);
+                $_SESSION["myses"] = auth()->guard('admin')->user();
+                $user = auth()->guard('admin')->user();
+                //User::whereId($user->id)->update(['last_login' => date('Y-m-d H:i:s'),'last_ip'=>$request->ip()]);
                 $request->session()->flash('alert-success', 'Welcome '.$postArr['email']);
                 $response = array(
                         'type' => 'success',
@@ -137,8 +141,7 @@ class AdminAuthController extends Controller
                     );
 
                    return Response::json($response);
-            }
-            else {
+            }else {
                 $response = array(
                         'type' => 'danger',
                         'msg' => 'Incorrect Email or Password',

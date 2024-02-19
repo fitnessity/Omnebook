@@ -20,9 +20,12 @@ class Customer extends Authenticatable
         parent::boot();
 
         self::creating(function($model){
-            $fitnessity_user = User::where(['email' => $model->email,'firstname' => $model->fname ,'lastname' => $model->lname])->first();
+            $fitnessity_user = User::where('email', $model->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($model->fname), strtolower($model->fname)])->first();
             if($fitnessity_user){
                 $model->user_id = $fitnessity_user->id;
+                $model->password = $fitnessity_user->password;
+            }else{
+                $model->createUser();
             }
         });
 
@@ -30,20 +33,34 @@ class Customer extends Authenticatable
             if(!$model->stripe_customer_id){
                 //$model->create_stripe_customer_id();
             }
+
+            if(!$model->password){
+                $model->createPassword();
+            }
         });
 
         self::updated(function($model){
             if(!$model->stripe_customer_id){
                 $model->create_stripe_customer_id();
             }
+
+            if(!$model->password){
+                $model->createPassword();
+            }
+
         });
 
         self::updating(function($model){
-            
-            $fitnessity_user = User::where(['email' => $model->email,'firstname' => $model->fname ,'lastname' => $model->lname])->first();
+            $fitnessity_user = User::where('email', $model->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($model->fname), strtolower($model->lname)])->first();
             if($fitnessity_user){
                 $model->user_id = $fitnessity_user->id;
+                $model->password = $fitnessity_user->password;
             }
+
+            if(!$model->password){
+                $model->createPassword();
+            }
+
         });
         
     }
@@ -81,6 +98,52 @@ class Customer extends Authenticatable
 
     protected $appends = ['age', 'profile_pic_url', 'full_name', 'first_letter' ,'company_name','last_attend_date'];
 
+
+    public function createUser(){
+        $user = User::where('email', $this->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($this->fname), strtolower($this->lname)])->first();
+        if(!$this->user_id){
+            if($user){
+                $this->user_id = $user->id;
+            }else{
+                $user = New User();
+                $user->role = 'customer';
+                $user->firstname =  $this->fname;
+                $user->lastname =  $this->lname;
+                $user->username = $this->fname.$this->lname;
+                $user->email = $this->email;
+                $user->gender = $this->gender;
+                $user->primary_account = 0;
+                $user->country = 'United Status';
+                $user->phone_number = $this->mobile;
+                $user->birthdate =  $this->birthdate != '' ? date('Y-m-d', strtotime($this->birthdate)) : null;
+                $user->stripe_customer_id =  $this->stripe_customer_id;
+                $user->password =  $this->password;
+                $user->save(); 
+                $this->user_id = $user->id;
+            }
+        }
+    }
+
+    public function createPassword(){
+        $password = Str::random(8);
+        $user = User::where('email', $this->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($this->fname), strtolower($this->lname)])->first();
+        if(!$this->password){
+            if($user){
+                if($user->password){
+                    $this->password =  $user->password;
+                }else{
+                    $this->password = \Hash::make($password);
+                    $user->update(['password'=> \Hash::make($password),'buddy_key' => $password]);
+                }
+            }else{
+                $this->createUser();
+            }
+        }else{
+            if($user && !$user->password){
+                $user->update(['password'=> $this->password]);
+            }
+        }
+    }
 
     public function stripePaymentMethods(){
 
@@ -302,11 +365,11 @@ class Customer extends Authenticatable
 	   if( !empty($this->email) && $this->email != 'N/A' && $this->email != '-' &&  $this->stripe_customer_id == ''){
             $FndCustomer =  Customer::whereRaw('LOWER(fname) = ? AND LOWER(lname) = ?', [strtolower($this->fname), strtolower($this->lname)])->where(['email' => $this->email])->whereNotNull('stripe_customer_id')->where('id', '!=', $this->id)->first();
             if($FndCustomer == ''){
-                $user = User::where(['firstname' => $this->fname, 'lastname' =>$this->lname, 'email' => $this->email])->first();
+                $user = User::where('email', $this->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($this->fname), strtolower($this->lname)])->first();
                 if($user){
                     $this->stripe_customer_id = $user->stripe_customer_id;
                     $this->save();
-                     return $customer->id;
+                    return $this->id;
                 }else{
                     try {
                         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
@@ -319,8 +382,8 @@ class Customer extends Authenticatable
                 
                         return $customer->id;
                         
-                    } catch (Exception $e) {
-                        return '';
+                    }catch(Exception | \Stripe\Exception\InvalidRequestException $e){
+                        return "";
                     }
                 }
             }else{
@@ -368,11 +431,11 @@ class Customer extends Authenticatable
             return $item->id;
         });
 
-        return BookingCheckinDetails::whereIn('booking_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc');
+        return BookingCheckinDetails::whereIn('booking_detail_id', $booking_detail_ids)->whereNotNull('checkin_date')->orderBy('checkin_date', 'desc');
     }
 
     public function visits_count(){
-        return $this->visits()->where('checked_at',"!=",NULL)->count();
+        return $this->visits()->whereNotNull('checked_at')->whereNotNull('checkin_date')->count();
     }
 
     public function get_last_seen(){

@@ -87,7 +87,8 @@
 																						<!--end col-->
 																						<div class="col-lg-7 col-md-6 col-sm-5 col-xs-12 col-auto">
 																							<div class="p-2 mmt-10">
-																								<h3 class="mb-1">{{$customerdata->full_name}} @if($customerdata->primary_account == '1') <span class="font-green">(Primary Account)</span> @endif </h3>
+																								<h3 class="mb-1">{{$customerdata->full_name}} @if($customerdata->primary_account == '1') <span class="font-green fs-14">(Primary Account)</span> @endif </h3>
+																								<h3>Member Id {{@$customerdata->user->unique_user_id}}</h3>
 																							</div>
 																						</div>
 																						<!--end col-->
@@ -194,6 +195,15 @@
 																										</div>
 																										<div class="col-lg-7 col-sm-7">
 																											<span>{{date('m/d/Y',strtotime($customerdata->created_at))}}</span>
+																										</div>
+																									</div>
+
+																									<div class="row mb-10"> 
+																										<div class="col-lg-5 col-sm-5">
+																											<label class="font-black">Member Id :</label>
+																										</div>
+																										<div class="col-lg-7 col-sm-7">
+																											<span>{{@$customerdata->user->unique_user_id}}</span>
 																										</div>
 																									</div>
 																								</div>
@@ -984,7 +994,7 @@
 																								@foreach($visits as $visit)
 																								 	@if($visit->order_detail)
 																										<tr>
-																											<td>{{date('m/d/Y',strtotime($visit->checkin_date))}}</td>
+																											<td>@if($visit->checkin_date) {{date('m/d/Y',strtotime($visit->checkin_date))}} @else N/A @endif</td>
 																											<td>
 																												{{date('h:i A', strtotime($visit->checked_at))}}
 																											</td>
@@ -1431,7 +1441,7 @@
 							<div class="mb-10">
 								<label>	Birthdate </label>
 								<div class="input-group">
-									<input type="text" name="birthdate" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border" value="@if($customerdata->birthdate != '') {{date('m/d/Y',strtotime($customerdata->birthdate))}} @endif" placeholder="Birthday">
+									<input type="text" name="birthdate" class="form-control flatpiker-with-border flatpickr-date" value="@if($customerdata->birthdate != '') {{date('m/d/Y',strtotime($customerdata->birthdate))}} @endif" placeholder="Birthday">
 								</div>
 							</div>
 						</div>
@@ -1477,7 +1487,7 @@
 							</div>
 
 							<div class="mb-10">
-								<input class="check-box-primary-account" type="checkbox" id="primary_account" name="primary_account" value="1" @if($customerdata->primary_account == '1') checked @endif>
+								<input class="check-box-primary-account" type="checkbox" id="primary_account" name="primary_account" value="1" @if($customerdata->primary_account == '1') checked @endif @if($resultDate->format('Y-m-d') <= $customerdata->birthdate) disabled @endif>
 								<label for="primary_account"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="You are paying for yourself and all added family members.">(i)</span></label>
 							</div>
 						</div>
@@ -1954,10 +1964,32 @@
          });
 	   }
       
-		flatpickr(".flatpickr-range", {
+		flatpickr(".flatpickr-date", {
         	dateFormat: "m/d/Y",
         	maxDate: "01/01/2050",
+        	onChange: function(selectedDates, dateStr, instance) {
+              	var age = calculateAge(dateStr);
+              	if (age < 18) {
+                  $('.check-box-primary-account').prop('disabled', true);
+                  if ($('.check-box-primary-account').is(':checked')) {
+                      $('.check-box-primary-account').prop('checked', false);
+                  }
+              	} else {
+                 $('.check-box-primary-account').prop('disabled', false);
+              	}
+          	}
       });
+
+      function calculateAge(dateStr) {
+        var birthDate = new Date(dateStr);
+        var currentDate = new Date();
+        var age = currentDate.getFullYear() - birthDate.getFullYear();
+        var monthDiff = currentDate.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
 
       function printTerms(divId,termsName){
       	var chk = $('#'+divId).html() != '' ? 1 : 0;

@@ -31,7 +31,7 @@
 			<div class="col-md-4 col-sm-4 col-6">
 				<div class="gry-box d-grid side-box mb-3">
 					<label>Spots</label>
-					<span>{{$business_activity_scheduler->spots_left($filter_date)}}/{{$business_activity_scheduler->spots_available}} </span>
+					<span>{{$business_activity_scheduler->spots_left($filter_date)}}/{{$business_activity_scheduler->spots_available}}  </span>
 				</div>
 			</div>
 		</div>
@@ -46,12 +46,7 @@
             </select>
 
 			<script type="text/javascript">
-				const instructure  = '{{ @$instructor_id }}';
-				const insIds  = instructure ? instructure.split(',') : [];
-				const s  = new SlimSelect({
-				   select: '#instructure'
-				});
-				s.set(insIds);
+					initializeSlimSelect();
 			</script>
 		</div>
 	</div>
@@ -109,9 +104,12 @@
 
 							// if the customer has only 1 session remaining or the membership is only for 1 session then we have to display that activity also after check-in. because if that type of activity is checked-in then it's became an expired activity.
 
-							$todayCheckInDetails = App\UserBookingDetail::join('booking_checkin_details as bcd' ,'bcd.booking_detail_id' ,'=','user_booking_details.id')->where('bcd.customer_id',$cus->id)->whereDate('bcd.checked_at',date('Y-m-d'))->select('user_booking_details.*')->get();
+							$todayCheckInDetails = App\UserBookingDetail::join('booking_checkin_details as bcd' ,'bcd.booking_detail_id' ,'=','user_booking_details.id')->where('bcd.customer_id',$cus->id)->whereDate('bcd.checkin_date',$filter_date->format('Y-m-d'))->select('user_booking_details.*')->get();
 
-							$activeMembership = $activeMembershipCustomer->merge($todayCheckInDetails)->unique('id');
+							//print_r($todayCheckInDetails);
+							if($filter_date->format('Y-m-d') <= date('Y-m-d')){
+								$activeMembership = $activeMembershipCustomer->merge($todayCheckInDetails)->unique('id');
+							}
 
      					@endphp
 						<tr>
@@ -211,6 +209,16 @@
 </div>
 
 <script type="text/javascript">
+	var ins;
+	function initializeSlimSelect() {
+        const instructure  = '{{ @$instructor_id }}';
+        const insIds  = instructure ? instructure.split(',') : [];
+        ins  = new SlimSelect({
+            select: '#instructure'
+        });
+        ins.set(insIds);
+    }
+
 	$(document).ready(function () {
         var business_id = '{{request()->current_company->id}}';
         var url = "{{ url('/business/business_id/customers') }}";
@@ -338,10 +346,11 @@
     	$('.checkinDetails').modal('hide');
     }
 
-    var ins = new SlimSelect({
+    /*var ins = new SlimSelect({
       	select: '#instructure'
-   	});
+   	});*/
 
+    initializeSlimSelect();
    	$('#instructure').on('change', function() {
     	var selectedValues = ins.selected();
     	date = "{{$filter_date->format('Y-m-d')}}";

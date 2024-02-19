@@ -74,7 +74,8 @@ class ServiceController extends BusinessBaseController
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+        //ini_set('memory_limit', '-1');
         //print_r($request->all());exit(); 
         $profilePicture = $dayImage = $safe_varification ="";
 
@@ -211,7 +212,7 @@ class ServiceController extends BusinessBaseController
                         "serviceid" => $serviceId,
                        /* "dues_tax" => $request->dues_tax[$i] ?? '',
                         "sales_tax" => $request->sales_tax[$i] ?? '',*/
-                        "visibility_to_public" => in_array('V'.$i, @$request->visibility_to_public) ? 1 : 0,
+                        "visibility_to_public" => (!empty(@$request->visibility_to_public)) ? (in_array('V'.$i, @$request->visibility_to_public) ? 1 : 0) : 0,
                     ];
 
                     $createOrUpdate = BusinessPriceDetailsAges::updateOrCreate(['id' => $request->cat_id_db[$i]], $businessages);

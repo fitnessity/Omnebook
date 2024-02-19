@@ -46,6 +46,10 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         $chkCusId = $request->cus_id ?? '';
      
         $instructor_id = $booking_checkin_details->first() != '' ? $booking_checkin_details->first()->instructor_id : '';
+        
+        if($instructor_id == ''){
+             $instructor_id = $business_activity_scheduler->getInstructureIds($filter_date->format('Y-m-d'));
+        }
         // print_r($customers);exit;
 
         if($request->chk === '1'){

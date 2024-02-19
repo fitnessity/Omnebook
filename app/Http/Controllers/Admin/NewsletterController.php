@@ -31,9 +31,9 @@ class NewsletterController extends Controller
 
     public function index()
     {   
-        $loggedinAdmin = Auth::user();
+        $loggedinAdmin = auth()->guard('admin')->user();
         
-        if($loggedinAdmin->role == "admin"){
+        if($loggedinAdmin){
             
             $newsletterModulesList = $this->newsletter->getAllNewsletterModules();
 
@@ -84,9 +84,9 @@ class NewsletterController extends Controller
     {
         
         $return = array();
-        $loggedinAdmin = Auth::user();
+        $loggedinAdmin = auth()->guard('admin')->user();
         
-            if($loggedinAdmin->role == "admin"){
+            if($loggedinAdmin){
             $validator = $this->mailvalidator($request->all());
             if ($validator->fails()) {
                 $this->throwValidationException(
