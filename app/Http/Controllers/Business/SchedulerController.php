@@ -34,7 +34,7 @@ class SchedulerController extends BusinessBaseController
           }
           $category =  BusinessPriceDetailsAges::where('id',$request->categoryId)->first();
           $staffData = BusinessStaff::where('business_id',$business_id)->get();
-          $staffDataHTml = '<input type="hidden" name="instructure[0]" value=""><select name="instructure[0]" id="instructure0" multiple >';
+          $staffDataHTml = '<input type="hidden" name="instructure[0]" value=""><select name="instructure[0][]" id="instructure0" multiple>';
           foreach($staffData as $data){
                $selected ='';
                if(@$service->instructor_id == $data->id) {
@@ -48,6 +48,7 @@ class SchedulerController extends BusinessBaseController
      }
 
      public function store(Request $request){
+          //print_r($request->all());exit;
           $shift_start = $request->duration_cnt;
           if($shift_start >= 0) {
                $idary = BusinessActivityScheduler::where('cid', $request->cId)->where('userid', Auth::user()->id)->where('serviceid',  $request->serviceId)->where('category_id',$request->categoryId)->pluck('id')->toArray();

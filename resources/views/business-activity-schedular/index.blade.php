@@ -215,24 +215,6 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
     </div><!-- end main content-->
 </div><!-- END layout-wrapper -->
 
-<div class="modal fade" tabindex="-1" aria-labelledby="mySmallModalLabel" data-bs-focus="false"  aria-hidden="true" id="success-reservation">
-	<div class="modal-dialog modal-dialog-centered" id="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body" id="receiptbody">
-            	<div class="row">
-            		<div class="col-md-12 text-center">
-                       <label class="pay-confirm fs-17"></label>
-                    </div>
-            	</div>
-            </div>
-		</div>
-	</div>
-</div>
-
-
 <div class="modal fade compare-model in modal-middle" id="ajax_html_modal" tabindex="-1" aria-labelledby="mySmallModalLabel" data-bs-focus="false"  aria-hidden="true" >
 	<div class="modal-dialog modal-dialog-centered" id="modal-dialog">
 		<div class="modal-content">
@@ -244,7 +226,6 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 		</div>
 	</div>
 </div>
-
 
 <div class="modal fade compare-model  modal-middle in selectbooking"  tabindex="-1" aria-labelledby="mySmallModalLabel" data-bs-focus="false"  aria-hidden="true" >
 	<div class="modal-dialog modal-dialog-centered" id="modal-dialog">

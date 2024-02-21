@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Artisan;
 
 
 Route::get('/clear-cache', function () {
-    /*// Clear all cache
+    // Clear all cache
     Artisan::call('cache:clear');
 
     // Clear specific cache (e.g., route cache)
@@ -29,11 +29,13 @@ Route::get('/clear-cache', function () {
     // Clear all cached configuration files
     Artisan::call('config:clear');
 
-    return 'Cache cleared successfully.';*/
+    return 'Cache cleared successfully.';
 
     //print_r(App\Customer::where('user_id',NULL)->get());
 
-    /* done foreach(App\UserBookingDetail::get() as $details){
+
+    /*foreach(App\UserBookingDetail::get() as $details){
+
         $type = '';
         if($details->qty){
            $item = json_decode($details->qty,true);
@@ -47,25 +49,41 @@ Route::get('/clear-cache', function () {
             }
             $details->update(['membership_for'=>$type]);
         }
-    }
+    }*/
 
-    $bookings = App\Recurring::select('booking_detail_id', DB::raw('MIN(payment_date) as min_payment_date'))
+    /*$bookings = App\Recurring::select('booking_detail_id', DB::raw('MIN(payment_date) as min_payment_date'))
         ->groupBy('booking_detail_id')
         ->get();
 
 
     foreach($bookings as $details){
         App\Recurring::where(['booking_detail_id'=> $details->booking_detail_id ,'payment_date' =>$details->min_payment_date])->update(['payment_number' => 1]);
-    }
+    }*/
 
-    foreach(App\Recurring::get() as $details){
+    /*foreach(App\Recurring::get() as $details){
         if($details->status == 'Completed'){
             $details->update(['payment_on' => $details->payment_date]);
         }else{
             $details->update(['payment_on' => NULL]);
         }
-       
-    }  done*/  
+    }*/
+
+    /*foreach(App\Customer::get() as $details){
+        //$details->createUser(); 
+        // $details->createPassword(); 
+        // if(!$details->password){
+        //    $details->update(['password' => @$details->user->password]);
+        // }
+
+        if(!$details->user_id){
+            $FndCustomer =  App\Customer::whereRaw('LOWER(fname) = ? AND LOWER(lname) = ?', [strtolower($details->fname), strtolower($details->lname)])->where(['email' => $details->email])->first();
+
+            if($FndCustomer){
+                $details->update(['user_id' => $FndCustomer->id]);
+            }
+        }
+    }*/
+
 });
 //end
 
@@ -273,7 +291,6 @@ Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware
 
 });
 
-
 Route::group(['middleware' => ['auth']], function(){
 
 
@@ -290,6 +307,9 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/deleteFromSession', 'BusinessActivitySchedulerController@deleteFromSession')->name('deleteFromSession');
 
     Route::post('/multibooking/save', 'BusinessActivitySchedulerController@save')->name('multibooking.save');
+
+
+    Route::get('/multibooking/confirmation', 'BusinessActivitySchedulerController@confirmation')->name('multibooking.confirmation');
 
     Route::post('/setSessionOfSchedule/', 'BusinessActivitySchedulerController@setSessionOfSchedule')->name('setSessionOfSchedule');
 });
@@ -565,6 +585,9 @@ Route::any('logout', function (Request $request) {
 /* 09-june 2020 end */
 Route::get('/allSports', 'HomeController@allSports')->name('list-all-sports');
 Route::get('home/jsModalChildSports/{id}', 'HomeController@jsModalChildSports');
+
+Route::get('/users/{id}/login_as', 'HomeController@login_as')->name('admin_user_login_as');
+
 Route::group(array('prefix' => 'admin'), function(){
 
     // Inquiry Box
@@ -591,6 +614,11 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('/vatted_business_faq_view/{id}','Admin\BusinessFaqController@view')->name('vatted_business_faq_view');
     Route::get('/delete_vatted_business_faq/{id}','Admin\BusinessFaqController@delete')->name('vatted_business_faq_delete');
 
+
+    Route::get('/logout', function(){
+        Auth::guard('admin')->logout();
+        return Redirect::to('/admin');
+    });
 
     //forgot password routes
     Route::get('/forgotpassword', 'Admin\AdminAuthController@GetForgotpassword');  
@@ -623,7 +651,6 @@ Route::group(array('prefix' => 'admin'), function(){
     //Manage users
     Route::get('/users', 'Admin\AdminUserController@viewCustomers');
     Route::post('/users', 'Admin\AdminUserController@postCustomers');
-    Route::get('/users/{id}/login_as', 'Admin\AdminUserController@login_as')->name('admin_user_login_as');
     Route::get('/users/edit/{id}', 'Admin\AdminUserController@getCustomerDetails');
     Route::get('/users/view/{id}', 'Admin\AdminUserController@viewCustomerDetails');
     Route::post('/users/edit/{id}', 'Admin\AdminUserController@postCustomerDetails');
@@ -815,10 +842,6 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('/newsletters/delete/{id}', 'Admin\NewsletterController@delete');
     Route::get('/newsletters/create', 'Admin\NewsletterController@create')->name('send-newsletter-email');
     Route::post('/newsletters/send-email', 'Admin\NewsletterController@store')->name('send-newsletter');
-
-    Route::get('/logout', function(){
-        return Redirect::to('/admin');
-    });
 
     /* Help desk by sam */
     Route::get('/helpdesk','Admin\HelpController@index')->name('helpdesk');

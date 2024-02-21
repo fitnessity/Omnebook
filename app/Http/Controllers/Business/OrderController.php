@@ -446,6 +446,7 @@ class OrderController extends BusinessBaseController
                                 $paymentDate = $date->format('Y-m-d');
                                 $status = 'Completed';
                                 $payment_number = '1';
+                                $payment_on = date('Y-m-d');
                             }else{
                                 $Chk = explode(" ",$reCharge);
                                 $timeChk = @$Chk[1];
@@ -463,6 +464,7 @@ class OrderController extends BusinessBaseController
                                 }
                                 $status = 'Scheduled';
                                 $payment_number = NULL;
+                                $payment_on = NULL;
                             } 
 
                             $recurring = array(
@@ -478,6 +480,7 @@ class OrderController extends BusinessBaseController
                                 "tax" => $tax_recurring,
                                 "status" => $status,
                                 "payment_number" => $payment_number,
+                                "payment_on" => $payment_on,
                             );
                             if(!$isComp){
                                 Recurring::create($recurring);

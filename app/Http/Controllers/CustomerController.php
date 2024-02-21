@@ -34,12 +34,15 @@ class CustomerController extends Controller {
 
     protected $customers;
     protected $company;
+    protected $resultDate;
     public $error = '';
 
     public function __construct(CustomerRepository $customers,BookingRepository $bookings,UserRepository $users) {
         $this->middleware('auth');
         $this->customers = $customers;
         $this->bookings = $bookings;
+        $currentDate = Carbon::now();
+        $this->resultDate = $currentDate->subYears(18);
     }
 
     public function client(){
@@ -175,6 +178,7 @@ class CustomerController extends Controller {
             'notes' =>$notes,
             'lastBooking' =>$lastBooking,
             'cardSuccessMsg' =>$cardSuccessMsg,
+            'resultDate' =>$this->resultDate,
         ]);
     }
 
@@ -449,11 +453,11 @@ class CustomerController extends Controller {
         $customer = Customer::find($id);
         $UserFamilyDetails  = $customer->get_families();
         $companyId = $customer->business_id;
-            
         return view('customers.add_family', [
             'UserFamilyDetails' => $UserFamilyDetails,
             'companyId' => $companyId,
             'parent_cus_id' => $id,
+            'resultDate' => $this->resultDate,
         ]);
         //return view('profiles.viewcustomer');
     }
@@ -508,21 +512,19 @@ class CustomerController extends Controller {
                 $customer->user_id =  @$is_user->id;
             }
 
-            if($parent_id != ''){
-                $userId = $customer->user_id;
-            }else{
-                $userIdArray[$i][] = $customer->user_id;   
-            }
-
+            $userIdArray[] = $customer->user_id;   
             $customer->save();
         }
-
+       
         if($parent_id){
-            User::whereIn('id', $userIdArray)->update(['primary_account' => 0]);
-            User::where('id', $userId)->update(['primary_account' => 1]);
+            $cus = Customer::where('id', $request['parent_cus_id'])->first();
+            $cusParent = Customer::where('id',  $parent_id)->first();
             Customer::whereIn('id', $idArray)->update(['parent_cus_id' => $parent_id]);
-            Customer::where('id', $request['parent_cus_id'])->update(['parent_cus_id' => $parent_id,'primary_account' => 0]);
-            Customer::where('id', $parent_id)->update(['parent_cus_id' => null,'primary_account' => 1]);
+            $cus->update(['parent_cus_id' => $parent_id,'primary_account' => 0]);
+            $cusParent->update(['parent_cus_id' => null,'primary_account' => 1]);
+
+            User::whereIn('id', $userIdArray)->update(['primary_account' => 0]);
+            User::where('id', $cusParent->user_id)->update(['primary_account' => 1]);
         }
         return Redirect::back();
     }
@@ -616,9 +618,16 @@ class CustomerController extends Controller {
             $cust = Customer::find($request->cus_id);
             if($request->primary_account == 1){
                 $data['parent_cus_id'] = NULL;
-                 $data['primary_account']  = 1;
+                $data['primary_account']  = 1;
             }else{
                 $data['primary_account'] = 0;
+            }
+
+            if($data['primary_account'] == 1 && $cust->primary_account == 0){
+                Customer::where(['parent_cus_id' => $cust->parent_cus_id])->update(['parent_cus_id' => $cust->id]);
+                $oldParent = Customer::where(['id' => $cust->parent_cus_id])->first();
+                $oldParent->update(['parent_cus_id' => $cust->id ,'primary_account' => 0]);
+                User::where(['email' => @$oldParent->email, 'id' => @$oldParent->user_id])->update(['primary_account' => 0]);
             }
 
             User::where(['email' => $cust['email'] , 'id' => $cust['user_id']])->update(['primary_account' => $data['primary_account'] ,'profile_pic'=> $data['profile_pic'] ?? $cust->profile_pic ]);
@@ -763,7 +772,6 @@ class CustomerController extends Controller {
                 }
             }*/
         }
-
 
         Notification::create([
             'user_id' => Auth::user()->id,

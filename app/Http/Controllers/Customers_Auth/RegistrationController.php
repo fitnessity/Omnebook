@@ -167,7 +167,7 @@ class RegistrationController extends Controller
                     $currentCustomer = $customerObj;
                     for($i=0;$i<=$request->familycnt;$i++){
                         if($request->fname[$i] != ''){
-
+                            $random_passwordFamily = Str::random(8);    
                             $date = $request->birthdate[$i] ?? NULL;
                             if($request->primaryAccount == 1 && $currentCustomer->primary_account != 1){
                                 if($i == 0){
@@ -196,6 +196,7 @@ class RegistrationController extends Controller
                             $customerFamily->emergency_email = $request->emergency_email[$i];
                             $customerFamily->emergency_relation = $request->emergency_relation[$i];
                             $customerFamily->gender =  $request->familygender[$i];
+                            $customerFamily->password =   Hash::make($random_passwordFamily);
                             $customerFamily->request_status =  1;
                             $customerFamily->save();
                             $customerFamily->create_stripe_customer_id();
@@ -218,8 +219,8 @@ class RegistrationController extends Controller
                                 $familyUser->firstname =  $request->fname[$i];
                                 $familyUser->lastname =  $request->lname[$i];
                                 $familyUser->username = $request->fname[$i].$request->lname[$i];
-                                $familyUser->password = Hash::make($random_password);
-                                $familyUser->buddy_key = $random_password;
+                                $familyUser->password = Hash::make($random_passwordFamily);
+                                $familyUser->buddy_key = $random_passwordFamily;
                                 $familyUser->email = $request->emailid[$i];
                                 $familyUser->primary_account = $isParentAccount;
                                 $familyUser->country = 'United Status';
@@ -232,6 +233,9 @@ class RegistrationController extends Controller
                             }else{
                                 $customerFamily->stripe_customer_id = @$is_user->stripe_customer_id;
                                 $customerFamily->user_id = @$is_user->id;
+                                if(@$is_user->password){
+                                    $customerFamily->password = @$is_user->password;
+                                }
                             }
 
                             $customerFamily->save();

@@ -95,7 +95,72 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="links" role="tabpanel">
-                                    <h6>Comming soon</h6>
+                                    <div class="card bg-soft-grey ">
+                                        <div class="card-header align-items-center d-flex bg-soft-grey">
+                                            <h4 class="card-title mb-0 flex-grow-1">Create your link</h4>
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="live-preview">
+                                                <div class="row ">
+                                                    <div class="col-lg-3">
+                                                        <div class="mt-3 filter-check">
+                                                            <label for="">Link type</label>
+                                                            <select class="form-select mb-3" aria-label="Default select example">
+                                                                <option selected="">Login</option>                                                           
+                                                            </select>
+                                                        </div>
+                                                    </div>                                                  
+                                                </div>
+
+                                                <div>
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio" name="action" value="txtcolor"/>
+                                                            Change Text Color
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio" name="action" value="red"/>
+                                                                Change Background Color
+                                                        </label>
+                                                    </div>
+                                                    <div id="txtcolor" class="show-hide">
+                                                        <div>
+                                                            <label for="color-picker">Color:</label>
+                                                            <input type="color" value="#000000" id="color-picker" />
+                                                            <div class="mt-3 d-grid">
+                                                                <label for="">Preview</label>
+                                                                <p>
+                                                                    Watch the paragraph colors change when you adjust the color picker. As you make changes in the color picker, the first paragraph's color changes.
+                                                                </p>
+                                                            </div>  
+                                                        </div>
+                                                    </div>
+                                                    <div id="red" class="show-hide">I am the red div.</div>
+                                                </div>                                                
+
+                                                <div class="row">
+                                                    <div class="col-lg-3">
+                                                        <div class="mt-3 filter-check">
+                                                            <label for="">Image URL </label>
+                                                            <input class="form-control" type="file" id="formFileMultiple" multiple="">
+                                                        </div>
+                                                    </div>                                                  
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3">
+                                                        <div class="mt-3 d-grid">
+                                                            <label for="">Preview</label>
+                                                            <button class="btn btn-red" data-bs-toggle="modal" data-bs-target="#login_preview"><i class="fas fa-user"></i></button>
+                                                        </div>
+                                                    </div>                                                  
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="tab-pane" id="site_settings" role="tabpanel">
                                     <div class="">
@@ -315,6 +380,23 @@
 
 
 <!-- Modal -->
+<div class="modal fade" id="login_preview" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-70">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="preview-login">
+                    <img src="http://dev.fitnessity.co//public/images/register-bg.jpg">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
 <div class="modal fade" id="adduser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -345,6 +427,43 @@
 
 
 @include('layouts.business.footer')
+
+<script>
+$(document).ready(function(){ 
+    $("input[name=action]").change(function() {
+        var test = $(this).val();
+        $(".show-hide").hide();
+        $("#"+test).show();
+    }); 
+});
+
+let colorPicker;
+const defaultColor = "#0000ff";
+
+window.addEventListener("load", startup, false);
+
+function startup() {
+  colorPicker = document.querySelector("#color-picker");
+  colorPicker.value = defaultColor;
+  colorPicker.addEventListener("input", updateFirst, false);
+  colorPicker.addEventListener("change", updateAll, false);
+  colorPicker.select();
+}
+
+function updateFirst(event) {
+  const p = document.querySelector("p");
+  if (p) {
+    p.style.color = event.target.value;
+  }
+}
+
+function updateAll(event) {
+  document.querySelectorAll("p").forEach((p) => {
+    p.style.color = event.target.value;
+  });
+}
+
+</script>
 
 <script>
 // Inputs

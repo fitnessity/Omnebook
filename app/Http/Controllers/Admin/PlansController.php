@@ -768,7 +768,7 @@ class PlansController extends Controller
                 $bpd->cid= $request->cid;
                 $bpd->serviceid= $request->sid;
                 if($comdata->is_verified == 0){
-                    $bpd->userid = Auth::user()->id;
+                    $bpd->userid = auth()->guard('admin')->user()->id;
                 }else{
                     $bpd->userid = $comdata->user_id;
                 } 
@@ -860,7 +860,7 @@ class PlansController extends Controller
                         }
 
                         if($comdata->is_verified == 0){
-                            $userid = Auth::user()->id;
+                            $userid = auth()->guard('admin')->user()->id;
                         }else{
                             $userid = $comdata->user_id;
                         } 
@@ -1093,7 +1093,7 @@ class PlansController extends Controller
         }
         $bs->serviceid = 0;
         if($comdata->is_verified == 0){
-            $bs->userid = Auth::user()->id;
+            $bs->userid = auth()->guard('admin')->user()->id;
         }else{
             $bs->userid = $comdata->user_id;
         }
@@ -1108,7 +1108,7 @@ class PlansController extends Controller
                 $bpd->cid= $request->cid;
                 $bpd->serviceid= $bs->id;
                 if($comdata->is_verified == 0){
-                    $bpd->userid = Auth::user()->id;
+                    $bpd->userid = auth()->guard('admin')->user()->id;
                 }else{
                     $bpd->userid = $comdata->user_id;
                 } 
@@ -1208,7 +1208,7 @@ class PlansController extends Controller
                         }
 
                         if($comdata->is_verified == 0){
-                            $userid = Auth::user()->id;
+                            $userid = auth()->guard('admin')->user()->id;
                         }else{
                             $userid = $comdata->user_id;
                         } 
@@ -1368,7 +1368,7 @@ class PlansController extends Controller
             if($busschedata != ''){
                 $userid= $busschedata['userid'];
             }else{
-                $userid= Auth::user()->id;
+                $userid= auth()->guard('admin')->user()->id;
             }
             BusinessActivityScheduler::where('cid', $request->cid)->where('userid',$userid)->where('serviceid',  $request->serviceid)->where('category_id',$request->catid)->delete();
             

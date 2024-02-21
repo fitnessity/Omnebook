@@ -267,4 +267,11 @@ class BusinessActivityScheduler extends Model
         $name = rtrim($name, ', ');
         return $name;
     }
+
+    public function getInstructureIds($date){
+        $name = '';
+        $checkInData = BookingCheckinDetails::where('business_activity_scheduler_id' ,$this->id)->whereDate('checkin_date',$date)->first();
+        return @$checkInData->instructor_id ?? $this->instructure_ids;
+    }
+
 }

@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use Input;
 use View;
 use Validator;
-use App\User;
+use App\{User,Admin};
 use Hash;
 use Redirect;
 use Response;
@@ -123,12 +123,6 @@ class AdminUserController extends Controller
                 'pageTitle' => "Manage Users"
                 ]);
 
-    }
-
-    public function login_as(Request $request){
-        $user = User::find($request->id);
-        Auth::login($user, true);
-        return redirect('/');
     }
 
     public function postCustomers(Request $request){

@@ -17,13 +17,18 @@ class RedirectIfNotAdmin
      */
     public function handle($request, Closure $next, $guard = 'admin')
     {
-        $user = $request->user();
+        /*$user = $request->user();
         if($user && $user->role == "admin") {
             return $next($request);
         }else {
             return redirect('/admin');
-        }
+        }*/
         
+        if(auth()->guard('admin')->user()){
+            return $next($request);
+        }else{
+            return redirect('/admin');
+        }
     }
 }
 ?>

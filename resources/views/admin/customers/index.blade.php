@@ -27,6 +27,7 @@
                 <th><input type="checkbox" id="checkAll"></th>
                 <th>Profile Pic</th>
                 <th>Name</th>
+                <th>User ID</th>
                 <th>Email</th>
                 <th>Phone Number</th>
                 <th>Gender</th>
@@ -38,7 +39,12 @@
               </tr>
               </thead>
               <tbody>
+                <?php 
+                    $currentDate = Carbon\Carbon::now();
+                    $resultDate = $currentDate->subYears(18)->format('Y-m-d');  
+                ?>
                 @foreach ($allCustomers as $key=>$value)
+                <?php $userBirthdate = Carbon\Carbon::parse($value->birthdate); ?>
                   <tr>
                     <td><input type="checkbox" name="customerIds[]" value="{{$value->id}}"></td>
                     <td>
@@ -50,6 +56,7 @@
                       </center>
                     </td>
                     <td><a href="\admin\users\view\{{$value->id}}" title="Click to View user">{{$value->firstname}}  {{$value->lastname}}</a></td>
+                    <td>{{$value->unique_user_id}}</td>
                     <td>{{$value->email}}</td>
                     <td>{{$value->phone_number}}</td>
                     <td>{{$value->gender}}</td>
@@ -62,8 +69,8 @@
                       @endif
                       <span class="<?=$class?>"><?php echo ucfirst($value->status); ?></span>
                     </td>
-                    <td>
-                      <a href="{{route('admin_user_login_as', ['id' => $value->id])}}">Login</a>
+                    <td>@if($userBirthdate <= $resultDate && $value->birthdate != '') 
+                      <a href="{{route('admin_user_login_as', ['id' => $value->id])}}" target="_blank">Login</a> @endif
                     </td>
                     <td>
                       <input class="fitness-fee-ad" type="text" name="fitness_fee" id="fitness_fee{{$value->id}}" value="{{$value->fitnessity_fee}}"> %<br/>

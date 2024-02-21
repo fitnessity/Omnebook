@@ -176,6 +176,7 @@ class PaymentController extends Controller {
                                 $paymentDate = $date->format('Y-m-d');
                                 $status = 'Completed';
                                 $payment_number = '1';
+                                $payment_on = date('Y-m-d');
                             }else{
                                 $Chk = explode(" ",$reCharge);
                                 $timeChk = @$Chk[1];
@@ -191,6 +192,7 @@ class PaymentController extends Controller {
                                 }
                                 $status = 'Scheduled';
                                 $payment_number = NULL;
+                                $payment_on = NULL;
                             } 
 
                             $recurring = array(
@@ -206,6 +208,7 @@ class PaymentController extends Controller {
                                 "tax" => $tax_recurring ,
                                 "status" => $status,
                                 "payment_number" => $payment_number,
+                                "payment_on" => $payment_on,
                             );
                             Recurring::create($recurring);
                         }
@@ -501,6 +504,7 @@ class PaymentController extends Controller {
                                 $paymentDate = $date->format('Y-m-d');
                                 $status = 'Completed';
                                  $payment_number = '1';
+                                 $payment_on = date('Y-m-d');
                             }else{
                                 $Chk = explode(" ",$reCharge);
                                 $timeChk = @$Chk[1];
@@ -516,6 +520,7 @@ class PaymentController extends Controller {
                                 }
                                 $status = 'Scheduled';
                                 $payment_number = NULL;
+                                $payment_on = NULL;
                             } 
 
                             $recurring = array(
@@ -529,6 +534,8 @@ class PaymentController extends Controller {
                                 'payment_method'=> $payment_method,
                                 'stripe_payment_id'=> $stripe_id,
                                 "tax" => $tax_recurring ,
+                                "payment_number" => $payment_number,
+                                "payment_on" => $payment_on,
                                 "status" => $status,
                             );
                             Recurring::create($recurring);

@@ -18,10 +18,11 @@ class CustomerImport implements ToModel,ToCollection, WithStartRow, WithChunkRea
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    /*public function  __construct($business_id)
+
+    public function  __construct($business_id)
     {
-        $this->business_id= $business_id;
-    }*/
+        $this->business_id = $business_id;
+    }
     
     public function startRow(): int
     {
@@ -60,7 +61,7 @@ class CustomerImport implements ToModel,ToCollection, WithStartRow, WithChunkRea
 
     public function model(array $row){
 
-        if(Customer::where(['email'=>$row[12]])->first() == ''){
+       if(Customer::whereRaw('LOWER(lname) = ? AND LOWER(fname) = ? AND email = ? business_id = ?', [strtolower($row[0]), strtolower($row[1]), $row[12] ,$this->business_id])->first() == '') {
             return new Customer([
                 'lname' => $row[0],
                 'fname' => $row[1],

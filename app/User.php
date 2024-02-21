@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',  'password','new_password_key','is_deleted','isguestuser','fitnessity_fee','recurring_fee','firstname','lastname','birthdate','cid','bstep','serviceid','servicetype','stripe_connect_id','stripe_customer_id','username','gender','email','phone_number','profile_pic','address','city','state','country','zipcode','activated','show_step','dobstatus','buddy_key','primary_account','default_card','quick_intro', 'favorit_activity' ,'business_info','cover_photo','website','twitter','insta','facebook',
+        'name',  'password','new_password_key','is_deleted','isguestuser','fitnessity_fee','recurring_fee','firstname','lastname','birthdate','cid','bstep','serviceid','servicetype','stripe_connect_id','stripe_customer_id','username','gender','email','phone_number','profile_pic','address','city','state','country','zipcode','activated','show_step','dobstatus','buddy_key','primary_account','default_card','quick_intro', 'favorit_activity' ,'business_info','cover_photo','website','twitter','insta','facebook','unique_user_id',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -53,11 +53,29 @@ class User extends Authenticatable
             }
         });
 
+        self::creating(function($model){
+            if(!$model->unique_user_id){
+                $model->create_unique_id();
+            }
+        });
+
         self::updated(function($model){
             if(!$model->stripe_customer_id){
                 $model->create_stripe_customer_id();
             }
         });
+    }
+
+
+    public function create_unique_id(){
+        $lastUser = User::whereNotNull('unique_user_id')->orderBy('id','desc')->first();
+        if(!$lastUser){
+            $uniqueId = 100000000;
+        }else{
+            $uniqueId = $lastUser->unique_user_id + 1;
+        }
+
+        $this->unique_user_id = $uniqueId;
     }
 
     public function getAgeAttribute()
@@ -158,14 +176,19 @@ class User extends Authenticatable
 
     function create_stripe_customer_id(){
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $customer = \Stripe\Customer::create([
-            'name' => $this->firstname . ' '. $this->lastname,
-            'email'=> $this->email,
-        ]);
-        $this->stripe_customer_id = $customer->id;
-        $this->save();
+        try{
+             $customer = \Stripe\Customer::create([
+                'name' => $this->firstname . ' '. $this->lastname,
+                'email'=> $this->email,
+            ]);
+            $this->stripe_customer_id = $customer->id;
+            $this->save();
 
-        return $customer->id;
+            return $customer->id;
+        }catch(Exception | \Stripe\Exception\InvalidRequestException $e){
+            return "";
+        }
+       
     }
 
     public function get_stripe_card_info(){
