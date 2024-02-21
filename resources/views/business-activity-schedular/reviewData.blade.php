@@ -23,9 +23,8 @@
 					<th>Choose Membership</th>
 					<th>Action</th>
 				</tr>
-
 				@foreach($finalSessionAry as $i=>$sesAry)
-				<tr id="blankTr">
+				<tr class="blankTr">
 					<td>{{$i+1}}.</td>
 					<td>{{$sesAry['pname']}} @if(@$sesAry['catname']) -  {{@$sesAry['catname']}} @endif</td>
 					<td>{{(new DateTime($sesAry['date']))->format("l, F j,Y")}}</td>
@@ -67,7 +66,7 @@
 	</div>
 </div>
 <div class="modal-footer mt-20">
-	<button type="button" @if(count($finalSessionAry) > 0 ) onclick="confirmSchedule('{{count($finalSessionAry)}}');" @endif class="btn btn-red">Confirm Booking</button>
+	<button type="button" @if(count($finalSessionAry) > 0 ) onclick="confirmSchedule('{{count($finalSessionAry)}}');" @endif class="btn btn-red confirmBtn">Confirm Booking</button>
 </div>
 
 <script type="text/javascript">
@@ -85,6 +84,7 @@
 				});
 
 				if (isValid == 1) {
+					$('.confirmBtn').attr('disable',true)
 					$.ajax({
 			   			url: "{{route('multibooking.save')}}",
 						type: 'POST',
@@ -96,12 +96,21 @@
 							cid: '{{$cid}}',
 						},
 						success: function (response) { 
-							//window.location.reload();
-							$('#blankTr').html('');
-							$('#successMsg').html(response);
-							setTimeout(function() {
-							    window.location.href = "/business_activity_schedulers/" + "{{$company->id}}" + "?customer_id=" + "{{$cid}}";
-							}, 2000);
+							$('.confirmBtn').attr('disable',false)
+							//$('#successMsg').html(response);
+							$.ajax({
+								url:'/multibooking/confirmation',
+								type: 'GET',
+								success:function(data){
+									$('.blankTr').html('');
+									$('#ajax_html_modal').hide();
+									$('#receiptbody').html(data);
+									$('#success-reservation').modal('show');
+									setTimeout(function() {
+									    window.location.href = "/business_activity_schedulers/" + "{{$company->id}}" + "?customer_id=" + "{{$cid}}";
+									}, 3000);
+								}
+							});
 							
 						}
 					});

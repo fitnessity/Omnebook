@@ -88,7 +88,7 @@
 																						<div class="col-lg-7 col-md-6 col-sm-5 col-xs-12 col-auto">
 																							<div class="p-2 mmt-10">
 																								<h3 class="mb-1">{{$customerdata->full_name}} @if($customerdata->primary_account == '1') <span class="font-green fs-14">(Primary Account)</span> @endif </h3>
-																								<h3>Member Id {{@$customerdata->user->unique_user_id}}</h3>
+																								<h3> <span class="fs-14">Member Id {{@$customerdata->user->unique_user_id}}</span></h3>
 																							</div>
 																						</div>
 																						<!--end col-->

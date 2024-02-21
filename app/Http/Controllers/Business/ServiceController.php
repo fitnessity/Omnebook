@@ -65,7 +65,12 @@ class ServiceController extends BusinessBaseController
         if($service == '' && $serviceId != 0){
             return redirect(route('business.services.create',["serviceType"=> $request->serviceType,'business_id'=>$companyId]));
         }
-        return view('business.services.create', compact('serviceType','sportsData','staffData','service','profile_pic','companyId','serviceId','proofVerification','vaccinefVerification','covidVerification','fitnessity_fee','recurring_fee','categoryData'));
+
+        $displayRecPrice = $request->displayRecPrice;
+        $displayRecCategory = $request->displayRecCategory;
+        $displayType = $request->displayType;
+        
+        return view('business.services.create', compact('serviceType','sportsData','staffData','service','profile_pic','companyId','serviceId','proofVerification','vaccinefVerification','covidVerification','fitnessity_fee','recurring_fee','categoryData','displayRecPrice','displayRecCategory','displayType'));
     }
     /**
      * Store a newly created resource in storage.
@@ -111,7 +116,9 @@ class ServiceController extends BusinessBaseController
                 'know_before_you_go' => $request->thingsToKnow,
                 'instructor_id' => $request->instructor_id,
             ];
-        }else if($request->step == '2'){
+        }
+
+        if($request->step == '2'){
             $instant = $request->has('instantbooking') ? 1 : 0;
             $requestbooking = $request->has('requestbooking') ? 1 : 0;
             $serviceTypes =     $request->serviceTypes != ''  ? implode(',' , $request->serviceTypes) :  '';
@@ -192,7 +199,10 @@ class ServiceController extends BusinessBaseController
             }
 
             return redirect()->route('business.services.create',['serviceType'=>$request->serviceType, 'serviceId'=> $serviceId]);
-        }else{
+        }
+
+
+        if($request->step == '3'){
             $paycount = count($request->category_title);
             if($paycount > 0) {
                 $idary_cat = $idary_cat1 = $idary_price = $idary_price1 = $idary_addOn = $idary_addOn1 = array();
@@ -348,7 +358,13 @@ class ServiceController extends BusinessBaseController
             $companyservice = $companyInfo->service->sortByDesc('created_at');
             $popupserviceid = '';
             $companyname = $companyInfo->name;
-            return redirect()->route('business.services.index');
+
+            if($request->submitType == 'recurring'){
+                return redirect()->route('business.services.create',['serviceType'=>$request->serviceType, 'serviceId'=> $serviceId ,'displayRecPrice' => $request->displayRecPrice ,'displayType' =>$request->displayType,'displayRecCategory' =>$request->displayRecCategory]);
+            }else{
+                return redirect()->route('business.services.index');
+            }
+            
         }   
     }
 

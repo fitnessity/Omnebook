@@ -305,6 +305,8 @@ Route::group(['middleware' => ['auth']], function(){
 
     Route::post('/multibooking/save', 'BusinessActivitySchedulerController@save')->name('multibooking.save');
 
+    Route::get('/multibooking/confirmation', 'BusinessActivitySchedulerController@confirmation')->name('multibooking.confirmation');
+
     Route::post('/setSessionOfSchedule/', 'BusinessActivitySchedulerController@setSessionOfSchedule')->name('setSessionOfSchedule');
 });
 

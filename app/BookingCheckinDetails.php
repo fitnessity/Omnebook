@@ -75,8 +75,6 @@ class BookingCheckinDetails extends Model
             }
         });
 
-        
-
         self::updated(function($model){
             if($model->no_show_action == 'charge_fee'){
                 $model->customer->charge($model->no_show_charged);
@@ -99,10 +97,7 @@ class BookingCheckinDetails extends Model
         'business_activity_scheduler_id', 'customer_id', 'booking_detail_id', 'checkin_date', 'checked_at', 'created_at', 'updated_at', 'use_session_amount', 'before_use_session_amount', 'after_use_session_amount', 'no_show_action', 'no_show_charged', 'source_type','booked_by_customer_id','instructor_id'
     ];
 
-
     protected $appends = ['cancel_count' ,'noshow_count' ,'membership_checkin_count'];
-
-
 
     public function getMembershipCheckinCountAttribute(){
         return BookingCheckinDetails::where('booking_detail_id',$this->booking_detail_id)->whereNotNull('checked_at')->count();
