@@ -6776,9 +6776,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   border-radius: 15px;
   font-weight: 500;
 }
-.show-all .table-inner-data-sec {
-  padding: 7px;
-}
+
 .show-all .table-inner-data-sec img {
   border-radius: 100%;
   width: 50px;
@@ -6809,7 +6807,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .star-rest .activity-inner-data {
   display: inline-block;
   font-size: 25px;
-  padding: 9px 0;
 }
 .star-rest .activity-inner-data i {
   color: #f91942;
@@ -6831,7 +6828,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   font-weight: 500;
 }
 .show-all .join-btn {
-  padding: 17px;
   text-align: right;
 }
 .sports-list {
@@ -6849,3 +6845,29 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .preview-login img{
   width: 100%;
 }
+.service-pr-0{
+  padding-right: 0px;
+}
+.staff-pl-0{
+  padding-left: 0px;
+}
+.schedulewid-info label{
+  margin-bottom: 0px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.schedulewid-info span{
+  color: #000 !important;
+  margin-left: 5px !important;
+  font-size: 14px;
+}
+#txtcolor {
+  display: none;
+  padding: 10px;
+}
+
+#red {
+  display: none;
+  padding: 10px;
+  background-color: #f00;
+} 

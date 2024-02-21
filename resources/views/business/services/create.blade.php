@@ -853,9 +853,13 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <form action="{{route('business.services.store')}}" method="POST" enctype="multipart/form-data">
+                                            <form action="{{route('business.services.store')}}" method="POST" enctype="multipart/form-data" >
                                                 @csrf
                                                 <input type="hidden" name="step" id="step3" value="3">
+                                                <input type="hidden" name="submitType" id="submitType" value="">
+                                                <input type="hidden" name="displayRecPrice" id="displayRecPrice" value="">
+                                                <input type="hidden" name="displayRecCategory" id="displayRecCategory" value="">
+                                                <input type="hidden" name="displayType" id="displayType" value="">
                                                 <input type="hidden" name="serviceId" id="serviceId" value="{{$serviceId}}">
                                                 <input type="hidden" name="serviceType" id="serviceType" value="{{$serviceType}}">
                                                 <div class="live-preview" id="categoryMainDiv">
@@ -876,9 +880,6 @@
                                                                                             <div class="setting-icon">
                                                                                                 <i class="ri-more-fill"></i>
                                                                                                 <ul id="catUl{{$i}}">
-                                                                                                    <!-- <li><a href="" data-bs-toggle="modal" data-bs-target=".tax{{$i}}">
-                                                                                                        <i class="fas fa-plus text-muted"></i>Taxes</a></li> -->
-                                                                                                   <!-- <li><a onclick="scheduleLink('{{@$category->cid}}','{{@$category->id}}');"><i class="fas fa-plus text-muted"></i>Schedule</a></li> -->
                                                                                                     <li class="non-collapsing" data-bs-toggle="collapse" data-bs-target><a onclick=" return add_another_price_duplicate_category({{$i}});" ><i class="fas fa-plus text-muted"></i>Duplicate Entire Category</a></li>
                                                                                                     @if($i!=0)
                                                                                                     <li class="dropdown-divider"></li>
@@ -892,7 +893,7 @@
                                                                             </div>
                                                                         </button>
                                                                     </h2>
-                                                                    <div id="accor_nestingcategory{{$i}}" class="accordion-collapse collapse" aria-labelledby="accordionnestingcat{{$i}}" data-bs-parent="#category{{$i}}">
+                                                                    <div id="accor_nestingcategory{{$i}}" class="accordion-collapse @if($displayRecCategory == $category->id) show @else collapse @endif" aria-labelledby="accordionnestingcat{{$i}}" data-bs-parent="#category{{$i}}">
                                                                         <div class="accordion-body">
                                                                             <div class="row">
                                                                                 <div class="col-md-12">
@@ -964,27 +965,6 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <!-- <div class="modal fade tax{{$i}}" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                                                                    <div class="modal-dialog modal-dialog-centered">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h5 class="modal-title" id="myModalLabel">Taxes</h5>
-                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                            </div>
-                                                                            <div class="modal-body">
-                                                                                <div class="mb-3">
-                                                                                    <input type="text" name="sales_tax[]" id="sales_tax" class="form-control" value="{{$category->sales_tax}}" placeholder="Sales Tax">
-                                                                                </div>
-                                                                                <div class="mb-3">
-                                                                                    <input type="text" name="dues_tax[]" id="dues_tax" class="form-control" value="{{$category->dues_tax}}" placeholder="Dues Tax"> 
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button" data-bs-dismiss="modal" class="btn btn-primary btn-red">Submit</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div> -->
                                                             </div>
                                                         @endforeach
                                                     @else
@@ -1067,27 +1047,6 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <!-- <div class="modal fade tax0" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                                                                <div class="modal-dialog modal-dialog-centered">
-                                                                    <div class="modal-content">
-                                                                        <div class="modal-header">
-                                                                            <h5 class="modal-title" id="myModalLabel">Taxes</h5>
-                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                        </div>
-                                                                        <div class="modal-body">
-                                                                            <div class="mb-3">
-                                                                                <input type="text" name="sales_tax[]" id="sales_tax" class="form-control" value="" placeholder="Sales Tax">
-                                                                            </div>
-                                                                            <div class="mb-3">
-                                                                                <input type="text" name="dues_tax[]" id="dues_tax" class="form-control" value="" placeholder="Dues Tax"> 
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="modal-footer">
-                                                                            <button type="button" data-bs-dismiss="modal" class="btn btn-primary btn-red">Submit</button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div> -->
                                                         </div>
                                                     @endif
                                                 </div>
@@ -1101,7 +1060,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-12 col-12">
-                                                        <button type="submit" class="btn-red-primary btn-red float-right mt-15" @if($serviceId == 0) disabled @endif>Save </button>
+                                                        <button type="submit" class="btn-red-primary btn-red float-right mt-15" id="priceForm" @if($serviceId == 0) disabled @endif >Save </button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -1773,7 +1732,7 @@ yourButton.addEventListener('mouseleave', (e) => {
         displayTotalTime  =  total != 0 ? total_time : 0;
 
         $("#p_total_contract_revenue_"+val+i+j).html('$'+displayPrice);
-        $("#total_contract_revenue_"+val+i+j).val('$'+displayPrice);
+        $("#total_contract_revenue_"+val+i+j).val(displayPrice);
         $("#total_duration_"+val+i+j).html(displayTotalTime+' '+time);
         $("#trems_payment_"+val+i+j).html('Terms: '+displayPart+' '+time+' Payments');
 
@@ -1962,6 +1921,15 @@ yourButton.addEventListener('mouseleave', (e) => {
             }
         }
     }
+
+    function SubmitForm(price,type,category){
+        $('#submitType').val('recurring');
+        $('#displayRecPrice').val(price);
+        $('#displayRecCategory').val(category);
+        $('#displayType').val(type);
+        $('#priceForm').click();
+    }
+
 </script>
 
 <script type="text/javascript">

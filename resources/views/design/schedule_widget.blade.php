@@ -230,32 +230,32 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="activities_options col-md-2 col-sm-3 col-xs-6">
+                                            <div class="activities_options col-lg-2 col-md-3 col-sm-3 col-xs-6 col-6">
                                                 <div class="sports-list">
                                                     <a href="#">All Activities</a>
                                                 </div>
                                             </div>
-                                            <div class="activities_options col-md-2 col-sm-3 col-xs-6">
+                                            <div class="activities_options col-lg-2 col-md-3 col-sm-3 col-xs-6 col-6">
                                                 <div class="sports-list">
                                                     <a href="#">Yoga</a>
                                                 </div>
                                             </div>
-                                            <div class="activities_options col-md-2 col-sm-3 col-xs-6">
+                                            <div class="activities_options col-lg-2 col-md-3 col-sm-3 col-xs-6 col-6">
                                                 <div class="sports-list">
                                                     <a href="#">Pilates</a>
                                                 </div>
                                             </div>
-                                            <div class="activities_options col-md-2 col-sm-3 col-xs-6">
+                                            <div class="activities_options col-lg-2 col-md-3 col-sm-3 col-xs-6 col-6">
                                                 <div class="sports-list">
                                                     <a href="#">Cardio</a>
                                                 </div>
                                             </div>
-                                            <div class="activities_options col-md-2 col-sm-3 col-xs-6">
+                                            <div class="activities_options col-lg-2 col-md-3 col-sm-3 col-xs-6 col-6">
                                                 <div class="sports-list">
                                                     <a href="#">Cycling</a>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2 col-sm-3 col-xs-6 show_activities_options">
+                                            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6 col-6 show_activities_options">
                                                 <div class="sports-list">
                                                     <a href="#">More<i class="fas fa-caret-down"></i></a>
                                                 </div>
@@ -263,48 +263,89 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-lg-12 service-pr-0">
+                                                <div class="card-header bg-soft-grey">
+                                                    <h4 class="card-title mb-0 flex-grow-1">Services</h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="card-body">
+                                                    <select class="form-select" name="know_from">
+                                                        <option value="All Services" Selected>All Services</option>
+                                                        <option value="Classes">Classes</option>
+                                                        <option value="Private Lessons">Private Lessons</option>
+                                                        <option value="Events">Events</option>
+                                                        <option value="Experience">Experience</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-lg-12 staff-pl-0">
+                                                <div class="card-header bg-soft-grey">
+                                                    <h4 class="card-title mb-0 flex-grow-1">All Staff</h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="card-body">
+                                                    <select class="form-select" name="know_from">
+                                                        <option value="All Staff" Selected>All Staff</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+
                                 <div>
                                     <div class="card-header bg-soft-grey">
                                         <h4 class="card-title mb-0 flex-grow-1">Find Date</h4>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-2 col-sm-2 col-xs-6">
+                                            <div class="col-md-2 col-sm-2 col-xs-6 col-6">
                                                 <div class="pairets">
                                                     <!-- <div class="pairets-inviable"> -->
                                                     <a href="#" class="calendar-btn">Wed 14</a>
                                                 </div>
                                             </div>
                                                                     
-                                            <div class="col-md-2 col-sm-2 col-xs-6">
+                                            <div class="col-md-2 col-sm-2 col-xs-6 col-6">
                                                 <div class="pairets-inviable">
                                                     <!-- <div class="pairets-inviable"> -->
                                                     <a href="#" class="calendar-btn">Thu 15</a>
                                                 </div>
                                             </div>
                                                                     
-                                            <div class="col-md-2 col-sm-2 col-xs-6">
+                                            <div class="col-md-2 col-sm-2 col-xs-6 col-6">
                                                 <div class="pairets-inviable">
                                                     <!-- <div class="pairets-inviable"> -->
                                                     <a href="#" class="calendar-btn">Fri 16</a>
                                                 </div>
                                             </div>
                                                                     
-                                            <div class="col-md-2 col-sm-2 col-xs-6">
+                                            <div class="col-md-2 col-sm-2 col-xs-6 col-6">
                                                 <div class="pairets-inviable">
                                                     <!-- <div class="pairets-inviable"> -->
                                                     <a href="#" class="calendar-btn">Sat 17</a>
                                                 </div>
                                             </div>
                                                                     
-                                            <div class="col-md-2 col-sm-2 col-xs-6">
+                                            <div class="col-md-2 col-sm-2 col-xs-6 col-6">
                                                 <div class="pairets-inviable">
                                                     <!-- <div class="pairets-inviable"> -->
                                                     <a href="#" class="calendar-btn">Sun 18</a>
                                                 </div>
                                             </div>
                                                                     
-                                            <div class="col-md-2 col-sm-2 col-xs-6">
+                                            <div class="col-md-2 col-sm-2 col-xs-6 col-6">
                                                 <div class="pairets-inviable">
                                                     <!-- <div class="pairets-inviable"> -->
                                                     <a href="#" class="calendar-btn">Mon 19</a>
@@ -326,7 +367,7 @@
                                     </div>
                                     <div class="card-body card-body-schedule show-all">
                                         <div class="row justify-content-md-center">
-                                            <div class="col-md-2 col-xs-12 col-sm-2">
+                                            <div class="col-lg-2 col-md-2 col-xs-12 col-sm-2 col-12">
                                                 <div class="table-inner-data">
                                                     <span class="mg-time"> 06:30 AM </span>
                                                     <div class="time-min">
@@ -334,18 +375,26 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 col-xs-12 col-sm-5">
+                                            <div class="col-lg-7 col-md-7 col-xs-12 col-sm-7 col-12">
                                                 <div class="table-inner-data-sec">
                                                     <img src="https://fitnessity-production.s3.amazonaws.com/activity/meka8JsFR68TpdRhatzxzZpTFPVUSvgEx1MGILm5.jpg" alt="Fitnessity">
                                                     <div class="p-name">
-                                                        <h3>jumping 1</h3>
-                                                        <p> Personal Training | Bungee Jumping | Spot Available - 1/1
-                                                            </p>
-                                                                                                            
+                                                        <div class="schedulewid-info">
+                                                            <label>Category Name: </label>
+                                                            <span> Hocky class1</span>
+                                                        </div>
+                                                        <div class="schedulewid-info">
+                                                            <label>Program Name: </label>
+                                                            <span>Hocky Class On Fire</span>
+                                                        </div>
+                                                        <div class="schedulewid-info">
+                                                            <label>Activity: </label>
+                                                            <span>Ice Hockey</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-1 col-xs-3 col-sm-2">
+                                            <div class="col-lg-1 col-md-1 col-xs-3 col-sm-1 col-6">
                                                 <div class="star-rest">
                                                     <div class="activity-inner-data">
                                                         <i class="fas fa-star"></i>
@@ -353,12 +402,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-1 col-xs-3 col-sm-1">
-                                                <div class="table-price">
-                                                    <span> $10 </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 col-xs-6 col-sm-2">
+                                            <div class="col-lg-2 col-md-2 col-xs-6 col-sm-2 col-6">
                                                 <div class="join-btn">
                                                     <a class="btn btn-red" href="#">Book Now</a>
                                                 </div>
@@ -372,7 +416,7 @@
                                             <div class="col-md-12">
                                                 <div class="border-list">
                                                     <div class="row">
-                                                        <div class="col-md-2 col-xs-12 col-sm-2">
+                                                        <div class="col-lg-2 col-md-2 col-xs-12 col-sm-2  col-12">
                                                             <div class="table-inner-data">
                                                                 <span class="mg-time"> 09:00 AM </span>
                                                                 <div class="time-min">
@@ -380,18 +424,26 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6 col-xs-12 col-sm-5">
+                                                        <div class="col-lg-7 col-md-7 col-xs-12 col-sm-7  col-12">
                                                             <div class="table-inner-data-sec">
                                                                 <img src="https://fitnessity-production.s3.amazonaws.com/activity/eisJPbu7UPhASgD4edJSOufZSXENkw3TkZV281HL.jpg" alt="Fitnessity">
                                                                 <div class="p-name">
-                                                                    <h3>Summer Camp at Valor</h3>
-                                                                    <p> Events | Day Camp | Spot Available - 200/200
-                                                                        </p>
-                                                                                                                        
+                                                                    <div class="schedulewid-info">
+                                                                        <label>Category Name: </label>
+                                                                        <span>global acdamy</span>
+                                                                    </div>
+                                                                    <div class="schedulewid-info">
+                                                                        <label>Program Name: </label>
+                                                                        <span>Go Golfers</span>
+                                                                    </div>
+                                                                    <div class="schedulewid-info">
+                                                                        <label>Activity: </label>
+                                                                        <span>Golf</span>
+                                                                    </div>                                                
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-1 col-xs-3 col-sm-2">
+                                                        <div class="col-lg-1 col-md-1 col-xs-3 col-sm-1  col-6">
                                                             <div class="star-rest">
                                                                 <div class="activity-inner-data">
                                                                     <i class="fas fa-star"></i>
@@ -399,12 +451,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-1 col-xs-3 col-sm-1">
-                                                            <div class="table-price">
-                                                                <span> $150 </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-xs-6 col-sm-2">
+                                                        <div class="col-lg-2 col-md-2 col-xs-6 col-sm-2  col-6">
                                                             <div class="join-btn">
                                                                 <a class="btn btn-red" href="#">Book Now</a>
                                                             </div>
@@ -421,7 +468,7 @@
                                             <div class="col-md-12">
                                                 <div class="border-list">
                                                     <div class="row">
-                                                        <div class="col-md-2 col-xs-12 col-sm-2">
+                                                        <div class="col-lg-2 col-md-2 col-xs-12 col-sm-2  col-12">
                                                             <div class="table-inner-data">
                                                                 <span class="mg-time"> 09:15 AM </span>
                                                                 <div class="time-min">
@@ -429,18 +476,26 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6 col-xs-12 col-sm-5">
+                                                        <div class="col-lg-7 col-md-7 col-xs-12 col-sm-7  col-12">
                                                             <div class="table-inner-data-sec">
                                                                 <img src="https://fitnessity-production.s3.amazonaws.com/activity/wvahqhcKOL6C8NQ1IBqh3vtfVOc3MOAM3aarjoLf.jpg" alt="Fitnessity">
                                                                 <div class="p-name">
-                                                                    <h3>Bucephalus Riding and Polo Club1</h3>
-                                                                    <p> Events | Horseback Riding | Spot Available - 10/10
-                                                                        </p>
-                                                                                                                        
+                                                                    <div class="schedulewid-info">
+                                                                        <label>Category Name: </label>
+                                                                        <span>Solo Private Lessons</span>
+                                                                    </div>
+                                                                    <div class="schedulewid-info">
+                                                                        <label>Program Name: </label>
+                                                                        <span>Summer Aerobics</span>
+                                                                    </div>
+                                                                    <div class="schedulewid-info">
+                                                                        <label>Activity: </label>
+                                                                        <span>Beach Vollyball</span>
+                                                                    </div>                                              
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-1 col-xs-3 col-sm-2">
+                                                        <div class="col-lg-1 col-md-1 col-xs-3 col-sm-1  col-6">
                                                             <div class="star-rest">
                                                                 <div class="activity-inner-data">
                                                                     <i class="fas fa-star"></i>
@@ -448,12 +503,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-1 col-xs-3 col-sm-1">
-                                                            <div class="table-price">
-                                                                <span> $10 </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-xs-6 col-sm-2">
+                                                        <div class="col-lg-2 col-md-2 col-xs-6 col-sm-2  col-6">
                                                             <div class="join-btn">
                                                                 <a class="btn btn-red" href="#">Book Now</a>
                                                             </div>

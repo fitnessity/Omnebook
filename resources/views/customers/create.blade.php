@@ -91,28 +91,28 @@
                                                             <div class="row">
                                                                 <div class="col-md-12 col-lg-12"><h4 class="font-red ">Address</h4></div>
                                                                 <div class="col-md-4 col-lg-3 mt-10">
-                                                                    <label>Address <span id="star">*</span></label>
+                                                                    <label>Address </label>
                                                                     <input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="addressCustomer" value=""  oninput="initMapCall('addressCustomer', 'cityCustomer', 'stateCustomer', 'countryCustomer', 'zipcodeCustomer', 'latitudeCustomer', 'longitudeCustomer')"> 
                                                                 </div>
                                                                 <div id="map" style="display: none;"></div>
                                                                 <div class="col-md-4 col-lg-3 mt-10">
-                                                                    <label for="City">City <span id="star">*</span></label>
+                                                                    <label for="City">City</label>
                                                                     <input type="text" class="form-control" name="city" id="cityCustomer" size="30" maxlength="50" value="" >
                                                                 </div>
                                                                 <input type="hidden" name="lon" id="longitudeCustomer" value="">
                                                                 <input type="hidden" name="lat" id="latitudeCustomer" value="">
 
                                                                 <div class="col-md-4 col-lg-3 mt-10">
-                                                                    <label for="state">State <span id="star">*</span></label>
+                                                                    <label for="state">State</label>
                                                                     <input type="text" class="form-control" name="state" id="stateCustomer" size="30" maxlength="50" value="" >
                                                                 </div>
                                                                 <div class="col-md-4 col-lg-3 mt-10">
-                                                                    <label for="country">Country <span id="star">*</span></label>
+                                                                    <label for="country">Country </label>
                                                                     <input type="text" class="form-control" name="country" id="countryCustomer" size="30" maxlength="50" value="" >
                                                                 </div> 
 
                                                                 <div class="col-md-4 col-lg-3 mt-10">
-                                                                    <label for="zipcode">Zip Code <span id="star">*</span></label>
+                                                                    <label for="zipcode">Zip Code </label>
                                                                     <input type="text" class="form-control" name="zipcode" id="zipcodeCustomer" size="30" maxlength="50" value="" >
                                                                 </div>
                                                             </div>
@@ -271,11 +271,11 @@
                                                                 <div class="row">
                                                                     <label class="mt-10">Please pick a password to log-in to your account later.</label>
                                                                     <div class="col-md-4 col-lg-3 mt-10">
-                                                                        <label class="mt-10">Password</label>
+                                                                        <label class="mt-10">Password <span id="star">*</span></label>
                                                                         <input type="text" name="password" id="password" class="form-control">
                                                                     </div>
                                                                     <div class="col-md-4 col-lg-3 mt-10">
-                                                                        <label class="mt-10">Confirm Password</label>
+                                                                        <label class="mt-10">Confirm Password <span id="star">*</span></label>
                                                                         <input type="text" name="confirmpassword" id="confirmpassword" class="form-control">
                                                                     </div>
                                                                 </div>

@@ -56,7 +56,7 @@
                 </div>
             </button>
         </h2>
-        <div id="accor_nestingprice{{$i}}{{$j}}" class="accordion-collapse collapse" aria-labelledby="acc_nesting{{$i}}{{$j}}" data-bs-parent="#priceoption{{$i}}{{$j}}">
+        <div id="accor_nestingprice{{$i}}{{$j}}" class="accordion-collapse @if($displayRecPrice == @$price->id) show @else collapse @endif" aria-labelledby="acc_nesting{{$i}}{{$j}}" data-bs-parent="#priceoption{{$i}}{{$j}}">
             <div class="accordion-body">
                 <input type="hidden" name="price_id_db_{{$i}}{{$j}}" id="price_id_db{{$i}}{{$j}}" value="{{@$price->id}}" />
                 <div class="row">
@@ -135,7 +135,7 @@
                                 Prices Options for Adults
                             </button>
                         </h2>
-                        <div id="accor_adult{{$i}}{{$j}}" class="accordion-collapse collapse" aria-labelledby="accor_nestingadult{{$i}}{{$j}}" data-bs-parent="#accor_nestingadult{{$i}}{{$j}}">
+                        <div id="accor_adult{{$i}}{{$j}}" class="accordion-collapse @if($displayType == 'adult') show @else collapse @endif" aria-labelledby="accor_nestingadult{{$i}}{{$j}}" data-bs-parent="#accor_nestingadult{{$i}}{{$j}}">
                             <div class="accordion-body">
                                 <div class="container nopadding">
                                     <div class="row">
@@ -186,7 +186,7 @@
                                 Prices Options for Children
                             </button>
                         </h2>
-                        <div id="accor_child{{$i}}{{$j}}" class="accordion-collapse collapse" aria-labelledby="accor_nestingchild{{$i}}{{$j}}" data-bs-parent="#accor_nestingchild{{$i}}{{$j}}">
+                        <div id="accor_child{{$i}}{{$j}}" class="accordion-collapse @if($displayType == 'child') show @else collapse @endif" aria-labelledby="accor_nestingchild{{$i}}{{$j}}" data-bs-parent="#accor_nestingchild{{$i}}{{$j}}">
                             <div class="accordion-body">
                                 <div class="container nopadding">
                                     <div class="row">
@@ -238,7 +238,7 @@
                                 Prices Options for Infants
                             </button>
                         </h2>
-                        <div id="accor_infant{{$i}}{{$j}}" class="accordion-collapse collapse" aria-labelledby="accor_nestinginfant{{$i}}{{$j}}" data-bs-parent="#accor_nestinginfant{{$i}}{{$j}}">
+                        <div id="accor_infant{{$i}}{{$j}}" class="accordion-collapse @if($displayType == 'infant') show @else collapse @endif" aria-labelledby="accor_nestinginfant{{$i}}{{$j}}" data-bs-parent="#accor_nestinginfant{{$i}}{{$j}}">
                             <div class="accordion-body">
                                 <div class="container nopadding">
                                     <div class="row">
@@ -308,19 +308,6 @@
                             </select>
                         </div>
                     </div>
-                    <!-- <div class="col-lg-1 col-md-2 col-xs-12">
-                        <div class="set-num after">
-                            <label>After</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-5 col-md-10 col-xs-12">
-                        <div class="after-select">
-                            <select name="pay_after_{{$i}}{{$j}}" id="pay_after{{$i}}{{$j}}" class="pay_after form-control valid">
-                                <option value="1" {{@$price->pay_after =='1' ?'selected':'' }}>Starts to expire the day of purchase</option>
-                                <option value="2" {{@$price->pay_after =='2' ?'selected':'' }}>Starts to expire when the customer first participates in the activity</option>
-                            </select>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -471,7 +458,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-red" data-bs-dismiss="modal">Submit</button>
+                        <button type="button" class="btn btn-primary btn-red"  @if(@$price) onclick="SubmitForm('{{@$price->id}}','adult','{{@$price->category_id}}');" @else data-bs-dismiss="modal" @endif>Submit</button>
                     </div>
                 </div>
             </div>
@@ -621,7 +608,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-red" data-bs-dismiss="modal">Submit</button>
+                        <button type="button" class="btn btn-primary btn-red" @if(@$price) onclick="SubmitForm('{{@$price->id}}','child','{{@$price->category_id}}');" @else data-bs-dismiss="modal" @endif>Submit</button>
                     </div>
                 </div>
             </div>
@@ -771,7 +758,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-red" data-bs-dismiss="modal">Submit</button>
+                        <button type="button" class="btn btn-primary btn-red" @if(@$price) onclick="SubmitForm('{{@$price->id}}','infant','{{@$price->category_id}}');" @else data-bs-dismiss="modal" @endif>Submit</button>
                     </div>
                 </div>
             </div>

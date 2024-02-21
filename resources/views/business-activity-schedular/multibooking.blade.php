@@ -217,12 +217,23 @@
 	</div>
 </div>
 
-
+<div class="modal fade" tabindex="-1" aria-labelledby="mySmallModalLabel" data-bs-focus="false"  aria-hidden="true" id="success-reservation">
+	<div class="modal-dialog modal-dialog-centered modal-50" id="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="btn-close" aria-label="Close" onClick="window.location.reload();"></button>
+			</div>
+			<div class="modal-body" id="receiptbody">
+            	
+            </div>
+		</div>
+	</div>
+</div>
 
 @include('layouts.business.footer')
 <script>
 	$(function() {
-		$( ".date" ).datepicker({
+		$(".date").datepicker({
 		 	dateFormat : 'yy-mm-dd',
 		 	showOn: "both",
 		 	buttonImage: "/public/img/calendar-icon.png",

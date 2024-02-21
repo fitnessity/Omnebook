@@ -152,7 +152,7 @@
                     </li>
                 @endif		
                 
-                @if(!request()->customer_id)
+                @if(!request()->customer_id || !$request->has('customer_id'))
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->is('*favourite*') ? 'active' : '' }}" href="{{url('personal/favourite'). '?' . http_build_query(['business_id' => request()->business_id]) }}" >
                         <img src="{{asset('/public/img/favorite.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Favorite</span>
