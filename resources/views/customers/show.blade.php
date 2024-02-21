@@ -874,6 +874,7 @@
 																											<td>
 																												@if(($history->can_void() && $history->item_type=="UserBookingStatus") || ($history->can_refund()))
 																													<a href="#" data-behavior="ajax_html_modal" data-url="{{route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-100">Void</a>
+
 																												@else
 																													{{$history->status}}
 																												@endif
