@@ -398,10 +398,10 @@
                             <div class="logo-my">
                                 <a href="javascript:void(0)"> <img src="http://dev.fitnessity.co//public/images/logo-small.jpg"> </a>
                             </div>               
-                            <form method="post" action="http://dev.fitnessity.co/auth/userlogin">
+                            <form method="post" action="">
                                 <input type="hidden" name="_token" value="5QJLNEz2voSG1yd1mOKWRs91y0u50UhbqKLCiNJS">
                                 <div class="pop-title ftitle1">
-                                    <h3>Welcome to fitnessity</h3>
+                                    <h3>Welcome to Fitnessity</h3>
                                 </div>
                                 <br> 
                                 <input type="hidden" name="redirect" value="http://dev.fitnessity.co/design/integration_portal">
