@@ -81,7 +81,7 @@
                 @endif
 				<li class="nav-item">
                     <a class="nav-link menu-link {{ request()->is('*profile*') ? 'active' : '' }}" href="{{ url('/personal/profile') . '?' . http_build_query([ 'business_id' => request()->business_id,'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}" aria-controls="sidebarDashboards">
-                        <img src="{{asset('/public/img/edit-2.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">  @if(request()->customer_id) Edit Profile @else Edit Profile & Password @endif</span>
+                        <img src="{{asset('/public/img/edit-2.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">  @if(request()->customer_id || $request->has('customer_id')) Edit Profile @else Edit Profile & Password @endif</span>
                     </a>
                 </li>
 				<li class="nav-item">
