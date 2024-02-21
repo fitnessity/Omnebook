@@ -56,7 +56,7 @@ class RecurringPaymentReportController extends BusinessBaseController
             }
             /*$data = $this->membership($type,$endDate,$startDate,$business_id,'','payment_date');*/
 
-            $dataRemaing = $this->membership($type,$endDate,$startDate,$business_id,['Retry','Scheduled'],'payment_date');
+            $dataRemaing = $this->membership($type,$endDate,$startDate,$business_id,['Retry','Scheduled','Failed'],'payment_date');
             $dataComp = $this->membership($type,$endDate,$startDate,$business_id,['Completed'],'payment_on');
             $data = $dataRemaing->union($dataComp);
 
