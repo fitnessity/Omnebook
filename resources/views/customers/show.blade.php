@@ -865,7 +865,7 @@
 																									@foreach($purchase_history as $history) 
 																										@if($history->item_description(request()->business_id)['itemDescription'] != '' )
 																										<tr>
-																											<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
+																											<td>@if($history->created_at) {{date('m/d/Y',strtotime($history->created_at))}} @else N/A @endif </td>
 																											<td>{!!$history->item_description(request()->business_id)['itemDescription']!!}</td>
 																											<td>{{$history->item_type_terms()}}</td>
 																											<td>{{$history->getPmtMethod()}}</td>

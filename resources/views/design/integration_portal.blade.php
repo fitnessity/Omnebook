@@ -113,42 +113,44 @@
                                                     </div>                                                  
                                                 </div>
 
-                                                <div>
-                                                    <div class="radio">
-                                                        <label>
-                                                            <input type="radio" name="action" value="txtcolor"/>
-                                                            Change Text Color
-                                                        </label>
-                                                    </div>
-                                                    <div class="radio">
-                                                        <label>
-                                                            <input type="radio" name="action" value="red"/>
-                                                                Change Background Color
-                                                        </label>
-                                                    </div>
-                                                    <div id="txtcolor" class="show-hide">
-                                                        <div>
-                                                            <label for="color-picker">Color:</label>
-                                                            <input type="color" value="#000000" id="color-picker" />
-                                                            <div class="mt-3 d-grid">
-                                                                <label for="">Preview</label>
-                                                                <p>
-                                                                    Watch the paragraph colors change when you adjust the color picker. As you make changes in the color picker, the first paragraph's color changes.
-                                                                </p>
-                                                            </div>  
-                                                        </div>
-                                                    </div>
-                                                    <div id="red" class="show-hide">I am the red div.</div>
-                                                </div>                                                
-
                                                 <div class="row">
-                                                    <div class="col-lg-3">
+                                                    <div class="col-12">
                                                         <div class="mt-3 filter-check">
-                                                            <label for="">Image URL </label>
+                                                            <label for="">Text Color</label>
+                                                        </div>
+                                                        <label for="color-picker">Color:</label>
+                                                        <input type="color" value="#000000" id="color-picker" />
+                                                        <!--<div class="mt-3 d-grid">
+                                                            <label for="">Preview</label>
+                                                            <p>
+                                                                Watch the paragraph colors change when you adjust the color picker. As you make changes in the color picker, the first paragraph's color changes.
+                                                            </p>
+                                                        </div>  -->
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="mt-3 filter-check">
+                                                            <label for="">Background Color</label>
+                                                        </div>
+                                                        <label for="color-picker">Color:</label>
+                                                        <input type="color" value="#000000" id="color-picker" />
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-4 col-12">
+                                                        <div class="mt-3 filter-check">
+                                                            <label for="">Background Image </label>
                                                             <input class="form-control" type="file" id="formFileMultiple" multiple="">
                                                         </div>
-                                                    </div>                                                  
+                                                    </div>
+                                                    
                                                 </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-4 col-12">
+                                                        <div class="mt-3 filter-check">
+                                                            <label for="">Upload Logo</label>
+                                                            <input class="form-control" type="file" id="formFileMultiple" multiple="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
                                                 <div class="row">
                                                     <div class="col-lg-3">
                                                         <div class="mt-3 d-grid">
@@ -381,16 +383,67 @@
 
 <!-- Modal -->
 <div class="modal fade" id="login_preview" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-70">
+    <div class="modal-dialog modal-dialog-centered modal-100">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Preview</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="preview-login">
-                    <img src="http://dev.fitnessity.co//public/images/register-bg.jpg">
+            <section class="register ptb-65" style="background-image: url(http://dev.fitnessity.co//public/images/register-bg.jpg)">
+                <div class="container">
+                    <div class="col-lg-6 col-md-6 col-sm-7 col-xs-12">
+                        <div class="register_wrap" id="signup_normal">
+                            <input type="hidden" id="showstep" value="">
+                            <div class="logo-my">
+                                <a href="javascript:void(0)"> <img src="http://dev.fitnessity.co//public/images/logo-small.jpg"> </a>
+                            </div>               
+                            <form method="post" action="http://dev.fitnessity.co/auth/userlogin">
+                                <input type="hidden" name="_token" value="5QJLNEz2voSG1yd1mOKWRs91y0u50UhbqKLCiNJS">
+                                <div class="pop-title ftitle1">
+                                    <h3>Welcome to fitnessity</h3>
+                                </div>
+                                <br> 
+                                <input type="hidden" name="redirect" value="http://dev.fitnessity.co/design/integration_portal">
+                                <input type="email" name="email" id="email" class="myemail" size="30" autocomplete="off" placeholder="e-MAIL" maxlength="80">
+                                <span class="text-danger cls-error" id="erremail"></span> 
+                                <div class="position-relative auth-pass-inputgroup">
+                                    <input class="password-input" type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
+                                    <button class="btn-link position-absolute password-addon toggle-password" type="button" id="password-addon">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <span class="text-danger cls-error" id="errpass"></span>                    
+                                <div class="remembermediv terms-wrap">
+                                    <input type="checkbox" id="remember" name="remember" checked="" class="remembercheckbox">
+                                    <span for="remember" class="rememberme">Remember me</span>
+                                </div>
+                                <div id="capchaimg"></div>
+                                <button class="btn signup-new" id="login_submit" type="submit">Log in </button>
+                                <p class="or-data">OR</p>
+                                <div class="social-login">
+                                    <a href="login/facebook" class="fb-login">
+                                        <i class="fab fa-facebook" aria-hidden="true"></i> Login with Facebook
+                                    </a>
+                                </div>
+                                <div class="text-center mb-10">
+                                    <a href="login/google" class="fb-login btn signup-new">
+                                        <i class="fab fa-google" aria-hidden="true"></i>   <span class="ml-10">Login with Google</span>
+                                    </a>
+                                </div>
+
+                                <a class="forgotpass" data-behavior="ajax_html_modal" data-url="http://dev.fitnessity.co/auth/jsModalpassword">Forgot Password?</a>
+
+                                <a class="forgotpass" href="http://dev.fitnessity.co/staff_login">Login For Staff Member?</a>
+
+                                <p class="already">Don't have an account?
+                                    <a href="/registration">SIGN UP</a>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
                 </div>
+            </section>
             </div>
         </div>
     </div>
@@ -428,42 +481,7 @@
 
 @include('layouts.business.footer')
 
-<script>
-$(document).ready(function(){ 
-    $("input[name=action]").change(function() {
-        var test = $(this).val();
-        $(".show-hide").hide();
-        $("#"+test).show();
-    }); 
-});
 
-let colorPicker;
-const defaultColor = "#0000ff";
-
-window.addEventListener("load", startup, false);
-
-function startup() {
-  colorPicker = document.querySelector("#color-picker");
-  colorPicker.value = defaultColor;
-  colorPicker.addEventListener("input", updateFirst, false);
-  colorPicker.addEventListener("change", updateAll, false);
-  colorPicker.select();
-}
-
-function updateFirst(event) {
-  const p = document.querySelector("p");
-  if (p) {
-    p.style.color = event.target.value;
-  }
-}
-
-function updateAll(event) {
-  document.querySelectorAll("p").forEach((p) => {
-    p.style.color = event.target.value;
-  });
-}
-
-</script>
 
 <script>
 // Inputs

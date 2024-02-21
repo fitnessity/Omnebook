@@ -72,7 +72,7 @@
                     </li>
                 @endif
 
-                @if(!request()->customer_id)
+                @if(!request()->customer_id || !$request->has('customer_id'))
     				<li class="nav-item">
                         <a class="nav-link menu-link" href="{{route('profile-viewProfile')}}" aria-controls="sidebarDashboards">
                             <img src="{{asset('/public/img/social-profile.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">View Social Profile</span>
@@ -103,7 +103,7 @@
                         </a>
                     </li> 
 
-                    @if(!request()->customer_id)
+                    @if(!request()->customer_id || !$request->has('customer_id'))
     				<li class="nav-item">
                         <a class="nav-link menu-link {{ request()->is('*payment-history*') ? 'active' : '' }}" href="{{ url('/personal/payment-history?business_id='.request()->business_id) }}" aria-controls="sidebarDashboards">
                             <img src="{{asset('/public/img/payment.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Payment History</span>
@@ -123,7 +123,7 @@
 
                 @endif
 
-                @if(!request()->customer_id)
+                @if(!request()->customer_id || !$request->has('customer_id'))
 				<li class="nav-item">
                     <a class="nav-link menu-link {{ request()->is('*credit-cards*') ? 'active' : '' }}" href="{{url('personal/credit-cards'). '?' . http_build_query(['business_id' => request()->business_id]) }}" aria-controls="sidebarDashboards">
                         <img src="{{asset('/public/img/credit-card.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Credit Card </span>

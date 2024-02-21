@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Artisan;
 
 Route::get('/clear-cache', function () {
     // Clear all cache
-    Artisan::call('cache:clear');
+    /*Artisan::call('cache:clear');
 
     // Clear specific cache (e.g., route cache)
     Artisan::call('route:clear');
@@ -30,7 +30,7 @@ Route::get('/clear-cache', function () {
     Artisan::call('config:clear');
 
     return 'Cache cleared successfully.';
-
+*/
     //print_r(App\Customer::where('user_id',NULL)->get());
 
     /*foreach(App\UserBookingDetail::get() as $details){
@@ -68,7 +68,7 @@ Route::get('/clear-cache', function () {
 
     /*foreach(App\Customer::get() as $details){
         //$details->createUser(); 
-        // $details->createPassword(); 
+        //$details->createPassword(); 
         // if(!$details->password){
         //    $details->update(['password' => @$details->user->password]);
         // }
