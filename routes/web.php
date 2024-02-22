@@ -36,7 +36,9 @@ Route::get('/clear-cache', function () {
     */
     //print_r(App\Customer::where('user_id',NULL)->get());
 
+
     /*foreach(App\UserBookingDetail::get() as $details){
+
         $type = '';
         if($details->qty){
            $item = json_decode($details->qty,true);
@@ -84,6 +86,7 @@ Route::get('/clear-cache', function () {
             }
         }
     }*/
+
 });
 //end
 
@@ -306,6 +309,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/deleteFromSession', 'BusinessActivitySchedulerController@deleteFromSession')->name('deleteFromSession');
 
     Route::post('/multibooking/save', 'BusinessActivitySchedulerController@save')->name('multibooking.save');
+
 
     Route::get('/multibooking/confirmation', 'BusinessActivitySchedulerController@confirmation')->name('multibooking.confirmation');
 
