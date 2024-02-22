@@ -163,6 +163,23 @@
                                         </div>
                                     </div>
 
+                                    <div class="card bg-soft-grey ">
+                                        <div class="card-header align-items-center d-flex bg-soft-grey">
+                                            <h4 class="card-title mb-0 flex-grow-1">Copy your code</h4>
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="copy-code">
+                                                        <p>Paste the code into your webpage where you would like the link to appear. Changes made above automatically update your code.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+
                                 </div>
                                 <div class="tab-pane" id="site_settings" role="tabpanel">
                                     <div class="">
