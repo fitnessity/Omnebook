@@ -7046,3 +7046,6 @@ p.or-data {
   background: #ed1b24;
   color: #23527c;
 }
+.copy-code p{
+  font-size: 15px;
+}
