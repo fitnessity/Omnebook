@@ -6797,6 +6797,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 .show-all .table-inner-data-sec .p-name P {
   display: inline-block;
+  margin-bottom: 0px;
 }
 .show-all .table-inner-data-sec .p-name span {
   margin-left: 15px;
@@ -7047,9 +7048,8 @@ p.or-data {
   color: #23527c;
 }
 .copy-code p{
-  font-size: 15px;
+  font-size: 14px;
 }
-
 #red {
   display: none;
   padding: 10px;

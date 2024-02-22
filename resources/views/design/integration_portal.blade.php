@@ -173,6 +173,8 @@
                                                 <div class="col-lg-12">
                                                     <div class="copy-code">
                                                         <p>Paste the code into your webpage where you would like the link to appear. Changes made above automatically update your code.</p>
+                                                        <textarea class="form-control" placeholder="<script src=http://dev.fitnessity.co//public/dashboard-design/js/jquery-3.6.4.min.js></script><script src=https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw async defer></script> <script async src=https://www.googletagmanager.com/gtag/js?id=G-KQRG55N3Q1></script>" id="des-info-description-input" rows="4" required=""></textarea>
+                                                        <button class="btn btn-red mt-15">Copy</button>
                                                     </div>
                                                 </div>
                                             </div>

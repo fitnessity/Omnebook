@@ -18,6 +18,9 @@ use App\Http\Controllers\Products\ProductController;
 //to clear catch
 use Illuminate\Support\Facades\Artisan;
 
+Route::fallback(function () {
+    return redirect('/');
+});
 
 Route::get('/clear-cache', function () {
     // Clear all cache
@@ -30,7 +33,7 @@ Route::get('/clear-cache', function () {
     Artisan::call('config:clear');
 
     return 'Cache cleared successfully.';
-*/
+    */
     //print_r(App\Customer::where('user_id',NULL)->get());
 
 
@@ -293,7 +296,6 @@ Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware
 
 Route::group(['middleware' => ['auth']], function(){
 
-
     Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
     Route::any('/schedule/multibooking/{business_id}/', 'BusinessActivitySchedulerController@multibooking')->name('multibooking');
     Route::post('/chkOrderAvailable', 'BusinessActivitySchedulerController@chkOrderAvailable')->name('chkOrderAvailable');
@@ -317,33 +319,36 @@ Route::group(['middleware' => ['auth']], function(){
 Route::resource('stripe_payment_methods', 'StripePaymentMethodController')->only(['destroy']);
 
 // Activitys
-Route::get('/activities/get_started/personal_trainer','ActivityController@personal_trainer')->name('get_started_personal_trainer');
-Route::get('/activities/get_started/ways_to_workout','ActivityController@ways_to_workout')->name('get_started_ways_to_workout');
-Route::get('/activities/get_started/experiences','ActivityController@experiences')->name('get_started_activities_experiences');
-Route::get('/activities/get_started/events','ActivityController@events')->name('get_started_activities_events');
-Route::get('/activities/classes','ActivityController@classes')->name('activities_classes');
-Route::get('/activities/next_8_hours','ActivityController@next_8_hours')->name('activities_next_8_hours');
-Route::any('/activities/{filtervalue?}','ActivityController@index')->name('activities_index');
+    Route::get('/activities/get_started/personal_trainer','ActivityController@personal_trainer')->name('get_started_personal_trainer');
+    Route::get('/activities/get_started/ways_to_workout','ActivityController@ways_to_workout')->name('get_started_ways_to_workout');
+    Route::get('/activities/get_started/experiences','ActivityController@experiences')->name('get_started_activities_experiences');
+    Route::get('/activities/get_started/events','ActivityController@events')->name('get_started_activities_events');
+    Route::get('/activities/classes','ActivityController@classes')->name('activities_classes');
+    Route::get('/activities/next_8_hours','ActivityController@next_8_hours')->name('activities_next_8_hours');
+    Route::any('/activities/{filtervalue?}','ActivityController@index')->name('activities_index');
 
-Route::any('/activity-details/{serviceid}', 'ActivityController@show')->name('activities_show');
+    Route::any('/activity-details/{serviceid}', 'ActivityController@show')->name('activities_show');
 
 
-Route::post('pricecategory', 'ActivityController@pricecategory')->name('pricecategory');
-Route::post('pricemember', 'ActivityController@pricemember')->name('pricemember');
-Route::get('/getCompareProfessionalDetails/{id}', 'ActivityController@getCompareProfessionalDetailInstant');
-Route::post('/act_detail_filter', 'ActivityController@act_detail_filter')->name('act_detail_filter');
-Route::post('/act_detail_filter_for_cart', 'ActivityController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
-Route::post('/getmodelbody', 'ActivityController@getmodelbody')->name('getmodelbody');
-Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
-Route::get('/getBookingSummary', 'ActivityController@getBookingSummary')->name('getBookingSummary');
-Route::get('/getAddOnData', 'ActivityController@getAddOnData')->name('getAddOnData');
+    Route::post('pricecategory', 'ActivityController@pricecategory')->name('pricecategory');
+    Route::post('pricemember', 'ActivityController@pricemember')->name('pricemember');
+    Route::get('/getCompareProfessionalDetails/{id}', 'ActivityController@getCompareProfessionalDetailInstant');
+    Route::post('/act_detail_filter', 'ActivityController@act_detail_filter')->name('act_detail_filter');
+    Route::post('/act_detail_filter_for_cart', 'ActivityController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
+    Route::post('/getmodelbody', 'ActivityController@getmodelbody')->name('getmodelbody');
+    Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
+    Route::get('/getBookingSummary', 'ActivityController@getBookingSummary')->name('getBookingSummary');
+    Route::get('/getAddOnData', 'ActivityController@getAddOnData')->name('getAddOnData');
 
+//end Activitys
 
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/dashboard/{date?}/{id?}', 'BusinessController@dashboard')->name('business_dashboard');
 
     Route::post('/notification/delete/', 'BusinessController@notification_delete')->name('notification_delete');
+
     Route::get('/getBookingList', 'BusinessController@getBookingList')->name('getBookingList');
+
     Route::post('/getscheduleactivity', 'BusinessController@getscheduleactivity')->name('getscheduleactivity');
     Route::post('/getExpiringMembership', 'BusinessController@getExpiringMembership')->name('getExpiringMembership');
     Route::get('/bookingchart', 'BusinessController@bookingchart')->name('bookingchart');
@@ -383,61 +388,34 @@ Route::group(['middleware' => ['auth']], function(){
 
         // Booking Checkin Details
         Route::get('/scheduler/{business_activity_scheduler_id}/checkin_details', 'SchedulerController@checkin_details')->name('booking_checkin_details_index');
-
-       /* Route::get('/createStaff','StaffController@createmanageStaff')->name('createStaff');
-        Route::get('/staff-scheduled-activities','StaffController@staff_scheduled_activities')->name('staff-scheduled-activities');*/
-        //Route::get('/products','ProductController@index')->name('products_index');
     });
 });
 
 
 Route::get('/addcheckoutsession','HomeController@addcheckoutsession')->name('addcheckoutsession');
-Route::get('/senddummymail','HomeController@senddummymail')->name('senddummymail');
 
-Route::get('pricedetails','UserProfileController@pricedetails')->name('pricedetails');
 Route::get('/set-unset-session-business-welcome/{check?}','HomeController@set_unset_session_business_welcome');
 Route::get('/set-session-for-claim/{cid?}/{status?}','HomeController@set_session_for_claim');
 Route::get('/set-session-for-managecompany','HomeController@set_session');
 
 Route::get('spotify','UserProfileController@spotify')->name('spotify');
-Route::get('about','UserProfileController@about')->name('about');
 
 Route::get('sendmail','UserProfileController@sendmail')->name('sendmail');
 
-/*Route::get('{user_name}','UserProfileController@profileDetailPage');*/
 Route::get('profileDetail/{user_id}','UserProfileController@profileDetail')->name('profileDetail');
 Route::post('profileView','UserProfileController@profileView')->name('profileView');
 Route::get('userprofile/{user_name}','UserProfileController@viewuserpersonalprofile')->name('userprofile');
 
 Route::get('signupVerification','UserProfileController@signupVerification')->name('signupVerification');
-Route::get('createNewBusinessProfile/{cid?}','UserProfileController@createNewBusinessProfile')->name('createNewBusinessProfile');
-Route::get('businesspricedetails/{catid?}','UserProfileController@businesspricedetails')->name('businesspricedetails');
-Route::post('editBusinessProfile','UserProfileController@editBusinessProfile')->name('editBusinessProfile');
-Route::post('editBusinessService','UserProfileController@editBusinessService')->name('editBusinessService');
-/*Route::get('business/welcome','UserProfileController@welcomeBusinessProfile')->name('welcomeBusinessProfile');*/ //nnn its showing database connection error
 
-
-Route::get('business-welcome','UserProfileController@welcomeBusinessProfile')->name('business-welcome');
-
-Route::get('business/company','UserProfileController@companyBusinessProfile')->name('companyBusinessProfile');
-Route::get('business/experience','UserProfileController@experienceBusinessProfile')->name('experienceBusinessProfile');
-Route::get('business/specification','UserProfileController@specificationBusinessProfile')->name('specificationBusinessProfile');
-Route::get('business/terms','UserProfileController@termsBusinessProfile')->name('termsBusinessProfile');
-Route::get('business/verified','UserProfileController@verifiedBusinessProfile')->name('verifiedBusinessProfile');
-Route::get('business/services','UserProfileController@servicesBusinessProfile')->name('servicesBusinessProfile');
-Route::get('business/booking','UserProfileController@bookingBusinessProfile')->name('bookingBusinessProfile');
-
-Route::get('businessjumps/{bstep?}/{cid?}','UserProfileController@businessJumps')->name('businessjumps');
-Route::post('addbstep','UserProfileController@addbstep')->name('addbstep');
-
-Route::post('addbusinesscompanydetail','UserProfileController@addbusinesscompanydetail')->name('addbusinesscompanydetail');
-Route::match(['get','post'],'addbusinessexperience','UserProfileController@addbusinessexperience')->name('addbusinessexperience');
-Route::post('addbusinessspecification','UserProfileController@addbusinessspecification')->name('addbusinessspecification');
+/*Route::match(['get','post'],'addbusinessexperience','UserProfileController@addbusinessexperience')->name('addbusinessexperience');*/
+/*Route::post('addbusinessspecification','UserProfileController@addbusinessspecification')->name('addbusinessspecification');
 Route::post('addbusinessterms','UserProfileController@addbusinessterms')->name('addbusinessterms');
-Route::post('addbusinessverification','UserProfileController@addbusinessverification')->name('addbusinessverification');
-Route::post('addbusinessservices','UserProfileController@addbusinessservices')->name('addbusinessservices');
+Route::post('addbusinessverification','UserProfileController@addbusinessverification')->name('addbusinessverification');*/
+/*Route::post('addbusinessservices','UserProfileController@addbusinessservices')->name('addbusinessservices');
 Route::post('addbusinessschedule','UserProfileController@addbusinessschedule')->name('addbusinessschedule');
-Route::post('addbusinessbooking','UserProfileController@addbusinessbooking')->name('addbusinessbooking');
+Route::post('addbusinessbooking','UserProfileController@addbusinessbooking')->name('addbusinessbooking');*/
+
 Route::get('send-sms-twillio','UserProfileController@sendCustomMessage');
 Route::get('send-call-twillio','UserProfileController@makeCall');
 Route::post('generateMessage/{otpCode}', 'UserProfileController@generateVoiceMessage')->name('generateMessage');
@@ -555,8 +533,8 @@ Route::get('/openGuestRegistration', 'ActivityController@openGuestRegistration')
 
 Route::get('/', 'Frontend\HomeController@index')->name('homepage');
 Route::get('/home', 'Frontend\HomeController@index')->name('homemy');
-Route::get('/testleft', 'Frontend\HomeController@testleft')->name('testleft');
-Route::get('/leftpanel', 'Frontend\HomeController@leftpanel')->name('leftpanel');
+/*Route::get('/testleft', 'Frontend\HomeController@testleft')->name('testleft');
+Route::get('/leftpanel', 'Frontend\HomeController@leftpanel')->name('leftpanel');*/
 Route::get('/new-register', 'Auth\AuthController@newRegister');
 Route::post('/auth/uploadProfile', 'Auth\AuthController@uploadProfile111');
 Route::get('/all-trainings', 'Frontend\HomeController@all_trainings');
@@ -578,8 +556,6 @@ Route::any('logout', function (Request $request) {
     Auth::logout();
     return redirect('/');
 });
-
-
 
 
 /* 09-june 2020 end */
@@ -683,7 +659,7 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('/edit_unclaim/{id}', 'Admin\PlansController@edit_unclaim')->name('edit_unclaim');
 
     Route::post('/unclaim/edit', 'Admin\PlansController@update_unclaim')->name('update_unclaim'); 
-    Route::get('businesspricedetails/{catid?}','Admin\PlansController@admin_businesspricedetails')->name('admin_businesspricedetails');
+   
     Route::post('adminaddbusinessschedule','Admin\PlansController@adminaddbusinessschedule')->name('adminaddbusinessschedule');
 
     //plans
@@ -879,12 +855,6 @@ Route::group(array('prefix' => 'admin'), function(){
     /*Advertisment end */
 });
 
-// Task Routes
-// Route::get('/tasks', 'TaskController@index');
-// Route::post('/task', 'TaskController@store');
-// Route::delete('/task/{task}', 'TaskController@destroy');
-// Route::get('/testTwilio', 'TaskController@testTwilio');
-// Route::post('/testTwilio', 'TaskController@testTwilio');
 
 Route::post('auth/login', 'Auth\AuthController@postLogin');
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
@@ -991,6 +961,8 @@ Route::get('loadmorepost', 'UserProfileController@loadmorepost');
 Route::post('updateprofilepostviewcount', 'UserProfileController@updateprofilepostviewcount');
 Route::get('loadmoreposts', 'Frontend\PostController@loadmoreposts');
 /////////made by me////////
+
+
 Route::get('family-member-delete/{family_id}', 'UserProfileController@deleteFamily');
 Route::post('add-family-detail', 'UserProfileController@addFamilyDetail');
 Route::post('/profile/create/company', 'UserProfileController@createCompany');
@@ -1002,7 +974,6 @@ Route::post('/changecompanystatus', 'UserProfileController@changecompanystatus')
 Route::get('/pcompany/delete/{company_id}', 'UserProfileController@deleteCompany');
 Route::get('/pcompany/edit/{company_id}', 'UserProfileController@editCompany');
 Route::get('/pcompany/view/{company_id}', 'UserProfileController@viewPCompany');
-Route::get('/newtest', 'UserProfileController@newtest');
 Route::post('/favourite', 'UserProfileController@Pfavourite')->name('favourite');
 Route::post('/follow_company', 'UserProfileController@Pfollow')->name('follow_company');
 Route::post('/follow_profile', 'UserProfileController@follow_profile')->name('follow_profile');
@@ -1016,7 +987,8 @@ Route::post('/unfollower_company', 'UserProfileController@Punfollower')->name('u
 Route::post('/company-image-upload', 'UserProfileController@companyImageUpload');
 Route::post('/user-multi-image-upload', 'UserProfileController@userImageUpload');
 Route::get('personal-profile/add-family', 'UserProfileController@addFamily')->name('addFamily');
-Route::get('payment_history', 'UserProfileController@payment_history')->name('payment_history');
+
+
 Route::post('/gallery-upload', 'UserProfileController@galleryUpload')->name('file-upload');
 Route::get('gallery-picture/{user_id}', 'UserProfileController@galleryList')->name('file-list');
 Route::post('profile/editProfilePicture', 'UserProfileController@editProfilePicture');
@@ -1045,7 +1017,6 @@ Route::get('/get_createcompanyform', 'UserProfileController@get_createcompanyfor
 Route::get('/get_serviceform/{id}', 'UserProfileController@get_serviceform');
 Route::get('/getmyservices', 'UserProfileController@getmyservices');
 Route::post('/myemail', 'Auth\AuthController@myemail');
-
 
 
 //Scheduler Controller
@@ -1117,10 +1088,6 @@ Route::get('lesson/jsModallesson/{modalname}', 'LessonController@jsModallesson')
 Route::get('lesson/jsModallesson/{modalname}/{sportId}', 'LessonController@jsModallesson');
 Route::post('lesson/getquotes', 'LessonController@PostQuotes');
 
-//Route::get('/mypostedjobs', 'LessonController@Getmypostedjobs');
-//Route::get('/mybooking', 'LessonController@GetProfessionalBookingList');
-//Route::get('/mybooking/{status}', 'LessonController@GetProfessionalBookingList');
-
 Route::get('/mybooking', 'LessonController@GetBookingList');
 Route::get('/mybooking/{status}', 'LessonController@GetBookingList');
 Route::get('/jobmatchingskill', 'LessonController@Getjobmatchingskill');
@@ -1145,7 +1112,6 @@ Route::post('/savedirecthirerequest', 'LessonController@postSaveDirecthireReques
 Route::any('/direct-hire/cart-payment', 'LessonController@cartpayment');
 Route::any('/direct-hire/confirm-payment', 'LessonController@confirmpayment');
 Route::get('/direct-hire/getCompareProfessionalDetail/{id}', 'LessonController@getCompareProfessionalDetail');
-/*Route::any('/payments/card', 'LessonController@cartpaymentinstant')->name('payments_card');*/
 Route::get('/carts', 'CartController@index')->name('carts_index');
 Route::get('/indexCart', 'CartController@indexCart')->name('indexCart');
 Route::post('/addfamilyfromcart', 'CartController@addfamilyfromcart')->name('addfamilyfromcart');
@@ -1217,12 +1183,6 @@ Route::get('/testmail', 'LessonController@test');
 Route::get('/user/sport-alert', 'UserProfileController@showSportAlertbox');
 Route::post('/getlanguage', 'UserProfileController@getlanguage');
 
-// Route::filter('author_check', function () { 
-// 	if ( !Session::has('user') || !Session::get('user')->id ) { 
-// 		//return View::make('login');
-// 		return Redirect::to('/auth/jsModallogin'); 
-// 	}
-// });
 
 // home page banner search filter
 //view netwrok user profile
@@ -1260,23 +1220,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/getRescheduleModel', 'BookingController@getRescheduleModel')->name('getRescheduleModel');
      Route::get('/cancelbooking', 'BookingController@cancelbooking')->name('cancelbooking');
     Route::get('/getbookingmodeldata', 'BookingController@getbookingmodeldata')->name('getbookingmodeldata');
-
-    Route::resource('/family-member', 'FamilyMemberController')->only(['index','store','update','destroy']);
-
     Route::get('family-member.show', 'FamilyMemberController@show')->name('family-member.show');
 });
 
 Route::post('/fullcalenderAjax', 'UserProfileController@cajax')->name('fullcalenderAjax');
 
 
-Route::get('/personal-profile/favorite', 'UserProfileController@favorite');
+/*Route::get('/personal-profile/favorite', 'UserProfileController@favorite');
 Route::get('/personal-profile/followers', 'UserProfileController@followers');
 Route::get('/personal-profile/following', 'UserProfileController@following');
 Route::post('/personal-profile/card-delete', 'UserProfileController@cardDelete')->name('cardDelete');
 Route::get('/personal-profile/cards-save', 'UserProfileController@cardsSave')->name('cards-save');
 Route::get('/personal-profile/credit-cards-info', 'UserProfileController@creditCardInfo')->name('creditCardInfo');
 Route::get('/personal-profile/payment-history', 'UserProfileController@paymentHistory')->name('paymentHistory');
-Route::post('/personal-profile/get-card-purchase-history', 'UserProfileController@card_purchase_history')->name('card_purchase_history');
+Route::post('/personal-profile/get-card-purchase-history', 'UserProfileController@card_purchase_history')->name('card_purchase_history');*/
 Route::get('/personal-profile/review', 'UserProfileController@review');
 Route::get('/personal-profile/user-profile', 'UserProfileController@userprofile')->name('user-profile');
 Route::post('updateuserprofile', 'UserProfileController@updateuserprofile')->name('updateuserprofile');
@@ -1296,7 +1253,6 @@ Route::post('/act_detail_filter_business_pages', 'LessonController@act_detail_fi
 Route::post('getServiceData', 'UserProfileController@getServiceData')->name('getServiceData');
 Route::post('NewService', 'UserProfileController@NewService')->name('NewService');
 
-//Route::post('autocomplete','UserProfileController@autocomplete'->name('autocomplete');
 
 // Page
 
@@ -1322,11 +1278,6 @@ Route::post('save_business_reviews','BusinessController@save_business_reviews')-
 
 Route::post('save_business_service_reviews','LessonController@save_business_service_reviews')->name('save_business_service_reviews');
 
-Route::get('manageproduct','UserProfileController@manageproduct')->name('manageproduct');
-Route::get('addproduct','UserProfileController@addproduct')->name('addproduct');
-Route::get('manage-activity','UserProfileController@manage_activity')->name('manage-activity'); 
-
-Route::get('view-customer','UserProfileController@view_customer')->name('view-customer');
 Route::get('financial-dashboard','UserProfileController@financial_dashboard')->name('financial-dashboard');
 Route::get('stripe-dashboard','StripeController@dashboard')->name('stripe-dashboard');
 Route::get('show-all-list','LessonController@showalllist')->name('show-all-list');
@@ -1384,7 +1335,7 @@ Route::group(['middleware' => ['auth']], function()
 
 Route::group(['middleware' => ['auth']], function()
 {
-    Route::get('/personal-profile/calendar', 'CalendarController@calendar')->name('calendar');
+    //Route::get('/personal-profile/calendar', 'CalendarController@calendar')->name('calendar');
     Route::post('eventmodelboxdata', 'CalendarController@eventmodelboxdata')->name('eventmodelboxdata');
     Route::prefix('/business/{business_id}')->group(function () {
         Route::get('/calendar', 'CalendarController@provider_calendar')->name('provider_calendar');
@@ -1394,17 +1345,11 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('/chkStaffAssignedOrder', 'CalendarController@chkStaffAssignedOrder')->name('calendar.chkStaffAssignedOrder');
 });
 
-Route::get('/staff_login','StaffController@index')->name('staff_login');
-Route::post('/login','StaffController@login')->name('dologin');
-Route::post('/import-staff','StaffController@importstaff')->name('importstaff');
-
-
-//Route::get('/addproducts',[ProductController::class,'addProduct'])->name('addproducts');
-
-
-//Route::resource('product', 'Products\ProductController')->only(['store','create']);
-//Route::post('products', 'Products\ProductController@store')->name('products');
-
+//staff
+    Route::get('/staff_login','StaffController@index')->name('staff_login');
+    Route::post('/login','StaffController@login')->name('dologin');
+    Route::post('/import-staff','StaffController@importstaff')->name('importstaff');
+// end staff
 
 Route::name('design.')->prefix('/design')->middleware('auth')->group(function () {
     Route::get('/orders','DesignController@orders')->name('orders');
@@ -1479,6 +1424,7 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/integration_portal','DesignController@integration_portal')->name('integration_portal');
     Route::get('/registration_widget','DesignController@registration_widget')->name('registration_widget');
     Route::get('/schedule_widget','DesignController@schedule_widget')->name('schedule_widget');
+    Route::get('/deploy_widget','DesignController@deploy_widget')->name('deploy_widget');
 });
 
 ?>
