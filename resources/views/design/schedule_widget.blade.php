@@ -224,7 +224,7 @@
 
                         <div>
                             <div class="live-preview">
-                                <div>
+                                <!--<div>
                                     <div class="card-header bg-soft-grey">
                                         <h4 class="card-title mb-0 flex-grow-1">Find Class</h4>
                                     </div>
@@ -262,7 +262,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="row">
                                     <div class="col-lg-6">
@@ -379,18 +379,12 @@
                                                 <div class="table-inner-data-sec">
                                                     <img src="https://fitnessity-production.s3.amazonaws.com/activity/meka8JsFR68TpdRhatzxzZpTFPVUSvgEx1MGILm5.jpg" alt="Fitnessity">
                                                     <div class="p-name">
-                                                        <div class="schedulewid-info">
-                                                            <label>Category Name: </label>
-                                                            <span> Hocky class1</span>
+                                                        <h3>jumping 1</h3>
+                                                        <div class="d-grid">
+                                                            <p> Personal Training | Bungee Jumping | Spot Available - 1/1</p>
+                                                            <p>Instructor: Darryl Phipps</p>   
                                                         </div>
-                                                        <div class="schedulewid-info">
-                                                            <label>Program Name: </label>
-                                                            <span>Hocky Class On Fire</span>
-                                                        </div>
-                                                        <div class="schedulewid-info">
-                                                            <label>Activity: </label>
-                                                            <span>Ice Hockey</span>
-                                                        </div>
+                                                                       
                                                     </div>
                                                 </div>
                                             </div>
@@ -428,18 +422,11 @@
                                                             <div class="table-inner-data-sec">
                                                                 <img src="https://fitnessity-production.s3.amazonaws.com/activity/eisJPbu7UPhASgD4edJSOufZSXENkw3TkZV281HL.jpg" alt="Fitnessity">
                                                                 <div class="p-name">
-                                                                    <div class="schedulewid-info">
-                                                                        <label>Category Name: </label>
-                                                                        <span>global acdamy</span>
-                                                                    </div>
-                                                                    <div class="schedulewid-info">
-                                                                        <label>Program Name: </label>
-                                                                        <span>Go Golfers</span>
-                                                                    </div>
-                                                                    <div class="schedulewid-info">
-                                                                        <label>Activity: </label>
-                                                                        <span>Golf</span>
-                                                                    </div>                                                
+                                                                    <h3>Summer Camp at Valor</h3>
+                                                                    <div class="d-grid">
+                                                                        <p> Events | Day Camp | Spot Available - 200/200</p>
+                                                                        <p>Instructor: Darryl Phipps</p>   
+                                                                    </div>                                                                   
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -480,18 +467,11 @@
                                                             <div class="table-inner-data-sec">
                                                                 <img src="https://fitnessity-production.s3.amazonaws.com/activity/wvahqhcKOL6C8NQ1IBqh3vtfVOc3MOAM3aarjoLf.jpg" alt="Fitnessity">
                                                                 <div class="p-name">
-                                                                    <div class="schedulewid-info">
-                                                                        <label>Category Name: </label>
-                                                                        <span>Solo Private Lessons</span>
-                                                                    </div>
-                                                                    <div class="schedulewid-info">
-                                                                        <label>Program Name: </label>
-                                                                        <span>Summer Aerobics</span>
-                                                                    </div>
-                                                                    <div class="schedulewid-info">
-                                                                        <label>Activity: </label>
-                                                                        <span>Beach Vollyball</span>
-                                                                    </div>                                              
+                                                                    <h3>Bucephalus Riding and Polo Club1</h3>
+                                                                    <div class="d-grid">
+                                                                        <p> Events | Horseback Riding | Spot Available - 10/10</p>
+                                                                        <p>Instructor: Darryl Phipps</p>   
+                                                                    </div>                                                                                                                        
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -339,5 +339,9 @@ class DesignController extends Controller {
     public function schedule_widget(Request $request){
         return view('design.schedule_widget');
     }
+
+    public function deploy_widget(Request $request){
+        return view('design.deploy_widget');
+    }
 }
 
