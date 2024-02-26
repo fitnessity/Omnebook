@@ -64,8 +64,9 @@ class BusinessActivitySchedulerController extends Controller
             }
             
             $memberships = @$customer->active_memberships()->pluck('sport')->unique();
-            $business_services = $business_services->whereIn('id', @$memberships)->get();
+            $business_services = $business_services->whereIn('id', @$memberships);
         }
+
 
         if($request->business_service_id){
             $servicetype = $request->stype;
@@ -85,10 +86,10 @@ class BusinessActivitySchedulerController extends Controller
             $days[] = $d->modify('+'.($i+$shift).' day');
         }
 
+
         $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('shift_start', 'asc')->get();
 
         $services = [];
-        //print_r($bookschedulers);exit;
         foreach($bookschedulers as $bs){
             $services [] = $bs->business_service;
         }
@@ -191,8 +192,9 @@ class BusinessActivitySchedulerController extends Controller
                 $html .= '<option value="'.$priceDetail->id.'" data-did="'.$bookingDetail->id.'">'.$priceDetail->price_title.'</option>';
             }
         }else{
-            $customer = $request->user()->customers()->find($request->cid);
+            $customer = Customer::where('business_id' ,$request->businessId)->find($request->cid);
             $active_memberships = $customer ? @$customer->active_memberships()->where('user_booking_details.user_id',$request->cid)->get() : [];
+
             foreach($active_memberships as $active_membership){
                 $remainingSession = max($active_membership->getremainingsession() - 1, 0);
                 if($remainingSession > 0 && $active_membership->business_price_detail){
@@ -235,9 +237,11 @@ class BusinessActivitySchedulerController extends Controller
                     $inSession++; 
                 }
             }
-            $inSession = $inSession ?? 1;
-            $remaining = $remaining - $inSession;
+            
         }
+
+        $inSession = max(1, $inSession);
+        $remaining = $remaining - $inSession;
 
         return max(0, $remaining);
     }

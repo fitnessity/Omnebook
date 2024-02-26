@@ -65,12 +65,12 @@ class Customer extends Authenticatable
 
         });
 
-        self::retrieved(function($model){
+        /*self::retrieved(function($model){
             $fitnessity_user = User::where('email', $model->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($model->fname), strtolower($model->lname)])->first();
             if(!$model->user_id){
                 $model->createUserIfNeeded();
             }
-        });
+        });*/
         
     }
 
