@@ -5,7 +5,7 @@
 	<div class="col-md-12 text-center">
        <p class="pay-confirm fs-17 font-green">
        		@forelse($data as $i=>$d)
-       		  {{$i+1}}. Your reservation for {{@$d->UserBookingDetail->business_services->program_name}} on {{@$d->checkin_date}} at {{@$d->scheduler->activity_time()}} <br>
+       		  {{$i+1}}. Your reservation for {{@$d->UserBookingDetail->business_services->program_name}} on {{date('m/d/Y', strtotime(@$d->checkin_date))}} at {{@$d->scheduler->activity_time()}} <br>
        		@empty
        		@endforelse
    		</p>

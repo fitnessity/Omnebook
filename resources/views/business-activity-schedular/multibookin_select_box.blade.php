@@ -1,7 +1,6 @@
 <?php 
 	$html = $data = '';$remaining = 0;$firstDataProcessed = false; 
-    $customer = Auth::user()->customers()->find($cid);
-
+    $customer = App\Customer::where('business_id', request()->business_id)->find($cid);
     $active_memberships = $customer->active_memberships()->where('user_booking_details.user_id',request()->cid)->get();
 
     foreach($active_memberships as $active_membership){

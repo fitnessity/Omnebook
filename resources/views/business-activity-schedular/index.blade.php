@@ -239,6 +239,20 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 	</div>
 </div>
 
+
+<div class="modal fade" tabindex="-1" aria-labelledby="mySmallModalLabel" data-bs-focus="false"  aria-hidden="true" id="success-reservation">
+	<div class="modal-dialog modal-dialog-centered modal-50" id="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="btn-close" aria-label="Close" onClick="window.location.reload();"></button>
+			</div>
+			<div class="modal-body" id="receiptbody">
+            	<div class="pay-confirm font-green text-center fs-16"></div>
+            </div>
+		</div>
+	</div>
+</div>
+
 @include('layouts.business.footer')
 
 <script>
@@ -313,6 +327,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 				cid : '{{@$customer->id}}',
 				// priceId : '{{$priceid}}',
 				catId : catId,
+				businessId : '{{$businessId}}',
 			},
 			success:function(data){
 				if(data == ''){
