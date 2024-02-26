@@ -159,7 +159,8 @@ class AdminAuthController extends Controller
     }
 
     public function logout(){
-        session_destroy(); 
+        \Session::flush();
+        Auth::guard('admin')->logout();
         return Redirect::to('/admin');
     }
 }

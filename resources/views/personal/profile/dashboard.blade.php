@@ -124,7 +124,7 @@
 											<tbody>
 												@forelse(@$classes as $c)
 													<tr>
-														<th scope="row">{{@$c->order_detail->getremainingsession()."/".@$c->order_detail->pay_session}}</th>
+														<th scope="row">{{@$c->order_detail->getRemainingSessionAfterAttend()."/".@$c->order_detail->pay_session}}</th>
 														<td>{{ @$c->order_detail->business_services_with_trashed->program_name }} </td>
 														<td>{{ date('m/d/Y' ,strtotime($c->checkin_date))}}  {{ date("g:i A", strtotime(@$c->scheduler->shift_start))}} </td>
 														<td> {{ @$c->order_detail->business_price_detail_with_trashed->price_title }}</td>

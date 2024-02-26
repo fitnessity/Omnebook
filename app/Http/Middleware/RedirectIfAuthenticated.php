@@ -22,15 +22,19 @@ class RedirectIfAuthenticated
             return redirect(RouteServiceProvider::HOME);
         }
 
-        return $next($request);*/
+        */
 
-        if ($guard == "admin" && Auth::guard($guard)->check()) {
+        /*if ($guard == "admin" && Auth::guard($guard)->check()) {
             return redirect('/admin');
         }
 
         if (Auth::guard($guard)->check()) {
             return redirect(RouteServiceProvider::HOME);
-        }
+        }*/
 
+        if(!auth()->guard('admin')->user()){
+            return redirect('/admin');
+        }
+        return $next($request);
     }
 }

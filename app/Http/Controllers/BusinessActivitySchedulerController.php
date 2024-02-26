@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\{CompanyInformation,UserBookingStatus,UserBookingDetail,BusinessActivityScheduler,Customer,BusinessPriceDetails,BookingCheckinDetails,SGMailService};
 use App\Repositories\BookingRepository;
 use DateTime;
-use Auth;
+use Auth,View;
 use Session;
 
 class BusinessActivitySchedulerController extends Controller
@@ -185,7 +185,8 @@ class BusinessActivitySchedulerController extends Controller
         if($request->priceId != ''){
             $priceDetail = BusinessPriceDetails::find($request->priceId);
             $bookingDetail = UserBookingDetail::where(['sport'=> $request->sid ,'user_id'=>$request->cid,'priceid' => $request->priceId])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->first();
-            $remaining= @$bookingDetail != '' ? @$bookingDetail->getremainingsession() : 0;
+            $remaining = max(@$bookingDetail != '' ? @$bookingDetail->getremainingsession() - 1 : 0, 0);
+            @$bookingDetail != '' ? @$bookingDetail->getremainingsession() - 1 : 0;
             if($remaining != 0 ){
                 $html .= '<option value="'.$priceDetail->id.'" data-did="'.$bookingDetail->id.'">'.$priceDetail->price_title.'</option>';
             }
@@ -193,7 +194,7 @@ class BusinessActivitySchedulerController extends Controller
             $customer = $request->user()->customers()->find($request->cid);
             $active_memberships = $customer ? @$customer->active_memberships()->where('user_booking_details.user_id',$request->cid)->get() : [];
             foreach($active_memberships as $active_membership){
-                $remainingSession = $active_membership->getremainingsession();
+                $remainingSession = max($active_membership->getremainingsession() - 1, 0);
                 if($remainingSession > 0 && $active_membership->business_price_detail){
                     $priceDetail = $active_membership->business_price_detail;
                     $html .= '<option value="'.$priceDetail->id.'" data-did ="'.$active_membership->id.'">'.$priceDetail->price_title.'</option>';
@@ -392,7 +393,7 @@ class BusinessActivitySchedulerController extends Controller
                 'cid' => $request->customerID,
                 'timeId' =>$request->timeid,
                 'pname' =>$request->pname,
-                'catname' =>$UserBookingDetails->business_price_detail->business_price_details_ages->category_title,
+                'catname' => @$UserBookingDetails->business_price_detail->business_price_details_ages->category_title,
                 'serviceID' =>$request->serviceID,
                 'businessId' =>$request->businessId,
                 'time' => $request->time,
@@ -421,6 +422,17 @@ class BusinessActivitySchedulerController extends Controller
        // print_r($finalSessionAry);
         $company = CompanyInformation::find($business_id);
         return view('business-activity-schedular.reviewData',compact('finalSessionAry','company','cid'));
+    }
+
+    public function loadMembershipDropdown(Request $request){
+        $cid = $request->cid;
+        $i = $request->i;
+        $sessionAry = Session::get('multibooking',[]);
+        $finalSessionAry = collect($sessionAry)->filter(function($ary) use ($cid) {
+            return $ary['cid'] == $cid;
+        })->all();
+        
+        return view('business-activity-schedular.multibookin_select_box',compact('finalSessionAry','cid','i'));
     }
 
     public function deleteFromSession(Request $request){
