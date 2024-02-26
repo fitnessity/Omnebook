@@ -179,6 +179,154 @@
 </div>
 <!-- end main content-->
 
+<!-- Modal -->
+<div class="modal fade" id="createTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="task-error-msg" class="alert alert-danger py-2"></div>
+                <form autocomplete="off" action="" id="creattask-form">
+                    <input type="hidden" id="taskid-input" class="form-control">
+                    <div class="mb-3">
+                        <label for="task-title-input" class="form-label">Task Title</label>
+                        <input type="text" id="task-title-input" class="form-control" placeholder="Enter task title">
+                    </div>
+                    <div class="mb-3 position-relative">
+                        <label for="task-assign-input" class="form-label">Assigned To</label>
+                        <div class="avatar-group justify-content-center" id="assignee-member"></div>
+                        <div class="select-element">
+                            <button class="btn btn-light w-100 d-flex justify-content-between" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                <span>Assigned To<b id="total-assignee" class="mx-1">0</b>Members</span> <i class="mdi mdi-chevron-down"></i>
+                            </button>
+                            <div class="dropdown-menu w-100">
+                                <div data-simplebar style="max-height: 141px">
+                                    <ul class="list-unstyled mb-0">
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="https://fitnessity-production.s3.amazonaws.com/customer/Pj5DKQgqQZvsvjBEQokyaKtuHHNHEmv0xTExXX2D.jpg" alt="" class="drop-img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">James Forbes</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="https://fitnessity-production.s3.amazonaws.com/customer/ruxB4qnxpKeKcsWtUCGnihFs5AEuMLOF5qWh16rB.jpg" alt="" class="drop-img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">John Robles</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="https://fitnessity-production.s3.amazonaws.com/company/pHSVR4Hvc7abvaVqPG3zk3tUJjbJNCdEMfKuCM1j.jpg" alt="" class="drop-img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Mary Gant</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="https://fitnessity-production.s3.amazonaws.com/customer/Pj5DKQgqQZvsvjBEQokyaKtuHHNHEmv0xTExXX2D.jpg" alt="" class="drop-img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Curtis Saenz</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="https://fitnessity-production.s3.amazonaws.com/customer/ruxB4qnxpKeKcsWtUCGnihFs5AEuMLOF5qWh16rB.jpg" alt="" class="drop-img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Virgie Price</div>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="https://fitnessity-production.s3.amazonaws.com/company/pHSVR4Hvc7abvaVqPG3zk3tUJjbJNCdEMfKuCM1j.jpg" alt="" class="drop-img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Anthony Mills</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="https://fitnessity-production.s3.amazonaws.com/customer/Pj5DKQgqQZvsvjBEQokyaKtuHHNHEmv0xTExXX2D.jpg" alt="" class="drop-img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Marian Angel</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="https://fitnessity-production.s3.amazonaws.com/customer/ruxB4qnxpKeKcsWtUCGnihFs5AEuMLOF5qWh16rB.jpg" alt="" class="drop-img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Johnnie Walton</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="https://fitnessity-production.s3.amazonaws.com/company/pHSVR4Hvc7abvaVqPG3zk3tUJjbJNCdEMfKuCM1j.jpg" alt="" class="drop-img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Donna Weston</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="https://fitnessity-production.s3.amazonaws.com/customer/Pj5DKQgqQZvsvjBEQokyaKtuHHNHEmv0xTExXX2D.jpg" alt="" class="drop-img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Diego Norris</div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-4 mb-3">
+                        <div class="col-lg-6">
+                            <label for="task-status" class="form-label">Status</label>
+                            <select class="form-control" data-choices data-choices-search-false id="task-status-input">
+                                <option value="">Status</option>
+                                <option value="New" selected>New</option>
+                                <option value="Inprogress">Inprogress</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <label for="priority-field" class="form-label">Priority</label>
+                            <select class="form-control" data-choices data-choices-search-false id="priority-field">
+                                <option value="">Priority</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <div class="mb-4">
+                        <label for="task-duedate-input" class="form-label">Due Date:</label>
+                        <input type="text" class="form-control flatpickr" data-provider="flatpickr" id="JoiningdatInput" data-date-format="d M, Y" data-deafult-date="24 Nov, 2021" placeholder="Due date" />
+                    </div>
+
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="submit" class="btn btn-red" id="addNewTodo">Add Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -201,5 +349,14 @@
       }
     }).disableSelection();
   });
+</script>
+
+<script>
+		 flatpickr(".flatpickr", {
+	        dateFormat: "m/d/Y",
+	        maxDate: "01/01/2050",
+			defaultDate: [new Date()],
+	     });
+			 
 </script>
 @endsection

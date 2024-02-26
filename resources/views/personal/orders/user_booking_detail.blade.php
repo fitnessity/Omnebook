@@ -28,7 +28,7 @@
 														<div class="mx-line d-inline-block mmt-10">
 															<div>
 																<label>{{@$bs->business_services_with_trashed->program_name}} |</label>
-																<label>Remaining: {{@$bs->getremainingsession()}}/{{@$bs->pay_session}} |</label>
+																<label>Remaining: {{@$bs->getRemainingSessionAfterAttend()}}/{{@$bs->pay_session}} |</label>
 																<label>Expiration: {{date('m/d/Y',strtotime(@$bs->expired_at))}} |</label>
 															</div>
 															@if($tabName == 'past') 
@@ -114,7 +114,7 @@
 											<label>TOTAL REMAINING</label>
 										</div>
 										<div class="col-lg-6 col-6">
-											<span>{{@$bs->getremainingsession()}}/{{@$bs['pay_session']}}</span>
+											<span>{{@$bs->getRemainingSessionAfterAttend()}}/{{@$bs['pay_session']}}</span>
 										</div>
 										
 										<div class="col-lg-6 col-6">
