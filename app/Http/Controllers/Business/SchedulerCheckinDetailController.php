@@ -145,12 +145,10 @@ class SchedulerCheckinDetailController extends BusinessBaseController
      */
     public function update(Request $request, $business_id, $scheduler_id, $id)
     {
-        
         $company = $request->current_company;
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
         $business_checkin_detail = BookingCheckinDetails::whereRaw('1=1');
-        $overwrite = []; $sendmail= 0;
-
+        $overwrite = []; $sendmail= 0; $membershipSessionOverAlert = 0; $sessionOvermessage = '';
 
         if($request->checked_at){
             $customerInClass = BookingCheckinDetails::checkCustomerInClass($scheduler_id,$request->checked_at);
@@ -173,13 +171,35 @@ class SchedulerCheckinDetailController extends BusinessBaseController
             }else{
                 $sendmail= 2;
             }
-            
         }else{
             
+            $bookingDetail = UserBookingDetail::findOrFail($request->booking_detail_id);
+            $chkBookedSpot = $bookingDetail->getremainingsession();
             $checkin_detail = BookingCheckinDetails::findOrFail($id);
-            $overwrite['use_session_amount'] = 0;
-            $overwrite['checked_at'] = Null;
-            $checkin_detail->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
+            if($chkBookedSpot > 0 ){
+                $overwrite['use_session_amount'] = 0;
+                $overwrite['checked_at'] = Null;
+                $checkin_detail->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
+            }else{
+                $sendmail= 0;
+                $bookedSpot = $bookingDetail->getWithoutAttendBookedSession();
+                $usedSession = $bookingDetail->getUsedSession();
+                $membershipSessionOverAlert = 1;
+
+                $sessionOvermessage .= "You have total ".$bookingDetail->pay_session." Sessions and used ".$usedSession." Session. ";
+
+                if($bookedSpot > 0){
+                    $sessionOvermessage .= "Currently you have booked ".$bookedSpot." spots (for ".$bookedSpot." Sessions)  across different dates. ";
+                }
+
+                $sessionOvermessage .= "Unfortunately, all available sessions have been used.";
+                
+                $checkin_detail->update(['checked_at' => NULL, 'booking_detail_id' => NULL, 'use_session_amount' => 0]);
+            }
+        }
+
+        if($membershipSessionOverAlert == 1){
+            return $sessionOvermessage;
         }
 
         $business_checkin_detail = $business_checkin_detail->findOrFail($id);
@@ -204,7 +224,6 @@ class SchedulerCheckinDetailController extends BusinessBaseController
 
             $business_checkin_detail->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
         }
-
 
         if($request->checked_at){
             if($sendmail == 1){
@@ -241,12 +260,12 @@ class SchedulerCheckinDetailController extends BusinessBaseController
             }
         }
 
-        /*if (!$request->ajax()) {
-          return redirect()->route('business.schedulers.checkin_details.index',[
-            'scheduler'=>$business_checkin_detail->business_activity_scheduler_id, 
-            'date' =>$business_checkin_detail->checkin_date
-          ]);
-        }*/
+        // if (!$request->ajax()) {
+        //   return redirect()->route('business.schedulers.checkin_details.index',[
+        //     'scheduler'=>$business_checkin_detail->business_activity_scheduler_id, 
+        //     'date' =>$business_checkin_detail->checkin_date
+        //   ]);
+        // }
 
         return $sendmail;
     }

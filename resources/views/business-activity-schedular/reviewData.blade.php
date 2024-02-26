@@ -32,29 +32,13 @@
 					<td>{{$sesAry['duration']}} </td>
 					<td> 1 Slot </td>
 					<td>  
-						<?php 
-							$html = $data = '';$remaining = 0;$firstDataProcessed = false; 
-				            $customer = Auth::user()->customers()->find(request()->cid);
+						<select class="mb-10 form-control required" id="priceId{{$i}}" onclick="loadOptions({{$i}})" onchange="getRemainingSession({{$i}},'{{$sesAry["date"]}}',{{$sesAry['timeId']}})">
+							<option value="" data-did ="0">Choose Membership</option>
+						</select>  
 
-				            $active_memberships = $customer->active_memberships()->where('user_booking_details.user_id',request()->cid)->get();
-
-				            foreach($active_memberships as $active_membership){
-				                $remainingSession = $active_membership->getremainingsession();
-				                if($remainingSession > 0 && $active_membership->business_price_detail){
-				                    $priceDetail = $active_membership->business_price_detail;
-				                    $html .= '<option value="'.$priceDetail->id.'" data-did ="'.$active_membership->id.'">'.$priceDetail->price_title.'</option>';
-				                }
-				            }
-
-				            if($html != ''){
-					            $data .='<select class="mb-10 form-control required" id="priceId'.$i.'" onchange="getRemainingSession('.$i.',\''.$sesAry["date"].'\','.$sesAry['timeId'].')"  ><option value="" data-did ="0">Choose Membership</option>'.$html.'</select>  <div class="font-red text-center" id="remainingSession'.$i.'"></div>';
-
-					            //'<div class="font-red text-center" id="remainingSession'.$i.'">'.$remaining.' Session Remaining.</div>';
-					        }
-				        ?>
+						<div class="font-red text-center" id="remainingSession{{$i}}"></div>
 				        <div class="text-center">
-				        	{!! $data != '' ? $data : '<p> No MemberShip Available</p>' !!}
-
+				        	<p class="d-none not-avail"> No MemberShip Available</p>
 				        	<div class="time-slots-saprator mb-20"></div><a href="/activity-details/{{$sesAry['serviceID']}}" class="btn btn-red" target="_blank">Purchase A Membership</a>
 				        </div>
 				    </td>
@@ -70,6 +54,48 @@
 </div>
 
 <script type="text/javascript">
+	var onChangeTriggered = false;
+
+	function loadOptions(i){
+		if (!onChangeTriggered) {
+			$.ajax({
+	            url: '/load-membership-dropdown/', 
+	            type: 'POST',
+	            data: {
+	            	'cid': '{{request()->cid}}' ,
+	            	'_token': '{{csrf_token()}}' ,
+	            	'i': i ,
+	            },
+	            success: function(response) {
+	            	//alert(response)
+	            	if(response){
+	            		 $('#priceId'+i).html(response);
+	            	}else{
+	            		$('.not-avail').removeClass('d-none');
+	            	}
+	            },
+	        });
+	    }
+    	onChangeTriggered = false;
+	}
+
+	function  getRemainingSession(i,date,timeid){
+		onChangeTriggered = true;
+		var did = $('#priceId'+i).find('option:selected').data('did');
+		if(did != '' &&  did != '0'){
+			$.ajax({
+				url:'/chksession/'+did+'/'+date+'/'+timeid+'/1',
+				type: 'GET',
+				success:function(data){
+					$('#remainingSession'+i).html(data+' Session Remaining.')
+				}
+			});
+		}else{
+			$('#remainingSession'+i).html('')
+		}
+	}
+
+
 	function confirmSchedule(cnt){
 		if(confirm('Are you want to confirm this booking schedule ?')){
 			if(cnt == 0){

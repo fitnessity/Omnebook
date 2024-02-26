@@ -384,6 +384,11 @@
     <script src="{{asset('/public/dashboard-design/js/form-file-upload.init.js')}}"></script> 
 
     <script src="{{asset('/public/dashboard-design/js/password-addon.init.js')}}"></script> 
+
+    <script src="{{asset('/public/dashboard-design/js/dragula.min.js')}}"></script> 
+    <script src="{{asset('/public/dashboard-design/js/dom-autoscroller.min.js')}}"></script> 
+    
+    <script src="{{asset('/public/dashboard-design/js/todo.init.js')}}"></script> 
     
  <!-- new design end -->
 

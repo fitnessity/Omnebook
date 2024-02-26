@@ -55,12 +55,21 @@ class Customer extends Authenticatable
             if($fitnessity_user){
                 $model->user_id = $fitnessity_user->id;
                 $model->password = $fitnessity_user->password;
+            }else{
+                $model->createUser();
             }
 
             if(!$model->password){
                 $model->createPassword();
             }
 
+        });
+
+        self::retrieved(function($model){
+            $fitnessity_user = User::where('email', $model->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($model->fname), strtolower($model->lname)])->first();
+            if(!$model->user_id){
+                $model->createUserIfNeeded();
+            }
         });
         
     }
@@ -96,7 +105,7 @@ class Customer extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['age', 'profile_pic_url', 'full_name', 'first_letter' ,'company_name','last_attend_date'];
+    protected $appends = ['age', 'profile_pic_url', 'full_name', 'first_letter' ,'company_name','last_attend_date','member_id','customer_type'];
 
 
     public function createUser(){
@@ -191,6 +200,30 @@ class Customer extends Authenticatable
         }
     }
 
+    public function getMemberIdAttribute()
+    {
+        if($this->user){
+            return $this->user->unique_user_id;
+        }else{
+            return 'N/A';
+        }
+    }
+
+    public function getCustomerTypeAttribute()
+    {
+        if($this->age){
+            if($this->age >= 18){
+                return 'Adult';  
+            }else if($this->age >= 3 && $this->age < 18){
+                return 'Child';
+            }else if($this->age < 3){
+                 return 'Infant';
+            }
+        }else{
+            return 'N/A';
+        }
+    }
+
     public function getFullNameAttribute(){
         return ucfirst($this->fname) . ' ' . ucfirst($this->lname);
     }
@@ -204,6 +237,35 @@ class Customer extends Authenticatable
         $lname = $this->lname != '' ? $this->lname[0] : '';
         return $fname . '' . $lname;
     }
+
+    public function createUserIfNeeded()
+    {
+    
+        if (!$this->user_id) {
+            $user = User::where('email', $this->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($this->fname), strtolower($this->lname)])->first();
+            if($user){
+                $this->user_id = $user->id;
+            }else{
+                $user = New User();
+                $user->role = 'customer';
+                $user->firstname =  $this->fname;
+                $user->lastname =  $this->lname;
+                $user->username = $this->fname.$this->lname;
+                $user->email = $this->email;
+                $user->gender = $this->gender;
+                $user->primary_account = 0;
+                $user->country = 'United Status';
+                $user->phone_number = $this->mobile;
+                $user->birthdate =  $this->birthdate != '' ? date('Y-m-d', strtotime($this->birthdate)) : null;
+                $user->stripe_customer_id =  $this->stripe_customer_id;
+                $user->password =  $this->password;
+                $user->save(); 
+                $this->user_id = $user->id;
+            }
+            $this->update();
+        }
+    }
+
 
     public function company_information()
     {
@@ -289,35 +351,26 @@ class Customer extends Authenticatable
     }
 
     public function full_address(){
-        $location = '';
-        $address = '';
+        $location = $address = '';
         if($this->address != ''){
-            $address .= $this->address.', ';
+            $location .= $this->address.', ';
         }
         if($this->city != ''){
-            $address .= $this->city.', ';
+            $location .= $this->city.', ';
         }
         if($this->state != ''){
-            $address .= $this->state.' '.$this->zipcode.', ';
-            $location .= $this->state.', ';
+            $location .= $this->state.' '.$this->zipcode.', ';
         }
         if($this->country != ''){
-            $address .= $this->country;
             $location .= $this->country;
         }
 
-        if($address == ''){
-            $address = '—';
-        }else if($address == 'US'){
-            $address = 'United States';
-        }
-
         if($location == ''){
-           $location = '—'; 
+           $location = 'N/A';
         }else if($location == 'US'){
             $location = 'United States';
         }
-        return $address;
+        return $location;
     }
 
     public function getlastbooking(){

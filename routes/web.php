@@ -24,7 +24,7 @@ Route::fallback(function () {
 
 Route::get('/clear-cache', function () {
     // Clear all cache
-    /*Artisan::call('cache:clear');
+    Artisan::call('cache:clear');
 
     // Clear specific cache (e.g., route cache)
     Artisan::call('route:clear');
@@ -33,7 +33,7 @@ Route::get('/clear-cache', function () {
     Artisan::call('config:clear');
 
     return 'Cache cleared successfully.';
-    */
+    
     //print_r(App\Customer::where('user_id',NULL)->get());
 
 
@@ -208,6 +208,10 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('/getCancellationNoShowData/','ClientReportController@getCancellationNoShowData')->name('client.getCancellationNoShowData');
     Route::get('/getMoreCancellationNoShowData/','ClientReportController@getMoreCancellationNoShowData')->name('client.getMoreCancellationNoShowData');
 
+    Route::get('/contact-list/','ClientReportController@contactList')->name('client.contact_list');
+    Route::get('/contact-list/export-contact','ClientReportController@contactListExport')->name('contact-list.export');
+    Route::get('/get-more-contact-list','ClientReportController@getMorecontactList')->name('contact-list.get-more');
+
     Route::get('/cancellation/export','ClientReportController@cancellationExport')->name('cancellation.export');
 
     Route::get('active-membership','ActiveMembershipController@index')->name('active-membership.index');
@@ -305,6 +309,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/chkMultipleOrder', 'BusinessActivitySchedulerController@chkMultipleOrder')->name('chkMultipleOrder');
 
     Route::get('/getReviewData/{cid}/{business_id}', 'BusinessActivitySchedulerController@getReviewData')->name('getReviewData');
+
+    Route::post('/load-membership-dropdown', 'BusinessActivitySchedulerController@loadMembershipDropdown')->name('load-membership-dropdown');
 
     Route::post('/deleteFromSession', 'BusinessActivitySchedulerController@deleteFromSession')->name('deleteFromSession');
 
@@ -423,17 +429,6 @@ Route::post('modelboxsuccess', 'UserProfileController@modelboxsuccess')->name('m
 Route::get('editactivityimg', 'UserProfileController@editactivityimg')->name('editactivityimg');
 Route::post('activityimgupdate', 'UserProfileController@activityimgupdate')->name('activityimgupdate');
 
-
-Route::get('make-new-logout',function(){
-    if(Auth::check()){
-        Auth::logout();
-    }
-    return 1;
-});
-
-Route::get('/blade-check1',function(){
-    return view('home.mycheck');
-});
 
 Route::get('/claim/reminder/{cname?}/{cid?}','UserProfileController@claim_reminder');
 
@@ -564,295 +559,297 @@ Route::get('home/jsModalChildSports/{id}', 'HomeController@jsModalChildSports');
 
 Route::get('/users/{id}/login_as', 'HomeController@login_as')->name('admin_user_login_as');
 
-Route::group(array('prefix' => 'admin'), function(){
+Route::prefix('/admin')->group(function() {
 
-    // Inquiry Box
-
-    Route::get('/inquiry', 'Admin\AdminUserController@inquiry')->name('inquiry');
-    Route::get('/inquirydelete/{id}', 'Admin\AdminUserController@inquirydelete')->name('inquirydelete');
-    Route::get('/contact-us', 'Admin\AdminUserController@contactus')->name('contact-us');
-    Route::get('/contactdelete/{id}', 'Admin\AdminUserController@contactdelete')->name('contactdelete');
-    
     Route::get('/', 'Admin\AdminAuthController@index');
     Route::post('/login', 'Admin\AdminAuthController@PostLogin');
-    Route::get('/register', 'Admin\AdminAuthController@GetRegister');
-    Route::post('/register', 'Admin\AdminAuthController@PostRegister');	
-    Route::get('/background_check_faq','Admin\CheckFaqController@index')->name('background_check_faq');
-    Route::get('/add_new_background_check_faq','Admin\CheckFaqController@create')->name('background_check_faq-add');
-    Route::post('/background_check_faq_store','Admin\CheckFaqController@store')->name('background_check_faq_create');
-    Route::post('/background_check_faq_update','Admin\CheckFaqController@update')->name('background_check_faq_update');
-    Route::get('/background_check_faq_view/{id}','Admin\CheckFaqController@view')->name('background_check_faq_view');
-    Route::get('/delete_background_check_faq/{id}','Admin\CheckFaqController@delete')->name('background_check_faq_delete');
-    Route::get('/vatted_business_faq','Admin\BusinessFaqController@index')->name('vatted_business_faq');
-    Route::get('/add_new_vatted_business_faq','Admin\BusinessFaqController@create')->name('vatted_business_faq-add');
-    Route::post('/vatted_business_faq_store','Admin\BusinessFaqController@store')->name('vatted_business_faq_create');
-    Route::post('/vatted_business_faq_update','Admin\BusinessFaqController@update')->name('vatted_business_faq_update');
-    Route::get('/vatted_business_faq_view/{id}','Admin\BusinessFaqController@view')->name('vatted_business_faq_view');
-    Route::get('/delete_vatted_business_faq/{id}','Admin\BusinessFaqController@delete')->name('vatted_business_faq_delete');
-
-
-    Route::get('/logout', function(){
-        Auth::guard('admin')->logout();
-        return Redirect::to('/admin');
-    });
-
     //forgot password routes
-    Route::get('/forgotpassword', 'Admin\AdminAuthController@GetForgotpassword');  
-    Route::get('/dashboard', 'Admin\AdminUserController@index');
-    Route::get('/profile/editprofiledetail', 'Admin\AdminProfileController@viewProfile');
-    Route::post('/profile/editprofiledetail', 'Admin\AdminProfileController@editProfileDetail');
-    Route::post('/profile/editProfilePicture', 'Admin\AdminProfileController@editProfilePicture');
+    Route::get('/forgotpassword', 'Admin\AdminAuthController@GetForgotpassword'); 
+    
 
-    //Home tracker
-    Route::get('/hometracker', 'Admin\HomeTrackerController@index')->name('hometracker');
-    Route::post('/update-hometracker', 'Admin\HomeTrackerController@update')->name('update-hometracker');
+    Route::middleware(['admin:admin'])->group(function () {
+        Route::get('/logout', 'Admin\AdminAuthController@logout')->name('logout');
 
+        Route::get('/dashboard', 'Admin\AdminUserController@index');
+        Route::get('/profile/editprofiledetail', 'Admin\AdminProfileController@viewProfile');
+        Route::post('/profile/editprofiledetail', 'Admin\AdminProfileController@editProfileDetail');
+        Route::post('/profile/editProfilePicture', 'Admin\AdminProfileController@editProfilePicture');
 
-    //cms
-    Route::get('/cms', 'Admin\CmsController@listCmsModules');
-    Route::get('/cms/edit/{id}', 'Admin\CmsController@viewCmsModule');  
-    Route::post('/cms/edit/{id}', 'Admin\CmsController@postCmsModule');  
-
-    //Manage Customers
-    /*Route::get('/customers', 'Admin\AdminUserController@viewCustomers');
-    Route::post('/customers', 'Admin\AdminUserController@postCustomers');
-    Route::get('/customers/{id}/login_as', 'Admin\AdminUserController@login_as')->name('admin_user_login_as');
-    Route::get('/customers/edit/{id}', 'Admin\AdminUserController@getCustomerDetails');
-    Route::get('/customers/view/{id}', 'Admin\AdminUserController@viewCustomerDetails');
-    Route::post('/customers/edit/{id}', 'Admin\AdminUserController@postCustomerDetails');
-    Route::get('/customers/delete/{id}', 'Admin\AdminUserController@deleteCustomer');
-    Route::get('/customers/deactivate/{id}', 'Admin\AdminUserController@deactivateCustomer');
-    Route::post('/customer/update_fee/', 'Admin\AdminUserController@updatefitnessityfee');*/
-
-    //Manage users
-    Route::get('/users', 'Admin\AdminUserController@viewCustomers');
-    Route::post('/users', 'Admin\AdminUserController@postCustomers');
-    Route::get('/users/edit/{id}', 'Admin\AdminUserController@getCustomerDetails');
-    Route::get('/users/view/{id}', 'Admin\AdminUserController@viewCustomerDetails');
-    Route::post('/users/edit/{id}', 'Admin\AdminUserController@postCustomerDetails');
-    Route::get('/users/delete/{id}', 'Admin\AdminUserController@deleteCustomer');
-    Route::get('/users/deactivate/{id}', 'Admin\AdminUserController@deactivateCustomer');
-    Route::post('/user/update_fee/', 'Admin\AdminUserController@updatefitnessityfee');
-
-    //reportedfeeds
-    Route::get('/reportedfeeds', 'Admin\ReportedFeedsController@index')->name('reportedfeed-list');
-    Route::get('/reportedfeeds/view/{id}', 'Admin\ReportedFeedsController@view');
-    Route::post('/reportedfeeds/delete-reportedfeed', 'Admin\ReportedFeedsController@delete')->name('delete-reportedfeed');  
-    Route::post('/reportedfeeds/deleteAll', 'Admin\ReportedFeedsController@deleteAll')->name('delete-reportedfeeds');
-    Route::post('/reportedfeeds/allow-reportedfeed', 'Admin\ReportedFeedsController@allowFeed')->name('allow-reportedfeed');
-
-    // add services
-
-    Route::post('/add_services','Admin\PlansController@add_services')->name('add_services'); 
-
-    //unclaim edit and manual add and add activity, list activity
-
-    Route::get('/add_activity/{id}','Admin\PlansController@add_activity')->name('add_activity'); 
-    Route::get('/edit_services/{sid}/{cid}','Admin\PlansController@edit_services')->name('edit_services'); 
-    Route::post('/update_services','Admin\PlansController@update_services')->name('update_services'); 
-
-    Route::get('/manage/service/{id}','Admin\PlansController@list_activity')->name('list_activity'); 
-    Route::post('/editBusinessServiceadmin','Admin\PlansController@editBusinessServiceadmin')->name('editBusinessServiceadmin'); 
-    Route::post('add_manual', 'Admin\PlansController@add_manual')->name('add_manual'); 
-    Route::get('/manual_add_unclaim_business', 'Admin\PlansController@manual_add_unclaim_business')->name('manual_add_unclaim_business');
-
-    Route::get('/edit_unclaim/{id}', 'Admin\PlansController@edit_unclaim')->name('edit_unclaim');
-
-    Route::post('/unclaim/edit', 'Admin\PlansController@update_unclaim')->name('update_unclaim'); 
-   
-    Route::post('adminaddbusinessschedule','Admin\PlansController@adminaddbusinessschedule')->name('adminaddbusinessschedule');
-
-    //plans
-    Route::get('/plans/membership-plan', 'Admin\PlansController@index')->name('plan-list');
-    Route::get('/plans/create', 'Admin\PlansController@create')->name('create-new-membership-plan');  
-    Route::get('/plans/edit/{id}', 'Admin\PlansController@edit');  
-    Route::post('/plans/update/{id}', 'Admin\PlansController@update')->name('update-plan');   
-    Route::post('/plans/store', 'Admin\PlansController@store')->name('create-plan');  
-    Route::DELETE('/plans/delete-plan', 'Admin\PlansController@delete')->name('delete-plan');  
-    Route::post('/plans/deactivate-plan', 'Admin\PlansController@deactivate')->name('deactivate-plan'); 
-    Route::post('/plans/activate-plan', 'Admin\PlansController@activate')->name('activate-plan'); 
-    Route::post('/plans/deleteAll', 'Admin\PlansController@deleteAll')->name('delete-plans');
-
-    //features
-    Route::get('/features/', 'Admin\FeaturesController@index')->name('features.index');
-    Route::get('/features/edit/{id}', 'Admin\FeaturesController@edit')->name('features.edit');
-    Route::post('/features/update/{id}', 'Admin\FeaturesController@update')->name('features.update'); 
-
-     //promo_codes
-    Route::get('/promo_codes/', 'Admin\PromoCodesController@index')->name('promo_codes.index');
-    Route::get('/promo_codes/create', 'Admin\PromoCodesController@create')->name('promo_codes.create'); 
-    Route::post('/promo_codes/store', 'Admin\PromoCodesController@store')->name('promo_codes.store');  
-    Route::get('/promo_codes/edit/{id}', 'Admin\PromoCodesController@edit')->name('promo_codes.edit');
-    Route::post('/promo_codes/update/{id}', 'Admin\PromoCodesController@update')->name('promo_codes.update');
-    Route::get('/promo_codes/delete/{id}', 'Admin\PromoCodesController@delete')->name('promo_codes.delete');
-
-    //on-board-questions
-    Route::get('/on-board-questions/', 'Admin\OnboardQuestionsController@index')->name('on_board_questions.index');
-    Route::get('/on-board-questions/create', 'Admin\OnboardQuestionsController@create')->name('on_board_questions.create'); 
-    Route::post('/on-board-questions/store', 'Admin\OnboardQuestionsController@store')->name('on_board_questions.store');  
-    Route::get('/on-board-questions/edit/{id}', 'Admin\OnboardQuestionsController@edit')->name('on_board_questions.edit');
-    Route::post('/on-board-questions/update/{id}', 'Admin\OnboardQuestionsController@update')->name('on_board_questions.update');
-    Route::get('/on-board-questions/delete/{id}', 'Admin\OnboardQuestionsController@delete')->name('on_board_questions.delete');
-
-	//fees
-	Route::get('/fees', 'Admin\FeesController@index')->name('fees');
-	Route::post('/update-fees', 'Admin\FeesController@update')->name('update-fees');
-
-    // Slider
-    Route::get('/slider', 'Frontend\SliderController@index')->name('slider');
-    Route::get('/slider/create', 'Frontend\SliderController@create')->name('create-new-slider'); 
-    Route::post('/slider/store', 'Frontend\SliderController@store')->name('create-slider');
-    Route::DELETE('/slider/delete-slider', 'Frontend\SliderController@delete')->name('delete-slider');
-    Route::get('/slider/edit/{id}', 'Frontend\SliderController@edit');
-    Route::post('/slider/update/{id}', 'Frontend\SliderController@update')->name('update-slider'); 
-    Route::get('/slider/delete/{id}', 'Frontend\SliderController@delete');
-
-    // Slider
-    Route::get('/activity-slider', 'Frontend\ActivitySliderController@index')->name('activity-slider');
-    Route::get('/activity-slider/create', 'Frontend\ActivitySliderController@create')->name('create-new-activity-slider'); 
-    Route::post('/activity-slider/store', 'Frontend\ActivitySliderController@store')->name('create-activity-slider');
-    Route::DELETE('/activity-slider/delete-slider', 'Frontend\ActivitySliderController@delete')->name('delete-activity-slider');
-    Route::get('/activity-slider/edit/{id}', 'Frontend\ActivitySliderController@edit');
-    Route::post('/activity-slider/update/{id}', 'Frontend\ActivitySliderController@update')->name('update-activity-slider'); 
-    Route::get('/activity-slider/delete/{id}', 'Frontend\ActivitySliderController@delete');
-
-	
-
-    // Post
-    Route::get('/post', 'Frontend\PostController@index')->name('admin/post');
-    Route::get('/businesspost', 'Frontend\PostController@businessindex')->name('admin/businesspost');
-    Route::get('/profilepost', 'Frontend\PostController@index')->name('admin/profilepost');
-    Route::get('/viewprofilepost/', 'Frontend\PostController@viewProfilepost')->name('admin/viewprofilepost');
-    Route::get('/viewbusinesspost/', 'Frontend\PostController@viewBusinesspost')->name('admin/viewbusinesspost');
-
-    //Trainer
-    Route::get('/trainer', 'Frontend\TrainerController@index')->name('trainer');
-    Route::get('/trainer/create', 'Frontend\TrainerController@create')->name('create-new-trainer');
-    Route::post('/trainer/store', 'Frontend\TrainerController@store')->name('create-trainer'); 
-    Route::DELETE('/trainer/delete-trainer', 'Frontend\TrainerController@delete')->name('delete-trainers');
-    Route::get('/trainer/edit/{id}', 'Frontend\TrainerController@edit');
-    Route::post('/trainer/update/{id}', 'Frontend\TrainerController@update')->name('update-trainer'); 
-    Route::get('/trainer/delete/{id}', 'Frontend\TrainerController@delete');
-
-    // Online classes and activities
-    Route::get('/online', 'Frontend\OnlineController@index')->name('online');
-    Route::get('/online/create', 'Frontend\OnlineController@create')->name('create-new-online'); 
-    Route::post('/online/store', 'Frontend\OnlineController@store')->name('create-online');
-    Route::DELETE('/online/delete-online', 'Frontend\OnlineController@delete')->name('delete-online');
-    Route::get('/online/edit/{id}', 'Frontend\OnlineController@edit');
-    Route::post('/online/update/{id}', 'Frontend\OnlineController@update')->name('update-online'); 
-    Route::get('/online/delete/{id}', 'Frontend\OnlineController@delete');
-
-    // Person classes and activities
-    Route::get('/person', 'Frontend\PersonController@index')->name('person');
-    Route::get('/person/create', 'Frontend\PersonController@create')->name('create-new-person'); 
-    Route::post('/person/store', 'Frontend\PersonController@store')->name('create-person');
-    Route::DELETE('/person/delete-person', 'Frontend\PersonController@delete')->name('delete-person');
-    Route::get('/person/edit/{id}', 'Frontend\PersonController@edit');
-    Route::post('/person/update/{id}', 'Frontend\PersonController@update')->name('update-person'); 
-    Route::get('/person/delete/{id}', 'Frontend\PersonController@delete');
-
-    //Trainer
-    Route::get('/discover', 'Frontend\DiscoverController@index')->name('discover');
-    Route::get('/discover/create', 'Frontend\DiscoverController@create')->name('create-new-discover');
-    Route::post('/discover/store', 'Frontend\DiscoverController@store')->name('create-discover'); 
-    Route::DELETE('/discover/delete-trainer', 'Frontend\DiscoverController@delete')->name('delete-discovers');
-    Route::get('/discover/edit/{id}', 'Frontend\DiscoverController@edit');
-    Route::post('/discover/update/{id}', 'Frontend\DiscoverController@update')->name('update-discover'); 
-    Route::get('/discover/delete/{id}', 'Frontend\DiscoverController@delete');
-
-    Route::get('/unclaimbusiness', 'Admin\PlansController@businessUnclaim')->name('businessUnclaim');
-    Route::get('/claimbusiness', 'Admin\PlansController@businessClaim')->name('adminbusinessClaim');
-    Route::get('/delete_claim/{id}','Admin\PlansController@deleteClaim')->name('claim_delete');
-    Route::post('/import-claimbusiness', 'Admin\PlansController@addBusinessClaim');
-    Route::post('/ignore-replace-claimbusiness', 'Admin\PlansController@ignoreReplaceBusinessClaim');
-	Route::get('/business_delete/{id}','Admin\PlansController@business_delete')->name('business_delete');
-    Route::get('/sendemail/{cid?}','Admin\PlansController@sendemail')->name('sendemail');
-
-    //Feedbacks
-    Route::get('/feedbacks', 'Admin\FeedbackController@index');
-    Route::get('/feedbacks/view/{id}', 'Admin\FeedbackController@viewFeedback');
-    Route::get('/feedbacks/delete/{id}', 'Admin\FeedbackController@deleteFeedback');
-
-    //Booking
-    Route::get('/bookings', 'Admin\BookingController@index');
-    Route::get('/bookings/directHireDetails/{id}', 'Admin\BookingController@directHireDetails');
-    Route::get('/bookings/quickHireDetails/{id}', 'Admin\BookingController@quickHireDetails');
-
-    //Professionals Controller
-    Route::get('/professionals', 'Admin\AdminProfessionalsController@index')->name('professionals-list');
-    Route::post('/professionals', 'Admin\AdminProfessionalsController@postProfessionals');
-    Route::get('/professionals/view/{id}', 'Admin\AdminProfessionalsController@view')->name('professionals-view');
-    Route::post('/professionals/deleteAll', 'Admin\AdminProfessionalsController@deleteAll')->name('delete-professionals');
-    Route::post('/professionals/approve-professional', 'Admin\AdminProfessionalsController@Approve')->name('approve-professional');
-
-    // Business user
-
-    //Professionals Controller
-    Route::get('/businessusers', 'Admin\AdminBusinessController@index')->name('professionals-list');
-    Route::post('/businessusers', 'Admin\AdminBusinessController@postProfessionals');
-    Route::get('/businessusers/view/{id}', 'Admin\AdminBusinessController@view')->name('professionals-view');
-    Route::post('/businessusers/deleteAll', 'Admin\AdminBusinessController@deleteAll')->name('delete-professionals');
-    Route::post('/businessusers/approve-professional', 'Admin\AdminBusinessController@Approve')->name('approve-professional');
-
-    // Professional Reject with Reason
-    Route::post('/professionals/reject-professional', 'Admin\AdminProfessionalsController@rejectProfessional')->name('reject-professional'); 
-
-    // Business user Reject with Reason
-    Route::post('/businessusers/reject-professional', 'Admin\AdminBusinessController@rejectProfessional')->name('reject-professional');   
-
-    //Sports
-    Route::get('/sports', 'Admin\SportsController@index')->name('sports-list');
-    Route::get('/sports/create', 'Admin\SportsController@create')->name('create-new-sport');  
-    Route::post('/sports/store', 'Admin\SportsController@store')->name('store-new-sport'); 
-    Route::post('/sports/deactivate-sport', 'Admin\SportsController@deactivate')->name('deactivate-sport');
-    Route::post('/sports/activate-sport', 'Admin\SportsController@activate')->name('activate-sport');
-    Route::get('/sports/edit/{id}', 'Admin\SportsController@getEdit')->name('get-edit-sport');
-    Route::post('/sports/edit/{id}', 'Admin\SportsController@postEdit')->name('post-edit-sport');  
-    Route::post('/sports/sports-ajax-get-list', 'Admin\SportsController@getAjaxSportListFromCat')->name('sports-ajax-get-list');
-    Route::post('/happening/happening-now-ajax-get-list', 'Admin\SportsController@getAjaxHappeningNow')->name('happening-now-ajax-get-list');
-
-    // Newsletters
-    Route::get('/newsletters', 'Admin\NewsletterController@index')->name('newsletters-list');
-    Route::post('/newsletters', 'Admin\NewsletterController@postNewsletter');
-    Route::get('/newsletters/delete/{id}', 'Admin\NewsletterController@delete');
-    Route::get('/newsletters/create', 'Admin\NewsletterController@create')->name('send-newsletter-email');
-    Route::post('/newsletters/send-email', 'Admin\NewsletterController@store')->name('send-newsletter');
-
-    /* Help desk by sam */
-    Route::get('/helpdesk','Admin\HelpController@index')->name('helpdesk');
-    Route::get('/add_new_help','Admin\HelpController@create')->name('helpdesk-add');
-    Route::post('/help_store','Admin\HelpController@store')->name('help_create');
-    Route::post('/help_update','Admin\HelpController@update')->name('help_update');
-    Route::get('/help_view/{id}','Admin\HelpController@view')->name('help_view');
-    Route::get('/delete_help/{id}','Admin\HelpController@delete')->name('help_delete');
-    /* Help desk by sam end*/
+        //Home tracker
+        Route::get('/hometracker', 'Admin\HomeTrackerController@index')->name('hometracker');
+        Route::post('/update-hometracker', 'Admin\HomeTrackerController@update')->name('update-hometracker');
 
 
-    /*Advertisment start */
-        /*** book an activity start ****/
-        Route::get('/bookactivity', 'Admin\BookactivityController@index')->name('bookactivity');
-        Route::get('/bookactivity/create', 'Admin\BookactivityController@create')->name('create-new-bookactivity'); 
-        Route::post('/bookactivity/store', 'Admin\BookactivityController@store')->name('create-bookactivity');
-        Route::DELETE('/bookactivity/delete-bookactivity', 'Admin\BookactivityController@delete')->name('delete-bookactivity');
-        Route::get('/book/edit/{id}', 'Admin\BookactivityController@edit');
-        Route::post('/bookactivity/update/{id}', 'Admin\BookactivityController@update')->name('update-bookactivity'); 
-        Route::get('/book/delete/{id}', 'Admin\BookactivityController@delete');
+        //cms
+        Route::get('/cms', 'Admin\CmsController@listCmsModules');
+        Route::get('/cms/edit/{id}', 'Admin\CmsController@viewCmsModule');  
+        Route::post('/cms/edit/{id}', 'Admin\CmsController@postCmsModule');  
+
+        // Inquiry Box
+
+        Route::get('/inquiry', 'Admin\AdminUserController@inquiry')->name('inquiry');
+        Route::get('/inquirydelete/{id}', 'Admin\AdminUserController@inquirydelete')->name('inquirydelete');
+        Route::get('/contact-us', 'Admin\AdminUserController@contactus')->name('contact-us');
+        Route::get('/contactdelete/{id}', 'Admin\AdminUserController@contactdelete')->name('contactdelete');
+        
+    
+        Route::get('/register', 'Admin\AdminAuthController@GetRegister');
+        Route::post('/register', 'Admin\AdminAuthController@PostRegister'); 
+        Route::get('/background_check_faq','Admin\CheckFaqController@index')->name('background_check_faq');
+        Route::get('/add_new_background_check_faq','Admin\CheckFaqController@create')->name('background_check_faq-add');
+        Route::post('/background_check_faq_store','Admin\CheckFaqController@store')->name('background_check_faq_create');
+        Route::post('/background_check_faq_update','Admin\CheckFaqController@update')->name('background_check_faq_update');
+        Route::get('/background_check_faq_view/{id}','Admin\CheckFaqController@view')->name('background_check_faq_view');
+        Route::get('/delete_background_check_faq/{id}','Admin\CheckFaqController@delete')->name('background_check_faq_delete');
+        Route::get('/vatted_business_faq','Admin\BusinessFaqController@index')->name('vatted_business_faq');
+        Route::get('/add_new_vatted_business_faq','Admin\BusinessFaqController@create')->name('vatted_business_faq-add');
+        Route::post('/vatted_business_faq_store','Admin\BusinessFaqController@store')->name('vatted_business_faq_create');
+        Route::post('/vatted_business_faq_update','Admin\BusinessFaqController@update')->name('vatted_business_faq_update');
+        Route::get('/vatted_business_faq_view/{id}','Admin\BusinessFaqController@view')->name('vatted_business_faq_view');
+        Route::get('/delete_vatted_business_faq/{id}','Admin\BusinessFaqController@delete')->name('vatted_business_faq_delete');
+
+
+        //Manage Customers
+        /*Route::get('/customers', 'Admin\AdminUserController@viewCustomers');
+        Route::post('/customers', 'Admin\AdminUserController@postCustomers');
+        Route::get('/customers/{id}/login_as', 'Admin\AdminUserController@login_as')->name('admin_user_login_as');
+        Route::get('/customers/edit/{id}', 'Admin\AdminUserController@getCustomerDetails');
+        Route::get('/customers/view/{id}', 'Admin\AdminUserController@viewCustomerDetails');
+        Route::post('/customers/edit/{id}', 'Admin\AdminUserController@postCustomerDetails');
+        Route::get('/customers/delete/{id}', 'Admin\AdminUserController@deleteCustomer');
+        Route::get('/customers/deactivate/{id}', 'Admin\AdminUserController@deactivateCustomer');
+        Route::post('/customer/update_fee/', 'Admin\AdminUserController@updatefitnessityfee');*/
+
+        //Manage users
+        Route::get('/users', 'Admin\AdminUserController@viewCustomers');
+        Route::post('/users', 'Admin\AdminUserController@postCustomers');
+        Route::get('/users/edit/{id}', 'Admin\AdminUserController@getCustomerDetails');
+        Route::get('/users/view/{id}', 'Admin\AdminUserController@viewCustomerDetails');
+        Route::post('/users/edit/{id}', 'Admin\AdminUserController@postCustomerDetails');
+        Route::get('/users/delete/{id}', 'Admin\AdminUserController@deleteCustomer');
+        Route::get('/users/deactivate/{id}', 'Admin\AdminUserController@deactivateCustomer');
+        Route::post('/user/update_fee/', 'Admin\AdminUserController@updatefitnessityfee');
+
+        //reportedfeeds
+        Route::get('/reportedfeeds', 'Admin\ReportedFeedsController@index')->name('reportedfeed-list');
+        Route::get('/reportedfeeds/view/{id}', 'Admin\ReportedFeedsController@view');
+        Route::post('/reportedfeeds/delete-reportedfeed', 'Admin\ReportedFeedsController@delete')->name('delete-reportedfeed');  
+        Route::post('/reportedfeeds/deleteAll', 'Admin\ReportedFeedsController@deleteAll')->name('delete-reportedfeeds');
+        Route::post('/reportedfeeds/allow-reportedfeed', 'Admin\ReportedFeedsController@allowFeed')->name('allow-reportedfeed');
+
+        // add services
+
+        Route::post('/add_services','Admin\PlansController@add_services')->name('add_services'); 
+
+        //unclaim edit and manual add and add activity, list activity
+
+        Route::get('/add_activity/{id}','Admin\PlansController@add_activity')->name('add_activity'); 
+        Route::get('/edit_services/{sid}/{cid}','Admin\PlansController@edit_services')->name('edit_services'); 
+        Route::post('/update_services','Admin\PlansController@update_services')->name('update_services'); 
+
+        Route::get('/manage/service/{id}','Admin\PlansController@list_activity')->name('list_activity'); 
+        Route::post('/editBusinessServiceadmin','Admin\PlansController@editBusinessServiceadmin')->name('editBusinessServiceadmin'); 
+        Route::post('add_manual', 'Admin\PlansController@add_manual')->name('add_manual'); 
+        Route::get('/manual_add_unclaim_business', 'Admin\PlansController@manual_add_unclaim_business')->name('manual_add_unclaim_business');
+
+        Route::get('/edit_unclaim/{id}', 'Admin\PlansController@edit_unclaim')->name('edit_unclaim');
+
+        Route::post('/unclaim/edit', 'Admin\PlansController@update_unclaim')->name('update_unclaim'); 
+       
+        Route::post('adminaddbusinessschedule','Admin\PlansController@adminaddbusinessschedule')->name('adminaddbusinessschedule');
+
+        //plans
+        Route::get('/plans/membership-plan', 'Admin\PlansController@index')->name('plan-list');
+        Route::get('/plans/create', 'Admin\PlansController@create')->name('create-new-membership-plan');  
+        Route::get('/plans/edit/{id}', 'Admin\PlansController@edit');  
+        Route::post('/plans/update/{id}', 'Admin\PlansController@update')->name('update-plan');   
+        Route::post('/plans/store', 'Admin\PlansController@store')->name('create-plan');  
+        Route::DELETE('/plans/delete-plan', 'Admin\PlansController@delete')->name('delete-plan');  
+        Route::post('/plans/deactivate-plan', 'Admin\PlansController@deactivate')->name('deactivate-plan'); 
+        Route::post('/plans/activate-plan', 'Admin\PlansController@activate')->name('activate-plan'); 
+        Route::post('/plans/deleteAll', 'Admin\PlansController@deleteAll')->name('delete-plans');
+
+        //features
+        Route::get('/features/', 'Admin\FeaturesController@index')->name('features.index');
+        Route::get('/features/edit/{id}', 'Admin\FeaturesController@edit')->name('features.edit');
+        Route::post('/features/update/{id}', 'Admin\FeaturesController@update')->name('features.update'); 
+
+         //promo_codes
+        Route::get('/promo_codes/', 'Admin\PromoCodesController@index')->name('promo_codes.index');
+        Route::get('/promo_codes/create', 'Admin\PromoCodesController@create')->name('promo_codes.create'); 
+        Route::post('/promo_codes/store', 'Admin\PromoCodesController@store')->name('promo_codes.store');  
+        Route::get('/promo_codes/edit/{id}', 'Admin\PromoCodesController@edit')->name('promo_codes.edit');
+        Route::post('/promo_codes/update/{id}', 'Admin\PromoCodesController@update')->name('promo_codes.update');
+        Route::get('/promo_codes/delete/{id}', 'Admin\PromoCodesController@delete')->name('promo_codes.delete');
+
+        //on-board-questions
+        Route::get('/on-board-questions/', 'Admin\OnboardQuestionsController@index')->name('on_board_questions.index');
+        Route::get('/on-board-questions/create', 'Admin\OnboardQuestionsController@create')->name('on_board_questions.create'); 
+        Route::post('/on-board-questions/store', 'Admin\OnboardQuestionsController@store')->name('on_board_questions.store');  
+        Route::get('/on-board-questions/edit/{id}', 'Admin\OnboardQuestionsController@edit')->name('on_board_questions.edit');
+        Route::post('/on-board-questions/update/{id}', 'Admin\OnboardQuestionsController@update')->name('on_board_questions.update');
+        Route::get('/on-board-questions/delete/{id}', 'Admin\OnboardQuestionsController@delete')->name('on_board_questions.delete');
+
+    	//fees
+    	Route::get('/fees', 'Admin\FeesController@index')->name('fees');
+    	Route::post('/update-fees', 'Admin\FeesController@update')->name('update-fees');
+
+        // Slider
+        Route::get('/slider', 'Frontend\SliderController@index')->name('slider');
+        Route::get('/slider/create', 'Frontend\SliderController@create')->name('create-new-slider'); 
+        Route::post('/slider/store', 'Frontend\SliderController@store')->name('create-slider');
+        Route::DELETE('/slider/delete-slider', 'Frontend\SliderController@delete')->name('delete-slider');
+        Route::get('/slider/edit/{id}', 'Frontend\SliderController@edit');
+        Route::post('/slider/update/{id}', 'Frontend\SliderController@update')->name('update-slider'); 
+        Route::get('/slider/delete/{id}', 'Frontend\SliderController@delete');
+
+        // Slider
+        Route::get('/activity-slider', 'Frontend\ActivitySliderController@index')->name('activity-slider');
+        Route::get('/activity-slider/create', 'Frontend\ActivitySliderController@create')->name('create-new-activity-slider'); 
+        Route::post('/activity-slider/store', 'Frontend\ActivitySliderController@store')->name('create-activity-slider');
+        Route::DELETE('/activity-slider/delete-slider', 'Frontend\ActivitySliderController@delete')->name('delete-activity-slider');
+        Route::get('/activity-slider/edit/{id}', 'Frontend\ActivitySliderController@edit');
+        Route::post('/activity-slider/update/{id}', 'Frontend\ActivitySliderController@update')->name('update-activity-slider'); 
+        Route::get('/activity-slider/delete/{id}', 'Frontend\ActivitySliderController@delete');
+
+    	
+
+        // Post
+        Route::get('/post', 'Frontend\PostController@index')->name('admin/post');
+        Route::get('/businesspost', 'Frontend\PostController@businessindex')->name('admin/businesspost');
+        Route::get('/profilepost', 'Frontend\PostController@index')->name('admin/profilepost');
+        Route::get('/viewprofilepost/', 'Frontend\PostController@viewProfilepost')->name('admin/viewprofilepost');
+        Route::get('/viewbusinesspost/', 'Frontend\PostController@viewBusinesspost')->name('admin/viewbusinesspost');
+
+        //Trainer
+        Route::get('/trainer', 'Frontend\TrainerController@index')->name('trainer');
+        Route::get('/trainer/create', 'Frontend\TrainerController@create')->name('create-new-trainer');
+        Route::post('/trainer/store', 'Frontend\TrainerController@store')->name('create-trainer'); 
+        Route::DELETE('/trainer/delete-trainer', 'Frontend\TrainerController@delete')->name('delete-trainers');
+        Route::get('/trainer/edit/{id}', 'Frontend\TrainerController@edit');
+        Route::post('/trainer/update/{id}', 'Frontend\TrainerController@update')->name('update-trainer'); 
+        Route::get('/trainer/delete/{id}', 'Frontend\TrainerController@delete');
+
+        // Online classes and activities
+        Route::get('/online', 'Frontend\OnlineController@index')->name('online');
+        Route::get('/online/create', 'Frontend\OnlineController@create')->name('create-new-online'); 
+        Route::post('/online/store', 'Frontend\OnlineController@store')->name('create-online');
+        Route::DELETE('/online/delete-online', 'Frontend\OnlineController@delete')->name('delete-online');
+        Route::get('/online/edit/{id}', 'Frontend\OnlineController@edit');
+        Route::post('/online/update/{id}', 'Frontend\OnlineController@update')->name('update-online'); 
+        Route::get('/online/delete/{id}', 'Frontend\OnlineController@delete');
+
+        // Person classes and activities
+        Route::get('/person', 'Frontend\PersonController@index')->name('person');
+        Route::get('/person/create', 'Frontend\PersonController@create')->name('create-new-person'); 
+        Route::post('/person/store', 'Frontend\PersonController@store')->name('create-person');
+        Route::DELETE('/person/delete-person', 'Frontend\PersonController@delete')->name('delete-person');
+        Route::get('/person/edit/{id}', 'Frontend\PersonController@edit');
+        Route::post('/person/update/{id}', 'Frontend\PersonController@update')->name('update-person'); 
+        Route::get('/person/delete/{id}', 'Frontend\PersonController@delete');
+
+        //Trainer
+        Route::get('/discover', 'Frontend\DiscoverController@index')->name('discover');
+        Route::get('/discover/create', 'Frontend\DiscoverController@create')->name('create-new-discover');
+        Route::post('/discover/store', 'Frontend\DiscoverController@store')->name('create-discover'); 
+        Route::DELETE('/discover/delete-trainer', 'Frontend\DiscoverController@delete')->name('delete-discovers');
+        Route::get('/discover/edit/{id}', 'Frontend\DiscoverController@edit');
+        Route::post('/discover/update/{id}', 'Frontend\DiscoverController@update')->name('update-discover'); 
+        Route::get('/discover/delete/{id}', 'Frontend\DiscoverController@delete');
+
+        Route::get('/unclaimbusiness', 'Admin\PlansController@businessUnclaim')->name('businessUnclaim');
+        Route::get('/claimbusiness', 'Admin\PlansController@businessClaim')->name('adminbusinessClaim');
+        Route::get('/delete_claim/{id}','Admin\PlansController@deleteClaim')->name('claim_delete');
+        Route::post('/import-claimbusiness', 'Admin\PlansController@addBusinessClaim');
+        Route::post('/ignore-replace-claimbusiness', 'Admin\PlansController@ignoreReplaceBusinessClaim');
+    	Route::get('/business_delete/{id}','Admin\PlansController@business_delete')->name('business_delete');
+        Route::get('/sendemail/{cid?}','Admin\PlansController@sendemail')->name('sendemail');
+
+        //Feedbacks
+        Route::get('/feedbacks', 'Admin\FeedbackController@index');
+        Route::get('/feedbacks/view/{id}', 'Admin\FeedbackController@viewFeedback');
+        Route::get('/feedbacks/delete/{id}', 'Admin\FeedbackController@deleteFeedback');
+
+        //Booking
+        Route::get('/bookings', 'Admin\BookingController@index');
+        Route::get('/bookings/directHireDetails/{id}', 'Admin\BookingController@directHireDetails');
+        Route::get('/bookings/quickHireDetails/{id}', 'Admin\BookingController@quickHireDetails');
+
+        //Professionals Controller
+        Route::get('/professionals', 'Admin\AdminProfessionalsController@index')->name('professionals-list');
+        Route::post('/professionals', 'Admin\AdminProfessionalsController@postProfessionals');
+        Route::get('/professionals/view/{id}', 'Admin\AdminProfessionalsController@view')->name('professionals-view');
+        Route::post('/professionals/deleteAll', 'Admin\AdminProfessionalsController@deleteAll')->name('delete-professionals');
+        Route::post('/professionals/approve-professional', 'Admin\AdminProfessionalsController@Approve')->name('approve-professional');
+
+        // Business user
+
+        //Professionals Controller
+        Route::get('/businessusers', 'Admin\AdminBusinessController@index')->name('professionals-list');
+        Route::post('/businessusers', 'Admin\AdminBusinessController@postProfessionals');
+        Route::get('/businessusers/view/{id}', 'Admin\AdminBusinessController@view')->name('professionals-view');
+        Route::post('/businessusers/deleteAll', 'Admin\AdminBusinessController@deleteAll')->name('delete-professionals');
+        Route::post('/businessusers/approve-professional', 'Admin\AdminBusinessController@Approve')->name('approve-professional');
+
+        // Professional Reject with Reason
+        Route::post('/professionals/reject-professional', 'Admin\AdminProfessionalsController@rejectProfessional')->name('reject-professional'); 
+
+        // Business user Reject with Reason
+        Route::post('/businessusers/reject-professional', 'Admin\AdminBusinessController@rejectProfessional')->name('reject-professional');   
+
+        //Sports
+        Route::get('/sports', 'Admin\SportsController@index')->name('sports-list');
+        Route::get('/sports/create', 'Admin\SportsController@create')->name('create-new-sport');  
+        Route::post('/sports/store', 'Admin\SportsController@store')->name('store-new-sport'); 
+        Route::post('/sports/deactivate-sport', 'Admin\SportsController@deactivate')->name('deactivate-sport');
+        Route::post('/sports/activate-sport', 'Admin\SportsController@activate')->name('activate-sport');
+        Route::get('/sports/edit/{id}', 'Admin\SportsController@getEdit')->name('get-edit-sport');
+        Route::post('/sports/edit/{id}', 'Admin\SportsController@postEdit')->name('post-edit-sport');  
+        Route::post('/sports/sports-ajax-get-list', 'Admin\SportsController@getAjaxSportListFromCat')->name('sports-ajax-get-list');
+        Route::post('/happening/happening-now-ajax-get-list', 'Admin\SportsController@getAjaxHappeningNow')->name('happening-now-ajax-get-list');
+
+        // Newsletters
+        Route::get('/newsletters', 'Admin\NewsletterController@index')->name('newsletters-list');
+        Route::post('/newsletters', 'Admin\NewsletterController@postNewsletter');
+        Route::get('/newsletters/delete/{id}', 'Admin\NewsletterController@delete');
+        Route::get('/newsletters/create', 'Admin\NewsletterController@create')->name('send-newsletter-email');
+        Route::post('/newsletters/send-email', 'Admin\NewsletterController@store')->name('send-newsletter');
+
+        /* Help desk by sam */
+        Route::get('/helpdesk','Admin\HelpController@index')->name('helpdesk');
+        Route::get('/add_new_help','Admin\HelpController@create')->name('helpdesk-add');
+        Route::post('/help_store','Admin\HelpController@store')->name('help_create');
+        Route::post('/help_update','Admin\HelpController@update')->name('help_update');
+        Route::get('/help_view/{id}','Admin\HelpController@view')->name('help_view');
+        Route::get('/delete_help/{id}','Admin\HelpController@delete')->name('help_delete');
+        /* Help desk by sam end*/
+
+
+        /*Advertisment start */
+            /*** book an activity start ****/
+            Route::get('/bookactivity', 'Admin\BookactivityController@index')->name('bookactivity');
+            Route::get('/bookactivity/create', 'Admin\BookactivityController@create')->name('create-new-bookactivity'); 
+            Route::post('/bookactivity/store', 'Admin\BookactivityController@store')->name('create-bookactivity');
+            Route::DELETE('/bookactivity/delete-bookactivity', 'Admin\BookactivityController@delete')->name('delete-bookactivity');
+            Route::get('/book/edit/{id}', 'Admin\BookactivityController@edit');
+            Route::post('/bookactivity/update/{id}', 'Admin\BookactivityController@update')->name('update-bookactivity'); 
+            Route::get('/book/delete/{id}', 'Admin\BookactivityController@delete');
+            /*** book an activity end ****/
+            /*** get strated start ****/
+            Route::get('/getstarted', 'Admin\GetstartedController@index')->name('getstarted');
+            Route::get('/getstarted/create', 'Admin\GetstartedController@create')->name('create-new-getstarted'); 
+            Route::post('/getstarted/store', 'Admin\GetstartedController@store')->name('create-getstarted');
+            Route::DELETE('/getstarted/delete-getstarted', 'Admin\GetstartedController@delete')->name('delete-getstarted');
+            Route::get('/getstarted/edit/{id}', 'Admin\GetstartedController@edit');
+            Route::post('/getstarted/update/{id}', 'Admin\GetstartedController@update')->name('update-getstarted'); 
+            Route::get('/getstarted/delete/{id}', 'Admin\GetstartedController@delete');
+            Route::get('/activity-get-started-fast', 'Admin\activityGetStartedFastController@index')->name('activityGetStartedFast');
+            Route::get('/activity-get-started-fast/edit/{id}', 'Admin\activityGetStartedFastController@edit');
+            Route::post('/activity-get-started-fast/update/{id}', 'Admin\activityGetStartedFastController@update')->name('update-activitygetstartedfast');
+
         /*** book an activity end ****/
-        /*** get strated start ****/
-        Route::get('/getstarted', 'Admin\GetstartedController@index')->name('getstarted');
-        Route::get('/getstarted/create', 'Admin\GetstartedController@create')->name('create-new-getstarted'); 
-        Route::post('/getstarted/store', 'Admin\GetstartedController@store')->name('create-getstarted');
-        Route::DELETE('/getstarted/delete-getstarted', 'Admin\GetstartedController@delete')->name('delete-getstarted');
-        Route::get('/getstarted/edit/{id}', 'Admin\GetstartedController@edit');
-        Route::post('/getstarted/update/{id}', 'Admin\GetstartedController@update')->name('update-getstarted'); 
-        Route::get('/getstarted/delete/{id}', 'Admin\GetstartedController@delete');
-        Route::get('/activity-get-started-fast', 'Admin\activityGetStartedFastController@index')->name('activityGetStartedFast');
-        Route::get('/activity-get-started-fast/edit/{id}', 'Admin\activityGetStartedFastController@edit');
-        Route::post('/activity-get-started-fast/update/{id}', 'Admin\activityGetStartedFastController@update')->name('update-activitygetstartedfast');
-
-        /*** book an activity end ****/
-    /*Advertisment end */
+        /*Advertisment end */
+    });
 });
 
 

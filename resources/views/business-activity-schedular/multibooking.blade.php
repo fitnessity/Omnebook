@@ -330,20 +330,7 @@
 	   	});
 	}
 
-	function  getRemainingSession(i,date,timeid){
-		var did = $('#priceId'+i).find('option:selected').data('did');
-		if(did != '' &&  did != '0'){
-			$.ajax({
-				url:'/chksession/'+did+'/'+date+'/'+timeid+'/1',
-				type: 'GET',
-				success:function(data){
-					$('#remainingSession'+i).html(data+' Session Remaining.')
-				}
-			});
-		}else{
-			$('#remainingSession'+i).html('')
-		}
-	}
+	
 
 	function confirmdelete(serviceID ,date ,timeId ,chk) {
 		if (confirm('Are you want to remove this selected slot ?')) {

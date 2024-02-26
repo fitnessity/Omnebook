@@ -115,7 +115,7 @@
                         <div class="card-footer">
                             <div class="d-flex mt-3 mb-3">
                                 <div class="flex-grow-1">
-                                    <button href="#" class="btn btn-black w-100">Save and Deploy</button>
+                                    <a href="http://dev.fitnessity.co/design/deploy_widget" class="btn btn-black w-100">Save and Deploy</a>
                                 </div>
                             </div>
                         </div>
