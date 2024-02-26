@@ -560,7 +560,7 @@ class Customer extends Authenticatable
                 $detail = $checkindetail->whereDate("checkin_date","<=",$endDate);
             }
 
-            $detail = $detail->first();
+            $detail = $detail->where('checkin_date' ,'!=' , NULL)->first();
             return $detail != '' ? 'Active' : 'InActive';
         }else{
            return $this->created_at >= Carbon::now()->subMonths(3) ? 'Prospect' : 'InActive';

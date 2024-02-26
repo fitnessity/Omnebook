@@ -134,7 +134,6 @@ class ClientReportController extends BusinessBaseController
         return view('business.reports.client.table_data',compact('clients','type'));
     }
 
-
     public function inactiveCleintExport(Request $request , $business_id){
        /* $clients = $this->client('all',$request->startDate,$request->endDate,$business_id);
         $thirtydays = $this->client('30',$request->startDate,$request->endDate,$business_id);
@@ -305,9 +304,9 @@ class ClientReportController extends BusinessBaseController
 
     public function getData($type,$business_id,$endDate,$startDate){
         if($type == 'NoShow'){
-            $bookings = BookingCheckinDetails::join('user_booking_details as ubd','booking_checkin_details.booking_detail_id','=', 'ubd.id')->where('ubd.business_id' ,$business_id)->whereDate('booking_checkin_details.checkin_date', '>=', $startDate)->whereDate('booking_checkin_details.checkin_date', '<', $endDate)->orderBy('booking_checkin_details.checkin_date','desc')->select('booking_checkin_details.*');
+            $bookings = BookingCheckinDetails::join('user_booking_details as ubd','booking_checkin_details.booking_detail_id','=', 'ubd.id')->where('ubd.business_id' ,$business_id)->whereDate('booking_checkin_details.checkin_date', '>=', $startDate)->whereDate('booking_checkin_details.checkin_date', '<=', $endDate)->whereNull('booking_checkin_details.checked_at')->orderBy('booking_checkin_details.checkin_date','desc')->select('booking_checkin_details.*');
         }else{
-            $bookings = BookingCheckinDetails::join('user_booking_details as ubd','booking_checkin_details.booking_detail_id','=', 'ubd.id')->where('ubd.business_id' ,$business_id)->whereDate('booking_checkin_details.checkin_date', '>=', $startDate)->whereDate('booking_checkin_details.checkin_date', '<', $endDate)->orderBy('booking_checkin_details.checkin_date','desc')->whereNotNull('no_show_action')->select('booking_checkin_details.*');
+            $bookings = BookingCheckinDetails::join('user_booking_details as ubd','booking_checkin_details.booking_detail_id','=', 'ubd.id')->where('ubd.business_id' ,$business_id)->whereDate('booking_checkin_details.checkin_date', '>=', $startDate)->whereDate('booking_checkin_details.checkin_date', '<=', $endDate)->orderBy('booking_checkin_details.checkin_date','desc')->whereNotNull('no_show_action')->select('booking_checkin_details.*');
         }
         return $bookings;
     }
