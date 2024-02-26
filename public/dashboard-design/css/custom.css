@@ -7050,3 +7050,30 @@ p.or-data {
 .copy-code p{
   font-size: 14px;
 }
+.deploy-connect i{
+  font-size: 45px;
+  color: #22589a;
+  margin-bottom: 25px;
+}
+.deploy-connect{
+  padding: 25px;
+}
+.deploy-connect h3{
+  font-size: 20px;
+  margin-bottom: 0px;
+}
+.plug-in label{
+  font-size: 15px;
+}
+.plug-in p{
+  font-size: 15px;
+}
+.garb-plug-in h3{
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+.garb-plug-in p{
+  font-size: 15px;
+  margin-bottom: 10px;
+}

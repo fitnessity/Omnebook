@@ -105,6 +105,10 @@
 														<div class="report-links">
 															<a href="{{route('business.client.new_client')}}">New Clients</a>
 														</div>
+
+														<div class="report-links">
+															<a href="{{route('business.client.contact_list')}}">Contact List</a>
+														</div>
 														<div class="report-links">
 															<a href="{{route('business.client.cancellation_noshow')}}">Cancellations & No Shows</a>
 														</div>

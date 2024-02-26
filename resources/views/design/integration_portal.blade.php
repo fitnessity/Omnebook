@@ -47,7 +47,7 @@
                                                                 </button>
                                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                                     <a class="dropdown-item" href="http://dev.fitnessity.co/design/registration_widget">Registration Widget</a>
-                                                                    <a class="dropdown-item" href="#">Schedule Widget</a>
+                                                                    <a class="dropdown-item" href="http://dev.fitnessity.co/design/schedule_widget">Schedule Widget</a>
                                                                     <a class="dropdown-item" href="#">Enrollment Widget</a>
                                                                 </div>
                                                             </div>
@@ -70,7 +70,7 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <th scope="row"><a href="#">Fall 2021 to 2022 Schedule</a></th>
+                                                                        <th scope="row"><a href="http://dev.fitnessity.co/design/schedule_widget">Fall 2021 to 2022 Schedule</a></th>
                                                                         <td>Schedule</td>
                                                                         <td></td>
                                                                     </tr>

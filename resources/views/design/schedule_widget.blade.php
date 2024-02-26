@@ -306,7 +306,18 @@
 
                                 <div>
                                     <div class="card-header bg-soft-grey">
-                                        <h4 class="card-title mb-0 flex-grow-1">Find Date</h4>
+                                        <div class="row">
+                                            <div class="col-lg-6 col-6">
+                                                <h4 class="card-title mb-0 flex-grow-1">Find Date</h4>
+                                            </div>
+                                            <div class="col-lg-6 col-6">
+                                                <div class="calendar-icon float-right">
+                                                    <input type="text" name="date" class="date datepicker" readonly placeholder="DD/MM/YYYY" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
@@ -788,6 +799,22 @@
 
 
 @include('layouts.business.footer')
+<script>
+    $(function() {
+		$(".date").datepicker({
+		 	dateFormat : 'yy-mm-dd',
+		 	showOn: "both",
+		 	buttonImage: "/public/img/calendar-icon.png",
+		 	buttonImageOnly: true,
+		 	buttonText: "Select date",
+		 	changeMonth: true,
+		 	changeYear: true,
+		 	minDate: 'today',
+		 	yearRange: "0:+20"
+		}); 
+	});
+</script>
+
 <script>
 $('.Show').click(function() {
     $('#targetone').show(200);

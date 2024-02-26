@@ -564,7 +564,7 @@
 														<div class="col-6">
 															<!-- <a href="/personal-profile/payment-info" class="edit-cart fs-15 color-red-a float-end"> Edit</a> -->
 
-															<a href="{{route('creditCardInfo')}}" class="edit-cart fs-15 color-red-a float-end"> Edit</a>
+															<a href="{{route('personal.credit-cards')}}" class="edit-cart fs-15 color-red-a float-end"> Edit</a>
 														</div>
 													</div>
 														
@@ -736,7 +736,7 @@
 				<h5 class="modal-title" id="exampleModalLabel">Add Family or Friends</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
 			</div>
-			<form action="{{route('family-member.store')}}" method="post">
+			<form action="{{route('personal.manage-account.store')}}" method="post">
 				@csrf
 				<div class="modal-body">
 					<div class="row">	

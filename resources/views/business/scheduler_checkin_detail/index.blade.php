@@ -68,13 +68,13 @@
 		</div>
 	</div>
 	@if(session()->has('success'))
-	    <div class="font-green mb-10 fs-16">
+	    <div class="font-green mb-10 fs-16 error-msg">
 	        {{ session()->get('success') }}
 	    </div>
 	@endif
 
 	@if(session()->has('error'))
-	    <div class="font-red mb-10 fs-16">
+	    <div class="font-red mb-10 fs-16 error-msg">
 	        {{ session()->get('error') }}
 	    </div>
 	@endif
@@ -147,6 +147,8 @@
 								@else
 									<p class="font-red">No Membership</p>
 								@endif
+
+								<div class="mt-10 membership-section text-center font-red"></div>
 							</td>
 							<td class="modal-check-width">
 								<div class="check-cancel width-105">
@@ -167,11 +169,11 @@
 								</div>
 							</td>
 							<td>
-								<div>
-									<p class="mb-0">{{ @$firstCheckInDetail->order_detail !='' ? @$firstCheckInDetail->order_detail->getremainingsession()."/".@$firstCheckInDetail->order_detail->pay_session : "N/A"}}</p>
+								<div class="remaining-session">
+									<p class="mb-0">{{ @$firstCheckInDetail->order_detail !='' ? @$firstCheckInDetail->order_detail->getRemainingSessionAfterAttend()."/".@$firstCheckInDetail->order_detail->pay_session : "N/A"}}</p>
 								</div>
 							</td>
-							<td>{{@$firstCheckInDetail->order_detail != '' ? Carbon\Carbon::parse(@$firstCheckInDetail->order_detail->expired_at)->format('m/d/Y') : "N/A"}}</td>
+							<td class="session-exp">{{@$firstCheckInDetail->order_detail != '' ? Carbon\Carbon::parse(@$firstCheckInDetail->order_detail->expired_at)->format('m/d/Y') : "N/A"}}</td>
 							<td>{!! $cus->chkSignedTerms() !!} {!!$cus->chkBirthday() !!} {!! $cus->findExpiredCC() !!} {!! $cus->chkRecurringPayment(@$firstCheckInDetail->booking_detail_id) !!}</td>
 							<td>
 								<div class="multiple-options">
@@ -292,6 +294,7 @@
 	});
 
 	$('[data-behavior~=checkin]').change(function(e){
+		$('.error-msg').html('');
         checkbox = this
      	if(!$(this).data('booking-detail-id')){
             this.checked = false;
@@ -325,6 +328,7 @@
     });
 
     $('[data-behavior~=change_price_title]').change(function(e){
+    	$('.error-msg').html('');
     	var t = $(this)
         $.ajax({
             url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + $(this).data('booking-checkin-detail-id'),
@@ -334,10 +338,17 @@
                 booking_detail_id: $(this).val()
             },
             success:function(response) {
-        	    var cus_id =t.data('cus-id');
-            	var selectedOption = t.find('option:selected');
-            	var chkInID = selectedOption.attr('checkInId');
-            	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date->format("Y-m-d")}}',chkInID,cus_id,'','','');
+            	if(isNaN(response)){
+            		$('.membership-section').html(response);
+            		$('.modal-check-width').html('<div class="check-cancel width-105"><label for="checkin" class="mb-0 mmt-10">Check In</label><br><label for="cancel" class="mb-0 mmt-10"> Late Cancel</label><br></div>');
+            		$('.remaining-session').html('<div><p class="mb-0">N/A</p></div>');
+					$('.session-exp').html('N/A');
+            	}else{
+	        	    var cus_id = t.data('cus-id');
+	            	var selectedOption = t.find('option:selected');
+	            	var chkInID = selectedOption.attr('checkInId');
+	            	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date->format("Y-m-d")}}',chkInID,cus_id,'','','');
+            	}
             },
        	});
     });

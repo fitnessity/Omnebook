@@ -301,27 +301,37 @@ class UserBookingDetail extends Model
         }
     }
 
+    public function baseSessionCountQuery(){
+        return BookingCheckinDetails::where(['booking_detail_id'=> $this->id]);
+    }
+
+    public function getWithoutAttendBookedSession(){
+        return $this->baseSessionCountQuery()->whereNull('checked_at')->count('use_session_amount');
+    }
+
+    public function getUsedSession(){
+        return $this->baseSessionCountQuery()->whereNotNull('checked_at')->count('use_session_amount');
+    }
+
     public function getRemainingSessionAfterAttend(){
         $pay_session = $this->pay_session;
-        $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->whereNotNull('checked_at')->count('use_session_amount');
-        $remaining = $pay_session - $checkindetailscnt;
-        return $remaining;
+        return $pay_session - max($this->getUsedSession(),0);
     }
 
     public function getremainingsession(){
         $pay_session = $this->pay_session;
-        //$checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->whereNotNull('checked_at')->count();
-        $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->sum('use_session_amount');
-        // $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])
+        //$checkindetailscnt = $this->baseSessionCountQuery()->whereNotNull('checked_at')->count();
+        //$checkindetailscnt = $this->baseSessionCountQuery()->sum('use_session_amount');
+        // $checkindetailscnt = $this->baseSessionCountQuery()
         //             ->where('checkin_date' ,'!=',NULL)
         //             ->whereNotNull('checked_at')
         //             ->orWhere(function($query) {
         //                 $query->whereNull('checked_at')
         //                       ->whereDate('checkin_date', '>=', now())->where(['booking_detail_id'=> $this->id]);
         //             })->count();
-                    
-        $remaining = $pay_session - $checkindetailscnt;
-        return $remaining;
+        
+        $checkindetailscnt = $this->baseSessionCountQuery()->whereNotNull('checkin_date')->count();
+        return max($pay_session - $checkindetailscnt,0);
     }
 
     public function getReserveData($feildName)

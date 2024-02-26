@@ -357,6 +357,11 @@ class ClientReportController extends BusinessBaseController
         }
     }
 
+    public function contactList(Request $request,$business_id){
+        $clients = Customer::where(['business_id'=> $business_id])->orderBy('created_at','desc')->limit(3000)->get();
+        return view('business.reports.client.contanct-list',compact('clients'));
+    }
+
     public function export(Request $request,$business_id){
 
         if($request->clientType == 'new'){

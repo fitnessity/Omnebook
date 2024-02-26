@@ -25,16 +25,17 @@ use DB;
 
 class AdminUserController extends Controller
 {
-    protected $loginPath = '/admin';
-    protected $redirectTo = '/admin';
+    /*protected $loginPath = '/admin';
+    protected $redirectTo = '/admin';*/
     protected $users;
     protected $booking;
 
     public function __construct(UserRepository $users,BookingRepository $booking)
     {
         
+        
         $this->users = $users;
-        $this->middleware('admin');
+        $this->middleware('admin:admin');
         $this->booking = $booking;
     }
 
@@ -74,7 +75,8 @@ class AdminUserController extends Controller
 
     }
     public function index()
-    {   
+    {    
+        
         $socialMediaUsers = $this->users->getUserCount('social_media_users');
         $totalUsers = $this->users->getUserCount();
         $totalBusinessUsers = $this->users->getUserCount('business_users');
@@ -91,8 +93,10 @@ class AdminUserController extends Controller
         //Booking
         $totalBooking = $this->booking->getBookingCount();
         $totalConfirmedBooking = $this->booking->getBookingCount('confirmed');
-        $totalBookedProfessional = $this->booking->getTotalBookedProfessional();
-        
+
+        //$totalBookedProfessional = $this->booking->getTotalBookedProfessional();
+        $totalBookedProfessional = 0;
+          
         return view('admin.dashboard', [
                 'socialMediaUsers' => $socialMediaUsers,
                 'totalUsers' => $totalUsers,
