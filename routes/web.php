@@ -206,6 +206,8 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/getMoreCancellationNoShowData/','ClientReportController@getMoreCancellationNoShowData')->name('client.getMoreCancellationNoShowData');
 
     Route::get('/contact-list/','ClientReportController@contactList')->name('client.contact_list');
+    Route::get('/contact-list/export-contact','ClientReportController@contactListExport')->name('contact-list.export');
+    Route::get('/get-more-contact-list','ClientReportController@getMorecontactList')->name('contact-list.get-more');
 
     Route::get('/cancellation/export','ClientReportController@cancellationExport')->name('cancellation.export');
 

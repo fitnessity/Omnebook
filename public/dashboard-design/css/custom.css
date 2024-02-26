@@ -7077,3 +7077,12 @@ p.or-data {
   font-size: 15px;
   margin-bottom: 10px;
 }
+.table-scroll{
+  overflow-y: scroll;
+  max-height: 680px;
+  overflow-x: hidden;
+}
+.drop-img-fluid{
+  max-width: 25px;
+  height: 25px;
+}

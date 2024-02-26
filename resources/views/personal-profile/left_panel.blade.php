@@ -30,8 +30,8 @@
                                 </a>
                             </li> <?php ?>
 
-                            <li class=" {{ (request()->is('family-member')) ? 'active' : '' }}">
-                                <a href="{{route('family-member.index')}}">
+                            <li class=" {{ (request()->is('manage-account')) ? 'active' : '' }}">
+                                <a href="{{route('personal.manage-account.index')}}">
                                     <img src="{{ url('public/img/menu-icon5.svg') }}" alt="">
                                     <span><!-- Add Family -->  Manage Accounts</span>
                                 </a>

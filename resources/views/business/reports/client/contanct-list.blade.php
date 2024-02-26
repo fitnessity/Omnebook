@@ -60,10 +60,9 @@
 													<form method="GET">
 														<div class="row justify-content-md-center">
 															<div class="col-lg-6 col-md-6 col-sm-6">
-																<select class="form-select mb-10" name="exportOptions" id="exportOptions" required="">
-																	<option value="">Select Export Options</option>
-																	<option value="email">Email List</option>
-																	<option value="mailing">The Mailing List</option>
+																<select class="form-select mb-10" name="type" id="type" required="">
+																	<option value="email-list" >Email List</option>
+																	<option value="mailing-list" @if($type == 'mailing-list') selected @endif>The Mailing List</option>
 																</select>
 															</div>
 														</div>
@@ -115,34 +114,34 @@
 											   <div class="live-preview">
 													<div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnesting">
 														<div class="membership-expirations-table">
-															<div class="table-responsive">
-																<table class="table mb-0">
+															<div class="table-responsive table-scroll" id="contact-table">
+																<table class="table mb-0" >
 																	<thead>
 																		<tr>
 																			<th>No</th>
 																			<th>Name</th>
+																			<th>Member ID</th>
 																			<th>Email </th>
-																			<th>Birthday  </th>
+																			@if($type == 'mailing-list') <th>Address</th>@endif
 																			<th>Phone Number </th>
-																			<th>Customers Since</th>
-																			<th>Status</th>
-																			<th></th>
+																			<th>Customer Type</th>
 																		</tr>
 																	</thead>
-																	<tbody>
+																	<tbody id="contact-data">
 																		@forelse($clients as $i=>$list)
 																			<tr>
 																				<td>{{$i+1}}</td>
 																				<td><a href="{{url('business/'.request()->business_id.'/customers/'.@$list->id)}}" class="fw-medium" target="_blank">  {{@$list->full_name}}  </a> </td>
+																				<td>{{@$list->member_id}}</td>
 																				<td>{{@$list->email}}</td>
-																				<td>{{date('m/d/Y',strtotime($list->birthdate))}}</td>
+																				@if($type == 'mailing-list') 
+																					<td>{{@$list->full_address()}}</td>
+																				@endif
 																				<td>{{@$list->phone_number ?? 'N/A'}}</td>
-																				<td>{{date('m/d/Y',strtotime($list->created_at))}}</td>
-																				<td class="@if($list->is_active() == 'InActive') font-red @else font-green @endif ">{{$list->is_active() == 'Active' ? 'Member' : $list->is_active()}}</td>
-																				<td><a href="{{url('business/'.request()->business_id.'/customers/'.@$list->id)}}"> View </a></td>
+																				<td>{{@$list->customer_type}}</td>
 																			</tr>
 																		@empty
-																			<tr> <td colspan="6"></td> </tr>
+																			<tr> <td @if($type == 'mailing-list') colspan="7" @else colspan="6" @endif></td> </tr>
 																		@endforelse
 																	</tbody>
 																</table>
@@ -168,6 +167,47 @@
 	
 <script>
 
+	let offset  = 1000;
+ 	var isLoading = false;
+
+ 	$(document).ready(function () {
+      $(window).scroll(function () {
+      	var type = $('#type').val();
+   		if(type != ''){
+	         if ($(window).scrollTop() + $(window).height() > $("#contact-table").height()) {
+	            // Check if not already loading more records and not all records are loaded
+	            if (!isLoading && offset !== -1) {
+	               loadMoreRecords();
+	            }
+	         }
+	      }
+      });
+   });
+
+ 	function loadMoreRecords() {
+		let type = $('#type').val();
+     	isLoading = true;
+     	$.ajax({
+         url: "{{route('business.contact-list.get-more')}}",
+         method: 'GET',
+         data: { 
+         	offset: offset,
+         	type: type,
+         },
+         success: function (response) {
+            if (response != '') {
+               $('#contact-data').append(response);
+               offset = offset + 1000;
+               isLoading = false;
+            }else {
+               // All records have been loaded
+               offset = -1;
+            }
+         }
+     });
+   }
+
+
    flatpickr(".flatpickr-range", {
    	altInput: true,
    	altFormat: "m/d/Y",
@@ -192,6 +232,7 @@
 		let startDate = '';
 		let endDate = '' ;
 		var type = $('#exportOptions').val();
+		var listType = $('#type').val();
 		if(type){
 			$('#go_btn').html('Loading..'); 
 			$("#go_btn").prop("disabled", true);
@@ -200,8 +241,7 @@
       var filename =  '';
 		if(type != '' && type != 'print'){
 
-			var downloadUrl = '{{ route("business.new_client.export") }}' + '?clientType=new&type=' + type +'&endDate=' + endDate +
-		        '&startDate=' + startDate;
+			var downloadUrl = '{{ route("business.contact-list.export") }}' + '?listType='+listType+'&type=' + type;
 
 	    	if(type == 'excel'){
 	    		filename = 'new-cleint.xlsx';

@@ -55,7 +55,7 @@
 	<link rel="stylesheet" href="{{asset('/public/dashboard-design/filepond/filepond.min.css')}}" type="text/css" />
 	<link rel="stylesheet" href="{{asset('/public/dashboard-design/filepond/filepond-plugin-image-preview.min.css')}}" type="text/css" />
 
-	
+	<link rel="stylesheet" href="{{asset('/public/dashboard-design/css/dragula.min.css')}}" type="text/css" />
 </head>
 
  <!-- Begin page -->

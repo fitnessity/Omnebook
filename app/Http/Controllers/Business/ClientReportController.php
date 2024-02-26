@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Business\BusinessBaseController;
 use Illuminate\Http\Request;
 use Auth,DateTime,Carbon\Carbon;
-use App\{Exports\ExportCancellationNoShow,Exports\ExportClient,Customer,BookingCheckinDetails};
+use App\{Exports\ExportCancellationNoShow,Exports\ExportNewContact,Customer,BookingCheckinDetails};
 use Maatwebsite\Excel\HeadingRowImport;
 use Excel, Response,\PDF,Storage;
 use App\Jobs\GeneratePdf;
@@ -357,9 +357,50 @@ class ClientReportController extends BusinessBaseController
         }
     }
 
+
+    public function contactListQuery($business_id){
+        return Customer::where(['business_id'=> $business_id])->orderBy('created_at','desc');
+    }
+
     public function contactList(Request $request,$business_id){
-        $clients = Customer::where(['business_id'=> $business_id])->orderBy('created_at','desc')->limit(3000)->get();
-        return view('business.reports.client.contanct-list',compact('clients'));
+        $type = $request->type ?? 'email-list';
+        $clients = $this->contactListQuery($business_id)->limit(3000)->get();
+        $clients->each(function ($client) {
+            $client->createUserIfNeeded();
+        });
+        return view('business.reports.client.contanct-list',compact('clients','type'));
+    }
+
+    public function getMorecontactList(Request $request,$business_id){
+        //echo "hii";exit;
+        $type = $request->type;
+        $offset = $request->get('offset', 0); 
+        $limit = 1000; 
+        $clients = $this->contactListQuery($business_id)->take($offset)->get();
+        $clients->each(function ($client) {
+            $client->createUserIfNeeded();
+        });
+        //print_r($clients);
+        return view('business.reports.client.contact_list_table_data',compact('clients','type','business_id','offset'));
+    }
+
+    public function contactListExport(Request $request,$business_id){
+        $clients = $this->contactListQuery($business_id)->limit(1000)->get();
+        $heading = 'Contact List Report';
+        $excelFileName = 'contact-list.xlsx';
+        $pdfFileName = 'contact-list.pdf';
+
+        if($request->type == 'excel'){
+            return Excel::download(new ExportNewContact($clients ,$heading,$request->listType), $excelFileName);
+        }elseif($request->type == 'pdf'){
+            $data = [
+                'title' => $heading,
+                'clients'=>$clients,
+                'listType'=>$request->listType,
+            ];
+            $pdf = PDF::loadView('business.reports.client.pdf_view_contact_list_client', $data);
+            return $pdf->download($pdfFileName);
+        }
     }
 
     public function export(Request $request,$business_id){
