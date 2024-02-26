@@ -65,6 +65,7 @@
 	            	'cid': '{{request()->cid}}' ,
 	            	'_token': '{{csrf_token()}}' ,
 	            	'i': i ,
+	            	'business_id': '{{request()->business_id}}' ,
 	            },
 	            success: function(response) {
 	            	//alert(response)

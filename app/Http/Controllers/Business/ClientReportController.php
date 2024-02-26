@@ -385,7 +385,12 @@ class ClientReportController extends BusinessBaseController
     }
 
     public function contactListExport(Request $request,$business_id){
-        $clients = $this->contactListQuery($business_id)->limit(1000)->get();
+
+        set_time_limit(8000000);
+        ini_set('memory_limit', '-1');
+
+
+        $clients = $this->contactListQuery($business_id)->get();
         $heading = 'Contact List Report';
         $excelFileName = 'contact-list.xlsx';
         $pdfFileName = 'contact-list.pdf';
