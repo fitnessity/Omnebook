@@ -86,16 +86,37 @@
 
 					<div class="d-flex align-items-center">
 
-						<div class="ms-1 header-item d-none d-sm-flex">
+						<div class="ms-1 header-item d-none i-none d-sm-flex">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-toggle="fullscreen">
 								<i class='bx bx-fullscreen fs-22'></i>
 							</button>
 						</div>
 
-						<div class="ms-1 header-item d-none d-sm-flex">
+						<div class="ms-1 header-item d-none i-none d-sm-flex">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode shadow-none">
 								<i class='bx bx-moon fs-22'></i>
 							</button>
+						</div>
+
+						<div class="ms-1 header-item d-sm-flex">
+							<a href="{{route('business_customer_create' ,['business_id'=> Auth::user()->cid])}}" class="add-client mr-5 desktop-none-client">Add Client</a> 
+						</div>
+
+						<div class="dropdown d-md-none topbar-head-dropdown header-item">
+							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="bx bx-search fs-22"></i>
+							</button>
+							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-search-dropdown">
+
+								<form class="p-3">
+									<div class="form-group m-0">
+										<div class="input-group">
+											<input type="text" class="form-control" placeholder="Search for client" autocomplete="off" id="serchclient_navbar1"  name="fname" value="{{Request::get('fname')}}">
+											<button class="btn btn-black m-search" type="submit"><i class="mdi mdi-magnify"></i></button>
+										</div>
+									</div>
+								</form>
+							</div>
 						</div>
 
 						<div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
@@ -288,17 +309,16 @@
 							</div>
 						</div>
 
-						<div class="ms-1 header-item d-none d-sm-flex">
+						<div class="ms-1 header-item d-sm-flex">
 							<button type="button" class="btn btn-soft-info btn-icon waves-effect waves-light layout-rightside-btn shadow-none"><i class="ri-pulse-line"></i></button>
-							<!--<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode shadow-none">
-								<i class='bx bx-moon fs-22'></i>
-							</button> -->
+						
 						</div>
-
 					</div>
 				</div>
 			</div>
 		</div>
+
+		{!! sidebarUpdatesNotification() !!}
 
 		<!-- removeNotificationModal -->
 		<div id="removeNotificationModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
