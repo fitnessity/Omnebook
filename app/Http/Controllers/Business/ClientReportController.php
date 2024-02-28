@@ -364,24 +364,45 @@ class ClientReportController extends BusinessBaseController
 
     public function contactList(Request $request,$business_id){
         $type = $request->type ?? 'email-list';
-        $clients = $this->contactListQuery($business_id)->limit(3000)->get();
+        $filter = $request->filter;
+        //$clients = $this->contactListQuery($business_id)->limit(3000)->get();
+
+        $clients = $this->contactListQuery($business_id)->get();
+
+        if ($filter) {
+            $clients = $clients->filter(function ($client) use ($filter) {
+                return $client->customer_type == $filter;
+            });
+        }
+
+        $clients = $clients->take(1000)->values();
+
         $clients->each(function ($client) {
             $client->createUserIfNeeded();
         });
-        return view('business.reports.client.contanct-list',compact('clients','type'));
+        return view('business.reports.client.contanct-list',compact('clients','filter','type'));
     }
 
     public function getMorecontactList(Request $request,$business_id){
         //echo "hii";exit;
         $type = $request->type;
+        $filter = $request->filter;
         $offset = $request->get('offset', 0); 
         $limit = 1000; 
-        $clients = $this->contactListQuery($business_id)->take($offset)->get();
+        $clients = $this->contactListQuery($business_id)->get();
+
+        if ($filter) {
+            $clients = $clients->filter(function ($client) use ($filter) {
+                return $client->customer_type == $filter;
+            });
+        }
+
+        $clients =  $clients->skip($offset)->take($limit);
         $clients->each(function ($client) {
             $client->createUserIfNeeded();
         });
         //print_r($clients);
-        return view('business.reports.client.contact_list_table_data',compact('clients','type','business_id','offset'));
+        return view('business.reports.client.contact_list_table_data',compact('clients','type','filter','business_id','offset'));
     }
 
     public function contactListExport(Request $request,$business_id){

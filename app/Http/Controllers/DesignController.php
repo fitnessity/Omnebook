@@ -343,5 +343,9 @@ class DesignController extends Controller {
     public function deploy_widget(Request $request){
         return view('design.deploy_widget');
     }
+
+    public function confirmation(Request $request){
+        return view('design.confirmation');
+    }
 }
 

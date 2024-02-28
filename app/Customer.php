@@ -220,6 +220,9 @@ class Customer extends Authenticatable
                  return 'Infant';
             }
         }else{
+            if($this->birthdate != null){
+                return 'Infant';
+            }
             return 'N/A';
         }
     }

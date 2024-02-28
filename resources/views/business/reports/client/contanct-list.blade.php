@@ -58,6 +58,8 @@
 														</div>
 													</div>  
 													<form method="GET">
+														<input type="hidden" name="filter" id="filterOptions" value="{{@$filter}}">
+
 														<div class="row justify-content-md-center">
 															<div class="col-lg-6 col-md-6 col-sm-6">
 																<select class="form-select mb-10" name="type" id="type" required="">
@@ -75,11 +77,30 @@
 													</form>
 												</div>
 											</div>
+
 											<div class="col-lg-6 col-md-6 col-sm-6">
 												<div class="card-body border-end-left">
+
 													<div class="d-flex align-items-center mb-25">
 														<div class="avatar-sm flex-shrink-0">
 															<span class="avatar-title bg-primary rounded-circle fs-2">2</span>
+														</div>
+														<div class="flex-grow-1 ms-3 sale-date"><h2 class="mb-0">Filter Options</h2></div>
+													</div> 	
+
+													<div class="row justify-content-md-center">
+														<div class="col-lg-6 col-md-6 col-sm-6">
+															<select class="form-select mb-10" id="filter" data-behavior="on_change_dropdown">
+																<option value="" >All</option>
+																<option value="Adult" @if($filter == 'Adult') selected @endif>Adult</option>
+																<option value="Child" @if($filter == 'Child') selected @endif>Child</option>
+																<option value="Infant" @if($filter == 'Infant') selected @endif>Infant</option>
+															</select>
+														</div>
+													</div>
+													<div class="d-flex align-items-center mb-25">
+														<div class="avatar-sm flex-shrink-0">
+															<span class="avatar-title bg-primary rounded-circle fs-2">3</span>
 														</div>
 														<div class="flex-grow-1 ms-3 sale-date"><h2 class="mb-0">Export Options</h2></div>
 													</div> 	
@@ -98,17 +119,16 @@
 													</div>
 												</div>
 											</div>
+
 										</div>
 									</div><!-- end card -->
 								</div><!-- end col -->
 							</div>
 
 							<div class="row exclude-from-print mt-5">
-						
 								@if($clients->isNotEmpty())
 									<div class="col-xl-12">
 										<div class="card">
-											
 											<div class="card-body">
 												<input type="hidden" id="type" value="">
 											   <div class="live-preview">
@@ -133,7 +153,7 @@
 																				<td>{{$i+1}}</td>
 																				<td><a href="{{url('business/'.request()->business_id.'/customers/'.@$list->id)}}" class="fw-medium" target="_blank">  {{@$list->full_name}}  </a> </td>
 																				<td>{{@$list->member_id}}</td>
-																				<td>{{@$list->email}}</td>
+																				<td>{{@$list->email ?? 'N/A'}}</td>
 																				@if($type == 'mailing-list') 
 																					<td>{{@$list->full_address()}}</td>
 																				@endif
@@ -153,7 +173,6 @@
 										</div><!-- end card -->
 									</div>
 								@endif
-								
 							</div><!--end row-->						
 						</div> <!-- end .h-100-->
                </div> <!-- end col -->
@@ -186,6 +205,7 @@
 
  	function loadMoreRecords() {
 		let type = $('#type').val();
+		let filter = $('#filterOptions').val();
      	isLoading = true;
      	$.ajax({
          url: "{{route('business.contact-list.get-more')}}",
@@ -193,6 +213,7 @@
          data: { 
          	offset: offset,
          	type: type,
+         	filter: filter,
          },
          success: function (response) {
             if (response != '') {
@@ -221,6 +242,12 @@
 		$("#generateReport").prop("disabled", true);
 		$(this).parents('form').submit();
 	});
+
+	$(document).on('change', '[data-behavior~=on_change_dropdown]', function(e){
+		$('#filterOptions').val(this.value);
+		$('#generateReport').click();
+	});
+
 
 	function formatDate(dateString) {
     	const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };

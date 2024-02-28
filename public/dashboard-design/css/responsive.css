@@ -9,6 +9,7 @@
 	.manage-customer-modal-title h3{}
 	.desktop-none-booking{display: none;}
 	.dots {  overflow-x: visible !important;}
+	.desktop-none-client{display: none;}
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1900px){
@@ -16,6 +17,7 @@
 	.dots {  overflow-x: visible !important;}
 	.self-check-sp { margin-bottom: 40px; }
 	.home-banner-title{  padding: 150px 0 150px;}
+	.desktop-none-client{display: none;}
 }
 
 @media screen and (min-width: 768px) and (max-width: 992px){
@@ -116,6 +118,10 @@
 	.show-all {	margin-top: 0;  }
 	.show-all .join-btn{margin-top: 0; padding: 0px !important;}
 	.star-rest .activity-inner-data{padding: 0 0;}
+	.fit-widget-container-banner label{font-size: 45px; line-height: 64px;}
+	.i-none{display: none !important;}
+	.confirmed-slider .owl-nav .owl-next{right: -55px !important; width: 20px; height: 20px; font-size: 18px;}
+	.confirmed-slider .owl-nav .owl-prev{left: -55px !important; width: 20px; height: 20px; font-size: 18px;}
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){
@@ -380,6 +386,9 @@
 	.staff-pl-0 { padding-left: 12px;  }
 	.service-pr-0 {	padding-right: 10px; }
 	.show-all .table-inner-data-sec .p-name { width: 77% !important; } 
+	.fit-widget-container-banner label{font-size: 45px; line-height: 64px;}
+	.confirmed-slider .owl-nav .owl-prev{left: -15px; font-size: 20px; width: 20px; height: 20px; }
+	.confirmed-slider .owl-nav .owl-next{right: -15px; font-size: 20px; width: 20px; height: 20px;}
 }
 
 
