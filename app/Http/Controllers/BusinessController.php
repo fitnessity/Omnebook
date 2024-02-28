@@ -29,7 +29,7 @@ class BusinessController extends Controller
 
         $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales =  $in_person =$online = $customerCount = $remainingRecPercentage = $completedRecPercentage = $previousTotalSales = $totalsalePercentage =  $customerCountPercentage = $bookingCountPercentage = $totalRecurringPmt = $compltedpmtcnt = $remainigpmtcnt =$recurringAmount = $completeRecurringAmount = $reminingRecurringAmount = $left_days = 0;
 
-        $ptdata1= $expiringMembership = $activitySchedule = $topBookedPriceId=$todayBooking =  $services = $topBookedCategories = $notificationAry = $transaction = $businessServices = $usDetail = [];
+        $ptdata1= $expiringMembership = $activitySchedule  = $businessServices =  [];
 
         if($id != ''){
             User::where('id',Auth::user()->id)->update(['cid'=> $id]);
@@ -62,14 +62,11 @@ class BusinessController extends Controller
         $endOfWeek = Carbon::now()->endOfWeek();
         
         if(@$business != ''){
-            $services = $business->service()->orderby('created_at')->take(5)->get();
-
             $customerCount = @$business->customers()->whereYear('created_at', '>=', $startDateYear)->whereMonth('created_at', '>=', $startDateMonth)->whereYear('created_at', '<=', $endDateYear)->whereMonth('created_at', '<=', $endDateMonth)->count();
 
             $priviousCustomerCount = @$business->customers()->whereYear('created_at', '>=', $startDateYear)->whereMonth('created_at', '>=', $startDateMonth - 1)->whereYear('created_at', '<=', $endDateYear - 1)->whereMonth('created_at', '<=', $endDateMonth)->count();
             $bookingCount = $business->UserBookingDetails()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->count();
             $priviousBookingCount = $business->UserBookingDetails()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->count();
-            $todayBooking = @$business->UserBookingDetails()->whereDate('created_at', '=', date('Y-m-d'))->get();
             
             $customerCountPercentage =  $priviousCustomerCount != 0 ? number_format(($customerCount - $priviousCustomerCount)*100/$priviousCustomerCount,2,'.','') : 0;
             $bookingCountPercentage = $priviousBookingCount != 0 ? number_format(($bookingCount - $priviousBookingCount)*100/$priviousBookingCount,2,'.',''): 0; 
@@ -117,12 +114,9 @@ class BusinessController extends Controller
                             $expdata += $chkindata->UserBookingDetail->business_services()->where('service_type' ,'experience')->count();
                         }
                     }*/
-                    if($b->business_price_detail != ''){
-                        $topBookedPriceId[] = $b->business_price_detail->id;
-                    }
                     
-                    /*$in_person += $b->userBookingStatus->Transaction()->where(['user_type' =>'Customer'])->count();
-                    $online +=  $b->userBookingStatus->Transaction()->where(['user_type' =>'user'])->count();*/
+                    $in_person += $b->userBookingStatus->Transaction()->where(['user_type' =>'Customer'])->count();
+                    $online +=  $b->userBookingStatus->Transaction()->where(['user_type' =>'user'])->count();
                 }
             }
 
@@ -137,10 +131,6 @@ class BusinessController extends Controller
                     ->whereDate('created_at', '<=', $endOfWeek)
                     ->get();
 
-            $usDetail = $business->UserBookingDetails()->whereDate('created_at', '>=', $startOfWeek)
-                    ->whereDate('created_at', '<=', $endOfWeek)
-                   ->orderby('created_at','desc')->get();
-
             //$recurringAmount = DB::table('recurring')->where('business_id',$business_id)->whereNull('payment_number')->whereDate('payment_date', '>=', $startDate)->whereDate('payment_date', '<=', $endDate)->select(DB::raw('sum(amount+tax) AS total_sales'))->get();
 
             $completeRecurringAmount = DB::table('recurring')
@@ -150,10 +140,6 @@ class BusinessController extends Controller
 
             $reminingRecurringAmount = DB::table('recurring')
                 ->where('business_id',$business_id)->whereNull('payment_number')->whereDate('payment_date', '>=', $startDate)->whereDate('payment_date', '<=', $endDate)->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'!=','Completed')->get();
-
-
-            //print_r($completeRecurringAmount);exit;
-            //print_r($reminingRecurringAmount);exit;
 
             $completeRecurringAmount = $completeRecurringAmount[0]->total_sales ?? 0;
             $reminingRecurringAmount = $reminingRecurringAmount[0]->total_sales ?? 0;
@@ -168,127 +154,8 @@ class BusinessController extends Controller
             
             $recurringAmount = number_format($recurringAmount,2,'.','');
         }
-        
-        $topBookedPriceId = array_values(array_unique($topBookedPriceId));
-        $priceDetails = BusinessPriceDetails::whereIn('id', $topBookedPriceId)->get();
-        foreach ($priceDetails as $priceDetail) {
-            $sum = 0;
-            $UserBookingDetails = $priceDetail->UserBookingDetail;
-            foreach ($UserBookingDetails as $ubd) {
-                $sum += $ubd->subtotal + $ubd->tax + $ubd->tip - $ubd->discount + $ubd->fitnessity_fee;
-            }
-
-            if ($sum != 0) {
-                $topBooked['booked'] = count($UserBookingDetails);
-                $topBooked['name'] = $priceDetail->business_price_details_ages->category_title;
-                $topBooked['paid'] = $sum;
-                $topBookedCategories[] = $topBooked;
-            }
-        }
-
-        $key_values = array_column($topBookedCategories, 'paid'); 
-        array_multisort($key_values, SORT_DESC, $topBookedCategories);
-
-        $pagepostIds = PagePost::where(['page_id'=>$business_id,'user_id' =>Auth::user()->id])->pluck('id');   
-
-        $expiredMembership = UserBookingDetail::where(['business_id'=>$business_id])->whereDate('expired_at', '>=', $startOfWeek)->whereDate('expired_at', '<=', $endOfWeek)->get();
-        $clientsBirthdayList  = Customer::where(['business_id'=>$business_id])->whereMonth('birthdate', '=', now()->month)->get();
-
-        $staffsBirthdayList  = BusinessStaff::where(['business_id'=>$business_id])->whereMonth('birthdate', '=', now()->month)->get();
-        
-        $newClients = Customer::where(['business_id'=>$business_id])->whereDate('created_at', '>=', $startOfWeek)->whereDate('created_at', '<=', $endOfWeek)->get();
-
-        $cardDetails = Customer::where('business_id',$business_id)->leftJoin('stripe_payment_methods as spm' , 'spm.user_id' ,'=' ,'customers.id')->where('spm.user_type','Customer')->whereYear('spm.exp_year', '=', now()->year)->whereMonth('exp_month', '=', now()->month)->get();
-
-        $comments = PagePostComments::whereIn('post_id',$pagepostIds)
-                    ->where('user_id','!=',Auth::user()->id)
-                    ->whereDate('created_at', '>=', $startOfWeek)
-                    ->whereDate('created_at', '<=', $endOfWeek)
-                    ->get();
-
-        $postlikes = PagePostLikes::whereIn('post_id',$pagepostIds)
-                    ->where('user_id','!=',Auth::user()->id)
-                    ->whereDate('created_at', '>=', $startOfWeek)
-                    ->whereDate('created_at', '<=', $endOfWeek)
-                    ->get();
-
-        $commentslikes = PagePostCommentsLike::whereIn('post_id',$pagepostIds)
-                    ->where('user_id','!=',Auth::user()->id)
-                    ->whereDate('created_at', '>=', $startOfWeek)
-                    ->whereDate('created_at', '<=', $endOfWeek)
-                    ->get();
-
-        $formatNotification = function ($userData, $action, $type, $text) {
-            $image = Storage::disk('s3')->exists(@$userData->profile_pic) ? Storage::url(@$userData->profile_pic) : '';
-            $date = new DateTime($action->created_at);
-
-            return [
-                "title" => @$userData->full_name . $text,
-                "image" => $image,
-                "type"  => $type,
-                "text"  => $type === 'comment' ? $action->comment : '',
-                "date"  => $date->format('d M, Y'),
-                "fl"    => @$userData->first_letter,
-            ];
-        };
-
-        foreach ($newClients as $nc) {
-            $notificationAry[] = $formatNotification($nc, $nc, 'client',' added as a client.');
-        }
-
-        foreach ($clientsBirthdayList as $cbl) {
-            $birthdayInCurrentYear = Carbon::createFromDate(now()->year, date('m', strtotime($cbl->birthdate)),date('d', strtotime($cbl->birthdate)));
-            $notificationAry[] = $formatNotification($cbl, $cbl, 'client',"'s birthday on ". $birthdayInCurrentYear->format('m/d/Y'));
-        }
-
-        foreach ($staffsBirthdayList as $sbl) {
-            $birthdayInCurrentYear = Carbon::createFromDate(now()->year, date('m', strtotime($sbl->birthdate)),date('d', strtotime($sbl->birthdate)));
-            $notificationAry[] = $formatNotification($sbl, $sbl, 'staff',"'s birthday on ".$birthdayInCurrentYear->format('m/d/Y'));
-        }
-
-        foreach ($comments as $com) {
-            $notificationAry[] = $formatNotification($com->user, $com, 'comment',' commented on your post.');
-        }
-
-        foreach ($expiredMembership as $em) {
-            $name = @$em->business_price_detail->price_title.'('.@$em->business_services->program_name.')';
-            $notificationAry[] = $formatNotification($em->Customer, $em, 'booking',"'s membership of  ".$name." is expired on ". date('m/d/Y' ,strtotime($em->expired_at)));
-        }
-
-        foreach ($cardDetails as $cd) {
-            $notificationAry[] = $formatNotification($em->Customer, $cd, 'card', "'s card is expired on this month");
-        }
-
-        foreach ($postlikes as $pl) {
-            $notificationAry[] = $formatNotification($pl->user, $pl, 'like',' liked your post.');
-        }
-
-        foreach ($commentslikes as $cl) {
-            $notificationAry[] = $formatNotification($cl->user, $cl, 'like',' liked your post comment.');
-        }
-
-        foreach ($businessServices as $bs) {
-            $notificationAry[] = $formatNotification($bs->user, $bs, 'service',' added new activity "'.$bs->program_name.'".');
-        }
-
-        foreach ($transaction as $tr) {
-            if($tr->user_type == 'user'){
-                $userData =  $tr->User;
-            }else{
-                $userData = $tr->Customer;
-            }
-            $notificationAry[] = $formatNotification($userData, $tr, 'transaction',' made a payment of $'.$tr->amount);
-        }
-
-        foreach($usDetail as $usd){
-            if($usd->userBookingStatus != ''){
-                $transaction[] = $usd->userBookingStatus->Transaction()->orderby('created_at','desc')->first();
-            }
-        }   
-
-        /*print_r($notificationAry);*/
-       
-        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingRecPercentage','completedRecPercentage','totalsalePercentage','bookingCountPercentage','customerCountPercentage','todayBooking','services','startDate','endDate','topBookedCategories','notificationAry' ,'startDateCalendar','endDateCalendar','completeRecurringAmount','reminingRecurringAmount','recurringAmount','left_days','activePlan'));
+               
+        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingRecPercentage','completedRecPercentage','totalsalePercentage','bookingCountPercentage','customerCountPercentage','startDate','endDate','startDateCalendar','endDateCalendar','completeRecurringAmount','reminingRecurringAmount','recurringAmount','left_days','activePlan'));
     }
 
     public function notification_delete(Request $request){

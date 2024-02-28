@@ -1,6 +1,6 @@
 <?php
 
-    use Carbon\Carbon;
+    use Carbon\Carbon,Storage,DateTime,View;
     use App\Repositories\{ReviewRepository,UserRepository,NetworkRepository};
     use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction,Products,CustomerNotes,Notification,CompanyInformation,BusinessServices};
 
@@ -345,5 +345,158 @@
     function countryName($city){
        return CompanyInformation::where('city',$city)->pluck('country')->first();
         
+    }
+
+    function sidebarUpdatesNotification()
+    {
+        $viewData = '';  $todayBooking =  $services = $topBookedCategories = $notificationAry = $transaction = $businessServices = $usDetail = [];
+
+        $business_id = Auth::user()->cid;
+        $company = CompanyInformation::find($business_id);
+
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
+        if($company){
+            $services = $company->service()->orderby('created_at')->take(5)->get();
+            $todayBooking = $company->UserBookingDetails()->whereDate('created_at', '=', date('Y-m-d'))->get();
+
+            $formatNotification = function ($userData, $action, $type, $text) {
+                $image = Storage::disk('s3')->exists(@$userData->profile_pic) ? Storage::url(@$userData->profile_pic) : '';
+                $date = new DateTime($action->created_at);
+
+                return [
+                    "title" => @$userData->full_name . $text,
+                    "image" => $image,
+                    "type"  => $type,
+                    "text"  => $type === 'comment' ? $action->comment : '',
+                    "date"  => $date->format('d M, Y'),
+                    "fl"    => @$userData->first_letter,
+                ];
+            };
+
+            $pagepostIds = App\PagePost::where(['page_id'=>$business_id,'user_id' =>Auth::user()->id])->pluck('id');   
+
+            $expiredMembership = App\UserBookingDetail::where(['business_id'=>$business_id])->whereDate('expired_at', '>=', $startOfWeek)->whereDate('expired_at', '<=', $endOfWeek)->get();
+            $clientsBirthdayList  = App\Customer::where(['business_id'=>$business_id])->whereMonth('birthdate', '=', now()->month)->get();
+
+            $staffsBirthdayList  = App\BusinessStaff::where(['business_id'=>$business_id])->whereMonth('birthdate', '=', now()->month)->get();
+
+            $clientsBirthdayList  = App\Customer::where(['business_id'=>$business_id])->whereMonth('birthdate', '=', now()->month)->get();
+
+            $staffsBirthdayList  = App\BusinessStaff::where(['business_id'=>$business_id])->whereMonth('birthdate', '=', now()->month)->get();
+            
+            $newClients = App\Customer::where(['business_id'=>$business_id])->whereDate('created_at', '>=', $startOfWeek)->whereDate('created_at', '<=', $endOfWeek)->get();
+
+            $cardDetails = App\Customer::where('business_id',$business_id)->leftJoin('stripe_payment_methods as spm' , 'spm.user_id' ,'=' ,'customers.id')->where('spm.user_type','Customer')->whereYear('spm.exp_year', '=', now()->year)->whereMonth('exp_month', '=', now()->month)->get();
+
+            $comments = App\PagePostComments::whereIn('post_id',$pagepostIds)
+                        ->where('user_id','!=',Auth::user()->id)
+                        ->whereDate('created_at', '>=', $startOfWeek)
+                        ->whereDate('created_at', '<=', $endOfWeek)
+                        ->get();
+
+            $postlikes = App\PagePostLikes::whereIn('post_id',$pagepostIds)
+                        ->where('user_id','!=',Auth::user()->id)
+                        ->whereDate('created_at', '>=', $startOfWeek)
+                        ->whereDate('created_at', '<=', $endOfWeek)
+                        ->get();
+
+            $commentslikes = App\PagePostCommentsLike::whereIn('post_id',$pagepostIds)
+                    ->where('user_id','!=',Auth::user()->id)
+                    ->whereDate('created_at', '>=', $startOfWeek)
+                    ->whereDate('created_at', '<=', $endOfWeek)
+                    ->get();
+
+            $usDetail = $company->UserBookingDetails()->whereDate('created_at', '>=', $startOfWeek)
+                    ->whereDate('created_at', '<=', $endOfWeek)
+                   ->orderby('created_at','desc')->get();
+
+            foreach ($newClients as $nc) {
+                $notificationAry[] = $formatNotification($nc, $nc, 'client',' added as a client.');
+            }
+
+            foreach ($clientsBirthdayList as $cbl) {
+                $birthdayInCurrentYear = Carbon::createFromDate(now()->year, date('m', strtotime($cbl->birthdate)),date('d', strtotime($cbl->birthdate)));
+                $notificationAry[] = $formatNotification($cbl, $cbl, 'client',"'s birthday on ". $birthdayInCurrentYear->format('m/d/Y'));
+            }
+
+            foreach ($staffsBirthdayList as $sbl) {
+                $birthdayInCurrentYear = Carbon::createFromDate(now()->year, date('m', strtotime($sbl->birthdate)),date('d', strtotime($sbl->birthdate)));
+                $notificationAry[] = $formatNotification($sbl, $sbl, 'staff',"'s birthday on ".$birthdayInCurrentYear->format('m/d/Y'));
+            }
+
+            foreach ($comments as $com) {
+                $notificationAry[] = $formatNotification($com->user, $com, 'comment',' commented on your post.');
+            }
+
+            foreach ($expiredMembership as $em) {
+                $name = @$em->business_price_detail->price_title.'('.@$em->business_services->program_name.')';
+                $notificationAry[] = $formatNotification($em->Customer, $em, 'booking',"'s membership of  ".$name." is expired on ". date('m/d/Y' ,strtotime($em->expired_at)));
+            }
+
+            foreach ($cardDetails as $cd) {
+                $notificationAry[] = $formatNotification($em->Customer, $cd, 'card', "'s card is expired on this month");
+            }
+
+            foreach ($postlikes as $pl) {
+                $notificationAry[] = $formatNotification($pl->user, $pl, 'like',' liked your post.');
+            }
+
+            foreach ($commentslikes as $cl) {
+                $notificationAry[] = $formatNotification($cl->user, $cl, 'like',' liked your post comment.');
+            }
+
+            foreach ($businessServices as $bs) {
+                $notificationAry[] = $formatNotification($bs->user, $bs, 'service',' added new activity "'.$bs->program_name.'".');
+            }
+
+            foreach($usDetail as $usd){
+                if($usd->userBookingStatus != ''){
+                    $transaction[] = $usd->userBookingStatus->Transaction()->orderby('created_at','desc')->first();
+                }
+            }   
+
+            foreach ($transaction as $tr) {
+                if($tr->user_type == 'user'){
+                    $userData =  $tr->User;
+                }else{
+                    $userData = $tr->Customer;
+                }
+                $notificationAry[] = $formatNotification($userData, $tr, 'transaction',' made a payment of $'.$tr->amount);
+            }
+
+            $booking = $company->UserBookingDetails();
+            if(!empty($booking->get())){
+                foreach($booking->get() as $b){
+                    if($b->business_price_detail != ''){
+                        $topBookedPriceId[] = $b->business_price_detail->id;
+                    }
+                }
+            }
+
+            $topBookedPriceId = array_values(array_unique($topBookedPriceId));
+            $priceDetails = App\BusinessPriceDetails::whereIn('id', $topBookedPriceId)->get();
+            foreach ($priceDetails as $priceDetail) {
+                $sum = 0;
+                $UserBookingDetails = $priceDetail->UserBookingDetail;
+                foreach ($UserBookingDetails as $ubd) {
+                    $sum += $ubd->subtotal + $ubd->tax + $ubd->tip - $ubd->discount + $ubd->fitnessity_fee;
+                }
+
+                if ($sum != 0) {
+                    $topBooked['booked'] = count($UserBookingDetails);
+                    $topBooked['name'] = $priceDetail->business_price_details_ages->category_title;
+                    $topBooked['paid'] = $sum;
+                    $topBookedCategories[] = $topBooked;
+                }
+            }
+
+            $key_values = array_column($topBookedCategories, 'paid'); 
+            array_multisort($key_values, SORT_DESC, $topBookedCategories);
+        }
+
+        return view('layouts.business.sideNotification', ['notificationAry' =>$notificationAry ,'todayBooking' => $todayBooking,'topBookedCategories' => $topBookedCategories,'services' => $services])->render();
+
     }
 ?>
