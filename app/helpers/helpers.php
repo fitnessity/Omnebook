@@ -349,7 +349,7 @@
 
     function sidebarUpdatesNotification()
     {
-        $viewData = '';  $todayBooking =  $services = $topBookedCategories = $notificationAry = $transaction = $businessServices = $usDetail = [];
+        $viewData = '';  $todayBooking =  $services = $topBookedCategories = $notificationAry = $transaction = $businessServices = $usDetail =$topBookedPriceId= [];
 
         $business_id = Auth::user()->cid;
         $company = CompanyInformation::find($business_id);

@@ -59,6 +59,8 @@
 													</div>  
 													<form method="GET">
 														<input type="hidden" name="filter" id="filterOptions" value="{{@$filter}}">
+														<input type="hidden" name="genderFilter" id="gender-filterOptions" value="{{@$genderFilter}}">
+														<input type="hidden" name="statusFilter" id="status-filterOptions" value="{{@$statusFilter}}">
 
 														<div class="row justify-content-md-center">
 															<div class="col-lg-6 col-md-6 col-sm-6">
@@ -88,16 +90,60 @@
 														<div class="flex-grow-1 ms-3 sale-date"><h2 class="mb-0">Filter Options</h2></div>
 													</div> 	
 
-													<div class="row justify-content-md-center">
+													<div class="row d-flex align-items-center">
+														<div class="col-lg-3 col-md-4 col-sm-4">
+															<label>Choose Member Type</label>
+														</div>
 														<div class="col-lg-6 col-md-6 col-sm-6">
-															<select class="form-select mb-10" id="filter" data-behavior="on_change_dropdown">
-																<option value="" >All</option>
-																<option value="Adult" @if($filter == 'Adult') selected @endif>Adult</option>
-																<option value="Child" @if($filter == 'Child') selected @endif>Child</option>
-																<option value="Infant" @if($filter == 'Infant') selected @endif>Infant</option>
-															</select>
+															<div class="form-group">	
+																<div class="input-group">
+																	<select class="form-select mb-10" id="filter" data-behavior="on_change_dropdown" data-type="customer_type">
+																		<option value="" >All</option>
+																		<option value="Adult" @if($filter == 'Adult') selected @endif>Adult</option>
+																		<option value="Child" @if($filter == 'Child') selected @endif>Child</option>
+																		<option value="Infant" @if($filter == 'Infant') selected @endif>Infant</option>
+																	</select>
+																</div>
+															</div>
 														</div>
 													</div>
+
+													<div class="row d-flex align-items-center">
+														<div class="col-lg-3 col-md-4 col-sm-4">
+															<label>Choose Status</label>
+														</div>
+														<div class="col-lg-6 col-md-6 col-sm-6">
+															<div class="form-group">	
+																<div class="input-group">
+																	<select class="form-select mb-10" id="statusFilter" data-behavior="on_change_dropdown" data-type="status">
+																		<option value="" >All</option>
+																		<option value="Active" @if($statusFilter == 'Active') selected @endif>Active</option>
+																		<option value="InActive" @if($statusFilter == 'InActive') selected @endif>InActive</option>
+																		<option value="Prospect" @if($statusFilter == 'Prospect') selected @endif>Prospect</option>
+																		<option value="NoAddress" @if($statusFilter == 'NoAddress') selected @endif> No Address Added</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="row d-flex align-items-center">
+														<div class="col-lg-3 col-md-4 col-sm-4">
+															<label>Choose Gender</label>
+														</div>
+														<div class="col-lg-6 col-md-6 col-sm-6">
+															<div class="form-group">	
+																<div class="input-group">
+																	<select class="form-select mb-10" id="gender-filter" data-behavior="on_change_dropdown" data-type="gender">
+																		<option value="" >All</option>
+																		<option value="Male" @if($genderFilter == 'Male') selected @endif>Male</option>
+																		<option value="Female" @if($genderFilter == 'Female') selected @endif>Female</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+
 													<div class="d-flex align-items-center mb-25">
 														<div class="avatar-sm flex-shrink-0">
 															<span class="avatar-title bg-primary rounded-circle fs-2">3</span>
@@ -134,7 +180,7 @@
 											   <div class="live-preview">
 													<div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnesting">
 														<div class="membership-expirations-table">
-															<div class="table-responsive table-scroll" id="contact-table">
+															<div class="table-responsive " id="contact-table"> <!-- table-scroll remove to avoid -->
 																<table class="table mb-0" >
 																	<thead>
 																		<tr>
@@ -142,7 +188,12 @@
 																			<th>Name</th>
 																			<th>Member ID</th>
 																			<th>Email </th>
-																			@if($type == 'mailing-list') <th>Address</th>@endif
+																			@if($type == 'mailing-list') 
+																				<th>Address</th>
+																				<th>City</th>
+																				<th>State</th>
+																				<th>Zip</th>
+																			@endif
 																			<th>Phone Number </th>
 																			<th>Customer Type</th>
 																		</tr>
@@ -155,13 +206,16 @@
 																				<td>{{@$list->member_id}}</td>
 																				<td>{{@$list->email ?? 'N/A'}}</td>
 																				@if($type == 'mailing-list') 
-																					<td>{{@$list->full_address()}}</td>
+																					<td>{{@$list->address ?? 'N/A'}}</td>
+																					<td>{{@$list->city ?? 'N/A'}}</td>
+																					<td>{{@$list->state ?? 'N/A'}}</td>
+																					<td>{{@$list->zipcode ?? 'N/A'}}</td>
 																				@endif
 																				<td>{{@$list->phone_number ?? 'N/A'}}</td>
 																				<td>{{@$list->customer_type}}</td>
 																			</tr>
 																		@empty
-																			<tr> <td @if($type == 'mailing-list') colspan="7" @else colspan="6" @endif></td> </tr>
+																			<tr> <td @if($type == 'mailing-list') colspan="10" @else colspan="6" @endif></td> </tr>
 																		@endforelse
 																	</tbody>
 																</table>
@@ -206,6 +260,8 @@
  	function loadMoreRecords() {
 		let type = $('#type').val();
 		let filter = $('#filterOptions').val();
+		let genderFilter = $('#gender-filterOptions').val();
+		let statusFilter = $('#status-filterOptions').val();
      	isLoading = true;
      	$.ajax({
          url: "{{route('business.contact-list.get-more')}}",
@@ -214,6 +270,8 @@
          	offset: offset,
          	type: type,
          	filter: filter,
+         	statusFilter: statusFilter,
+         	genderFilter: genderFilter,
          },
          success: function (response) {
             if (response != '') {
@@ -244,7 +302,13 @@
 	});
 
 	$(document).on('change', '[data-behavior~=on_change_dropdown]', function(e){
-		$('#filterOptions').val(this.value);
+		if($(this).attr('data-type') == 'gender'){
+			$('#gender-filterOptions').val(this.value);
+		}else if($(this).attr('data-type') == 'status'){
+			$('#status-filterOptions').val(this.value);
+		}else{
+			$('#filterOptions').val(this.value);
+		}
 		$('#generateReport').click();
 	});
 
@@ -259,7 +323,12 @@
 		let startDate = '';
 		let endDate = '' ;
 		var type = $('#exportOptions').val();
+		
+		let filter = $('#filterOptions').val();
+		let genderFilter = $('#gender-filterOptions').val();
+		let statusFilter = $('#status-filterOptions').val();
 		var listType = $('#type').val();
+
 		if(type){
 			$('#go_btn').html('Loading..'); 
 			$("#go_btn").prop("disabled", true);
@@ -268,7 +337,7 @@
       var filename =  '';
 		if(type != '' && type != 'print'){
 
-			var downloadUrl = '{{ route("business.contact-list.export") }}' + '?listType='+listType+'&type=' + type;
+			var downloadUrl = '{{ route("business.contact-list.export") }}' + '?listType='+listType+'&type=' + type+'&filter=' + filter+'&genderFilter=' + genderFilter+'&statusFilter=' + statusFilter;
 
 	    	if(type == 'excel'){
 	    		filename = 'new-cleint.xlsx';

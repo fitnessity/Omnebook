@@ -30,7 +30,7 @@ class ExportNewContact implements FromCollection, WithHeadings
             $formattedData = [
                 ['',$this->heading,''],
                 [''],
-                [ 'Name', 'Member ID', 'Email', 'Address','Phone Number','Customer Type'],
+                [ 'Name', 'Member ID', 'Email', 'Address', 'City','State','Zip','Phone Number','Customer Type'],
                 $this->transformData($this->clients,$this->listType),
             ];
         }else{
@@ -65,7 +65,10 @@ class ExportNewContact implements FromCollection, WithHeadings
             ];
 
             if ($type == 'mailing-list') {
-                array_splice($transformedItem, 3, 0, [@$item->full_address()]);
+                array_splice($transformedItem, 3, 0, [@$item->address ?? 'N/A']);
+                array_splice($transformedItem, 4, 0, [@$item->city ?? 'N/A']);
+                array_splice($transformedItem, 5, 0, [@$item->state ?? 'N/A']);
+                array_splice($transformedItem, 6, 0, [@$item->zipcode ?? 'N/A']);
             }
 
             return $transformedItem;

@@ -365,13 +365,36 @@ class ClientReportController extends BusinessBaseController
     public function contactList(Request $request,$business_id){
         $type = $request->type ?? 'email-list';
         $filter = $request->filter;
+        $genderFilter = $request->genderFilter;
+        $statusFilter = $request->statusFilter;
         //$clients = $this->contactListQuery($business_id)->limit(3000)->get();
 
-        $clients = $this->contactListQuery($business_id)->get();
+        $clients = $this->contactListQuery($business_id)
+            ->when($genderFilter, function($query) use ($genderFilter) {
+                return $query->whereNotNull('gender')
+                             ->where('gender', '!=', '')
+                             ->whereRaw('LOWER(gender) = ?', [strtolower($genderFilter)]);
+            })->get();
 
         if ($filter) {
             $clients = $clients->filter(function ($client) use ($filter) {
                 return $client->customer_type == $filter;
+            });
+        }
+
+        if($statusFilter != '' && $statusFilter != 'Birthday' && $statusFilter != 'NoAddress') {
+            $clients = $clients->filter(function ($client) use ($statusFilter) {
+                return $client->is_active() == $statusFilter;
+            });
+        }else if($statusFilter == 'NoAddress'){
+            $clients = $clients->filter(function ($client) use ($statusFilter) {
+                return $client->full_address() == 'N/A';
+            });
+        }else if($statusFilter == 'Birthday'){
+             $today = Carbon::today();
+            $clients = $clients->filter(function ($client) use ($statusFilter,$today) {
+                $birthday = Carbon::createFromFormat('Y-m-d', $client->birthdate());
+                return $birthday->month == $today->month && $birthday->day == $today->day;
             });
         }
 
@@ -380,20 +403,37 @@ class ClientReportController extends BusinessBaseController
         $clients->each(function ($client) {
             $client->createUserIfNeeded();
         });
-        return view('business.reports.client.contanct-list',compact('clients','filter','type'));
+        return view('business.reports.client.contanct-list',compact('clients','filter','type','genderFilter','statusFilter'));
     }
 
     public function getMorecontactList(Request $request,$business_id){
         //echo "hii";exit;
         $type = $request->type;
         $filter = $request->filter;
+        $genderFilter = $request->genderFilter;
+        $statusFilter = $request->statusFilter;
         $offset = $request->get('offset', 0); 
         $limit = 1000; 
-        $clients = $this->contactListQuery($business_id)->get();
+        $clients = $this->contactListQuery($business_id)->when($genderFilter, function($query) use ($genderFilter) {
+            return $query->whereNotNull('gender')
+                 ->where('gender', '!=', '')
+                 ->whereRaw('LOWER(gender) = ?', [strtolower($genderFilter)]);
+        })->get();
 
-        if ($filter) {
+
+        if($filter) {
             $clients = $clients->filter(function ($client) use ($filter) {
                 return $client->customer_type == $filter;
+            });
+        } 
+
+        if($statusFilter != '' && $statusFilter != 'birthday' && $statusFilter != 'NoAddress') {
+            $clients = $clients->filter(function ($client) use ($statusFilter) {
+                return $client->is_active() == $statusFilter;
+            });
+        }else if($statusFilter == 'NoAddress'){
+            $clients = $clients->filter(function ($client) use ($statusFilter) {
+                return $client->full_address() == 'N/A';
             });
         }
 
@@ -402,7 +442,7 @@ class ClientReportController extends BusinessBaseController
             $client->createUserIfNeeded();
         });
         //print_r($clients);
-        return view('business.reports.client.contact_list_table_data',compact('clients','type','filter','business_id','offset'));
+        return view('business.reports.client.contact_list_table_data',compact('clients','type','filter','business_id','offset','genderFilter','statusFilter'));
     }
 
     public function contactListExport(Request $request,$business_id){
@@ -410,8 +450,35 @@ class ClientReportController extends BusinessBaseController
         set_time_limit(8000000);
         ini_set('memory_limit', '-1');
 
+        $filter = $request->filter;
+        $genderFilter = $request->genderFilter;
+        $statusFilter = $request->statusFilter;
 
-        $clients = $this->contactListQuery($business_id)->get();
+        $clients = $this->contactListQuery($business_id)->when($genderFilter, function($query) use ($genderFilter) {
+            return $query->whereNotNull('gender')
+                 ->where('gender', '!=', '')
+                 ->whereRaw('LOWER(gender) = ?', [strtolower($genderFilter)]);
+        })->get();
+
+
+        if($filter) {
+            $clients = $clients->filter(function ($client) use ($filter) {
+                return $client->customer_type == $filter;
+            });
+        } 
+        
+        if($statusFilter != '' && $statusFilter != 'birthday' && $statusFilter != 'NoAddress') {
+            $clients = $clients->filter(function ($client) use ($statusFilter) {
+                return $client->is_active() == $statusFilter;
+            });
+        }else if($statusFilter == 'NoAddress'){
+            $clients = $clients->filter(function ($client) use ($statusFilter) {
+                return $client->full_address() == 'N/A';
+            });
+        }
+
+        $clients =  $clients->values();;
+
         $heading = 'Contact List Report';
         $excelFileName = 'contact-list.xlsx';
         $pdfFileName = 'contact-list.pdf';

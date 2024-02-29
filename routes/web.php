@@ -22,19 +22,25 @@ Route::fallback(function () {
     return redirect('/');
 });
 
+
 Route::get('/clear-cache', function () {
     // Clear all cache
-    Artisan::call('cache:clear');
+    //Artisan::call('cache:clear');
 
     // Clear specific cache (e.g., route cache)
-    Artisan::call('route:clear');
+    //Artisan::call('route:clear');
 
     // Clear all cached configuration files
-    Artisan::call('config:clear');
+    //Artisan::call('config:clear');
 
-    return 'Cache cleared successfully.';
+    //return 'Cache cleared successfully.';
     
     //print_r(App\Customer::where('user_id',NULL)->get());
+
+
+    /*$stripe = new \Stripe\StripeClient('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');
+    print_r($stripe->customers->retrieve('cus_Pdq3P3f5RaiQzz', []));
+    print_r($stripe->paymentMethods->retrieve('pm_1OoYOvCr65ASmcsqvia6L6UM', []));*/
 
     /*foreach(App\UserBookingDetail::get() as $details){
         $type = '';
@@ -84,6 +90,7 @@ Route::get('/clear-cache', function () {
             }
         }
     }*/
+   
 });
 //end
 
