@@ -1870,7 +1870,6 @@ padding: 0px 0px 3px 2px !important; */
 	padding: 0;
 	position: absolute;
 }
-
 .font-green{
 	color: #009f0a;
 }
@@ -6664,6 +6663,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .p-tb-10{
   padding: 10px 0;
 }
+
 .modal-40{
   max-width: 40%; 
 }
@@ -6754,6 +6754,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   display: inline-block;
   margin-right: 5px;
 }
+
 .card-body-schedule{
   padding: 15px 15px 0;
 }
@@ -6862,7 +6863,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   margin-left: 5px !important;
   font-size: 14px;
 }
-
 .register {
   padding-top: 120px;
   background-size: cover;
@@ -7086,6 +7086,7 @@ p.or-data {
   max-width: 25px;
   height: 25px;
 }
+
 .confirmed h5{
   text-align: center;
   font-size: 25px;
@@ -7161,4 +7162,10 @@ p.or-data {
 }
 .btn.show, .btn:first-child:active{
   color: #fff;
+}
+
+#red {
+  display: none;
+  padding: 10px;
+  background-color: #f00;
 }
