@@ -53,6 +53,79 @@
                             <!--end col-->
 						</div>
                         <!--end row-->
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="card">
+									<div class="card-body">
+										<!-- Nav tabs -->
+										<ul class="nav nav-tabs mb-3" role="tablist">
+											<li class="nav-item">
+												<a class="nav-link active" data-bs-toggle="tab" href="#client" role="tab" aria-selected="false">
+													Clients
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" data-bs-toggle="tab" href="#beltpromotions" role="tab" aria-selected="false">
+													Belt Promotions
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" data-bs-toggle="tab" href="#clientstats" role="tab" aria-selected="false">
+													Client Stats 
+												</a>
+											</li>
+										</ul>
+										<!-- Tab panes -->
+										<div class="tab-content  text-muted">
+											<div class="tab-pane active" id="client" role="tabpanel">
+												<div class="row">
+													<div class="col-lg-12">
+															<div class="card-body">
+																<!-- Nav tabs -->
+																<ul class="nav nav-tabs mb-3" role="tablist">
+																	<li class="nav-item">
+																		<a class="nav-link active" data-bs-toggle="tab" href="#totalclient" role="tab" aria-selected="false">
+																			Total Clients
+																		</a>
+																	</li>
+																	<li class="nav-item">
+																		<a class="nav-link" data-bs-toggle="tab" href="#visitors" role="tab" aria-selected="false">
+																			Visitors
+																		</a>
+																	</li>
+																	<li class="nav-item">
+																		<a class="nav-link" data-bs-toggle="tab" href="#suspensions" role="tab" aria-selected="false">
+																			Suspensions
+																		</a>
+																	</li>
+																</ul>
+																<!-- Tab panes -->
+																<div class="tab-content  text-muted">
+																	<div class="tab-pane active" id="totalclient" role="tabpanel">
+																		<h6>Coming soon</h6>
+																	</div>
+																	<div class="tab-pane" id="visitors" role="tabpanel">
+																		<h6>Coming soon</h6>
+																	</div>
+																	<div class="tab-pane" id="suspensions" role="tabpanel">
+																		<h6>Coming soon</h6>
+																	</div>
+																</div>
+															</div><!-- end card-body -->
+														</div><!-- end card -->
+												</div>
+											</div>
+											<div class="tab-pane" id="beltpromotions" role="tabpanel">
+												<h6>Coming soon</h6>
+											</div>
+											<div class="tab-pane" id="clientstats" role="tabpanel">
+												<h6>Coming soon</h6>
+											</div>
+										</div>
+									</div><!-- end card-body -->
+								</div><!-- end card -->
+							</div>
+						</div>
 						
 						<div class="row">
 							<div class="col-xl-12">
