@@ -5,7 +5,10 @@
 		<td>{{@$list->member_id}}</td>
 		<td>{{@$list->email ?? 'N/A'}}</td>
 		@if($type == 'mailing-list') 
-			<td>{{@$list->full_address()}}</td>
+			<td>{{@$list->address ?? 'N/A'}}</td>
+			<td>{{@$list->city ?? 'N/A'}}</td>
+			<td>{{@$list->state ?? 'N/A'}}</td>
+			<td>{{@$list->zipcode ?? 'N/A'}}</td>
 		@endif
 		<td>{{@$list->phone_number ?? 'N/A'}}</td>
 		<td>{{@$list->customer_type}}</td>

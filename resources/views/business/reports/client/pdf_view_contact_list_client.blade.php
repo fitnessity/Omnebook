@@ -51,7 +51,12 @@
 					<th>Name</th>
 					<th>Member ID</th>
 					<th>Email </th>
-					@if($listType == 'mailing-list') <th>Address</th>@endif
+					@if($listType == 'mailing-list') 
+						<th>Address</th>
+						<th>City</th>
+						<th>State</th>
+						<th>Zip</th>
+					@endif
 					<th>Phone Number </th>
 					<th>Customer Type</th>
 				</tr>
@@ -62,13 +67,16 @@
 						<td>{{@$list->member_id}}</td>
 						<td>{{@$list->email}}</td>
 						@if($listType == 'mailing-list') 
-							<td>{{@$list->full_address()}}</td>
+							<td>{{@$list->address ?? 'N/A'}}</td>
+							<td>{{@$list->city ?? 'N/A'}}</td>
+							<td>{{@$list->state ?? 'N/A'}}</td>
+							<td>{{@$list->zipcode ?? 'N/A'}}</td>
 						@endif
 						<td>{{@$list->phone_number ?? 'N/A'}}</td>
 						<td>{{@$list->customer_type}}</td>
 					</tr>
 				@empty
-					<tr> <td @if($listType == 'mailing-list') colspan="7" @else colspan="6" @endif></td> </tr>
+					<tr> <td @if($listType == 'mailing-list') colspan="10" @else colspan="6" @endif></td> </tr>
 				@endforelse
 			</table>
 		</div>

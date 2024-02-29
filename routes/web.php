@@ -22,20 +22,20 @@ Route::fallback(function () {
     return redirect('/');
 });
 
+
 Route::get('/clear-cache', function () {
     // Clear all cache
-    Artisan::call('cache:clear');
+    //Artisan::call('cache:clear');
 
     // Clear specific cache (e.g., route cache)
-    Artisan::call('route:clear');
+    //Artisan::call('route:clear');
 
     // Clear all cached configuration files
-    Artisan::call('config:clear');
+    //Artisan::call('config:clear');
 
-    return 'Cache cleared successfully.';
+    //return 'Cache cleared successfully.';
     
     //print_r(App\Customer::where('user_id',NULL)->get());
-
 
     /*foreach(App\UserBookingDetail::get() as $details){
 
@@ -86,7 +86,6 @@ Route::get('/clear-cache', function () {
             }
         }
     }*/
-
 });
 //end
 
