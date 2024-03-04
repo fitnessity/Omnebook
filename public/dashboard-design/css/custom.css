@@ -7164,8 +7164,75 @@ p.or-data {
   color: #fff;
 }
 
+.self-welcome-logo img{
+  width: 200px;
+}
+.wel-date-time span{
+  font-size: 15px;
+  font-weight: 600;
+}
+.wel-date-time h3{
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.welcome-title label{
+  font-size: 45px;
+  padding: 55px 0px 0px 0px;
+  margin-bottom: 0px;
+  font-weight: 500;
+}
+.welcome-title span{
+  font-size: 45px;
+  font-weight: 500;
+  padding: 0px 0px 55px 0px;
+}
+.qr-code{
+  padding: 55px 0px 0px 0px;
+}
+.qr-code img{
+  width: 100%;
+  margin-bottom: 15px;
+}
+.qr-code p{
+  font-size: 16px;
+}
+.back-check-img{
+  background-size: cover; 
+  position: relative;
+  min-height: 348px;
+  background-repeat: no-repeat;
+  background-color: #F9FBFF;
+  background-position: bottom left;
+}
+.register-check img{
+  width: 225px;
+}
+.card-check-in{
+  padding: 50px 100px;
+}
+.pb-60{
+  padding-bottom: 60px;
+}
+.welcome-provider h3{
+  font-size: 55px;
+  font-weight: 600;
+}
+.welcome-provider span{
+  font-size: 55px;
+  font-weight: 600;
+}
+.welcome-provider p{
+  font-size: 20px;
+}
+.self-check-arrow i{
+  position: absolute;
+  bottom: 20px;
+  font-size: 25px;
+}
 #red {
   display: none;
   padding: 10px;
   background-color: #f00;
 }
+

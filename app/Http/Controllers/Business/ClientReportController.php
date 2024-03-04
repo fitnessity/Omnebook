@@ -367,12 +367,16 @@ class ClientReportController extends BusinessBaseController
         $genderFilter = $request->genderFilter;
         $statusFilter = $request->statusFilter;
         //$clients = $this->contactListQuery($business_id)->limit(3000)->get();
+        $today = Carbon::today();
 
         $clients = $this->contactListQuery($business_id)
             ->when($genderFilter, function($query) use ($genderFilter) {
                 return $query->whereNotNull('gender')
                              ->where('gender', '!=', '')
                              ->whereRaw('LOWER(gender) = ?', [strtolower($genderFilter)]);
+            })->when($statusFilter == 'Birthday', function($query) use ($genderFilter,$today) {
+                return $query->whereNotNull('birthdate')->whereRaw('MONTH(birthdate) = ? AND DAY(birthdate) = ?', [$today->month, $today->day]);
+            
             })->get();
 
         if ($filter) {
@@ -381,7 +385,7 @@ class ClientReportController extends BusinessBaseController
             });
         }
 
-        if($statusFilter != '' && $statusFilter != 'Birthday' && $statusFilter != 'NoAddress') {
+        if($statusFilter == 'Active' && $statusFilter == 'InActive' && $statusFilter == 'Prospect') {
             $clients = $clients->filter(function ($client) use ($statusFilter) {
                 return $client->is_active() == $statusFilter;
             });
@@ -389,11 +393,9 @@ class ClientReportController extends BusinessBaseController
             $clients = $clients->filter(function ($client) use ($statusFilter) {
                 return $client->full_address() == 'N/A';
             });
-        }else if($statusFilter == 'Birthday'){
-             $today = Carbon::today();
-            $clients = $clients->filter(function ($client) use ($statusFilter,$today) {
-                $birthday = Carbon::createFromFormat('Y-m-d', $client->birthdate());
-                return $birthday->month == $today->month && $birthday->day == $today->day;
+        }else if($statusFilter == 'At-Risk'){
+            $clients = $clients->filter(function ($client) use ($statusFilter) {
+                return $client->customerAtRisk() == $statusFilter;
             });
         }
 
@@ -413,11 +415,16 @@ class ClientReportController extends BusinessBaseController
         $statusFilter = $request->statusFilter;
         $offset = $request->get('offset', 0); 
         $limit = 1000; 
+        $today = Carbon::today();
+
         $clients = $this->contactListQuery($business_id)->when($genderFilter, function($query) use ($genderFilter) {
             return $query->whereNotNull('gender')
                  ->where('gender', '!=', '')
                  ->whereRaw('LOWER(gender) = ?', [strtolower($genderFilter)]);
-        })->get();
+        })->when($statusFilter == 'Birthday', function($query) use ($genderFilter,$today) {
+                return $query->whereNotNull('birthdate')->whereRaw('MONTH(birthdate) = ? AND DAY(birthdate) = ?', [$today->month, $today->day]);
+            
+            })->get();
 
 
         if($filter) {
@@ -426,7 +433,7 @@ class ClientReportController extends BusinessBaseController
             });
         } 
 
-        if($statusFilter != '' && $statusFilter != 'birthday' && $statusFilter != 'NoAddress') {
+        if($statusFilter == 'Active' && $statusFilter == 'InActive' && $statusFilter == 'Prospect') {
             $clients = $clients->filter(function ($client) use ($statusFilter) {
                 return $client->is_active() == $statusFilter;
             });
@@ -434,7 +441,13 @@ class ClientReportController extends BusinessBaseController
             $clients = $clients->filter(function ($client) use ($statusFilter) {
                 return $client->full_address() == 'N/A';
             });
+        }else if($statusFilter == 'At-Risk'){
+            $clients = $clients->filter(function ($client) use ($statusFilter) {
+                return $client->customerAtRisk() == $statusFilter;
+            });
         }
+
+
 
         $clients =  $clients->skip($offset)->take($limit);
         $clients->each(function ($client) {
@@ -452,13 +465,15 @@ class ClientReportController extends BusinessBaseController
         $filter = $request->filter;
         $genderFilter = $request->genderFilter;
         $statusFilter = $request->statusFilter;
-
+         $today = Carbon::today();
         $clients = $this->contactListQuery($business_id)->when($genderFilter, function($query) use ($genderFilter) {
             return $query->whereNotNull('gender')
                  ->where('gender', '!=', '')
                  ->whereRaw('LOWER(gender) = ?', [strtolower($genderFilter)]);
-        })->get();
-
+        })->when($statusFilter == 'Birthday', function($query) use ($genderFilter,$today) {
+                return $query->whereNotNull('birthdate')->whereRaw('MONTH(birthdate) = ? AND DAY(birthdate) = ?', [$today->month, $today->day]);
+            
+            })->get();
 
         if($filter) {
             $clients = $clients->filter(function ($client) use ($filter) {
@@ -466,7 +481,7 @@ class ClientReportController extends BusinessBaseController
             });
         } 
         
-        if($statusFilter != '' && $statusFilter != 'birthday' && $statusFilter != 'NoAddress') {
+        if($statusFilter != '' && $statusFilter != 'Birthday' && $statusFilter != 'NoAddress') {
             $clients = $clients->filter(function ($client) use ($statusFilter) {
                 return $client->is_active() == $statusFilter;
             });

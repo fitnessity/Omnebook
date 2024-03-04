@@ -406,6 +406,15 @@ class Customer extends Authenticatable
         return $results; 
     }
 
+    public function customerAtRisk(){
+        $activeMemberships = $this->active_memberships();
+        $checkinData = BookingCheckinDetails::join('user_booking_details', 'booking_checkin_details.booking_detail_id', '=', 'user_booking_details.id')
+        ->whereIn('booking_checkin_details.booking_detail_id', $activeMemberships->pluck('id'))
+        ->where('booking_checkin_details.checked_at', '>=', Carbon::parse(date('Y-m-d'))->subDays(14))
+        ->exists();
+        return $checkinData ? 'Not-Risk' : 'At-Risk';
+    }
+
     public function expired_soon(){
         $company = $this->company_information;
         $now = Carbon::now();

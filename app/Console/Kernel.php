@@ -118,10 +118,10 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function (){
             $expiredCreditCards = StripePaymentMethod::where(function ($query) {
-                $query->where('exp_year', '<', Carbon::now()->year)
+                $query->where('exp_year', '<', Carbon::now()->year)->where('mail_status',0)
                     ->orWhere(function ($query) {
                         $query->where('exp_year', '=', Carbon::now()->year)
-                            ->where('exp_month', '<', Carbon::now()->month);
+                            ->where('exp_month', '<', Carbon::now()->month)->where('mail_status',0);
                     });
             })->get();
             foreach($expiredCreditCards as $ecc){

@@ -3159,6 +3159,34 @@ code{
     margin-top:calc(1px - 1.5rem * 1.1);
     height:calc(100% + 1.5rem * 1.1)
 }
+@media (max-width:2500px){
+    .layout-rightside-col{
+        display:none;
+        position:fixed!important;
+        height:100vh;
+        right:0;
+        top:0;
+        bottom:0;
+        z-index:1004
+    }
+    .layout-rightside-col .overlay{
+        position:fixed;
+        top:0;
+        right:0;
+        bottom:0;
+        left:0;
+        background-color:rgba(33,37,41,.2)
+    }
+    .layout-rightside-col .layout-rightside{
+        margin-top:0;
+        height:100%;
+        margin-left:auto
+    }
+    .layout-rightside-col .card-body{
+        overflow-y:auto;
+        padding-bottom:1rem!important
+    }
+}
 @media (max-width:1699.98px){
     .layout-rightside-col{
         display:none;

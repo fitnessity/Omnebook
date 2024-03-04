@@ -1422,6 +1422,7 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/schedule_widget','DesignController@schedule_widget')->name('schedule_widget');
     Route::get('/deploy_widget','DesignController@deploy_widget')->name('deploy_widget');
     Route::get('/confirmation','DesignController@confirmation')->name('confirmation');
+    Route::get('/selfcheck_in_welcome','DesignController@selfcheck_in_welcome')->name('selfcheck_in_welcome');
 });
 
 ?>

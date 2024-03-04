@@ -121,6 +121,8 @@
 																		<option value="InActive" @if($statusFilter == 'InActive') selected @endif>InActive</option>
 																		<option value="Prospect" @if($statusFilter == 'Prospect') selected @endif>Prospect</option>
 																		<option value="NoAddress" @if($statusFilter == 'NoAddress') selected @endif> No Address Added</option>
+																		<option value="Birthday" @if($statusFilter == 'Birthday') selected @endif> Birthday</option>
+																		<option value="At-Risk" @if($statusFilter == 'At-Risk') selected @endif> At-Risk</option>
 																	</select>
 																</div>
 															</div>
