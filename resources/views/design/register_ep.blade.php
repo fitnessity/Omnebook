@@ -6,114 +6,62 @@
 	@include('layouts.business.new-header')
 
 
-	<div class="page-content-register">
-        <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
-            <div class="bg-overlay"></div>
-
-            <div class="shape">
-                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
-                    <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
-                </svg>
-            </div>
-        </div>
+	<div class="">
+    
         <!-- auth page content -->
         <div class="auth-page-content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="text-center mt-sm-5 mb-4 text-white-50">
-                            <div class="register-logo-middle">
-                                <a href="#" class="d-inline-block auth-logo">
+            <div class="container-fuild">             
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 back-check-img" style="background-image:url(../dashboard-design/images/check-in-bg.jpg)">
+                        <div class="card-check-in p-relative h-100">
+                            <div class="pb-60">
+                                <a href="#" class="register-check">
                                     <img src="http://dev.fitnessity.co//public/images/fitnessity_logo1_black.png" alt="logo">
                                 </a>
-                            </div>
+                            </div>   
+                            <div class="welcome-provider">
+                                <h3>Welcome to</h3>
+                                <span>Fitness Pvt. Ltd.</span>
+                                <p>Please select a check-in option to the right. </p>
+                            </div>   
+                            <div class="self-check-arrow">
+                                <i class="fas fa-long-arrow-alt-left"></i>
+                            </div>                         
                         </div>
                     </div>
-                </div>
-                <!-- end row -->
-
-                <div class="row justify-content-center">
-                    <div class="col-md-8 col-lg-6 col-xl-12">
-                        <div class="card mt-4 z-1">
-                            <div class="card-body p-4 ">
-                                <div class="mt-70 mb-70 cross-check">
-                                    <div class="row mt-4">
-                                        <div class="col-lg-12">
-                                            <div class="text-center self-check-sp">
-                                                <label for="" class="fs-20 font-red mb-3">Self Check-In</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-5">
-                                            <div class="text-center">
-                                                <label class="fs-16 m-b-50 font-red">Already have an account?</label>
-                                            </div>
-                                            <div class="text-center reg-up-img">
-                                                <div class="mb-3">
-                                                <img src="http://dev.fitnessity.co//public/dashboard-design/images/u-login.png" alt="logo">
-                                                </div>
-                                            </div>
-                                            <div class="p-relative mb-25">
-                                                <form class="form">
-                                                    <input type="email" class="form-control" placeholder="Enter phone number or email" />
-                                                    <button type="button" class="uppercase btn btn-link inner-btn position-absolute end-0 top-0 text-decoration-none shadow-none text-muted password-addon"><i class="fas fa-arrow-right"></i></button>
-                                                </form>
-                                            </div>
-                                            <div class="or-text p-relative pt-15 pb-15">
-                                                <div class="border-bottom-or"></div>
-                                                <div class="or-set-btn">
-                                                    <label>OR</label>
-                                                </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <button type="button" class="btn-red-primary btn-red mt-25 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">Enter a quick four digit code </button>
-                                            </div>
-                                            
-                                           <!-- <form action="">
-                                                <div class="mb-3">
-                                                    <label for="username" class="form-label">Enter Email Address or Phone Number</label>
-                                                    <input type="text" class="form-control" id="username" placeholder="Enter phone or email">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <button type="button" class="btn-red-primary btn-red mt-15 w-100">Submit </button>
-                                                </div>                            
-                                            </form> -->
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <div class="border-start p-4 h-100 d-flex flex-column center-border"></div>
-                                        </div>
-                                        <div class="col-lg-5">
-                                            <div class="text-center d-grid">
-                                                <label class="fs-16 font-red">New to Fitnessity</label>
-                                                <label class="fs-16 m-b-50 font-red">Create A New Account</label>
-                                            </div>
-                                            <div class="text-center sign-up-img">
-                                                <img src="http://dev.fitnessity.co//public/dashboard-design/images/reg.png" alt="logo">
-                                            </div>
-                                            <form action="">
-                                                <div class="mb-3">
-                                                    <a href="http://dev.fitnessity.co/business/68/create-customer" class="btn-red-primary btn-red w-100"><i class="ri-add-line align-bottom me-1"></i>Create Account</a>
-                                                </div>                            
-                                            </form>
-                                        </div>
-                                    </div>
-                                   
+                    <div class="col-lg-6 nopadding">
+                        <div class="card-check-in bg-white">
+                            <div class="text-center">
+                                <label class="fs-16 m-b-50 font-red">Already have an account?</label>
+                            </div>
+                            <div class="text-center reg-up-img">
+                                <div class="mb-3">
+                                    <img src="http://dev.fitnessity.co//public/dashboard-design/images/u-login.png" alt="logo">
                                 </div>
                             </div>
-                           
-                            <!-- end card body -->
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="text-right powerby">
-                                <img class="mr-15" src="http://dev.fitnessity.co//public/images/fit-logo.png" alt="logo">
-                                <button type="button" class="btn btn-black" data-bs-toggle="modal" data-bs-target="#exit">Exit</button>
+                            <div class="row justify-content-center">
+                                <div class="col-lg-6">
+                                    <div class="p-relative mb-25">
+                                        <form class="form">
+                                            <input type="email" class="form-control" placeholder="Enter phone number or email">
+                                            <button type="button" class="uppercase btn btn-link inner-btn position-absolute end-0 top-0 text-decoration-none shadow-none text-muted password-addon"><i class="fas fa-arrow-right"></i></button>
+                                        </form>
+                                    </div>
+                                    <div class="or-text p-relative pt-15 pb-15">
+                                        <div class="border-bottom-or"></div>
+                                            <div class="or-set-btn">
+                                                <label>OR</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="button" class="btn-red-primary btn-red mt-25 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">Enter a quick four digit code </button>
+                                        </div>
+                                    </div> 
+                                </div>
                             </div>
-                        </div>
-                        
-
-                        <!-- end card -->
+                        </div>       
                     </div>
                 </div>
-                <!-- end row -->
             </div>
             <!-- end container -->
         </div>

@@ -347,5 +347,9 @@ class DesignController extends Controller {
     public function confirmation(Request $request){
         return view('design.confirmation');
     }
+
+    public function selfcheck_in_welcome(Request $request){
+        return view('design.selfcheck_in_welcome');
+    }
 }
 

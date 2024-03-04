@@ -20,6 +20,7 @@ class StripePaymentMethod extends Model
         'last4',
         'primary',
         'brand',
+        'mail_status',
     ];
 
     public static function boot(){
@@ -82,6 +83,9 @@ class StripePaymentMethod extends Model
                     );
                     SGMailService::creditCardExpiredToCustomer($emailDetailCustomer);
                     SGMailService::creditCardExpiredToProvider($emailDetailProvider);
+
+                    $this->mail_status == 1;
+                    $this->update();
                 }
             }
         }else{
@@ -94,6 +98,8 @@ class StripePaymentMethod extends Model
                     'temp_id'=> 'd-be2806a628fd4d03ae17e70afba7f3e0',
                 );
                 SGMailService::creditCardExpiredORExpringToUser($emailDetailUser);
+                $this->mail_status == 1;
+                $this->update();
             }
         }
     }

@@ -65,8 +65,8 @@ class BusinessController extends Controller
             $customerCount = @$business->customers()->whereYear('created_at', '>=', $startDateYear)->whereMonth('created_at', '>=', $startDateMonth)->whereYear('created_at', '<=', $endDateYear)->whereMonth('created_at', '<=', $endDateMonth)->count();
 
             $priviousCustomerCount = @$business->customers()->whereYear('created_at', '>=', $startDateYear)->whereMonth('created_at', '>=', $startDateMonth - 1)->whereYear('created_at', '<=', $endDateYear - 1)->whereMonth('created_at', '<=', $endDateMonth)->count();
-            $bookingCount = $business->UserBookingDetails()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->count();
-            $priviousBookingCount = $business->UserBookingDetails()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->count();
+            $bookingCount = $business->UserBookingDetails()->whereYear('created_at', '>=', $startDateYear)->whereMonth('created_at', '>=', $startDateMonth)->whereYear('created_at', '<=', $endDateYear)->whereMonth('created_at', '<=', $endDateMonth)->count();
+            $priviousBookingCount = $business->UserBookingDetails()->whereYear('created_at', '>=', $startDateYear)->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->whereYear('created_at', '<=', $endDateYear - 1)->count();
             
             $customerCountPercentage =  $priviousCustomerCount != 0 ? number_format(($customerCount - $priviousCustomerCount)*100/$priviousCustomerCount,2,'.','') : 0;
             $bookingCountPercentage = $priviousBookingCount != 0 ? number_format(($bookingCount - $priviousBookingCount)*100/$priviousBookingCount,2,'.',''): 0; 
