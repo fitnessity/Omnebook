@@ -7166,22 +7166,22 @@ p.or-data {
   width: 200px;
 }
 .wel-date-time span{
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 600;
 }
 .wel-date-time h3{
-  font-size: 24px;
+  font-size: 35px;
   font-weight: 600;
 }
 
 .welcome-title label{
-  font-size: 45px;
+  font-size: 55px;
   padding: 55px 0px 0px 0px;
   margin-bottom: 0px;
   font-weight: 500;
 }
 .welcome-title span{
-  font-size: 45px;
+  font-size: 55px;
   font-weight: 500;
   padding: 0px 0px 55px 0px;
 }
@@ -7189,7 +7189,7 @@ p.or-data {
   padding: 55px 0px 0px 0px;
 }
 .qr-code img{
-  width: 100%;
+  width: 185px;
   margin-bottom: 15px;
 }
 .qr-code p{
@@ -7207,7 +7207,7 @@ p.or-data {
   width: 225px;
 }
 .card-check-in{
-  padding: 50px 100px;
+  padding: 200px 100px;
 }
 .pb-60{
   padding-bottom: 60px;
@@ -7227,4 +7227,15 @@ p.or-data {
   position: absolute;
   bottom: 20px;
   font-size: 25px;
+}
+.self-check-sp{
+  padding: 150px 55px !important;
+}
+.regi-qr-code{
+  position: absolute;
+  top: 30px;
+  right: 40px;
+}
+.regi-qr-code img {
+  width: 125px;
 }

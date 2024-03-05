@@ -466,23 +466,25 @@ class ClientReportController extends BusinessBaseController
         $filter = $request->filter;
         $genderFilter = $request->genderFilter;
         $statusFilter = $request->statusFilter;
-         $today = Carbon::today();
-        $clients = $this->contactListQuery($business_id)->when($genderFilter, function($query) use ($genderFilter) {
-            return $query->whereNotNull('gender')
-                 ->where('gender', '!=', '')
-                 ->whereRaw('LOWER(gender) = ?', [strtolower($genderFilter)]);
-        })->when($statusFilter == 'Birthday', function($query) use ($genderFilter,$today) {
+        $today = Carbon::today();
+
+        $clients = $this->contactListQuery($business_id)
+            ->when($genderFilter, function($query) use ($genderFilter) {
+                return $query->whereNotNull('gender')
+                             ->where('gender', '!=', '')
+                             ->whereRaw('LOWER(gender) = ?', [strtolower($genderFilter)]);
+            })->when($statusFilter == 'Birthday', function($query) use ($genderFilter,$today) {
                 return $query->whereNotNull('birthdate')->whereRaw('MONTH(birthdate) = ? AND DAY(birthdate) = ?', [$today->month, $today->day]);
             
             })->get();
 
-        if($filter) {
+        if ($filter) {
             $clients = $clients->filter(function ($client) use ($filter) {
                 return $client->customer_type == $filter;
             });
-        } 
-        
-        if($statusFilter != '' && $statusFilter != 'Birthday' && $statusFilter != 'NoAddress') {
+        }
+
+        if($statusFilter == 'Active' && $statusFilter == 'InActive' && $statusFilter == 'Prospect') {
             $clients = $clients->filter(function ($client) use ($statusFilter) {
                 return $client->is_active() == $statusFilter;
             });
@@ -490,9 +492,13 @@ class ClientReportController extends BusinessBaseController
             $clients = $clients->filter(function ($client) use ($statusFilter) {
                 return $client->full_address() == 'N/A';
             });
+        }else if($statusFilter == 'At-Risk'){
+            $clients = $clients->filter(function ($client) use ($statusFilter) {
+                return $client->customerAtRisk() == $statusFilter;
+            });
         }
 
-        $clients =  $clients->values();;
+        $clients =  $clients->values(); 
 
         $heading = 'Contact List Report';
         $excelFileName = 'contact-list.xlsx';
