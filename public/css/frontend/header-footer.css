@@ -353,7 +353,7 @@ button.header-right-menu {
     background: #cb3e2d
 }
 .btn-list-business:hover {
-  color: #fff;
+  color: #fff !important;
   background: #000;
   border: 1px solid #000 !important;
 }

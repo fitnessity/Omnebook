@@ -14,12 +14,12 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-6 back-check-img" style="background-image:url(../dashboard-design/images/check-in-bg.jpg)">
                         <div class="card-check-in p-relative h-100">
-                            <div class="pb-60">
+                            <div class="pb-60 text-center">
                                 <a href="#" class="register-check">
                                     <img src="http://dev.fitnessity.co//public/images/fitnessity_logo1_black.png" alt="logo">
                                 </a>
                             </div>   
-                            <div class="welcome-provider">
+                            <div class="welcome-provider text-center">
                                 <h3>Welcome to</h3>
                                 <span>Fitness Pvt. Ltd.</span>
                                 <p>Please select a check-in option to the right. </p>
@@ -31,6 +31,9 @@
                     </div>
                     <div class="col-lg-6 nopadding">
                         <div class="card-check-in bg-white">
+                            <div class="regi-qr-code">
+                                <img src="http://dev.fitnessity.co//public/dashboard-design/images/qr-code.png" alt="logo">
+                            </div>
                             <div class="text-center">
                                 <label class="fs-16 m-b-50 font-red">Already have an account?</label>
                             </div>

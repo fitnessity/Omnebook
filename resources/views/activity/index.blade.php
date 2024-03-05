@@ -325,11 +325,11 @@
 					                  $pic_image = explode(',',$service['profile_pic']);
 											$bookscheduler = App\BusinessActivityScheduler::where('serviceid', $service['id'])->orderBy('id', 'ASC')->first();
 											$time = @$bookscheduler != '' ? @$bookscheduler->get_duration() : '';
-											$price_all = $bookscheduler->business_service->min_price();
+											$price_all = (@$bookscheduler->business_service !='')  ? $bookscheduler->business_service->min_price() : 0;
 		                    	?>
 								
 									<div class="item">
-										<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
+										<div class="selectProduct" data-id="{{ @$service['id'] }}" data-title="{{ @$service['program_name'] }}" data-name="{{ @$service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
 										
 											<div class="kickboxing-block">
 												@if(Auth::check())

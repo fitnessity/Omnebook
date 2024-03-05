@@ -59,6 +59,7 @@
 					@endif
 					<th>Phone Number </th>
 					<th>Customer Type</th>
+					<th>Status</th>
 				</tr>
 				@forelse($clients as $i=>$list)
 					<tr>
@@ -74,6 +75,7 @@
 						@endif
 						<td>{{@$list->phone_number ?? 'N/A'}}</td>
 						<td>{{@$list->customer_type}}</td>
+						<td>{{@$list->is_active()}}</td>
 					</tr>
 				@empty
 					<tr> <td @if($listType == 'mailing-list') colspan="10" @else colspan="6" @endif></td> </tr>
