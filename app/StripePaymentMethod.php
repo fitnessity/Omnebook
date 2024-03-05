@@ -81,11 +81,12 @@ class StripePaymentMethod extends Model
                         'userdata'=> $this->Customer,
                         'email'=> $company->business_email,
                     );
-                    SGMailService::creditCardExpiredToCustomer($emailDetailCustomer);
-                    SGMailService::creditCardExpiredToProvider($emailDetailProvider);
 
-                    $this->mail_status == 1;
-                    $this->update();
+                    $status = SGMailService::creditCardExpiredToCustomer($emailDetailCustomer);
+                    $status1 =SGMailService::creditCardExpiredToProvider($emailDetailProvider);
+
+                    $this->update(['mail_status' => 1]);
+                   
                 }
             }
         }else{
@@ -98,8 +99,7 @@ class StripePaymentMethod extends Model
                     'temp_id'=> 'd-be2806a628fd4d03ae17e70afba7f3e0',
                 );
                 SGMailService::creditCardExpiredORExpringToUser($emailDetailUser);
-                $this->mail_status == 1;
-                $this->update();
+                $this->update(['mail_status' => 1]);
             }
         }
     }

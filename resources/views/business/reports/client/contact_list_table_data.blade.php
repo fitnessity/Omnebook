@@ -12,6 +12,7 @@
 		@endif
 		<td>{{@$list->phone_number ?? 'N/A'}}</td>
 		<td>{{@$list->customer_type}}</td>
+		<td>{{@$list->is_active()}}</td>
 	</tr>
 @empty
 @endforelse

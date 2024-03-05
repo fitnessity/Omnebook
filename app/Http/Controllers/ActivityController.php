@@ -232,7 +232,6 @@ class ActivityController extends Controller {
 				'getstarteddata'=>$getstarteddata,
 			]);    
 		}else{
-			DB::enableQueryLog();
 			$all_activities = BusinessServices::where('business_services.is_active', 1);
 
 			$this_nthactivity = BusinessServices::where('business_services.is_active', 1)->whereMonth('business_services.CREATED_AT', date('Y-m'));
@@ -254,20 +253,39 @@ class ActivityController extends Controller {
 	        $searchDatauserProfile = $searchDatabusiness = $searchDataacivity = '';
 
 	        if($request->label != ''){
-				$all_activities = $all_activities->where('sport_activity', 'LIKE', '%'. $request->label . '%');  
-				$this_nthactivity = $this_nthactivity->where('sport_activity', 'LIKE', '%'. $request->label . '%');  
-				$most_popularactivity = $most_popularactivity->where('sport_activity', 'LIKE', '%'. $request->label . '%');  
-				$Trainers_coaches_acitvity = $Trainers_coaches_acitvity->where('sport_activity', 'LIKE', '%'. $request->label . '%');  
-				$Fun_Activities = $Fun_Activities->where('sport_activity', 'LIKE', '%'. $request->label . '%');  
-				$Ways_To_Work_out = $Ways_To_Work_out->where('sport_activity', 'LIKE', '%'. $request->label . '%');  
-				$events_activity = $events_activity->where('sport_activity', 'LIKE', '%'. $request->label . '%');  
-				$nxtact = $nxtact->where('sport_activity', 'LIKE', '%'. $request->label . '%');  
-				$searchDatauserProfile = User::where('username', 'LIKE', '%'.$request->label.'%')->first();
+				$all_activities = $all_activities->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+				$this_nthactivity = $this_nthactivity->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+				$most_popularactivity = $most_popularactivity->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+				$Trainers_coaches_acitvity = $Trainers_coaches_acitvity->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+				$Fun_Activities = $Fun_Activities->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+				$Ways_To_Work_out = $Ways_To_Work_out->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+				$events_activity = $events_activity->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+				$nxtact = $nxtact->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+
+				$searchDatauserProfile = User::where('username', $request->label)->first();
+	            $searchDatabusiness = CompanyInformation::where('dba_business_name',$request->label)->first();
+	            $searchDataacivity = BusinessServices::where('program_name',$request->label)->first();
+
+				/*$searchDatauserProfile = User::where('username', 'LIKE', '%'.$request->label.'%')->first();
 	            $searchDatabusiness = CompanyInformation::where('dba_business_name','LIKE', '%'.$request->label.'%')->first();
-	            $searchDataacivity = BusinessServices::where('program_name','LIKE', '%'.$request->label.'%')->first();
+	            $searchDataacivity = BusinessServices::where('program_name','LIKE', '%'.$request->label.'%')->first();*/
             }
 
-			if($request->country != ''){
+            if($request->address){
+
+            	if (is_numeric($request->address)){
+					$all_activities = $this->buildQuery($all_activities,'zip_code',$request->address);
+					$this_nthactivity = $this->buildQuery($this_nthactivity,'zip_code',$request->address);
+					$most_popularactivity = $this->buildQuery($most_popularactivity,'zip_code',$request->address);
+					$Trainers_coaches_acitvity = $this->buildQuery($Trainers_coaches_acitvity,'zip_code',$request->address);
+					$Fun_Activities = $this->buildQuery($Fun_Activities,'zip_code',$request->address);
+					$Ways_To_Work_out = $this->buildQuery($Ways_To_Work_out,'zip_code',$request->address);
+					$events_activity = $this->buildQuery($events_activity,'zip_code',$request->address);
+					$nxtact = $this->buildQuery($nxtact,'zip_code',$request->address);
+				}
+            }
+
+			if($request->country){
             	$all_activities = $this->buildQuery($all_activities,'country',$request->country);
 				$this_nthactivity = $this->buildQuery($this_nthactivity,'country',$request->country);
 				$most_popularactivity = $this->buildQuery($most_popularactivity,'country',$request->country);
@@ -278,7 +296,7 @@ class ActivityController extends Controller {
 				$nxtact = $this->buildQuery($nxtact,'country',$request->country);
             }
 
-			if($request->city != ''){
+			if($request->city){
 				$all_activities = $this->buildQuery($all_activities,'city',$request->city);
 				$this_nthactivity = $this->buildQuery($this_nthactivity,'city',$request->city);
 				$most_popularactivity = $this->buildQuery($most_popularactivity,'city',$request->city);
@@ -289,7 +307,7 @@ class ActivityController extends Controller {
 				$nxtact = $this->buildQuery($nxtact,'city',$request->city);
             }
 
-            if($request->state != ''){
+            if($request->state){
             	$all_activities = $this->buildQuery($all_activities,'state',$request->state);
 				$this_nthactivity = $this->buildQuery($this_nthactivity,'state',$request->state);
 				$most_popularactivity = $this->buildQuery($most_popularactivity,'state',$request->state);
@@ -300,7 +318,7 @@ class ActivityController extends Controller {
 				$nxtact = $this->buildQuery($nxtact,'state',$request->state);
             }
 
-            if($request->zip_code != ''){
+            if($request->zip_code){
             	$all_activities = $this->buildQuery($all_activities,'zip_code',$request->zip_code);
 				$this_nthactivity = $this->buildQuery($this_nthactivity,'zip_code',$request->zip_code);
 				$most_popularactivity = $this->buildQuery($most_popularactivity,'zip_code',$request->zip_code);
@@ -311,7 +329,7 @@ class ActivityController extends Controller {
 				$nxtact = $this->buildQuery($nxtact,'zip_code',$request->zip_code);
             }
    
-			if($filtervalue != ''){
+			if($filtervalue){
 				if(str_contains($filtervalue, 'activity_type')){
 					$activity = substr($filtervalue, strpos($filtervalue, "activity_type=") +14);
 					$activity = explode('~',$activity );
@@ -957,8 +975,7 @@ class ActivityController extends Controller {
 	        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtacty->pluck('id'))->limit(3)->get();
 	       
 			$allactivities = $all_activities->limit(10)->get();
-			/*dd(DB::getQueryLog());*/
-			/*print_r($allactivities);exit();*/
+			
 			$thismonthactivity = $this_nthactivity->limit(10)->get();
 			$mostpopularactivity = $most_popularactivity->limit(10)->get();
 			$Trainers_coachesacitvity  = $Trainers_coaches_acitvity->limit(10)->get();
