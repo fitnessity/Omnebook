@@ -25,7 +25,7 @@ class Recurring extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [ 'booking_detail_id', 'user_id', 'user_type', 'business_id', 'payment_date', 'amount', 'tax', 'charged_amount', 'payment_method', 'stripe_payment_id', 'status','transfer_provider_status','provider_amount','provider_transaction_id','attempt','payment_number','payment_on'];
+    protected $fillable = [ 'booking_detail_id', 'user_id', 'user_type', 'business_id', 'payment_date', 'amount', 'tax', 'charged_amount', 'payment_method', 'stripe_payment_id', 'status','transfer_provider_status','provider_amount','provider_transaction_id','attempt','payment_number','payment_on','error_msg'];
     protected $appends = ['total_amount' ,'card','customer_name' ,'customer_id','membership_name'];
 
      public function getTotalAmountAttribute(){
@@ -174,7 +174,7 @@ class Recurring extends Authenticatable
             'Website' => env('APP_URL'),
             'url'=> env('APP_URL').'personal/manage-account',
         );
-
+       
         if($cardID != '' && $stripeCustomerId != ''){
             try {
                 $totalPrice = ($this->amount + $this->tax )*100;
@@ -208,14 +208,62 @@ class Recurring extends Authenticatable
                     'payload' =>json_encode($paymentIntent,true),
                 );
                 $transactionstatus = Transaction::create($transactiondata);
-
                 $this->charged();
-            }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e ) {
+            }catch(\Stripe\Exception\CardException $e ) {
+                $this->error_msg = $e->getError()->message;
                 $this->payment_method = NULL;
+                $this->attempt += 1;
                 $this->status = "Retry";
+            }catch(\Stripe\Exception\ApiErrorException  $e ) {
+                $this->error_msg = $e->getMessage();
+                $this->payment_method = NULL;
+                $this->attempt += 1;
+                $this->status = "Retry";
+            }catch(\Stripe\Exception\AuthenticationException  $e ) {
+                $this->error_msg = "Stripe can’t authenticate you with the information provided";
+                $this->payment_method = NULL;
+                $this->attempt += 1;
+                $this->status = "Retry";
+            }catch(\Stripe\Exception\InvalidRequestException $e ) {
+                $this->error_msg = 'An invalid request occurred in stripe';
+                if (isset($e->getError()->param)) {
+                    $this->error_msg =  "The parameter {$e->getError()->param} is invalid or missing.";
+                }
+
+                $this->payment_method = NULL;
+                $this->attempt += 1;
+                $this->status = "Retry";
+            }catch(\Stripe\Exception\RateLimitException $e ) {
+                $this->error_msg = "Our system is currently experiencing a high volume of requests, and as a result, we've received too many API calls in a short period of time. We will try again later. We apologize for any inconvenience";
+                $this->payment_method = NULL;
+                $this->attempt += 1;
+                $this->status = "Retry";
+            }catch(\Stripe\Exception\StripeApiException $e ) {
+                $this->error_msg = $e->getError()->message;
+                $this->payment_method = NULL;
+                $this->attempt += 1;
+                $this->status = "Retry";
+            }catch(\Stripe\Exception\NetworkException $e ) {
+                $this->error_msg = $e->getError()->message;
+                $this->payment_method = NULL;
+                $this->attempt += 1;
+                $this->status = "Retry";
+            }catch(\Stripe\Exception\InvalidResponseException  $e ) {
+                $this->error_msg = "We're sorry, but there was a problem processing your payment due to a network error. Please try again later";
+                $this->payment_method = NULL;
+                $this->attempt += 1;
+                $this->status = "Retry";
+            }catch(\Stripe\Exception\StripeServerException   $e ) {
+                $this->error_msg = $e->getError()->message;
+                $this->payment_method = NULL;
+                $this->attempt += 1;
+                $this->status = "Retry";
+            }catch (Exception $e) {
+                $this->error_msg = 'Another problem occurred, maybe unrelated to Stripe';
+                $this->status = "Retry";
+                $this->attempt += 1;
             }finally {
                 $this->save();
-
                 if($this->attempt != 'complete'){
                     SGMailService::sendAutoPayFaildAlertToProvider($emailDetailProvider);
                     SGMailService::sendAutoPayFaildAlertToCustomer($emailDetailCustomer);

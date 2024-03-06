@@ -41,16 +41,16 @@ class Kernel extends ConsoleKernel
                     var_dump($errormsg);
                 }
             }
-        })->everyTenMinutes();
+        })->daily();
 
         $schedule->call(function () {
-            var_dump('run recurring');
-            $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->where('attempt' ,'<' ,3)->where('status','!=','Completed')->orderBy('created_at','desc')->get();
+            $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->where('attempt' ,'<' ,3)->where('status','!=','Completed')->orderBy('created_at','desc')->limit(1)->get();
+
             //print_r($recurringDetails);exit();
             foreach($recurringDetails as $recurringDetail){
                 $recurringDetail->createRecurringPayment();
             }
-        })->everyMinute();
+        })->daily();
 
         $schedule->call(function () {
             $userBookingDetails = UserBookingDetail::whereDate("expired_at", ">=" ,date('Y-m-d'))->get();
@@ -127,7 +127,7 @@ class Kernel extends ConsoleKernel
             foreach($expiredCreditCards as $ecc){
                 $ecc->checkExpiredCard();
             }
-        })->everyMinute();
+        })->daily();
 
         $schedule->call(function (){
             $expiringCreditCards = StripePaymentMethod::where('exp_year', '=', Carbon::now()->year)->where('exp_month', '=', Carbon::now()->month)->get();
@@ -135,7 +135,7 @@ class Kernel extends ConsoleKernel
             foreach($expiringCreditCards as $ecc){
                 $ecc->checkExpiringCard();
             }
-        })->everyMinute();
+        })->daily();
     }
 
     protected function scheduleTimezone()
