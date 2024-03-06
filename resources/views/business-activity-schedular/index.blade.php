@@ -80,7 +80,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																@php  
 																	if($priceid != ''){
 																		$pricelist =  @$ser->price_details()->find($priceid);
-																		if(@$pricelist->business_price_details_ages != ''){
+																		if(@$pricelist->business_price_details_ages){
 																			$categoryList [] = @$pricelist->business_price_details_ages;
 																		}
 																	}else{
@@ -95,7 +95,12 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																$categoryListFull = collect($categoryList)->sortBy(function ($item) 		{
 																	    $earliestStartTime = $item->BusinessActivityScheduler->min('shift_start');
 																	    return $earliestStartTime ?: PHP_INT_MAX;
-																	});
+																	})->values()->each(function ($item, $index) use (&$categoryListFull) {
+																        $categoryListFull[$index] = $item;
+																    });
+
+
+																	//print_r($categoryListFull);exit;
 															@endphp 
 
 															@if(!empty($categoryListFull) && count($categoryListFull)>0)

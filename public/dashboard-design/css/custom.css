@@ -6410,9 +6410,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   vertical-align: top;
   position: relative;
 }
-.self-check-sp{
+/* .self-check-sp{
   margin-bottom: 70px;
-}
+} */
 .mb-70{
   margin-bottom: 70px;
 }
@@ -7175,18 +7175,18 @@ p.or-data {
 }
 
 .welcome-title label{
-  font-size: 55px;
-  padding: 55px 0px 0px 0px;
+  font-size: 75px;
+  padding: 105px 0px 0px 0px;
   margin-bottom: 0px;
   font-weight: 500;
 }
 .welcome-title span{
-  font-size: 55px;
+  font-size: 75px;
   font-weight: 500;
   padding: 0px 0px 55px 0px;
 }
 .qr-code{
-  padding: 55px 0px 0px 0px;
+  padding: 135px 0px 0px 0px;
 }
 .qr-code img{
   width: 185px;
@@ -7229,13 +7229,13 @@ p.or-data {
   font-size: 25px;
 }
 .self-check-sp{
-  padding: 150px 55px !important;
+  padding: 50px 55px 140px;
 }
-.regi-qr-code{
-  position: absolute;
-  top: 30px;
-  right: 40px;
+.fall-schedule{
+  padding-right: 0px;
+  padding-left: 0px;
 }
-.regi-qr-code img {
-  width: 125px;
+.bg-red-fall{
+  background: #ea1515 !important;
+  color: #fff;
 }

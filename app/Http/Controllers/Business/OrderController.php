@@ -608,8 +608,8 @@ class OrderController extends BusinessBaseController
         $html = $result = '';
         $salestaxajax = $duestaxajax = 0;
         $request->priceid = $request->priceid == 0 ? '' : $request->priceid;
-        if(in_array($request->customerId.'~~'.$request->priceid.'^~'.$request->orderType, array_keys($cart_item["cart_item"]))) {
-            $cart = $cart_item["cart_item"][$request->customerId.'~~'.$request->priceid.'^~'.$request->orderType];
+        if(in_array($request->customerId.'~~'.$request->priceid.'^~'.$request->productIds.''.$request->orderType, array_keys($cart_item["cart_item"]))) {
+            $cart = $cart_item["cart_item"][$request->customerId.'~~'.$request->priceid.'^~'.$request->productIds.''.$request->orderType];
             $cartselectedpriceid = BusinessPriceDetails::where('id',$cart['priceid'])->first();
             $cartselectedcategory = BusinessPriceDetailsAges::where('id',$cart['categoryid'])->first();
             $program_list = BusinessServices::where(['is_active'=>1,'userid'=>Auth::user()->id])->get();
@@ -653,7 +653,7 @@ class OrderController extends BusinessBaseController
     }
 
     public function addToCartForCheckout(Request $request){
-        //print_r($request->all());exit;
+        //print_r($request->all()); //exit;
         $customerId = $request->pc_regi_id;
         $cart_item = $request->session()->has('cart_item_for_checkout') ? $request->session()->get('cart_item_for_checkout') : [];
         $tax = $request->has('value_tax') != '' ? $request->value_tax : 0;
@@ -705,13 +705,19 @@ class OrderController extends BusinessBaseController
             unset($cart_item["cart_item"][$request->deletepid]);
         }
 
+        if($orderType == 'Product'){
+            $matchOrderType = $productIds.''.$orderType;
+        }else{
+            $matchOrderType = $orderType;
+        }
+
         if ($service != '' || $productIds != '') {
-            $itemArray = array($customerId.'~~'.$request->priceid.'^~'.$orderType=>array('type'=>@$service->service_type, 'name'=>@$service->program_name, 'code'=>@$service->id,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'tax'=>$tax,'tax_activity'=>$tax_activity,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'categoryid'=>$categoryid ,'p_session'=>$p_session,'addOnServicesId'=> $addOnServicesId, 'addOnServicesQty' => $addOnServicesQty, 'addOnServicesTotalPrice' => $addOnServicesTotalPrice, 'aos_details' => $aos_details, 'product_details' => $product_details,'productIds' => $productIds, 'productQtys' => $productQtys, 'productSize' => $productSize, 'productColor' => $productColor, 'productTypes' =>$productTypes ,'productTotalPrices' =>$productTotalPrices, 'customerId' => $customerId ,'orderType' =>$orderType));
-    
+            $itemArray = array($customerId.'~~'.$request->priceid.'^~'.$matchOrderType=>array('type'=>@$service->service_type, 'name'=>@$service->program_name, 'code'=>@$service->id,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'tax'=>$tax,'tax_activity'=>$tax_activity,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'categoryid'=>$categoryid ,'p_session'=>$p_session,'addOnServicesId'=> $addOnServicesId, 'addOnServicesQty' => $addOnServicesQty, 'addOnServicesTotalPrice' => $addOnServicesTotalPrice, 'aos_details' => $aos_details, 'product_details' => $product_details,'productIds' => $productIds, 'productQtys' => $productQtys, 'productSize' => $productSize, 'productColor' => $productColor, 'productTypes' =>$productTypes ,'productTotalPrices' =>$productTotalPrices, 'customerId' => $customerId ,'orderType' =>$orderType));
+        
             if(!empty($cart_item["cart_item"])) {
-                if(in_array($customerId.'~~'.$request->priceid.'^~'.$orderType, array_keys($cart_item["cart_item"]))) {
+                if(in_array($customerId.'~~'.$request->priceid.'^~'.$matchOrderType, array_keys($cart_item["cart_item"]))) {
                     foreach($cart_item["cart_item"] as $k => $v) {
-                        if($customerId.'~~'.$request->priceid.'^~'.$orderType == $k) {
+                        if($customerId.'~~'.$request->priceid.'^~'.$matchOrderType == $k) {
                             $cart_item["cart_item"][$k]["actscheduleid"] = $actscheduleid;
                             $cart_item["cart_item"][$k]["tip"] = $tip_amt_val;
                             $cart_item["cart_item"][$k]["discount"] = $dis_amt_val;
@@ -772,11 +778,12 @@ class OrderController extends BusinessBaseController
         
         if(!empty($cart_item["cart_item"])) {
             foreach($cart_item["cart_item"] as $k => $v) {
-                if($request->customerID.'~~'.@$_GET["priceid"].'^~'.$_GET["orderType"] == @$v['customerId'].'~~'.@$v['priceid'].'^~'.@$v["orderType"]) {
+                if($request->customerID.'~~'.@$_GET["priceid"].'^~'.$_GET["orderType"] == @$v['customerId'].'~~'.@$v['priceid'].'^~'.@$v["productIds"].@$v["orderType"]) {
                     unset($cart_item["cart_item"][$k]);
                 }
             }
         }
+
         if (isset($cart_item)) {
             $request->session()->put('cart_item_for_checkout', $cart_item);
         } else {

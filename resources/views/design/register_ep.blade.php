@@ -10,30 +10,27 @@
     
         <!-- auth page content -->
         <div class="auth-page-content">
-            <div class="container-fuild">             
+            <div class="container-fluid">
                 <div class="row justify-content-center">
-                    <div class="col-lg-6 back-check-img" style="background-image:url(../dashboard-design/images/check-in-bg.jpg)">
+                   <div class="col-lg-6 back-check-img"  style="background-image:url(../dashboard-design/images/check-in-bg.jpg)">
                         <div class="card-check-in p-relative h-100">
                             <div class="pb-60 text-center">
                                 <a href="#" class="register-check">
                                     <img src="http://dev.fitnessity.co//public/images/fitnessity_logo1_black.png" alt="logo">
                                 </a>
-                            </div>   
+                            </div>  
                             <div class="welcome-provider text-center">
                                 <h3>Welcome to</h3>
                                 <span>Fitness Pvt. Ltd.</span>
                                 <p>Please select a check-in option to the right. </p>
-                            </div>   
+                            </div>  
                             <div class="self-check-arrow">
                                 <i class="fas fa-long-arrow-alt-left"></i>
-                            </div>                         
+                            </div>  
                         </div>
                     </div>
                     <div class="col-lg-6 nopadding">
                         <div class="card-check-in bg-white">
-                            <div class="regi-qr-code">
-                                <img src="http://dev.fitnessity.co//public/dashboard-design/images/qr-code.png" alt="logo">
-                            </div>
                             <div class="text-center">
                                 <label class="fs-16 m-b-50 font-red">Already have an account?</label>
                             </div>
@@ -42,27 +39,29 @@
                                     <img src="http://dev.fitnessity.co//public/dashboard-design/images/u-login.png" alt="logo">
                                 </div>
                             </div>
-                            <div class="row justify-content-center">
-                                <div class="col-lg-6">
-                                    <div class="p-relative mb-25">
-                                        <form class="form">
-                                            <input type="email" class="form-control" placeholder="Enter phone number or email">
-                                            <button type="button" class="uppercase btn btn-link inner-btn position-absolute end-0 top-0 text-decoration-none shadow-none text-muted password-addon"><i class="fas fa-arrow-right"></i></button>
-                                        </form>
-                                    </div>
-                                    <div class="or-text p-relative pt-15 pb-15">
-                                        <div class="border-bottom-or"></div>
-                                            <div class="or-set-btn">
-                                                <label>OR</label>
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-6">
+                                        <div class="p-relative mb-25">
+                                            <form class="form">
+                                                <input type="email" class="form-control" placeholder="Enter phone number or email">
+                                                <button type="button" class="uppercase btn btn-link inner-btn position-absolute end-0 top-0 text-decoration-none shadow-none text-muted"><i class="fas fa-arrow-right"></i></button>
+                                            </form>
+                                        </div>
+                                        <div class="or-text p-relative pt-15 pb-15">
+                                            <div class="border-bottom-or"></div>
+                                                <div class="or-set-btn">
+                                                    <label>OR</label>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <button type="button" class="btn-red-primary btn-red mt-25 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">Enter a quick four digit code </button>
-                                        </div>
-                                    </div> 
+                                            <div class="mb-3">
+                                                <button type="button" class="btn-red-primary btn-red mt-25 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">Enter a quick four digit code </button>
+                                            </div>
+                                        </div> 
+                                    </div>
                                 </div>
                             </div>
-                        </div>       
+                        </div>
                     </div>
                 </div>
             </div>
