@@ -265,14 +265,14 @@
                                 </div> -->
 
                                 <div class="row">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-3 col-md-3">
                                         <div class="row">
                                             <div class="col-lg-12 service-pr-0">
                                                 <div class="card-header bg-soft-grey">
                                                     <h4 class="card-title mb-0 flex-grow-1">Services</h4>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-12">
                                                 <div class="card-body">
                                                     <select class="form-select" name="know_from">
                                                         <option value="All Services" Selected>All Services</option>
@@ -285,15 +285,53 @@
                                             </div>
                                         </div>                                        
                                     </div>
-
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-3 col-md-3">
+                                        <div class="row">
+                                            <div class="col-lg-12 fall-schedule">
+                                                <div class="card-header bg-soft-grey">
+                                                    <h4 class="card-title mb-0 flex-grow-1">Great For</h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 fall-schedule">
+                                                <div class="card-body">
+                                                    <select class="form-select" name="know_from">
+                                                        <option value="All" Selected>All</option>
+                                                        <option value="adults">Adults</option>
+                                                        <option value="kids">Kids</option>
+                                                        <option value="infants">Infants</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <div class="col-lg-3 col-md-3">
+                                        <div class="row">
+                                            <div class="col-lg-12 fall-schedule">
+                                                <div class="card-header bg-soft-grey">
+                                                    <h4 class="card-title mb-0 flex-grow-1">Difficulty Level</h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 fall-schedule">
+                                                <div class="card-body">
+                                                    <select class="form-select" name="know_from">
+                                                        <option value="All Levels" Selected>All Levels</option>
+                                                        <option value="Beginner">Beginner</option>
+                                                        <option value="Intermediate">Intermediate</option>
+                                                        <option value="Advance">Advance</option>
+                                                        <option value="Pro">Pro</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <div class="col-lg-3 col-md-3">
                                         <div class="row">
                                             <div class="col-lg-12 staff-pl-0">
                                                 <div class="card-header bg-soft-grey">
                                                     <h4 class="card-title mb-0 flex-grow-1">All Staff</h4>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-12 staff-pl-0">
                                                 <div class="card-body">
                                                     <select class="form-select" name="know_from">
                                                         <option value="All Staff" Selected>All Staff</option>
@@ -381,7 +419,7 @@
                                             <div class="col-lg-2 col-md-2 col-xs-12 col-sm-2 col-12">
                                                 <div class="table-inner-data">
                                                     <span class="mg-time"> 06:30 AM </span>
-                                                    <div class="time-min">
+                                                    <div class="time-min bg-red-fall">
                                                         <span> 1 hour </span>
                                                     </div>
                                                 </div>
@@ -424,7 +462,7 @@
                                                         <div class="col-lg-2 col-md-2 col-xs-12 col-sm-2  col-12">
                                                             <div class="table-inner-data">
                                                                 <span class="mg-time"> 09:00 AM </span>
-                                                                <div class="time-min">
+                                                                <div class="time-min bg-red-fall">
                                                                     <span> 1 hour 15 minute </span>
                                                                 </div>
                                                             </div>
@@ -469,7 +507,7 @@
                                                         <div class="col-lg-2 col-md-2 col-xs-12 col-sm-2  col-12">
                                                             <div class="table-inner-data">
                                                                 <span class="mg-time"> 09:15 AM </span>
-                                                                <div class="time-min">
+                                                                <div class="time-min bg-red-fall">
                                                                     <span> 1 hour </span>
                                                                 </div>
                                                             </div>

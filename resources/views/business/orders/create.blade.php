@@ -606,11 +606,11 @@
 																			<input type="hidden" name="itemparticipate[]" id="itemparticipate" value="" />
 																			<div class="d-flex">
 																				<div class="close-cross-icon mr-10"> 
-																					<a class="p-red-color editcartitemaks" data-toggle="modal" data-priceid="{{$item['priceid']}}" data-pageid="{{$pageid}}" data-customerId="{{$item['customerId']}}" data-orderType = "{{$item['orderType']}}"> 
+																					<a class="p-red-color editcartitemaks" data-toggle="modal" data-priceid="{{$item['priceid']}}" data-pageid="{{$pageid}}" data-customerId="{{$item['customerId']}}" data-orderType = "{{$item['orderType']}}"data-productIds = "{{@$item['productIds']}}"> 
 																					<i class="fas fa-pencil-alt"></i></a>
 																				</div>
 																				<div class="close-cross-icon-trash">
-																					<a href="{{route('business.removeFromCartForCheckout',['priceid'=>@$item['priceid'],'pageid'=>$pageid ,'customerID'=>$item['customerId'],'orderType' =>@$item['orderType'], ])}}" class="p-red-color">
+																					<a href="{{route('business.removeFromCartForCheckout',['priceid'=>@$item['priceid'],'pageid'=>$pageid ,'customerID'=>$item['customerId'],'orderType' =>@$item['productIds'].''.@$item['orderType'], ])}}" class="p-red-color">
 																					<i class="fas fa-trash-alt"></i></a>
 																				</div>
 																			</div>
@@ -1689,9 +1689,11 @@
 	$(document).on('click', '.editcartitemaks', function () {
 		$('#Countermodalbodyajax').html('');
 		var priceid = $(this).attr('data-priceid');
+		var priceid = $(this).attr('data-priceid');
 		var pageid = $(this).attr('data-pageid');
 		var customerId = $(this).attr('data-customerId');
 		var orderType = $(this).attr('data-orderType');
+		var productIds = $(this).attr('data-productIds');
 		$.ajax({
 			url: '{{route("business.editcartmodel")}}',
 			type: 'post',
@@ -1701,6 +1703,7 @@
 				'customerId':customerId,
 				'companyId': '{{$companyId}}',
 				'orderType': orderType,
+				'productIds': productIds,
 				_token: '{{csrf_token()}}', 
 			},
 			success:function(response){
