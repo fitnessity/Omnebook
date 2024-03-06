@@ -30,18 +30,22 @@ class Kernel extends ConsoleKernel
         //$schedule->command('stripe:cron')->everyMinute();
 
         $schedule->call(function () {
+            var_dump('run transfer');
             $user_booking_details = UserBookingDetail::whereRaw("transfer_provider_status is NULL or transfer_provider_status !='paid'");
             foreach($user_booking_details->get() as $user_booking_detail){
                 try {
                     $user_booking_detail->transfer_to_provider();
                 }catch (Exception $e) {
                     $errormsg = $e->getError()->message;
+                    var_dump('run transfer error');
+                    var_dump($errormsg);
                 }
             }
         })->daily();
 
         $schedule->call(function () {
             $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->where('attempt' ,'<' ,3)->where('status','!=','Completed')->orderBy('created_at','desc')->limit(1)->get();
+
             //print_r($recurringDetails);exit();
             foreach($recurringDetails as $recurringDetail){
                 $recurringDetail->createRecurringPayment();
@@ -74,12 +78,15 @@ class Kernel extends ConsoleKernel
         })->daily();
 
         $schedule->call(function () {
+            var_dump('run capture');
             $transactions = Transaction::where(['status' => 'requires_capture'])->get();
             foreach($transactions as $transaction){
                 try {
                     $transaction->capture();
                 }catch (Exception $e) {
                     $errormsg = $e->getError()->message;
+                    var_dump('capture error');
+                    var_dump($errormsg);
                 }
             }
         })->daily();
