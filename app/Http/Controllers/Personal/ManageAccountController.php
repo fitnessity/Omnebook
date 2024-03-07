@@ -28,20 +28,15 @@ class ManageAccountController extends Controller
             return $next($request);
         });
 
-        // You can also apply additional middleware or other constructor logic here
     }
 
     public function index(Request $request)
     {
         $user = $this->user;
         $UserFamilyDetails = $familyDetails = [];
-        if(count($user->company) ==  0){
-            $userfamily = $user->user_family_details;
-            foreach($userfamily as $uf){
-                $UserFamilyDetails [] = $uf;
-            }
-        }else{
-            $customer = @$user->customers;
+        $customer = @$user->customers;
+
+        if($customer){
             foreach($customer as $cs){
                 foreach ($cs->get_families() as $fm){
                     $familyDetails [] = $fm;
@@ -61,7 +56,13 @@ class ManageAccountController extends Controller
             foreach ($uniqueFamilyDetails as $detail) {
                 $UserFamilyDetails [] = $detail;
             }
-        } 
+        }else{
+            $userfamily = $user->user_family_details;
+            foreach($userfamily as $uf){
+                $UserFamilyDetails [] = $uf;
+            }
+        }
+
         return view('personal.manage_account.index',compact('user','UserFamilyDetails'));
     }
 

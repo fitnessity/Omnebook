@@ -3855,7 +3855,7 @@ div#termsdiv{order: 4;}
   background-size: cover;
   background-position: center;
   box-shadow: 0px 10px 15px 0px #cfd7e2;
-  height: 172px;
+  height: 188px;
 }
 .cards-block .cards-content img {
   max-width: 60px;
@@ -7237,5 +7237,17 @@ p.or-data {
 }
 .bg-red-fall{
   background: #ea1515 !important;
+  color: #fff;
+  padding: 4px;
+}
+.member-count {
+  margin: 15px 0;
+}
+.tot-member-hight{
+  height: 510px;
+  max-height: 510px;  
+}
+.cards-block .cards-content h3{
+  font-size: 13px;
   color: #fff;
 }

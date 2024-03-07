@@ -431,7 +431,8 @@
                                                         <h3>jumping 1</h3>
                                                         <div class="d-grid">
                                                             <p> Personal Training | Bungee Jumping | Spot Available - 1/1</p>
-                                                            <p>Instructor: Darryl Phipps</p>   
+                                                            <p>Instructor: Darryl Phipps </p>   
+                                                            <p>Difficulty Level: Pro </p>
                                                         </div>
                                                                        
                                                     </div>
@@ -475,6 +476,7 @@
                                                                     <div class="d-grid">
                                                                         <p> Events | Day Camp | Spot Available - 200/200</p>
                                                                         <p>Instructor: Darryl Phipps</p>   
+                                                                        <p>Difficulty Level: Beginner</p>
                                                                     </div>                                                                   
                                                                 </div>
                                                             </div>
@@ -519,7 +521,8 @@
                                                                     <h3>Bucephalus Riding and Polo Club1</h3>
                                                                     <div class="d-grid">
                                                                         <p> Events | Horseback Riding | Spot Available - 10/10</p>
-                                                                        <p>Instructor: Darryl Phipps</p>   
+                                                                        <p>Instructor: Darryl Phipps</p>  
+                                                                        <p>Difficulty Level: Advance</p> 
                                                                     </div>                                                                                                                        
                                                                 </div>
                                                             </div>
