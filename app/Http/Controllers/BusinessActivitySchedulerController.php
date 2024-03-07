@@ -64,8 +64,9 @@ class BusinessActivitySchedulerController extends Controller
             }
             
             $memberships = @$customer->active_memberships()->pluck('sport')->unique();
-            $business_services = $business_services->whereIn('id', @$memberships);
+            /*$business_services = $business_services->whereIn('id', @$memberships);*/
         }
+
 
 
         if($request->business_service_id){
@@ -88,6 +89,7 @@ class BusinessActivitySchedulerController extends Controller
 
 
         $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('shift_start', 'asc')->get();
+
 
         $services = [];
         foreach($bookschedulers as $bs){
@@ -276,7 +278,7 @@ class BusinessActivitySchedulerController extends Controller
         if($request->customer_id){
             $customer = Customer::where('id',$request->customer_id)->first();
             $memberships = $customer->active_memberships()->pluck('sport')->unique();
-            $business_services = $company->service()->whereIn('id', $memberships)->get();
+            /*$business_services = $company->service()->whereIn('id', $memberships)->get();*/
         }
 
         $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('shift_start', 'asc')->get();

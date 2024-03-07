@@ -1051,7 +1051,7 @@
 																				<div class="row">
 																					@foreach($customerdata->stripePaymentMethods()->get() as $card)
 																							<div class="col-lg-3 col-sm-6">
-																								<div class="cards-block dispalycard" style="cursor: pointer" data-name="{{$card->name}}" data-cvv="{{$card->last4}}" data-cnumber="{{$card->exp_month}}" data-month="{{$card->exp_month}}" data-year="$card->exp_year" data-type="{{strtolower($card->brand)}}" data-id="{{$card->id}}">
+																								<div class="cards-block dispalycard" style="cursor: pointer" data-name="{{$card->name}}" data-cvv="{{$card->last4}}" data-cnumber="{{$card->exp_month}}" data-month="{{$card->exp_month}}" data-year="{{$card->exp_year}}" data-type="{{strtolower($card->brand)}}" data-id="{{$card->id}}">
 																									<div class="cards-content" style="background-image: url({{ url('public/img/visa-card-bg.jpg')}});">
 																										<img src="{{ url('/public/images/creditcard/'.strtolower($card->brand).'.jpg') }}" alt="">
 																										<span></span>
@@ -1063,6 +1063,8 @@
 																										<a class="float-end card-remove" data-behavior="delete_card" data-url="{{route('stripe_payment_methods.destroy', ['stripe_payment_method' => $card->payment_id])}}" data-cardid="{{$card->id}}" class="delCard">
 																											<i class="fa fa-trash"></i> 
 																										</a>
+
+																										<h3>{{$card->exp_month}}/{{$card->exp_year}}</h3>
 																									</div>
 																								</div>
 																							</div>
