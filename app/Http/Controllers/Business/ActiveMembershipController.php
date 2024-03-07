@@ -90,7 +90,7 @@ class ActiveMembershipController extends BusinessBaseController
 
         if($request->page == 'not_used'){
             $oneMonthAgo = Carbon::parse($request->startDate)->subDays(30)->format('Y-m-d');
-            $bookings = $bookings->join('booking_checkin_details as bcd' ,'bcd.booking_detail_id', '=' ,'user_booking_details.id')->select('user_booking_details.*')->where('bcd.checked_at', '<', $oneMonthAgo)->whereNotNull('bcd.checkin_date');
+            $bookings = $bookings->join('booking_checkin_details as bcd' ,'bcd.booking_detail_id', '=' ,'user_booking_details.id')->select('user_booking_details.*')->where('bcd.checked_at', '<', $oneMonthAgo)->whereNotNull('bcd.checkin_date')->groupBy('id');
             $fileName = 'Not-Used-Membership';
             $title = 'Not Used Membership Report';
         }elseif($request->page == 'terminate'){
@@ -111,7 +111,7 @@ class ActiveMembershipController extends BusinessBaseController
             $title = 'Active Membership Report';
         }
 
-        $bookings = $bookings->get()->filter(function($item){
+        $bookings = $bookings->groupBy('id')->get()->filter(function($item){
             return $item->Customer;
         });
         $type = $request->type;
