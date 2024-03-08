@@ -270,7 +270,10 @@ class Recurring extends Authenticatable
                 }
             }
         }else{
-            $this->status = "Failed";
+
+            $this->status = "Retry";
+            $this->error_msg = 'No Card Added.';
+            $this->attempt += 1;
             $this->save();
             SGMailService::sendAutoPayFaildAlertToProvider($emailDetailProvider);
             SGMailService::sendAutoPayFaildAlertToCustomer($emailDetailCustomer);
