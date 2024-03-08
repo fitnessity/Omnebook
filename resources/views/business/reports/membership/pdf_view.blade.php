@@ -60,6 +60,11 @@
 				</tr>
 				@php $counter = 1; @endphp
 				@forelse($bookings as $i=>$list) 
+					@php
+						if($list->expired_at < date('Y-m-d') && @$page == 'not_used' && $list->status == 'active'){
+							$list->status = 'completed';
+						}
+					@endphp
 					<tr>
 						<td>{{$counter}}</td>
 						<td>{{@$list->Customer->full_name}}</td>
