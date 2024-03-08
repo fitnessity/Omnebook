@@ -50,7 +50,7 @@ class Kernel extends ConsoleKernel
             foreach($recurringDetails as $recurringDetail){
                 $recurringDetail->createRecurringPayment();
             }
-        })->everyMinute();
+        })->daily();
 
         $schedule->call(function () {
             $userBookingDetails = UserBookingDetail::whereDate("expired_at", ">=" ,date('Y-m-d'))->get();
