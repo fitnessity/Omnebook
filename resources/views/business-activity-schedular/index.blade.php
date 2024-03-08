@@ -92,15 +92,40 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 															@endforeach
 
 															@php 	
-																$categoryListFull = collect($categoryList)->sortBy(function ($item) 		{
-																	    $earliestStartTime = $item->BusinessActivityScheduler->min('shift_start');
-																	    return $earliestStartTime ?: PHP_INT_MAX;
-																	})->values()->each(function ($item, $index) use (&$categoryListFull) {
-																        $categoryListFull[$index] = $item;
-																    });
+																function customKeySort($a, $b) {
+																    $timeA = strtotime($a);
+																    $timeB = strtotime($b);
+																    
+																    if ($timeA == $timeB) {
+																        return 0;
+																    }
+																    return ($timeA < $timeB) ? -1 : 1;
+																}
+																$schedule = [];
+																foreach($categoryList as $c){
+																	foreach($c->BusinessActivityScheduler as $sc){
 
+																		if($sc->end_activity_date >= $filter_date->format('Y-m-d') && $sc->starting <= $filter_date->format('Y-m-d')){
+																			if(strpos($sc->activity_days, $filter_date->format('l')) !== false){
+																				$cancelSc = $sc->activity_cancel->where('cancel_date',$filter_date->format('Y-m-d'))->first();
+																				$hide_cancel = @$cancelSc->hide_cancel_on_schedule;
+																				if(@$cancelSc->cancel_date_chk == 0 ){
+																					$hide_cancel = 0;
+																				}
+																				if($hide_cancel == '' || $hide_cancel != 1 ){
+																					$schedule[$sc->shift_start][] = $c;
+																				}
+																			}
+																		}
+																	}
+																}
 
-																	//print_r($categoryListFull);exit;
+																uksort($schedule, 'customKeySort');
+																$categoryListFull = [];
+																foreach ($schedule as $value) {
+																    $categoryListFull = array_merge($categoryListFull, (array)$value);
+																}
+																$categoryListFull = array_unique($categoryListFull);
 															@endphp 
 
 															@if(!empty($categoryListFull) && count($categoryListFull)>0)
