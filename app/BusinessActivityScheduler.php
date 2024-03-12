@@ -181,6 +181,11 @@ class BusinessActivityScheduler extends Model
         return intval($this->spots_available) - BookingCheckinDetails::where('business_activity_scheduler_id', $this->id)->whereDate('checkin_date', $current_time->format("Y-m-d"))->count();
     }
 
+
+    public function chkReservedToday(){
+        return BookingCheckinDetails::where('business_activity_scheduler_id', $this->id)->whereDate('checkin_date', date('Y-m-d'))->count();
+    }
+    
     public function price_detail() {
         $price_detail = BusinessPriceDetails::where('serviceid', $this->serviceid)
                             ->where('category_id', $this->category_id)

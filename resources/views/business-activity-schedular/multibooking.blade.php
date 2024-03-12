@@ -196,6 +196,7 @@
 																							<label class="btn button_select" for="item_{{$s}}{{$scary->id}}">{{$timeOfActivity}} <br>{{$duration}}</label>
 																							<span>{{ $SpotsLeftdis == 0 ? "Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</span>
 																							<label class="font-red">{{ $canceldata != '' ? "Cancelled" : ''}}</label>
+																							@if($scary->chkReservedToday())<label class="font-green mb-0 fs-13">Already Reserved</label>@endif
 																							<span>{{ $insName }}</span>
 																						</div>
 																					</div>
@@ -295,7 +296,7 @@
     	if ($(this).prop("checked")) {
     		openPopUp(scid,sid,pname,toa,chk,catId,checkboxId);
     	} else {
-    		confirmdelete(sid,'{{$filter_date->format("Y-m-d")}}',scid , 1);
+    		confirmdelete(sid,'{{$filter_date->format("Y-m-d")}}',scid , 1 ,'');
     	}
        	
     });
@@ -362,7 +363,7 @@
 
 	
 
-	function confirmdelete(serviceID ,date ,timeId ,chk) {
+	function confirmdelete(serviceID ,date ,timeId ,chk, trid) {
 		if (confirm('Are you want to remove this selected slot ?')) {
 			$.ajax({
 		   		url: "{{route('deleteFromSession')}}",
@@ -380,7 +381,8 @@
 				success: function (response) { 
 					if(chk ==0){
 						//window.location.reload();
-						$('#reviewData').click();
+						//$('#reviewData').click();
+						$('.'+trid).remove();
 					}else{
 						$('#timeSlotCntUpdate').html(response);
 					}

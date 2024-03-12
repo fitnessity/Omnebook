@@ -36,7 +36,7 @@
 								<div class="col-xl-12">
 									<div class="card">
 										<div class="card-header align-items-center d-flex">
-											<h4 class="card-title mb-0 flex-grow-1">Customers</h4>
+											<h4 class="card-title mb-0 flex-grow-1">Total Members ({{$customerCount}}) | Active Members ({{$activeMembersCount}}) | Inactive Members ({{$inActiveMembersCount}}) |  Prospects ({{$prospectMembersCount}}) | Suspended | Owed | At-Risk ({{$atRiskMembersCount}}) | Big Spenders</h4>
 										</div><!-- end card header -->
 										<div class="card-body">
 										   <div class="total-clients">
