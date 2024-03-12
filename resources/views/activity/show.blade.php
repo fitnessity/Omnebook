@@ -19,7 +19,7 @@ input:disabled{
 }  
 </style>
 <?php
-	use App\{UserBookingDetail,BusinessServices,BusinessService,BusinessPriceDetails,BusinessPriceDetailsAges,BusinessServiceReview,BusinessTerms,User,BusinessActivityScheduler,BusinessServicesFavorite,CompanyInformation,BusinessReview,BusinessStaff};
+	use App\{BusinessServices,BusinessServiceReview,BusinessTerms,User,BusinessActivityScheduler,BusinessServicesFavorite,CompanyInformation,BusinessReview};
 	use Carbon\Carbon;
 
 	$sid = $service->id;
@@ -425,7 +425,7 @@ input:disabled{
 						<div class="col-md-12 col-sm-12 col-xs-12">
 							<div class="">
 								<h3 class="date-title mt-10 mb-10"></h3>
-								<label class="mb-10">Step: 1 </label> <span class="">Select Date</span>
+								<label class="mb-10 fw-600">Step: 1 </label> <span class="">Select Date</span>
 
 								<div class="row">
 									<div class="col-md-12 col-sm-12 col-xs-12">
@@ -456,7 +456,7 @@ input:disabled{
 	        <div class="col-md-12 col-xs-12 mb-80">
             	@if(count($activities_search)>0)
 					<div class="col-md-12 col-sm-12 col-xs-12">
-						<h3 class="subtitle text-center mtb-30">Other Activities Offered By This Provider</h3>
+						<h3 class="subtitle text-center mtb-30">Other Activities Offered By {{$comp_data->public_company_name}}</h3>
 					</div>
 				@endif
             	<div class="modal-sidebox">

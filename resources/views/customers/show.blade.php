@@ -1490,7 +1490,8 @@
 							</div>
 
 							<div class="mb-10">
-								<input class="check-box-primary-account" type="checkbox" id="primary_account" name="primary_account" value="1" @if($customerdata->primary_account == '1') checked @endif @if($resultDate->format('Y-m-d') <= $customerdata->birthdate) disabled @endif>
+								<input class="check-box-primary-account" type="checkbox" id="primary_account" name="primary_account" value="1" @if($customerdata->primary_account == '1') checked @endif  >
+								<!-- @if($resultDate->format('Y-m-d') <= $customerdata->birthdate) disabled @endif -->
 								<label for="primary_account"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="You are paying for yourself and all added family members.">(i)</span></label>
 							</div>
 						</div>

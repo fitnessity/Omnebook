@@ -158,7 +158,7 @@
 														</form>
 													</div>
 												</div>
-												<!-- <div class="container mb-60">
+												<div class="container mb-60">
 													<div class="row">
 														<div class="col-lg-12">
 															<label class="fs-15">Things to try</label>
@@ -203,7 +203,7 @@
 															</div>
 														</div>
 													</div>
-												</div> -->
+												</div>
 											</div>
 										</div>
 									</div>

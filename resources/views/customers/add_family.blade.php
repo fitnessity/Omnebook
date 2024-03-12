@@ -109,7 +109,7 @@
 																									<div class="col-lg-4 col-md-6 col-sm-6">
 																										<div class="form-group mb-15">
 																											<div class="input-group">
-																												<input type="text" value="{{date('m/d/Y',strtotime($family->birthdate))}}" name="birthdate[{{$fam_cnt}}]" id="birthdate" class="form-control border-0 dash-filter-picker width-flatpiker flatpiker-with-border flatpickr-input active flatpickr-date{{$fam_cnt}}" data-dynamic-id ="{{$fam_cnt}}" placeholder="Birthdate">
+																												<input type="text" value="@if($family->birthdate) {{date('m/d/Y',strtotime($family->birthdate))}} @endif" name="birthdate[{{$fam_cnt}}]" id="birthdate" class="form-control border-0 dash-filter-picker width-flatpiker flatpiker-with-border flatpickr-input active flatpickr-date{{$fam_cnt}}" data-dynamic-id ="{{$fam_cnt}}" placeholder="Birthdate">
 																											</div>
 																										</div>
 																									</div>
