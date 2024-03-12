@@ -211,6 +211,8 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 
 																									@if($canceldata != '')<label class="font-red">Cancelled</label>@endif
 
+																									@if($scary->chkReservedToday())<label class="font-green">Already Reserved</label>@endif
+
 																									<label>{{ $insName }}</label>
 																								</div>
 																							</div>
@@ -396,7 +398,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 			success: function (response) { //alert(response);
 				if(response == 'success'){
 					$('.pay-confirm').addClass('font-green');
-					$('.pay-confirm').html('Confirm your reservation for '+activityName+' on '+date+' at '+time);
+					$('.pay-confirm').html('<div class="row"><div class="col-md-12"> <h4 class="mb-10 lh-25 text-center"> Booking Confirmed</h4> </div><div class="col-md-12 text-center"><p class="pay-confirm fs-17 font-green">Your reservation for  '+activityName+' '+date+' at '+time +'</p></div></div>');
 					$('#success-reservation').modal('show');
 					$('#ajax_html_modal').modal('hide');
  					$(".activity-tabs").load(location.href+" .activity-tabs>*","");

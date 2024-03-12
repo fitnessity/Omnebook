@@ -41,7 +41,7 @@
                     $totalTax += number_format($orderDetail->tax + $orderDetail->service_fee ,2);
                     $totDis +=  number_format($orderDetail->discount,2);
                     $totTip +=  number_format($orderDetail->tip,2);
-                    $grandTotal +=  number_format($orderDetail->subtotal,2);
+                    $grandTotal +=  is_numeric($orderDetail->subtotal) ? $orderDetail->subtotal : 0;
                 ?>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">

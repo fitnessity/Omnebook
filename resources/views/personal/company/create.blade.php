@@ -81,7 +81,7 @@
 																		<div class="col-lg-6 col-md-6">
 																			<div class="form-group mt-10">
 																				<label for="pwd">Business Address <span id="star">*</span></label>
-																				<input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="addressBusiness" placeholder="Address" value="{{@$company->address}}" required="" oninput="initMapCall('addressBusiness', 'cityBusiness', 'stateBusiness', 'countryBusiness', 'zipcodeBusiness', 'latitude', 'longitude')"> 
+																				<input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="addressBusiness" placeholder="Address" value="{{@$company->address}}" required="" oninput="initMapCall('addressBusiness', 'cityBusiness', 'stateBusiness', 'countryBusiness', 'zipCodeBusiness', 'latitude', 'longitude')"> 
 																			</div>
 																		</div>
 																		 <div id="map" style="display: none;"></div>

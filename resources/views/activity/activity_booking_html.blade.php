@@ -2,21 +2,21 @@
 	<div class="">
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
-				<label class="mb-10">Step: 2 </label> <span class="">Select Category</span>
+				<label class="mb-10 fw-600">Step: 2 </label> <span class="">Select Category</span>
 				<select id="selcatpr" name="selcatpr" class="price-select-control" onchange="updatedetail('{{$companyId}}','{{$serviceId}}','category',this.value)">
 					@foreach($categories as  $sc) 
                         <option value="{{$sc->id}}" @if($categoryId == $sc->id) selected @endif>{{$sc->category_title}}</option>
                     @endforeach
 				</select>
 			
-				<label class="mb-10">Step: 3 </label> <span class="">Select Price Option</span>
+				<label class="mb-10 fw-600">Step: 3 </label> <span class="">Select Price Option</span>
 				<div class="priceoption" id="pricechng{{$serviceId}}{{$serviceId}}">
 					<select id="selprice" name="selprice" class="price-select-control" onchange="updatedetail('{{$companyId}}','{{$serviceId}}','price',this.value)">
 						{!!$priceOption!!}
 					</select>
 				</div>  
 				
-				<label class="mb-10">Step: 4 </label> <span class=""> Select Time</span>
+				<label class="mb-10 fw-600">Step: 4 </label> <span class=""> Select Time</span>
 				<div class="row" id="timeschedule">
 					@forelse (@$bschedule as $s=>$bdata)
 	            		<?php 
@@ -47,7 +47,7 @@
 					@endforelse
 				</div>
 			
-				<label class="mb-10">Step: 5 </label> <span class=""> Select Participant</span>
+				<label class="mb-10 fw-600">Step: 5 </label> <span class=""> Select # of participants</span>
 				<div class="participant-accordion">
 					<div class="content1">
 						<div class="panel-group" id="accordion">
@@ -117,8 +117,26 @@
 						</div>
 					</div>
 				</div>
-			
-				<label class="mb-10">Step: 6 </label> <span class=""> Select Add-On Service (Optional)</span>
+				
+				<label class="mb-10 fw-600">Step: 6 </label> <span class=""> Select Who's Participating</span>
+
+				<div class="row" id="participantDiv">
+
+					<div class="col-md-12 col-sm-12 mb-12">
+						<div class="text-left mt-40 mmt-10">
+							<h6 class="mb-3 mt-3 fs-13">Who's Participating</h6>
+						</div>
+						<div class="hstack gap-3 px-3 mx-n3">
+							<select class="price-select-control fs-13 familypart" name="participat[]" id="participats">
+								<option value="" data-cnt="0" data-priceid="1000" data-type="user">Choose or Add Participant</option>
+								<option value="720" data-cnt="0" data-priceid="1000" data-type="user">Nipa (Test) Soni</option>
+							</select>
+						</div>
+					</div>
+				</div>
+																																	
+
+				<label class="mb-10 fw-600">Step: 7 </label> <span class=""> Select Add-On Service (Optional)</span>
 				<div class="participant-accordion">
 					<div class="content1">
 						<div class="panel-group" id="accordiontwo">
@@ -220,6 +238,7 @@
                     <input type="hidden" name="addOnServicesId" value="" id="addOnServicesId" />
                     <input type="hidden" name="addOnServicesQty" value="" id="addOnServicesQty" />
                     <input type="hidden" name="addOnServicesTotalPrice" value="0" id="addOnServicesTotalPrice" />
+                    <input type="hidden" name="totalcnt" value="0" id="totalcnt" />
 
 					<div id="addcartdiv">
 						<button type="button" id="btnaddcart" class="btn btn-red"> Add to Cart</button>
@@ -230,21 +249,21 @@
 	</div>
 </div>
 <script type="text/javascript">
-		function getUrl(pid , sid){
-			$('.hiddenALink').html('');
-			var adultCount = $('#adultCount').val();
-			var childCount = $('#childCount').val();
-			var infantCount = $('#infantCount').val();
+	function getUrl(pid , sid){
+		$('.hiddenALink').html('');
+		var adultCount = $('#adultCount').val();
+		var childCount = $('#childCount').val();
+		var infantCount = $('#infantCount').val();
 
-			var aosId = $('#addOnServicesId').val();
-			var aosQty = $('#addOnServicesQty').val();
-			var aosPrice = $('#addOnServicesTotalPrice').val();
+		var aosId = $('#addOnServicesId').val();
+		var aosQty = $('#addOnServicesQty').val();
+		var aosPrice = $('#addOnServicesTotalPrice').val();
 
-			if(sid != undefined){
-				var url= "/getBookingSummary/?priceId="+pid+"&schedule="+sid+"&adultCount="+adultCount+"&childCount="+childCount+"&infantCount="+infantCount+"&date="+"{{$date->format('Y-m-d')}}"+"&aosPrice="+aosPrice+"&aosId="+aosId+"&aosQty="+aosQty;
-				$('.hiddenALink').html('<a data-behavior="ajax_html_modal" data-url="'+url+'" id="hiddenALink"></a>');
-				$('#hiddenALink')[0].click();
-			}
+		if(sid != undefined){
+			var url= "/getBookingSummary/?priceId="+pid+"&schedule="+sid+"&adultCount="+adultCount+"&childCount="+childCount+"&infantCount="+infantCount+"&date="+"{{$date->format('Y-m-d')}}"+"&aosPrice="+aosPrice+"&aosId="+aosId+"&aosQty="+aosQty;
+			$('.hiddenALink').html('<a data-behavior="ajax_html_modal" data-url="'+url+'" id="hiddenALink"></a>');
+			$('#hiddenALink')[0].click();
 		}
+	}
 
 </script>

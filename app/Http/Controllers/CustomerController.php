@@ -83,16 +83,37 @@ class CustomerController extends Controller {
             $customers = $customers->where('id',$request->customer_id);
         }
 
+        
         $customers = $customers->get();
         $customerCount = count($customers);
+
+         set_time_limit(8000000); 
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 10000);
+
+        $activeMembersCount = $customers->filter(function ($customer) {
+            return $customer->is_active() == 'Active'; 
+        })->count();
+
+        $inActiveMembersCount = $customers->filter(function ($customer) {
+            return $customer->is_active() == 'InActive'; 
+        })->count();
+
+        $prospectMembersCount = 0;
+        /*$prospectMembersCount = $customers->filter(function ($customer) {
+            return $customer->is_active() == 'Prospect'; 
+        })->count();*/
+
+        $atRiskMembersCount =0;
+       /* $atRiskMembersCount = $customers->filter(function ($customer)  {
+            return $customer->customerAtRisk() == 'At-Risk';
+        });*/
+
 
         if ($request->ajax()) {
             return response()->json($customers);
         }
-        return view('customers.index', [
-            'company' => $company,
-            'customerCount' => $customerCount,
-        ]); 
+        return view('customers.index', compact(['company','customerCount','activeMembersCount','inActiveMembersCount','prospectMembersCount','atRiskMembersCount']));
     }
 
     public function create(Request $request, $business_id){
