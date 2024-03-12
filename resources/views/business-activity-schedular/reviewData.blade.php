@@ -23,27 +23,30 @@
 					<th>Choose Membership</th>
 					<th>Action</th>
 				</tr>
+				@php $cnt= 1; @endphp
 				@foreach($finalSessionAry as $i=>$sesAry)
-				<tr class="blankTr">
-					<td>{{$i+1}}.</td>
+
+				<tr class="blankTr tr{{$cnt}}">
+					<td>{{$cnt}}.</td>
 					<td>{{$sesAry['pname']}} @if(@$sesAry['catname']) -  {{@$sesAry['catname']}} @endif</td>
 					<td>{{(new DateTime($sesAry['date']))->format("l, F j,Y")}}</td>
 					<td>{{$sesAry['time']}} </td>
 					<td>{{$sesAry['duration']}} </td>
 					<td> 1 Slot </td>
 					<td>  
-						<select class="mb-10 form-control required" id="priceId{{$i}}" onclick="loadOptions({{$i}})" onchange="getRemainingSession({{$i}},'{{$sesAry["date"]}}',{{$sesAry['timeId']}})">
+						<select class="mb-10 form-control required" id="priceId{{$cnt}}" onclick="loadOptions({{$i}} ,{{$cnt}})" onchange="getRemainingSession({{$cnt}},'{{$sesAry["date"]}}',{{$sesAry['timeId']}})">
 							<option value="" data-did ="0">Choose Membership</option>
 						</select>  
 
-						<div class="font-red text-center" id="remainingSession{{$i}}"></div>
+						<div class="font-red text-center" id="remainingSession{{$cnt}}"></div>
 				        <div class="text-center">
 				        	<p class="d-none not-avail"> No MemberShip Available</p>
 				        	<div class="time-slots-saprator mb-20"></div><a href="/activity-details/{{$sesAry['serviceID']}}" class="btn btn-red" target="_blank">Purchase A Membership</a>
 				        </div>
 				    </td>
-					<td><button class="btn-delete font-red" onclick="confirmdelete({{$sesAry['serviceID']}},'{{$sesAry["date"]}}' ,{{$sesAry['timeId']}} , 0);"> Delete </button></td>
+					<td><button class="btn-delete font-red" onclick="confirmdelete({{$sesAry['serviceID']}},'{{$sesAry["date"]}}' ,{{$sesAry['timeId']}} , 0 ,'tr{{$cnt}}');"> Delete </button></td>
 				  </tr>
+				  @php $cnt++; @endphp
 				@endforeach
 			</table>
 		</div>
@@ -56,7 +59,7 @@
 <script type="text/javascript">
 	var onChangeTriggered = false;
 
-	function loadOptions(i){
+	function loadOptions(i,cnt){
 		if (!onChangeTriggered) {
 			$.ajax({
 	            url: '/load-membership-dropdown/', 
@@ -70,7 +73,7 @@
 	            success: function(response) {
 	            	//alert(response)
 	            	if(response){
-	            		 $('#priceId'+i).html(response);
+	            		 $('#priceId'+cnt).html(response);
 	            	}else{
 	            		$('.not-avail').removeClass('d-none');
 	            	}

@@ -85,6 +85,131 @@
 					</div>
 
 					<div class="d-flex align-items-center">
+						<div>
+							<div class="ms-1 header-item d-none i-none d-sm-flex">
+								<button type="button" class="btn btn-red" onclick="openNaav()"> Complete Setup <i class="fas fa-angle-right ml-20"></i>
+								</button>
+							</div>
+							<nav class="com-sidebar">
+									<div class="navbar-wrapper">
+										<div id="completesetup" class="com-sidepanel">
+											<div class="navbar-content">
+												<div class="container"> 
+													<div class="row">
+														<div class="col-lg-8">
+															<div class="setup-title">
+																<label> Setup Guide</label>
+															</div>
+														</div>
+														<div class="col-lg-4">
+															<div class="p-relative">
+																<a href="javascript:void(0)" class="com-cancle fa fa-times" onclick="closeNaav()"></a>
+															</div>
+														</div>
+													</div>	
+												</div>
+												<div class="border-bottom-grey mt-10 mb-10"></div>	
+												
+												<div class="highlight-part">
+													<div class="row">
+														<div class="col-lg-8">
+															<div class="welcome-sidebar">
+																<label>Hi Darryl, continue setting up your new account.</label>
+																<span>3 of 5 tasks completed</span>
+															</div>
+														</div>
+														<div class="col-lg-4">
+															<div>
+															<div id="wrapper" class="center">
+																<svg class="circle-progress green noselect" data-progress="30" x="0px" y="0px" viewBox="0 0 80 80">
+																	<path class="track" d="M5,40a35,35 0 1,0 70,0a35,35 0 1,0 -70,0" />
+																	<path class="fill" d="M5,40a35,35 0 1,0 70,0a35,35 0 1,0 -70,0" />
+																	<text class="value" x="50%" y="43%">0%</text>
+																	<text class="text1" x="50%" y="64%">Complete</text>
+																</svg>
+															</div>
+															</div>
+														</div>
+													</div>
+												</div>	
+												<div class="container">
+													<div class="new sidebar-radio">
+														<form>
+															<div class="form-group options-box">
+																<input type="checkbox" id="html">
+																<label for="html">  Add your business address </label>
+															</div>
+															<div class="form-group options-box">
+																<input type="checkbox" id="css">
+																<label for="css"> Add your business website </label>
+															</div>
+															<div class="form-group options-box">
+																<input type="checkbox" id="javascript">
+																<label for="javascript"> Set up your service list </label>
+															</div> 
+															<div class="form-group options-box">
+																<input type="checkbox" id="members">
+																<label for="members"> Set up your team members </label>
+															</div>
+															<div class="form-group options-box">
+																<input type="checkbox" id="working">
+																<label for="working"> Set your working hours </label>
+															</div>
+														</form>
+													</div>
+												</div>
+												<!-- <div class="container mb-60">
+													<div class="row">
+														<div class="col-lg-12">
+															<label class="fs-15">Things to try</label>
+														</div>
+														<div class="col-lg-6">
+															<div class="sidebar-service-box mb-15">
+																<div class="mb-15">
+																	<i class="fas fa-user-cog fs-18"></i>
+																</div>
+																<div class="mb-15">
+																	<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+																</div>
+																<div>
+																<button type="button" class="btn btn-red"> Service</button>
+																</div>
+															</div>
+														</div>
+														<div class="col-lg-6">
+															<div class="sidebar-service-box mb-15">
+																<div class="mb-15">
+																	<i class="fas fa-hand-holding-usd fs-18"></i>
+																</div>
+																<div class="mb-15">
+																	<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+																</div>
+																<div>
+																<button type="button" class="btn btn-red"> Prices</button>
+																</div>
+															</div>
+														</div>
+														<div class="col-lg-6">
+															<div class="sidebar-service-box mb-15">
+																<div class="mb-15">
+																	<i class="fas fa-copy fs-18"></i>
+																</div>
+																<div class="mb-15">
+																	<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+																</div>
+																<div>
+																<button type="button" class="btn btn-red"> Prices</button>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div> -->
+											</div>
+										</div>
+									</div>
+								</nav>
+						</div>
+						
 
 						<div class="ms-1 header-item d-none i-none d-sm-flex">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-toggle="fullscreen">
@@ -350,6 +475,7 @@
 
 		<!-- Vertical Overlay-->
       <div class="vertical-overlay"></div>
+
 		<script type="text/javascript">
 
 			function deleteNoteFromNotification(id){
@@ -435,3 +561,30 @@
 		   });
 
 		</script>
+
+<script>
+function openNaav() {
+	document.getElementById("completesetup").style.width = "380px";
+}
+
+function closeNaav() {
+	document.getElementById("completesetup").style.width = "0";
+}
+</script>
+
+
+<script>
+	var forEach = function (array, callback, scope) {
+	for (var i = 0; i < array.length; i++) {
+		callback.call(scope, i, array[i]);
+	}
+};
+window.onload = function(){
+	var max = -219.99078369140625;
+	forEach(document.querySelectorAll('.circle-progress'), function (index, value) {
+	percent = value.getAttribute('data-progress');
+		value.querySelector('.fill').setAttribute('style', 'stroke-dashoffset: ' + ((100 - percent) / 100) * max);
+		value.querySelector('.value').innerHTML = percent + '%';
+	});
+}
+</script>
