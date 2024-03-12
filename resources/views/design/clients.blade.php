@@ -56,7 +56,7 @@
 						<div class="row">
 							<div class="col-lg-12">
 								<div class="card">
-									<div class="card-body">
+									<div class="card-body client-tabs">
 										<!-- Nav tabs -->
 										<ul class="nav nav-tabs mb-3" role="tablist">
 											<li class="nav-item">
@@ -354,14 +354,14 @@
 											<div class="tab-pane" id="clientstats" role="tabpanel">
 												<div class="mb-55">
 													<div class="row">
-														<div class="col-lg-3">
+														<div class="col-lg-3 select-option-first">
 															<label class="mt-10">Client Stats</label>
 															<select class="form-select" name="know_from">
-																<option value="Aactive" selected="">Active</option>
+																<option value="active" selected="">Active</option>
 																<option value="In-Active">In-Active</option>
 															</select>
 														</div>
-														<div class="col-lg-3">
+														<div class="col-lg-3 select-option-first">
 															<label class="mt-10">Select Year</label>
 															<select class="form-select" name="know_from">
 																<option value="2000" selected="">2000</option>
@@ -449,7 +449,64 @@
 														
 													</div>
 												</div><!-- end row -->
+												<div class="row">
+													<div class="col-xl-12">
+														<div class="card box-border mt-25">
+															<div class="card-header align-items-center d-flex">
+																<h4 class="card-title mb-0 flex-grow-1">Member Growth</h4>
+															</div><!-- end card header -->
 
+															<div class="card-body">
+																<div class="live-preview">
+																	<div class="table-responsive table-card">
+																		<table class="table align-middle table-nowrap mb-0">
+																			<thead class="table-light">
+																				<tr>
+																					<th scope="col" style="width: 46px;">
+																						<div class="form-check">
+																							<input class="form-check-input" type="checkbox" value="" id="cardtableCheck">
+																							<label class="form-check-label" for="cardtableCheck"></label>
+																						</div>
+																					</th>
+																					<th scope="col">Month</th>
+																					<th scope="col">Active Members</th>
+																					<th scope="col">Visitors</th>
+																					<th scope="col">Frozen</th>
+																					<th scope="col">Cancelled</th>
+																					<th scope="col">Growth <i class="fas fa-question calculat-question" data-bs-toggle="tooltip" data-bs-placement="top" title="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "></i></th>
+																					<th scope="col">Churn <i class="fas fa-question calculat-question" data-bs-toggle="tooltip" data-bs-placement="top" title="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "></i>
+																					<th scope="col">Net <i class="fas fa-question calculat-question" data-bs-toggle="tooltip" data-bs-placement="top" title="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "></i></th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr>
+																					<td>
+																						<div class="form-check">
+																							<input class="form-check-input" type="checkbox" value="" id="cardtableCheck01">
+																							<label class="form-check-label" for="cardtableCheck01"></label>
+																						</div>
+																					</td>
+																					<td>11/2024 <span class="badge text-bg-success">Current</span> </td>
+																					<td>3</td>
+																					<td>0</td>
+																					<td>0</td>
+																					<td>0</td>
+																					<td>
+																						0% 
+																						
+																					</td>
+																					<td>0%</td>
+																					<td>0%</td>
+																				</tr>
+																			
+																			</tbody>
+																		</table>
+																	</div>
+																</div>
+															</div><!-- end card-body -->
+														</div><!-- end card -->
+													</div><!-- end col -->
+												</div><!-- end row -->
 											</div>
 										</div>
 									</div><!-- end card-body -->

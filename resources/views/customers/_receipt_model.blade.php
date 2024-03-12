@@ -73,7 +73,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $orderDetail->business_services_with_trashed->program_name}}</span>
+                            <span>{{ ($orderDetail->business_services_with_trashed ? $orderDetail->business_services_with_trashed->program_name : 'N/A' )}}</span>
                         </div>
                     </div>
                     
@@ -84,7 +84,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $orderDetail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}}</span>
+                            <span>{{ $orderDetail->business_price_detail_with_trashed ? $orderDetail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title : 'N/A'}}</span>
                         </div>
                     </div>
                     
@@ -95,7 +95,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{$orderDetail->business_price_detail_with_trashed->price_title}}</span>
+                            <span>{{$orderDetail->business_services_with_trashed ? $orderDetail->business_price_detail_with_trashed->price_title : 'N/A'}}</span>
                         </div>
                     </div>
                     
@@ -117,7 +117,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{$orderDetail->business_price_detail_with_trashed->membership_type}}</span>
+                            <span>{{$orderDetail->business_price_detail_with_trashed ? $orderDetail->business_price_detail_with_trashed->membership_type : 'N/A' }}</span>
                         </div>
                     </div>
                     
@@ -128,7 +128,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $orderDetail->getparticipate()}}</span>
+                            <span>{{ $orderDetail->getparticipate() ?? N/A}}</span>
                         </div>
                     </div>
                     
@@ -139,7 +139,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $orderDetail->decodeparticipate()}}</span>
+                            <span>{{ ($orderDetail->order_type == 'Membership') ? $orderDetail->decodeparticipate() : 'N/A' }} </span>
                         </div>
                     </div>
                     
@@ -150,7 +150,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $orderDetail->business_services_with_trashed->sport_activity}}</span>
+                            <span>{{ $orderDetail->business_services_with_trashed   ? $orderDetail->business_services_with_trashed->sport_activity : 'N/A' }}</span>
                         </div>
                     </div>
                     
@@ -161,7 +161,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{$orderDetail->business_services_with_trashed->select_service_type}}</span>
+                            <span>{{$orderDetail->business_services_with_trashed  ? $orderDetail->business_services_with_trashed->select_service_type : 'N/A'}}</span>
                         </div>
                     </div>
                     
@@ -208,6 +208,29 @@
                             <span>{{date('d-m-Y',strtotime($orderDetail->expired_at))}}</span>
                         </div>
                     </div>
+
+                    <div class="col-md-6 col-xs-6">
+                        <div class="text-left">
+                            <label>ADD ON SERVICE:</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-6">
+                        <div class="float-end text-right">
+                            <span>{!! getAddonService($orderDetail->addOnServicesId,$orderDetail->addOnServicesQty) !!}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xs-6">
+                        <div class="text-left">
+                            <label>PRODUCTS:</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-6">
+                        <div class="float-end text-right">
+                            <span>{!! getProducts($orderDetail->productIds,$orderDetail->productQtys,$orderDetail->productTypes) !!}</span>
+                        </div>
+                    </div>
+
                     
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="text-left space-bottom">
@@ -216,7 +239,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>${{$orderDetail->total()}}</span>
+                            <span>${{$orderDetail->total() + $orderDetail->productTotalPrices + $orderDetail->addOnservice_total}}</span>
                         </div>
                     </div>
                     @if (!$loop->last)

@@ -118,7 +118,7 @@
 					</div>
 				</div>
 				
-				<label class="mb-10 fw-600">Step: 6 </label> <span class=""> Select Who's Participating</span>
+				<!-- <label class="mb-10 fw-600">Step: 6 </label> <span class=""> Select Who's Participating</span>
 
 				<div class="row" id="participantDiv">
 
@@ -133,7 +133,7 @@
 							</select>
 						</div>
 					</div>
-				</div>
+				</div> -->
 																																	
 
 				<label class="mb-10 fw-600">Step: 7 </label> <span class=""> Select Add-On Service (Optional)</span>
