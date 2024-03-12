@@ -16,6 +16,11 @@
 			<tbody>
 				@php $counter = 1; @endphp
 				@forelse($bookDetails as $i=>$list) 
+					@php
+						if($list->expired_at < date('Y-m-d') && @$type == 'notUsed' && $list->status == 'active'){
+							$list->status = 'completed';
+						}
+					@endphp
 					<tr>
 						<td>{{$counter}}</td>
 						<td><a href="{{url('business/'.@$business_id.'/customers/'.@$list->Customer->id)}}" class="fw-medium" target="_blank">{{@$list->Customer->full_name}}</a> </td>
