@@ -79,127 +79,221 @@
 							</div>
 						</form>
 						<div class="app-search">
-							<a href="{{route('business_customer_create' ,['business_id'=> Auth::user()->cid])}}" class="add-client mobile-none" >Add New Client</a>
+							<a href="{{route('business_customer_create' ,['business_id'=> Auth::user()->cid])}}" class="add-client mobile-none zfold-none" >Add New Client</a>
 							<!-- <a href="#" class="add-client mobile-none"  data-bs-toggle="modal" data-bs-target=".new-client-steps">Add New Client</a> -->
 						</div>
 					</div>
 
 					<div class="d-flex align-items-center">
-						<div>
-							<div class="ms-1 header-item d-none i-none d-sm-flex">
-								<button type="button" class="btn btn-red" onclick="openNaav()"> Complete Setup <i class="fas fa-angle-right ml-20"></i>
+
+						<div class="provider-sidebar-scroll">
+							<div class="ms-1 header-item d-none d-sm-flex">
+								<button type="button" class="btn btn-red zfold-none" onclick="openNaav()"> Complete Setup <i class="fas fa-angle-right ml-20 mil-5"></i>
 								</button>
 							</div>
+							<div class="ms-1 header-item d-sm-flex">
+								<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none sidebar-progress-bar" onclick="openNaav()"> <i class="fas fa-tasks fs-22"></i>
+								</button>
+							</div>
+						
 							<nav class="com-sidebar">
-									<div class="navbar-wrapper">
-										<div id="completesetup" class="com-sidepanel">
-											<div class="navbar-content">
-												<div class="container"> 
-													<div class="row">
-														<div class="col-lg-8">
-															<div class="setup-title">
-																<label> Setup Guide</label>
-															</div>
+								<div class="navbar-wrapper">
+									<div id="completesetup" class="com-sidepanel">
+										<div class="navbar-content">
+											<div class="container"> 
+												<div class="row">
+													<div class="col-lg-8 col-8">
+														<div class="setup-title">
+															<label> Setup Guide</label>
 														</div>
-														<div class="col-lg-4">
-															<div class="p-relative">
-																<a href="javascript:void(0)" class="com-cancle fa fa-times" onclick="closeNaav()"></a>
-															</div>
-														</div>
-													</div>	
-												</div>
-												<div class="border-bottom-grey mt-10 mb-10"></div>	
-												
-												<div class="highlight-part">
-													<div class="row">
-														<div class="col-lg-8">
-															<div class="welcome-sidebar">
-																<label>Hi Darryl, continue setting up your new account.</label>
-																<span>3 of 5 tasks completed</span>
-															</div>
-														</div>
-														<div class="col-lg-4">
-															<div>
-															<div id="wrapper" class="center">
-																<svg class="circle-progress green noselect" data-progress="30" x="0px" y="0px" viewBox="0 0 80 80">
-																	<path class="track" d="M5,40a35,35 0 1,0 70,0a35,35 0 1,0 -70,0" />
-																	<path class="fill" d="M5,40a35,35 0 1,0 70,0a35,35 0 1,0 -70,0" />
-																	<text class="value" x="50%" y="43%">0%</text>
-																	<text class="text1" x="50%" y="64%">Complete</text>
-																</svg>
-															</div>
-															</div>
+													</div>
+													<div class="col-lg-4 col-4">
+														<div class="p-relative">
+															<a href="javascript:void(0)" class="com-cancle fa fa-times" onclick="closeNaav()"></a>
 														</div>
 													</div>
 												</div>	
-												<div class="container">
-													<div class="new sidebar-radio">
-														<form>
-															<div class="form-group options-box">
-																<input type="checkbox" id="html">
-																<label for="html">  Add your business address </label>
-															</div>
-															<div class="form-group options-box">
-																<input type="checkbox" id="css">
-																<label for="css"> Add your business website </label>
-															</div>
-															<div class="form-group options-box">
-																<input type="checkbox" id="javascript">
-																<label for="javascript"> Set up your service list </label>
-															</div> 
-															<div class="form-group options-box">
-																<input type="checkbox" id="members">
-																<label for="members"> Set up your team members </label>
-															</div>
-															<div class="form-group options-box">
-																<input type="checkbox" id="working">
-																<label for="working"> Set your working hours </label>
-															</div>
-														</form>
+											</div>
+											<div class="border-bottom-grey mt-10 mb-10"></div>	
+												
+											<div class="highlight-part">
+												<div class="row">
+													<div class="col-lg-8 col-8">
+														<div class="welcome-sidebar">
+															<label>Hi Darryl, continue setting up your company.</label>
+															<span>3 of 5 tasks completed</span>
+														</div>
+													</div>
+													<div class="col-lg-4 col-4">
+														<div id="wrapper" class="center">
+															<svg class="circle-progress green noselect" data-progress="30" x="0px" y="0px" viewBox="0 0 80 80">
+																<path class="track" d="M5,40a35,35 0 1,0 70,0a35,35 0 1,0 -70,0" />
+																<path class="fill" d="M5,40a35,35 0 1,0 70,0a35,35 0 1,0 -70,0" />
+																<text class="value" x="50%" y="43%">0%</text>
+																<text class="text1" x="50%" y="64%">Complete</text>
+															</svg>
+														</div>
 													</div>
 												</div>
-												<div class="container mb-60">
-													<div class="row">
-														<div class="col-lg-12">
-															<label class="fs-15">Things to try</label>
+											</div>	
+											<div class="container">
+												<div class="new sidebar-radio">
+													<form>
+														<div class="form-group options-box">
+															<input type="checkbox" id="Setup">
+															<label for="Setup" onclick="companySetup()"> Complete your company setup. </label>
 														</div>
-														<div class="col-lg-6">
-															<div class="sidebar-service-box mb-15">
-																<div class="mb-15">
-																	<i class="fas fa-user-cog fs-18"></i>
-																</div>
-																<div class="mb-15">
-																	<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-																</div>
-																<div>
-																<button type="button" class="btn btn-red"> Service</button>
-																</div>
+														<div class="form-group options-box">
+															<input type="checkbox" id="Client">
+															<label for="Client" onclick="addClient()"> Add your clients </label>
+														</div>
+														<div class="form-group options-box">
+															<input type="checkbox" id="servies">
+															<label for="servies" onclick="servies()"> Set up your services </label>
+														</div> 
+														<div class="form-group options-box">
+															<input type="checkbox" id="staff">
+															<label for="staff" onclick="staff()"> Add your staff </label> 
+														</div>
+														<div class="form-group options-box">
+															<input type="checkbox" id="working">
+															<label for="working" onclick="newDoc()"> Add your products </label>
+														</div>
+														<div class="form-group options-box">
+															<input type="checkbox" id="payment">
+															<label for="payment" onclick="payment()"> Take your first payment</label>
+														</div>
+													</form>
+												</div>
+											</div>
+											<div class="container mb-60 mb-200">
+												<div class="row">
+													<div class="col-lg-12">
+														<label class="fs-15">Things to try</label>
+													</div>
+													<div class="col-lg-6">
+														<div class="sidebar-service-box mb-15">
+															<div class="mb-15">
+																<i class="fas fa-share-alt fs-18"></i>
+															</div>
+															<div class="mb-15">
+																<label>Share Experience </label>
+																<p>Make a post on your social profile to engage clients, network and share. </p>
+															</div>
+															<div>
+																<a type="button" class="btn btn-red">Experience</a>
 															</div>
 														</div>
-														<div class="col-lg-6">
-															<div class="sidebar-service-box mb-15">
-																<div class="mb-15">
-																	<i class="fas fa-hand-holding-usd fs-18"></i>
-																</div>
-																<div class="mb-15">
-																	<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-																</div>
-																<div>
-																<button type="button" class="btn btn-red"> Prices</button>
-																</div>
+													</div>
+													<div class="col-lg-6">
+														<div class="sidebar-service-box mb-15">
+															<div class="mb-15">
+																<i class="fas fa-plus fs-18"></i>
+															</div>
+															<div class="mb-15">
+																<label>Create A Task </label>
+																<p>Create a task to stay get things done and stay organized.</p>
+															</div>
+															<div>
+																<a type="button" class="btn btn-red">Task</a>
 															</div>
 														</div>
-														<div class="col-lg-6">
-															<div class="sidebar-service-box mb-15">
-																<div class="mb-15">
-																	<i class="fas fa-copy fs-18"></i>
-																</div>
-																<div class="mb-15">
-																	<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-																</div>
-																<div>
-																<button type="button" class="btn btn-red"> Prices</button>
-																</div>
+													</div>
+													<div class="col-lg-6">
+														<div class="sidebar-service-box mb-15">
+															<div class="mb-15">
+																<i class="fas fa-users fs-18"></i>
+															</div>
+															<div class="mb-15">
+																<label>Engage Clients </label>
+																<p>Send a direct message to your clients from the inbox</p>
+															</div>
+															<div>
+																<a type="button" class="btn btn-red">Clients</a>
+															</div>
+														</div>
+													</div>
+													<div class="col-lg-6">
+														<div class="sidebar-service-box mb-15">
+															<div class="mb-15">
+																<i class="fas fa-bullhorn fs-18"></i>
+															</div>
+															<div class="mb-15">
+																<label>Create An Announcement</label>
+																<p>Engage your clients further by sending an announcement</p>
+															</div>
+															<div>
+																<a type="button" class="btn btn-red">Announcement</a>
+															</div>
+														</div>
+													</div>
+													<div class="col-lg-6">
+														<div class="sidebar-service-box mb-15">
+															<div class="mb-15">
+																<i class="fas fa-coins fs-18"></i>
+															</div>
+															<div class="mb-15">
+																<label>Financial Dashboard</label>
+																<p>Keep track of all upcoming payments from stripe</p>
+															</div>
+															<div>
+																<a type="button" class="btn btn-red">Dashboard</a>
+															</div>
+														</div>
+													</div>
+													<div class="col-lg-6">
+														<div class="sidebar-service-box mb-15">
+															<div class="mb-15">
+																<i class="fas fa-file fs-18"></i>
+															</div>
+															<div class="mb-15">
+																<label>Reports</label>
+																<p>Keep track of the health of your business by checking your reports</p>
+															</div>
+															<div>
+																<a href="#" type="button" class="btn btn-red">Reports</a>
+															</div>
+														</div>
+													</div>
+													<div class="col-lg-6">
+														<div class="sidebar-service-box mb-15">
+															<div class="mb-15">
+																<i class="fas fa-home fs-18"></i>
+															</div>
+															<div class="mb-15">
+																<label>Dashboard</label>
+																<p>Get insights and quick data on how your business is doing.</p>
+															</div>
+															<div>
+																<a type="button" class="btn btn-red">Dashboard</a>
+															</div>
+														</div>
+													</div>
+													<div class="col-lg-6">
+														<div class="sidebar-service-box mb-15">
+															<div class="mb-15">
+																<i class="fas fa-percentage fs-18"></i>
+															</div>
+															<div class="mb-15">
+																<label>Point of Sale</label>
+																<p>Explore the point of sale to learn how to take payments.</p>
+															</div>
+															<div>
+																<a type="button" class="btn btn-red">Sale</a>
+															</div>
+														</div>
+													</div>
+													<div class="col-lg-6">
+														<div class="sidebar-service-box mb-15">
+															<div class="mb-15">
+																<i class="fas fa-user  fs-18"></i>
+															</div>
+															<div class="mb-15">
+																<label>Client Section</label>
+																<p>Get info, insights, and manage your clients</p>
+															</div>
+															<div>
+																<a type="button" class="btn btn-red">Client Section</a>
 															</div>
 														</div>
 													</div>
@@ -207,9 +301,94 @@
 											</div>
 										</div>
 									</div>
-								</nav>
+								</div>
+							</nav>
 						</div>
 						
+						<div class="provider-sidebar-scroll ms-1">
+							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" onclick="openNavxop()">
+								<i class="fas fa-rocket fs-19"></i>
+							</button>						
+							<nav class="com-sidebar">
+								<div class="navbar-wrapper">
+									<div id="newthings" class="com-sidepanel">
+										<div class="navbar-content">
+											<div class="container"> 
+												<div class="row">
+													<div class="col-lg-12 col-12">
+														<div class="p-relative">
+															<a href="javascript:void(0)" class="com-cancle fa fa-times" onclick="closeNavxop()"></a>
+														</div>
+													</div>
+												</div>	
+											</div>
+											<div class="pb-100 pt-40">
+												<div class="container">
+													<div class="row">
+														<div class="col-lg-12 col-12">
+															<div class="top-welcome">
+																<label>Welcome to Fitnessity</label>
+																<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+															</div>
+														</div>
+													</div>
+													<div class="border-bottom-grey"></div>
+													<div class="row">
+														<div class="col-lg-12 col-12">
+															<div class="top-welcome mt-15 mb-15">
+																<label>Follow@fitnessity on Instagram</label>
+																<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+																<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
+															</div>
+														</div>
+													</div>
+													<div class="border-bottom-grey"></div>
+													<div class="row">
+														<div class="col-lg-12 col-12">
+															<div class="top-welcome mt-15 mb-15">
+																<label>Follow@fitnessity on Twitter</label>
+																<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+																<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
+															</div>
+														</div>
+													</div>
+													<div class="border-bottom-grey"></div>
+													<div class="row">
+														<div class="col-lg-12 col-12">
+															<div class="top-welcome mt-15 mb-15">
+																<label>Follow@fitnessity on Facebook</label>
+																<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+																<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
+															</div>
+														</div>
+													</div>
+													<div class="border-bottom-grey"></div>
+													<div class="row">
+														<div class="col-lg-12 col-12">
+															<div class="top-welcome mt-15 mb-15">
+																<label>Follow@fitnessity on Ticktok</label>
+																<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+																<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
+															</div>
+														</div>
+													</div>
+													<div class="border-bottom-grey"></div>
+													<div class="row">
+														<div class="col-lg-12 col-12">
+															<div class="top-welcome mt-15 mb-15">
+																<label>Watch how to use the software on YouTube</label> 
+																<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+																<button type="submit" class="btn-red-primary btn-red mt-15">Watch and subscribe </button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>											
+										</div>
+									</div>
+								</div>
+							</nav>
+						</div>
 
 						<div class="ms-1 header-item d-none i-none d-sm-flex">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-toggle="fullscreen">
@@ -281,10 +460,10 @@
 								</div>
 
 								<div class="tab-content position-relative" id="notificationItemsTabContent">
-									<div class="tab-pane fade show active py-2 ps-2" id="all-noti-tab" role="tabpanel">
-										<div data-simplebar style="max-height: 300px;" class="pe-2">
+									<div class="tab-pane fade show active py-2 ps-2 alerts-scroll" id="all-noti-tab" role="tabpanel">
+										<div class="pe-2">
 											@forelse(getNotificationDashboard('') as $n)
-												<div class="text-reset notification-item d-block dropdown-item">
+												<div class="text-reset notification-item d-block dropdown-item position-relative">
 													<div class="d-flex">
 														@php
 															if($n->table == 'CustomerNotes'){
@@ -349,13 +528,13 @@
 										</div>
 									</div>
 
-									<div class="tab-pane fade py-2 ps-2" id="messages-tab" role="tabpanel" aria-labelledby="messages-tab">
-										<div data-simplebar style="max-height: 300px;" class="pe-2">
+									<div class="tab-pane fade py-2 ps-2 alerts-scroll" id="messages-tab" role="tabpanel" aria-labelledby="messages-tab">
+										<div class="pe-2">
 										</div>
 									</div>
 
-									<div class="tab-pane fade py-2 ps-2" id="alerts-tab" role="tabpanel" aria-labelledby="alerts-tab">
-										<div data-simplebar style="max-height: 300px;">
+									<div class="tab-pane fade py-2 ps-2 alerts-scroll" id="alerts-tab" role="tabpanel" aria-labelledby="alerts-tab">
+										<div>
 											@if(!empty(getNotificationDashboard('Alert')))
 												<input type="hidden" id="alertIds" value="{{ implode(',', getNotificationDashboard('Alert')->pluck('id')->toArray())}}">
 											@endif
@@ -564,11 +743,21 @@
 
 <script>
 function openNaav() {
-	document.getElementById("completesetup").style.width = "380px";
+	document.getElementById("completesetup").style.width = "358px";
 }
 
 function closeNaav() {
 	document.getElementById("completesetup").style.width = "0";
+}
+</script>
+
+<script>
+function openNavxop() {
+	document.getElementById("newthings").style.width = "358px";
+}
+
+function closeNavxop() {
+	document.getElementById("newthings").style.width = "0";
 }
 </script>
 
@@ -586,5 +775,26 @@ window.onload = function(){
 		value.querySelector('.fill').setAttribute('style', 'stroke-dashoffset: ' + ((100 - percent) / 100) * max);
 		value.querySelector('.value').innerHTML = percent + '%';
 	});
+}
+</script>
+
+<script>
+function companySetup() {
+  window.location.assign("http://dev.fitnessity.co/personal/company/create?company=68")
+}
+function addClient() {
+  window.location.assign("http://dev.fitnessity.co/business/68/customers")
+}
+function servies() {
+  window.location.assign("http://dev.fitnessity.co/business/68/services/select")
+}
+function staff() {
+  window.location.assign("http://dev.fitnessity.co/business/68/staff")
+}
+function newDoc() {
+  window.location.assign("http://dev.fitnessity.co/business/68/products/create")
+}
+function payment() {
+  window.location.assign("http://dev.fitnessity.co/business/68/orders/create?book_id=0")
 }
 </script>

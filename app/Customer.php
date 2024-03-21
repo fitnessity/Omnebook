@@ -316,16 +316,16 @@ class Customer extends Authenticatable
     {
         $familes = [];
         if($this->parent_cus_id){
-            $parent = Customer::where('id',$this->parent_cus_id)->first();
+            $parent = Customer::where(['id' => $this->parent_cus_id ,'business_id' => $this->business_id])->first();
             if ($parent != '') {
-                $familes = Customer::where('parent_cus_id', $parent->id)->where('id', '<>', $this->id)->get();
-                $familes = $familes->merge(Customer::where('id',$this->parent_cus_id)->where('id', '<>', $this->id)->get());
-                $familes = $familes->merge(Customer::where('parent_cus_id',$this->id)->get());
+                $familes = Customer::where(['parent_cus_id'=> $parent->id, 'business_id' => $this->business_id])->where('id', '<>', $this->id)->get();
+                $familes = $familes->merge(Customer::where(['id'=>$this->parent_cus_id ,'business_id' => $this->business_id])->where('id', '<>', $this->id)->get());
+                $familes = $familes->merge(Customer::where(['parent_cus_id'=> $this->id, 'business_id' => $this->business_id])->get());
             }
             
             return $familes;
         }else{
-            return Customer::where('parent_cus_id',$this->id)->get();
+            return Customer::where(['parent_cus_id'=> $this->id, 'business_id' => $this->business_id])->get();
         }
     }
 

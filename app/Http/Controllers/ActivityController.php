@@ -52,11 +52,8 @@ class ActivityController extends Controller {
 
 		$name = 'Personal Training';
 		
-
-
         $current_date = new DateTime();
         $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $activities->pluck('id'))->limit(3)->get();
-
 
 		return view('activity.get_started',[
 			'activity_get_start_fast'=>$activity_get_start_fast,
@@ -253,14 +250,25 @@ class ActivityController extends Controller {
 	        $searchDatauserProfile = $searchDatabusiness = $searchDataacivity = '';
 
 	        if($request->label != ''){
-				$all_activities = $all_activities->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
-				$this_nthactivity = $this_nthactivity->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
-				$most_popularactivity = $most_popularactivity->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
-				$Trainers_coaches_acitvity = $Trainers_coaches_acitvity->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
-				$Fun_Activities = $Fun_Activities->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
-				$Ways_To_Work_out = $Ways_To_Work_out->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
-				$events_activity = $events_activity->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
-				$nxtact = $nxtact->where('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+
+	        	$all_activities = $this->buildQuery($all_activities,'zip_code',$request->label);
+				$this_nthactivity = $this->buildQuery($this_nthactivity,'zip_code',$request->label);
+				$most_popularactivity = $this->buildQuery($most_popularactivity,'zip_code',$request->label);
+				$Trainers_coaches_acitvity = $this->buildQuery($Trainers_coaches_acitvity,'zip_code',$request->label);
+				$Fun_Activities = $this->buildQuery($Fun_Activities,'zip_code',$request->label);
+				$Ways_To_Work_out = $this->buildQuery($Ways_To_Work_out,'zip_code',$request->label);
+				$events_activity = $this->buildQuery($events_activity,'zip_code',$request->label);
+				$nxtact = $this->buildQuery($nxtact,'zip_code',$request->label);
+				
+				$all_activities = $all_activities->orWhere('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+				$this_nthactivity = $this_nthactivity->orWhere('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+				$most_popularactivity = $most_popularactivity->orWhere('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+				$Trainers_coaches_acitvity = $Trainers_coaches_acitvity->orWhere('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+				$Fun_Activities = $Fun_Activities->orWhere('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+				$events_activity = $events_activity->orWhere('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+				$nxtact = $nxtact->orWhere('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
+
+				
 
 				$searchDatauserProfile = User::where('username', $request->label)->first();
 	            $searchDatabusiness = CompanyInformation::where('dba_business_name',$request->label)->first();
@@ -1559,6 +1567,13 @@ class ActivityController extends Controller {
     	$html = View::make('activity.activity_booking_html')->with(['activityDate' => $activityDate, 'serviceId' => $serviceId , 'companyId' => $companyId  ,'chk_found'=>$chkFound ,'categories' => $categories, 'priceOption' =>$priceOption,'bschedule' =>$bschedule , 'timeChk' => $timeChk ,'maxSports' =>  $maxSports , 'adultPrice' => $adult_price , 'childPrice' => $child_price, 'infantPrice' => $infant_price , 'addOnServices' =>$addOnServices ,'priceId' =>$priceId ,'bschedulefirst' => $bschedulefirst ,'date' =>$date,'categoryId' =>$categoryId ,'scheduleId' =>$scheduleId , 'paySession' => $paySession ,'adultDiscountPrice' => $adultDiscountPrice,'childDiscountPrice' => $childDiscountPrice,'infantDiscountPrice' => $infantDiscountPrice])->render();
 
  		return response()->json(['html' => $html ,'date'=>$formattedDate]);
+    }
+
+    public function getParticipateData(Request $request){
+    	$family = getFamilyMember($request->cid);
+    	$priceid = $request->priceid; 
+    	$type = $request->type; 
+    	return view('activity.participate_data' ,compact('priceid','type','family'));
     }
 
     public function getAddOnData(Request $request){

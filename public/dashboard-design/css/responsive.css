@@ -18,6 +18,7 @@
 	.self-check-sp { margin-bottom: 40px; }
 	.home-banner-title{  padding: 150px 0 150px;}
 	.desktop-none-client{display: none;}
+	.notification-close{right: 28px;}
 }
 
 @media screen and (min-width: 768px) and (max-width: 992px){
@@ -122,6 +123,8 @@
 	.i-none{display: none !important;}
 	.confirmed-slider .owl-nav .owl-next{right: -55px !important; width: 20px; height: 20px; font-size: 18px;}
 	.confirmed-slider .owl-nav .owl-prev{left: -55px !important; width: 20px; height: 20px; font-size: 18px;}
+	.mil-5 { margin-left: 5px;  }
+	.com-sidepanel{top: 67px;}
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){
@@ -192,7 +195,11 @@
 	.cash-tend {  margin-left: 0px;}
 	.chat-leftsidebar {  height: calc(70vh - 70px - 60px - 8px) !important;}
 	.chat-conversation { height: calc(70vh - 275px) !important;}
-	
+	.zfold-none{	display: none;  }
+	.sidebar-progress-bar{display: block;}
+	.com-sidepanel{top: 104px;}
+	#page-topbar { top: 104px;  }
+	.com-cancle{color: #000 !important;}
 }
 
 @media screen and (min-width: 560px) and (max-width: 699px){ 
@@ -233,6 +240,7 @@
 	.show-all {	margin-top: 0;  }
 	.show-all .join-btn{margin-top: 0; padding: 0px !important;}
 	.star-rest .activity-inner-data{padding: 0 0;}
+	
 }
 
 @media screen and (max-width: 699px){ 
@@ -397,6 +405,10 @@
 	.self-welcome-logo{ text-align: center;}
 	.welcome-title label {font-size: 45px; }
 	.welcome-title span { font-size: 45px; line-height: 55px;}  
+	.com-sidepanel{top: 103px;}
+	.com-cancle{color: #000 !important;}
+	.sidebar-progress-bar{	display: block;	  }
+	.notification-close{right: 35px;}
 }
 
 

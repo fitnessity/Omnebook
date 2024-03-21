@@ -776,6 +776,19 @@ input:disabled{
 	    $('[data-toggle="tooltip"]').tooltip();
 	});
 
+	function getAllSelectedOptions() {
+        var selectedOptions = [];
+
+        $('#participantDiv').find('select').each(function() {
+            var selectedValue = $(this).val();
+            var dataType = $(this).find('option:selected').data('type');
+            selectedOptions.push({ id: selectedValue, from: dataType });
+        });
+        
+        return selectedOptions;
+    }
+
+
 	$(document).ready(function() {
 		$(document).on("click", "#btnaddcart", function(){
 			$('#spoterror').html('');
@@ -806,21 +819,42 @@ input:disabled{
 					$('#spoterror').html("You have "+maxQty+" sports left.");
 				}else{
 					var form = $("#addtocartform");
-			        var url = '{{route("addtocart")}}';
-			        $.ajax({
-			            type: "POST",
-			            url: url,
-			            data: form.serialize(),
-			            success: function(data) {
-			                if(data == 'no_spots'){
-			                 	$('#spoterror').html("There Is No Spots left You Can't Add This Activity.");
-			                }else{
-			                	$(".btns-modal").html('<button type="button" class="addbusiness-btn-modal noborder" data-dismiss="modal">Add Another Person</button>     <a href="'+data+'" class=" addbusiness-btn-modal" id="redicttosuccess">Continue Add To Cart</a>');
-			                	$('#confirmredirection').modal({ backdrop: 'static',keyboard: false});
-			                }
-			                $(".cartitmclass").load(location.href+" .cartitmclass>*","");
+
+					var allSelected = true;
+			        $('.familypart').each(function() {
+			            if ($(this).find('option:selected').not('[value=""]').length === 0) {
+			                allSelected = false;
+			                return false;
 			            }
 			        });
+        			if (allSelected) {
+			           @if(Auth::check())
+							var selectedOptions = getAllSelectedOptions();
+							$.each(selectedOptions, function(index, option) {
+					            form.append('<input type="hidden" name="participateAry['+index+'][id]" value="'+option.id+'">');
+					            form.append('<input type="hidden" name="participateAry['+index+'][from]" value="'+option.from+'">');
+					        });
+					    @endif
+						
+				        var url = '{{route("addtocart")}}';
+				        $.ajax({
+				            type: "POST",
+				            url: url,
+				            data: form.serialize(),
+				            success: function(data) {
+				                if(data == 'no_spots'){
+				                 	$('#spoterror').html("There Is No Spots left You Can't Add This Activity.");
+				                }else{
+				                	$(".btns-modal").html('<button type="button" class="addbusiness-btn-modal noborder" data-dismiss="modal">Add Another Person</button>     <a href="'+data+'" class=" addbusiness-btn-modal" id="redicttosuccess">Continue Add To Cart</a>');
+				                	$('#confirmredirection').modal({ backdrop: 'static',keyboard: false});
+				                }
+				                $(".cartitmclass").load(location.href+" .cartitmclass>*","");
+				            }
+				        });
+			        } else {
+			        	$('#spoterror').html('<br>Please select all who is participant.');
+			        }
+					
 				}
 		    }else{
 		    	$('#ActivtityFail').modal('show');
@@ -874,7 +908,11 @@ input:disabled{
 		$(document).on('click','.adultplus',function(){
 		    $('#adultcnt').val(parseInt($('#adultcnt').val()) + 1 );
 		    $('#adultCount').val(parseInt($('#adultcnt').val()));
+		    $('#totalcnt').val(parseInt($('#totalcnt').val() + 1));
 		    calculateTotal();
+		    @if(Auth::check())
+		    	participateCnt('adult');
+		   	@endif
 		});
 
     	$(document).on('click','.adultminus',function(){
@@ -882,38 +920,67 @@ input:disabled{
 			if ($('#adultcnt').val() <= 0) {
 				$('#adultcnt').val(0);
 			}
+			$('#totalcnt').val(parseInt($('#totalcnt').val() - 1));
+			if ($('#totalcnt').val() <= 0) {
+				$('#totalcnt').val(0);
+			}
 			$('#adultCount').val(parseInt($('#adultcnt').val()));
 			calculateTotal();
+			@if(Auth::check())
+				removeParticipateCnt('adult');
+			@endif
 	    });
 
 	    $('#childcnt').prop('readonly', true);
 		$(document).on('click','.childplus',function(){
 			$('#childcnt').val(parseInt($('#childcnt').val()) + 1 );
+			$('#totalcnt').val(parseInt($('#totalcnt').val() + 1));
 			$('#childCount').val(parseInt($('#childcnt').val()));
 			calculateTotal();
+			@if(Auth::check())
+				participateCnt('child');
+			@endif
 		});
     	$(document).on('click','.childminus',function(){
 			$('#childcnt').val(parseInt($('#childcnt').val()) - 1 );
+			$('#totalcnt').val(parseInt($('#totalcnt').val() - 1));
 			if ($('#childcnt').val() <= 0) {
 				$('#childcnt').val(0);
 			}
+			if ($('#totalcnt').val() <= 0) {
+				$('#totalcnt').val(0);
+			}
 			$('#childCount').val(parseInt($('#childcnt').val()));
 			calculateTotal();
+			@if(Auth::check())
+				removeParticipateCnt('child');
+			@endif
 	    }); 
 
 	    $('#infantcnt').prop('disabled', true);
 		$(document).on('click','.infantplus',function(){
 			$('#infantcnt').val(parseInt($('#infantcnt').val()) + 1 );
+			$('#totalcnt').val(parseInt($('#totalcnt').val()) + 1 );
 			$('#infantCount').val(parseInt($('#infantcnt').val()));
 			calculateTotal();
+			@if(Auth::check())
+				participateCnt('infant');
+			@endif
 		});
     	$(document).on('click','.infantminus',function(){
 			$('#infantcnt').val(parseInt($('#infantcnt').val()) - 1 );
+			$('#totalcnt').val(parseInt($('#totalcnt').val()) - 1 );
 			if ($('#infantcnt').val() <= 0) {
 				$('#infantcnt').val(0);
 			}
+			if ($('#totalcnt').val() <= 0) {
+				$('#totalcnt').val(0);
+			}
 			$('#infantCount').val(parseInt($('#infantcnt').val()));
 			calculateTotal();
+			@if(Auth::check())
+				removeParticipateCnt('infant');
+			@endif
 	    });
  	
 		$(document).on('click', '.serv_fav1', function(){
@@ -951,6 +1018,29 @@ input:disabled{
 </script>
 
 <script>
+
+	@if(Auth::check())
+		function participateCnt(type){
+			$.ajax({
+	            type: "POST",
+	            url: '{{route("get-participate-data")}}',
+	            data: {
+	            	'_token' : '{{csrf_token()}}',
+	            	'cid' : '{{$companyid}}',
+	            	'priceid' : $('#selprice').val(),
+	            	'type' : type,
+	            },
+	            success: function(data) {
+	                $('#participantDiv').append(data);
+	            }
+	        });
+		}
+	@endif
+
+	function removeParticipateCnt(type){
+		$('#participantDiv').children('.'+type).last().remove();
+	}
+
 	function  setAddOnServiceTotal() {
 		var totalQty =  0;
 		var sQty = '';
@@ -990,7 +1080,7 @@ input:disabled{
 	}
 
 	function addhiddentime(id,sid,chk) {
-		updatedetail({{$companyid}},sid,'schedule',id);
+		updatedetail('{{$companyid}}',sid,'schedule',id);
 		if(chk == 1){
 			$('#Countermodalbody').html('<div class="row "> <div class="col-lg-12 text-center"> <div class="modal-inner-txt scheduler-time-txt label-space"><label>You can\'t book this activity for today.</label><label> The time has passed.</label><label>Please choose another time.</label></div> </div></div>');
 			$('#Countermodal').modal('show');

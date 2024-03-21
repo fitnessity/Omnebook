@@ -69,8 +69,8 @@
                       @endif
                       <span class="<?=$class?>"><?php echo ucfirst($value->status); ?></span>
                     </td>
-                    <td>@if($userBirthdate <= $resultDate && $value->birthdate != '') 
-                      <a href="{{route('admin_user_login_as', ['id' => $value->id])}}" target="_blank">Login</a> @endif
+                    <td>
+                      <a href="{{route('admin_user_login_as', ['id' => $value->id])}}" target="_blank">Login</a>
                     </td>
                     <td>
                       <input class="fitness-fee-ad" type="text" name="fitness_fee" id="fitness_fee{{$value->id}}" value="{{$value->fitnessity_fee}}"> %<br/>

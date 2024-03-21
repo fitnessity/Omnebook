@@ -294,7 +294,7 @@ class CustomerController extends Controller {
                 }
                 ini_set('max_execution_time', 10000); 
                 $headings = (new HeadingRowImport(2))->toArray($request->file('import_file'));
-
+                
                 if(!empty($headings)){
                     foreach($headings as $key => $row) {
                         $firstrow = $row[0];
@@ -303,15 +303,16 @@ class CustomerController extends Controller {
                             $this->error = 'Problem in header.';
                             break;
                         }*/
+                       
                         if($firstrow[1] != 'name' || $firstrow[2] != 'membership_type' ||  $firstrow[3] != 'status'|| $firstrow[4] != 'member_from'|| $firstrow[5] != 'member_to') 
                         {
-                            $this->error = 'Problem in header.';
-                            break;
+
+                            return response()->json(['status'=>500,'message'=>'Problem in header.']);
                         }
                     }
                 }
 
-                $current_company->update(['membership_uploading' => 1]);
+                //$current_company->update(['membership_uploading' => 1]);
                 // $name = Str::random(8).'.csv';
                 // Storage::disk('uploadExcel')->put($name,'');
                 // $target = '../public/ExcelUpload/'.$name;
@@ -379,13 +380,12 @@ class CustomerController extends Controller {
                         $firstrow = $row[0];
                         if( $firstrow[0] != 'date' ||$firstrow[1] != 'day' || $firstrow[2] != 'time' ||$firstrow[4] != 'client'  || $firstrow[8] != 'pricing_option' || $firstrow[9] != 'exp_date'|| $firstrow[10] != 'visits_rem' ) 
                         {
-                            $this->error = 'Problem in header.';
-                            break;
+                            return response()->json(['status'=>500,'message'=>'Problem in header.']);
                         }
                     }
                 }
 
-                $current_company->update(['attendance_uploading' => 1]);
+                //$current_company->update(['attendance_uploading' => 1]);
 
                 // $name = Str::random(8).'.csv';
                 // Storage::disk('uploadExcel')->put($name,'');
@@ -547,7 +547,9 @@ class CustomerController extends Controller {
             User::whereIn('id', $userIdArray)->update(['primary_account' => 0]);
             User::where('id', $cusParent->user_id)->update(['primary_account' => 1]);
         }
-        return Redirect::back();
+
+        return redirect()->route('customer.add_family',['id' => $request['parent_cus_id']]);
+        //return Redirect::back();
     }
 
     public function removefamilyCustomer(Request $request) {
@@ -645,7 +647,10 @@ class CustomerController extends Controller {
             }
 
             if($data['primary_account'] == 1 && $cust->primary_account == 0){
-                Customer::where(['parent_cus_id' => $cust->parent_cus_id])->update(['parent_cus_id' => $cust->id]);
+                if($cust->parent_cus_id){
+                    Customer::where(['parent_cus_id' => $cust->parent_cus_id])->update(['parent_cus_id' => $cust->id]);
+                }
+                
                 $oldParent = Customer::where(['id' => $cust->parent_cus_id])->first();
                 if($oldParent){
 
