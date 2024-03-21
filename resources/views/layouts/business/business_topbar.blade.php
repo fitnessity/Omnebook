@@ -309,20 +309,24 @@
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" onclick="openNavxop()">
 								<i class="fas fa-rocket fs-19"></i>
 							</button>						
-							<nav class="com-sidebar">
+							<nav class="blog-sidebar">
 								<div class="navbar-wrapper">
-									<div id="newthings" class="com-sidepanel">
+									<div id="newthings" class="blog-sidepanel">
 										<div class="navbar-content">
+											<div class="">
 											<div class="container"> 
 												<div class="row">
 													<div class="col-lg-12 col-12">
 														<div class="p-relative">
-															<a href="javascript:void(0)" class="com-cancle fa fa-times" onclick="closeNavxop()"></a>
+															<!-- <a href="javascript:void(0)" class="blog-cancle fa fa-times" onclick="closeNavxop()"></a> -->
+															<label for="">Test</label>
 														</div>
 													</div>
 												</div>	
 											</div>
-											<div class="pb-100 pt-40">
+											</div>
+											
+											<!-- <div class="pb-100 pt-40">
 												<div class="container">
 													<div class="row">
 														<div class="col-lg-12 col-12">
@@ -383,7 +387,7 @@
 														</div>
 													</div>
 												</div>
-											</div>											
+											</div>											 -->
 										</div>
 									</div>
 								</div>
