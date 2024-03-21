@@ -7302,6 +7302,13 @@ p.or-data {
   transition: 0.5s;
   padding-top: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+.provider-sidebar-scroll{
+  overflow-y: auto;
+  scrollbar-color: #000 #eee;
+  scrollbar-width: thin;
+  overflow-x: hidden;
 }
 .com-cancle{
   color: #000000;
@@ -7446,4 +7453,40 @@ p.or-data {
 }
 .mb-60{
   margin-bottom: 60px;
+}
+.mb-200{
+  margin-bottom: 200px;  
+}
+.sidebar-progress-bar{
+  display: none;
+}
+.notification-close{
+  position: absolute;
+  right: 18px;
+  top: 17px;
+  color: #000;
+}
+.alerts-scroll{
+  overflow: scroll;
+  scrollbar-width: thin;
+  height: 300px;
+  overflow-x: hidden;
+}
+.recent-activity-scroll{
+  overflow: scroll;
+  scrollbar-width: thin;
+  height: 410px;
+  overflow-x: hidden;
+}
+.pt-100{
+  padding-top: 100px;
+}
+.pb-100{
+  padding-bottom: 100px;
+}
+.pt-40{
+  padding-top: 40px;
+}
+.top-welcome label{
+  font-size: 15px;
 }

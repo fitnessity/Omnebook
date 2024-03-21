@@ -66,7 +66,7 @@
                     ->where('content_alias', 'footer_content')->get(); ?>
             @foreach($footer_fitnessity as $footercon)
                 <div class="footer-logo">
-                    <img src="/public/images/fitnessity-logo-white.png" style="width:250px">
+                    <img  @if($footercon->banner_image) src="{{url('/public/uploads/cms/'.$footercon->banner_image)}}"   @else  src="/public/images/fitnessity-logo-white.png"   @endif style="width:250px">
                     <p style="text-align: justify; padding: 5px 50px 5px 0px">
                         {!!$footercon->content!!}
                     </p>

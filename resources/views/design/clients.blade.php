@@ -80,7 +80,7 @@
 											<div class="tab-pane active" id="client" role="tabpanel">
 												<div class="row">
 													<div class="col-lg-12">
-														<div class="card-body">
+														<div class="">
 															<!-- Nav tabs -->
 															<ul class="nav nav-tabs mb-3" role="tablist">
 																<li class="nav-item">

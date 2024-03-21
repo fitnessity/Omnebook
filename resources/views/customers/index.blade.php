@@ -81,7 +81,7 @@
 			<div class="modal-body">
 				<div class="form-group mt-10">
 					<label for="img">Choose File: </label>
-					<input type="file" class="form-control" name="file" id="file" onchange="readURL(this)">
+					<input type="file" class="form-control" name="file" id="file1" onchange="readURL(this)">
 					<p class='err mt-10 font-red'></p>
 					<div class="row">
 						<div class="col-md-12">
@@ -109,7 +109,7 @@
 			<div class="modal-body">
 				<div class="form-group mt-10">
 					<label for="img">Choose File: </label>
-					<input type="file" class="form-control" name="membershipFile" id="file" onchange="readURL(this)">
+					<input type="file" class="form-control" name="membershipFile" id="file1" onchange="readURL(this)">
 					<p class='err mt-10 font-red'></p>
 					<div class="row">
 						<div class="col-md-12">
@@ -136,12 +136,14 @@
 			</div>
 			<div class="modal-body text-center">
 				<div class="upload-files">
-					@if ($company->customer_uploading)
+					<!-- @if ($company->customer_uploading)
 					    <button type="button" disabled data-bs-toggle="modal" data-bs-target=".uploadfile" id="upload-csv1" class="btn btn-primary btn-red mb-10">Client importing</button>
 					@else
 					    <button type="button"  data-bs-toggle="modal" data-bs-target=".uploadfile" id="upload-csv1" class="btn btn-primary btn-red mb-10">Upload Client List</button>
-					@endif
+					@endif -->
 					
+					<button type="button"  data-bs-toggle="modal" data-bs-target=".uploadfile" id="upload-csv1" class="btn btn-primary btn-red mb-10">Upload Client List</button>
+
 					<button type="button" id="upload-csv2" class="btn btn-primary btn-black mb-10" data-bs-toggle="modal" data-bs-target=".uploadmembership" >Upload Membership Details</button>
 					<button type="button" id="upload-csv3" class="btn btn-primary btn-red mb-10" data-bs-toggle="modal" data-bs-target=".uploadAttendance" >Upload Attendance Details</button>
 					<br/>
@@ -168,7 +170,7 @@
 			<div class="modal-body">
 				<div class="form-group mt-10">
 					<label for="img">Choose File: </label>
-					<input type="file" class="form-control" name="attendanceFile" id="file" onchange="readURL(this)">
+					<input type="file" class="form-control" name="attendanceFile" id="file1" onchange="readURL(this)">
 					<p class='err mt-10 font-red'></p>
 					<div class="row">
 						<div class="col-md-12">
@@ -191,18 +193,17 @@
 	var profile_pic_var = '';
 	var ext = '';
 	function readURL(input) {
-	   if (input.files && input.files[0]) {
-	      const name = input.files[0].name;
+	   	if (input.files && input.files[0]) {
+	      	const name = input.files[0].name;
 	  		const lastDot = name.lastIndexOf('.');
 	  		const fileName = name.substring(0, lastDot);
-	   	ext = name.substring(lastDot + 1);
-	   	var reader = new FileReader();
-         reader.onload = function (e) {
-             
-         };
-         profile_pic_var = input.files[0];
-         reader.readAsDataURL(input.files[0]);
-     }
+	   		ext = name.substring(lastDot + 1);
+	   		var reader = new FileReader();
+         	reader.onload = function (e) {
+         	};
+         	profile_pic_var = input.files[0];
+         	eader.readAsDataURL(input.files[0]);
+     	}
 	}
 </script>
 
