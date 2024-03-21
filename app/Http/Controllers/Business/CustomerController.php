@@ -186,7 +186,7 @@ class CustomerController extends Controller
             }
 
 
-            $current_company->update(['customer_uploading' => 1]);
+            //$current_company->update(['customer_uploading' => 1]);
             
             
             $timestamp = now()->timestamp;

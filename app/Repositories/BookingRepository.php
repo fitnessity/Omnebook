@@ -88,9 +88,9 @@ class BookingRepository
             }
            
             if(@$book_details['bookedtime'] == '' ){
-                $sc_date = date("m-d-Y", strtotime($book_details['expired_at']));
+                $sc_date = date("m/d/Y", strtotime($book_details['expired_at']));
             }else{
-                $sc_date = date("m-d-Y", strtotime($book_details['bookedtime']));
+                $sc_date = date("m/d/Y", strtotime($book_details['bookedtime']));
             }
 
             $sc_date = str_replace('-', '/', $sc_date);  
@@ -265,18 +265,18 @@ class BookingRepository
             if($reserve_date != ''){
                 $start = date('h:ia', strtotime(@$reserve_date->scheduler->shift_start));
                 $end = date('h:ia', strtotime(@$reserve_date->scheduler->shift_end));
-                $re_date = date('m-d-Y',strtotime($reserve_date->checkin_date));
-                $check_in_time = date('m-d-Y',strtotime($reserve_date->checked_at));
+                $re_date = date('m/d/Y',strtotime($reserve_date->checkin_date));
+                $check_in_time = date('m/d/Y',strtotime($reserve_date->checked_at));
                 $re_time = $start .' to '.$end;
             }
 
             $one_array = array (
                     "pro_pic" => $pro_pic,
                     "orderid" => $book_details["id"],
-                    "date_booked" => date('m-d-Y',strtotime($book_details['created_at'])),
+                    "date_booked" => date('m/d/Y',strtotime($book_details['created_at'])),
                     "orderdetailid" => $book_details['user_booking_detail']['id'],
                     "confirm_id" => $book_details["order_id"],
-                    "expired_at" => date('m-d-Y',strtotime($book_details['user_booking_detail']["expired_at"])),
+                    "expired_at" => date('m/d/Y',strtotime($book_details['user_booking_detail']["expired_at"])),
                     "reserve_date" => $re_date,
                     "reserve_time" => $re_time,
                     "check_in_time" => $check_in_time,
@@ -496,14 +496,14 @@ class BookingRepository
         $discount = $booking_details->getextrafees('discount');
         $expiretime = $booking_details->getexpiretime($booking_details->expired_duration,$booking_details->contract_date);
         if($expiretime != ''){
-            $expiretime =  date('m-d-Y',strtotime($expiretime));
+            $expiretime =  date('m/d/Y',strtotime($expiretime));
         }else{
             $expiretime =  'N/A';
         }
 
         $contract_date ='N/A';
         if($booking_details->contract_date != NULL || $booking_details->contract_date != ''){
-           $contract_date = date('m-d-Y',strtotime($booking_details->contract_date));
+           $contract_date = date('m/d/Y',strtotime($booking_details->contract_date));
         }
 
         if($booking_status->user_type == 'user'){
@@ -516,7 +516,7 @@ class BookingRepository
 
         $bookingUrl = '';
         if($booking_status->order_type  == 'checkout_register'){
-            if($expiretime > date('m-d-Y') && $expiretime != 'N/A'){
+            if($expiretime > date('m/d/Y') && $expiretime != 'N/A'){
                 $tab = '';
             }else{
                 $tab = 'past';
@@ -552,7 +552,7 @@ class BookingRepository
             "activity_Type" => @$business_services->sport_activity,  
             "service_Type" => @$business_services->service_type,  
             "membership_Duration" => $booking_details->expired_duration,  
-            "purchase_Date" => date('m-d-Y',strtotime($booking_details->created_at)),  
+            "purchase_Date" => date('m/d/Y',strtotime($booking_details->created_at)),  
             "membership_Activation_Date" =>  $contract_date,   
             "membership_Expiration" => $expiretime,  
             "price" => $price,  

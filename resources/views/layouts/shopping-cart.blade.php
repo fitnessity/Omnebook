@@ -39,7 +39,7 @@
 			                        </div>
 										<div class="col-sm-auto">
 											<div class="float-end">
-												<a href="/activities" class="fs-15 color-red-a">Continue Shopping</a>
+												<a href="{{route('activities_index')}}" class="fs-15 color-red-a">Continue Shopping</a>
 											</div>
 										</div>
 									</div>
@@ -153,10 +153,11 @@
 
 																				<option value="" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">Choose or Add Participant</option>
 	                                            								
-	                                            								<option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">{{Auth::user()->firstname}} {{ Auth::user()->lastname }}</option>
+	                                            								<option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user"  @if(@$item['participate'][$i]['id'] == Auth::user()->id) selected @endif>{{Auth::user()->firstname}} {{ Auth::user()->lastname }}</option>
 	                                            									@foreach($family as $fa)
-									                                            		<option value="{{$fa['id']}}"  data-name="{{$fa['fname']}}  {{$fa['lname']}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-age="" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="{{$fa['type']}}">
-									                                                    {{$fa['fname']}} {{$fa['lname']}}</option>
+									                                            		<option value="{{$fa['id']}}"  data-name="{{$fa['full_name']}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-age="" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="{{$fa['type']}}">
+
+									                                                    {{$fa['full_name']}}</option>
 									                                            	@endforeach
 
 	                                           	 								<option value="addparticipate">+ Add New Participant</option>

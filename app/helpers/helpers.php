@@ -97,7 +97,7 @@
         foreach($company as $key=>$c){
             $businessCustomer[] = $c->customers()->where('user_id', $user->id)->pluck('id')->toArray();
         }*/
-        if($cid){
+        /*if($cid){
             $company = $user->company()->where('id',$cid)->first();
         }else{
             $company = $user->current_company;
@@ -110,9 +110,8 @@
                     $cus = Customer::where('parent_cus_id', $c)->get();
                     foreach($cus as $c1){
                         $customers [] = array(
-                            "fname" => $c1->fname,
-                            "lname" => $c1->lname,
                             "id" => $c1->id,
+                            "full_name" => $c1->full_name,
                             "type" => 'customer',
                         );
                     }
@@ -123,9 +122,48 @@
             $family = $user->user_family_details;
             foreach($family as $fm){
                 $customers [] = array(
-                    "fname" => $fm->first_name,
-                    "lname" => $fm->last_name,
                     "id" => $fm->id,
+                    "full_name" => $fm->full_name,
+                    "type" => 'family',
+                );
+            }
+        }*/
+
+        $customer = @$user->customers()->where('business_id',$cid)->get();
+        if($customer){
+            foreach($customer as $cs){
+                foreach ($cs->get_families() as $fm){
+                    $familyDetails [] = $fm;
+                }  
+            }
+
+            $groupedFamilyDetails = collect($familyDetails)->groupBy(function ($item) {
+                return $item->fname . ' ' . $item->lname;
+            });
+
+            $uniqueFamilyDetails = collect([]);
+
+            foreach ($groupedFamilyDetails as $name => $group) {
+                $uniqueFamilyDetails->push($group->first()); // Add the first item from each group
+            }
+
+            foreach ($uniqueFamilyDetails as $detail) {
+                $UserFamilyDetails [] = $detail;
+            }
+
+            foreach($UserFamilyDetails as $c1){
+                $customers [] = array(
+                    "id" => $c1->id,
+                    "full_name" => $c1->full_name,
+                    "type" => 'customer',
+                );
+            }
+        }else{
+            $userfamily = $user->user_family_details;
+            foreach($userfamily as $uf){
+                 $customers [] = array(
+                    "id" => $uf->id,
+                    "full_name" => $uf->full_name,
                     "type" => 'family',
                 );
             }

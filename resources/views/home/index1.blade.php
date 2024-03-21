@@ -162,7 +162,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="fitness-title mb-5 mt-10">
-                                    <h1>Why <span>Fitnessity?</span></h1>
+                                    <h1>{!! $whyFitnessity->content_title !!}</h1>
                                 </div>
                             </div>
                                 

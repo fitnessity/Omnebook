@@ -157,7 +157,7 @@
         <div class="float-end text-right">
             <span>
                 @if($order_detail->order_type == 'Membership') 
-                   {{date('d-m-Y',strtotime($order_detail->contract_date))}}
+                   {{date('m/d/Y',strtotime($order_detail->contract_date))}}
                 @else
                     N/A
                 @endif
@@ -173,7 +173,7 @@
     <div class="col-md-6 col-xs-6">
         <div class="float-end text-right">
             <span>@if($order_detail->order_type == 'Membership') 
-                   {{date('d-m-Y',strtotime($order_detail->expired_at))}}
+                   {{date('m/d/Y',strtotime($order_detail->expired_at))}}
                 @else
                     N/A
                 @endif

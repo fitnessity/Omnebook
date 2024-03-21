@@ -5,49 +5,22 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Libraries\Stripes\StripePay;
 use App\Http\Controllers\Controller;
-use App\Repositories\UserRepository;
-use App\Repositories\BookingRepository;
-use App\Repositories\SportsRepository;
+use App\Repositories\{UserRepository,BookingRepository,SportsRepository};
 use Illuminate\Support\Facades\Log;
 use Auth;
 use File;
 use Config;
-use App\Jobpostquestions;
 use Redirect;
-use App\Miscellaneous;
-use App\Quote;
 use View;
 use DB;
 use Response;
 use Validator;
-use App\UserBookingStatus;
-use App\User;
-use App\Evidents;
-use App\UserProfessionalDetail;
-use App\UserService;
-use App\CompanyInformation;
-use App\BusinessServices;
-use App\BusinessService;
-use App\BusinessPriceDetails;
-use App\UserBookingDetail;
-use App\BusinessCompanyDetail;
-use App\Fit_Cart;
-use App\Sports;
-use App\Payment;
-use App\UserFamilyDetail;
-use App\MailService;
-use App\Zip_code;
+use App\{UserBookingStatus,User,Evidents,UserProfessionalDetail,UserService,CompanyInformation,BusinessServices,BusinessService,BusinessPriceDetails,UserBookingDetail,BusinessCompanyDetail,Fit_Cart,Sports,Payment,UserFamilyDetail,MailService,Zip_code,UserFavourite,BusinessServicesFavorite,BusinessServiceReview,BusinessActivityScheduler,BusinessSubscriptionPlan,BusinessPriceDetailsAges,Jobpostquestions,Miscellaneous,Quote};
 use Illuminate\Pagination\LengthAwarePaginator;
-use App\UserFavourite;
-use App\BusinessServicesFavorite;
-use App\BusinessServiceReview;
-use App\BusinessActivityScheduler;
-use App\BusinessSubscriptionPlan;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use DateTime;
 use DateTimeZone;
-use App\BusinessPriceDetailsAges;
 
 class LessonController extends Controller {
 
@@ -3069,14 +3042,17 @@ class LessonController extends Controller {
             $tot_qty += $request->infantquantity;
         }
 
-        for ($i=0; $i < $tot_qty; $i++) { 
-            if(Auth::check()){
-                $totparticipate[] = array('id'=>Auth::user()->id, 'from'=>"user");
-            }else{
-                $totparticipate[] = array('id'=>'', 'from'=>"user");
-            } 
+        if(isset($request->participateAry)){
+            $totparticipate = $request->participateAry;
+        }else{
+            for ($i=0; $i < $tot_qty; $i++) { 
+                if(Auth::check()){
+                    $totparticipate[] = array('id'=>Auth::user()->id, 'from'=>"user");
+                }else{
+                    $totparticipate[] = array('id'=>'', 'from'=>"user");
+                } 
+            }
         }
-       
 
         if (count($result) > 0) {
             foreach ($result as $item) {

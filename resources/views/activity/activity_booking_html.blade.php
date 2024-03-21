@@ -118,22 +118,12 @@
 					</div>
 				</div>
 				
-				<!-- <label class="mb-10 fw-600">Step: 6 </label> <span class=""> Select Who's Participating</span>
+				<label class="mb-10 fw-600">Step: 6 </label> <span class=""> Select Who's Participating</span>
 
 				<div class="row" id="participantDiv">
 
-					<div class="col-md-12 col-sm-12 mb-12">
-						<div class="text-left mt-40 mmt-10">
-							<h6 class="mb-3 mt-3 fs-13">Who's Participating</h6>
-						</div>
-						<div class="hstack gap-3 px-3 mx-n3">
-							<select class="price-select-control fs-13 familypart" name="participat[]" id="participats">
-								<option value="" data-cnt="0" data-priceid="1000" data-type="user">Choose or Add Participant</option>
-								<option value="720" data-cnt="0" data-priceid="1000" data-type="user">Nipa (Test) Soni</option>
-							</select>
-						</div>
-					</div>
-				</div> -->
+					
+				</div>
 																																	
 
 				<label class="mb-10 fw-600">Step: 7 </label> <span class=""> Select Add-On Service (Optional)</span>
@@ -239,6 +229,7 @@
                     <input type="hidden" name="addOnServicesQty" value="" id="addOnServicesQty" />
                     <input type="hidden" name="addOnServicesTotalPrice" value="0" id="addOnServicesTotalPrice" />
                     <input type="hidden" name="totalcnt" value="0" id="totalcnt" />
+                    <input type="hidden" name="totparticipate" value="" id="totparticipate" />
 
 					<div id="addcartdiv">
 						<button type="button" id="btnaddcart" class="btn btn-red"> Add to Cart</button>

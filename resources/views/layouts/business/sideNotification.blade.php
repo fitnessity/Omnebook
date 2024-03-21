@@ -3,10 +3,11 @@
     <div class="layout-rightside">
         <div class="card h-100 rounded-0">
             <div class="card-body p-0">
-                <div class="p-3">
+                <div class="p-3 p-relative">
                     <h6 class="text-muted mb-0 text-uppercase fw-semibold">Recent Activity</h6>
+                    <a href="javascript:void(0)" class="fa fa-times notification-close" onclick="$('.layout-rightside-col').removeClass('d-block');"></a>
                 </div>
-                <div data-simplebar style="max-height: 410px;" class="p-3 pt-0">
+                <div class="p-3 pt-0 recent-activity-scroll">
                     <div class="acitivity-timeline acitivity-main">
                         @foreach($todayBooking as $tb)
                             <div class="acitivity-item d-flex  mb-5">

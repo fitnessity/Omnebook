@@ -25,15 +25,15 @@ Route::fallback(function () {
 
 Route::get('/clear-cache', function () {
     // Clear all cache
-    //Artisan::call('cache:clear');
+    Artisan::call('cache:clear');
 
-    // Clear specific cache (e.g., route cache)
-    //Artisan::call('route:clear');
+    //lear specific cache (e.g., route cache)
+    Artisan::call('route:clear');
 
-    // Clear all cached configuration files
-    //Artisan::call('config:clear');
+    //Clear all cached configuration files
+    Artisan::call('config:clear');
 
-    //return 'Cache cleared successfully.';
+    return 'Cache cleared successfully.';
     
     //print_r(App\Customer::where('user_id',NULL)->get());
 
@@ -340,6 +340,9 @@ Route::resource('stripe_payment_methods', 'StripePaymentMethodController')->only
     Route::get('/getCompareProfessionalDetails/{id}', 'ActivityController@getCompareProfessionalDetailInstant');
     Route::post('/act_detail_filter', 'ActivityController@act_detail_filter')->name('act_detail_filter');
     Route::post('/act_detail_filter_for_cart', 'ActivityController@act_detail_filter_for_cart')->name('act_detail_filter_for_cart');
+
+    Route::post('/get-participate-data', 'ActivityController@getParticipateData')->name('get-participate-data');
+
     Route::post('/getmodelbody', 'ActivityController@getmodelbody')->name('getmodelbody');
     Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
     Route::get('/getBookingSummary', 'ActivityController@getBookingSummary')->name('getBookingSummary');
@@ -349,6 +352,8 @@ Route::resource('stripe_payment_methods', 'StripePaymentMethodController')->only
 
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/dashboard/{date?}/{id?}', 'BusinessController@dashboard')->name('business_dashboard');
+    Route::post('/set-revenue-goal', 'BusinessController@setRevenueGoal')->name('set_revenue_goal');
+    Route::get('/getRevenueAjax', 'BusinessController@getRevenueAjax')->name('getRevenueAjax');
 
     Route::post('/notification/delete/', 'BusinessController@notification_delete')->name('notification_delete');
 
