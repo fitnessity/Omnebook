@@ -85,7 +85,7 @@ class BookingReportController extends BusinessBaseController
 
         $type = $request->type;
         if($type == 'excel'){
-            return Excel::download(new ExportTodayBooking($bookings), 'booking-info.xlsx');
+            return Excel::download(new ExportTodayBooking($bookings,''), 'booking-info.xlsx');
         }elseif($type == 'pdf'){
             $data = [
                 'bookings'=>$bookings,

@@ -50,7 +50,7 @@ class MoneyOwedReportController extends BusinessBaseController
                 $endDate = $this->endDate;
                 $startDate = $this->firstDate;
             }
-            $data = $this->membership($type,$endDate,$startDate)->where('item_type' ,'UserBookingStatus')->join('user_booking_status as ubs','ubs.id' ,'=','transaction.item_id')->join('user_booking_details as ubd','ubd.booking_id' ,'=','ubs.id')->where('ubd.business_id',$business_id)->join('booking_checkin_details as cid','cid.booking_detail_id' ,'=','ubd.id')->whereDate('cid.checkin_date','>=' ,$startDate)->whereDate('cid.checkin_date','<=' ,$endDate)->whereNotNull('cid.checked_at')->select('transaction.*', 'cid.checkin_date as checkin_date', 'cid.booking_detail_id as detail_id');
+            $data = $this->membership($type,$endDate,$startDate)->where('item_type' ,'UserBookingStatus')->join('user_booking_status as ubs','ubs.id' ,'=','transaction.item_id')->join('user_booking_details as ubd','ubd.booking_id' ,'=','ubs.id')->where(['ubd.business_id'=>$business_id ,'ubd.order_type'=>'Membership'])->join('booking_checkin_details as cid','cid.booking_detail_id' ,'=','ubd.id')->whereDate('cid.checkin_date','>=' ,$startDate)->whereDate('cid.checkin_date','<=' ,$endDate)->whereNotNull('cid.checked_at')->select('transaction.*', 'cid.checkin_date as checkin_date', 'cid.booking_detail_id as detail_id');
         }
 
         $data = $data->orderBy('transaction.created_at' ,'desc')->get()->filter(function ($item) use($business_id) {
