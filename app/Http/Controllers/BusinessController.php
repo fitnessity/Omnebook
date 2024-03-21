@@ -213,17 +213,17 @@ class BusinessController extends Controller
             ];
 
             $currentMnth = strtolower( date('M')).'_goal';
-            $currentMonthRevenue = $revenueData->$currentMnth;
+            $currentMonthRevenue = @$revenueData->$currentMnth;
             $dayOfMonth = date('j');
             $countOfDaysInMonth = Carbon::now()->daysInMonth;
             $revenuePerDay =  $currentMonthRevenue != 0 ?  number_format(($currentMonthRevenue / $countOfDaysInMonth),2,'.',''): 0;
-            $revenueShouldbeOnDay =  number_format(($revenuePerDay * $dayOfMonth),2,'.','');
-            $revenueAchivedPercentage = number_format((($currentMonthRevenue - $totalSales)/$currentMonthRevenue),2,'.','');
+            $revenueShouldbeOnDay = $dayOfMonth != 0 ? number_format(($revenuePerDay * $dayOfMonth),2,'.','') :0;
+            $revenueAchivedPercentage = $currentMonthRevenue != 0 ?  number_format((($currentMonthRevenue - $totalSales)/$currentMonthRevenue),2,'.','') :0;
             $category = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             $categoryData = json_encode($category);
 
 
-            $lastYearCurrentMonth = $revenueDataPrivious->$currentMnth;
+            $lastYearCurrentMonth = @$revenueDataPrivious->$currentMnth;
             $lastYearRevenuePerDay =  $currentMonthRevenue != 0 ?  number_format(($lastYearCurrentMonth / $countOfDaysInMonth),2,'.',''): 0;
 
             $startDateR = Carbon::now()->startOfMonth();
@@ -255,7 +255,7 @@ class BusinessController extends Controller
                     ->sum('transaction.amount');
                 $tot = $totalSalesMonthly + $totalSalesforRecurringMonthly;
                 
-                $array3[] = $tot ?? 0;
+                $array3[] = number_format($tot,2,'.','')  ?? 0;
 
             }
 
