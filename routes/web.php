@@ -19,7 +19,6 @@ use App\Http\Controllers\Products\ProductController;
 use Illuminate\Support\Facades\Artisan;
 
 Route::fallback(function () {
-    echo "hii";exit;
     return redirect('/');
 });
 
