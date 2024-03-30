@@ -153,6 +153,7 @@ class ProcessMembershipExcelData implements ShouldQueue
                                 'payment_number' => '{}',
                                 'order_from' => "Excel Order",
                                 'status' => strtolower($status),
+                                'order_type' => 'Membership',
                             ]);
 
                             BookingCheckinDetails::create([
