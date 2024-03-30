@@ -48,7 +48,7 @@ class ProcessAttendanceExcelData implements ShouldQueue
             $content = html_entity_decode($content1);
             $name = explode(',',$content);
 
-            $customerData = Customer::whereRaw('LOWER(lname) = ? AND LOWER(fname) = ? AND business_id= ? ', [strtolower($@$name[0]), strtolower(@$name[1]),$this->business_id])->first();
+            $customerData = Customer::whereRaw('LOWER(lname) = ? AND LOWER(fname) = ? AND business_id= ? ', [strtolower(@$name[0]), strtolower(@$name[1]),$this->business_id])->first();
             //echo $customerData;
             if($customerData != ''){
 
