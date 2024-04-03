@@ -7508,6 +7508,7 @@ p.or-data {
   transition: 0.5s;
   /* padding-top: 10px; */
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  scrollbar-width: thin;
 }
 .blog-sidebar .navbar-content {
   position: relative;
@@ -7515,4 +7516,128 @@ p.or-data {
 .blog-cancle{
   position: absolute;
   right: 10px;
+  top: 5px;
+  color: #fff;
+}
+.blog-cancle:hover{
+  color: #fff;
+}
+.blog-header{
+  background: #151529;
+  padding: 15px 0;
+}
+.newsfeed-title label{
+  font-size: 17px;
+  color: #fff;
+  margin-bottom: 0;
+}
+.side-footer-set{
+  position: fixed;
+  bottom: 0;
+  padding: 15px 0;
+  width: 468px;
+}
+.bottom-tab-titles{
+  font-size: 13px;
+}
+.side-footer-set ul li a{
+  display: grid;
+}
+/* .side-footer-set ul li {
+  width: 150px;
+} */
+.blog-card-img-top{
+  max-height: 185px;
+  object-fit: cover;
+  object-position: top;
+  width: 100%;
+}
+.blog-title a{
+  color: #000;
+  font-size: 15px;
+  font-weight: 600;
+}
+.mb-165{
+  margin-bottom: 165px;
+}
+.blog-info ul{
+  padding-left: 20px;
+}
+.blog-info ul li{
+  list-style: disc;
+  margin-bottom: 10px;;
+}
+.idea-title  a{
+  color: #000;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 21px;
+}
+.d-inline-grid{
+  display: inline-grid;
+}
+.idea-review label{
+  font-size: 13px;
+  margin-top: 5px;
+  color: #000;
+  text-transform: uppercase;
+}
+.methoyopilo{
+  color: #ffbe0b;
+}
+.btn-suggest{
+  padding: 10px;
+}
+.suggested-set{
+  position: fixed;
+  bottom: 100px;
+  right: 0px;
+  text-align: center;
+  width: 500px;
+}
+.grey-border-top{
+  border-top: 3px solid #878a99;
+}
+.roadmap-title{
+  font-size: 16px;
+  margin-top: 5px;
+  color: #000;
+}
+.round-grey{
+  color: #878a99;
+}
+.roadmap-subtitle a{
+  color: #000;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 21px;
+}
+.improvment{
+  text-transform: uppercase;
+  color: #000;
+}
+.yellow-border-top{
+  border-top: 3px solid #ffbe0b;
+}
+.green-round{
+  color: #45cb85;
+}
+.green-border-top {
+  border-top: 3px solid #45cb85;
+}
+.create-customer-box{
+  padding: 25px 20px;
+  box-shadow: var(--vz-box-shadow);
+  border: 1px solid #ececec;
+  margin-bottom: 30px;
+}
+.tab-customer-avatar {
+  height: 70px;
+  width: 70px;
+}
+.product-display img{
+  height: 48px;
+  width: 48px;
+  object-fit: cover;
+  object-position: top;
 }

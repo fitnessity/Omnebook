@@ -145,6 +145,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
      */
     public function update(Request $request, $business_id, $scheduler_id, $id)
     {
+        //print_r($request->all());exit;
         $company = $request->current_company;
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
         $business_checkin_detail = BookingCheckinDetails::whereRaw('1=1');
@@ -154,33 +155,38 @@ class SchedulerCheckinDetailController extends BusinessBaseController
             $customerInClass = BookingCheckinDetails::checkCustomerInClass($scheduler_id,$request->checked_at);
            /* echo $customerInClass;
             exit();*/
+           
             $checkin = BookingCheckinDetails::whereNotNull('booking_detail_id')->findOrFail($id);
-            $overwrite['use_session_amount'] = 1;
-            $overwrite['no_show_action'] = Null;
-            $overwrite['no_show_charged'] = Null;
-            
-            if($customerInClass  <  $business_activity_scheduler->spots_available){
-                $checkin->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
-                if($checkin->UserBookingDetail){
-                    $totalSession = $checkin->UserBookingDetail->pay_session;
-                    if($checkin->membership_checkin_count == 1 || $checkin->membership_checkin_count == $totalSession){
-                        SGMailService::leaveAReview(['companyName' =>  $company->public_company_name,'cid' => $business_id ,'email' => $checkin->customer->email]);
+            if($checkin){
+                $overwrite['use_session_amount'] = 1;
+                $overwrite['no_show_action'] = Null;
+                $overwrite['no_show_charged'] = Null;
+                
+                if($customerInClass  <  $business_activity_scheduler->spots_available){
+                    $checkin->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
+                    if($checkin->UserBookingDetail){
+                        $totalSession = $checkin->UserBookingDetail->pay_session;
+                        if($checkin->membership_checkin_count == 1 || $checkin->membership_checkin_count == $totalSession){
+                            SGMailService::leaveAReview(['companyName' =>  $company->public_company_name,'cid' => $business_id ,'email' => $checkin->customer->email]);
+                        }
                     }
+                    $sendmail= 1;
+                }else{
+                    $sendmail= 2;
                 }
-                $sendmail= 1;
-            }else{
-                $sendmail= 2;
             }
         }else{
-            
+            //echo "hii";exit;
             $bookingDetail = UserBookingDetail::findOrFail($request->booking_detail_id);
             $chkBookedSpot = $bookingDetail->getremainingsession();
             $checkin_detail = BookingCheckinDetails::findOrFail($id);
             if($chkBookedSpot > 0 ){
+                //echo "hii";exit;
                 $overwrite['use_session_amount'] = 0;
                 $overwrite['checked_at'] = Null;
                 $checkin_detail->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
             }else{
+               //echo "bcvcv";exit;
                 $sendmail= 0;
                 $bookedSpot = $bookingDetail->getWithoutAttendBookedSession();
                 $usedSession = $bookingDetail->getUsedSession();

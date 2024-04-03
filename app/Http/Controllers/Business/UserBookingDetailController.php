@@ -125,7 +125,7 @@ class UserBookingDetailController extends Controller
         $customer = $company->customers()->findOrFail($request->customer_id);
 
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
-
+        
         if($booking_detail->can_suspend()){
             if($request->suspension_fee > 0){
                 if($customer->charge($request->suspension_fee, 'terminate')){

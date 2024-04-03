@@ -132,7 +132,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
 
     Route::resource('products', 'ProductController')->only(['index','create', 'update', 'destroy', 'store']);
 
-    Route::get('addVariantModal/{name}','ProductController@addVariantModal')->name('products.addVariantModal');
+    Route::get('addVariantModal/{name}','ProductController@addVariantModal')->name('products.addVariantModal'); 
     Route::post('addVariant','ProductController@addVariant')->name('products.addVariant');
     
     Route::resource('recurring', 'RecurringController')->only(['index', 'update','destroy', ]);

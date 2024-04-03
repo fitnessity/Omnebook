@@ -243,6 +243,18 @@ class User extends Authenticatable
     public function CustomersDocuments()
     {
         return $this->hasMany(CustomersDocuments::class,'user_id');
+    
+
+    }
+
+    public function BusinessServices()
+    {
+        return $this->hasMany(BusinessServices::class,'userid');
+    } 
+
+    public function Products()
+    {
+        return $this->hasMany(Products::class,'user_id');
     }
 
     public function AddOnService()

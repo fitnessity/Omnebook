@@ -514,10 +514,11 @@
             }
 
             $topBookedPriceId = array_values(array_unique($topBookedPriceId));
+ 
             $priceDetails = App\BusinessPriceDetails::whereIn('id', $topBookedPriceId)->get();
             foreach ($priceDetails as $priceDetail) {
                 $sum = 0;
-                $UserBookingDetails = $priceDetail->UserBookingDetail;
+                $UserBookingDetails = $priceDetail->UserBookingDetail()->whereDate('created_at', '>=',$startOfWeek->format('Y-m-d'))->whereDate('created_at', '<=',$endOfWeek->format('Y-m-d'))->get();
                 foreach ($UserBookingDetails as $ubd) {
                     $sum += $ubd->subtotal + $ubd->tax + $ubd->tip - $ubd->discount + $ubd->fitnessity_fee;
                 }
@@ -537,4 +538,44 @@
         return view('layouts.business.sideNotification', ['notificationAry' =>$notificationAry ,'todayBooking' => $todayBooking,'topBookedCategories' => $topBookedCategories,'services' => $services])->render();
 
     }
+
+    function completeSetUpCount(){
+        $counter = 0;
+        $business = Auth::user()->current_company;
+        if(Auth::user()->businesses()->count() > 0){
+            $counter++;
+        } 
+
+        if(Auth::user()->customers()->where('business_id', Auth::user()->cid)->count() > 0){
+            $counter++;
+        } 
+
+        if(Auth::user()->BusinessServices()->where('cid', Auth::user()->cid)->count() > 0){
+            $counter++;
+        } 
+
+        if(Auth::user()->Products()->where('business_id', Auth::user()->cid)->count() > 0  ){
+            $counter++;
+        }
+
+        if($business && @$business->business_staff()->count() > 0){
+            $counter++;
+        }
+
+        if($business && @$business->UserBookingDetails()->count() > 0){
+            $counter++;
+        }
+        
+        return $counter;
+    }
+
+    function setUpPercentage(){
+        $count = completeSetUpCount();
+        if($count > 0){
+            return number_format((($count/6) *100),2);
+        }
+        return 0;
+    }
+
+
 ?>
