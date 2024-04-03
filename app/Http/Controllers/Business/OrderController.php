@@ -227,11 +227,13 @@ class OrderController extends BusinessBaseController
                             'payload' =>json_encode($onFilePaymentIntent,true),
                         ];
                     }
-                }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
-                    //$errormsg = $e->getError()->message;
+                }catch(\Stripe\Exception\CardException  $e) {
+                    $errormsg = $e->getError()->message;
+                   return redirect(route('business.orders.create', ['cus_id' => $customer->id]))->with('stripeErrorMsg', $errormsg);
+                }catch(\Stripe\Exception\InvalidRequestException $e) {
                     $errormsg = "Your card is not connected with your account. Please add your card again.";
-                    return redirect(route('business.orders.create', ['cus_id' => $customer->id]))->with('stripeErrorMsg', $errormsg);
-                }catch (Exception $e) {
+                   return redirect(route('business.orders.create', ['cus_id' => $customer->id]))->with('stripeErrorMsg', $errormsg);
+                }catch( \Exception $e) {
                     $errormsg = $e->getError()->message;
                     return redirect(route('business.orders.create', ['cus_id' => $customer->id]))->with('stripeErrorMsg', $errormsg);
                 }
@@ -274,12 +276,15 @@ class OrderController extends BusinessBaseController
                             'capture_method' => 'manual',
                         ];
                     }
-                }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
-                    //$errormsg = $e->getError()->message;
+                }catch(\Stripe\Exception\CardException  $e) {
+                    $errormsg = $e->getError()->message;
+                    $url = '/business/'.Auth::user()->cid.'/orders/create?cus_id='.$request->user_id;
+                    return redirect($url)->with('stripeErrorMsg', $errormsg);
+                }catch(\Stripe\Exception\InvalidRequestException $e) {
                     $errormsg = "Your card is not connected with your account. Please add your card again.";
                     $url = '/business/'.Auth::user()->cid.'/orders/create?cus_id='.$request->user_id;
                     return redirect($url)->with('stripeErrorMsg', $errormsg);
-                }catch (Exception $e) {
+                }catch( \Exception $e) {
                     $errormsg = $e->getError()->message;
                     $url = '/business/'.Auth::user()->cid.'/orders/create?cus_id='.$request->user_id;
                     return redirect($url)->with('stripeErrorMsg', $errormsg);
@@ -480,7 +485,9 @@ class OrderController extends BusinessBaseController
                                 "payment_number" => $payment_number,
                                 "payment_on" => $payment_on,
                             );
-                            Recurring::create($recurring);
+                            if(!$isComp){
+                                Recurring::create($recurring);
+                            }
                         }
                     }
                 }

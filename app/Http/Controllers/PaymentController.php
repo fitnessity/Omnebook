@@ -321,8 +321,10 @@ class PaymentController extends Controller {
 
                         $transactionstatus = Transaction::create($transactiondata);
                     }
-                }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
-                    //$errormsg = $e->getError()->message;
+                }catch(\Stripe\Exception\CardException  $e) {
+                    $errormsg = $e->getError()->message;
+                    return redirect('/carts')->with('stripeErrorMsg', $errormsg);
+                }catch(\Stripe\Exception\InvalidRequestException $e) {
                     $errormsg = "Your card is not connected with your account. Please add your card again.";
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }catch( \Exception $e) {
@@ -375,7 +377,6 @@ class PaymentController extends Controller {
                         $transactionstatus = Transaction::create($transactiondata);
                     }
                 }catch(\Stripe\Exception\CardException  $e) {
-                    print_r($e->getError());exit();
                     $errormsg = $e->getError()->message;
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }catch(\Stripe\Exception\InvalidRequestException $e) {

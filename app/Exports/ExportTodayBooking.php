@@ -44,11 +44,14 @@ class ExportTodayBooking implements FromCollection, WithHeadings
     private function transformData($data,$page)
     {
         return collect($data)->map(function($item, $key) use ($page){
+            if($item->expired_at < date('Y-m-d') && $page == 'not_used' && $item->status == 'active'){
+                $item->status = 'completed';
+            }
             return [
                 @$item->Customer->full_name,
                 date('m/d/Y',strtotime(@$item->contract_date)),
                 date('m/d/Y',strtotime(@$item->expired_at)),
-                $item->subtotal,
+                '$'.$item->subtotal,
                 $item->status,
                 $page == 'not_used' ? $item->last_attended : '',
             ];
