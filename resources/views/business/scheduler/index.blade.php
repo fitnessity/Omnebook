@@ -61,7 +61,7 @@
 											<div class="row">
 												<div class="col-md-12">
 													<div class="text-right">
-														<button type="button" class="btn btn-red" data-behavior="ajax_html_modal" data-url="{{route('business.schedulers.cancel_all', ['schedulerId' => rtrim($scheduleIds, ','), 'date' => $filterDate->format('m/d/Y'), 'return_url' => url()->full()])}}">Cancel All Activity Of Today</button>
+														<button type="button" class="btn btn-red mmb-10" data-behavior="ajax_html_modal" data-url="{{route('business.schedulers.cancel_all', ['schedulerId' => rtrim($scheduleIds, ','), 'date' => $filterDate->format('m/d/Y'), 'return_url' => url()->full()])}}">Cancel All Activity Of Today</button>
 													
 														<button type="button" class="btn btn-red" data-behavior="ajax_html_modal" data-url="{{route('business.schedulers.cancel_all_by_date', ['activity_type'=>request()->activity_type, 'return_url' => url()->full()])}}">Cancel Multiple Days</button>
 													</div>

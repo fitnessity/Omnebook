@@ -400,6 +400,104 @@
 							</div>
 						</div>
 						<div class="col-lg-12">
+							<div class="row">
+								<div class="col-lg-2">
+									<div class="form-check mb-3">
+										<input class="form-check-input" type="checkbox" id="formCheck1">
+										<label class="form-check-label" for="formCheck1">
+											All
+										</label>
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="mb-3">
+										<label class="form-label">Gender</label>
+										<div>
+											<form action="">
+												<input class="form-check-input" type="checkbox" id="formCheck2">
+												<label class="form-check-label mr-10" for="formCheck2">
+													Male
+												</label>
+
+												<input class="form-check-input" type="checkbox" id="formCheck3">
+												<label class="form-check-label mr-10" for="formCheck3">
+													Female
+												</label>
+											</form>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-3">
+									<div class="mb-3">
+										<label class="form-label">Age</label>
+										<div>
+											<form action="">
+												<input class="form-check-input" type="checkbox" id="formCheck4">
+												<label class="form-check-label mr-10" for="formCheck4">
+													Adult
+												</label>
+
+												<input class="form-check-input" type="checkbox" id="formCheck5">
+												<label class="form-check-label mr-10" for="formCheck5">
+													Kids
+												</label>
+											</form>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-4">
+									<div class="mb-3">
+										<label class="form-label">Status</label>
+										<div>
+											<form action="">
+												<input class="form-check-input" type="checkbox" id="formCheck6">
+												<label class="form-check-label mr-10" for="formCheck6">
+													Active
+												</label>
+
+												<input class="form-check-input" type="checkbox" id="formCheck7">
+												<label class="form-check-label mr-10" for="formCheck7">
+													Inactive
+												</label>
+
+												<input class="form-check-input" type="checkbox" id="formCheck8">
+												<label class="form-check-label mr-10" for="formCheck8">
+													Prospects
+												</label><br>
+
+												<input class="form-check-input" type="checkbox" id="formCheck9">
+												<label class="form-check-label mr-10" for="formCheck9">
+													At-Risk
+												</label>
+
+												<input class="form-check-input" type="checkbox" id="formCheck10">
+												<label class="form-check-label mr-10" for="formCheck10">
+													Big-Spenders
+												</label>
+											</form>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						<div class="col-lg-12">
+							<div class="form-group mb-3">
+								<label class="form-label">Programs</label>
+								<select name="relationship[0]" id="relationship[0]" class="form-select" required="required">
+									<option value="" selected="">Select Programs</option>
+									<option value="">Option 1</option>
+									<option value="">Option 2</option>
+									<option value="">Option 3</option>
+									<option value="">Option 4</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-lg-12">
 							<div class="form-group mb-3">
 								<label class="form-label">Category</label>
 								<select name="relationship[0]" id="relationship[0]" class="form-select" required="required">
@@ -411,6 +509,8 @@
 								</select>
 							</div>
 						</div>
+						
+
 						<div class="col-lg-6 col-md-6 col-sm-6 col-12">
 							<div class="form-group mb-3">
 								<label class="form-label">Start Date</label>

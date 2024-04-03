@@ -105,7 +105,7 @@ class Customer extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['age', 'profile_pic_url', 'full_name', 'first_letter' ,'company_name','last_attend_date','member_id','customer_type'];
+    protected $appends = ['age', 'profile_pic_url', 'full_name', 'first_letter' ,'company_name','last_attend_date','member_id','customer_type' ,'total_spend'];
 
 
     public function createUser(){
@@ -198,6 +198,10 @@ class Customer extends Authenticatable
         }else{
             return null;
         }
+    }
+
+    public function getTotalSpendAttribute(){
+        return $this->total_spend();
     }
 
     public function getMemberIdAttribute()
@@ -412,7 +416,35 @@ class Customer extends Authenticatable
         ->whereIn('booking_checkin_details.booking_detail_id', $activeMemberships->pluck('id'))
         ->where('booking_checkin_details.checked_at', '>=', Carbon::parse(date('Y-m-d'))->subDays(14))
         ->exists();
-        return $checkinData ? 'Not-Risk' : 'At-Risk';
+
+        if ($activeMemberships->get()->isNotEmpty() && !$checkinData) {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    public function bigSpender(){
+        $transaction = $this->total_spend();
+        return $transaction >= 2000 ? 1 : 0;
+    }
+
+    public function suspended(){
+        return $this->bookingDetail()->where('status' ,'suspend')->get();
+    }
+
+    public function suspendedOrNot(){
+        $membership = $this->suspended()->count();
+        return $membership > 0 ? 1 : 0;
+    }
+
+    public function owedDetail(){
+        return $this->recurringDetail()->where('payment_number',NULL)->whereIn('status',['Retry','Failed'])->join('booking_checkin_details as cid','cid.booking_detail_id' ,'=','recurring.booking_detail_id')->whereNotNull('cid.checked_at');
+    }
+
+    public function owedOrnot(){
+        $detail = $this->owedDetail()->count();
+        return $detail > 0 ? 1 : 0;
     }
 
     public function expired_soon(){
@@ -510,6 +542,13 @@ class Customer extends Authenticatable
         }
     }
 
+    public function lastDays(){
+        $date1 = Carbon::parse($this->get_last_seen());
+        $date2 = Carbon::now();
+
+        return $date1->diffInDays($date2);
+    }
+
     public function get_current_membership(){
         $checkin = $this->get_last_seen();
         if($checkin){
@@ -521,37 +560,41 @@ class Customer extends Authenticatable
         $payment_method = $this->StripePaymentMethods()->get()->last();
 
         if($payment_method){
+
             $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-
-            $paymentIntent = $stripe->paymentIntents->create([
-                'amount' =>  round($amount *100),
-                'currency' => 'usd',
-                'customer' => $this->stripe_customer_id,
-                'payment_method' => $payment_method->payment_id,
-                'off_session' => true,
-                'confirm' => true,
-                'metadata' => []
-            ]);
-
-            if($paymentIntent->status == 'succeeded'){
-
-                $this->Transaction()->create([
-                    'user_type' => 'Customer',
-                    'user_id' => $this->id,
-                    'item_type'=> 'Customer',
-                    'item_id'=> $this->id,
-                    'channel'=> 'stripe',
-                    'kind'=> $kind,
-                    'transaction_id'=> $paymentIntent->id,
-                    'stripe_payment_method_id'=> $payment_method->payment_id,
-                    'amount'=> $amount,
-                    'qty'=> 1,
-                    'status'=> 'complete',
-                    'payload'=> json_encode($paymentIntent)
+            try{
+                $paymentIntent = $stripe->paymentIntents->create([
+                    'amount' =>  round($amount *100),
+                    'currency' => 'usd',
+                    'customer' => $this->stripe_customer_id,
+                    'payment_method' => $payment_method->payment_id,
+                    'off_session' => true,
+                    'confirm' => true,
+                    'metadata' => []
                 ]);
-                return true;
-            }else{
-                return false;
+
+                if($paymentIntent->status == 'succeeded'){
+
+                    $this->Transaction()->create([
+                        'user_type' => 'Customer',
+                        'user_id' => $this->id,
+                        'item_type'=> 'Customer',
+                        'item_id'=> $this->id,
+                        'channel'=> 'stripe',
+                        'kind'=> $kind,
+                        'transaction_id'=> $paymentIntent->id,
+                        'stripe_payment_method_id'=> $payment_method->payment_id,
+                        'amount'=> $amount,
+                        'qty'=> 1,
+                        'status'=> 'complete',
+                        'payload'=> json_encode($paymentIntent)
+                    ]);
+                    return true;
+                }else{
+                    return false;
+                }
+            }catch(Exception | \Stripe\Exception\InvalidRequestException $e){
+               return false;
             }
 
         }else{

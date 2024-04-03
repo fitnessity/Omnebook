@@ -30,7 +30,7 @@
 	.mb-55{margin-bottom: 55px;}
 	.dropBoximg{ min-width: 100% !important;}
 	.search-width { width: 100%;}
-	.dash-sidebar-menu{margin-top: 110px;}
+	.dash-sidebar-menu{margin-top: 20px;}
 	.set-price{margin-bottom: 10px !important;}
 	.equal-earn {  margin-top: 25px;}
 	.checkbox-selection label{display: inline;}
@@ -125,6 +125,8 @@
 	.confirmed-slider .owl-nav .owl-prev{left: -55px !important; width: 20px; height: 20px; font-size: 18px;}
 	.mil-5 { margin-left: 5px;  }
 	.com-sidepanel{top: 67px;}
+	.ipad-none{display: none;}
+	.notification-close{right: 35px;} 
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){
@@ -240,7 +242,7 @@
 	.show-all {	margin-top: 0;  }
 	.show-all .join-btn{margin-top: 0; padding: 0px !important;}
 	.star-rest .activity-inner-data{padding: 0 0;}
-	
+	.ipad-none{display: none;}
 }
 
 @media screen and (max-width: 699px){ 
@@ -409,6 +411,20 @@
 	.com-cancle{color: #000 !important;}
 	.sidebar-progress-bar{	display: block;	  }
 	.notification-close{right: 35px;}
+	#signatureCanvas{width: 100%;}
+	.accordion-body{ padding: 6px;}
+	.mcard-body-sp{padding: 15px 5px;}
+	.mp-5{padding: 5px;}
+	.mp-6{padding: 6px;}
+	.customer-details-img{display: block; margin-left: auto; margin-right: auto; width: 50%; }
+	.m-customer-detials{text-align: center;}
+	.m-d-grid{display: grid;}
+	.blog-sidepanel{top: 104px;}
+	.side-footer-set{bottom: 80px;}
+	.mb-165 { margin-bottom: 275px;	}
+	.suggested-set{bottom: 180px;}
+	.create-customer-box{padding: 15px 10px;}
+	#dropzone-preview li div .pt-1{word-wrap: anywhere;} 
 }
 
 

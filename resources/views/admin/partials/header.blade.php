@@ -4,7 +4,7 @@
 
     <a href="/admin/dashboard" class="logo">
 
-      <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>logo.png" style="height:auto;width:190px;" />
+      <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>omnebook-admin.png" style="height: auto; width: 174px; display: block;  padding: 5px;" />
 
       <!-- mini logo for sidebar mini 50x50 pixels -->
 

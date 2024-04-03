@@ -88,11 +88,11 @@
 
 						<div class="provider-sidebar-scroll">
 							<div class="ms-1 header-item d-none d-sm-flex">
-								<button type="button" class="btn btn-red zfold-none" onclick="openNaav()"> Complete Setup <i class="fas fa-angle-right ml-20 mil-5"></i>
+								<button type="button" class="btn btn-red zfold-none ipad-none" onClick="openNaav()"> Complete Setup <i class="fas fa-angle-right ml-20 mil-5"></i>
 								</button>
 							</div>
 							<div class="ms-1 header-item d-sm-flex">
-								<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none sidebar-progress-bar" onclick="openNaav()"> <i class="fas fa-tasks fs-22"></i>
+								<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none sidebar-progress-bar" onClick="openNaav()"> <i class="fas fa-tasks fs-22"></i>
 								</button>
 							</div>
 						
@@ -109,7 +109,7 @@
 													</div>
 													<div class="col-lg-4 col-4">
 														<div class="p-relative">
-															<a href="javascript:void(0)" class="com-cancle fa fa-times" onclick="closeNaav()"></a>
+															<a href="javascript:void(0)" class="com-cancle fa fa-times" onClick="closeNaav()"></a>
 														</div>
 													</div>
 												</div>	
@@ -120,13 +120,13 @@
 												<div class="row">
 													<div class="col-lg-8 col-8">
 														<div class="welcome-sidebar">
-															<label>Hi Darryl, continue setting up your company.</label>
-															<span>3 of 5 tasks completed</span>
+															<label>Hi {{ucwords(Auth::user()->full_name)}}, continue setting up your company.</label>
+															<span>{{completeSetUpCount()}} of 6 tasks completed</span>
 														</div>
 													</div>
 													<div class="col-lg-4 col-4">
 														<div id="wrapper" class="center">
-															<svg class="circle-progress green noselect" data-progress="30" x="0px" y="0px" viewBox="0 0 80 80">
+															<svg class="circle-progress green noselect" data-progress="{{setUpPercentage()}}" x="0px" y="0px" viewBox="0 0 80 80">
 																<path class="track" d="M5,40a35,35 0 1,0 70,0a35,35 0 1,0 -70,0" />
 																<path class="fill" d="M5,40a35,35 0 1,0 70,0a35,35 0 1,0 -70,0" />
 																<text class="value" x="50%" y="43%">0%</text>
@@ -136,32 +136,35 @@
 													</div>
 												</div>
 											</div>	
+											@php 
+												$businessTopbar = Auth::user()->current_company;
+											@endphp
 											<div class="container">
 												<div class="new sidebar-radio">
 													<form>
 														<div class="form-group options-box">
-															<input type="checkbox" id="Setup">
-															<label for="Setup" onclick="companySetup()"> Complete your company setup. </label>
+															<input type="checkbox" id="Setup" @if(Auth::user()->businesses()->count() > 0 ) checked disabled @endif>
+															<label for="Setup" @if(Auth::user()->businesses()->count() == 0 ) onclick="companySetup() @endif"> Complete your company setup. </label>
 														</div>
 														<div class="form-group options-box">
-															<input type="checkbox" id="Client">
-															<label for="Client" onclick="addClient()"> Add your clients </label>
+															<input type="checkbox" id="Client" @if(Auth::user()->customers()->where('business_id', Auth::user()->cid)->count() > 0 ) checked disabled @endif >
+															<label for="Client" @if(Auth::user()->customers()->where('business_id', Auth::user()->cid)->count() == 0 )  onclick="addClient()" @endif  > Add your clients </label>
 														</div>
 														<div class="form-group options-box">
-															<input type="checkbox" id="servies">
-															<label for="servies" onclick="servies()"> Set up your services </label>
+															<input type="checkbox" id="servies" @if(Auth::user()->BusinessServices()->where('cid', Auth::user()->cid)->count() > 0 ) checked disabled @endif >
+															<label for="servies" @if(Auth::user()->BusinessServices()->where('cid', Auth::user()->cid)->count() == 0 )  onclick="servies()" @endif> Set up your services </label>
 														</div> 
 														<div class="form-group options-box">
-															<input type="checkbox" id="staff">
-															<label for="staff" onclick="staff()"> Add your staff </label> 
+															<input type="checkbox" id="staff" @if($businessTopbar && @$businessTopbar->business_staff()->count() > 0 ) checked disabled @endif >
+															<label for="staff" @if($businessTopbar && @$businessTopbar->business_staff()->count() == 0 )  onclick="staff()"  @endif > Add your staff </label> 
 														</div>
 														<div class="form-group options-box">
-															<input type="checkbox" id="working">
-															<label for="working" onclick="newDoc()"> Add your products </label>
+															<input type="checkbox" id="working"  @if(Auth::user()->Products()->where('business_id', Auth::user()->cid)->count() > 0 ) checked disabled @endif >
+															<label for="working" @if(Auth::user()->Products()->where('business_id', Auth::user()->cid)->count() == 0 ) onclick="product()" @endif  > Add your products </label>
 														</div>
 														<div class="form-group options-box">
-															<input type="checkbox" id="payment">
-															<label for="payment" onclick="payment()"> Take your first payment</label>
+															<input type="checkbox" id="payment"  @if($businessTopbar && @$businessTopbar->UserBookingDetails()->count() > 0 ) checked disabled @endif >
+															<label for="payment"  @if($businessTopbar && @$businessTopbar->UserBookingDetails()->count() == 0 )  onclick="payment()"  @endif  > Take your first payment</label>
 														</div>
 													</form>
 												</div>
@@ -181,7 +184,7 @@
 																<p>Make a post on your social profile to engage clients, network and share. </p>
 															</div>
 															<div>
-																<a type="button" class="btn btn-red">Experience</a>
+																<a href="{{ route('businessprofiletimeline',['user_name'=>str_replace(' ','-', Auth::user()->current_company->public_company_name) ,'id'=> Auth::user()->cid])}}" target="_blank" class="btn btn-red">Experience</a>
 															</div>
 														</div>
 													</div>
@@ -223,7 +226,7 @@
 																<p>Engage your clients further by sending an announcement</p>
 															</div>
 															<div>
-																<a type="button" class="btn btn-red">Announcement</a>
+																<a href="{{route('business.announcement.index' ,['business_id' => Auth::user()->cid])}}" target="_blank" class="btn btn-red">Announcement</a>
 															</div>
 														</div>
 													</div>
@@ -237,7 +240,7 @@
 																<p>Keep track of all upcoming payments from stripe</p>
 															</div>
 															<div>
-																<a type="button" class="btn btn-red">Dashboard</a>
+																<a href="{{route('stripe-dashboard')}}" target="_blank" class="btn btn-red">Dashboard</a>
 															</div>
 														</div>
 													</div>
@@ -251,7 +254,7 @@
 																<p>Keep track of the health of your business by checking your reports</p>
 															</div>
 															<div>
-																<a href="#" type="button" class="btn btn-red">Reports</a>
+																<a href="{{route('business.reports.index',['business_id' => Auth::user()->cid])}}" target="_blank"  type="button" class="btn btn-red">Reports</a>
 															</div>
 														</div>
 													</div>
@@ -265,7 +268,7 @@
 																<p>Get insights and quick data on how your business is doing.</p>
 															</div>
 															<div>
-																<a type="button" class="btn btn-red">Dashboard</a>
+																<a href="{{route('business_dashboard')}}" class="btn btn-red">Dashboard</a>
 															</div>
 														</div>
 													</div>
@@ -279,7 +282,7 @@
 																<p>Explore the point of sale to learn how to take payments.</p>
 															</div>
 															<div>
-																<a type="button" class="btn btn-red">Sale</a>
+																<a  href="{{route('business.orders.create',['business_id' => Auth::user()->cid,'book_id' => 0])}}" target="_blank"  class="btn btn-red">Sale</a>
 															</div>
 														</div>
 													</div>
@@ -293,7 +296,7 @@
 																<p>Get info, insights, and manage your clients</p>
 															</div>
 															<div>
-																<a type="button" class="btn btn-red">Client Section</a>
+																<a  href="{{route('business_customer_index',['business_id' => Auth::user()->cid])}}" target="_blank"  class="btn btn-red">Client Section</a>
 															</div>
 														</div>
 													</div>
@@ -306,88 +309,604 @@
 						</div>
 						
 						<div class="provider-sidebar-scroll ms-1">
-							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" onclick="openNavxop()">
+							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" onClick="openNavxop()">
 								<i class="fas fa-rocket fs-19"></i>
 							</button>						
 							<nav class="blog-sidebar">
 								<div class="navbar-wrapper">
 									<div id="newthings" class="blog-sidepanel">
 										<div class="navbar-content">
-											<div class="">
-											<div class="container"> 
-												<div class="row">
-													<div class="col-lg-12 col-12">
-														<div class="p-relative">
-															<!-- <a href="javascript:void(0)" class="blog-cancle fa fa-times" onclick="closeNavxop()"></a> -->
-															<label for="">Test</label>
+											<div class="blog-header">
+												<div class="container"> 
+													<div class="row">
+														<div class="col-lg-9 col-9">
+															<div class="newsfeed-title">
+																<label>What's new on Fitnessity</label>
+															</div>
 														</div>
-													</div>
-												</div>	
+														<div class="col-lg-3 col-3">
+															<div class="p-relative">
+																<a href="javascript:void(0)" class="blog-cancle fa fa-times" onClick="closeNavxop()"></a>
+															</div>
+														</div>
+													</div>	
+												</div>
 											</div>
+											<div class="container">
+												<div class="row">
+													<div class="col-xxl-12">
+														<div class="">
+															<div class="tab-content text-muted mb-165">
+																<div class="tab-pane active" id="bottomtabs-newsfeed" role="tabpanel">
+																	<div class="card mt-15">
+																		<div class="card-body box-border">
+																			<div class="mb-5">
+																				<span class="badge rounded-pill text-bg-warning fs-11">Announcement</span>
+																				<label>March 15, 2024</label>
+																			</div>
+																			<div class="mb-15 blog-title">
+																				<a href="">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a>
+																			</div>
+																			<div class="mb-15">
+																				<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="blog-card-img-top" alt="card img">
+																			</div>
+																			
+																			<p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+																			<p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+																			<a href="#" class="btn btn-primary">Learn More</a>
+																		</div>
+																	</div>
+																	<div class="card mt-15">
+																		<div class="card-body box-border" >
+																			<div class="mb-5">
+																				<span class="badge rounded-pill text-bg-info fs-11">New</span>
+																				<label>April 18, 2024</label>
+																			</div>
+																			<div class="mb-15 blog-title">
+																				<a href="">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a>
+																			</div>
+																			<div class="mb-15">
+																				<img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648221-snow ski.jpg" class="blog-card-img-top" alt="card img">
+																			</div>
+																			<p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+																			<div class="blog-info">
+																				<ul>
+																					<li>
+																						It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+																					</li>
+																					<li>
+																						The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
+																					</li>
+																					<li>
+																						It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
+																					</li>
+																				</ul>
+																			</div>
+																			
+																			<p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+																			<a href="#" class="btn btn-primary">Learn More</a>
+																		</div>
+																	</div>
+																</div>
+																<div class="tab-pane" id="bottomtabs-ideas" role="tabpanel">
+																	<div class="card mt-25">
+																		<div class="card-body box-border" id="divMsg" style="display:none">
+																			<form action="">
+																				<div class="row">
+																					<div class="col-lg-12">
+																						<div class="mb-3">
+																							<label for="title" class="form-label">Title</label>
+																							<input type="text" class="form-control" id="title">
+																						</div>
+																						<div class="mb-3">
+																							<label for="email" class="form-label">Email</label>
+																							<input type="text" class="form-control" id="email">
+																						</div>
+																						<div class="mb-3">
+																							<label for="fname" class="form-label">First Name</label>
+																							<input type="text" class="form-control" id="fname">
+																						</div>
+																						<div class="mb-3">
+																							<label for="lname" class="form-label">Last Name</label>
+																							<input type="text" class="form-control" id="lname">
+																						</div>
+																						<div class="mb-3">
+																							<label for="lname" class="form-label">Upload Image</label>
+																							<input class="form-control" type="file" id="formFile">
+																						</div>
+																						<div class="mb-3">
+																							<label for="details" class="form-label">Details</label>
+																							<textarea class="form-control" id="exampleFormControlTextarea" rows="3"></textarea>
+																						</div>
+																						<div class="mb-3 float-right">
+																							<button class="btn btn-black ">Submit</button>
+																						</div>
+																					</div>
+																				</div>
+																			</form>
+																		</div>
+																	</div>
+
+																	<div class="card mt-15">
+																		<div class="card-body box-border">
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row">
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-8 col-8">
+																						<div class="mb-5 idea-title">
+																							<a href="" class="mb-5">Lorem Ipsum is simply </a>
+																						</div>
+																						<div>
+																							<span class="badge rounded-pill text-bg-warning fs-11">Improvement</span>
+																						</div>
+																						<div class="idea-review">
+																							<i class="ri-checkbox-blank-circle-fill"></i> <label>Under Review</label>
+																						</div>
+																						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>													
+																					</div>
+																					<div class="col-lg-2 col-2">
+																						<span> 4 </span>
+																						<i class="ri-chat-4-line"></i>
+																					</div>
+																				</div>
+																			</div>		
+																			
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row">
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-8 col-8">
+																						<div class="mb-5 idea-title">
+																							<a href="" class="mb-5">It is a long established fact that a reader will be distracted by the readable </a>
+																						</div>
+																						<div>
+																							<span class="badge rounded-pill text-bg-success fs-11">Feature Request</span>
+																						</div>
+																						<div class="idea-review">
+																							<i class="ri-checkbox-blank-circle-fill methoyopilo"></i> <label>Completed</label>
+																						</div>
+																						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>													
+																					</div>
+																					<div class="col-lg-2 col-2">
+																						<span> 4 </span>
+																						<i class="ri-chat-4-line"></i>
+																					</div>
+																				</div>
+																			</div>
+
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row">
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-8 col-8">
+																						<div class="mb-5 idea-title">
+																							<a href="" class="mb-5">Contrary to popular belief, Lorem Ipsum is not simply random text. </a>
+																						</div>
+																						<div>
+																							<span class="badge rounded-pill text-bg-success fs-11">Feature Request</span>
+																						</div>
+																						<div class="idea-review">
+																							<i class="ri-checkbox-blank-circle-fill"></i> <label>Under Review</label>
+																						</div>
+																						<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. </p>
+																					</div>
+																					<div class="col-lg-2 col-2">
+																						<span> 4 </span>
+																						<i class="ri-chat-4-line"></i>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="">
+																				<div class="suggested-set">
+																					<button class="btn- btn-red btn-suggest" onClick="showHideDiv('divMsg')">Suggest a new idea</button>
+																				</div>
+																			</div>
+																			
+																		</div>
+																	</div>
+																</div>
+																<div class="tab-pane" id="bottomtabs-roadmap" role="tabpanel" > 
+																	<div class="card mt-15 grey-border-top">
+																		<div class="card-body box-border">
+																			<div class="roadmap-title">
+																				<i class="ri-checkbox-blank-circle-fill round-grey"></i> <label>Under Review</label>
+																			</div>
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row">
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-10 col-10">
+																						<div class="mb-5 roadmap-subtitle">
+																							<a href="" class="mb-5">Lorem Ipsum is simply </a>
+																						</div>
+																						<div class="mb-25 improvment">
+																							<span >Improvement</span>
+																						</div>												
+																					</div>
+																				</div>
+																			</div>
+
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row">
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-10 col-10">
+																						<div class="mb-5 roadmap-subtitle">
+																							<a href="" class="mb-5">When an unknown printer took a galley of type</a>
+																						</div>
+																						<div class="mb-25 improvment">
+																							<span>Feature Request</span>
+																						</div>												
+																					</div>
+																				</div>
+																			</div>
+
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row"> 
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-10 col-10">
+																						<div class="mb-5 roadmap-subtitle">
+																							<a href="" class="mb-5">Contrary to popular belief, Lorem Ipsum is not simply</a>
+																						</div>
+																						<div class="mb-25 improvment">
+																							<span>Feature Request</span>
+																						</div>												
+																					</div>
+																				</div>
+																			</div>
+
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row">
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-10 col-10">
+																						<div class="mb-5 roadmap-subtitle">
+																							<a href="" class="mb-5">There are many variations of passages of Lorem Ipsum available</a>
+																						</div>
+																						<div class="mb-25 improvment">
+																							<span>Improvement</span>
+																						</div>												
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+
+																	<div class="card mt-15 yellow-border-top">
+																		<div class="card-body box-border">
+																			<div class="roadmap-title">
+																				<i class="ri-checkbox-blank-circle-fill methoyopilo"></i> <label>Completed</label>
+																			</div>
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row">
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-10 col-10">
+																						<div class="mb-5 roadmap-subtitle">
+																							<a href="" class="mb-5">Contrary to popular belief </a>
+																						</div>
+																						<div class="mb-25 improvment">
+																							<span >Improvement</span>
+																						</div>												
+																					</div>
+																				</div>
+																			</div>
+
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row">
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-10 col-10">
+																						<div class="mb-5 roadmap-subtitle">
+																							<a href="" class="mb-5">Lorem Ipsum is not simply random text</a>
+																						</div>
+																						<div class="mb-25 improvment">
+																							<span>Feature Request</span>
+																						</div>												
+																					</div>
+																				</div>
+																			</div>
+
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row">
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-10 col-10">
+																						<div class="mb-5 roadmap-subtitle">
+																							<a href="" class="mb-5">It has roots in a piece</a>
+																						</div>
+																						<div class="mb-25 improvment">
+																							<span>Feature Request</span>
+																						</div>												
+																					</div>
+																				</div>
+																			</div>
+
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row">
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-10 col-10">
+																						<div class="mb-5 roadmap-subtitle">
+																							<a href="" class="mb-5">Majority have suffered alteration in some form</a>
+																						</div>
+																						<div class="mb-25 improvment">
+																							<span>Improvement</span>
+																						</div>												
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+
+																	<div class="card mt-15 green-border-top">
+																		<div class="card-body box-border">
+																			<div class="roadmap-title">
+																				<i class="ri-checkbox-blank-circle-fill green-round"></i> <label>In Progress</label>
+																			</div>
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row">
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-10 col-10">
+																						<div class="mb-5 roadmap-subtitle">
+																							<a href="" class="mb-5"> If you are going to use a passage </a>
+																						</div>
+																						<div class="mb-25 improvment">
+																							<span >Improvement</span>
+																						</div>												
+																					</div>
+																				</div>
+																			</div>
+
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row">
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-10 col-10">
+																						<div class="mb-5 roadmap-subtitle">
+																							<a href="" class="mb-5">There are many variations of passages of Lorem Ipsum</a>
+																						</div>
+																						<div class="mb-25 improvment">
+																							<span>Feature Request</span>
+																						</div>												
+																					</div>
+																				</div>
+																			</div>
+
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row">
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-10 col-10">
+																						<div class="mb-5 roadmap-subtitle">
+																							<a href="" class="mb-5">Finibus Bonorum et Malorum</a>
+																						</div>
+																						<div class="mb-25 improvment">
+																							<span>Feature Request</span>
+																						</div>												
+																					</div>
+																				</div>
+																			</div>
+
+																			<div class="border-bottom-grey mt-15">
+																				<div class="row">
+																					<div class="col-lg-2 col-2">
+																						<span class="ri-check-double-fill fs-22"> </span>
+																					</div>
+																					<div class="col-lg-10 col-10">
+																						<div class="mb-5 roadmap-subtitle">
+																							<a href="" class="mb-5">The standard chunk of Lorem Ipsum</a>
+																						</div>
+																						<div class="mb-25 improvment">
+																							<span>Improvement</span>
+																						</div>												
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+
+																</div>
+																<div class="tab-pane" id="bottomtabs-engage" role="tabpanel"> 
+																	<div class="pt-40">
+																		<div class="container">
+																			<div class="row">
+																				<div class="col-lg-12 col-12">
+																					<div class="top-welcome">
+																						<label>Welcome to Fitnessity</label>
+																						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="border-bottom-grey"></div>
+																			<div class="row">
+																				<div class="col-lg-12 col-12">
+																					<div class="top-welcome mt-15 mb-15">
+																						<label>Follow@fitnessity on Instagram</label>
+																						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+																						<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="border-bottom-grey"></div>
+																			<div class="row">
+																				<div class="col-lg-12 col-12">
+																					<div class="top-welcome mt-15 mb-15">
+																						<label>Follow@fitnessity on Twitter</label>
+																						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+																						<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="border-bottom-grey"></div>
+																			<div class="row">
+																				<div class="col-lg-12 col-12">
+																					<div class="top-welcome mt-15 mb-15">
+																						<label>Follow@fitnessity on Facebook</label>
+																						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+																						<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="border-bottom-grey"></div>
+																			<div class="row">
+																				<div class="col-lg-12 col-12">
+																					<div class="top-welcome mt-15 mb-15">
+																						<label>Follow@fitnessity on Ticktok</label>
+																						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+																						<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="border-bottom-grey"></div>
+																			<div class="row">
+																				<div class="col-lg-12 col-12">
+																					<div class="top-welcome mt-15 mb-15">
+																						<label>Watch how to use the software on YouTube</label> 
+																						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+																						<button type="submit" class="btn-red-primary btn-red mt-15">Watch and subscribe </button>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>									
+																</div>
+																<div class="tab-pane" id="bottomtabs-feedback" role="tabpanel"> 
+																	<div class="mt-20">
+																		<label class="mb-0 fs-18">Give Us Feedback</label>
+																	</div>
+																	<div class="card mt-20 mb-25">
+																		<div class="card-body box-border">
+																			<form action="">
+																				<div class="row">
+																					<div class="col-lg-12">
+																						<div class="mb-3">
+																							<label for="name" class="form-label">Name</label>
+																							<input type="text" class="form-control" id="name"">
+																						</div>
+																						<div class="mb-3">
+																							<label for="email" class="form-label">Email</label>
+																							<input type="text" class="form-control" id="email">
+																						</div>
+																						<div class="mb-3">
+																							<label for="sub" class="form-label">Subject</label>
+																							<input type="text" class="form-control" id="sub">
+																						</div>
+																						<div class="mb-3">
+																							<label for="msg" class="form-label">Message</label>
+																							<textarea class="form-control" rows="3"></textarea>
+																						</div>
+																						<div class="mb-3 float-right">
+																							<button class="btn btn-black">Send Feedback</button>
+																						</div>
+																					</div>
+																				</div>
+																			</form>
+																		</div>
+																	</div>
+																	<div class="border-bottom-grey"> </div>
+																	<div class="mt-20">
+																		<label class="mb-0 fs-18">Report A Bug</label>
+																	</div>
+																	<div class="card mt-20 mb-25">
+																		<div class="card-body box-border">
+																			<form action="">
+																				<div class="row">
+																					<div class="col-lg-12">
+																						<div class="mb-3">
+																							<label for="name" class="form-label">Name</label>
+																							<input type="text" class="form-control" id="name"">
+																						</div>
+																						<div class="mb-3">
+																							<label for="email" class="form-label">Email</label>
+																							<input type="text" class="form-control" id="email">
+																						</div>
+																						<div class="mb-3">
+																							<label for="bug" class="form-label">Where was this bug found?</label>
+																							<input type="text" class="form-control" id="bug">
+																						</div>
+																						<div class="mb-3">
+																							<label for="details" class="form-label">Details</label>
+																							<textarea class="form-control" rows="3"></textarea>
+																						</div>
+																						<div class="mb-3 float-right">
+																							<button class="btn btn-black">Submit</button>
+																						</div>
+																					</div>
+																				</div>
+																			</form>
+																		</div>
+																	</div>
+
+																</div>
+
+															</div>
+															<div class="p-relative">
+																<div class="side-footer-set bg-white">
+																	<!-- Nav tabs --> 
+																	<ul class="nav nav-pills nav-justified card-footer-tabs fs-17" role="tablist">
+																		<li class="nav-item">
+																			<a class="nav-link active" data-bs-toggle="tab" href="#bottomtabs-newsfeed" role="tab">
+																				<i class="fas fa-newspaper mb-5"></i>
+																				<label class="bottom-tab-titles mb-0">Newsfeed</label>
+																			</a>
+																		</li>
+																		<li class="nav-item">
+																			<a class="nav-link" data-bs-toggle="tab" href="#bottomtabs-ideas" role="tab">
+																				<i class="fas fa-lightbulb mb-5"></i>
+																				<label class="bottom-tab-titles mb-0">Ideas</label>
+																			</a>
+																		</li>
+																		<li class="nav-item">
+																			<a class="nav-link" data-bs-toggle="tab" href="#bottomtabs-roadmap" role="tab">
+																				<i class="fas fa-map mb-5"></i>
+																				<label class="bottom-tab-titles mb-0">Roadmap</label>
+																			</a>
+																		</li>
+																		<li class="nav-item">
+																			<a class="nav-link" data-bs-toggle="tab" href="#bottomtabs-engage" role="tab">
+																				<i class="fas fa-hand-point-up mb-5"></i>
+																				<label class="bottom-tab-titles mb-0">Engage</label>
+																			</a>
+																		</li>
+																		<li class="nav-item">
+																			<a class="nav-link" data-bs-toggle="tab" href="#bottomtabs-feedback" role="tab">
+																				<i class="fas fa-comment-alt mb-5"></i>
+																				<label class="bottom-tab-titles mb-0">Feedback</label>
+																			</a>
+																		</li>
+																	</ul>
+																</div>
+															</div>															
+														</div><!-- end card -->
+													</div>
+
+													
+												</div>
 											</div>
 											
-											<!-- <div class="pb-100 pt-40">
-												<div class="container">
-													<div class="row">
-														<div class="col-lg-12 col-12">
-															<div class="top-welcome">
-																<label>Welcome to Fitnessity</label>
-																<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-															</div>
-														</div>
-													</div>
-													<div class="border-bottom-grey"></div>
-													<div class="row">
-														<div class="col-lg-12 col-12">
-															<div class="top-welcome mt-15 mb-15">
-																<label>Follow@fitnessity on Instagram</label>
-																<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-																<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
-															</div>
-														</div>
-													</div>
-													<div class="border-bottom-grey"></div>
-													<div class="row">
-														<div class="col-lg-12 col-12">
-															<div class="top-welcome mt-15 mb-15">
-																<label>Follow@fitnessity on Twitter</label>
-																<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-																<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
-															</div>
-														</div>
-													</div>
-													<div class="border-bottom-grey"></div>
-													<div class="row">
-														<div class="col-lg-12 col-12">
-															<div class="top-welcome mt-15 mb-15">
-																<label>Follow@fitnessity on Facebook</label>
-																<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-																<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
-															</div>
-														</div>
-													</div>
-													<div class="border-bottom-grey"></div>
-													<div class="row">
-														<div class="col-lg-12 col-12">
-															<div class="top-welcome mt-15 mb-15">
-																<label>Follow@fitnessity on Ticktok</label>
-																<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-																<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
-															</div>
-														</div>
-													</div>
-													<div class="border-bottom-grey"></div>
-													<div class="row">
-														<div class="col-lg-12 col-12">
-															<div class="top-welcome mt-15 mb-15">
-																<label>Watch how to use the software on YouTube</label> 
-																<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-																<button type="submit" class="btn-red-primary btn-red mt-15">Watch and subscribe </button>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>											 -->
+											
 										</div>
 									</div>
 								</div>
@@ -407,7 +926,10 @@
 						</div>
 
 						<div class="ms-1 header-item d-sm-flex">
-							<a href="{{route('business_customer_create' ,['business_id'=> Auth::user()->cid])}}" class="add-client mr-5 desktop-none-client">Add Client</a> 
+							<button type="button" id="m_add_new_client" class="desktop-none-client btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none">
+								<i class="ri-user-add-fill fs-22"></i>
+							</button>
+							<!-- <a href="{{route('business_customer_create' ,['business_id'=> Auth::user()->cid])}}" class="add-client mr-5 desktop-none-client">Add Client</a>  -->
 						</div>
 
 						<div class="dropdown d-md-none topbar-head-dropdown header-item">
@@ -516,7 +1038,7 @@
 																		 @if($n->table != 'User') <a href="{{route('business_customer_show' ,['business_id'=> Auth::user()->cid, 'id' =>$n->customer_id])}}" class="mb-0">View</a> @endif 
 																	</div>
 																	<div class="col-md-3 col-3">
-																		<a onclick="deleteNoteFromNotification({{$n->id}})" class="mb-0">Delete</a>
+																		<a onClick="deleteNoteFromNotification({{$n->id}})" class="mb-0">Delete</a>
 																	</div>
 																</div>
 															</div>
@@ -592,7 +1114,7 @@
 																		<a @if($n->table != 'User') href="{{route('business_customer_show' ,['business_id'=> Auth::user()->cid, 'id' =>$n->customer_id])}}" @endif  class="mb-0">View</a>
 																	</div>
 																	<div class="col-md-3 col-3">
-																		<a onclick="deleteNoteFromNotification({{$n->id}})" class="mb-0">Delete</a>
+																		<a onClick="deleteNoteFromNotification({{$n->id}})" class="mb-0">Delete</a>
 																	</div>
 																</div>
 															</div>
@@ -608,7 +1130,7 @@
 
 											@if(count(getNotificationDashboard('Alert')) > 0)
 												<div class="text-center">
-													<button type="button" class="btn btn-red text-center clearAlert" onclick="clearAlert()">Clear All Alerts</button>
+													<button type="button" class="btn btn-red text-center clearAlert" onClick="clearAlert()">Clear All Alerts</button>
 												</div>
 											@endif
 										</div>
@@ -746,8 +1268,14 @@
 		</script>
 
 <script>
+	document.getElementById("m_add_new_client").onclick = function () {
+        location.href = "{{route('business_customer_create' ,['business_id'=> Auth::user()->cid])}}";
+    };
+</script>
+
+<script>
 function openNaav() {
-	document.getElementById("completesetup").style.width = "358px";
+	document.getElementById("completesetup").style.width = "500px";
 }
 
 function closeNaav() {
@@ -757,14 +1285,28 @@ function closeNaav() {
 
 <script>
 function openNavxop() {
-	document.getElementById("newthings").style.width = "358px";
+	document.getElementById("newthings").style.width = "500px";
 }
 
 function closeNavxop() {
 	document.getElementById("newthings").style.width = "0";
 }
 </script>
+<script>
+ 	function showHideDiv(ele) {
+    	var srcElement = document.getElementById(ele);
+     	if (srcElement != null) {
+        	if (srcElement.style.display == "block") {
+             	srcElement.style.display = 'none';
+         	}
+       		else {
+                srcElement.style.display = 'block';
+             	}
+          	return false;
+          	}
+    }
 
+</script>
 
 <script>
 	var forEach = function (array, callback, scope) {
@@ -783,22 +1325,33 @@ window.onload = function(){
 </script>
 
 <script>
-function companySetup() {
-  window.location.assign("http://dev.fitnessity.co/personal/company/create?company=68")
-}
-function addClient() {
-  window.location.assign("http://dev.fitnessity.co/business/68/customers")
-}
-function servies() {
-  window.location.assign("http://dev.fitnessity.co/business/68/services/select")
-}
-function staff() {
-  window.location.assign("http://dev.fitnessity.co/business/68/staff")
-}
-function newDoc() {
-  window.location.assign("http://dev.fitnessity.co/business/68/products/create")
-}
-function payment() {
-  window.location.assign("http://dev.fitnessity.co/business/68/orders/create?book_id=0")
-}
+	function companySetup() {
+		var url = '{{route("personal.company.index")}}';
+	  	window.location.href(url,'_blank')
+	}
+
+	function addClient() {
+		var url = '{{route("business_customer_create",["business_id" => Auth::user()->cid])}}';
+		window.open(url, "_blank");
+	}
+
+	function servies() {
+		var url = '{{route("business.service.select",["business_id" => Auth::user()->cid])}}';
+		window.open(url, "_blank");
+	}
+
+	function staff() {
+		var url = '{{route("business.staff.index",["business_id" => Auth::user()->cid])}}';
+		window.open(url, "_blank");
+	}
+
+	function product() {
+		var url = '{{route("business.products.create",["business_id" => Auth::user()->cid])}}';
+		window.open(url, "_blank");
+	}
+
+	function payment() {
+		var url = '{{route("business.orders.create",["business_id" => Auth::user()->cid])}}';
+		window.open(url, "_blank");
+	}
 </script>

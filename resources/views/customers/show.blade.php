@@ -71,10 +71,10 @@
 																	</h2>
 																	<div id="accor_nesting7Examplecollapse2" class="accordion-collapse collapse show" aria-labelledby="accordionnesting7Example2" data-bs-parent="#accordionnesting7">
 																		<div class="accordion-body">
-																			<div class="container-fluid">
-																				<div class="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
+																			<div class="container-fluid mp-5">
+																				<div class="pt-4 mb-lg-3 pb-lg-4 profile-wrapper">
 																					<div class="row d-flex align-items-center">
-																						<div class="col-auto col-md-3 col-lg-2 col-sm-4">
+																						<div class="col-12 col-md-3 col-lg-2 col-sm-4 customer-details-img">
 																							<div class="avatar-lg">
 																								@if(@$customerdata->profile_pic)
 																									<img src="{{Storage::Url($customerdata->profile_pic)}}" class="customers-name rounded-circle" alt="">
@@ -85,15 +85,15 @@
 																								
 																						</div>
 																						<!--end col-->
-																						<div class="col-lg-7 col-md-6 col-sm-5 col-xs-12 col-auto">
-																							<div class="p-2 mmt-10">
-																								<h3 class="mb-1">{{$customerdata->full_name}} @if($customerdata->primary_account == '1') <span class="font-green fs-14">(Primary Account)</span> @endif </h3>
+																						<div class="col-lg-7 col-md-6 col-sm-5 col-xs-12 col-12">
+																							<div class="p-2 mmt-10 m-customer-detials">
+																								<h3 class="mb-1 m-d-grid">{{$customerdata->full_name}} @if($customerdata->primary_account == '1') <span class="font-green fs-14">(Primary Account)</span> @endif </h3>
 																								<h3> <span class="fs-14">Member Id {{@$customerdata->user->unique_user_id}}</span></h3>
 																							</div>
 																						</div>
 																						<!--end col-->
 																						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 col-lg-auto order-last order-lg-0">
-																							<div class="flex-shrink-0 float-end mfloat-left small0width">
+																							<div class="flex-shrink-0 float-end small0width">
 																								<div class="multiple-options">
 																									<div class="setting-icon">
 																										<i class="ri-more-fill"></i>
@@ -118,7 +118,7 @@
 																					<!--end row-->
 																				</div>
 																				<div class="card card-border">
-																					<div class="card-body">
+																					<div class="card-body mcard-body-sp">
 																						<div class="container-fluid">
 																							<div class="row">
 																								<div class="col-lg-6">
@@ -212,7 +212,7 @@
 																					</div><!-- end card body -->
 																				</div>
 																				<div class="card card-border">
-																					<div class="card-body">
+																					<div class="card-body mcard-body-sp">
 																						<div class="container-fluid">
 																							<div class="row">
 																								<div class="col-lg-12">
@@ -228,7 +228,7 @@
 																											<label class="font-black">Status</label>
 																										</div>
 																										<div class="col-lg-6 col-sm-6">
-																												<span class="@if($customerdata->is_active() == 'InActive') font-red-fonts @else font-green @endif ">{{$customerdata->is_active()}}</span>
+																											<span class="@if($customerdata->is_active() == 'InActive') font-red-fonts @else font-green @endif ">{{$customerdata->is_active()}}</span>
 																											
 																										</div>
 																									</div>
@@ -326,7 +326,7 @@
 																								<div class="accordion nesting4-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnestinga{{$i}}">
 																									<div class="accordion-item shadow">
 																										<h2 class="accordion-header" id="accordionnesting4Examplea{{$i}}}">
-																											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting4Examplecollapsea{{$i}}" aria-expanded="false" aria-controls="accor_nesting4Examplecollapse2">
+																											<button class="accordion-button collapsed mp-6" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting4Examplecollapsea{{$i}}" aria-expanded="false" aria-controls="accor_nesting4Examplecollapse2">
 																												<div class="container-fluid nopadding">
 																													<div class="row mini-stats-wid d-flex align-items-center ">
 																														<div class="col-lg-10 col-md-10 col-8"> {{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} @if($booking_detail->contract_date) | Started On {{date('m/d/Y',strtotime(@$booking_detail->contract_date))}} @endif  @if($booking_detail->expired_at) | Expires On {{date('m/d/Y',strtotime(@$booking_detail->expired_at))}} @endif </div>
@@ -337,8 +337,8 @@
 																																	<i class="ri-more-fill"></i>
 																																	<ul>
 																																		<li>
-																					                                       	<a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id])}}" data-modal-width="modal-70" ><i class="fas fa-plus text-muted">
-																					                                       	</i> View Visits </a>
+																																			<a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id])}}" data-modal-width="modal-70" ><i class="fas fa-plus text-muted">
+																																			</i> View Visits </a>
 																																		</li>
 																																		<li>
 																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
@@ -353,11 +353,11 @@
 																																			</i>Suspend or Terminate</a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80" data-reload="1"><i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-50" data-reload="1"><i class="fas fa-plus text-muted">
 																																			</i>Autopay Schedule</a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'history'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'history'])}}" data-modal-width="modal-50"><i class="fas fa-plus text-muted">
 																																			</i>Autopay History</a>
 																																		</li>
 																																	</ul>
@@ -608,18 +608,18 @@
 																																		<i class="ri-more-fill"></i>
 																																		<ul>
 																																			<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-100"> <i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
 																																			</i>Edit Booking </a>
 																																		</li>
 																																			<li><a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id])}}" data-modal-width="modal-70" >
 																																					<i class="fas fa-plus text-muted"></i> View Visits </a>
 																																			</li>
 																																			<li>
-																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80" data-reload="1"><i class="fas fa-plus text-muted">
+																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-50" data-reload="1"><i class="fas fa-plus text-muted">
 																																				</i>Autopay Schedule</a>
 																																			</li>
 																																			<li>
-																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'history'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
+																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'history'])}}" data-modal-width="modal-50"><i class="fas fa-plus text-muted">
 																																				</i>Autopay History</a>
 																																			</li>
 																																		</ul>
@@ -946,7 +946,7 @@
 																									<td>{{$family_member->relationship ?? "N/A"}}</td>
 																									<td>{{$family_member->age ?? "N/A"}}</td>
 																									<td class="text-center">
-																										<a onclick="deleteMember({{$family_member->id}})" class="btn btn-red mmb-10">Delete</a>
+																										<a onclick="deleteMember('{{$family_member->id}}')" class="btn btn-red mmb-10">Delete</a>
 
 																										<a href="#" trget="_blank" onclick="redirctAddfamily({{$customerdata->id}});" class="btn btn-black mmb-10">Edit</a>
 
@@ -1006,7 +1006,7 @@
 																												@if($visit->status_term())
 																													{{$visit->status_term()}}
 																												@else
-																													<a class="font-red" onclick="getCheckInDetails({{$visit->order_detail->business_id}}, {{$visit->business_activity_scheduler_id}} ,'{{$visit->checkin_date}}','{{$customerdata->id}}');">Unprocess</a>
+																													<a class="font-red" onclick="getCheckInDetailsModel({{$visit->order_detail->business_id}}, {{$visit->business_activity_scheduler_id}} ,'{{$visit->checkin_date}}','{{$customerdata->id}}');">Unprocess</a>
 																												@endif
 																												
 																											</td>
@@ -1897,7 +1897,7 @@
 	     	};
 	   });
 
-		function getCheckInDetails(business_id,scheduleId,date,cid){
+		function getCheckInDetailsModel(business_id,scheduleId,date,cid){
 			if(scheduleId != 0){
 				$.ajax({	
 					url:"/business/"+business_id+"/schedulers/"+scheduleId+"/checkin_details?date="+date+"&customerId="+cid,
@@ -1911,7 +1911,7 @@
 		}
 
 	   function deleteMember(id) {
-			if(id == undefined){
+			if(id == ''){
 				window.location.reload();
 			}else{
 				var _token = $("input[name='_token']").val();
@@ -1923,7 +1923,7 @@
 		               id: id
 		            },
 		            success: function (data) {
-		               window.location.reload();
+		               //window.location.reload();
 		            }
 		        });
 			}

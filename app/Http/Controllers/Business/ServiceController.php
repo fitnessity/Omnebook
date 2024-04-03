@@ -319,7 +319,9 @@ class ServiceController extends BusinessBaseController
                                 "weekend_infant_estearn" =>  $this->getSectionValue($request, $i, $y, 'infant', 'weekend_infant_estearn_', $displaySection), */
                             ];
                             
-                            $createOrUpdate = BusinessPriceDetails::updateOrCreate(['id' => $request->input('price_id_db_' . $i . $y)], $businessPrice);
+                            if($request->input('price_title_'.$i.$y) != ''){
+                                $createOrUpdate = BusinessPriceDetails::updateOrCreate(['id' => $request->input('price_id_db_' . $i . $y)], $businessPrice);
+                            }
                         }
                     }
 

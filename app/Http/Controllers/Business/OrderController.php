@@ -424,6 +424,7 @@ class OrderController extends BusinessBaseController
                         $reCharge  = $price_detail->recurring_customer_chage_by_infant;
                     }
                 }
+                
                 $categoryData = $checkoutRegisterCartService->getCategory($item['priceid']);
                 $duesTax = @$categoryData->dues_tax;
                 $salesTax = @$categoryData->sales_tax;
@@ -436,7 +437,8 @@ class OrderController extends BusinessBaseController
                 }
 
                 if($qty != '' && $qty != 0){
-                    $tax_recurring = number_format((($amount * $duesTax)/100)  + (($amount * $salesTax)/100),2);
+                    //$tax_recurring = number_format((($amount * $duesTax)/100)  + (($amount * $salesTax)/100),2); 
+                    $tax_recurring = number_format( ($amount * $duesTax)/100 ,2); //salestax is for product. and dues tax is for membership 
                     $paymentMethod = $tran_data['stripe_payment_method_id'];
                     if($re_i != '' && $re_i != 0 && $amount != ''){
                         for ($num = $re_i; $num >0 ; $num--) { 
@@ -447,6 +449,7 @@ class OrderController extends BusinessBaseController
                                 $status = 'Completed';
                                 $payment_number = '1';
                                 $payment_on = date('Y-m-d');
+                                $tax_recurring =  $booking_detail->tax;
                             }else{
                                 $Chk = explode(" ",$reCharge);
                                 $timeChk = @$Chk[1];

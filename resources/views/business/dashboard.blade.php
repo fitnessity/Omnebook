@@ -241,7 +241,7 @@
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center">
                                                     <div class="white-box flex-grow-1 overflow-hidden">
-                                                        <p class="fw-medium text-muted text-truncate mb-0">Customers | Month</p>
+                                                        <p class="fw-medium text-muted text-truncate mb-0">New Client | Month</p>
                                                     </div>
                                                     <div class="increase flex-shrink-0">
                                                         @if($customerCountPercentage < 0)
@@ -260,6 +260,39 @@
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-warning rounded fs-3">
+                                                            <i class="bx bx-user-circle"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div><!-- end card body -->
+                                        </div><!-- end card -->
+                                    </div><!-- end col -->
+
+                                    <div class="col-xl-3 col-md-6">
+                                        <!-- card -->
+                                        <div class="card card-animate">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="white-box flex-grow-1 overflow-hidden">
+                                                        <p class="fw-medium text-muted text-truncate mb-0">Reservations | Month</p>
+                                                    </div>
+                                                    <div class="increase flex-shrink-0">
+                                                        @if($reserveMembersCountPercentage < 0)
+                                                            <h5 class="text-danger fs-14 mb-0">
+                                                            <i class="ri-arrow-right-down-line fs-13 align-middle"></i> {{$reserveMembersCountPercentage}} % </h5> <p>Decrease</p>
+                                                        @else
+                                                            <h5 class="text-success fs-14 mb-0">
+                                                            <i class="ri-arrow-right-up-line fs-13 align-middle"></i> + {{$reserveMembersCountPercentage}} % </h5> <p>Increase</p>
+                                                        @endif 
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-end justify-content-between mt-4">
+                                                    <div>
+                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$reserveMembersCount}}">{{$reserveMembersCount}}</span></h4>
+                                                        <a href="{{route('business_customer_index')}}" target="_blank" class="text-decoration-underline">View Customers</a>
+                                                    </div>
+                                                    <div class="avatar-sm flex-shrink-0">
+                                                        <span class="avatar-title text-bg-primary rounded fs-3">
                                                             <i class="bx bx-user-circle"></i>
                                                         </span>
                                                     </div>
@@ -336,7 +369,7 @@
                                                     <!--end col-->
                                                     <div class="col-6 col-sm-3">
                                                         <div class="p-3 border border-dashed border-start-0">
-                                                            <h5 class="mb-1">$<span class="counter-value" data-target="{{$revenuePerDay}}">{{$revenuePerDay}}</span></h5>
+                                                            <h5 class="mb-1">$<span class="counter-value" data-target="{{$revenuePerDayNeeded}}">{{$revenuePerDayNeeded}}</span></h5>
                                                             <p class="text-muted mb-0 revenue">Revenue Needed Per Day</p>
                                                         </div>
                                                     </div>
@@ -831,7 +864,7 @@
 
         var  category =["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 		$( document ).ready(function() {
-            $('#graphDivM').addClass('d-none');
+            $('#graphDivY').addClass('d-none');
 		    draw_chart_donut_revenue({{$in_person}}, {{$online}},'');
 		    draw_chart_donut_category({{$ptdata}},{{$clsdata}},{{$expdata}},{{$evdata}},{{$prdata}},'');
 		    <?php 
@@ -842,7 +875,7 @@
 
 		    draw_chart_radial_bar('{{$completedRecPercentage}}','new_jobs_chart' ,'{{$comp_color}}','105', "70%" ,'16px');
 		    draw_chart_radial_bar('{{$remainingRecPercentage}}','rejected_chart','{{$rem_color}}','105', "70%",'16px');
-            draw_chart_radial_bar('{{$revenueAchivedPercentage}}','total_jobs','{{$revenue_color}}','70', "60%",'11px');
+            draw_chart_radial_bar('{{$revenueAchivedPercentage}}','total_jobs','{{$revenue_color}}','70', "70%",'10px');
             
 		});
 
