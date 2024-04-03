@@ -92,12 +92,12 @@ class CustomerController extends Controller {
         ini_set('max_execution_time', 10000);
 
 
-        $customerStatusCounts = $customers->mapToGroups(function ($customer) {
+        /*$customerStatusCounts = $customers->mapToGroups(function ($customer) {
             return [$customer->is_active() => $customer];
-        });
+        });*/
 
         // Count customers by status
-        $forActive =  $customerStatusCounts->get('Active', collect());
+        /*$forActive =  $customerStatusCounts->get('Active', collect());
         $forInActive =  $customerStatusCounts->get('InActive', collect());
         $forPros =  $customerStatusCounts->get('Prospect', collect());
 
@@ -117,8 +117,8 @@ class CustomerController extends Controller {
         $owdCount = $owd->count();
 
         $validLetters = [];
-
-        $customersCollection = '';
+*/
+        /*$customersCollection = '';
         if(!$request->customer_type){
             $currentCount =  $customerCount;
             for ($asciiValue = ord('A'); $asciiValue <= ord('Z'); $asciiValue++) {
@@ -162,13 +162,14 @@ class CustomerController extends Controller {
                 }
             }
         }
-
+*/
         if ($request->ajax()) {
             return response()->json($customers);
         }
 
         //$activeMembersCount = $inActiveMembersCount = $prospectMembersCount = $atRiskMembersCount = $bigSpenderCount = $suspendCount = $owdCount =0;
-        return view('customers.index', compact(['company','customerCount','activeMembersCount','inActiveMembersCount','prospectMembersCount','atRiskMembersCount','bigSpenderCount','suspendCount','owdCount','currentCount','validLetters','customersCollection']));
+        /*return view('customers.index', compact(['company','customerCount','activeMembersCount','inActiveMembersCount','prospectMembersCount','atRiskMembersCount','bigSpenderCount','suspendCount','owdCount','currentCount','validLetters','customersCollection']));*/
+        return view('customers.index', compact(['company','customerCount']));
     }
 
     public function loadView(Request $request)
