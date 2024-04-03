@@ -8475,7 +8475,7 @@ class UserProfileController extends Controller {
             $client->messages->create($recipients, [ "body" => "Your verification code is: " .$message, 'from' => $twilio_number]);
             $msg = 'Success';
         }catch(\Exception $e) {
-            $msg = 'Fail';
+            $msg =  $e;
         }
         return $msg;
     }

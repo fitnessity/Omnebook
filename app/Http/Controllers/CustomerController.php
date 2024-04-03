@@ -87,34 +87,139 @@ class CustomerController extends Controller {
         $customers = $customers->get();
         $customerCount = count($customers);
 
-         set_time_limit(8000000); 
+        set_time_limit(8000000); 
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', 10000);
 
-        $activeMembersCount = $customers->filter(function ($customer) {
-            return $customer->is_active() == 'Active'; 
-        })->count();
 
-        $inActiveMembersCount = $customers->filter(function ($customer) {
-            return $customer->is_active() == 'InActive'; 
-        })->count();
+        $customerStatusCounts = $customers->mapToGroups(function ($customer) {
+            return [$customer->is_active() => $customer];
+        });
 
-        $prospectMembersCount = 0;
-        /*$prospectMembersCount = $customers->filter(function ($customer) {
-            return $customer->is_active() == 'Prospect'; 
-        })->count();*/
+        // Count customers by status
+        $forActive =  $customerStatusCounts->get('Active', collect());
+        $forInActive =  $customerStatusCounts->get('InActive', collect());
+        $forPros =  $customerStatusCounts->get('Prospect', collect());
 
-        $atRiskMembersCount =0;
-       /* $atRiskMembersCount = $customers->filter(function ($customer)  {
-            return $customer->customerAtRisk() == 'At-Risk';
-        });*/
+        $activeMembersCount = $forActive->count();
+        $inActiveMembersCount = $forInActive->count();
+        $prospectMembersCount = $forPros->count();
 
+        $atRiskMembers = $customers->filter->customerAtRisk();
+
+        $bigSpender = $customers->filter->bigSpender();
+        $suspend = $customers->filter->suspendedOrNot();
+        $owd = $customers->filter->owedOrnot();
+
+        $atRiskMembersCount = $atRiskMembers->count();
+        $bigSpenderCount = $bigSpender->count();
+        $suspendCount = $suspend->count();
+        $owdCount = $owd->count();
+
+        $validLetters = [];
+
+        $customersCollection = '';
+        if(!$request->customer_type){
+            $currentCount =  $customerCount;
+            for ($asciiValue = ord('A'); $asciiValue <= ord('Z'); $asciiValue++) {
+                $validLetters[] = chr($asciiValue);
+            }
+        }else{
+            if($request->customer_type == 'active'){
+                $customersCollection = $forActive;
+                $currentCount = $activeMembersCount ;
+            }else if($request->customer_type == 'in-active'){
+                $customersCollection = $forInActive;
+                $currentCount = $inActiveMembersCount ;
+            }else if($request->customer_type == 'prospect'){
+                $customersCollection = $forPros;
+                $currentCount = $prospectMembersCount;
+            }else if($request->customer_type == 'suspended'){
+                $customersCollection = $suspend;
+                $currentCount = $suspendCount;
+            }else if($request->customer_type == 'owed'){
+                $customersCollection = $owd;
+                $currentCount = $owdCount;
+            }else if($request->customer_type == 'at-risk'){
+                $customersCollection = $atRiskMembers;
+                $currentCount = $atRiskMembersCount;
+            }else if($request->customer_type == 'big-spenders'){
+                
+                $customersCollection = $bigSpender->sortByDesc(function ($customer) {
+                    return $customer->total_spend;
+                })->take(20);
+
+                $currentCount = $bigSpenderCount;
+            }
+
+            for ($asciiValue = ord('A'); $asciiValue <= ord('Z'); $asciiValue++) {
+
+                $letter = chr($asciiValue);
+                if ($customersCollection->contains(function ($customer) use ($letter) {
+                    return stripos($customer->fname, $letter) === 0;
+                })) {
+                    $validLetters[] = $letter;
+                }
+            }
+        }
 
         if ($request->ajax()) {
             return response()->json($customers);
         }
-        return view('customers.index', compact(['company','customerCount','activeMembersCount','inActiveMembersCount','prospectMembersCount','atRiskMembersCount']));
+
+        //$activeMembersCount = $inActiveMembersCount = $prospectMembersCount = $atRiskMembersCount = $bigSpenderCount = $suspendCount = $owdCount =0;
+        return view('customers.index', compact(['company','customerCount','activeMembersCount','inActiveMembersCount','prospectMembersCount','atRiskMembersCount','bigSpenderCount','suspendCount','owdCount','currentCount','validLetters','customersCollection']));
     }
+
+    public function loadView(Request $request)
+    {
+        $char = $request->input('char');
+        $cid = Auth::user()->cid;
+        $company = CompanyInformation::find($cid);
+
+        $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->orderBy('fname')->get();
+
+        $customerStatusCounts = $customers->mapToGroups(function ($customer) {
+            return [$customer->is_active() => $customer];
+        });
+
+        if($request->customer_type == 'active'){
+            $customers =  $customerStatusCounts->get('Active', collect());
+        }else if($request->customer_type == 'in-active'){
+            $customers =  $customerStatusCounts->get('InActive', collect());
+        }else if($request->customer_type == 'prospect'){
+            $customers =  $customerStatusCounts->get('Prospect', collect());
+        } else if($request->customer_type == 'suspended'){
+            $customersAry = $customers->filter->suspendedOrNot();
+            $customers = [];
+            foreach ($customersAry as $key => $value) {
+                if(!empty($value->suspended())){
+                    foreach ($value->suspended() as $key => $ubd) {
+                        $customers[] = $ubd;
+                    }
+                }
+            }
+        }else if($request->customer_type == 'owed'){
+            $customersAry = $customers->filter->owedOrnot();
+            //print_r( $customersAry);exit();
+            $customers = [];
+            foreach ($customersAry as $key => $value) {
+                if(!empty($value->owedDetail()->get())){
+                    foreach ($value->owedDetail()->get()     as $key => $owed) {
+                        $customers[] = $owed;
+                    }
+                }
+            }
+            //print_r( $customers);exit();
+        }else if($request->customer_type == 'at-risk'){
+            $customers = $customers->filter->customerAtRisk();
+        }else if($request->customer_type == 'big-spenders'){
+            $customers = $customers->filter->bigSpender();
+        }
+
+        return view('customers.customer-detail-list',compact('customers' ,'char','company'));
+    }
+
 
     public function create(Request $request, $business_id){
         $intent = $clientSecret = null;
@@ -553,6 +658,7 @@ class CustomerController extends Controller {
     }
 
     public function removefamilyCustomer(Request $request) {
+      
         $customer = Customer::find($request->id);
         $customer->update(['parent_cus_id' => NULL]);
        /* DB::delete('DELETE FROM customers WHERE id = "'.$request->id.'"');
@@ -846,15 +952,6 @@ class CustomerController extends Controller {
             $transactionType = 'Membership';
         }
         return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $oid ,'type' =>$transactionType]);
-    }
-
-    public function loadView(Request $request)
-    {
-        $char = $request->input('char');
-        $cid = Auth::user()->cid;
-        $company = CompanyInformation::find($cid);
-        $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->orderBy('fname')->get();
-        return view('customers.customer-detail-list',compact('customers' ,'char','company'));
     }
 
     public function getMoreRecords(Request $request)

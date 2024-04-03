@@ -494,7 +494,8 @@ class PaymentController extends Controller {
                     }
 
                     if($re_i != '' && $re_i != 0 && $amount != ''){
-                        $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
+                        //$tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
+                        $tax_recurring = number_format( ($amount * $fees->site_tax)/100 ,2);
                         for ($num = $re_i; $num >0 ; $num--) { 
                             $payment_method = $transactionstatus->stripe_payment_method_id;
                             if($num==1){

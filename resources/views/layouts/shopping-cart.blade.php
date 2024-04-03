@@ -512,7 +512,7 @@
 														<span class="fs-15 float-end">{{$cartCount}}</span>
 													</div>
 													<div class="col-6">
-														<label class="fs-15">Subtotal {{$discount}}</label>
+														<label class="fs-15">Subtotal</label>
 													</div>
 													<div class="col-6">
 														<span class="fs-15 float-end">

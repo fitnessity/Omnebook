@@ -117,11 +117,12 @@ class RecurringController extends Controller
 
             $amount += $recurringDetail->amount + $recurringDetail->tax;
             $stripeCustomerId = $recurringDetail->Customer != '' ? $recurringDetail->Customer->stripe_customer_id : '';
-            $cardDetails = StripePaymentMethod::whereRaw('((user_type = "User" and user_id = ?) or (user_type = "Customer" and user_id = ?))', [@$customer->user_id, $recurringDetail->user_id]);
+            $cardDetails = StripePaymentMethod::whereRaw('((user_type = "User" and user_id = ?) or (user_type = "Customer" and user_id = ?))', [@$customer->user_id, $recurringDetail->user_id])->get();
 
             //$cardDetails = StripePaymentMethod::where('user_id',$recurringDetail->user_id)->get();
         }
 
+        //print_r($cardDetails);
         $chkCard = 1;
         if(!empty($cardDetails) && $stripeCustomerId){
             foreach($cardDetails as $card){
@@ -131,6 +132,7 @@ class RecurringController extends Controller
                 if($cardID){
                     $chkCard = 0;
                 }
+
             }
         }
         
@@ -199,17 +201,42 @@ class RecurringController extends Controller
                     $update_recurring_detail->charged();
                 }
                 return response()->json(['message' => 'success']);
-            }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException | \Exception $e) {
+            }catch(\Stripe\Exception\CardException $e ) {
+                $error_msg = $e->getError()->message;
+            }catch(\Stripe\Exception\ApiErrorException  $e ) {
+                $error_msg = $e->getMessage();
+            }catch(\Stripe\Exception\AuthenticationException  $e ) {
+                $error_msg = "Stripe can’t authenticate you with the information provided";
+            }catch(\Stripe\Exception\InvalidRequestException $e ) {
+                $error_msg = 'An invalid request occurred in stripe';
+                if (isset($e->getError()->param)) {
+                    $error_msg =  "The parameter {$e->getError()->param} is invalid or missing.";
+                }
+            }catch(\Stripe\Exception\RateLimitException $e ) {
+                $error_msg = "Our system is currently experiencing a high volume of requests, and as a result, we've received too many API calls in a short period of time. We will try again later. We apologize for any inconvenience";
+            }catch(\Stripe\Exception\StripeApiException $e ) {
+                $error_msg = $e->getError()->message;
+            }catch(\Stripe\Exception\NetworkException $e ) {
+                $error_msg = $e->getError()->message;
+            }catch(\Stripe\Exception\InvalidResponseException  $e ) {
+                $error_msg = "We're sorry, but there was a problem processing your payment due to a network error. Please try again later";
+            }catch(\Stripe\Exception\StripeServerException   $e ) {
+                $error_msg = $e->getError()->message;
+            }catch (Exception $e) {
+                $error_msg = 'Another problem occurred, maybe unrelated to Stripe';
+            }
+
+            if($error_msg){
                 Recurring::whereIn('id', $ids)->update(['status' => 'Retry']);
                 SGMailService::sendAutoPayFaildAlertToProvider($emailDetailProvider);
                 SGMailService::sendAutoPayFaildAlertToCustomer($emailDetailCustomer);
-                return response()->json(['message' => 'Autopay payment is failed due to some reason. Please try again latter. ']);
-            } 
+                return response()->json(['message' => $error_msg]);
+            }
         }else{
             Recurring::whereIn('id', $ids)->update(['status' => 'Retry']);
             SGMailService::sendAutoPayFaildAlertToProvider($emailDetailProvider);
             SGMailService::sendAutoPayFaildAlertToCustomer($emailDetailCustomer);
-            return response()->json(['message' => 'Autopay payment is failed due to some reason. Please try again latter. ']);
+            return response()->json(['message' => 'Credit Card is not valid. Please Add again.']);
         }
     }
 }

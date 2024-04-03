@@ -130,7 +130,7 @@
 							</td>
 							<td>
 								@if($activeMembership->isNotEmpty())
-									<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" data-cus-id="{{$cus->id}}">
+									<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" data-cus-id="{{$cus->id}}" data-loop-id="{{$i}}">
 										<option value="" @if(!@$firstCheckInDetail->order_detail) selected @endif>Choose option</option>
 										@foreach($activeMembership as $bookingDetail)
 											@php 
@@ -148,7 +148,7 @@
 									<p class="font-red">No Membership</p>
 								@endif
 
-								<div class="mt-10 membership-section text-center font-red"></div>
+								<div class="mt-10 membership-section{{$i}} text-center font-red"></div>
 							</td>
 							<td class="modal-check-width">
 								<div class="check-cancel width-105">
@@ -157,7 +157,7 @@
 											$datetime = new DateTime(@$firstCheckInDetail->checkin_date.' '.$business_activity_scheduler->shift_start);
 											$formattedDatetime = $datetime->format('Y-m-d H:i:s');
 										@endphp
-										<input type="checkbox" name="check_in" value="1" data-behavior="checkin"data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}"data-booking-detail-id="{{@$firstCheckInDetail->booking_detail_id}}"  data-booking-detail-date="{{$formattedDatetime}}" @if(@$firstCheckInDetail->checked_at != '' ) checked @endif   data-cus-id="{{$cus->id}}"> 
+										<input type="checkbox" name="check_in" value="1" data-behavior="checkin" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}"data-booking-detail-id="{{@$firstCheckInDetail->booking_detail_id}}"  data-booking-detail-date="{{$formattedDatetime}}" @if(@$firstCheckInDetail->checked_at != '' ) checked @endif   data-cus-id="{{$cus->id}}"> 
 									@endif 
 									<label for="checkin" class="mb-0 mmt-10">Check In</label><br>
 
@@ -306,6 +306,7 @@
      	
      	var date = $(this).data('booking-detail-date');
      	var chkInID =$(this).data('booking-checkin-detail-id');
+     	var booking_detail_id =$(this).data('booking-detail-id');
      	var cus_id =$(this).data('cus-id');
      	var chk = $(this).is(':checked') ? 1 : 0;
      	$.ajax({
@@ -314,6 +315,7 @@
             data:{
                 _token: '{{csrf_token()}}', 
                 checked_at: $(this).is(':checked') ? date : null,
+                booking_detail_id: booking_detail_id,
             },
             success:function(response) {
             	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}',chkInID,cus_id,chk,'',response);
@@ -329,6 +331,8 @@
 
     $('[data-behavior~=change_price_title]').change(function(e){
     	$('.error-msg').html('');
+    	var loopId = $(this).data('loop-id');
+    	$('.membership-section'+loopId).html('');
     	var t = $(this)
         $.ajax({
             url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + $(this).data('booking-checkin-detail-id'),
@@ -339,7 +343,7 @@
             },
             success:function(response) {
             	if(isNaN(response)){
-            		$('.membership-section').html(response);
+            		$('.membership-section'+loopId).html(response);
             		$('.modal-check-width').html('<div class="check-cancel width-105"><label for="checkin" class="mb-0 mmt-10">Check In</label><br><label for="cancel" class="mb-0 mmt-10"> Late Cancel</label><br></div>');
             		$('.remaining-session').html('<div><p class="mb-0">N/A</p></div>');
 					$('.session-exp').html('N/A');

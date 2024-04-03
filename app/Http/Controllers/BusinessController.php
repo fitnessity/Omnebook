@@ -27,7 +27,7 @@ class BusinessController extends Controller
             return redirect('/personal/manage-account');
         }
 
-        $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales =  $in_person =$online = $customerCount = $remainingRecPercentage = $completedRecPercentage = $previousTotalSales = $totalsalePercentage =  $customerCountPercentage = $bookingCountPercentage = $totalRecurringPmt = $compltedpmtcnt = $remainigpmtcnt =$recurringAmount = $completeRecurringAmount = $reminingRecurringAmount = $left_days = $currentMonthRevenue = $dayOfMonth = $revenuePerDay = $revenueShouldbeOnDay = $revenueAchivedPercentage = 0;
+        $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales =  $in_person =$online = $customerCount = $remainingRecPercentage = $completedRecPercentage = $previousTotalSales = $totalsalePercentage =  $customerCountPercentage = $bookingCountPercentage = $totalRecurringPmt = $compltedpmtcnt = $remainigpmtcnt =$recurringAmount = $completeRecurringAmount = $reminingRecurringAmount = $left_days = $currentMonthRevenue = $dayOfMonth = $revenuePerDay = $revenueShouldbeOnDay = $revenueAchivedPercentage = $reserveMembersCount = $reserveMembersCountPercentage = $revenuePerDayNeeded = 0;
 
         $ptdata1= $expiringMembership = $activitySchedule  = $businessServices =  $revenueDataAry = $revenueDataMonthAry= []; $revenueData  = $categoryMonthData= '';
 
@@ -62,7 +62,15 @@ class BusinessController extends Controller
         $endOfWeek = Carbon::now()->endOfWeek();
         
         if(@$business != ''){
-            $customerCount = @$business->customers()->whereYear('created_at', '>=', $startDateYear)->whereMonth('created_at', '>=', $startDateMonth)->whereYear('created_at', '<=', $endDateYear)->whereMonth('created_at', '<=', $endDateMonth)->count();
+            $customers= @$business->customers()->whereYear('created_at', '>=', $startDateYear)->whereMonth('created_at', '>=', $startDateMonth)->whereYear('created_at', '<=', $endDateYear)->whereMonth('created_at', '<=', $endDateMonth)->get();
+
+            $customerCount = $customers->filter(function ($customer) {
+                return $customer->is_active() == 'Prospect'; 
+            })->count();
+
+            $reserveMembersCount = $customers->filter(function ($customer) {
+                return $customer->is_active() == 'Active'; 
+            })->count();
 
             $bookingCount = $business->UserBookingDetails()->whereYear('created_at', '>=', $startDateYear)->whereMonth('created_at', '>=', $startDateMonth)->whereYear('created_at', '<=', $endDateYear)->whereMonth('created_at', '<=', $endDateMonth)->count();
 
@@ -70,12 +78,24 @@ class BusinessController extends Controller
             $endSubDate = Carbon::createFromDate($endDateYear, $endDateMonth, 1)->subMonth()->endOfMonth();
 
             $priviousBookingCount = $business->UserBookingDetails()->whereDate('created_at', '>=', $startSubDate)->whereDate('created_at', '<=', $endSubDate)->count();
-               
-            $priviousCustomerCount = @$business->customers()->whereDate('created_at', '>=', $startSubDate)->whereDate('created_at', '<=', $endSubDate)->count();
 
+            $customersPrevious= @$business->customers()->whereDate('created_at', '>=', $startSubDate)->whereMonth('created_at', '<=', $endSubDate)->get();
+
+            $priviousCustomerCount = $customersPrevious->filter(function ($customer) {
+                return $customer->is_active() == 'Prospect'; 
+            })->count();
+
+            
+            $previousReserveMembersCount = $customersPrevious->filter(function ($customer) {
+                return $customer->is_active() == 'Active'; 
+            })->count();
+           
             $customerCountPercentage =  $priviousCustomerCount != 0 ? number_format(($customerCount - $priviousCustomerCount)*100/$priviousCustomerCount,2,'.','') : 0;
 
+            $reserveMembersCountPercentage =  $previousReserveMembersCount != 0 ? number_format(($reserveMembersCount - $previousReserveMembersCount)*100/$previousReserveMembersCount,2,'.','') : 0;
+           
             $bookingCountPercentage = $priviousBookingCount != 0 ? number_format(($bookingCount - $priviousBookingCount)*100/$priviousBookingCount,2,'.',''): 0; 
+
 
              
             $booking = @$business->UserBookingDetails();
@@ -165,13 +185,47 @@ class BusinessController extends Controller
             $revenueDataPrivious = CompanyRevenueGoalTracker::where(['year' =>date('Y') - 1 ,'business_id' => $business_id])->first();
 
             $currentYear = date('Y');
+            $previousYear =  date('Y') - 1;
 
             $months = range(1, 12);
             $monthYearArray = array_map(function($month) use ($currentYear) {
                 return $currentYear . '-' . str_pad($month, 2, '0', STR_PAD_LEFT);
             }, $months);
 
-     
+            $premonthYearArray = array_map(function($month) use ($previousYear) {
+                return $previousYear . '-' . str_pad($month, 2, '0', STR_PAD_LEFT);
+            }, $months);
+
+        
+            foreach($premonthYearArray as $m){
+                
+                $totalSalesMonthly = Transaction::selectRaw('SUM(transaction.amount) as total_sales, DATE_FORMAT(transaction.created_at, "%Y-%m") as month_year')
+                    ->where('item_type', 'UserBookingStatus')
+                    ->where('kind', '!=', 'comp')
+                    ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+                    ->join('user_booking_details as ubd', function ($join) use ($business_id) {
+                        $join->on('ubd.booking_id', '=', 'ubs.id')
+                            ->where('ubd.order_type', 'Membership')
+                            ->where('ubd.business_id', '=', $business_id);
+                    })
+                    ->whereDate('transaction.created_at','>=', $m. '-01')
+                    ->whereDate('transaction.created_at','<=', $m. '-31')
+                    ->sum('transaction.amount');
+
+                $totalSalesforRecurringMonthly = Transaction::selectRaw('SUM(transaction.amount) as total_sales, DATE_FORMAT(transaction.created_at, "%Y-%m") as month_year')
+                    ->where('item_type', 'Recurring')
+                    ->join('recurring as rec', 'rec.id', '=', 'transaction.item_id')
+                    ->where('rec.business_id', '=', $business_id)
+                    ->whereDate('transaction.created_at','>=', $m. '-01')
+                    ->whereDate('transaction.created_at','<=', $m. '-31')
+                    ->sum('transaction.amount');
+                $tot = $totalSalesMonthly + $totalSalesforRecurringMonthly;
+                
+                $arrayPreYear[] = number_format($tot,2,'.','') ?? 0;
+            }
+
+            $arrayPreYear = array_map('floatval', $arrayPreYear);
+
 
             foreach($monthYearArray as $m){
                 
@@ -205,7 +259,7 @@ class BusinessController extends Controller
         
             $revenueDataAry = [
 
-                [$revenueDataPrivious->jan_goal ?? 0,$revenueDataPrivious->feb_goal ?? 0,$revenueDataPrivious->mar_goal ?? 0,$revenueDataPrivious->apr_goal ?? 0,$revenueDataPrivious->may_goal ?? 0,$revenueDataPrivious->jun_goal ?? 0,$revenueDataPrivious->jul_goal ?? 0,$revenueDataPrivious->aug_goal ?? 0,$revenueDataPrivious->sep_goal ?? 0,$revenueDataPrivious->oct_goal ?? 0,$revenueDataPrivious->nov_goal ?? 0,$revenueDataPrivious->dec_goal  ?? 0],
+                $arrayPreYear,
 
                 [$revenueData->jan_goal ?? 0 ,$revenueData->feb_goal ?? 0, $revenueData->mar_goal ?? 0, $revenueData->apr_goal ?? 0, $revenueData->may_goal ?? 0, $revenueData->jun_goal ?? 0, $revenueData->jul_goal ?? 0, $revenueData->aug_goal ?? 0, $revenueData->sep_goal ?? 0, $revenueData->oct_goal ?? 0, $revenueData->nov_goal ?? 0, $revenueData->dec_goal ?? 0 ], 
 
@@ -217,8 +271,11 @@ class BusinessController extends Controller
             $dayOfMonth = date('j');
             $countOfDaysInMonth = Carbon::now()->daysInMonth;
             $revenuePerDay =  $currentMonthRevenue != 0 ?  number_format(($currentMonthRevenue / $countOfDaysInMonth),2,'.',''): 0;
+
+            $revenuePerDayNeeded =  $currentMonthRevenue != 0 ?  number_format((($currentMonthRevenue - $totalSales) / ($countOfDaysInMonth -  $dayOfMonth + 1)),2,'.',''): 0;
             $revenueShouldbeOnDay = $dayOfMonth != 0 ? number_format(($revenuePerDay * $dayOfMonth),2,'.','') :0;
-            $revenueAchivedPercentage = $currentMonthRevenue != 0 ?  number_format((($currentMonthRevenue - $totalSales)/$currentMonthRevenue),2,'.','') :0;
+     
+            $revenueAchivedPercentage = $currentMonthRevenue != 0 ?  number_format(100 - (($currentMonthRevenue - $totalSales)/$currentMonthRevenue) * 100,2,'.','') :0;
             $category = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             $categoryData = json_encode($category);
 
@@ -229,11 +286,10 @@ class BusinessController extends Controller
             $startDateR = Carbon::now()->startOfMonth();
             $endDateR  = Carbon::now()->endOfMonth();
             $loopDate = $startDateR->copy();
+            $totalRe = 0;
             while($loopDate->lte($endDateR)) {
                 $categoryMonth[] = $loopDate->format('m/d/Y');
-                $loopDate->addDay();
-                $array1[] = $revenuePerDay;
-                $array2[] = $lastYearRevenuePerDay;
+                
 
                 $totalSalesMonthly = Transaction::selectRaw('SUM(transaction.amount) as total_sales, DATE_FORMAT(transaction.created_at, "%Y-%m") as month_year')
                     ->where('item_type', 'UserBookingStatus')
@@ -254,12 +310,56 @@ class BusinessController extends Controller
                     ->whereDate('transaction.created_at', $loopDate->format('Y-m-d'))
                     ->sum('transaction.amount');
                 $tot = $totalSalesMonthly + $totalSalesforRecurringMonthly;
-                
-                $array3[] = number_format($tot,2,'.','')  ?? 0;
+                $tot =  number_format($tot,2,'.','')  ?? 0;
+
+                $totalRe += $tot ;
+                $array3[] = $tot ;
+
+                if($loopDate->format('Y-m-d') <= date('Y-m-d')){
+                   
+                    if ($loopDate->day == 1) {
+                        $array1[] = $revenuePerDay;
+                    }else{
+                        $cR = number_format( ( ($currentMonthRevenue - $totalRe) / ($countOfDaysInMonth - $loopDate->day +1) ),2,'.','') ?? 0; 
+                        $array1[] = $cR;
+                    }
+                }else{
+                    $array1[] = $revenuePerDayNeeded;
+                }
+                $loopDate->addDay(); 
 
             }
 
-            //print_r($array3);exit;
+
+            $startDateRP = Carbon::now()->startOfMonth()->subYear();
+            $endDateRP  = Carbon::now()->endOfMonth()->subYear();
+            $loopDateP = $startDateRP->copy();
+            while($loopDateP->lte($endDateRP)) {
+                $loopDateP->addDay();
+                $totalSalesMonthlyP = Transaction::selectRaw('SUM(transaction.amount) as total_sales, DATE_FORMAT(transaction.created_at, "%Y-%m") as month_year')
+                    ->where('item_type', 'UserBookingStatus')
+                    ->where('kind', '!=', 'comp')
+                    ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+                    ->join('user_booking_details as ubd', function ($join) use ($business_id) {
+                        $join->on('ubd.booking_id', '=', 'ubs.id')
+                            ->where('ubd.order_type', 'Membership')
+                            ->where('ubd.business_id', '=', $business_id);
+                    })
+                    ->whereDate('transaction.created_at', $loopDateP->format('Y-m-d'))
+                    ->sum('transaction.amount');
+
+                $totalSalesforRecurringMonthlyP = Transaction::selectRaw('SUM(transaction.amount) as total_sales, DATE_FORMAT(transaction.created_at, "%Y-%m") as month_year')
+                    ->where('item_type', 'Recurring')
+                    ->join('recurring as rec', 'rec.id', '=', 'transaction.item_id')
+                    ->where('rec.business_id', '=', $business_id)
+                    ->whereDate('transaction.created_at', $loopDateP->format('Y-m-d'))
+                    ->sum('transaction.amount');
+                $totP = $totalSalesMonthlyP + $totalSalesforRecurringMonthlyP;
+                
+                $array2[] = number_format($totP,2,'.','')  ?? 0;
+
+            }
+
 
             $array1 = array_map('floatval', $array1);
             $array2 = array_map('floatval', $array2);
@@ -269,7 +369,7 @@ class BusinessController extends Controller
             $categoryMonthData = json_encode($categoryMonth);
         }
                
-        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingRecPercentage','completedRecPercentage','totalsalePercentage','bookingCountPercentage','customerCountPercentage','startDate','endDate','startDateCalendar','endDateCalendar','completeRecurringAmount','reminingRecurringAmount','recurringAmount','left_days','activePlan','revenueData','revenueDataAry','revenuePerDay','revenueShouldbeOnDay','revenueAchivedPercentage','categoryData','categoryMonthData','revenueDataMonthAry','currentMonthRevenue'));
+        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingRecPercentage','completedRecPercentage','totalsalePercentage','bookingCountPercentage','customerCountPercentage','startDate','endDate','startDateCalendar','endDateCalendar','completeRecurringAmount','reminingRecurringAmount','recurringAmount','left_days','activePlan','revenueData','revenueDataAry','revenuePerDay','revenueShouldbeOnDay','revenueAchivedPercentage','categoryData','categoryMonthData','revenueDataMonthAry','currentMonthRevenue' ,'reserveMembersCount','reserveMembersCountPercentage','revenuePerDayNeeded'));
     }
 
     public function getRevenueAjax(Request $request){
