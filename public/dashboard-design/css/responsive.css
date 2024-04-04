@@ -425,6 +425,7 @@
 	.suggested-set{bottom: 180px;}
 	.create-customer-box{padding: 15px 10px;}
 	#dropzone-preview li div .pt-1{word-wrap: anywhere;} 
+	.personal-sidebar .simplebar-mask{position: absolute;	top: 0px;}
 }
 
 
