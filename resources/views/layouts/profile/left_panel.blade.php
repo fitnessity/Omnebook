@@ -21,7 +21,7 @@
         </button>
     </div>
 
-    <div id="scrollbar123">
+    <div id="scrollbar" class="personal-sidebar">
         <div class="container-fluid">
             <div id="two-column-menu">
             </div>
@@ -46,7 +46,7 @@
 					</div>
                 @endif
 
-				<li class="menu-title border-bottom">
+				<li class="menu-title border-bottom width-250">
                     @php
                         if(request()->customer_id){
                             if(request()->type == 'user'){
@@ -178,7 +178,7 @@
                 </li> 
                 @endif  
             </ul>
-        </div><!-- Sidebar -->
+        </div>
     </div>
     <div class="sidebar-background"></div>
 </div>

@@ -6399,7 +6399,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .row.cstm-bnner li {
   margin: 0;
   width: 49.33%;
-  / width: 33.33%; /
+  /* width: 33.33%;  */
   position: relative;
 }
 .cstm-bnner ul li {
@@ -7645,7 +7645,8 @@ p.or-data {
   object-fit: cover;
   object-position: top;
 }
-=======
+.width-250{
+  width: 250px;
 }
 regi-qr-code img {
   width: 125px;
@@ -7655,4 +7656,3 @@ regi-qr-code img {
   padding: 10px;
   background-color: #f00;
 }
-

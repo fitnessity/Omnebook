@@ -1164,7 +1164,8 @@ body{
     height:auto!important
 }
 :is([data-layout=vertical],[data-layout=semibox])[data-sidebar-size=sm] .navbar-menu .navbar-nav .nav-item{
-    position:relative
+    position:relative;
+    width: 70px;
 }
 :is([data-layout=vertical],[data-layout=semibox])[data-sidebar-size=sm] .navbar-menu .navbar-nav .nav-item:hover>a.menu-link{
     position:relative;
@@ -7499,7 +7500,7 @@ a,button{
     max-width:inherit;
     max-height:inherit
 }
-.simplebar-mask{
+/* .simplebar-mask{
     direction:inherit;
     position:absolute;
     overflow:hidden;
@@ -7512,6 +7513,24 @@ a,button{
     width:auto!important;
     height:auto!important;
     z-index:0
+} */
+.simplebar-mask{
+    direction:inherit;
+    position: absolute;
+    overflow:hidden;
+    padding:0;
+    margin:0;
+    left:0;
+    top: 0px;
+    bottom:0;
+    right:0;
+    width:auto!important;
+    height:auto!important;
+    z-index:0
+}
+.personal-sidebar .simplebar-mask{
+    position: fixed;
+    top: 80px;
 }
 .simplebar-offset{
     direction:inherit!important;
