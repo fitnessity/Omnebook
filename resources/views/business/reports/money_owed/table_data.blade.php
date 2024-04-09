@@ -23,7 +23,7 @@
 						<td>{!! @$list->item_description($business_id)['itemDescription'] !!}</td>
 						<td>{{$list->getPmtMethod()}}</td>
 						<td>$ {{$list->amount}}</td>
-						<td class="font-red"> {{ ($list->status == 'requires_capture') ? 'Payment Need to Capture' : $list->status}}</td>
+						<td class="font-red"> {{ ($list->status == 'requires_capture') ? 'Payment Need to Capture' : ucfirst($list->status)}}</td>
 						<td>
 							<a href="{{url('business/'.@$business_id.'/customers/'.@$list->getCustomer($business_id)->id)}}"> View </a>
 						</td>
