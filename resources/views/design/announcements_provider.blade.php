@@ -377,7 +377,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="add_announcements" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered modal-50">
+	<div class="modal-dialog modal-dialog-centered modal-50 modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="staticBackdropLabel">Required Settings</h5>
@@ -385,7 +385,7 @@
 			</div>
 			<div class="modal-body">
 				<form id="" autocomplete="off" class="needs-validation" novalidate="">
-					<div class="row y-middle">
+					<div class="row">
 						<div class="col-lg-12">
 							<div class="mb-3">
 								<label class="form-label">Title</label>
@@ -438,14 +438,40 @@
 							</div>
 						</div>
 
-						<div class="col-lg-12 col-md-6 col-sm-6 col-12">
-							<div>
-								<label class="form-label">Delivery Method</label>
-							</div>
-							
-						
+						<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+							<label class="form-label">Delivery Method</label>
 						</div>
-						
+						<div class="col-lg-4 col-md-4 col-sm-6 col-12">
+							<div>
+								<div class="form-check form-switch form-switch-dark form-switch-md mb-3">
+									<input class="form-check-input" type="checkbox" role="switch" id="SwitchCheck7" checked>
+									<label class="form-check-label" for="SwitchCheck7">SMS</label>
+								</div>
+								<div class="mb-15">
+									<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+									<label for="vehicle1" class="push-notification">Send SMS if push notification isn't available</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-4 col-md-4 col-sm-6 col-12">
+							<div>
+								<div class="form-check form-switch form-switch-dark form-switch-md mb-3">
+									<input class="form-check-input" type="checkbox" role="switch" id="SwitchCheck8" checked>
+									<label class="form-check-label" for="SwitchCheck8">Push Notification</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-4 col-md-4 col-sm-6 col-12">
+							<div>
+								<div class="form-check form-switch form-switch-dark form-switch-md mb-3">
+									<input class="form-check-input" type="checkbox" role="switch" id="SwitchCheck9" checked>
+									<label class="form-check-label" for="SwitchCheck9">Email</label>
+								</div>
+							</div>
+						</div>
+
 						<div class="col-lg-12">
 							<div class="">
 								<label class="form-label">Announcement</label>
@@ -466,7 +492,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="firstModal" tabindex="-1" aria-labelledby="firstModalLabel" aria-hidden="true">
-  	<div class="modal-dialog modal-dialog-centered client-contact-list-modal">
+  	<div class="modal-dialog modal-dialog-centered client-contact-list-modal modal-dialog-scrollable">
     	<div class="modal-content">
       		<div class="modal-header">
         		<h5 class="modal-title" id="staticBackdropLabel">Client Contact List</h5>

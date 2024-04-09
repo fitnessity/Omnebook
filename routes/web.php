@@ -370,7 +370,11 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/uploadDocsName','CustomerController@uploadDocsName')->name('uploadDocsName');
     Route::get('/docContent/{id?}','CustomerController@docContent')->name('docContent');
 
+
+    Route::get('/getCustomerCounts/{business_id}', 'CustomerController@getCustomerCounts')->name('getCustomerCounts');
+
     Route::prefix('/business/{business_id}')->middleware('auth', 'business_scope')->group(function () {
+
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
         Route::delete('/customers/delete/{id}','CustomerController@delete')->name('business_customer_delete');
         Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
