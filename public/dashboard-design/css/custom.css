@@ -7659,5 +7659,11 @@ color: #000;
 .client-contact-list-modal{
   max-width: 70%;
 }
-
-
+.push-notification{
+  word-wrap: anywhere;
+  display: inline;
+}
+.clientloading{
+  height: 20px;
+    width: 20px;
+}
