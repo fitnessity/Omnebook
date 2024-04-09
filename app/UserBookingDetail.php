@@ -4,7 +4,7 @@ namespace App;
 
 
 
-use App\{User,SGMailService};
+use App\{User,SGMailService,BusinessStaff};
 use Auth,Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,7 +28,7 @@ class UserBookingDetail extends Model
     protected $table = 'user_booking_details';
     public $timestamps = false;
     protected $fillable = [
-        'booking_id', 'sport','business_id', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment', 'subtotal', 'fitnessity_fee', 'tax', 'tip', 'discount','user_type','user_id', 'repeateTimeType','everyWeeks','monthDays','enddate','activity_days','booking_from','booking_from_id','order_from','calendar_booking_time','addOnservice_total','addOnservice_ids','addOnservice_qty','service_fee' ,'productIds','productQtys','productSize','productColor','productTypes','productTotalPrices','order_type','membership_for'];
+        'booking_id', 'sport','business_id', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment', 'subtotal', 'fitnessity_fee', 'tax', 'tip', 'discount','user_type','user_id', 'repeateTimeType','everyWeeks','monthDays','enddate','activity_days','booking_from','booking_from_id','order_from','calendar_booking_time','addOnservice_total','addOnservice_ids','addOnservice_qty','service_fee' ,'productIds','productQtys','productSize','productColor','productTypes','productTotalPrices','order_type','membership_for','membershipTotalPrices','membershipTotalTax','productTotalTax','suspend_by','terminate_by','refund_by'];
      
 
     /**
@@ -37,7 +37,7 @@ class UserBookingDetail extends Model
 
      */
 
-    protected $appends = ['last_attended'];
+    protected $appends = ['last_attended','refunded_person','terminated_person','suspended_person'];
 
     public static function boot(){
         parent::boot();
@@ -62,6 +62,51 @@ class UserBookingDetail extends Model
     public function getLastAttendedAttribute(){
         $checkIn = $this->BookingCheckinDetails()->latest()->first();
         return ($checkIn != '') ? date('m/d/Y',strtotime(@$checkIn->checkin_date)) : 'N/A';
+    }
+
+    public function getRefundedPersonAttribute(){
+        if($this->refund_by){
+            $parts = explode("~~", $this->refund_by);
+            if(!empty($parts) && @$parts[0] == 'user'){
+                $user = User::find($parts[1]);
+                return @$user->full_name;
+            }else{
+                $user = BusinessStaff::find($parts[1]);
+                return @$user->full_name;
+            }
+        }else{
+            return Auth::user()->full_name;
+        }
+    }
+
+    public function getTerminatedPersonAttribute(){
+        if($this->terminate_by){
+            $parts = explode("~~", $this->terminate_by);
+            if(!empty($parts) && @$parts[0] == 'user'){
+                $user = User::find($parts[1]);
+                return @$user->full_name;
+            }else{
+                $user = BusinessStaff::find($parts[1]);
+                return @$user->full_name;
+            }
+        }else{
+            return Auth::user()->full_name;
+        }
+    }
+
+    public function getSuspendedPersonAttribute(){
+        if($this->suspend_by){
+            $parts = explode("~~", $this->suspend_by);
+            if(!empty($parts) && @$parts[0] == 'user'){
+                $user = User::find($parts[1]);
+                return @$user->full_name;
+            }else{
+                $user = BusinessStaff::find($parts[1]);
+                return @$user->full_name;
+            }
+        }else{
+            return Auth::user()->full_name;
+        }
     }
 
     public function getBookingCheckinDetails(){

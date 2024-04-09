@@ -67,5 +67,8 @@
           <input type="hidden" name="adultprice" id="adultpriceajax" value="{{$aduprice}}" >
           <input type="hidden" name="childprice" id="childpriceajax" value="{{$childprice}}" >
           <input type="hidden" name="infantprice" id="infantpriceajax" value="{{$infantprice}}"> 
+          <input type="hidden" name="isRecurringChild" id="isRecurringChildajax" value="{{$isRecurringChild}}"> 
+          <input type="hidden" name="isRecurringAdult" id="isRecurringAdultajax" value="{{$isRecurringAdult}}"> 
+          <input type="hidden" name="isRecurringInfant" id="isRecurringInfantajax" value="{{$isRecurringInfant}}"> 
      </div>
 </div>

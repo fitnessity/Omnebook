@@ -326,6 +326,7 @@ Route::group(['middleware' => ['auth']], function(){
 });
 
 Route::resource('stripe_payment_methods', 'StripePaymentMethodController')->only(['destroy']);
+Route::post('stripe_payment_methods/update', 'StripePaymentMethodController@update')->name('stripe.update');
 
 // Activitys
     Route::get('/activities/get_started/personal_trainer','ActivityController@personal_trainer')->name('get_started_personal_trainer');
@@ -1432,6 +1433,7 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/deploy_widget','DesignController@deploy_widget')->name('deploy_widget');
     Route::get('/confirmation','DesignController@confirmation')->name('confirmation');
     Route::get('/selfcheck_in_welcome','DesignController@selfcheck_in_welcome')->name('selfcheck_in_welcome');
+    Route::get('/engage_clients','DesignController@engage_clients')->name('engage_clients');
 });
 
 ?>

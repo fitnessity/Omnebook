@@ -84,10 +84,23 @@ class CheckoutRegisterCartService
     }
 
     public function getSubTotalByItem($item, $user){
-        
         $pretaxSubTotal = $this->getGrossSubtotalByItem($item);
-
         return $pretaxSubTotal + $item["tax"] + (@$item['addOnServicesTotalPrice'] ?? 0) + (@$item['productTotalPrices'] ?? 0);
+    }
+
+
+    public function getMembershipTotalItem($item){
+        $addOnServiceTotal = $item['addOnServicesTotalPrice'] ?? 0;
+        $productTotal = $item['productTotalPrices'] ?? 0;
+
+        return  $item["totalprice"] - ($addOnServiceTotal + $productTotal);
+    }
+
+    public function getProductTaxItem($item){
+        $tax = $item['tax'] ?? 0;
+        $taxActivity = $item['tax_activity'] ?? 0;
+
+        return  $tax - $taxActivity;
     }
 
     public function getPriceDetail($priceid){

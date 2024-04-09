@@ -169,25 +169,9 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link collapsed" href="#sidebarLanding" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLanding">
+                    <a class="nav-link menu-link" href="#" >
                         <i class=" ri-user-follow-fill"></i> <span data-key="t-landing">Engage Clients </span>
                     </a>
-                    <div class="menu-dropdown collapse" id="sidebarLanding" style="">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-one-page"> Inbox </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link menu-link @if(Route::current()->getName() == 'business.announcement.index' ) tab-active @endif" @if($companyId) href="{{route('business.announcement.index')}}" @endif aria-controls="sidebarUI"> Announcements </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link"> Email Marketing </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link"> Automation </a>
-                            </li>
-                        </ul>
-                    </div>
                 </li>
 
                 <!-- <li class="nav-item">

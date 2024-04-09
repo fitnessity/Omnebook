@@ -10,6 +10,7 @@
 	.desktop-none-booking{display: none;}
 	.dots {  overflow-x: visible !important;}
 	.desktop-none-client{display: none;}
+	.client-contact-list-modal{max-width: 70%;}
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1900px){
@@ -425,7 +426,7 @@
 	.suggested-set{bottom: 180px;}
 	.create-customer-box{padding: 15px 10px;}
 	#dropzone-preview li div .pt-1{word-wrap: anywhere;} 
-	.personal-sidebar .simplebar-mask{position: absolute;	top: 0px;}
+	.personal-sidebar .simplebar-mask{position: absolute; top: 0px;}
 }
 
 
