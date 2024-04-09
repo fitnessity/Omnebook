@@ -372,6 +372,9 @@ class OrderController extends BusinessBaseController
                 'expired_duration' => @$item['orderType'] == 'Membership' ? $item['actscheduleid'] : NULL,
                 'subtotal' => $checkoutRegisterCartService->getSubTotalByItem($item, $user),
                 'fitnessity_fee' => $checkoutRegisterCartService->getRecurringFeeByItem($item, $user),
+                'membershipTotalPrices' => $checkoutRegisterCartService->getMembershipTotalItem($item),
+                'membershipTotalTax' => $item['tax_activity'],
+                'productTotalTax' => $checkoutRegisterCartService->getProductTaxItem($item),
                 'tax' => $item['tax'],
                 'tip' => $item['tip'],
                 'discount' => $item['discount'],
@@ -401,9 +404,11 @@ class OrderController extends BusinessBaseController
                 $date = new Carbon;
                 $stripeId = $stripeChargedAmount = $paymentMethod= '';
 
+                $amount = $checkoutRegisterCartService->getMembershipTotalItem($item);
+
                 if($key == 'adult'){
                     if($qty != '' && $qty != 0){
-                        $amount = $qty * $price_detail->recurring_first_pmt_adult;
+                        //$amount = $qty * $price_detail->recurring_first_pmt_adult;
                         $re_i = $price_detail->recurring_nuberofautopays_adult; 
                         $reCharge  = $price_detail->recurring_customer_chage_by_adult;
                     }
@@ -411,7 +416,7 @@ class OrderController extends BusinessBaseController
 
                 if($key == 'child'){
                     if($qty != '' && $qty != 0){
-                        $amount = $qty * $price_detail->recurring_first_pmt_child;
+                        //$amount = $qty * $price_detail->recurring_first_pmt_child;
                         $re_i = $price_detail->recurring_nuberofautopays_child; 
                         $reCharge  = $price_detail->recurring_customer_chage_by_child;
                     }
@@ -419,7 +424,7 @@ class OrderController extends BusinessBaseController
 
                 if($key == 'infant'){
                     if($qty != '' && $qty != 0){
-                        $amount =  $qty * $price_detail->recurring_first_pmt_infant;
+                        //$amount =  $qty * $price_detail->recurring_first_pmt_infant;
                         $re_i = $price_detail->recurring_nuberofautopays_infant;
                         $reCharge  = $price_detail->recurring_customer_chage_by_infant;
                     }
@@ -438,18 +443,17 @@ class OrderController extends BusinessBaseController
 
                 if($qty != '' && $qty != 0){
                     //$tax_recurring = number_format((($amount * $duesTax)/100)  + (($amount * $salesTax)/100),2); 
-                    $tax_recurring = number_format( ($amount * $duesTax)/100 ,2); //salestax is for product. and dues tax is for membership 
+                    $tax_recurring = $booking_detail->membershipTotalTax ?? 0; //salestax is for product. and dues tax is for membership 
                     $paymentMethod = $tran_data['stripe_payment_method_id'];
                     if($re_i != '' && $re_i != 0 && $amount != ''){
-                        for ($num = $re_i; $num >0 ; $num--) { 
-                            if($num==1){
+                        for ($num = $re_i; $num > 0 ; $num--) { 
+                            if($num == 1){
                                 $stripeId =  $tran_data['transaction_id'];
                                 $stripeChargedAmount = number_format($tran_data['amount'],2);
                                 $paymentDate = $date->format('Y-m-d');
                                 $status = 'Completed';
                                 $payment_number = '1';
                                 $payment_on = date('Y-m-d');
-                                $tax_recurring =  $booking_detail->tax;
                             }else{
                                 $Chk = explode(" ",$reCharge);
                                 $timeChk = @$Chk[1];
@@ -458,13 +462,24 @@ class OrderController extends BusinessBaseController
 
                                 if($timeChk == 'Month'){
                                     $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
+                                    $additionalPaymentDate = Carbon::parse($paymentDate)->addMonths($afterHowmanytime)->format('Y-m-d');
                                 }else if($timeChk == 'Week'){
                                     $paymentDate = (Carbon::now()->addWeeks($addTime))->format('Y-m-d');
+                                    $additionalPaymentDate = Carbon::parse($paymentDate)->addWeeks($afterHowmanytime)->format('Y-m-d');
                                 }else if($timeChk == 'Year'){
                                     $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
+                                    $additionalPaymentDate = Carbon::parse($paymentDate)->addYears($afterHowmanytime)->format('Y-m-d');
                                 }else{
                                     $paymentDate = (Carbon::now()->addDays($addTime))->format('Y-m-d');
+                                    $additionalPaymentDate = Carbon::parse($paymentDate)->addDays($afterHowmanytime)->format('Y-m-d');
                                 }
+
+                                if($num == $re_i && $additionalPaymentDate){
+                                    $booking_detail->expired_at = $additionalPaymentDate;
+                                    $booking_detail->expired_duration = $re_i.' '.$timeChk.'s';
+                                    $booking_detail->save();
+                                }
+
                                 $status = 'Scheduled';
                                 $payment_number = NULL;
                                 $payment_on = NULL;
@@ -641,6 +656,21 @@ class OrderController extends BusinessBaseController
             $childqty = !empty($cart['child']) ? ($cart['child']['quantity'] != 0 ? $cart['child']['quantity'] : 0) : 0;
             $infantqty = !empty($cart['infant']) ? ($cart['infant']['quantity'] != 0 ? $cart['infant']['quantity'] : 0) : 0;
 
+            $isRecurringChild = $cartselectedpriceid->is_recurring_adult ?? 0;
+            $isRecurringAdult = $cartselectedpriceid->is_recurring_child ?? 0;
+            $isRecurringInfant = $cartselectedpriceid->is_recurring_infant ?? 0;
+
+            $durationDivAjax = '';
+
+            if ($aduqty == 1 && $isRecurringAdult == 1) {
+                $durationDivAjax = 'd-none';
+            } elseif ($childqty == 1 && $isRecurringChild == 1) {
+                $durationDivAjax = 'd-none';
+            } elseif ($infantqty == 1 && $isRecurringInfant == 1) {
+                $durationDivAjax = 'd-none';
+            }
+
+
             $actscheduleid = explode(' ' ,$cart["actscheduleid"]);
 
             $participate = $cart["participate_from_checkout_regi"]['pc_name'];
@@ -654,9 +684,9 @@ class OrderController extends BusinessBaseController
             $addOnData = view('business.orders.add_on_service')->with(['addOnServices' =>$addOnServices ,'idsArray'=>$idsArray ,'qtysArray'=>$qtysArray ,'ajax'=>'ajax' ]);
             //$business_id = @$cartselectedpriceid->cid;
             $view1 = view('business.orders.edit_cart', compact('cart','aduprice','childprice','infantprice','salestaxajax','duestaxajax','aduqty','childqty','infantqty','actscheduleid','participate','membershiplist','cartselectedpriceid','cartselectedcategory','program_list','catelist','pricelist','pageid','indexOfAry',
-                'addOnData','business_id'));
+                'addOnData','business_id','durationDivAjax'));
 
-            $view2 = view('business.orders.participate_modal', compact('aduprice','childprice','infantprice','aduqty','childqty','infantqty','p_session'));
+            $view2 = view('business.orders.participate_modal', compact('aduprice','childprice','infantprice','aduqty','childqty','infantqty','p_session','isRecurringChild','isRecurringAdult','isRecurringInfant'));
 
             return $view1.'~~~'.$view2;
         }

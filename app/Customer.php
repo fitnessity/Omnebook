@@ -402,7 +402,7 @@ class Customer extends Authenticatable
 
     public function active_memberships($sport = null,$expireDate= null){
         $expireDate = $expireDate ??  Carbon::now()->format('Y-m-d');
-        $used_user_booking_detail_ids = $this->BookingCheckinDetails()->whereRaw('booking_detail_id is not null')->where('after_use_session_amount', 0)->pluck('booking_detail_id')->toArray();
+        $used_user_booking_detail_ids = $this->BookingCheckinDetails()->whereRaw('booking_detail_id is not null')->where('after_use_session_amount', '<=' , 0)->pluck('booking_detail_id')->toArray();
 
         $results = $this->bookingDetail()->where('order_type','membership')->where('status', 'active')->whereRaw('(user_booking_details.expired_at > ? or user_booking_details.expired_at is null)', $expireDate)
                                          ->whereNotIn('user_booking_details.id', $used_user_booking_detail_ids);
@@ -538,7 +538,7 @@ class Customer extends Authenticatable
     public function get_last_seen(){
         $checkin = $this->visits()->where('checked_at',"!=",NULL)->orderby('checkin_date','desc')->first();
         if($checkin){
-            return $checkin->checkin_date;
+            return date('m/d/Y', strtotime($checkin->checkin_date));
         }
     }
 

@@ -351,5 +351,9 @@ class DesignController extends Controller {
     public function selfcheck_in_welcome(Request $request){
         return view('design.selfcheck_in_welcome');
     }
+
+    public function engage_clients(Request $request){
+        return view('design.engage_clients');
+    }
 }
 

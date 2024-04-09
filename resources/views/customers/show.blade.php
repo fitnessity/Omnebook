@@ -22,13 +22,13 @@
 </style>
 
 	@include('layouts.business.business_topbar')
-   <div class="main-content printnone">
+    <div class="main-content printnone">
 		<div class="page-content">
-         <div class="container-fluid">
-            <div class="row">
-               <div class="col">
-                  <div class="h-100">
-                     <div class="row mb-3">
+         	<div class="container-fluid">
+	            <div class="row">
+	                <div class="col">
+	                   <div class="h-100">
+	                        <div class="row mb-3">
 								<div class="col-12">
 									<div class="page-heading">
 										<label>Manage Customers</label>
@@ -43,8 +43,8 @@
 							@endif
 
 							@if($cardSuccessMsg == 1)
-							<div class="fs-15 font-green mb-10">Your Card is uploaded successfully.</div>
-						   @endif
+								<div class="fs-15 font-green mb-10">Your Card is uploaded successfully.</div>
+					  	 	@endif
 
 							<div class="row">
 								<div class="col-xl-12">
@@ -582,19 +582,19 @@
 																												<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting01Examplecollapsec{{$i}}" aria-expanded="false" aria-controls="accor_nesting01Examplecollapsec{{$i}}">
 																													 <div class="container-fluid nopadding">
 																														<div class="row mini-stats-wid d-flex align-items-center ">
-																															<div class="col-lg-8 col-md-8 col-8">
+																															<div class="col-lg-10 col-md-8 col-8">
 																																{{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}}
 																																
 																																@if($booking_detail->status == 'refund')
-																																	  | <span class="font-red">  Status: Refunded on {{date('m/d/Y',strtotime($booking_detail->refund_date))}}	</span>
+																																	  | <span class="font-red">  Status: Refunded on {{date('m/d/Y',strtotime($booking_detail->refund_date))}} by {{$booking_detail->refunded_person}}	</span>
 																																@endif
 
 																																@if($booking_detail->status == 'terminate')
-																																	| <span class="font-red">  Status: Terminated on {{date('m/d/Y',strtotime($booking_detail->terminated_at))}}	</span>
+																																	| <span class="font-red">  Status: Terminated on {{date('m/d/Y',strtotime($booking_detail->terminated_at))}}  by {{$booking_detail->terminated_person}}		</span>
 																																@endif
 
 																																@if($booking_detail->status == 'suspend')
-																																	| <span class="font-red"> Status: Freeze from {{date('m/d/Y',strtotime($booking_detail->suspend_started))}}	to {{date('m/d/Y',strtotime($booking_detail->suspend_ended))}}</span>
+																																	| <span class="font-red"> Status: Freeze from {{date('m/d/Y',strtotime($booking_detail->suspend_started))}}	to {{date('m/d/Y',strtotime($booking_detail->suspend_ended))}} by {{$booking_detail->suspended_person}}	 </span>
 																																	
 																																@endif
 
@@ -602,7 +602,7 @@
 																																	| <span class="font-red">  Status: Void </span>
 																																@endif						
 																															</div>
-																															<div class="col-lg-4 col-md-4 col-4">
+																															<div class="col-lg-2 col-md-4 col-4">
 																																<div class="multiple-options">
 																																	<div class="setting-icon">
 																																		<i class="ri-more-fill"></i>
@@ -1065,6 +1065,10 @@
 																											<i class="fa fa-trash"></i> 
 																										</a>
 
+																										<a class="float-end card-remove mr-10" onclick="editCard('{{$card->payment_id}}','{{$card->exp_month}}','{{$card->exp_year}}')" data-cardid="{{$card->id}}">
+																											<i class="fas fa-pencil-alt"></i> 
+																										</a>
+
 																										<h3>{{$card->exp_month}}/{{$card->exp_year}}</h3>
 																									</div>
 																								</div>
@@ -1384,11 +1388,11 @@
 								</div>
 							</div>
 						</div>
-               </div> 
-            </div>
-         </div>
-      </div>
-   </div>
+               		</div> 
+            	</div>
+        	</div>
+      	</div>
+   	</div>
 </div>
 
 <div class="row mt-25">
@@ -1401,6 +1405,43 @@
 		<div class="col-md-12 text-center printDiv mb-10 printnone" id="refundDiv">{!!@$terms->refundpolicytext!!}</div>
 
 		<div class="col-md-12 text-center printDiv mb-10 printnone" id="termsDiv">{!!@$terms->termcondfaqtext!!}</div>
+</div>
+
+
+<div class="modal fade editCard" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Edit Card</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form id="editCardForm">
+				<input type="hidden" id="cardId" name="cardId" value="">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="mb-10">
+								<label>Expiration Month</label>
+								<input class="form-control" type="text" id="month" name="month" value="">
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="mb-10">
+								<label>Expiration Year</label>
+								<input class="form-control" type="text" id="year" name="year" value="">
+							</div>
+						</div>
+					</div>	
+					<div class="col-md-12">
+						<span class="card-error fs-16"></span>
+					</div>				
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary btn-red" onclick="updateCard();">Submit</button>
+				</div>
+			</form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
 </div>
 
 <div class="modal fade editprofile" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
@@ -1669,8 +1710,7 @@
 
 <script>
 	
-	var docToUpload = '';
-	var ext = '';
+	var docToUpload = ''; ext = '';
 
 	function readURL(input) {
 	   if (input.files && input.files[0]) {
@@ -1685,6 +1725,41 @@
          docToUpload = input.files[0];
          reader.readAsDataURL(input.files[0]);
       }
+	}
+
+	function editCard(cardId,month,year){
+		$('#cardId').val(cardId);
+		$('#year').val(year);
+		$('#month').val(month);
+		$('.editCard').modal('show');
+	}
+
+	function updateCard(){
+		$('.card-error').removeClass('font-green font-red');
+
+       	var cardId = $('#cardId').val();
+       	$.ajax({
+         	type: 'POST',
+         	url: '/stripe_payment_methods/update',
+          	data: {
+          		year: $('#year').val(),
+          		month: $('#month').val(),
+          		customerID: '{{$customerdata->id}}',
+          		cardId: $('#cardId').val(),
+          		_token:'{{csrf_token()}}'
+          	},
+	        success: function (response) {
+            	if(response == 'success'){
+            		$('.card-error').addClass('font-green').html('Card updated successfully.');
+            		setTimeout(function() {
+				        window.location.reload();
+				    }, 1000);
+
+            	}else{
+            		$('.card-error').addClass('font-red').html(response);
+            	}
+         	}
+      	});
 	}
 
 	function openDocumentModal(id,type){
@@ -1708,34 +1783,34 @@
 
 	function requestSign(id){
 		$.ajax({
-         type: 'GET',
-         url: '/business/'+'{{request()->business_id}}'+'/requestSign/'+id,
-         success: function (data) {
-            window.location.reload();
-         }
-      });
+         	type: 'GET',
+         	url: '/business/'+'{{request()->business_id}}'+'/requestSign/'+id,
+         	success: function (data) {
+            	window.location.reload();
+         	}
+      	});
 	}
 
 	function openModalDoc(){
 		var cust_id =  '{{$customerdata->id}}'
 		$.ajax({
-         type: 'GET',
-         url: '/docContent/'+cust_id,
-         success: function (response) {
-            $('#modalDocumentHtml').html(response);
+         	type: 'GET',
+         	url: '/docContent/'+cust_id,
+         	success: function (response) {
+            	$('#modalDocumentHtml').html(response);
 				$('.modalDocument').modal('show');
-         }
-      });
+         	}
+      	});
 	}
 
 	function requestDoc(id){
 		$.ajax({
-         type: 'GET',
-         url: '/business/'+'{{request()->business_id}}'+'/requestDoc/'+id,
-         success: function (data) {
-            window.location.reload();
-         }
-      });
+         	type: 'GET',
+         	url: '/business/'+'{{request()->business_id}}'+'/requestDoc/'+id,
+         	success: function (data) {
+            	window.location.reload();
+         	}
+      	});
 	}
 
 	function deleteDoc(id){
@@ -1766,23 +1841,23 @@
 
 	function getNote(id){
 		$.ajax({
-         type: 'GET',
-         url: '/business/'+'{{request()->business_id}}'+'/customer/'+'{{$customerdata->id}}'+'/getNote/'+id,
-         success: function (data) {
-            $('#noteHtml').html(data);
-            if(id){
-            	$('.note-title').html('Edit Note');
-            }else{
-            	$('.note-title').html('Add Note');
-            }
-            $('.notes').modal('show');
-         }
+         	type: 'GET',
+         	url: '/business/'+'{{request()->business_id}}'+'/customer/'+'{{$customerdata->id}}'+'/getNote/'+id,
+         	success: function (data) {
+            	$('#noteHtml').html(data);
+	            if(id){
+	            	$('.note-title').html('Edit Note');
+	            }else{
+	            	$('.note-title').html('Add Note');
+	            }
+            	$('.notes').modal('show');
+         	}
 	   });
 	}
 
 	$('.upload-pdf').click(function(){
-     		$('.err').html('');
-     		var signature = ($('#signature').val() !== undefined && $('#signature').val() !== null) ? $('#signature').val() : 0;
+     	$('.err').html('');
+     	var signature = ($('#signature').val() !== undefined && $('#signature').val() !== null) ? $('#signature').val() : 0;
       	var formdata = new FormData();
       	formdata.append('file',docToUpload);
       	formdata.append('sign',signature);
@@ -1815,7 +1890,7 @@
                $('#file').val('')
             }
       	});
-    	});
+    });
 
 </script>
 
@@ -1867,35 +1942,32 @@
 		$(document).ready(function () {
 			var business_id = '{{request()->business_id}}';
 	     	var url = "{{ url('/business/business_id/customers') }}";
-	      url = url.replace('business_id', business_id);
+	      	url = url.replace('business_id', business_id);
 
 			$("#serchFamilyMember").autocomplete({
-	         source: url,
-	         focus: function( event, ui ) {
-	              return false;
-	         },
-	         select: function( event, ui ) {
-	         	callAddFamily(ui.item.id , business_id);
-	            return false;
-	         }
-	     	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-	         let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
+	         	source: url,
+	         	focus: function( event, ui ) {
+	              	return false;
+	         	},
+	         	select: function( event, ui ) {
+	         		callAddFamily(ui.item.id , business_id);
+	            	return false;
+	         	}
+     		}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+         		let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
 
-	         if(item.profile_pic_url){
-	             profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
-	         }
+         		if(item.profile_pic_url){
+             		profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
+         		}
 
-	         var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
-	                   '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
-	                   '<p class="pstyle liaddress">' + item.email +'</p>' + 
-	                   '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
-	        
-	         return $( "<li></li>" )
-	                 .data( "item.autocomplete", item )
-	                 .append(inner_html)
-	                 .appendTo( ul );
-	     	};
-	   });
+         		var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
+                   '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
+                   '<p class="pstyle liaddress">' + item.email +'</p>' + 
+                   '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
+        
+        		return $( "<li></li>" ).data( "item.autocomplete", item ).append(inner_html).appendTo( ul );
+     		};
+   		});
 
 		function getCheckInDetailsModel(business_id,scheduleId,date,cid){
 			if(scheduleId != 0){
@@ -1910,7 +1982,19 @@
 			}	
 		}
 
-	   function deleteMember(id) {
+		function getCheckInDetails(scheduleId,date,chkInID,cus_id,chk,chkMsg,chkInMsg){
+			var business_id = '{{$customerdata->business_id}}';
+			$.ajax({	
+				url:"/business/"+business_id+"/schedulers/"+scheduleId+"/checkin_details?date="+date+"&chkInId="+chkInID+"&cus_id="+cus_id+"&chk="+chk+"&msg="+chkMsg+"&chkInMsg="+chkInMsg,
+				type:'GET',
+				success:function(data){
+					$('#checkInHtml').html(data);
+					$('.checkinDetails').modal('show');
+				}
+			});	
+		}
+
+	   	function deleteMember(id) {
 			if(id == ''){
 				window.location.reload();
 			}else{
@@ -1948,26 +2032,26 @@
 			}
 		});
 
-	   function callAddFamily(cid ,business_id){
-	   	if(cid == '{{$customerdata->id}}'){
-	   		alert("You can't add your self as your family member..");
-	   		return false;
+	   	function callAddFamily(cid ,business_id){
+	   		if(cid == '{{$customerdata->id}}'){
+	   			alert("You can't add your self as your family member..");
+	   			return false;
+	   		}
+	   		$.ajax({
+	            type: 'POST',
+	            url: '{{route("addFamilyViaSearch")}}',
+	            data: { 
+	            	_token: '{{csrf_token()}}',
+	            	business_id: business_id,
+	            	cid: cid,
+	            	currentCid:'{{$customerdata->id}}'
+	         	},
+	            success: function(data) {
+	               location.reload();
+	            }
+         	});
 	   	}
-	   	$.ajax({
-            type: 'POST',
-            url: '{{route("addFamilyViaSearch")}}',
-            data: { 
-            	_token: '{{csrf_token()}}',
-            	business_id: business_id,
-            	cid: cid,
-            	currentCid:'{{$customerdata->id}}'
-         	},
-            success: function(data) {
-               location.reload();
-            }
-         });
-	   }
-      
+  
 		flatpickr(".flatpickr-date", {
         	dateFormat: "m/d/Y",
         	maxDate: "01/01/2050",
@@ -1982,78 +2066,78 @@
                  $('.check-box-primary-account').prop('disabled', false);
               	}
           	}
-      });
+      	});
 
-      function calculateAge(dateStr) {
-        var birthDate = new Date(dateStr);
-        var currentDate = new Date();
-        var age = currentDate.getFullYear() - birthDate.getFullYear();
-        var monthDiff = currentDate.getMonth() - birthDate.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age;
-    }
+      	function calculateAge(dateStr) {
+        	var birthDate = new Date(dateStr);
+        	var currentDate = new Date();
+        	var age = currentDate.getFullYear() - birthDate.getFullYear();
+        	var monthDiff = currentDate.getMonth() - birthDate.getMonth();
+        	if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < birthDate.getDate())) {
+            	age--;
+        	}
+        	return age;
+    	}
 
-      function printTerms(divId,termsName){
-      	var chk = $('#'+divId).html() != '' ? 1 : 0;
-      	if(chk == 1){
-	      	const divName = ['covidDiv','liabilityDiv','contractDiv','refundDiv','termsDiv'];
-	      	divName.forEach(function(div) {
-				   if(divId == div){
-				   	$('#'+divId).removeClass('printnone');
-	      			$('#'+divId).addClass('exclude-from-print');
-				   }else{
-				   	$('#'+div).addClass('printnone');
-	      			$('#'+div).removeClass('exclude-from-print');
-				   }
+      	function printTerms(divId,termsName){
+      		var chk = $('#'+divId).html() != '' ? 1 : 0;
+      		if(chk == 1){
+	      		const divName = ['covidDiv','liabilityDiv','contractDiv','refundDiv','termsDiv'];
+	      		divName.forEach(function(div) {
+				   	if(divId == div){
+				   		$('#'+divId).removeClass('printnone');
+	      				$('#'+divId).addClass('exclude-from-print');
+				   	}else{
+				   		$('#'+div).addClass('printnone');
+	      				$('#'+div).removeClass('exclude-from-print');
+				   	}
 				});
 	      	
-	      	print();
-	      }else{
-	      	alert("There is not any " +termsName + " policy.");
-	      }
-      }
+	      		print();
+	      	}else{
+	      		alert("There is not any " +termsName + " policy.");
+	      	}
+       	}
 
-      function emailTerms(divId,business_id,termsName,cid){
-      	var chk = $('#'+divId).html() != '' ? 1 : 0;
-      	if(chk == 1){
-	      	$.ajax({
-               type: 'POST',
-               url: '{{route("sendTermsMail")}}',
-               data: { 
-               	_token: '{{csrf_token()}}',
-               	business_id: business_id,
-               	cid: cid,
-               	termsName: termsName,
-            	},
-               success: function(data) {
-                  alert('Email sent successfully.')
-               }
-            });
-	      }else{
-	      	alert("There is not any " +termsName + " policy.");
-	      }
-      }
+      	function emailTerms(divId,business_id,termsName,cid){
+	      	var chk = $('#'+divId).html() != '' ? 1 : 0;
+	      	if(chk == 1){
+		      	$.ajax({
+	               type: 'POST',
+	               url: '{{route("sendTermsMail")}}',
+	               data: { 
+	               	_token: '{{csrf_token()}}',
+	               	business_id: business_id,
+	               	cid: cid,
+	               	termsName: termsName,
+	            	},
+	               success: function(data) {
+	                  alert('Email sent successfully.')
+	               }
+	            });
+		    }else{
+		      	alert("There is not any " +termsName + " policy.");
+		    }
+      	}
 
 		$(document).on("click", "[data-behavior~=delete_card]", function(e){
     		e.preventDefault()
-         if (confirm('You are sure to delete card?')) {
-            var cardid = $(this).data("cardid");
-            $.ajax({
-               type: 'DELETE',
-               url: $(this).data('url'),
-               data: { _token: '{{csrf_token()}}'},
-               success: function(data) {
-                  location.reload();
-               }
-            });
-         }
-     });
-   	
-   	function redirctAddfamily(id){
-   		window.open('/customer/add-family/'+id, '_blank');
-   	}
+         	if (confirm('You are sure to delete card?')) {
+            	var cardid = $(this).data("cardid");
+            	$.ajax({
+	               	type: 'DELETE',
+	               	url: $(this).data('url'),
+	               	data: { _token: '{{csrf_token()}}'},
+	               	success: function(data) {
+	                  	location.reload();
+	               	}
+            	});
+         	}
+     	});
+	
+   		function redirctAddfamily(id){
+   			window.open('/customer/add-family/'+id, '_blank');
+   		}
 	</script>
 
 	<script type="text/javascript">
