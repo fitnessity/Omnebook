@@ -100,14 +100,22 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         $customer = $company->customers()->findOrFail($request->customer_id);
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
         $bookingDetail = UserBookingDetail::where(['user_id' =>$request->customer_id])->whereDate('expired_at','>=',date('Y-m-d'))->get();
+        $firstActiveMebership = $customer->active_memberships();
+        $bookingId = NULL;
+        foreach ($firstActiveMebership->get() as $key => $m) {
+            if ($m->getremainingsession() > 0) {
+                $bookingId = $m->id;
+                break;
+            }
+        }
 
-        
         $status = BookingCheckinDetails::create([
             'customer_id' => $customer->id,
             'checkin_date' => $request->checkin_date,
             'business_activity_scheduler_id' => $business_activity_scheduler->id,
             'source_type' => 'in_person',
             'use_session_amount' => 0,
+            'booking_detail_id' =>  $bookingId,
         ]);
 
         return 1; 
@@ -188,17 +196,16 @@ class SchedulerCheckinDetailController extends BusinessBaseController
             }else{
                //echo "bcvcv";exit;
                 $sendmail= 0;
-                $bookedSpot = $bookingDetail->getWithoutAttendBookedSession();
-                $usedSession = $bookingDetail->getUsedSession();
+                /*$bookedSpot = $bookingDetail->getWithoutAttendBookedSession();
+                $usedSession = $bookingDetail->getUsedSession();*/
                 $membershipSessionOverAlert = 1;
 
-                $sessionOvermessage .= "You have total ".$bookingDetail->pay_session." Sessions and used ".$usedSession." Session. ";
-
+                /*$sessionOvermessage .= "You have total ".$bookingDetail->pay_session." Sessions and used ".$usedSession." Session. ";
                 if($bookedSpot > 0){
                     $sessionOvermessage .= "Currently you have booked ".$bookedSpot." spots (for ".$bookedSpot." Sessions)  across different dates. ";
-                }
+                }*/
 
-                $sessionOvermessage .= "Unfortunately, all available sessions have been used.";
+                $sessionOvermessage .= "All sessions have been booked.";
                 
                 $checkin_detail->update(['checked_at' => NULL, 'booking_detail_id' => NULL, 'use_session_amount' => 0]);
             }

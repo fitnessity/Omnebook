@@ -57,8 +57,8 @@ class ProcessMembershipExcelData implements ShouldQueue
                     });
 
                     if($priceDetail != ''){ 
-                        $exDate = explode('/',$this->data[$i][4]);
-                        $conDate = explode('/',$this->data[$i][5]);
+                        $conDate  = explode('/',$this->data[$i][4]);
+                        $exDate = explode('/',$this->data[$i][5]);
                         $member_to = @$exDate[2].'-'.@$exDate[0].'-'.@$exDate[1];
                         $member_from = @$conDate[2].'-'.@$conDate[0].'-'.@$conDate[1];
                         $BookingDetail = UserBookingDetail::where(['user_id' => $customerData->id ,'priceid' => $priceDetail->id])->whereDate('expired_at','=',$member_to)->whereDate('contract_date','=',$member_from)->first();

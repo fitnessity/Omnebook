@@ -2270,6 +2270,7 @@ padding: 0px 0px 3px 2px !important; */
 .check-out-steps label {
     display: inline-block;
 	font-size: 14px;
+  margin-top: 15px;
 }
 .check-out-steps h2 {
   display: inline-block;
@@ -7644,3 +7645,19 @@ p.or-data {
 .width-250{
   width: 250px;
 }
+.custom-list-sidebar{
+  background: #f0f0f07d;
+  padding: 15px 10px;
+}
+.smart-generate-list span{
+  font-weight: 500;
+  color: #000;
+}
+.engage-client-submenu ul li a{
+color: #000;
+}
+.client-contact-list-modal{
+  max-width: 70%;
+}
+
+

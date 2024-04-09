@@ -99,7 +99,7 @@
 							$rowRelation = $cus->BookingCheckinDetails();
 							$firstCheckInDetail = $rowRelation->whereDate('checkin_date', $filter_date->format('Y-m-d'))->where('business_activity_scheduler_id', $business_activity_scheduler->id)->first();
 
-							$checkInIds = '';
+							$checkInIds = $activeMembership ='';
 							$activeMembershipCustomer = $cus->active_memberships()->get();
 
 							// if the customer has only 1 session remaining or the membership is only for 1 session then we have to display that activity also after check-in. because if that type of activity is checked-in then it's became an expired activity.
@@ -109,6 +109,8 @@
 							//print_r($todayCheckInDetails);
 							if($filter_date->format('Y-m-d') <= date('Y-m-d')){
 								$activeMembership = $activeMembershipCustomer->merge($todayCheckInDetails)->unique('id');
+							}else{
+								$activeMembership = $activeMembershipCustomer;
 							}
 
      					@endphp
@@ -129,7 +131,7 @@
 								</div>
 							</td>
 							<td>
-								@if($activeMembership->isNotEmpty())
+								@if(is_object($activeMembership) && $activeMembership->isNotEmpty())
 									<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" data-cus-id="{{$cus->id}}" data-loop-id="{{$i}}">
 										<option value="" @if(!@$firstCheckInDetail->order_detail) selected @endif>Choose option</option>
 										@foreach($activeMembership as $bookingDetail)
@@ -152,7 +154,7 @@
 							</td>
 							<td class="modal-check-width">
 								<div class="check-cancel width-105">
-									@if(@$firstCheckInDetail->order_detail && $activeMembership->isNotEmpty()) 
+									@if(@$firstCheckInDetail->order_detail && is_object($activeMembership) && $activeMembership->isNotEmpty()) 
 										@php  
 											$datetime = new DateTime(@$firstCheckInDetail->checkin_date.' '.$business_activity_scheduler->shift_start);
 											$formattedDatetime = $datetime->format('Y-m-d H:i:s');
@@ -161,7 +163,7 @@
 									@endif 
 									<label for="checkin" class="mb-0 mmt-10">Check In</label><br>
 
-									@if(@$firstCheckInDetail->order_detail && $activeMembership->isNotEmpty())
+									@if(@$firstCheckInDetail->order_detail && is_object($activeMembership) && $activeMembership->isNotEmpty())
 					                    <input type="checkbox"  onclick="call()" name="late_cancel" value="0" data-behavior="ajax_html_modal" data-url="{{route('business.scheduler_checkin_details.latecencel_modal', ['id' => @$firstCheckInDetail->id, 'scheduler_id' => $business_activity_scheduler->id])}}"  data-modal-width = "500px" data-booking-detail-id="{{@$firstCheckInDetail->order_detail->id}}"
 					                        @if(@$firstCheckInDetail->no_show_action) checked @endif >
 					                @endif 
