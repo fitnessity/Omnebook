@@ -499,200 +499,130 @@
         		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       		</div>
 			<div class="modal-body">
-				<!-- <div class="row">
-					<div class="col-lg-12">
-						<div class="form-group mb-3">
-							<label class="form-label">Programs</label>
-							<select name="relationship[0]" id="relationship[0]" class="form-select" required="required">
-								<option value="" selected="">Select Programs</option>
-								<option value="">Option 1</option>
-								<option value="">Option 2</option>
-								<option value="">Option 3</option>
-								<option value="">Option 4</option>
-							</select>
-						</div>
-					</div>
-					
-					<div class="col-lg-12">
-						<div class="form-group mb-3">
-							<label class="form-label">Category</label>
-							<select name="relationship[0]" id="relationship[0]" class="form-select" required="required">
-								<option value="" selected="">Select Category</option>
-								<option value="">Option 1</option>
-								<option value="">Option 2</option>
-								<option value="">Option 3</option>
-								<option value="">Option 4</option>
-							</select>
-						</div>
-					</div>
-				</div> -->
 				<div class="row">
 					<div class="col-lg-4">
 						<div class="custom-list-sidebar">
 							<div class="card-header">
-                                <div class="d-flex mb-3">
-                                	<div class="flex-grow-1 text-center">
-										<button type="button" class="btn btn-red" id="openSecondModalBtn"> Create List </button>
-                                    </div>
+                                <div class="row mb-3">
+									<div class="col-lg-12">
+										<div class="text-center">
+											<button type="button" class="btn btn-red mb-15" id="openSecondModalBtn"> Create Custom List </button>
+										</div>
+									</div>
+                                	<div class="col-lg-12">
+										<div class="search-box">
+											<input type="text" id="serchclient" name="fname" class="form-control search" placeholder="Search.." autocomplete="off" value="" data-id="0">
+											<i class="ri-search-line search-icon"></i>
+										</div>
+									</div>
                                 </div>
                             </div>
+							
 							<div class="mt-15">
-								<label class="mb-15 fs-14 font-red">Custom List</label>
-							</div>
-							<div>
 								<label class="mb-5 fs-14 font-red">Generated Smart List</label>
-								<div>
-									<label class="mb-5 fs-14 font-red">Program</label>
-									<div class="mb-3">
-										<form action="">
-											<input class="form-check-input" type="checkbox" id="formCheck1">
-											<label class="form-check-label" for="formCheck1">
-												All Contacts
-											</label>
-										</form>
-									</div>
 
-									<div class="mb-3">
-										<label class="form-label">Gender</label>
+								<div class="mb-10 d-grid">
+									<span class="mb-10"> All Contacts </span>
+									<div class="mb-10 d-grid">
+										<span>Gender - Female</span>
+										<span>Gender - Male</span>
+									</div>
+									<div class="mb-10 d-grid">
+										<span>Age - Adult</span>
+										<span>Age - Kids</span>
+									</div>
+									<div class="mb-10 d-grid">
+										<span>Status - Program</span>
+										<span>Status - Category</span>
+										<span>Status - Active</span>
+										<span>Status - Inactive</span>
+										<span>Status - Prospects</span>
+										<span>Status - At-Risk</span>
+										<span>Status - Big-Spenders</span>
+									</div>
+									
+								</div>
+								<!-- <div class="mb-3">
+									<form action="">
+										<input class="form-check-input" type="checkbox" id="formCheck1">
+										<label class="form-check-label" for="formCheck1">
+											All Contacts
+										</label>
+									</form>
+								</div>
+
+								<div class="mb-3">
+									<label class="form-label">Gender</label>
+									<form action="">
+										<input class="form-check-input" type="checkbox" id="formCheck2">
+										<label class="form-check-label mr-10" for="formCheck2">
+											Male
+										</label><br>
+
+										<input class="form-check-input" type="checkbox" id="formCheck3">
+										<label class="form-check-label mr-10" for="formCheck3">
+											Female
+										</label><br>
+									</form>
+								</div>
+
+								<div class="mb-3">
+									<label class="form-label">Age</label>
+									<div>
 										<form action="">
-											<input class="form-check-input" type="checkbox" id="formCheck2">
-											<label class="form-check-label mr-10" for="formCheck2">
-												Male
+											<input class="form-check-input" type="checkbox" id="formCheck4">
+											<label class="form-check-label mr-10" for="formCheck4">
+												Adult
 											</label><br>
 
-											<input class="form-check-input" type="checkbox" id="formCheck3">
-											<label class="form-check-label mr-10" for="formCheck3">
-												Female
+											<input class="form-check-input" type="checkbox" id="formCheck5">
+											<label class="form-check-label mr-10" for="formCheck5">
+												Kids
 											</label><br>
 										</form>
-									</div>
-
-									<div class="mb-3">
-										<label class="form-label">Age</label>
-										<div>
-											<form action="">
-												<input class="form-check-input" type="checkbox" id="formCheck4">
-												<label class="form-check-label mr-10" for="formCheck4">
-													Adult
-												</label><br>
-
-												<input class="form-check-input" type="checkbox" id="formCheck5">
-												<label class="form-check-label mr-10" for="formCheck5">
-													Kids
-												</label><br>
-											</form>
-										</div>
-									</div>
-
-									<div class="mb-3">
-										<label class="form-label">Status</label>
-										<div>
-											<form action="">
-												<input class="form-check-input" type="checkbox" id="formCheck6">
-												<label class="form-check-label mr-10" for="formCheck6">
-													Active
-												</label><br>
-
-												<input class="form-check-input" type="checkbox" id="formCheck7">
-												<label class="form-check-label mr-10" for="formCheck7">
-													Inactive
-												</label><br>
-
-												<input class="form-check-input" type="checkbox" id="formCheck8">
-												<label class="form-check-label mr-10" for="formCheck8">
-													Prospects
-												</label><br>
-
-												<input class="form-check-input" type="checkbox" id="formCheck9">
-												<label class="form-check-label mr-10" for="formCheck9">
-													At-Risk
-												</label><br>
-
-												<input class="form-check-input" type="checkbox" id="formCheck10">
-												<label class="form-check-label mr-10" for="formCheck10">
-													Big-Spenders
-												</label><br>
-											</form>
-										</div>
 									</div>
 								</div>
-								
-								<div>
-									<label class="mb-5 fs-14 font-red">Category</label>
-									<div class="mb-3">
-										<form action="">
-											<input class="form-check-input" type="checkbox" id="formCheck1">
-											<label class="form-check-label" for="formCheck1">
-												All Contacts
-											</label>
-										</form>
-									</div>
 
-									<div class="mb-3">
-										<label class="form-label">Gender</label>
+								<div class="mb-3">
+									<label class="form-label">Status</label>
+									<div>
 										<form action="">
-											<input class="form-check-input" type="checkbox" id="formCheck2">
-											<label class="form-check-label mr-10" for="formCheck2">
-												Male
+											<input class="form-check-input" type="checkbox" id="formCheck6">
+											<label class="form-check-label mr-10" for="formCheck6">
+												Active
 											</label><br>
 
-											<input class="form-check-input" type="checkbox" id="formCheck3">
-											<label class="form-check-label mr-10" for="formCheck3">
-												Female
+											<input class="form-check-input" type="checkbox" id="formCheck7">
+											<label class="form-check-label mr-10" for="formCheck7">
+												Inactive
+											</label><br>
+
+											<input class="form-check-input" type="checkbox" id="formCheck8">
+											<label class="form-check-label mr-10" for="formCheck8">
+												Prospects
+											</label><br>
+
+											<input class="form-check-input" type="checkbox" id="formCheck9">
+											<label class="form-check-label mr-10" for="formCheck9">
+												At-Risk
+											</label><br>
+
+											<input class="form-check-input" type="checkbox" id="formCheck10">
+											<label class="form-check-label mr-10" for="formCheck10">
+												Big-Spenders
 											</label><br>
 										</form>
 									</div>
+								</div> -->
 
-									<div class="mb-3">
-										<label class="form-label">Age</label>
-										<div>
-											<form action="">
-												<input class="form-check-input" type="checkbox" id="formCheck4">
-												<label class="form-check-label mr-10" for="formCheck4">
-													Adult
-												</label><br>
-
-												<input class="form-check-input" type="checkbox" id="formCheck5">
-												<label class="form-check-label mr-10" for="formCheck5">
-													Kids
-												</label><br>
-											</form>
-										</div>
-									</div>
-
-									<div class="mb-3">
-										<label class="form-label">Status</label>
-										<div>
-											<form action="">
-												<input class="form-check-input" type="checkbox" id="formCheck6">
-												<label class="form-check-label mr-10" for="formCheck6">
-													Active
-												</label><br>
-
-												<input class="form-check-input" type="checkbox" id="formCheck7">
-												<label class="form-check-label mr-10" for="formCheck7">
-													Inactive
-												</label><br>
-
-												<input class="form-check-input" type="checkbox" id="formCheck8">
-												<label class="form-check-label mr-10" for="formCheck8">
-													Prospects
-												</label><br>
-
-												<input class="form-check-input" type="checkbox" id="formCheck9">
-												<label class="form-check-label mr-10" for="formCheck9">
-													At-Risk
-												</label><br>
-
-												<input class="form-check-input" type="checkbox" id="formCheck10">
-												<label class="form-check-label mr-10" for="formCheck10">
-													Big-Spenders
-												</label><br>
-											</form>
-										</div>
-									</div>
-								</div>
 							</div>
+							<!-- <div class="mt-15">
+								<label class="mb-15 fs-14 font-red">Status</label>
+								<div class="mb-3 d-grid smart-generate-list">
+									<span>Program</span>
+									<span>Category</span>
+								</div>
+							</div> -->
 						</div>
 					</div>
 				

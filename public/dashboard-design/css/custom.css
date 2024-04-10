@@ -7672,6 +7672,12 @@ color: #000;
   height: 20px;
     width: 20px;
 }
+.side-submenu a{
+    color: #000;
+}
+.set-submenu-p{
+  padding: var(--vz-accordion-btn-padding-y) var(--vz-accordion-btn-padding-x);
+}
 regi-qr-code img {
   width: 125px;
 }

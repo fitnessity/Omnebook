@@ -703,67 +703,67 @@
     						<div class="col-lg-3 col-md-3 col-sm-3">
     							<div class="track-goal form-group mb-10">
     								<label>March</label>
-    								<input type="text" class="form-control" name="mar_goal" id="mar_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->mar_goal}}">
+    								<input type="text" class="form-control" name="mar_goal" id="mar_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->mar_goal ?? 0}}">
     							</div>
     						</div>
     						<div class="col-lg-3 col-md-3 col-sm-3">
     							<div class="track-goal form-group mb-10">
     								<label>April</label>
-    								<input type="text" class="form-control" name="apr_goal" id="apr_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->apr_goal}}">
+    								<input type="text" class="form-control" name="apr_goal" id="apr_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->apr_goal ?? 0}}">
     							</div>
     						</div>
     						<div class="col-lg-3 col-md-3 col-sm-3">
     							<div class="track-goal form-group mb-10">
     								<label>May</label>
-    								<input type="text" class="form-control" name="may_goal" id="may_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->may_goal}}">
+    								<input type="text" class="form-control" name="may_goal" id="may_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->may_goal ?? 0}}">
     							</div>
     						</div>
     						<div class="col-lg-3 col-md-3 col-sm-3">
     							<div class="track-goal form-group mb-10">
     								<label>June</label>
-    								<input type="text" class="form-control" name="jun_goal" id="jun_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->jun_goal}}">
+    								<input type="text" class="form-control" name="jun_goal" id="jun_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->jun_goal ?? 0}}">
     							</div>
     						</div>
     						<div class="col-lg-3 col-md-3 col-sm-3">
     							<div class="track-goal form-group mb-10">
     								<label>July</label>
-    								<input type="text" class="form-control" name="jul_goal" id="jul_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->jul_goal}}">
+    								<input type="text" class="form-control" name="jul_goal" id="jul_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->jul_goal ?? 0}}">
     							</div>
     						</div>
     						<div class="col-lg-3 col-md-3 col-sm-3">
     							<div class="track-goal form-group mb-10">
     								<label>August</label>
-    								<input type="text" class="form-control" name="aug_goal" id="aug_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->aug_goal}}">
+    								<input type="text" class="form-control" name="aug_goal" id="aug_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->aug_goal ?? 0}}">
     							</div>
     						</div>
     						<div class="col-lg-3 col-md-3 col-sm-3">
     							<div class="track-goal form-group mb-10">
     								<label>September</label>
-    								<input type="text" class="form-control" name="sep_goal" id="sep_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->sep_goal}}">
+    								<input type="text" class="form-control" name="sep_goal" id="sep_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->sep_goal ?? 0}}">
     							</div>
     						</div>
     						<div class="col-lg-3 col-md-3 col-sm-3">
     							<div class="track-goal form-group mb-10">
     								<label>October</label>
-    								<input type="text" class="form-control" name="oct_goal" id="oct_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->oct_goal}}">
+    								<input type="text" class="form-control" name="oct_goal" id="oct_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->oct_goal ?? 0}}">
     							</div>
     						</div>
     						<div class="col-lg-3 col-md-3 col-sm-3">
     							<div class="track-goal form-group mb-10">
     								<label>November</label>
-    								<input type="text" class="form-control" name="nov_goal" id="nov_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->nov_goal}}">
+    								<input type="text" class="form-control" name="nov_goal" id="nov_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->nov_goal ?? 0}}">
     							</div>
     						</div>
     						<div class="col-lg-3 col-md-3 col-sm-3">
     							<div class="track-goal form-group mb-10">
     								<label>December</label>
-    								<input type="text" class="form-control" name="dec_goal" id="dec_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->dec_goal}}">
+    								<input type="text" class="form-control" name="dec_goal" id="dec_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->dec_goal ?? 0}}">
     							</div>
     						</div>
     						<div class="col-lg-3 col-md-3 col-sm-3">
     							<div class="yearly-total form-group mb-10">
     								<label class="font-red text-decoration">Yearly Total</label>
-    								<input type="text" class="form-control" name="yearly_total_goal" id="yearly_total_goal" required="" readonly value="{{@$revenueData->yearly_total_goal}}">
+    								<input type="text" class="form-control" name="yearly_total_goal" id="yearly_total_goal" required="" readonly value="{{@$revenueData->yearly_total_goal ?? 0}}">
     							</div>
     						</div>
 
