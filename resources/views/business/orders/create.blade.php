@@ -1742,7 +1742,7 @@
 		}else{
 
 			var adult = '', child = '', infant = '';
-			var totalprice = 0, totalprice = 0, totalpricechild = 0; totalpriceinfant = 0;
+			var totalprice = 0, totalprice = 0, totalpriceadult =0;totalpricechild = 0; totalpriceinfant = 0;
 
 			var aduprice = parseFloat($('#adultprice').val()) || 0;
 	        var childprice = parseFloat($('#childprice').val()) || 0;
