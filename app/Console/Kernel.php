@@ -7,6 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\{UserBookingDetail,Recurring,Transaction,BookingCheckinDetails,CustomerPlanDetails,StripePaymentMethod};
 use DB;
 use Carbon\Carbon;
+use Stripe\Exception\InvalidRequestException;
 
 class Kernel extends ConsoleKernel
 {
@@ -83,13 +84,12 @@ class Kernel extends ConsoleKernel
             foreach($transactions as $transaction){
                 try {
                     $transaction->capture();
-                }catch (Exception $e) {
-                    $errormsg = $e->getError()->message;
-                    var_dump('capture error');
-                    var_dump($errormsg);
-                }catch (Stripe\Exception\InvalidRequestException $e){
-                    var_dump('capture error 2');
-                    var_dump($errormsg);
+                }catch (InvalidRequestException $e) {
+                    // Handle Stripe's InvalidRequestException
+                    return response()->json(['error' => 'Invalid request: ' . $e->getMessage()], 400);
+                } catch (\Exception $e) {
+                    // Handle other exceptions
+                    return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
                 }
             }
         // })->daily();
