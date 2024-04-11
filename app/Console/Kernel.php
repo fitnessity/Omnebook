@@ -86,10 +86,10 @@ class Kernel extends ConsoleKernel
                     $transaction->capture();
                 }catch (InvalidRequestException $e) {
                     // Handle Stripe's InvalidRequestException
-                    return response()->json(['error' => 'Invalid request: ' . $e->getMessage()], 400);
+                    var_dump(response()->json(['error' => 'Invalid request: ' . $e->getMessage()], 400));
                 } catch (\Exception $e) {
                     // Handle other exceptions
-                    return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
+                    var_dump(response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500));
                 }
             }
         // })->daily();
