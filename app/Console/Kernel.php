@@ -87,6 +87,9 @@ class Kernel extends ConsoleKernel
                     $errormsg = $e->getError()->message;
                     var_dump('capture error');
                     var_dump($errormsg);
+                }catch (Stripe\Exception\InvalidRequestException $e){
+                    var_dump('capture error 2');
+                    var_dump($errormsg);
                 }
             }
         // })->daily();
