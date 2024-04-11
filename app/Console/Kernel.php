@@ -78,7 +78,7 @@ class Kernel extends ConsoleKernel
             }
         })->daily();
 
-        // $schedule->call(function () {
+        $schedule->call(function () {
             var_dump('run capture');
             $transactions = Transaction::where(['status' => 'requires_capture'])->get();
             foreach($transactions as $transaction){
@@ -92,7 +92,7 @@ class Kernel extends ConsoleKernel
                     var_dump(response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500));
                 }
             }
-        // })->daily();
+        })->daily();
 
         $schedule->call(function () {
             $today = Carbon::now()->format('Y-m-d');
