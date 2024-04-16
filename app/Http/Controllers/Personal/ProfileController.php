@@ -231,10 +231,13 @@ class ProfileController extends Controller
             $fail = 'Problem in uploading profile photo.';
         }
         
-        if(@$status)
-            return Redirect::back()->with('success',$success);
-        else
-            return Redirect::back()->with('error', $fail);
+        if(@$status){
+            return Redirect::route('personal.profile.index')->with('success', $success);
+            //return Redirect::back()->with('success',$success);
+        }else{
+            return Redirect::route('personal.profile.index')->with('error', $fail);
+           //return Redirect::back()->with('error', $fail);
+        }
     }
 
     /**
@@ -285,13 +288,22 @@ class ProfileController extends Controller
         }
         
 
+        if(@$status){
+            return Redirect::route('personal.profile.index',['type' => 'user','customer_id' =>$request->id])->with('success', $success);
+            //return Redirect::back()->with('success',$success);
+        }else{
+            return Redirect::route('personal.profile.index',['type' => 'user','customer_id' =>$request->id])->with('error', $fail);
+           //return Redirect::back()->with('error', $fail);
+        }
+       /* 
         if(@$status)
             return Redirect::back()->with('success',$success);
         else
-            return Redirect::back()->with('error', $fail);
+            return Redirect::back()->with('error', $fail);*/
     }
 
     public function customerProfileUpdate(Request $request){
+        /*print_r($request->all());exit;*/
         $user = Customer::find($request->id);
         $success = $fail = '';
         if($request->type == 'details'){
@@ -332,10 +344,18 @@ class ProfileController extends Controller
         }
         
 
-        if(@$status)
+        if(@$status){
+            return Redirect::route('personal.profile.index',['type' =>'customer' ,'customer_id' =>$request->id])->with('success', $success);
+            //return Redirect::back()->with('success',$success);
+        }else{
+            return Redirect::route('personal.profile.index',['type' =>'customer' ,'customer_id' =>$request->id])->with('error', $fail);
+           //return Redirect::back()->with('error', $fail);
+        }
+
+        /*if(@$status)
             return Redirect::back()->with('success',$success);
         else
-            return Redirect::back()->with('error', $fail);
+            return Redirect::back()->with('error', $fail);*/
     }
 
     public function provider(Request $request){
