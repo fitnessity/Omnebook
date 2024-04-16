@@ -167,7 +167,7 @@ class ProfileController extends Controller
                 'firstname' => 'required',
                 'lastname' => 'required',
                 'gender' => 'required',
-                /*'phone_number' => 'required',*/
+                'phone_number' => 'required',
                 'address' => 'required',
             ]);
 
@@ -258,7 +258,7 @@ class ProfileController extends Controller
                 'firstname' => 'required',
                 'lastname' => 'required',
                 'gender' => 'required',
-                /*'phone_number' => 'required'*/
+                'phone_number' => 'required'
             ]);
 
             $status = $user->update([
@@ -311,7 +311,7 @@ class ProfileController extends Controller
                 'firstname' => 'required',
                 'lastname' => 'required',
                 'gender' => 'required',
-               /* 'phone_number' => 'required'*/
+                'phone_number' => 'required'
             ]);
 
             $status = $user->update([
