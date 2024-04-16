@@ -18,9 +18,9 @@ use App\Http\Controllers\Products\ProductController;
 //to clear catch
 use Illuminate\Support\Facades\Artisan;
 
-Route::fallback(function () {
+/*Route::fallback(function () {
     return redirect('/');
-});
+});*/
 
 
 Route::get('/clear-cache', function () {
@@ -347,6 +347,7 @@ Route::post('stripe_payment_methods/update', 'StripePaymentMethodController@upda
     Route::post('/getmodelbody', 'ActivityController@getmodelbody')->name('getmodelbody');
     Route::post('/load-data', 'ActivityController@loadMoreData')->name('load-data');
     Route::get('/getBookingSummary', 'ActivityController@getBookingSummary')->name('getBookingSummary');
+    Route::get('/getInsData', 'ActivityController@getInsData')->name('getInsData');
     Route::get('/getAddOnData', 'ActivityController@getAddOnData')->name('getAddOnData');
 
 //end Activitys
@@ -355,6 +356,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/dashboard/{date?}/{id?}', 'BusinessController@dashboard')->name('business_dashboard');
     Route::post('/set-revenue-goal', 'BusinessController@setRevenueGoal')->name('set_revenue_goal');
     Route::get('/getRevenueAjax', 'BusinessController@getRevenueAjax')->name('getRevenueAjax');
+    Route::get('/getClientModelData', 'BusinessController@getClientModelData')->name('getClientModelData');
 
     Route::post('/notification/delete/', 'BusinessController@notification_delete')->name('notification_delete');
 
@@ -1434,6 +1436,8 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/confirmation','DesignController@confirmation')->name('confirmation');
     Route::get('/selfcheck_in_welcome','DesignController@selfcheck_in_welcome')->name('selfcheck_in_welcome');
     Route::get('/engage_clients','DesignController@engage_clients')->name('engage_clients');
+    Route::get('/engage_clients_sidebar','DesignController@engage_clients_sidebar')->name('engage_clients_sidebar');
+    Route::get('/customer_contact_list','DesignController@customer_contact_list')->name('customer_contact_list');
 });
 
 ?>
