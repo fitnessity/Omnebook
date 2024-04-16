@@ -1446,8 +1446,6 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/customer_contact_list','DesignController@customer_contact_list')->name('customer_contact_list');
 });
 
-Route::fallback(function () {
-    return redirect('/');
-});
+
 
 ?>
