@@ -78,6 +78,9 @@
 													<div class="mb-3">
 														<label for="firstnameInput" class="form-label">First Name</label>
 														<input type="text" class="form-control" name="firstname" id="firstname" placeholder="Enter your firstname" value="{{ $user->fname}}" required>
+                                                        @error('firstname')
+                                                            <div class="error">{{ $message }}</div>
+                                                        @enderror
 													</div>
 												</div><!--end col-->
 
@@ -85,6 +88,9 @@
                                                     <div class="mb-3">
                                                         <label for="lastnameInput" class="form-label">Last Name</label>
                                                         <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Enter your lastname" value="{{ $user->lname}}" required>
+                                                        @error('lastname')
+                                                            <div class="error">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                 </div><!--end col-->
 
@@ -99,6 +105,9 @@
                                                     <div class="mb-3">
                                                         <label for="phonenumberInput" class="form-label">Phone Number</label>
                                                         <input type="text" class="form-control"name="phone_number" id="phone_number" placeholder="Enter your phone number" value="{{ $user->phone_number}}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="14" data-behavior="text-phone">
+                                                        @error('phone_number')
+                                                            <div class="error">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                 </div><!--end col-->
 
@@ -125,6 +134,9 @@
 																<option value="female" {{strtolower($user->gender) == 'female' ? 'selected' : ''}}>Female</option>
 																<option value="other" {{strtolower($user->gender) == 'other' ? 'selected' : ''}}>Other</option>
 															</select>
+                                                            @error('gender')
+                                                                <div class="error">{{ $message }}</div>
+                                                            @enderror
 														</div>
 													</div>
                                                 </div> <!--end col-->
