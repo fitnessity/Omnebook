@@ -30,7 +30,9 @@ class Kernel extends ConsoleKernel
     {
         //$schedule->command('stripe:cron')->everyMinute();
 
-        $schedule->call(function () {
+
+        /*$schedule->call(function () {
+             var_dump('run transfer');
             $user_booking_details = UserBookingDetail::whereRaw("transfer_provider_status is NULL or transfer_provider_status !='paid'");
             foreach($user_booking_details->get() as $user_booking_detail){
                 try {
@@ -41,18 +43,18 @@ class Kernel extends ConsoleKernel
                     var_dump($errormsg);
                 }
             }
-        })->daily();
+        })->daily();*/
 
         $schedule->call(function () {
             $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->where('attempt' ,'<' ,3)->orderBy('created_at','desc')->get();
+            print_r($recurringDetails);exit();
 
-            //print_r($recurringDetails);exit();
             foreach($recurringDetails as $recurringDetail){
                 $recurringDetail->createRecurringPayment();
             }
-        })->daily();
+        })->everyMinute();
 
-        $schedule->call(function () {
+        /*$schedule->call(function () {
             $userBookingDetails = UserBookingDetail::whereDate("expired_at", ">=" ,date('Y-m-d'))->get();
             foreach($userBookingDetails as $userBookingDetail){
                 $userBookingDetail->membershipOrSessionAboutToExpireAlert('membership');
@@ -137,7 +139,7 @@ class Kernel extends ConsoleKernel
             foreach($expiringCreditCards as $ecc){
                 $ecc->checkExpiringCard();
             }
-        })->daily();
+        })->daily();*/
 
         /*$schedule->call(function (){
             $current_time = now()->format('H:i');
