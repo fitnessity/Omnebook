@@ -75,7 +75,10 @@ class UserBookingDetail extends Model
                 return @$user->full_name;
             }
         }else{
-            return Auth::user()->full_name;
+            if(Auth::check()){
+                return Auth::user()->full_name;
+            }
+            return '';
         }
     }
 
@@ -90,7 +93,10 @@ class UserBookingDetail extends Model
                 return @$user->full_name;
             }
         }else{
-            return Auth::user()->full_name;
+            if(Auth::check()){
+                return Auth::user()->full_name;
+            }
+            return '';
         }
     }
 
@@ -105,7 +111,10 @@ class UserBookingDetail extends Model
                 return @$user->full_name;
             }
         }else{
-            return Auth::user()->full_name;
+            if(Auth::check()){
+                return Auth::user()->full_name;
+            }
+            return '';
         }
     }
 
