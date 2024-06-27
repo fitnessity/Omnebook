@@ -256,6 +256,7 @@ a{
     display: inline-block;
     float: right;
     font-size: 13px;
+    text-align: right;
 }
 .activity-information{
     text-align: center;

@@ -390,7 +390,7 @@ $total_quantity = 0;
 												<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeNav()"></a>
 												<ul class="pc-navbar">
 													<li style="text-align: center;"> 
-                                                        <img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" class="sidemenupic">
+                                                        <img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" class="sidemenupic" alt="Fitnessity">
 													</li>
 													<li class="pc-caption"><span> Welcome</span></li>
                                                     <li class="pc-caption-1">

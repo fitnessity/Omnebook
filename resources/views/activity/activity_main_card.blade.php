@@ -12,10 +12,10 @@
 						@foreach ($activity->profile_pictures() as $picture)
 							@if(Storage::disk('s3')->exists($picture) && $picture != '' )
 								<div class="item-inner">
-									<img src="{{Storage::URL($picture)}}" class="productImg">
+									<img src="{{Storage::URL($picture)}}" class="productImg" alt="Fitnessity">
 								</div>
 							@else
-								<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+								<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 							@endif
 						@endforeach
 					</div>

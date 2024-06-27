@@ -16,7 +16,7 @@
 				<div class="find-activity">
 					<div class="row">
 						<div class="col-md-4 col-sm-4" style="overflow: hidden;">
-							<img class="personal-find-activity" style="" src="{{ Storage::disk('s3')->exists($bookscheduler->business_service->first_profile_pic()) ? Storage::URL($bookscheduler->business_service->first_profile_pic()) : url('/images/service-nofound.jpg') }}" >
+							<img alt="Fitnessity" class="personal-find-activity" style="" src="{{ Storage::disk('s3')->exists($bookscheduler->business_service->first_profile_pic()) ? Storage::URL($bookscheduler->business_service->first_profile_pic()) : url('/images/service-nofound.jpg') }}" >
 						</div>
 						<div class="col-md-8 col-sm-8 activity-data">
 							<div class="row">

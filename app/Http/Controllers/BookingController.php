@@ -49,6 +49,7 @@ class BookingController extends Controller {
         $type = $request->type;
         $categoryList  = [];
         $categoryList = $activity->BusinessPriceDetailsAges;
+        $date = date('m/d/Y',strtotime($date));
         return view('business.services.view_bookings_of_service', compact('data', 'date', 'programName', 'sid' ,'type','categoryList','categoryId'));
     }
 

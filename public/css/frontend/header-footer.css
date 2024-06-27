@@ -60,6 +60,7 @@ header .logo img {
 }
 #suggesstion-box{ 
 	background-color: #ffffff; 
+    cursor: pointer;
 }
 
 .top-search button {
@@ -102,7 +103,11 @@ header .header-right {
 	padding: 9px 12px;
 	color: #000 !important;
 }
-
+.btn-list-business.business-sp:hover{
+    color: #fff !important;
+  background: #000;
+  border: 1px solid #000 !important;
+}
 .btn-list-business{
 	border: 1px solid #000 !important;
 	color: #000;

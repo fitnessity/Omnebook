@@ -178,5 +178,8 @@ class BookingCheckinDetails extends Model
             SGMailService::sendEmailCustomerforReminder($emailDetail);
         }
     }
-
+    public function businessActivityScheduler()
+    {
+        return $this->belongsTo(BusinessActivityScheduler::class, 'business_activity_scheduler_id', 'id');
+    }
 }

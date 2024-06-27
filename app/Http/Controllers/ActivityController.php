@@ -12,7 +12,7 @@ use View;
 use DB;
 use Response;
 use Validator;
-use App\{BusinessServices,BusinessActivityScheduler,Miscellaneous,BusinessPriceDetails,BusinessServiceReview,CompanyInformation,BusinessPriceDetailsAges,UserBookingDetail,ActivtyGetStartedFast,BusinessServicesFavorite,BusinessService,User,AddOnService,MailService};
+use App\{BusinessServices,BusinessActivityScheduler,Miscellaneous,BusinessPriceDetails,BusinessServiceReview,CompanyInformation,BusinessPriceDetailsAges,UserBookingDetail,ActivtyGetStartedFast,BusinessServicesFavorite,BusinessService,User,AddOnService,MailService,Customer};
 use DateTime;
 use Hash;
 
@@ -34,13 +34,12 @@ class ActivityController extends Controller {
         $current_date = new DateTime();
         $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $activities->pluck('id'))->limit(3)->get();
 
-
 		return view('activity.get_started',[
 			'activity_get_start_fast'=>$activity_get_start_fast,
 			'bookschedulers' => $bookschedulers,
 			'current_date' => $current_date,
 			'allactivities'=>$activities,
-			'activities'=>$activities->get(),
+			'activities'=> $this->filterActivities($activities)->get(),
 			'name' => $name,
 		]);	
     }
@@ -60,7 +59,7 @@ class ActivityController extends Controller {
 			'bookschedulers' => $bookschedulers,
 			'current_date' => $current_date,
 			'allactivities'=>$activities,
-			'activities'=>$activities->get(),
+			'activities'=>$this->filterActivities($activities)->get(),
 			'name' => $name,
 		]);	
     }
@@ -78,7 +77,7 @@ class ActivityController extends Controller {
 			'bookschedulers' => $bookschedulers,
 			'current_date' => $current_date,
 			'allactivities'=>$activities,
-			'activities'=>$activities->get(),
+			'activities'=>$this->filterActivities($activities)->get(),
 			'name'=>$name,
 		]);	
     } 
@@ -97,7 +96,7 @@ class ActivityController extends Controller {
 			'bookschedulers' => $bookschedulers,
 			'current_date' => $current_date,
 			'allactivities'=>$activities,
-			'activities'=>$activities->get(),
+			'activities'=>$this->filterActivities($activities)->get(),
 			'name'=>$name,
 		]);	
     }
@@ -215,7 +214,7 @@ class ActivityController extends Controller {
 	        $current_date = new DateTime();
 	        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtacty->pluck('id'))->limit(3)->get();
 			
-			$allactivities = $all_activities->get();
+			$allactivities = $this->filterActivities($all_activities)->get();
 			/*print_r($allactivities);exit();*/
 			$serviceLocation = Miscellaneous::serviceLocation();
 
@@ -266,9 +265,7 @@ class ActivityController extends Controller {
 				$Trainers_coaches_acitvity = $Trainers_coaches_acitvity->orWhere('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
 				$Fun_Activities = $Fun_Activities->orWhere('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
 				$events_activity = $events_activity->orWhere('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
-				$nxtact = $nxtact->orWhere('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%');  
-
-				
+				$nxtact = $nxtact->orWhere('sport_activity', 'LIKE', '%'. $request->label . '%')->orWhere('program_name', 'LIKE', '%'. $request->label . '%'); 
 
 				$searchDatauserProfile = User::where('username', $request->label)->first();
 	            $searchDatabusiness = CompanyInformation::where('dba_business_name',$request->label)->first();
@@ -982,14 +979,13 @@ class ActivityController extends Controller {
 	        $current_date = new DateTime();
 	        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtacty->pluck('id'))->limit(3)->get();
 	       
-			$allactivities = $all_activities->limit(10)->get();
-			
-			$thismonthactivity = $this_nthactivity->limit(10)->get();
-			$mostpopularactivity = $most_popularactivity->limit(10)->get();
-			$Trainers_coachesacitvity  = $Trainers_coaches_acitvity->limit(10)->get();
-			$Fun_Activities  = $Fun_Activities->limit(10)->get();
-			$Ways_To_Workout = $Ways_To_Work_out->limit(10)->get();
-			$events_activity = $events_activity->limit(10)->get();
+			$allactivities = $this->filterActivities($all_activities)->limit(10)->get();
+			$thismonthactivity = $this->filterActivities($this_nthactivity)->limit(10)->get();
+			$mostpopularactivity = $this->filterActivities($most_popularactivity)->limit(10)->get();
+			$Trainers_coachesacitvity = $this->filterActivities($Trainers_coaches_acitvity)->limit(10)->get();
+			$Fun_Activities = $this->filterActivities($Fun_Activities)->limit(10)->get();
+			$Ways_To_Workout = $this->filterActivities($Ways_To_Work_out)->limit(10)->get();
+			$events_activity = $this->filterActivities($events_activity)->limit(10)->get();
 
 			$serviceLocation = Miscellaneous::serviceLocation();
 			$getstarteddata =  ActivtyGetStartedFast::orderby('id','asc')->get();
@@ -1019,6 +1015,13 @@ class ActivityController extends Controller {
 		}
 	}
 
+	function filterActivities($activities) {
+	    return $activities->whereHas('schedulers', function ($query) {
+	        $query->where('end_activity_date', '>', now())
+	              ->orWhereNull('end_activity_date');
+	    });
+	}
+
 	public function buildQuery($modal,$column,$search){
 		return $modal->join("company_informations as cic{$column}", 'business_services.cid', '=', "cic{$column}.id")->where("cic{$column}.{$column}", 'LIKE', '%'. $search . '%')->select('business_services.*')->groupby('business_services.id');
 	}
@@ -1037,16 +1040,38 @@ class ActivityController extends Controller {
       	$cart = [];
       	$cart = $request->session()->get('cart_item') ? $request->session()->get('cart_item') : [];
       	$service = BusinessServices::findOrFail($serviceid);
-      	$activities_search = BusinessServices::where('cid', $service['cid'])
-	    	->where('is_active', '1')
-	    	->where('id', '!=' , $serviceid)
-	    	->orderBy('id', 'DESC')
-	    	->get();
+      	$company = $service->company_information;
+      	$sid = $serviceid;
+    	$businessService = $company->business_service;
+    	$activityOffered = BusinessServices::where('cid',$company->id)->groupBy('sport_activity')->get()->toArray();
+      	$activitiesSearch = BusinessServices::where('cid', $service->cid)->where('is_active', '1')->where('id', '!=' , $serviceid)->orderBy('id', 'DESC')->get();
        	return view('activity.show', [
         	'cart' => $cart,
+        	'company' =>$company,
         	'service' =>$service,
-        	'activities_search' =>$activities_search
+        	'sid' =>$sid,
+        	'businessService' =>$businessService,
+        	'activityOffered' =>$activityOffered,
+        	'activitiesSearch' =>$activitiesSearch
       	]);
+    }
+
+    public function getReview(Request $request){
+    	$service = BusinessServices::find($request->sid);
+
+    	if($request->type == 'lowest'){
+    		$reviews = $service->reviews()->get()->sortBy(function ($review) {
+			    return $review->all_over_review;
+			});
+    	}else if($request->type == 'highest'){
+    		$reviews = $service->reviews()->get()->sortByDesc(function ($review) {
+			    return $review->all_over_review;
+			});
+    	}else{
+    		$reviews = $service->reviews()->orderby('created_at','desc')->get();
+    	}
+
+    	return view('activity.review',compact('reviews'));
     }
 
     public function getCompareProfessionalDetailInstant($id) {
@@ -1256,224 +1281,20 @@ class ActivityController extends Controller {
             $dt = date('Y-m-d',strtotime($actdate) );
             
             $enddt = date('Y-m-d',strtotime($actdate));
-            
-            //Where('business_activity_scheduler.starting', $dt);
-            /*BusinessActivityScheduler::where('serviceid',$serviceid)->where('cid',$companyid)->where('starting','<=',date('Y-m-d',strtotime($actdate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($actdate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",activity_days)')->get();*/
-
-            $searchData->join('business_activity_scheduler as bas', 'business_services.id', '=', 'bas.serviceid')->select('business_services.*','bas.end_activity_date')->where('bas.end_activity_date','>=',  $dt )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",bas.activity_days)')->groupby('business_services.id')->distinct();
+           	$searchData->join('business_activity_scheduler as bas', 'business_services.id', '=', 'bas.serviceid')->select('business_services.*','bas.end_activity_date')->where('bas.end_activity_date','>=',  $dt )->whereRaw('FIND_IN_SET("'.date('l',strtotime($actdate)).'",bas.activity_days)')->groupby('business_services.id')->distinct();
         }
         if( !empty($actfilsType) )
         {
             $searchData->whereRaw('FIND_IN_SET("'.$actfilsType.'",select_service_type)');
         }
-       /* DB::enableQueryLog();*/
-        $activity1 = $searchData->distinct()->get()->toArray();
-        // dd(\DB::getQueryLog());
+      
+        $activitiesSearch = $searchData->distinct()->get();
         
-        $activity = json_decode(json_encode($activity1), true);
-        $actbox='';
-        //dd(\DB::getQueryLog());
-       /* print_r($activity);exit;*/
-        if (!empty($activity)) { 
-            $companyid = $companyname = $serviceid = $companycity = $companycountry = $pay_price  = "";
-            foreach ($activity as  $act) {
-                $company = $price = $businessSp = [];
-                $serviceid = $act['id'];
-                $sport_activity = $act['sport_activity'];
-                $companyData = CompanyInformation::where('id',$act['cid'])->first();
-                if (isset($companyData)) {
-                    $companyid = $companyData['id'];
-                    $companyname = $companyData['dba_business_name'];
-                    $companycity = $companyData['city'];
-                    $companycountry = $companyData['country'];    
-                }
-                if ($act['profile_pic']!="") {
-                	if(str_contains($act['profile_pic'], ',')){
-                        $pic_image = explode(',', $act['profile_pic']);
-                        if( $pic_image[0] == ''){
-                           $p_image  = $pic_image[1];
-                        }else{
-                            $p_image  = $pic_image[0];
-                        }
-                    }else{
-                        $p_image = $act['profile_pic'];
-                    }
 
-                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
-                    }else {
-                       $profilePic = url('/public/images/service-nofound.jpg');
-                    }
-
-				}else{ $profilePic = '/public/images/service-nofound.jpg'; }
-
-                $reviews_count = BusinessServiceReview::where('service_id', $act['id'])->count();
-                $reviews_sum = BusinessServiceReview::where('service_id', $act['id'])->sum('rating');
-                $reviews_avg=0;
-                if($reviews_count>0)
-                {   
-                    $reviews_avg= round($reviews_sum/$reviews_count,2); 
-                }
-                
-                $redlink = str_replace(" ","-",$companyname)."/".$act['cid'];
-                $service_type='';
-                if($act['service_type']!=''){
-                    if( $act['service_type']=='individual' ) {$service_type = 'Personal Training'; }
-                    else if( $act['service_type']=='classes' ) { $service_type = 'Group Class';} 
-                    else if( $act['service_type']=='experience' ) { $service_type = 'Experience'; }
-                }
-                $pricearr = [];
-                $price_all = '';
-                $ser_date = '';
-
-                $price_allarray = BusinessPriceDetails::where('serviceid', $act['id'])->get();
-                if(!empty($price_allarray)){
-                    foreach ($price_allarray as $key => $value) {
-                        $pricearr[] = $value->pay_price;
-                    }
-                }
-                if(!empty($pricearr)){
-                    $price_all = min($pricearr);
-                }
-                
-                $bookscheduler='';
-                $time='';
-                $bookscheduler = BusinessActivityScheduler::where('serviceid', $act['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-                if(@$bookscheduler[0]['set_duration']!=''){
-                    $tm=explode(' ',$bookscheduler[0]['set_duration']);
-                    $hr=''; $min=''; $sec='';
-                    if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-                    if($tm[2]!=0){ $min=$tm[2].'min. '; }
-                    if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-                    if($hr!='' || $min!='' || $sec!='')
-                    { $time =  $hr.$min.$sec; } 
-                }
-
-                if( !empty( $actdate) ){
-                   /* $p=$act['schedule_until'];*/
-                    /*$enddt = date('Y-m-d', strtotime("+".$p, strtotime($act['starting'])) );*/ 
-                    $enddt = $act['end_activity_date'];
-                    $flterdt = date('Y-m-d',strtotime($actdate) );
-                    if( $flterdt <= $enddt ){
-                        $actbox .= '<div class="col-md-4 col-sm-12 col-xs-12 ">
-                                        <div class="find-activity">
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <div class="img-modal-left">
-                                                        <img src="'.$profilePic.'" >
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-sm-6 col-xs-12 activity-data">
-                                                    <div class="activity-inner-data">
-                                                        <i class="fas fa-star"></i>
-                                                        <span> '.$reviews_avg.' ('.$reviews_count.')  </span>
-                                                    </div>';
-                                                    if($time != ''){
-                                                        $actbox .= '<div class="activity-hours">
-                                                            <span>'.$time.'</span>
-                                                        </div>';
-                                                    }
-                                                    $actbox .= '<div class="activity-city">
-                                                        <span>'.$companycity.', '.$companycountry.'</span>';
-                                                    if(Auth::check()){
-                                                        $loggedId = Auth::user()->id;
-                                                        $favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$act['id'])->first();
-                                                        $actbox .= '<div class="serv_fav1" ser_id="'.$act["id"].'">
-                                                            <a class="fav-fun-2" id="serfav'.$act["id"].'">';
-                                                        if( !empty($favData) ){ 
-                                                            $actbox .= '<i class="fas fa-heart"></i>';
-                                                        }else{ 
-                                                            $actbox .= '<i class="far fa-heart"></i>';
-                                                        } 
-                                                        $actbox .= '</a></div> '; 
-                                                    }else{
-                                                        $actbox .= '<a class="fav-fun-2" href="'.Config::get('constants.SITE_URL').'/userlogin" ><i class="far fa-heart"></i></a>';
-                                                    }
-                                                    $actbox .= '</div>
-                                                        <div class="activity-information">
-                                                        <span><a';
-                                                        if (Auth::check()) { 
-                                                            $actbox .= 'href="'.Config::get('constants.SITE_URL').'/businessprofile/'.$redlink.'"';
-                                                        }else { 
-                                                            $actbox .= 'href="'.Config::get('constants.SITE_URL').'/userlogin"';
-                                                        }
-                                                        $actbox .= 'target="_blank">'. $act['program_name'] .'</a></span>
-                                                            <p>'. $service_type .' | '. $act['sport_activity'] .'</p>
-                                                            <a class="showall-btn" href="/activity-details/'.$act['id'].'">Book Now</a>
-                                                        </div>';
-                                                        if($price_all != ''){
-                                                            $actbox .= '<div>
-                                                                <span class="activity-time">From $'.$price_all.'/Person</span>
-                                                            </div>';
-                                                        }
-                                                $actbox .= '</div>
-                                                </div>
-                                            </div>
-                                        </div>';
-                    }
-                }else{
-                    $actbox .= '<div class="col-md-12 col-sm-8 col-xs-12 ">
-                                    <div class="find-activity">
-                                        <div class="row">
-                                            <div class="col-md-4 col-sm-4 col-xs-12">
-                                                <div class="img-modal-left">
-                                                    <img src="'.$profilePic.'" >
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8 col-sm-8 col-xs-12 activity-data">
-                                                <div class="activity-inner-data">
-                                                    <i class="fas fa-star"></i>
-                                                    <span> '.$reviews_avg.' ('.$reviews_count.')  </span>
-                                                </div>';
-                                                if($time != ''){
-                                                    $actbox .= '<div class="activity-hours">
-                                                        <span>'.$time.'</span>
-                                                    </div>';
-                                                }
-                                                $actbox .= '<div class="activity-city">
-                                                    <span>'.$companycity.', '.$companycountry.'</span>';
-                                                if(Auth::check()){
-                                                    $loggedId = Auth::user()->id;
-                                                    $favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$act['id'])->first();
-                                                    $actbox .= '<div class="serv_fav1" ser_id="'.$act["id"].'">
-                                                        <a class="fav-fun-2" id="serfav'.$act["id"].'">';
-                                                    if( !empty($favData) ){ 
-                                                        $actbox .= '<i class="fas fa-heart"></i>';
-                                                    }else{ 
-                                                        $actbox .= '<i class="far fa-heart"></i>';
-                                                    } 
-                                                    $actbox .= '</a></div> '; 
-                                                }else{
-                                                    $actbox .= '<a class="fav-fun-2" href="'.Config::get('constants.SITE_URL').'/userlogin" ><i class="far fa-heart"></i></a>';
-                                                }
-                                                $actbox .= '</div>
-                                                    <div class="activity-information">
-                                                    <span><a';
-                                                    if (Auth::check()) { 
-                                                        $actbox .= 'href="'.Config::get('constants.SITE_URL').'/businessprofile/'.$redlink.'"';
-                                                    }else { 
-                                                        $actbox .= 'href="'.Config::get('constants.SITE_URL').'/userlogin"';
-                                                    }
-                                                    $actbox .= 'target="_blank">'. $act['program_name'] .'</a></span>
-                                                        <p>'. $service_type .' | '. $act['sport_activity'] .'</p>
-                                                        <a class="showall-btn" href="/activity-details/'.$act['id'].'">Book Now</a>
-                                                    </div>';
-                                                    if($price_all != ''){
-                                                        $actbox .= '<div>
-                                                            <span class="activity-time">From $'.$price_all.'/Person</span>
-                                                        </div>';
-                                                    }
-                                            $actbox .= '</div>
-                                            </div>
-                                        </div>
-                                    </div>';
-                }
-            }
-        }
-        
-        
-        echo $actbox;
-        exit;
+        $activitiesSearch = $activitiesSearch->map(function ($item) {
+		    return BusinessServices::find($item->id);
+		});
+       	return view('activity.search_activity_file',compact('activitiesSearch'));
     }
 
     public function act_detail_filter_for_cart(Request $request){
@@ -1487,7 +1308,7 @@ class ActivityController extends Controller {
         $priceId = $request->priceId;
         $scheduleId = $request->scheduleId;
         $businessService = BusinessService::where('cid' ,$companyId)->first();
-        $chkFound = strpos(@$service->special_days_off , date('m/d/Y',strtotime($activityDate))) !== false ?  "Found" : "Not" ;
+        $chkFound = strpos(@$businessService->special_days_off , date('m/d/Y',strtotime($activityDate))) !== false ?  "Found" : "Not" ;
 
         $service = BusinessServices::where('id' ,$serviceId)->first();
         if($activityDate != ''){
@@ -1498,20 +1319,28 @@ class ActivityController extends Controller {
 	    $firstSchedule = $schedule != '' ? $schedule->first() : '';
 
 	   	
-	   	$rawcategory = $service->BusinessPriceDetailsAges()->orderBy('id', 'ASC');
+	   	$rawcategory = $service->BusinessPriceDetailsAges()->whereNotNull('class_type')->has('BusinessActivityScheduler')->orderBy('id', 'ASC');
+
+
         $categories = $firstSchedule != '' ? $rawcategory->where('visibility_to_public' , 1)->get() : [];
         
         $firstCategory = $firstSchedule != '' ?  $rawcategory->when($categoryId, function ($query) use ($categoryId) {
 		    $query->where('id', $categoryId);
 		})->where('visibility_to_public' , 1)->first() : '';
+
    		$categoryId = $categoryId ?? @$firstCategory->id;
 
-        $prices = $firstCategory  != '' ? $firstCategory->BusinessPriceDetails()->orderBy('id', 'ASC')->get() : []; 
+   		if(@$firstCategory->class_type){
+   			$prices = $firstCategory  != '' ? $firstCategory->bPriceDetails()->orderBy('id', 'ASC')->get() : []; 
+   		}else{
+        	$prices = $firstCategory  != '' ? $firstCategory->BusinessPriceDetails()->orderBy('id', 'ASC')->get() : []; 
+   		}
 
         $addOnServices = $firstCategory  != '' ?  $firstCategory->AddOnService: [];
       
        	//print_r($addOnServices);exit;
-        if (!empty(@$prices)) {
+       	//print_r($prices);EXIT;
+        if (!$prices->isEmpty()) {
         	$priceId = $priceId ?? $prices[0]['id'];
             foreach ($prices as  $pr) {
             	$select = $pr['id'] == $priceId ? 'selected' : '';
@@ -1531,13 +1360,24 @@ class ActivityController extends Controller {
 		$timeChk= 1;
 		if(date('Y-m-d',strtotime($activityDate)) == date('Y-m-d') ){
             $start = new DateTime(@$bschedulefirst->shift_start);
-            $start_time = $start->format("H:i");
+            //$start_time = $start->format("H:i");
+            $start_time = $start->format("Y-m-d H:i");
+
             $current = new DateTime();
-            $current_time =  $current->format("H:i");
+            $current_time =  $current->format("Y-m-d H:i");
+            if($service->can_book_after_activity_starts == 'No' && $service->beforetime != ''  && $service->beforetimeint != '' ){
+            	$matchTime = $start->modify('-'.$service->beforetimeint.' '.$service->beforetime)->format("Y-m-d H:i");
+				$timeChk =  $current_time <  $matchTime ? 0 : 1;
+			}else if($service->can_book_after_activity_starts == 'Yes' && $service->aftertime != '' && $service->aftertimeint != ''){
+				$matchTime = $start->modify('+'.$service->aftertimeint.' '.$service->aftertime)->format("Y-m-d H:i");
+				$timeChk =  $current_time <  $matchTime ? 1 : 0;
+			}
+
+            /*$current_time =  $current->format("H:i");
             
             if($current_time > $start_time && @$bschedulefirst->shift_start != ''){
                	$timeChk= 0;
-            }
+            }*/
         }
         
         $pricedata = BusinessPriceDetails::where('id', $priceId)->first();
@@ -1563,17 +1403,26 @@ class ActivityController extends Controller {
 
         $date = new DateTime($activityDate);
 		$formattedDate = $date->format('l, F j, Y');
+			/*echo $timeChk;*/
 
-    	$html = View::make('activity.activity_booking_html')->with(['activityDate' => $activityDate, 'serviceId' => $serviceId , 'companyId' => $companyId  ,'chk_found'=>$chkFound ,'categories' => $categories, 'priceOption' =>$priceOption,'bschedule' =>$bschedule , 'timeChk' => $timeChk ,'maxSports' =>  $maxSports , 'adultPrice' => $adult_price , 'childPrice' => $child_price, 'infantPrice' => $infant_price , 'addOnServices' =>$addOnServices ,'priceId' =>$priceId ,'bschedulefirst' => $bschedulefirst ,'date' =>$date,'categoryId' =>$categoryId ,'scheduleId' =>$scheduleId , 'paySession' => $paySession ,'adultDiscountPrice' => $adultDiscountPrice,'childDiscountPrice' => $childDiscountPrice,'infantDiscountPrice' => $infantDiscountPrice])->render();
+		if(@$request->type == 'checkin_portal'){
+			$page = 'checkin.booking_html';
+		}else{
+			$page = 'activity.activity_booking_html';
+		}
 
+    	$html = View::make($page)->with(['activityDate' => $activityDate, 'service' => $service ,'serviceId' => $serviceId , 'companyId' => $companyId  ,'chk_found'=>$chkFound ,'categories' => $categories, 'priceOption' =>$priceOption,'bschedule' =>$bschedule , 'timeChk' => $timeChk ,'maxSports' =>  $maxSports , 'adultPrice' => $adult_price , 'childPrice' => $child_price, 'infantPrice' => $infant_price , 'addOnServices' =>$addOnServices ,'priceId' =>$priceId ,'bschedulefirst' => $bschedulefirst ,'date' =>$date,'categoryId' =>$categoryId ,'scheduleId' =>$scheduleId , 'paySession' => $paySession ,'adultDiscountPrice' => $adultDiscountPrice,'childDiscountPrice' => $childDiscountPrice,'infantDiscountPrice' => $infantDiscountPrice])->render();
+		// dd($html);
  		return response()->json(['html' => $html ,'date'=>$formattedDate]);
     }
 
     public function getParticipateData(Request $request){
-    	$family = getFamilyMember($request->cid);
+    	$cusId = $request->cus_id ?? '';
+    	$family = getFamilyMember($cusId,$request->cid);
     	$priceid = $request->priceid; 
     	$type = $request->type; 
-    	return view('activity.participate_data' ,compact('priceid','type','family'));
+    	$customer = ( $cusId ) ? Customer::find($cusId) : '';
+		return view('activity.participate_data' ,compact('priceid','type','family','customer'));
     }
 
     public function getAddOnData(Request $request){
@@ -1584,6 +1433,11 @@ class ActivityController extends Controller {
     }
 
     public function getBookingSummary(Request $request){
+		// my code starts
+		// dd($request->all());
+		$participantIds = explode(',', $request->participants);
+		$participants = Customer::whereIn('id', $participantIds)->get();
+		// end
     	$childCount  = $request->childCount;
     	$infantCount = $request->infantCount;
     	$adultCount = $request->adultCount;
@@ -1604,8 +1458,13 @@ class ActivityController extends Controller {
         $infantDiscount = $price != '' ? ( $price->getDiscoutPrice('infant',$request->date) * $infantCount)  : 0;  
 
         $total = $childDiscount + $adultDiscount + $infantDiscount + $aosPrice;
-       
-    	return view('activity.bookingModal',compact('price','scheduler','adultCount','childCount' , 'infantCount' ,'category' , 'childDiscount','adultDiscount','infantDiscount' ,'adult_price','child_price','infant_price','total','aosId','aosQty'));
+		
+    	return view('activity.bookingModal',compact('participants','price','scheduler','adultCount','childCount' , 'infantCount' ,'category' , 'childDiscount','adultDiscount','infantDiscount' ,'adult_price','child_price','infant_price','total','aosId','aosQty'));
+    }
+
+    public function getInsData(Request $request){
+    	$scheduler = BusinessActivityScheduler::find($request->scheduleId);
+    	return view('activity.ins_modal',compact('scheduler'));
     }
 
     public function getmodelbody(Request $request){

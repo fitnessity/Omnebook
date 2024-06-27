@@ -6,34 +6,36 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <!-- <link rel="shortcut icon" href="{{ url('/public/images/email/favicon.ico') }}"> -->
 	
 
     <!-- Layout config Js-->
     <script src="{{asset('/public/dashboard-design/js/layout.js')}}"></script>
-    <!-- Bootstrap Css -->
+    <!-- Bootstrap Css 
     <link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('/public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('/public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" /> -->
 	
     <!-- Style Css-->
-    <link href="{{asset('/public/dashboard-design/css/style.css')}}" rel="stylesheet" type="text/css" />
+    <!-- <link href="{{asset('/public/dashboard-design/css/style.css')}}" rel="stylesheet" type="text/css" /> -->
 	
 	<!-- Custom Css-->
-    <link href="{{asset('/public/dashboard-design/css/custom.css')}}" rel="stylesheet" type="text/css" />
+    <!-- <link href="{{asset('/public/dashboard-design/css/custom.css')}}" rel="stylesheet" type="text/css" /> -->
     
-		<script src="https://cdn.ckeditor.com/4.21.0/standard-all/ckeditor.js"></script>
+		<!-- <script src="https://cdn.ckeditor.com/4.21.0/standard-all/ckeditor.js"></script>  -->
+
+   <script src="{{asset('/public/dashboard-design/js/ckeditor/ckeditor.js')}}"></script>
 	<link href="{{asset('/public/dashboard-design/css/responsive.css')}}" rel="stylesheet" type="text/css" />
 	
-	<!-- icon -->
+	<!-- icon
 	<link href="{{asset('/public/dashboard-design/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
 
 	<link href="{{asset('/public/css/slimselect.min.css')}}" rel="stylesheet" type="text/css" />
 	<link href="{{asset('/public/js/select/select.css')}}" rel="stylesheet" type="text/css" />
-	<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script> -->
 	
-	<!-- fullcalendar css >-->
+	<!-- fullcalendar css >
 	<link rel="stylesheet" type="text/css" href="{{ url('public/css/metismenu.min.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url('public/css/fullcalendar/fullcalendar.min.css') }}"> 
+	<link rel="stylesheet" type="text/css" href="{{ url('public/css/fullcalendar/fullcalendar.min.css') }}"> -->
 	
 
 	<!-- dropzone css -->
@@ -948,11 +950,15 @@
 								</form>
 							</div>
 						</div>
-
+						@php
+						$notificationDashboardCount = count(getNotificationDashboard(''));
+						$customerFilesNotifyCount = count(getCustomerFilesNotifiy());
+						$totalNotifications = $notificationDashboardCount + $customerFilesNotifyCount;
+						@endphp
 						<div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
 								<i class='bx bx-bell fs-22'></i>
-								<span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">{{count(getNotificationDashboard(''))}}<span class="visually-hidden">unread messages</span></span>
+								<span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">{{$totalNotifications}}<span class="visually-hidden">unread messages</span></span>
 							</button>
 
 							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
@@ -965,12 +971,12 @@
 											</div>
 										</div>
 									</div>
-
+									
 									<div class="px-2 pt-2">
 										<ul class="nav nav-tabs dropdown-tabs nav-tabs-custom" data-dropdown-tabs="true" id="notificationItemsTab" role="tablist">
 											<li class="nav-item waves-effect waves-light">
 												<a class="nav-link active" data-bs-toggle="tab" href="#all-noti-tab" role="tab" aria-selected="true">
-													All ({{count(getNotificationDashboard(''))}})
+													All ({{$totalNotifications}})
 												</a>
 											</li>
 											<li class="nav-item waves-effect waves-light">
@@ -988,27 +994,55 @@
 								<div class="tab-content position-relative" id="notificationItemsTabContent">
 									<div class="tab-pane fade show active py-2 ps-2 alerts-scroll" id="all-noti-tab" role="tabpanel">
 										<div class="pe-2">
+											@php
+												$notifications = getCustomerFilesNotifiy();
+											@endphp
+										
+												@if($notifications->isNotEmpty())
+														@foreach($notifications as $notification)
+															<div class="text-reset notification-item d-block dropdown-item position-relative">
+															<div class="d-flex">
+															<p class="notification-text-set"> Your file  {{ basename($notification->file) }}  is processed successfully. </p>
+																Your file abc  is processed successfully.
+																<a href="{{ route('business_customer_index', ['business_id' => $notification->business_id]) }}">View Customer</a>
+																
+															</div>
+															</div>
+														@endforeach
+												@endif
 											@forelse(getNotificationDashboard('') as $n)
 												<div class="text-reset notification-item d-block dropdown-item position-relative">
 													<div class="d-flex">
 														@php
 															if($n->table == 'CustomerNotes'){
-																$profilePic = $n->CustomerNotes->customer->profile_pic_url;
-																$firstLetter = $n->CustomerNotes->customer->first_letter;
-																$fullName = $n->CustomerNotes->customer->full_name;
+																if (isset($n->CustomerNotes->customer->profile_pic_url)) {
+																	$profilePic = $n->CustomerNotes->customer->profile_pic_url;
+																}
+																if (isset($n->CustomerNotes->customer->first_letter)) {
+																	$firstLetter = $n->CustomerNotes->customer->first_letter;
+																}
+																if (isset($n->CustomerNotes->customer->full_name)) {
+																	$fullName = $n->CustomerNotes->customer->full_name;
+																}
 																$text = $n->CustomerNotes->title;
 															}else if($n->table == 'CustomersDocuments'){
-																$profilePic = $n->CustomersDocuments->Customer->profile_pic_url;
+																if (isset($n->CustomersDocuments->customer->profile_pic_url)) {
+																	$profilePic = $n->CustomersDocuments->Customer->profile_pic_url;
+																}
 																$firstLetter = $n->CustomersDocuments->Customer->first_letter;
 																$fullName = $n->CustomersDocuments->Customer->full_name;
 																$text = $n->CustomersDocuments->title.' document is signed by '.$fullName;
 															}else if($n->table == 'Customer'){
-																$profilePic = $n->Customer->profile_pic_url;
+																if (isset($n->customer->profile_pic_url)) {
+																	$profilePic = $n->Customer->profile_pic_url;
+																}
 																$firstLetter = $n->Customer->first_letter;
 																$fullName = $n->Customer->full_name;
 																$text = 'Terms is signed by '.$fullName;
 															}else if($n->table == 'CustomerDocumentsRequested'){
-																$profilePic = $n->CustomerDocumentsRequested->Customer->profile_pic_url;
+																if (isset($n->CustomerDocumentsRequested->customer->profile_pic_url)) {
+																	$profilePic = $n->CustomerDocumentsRequested->Customer->profile_pic_url;
+																}
 																$firstLetter = $n->CustomerDocumentsRequested->Customer->first_letter;
 																$fullName = $n->CustomerDocumentsRequested->Customer->full_name;
 																$text = $n->CustomerDocumentsRequested->content .' is uploded by '.$fullName;
@@ -1061,6 +1095,7 @@
 
 									<div class="tab-pane fade py-2 ps-2 alerts-scroll" id="alerts-tab" role="tabpanel" aria-labelledby="alerts-tab">
 										<div>
+											
 											@if(!empty(getNotificationDashboard('Alert')))
 												<input type="hidden" id="alertIds" value="{{ implode(',', getNotificationDashboard('Alert')->pluck('id')->toArray())}}">
 											@endif

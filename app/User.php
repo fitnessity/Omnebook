@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Storage;
 use App\StripePaymentMethod;
 use Auth;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -20,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',  'password','new_password_key','is_deleted','isguestuser','fitnessity_fee','recurring_fee','firstname','lastname','birthdate','cid','bstep','serviceid','servicetype','stripe_connect_id','stripe_customer_id','username','gender','email','phone_number','profile_pic','address','city','state','country','zipcode','activated','show_step','dobstatus','buddy_key','primary_account','default_card','quick_intro', 'favorit_activity' ,'business_info','cover_photo','website','twitter','insta','facebook','unique_user_id',
+        'name',  'password','new_password_key','is_deleted','isguestuser','fitnessity_fee','recurring_fee','firstname','lastname','birthdate','cid','bstep','serviceid','servicetype','stripe_connect_id','stripe_customer_id','username','gender','email','phone_number','profile_pic','address','city','state','country','zipcode','activated','show_step','dobstatus','buddy_key','primary_account','default_card','quick_intro', 'favorit_activity' ,'business_info','cover_photo','website','twitter','insta','facebook','unique_user_id','unique_code'
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -51,6 +52,9 @@ class User extends Authenticatable
             if(!$model->stripe_customer_id){
                 $model->create_stripe_customer_id();
             }
+            if(!$model->unique_code){
+                $model->create_unique_code();
+            }
         });
 
         self::creating(function($model){
@@ -77,6 +81,27 @@ class User extends Authenticatable
 
         $this->unique_user_id = $uniqueId;
     }
+
+    public function create_unique_code(){
+        $uniqueCode = $this->generateUniqueCode();
+        while ($this->isCodeExists($uniqueCode)) {
+            $uniqueCode = $this->generateUniqueCode();
+        }
+        $this->unique_code = $uniqueCode;
+    }
+
+
+    private function generateUniqueCode()
+    {
+        return str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
+    }
+
+    private function isCodeExists($code)
+    {
+        return DB::table('users')->where('unique_code', $code)->exists();
+    }
+
+
 
     public function getAgeAttribute()
     {
@@ -167,11 +192,11 @@ class User extends Authenticatable
 
     function getNetworkCountAttribute() {
         return UserNetwork::where('status','accepted')
-                         ->where(function($q) {
-                                $q->where('user_id', $this->id)
-                                  ->orWhere('friend_id', $this->id);
-                            })
-                         ->count();
+                 ->where(function($q) {
+                        $q->where('user_id', $this->id)
+                          ->orWhere('friend_id', $this->id);
+                    })
+                 ->count();
     }
 
     function create_stripe_customer_id(){

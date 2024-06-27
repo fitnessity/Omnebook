@@ -28,8 +28,33 @@ $total_quantity = 0;
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
         <link rel="shortcut icon" href="{{ url('/public/images/email/favicon.ico') }}">
         <link rel="icon" href="{{ url('/public/images/email/favicon.ico') }}">
-        <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,900'>
-        <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'>
+        <!-- <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,900'>
+        <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'> -->
+
+		<!-- Bootstrap Css -->
+		<link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    	<link href="{{asset('/public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" />
+
+		 <!-- Style Css-->
+		 <link href="{{asset('/public/dashboard-design/css/style.css')}}" rel="stylesheet" type="text/css" />
+	
+		<!-- Custom Css-->
+		<link href="{{asset('/public/dashboard-design/css/custom.css')}}" rel="stylesheet" type="text/css" />
+
+        <link rel='stylesheet' type='text/css' href="{{asset('public/css/font_family.css')}}">
+        <link rel='stylesheet' type='text/css' href="{{asset('public/css/font_family_roboto.css')}}">
+
+		<!-- fullcalendar css >-->
+		<link rel="stylesheet" type="text/css" href="{{ url('public/css/metismenu.min.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url('public/css/fullcalendar/fullcalendar.min.css') }}"> 
+		<link href="{{asset('/public/dashboard-design/css/glightbox.min.css')}}" rel="stylesheet" type="text/css" />
+		<!-- icon -->
+		<link href="{{asset('/public/dashboard-design/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
+
+		<link href="{{asset('/public/css/slimselect.min.css')}}" rel="stylesheet" type="text/css" />
+		<link href="{{asset('/public/js/select/select.css')}}" rel="stylesheet" type="text/css" />
+		<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>
+
       <!--   <link rel='stylesheet' type='text/css' href="<?php //echo Config::get('constants.FRONT_CSS'); ?>font-awesome.css">  -->
         <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
         <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>owl.css">
@@ -45,12 +70,19 @@ $total_quantity = 0;
 		<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
 		<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
 		
+		<!-- font glyphicon -->
+		<link href="{{asset('/public/css/glyphicon.css')}}" rel="stylesheet" type="text/css" />
 
         <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
         <script src="{{env('APP_URL')}}/public/dashboard-design/js/jquery-3.6.4.min.js"></script>
         <script src="{{asset('/public/js/slimselect.min.js')}}"></script>
-		<script src="{{env('APP_URL')}}/public/js/ratings.js"></script>
-		<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('AUTO_COMPLETE_ADDRESS_GOOGLE_KEY') }}" async defer></script>
+		<!-- <script src="{{env('APP_URL')}}/public/js/ratings.js"></script> -->
+	
+  		<!-- <script type="text/javascript"
+        src="https://maps.google.com/maps/api/js?key={{ env('AUTO_COMPLETE_ADDRESS_GOOGLE_KEY') }}" ></script> -->
+  
+
+		<!-- <script src="https://maps.googleapis.com/maps/api/js?loading=async&v=weekly&libraries=marker&key=AIzaSyBHm1RdzTbNsr9qm-AEfdreOWihD-oHN9A" async></script> -->
         <style>/*
             .btn-style-one {
                 position: relative;
@@ -283,7 +315,7 @@ $total_quantity = 0;
         <?php 
         $companyid = (isset($companyid) && $companyid != "") ? $companyid : 0;
         $module = explode(".co/", url()->current());?>
-        <header @if(  request()->is('*register_ep*')) class="d-none" @endif>
+        <header @if(  request()->is('*register_ep*') || request()->is('*check-in-welcome*') || request()->is('*quick-checkin*')|| request()->is('*check-in-portal*')) class="d-none" @endif>
 			<div class="container-fluid printnone">
 				<div class="row">
 					<div class="col-lg-12">
@@ -308,8 +340,8 @@ $total_quantity = 0;
 							<div  class="cartitmclass mobile-none">
 								<?php 
 									$cart = [];
-							        if ($request->session()->has('cart_item')) {
-							            $cart = $request->session()->get('cart_item');
+							        if (request()->session()->has('cart_item')) {
+							            $cart = request()->session()->get('cart_item');
 							        }
 									$newcart['cart_item'] = [];
 									if(isset($cart["cart_item"])){
@@ -357,29 +389,29 @@ $total_quantity = 0;
                                                     </li>
 
                                                     <li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt=""></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt="Fitnessity"></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt=""></span><a href="{{route('personal.manage-account.index')}}" style="color: white;">Manage Accounts</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt="Fitnessity"></span><a href="{{route('personal.manage-account.index')}}" style="color: white;">Manage Accounts</a>
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt=""></span><a href="{{ url('/personal/calendar')}}" style="color: white;">Calendar</a>
+														<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt="Fitnessity"></span><a href="{{ url('/personal/calendar')}}" style="color: white;">Calendar</a>
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt=""></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt="Fitnessity"></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt=""></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt="Fitnessity"></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
 													</li>
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt=""></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
 													</li>
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt=""></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
 													</li>
                                                 
 													<!-- <li class="pc-link">
@@ -700,3 +732,5 @@ $(document).ready(function () {
 		window.location.href = val;
 	}
 </script>
+
+@stack('scripts')

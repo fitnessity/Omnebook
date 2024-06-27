@@ -7,7 +7,7 @@ use App\Libraries\Stripes\StripePay;
 use App\Http\Controllers\Controller;
 use App\Repositories\{UserRepository,BookingRepository,SportsRepository};
 use Illuminate\Support\Facades\Log;
-use Auth;
+use Auth,Storage;
 use File;
 use Config;
 use Redirect;
@@ -2353,7 +2353,61 @@ class LessonController extends Controller {
 
     public function save_business_service_reviews(Request $request)
     {
-        $sid = $request->sid;
+       // echo "<pre>"; print_r($request->all());exit();
+
+       $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'title' => 'required',
+            'message' => 'required'
+        ], [
+            'name.required' => 'Enter name.',
+            'title.required' => 'Enter title.',
+            'message.required' => 'Enter message.',
+        ]);
+
+        
+
+        $review =  BusinessServiceReview::where('user_id',Auth::user()->id)->where('service_id',$request->sid)->first();
+
+        if($review){
+            return response()->json(['success' => true, 'message' => 'You have already submitted your review for this activity.']);
+        }else{
+            $imgpost = '';
+
+            if ($request->hasFile('images')) {
+                foreach ($request->images as $file) {
+                    $imagestore = $file->store('review');
+                    $imgpost .= $imagestore . ',';
+                }
+            }
+
+            $imgpost = rtrim($imgpost, ',');
+            $data= [
+                "name"=>$request->name,
+                "title"=>$request->title,
+                "message"=>$request->message,
+                "images"=>$imgpost,
+                "user_id" => Auth::user()->id,
+                "service_id" => $request->sid,
+                "ip" => $request->ip(),
+                'cleanliness' => $request->cleanliness,
+                'accuracy' => $request->accuracy,
+                'checkin' => $request->checkin,
+                'communication' => $request->communication,
+                'customer_service' => $request->customer_service,
+                'location' => $request->location,
+                'value' => $request->value,
+                'rating' => 0
+            ];
+
+             BusinessServiceReview::create($data);
+            //print_r($data);exit;
+            return response()->json(['success' => true, 'message' => 'Review submitted successfully.']);
+        }
+
+        
+        
+       /* $sid = $request->sid;
         $rating = $request->rating;
         $review = $request->review;
         $title = $request->rtitle;
@@ -2408,7 +2462,7 @@ class LessonController extends Controller {
         {
             echo 'addreview';
             exit;
-        }
+        }*/
     }
 
     public function viewActreview(Request $request) {
@@ -2986,6 +3040,11 @@ class LessonController extends Controller {
     
     public function addToCart(Request $request) {
         //print_r($request->all());exit;
+
+        if(@$request->flushsession == 1){
+            $request->session()->forget('cart_item');
+        }
+
         $cart_item = $request->session()->has('cart_item') ? $request->session()->get('cart_item') : [];
         $tax = $request->has('value_tax') != '' ? $request->value_tax : 0;
         $tip_amt_val = $request->has('tip_amt_val') != '' ? $request->tip_amt_val : 0;
@@ -3152,6 +3211,8 @@ class LessonController extends Controller {
             return redirect()->route('business.orders.create', ['business_id'=>Auth::user()->cid,'cus_id' => $request->pageid]);
         }else if($request->chk == 'calendar_activity_purchase'){
             return config('app.url').'/business/'.Auth::user()->cid.'/paymentModal/'.$request->pageid;;
+        }else if($request->chk == 'checkin'){
+           return 'Membership added successfully.';
         }else{
             if($msg == ''){
                 $msg = config('app.url').'/success-cart/'.$priceid;
@@ -3172,7 +3233,7 @@ class LessonController extends Controller {
         $ser = BusinessService::where('cid', @$sdata->cid)->first();
         $companyData = CompanyInformation::where('id',@$sdata->cid)->first();
         $discovermore = BusinessServices::where('cid',@$sdata->cid)->where('id','!=',$sdata->id)->where('is_active', 1)->limit(4)->get();
-
+        
         return view('activity.success_cart',[
             'priceid'=> $priceid,
             'cart'=> $cart_item,
