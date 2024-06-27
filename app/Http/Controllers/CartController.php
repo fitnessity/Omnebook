@@ -45,6 +45,7 @@ class CartController extends Controller {
             'customer' => $user->stripe_customer_id,
         ]);
 
+		// dd($cart);
     	return view('cart.index',[
 	        'cart' => $cart,
 	        'cardInfo' => $cardInfo,

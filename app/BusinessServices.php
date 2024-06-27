@@ -5,6 +5,7 @@ namespace App;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Storage;
 
 class BusinessServices extends Model
 {
@@ -33,6 +34,8 @@ class BusinessServices extends Model
         'program_name',
         'program_desc',
         'profile_pic',
+        'cover_photo',
+        'video',
         'instant_booking',
         'request_booking',
         'frm_min_participate',
@@ -113,9 +116,16 @@ class BusinessServices extends Model
         'cancelbefore',
         'cancelbeforeint',
         'know_before_you_go',
+        'can_book_after_activity_starts',
+        'aftertime',
+        'aftertimeint',
+        'cancellation_policy',
     ];
 
-     public static function boot(){
+
+    protected $appends = ['days_title_arry','days_desc_arry','days_img_arry' ,'id_proof' ,'id_vaccine' ,'id_covid' ,'included_items_ary','not_included_items_ary','all_over_review'];
+
+    public static function boot(){
         parent::boot();
 
         static::deleting(function($service) {
@@ -148,9 +158,69 @@ class BusinessServices extends Model
             });
         });
     }
+
+
+    public function getAllOverReviewAttribute(){
+        $reCnt = 0;
+        $reCnt += getBusinessServiecReviewSum($this->id,'cleanliness');
+        $reCnt += getBusinessServiecReviewSum($this->id,'accuracy');
+        $reCnt += getBusinessServiecReviewSum($this->id,'checkin');
+        $reCnt += getBusinessServiecReviewSum($this->id,'communication');
+        $reCnt += getBusinessServiecReviewSum($this->id,'customer_service');
+        $reCnt += getBusinessServiecReviewSum($this->id,'location');
+        $reCnt += getBusinessServiecReviewSum($this->id,'value');
+        
+        if($reCnt > 0){
+             return round($reCnt / ($this->reviews()->count() * 7),2);
+        }
+        return 0;
+    }
+
+    public function getDaysTitleArryAttribute(){
+        if ($this->days_plan_title === null || $this->days_plan_title === '' || $this->days_plan_title === '[null]') {
+            return [];
+        }
+    
+        return json_decode($this->days_plan_title, true);
+    } 
+
+    public function getDaysDescArryAttribute(){
+        return $this->days_plan_desc != ''  || $this->days_plan_desc != '[null]'  ? json_decode($this->days_plan_desc, true) : [];
+    }
+
+    public function getDaysImgArryAttribute(){
+        return $this->days_plan_img != ''  ? explode(",",$this->days_plan_img) : [];
+    }
+
+    public function getIncludedItemsAryAttribute(){
+        return $this->included_items != ''  ? explode(",",$this->included_items) : [];
+    } 
+
+    public function getNotIncludedItemsAryAttribute(){
+        return $this->notincluded_items != ''  ? explode(",",$this->notincluded_items) : [];
+    } 
+
+    public function getIdProofAttribute(){
+        $reqSafety = explode(',',$this->req_safety);
+        return empty($reqSafety) ? 0 : (in_array("id_proof", $reqSafety) ? 1 : 0);
+    }
+
+    public function getIdVaccineAttribute(){
+        $reqSafety = explode(',',$this->req_safety);
+        return empty($reqSafety) ? 0 : (in_array("id_vaccine", $reqSafety) ? 1 : 0);
+    }
+
+    public function getIdCovidAttribute(){
+        $reqSafety = explode(',',$this->req_safety);
+        return empty($reqSafety) ? 0 : (in_array("id_covid", $reqSafety) ? 1 : 0);
+    }
     
     public function BusinessStaff(){
         return $this->belongsTo(BusinessStaff::class, 'instructor_id');
+    }
+
+    public function businessServicesFaq(){
+        return $this->hasMany(BusinessServicesFaq::class, 'service_id');
     }
 
     public function businesscompanydetail() {
@@ -165,7 +235,7 @@ class BusinessServices extends Model
     {
         return $this->belongsTo(User::class, 'userid');
     }
-
+    
     public function company_information(){
         return $this->belongsTo(CompanyInformation::class, 'cid');
     }
@@ -209,7 +279,7 @@ class BusinessServices extends Model
 
     public function first_profile_pic(){
         $pictures = explode(',',$this->profile_pic);
-        return $pictures[0];
+        return Storage::disk('s3')->exists( $pictures[0]) ? Storage::URL( $pictures[0]) : '/public/images/service-nofound.jpg';
     }
 
     public function min_price(){

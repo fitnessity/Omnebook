@@ -547,7 +547,16 @@
 	.cart-success h5{margin-top: 20px;}
 	.cart-itme-img img{margin-bottom: 20px;}
     .main-slider{margin-top: 150px;}
-
+    .st-gallery.style-masonry .item-gallery:not(:nth-child(1)) {display: none;	  }
+	.st-gallery.style-masonry .item-gallery {padding: 0px;	padding-top: 0px;width: 100%; height: auto !important;  }
+	.st-gallery.style-masonry .item-gallery:nth-child(1) {padding-left: 0px;	padding-bottom: 0px;  }
+    .p-activitydetails { padding-top: 170px; }
+    .mb--mv--0{margin-bottom: 0px;}
+    .mb--mv--15{margin-bottom: 15px;}
+    .itinerary-image img{object-position: top; margin-bottom: 15px;}
+    .itinerary .panel-title a{line-height: 30px;}
+    .r-host-re-detail{text-align: center;}
+    .activity-top-border{border-top: 1px solid #ccc;}
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1365px) {
@@ -1386,6 +1395,9 @@
 	.custom-multiple-book .owl-prev{left: 13px !important;}
 	.custom-multiple-book .owl-next{right: 0px !important;}
 	.business-info{padding: 25px 20px;}
+    .itinerary-image img{object-position: top; margin-bottom: 15px;}
+    .mb--mv--0{margin-bottom: 0px;}
+    .mb--mv--15{margin-bottom: 15px;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -1736,8 +1748,8 @@
 		min-height: 157px !important;
 	} */
 	.activity-information{
-		margin-bottom: 15px !important;
-		margin-top: 15px !important;
+		/* margin-bottom: 15px !important;
+		margin-top: 15px !important; */
 	}
 	.hide-bullets > li > img{
 		width: 127px;
@@ -2531,7 +2543,7 @@
 	.padding-1{padding: 10px !important; }
 	.booking-info-history .cards-content p{padding: 0 23px !important;}
 	.booking-info-tab .nav-item {padding: 0px 5px !important;}
-	#ajax_html_modal .modal-dialog{width: 95% !important; }
+	#ajax_html_modal .modal-dialog{width: 96% !important; }
 	.your-booking-page.side-part { min-height: 369px;}
 	#calendar .fc-toolbar.fc-header-toolbar .fc-right{margin-top: 15px;}
 	#calendar .fc-toolbar.fc-header-toolbar .fc-center {margin-top: 22px;}
@@ -2570,7 +2582,7 @@
 	.calendar-separator-line{border-left: none !important;}
 	.custom-multiple-book .owl-prev{left: 0px;}
 	.custom-multiple-book .owl-next{right: -5px;}
-	.book0total-price {  text-align: left;}
+	.book0total-price {  text-align: right;}
 	#calendar .fc-toolbar.fc-header-toolbar .fc-right .fc-button-group{margin-top: -65px; height: 35px;}
 	#calendar .fc-toolbar.fc-header-toolbar .fc-right{align-items: end !important;}
 	.fc .fc-toolbar h2{text-align: center; width: 100%; }

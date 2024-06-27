@@ -14,6 +14,8 @@ use App\CompanyInformation;
 use App\Http\Controllers\Customers_Auth\HomeController;
 use App\Http\Controllers\Products\ProductController;
 
+use Illuminate\Support\Facades\DB;
+
 
 //to clear catch
 use Illuminate\Support\Facades\Artisan;
@@ -36,7 +38,6 @@ Route::get('/clear-cache', function () {
     return 'Cache cleared successfully.';
     
     //print_r(App\Customer::where('user_id',NULL)->get());
-
     /*foreach(App\UserBookingDetail::get() as $details){
 
         $type = '';
@@ -106,6 +107,9 @@ Route::any('/getCardData','MembershipPlanController@getCardData')->name('choose-
 
 
 Route::get('/add-client','CustomerController@client')->name('client');
+Route::post('/get-checkin-code', 'CustomerController@getCheckinCode')->name('get_checkin_code');
+
+
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
 
     // Scheduler
@@ -135,6 +139,14 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     
     Route::resource('orders', 'OrderController')->only(['create', 'store']);
     Route::resource('services', 'ServiceController')->only(['index','create','edit', 'update', 'destroy', 'store']);
+    Route::get('services/get-schedule', 'ServiceController@getSchedule')->name('service.get-schedule');
+    Route::get('services/get-schedule-data', 'ServiceController@getScheduleData')->name('service.get-schedule-data');
+
+    Route::post('class/store', 'ServiceController@storeClass')->name('class.store');
+    Route::get('class/edit/{id}', 'ServiceController@editClass')->name('class.edit');
+    Route::post('class/update/', 'ServiceController@updateClass')->name('class.update');
+    Route::get('class/delete/{id}', 'ServiceController@deleteClass')->name('class.delete');
+    Route::post('class/store-priceid', 'ServiceController@storeClassPriceOption')->name('class.store_priceid');
 
     Route::get('services/select', 'ServiceController@select')->name('service.select');
     Route::post('services/destroyimage', 'ServiceController@destroyimage')->name('service.destroyimage');
@@ -231,6 +243,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('announcement', 'AnnouncementController')->only(['index','create','show','edit','store','update', 'destroy']);
 
     Route::post('/announcement-upload', 'AnnouncementController@upload')->name('announcement-upload');
+    Route::get('/get-announcement-stats', 'AnnouncementController@getAnnouncementStats')->name('get-announcement-stats');
 
     Route::resource('announcement-category', 'AnnouncementCategoryController')->only(['index','create','show','store','update']);
     Route::get('announcement-category/delete/{id}', 'AnnouncementCategoryController@destroy')->name('announcement-category.destroy');
@@ -243,8 +256,45 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
 
     Route::get('/membership-revenue/','MembershipRevenueReportController@index')->name('membership_revenue'); 
     Route::get('/membership-revenue/export','MembershipRevenueReportController@export')->name('membership_revenue.export'); 
+
+    Route::get('/engage-client','EngageClientsController@index')->name('engage_client.index'); 
+    Route::get('/customer-contact-list','EngageClientsController@contactList')->name('engage_client.contact-list'); 
+    Route::post('/store-list','EngageClientsController@storeList')->name('store_list'); 
+    Route::post('/update_list','EngageClientsController@updateList')->name('update_list'); 
+    Route::get('/delete_list','EngageClientsController@deleteList')->name('delete_list'); 
+    Route::get('/get-add-clients-model','EngageClientsController@getAddClientsModel')->name('get_add_clients_model'); 
+    Route::get('/load-client-datatable','EngageClientsController@loadClientDatatable')->name('load_client_datatable'); 
+    Route::post('/store-client-custom-list','EngageClientsController@storeClientCustomList')->name('store_client_custom_list'); 
 });
 
+// Route::get('/users/{email}', 'SelfCheckInController@test');
+
+Route::post('/sendgrid/webhook', 'WebhookController@handleWebhook');
+Route::get('/check-in-welcome', 'SelfCheckInController@index')->name('check-in-welcome');
+Route::get('/quick-checkin', 'SelfCheckInController@quickCheckin')->name('quick-checkin');
+Route::post('/quick-login-for-check-in', 'SelfCheckInController@loginForCheckin')->name('quick-login-for-check-in');
+Route::get('/check-in-portal', 'SelfCheckInController@portal')->name('check-in-portal');
+Route::post('/quick-check-in', 'SelfCheckInController@checkin')->name('quick-check-in');
+Route::get('/checkin/card_editing_form', 'SelfCheckInController@cardEditingForm')->name('checkin.card_editing_form');
+// addded my me 
+Route::get('/checkin/card_editing_form_all', 'SelfCheckInController@cardEditingFormAll')->name('checkin.card_editing_form_all');
+Route::post('/checkin/autopay_payment_multiple', 'SelfCheckInController@autopayPaymentMultiple')->name('checkin.autopay_payment_multiple');
+// end
+Route::post('/checkin/autopay_payment', 'SelfCheckInController@autopayPayment')->name('checkin.autopay_payment');
+
+
+Route::get('/checkin/annoucement-modal/{id}', 'SelfCheckInController@getAnnoucementModal');
+Route::get('/checkin/autopay-list', 'SelfCheckInController@autopayList')->name('checkin.autopay_list');
+Route::get('/checkin/card-list', 'SelfCheckInController@cardList')->name('checkin.card_list');
+Route::get('/checkin/check-out', 'SelfCheckInController@checkOut')->name('checkin.check_out');
+Route::get('/checkin/activity-booking-html', 'SelfCheckInController@bookingHtml')->name('checkin.activity_booking_html');
+Route::post('/get-activity-dates', 'SelfCheckInController@getActivityDates')->name('checkin.getActivityDates');
+Route::post('/get-membership-payment', 'SelfCheckInController@getMembershipPayment')->name('checkin.getMembershipPayment');
+Route::post('/memberhsip-pay', 'SelfCheckInController@memberhsipPay')->name('checkin.memberhsipPay');
+Route::post('/chk-chckin-code', 'SelfCheckInController@chkCheckinCode')->name('checkin.chk-chckin-code');
+Route::post('/chk-chckin-code_exit', 'SelfCheckInController@chkCheckinCodeExit')->name('checkin.chk-chckin-code_exit');
+
+// chkCheckinCodeExit
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
     Route::resource('orders', 'OrderController')->only(['index','show']);
     Route::post('/orders/search-activity', 'OrderController@searchActivity')->name('orders.searchActivity');
@@ -256,6 +306,10 @@ Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware
     Route::any('all_activity_schedule', 'SchedulerController@allActivitySchedule')->name('allActivitySchedule');
     Route::resource('company', 'CompanyController')->only(['index','create','edit', 'update', 'destroy', 'store']);
     Route::resource('profile', 'ProfileController')->only(['index','create','edit', 'update', 'destroy', 'store']);
+
+    Route::get('check-in-portal', 'CheckInController@index')->name('check-in-portal');
+    Route::get('check-in', 'CheckInController@checkIn')->name('check-in');
+    Route::post('self-check-in', 'CheckInController@selfcheckIn')->name('self-check-in');
 
     Route::any('user_family_profile/update', 'ProfileController@userFamilyProfileUpdate')->name('user_family_profile.update');
     Route::any('customer_profile/update', 'ProfileController@customerProfileUpdate')->name('customer_profile.update');
@@ -290,6 +344,9 @@ Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware
     Route::get('/payment-history', 'ProfileController@paymentHistory')->name('payment-history');
 
     Route::resource('manage-account', 'ManageAccountController')->only(['index','create','edit', 'update', 'destroy', 'store']);
+    Route::post('/manage-accountfu', 'ManageAccountController@store_fu')->name('manage-accountfu');
+
+
     Route::resource('calendar', 'CalendarController')->only(['index','create','edit', 'update', 'destroy', 'store']);
     Route::get('/announcement-news', 'AnnouncementController@index')->name('announcement-news');
     Route::post('/announcement-date-filter', 'AnnouncementController@dateFilter')->name('announcement_date_filter');
@@ -334,6 +391,7 @@ Route::post('stripe_payment_methods/update', 'StripePaymentMethodController@upda
     Route::any('/activities/{filtervalue?}','ActivityController@index')->name('activities_index');
 
     Route::any('/activity-details/{serviceid}', 'ActivityController@show')->name('activities_show');
+    Route::post('/get-review/', 'ActivityController@getReview')->name('get_review');
 
 
     Route::post('pricecategory', 'ActivityController@pricecategory')->name('pricecategory');
@@ -377,12 +435,20 @@ Route::group(['middleware' => ['auth']], function(){
 
     Route::prefix('/business/{business_id}')->middleware('auth', 'business_scope')->group(function () {
 
+        Route::get('/upload/{id}', 'Business\CustomerController@uploadFile')->name('business_customer_upload'); //added 4-6
+        Route::get('/upload_member/{id}', 'CustomerController@uploadFileMember')->name('business_customer_upload_member'); //added 13-6
+        Route::get('/upload_attendance/{id}', 'CustomerController@uploadFileAttendance')->name('business_customer_upload_attendance'); //added by 22-6
+        // Route::get('/jobs', function () {
+        //     $jobs = DB::table('jobs')->get();
+        //     return response()->json(['jobs' => $jobs]);
+        // });
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
         Route::delete('/customers/delete/{id}','CustomerController@delete')->name('business_customer_delete');
         Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
         Route::get('/customers/{id}/visit_modal','CustomerController@visit_modal')->name('visit_modal');
         Route::get('/customers/{id}/visit_autopaymodel','CustomerController@visit_autopaymodel')->name('visit_autopaymodel');
         Route::get('/create-customer/','CustomerController@create')->name('business_customer_create');
+        Route::post('/change-checkin-code/','CustomerController@changeCode')->name('change-checkin-code');
 
         Route::post('/customers/upload_docs','CustomerController@uploadDocument')->name('upload_docs');
         Route::get('/requestSign/{id}', 'CustomerController@requestSign')->name('requestSign');
@@ -405,6 +471,9 @@ Route::group(['middleware' => ['auth']], function(){
 
         // Booking Checkin Details
         Route::get('/scheduler/{business_activity_scheduler_id}/checkin_details', 'SchedulerController@checkin_details')->name('booking_checkin_details_index');
+
+        Route::get('/checkin-portal-settings', 'Business\CheckInController@index')->name('checkin-portal-settings');
+        Route::post('/checkin-portal-settings', 'Business\CheckInController@store')->name('checkin-portal-settings.store');
     });
 });
 
@@ -1438,6 +1507,12 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/engage_clients','DesignController@engage_clients')->name('engage_clients');
     Route::get('/engage_clients_sidebar','DesignController@engage_clients_sidebar')->name('engage_clients_sidebar');
     Route::get('/customer_contact_list','DesignController@customer_contact_list')->name('customer_contact_list');
+    Route::get('/gift_card','DesignController@gift_card')->name('gift_card');
+    Route::get('/manage_gift_card','DesignController@manage_gift_card')->name('manage_gift_card');
+    Route::get('/automation_campaigns','DesignController@automation_campaigns')->name('automation_campaigns');
+    Route::get('/alerts_details','DesignController@alerts_details')->name('alerts_details');
+    Route::get('/email_blast','DesignController@email_blast')->name('email_blast');
+    Route::get('/email_blast_step1','DesignController@email_blast_step1')->name('email_blast_step1');
 });
 
 

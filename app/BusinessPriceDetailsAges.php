@@ -35,7 +35,23 @@ class BusinessPriceDetailsAges extends Model
         'service_price',
         'service_description',
         'visibility_to_public',
+        'class_type',
+        'desc',
     ];
+
+    public static function boot(){
+        parent::boot();
+        static::deleting(function($class) {
+            $class->businessClassPriceDetails->each(function($price) {
+                $price->delete();
+            });
+
+            $class->BusinessActivityScheduler->each(function($schedule) {
+                $schedule->delete();
+            });
+        });
+    }
+    
     
     public function BusinessActivityScheduler()
     {
@@ -55,7 +71,25 @@ class BusinessPriceDetailsAges extends Model
     public function BusinessPriceDetails(){
         return $this->hasMany(BusinessPriceDetails::class, 'category_id');
     }
+
     public function AddOnService(){
         return $this->hasMany(AddOnService::class, 'category_id');
+    }
+
+    public function businessClassPriceDetails(){
+        return $this->hasMany(BusinessClassPriceDetails::class, 'class_id');
+    }
+
+
+    public function bPriceDetails()
+    {
+        return $this->hasManyThrough(
+            BusinessPriceDetails::class,
+            BusinessClassPriceDetails::class,
+            'class_id', // Foreign key on BusinessClassPriceDetails table...
+            'id', // Foreign key on BusinessPriceDetails table...
+            'id', // Local key on BusinessPriceDetailsAges table...
+            'price_id' // Local key on BusinessClassPriceDetails table...
+        );
     }
 }

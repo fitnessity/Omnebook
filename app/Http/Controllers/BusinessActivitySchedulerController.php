@@ -9,6 +9,7 @@ use App\Repositories\BookingRepository;
 use DateTime;
 use Auth,View;
 use Session;
+use DB;
 
 class BusinessActivitySchedulerController extends Controller
 {
@@ -87,9 +88,9 @@ class BusinessActivitySchedulerController extends Controller
             $days[] = $d->modify('+'.($i+$shift).' day');
         }
 
-
+       // \DB::enableQueryLog(); // Enable query log
         $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('shift_start', 'asc')->get();
-
+       // dd(\DB::getQueryLog());
 
         $services = [];
         foreach($bookschedulers as $bs){
@@ -249,6 +250,7 @@ class BusinessActivitySchedulerController extends Controller
     }
 
     public function multibooking(Request $request, $business_id){
+        dd('test');
         $company = CompanyInformation::findOrFail($business_id);
         $filter_date = new DateTime();
         $shift = 1;

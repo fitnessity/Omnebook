@@ -242,7 +242,15 @@ class SchedulerController extends Controller
                }
           }else if($request->chk == 'category'){
                $catedata = BusinessPriceDetailsAges::where('id',$request->sid)->first();
-               $pricelist = BusinessPriceDetails::where('category_id',$request->sid)->get();
+
+               if($catedata->class_type){
+                    $pricelist = $catedata->bPriceDetails()->get(); 
+               }else{
+                    $pricelist = BusinessPriceDetails::where('category_id',$request->sid)->get();
+               }
+
+
+               
                $output = '<option value="">Select Price Title</option>';
                foreach($pricelist as $pl){
                     $output .= '<option value="'.$pl->id.'">'.$pl->price_title.'</option>';

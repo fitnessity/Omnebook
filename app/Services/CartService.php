@@ -41,7 +41,7 @@ class CartService
         $cart['cart_item'] = [];
         foreach($this->_cart['cart_item'] as $key=>$c)
         {   
-            if($c['chk'] == '') {
+            if($c['chk'] == '' || $c['chk'] == 'checkin') {
                 $cart['cart_item'][] = $c;
             }
         }
