@@ -43,7 +43,7 @@
 						<li>
 							<a class="dropdown-item" onclick="changeCompany({{$companyId}})">
                                 @if($businessImage)
-                                    <img src="{{$businessImage}}" alt="" class="avatar-xs rounded-circle me-2 shadow">
+                                    <img src="{{$businessImage}}" alt="Fitnessity" class="avatar-xs rounded-circle me-2 shadow">
                                 @else
                                     <div class="avatar-xs me-2 one-latter">
                                         <span class="avatar-title rounded-circle bg-danger-red text-white">{{@$company->cname_first_letter}}</span>
@@ -63,7 +63,7 @@
 							<a class="dropdown-item" onclick="changeCompany({{$list->id}})">
 								<div class="avatar-xs me-2 one-latter">
                                     @if( Storage::disk('s3')->exists($list->logo))
-                                        <img src="{{Storage::URL($list->logo)}}" alt="" class="avatar-xs rounded-circle me-2 shadow">
+                                        <img src="{{Storage::URL($list->logo)}}" alt="Fitnessity" class="avatar-xs rounded-circle me-2 shadow">
                                     @else
                                         <span class="avatar-title rounded-circle bg-danger-red text-white">{{$list->cname_first_letter}}</span>
                                     @endif
@@ -108,29 +108,29 @@
                 </li> 
 				
                 <li class="nav-item">
-                    <a class="nav-link menu-link" @if($companyId) href="#sidebarAuth" @endif data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
+                    <a class="nav-link menu-link" @if($companyId) href="#sidebarAuth"  @endif data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
                         <img src="{{asset('/public/img/manage-company.png')}}" alt="Fitnessity"> <span data-key="t-authentication">Manage </span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarAuth">
+                    <div class="collapse menu-dropdown @if(Route::current()->getName() == 'personal.company.index' || Route::current()->getName() == 'personal.company.index' || Route::current()->getName()=='business.schedulers.index' || Route::current()->getName() == 'business.services.index')) collapse show @endif" id="sidebarAuth">
                         <ul class="nav nav-sm flex-column">
                             @if(!Session('StaffLogin'))
                                 <li class="nav-item">
-                                    <a href="{{route('personal.company.index')}}" class="nav-link @if(Route::current()->getName() == 'personal.company.index') tab-active @endif" data-key="t-signup"> Manage Company
+                                    <a href="{{route('personal.company.index')}}" class="nav-link @if(Route::current()->getName() == 'personal.company.index') active @endif" data-key="t-signup"> Manage Company
                                     </a>
                                 </li> 
                             @endif
                             <li class="nav-item">
-                                <a href="{{route('business.schedulers.index')}}" class="nav-link @if(Route::current()->getName()=='business.schedulers.index') tab-active @endif" data-key="t-signin"> Manage Scheduler 
+                                <a href="{{route('business.schedulers.index')}}" class="nav-link @if(Route::current()->getName()=='business.schedulers.index') active @endif" data-key="t-signin"> Manage Scheduler 
                                 </a>
                             </li>
                             
                             <li class="nav-item">
-                                <a href="{{route('business.services.index')}}" class="nav-link @if(Route::current()->getName() == 'business.services.index') tab-active @endif" data-key="t-signup"> Manage Service
+                                <a href="{{route('business.services.index')}}" class="nav-link @if(Route::current()->getName() == 'business.services.index') active @endif" data-key="t-signup"> Manage Service
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a @if($companyId) href="{{route('business.products.index')}}" @endif class="nav-link  @if(Route::current()->getName() == 'business.products.index') tab-active @endif" data-key="t-password-reset">Manage Product
+                                <a @if($companyId) href="{{route('business.products.index')}}" @endif class="nav-link  @if(Route::current()->getName() == 'business.products.index') active @endif" data-key="t-password-reset">Manage Product
 									<span class="badge badge-pill bg-success" data-key="t-new">New</span>
                                 </a>
                             </li>
@@ -169,7 +169,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#" >
+                    <a class="nav-link menu-link @if(Route::current()->getName() == 'business.engage_client.index' ) tab-active @endif" href="{{route('business.engage_client.index')}}" >
                         <i class=" ri-user-follow-fill"></i> <span data-key="t-landing">Engage Clients </span>
                     </a>
                 </li>
@@ -193,21 +193,23 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                <!-- <li class="nav-item">
+                    <a class="nav-link menu-link" href="#checkinbar" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="checkinbar">
                         <i class="mdi mdi-account-circle-outline"></i> <span data-key="t-dashboards">Self Check-In</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarDashboards">
+                    <div class="collapse menu-dropdown @if(Route::current()->getName() == 'checkin-portal-settings') collapse show @endif" id="checkinbar">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-analytics"> Check-In Portal </a>
-                            </li>
+                                <a href="" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal"> Check-In Portal </a> -->
+                                <!-- <a href="{{route('check-in-welcome')}}" class="nav-link" data-key="t-analytics"> Check-In Portal </a> -->
+                            <!-- </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-crm">Check-In Settings </a>
+                                <a href="{{route('checkin-portal-settings')}}" class="nav-link @if(Route::current()->getName()=='checkin-portal-settings') active @endif" >Check-In Settings </a>
                             </li>
                         </ul>
                     </div>
-                </li> <!-- end Dashboard Menu -->
+                </li>  -->
+                <!-- end Dashboard Menu -->
 
 				<li class="nav-item">
 					<a class="nav-link menu-link @if(Route::current()->getName()=='business.reports.index') tab-active @endif" @if($companyId) href="{{ route('business.reports.index') }}"   @endif aria-controls="sidebarForms">
@@ -228,7 +230,31 @@
 
     <div class="sidebar-background"></div>
 </div>
-
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Activate Check-In Mode</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="active-check-in-mode">
+                            <p>Activating the check-in mode hides all the manager tools aside from member sign-up. You can turn off this mode at any time by entering your 4 digit passcode.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                        <a href="{{route('check-in-welcome')}}" data-key="t-analytics" class="btn btn-red ">Activate Check-In Mode</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     function changeCompany(id) {
         location.href = '/dashboard/dates=/'+id;
