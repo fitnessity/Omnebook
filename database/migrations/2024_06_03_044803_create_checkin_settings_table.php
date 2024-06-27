@@ -25,7 +25,7 @@ class CreateCheckinSettingsTable extends Migration
             $table->string('welcome_cover_photo',255)->nullable();
             $table->string('passcode_cover_photo',255)->nullable();
             $table->string('alerts_photo',255)->nullable();
-            $table->integer('membership_option',255)->default(1);
+            $table->integer('membership_option')->default(1);
             $table->timestamps();
         });
     }
