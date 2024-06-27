@@ -27,10 +27,36 @@ class CompanyInformation extends Model {
      */
    
     protected $guarded = [];  
-    protected $appends = ['full_name', 'first_letter','public_company_name','cname_first_letter'];
+    protected $appends = ['full_name', 'first_letter','public_company_name','cname_first_letter','business_review_avg' ,'years_of_exp','owner_country'];
+
+    public function getBusinessReviewAvgAttribute(){
+
+        if($this->businessReview()->count() > 0)
+        { 
+            return round($this->businessReview()->sum('rating')/$this->businessReview()->count(),2); 
+        }
+
+        return 0;
+    }
+
+    public function getOwnerCountryAttribute(){
+        if($this->addressCountry){
+            return $this->addressCountry->country_name;
+        }
+        return '';
+    }
 
     public function getFullNameAttribute(){
         return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getYearsOfExpAttribute(){
+        $startDate = new \DateTime($this->created_at);
+        $endDate = new \DateTime();
+        $totalDays = $startDate->diff($endDate)->days;
+
+        $totalYears = $totalDays / 365.25;
+        return number_format($totalYears, 1);
     }
 
     public function getFirstLetterAttribute(){
@@ -70,6 +96,10 @@ class CompanyInformation extends Model {
 
     public function Recurring() {
         return $this->hasMany(Recurring::class, 'business_id');
+    }
+
+    public function businessReview() {
+        return $this->hasMany(BusinessReview::class, 'page_id');
     }
 
     /*public function service() {
@@ -120,6 +150,11 @@ class CompanyInformation extends Model {
         return $this->hasOne(BusinessTerms::class, 'cid');
     }
 
+
+    public function addressCountry() {
+        return $this->belongsTo(AddressCountry::class, 'born');
+    }
+
     public function business_terms() {
         return $this->hasMany(BusinessTerms::class, 'cid');
     }
@@ -135,12 +170,13 @@ class CompanyInformation extends Model {
         if($this->state != ''){
             $comp_address .= $this->state.', ';
         }
+         if($this->zip_code != ''){
+            $comp_address .= $this->zip_code.', ';
+        }
         if($this->country != ''){
-            $comp_address .= $this->country.', ';
+            $comp_address .= $this->country;
         }
-        if($this->zip_code != ''){
-            $comp_address .= $this->zip_code;
-        }
+       
 
         return $comp_address;
     }
