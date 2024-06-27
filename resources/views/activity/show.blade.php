@@ -1548,7 +1548,10 @@ input:disabled{
   	</div>
 </nav>
 @php 
- 	$company_data=Auth::user()->current_company 
+   $company_data = null;
+    if (Auth::check()) {
+        $company_data = Auth::user()->current_company;
+    }
 @endphp
 @include('layouts.business.footer')
 
