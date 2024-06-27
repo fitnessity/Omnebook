@@ -35,7 +35,7 @@
             <button class="accordion-custom-btn accordion-button @if($displayRecPrice != @$price->id) collapsed @endif " type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingprice{{$i}}{{$j}}" aria-expanded="true" aria-controls="accor_nestingprice{{$i}}{{$j}}">
                 <div class="container-fluid nopadding">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-8">
+                        <div class="col-lg-6 col-md-6 col-8" id="priceTitle{{$i}}{{$j}}">
                             Price Option {{@$price->price_title != '' ? " : ".@$price->price_title :'' }}
                         </div>
                         <div class="col-lg-6 col-md-6 col-4">
@@ -115,7 +115,7 @@
                                 <input type="checkbox" id="all{{$i}}{{$j}}" name="all{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="all"  {{(@$price->adult_cus_weekly_price != '' && @$price->child_cus_weekly_price != '' && @$price->infant_cus_weekly_price != '') ? 'checked': '' }}>
                                 <label class="recurring-pmt">All</label>
                                 
-                                <input type="checkbox" id="adult{{$i}}{{$j}}" name="adult{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="adult" {{(@$price->adult_cus_weekly_price != '' || @$price == '') ? 'checked': ''}}>
+                                <input type="checkbox" id="adult{{$i}}{{$j}}" name="adult{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="adult" {{(@$price->adult_cus_weekly_price != '') ? 'checked': ''}}>
                                 <label class="recurring-pmt">Adults (12 and up)</label>
                                                 
                                 <input type="checkbox" id="child{{$i}}{{$j}}" name="child{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="child" {{@$price->child_cus_weekly_price != '' ? 'checked': ''}}>
@@ -128,7 +128,7 @@
                     </div>
                 </div>
                 
-                <div class="accordion nesting4-accordion custom-accordionwithicon accordion-border-box mt-3 displaysectiondiv{{$i}}{{$j}} {{(@$price->adult_cus_weekly_price != '' || @$price == '') ? '': 'd-none'}}" id="accor_nestingadult{{$i}}{{$j}}">
+                <div class="accordion nesting4-accordion custom-accordionwithicon accordion-border-box mt-3 displaysectiondiv{{$i}}{{$j}} {{(@$price->adult_cus_weekly_price != '') ? '': 'd-none'}}" id="accor_nestingadult{{$i}}{{$j}}">
                     <div class="accordion-item shadow">
                         <h2 class="accordion-header" id="accordionnesting4Example2">
                             <button class="accordion-custom-btn accordion-button collapsed font-red" type="button" data-bs-toggle="collapse" data-bs-target="#accor_adult{{$i}}{{$j}}" aria-expanded="false" aria-controls="accor_adult{{$i}}{{$j}}">
@@ -147,7 +147,7 @@
                                         </div>
                                         <div class="weekly-customer">
                                             <div class="cus-week-price sp-select">
-                                                <label>Weekday Price</label>
+                                                <label>Everyday Price</label>
                                                 <p> (Monday - Sunday)</p>
                                                 <input name="adult_cus_weekly_price_{{$i}}{{$j}}" id="adult_cus_weekly_price{{$i}}{{$j}}" value="{{@$price->adult_cus_weekly_price}}" onkeyup="changeWDayPrice({{$i}},{{$j}},'adult');" type="text" class="form-control "onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$"></div> 
                                         </div>
@@ -198,7 +198,7 @@
                                         </div>
                                         <div class="weekly-customer">
                                             <div class="cus-week-price sp-select">
-                                                <label>Weekday Price</label>
+                                                <label>Everyday Price</label>
                                                 <p> (Monday - Sunday)</p>
                                                 <input  name="child_cus_weekly_price_{{$i}}{{$j}}" id="child_cus_weekly_price{{$i}}{{$j}}" value="{{@$price->child_cus_weekly_price}}" onkeyup="changeWDayPrice({{$i}},{{$j}} ,'child');" type="text" class="form-control "onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$"></div> 
                                         </div>
@@ -250,7 +250,7 @@
                                         </div>
                                         <div class="weekly-customer">
                                             <div class="cus-week-price sp-select">
-                                                <label>Weekday Price</label>
+                                                <label>Everyday Price</label>
                                                 <p> (Monday - Sunday)</p>
                                                 <input  name="infant_cus_weekly_price_{{$i}}{{$j}}" id="infant_cus_weekly_price{{$i}}{{$j}}" value="{{@$price->infant_cus_weekly_price}}" onkeyup="changeWDayPrice({{$i}},{{$j}},'infant');" type="text" class="form-control" onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$">
                                             </div>
@@ -356,7 +356,7 @@
                                             </div>
                                             <div class="contract mb-10">
                                                 <label>  Total duration of contract: </label>
-                                                <p id="total_duration_adult{{$i}}{{$j}}"> {{@$price->recurring_nuberofautopays_adult == '' ?  "0 Week" : @$price->recurring_nuberofautopays_adult}} {{@$recurringStrAdult[1]}}  </p>
+                                                <p id="total_duration_adult{{$i}}{{$j}}"> {{@$price->recurring_nuberofautopays_adult == '' ?  "0 Week" : @$price->recurring_nuberofautopays_adult * ( @$recurringStrAdult[0] == '' ? 0 : @$recurringStrAdult[0] )}} {{@$recurringStrAdult[1]}}  </p>
                                             </div>
                                         </div>
                                     </div>
@@ -506,7 +506,7 @@
                                             </div>
                                             <div class="contract mb-10">
                                                 <label>  Total duration of contract: </label>
-                                                <p id="total_duration_child{{$i}}{{$j}}"> {{@$price->recurring_nuberofautopays_child == '' ?  "0 Week" : @$price->recurring_nuberofautopays_child}} {{@$price->customer_charged_time_child}}  </p>
+                                                <p id="total_duration_child{{$i}}{{$j}}"> {{@$price->recurring_nuberofautopays_child == '' ?  "0 Week" : @$price->recurring_nuberofautopays_child *  ( @$recurringStrChild[0] == '' ? 0 : @$recurringStrChild[0] )}}   {{@$recurringStrChild[1]}}  </p>
                                             </div>
                                         </div>
                                     </div>
@@ -656,7 +656,7 @@
                                             </div>
                                             <div class="contract mb-10">
                                                 <label>  Total duration of contract: </label>
-                                                <p id="total_duration_infant{{$i}}{{$j}}"> {{@$price->recurring_nuberofautopays_infant == '' ?  "0 Week" : @$price->recurring_nuberofautopays_infant}} {{@$recurringStrAdult[1]}}  </p>
+                                                <p id="total_duration_infant{{$i}}{{$j}}"> {{@$price->recurring_nuberofautopays_infant == '' ?  "0 Week" : @$price->recurring_nuberofautopays_infant *  ( @$recurringStrInfant[0] == '' ? 0 : @$recurringStrInfant[0] )}} {{@$recurringStrInfant[1]}}  </p>
                                             </div>
                                         </div>
                                     </div>

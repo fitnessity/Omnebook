@@ -48,7 +48,9 @@
 							<div class="col-xl-12">
 								<div class="card">
 									<div class="card-header align-items-center d-flex">
-										<h4 class="card-title mb-0 flex-grow-1">Check Out</h4>
+										<h4 class="card-title mb-0 ">Check Out</h4>
+										<h4 class="card-title mb-0 ml-10 mr-10">|</h4>
+										<a class="card-title mb-0 text-black" href="http://dev.fitnessity.co/design/manage_gift_card">Gift Cards</a>
 									</div>
 									<div class="card-body">
 										<div class="row g-3 mb-25">
@@ -375,11 +377,11 @@
 																		<label>Duration</label>
 																		<div class="row">
 																			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-																				<input type="text" class="form-control valid mb-10" id="duration_int" name=duration_int placeholder="12" value="1" onkeyup="changevalue();" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
+																				<input type="text" class="form-control valid mb-10" id="duration_int" name=duration_int placeholder="12" value="1" onkeyup="changevalue();" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))" disabled>
 																			</div>
 																			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 																				<div class="choose-tip mb-10">
-																					<select name="duration_dropdown" id="duration_dropdown" class="form-select" onchange="loaddropdown('duration',this,this.value);">
+																					<select name="duration_dropdown" id="duration_dropdown" class="form-select" onchange="loaddropdown('duration',this,this.value);" disabled>
 																						<option value="Days">Day(s) </option>
 																						<option value="Weeks">Week(s)</option>
 																						<option value="Months">Month(s) </option>
@@ -598,7 +600,7 @@
 																				$taxes += $taxval;
 																				$act = BusinessServices::where('id', $item["code"])->first();
 																				$serprice = $act != '' ? @$act->price_details->find(@$item['priceid']) : '';
-																				$serpricecate = $act != '' ? $act->businessPriceDetailsAges->find(@$serprice->category_id) : '';
+																				$serpricecate = $act != '' ? $act->businessPriceDetailsAges->find(@$item['categoryid']) : '';
 
 																				$total =($item['totalprice'] + $item['tip']  - $item['discount'] ) + $taxval ;
 																				$iprice = number_format($total,0, '.', '');
@@ -1695,7 +1697,6 @@
 	$(document).on('click', '.editcartitemaks', function () {
 		$('#Countermodalbodyajax').html('');
 		var priceid = $(this).attr('data-priceid');
-		var priceid = $(this).attr('data-priceid');
 		var pageid = $(this).attr('data-pageid');
 		var customerId = $(this).attr('data-customerId');
 		var orderType = $(this).attr('data-orderType');
@@ -1908,6 +1909,7 @@
 	}
 
 	function gettotal(chk,dropval){
+		//alert('hii');
 		var dis_val = tip_val = sub_tot = sub_tot_tip = sub_tot_dis = tax =salestax= duestax= 0;
 
 		var price = parseFloat($('#price').val()) || 0; 
@@ -1949,6 +1951,7 @@
 			 		$('#dis_amt_val').val(sub_tot_dis);
 		 		}else{
 		 			$('#dis_amt_val').val(0);
+		 			$('#dis_amt_span').html('$ 0.00');
 		 		}
 		 	}
 
@@ -2003,16 +2006,24 @@
 			 		$('#dis_amt_val').val(sub_tot_dis);
 		 		}else{
 		 			$('#dis_amt_val').val(0);
+		 			$('#dis_amt_span').html('$ 0.00');
 		 		}
 		 	}
 		 	tax = parseFloat(tax.toFixed(2));
+
+		 	if($("#tax").is(":checked")){
+	 			tax = 0;
+	 			$('#value_tax').val(0);
+	 		}else{
+		 		$('#value_tax').val(tax);
+	 		}
 
 	 		var tot = productTotalPrice + tax - parseFloat(sub_tot_dis);
 	 		tot = tot.toFixed(2);
 	 		$('#total_amount').html('$'+ tot);
 	 		$('#pricetotal').val(productTotalPrice);
 	 		
-	 		$('#value_tax').val(tax);
+	 		//$('#value_tax').val(tax);
 			$('#taxvalspan').html('$'+tax);
 	 		if(tot != 0){
 				$('#addToOrder').prop('disabled', false);

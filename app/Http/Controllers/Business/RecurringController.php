@@ -86,7 +86,7 @@ class RecurringController extends Controller
     public function update(Request $request, $business_id ,$id)
     {
         $rec = Recurring::where('id',$id)->first();
-        $rec->update(["payment_date" =>date('Y-m-d',strtotime($request->payment_date)),"payment_on" =>date('Y-m-d'),"amount" =>$request->amount]);
+        $rec->update(["payment_date" =>date('Y-m-d',strtotime($request->payment_date)),"payment_on" =>date('Y-m-d'),"amount" =>$request->amount,"tax" =>$request->tax]);
     }
 
     /**

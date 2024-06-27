@@ -5,7 +5,7 @@
 
 
 @php  use App\ActivityCancel; 
-	use App\Repositories\BookingRepository; 
+use App\Repositories\BookingRepository; 
 $service_type_ary = array("all","classes","individual","events","experience");@endphp
 
 	<div class="main-content">
@@ -76,6 +76,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 													<div class="activity-tabs">
 														@php $categoryList = []; @endphp
 														@if($serviceType == $st && !empty($services))
+														
 															@foreach($services as $ser)
 																@php  
 																	if($priceid != ''){
@@ -104,7 +105,6 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																$schedule = [];
 																foreach($categoryList as $c){
 																	foreach($c->BusinessActivityScheduler as $sc){
-
 																		if($sc->end_activity_date >= $filter_date->format('Y-m-d') && $sc->starting <= $filter_date->format('Y-m-d')){
 																			if(strpos($sc->activity_days, $filter_date->format('l')) !== false){
 																				$cancelSc = $sc->activity_cancel->where('cancel_date',$filter_date->format('Y-m-d'))->first();
@@ -152,7 +152,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																				<div class="classes-info text-left">
 																					<div class="row">
 																						<div class="col-md-12 col-xs-12">
-																							<label class="fs-16">Category Name: </label> <span class="fs-16">{{@$cList->category_title}}</span>
+																							<label class="fs-16">Schedule: </label> <span class="fs-16">{{@$cList->category_title}}</span>
 																						</div>
 																						<div class="col-md-12 col-xs-12 ">
 																							<label>Program Name: </label> <span> {{$cList->BusinessServices->program_name}}</span>
@@ -187,10 +187,30 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																								$difference = round((strtotime($st_time) - strtotime($current))/3600, 1);
 																								$timeOfActivity = date('h:i a', strtotime($scary->shift_start));
 																								$grayBtnChk = 0;$class = '';
-																								if($filter_date->format('Y-m-d') == date('Y-m-d') && $st_time < $current){
-																									$grayBtnChk = 1;
-																									$class = 'post-btn-gray';
+																								if($filter_date->format('Y-m-d') == date('Y-m-d') ){
+																									
+																									$start = new DateTime($scary->shift_start);
+																					                $current = new DateTime();
+																					                $current_time =  $current->format("Y-m-d H:i");
+
+																					                if($cList->BusinessServices->can_book_after_activity_starts == 'No' && $cList->BusinessServices->beforetime != '' && $cList->BusinessServices->beforetimeint != ''){
+																					                    $matchTime = $start->modify('-'.$cList->BusinessServices->beforetimeint.' '.$cList->BusinessServices->beforetime)->format("Y-m-d H:i");
+																					                    if($current_time > $matchTime){
+																					                        $grayBtnChk = 1;
+																											$class = 'post-btn-gray';
+																					                    }
+																					                    
+																					                }else if($cList->BusinessServices->can_book_after_activity_starts == 'Yes' && $cList->BusinessServices->beforetime != '' && $cList->BusinessServices->beforetimeint != ''){
+																					                    $matchTime = $start->modify('+'.$cList->BusinessServices->aftertimeint.' '.$cList->BusinessServices->aftertime)->format("Y-m-d H:i");
+																					                    if($current_time > $matchTime){
+																					                        $grayBtnChk = 1;
+																											$class = 'post-btn-gray';
+																					                    }
+																					                }
+
 																								}
+
+
 																								if($SpotsLeftdis == 0){
 																									$grayBtnChk = 2;
 																									$class = 'post-btn-gray';
@@ -203,6 +223,9 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 
 																								$insName = $scary->getInstructure($filter_date->format('Y-m-d'));
 																							@endphp
+
+																							<!-- $grayBtnChk = 1;
+																									$class = 'post-btn-gray'; -->
 																							<div class="col-md-4 col-sm-5 col-xs-12">
 																								<div class="classes-time">
 																									<button class="post-btn {{$class}} activity-scheduler" onclick="openPopUp({{$scary->id}} , {{$cList->BusinessServices->id}} ,'{{$cList->BusinessServices->program_name}}','{{$timeOfActivity}}',{{$grayBtnChk}},'{{$scary->category_id}}');"  {{ $SpotsLeftdis == 0 ?  "disabled" : ''}}  {{ $canceldata != '' ?  "disabled" : ''}} >{{$timeOfActivity}} <br>{{$duration}}</button>
@@ -211,7 +234,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 
 																									@if($canceldata != '')<label class="font-red">Cancelled</label>@endif
 
-																									@if($scary->chkReservedToday())<label class="font-green">Already Reserved</label>@endif
+																									@if($scary->chkReservedToday($filter_date->format('Y-m-d')) )<label class="font-green">Already Reserved</label>@endif
 
 																									<label>{{ $insName }}</label>
 																								</div>

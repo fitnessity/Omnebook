@@ -400,8 +400,9 @@
 														</div>
 													</div>
 												</div>
+
 												<div class="btn-ano-time mt-20 float-right">
-													<a href="{{route('business.services.index')}}" class="btn btn-red" >Finish</a>
+													<a href="@if($category->class_type) {{route('business.services.create',['serviceType'=> $category->BusinessServices->service_type,'serviceId'=>$category->serviceid])}}#stepFour @else {{route('business.services.index')}} @endif" class="btn btn-red" >Finish</a>
 												</div> 		
 											</div>
 										</div><!-- end card-body -->

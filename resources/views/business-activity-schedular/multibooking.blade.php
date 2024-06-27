@@ -196,7 +196,7 @@
 																							<label class="btn button_select" for="item_{{$s}}{{$scary->id}}">{{$timeOfActivity}} <br>{{$duration}}</label>
 																							<span>{{ $SpotsLeftdis == 0 ? "Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</span>
 																							<label class="font-red">{{ $canceldata != '' ? "Cancelled" : ''}}</label>
-																							@if($scary->chkReservedToday())<label class="font-green mb-0 fs-13">Already Reserved</label>@endif
+																							@if($scary->chkReservedToday($filter_date->format('Y-m-d')))<label class="font-green mb-0 fs-13">Already Reserved</label>@endif
 																							<span>{{ $insName }}</span>
 																						</div>
 																					</div>

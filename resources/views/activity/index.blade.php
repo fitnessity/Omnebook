@@ -26,7 +26,7 @@
 						<div class="owl-item" style="width: 300px;">
 							<div class="card-info instant-section-info">
 								<div class="img">
-								   <img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" alt="">
+								   <img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" alt="Fitnessity">
 								</div>
 								<h4>{{$getdatafast['title']}}</h4>
 								<p>{{$getdatafast['small_text']}}</p>
@@ -48,7 +48,7 @@
 			@foreach($getstarteddata as $getdatafast)
 				<div class="col-md-3 col-sm-3 col-xs-12">
 					<div class="instant-section-info d-none">
-						<img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" >
+						<img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" alt="Fitnessity">
 						<h4>{{$getdatafast['title']}}</h4>
 						<p>{{$getdatafast['small_text']}}</p>
 						@if($getdatafast['id'] == 1)
@@ -101,13 +101,9 @@
 												<div class="find-activity">
 													<div class="row y-middle">
 														<div class="col-xs-4 col-sm-4 padding-r0">
-															@if(Storage::disk('s3')->exists( $bookscheduler->business_service->first_profile_pic() ) && $bookscheduler->business_service->first_profile_pic() != '' )
-																<div class="item-inner">
-																	<img src="{{Storage::URL($bookscheduler->business_service->first_profile_pic())}}" class="productImg">
-																</div>
-															@else
-																<img src="{{url('/images/service-nofound.jpg')}}">
-															@endif 
+															<div class="item-inner">
+																<img src="{{$bookscheduler->business_service->first_profile_pic()}}" class="productImg" alt="Fitnessity">
+															</div>
 														</div>
 														
 														<div class="col-xs-8 col-sm-8 activity-data">
@@ -191,13 +187,9 @@
 							<div class="find-activity d-none">
 								<div class="row">
 									<div class="col-md-4 col-sm-4">
-										@if(Storage::disk('s3')->exists( $bookscheduler->business_service->first_profile_pic() ) && $bookscheduler->business_service->first_profile_pic() != '' )
-											<div class="item-inner">
-												<img src="{{Storage::URL($bookscheduler->business_service->first_profile_pic())}}" class="productImg">
-											</div>
-										@else
-											<img src="{{url('/images/service-nofound.jpg')}}">
-										@endif 
+										<div class="item-inner">
+											<img src="{{$bookscheduler->business_service->first_profile_pic()}}" class="productImg" alt="Fitnessity">
+										</div>
 									</div>
 									<div class="col-md-8 col-sm-8 activity-data">
 										<div class="row">
@@ -344,10 +336,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -356,7 +348,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -393,10 +385,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -405,7 +397,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -539,10 +531,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -551,7 +543,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -588,10 +580,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -600,7 +592,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -740,19 +732,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}">
+																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity"> 
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -789,14 +781,14 @@
 																			@foreach($pic_image as $img)
 																				@if(Storage::disk('s3')->exists($img) && $img != '' )
 																					<div class="item-inner">
-																						<img src="{{Storage::URL($img)}}" class="productImg">
+																						<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																					</div>
 																				@endif
 																			@endforeach
 																		@else
 																			@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																				<div class="item-inner">
-																					<img src="{{Storage::URL($pic_image)}}">
+																					<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity">
 																				</div>
 																			@endif
 																		@endif
@@ -933,11 +925,11 @@
 																@if(is_array($pic_image))
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
-																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																			<div class="item-inner"> 
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -946,7 +938,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -983,10 +975,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -995,7 +987,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" >
 																	@endif
 																@endif
 															</div>
@@ -1133,19 +1125,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}">
+																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -1183,10 +1175,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -1195,7 +1187,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -1332,10 +1324,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -1344,7 +1336,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -1381,19 +1373,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}">
+																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -1530,19 +1522,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}">
+																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -1580,19 +1572,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}">
+																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -1848,8 +1840,8 @@
 
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
-<script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
-<script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
+<!-- <script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
+<script src="{{ url('public/js/jquery-ui.min.js') }}"></script> -->
 <script type="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>

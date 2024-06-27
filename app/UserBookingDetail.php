@@ -28,7 +28,7 @@ class UserBookingDetail extends Model
     protected $table = 'user_booking_details';
     public $timestamps = false;
     protected $fillable = [
-        'booking_id', 'sport','business_id', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment', 'subtotal', 'fitnessity_fee', 'tax', 'tip', 'discount','user_type','user_id', 'repeateTimeType','everyWeeks','monthDays','enddate','activity_days','booking_from','booking_from_id','order_from','calendar_booking_time','addOnservice_total','addOnservice_ids','addOnservice_qty','service_fee' ,'productIds','productQtys','productSize','productColor','productTypes','productTotalPrices','order_type','membership_for','membershipTotalPrices','membershipTotalTax','productTotalTax','suspend_by','terminate_by','refund_by'];
+        'booking_id', 'sport','business_id', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid','category_id', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment', 'subtotal', 'fitnessity_fee', 'tax', 'tip', 'discount','user_type','user_id', 'repeateTimeType','everyWeeks','monthDays','enddate','activity_days','booking_from','booking_from_id','order_from','calendar_booking_time','addOnservice_total','addOnservice_ids','addOnservice_qty','service_fee' ,'productIds','productQtys','productSize','productColor','productTypes','productTotalPrices','order_type','membership_for','membershipTotalPrices','membershipTotalTax','productTotalTax','suspend_by','terminate_by','refund_by'];
      
 
     /**
@@ -160,19 +160,24 @@ class UserBookingDetail extends Model
         return $this->belongsTo(CompanyInformation::class, 'business_id');
     }
 
-    public function business_price_detail(){
-
-        return $this->belongsTo(BusinessPriceDetails::class, 'priceid');
-
+    public function businessPriceDetailsAges(){
+        return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id');
     }
+
+     public function businessPriceDetailsAgesTrashed(){
+        return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id')->withTrashed();
+    }
+
+    public function business_price_detail(){
+        return $this->belongsTo(BusinessPriceDetails::class, 'priceid');
+    }
+
     public function business_price_detail_with_trashed(){
         return $this->belongsTo(BusinessPriceDetails::class, 'priceid')->withTrashed();
     }
 
     public function business_activity_scheduler(){
-
         return $this->belongsTo(BusinessActivityScheduler::class, 'act_schedule_id');
-
     }
 
     public static function getbyid($book_id){
@@ -489,7 +494,7 @@ class UserBookingDetail extends Model
         if($customer){
             $company = $this->company_information;
             $business_price_detail =  $this->business_price_detail;
-            $business_price_details_ages =  @$business_price_detail->business_price_details_ages_with_trashed;
+            $business_price_details_ages =  $this->businessPriceDetailsAgesTrashed;
             $business_services = $this->business_services;
             $email_detail = array(
                 "email" =>$customer->email, 
@@ -524,7 +529,7 @@ class UserBookingDetail extends Model
         if($customer){
             $company = $this->company_information;
             $business_price_detail =  $this->business_price_detail;
-            $business_price_details_ages =  $business_price_detail->business_price_details_ages;
+            $business_price_details_ages =  $this->businessPriceDetailsAgesTrashed;
             $email_detail_provider = array(
                 "email" =>$company->business_email, 
                 "CustomerName" => $customer->full_name, 

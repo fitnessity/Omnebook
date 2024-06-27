@@ -1,3 +1,4 @@
+
 @php $counter = 0; @endphp
 @forelse($orderDetails as $i=>$book_details)
 	@php $accId = substr($i, 0, strpos($i, '!~!')); @endphp
@@ -55,7 +56,7 @@
 										<div class="col-lg-2 col-md-3 col-8">
 											@if($tabName != 'past')
 												<div class="mmt-10">
-													<a type="button" class="btn btn-red" onClick="redirectUrl(this.getAttribute('data-url'))" data-url="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => ((request()->customer_id) ? $bs['user_id'] : '')] )}}"> @if($tabName != 'current') Reschedule @else Reserve Now @endif</a>
+													<a type="button" class="btn btn-red" onClick="redirectUrl(this.getAttribute('data-url'))" @if(@$reserveUrl) data-url="{{route('check-in-portal',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => request()->customer_id ,'activetab' => 'schedule'] )}}" @else data-url="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => ((request()->customer_id) ? $bs['user_id'] : '')] )}}" @endif> @if($tabName != 'current') Reschedule @else Reserve Now @endif</a>
 
 													<!-- <a class="btn btn-red" href="#"  data-bs-toggle="modal" data-bs-target=".selectbooking">Reserve Now</a> -->
 												</div>		
@@ -211,7 +212,8 @@
 										<div class="col-12">
 											<div class="float-end mt-20">
 												@if($tabName !='past')
-													<a class="btn btn-red" href="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' =>((request()->customer_id) ? $bs['user_id'] : '') ] )}}" target="_blank">Schedule</a>
+
+													<a class="btn btn-red" @if(@$reserveUrl) href="{{route('check-in-portal',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => request()->customer_id ,'activetab' => 'schedule'] )}}" @else href="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => ((request()->customer_id) ? $bs['user_id'] : '')] )}}" @endif >Schedule</a>
 												@endif
 												<a class="btn btn-black" href="{{env('APP_URL')}}/businessprofile/{{strtolower(str_replace(' ', '', $bs->company_information->public_company_name))}}/{{$bs->company_information->id}}" target="_blank">View Provider</a>
 											</div>
@@ -249,7 +251,10 @@
 	</div>
 	@php $counter++; @endphp
 @empty
-	Membership Is Not Available
+	<div class="text-center mt-25">
+		<p class="text-center mt-20"> Membership Is Not Available. </p>
+		@if(@$membershipbtn == 1 ) <a class="btn btn-red" data-modal-chkBackdrop="1" data-reload="1" data-modal-width="modal-50" data-behavior="ajax_html_modal" data-url="{{route('checkin.activity_booking_html')}}" class="btn btn-red"> Purchase A Membership </a> @endif 
+	</div>
 @endforelse
 
 <script type="text/javascript">

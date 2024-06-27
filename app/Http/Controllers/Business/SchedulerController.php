@@ -19,9 +19,10 @@ class SchedulerController extends BusinessBaseController
 
      public function index(Request $request){
           $filterDate = Carbon::parse($request->date);
+          // \DB::enableQueryLog(); 
           $schedules = BusinessActivityScheduler::alldayschedule($filterDate,$request->activity_type)->where('cid', $request->current_company->id)->get();
-         
-          //print_r($schedules);exit;
+          // dd(\DB::getQueryLog()); 
+          // print_r($schedules);exit;
           return view('business.scheduler.index', [
               'schedules' => $schedules, 
               'filterDate' => $filterDate,
@@ -91,7 +92,25 @@ class SchedulerController extends BusinessBaseController
                     BusinessActivityScheduler::where('id',$deletdata)->delete();
                }
           }
-          return redirect()->route('business.schedulers.create', ["business_id"=>$request->cId,"categoryId"=>$request->categoryId]);
+
+          /*$category = BusinessPriceDetailsAges::where('id' , $request->categoryId)->whereNotNull('class_type')->first();
+          if($category){
+              $service = $category->BusinessServices;
+              return redirect()->to('business/'.$request->cId.'/services/create?serviceType='.$service->service_type.'&serviceId='.$request->serviceId.'#stepFour');
+          }else{*/
+              /*return redirect()->route('business.schedulers.create', ["business_id"=>$request->cId,"categoryId"=>$request->categoryId]);*/
+          /*}*/
+
+          if($request->has('returnUrl')){
+              $category = BusinessPriceDetailsAges::where('id' , $request->categoryId)->whereNotNull('class_type')->first();
+              $service = $category->BusinessServices;
+              $url = '/business/'.$request->cId.'/services/create?serviceType='.$service->service_type.'&serviceId='.$service->id.'#stepFour';
+              return redirect($url);
+
+              //return redirect()->to($request->returnUrl);
+          }else{
+              return redirect()->route('business.schedulers.create', ["business_id"=>$request->cId,"categoryId"=>$request->categoryId]);
+          }
      }
 
      public function destroy(Request $request){

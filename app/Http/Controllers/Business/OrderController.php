@@ -114,7 +114,10 @@ class OrderController extends BusinessBaseController
             $status = "Active";
         }
           
-        $program_list = BusinessServices::where(['is_active'=>1, 'userid'=>Auth::user()->id, 'cid'=>$companyId])->get();
+        $program_list = BusinessServices::where(['is_active'=>1, 'userid'=>Auth::user()->id, 'cid'=>$companyId])->whereHas('schedulers', function ($query) {
+            $query->where('end_activity_date', '>', now())
+                  ->orWhereNull('end_activity_date');
+        })->get();
         $products = Products::where(['user_id'=>Auth::user()->id, 'business_id'=>$companyId])->get();
 
         $productCategory = ProductsCategory::orderBy('name')->get();
@@ -361,6 +364,7 @@ class OrderController extends BusinessBaseController
                 'price' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['price']),
                 'qty' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['qty']),
                 'priceid' => $item['priceid'],
+                'category_id' => $item['categoryid'],
                 'pay_session' => $item['p_session'] ?? @$price_detail->pay_session,
                 'expired_at' => @$item['orderType'] == 'Membership'  ? $expired_at : NULL,
                 'contract_date' => @$item['orderType'] == 'Membership' ? $contractDate : NULL,
@@ -399,7 +403,8 @@ class OrderController extends BusinessBaseController
                 $date = new Carbon;
                 $stripeId = $stripeChargedAmount = $paymentMethod= '';
 
-                $amount = $checkoutRegisterCartService->getMembershipTotalItem($item);
+                $amount = $checkoutRegisterCartService->getMembershipTotalItem($item) - $checkoutRegisterCartService->getDisItem($item) ;
+                $tax_recurring = $item['tax_activity'];
 
                 if($key == 'adult'){
                     if($qty != '' && $qty != 0){
@@ -438,7 +443,7 @@ class OrderController extends BusinessBaseController
 
                 if($qty != '' && $qty != 0){
                     //$tax_recurring = number_format((($amount * $duesTax)/100)  + (($amount * $salesTax)/100),2); 
-                    $tax_recurring = $booking_detail->membershipTotalTax ?? 0; //salestax is for product. and dues tax is for membership 
+                   // $tax_recurring = $booking_detail->membershipTotalTax ?? 0; //salestax is for product. and dues tax is for membership 
                     $paymentMethod = $tran_data['stripe_payment_method_id'];
                     if($re_i != '' && $re_i != 0 && $amount != ''){
                         for ($num = $re_i; $num > 0 ; $num--) { 
@@ -471,7 +476,7 @@ class OrderController extends BusinessBaseController
 
                                 if($num == $re_i && $additionalPaymentDate){
                                     $booking_detail->expired_at = $additionalPaymentDate;
-                                    $booking_detail->expired_duration = $re_i.' '.$timeChk.'s';
+                                    $booking_detail->expired_duration = ($re_i * $afterHowmanytime).' '.$timeChk.'s';
                                     $booking_detail->save();
                                 }
 

@@ -46,7 +46,7 @@
 	</div>
 </div>
 
-<footer id="footer" class="printnone">
+<footer id="footer" class="printnone  @if(  request()->is('*register_ep*') || request()->is('*check-in-welcome*') || request()->is('*quick-checkin*')|| request()->is('*check-in-portal*')) d-none @endif" >
 	@if(session()->has('alert-success'))
     	<div class="alert alert-success">
         	{{ session()->get('alert-success') }}
@@ -96,9 +96,9 @@
                 </div> 
                 <div class="footer-bottom-left social-footer">
                     <ul>
-                        <li><a href="https://twitter.com/Fitnessitynyc" target="_blank" ><img src="{{ URL::to('public/img/twitter.png')}}" width="30" /></a>&nbsp;&nbsp;</li>
-                        <li><a href="https://www.instagram.com/fitnessityofficial/?hl=en" target="_blank"><img src="{{ URL::to('public/img/instagram.png')}}" width="30" /></a>&nbsp;&nbsp;</li>
-                        <li><a href="https://www.facebook.com/fitnessityofficial" target="_blank"><img src="{{ URL::to('public/img/facebook.png')}}" width="30" /></a>&nbsp;&nbsp;</li>
+                        <li><a href="https://twitter.com/Fitnessitynyc" target="_blank" ><img src="{{ URL::to('public/img/twitter.png')}}" width="30" alt="Fitnessity" /></a>&nbsp;&nbsp;</li>
+                        <li><a href="https://www.instagram.com/fitnessityofficial/?hl=en" target="_blank"><img src="{{ URL::to('public/img/instagram.png')}}" width="30" alt="Fitnessity" /></a>&nbsp;&nbsp;</li>
+                        <li><a href="https://www.facebook.com/fitnessityofficial" target="_blank"><img src="{{ URL::to('public/img/facebook.png')}}" width="30" alt="Fitnessity" /></a>&nbsp;&nbsp;</li>
                     </ul>
                 </div>
             </div>
@@ -170,7 +170,7 @@
 								<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeMobileNav()"></a>
 								<ul class="pc-navbar">
 									<li style="text-align: center;"> 
-										<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png')  }}"
+										<img alt="Fitnessity" src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}"
                                      alt="Fitnessity"  class="sidemenupic" >
 									</li>
 									<li class="pc-caption"><span> Welcome</span></li>
@@ -185,34 +185,34 @@
 										<button class="btn-lp" type="button"><a style="color: white;" href="{{url('/activities')}}">Book An Activity </a> </button> 
 									</li>
 									<li class="pc-link">
-									   <span class="pc-micon"><img src="{{asset('/public/img/social-profile.png')}}" alt=""></span><a href="{{route('profile-viewProfile')}}" style="color: white;"> View Personal Profile</a>
+									   <span class="pc-micon"><img src="{{asset('/public/img/social-profile.png')}}" alt="Fitnessity"></span><a href="{{route('profile-viewProfile')}}" style="color: white;"> View Personal Profile</a>
 									</li>
 
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt=""></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt="Fitnessity"></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
 									</li>
 
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt=""></span><a href="{{route('personal.manage-account.index')}}" style="color: white;"> Manage Accounts</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt="Fitnessity"></span><a href="{{route('personal.manage-account.index')}}" style="color: white;"> Manage Accounts</a>
 									</li>
 								
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt=""></span>
+										<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt="Fitnessity"></span>
 										<a href="{{ url('/personal/calendar')}}" style="color: white;">Calendar</a>
 									</li>
 
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt=""></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt="Fitnessity"></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
 									</li>
 
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt=""></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt="Fitnessity"></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
 									</li>
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt=""></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
 									</li>
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt=""></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
 									</li>
 									
 									<!-- <li class="pc-link">
@@ -303,8 +303,10 @@
     <script src="{{asset('/public/dashboard-design/js/swiper-bundle.min.js')}}"></script>
 
 	<script src="{{asset('/public/dashboard-design/js/feather.min.js')}}"></script>
+
     <!-- Dashboard init -->
     <script src="{{asset('/public/dashboard-design/js/dashboard-ecommerce.init.js')}}"></script>
+
 	<!--<script src="{{asset('/public/dashboard-design/js/dashboard-projects.init.js')}}"></script>-->
 	
 	<!-- Pie chart -->
@@ -313,12 +315,15 @@
 	<script src="{{asset('/public/dashboard-design/js/dashboard-job.init.js')}}"></script> -->
 	
     <!-- App js -->
-    <script src="{{asset('/public/dashboard-design/js/app.js')}}"></script> 
+
+    @if(Route::current()->getName() != 'homepage' ) 
+    	<script src="{{asset('/public/dashboard-design/js/app.js')}}"></script> 
+    @endif
     <!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
 	
-	<!-- list.js min js -->
-	<script src="{{asset('/public/dashboard-design/js/list.min.js')}}"></script>
-	<script src="{{asset('/public/dashboard-design/js/list.pagination.min.js')}}"></script>
+	<!-- list.js min js --> <!-- addded in product page -->
+	<!-- <script src="{{asset('/public/dashboard-design/js/list.min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/list.pagination.min.js')}}"></script> -->
 	
 	
 	<!-- profile-setting init js -->
@@ -334,15 +339,15 @@
 	<!-- add product init js -->
 	<script src="{{asset('/public/dashboard-design/ckeditor/ckeditor5-build-classic/build/ckeditor.js')}}"></script>
 	
-	<!-- dropzone js -->
-    <script src="{{asset('/public/dashboard-design/js/dropzone-min.js')}}"></script>
-	<script src="{{asset('/public/dashboard-design/js/ecommerce-product-create.init.js')}}"></script>
+	<!-- dropzone js --> <!-- addded in product page -->
+    <!-- <script src="{{asset('/public/dashboard-design/js/dropzone-min.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/ecommerce-product-create.init.js')}}"></script> -->
 	
 	<!-- Calendar -->
 	<script src="{{ url('public/js/fullcalendar/fullcalendar.min.js') }}"></script>
 	
-	<!-- ecommerce-customer init js -->
-    <script src="{{asset('/public/dashboard-design/js/ecommerce-customer-list.init.js')}}"></script>
+	<!-- ecommerce-customer init js --> <!-- addded in product page -->
+    <!-- <script src="{{asset('/public/dashboard-design/js/ecommerce-customer-list.init.js')}}"></script> -->
 	
 	<!-- glightbox js -->
 	<script src="{{asset('/public/dashboard-design/js/glightbox.min.js')}}"></script>
@@ -351,11 +356,14 @@
 	 <script src="{{asset('/public/dashboard-design/js/fgEmojiPicker.js')}}"></script>
 	 <script src="{{asset('/public/dashboard-design/js/emojionearea.js')}}"></script>
 
-	<!-- chat init js -->
-	<script src="{{asset('/public/dashboard-design/js/chat.init.js')}}"></script>
-	<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>
+	<!-- chat init js --> <!-- addded in chat page -->
+	<!-- <script src="{{asset('/public/dashboard-design/js/chat.init.js')}}"></script>
+	<script src="{{asset('/public/dashboard-design/js/form-wizard.init.js')}}"></script> -->
+
+
+
+	<!-- <script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script> -->
 	
-	<script src="{{asset('/public/dashboard-design/js/form-wizard.init.js')}}"></script>
 	
 	 <!--datatable js-->
 	<script src="{{asset('/public/dashboard-design/js/datatable/jquery.dataTables.min.js')}}"></script>
@@ -368,11 +376,11 @@
 	<script src="{{asset('/public/dashboard-design/js/datatable/pdfmake.min.js')}}"></script>
 	<script src="{{asset('/public/dashboard-design/js/datatable/jszip.min.js')}}"></script>    
 
-    <script src="assets/js/pages/datatables.init.js"></script>
+    <!-- <script src="assets/js/pages/datatables.init.js"></script> -->
   
     <!-- init js -->
-    <script src="{{asset('/public/dashboard-design/js/pickr.min.js')}}"></script>
-    <script src="{{asset('/public/dashboard-design/js/form-pickers.init.js')}}"></script>
+    <!-- <script src="{{asset('/public/dashboard-design/js/pickr.min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/js/form-pickers.init.js')}}"></script> -->
 
     <!-- filepond -->
     <script src="{{asset('/public/dashboard-design/filepond/filepond.min.js')}}"></script>
@@ -388,7 +396,7 @@
     <script src="{{asset('/public/dashboard-design/js/dragula.min.js')}}"></script> 
     <script src="{{asset('/public/dashboard-design/js/dom-autoscroller.min.js')}}"></script> 
     
-    <script src="{{asset('/public/dashboard-design/js/todo.init.js')}}"></script> 
+    <!-- <script src="{{asset('/public/dashboard-design/js/todo.init.js')}}"></script>  -->
     
  <!-- new design end -->
 
@@ -409,7 +417,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/public/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>*/ ?>
-
+<!-- 
+<script type="text/javascript"
+        src="https://maps.google.com/maps/api/js?key={{ env('AUTO_COMPLETE_ADDRESS_GOOGLE_KEY') }}" ></script>  -->
+        <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}"></script>
 <script type="text/javascript">
     	function initMapCall(addressInputID, cityElementID, stateElementID, countryElementID, zipcodeElementID, latElementID, lonElementID) {
         	var map = new google.maps.Map(document.getElementById('map'), {
@@ -423,8 +434,8 @@
         	autocomplete.bindTo('bounds', map);
         	var infowindow = new google.maps.InfoWindow();
         	var marker = new google.maps.Marker({
-            map: map,
-            anchorPoint: new google.maps.Point(0, -29)
+	            map: map,
+	            anchorPoint: new google.maps.Point(0, -29)
         	});
 
         	autocomplete.addListener('place_changed', function() {
@@ -553,7 +564,7 @@ function closeMobileNav() {
         var width = $(this).data('modal-width');
         var reload = $(this).data('reload');
         if(width == undefined){
-            width = 'modal-50';
+            // width = 'modal-50';
         }
          var chkbackdrop  =   $(this).attr('data-modal-chkBackdrop');            
         e.preventDefault()
@@ -661,3 +672,6 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 })
 
 </script>
+
+
+
