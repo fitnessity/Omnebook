@@ -96,6 +96,27 @@ class CheckoutRegisterCartService
         return  $item["totalprice"] - ($addOnServiceTotal + $productTotal);
     }
 
+
+    public function getDisItem($item){
+        $discount = $item['discount'] ?? 0;
+        $addOn = $item['addOnServicesQty'] != '' ?  explode(',', $item['addOnServicesQty']) : [];
+        $product = $item['productQtys'] != '' ?  explode(',', $item['productQtys']) : [];
+        $qty  = 1;  //1 qty for membership
+        if(!empty($addOn)){
+            $array = array_map('intval', $addOn);
+            $qty += array_sum($array);
+        }
+
+        if(!empty($productQty)){
+            $array = array_map('intval', $product);
+            $qty += array_sum($array);
+        }
+
+        $price = number_format( ($discount / $qty) ,2) ?? 0;
+        return $price;
+
+    }
+
     public function getProductTaxItem($item){
         $tax = $item['tax'] ?? 0;
         $taxActivity = $item['tax_activity'] ?? 0;
