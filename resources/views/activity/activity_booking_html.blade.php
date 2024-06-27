@@ -181,7 +181,10 @@
                
                 <div class="border-bottom-grey mb-15"></div>
                 @php 
-                    $company_data=Auth::user()->current_company 
+                    $company_data = null;
+                        if (Auth::check()) {
+                            $company_data = Auth::user()->current_company;
+                        }
                 @endphp
                 @if(Auth::check() && !empty($company_data))
                 <label class="mb-10 fw-600">Step: 6 </label> <span class=""> Select Who's Participating</span>
