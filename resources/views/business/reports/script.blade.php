@@ -9,9 +9,11 @@
 
 	$(document).on('click', '[data-behavior~=on_change_submit]', function(e){
 		e.preventDefault()
-		$('#generateReport').html('Loading..');
-		$("#generateReport").prop("disabled", true);
 		$(this).parents('form').submit();
+		setTimeout(function() {
+			$('#generateReport').html('Loading..');
+			$("#generateReport").prop("disabled", true);
+		}, 1500);
 	});
 
 	$(document).on('change', '[data-behavior~=on_change_dropdown]', function(e){
