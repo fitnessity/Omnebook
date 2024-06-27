@@ -1,8 +1,121 @@
 <?php
 
-    use Carbon\Carbon,Storage,DateTime,View;
+    use Carbon\Carbon;
+    use Storage;
+    use DateTime;
+    use View;
     use App\Repositories\{ReviewRepository,UserRepository,NetworkRepository};
-    use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction,Products,CustomerNotes,Notification,CompanyInformation,BusinessServices};
+    use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction,Products,CustomerNotes,Notification,CompanyInformation,BusinessServices,UserBookingDetail,BusinessPriceDetailsAges,CustomList,BusinessServicesFavorite};
+    use App\BusinessCustomerUploadFiles;
+        
+
+    
+    function countStarRatings($serviceId)
+    {
+        $service = BusinessServices::find($serviceId);
+        $reviewTypes = [
+            'cleanliness',
+            'accuracy',
+            'checkin',
+            'communication',
+            'customer_service',
+            'location',
+            'value'
+        ];
+
+        $starCountsSql = generateStarCountsSql($reviewTypes);
+
+        $results = DB::table('business_service_review')
+            ->select(DB::raw($starCountsSql))
+            ->where('service_id', $serviceId)
+            ->first();
+
+        /*print_r($results);exit;*/
+        $totalStars = $service->reviews()->count() * 7;
+
+
+        $fiveStarValue =  $totalStars > 0 ?  round( $results->star_5 /  $totalStars * 100 ,2 ) : 0;
+        $fourStarValue = $totalStars > 0 ?  round( $results->star_4 /  $totalStars * 100 ,2) : 0;
+        $threeStarValue = $totalStars > 0 ?  round( $results->star_3 /  $totalStars * 100 ,2) : 0;
+        $twoStarValue = $totalStars > 0 ?  round( $results->star_2 /  $totalStars * 100 ,2) : 0;
+        $oneStarValue = $totalStars > 0 ?  round( $results->star_1 /  $totalStars * 100 ,2) : 0;
+
+        return [
+            'star_5' => $fiveStarValue,
+            'star_4' => $fourStarValue,
+            'star_3' => $threeStarValue,
+            'star_2' => $twoStarValue,
+            'star_1' => $oneStarValue
+        ];
+    }
+
+    function generateStarCountsSql(array $reviewTypes)
+    {
+        $cases = [];
+        foreach ([5, 4, 3, 2, 1] as $star) {
+            $caseParts = [];
+            foreach ($reviewTypes as $type) {
+                $caseParts[] = "SUM(CASE WHEN $type = $star THEN 1 ELSE 0 END)";
+            }
+            $cases[] = implode(' + ', $caseParts) . " as  star_$star";
+        }
+
+        return implode(', ', $cases);
+    }
+
+    function getBusinessServiecReviewSum($sid,$type){
+        $service = BusinessServices::find($sid);
+        return $service->reviews()->sum($type);
+    }
+
+    function getBusinessServiceCount($sid,$type){
+        $service = BusinessServices::find($sid);
+        $count = $service->reviews()->count();
+        $sum = getBusinessServiecReviewSum($sid,$type);
+
+        if($count > 0){ 
+            return round($sum/$count,2); 
+        }else{
+            return 0;
+        }
+    }
+
+    function getFavorite($userId , $sid){
+       return BusinessServicesFavorite::where('user_id',$userId)->where('service_id',$sid)->first(); 
+    }
+
+    function getCode(){
+        $uniqueCode = str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
+        while ( DB::table('users')->where('unique_code', $uniqueCode)->exists()) {
+            $uniqueCode = str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
+        }
+        return $uniqueCode;
+    }
+
+    function getSpotLeft($id,$activityDate,$spotsAvailable){
+        $totalquantity = 0; 
+        $SpotsLeft = UserBookingDetail::where('act_schedule_id',$id)->whereDate('bookedtime', '=',date('Y-m-d',strtotime($activityDate)))->get();
+        foreach($SpotsLeft as $data1){
+            $totalquantity += $data1->userBookingDetailQty();
+        }
+       return $spotsAvailable != '' ? $spotsAvailable - $totalquantity : 0;
+    }
+
+    function getTimePassedChk($service,$bdata){
+        $start = new DateTime($bdata->shift_start);
+        $current = new DateTime();
+        $currentTime =  $current->format("Y-m-d H:i");
+        $timePassedChk = 0;
+        if($service->can_book_after_activity_starts == 'No' && $service->beforetime != '' && $service->beforetimeint != ''){
+            $matchTime = $start->modify('-'.$service->beforetimeint.' '.$service->beforetime)->format("Y-m-d H:i");
+            $timePassedChk =  $currentTime <  $matchTime ? 0 : 1;
+        }else if($service->can_book_after_activity_starts == 'Yes' && $service->aftertime != '' && $service->aftertimeint != ''){
+            $matchTime = $start->modify('+'.$service->aftertimeint.' '.$service->aftertime)->format("Y-m-d H:i");
+            $timePassedChk =  $currentTime <  $matchTime ? 0: 1;
+        }
+
+        return $timePassedChk;
+    }
 
     function getUserRatings($user_id)
     {
@@ -67,7 +180,6 @@
         return $text;
     }
 
-
     function createBusinessCustomer($user ,$passwords,$businessId){
         $createCustomerForBusiness = Customer::create([
             'business_id' => $businessId,
@@ -90,52 +202,13 @@
         return $createCustomerForBusiness;
     }
 
-    function getFamilyMember($cid = null){
-        $user = Auth::user();
-        $businessCustomer = $customers = [];
-        /*$company = $user->company;
-        foreach($company as $key=>$c){
-            $businessCustomer[] = $c->customers()->where('user_id', $user->id)->pluck('id')->toArray();
-        }*/
-        /*if($cid){
-            $company = $user->company()->where('id',$cid)->first();
-        }else{
-            $company = $user->current_company;
-        }
-        if($company != ''){
-            $businessCustomer = $company->customers()->where('user_id', $user->id)->pluck('id')->toArray();
-            //print_r($businessCustomer);exit;
-            foreach($businessCustomer as $c){
-                if(!empty($c)){
-                    $cus = Customer::where('parent_cus_id', $c)->get();
-                    foreach($cus as $c1){
-                        $customers [] = array(
-                            "id" => $c1->id,
-                            "full_name" => $c1->full_name,
-                            "type" => 'customer',
-                        );
-                    }
-                }
-                
-            }
-        }else{
-            $family = $user->user_family_details;
-            foreach($family as $fm){
-                $customers [] = array(
-                    "id" => $fm->id,
-                    "full_name" => $fm->full_name,
-                    "type" => 'family',
-                );
-            }
-        }*/
-
-        $customer = @$user->customers()->where('business_id',$cid)->get();
-        if($customer){
-            foreach($customer as $cs){
-                foreach ($cs->get_families() as $fm){
-                    $familyDetails [] = $fm;
-                }  
-            }
+    function getFamilyMember($cusId,$cid = null){
+        $businessCustomer = $customers = $familyDetails  = $UserFamilyDetails =[];
+        if($cusId){
+            $customer = Customer::find($cusId);
+            foreach ($customer->get_families() as $fm){
+                $familyDetails [] = $fm;
+            } 
 
             $groupedFamilyDetails = collect($familyDetails)->groupBy(function ($item) {
                 return $item->fname . ' ' . $item->lname;
@@ -158,18 +231,48 @@
                     "type" => 'customer',
                 );
             }
+
+            return $customers;
         }else{
-            $userfamily = $user->user_family_details;
-            foreach($userfamily as $uf){
-                 $customers [] = array(
-                    "id" => $uf->id,
-                    "full_name" => $uf->full_name,
-                    "type" => 'family',
-                );
+            $user = Auth::user();
+            $customer = @$user->customers()->where('business_id',$cid)->get();
+            if($customer){
+                foreach($customer as $cs){
+                    // dd($cs);
+                    foreach ($cs->get_families() as $fm){
+                        $familyDetails [] = $fm;
+                    }  
+                }
+                $groupedFamilyDetails = collect($familyDetails)->groupBy(function ($item) {
+                    return $item->fname . ' ' . $item->lname;
+                });
+                $uniqueFamilyDetails = collect([]);
+                foreach ($groupedFamilyDetails as $name => $group) {
+                    $uniqueFamilyDetails->push($group->first()); // Add the first item from each group
+                }
+                foreach ($uniqueFamilyDetails as $detail) {
+                    $UserFamilyDetails [] = $detail;
+                }
+                foreach($UserFamilyDetails as $c1){
+                    $customers [] = array(
+                        "id" => $c1->id,
+                        "full_name" => $c1->full_name,
+                        "type" => 'customer',
+                    );
+                }
+            }else{
+                $userfamily = $user->user_family_details;
+                foreach($userfamily as $uf){
+                     $customers [] = array(
+                        "id" => $uf->id,
+                        "full_name" => $uf->full_name,
+                        "type" => 'family',
+                    );
+                }
             }
+            // print_r($customers);exit;
+            return $customers;
         }
-        //print_r($customers);exit;
-        return $customers;
     }
 
     function getCustomerByname($businessId ,$customerName ){
@@ -268,7 +371,7 @@
 
     function getUserbookingDetail($sid,$cid)
     {
-        return App\UserBookingDetail::where(['sport'=> $sid ,'user_id'=>$cid])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->orderby('created_at','desc')->get();
+        return UserBookingDetail::where(['sport'=> $sid ,'user_id'=>$cid])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->orderby('created_at','desc')->get();
     }
 
     function getGroupByPriceOption($cdt)
@@ -349,9 +452,7 @@
        
        return $notifications = array();
     }
-
     
-
     function timeAgo($created_at){
         $date = Carbon::parse($created_at);
         $minutesDifference = $date->diffInMinutes(now());
@@ -381,8 +482,7 @@
     }
 
     function countryName($city){
-       return CompanyInformation::where('city',$city)->pluck('country')->first();
-        
+       return CompanyInformation::where('city',$city)->pluck('country')->first(); 
     }
 
     function sidebarUpdatesNotification()
@@ -536,7 +636,6 @@
         }
 
         return view('layouts.business.sideNotification', ['notificationAry' =>$notificationAry ,'todayBooking' => $todayBooking,'topBookedCategories' => $topBookedCategories,'services' => $services])->render();
-
     }
 
     function completeSetUpCount(){
@@ -577,5 +676,91 @@
         return 0;
     }
 
+    function getCustomerList($type ,$value,$business_id){
+
+        $customersIdAray = [];
+        if($type == 'program'){
+            $customersIdAray = UserBookingDetail::where('sport',$value)->whereNotNull('user_id')->pluck('user_id')->toArray();
+        }else if($type == 'category'){
+            $category = BusinessPriceDetailsAges::find($value);
+            $priceIds = $category->BusinessPriceDetails()->pluck('id')->toArray();
+            $customersIdAray = UserBookingDetail::whereIn('priceid',$priceIds)->pluck('user_id')->toArray();
+        }elseif($type == 'custom'){
+            $customList =  CustomList::find($value);
+            $customersIdAray = $customList->customCientList()->pluck('customer_id')->toArray();
+        }elseif($type == 'customer'){
+            $customers = Customer::where('business_id',$business_id)->get();
+
+            $customerStatus = $customers->mapToGroups(function ($customer) {
+                return [$customer->is_active() => $customer];
+            });
+
+            if($value == 'Active'){
+                $customersIdAray =  $customerStatus->get($value, collect())->pluck('id')->toArray();;
+            }else if($value == 'InActive'){
+                $customersIdAray =  $customerStatus->get($value, collect())->pluck('id')->toArray();;
+            }else if($value == 'Prospect'){
+                $customersIdAray =  $customerStatus->get($value, collect())->pluck('id')->toArray();;
+            }else if($value == 'at-risk'){
+                $customersIdAray = $customers->filter->customerAtRisk()->pluck('id')->toArray();;
+            }else if($value == 'big-spenders'){
+                $customersIdAray = $customers->filter->bigSpender()->pluck('id')->toArray();; 
+            }
+        }else if($type == 'gender'){
+            $customersIdAray = Customer::where('business_id',$business_id)->where('birthdate' ,'!=' , '')->where(DB::raw('LOWER(gender)'), strtolower($value))->pluck('id')->toArray();
+        }else if($type == 'age'){
+            if($value == '18-29'){
+                $customersIdAray =  Customer::where('business_id',$business_id)->where('birthdate' ,'!=' , '')->whereRaw("birthdate <= DATE_SUB(CURDATE(), INTERVAL 18 YEAR)")
+                   ->whereRaw("birthdate >= DATE_SUB(CURDATE(), INTERVAL 29 YEAR)")->pluck('id')->toArray();
+            }else if($value == '30-39'){
+                $customersIdAray =  Customer::where('business_id',$business_id)->where('birthdate' ,'!=' , '')->whereRaw("birthdate <= DATE_SUB(CURDATE(), INTERVAL 30 YEAR)")
+                   ->whereRaw("birthdate >= DATE_SUB(CURDATE(), INTERVAL 39 YEAR)")->pluck('id')->toArray();
+            }else if($value == '40-49'){
+                $customersIdAray = Customer::where('business_id',$business_id)->where('birthdate' ,'!=' , '')->whereRaw("birthdate <= DATE_SUB(CURDATE(), INTERVAL 40 YEAR)")
+                   ->whereRaw("birthdate >= DATE_SUB(CURDATE(), INTERVAL 49 YEAR)")->pluck('id')->toArray();
+            }else if($value == '50'){
+                $customersIdAray = Customer::where('business_id',$business_id)->where('birthdate' ,'!=' , '')->whereRaw("birthdate <= DATE_SUB(CURDATE(), INTERVAL 50 YEAR)")->pluck('id')->toArray();
+            }else if($value == 'kids'){
+                $customersIdAray =  Customer::where('business_id',$business_id)->where('birthdate' ,'!=' , '')->whereRaw("birthdate >= DATE_SUB(CURDATE(), INTERVAL 18 YEAR)")->pluck('id')->toArray();
+            }
+        }else if($type == 'membership'){
+            $currentDate = Carbon::now();
+            if($value == 'Month'){
+                $lastDateOfMonth = $currentDate->endOfMonth()->format('Y-m-d');
+                $customersIdAray = UserBookingDetail::where('expired_at', '>=', $currentDate->format('Y-m-d'))->where('expired_at', '<=', $lastDateOfMonth)->whereNotNull('user_id')->pluck('user_id')->toArray();
+            }else{
+                $customersIdAray = UserBookingDetail::where('expired_at', '<', $currentDate)->whereNotNull('user_id')->pluck('user_id')->toArray();
+            }
+        }
+
+        return $customersIdAray;
+    }
+
+    function getMemberList($cus,$value,$business_id){
+        $customer = Customer::find($cus);
+        $currentDate = Carbon::now();
+        $lastDateOfMonth = $currentDate->endOfMonth();
+        $text = '';
+        if($value == 'Month'){
+            $membership = $customer->bookingDetail()->whereDate('expired_at', '>=', Carbon::now()->format('Y-m-d'))->whereDate('expired_at', '<=', $lastDateOfMonth)->get();
+        }else{
+            $membership = $customer->bookingDetail()->whereDate('expired_at', '<', Carbon::now()->format('Y-m-d'))->get();
+        }
+
+        foreach ($membership as $key => $m) {
+            $text .= ' <b>Membership Type : </b>'.$m->business_price_detail_with_trashed->price_title .'  <b>Start Date : </b>'.  date('m/d/Y' ,strtotime($m->contract_date)) .'  <b>End Date : </b>'. date('m/d/Y' ,strtotime($m->expired_at)) .'<br>';
+        }
+
+        return  $text;
+    }
+    function getCustomerFilesNotifiy()
+    {
+        return BusinessCustomerUploadFiles::where('isseen', 0)->where('status', 0)->get();
+    }
+    function markNotificationsAsSeenAndProcessed($notificationIds)
+    {
+        BusinessCustomerUploadFiles::whereIn('id', $notificationIds)
+        ->update(['isseen' => 1]);
+    }
 
 ?>
