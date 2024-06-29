@@ -65,7 +65,13 @@
 
     function getBusinessServiecReviewSum($sid,$type){
         $service = BusinessServices::find($sid);
-        return $service->reviews()->sum($type);
+        if( $service->reviews()!='' )
+        {
+            return $service->reviews()->sum($type);
+        }
+        else
+        { return 0; }
+        
     }
 
     function getBusinessServiceCount($sid,$type){
