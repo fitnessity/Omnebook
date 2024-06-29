@@ -2,7 +2,6 @@
 @extends('layouts.business.header')
 @section('content')
 	@include('layouts.business.business_topbar')
-
    <div class="main-content">
 		<div class="page-content">
          <div class="container-fluid">
