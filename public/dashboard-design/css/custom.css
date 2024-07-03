@@ -5419,7 +5419,7 @@ div#termsdiv{order: 4;}
 	display: relative;
 }
 .sche-submit{
-	position: absolute;
+	position: fixed;
 	bottom: 4%;
 }
 .side-cross{
@@ -8706,7 +8706,7 @@ customer-list-table.dataTable > tbody > tr.child ul.dtr-details{
   object-position: top;
   border-radius: 7px;
   margin-bottom: 10px;
-  min-height: 300px;
+  min-height: 400px;
 }
 .like-heart .wegites-like a{
   top: 12px;
@@ -8726,7 +8726,7 @@ customer-list-table.dataTable > tbody > tr.child ul.dtr-details{
   padding: 6px 8px;
   border-radius: 4px;
   left: 0px;
-  z-index: 9999;
+  z-index: 99;
 }
 .break-word{word-wrap: break-word;}
 
