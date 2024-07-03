@@ -72,6 +72,7 @@ class OrderController extends BusinessBaseController
         }else if($request->cus_id != ''){
             $user_type = 'customer';
             $customer = $customerdata = $request->current_company->customers->find($request->cus_id);
+            // dd($request->cus_id);
             @$customer->create_stripe_customer_id();
             if($customer->parent_cus_id && $request->redirected != 1){
                 return redirect(route('business.orders.create', ['cus_id' => $customer->parent_cus_id, 'participate_id' => $request->cus_id, 'redirected' => true]));
@@ -114,10 +115,20 @@ class OrderController extends BusinessBaseController
             $status = "Active";
         }
           
-        $program_list = BusinessServices::where(['is_active'=>1, 'userid'=>Auth::user()->id, 'cid'=>$companyId])->whereHas('schedulers', function ($query) {
+        // $program_list = BusinessServices::where(['is_active'=>1, 'userid'=>Auth::user()->id, 'cid'=>$companyId])->whereHas('schedulers', function ($query) {
+        //     $query->where('end_activity_date', '>', now())
+        //           ->orWhereNull('end_activity_date');
+        // })->get();
+        $program_list = BusinessServices::where(['is_active' => 1, 'userid' => Auth::user()->id, 'cid' => $companyId])
+        ->whereHas('schedulers', function ($query) {
             $query->where('end_activity_date', '>', now())
-                  ->orWhereNull('end_activity_date');
-        })->get();
+                ->orWhereNull('end_activity_date');
+        })
+        ->whereHas('priceDetailsAges', function ($query) {
+            $query->where('stype', 1);
+        })
+        ->get();
+
         $products = Products::where(['user_id'=>Auth::user()->id, 'business_id'=>$companyId])->get();
 
         $productCategory = ProductsCategory::orderBy('name')->get();
@@ -359,9 +370,8 @@ class OrderController extends BusinessBaseController
                 $cUid = $item['participate_from_checkout_regi']['id'];
                 $participateName =  trim($item['participate_from_checkout_regi']['pc_name'],"(me)");
             }
-
             $price_detail = $checkoutRegisterCartService->getPriceDetail($item['priceid']);
-
+            // dd($price_detail);
             $booking_detail = UserBookingDetail::create([                 
                 'booking_id' => $userBookingStatus->id,
                 'sport' => $item['code'],
@@ -409,6 +419,7 @@ class OrderController extends BusinessBaseController
                 $stripeId = $stripeChargedAmount = $paymentMethod= '';
 
                 $amount = $checkoutRegisterCartService->getMembershipTotalItem($item) - $checkoutRegisterCartService->getDisItem($item) ;
+                // dd($amount);
                 $tax_recurring = $item['tax_activity'];
 
                 if($key == 'adult'){
@@ -445,12 +456,13 @@ class OrderController extends BusinessBaseController
                 if($salesTax == '' || $salesTax == null){
                     $salesTax = 0;
                 }
-
+                // dd($amount);
                 if($qty != '' && $qty != 0){
                     //$tax_recurring = number_format((($amount * $duesTax)/100)  + (($amount * $salesTax)/100),2); 
                    // $tax_recurring = $booking_detail->membershipTotalTax ?? 0; //salestax is for product. and dues tax is for membership 
                     $paymentMethod = $tran_data['stripe_payment_method_id'];
                     if($re_i != '' && $re_i != 0 && $amount != ''){
+                        // dd($re_i);
                         for ($num = $re_i; $num > 0 ; $num--) { 
                             if($num == 1){
                                 $stripeId =  $tran_data['transaction_id'];
@@ -461,6 +473,7 @@ class OrderController extends BusinessBaseController
                                 $payment_on = date('Y-m-d');
                             }else{
                                 $Chk = explode(" ",$reCharge);
+                                // dd($Chk);
                                 $timeChk = @$Chk[1];
                                 $afterHowmanytime = @$Chk[0];
                                 $addTime  = is_numeric($afterHowmanytime) ? $afterHowmanytime * ($num - 1) : 0;
@@ -481,8 +494,18 @@ class OrderController extends BusinessBaseController
 
                                 if($num == $re_i && $additionalPaymentDate){
                                     $booking_detail->expired_at = $additionalPaymentDate;
-                                    $booking_detail->expired_duration = ($re_i * $afterHowmanytime).' '.$timeChk.'s';
-                                    $booking_detail->save();
+                                    // $booking_detail->expired_duration = ($re_i * $afterHowmanytime).' '.$timeChk.'s';
+                                    // $booking_detail->save();
+                                    if (is_numeric($re_i) && is_numeric($afterHowmanytime)) {
+                                        $expired_duration = ($re_i * $afterHowmanytime).' '.$timeChk.'s';
+                                        $booking_detail->expired_duration = $expired_duration;
+                                        $booking_detail->save();
+                                    } else {
+                                        // Handle the error if either $re_i or $afterHowmanytime is not numeric
+                                        // For example, log an error or throw an exception
+                                        // Optionally, set a default value or handle the error gracefully
+                                            dd($afterHowmanytime);
+                                    }
                                 }
 
                                 $status = 'Scheduled';
@@ -509,6 +532,7 @@ class OrderController extends BusinessBaseController
                                 Recurring::create($recurring);
                             }
                         }
+                        // dd($recurring);
                     }
                 }
             }
@@ -698,7 +722,7 @@ class OrderController extends BusinessBaseController
     }
 
     public function addToCartForCheckout(Request $request){
-        //print_r($request->all()); //exit;
+        // print_r($request->all()); exit;
         $customerId = $request->pc_regi_id;
         $cart_item = $request->session()->has('cart_item_for_checkout') ? $request->session()->get('cart_item_for_checkout') : [];
         $tax = $request->has('value_tax') != '' ? $request->value_tax : 0;

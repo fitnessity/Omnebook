@@ -402,5 +402,11 @@ class BusinessServices extends Model
         return  $chkDetailCnt;
     }
 
+    // In BusinessService.php model
+    public function priceDetailsAges()
+    {
+        return $this->hasMany(BusinessPriceDetailsAges::class, 'serviceid', 'id');
+    }
+
 
 }
