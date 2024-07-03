@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\{CompanyInformation,UserBookingStatus,UserBookingDetail,BusinessActivityScheduler,Customer,BusinessPriceDetails,BookingCheckinDetails,SGMailService};
 use App\Repositories\BookingRepository;
 use DateTime;
+use App\BusinessPriceDetailsAges;
 use Auth,View;
 use Session;
 use DB;
@@ -74,7 +75,10 @@ class BusinessActivitySchedulerController extends Controller
             $servicetype = $request->stype;
             $business_services = $business_services->where(['id'=>$request->business_service_id,'is_active'=>1, 'service_type' => $servicetype]); 
         }
-
+        
+        // my code start
+            $serviceids=BusinessPriceDetailsAges::wherein('serviceid',$business_services->pluck('id'))->where('stype','1');
+        // my code ends
         $filter_date = new DateTime();
         $shift = 1;
         if($request->date && (new DateTime($request->date)) > $filter_date){
@@ -87,10 +91,11 @@ class BusinessActivitySchedulerController extends Controller
             $d = clone($filter_date);
             $days[] = $d->modify('+'.($i+$shift).' day');
         }
+        // \DB::enableQueryLog(); // Enable query log
+        // $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('shift_start', 'asc')->get();//old
+        $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $serviceids->pluck('serviceid'))->orderBy('shift_start', 'asc')->get();//added by me
+        // dd(\DB::getQueryLog());
 
-       // \DB::enableQueryLog(); // Enable query log
-        $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('shift_start', 'asc')->get();
-       // dd(\DB::getQueryLog());
 
         $services = [];
         foreach($bookschedulers as $bs){
@@ -250,7 +255,7 @@ class BusinessActivitySchedulerController extends Controller
     }
 
     public function multibooking(Request $request, $business_id){
-        dd('test');
+        // dd('test');
         $company = CompanyInformation::findOrFail($business_id);
         $filter_date = new DateTime();
         $shift = 1;
