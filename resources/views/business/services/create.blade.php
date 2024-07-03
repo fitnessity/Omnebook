@@ -1439,7 +1439,8 @@
                                                                                 </div>
                                                                                 <div class="col-lg-6 col-md-8 col-sm-6 col-6">
                                                                                     <div class="fs-14 float-right links-set setoflinkes">
-                                                                                        <a href="{{route('business.schedulers.create', ['business_id'=>$class->cid,'categoryId'=>$class->id]) }}">@if($class->BusinessActivityScheduler()->count() > 0 )  <a onclick="openScheduleModel('{{$class->id}}')" >{{$class->BusinessActivityScheduler()->count()}} Scheduled </a> @else  Not Scheduled @endif  </a>
+                                                                                        <!-- <a href="{{route('business.schedulers.create', ['business_id'=>$class->cid,'categoryId'=>$class->id]) }}">@if($class->BusinessActivityScheduler()->count() > 0 )  <a onclick="openScheduleModel('{{$class->id}}')" >{{$class->BusinessActivityScheduler()->count()}} Scheduled </a> @else  Not Scheduled @endif  </a> -->
+                                                                                        <span>@if($class->BusinessActivityScheduler()->count() > 0 ) <a onclick="openScheduleModel('{{$class->id}}')" >{{$class->BusinessActivityScheduler()->count()}} Scheduled </a> @else  Not Scheduled @endif</span>
                                                                                         <label class="mr-5 ml-5"> | </label>
                                                                                         <!-- <a href="{{route('business.schedulers.create', ['business_id'=>$class->cid,'categoryId'=>$class->id]) }}">+ Schedule </a> -->
 
@@ -1499,7 +1500,7 @@
 
                                                                                                                 <ul class="schedule-class-navbar">      
                                                                                                                     <li class="pc-caption">
-                                                                                                                        <div class="d-relative">
+                                                                                                                        <div class="">
                                                                                                                             <div class="sche-submit">
                                                                                                                                 <button type="submit" class="btn-red select-event"> Submit </button>
                                                                                                                             </div>
