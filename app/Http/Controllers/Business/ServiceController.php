@@ -290,9 +290,11 @@ class ServiceController extends BusinessBaseController
                        /* "dues_tax" => $request->dues_tax[$i] ?? '',
                         "sales_tax" => $request->sales_tax[$i] ?? '',*/
                         "visibility_to_public" => (!empty(@$request->visibility_to_public)) ? (in_array('V'.$i, @$request->visibility_to_public) ? 1 : 0) : 0,
+                        "stype" => 1,
                     ];
 
                     $createOrUpdate = BusinessPriceDetailsAges::updateOrCreate(['id' => $request->cat_id_db[$i]], $businessages);
+                    
                     //print_r($createOrUpdate);
                     $cat_new_id = $createOrUpdate->id; 
                     $priceCnt = $request->input('priceCount'.$i);
@@ -599,6 +601,7 @@ class ServiceController extends BusinessBaseController
         $class->update([
             'category_title'=> $request->category_title ,
             'desc'=>$request->desc ,
+            'stype'=>1,
         ]);
         
         return redirect()->to('business/'.$request->cid.'/services/create?serviceType='.$request->serviceType.'&serviceId='.$request->serviceid.'#stepFour');
