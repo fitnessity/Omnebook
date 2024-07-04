@@ -151,11 +151,13 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																			<div class="col-md-6 col-sm-6 col-xs-12">
 																				<div class="classes-info text-left">
 																					<div class="row">
+																						{{-- 
 																						<div class="col-md-12 col-xs-12">
 																							<label class="fs-16">Schedule: </label> <span class="fs-16">{{@$cList->category_title}}</span>
 																						</div>
+																						--}}
 																						<div class="col-md-12 col-xs-12 ">
-																							<label>Program Name: </label> <span> {{$cList->BusinessServices->program_name}}</span>
+																							<label>Activity Name: </label> <span> {{$cList->BusinessServices->program_name}}</span>
 																						</div>
 																						<div class="col-md-12 col-xs-12">
 																							<div class="text-left line-height-1">
