@@ -11,7 +11,7 @@ use Config;
 use DateInterval;
 use DateTimeZone;
 use Illuminate\Support\Facades\Session;
-
+use App\BusinessServices;
 class SchedulerController extends BusinessBaseController
 {  
      public function __construct(){ 
@@ -20,9 +20,27 @@ class SchedulerController extends BusinessBaseController
      public function index(Request $request){
           $filterDate = Carbon::parse($request->date);
           // \DB::enableQueryLog(); 
-          $schedules = BusinessActivityScheduler::alldayschedule($filterDate,$request->activity_type)->where('cid', $request->current_company->id)->get();
+          // $schedules = BusinessActivityScheduler::alldayschedule($filterDate,$request->activity_type)->where('cid', $request->current_company->id)->get();
           // dd(\DB::getQueryLog()); 
-          // print_r($schedules);exit;
+
+          $services = BusinessServices::where('cid', $request->current_company->id)->get();
+          $categoryIds = [];
+
+          foreach ($services as $service) {
+               $priceDetails = BusinessPriceDetailsAges::where('serviceid', $service->id)
+                                   ->where('class_type', $service->service_type)
+                                   ->get();
+               
+               foreach ($priceDetails as $priceDetail) {
+                    $categoryIds[] = $priceDetail->id;
+               }
+          }
+
+          $schedules = BusinessActivityScheduler::alldayschedule($filterDate, $request->activity_type)
+                         ->where('cid', $request->current_company->id)
+                         ->whereIn('category_id', $categoryIds)
+                         ->get();
+
           return view('business.scheduler.index', [
               'schedules' => $schedules, 
               'filterDate' => $filterDate,

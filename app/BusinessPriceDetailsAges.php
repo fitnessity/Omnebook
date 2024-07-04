@@ -37,6 +37,7 @@ class BusinessPriceDetailsAges extends Model
         'visibility_to_public',
         'class_type',
         'desc',
+        'stype',
     ];
 
     public static function boot(){
@@ -52,7 +53,13 @@ class BusinessPriceDetailsAges extends Model
         });
     }
     
-    
+
+    public static function getCategoriesByServiceAndType($serviceId, $serviceType)
+    {
+        return self::where('serviceid', $serviceId)
+                ->where('class_type', $serviceType)
+                ->get();
+    }
     public function BusinessActivityScheduler()
     {
         return $this->hasMany(BusinessActivityScheduler::class ,'category_id')->orderBy('shift_start');
