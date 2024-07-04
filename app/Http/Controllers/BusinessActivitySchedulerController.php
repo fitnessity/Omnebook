@@ -77,7 +77,7 @@ class BusinessActivitySchedulerController extends Controller
         }
         
         // my code start
-            $serviceids=BusinessPriceDetailsAges::wherein('serviceid',$business_services->pluck('id'))->where('stype','1');
+            $serviceids=BusinessPriceDetailsAges::wherein('serviceid',$business_services->pluck('id'))->where('stype','1')->where('class_type', $business_services->pluck('service_type'));
         // my code ends
         $filter_date = new DateTime();
         $shift = 1;
