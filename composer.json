@@ -59,6 +59,14 @@
             "app/helpers/general_helper.php",
             "app/helpers/helpers.php",
             "app/helpers/userfeed_helper.php"
+        ],
+        "exclude-from-classmap": [
+            "app/Exports/ExportInactiveClient.php",
+            "app/Http/Controllers/Admin/AdminAuthController_bkp.php",
+            "app/Http/Controllers/-DesignController.php",
+            "app/Http/Controllers/Personal/OnBoardedController.php",
+            "app/Libraries/vendor/braintree/braintree_php/tests/",
+            "app/Libraries/vendor/composer/"
         ]
     },
     "autoload-dev": {
@@ -72,6 +80,9 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
+        ],
+        "post-install-cmd": [
+            "sed -i '/use DateTime;/d' app/helpers/helpers.php"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
