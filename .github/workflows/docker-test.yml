@@ -34,7 +34,7 @@ jobs:
       - name: Migrate Database
         run: |
           gzip -d fitnessity_dev.sql.gz
-          docker exec -it fitnessity-app-1 mysql -u laraveluser -p${{ secrets.DB_PASSWORD }} laravel < fitnessity_dev.sql
+          docker exec -it fitnessity-app mysql -u laraveluser -p${{ secrets.DB_PASSWORD }} laravel < fitnessity_dev.sql
 
           echo "Application is up and running!"
 
