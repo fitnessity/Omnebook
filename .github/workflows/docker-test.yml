@@ -1,0 +1,51 @@
+name: Docker Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  docker-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build and start Docker containers
+        run: |
+          docker-compose -f docker-compose.yml build
+          docker-compose -f docker-compose.yml up -d
+
+      - name: Wait for application to be ready
+        run: |
+          echo "Waiting for application to be ready..."
+          timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8000)" != "200" ]]; do sleep 5; done' || false
+
+      # - name: Run Laravel migrations
+      #   run: docker-compose -f docker-compose.yml exec -T app php artisan migrate
+
+      # # Node.js end-to-end tests would go here
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: "14"
+
+      # - name: Install Node.js dependencies
+      #   run: |
+      #     # Navigate to your Node.js project directory if it's different
+      #     # cd path/to/nodejs/project
+      #     npm install
+
+      # - name: Run end-to-end tests
+      #   run: |
+      #     # This is a placeholder. Replace with your actual end-to-end test command
+      #     echo "Running end-to-end tests..."
+      #     # npm run test:e2e
+
+      - name: Stop Docker containers
+        run: docker-compose -f docker-compose.yml down
+
+      - name: Test completed successfully
+        run: echo "Test completed successfully"
