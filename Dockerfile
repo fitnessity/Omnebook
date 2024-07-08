@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    libzip-dev
+    libzip-dev \
+    default-mysql-client
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -42,7 +43,7 @@ RUN chmod -R 775 storage bootstrap/cache
 USER www-data
 
 # Debug: Print content of helpers.php before modification
-RUN echo "Content of helpers.php before modification:" && cat /var/www/html/app/helpers/helpers.php
+# RUN echo "Content of helpers.php before modification:" && cat /var/www/html/app/helpers/helpers.php
 
 # # Temporarily modify helpers.php
 # RUN sed -i 's/use View;/\/\/ use View;/' /var/www/html/app/helpers/helpers.php
@@ -57,16 +58,14 @@ RUN composer install --no-dev --no-scripts --no-autoloader --ignore-platform-req
 # Generate autoloader with verbose output
 RUN composer dump-autoload --no-dev --classmap-authoritative --ignore-platform-reqs -vvv
 
-
 # Create .env file if it doesn't exist
 RUN cp -n .env.example .env || true
-
 
 # Switch back to root for Apache configuration
 USER root
 
 # Set up Apache DocumentRoot
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+ENV APACHE_DOCUMENT_ROOT /var/www/html/
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
