@@ -18,6 +18,9 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
+# Install Xdebug
+# RUN pecl install xdebug && docker-php-ext-enable xdebug
+
 # Enable Apache modules
 RUN a2enmod rewrite
 
