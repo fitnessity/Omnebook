@@ -1,11 +1,5 @@
 name: Docker Test
 
-# on:
-#   push:
-#     branches: [main]
-#   pull_request:
-#     branches: [main]
-
 on:
   push:
     branches:
@@ -24,29 +18,29 @@ jobs:
           docker-compose -f docker-compose.yml up -d
 
       - name: Check Docker containers and wait for application
-            run: |
-              echo "Checking Docker containers..."
-              docker-compose -f docker-compose.yml ps
+        run: |
+          echo "Checking Docker containers..."
+          docker-compose -f docker-compose.yml ps
+
+          echo "Checking logs of the app container..."
+          docker-compose -f docker-compose.yml logs app
+
+          echo "Waiting for application to be ready..."
+          attempt_counter=0
+          max_attempts=30
+
+          until $(curl --output /dev/null --silent --head --fail http://localhost:8000); do
+              if [ ${attempt_counter} -eq ${max_attempts} ];then
+                echo "Max attempts reached. Application failed to start."
+                exit 1
+              fi
               
-              echo "Checking logs of the app container..."
-              docker-compose -f docker-compose.yml logs app
-              
-              echo "Waiting for application to be ready..."
-              attempt_counter=0
-              max_attempts=30
-              
-              until $(curl --output /dev/null --silent --head --fail http://localhost:8000); do
-                  if [ ${attempt_counter} -eq ${max_attempts} ];then
-                    echo "Max attempts reached. Application failed to start."
-                    exit 1
-                  fi
-                  
-                  printf '.'
-                  attempt_counter=$(($attempt_counter+1))
-                  sleep 10
-              done
-              
-              echo "Application is up and running!"
+              printf '.'
+              attempt_counter=$(($attempt_counter+1))
+              sleep 10
+          done
+
+          echo "Application is up and running!"
 
       # - name: Run Laravel migrations
       #   run: docker-compose -f docker-compose.yml exec -T app php artisan migrate
