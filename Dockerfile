@@ -61,6 +61,11 @@ RUN composer install --no-dev --no-scripts --no-autoloader --ignore-platform-req
 # Generate autoloader with verbose output
 RUN composer dump-autoload --no-dev --classmap-authoritative --ignore-platform-reqs -vvv
 
+### Debugging
+# Install Laravel Debug Bar
+# IF debug
+RUN composer require barryvdh/laravel-debugbar --dev
+
 # Create .env file if it doesn't exist
 RUN cp -n .env.example .env || true
 
