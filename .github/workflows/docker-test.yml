@@ -31,33 +31,41 @@ jobs:
           docker-compose -f docker-compose.yml build
           docker-compose -f docker-compose.yml up -d
 
-      - name: Check Docker containers and wait for application
+      - name: Check Docker containers health status
         run: |
-          echo "Checking Docker containers..."
-          docker-compose -f docker-compose.yml ps
-
-          echo "Checking logs of the app container..."
-          docker-compose -f docker-compose.yml logs app
-
           echo "Waiting for application to be ready..."
-          attempt_counter=0
-          max_attempts=3
-
-          until curl -sSf -o /dev/null http://localhost:8000
-          do
-              if [ ${attempt_counter} -eq ${max_attempts} ]; then
-                echo "Max attempts (${max_attempts}) reached. Application failed to start."
-                echo "Final attempt output:"
-                curl -v http://localhost:8000
-                echo "Docker logs:"
-                docker-compose -f docker-compose.yml logs
-                exit 1
-              fi
-              
-              echo "Attempt ${attempt_counter}/${max_attempts} failed. Retrying in 2 seconds..."
-              attempt_counter=$((attempt_counter+1))
-              sleep 2
+          until [ "$(docker inspect --format='{{json .State.Health.Status}}' your-container-name)" == "\"healthy\"" ]; do
+            sleep 5;
+            echo "Waiting for the application to be healthy..."
           done
+
+      # - name: Check Docker containers and wait for application
+      #   run: |
+      #     echo "Checking Docker containers..."
+      #     docker-compose -f docker-compose.yml ps
+
+      #     echo "Checking logs of the app container..."
+      #     docker-compose -f docker-compose.yml logs app
+
+      #     echo "Waiting for application to be ready..."
+      #     attempt_counter=0
+      #     max_attempts=3
+
+      #     until curl -sSf -o /dev/null http://localhost:8000
+      #     do
+      #         if [ ${attempt_counter} -eq ${max_attempts} ]; then
+      #           echo "Max attempts (${max_attempts}) reached. Application failed to start."
+      #           echo "Final attempt output:"
+      #           curl -v http://localhost:8000
+      #           echo "Docker logs:"
+      #           docker-compose -f docker-compose.yml logs
+      #           exit 1
+      #         fi
+              
+      #         echo "Attempt ${attempt_counter}/${max_attempts} failed. Retrying in 2 seconds..."
+      #         attempt_counter=$((attempt_counter+1))
+      #         sleep 2
+      #     done
 
           echo "Application is up and running!"
 
