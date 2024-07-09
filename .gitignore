@@ -17,9 +17,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 .env
-docker-compose.yml
 apache.conf
-Dockerfile
 .phpunit.result.cache
 docker-compose.override.yml
 Homestead.json
@@ -71,3 +69,4 @@ Thumbs.db
 *.wmv
 
 /braintree/nbproject/private/
+dbdata/
