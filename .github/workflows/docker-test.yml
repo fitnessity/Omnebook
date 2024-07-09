@@ -37,17 +37,23 @@ jobs:
           push: false
           tags: fitnessity:latest
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
-      - name: Start Docker containers
+      - name: Build and start Docker containers
         run: |
           docker-compose -f docker-compose.yml up -d
+          # Wait for the database to be ready
+          until docker exec fitnessity_db_1 mysqladmin ping --host=db --password=your_mysql_root_password --silent; do
+              echo "Waiting for database to be ready..."
+              sleep 2
+          done
 
       - name: Migrate Database
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
           gzip -d fitnessity_dev.sql.gz
-          docker exec -i fitnessity_app_1 mysql -u laraveluser -p laravel < fitnessity_dev.sql
-
+          docker exec -i fitnessity_app_1 mysql -h db -u laraveluser -p${DB_PASSWORD} laravel < fitnessity_dev.sql
           echo "Application is up and running!"
 
       - name: Stop Docker containers
