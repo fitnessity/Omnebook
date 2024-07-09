@@ -34,8 +34,9 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          push: false
-          tags: fitnessity:latest
+          push: true
+          tags: ghcr.io/fullstackwebdev/fitnessity/fitnessity:latest
+          # tags: ghcr.io/fullstackwebdev/fitnessity/fitnessity:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
