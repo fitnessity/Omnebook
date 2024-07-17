@@ -111,6 +111,7 @@
 																<label for="postcode">Post Code</label>
 																<input type="text" class="form-control" name="postcode" id="postcode" value="{{$staffMember->postcode}}">
 															</div>
+															
 															<div class="form-group mb-10">
 																<label for="email">Birthday</label>
 																<div class="input-group">
@@ -125,6 +126,13 @@
 																<label class="position-gander">Set Password</label>
 																<input type="text" class="form-control" id="password" name="password" value="{{$staffMember->buddy_key}}" placeholder="*****" /> 
 															</div>
+															<div class="form-group mb-10">
+																<label>unique code</label>
+																<input type="text" class="form-control" id="unique_code" name="unique_code" value="{{$staffMember->unique_code}}"/> 
+															</div>
+															@if ($errors->has('unique_code'))
+															<span class="text-danger">{{ $errors->first('unique_code') }}</span>
+															@endif
 															<div class="form-group mb-10 float-end">
 																<button type="submit" class="btn btn-red" id="add-btn">Update</button>
 															</div>
@@ -156,114 +164,143 @@
 														<div class="col-lg-6 col-sm-12">
 															<div class="mb-10">
 																<div class="row">
-																	<div class="col-lg-4 col-sm-4 col-4">
+																	<div class="col-lg-5 col-sm-5 col-5">
 																		<label> Name: </label>
 																	</div>
-																	<div class="col-lg-8 col-sm-8 col-8">
+																	<div class="col-lg-7 col-sm-7 col-7">
 																		<span> {{$staffMember->full_name}} </span>
 																	</div>													
 																</div>
 															</div>
 															<div class="mb-10">
 																<div class="row">
-																	<div class="col-lg-4 col-sm-4 col-4">
+																	<div class="col-lg-5 col-sm-5 col-5">
 																		<label> Cell Number: </label>
 																	</div>
-																	<div class="col-lg-8 col-sm-8 col-8">
+																	<div class="col-lg-7 col-sm-7 col-7">
 																		<span> {{$staffMember->phone}} </span>
 																	</div>													
 																</div>
 															</div>
 															<div class="mb-10">
 																<div class="row">
-																	<div class="col-lg-4 col-sm-4 col-4">
+																	<div class="col-lg-5 col-sm-5 col-5">
 																		<label> Email: </label>
 																	</div>
-																	<div class="col-lg-8 col-sm-8 col-8">
+																	<div class="col-lg-7 col-sm-7 col-7">
 																		<span>{{$staffMember->email}}</span>
 																	</div>													
 																</div>
 															</div>
 															<div class="mb-10">
 																<div class="row">
-																	<div class="col-lg-4 col-sm-4 col-4">
+																	<div class="col-lg-5 col-sm-5 col-5">
 																		<label> Position: </label>
 																	</div>
-																	<div class="col-lg-8 col-sm-8 col-8">
+																	<div class="col-lg-7 col-sm-7 col-7">
 																		<span>{{$staffMember->position}}</span>
 																	</div>				
 																</div>
 															</div>
 															<div class="mb-10">
 																<div class="row">
-																	<div class="col-lg-4 col-sm-4 col-4">
+																	<div class="col-lg-5 col-sm-5 col-5">
 																		<label> Gender: </label>
 																	</div>
-																	<div class="col-lg-8 col-sm-8 col-8">
+																	<div class="col-lg-7 col-sm-7 col-7">
 																		<span>{{$staffMember->gender}} </span>
 																	</div>													
 																</div>
 															</div>
 															<div class="mb-10">
 																<div class="row">
-																	<div class="col-lg-4 col-sm-4 col-4">
+																	<div class="col-lg-5 col-sm-5 col-5">
 																		<label> Address: </label>
 																	</div>
-																	<div class="col-lg-8 col-sm-8 col-8">
+																	<div class="col-lg-7 col-sm-7 col-7">
 																		<span>{{$staffMember->address != '' ? $staffMember->address : 'N/A'}}</span>
 																	</div>													
 																</div>
 															</div>
-															
-														</div>
-														<div class="col-lg-6">
 															<div class="mb-10">
 																<div class="row">
-																	<div class="col-lg-4 col-sm-4 col-4">
+																	<div class="col-lg-5 col-sm-5 col-5">
 																		<label> City: </label>
 																	</div>
-																	<div class="col-lg-8 col-sm-8 col-8">
+																	<div class="col-lg-7 col-sm-7 col-7">
 																		<span>{{$staffMember->city != '' ? $staffMember->city : 'N/A'}}</span>
 																	</div>													
 																</div>
 															</div>
+														</div>
+														<div class="col-lg-6">
 															<div class="mb-10">
 																<div class="row">
-																	<div class="col-lg-4 col-sm-4 col-4">
+																	<div class="col-lg-5 col-sm-5 col-5">
 																		<label> State:</label>
 																	</div>
-																	<div class="col-lg-8 col-sm-8 col-8">
+																	<div class="col-lg-7 col-sm-7 col-7">
 																		<span>{{$staffMember->state != '' ? $staffMember->state  : 'N/A'}}</span>
 																	</div>													
 																</div>
 															</div>
 															<div class="mb-10">
 																<div class="row">
-																	<div class="col-lg-4 col-sm-4 col-4">
+																	<div class="col-lg-5 col-sm-5 col-5">
 																		<label> Post Code: </label>
 																	</div>
-																	<div class="col-lg-8 col-sm-8 col-8">
+																	<div class="col-lg-7 col-sm-7 col-7">
 																		<span>{{$staffMember->postcode != '' ? $staffMember->postcode : 'N/A'}}</span>
 																	</div>													
 																</div>
 															</div>
 															<div class="mb-10">
 																<div class="row">
-																	<div class="col-lg-4 col-sm-4 col-4">
+																	<div class="col-lg-5 col-sm-5 col-5">
 																		<label> Birthday: </label>
 																	</div>
-																	<div class="col-lg-8 col-sm-8 col-8">
+																	<div class="col-lg-7 col-sm-7 col-7">
 																		<span>{{$staffMember->birthdate != '' ? date('m/d/Y',strtotime($staffMember->birthdate)) : "N/A"}}</span>
 																	</div>	
 																</div>
 															</div>
 															<div class="mb-10">
 																<div class="row">
-																	<div class="col-lg-4 col-sm-4 col-4">
+																	<div class="col-lg-5 col-sm-5 col-5">
 																		<label> Public Bio: </label>
 																	</div>
-																	<div class="col-lg-8 col-sm-8 col-8">
+																	<div class="col-lg-7 col-sm-7 col-7">
 																		<span>{{$staffMember->bio}}</span>
+																	</div>				
+																</div>
+															</div>
+															<div class="mb-10">
+																<div class="row">
+																	<div class="col-lg-5 col-sm-5 col-5">
+																		<label> Country Born: </label>
+																	</div>
+																	<div class="col-lg-7 col-sm-7 col-7">
+																		<span></span>
+																	</div>				
+																</div>
+															</div>
+															<div class="mb-10">
+																<div class="row">
+																	<div class="col-lg-5 col-sm-5 col-5">
+																		<label> Something fun about you: </label>
+																	</div>
+																	<div class="col-lg-7 col-sm-7 col-7">
+																		<span></span>
+																	</div>				
+																</div>
+															</div>
+															<div class="mb-10">
+																<div class="row">
+																	<div class="col-lg-5 col-sm-5 col-5">
+																		<label> 4 Digit Code: </label>
+																	</div>
+																	<div class="col-lg-7 col-sm-7 col-7">
+																		<span>{{$staffMember->unique_code != '' ? $staffMember->unique_code : 'N/A'}}</span>
 																	</div>				
 																</div>
 															</div>

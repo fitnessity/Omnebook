@@ -730,3 +730,9 @@
     
     </script>
 @endsection
+
+
+@push('scripts')
+    <script src="{{asset('/public/dashboard-design/js/dropzone-min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/js/ecommerce-product-create.init.js')}}"></script>
+@endpush

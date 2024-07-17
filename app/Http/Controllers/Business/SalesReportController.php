@@ -101,7 +101,7 @@ class SalesReportController extends BusinessBaseController
                     ->where('kind', 'cash')
                     ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
                     ->join('user_booking_details as ubd', function($join) use ($business_id ) {
-                         $join->on('ubd.booking_id', '=', 'ubs.id')
+                         $join->on('ubd.booking_id', '=', 'ubs.id')->where('ubd.order_type', 'Membership')
                               ->where('ubd.business_id', '=', $business_id );
                     })->whereDate('transaction.created_at','>=', $request->startDate )->whereDate('transaction.created_at','<=', $request->endDate )->orderBy('transaction.created_at', 'Desc')->get();
 
@@ -109,7 +109,7 @@ class SalesReportController extends BusinessBaseController
                     ->where('kind', 'comp')
                     ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
                     ->join('user_booking_details as ubd', function($join) use ($business_id ) {
-                         $join->on('ubd.booking_id', '=', 'ubs.id')
+                         $join->on('ubd.booking_id', '=', 'ubs.id')->where('ubd.order_type', 'Membership')
                               ->where('ubd.business_id', '=', $business_id );
                     })->whereDate('transaction.created_at','>=', $request->startDate )->whereDate('transaction.created_at','<=', $request->endDate )->orderBy('transaction.created_at', 'Desc')->get();
 
@@ -117,7 +117,7 @@ class SalesReportController extends BusinessBaseController
                     ->where('kind', 'check')
                     ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
                     ->join('user_booking_details as ubd', function($join) use ($business_id ) {
-                         $join->on('ubd.booking_id', '=', 'ubs.id')
+                         $join->on('ubd.booking_id', '=', 'ubs.id')->where('ubd.order_type', 'Membership')
                               ->where('ubd.business_id', '=', $business_id );
                     })->whereDate('transaction.created_at','>=', $request->startDate )->whereDate('transaction.created_at','<=', $request->endDate )->orderBy('transaction.created_at', 'Desc')->get();
 
@@ -126,7 +126,7 @@ class SalesReportController extends BusinessBaseController
                    ->where('item_type', 'UserBookingStatus')
                    ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
                    ->join('user_booking_details as ubd', function($join) use ($business_id) {
-                       $join->on('ubd.booking_id', '=', 'ubs.id')
+                       $join->on('ubd.booking_id', '=', 'ubs.id')->where('ubd.order_type', 'Membership')
                            ->where('ubd.business_id', '=', $business_id);
                    })
                    ->whereDate('transaction.created_at', '>=', $request->startDate)

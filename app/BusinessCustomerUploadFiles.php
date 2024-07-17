@@ -15,6 +15,9 @@ class BusinessCustomerUploadFiles extends Model
         'file',
 		'status',
 		'num_records',
+		'is_error',
+		'chunks_processed',
+		'total_chunks',
     ];
 }
 ?>

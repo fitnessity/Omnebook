@@ -14,14 +14,44 @@ class SGMailService{
 		$email->addTo(
 		    $sendemail,
 		);
+
 		if(!empty($substitutions)){
 			$email->addDynamicTemplateDatas($substitutions);
+
+			if(isset($substitutions['announcementId'])){
+				$announcementId = strval($substitutions['announcementId']);
+		 		$email->addCustomArg('announcementId', $announcementId);
+		 	}
+
+		 	if(isset($substitutions['customerId'])){
+		 		$customerId = strval($substitutions['customerId']);
+		 		$email->addCustomArg('customerId', $customerId);
+		 	}
 		}
 		$email->setTemplateId($templateId);
 		
+		$email->setOpenTracking(true);
+		$email->setClickTracking(true, true);
+
+
+
 		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
+
+		/*try {
+            $response = $sendgrid->send($email);
+            if ($response->statusCode() == 202) {
+                $response = "success";
+            } else {
+                $response = "Failed to send email: " . $response->body();
+            }
+        } catch (Exception $e) {
+            $response =  $e->getMessage();
+        }*/
+
+
 		try {
-		    $sendgrid->send($email);
+		   $response =  $sendgrid->send($email);
+		   //print_r($response);exit;
 		    $response = "success"; 
 		} catch (Exception $e) {
 			$response = 'fail';
@@ -65,11 +95,11 @@ class SGMailService{
 		    "message" => $notes,
 		];
 
-		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-22008cb39c6a409791acb17f3064abd3');	
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-22008cb39c6a409791acb17f3064abd3' );	
 	}
 
 	public static function sendWelcomeMail($email_name){
-		return SGMailService::MailDetail($email_name,$substitutions = [],'d-d42244ec709c4d91b23393393b2e05ef');
+		return SGMailService::MailDetail($email_name,$substitutions = [],'d-d42244ec709c4d91b23393393b2e05ef' );
 	}
 
 	public static function sendWelcomeMailToCustomer($id,$business_id,$password){
@@ -101,7 +131,7 @@ class SGMailService{
 		    "ContactUs" => env('APP_URL').'contact-us',
 		    "Activity" => env('APP_URL').'activities',
 		];
-		return SGMailService::MailDetail($customer->email,$substitutions,'d-70af5c145eca4a4f878ec680469036b7');
+		return SGMailService::MailDetail($customer->email,$substitutions,'d-70af5c145eca4a4f878ec680469036b7' );
 	}
 
 	public static function requestAccessMail($customer){
@@ -112,7 +142,7 @@ class SGMailService{
 			"Url" => $customer['url'],
 		];
 
-		return SGMailService::MailDetail($customer['email'],$substitutions,'d-6530330f52e8409ca171d446fbc8c248');
+		return SGMailService::MailDetail($customer['email'],$substitutions,'d-6530330f52e8409ca171d446fbc8c248' );
 	}
 
 	public static function sendresetemail($emailDetail){
@@ -500,5 +530,16 @@ class SGMailService{
 			'ActivityUrl'  =>env('APP_URL').'activities',
 		];
 		SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-1906577086e847dba0d002c1b2854ed1');
+    }
+
+    public static function sendAnnouncementEmail($emailDetail){
+    	$substitutions = [
+			'ProviderName'  => $emailDetail['ProviderName'],
+			'Text'  => $emailDetail['Text'],
+			'announcementId'  => $emailDetail['announcementId'],
+			'customerId'  => $emailDetail['customerId'],
+		];
+
+		SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-ffb8486a3e2343868f38b329ed48f397');
     }
 }

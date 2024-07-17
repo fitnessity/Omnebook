@@ -35,7 +35,7 @@
                 <span>
                 <div class="cat-img-name">
                 <span><div class="sports_name"><span>{{ $sports_value->sport_name }}</span></div></span>
-                    <img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>{{ $sports_value->image }}" height="466" width="313" /><p>&nbsp;</p>
+                    <img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>{{ $sports_value->image }}" height="466" width="313" alt="Fitnessity"/><p>&nbsp;</p>
                     <div class="pop-search-detail-sports">
                         <!-- <p>{{ $sports_value->description }} </p> -->
                         <h4>{{ $sports_value->sport_name }}</h4>
@@ -221,7 +221,7 @@ Participate in activities alone, with family, friends, or a group. We create a c
       <div class="row img-box-1">
         <div class="col-md-12">
           <div class="col-md-6">
-            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>one-on-one.png" style="width: 100%;height: auto;" />
+            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>one-on-one.png" style="width: 100%;height: auto;" alt="Fitnessity" />
           </div>
           <div class="col-md-6">
             <h2 class="subheading hp">1-ON-1 TRAINING & COACHING</h2>
@@ -235,7 +235,7 @@ Participate in activities alone, with family, friends, or a group. We create a c
       <div class="row img-box-2">
         <div class="col-md-12">
           <div class="col-md-6 img-rightgrid">
-            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>howItWorks_image2.jpg" style="width: 100%;height: auto;"/>
+            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>howItWorks_image2.jpg" style="width: 100%;height: auto;" alt="Fitnessity"/>
           </div>
           <div class="col-md-6 ">
             <h2 class="subheading hp">TAKE A CLASS NEAR YOU</h2>
@@ -251,7 +251,7 @@ Participate in activities alone, with family, friends, or a group. We create a c
       <div class="row img-box-3">
         <div class="col-md-12">
           <div class="col-md-6">
-            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>howItWorks_image3.jpg" style="width: 100%;height: auto;"/>
+            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>howItWorks_image3.jpg" style="width: 100%;height: auto;" alt="Fitnessity"/>
           </div>
           <div class="col-md-6">
             <h2 class="subheading hp">GET ADVENTOUROUS</h2>
@@ -299,7 +299,7 @@ Participate in activities alone, with family, friends, or a group. We create a c
                         } ?>
                     <div class="item">
                         <div class="rank-item-detail hp">
-                            <img src="public/uploads/profile_pic/{{ $professionals_list_value->profile_pic }}" height="466" width="313" />
+                            <img src="public/uploads/profile_pic/{{ $professionals_list_value->profile_pic }}" height="466" width="313" alt="Fitnessity"/>
                             <div class="ranker-detail">
                                 <p>{{ $professionals_list_value->firstname }}, {{ $professionals_list_value->lastname }}</p>
                                 <p><i class="fa fa-map-marker"></i> {{ $professionals_list_value->states->state_name }}, {{ $professionals_list_value->country }} , {{ $professionals_list_value->zipcode }}</p>
@@ -361,7 +361,7 @@ Participate in activities alone, with family, friends, or a group. We create a c
       <div class="flexslider" id="home_page_banners">
           <ul class="slides">
               <li>
-                <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>Bottombanner.jpg" class="fit_for_business">
+                <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>Bottombanner.jpg" class="fit_for_business" alt="Fitnessity">
               </li>
           </ul>
       </div>
@@ -1220,7 +1220,7 @@ if(window.location.href == '{{url("/p/login")}}'){
                                                     '<span>'+value.sport_name+'</span>'+
                                                 '</div>'+
                                             '</span>'+
-                                            '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" />'+
+                                            '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" alt="Fitnessity"/>'+
                                                 '<p>&nbsp;</p>'+
                                                 '<div class="pop-search-detail-sports">'+
                                                     '<h4>'+value.sport_name+'</h4>'+
@@ -1247,7 +1247,7 @@ if(window.location.href == '{{url("/p/login")}}'){
                                                             '<span>'+value.sport_name+'</span>'+
                                                         '</div>'+
                                                     '</span>'+
-                                                    '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" />'+
+                                                    '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" alt="Fitnessity"/>'+
                                                     '<p>&nbsp;</p>'+
                                                     '<div class="pop-search-detail-sports">'+
                                                         '<h4>'+value.sport_name+'</h4>'+
@@ -1271,7 +1271,7 @@ if(window.location.href == '{{url("/p/login")}}'){
                                                             '<span>'+value.sport_name+'</span>'+
                                                         '</div>'+
                                                     '</span>'+
-                                                    '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" />'+
+                                                    '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" alt="Fitnessity" />'+
                                                         '<p>&nbsp;</p>'+
                                                         '<div class="pop-search-detail-sports">'+
                                                             '<h4>'+value.sport_name+'</h4>'+
@@ -1344,7 +1344,7 @@ $('.happening_now').click(function(e) {
               <?php } else { ?>
  a_url = '<a data-toggle="modal" data-target="#lesson_modal" href="/lesson/jsModallesson/'+value.id+'">VIEW MORE <i class="fa fa-angle-right"></i> </a>';
                <?php }?>
-$('.test').append('<div class="item">' + '<div class="rank-item-detail">' + '<img src="public/uploads/profile_pic/<?php echo Config::get('constants.USER_IMAGE_THUMB '); ?>' + value.profile_pic + '" height="466" width="313" />' + '<div class="ranker-detail">' + '<p><i class="fa fa-user"></i> ' + value.firstname + ' ' + value.lastname + '</p>' + '<p><i class="fa fa-map-marker"></i> ' + value.states.state_name + ' ' + value.country + ' ' + value.zipcode + '</p>' + '<p><i class="fa fa-thumbs-up"></i>' + value.bookingcount + '</p>' + '<p><i class="fa fa-futbol-o"></i>' + sports_title + '</p>' + '</div>' + '</div>' + a_url + '<div>');
+$('.test').append('<div class="item">' + '<div class="rank-item-detail">' + '<img src="public/uploads/profile_pic/<?php echo Config::get('constants.USER_IMAGE_THUMB '); ?>' + value.profile_pic + '" height="466" width="313" alt="Fitnessity" />' + '<div class="ranker-detail">' + '<p><i class="fa fa-user"></i> ' + value.firstname + ' ' + value.lastname + '</p>' + '<p><i class="fa fa-map-marker"></i> ' + value.states.state_name + ' ' + value.country + ' ' + value.zipcode + '</p>' + '<p><i class="fa fa-thumbs-up"></i>' + value.bookingcount + '</p>' + '<p><i class="fa fa-futbol-o"></i>' + sports_title + '</p>' + '</div>' + '</div>' + a_url + '<div>');
             });
             if ($('.test').html() == '') {
               $('.test').html('<div class="cat-item"><div style="height:149px; width:100%; clear:both;"></div><div class="cat-detail"><h1 style="height:245px; width:345px;">No Professionals Found.</h1></div></div>');

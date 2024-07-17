@@ -28,11 +28,9 @@
 	
 	<!-- icon -->
 	<link rel="stylesheet" type="text/css" href="{{asset('/public/dashboard-design/css/icons.min.css')}}" />
-
 </head>
 	
 @section('content')
-
     <!-- Begin page -->
     <div id="layout-wrapper">
         @include('layouts.business.business_topbar')
@@ -101,7 +99,7 @@
                                                     <div class="alert alert-warning border-0 rounded-0 m-0 d-flex align-items-center" role="alert">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle text-warning me-2 icon-sm"></svg>
                                                         <div class="flex-grow-1 text-truncate">
-                                                            Your plan expired in <b>{{Auth::user()->chkDaysLeft()}}</b> days.
+                                                            Your plan expires in <b>{{Auth::user()->chkDaysLeft()}}</b> days.
                                                         </div>
                                                         <div class="flex-shrink-0">
                                                             <a href="{{route('choose-plan.index')}}" class="text-reset text-decoration-underline"><b>Upgrade</b></a>
@@ -222,8 +220,7 @@
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
                                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$bookingCount}}">{{$bookingCount}}</span></h4>
-                                                        <a href="{{route('business.schedulers.index',['business_id'=>$business_id])}}" class="text-decoration-underline" target="_blank">View Bookings</a>
-                                                        <!-- <a onclick="getbookingmodel();" class="text-decoration-underline" target="_blank">View Bookings</a> -->
+                                                        <a href="{{route('business.booking_history',['business_id'=>$business_id])}}" class="text-decoration-underline" target="_blank">View Bookings</a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-info rounded fs-3">
@@ -256,7 +253,7 @@
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
                                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$customerCount}}">{{$customerCount}}</span></h4>
-                                                        <a href="{{route('business_customer_index')}}" target="_blank" class="text-decoration-underline">View Customers</a>
+                                                        <a onclick="getNewClient('simple' ,'date' ,'open');" class="text-decoration-underline">View Customers</a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-warning rounded fs-3">
@@ -402,7 +399,7 @@
 										<div class="col-md-12">
 											<div class="card padding-15">
 												<div class="row">
-													<div class="col-lg-4 col-md-6">
+													<div class="col-xxl-3 col-lg-6 col-md-6 col-12">
 														<div class="border-0 align-items-center text-center mb-15">
 															<h4 class="payment-tracker flex-grow-1">Recurring Payments Tracker</h4>
 															<h4 class="payment-tracker">
@@ -416,7 +413,7 @@
 															<p class="mb-0">Scheduled Payments </p>
 														</div>
 													</div>
-													<div class="col-lg-4 col-md-6">
+													<div class="col-xxl-3 col-lg-6 col-md-6 col-12">
 														<div class="border-0 align-items-center">
 															<div class="card card-animate overflow-hidden set-data mb-15">
 																<div class="position-absolute start-0" style="z-index: 0;">
@@ -444,7 +441,7 @@
 															</div>
 														</div>
 													</div>
-													<div class="col-lg-4 col-md-6">
+													<div class="col-xxl-3 col-lg-6 col-md-6 col-12">
 														<div class="border-0 align-items-center">
 															<div class="card card-animate overflow-hidden set-data mb-15">
 																<div class="position-absolute start-0" style="z-index: 0;">
@@ -462,7 +459,7 @@
 																	<div class="d-flex align-items-center">
 																		<div class="flex-grow-1 overflow-hidden">
 																			<h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="{{$reminingRecurringAmount}}">{{$reminingRecurringAmount}}</span></h4>
-																			<p class="fw-medium text-muted text-truncate mb-0">Owed </p>
+																			<p class="fw-medium text-muted text-truncate mb-0">Scheduled </p>
 																		</div>
 																		<div class="flex-shrink-0">
 																			<div id="rejected_chart" data-colors='["--vz-danger"]' class="apex-charts" dir="ltr"></div>
@@ -472,6 +469,36 @@
 															</div>
 														</div>
 													</div>
+
+                                                    <div class="col-xxl-3 col-lg-6 col-md-6 col-12">
+                                                        <div class="border-0 align-items-center">
+                                                            <div class="card card-animate overflow-hidden set-data mb-15">
+                                                                <div class="position-absolute start-0" style="z-index: 0;">
+                                                                    <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
+                                                                        <style>
+                                                                            .s0 {
+                                                                                opacity: .05;
+                                                                                fill: var(--vz-info)
+                                                                            }
+                                                                        </style>
+                                                                        <path id="Shape 8" class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z" />
+                                                                    </svg>
+                                                                </div>
+                                                                <div class="card-body" style="z-index:1 ;">
+                                                                    <div class="d-flex align-items-center">
+                                                                        <div class="flex-grow-1 overflow-hidden">
+                                                                            <h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="{{$failedRecurringAmount}}">{{$failedRecurringAmount}}</span></h4>
+                                                                            <p class="fw-medium text-muted text-truncate mb-0">Failed </p>
+                                                                        </div>
+                                                                        <div class="flex-shrink-0">
+                                                                            <div id="failed_chart" data-colors='["--vz-danger"]' class="apex-charts" dir="ltr"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div><!-- end card body -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
 												</div>
 											</div>
 										</div>
@@ -490,9 +517,9 @@
 														<input type="text" class="form-control flatpickr-schedule"   data-deafult-date="today" data-inline-date="true" data-min-date="{{date('d M, Y')}}">
 													</div>
 													<div class="dropdown-activity mt-4 mb-3">
-														<a class="alinkdrop dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Show All Activites</a>
+														<a class="alinkdrop dropdown-toggle cal-drop" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Show All Activities</a>
 														<ul class="dropdown-menu activityschedule" aria-labelledby="dropdownMenuButton1">
-															<li><a class="dropdown-item">Show All Activites</a></li>
+															<li><a class="dropdown-item">Show All Activities</a></li>
 															<li><a class="dropdown-item">Personal Training</a></li>
 															<li><a class="dropdown-item">Classes</a></li>
 															<li><a class="dropdown-item">Events</a></li>
@@ -535,8 +562,8 @@
 											</div>
 										</div>
 									</div>
-								
-								<div class="row">
+								</div> 
+                                <div class="row">
 									<div class="col-lg-3 col-md-6">
 										<div class="card">
 											<div class="card-header align-items-center d-flex">
@@ -657,7 +684,6 @@
                                         </div>
 									</div>
 								</div>
-								</div> 
 							</div> <!-- end .h-100-->
                         </div> <!-- end col -->
 
@@ -779,6 +805,14 @@
     	</div>
     </div>
 
+
+    <div class="modal fade view-client" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-80">
+            <div class="modal-content" id="clientmodel">
+            </div>
+        </div>
+    </div> 
+
 	@include('layouts.business.footer')
 
 	<script type="text/javascript">
@@ -787,7 +821,7 @@
 	        dateFormat: "Y-m-d",
 	        maxDate: "2050-01-01",
 	        onChange: function(selectedDates, dateStr, instance) {
-	        	var type = $('.dropdown-toggle').text();
+	        	var type = $('.cal-drop').text();
 		       	activityschedule(type,dateStr);
 		    },
 	     });
@@ -821,22 +855,6 @@
 
         }
 
-        function getbookingmodel(){
-            $.ajax({
-                url:"{{route('getBookingList')}}",
-                type:"get",
-                data:{
-                    startDate:'{{$startDate}}',
-                    endDate:'{{$endDate}}',
-                    cid:'{{$business_id}}',
-                },
-                success:function(data){
-                    $('#bookingmodel').html(data);
-                    $('.view-booking').modal('show');
-                }
-            });
-        }
-
 		function activityschedule(type,date){
 			$.ajax({
 		  		type: "post",
@@ -854,11 +872,8 @@
 
 		$(".activityschedule li a").click(function(){
 		  	var selText = $(this).text();
-		  	$(this).parents('.dropdown-activity').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+		  	$(this).parents('.dropdown-activity').find('.cal-drop').html(selText+' <span class="caret"></span>');
 		  	type = selText;
-		  	if(selText == 'Personal Training'){
-		  		type = 'individual';
-		  	}
 		  	activityschedule(type,'');
 		});
 
@@ -870,11 +885,13 @@
 		    <?php 
 		    	$comp_color = $completedRecPercentage <= 20 ? '#FA4443':'#3577f1';
 		    	$rem_color = $remainingRecPercentage <= 20 ? '#FA4443':'#3577f1';
+                $failed_color = $failedRecPercentage <= 20 ? '#FA4443':'#3577f1';
                 $revenue_color = $revenueAchivedPercentage <= 20 ? '#FA4443':'#3577f1';
 		    ?>
 
-		    draw_chart_radial_bar('{{$completedRecPercentage}}','new_jobs_chart' ,'{{$comp_color}}','105', "70%" ,'16px');
-		    draw_chart_radial_bar('{{$remainingRecPercentage}}','rejected_chart','{{$rem_color}}','105', "70%",'16px');
+		    draw_chart_radial_bar('{{$completedRecPercentage}}','new_jobs_chart' ,'{{$comp_color}}','105', "70%" ,'14px');
+		    draw_chart_radial_bar('{{$remainingRecPercentage}}','rejected_chart','{{$rem_color}}','105', "70%",'14px');
+            draw_chart_radial_bar('{{$failedRecPercentage}}','failed_chart','{{$failed_color}}','105', "70%",'14px');
             draw_chart_radial_bar('{{$revenueAchivedPercentage}}','total_jobs','{{$revenue_color}}','70', "70%",'10px');
             
 		});
@@ -1065,14 +1082,9 @@
 
 	        (chart = new ApexCharts(document.querySelector("#"+name), options)).render();
 		}
-
 	</script>
-
-        
-
-
+ 
 <script>
-    
 
     $( document ).ready(function() {
         category = <?php echo $categoryData; ?>;
@@ -1159,9 +1171,38 @@
 
         var chart = new ApexCharts(document.querySelector("#" + chartName), options);
         chart.render();
-        
     }
 
+    function getNewClient(chk,type,open){  
+            let date = '';
+            if(chk == 'ajax'){
+                date = $('#clientdate').val();
+            }else if(chk == 'simple'){
+                if(open == 'open'){
+                    $('#clientmodel').html('');
+                }
+            }
+           
+            $.ajax({
+                url:"{{route('getClientModelData')}}",
+                xhrFields: {
+                    withCredentials: true
+                },
+                type:"get",
+                data:{
+                    business_id:'{{$business_id}}',
+                    cDate:date,
+                    type:type
+                },
+                success:function(data){
+                    $('#clientmodel').html(data);
+                    if(open == 'open'){
+                        $('.view-client').modal('show');
+                    }
+                }
+            });
+        } 
 </script>
+
 
 @endsection

@@ -26,6 +26,7 @@ class ActivityController extends Controller {
         $this->sports = $sports;
     }
 
+	
     public function ways_to_workout(Request $request){
     	$activity_get_start_fast =  ActivtyGetStartedFast::find(2);
 
@@ -101,14 +102,64 @@ class ActivityController extends Controller {
 		]);	
     }
 
-    public function next_8_hours(Request $request){
+    // public function next_8_hours(Request $request){
+
+    // 	$business_services = BusinessServices::where('business_services.is_active', 1);
+
+    // 	if($request->sport_activity){
+    // 		$business_services = $business_services->whereRaw('LOWER(`sport_activity`) LIKE ? ',['%'.trim(strtolower($request->sport_activity)).'%']);	
+    // 	}
+
+    // 	$filter_date = new DateTime();
+    // 	$shift = 1;
+    // 	if($request->date && (new DateTime($request->date)) > $filter_date){
+    // 		$filter_date = new DateTime($request->date);	
+    // 		$shift = 0;
+    // 	}
+
+	// 	$days = [];
+	// 	$days[] = new DateTime(date('Y-m-d'));
+
+	// 	for($i = 0; $i<=4; $i++){
+	// 		$d = clone($filter_date);
+	// 		$days[] = $d->modify('+'.($i+$shift).' day');
+	// 	}
+
+    // 	$start_date = $filter_date;
+    // 	$end_date = clone($start_date);
+    // 	$end_date = $end_date->modify("23:59:59");
+    // 	$business_services;
+    // 	$bookschedulers = BusinessActivityScheduler::allday($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('end_activity_date', 'desc')->get();
+
+    // 	return view('activity.next_8_hours',[
+    // 		'bookschedulers' => $bookschedulers,
+    // 		'filter_date' => $filter_date,
+    // 		'days' => $days,
+    // 	]);
+    // }
+	
+	public function next_8_hours(Request $request){
 
     	$business_services = BusinessServices::where('business_services.is_active', 1);
 
     	if($request->sport_activity){
     		$business_services = $business_services->whereRaw('LOWER(`sport_activity`) LIKE ? ',['%'.trim(strtolower($request->sport_activity)).'%']);	
     	}
+		//code start
+		$categoryIds = [];
 
+		 $services=$business_services->get();
+		foreach ($services as $service) {
+			 $priceDetails = BusinessPriceDetailsAges::where('serviceid', $service->id)
+								 ->where('class_type', $service->service_type)->where('stype','1')
+								 ->get();
+			 
+			 foreach ($priceDetails as $priceDetail) {
+				  $categoryIds[] = $priceDetail->id;
+			 }
+		}
+		// dd($categoryIds);
+		//code end
     	$filter_date = new DateTime();
     	$shift = 1;
     	if($request->date && (new DateTime($request->date)) > $filter_date){
@@ -128,15 +179,19 @@ class ActivityController extends Controller {
     	$end_date = clone($start_date);
     	$end_date = $end_date->modify("23:59:59");
     	$business_services;
-    	$bookschedulers = BusinessActivityScheduler::allday($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('end_activity_date', 'desc')->get();
+    	// $bookschedulers = BusinessActivityScheduler::allday($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('end_activity_date', 'desc')->get();
+		// \DB::enableQueryLog(); // Enable query log
 
-    	return view('activity.next_8_hours',[
+		$bookschedulers = BusinessActivityScheduler::allday($filter_date)->whereIn('category_id', $categoryIds)->orderBy('end_activity_date', 'desc')->get();
+    	// dd(\DB::getQueryLog()); // Show results of log
+		// dd($bookschedulers);
+		return view('activity.next_8_hours',[
     		'bookschedulers' => $bookschedulers,
     		'filter_date' => $filter_date,
     		'days' => $days,
     	]);
     }
-
+	
 	public function index(Request $request,$filtervalue = null)
 	{
 		if($filtervalue == 'classes' || $filtervalue == 'personal_trainer' || $filtervalue == 'experience' || $filtervalue == 'all' || $filtervalue == 'thismonth' || $filtervalue == 'most_popular' || $filtervalue == 'trainers_coaches' || $filtervalue == 'ways_to_workout'|| $filtervalue == 'active_wth_fun_things_to_do' || $filtervalue == 'events_in_your_area' )

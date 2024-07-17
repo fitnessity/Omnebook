@@ -3,13 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
-use App\AddrCities;
-use App\AddrStates;
-use App\UserBookingStatus;
-use App\UserBookingDetail;
-use App\{BusinessServices,Customer,BookingCheckinDetails,CompanyInformation,Transaction,Recurring,SGMailService,BusinessStaff};
-use App\Services\CheckoutCalendarCartService;
+use App\{Services\CheckoutCalendarCartService,User,BusinessServices,Customer,BookingCheckinDetails,CompanyInformation,Transaction,Recurring,SGMailService,BusinessStaff,UserBookingStatus,UserBookingDetail};
 use Auth;
 use DB;
 use DateTime;

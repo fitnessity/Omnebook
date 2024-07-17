@@ -297,7 +297,7 @@ use App\Review;
             <?php
             foreach (array_slice($gallery, 0, 4) as $pic) {
             ?>
-            <img style="padding:0; margin:0; float:left" width="25%" height="300" src="/public/uploads/gallery/<?= $company->user_id ?>/thumb/<?= $pic['name'] ?>" />
+            <img style="padding:0; margin:0; float:left" width="25%" height="300" src="/public/uploads/gallery/<?= $company->user_id ?>/thumb/<?= $pic['name'] ?>" alt="Fitnessity" />
             <?php } ?>
         </div>
     <?php } else { ?> 
@@ -367,7 +367,7 @@ use App\Review;
                                 <h3>EDIT COMPANY LOGO</h3>
                             </div>
                             <button type="button" class="close modal-close" data-dismiss="modal">
-                                <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
+                                <img alt="Fitnessity" src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
                             </button>
                             <div class="signup">
                                 <div id='systemMessage'></div>
@@ -523,7 +523,7 @@ use App\Review;
                             ?>
                             <div class="wrapper">
                                 <div id="big_img">
-                                    <img src="/public/uploads/gallery/<?= $company->user_id ?>/<?= $gallery[0]['name'] ?>" width="600" height="400" id="myPicture" class="border" />
+                                    <img src="/public/uploads/gallery/<?= $company->user_id ?>/<?= $gallery[0]['name'] ?>" width="600" height="400" id="myPicture" class="border" alt="Fitnessity" />
                                 </div>
                                 <div class="thumbnail-inner">
                                     <?php
@@ -531,7 +531,7 @@ use App\Review;
                                         ?>
                                         <div class="img-wrap">
                                             <i class="fa fa-trash-o delPhoto hide" delId="{{ $pic['id'] }}" aria-hidden="true" title="Delete photo"></i>
-                                            <img src="/public/uploads/gallery/<?= $company->user_id ?>/thumb/<?= $pic['name'] ?>" id="/public/uploads/gallery/<?= $company->user_id ?>/<?= $pic['name'] ?>" />
+                                            <img alt="Fitnessity" src="/public/uploads/gallery/<?= $company->user_id ?>/thumb/<?= $pic['name'] ?>" id="/public/uploads/gallery/<?= $company->user_id ?>/<?= $pic['name'] ?>" />
                                         </div>
                                     <?php } ?> 
                                 </div>
@@ -692,7 +692,7 @@ use App\Review;
                                                                     $profilePic = '/public/images/default-avatar.png';
                                                                 }
                                                                 ?>
-                                                                <img width="90" src="{{ $profilePic }}">
+                                                                <img width="90" src="{{ $profilePic }}" alt="Fitnessity">
                                                             </h1>
                                                         </div>
                                                         <div class="col-md-12" style="padding-left: 0px;">
@@ -889,11 +889,11 @@ use App\Review;
                         <p>Amazing place!</p>
                         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
                         <div class="media-gllarybox">
-                            <span><img src="/public/images/newimage/media.jpg"></span>
-                            <span><img src="/public/images/newimage/media.jpg"></span>
-                            <span><img src="/public/images/newimage/media.jpg"></span>
-                            <span><img src="/public/images/newimage/media.jpg"></span>
-                            <span><img src="/public/images/newimage/media.jpg"></span>
+                            <span><img src="/public/images/newimage/media.jpg" alt="Fitnessity"></span>
+                            <span><img src="/public/images/newimage/media.jpg" alt="Fitnessity"></span>
+                            <span><img src="/public/images/newimage/media.jpg" alt="Fitnessity"></span>
+                            <span><img src="/public/images/newimage/media.jpg" alt="Fitnessity"></span>
+                            <span><img src="/public/images/newimage/media.jpg" alt="Fitnessity"></span>
                         </div>
                         <div class="pr-author">
                             <h5>Author</h5>
@@ -1512,12 +1512,12 @@ use App\Review;
                             </div>
                         </div>
                         <div class="get-started">
-                            <div class="get-img"><img src="/public/images/newimage/get-started.jpg" alt="images" class="img-fluid"></div>
+                            <div class="get-img"><img src="/public/images/newimage/get-started.jpg" alt="Fitnessity" class="img-fluid"></div>
                             <div class="get-text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</div>
                             <div class="get-btn-box"><a href="#" class="get-btn"> Get Started </a> </div>
                         </div>
                         <div class="ad-img">
-                            <img src="/public/images/newimage/ad-img.jpg" alt="images" class="img-fluid">
+                            <img src="/public/images/newimage/ad-img.jpg" alt="Fitnessity" class="img-fluid">
                         </div>
                     </div>
                 </div>

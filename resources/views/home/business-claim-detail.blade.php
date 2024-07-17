@@ -116,7 +116,7 @@
                 <div class="claimright-wrap">
                     <div class="right-boxclaim-inner">
                         <div class="photo-box">
-                            <img alt="" class="photo-box-img" height="90" src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>business_90_square.png" width="90"> 
+                            <img alt="Fitnessity" class="photo-box-img" height="90" src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>business_90_square.png" width="90"> 
                         </div>
                         <div class="media-title clearfix"> 
                             <strong class="biz-name">{{ isset($data->business_name) ? $data->business_name : ''}}</strong> 
@@ -160,7 +160,7 @@
                         <div class="claimright-wrap">
                             <div class="right-boxclaim-inner">
                                 <div class="photo-box">
-                                    <img alt="" class="photo-box-img" height="90" src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>business_90_square.png" width="90"> 
+                                    <img alt="Fitnessity" class="photo-box-img" height="90" src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>business_90_square.png" width="90"> 
                                 </div>
                                 <div class="media-title clearfix"> 
                                     <strong class="biz-name">{{$data->business_name}}</strong> 
@@ -203,7 +203,7 @@
                         <div class="claimright-wrap">
                             <div class="right-boxclaim-inner">
                                 <div class="photo-box">
-                                    <img alt="" class="photo-box-img" height="90" src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>business_90_square.png" width="90"> 
+                                    <img alt="Fitnessity" class="photo-box-img" height="90" src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>business_90_square.png" width="90"> 
                                 </div>
                                 <div class="media-title clearfix"> 
                                     <strong class="biz-name">{{$data->business_name}}</strong> 
@@ -246,7 +246,7 @@
                         <div class="claimright-wrap">
                             <div class="right-boxclaim-inner">
                                 <div class="photo-box">
-                                    <img alt="" class="photo-box-img" height="90" src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>business_90_square.png" width="90"> 
+                                    <img alt="Fitnessity" class="photo-box-img" height="90" src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>business_90_square.png" width="90"> 
                                 </div>
                                 <div class="media-title clearfix"> 
                                     <strong class="biz-name">{{$data->business_name}}</strong> 

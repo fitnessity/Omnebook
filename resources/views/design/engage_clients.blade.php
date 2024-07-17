@@ -6,153 +6,83 @@
 
 @include('layouts.business.business_topbar')
 
-    <div class="main-content">
-		<div class="page-content">
-			<div class="container-fluid">
-                <div class="row">
-                    <div class="col-xl-3 col-lg-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="d-flex mb-3">
-                                    <div class="flex-grow-1">
-                                        <h5 class="fs-16">Messaging</h5>
-                                    </div>
-                                </div>
-                            </div>
+        <!-- ========================= Main ==================== -->
+        @include('design.engage_clients_sidebar')
 
-                            <div class="accordion accordion-flush filter-accordion">
-                                <div class="accordion-item">
-                                     <h2 class="accordion-header" id="flush-headingBrands">
-                                         <button class="accordion-button bg-transparent shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseBrands" aria-expanded="true" aria-controls="flush-collapseBrands">
-                                            <span class="text-uppercase fs-12 fw-medium">Inbox</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
-                                        </button>
-                                    </h2>
-
-                                    <div id="flush-collapseBrands" class="accordion-collapse collapse show" aria-labelledby="flush-headingBrands">
-                                        <div class="accordion-body text-body pt-0">
-                                            <div class="d-flex flex-column gap-2 side-submenu">
-                                                <a href="#"><i class="ri-subtract-fill  mr-5"></i> Stats</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end accordion-item -->
-
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="flush-headingDiscount">
-                                        <button class="accordion-button bg-transparent shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseDiscount" aria-expanded="true" aria-controls="flush-collapseDiscount">
-                                            <span class="text-uppercase fs-12 fw-medium">Announcements</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
-                                        </button>
-                                    </h2>
-                                    <div id="flush-collapseDiscount" class="accordion-collapse collapse" aria-labelledby="flush-headingDiscount">
-                                        <div class="accordion-body text-body pt-1">
-                                            <div class="d-flex flex-column gap-2 side-submenu">
-                                                <a href="#"><i class="ri-subtract-fill  mr-5"></i> Stats</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end accordion-item -->
-
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="flush-headingRating">
-                                        <button class="accordion-button bg-transparent shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseRating" aria-expanded="false" aria-controls="flush-collapseRating">
-                                            <span class="text-uppercase fs-12 fw-medium">Email Campaign</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
-                                        </button>
-                                    </h2>
-
-                                    <div id="flush-collapseRating" class="accordion-collapse collapse" aria-labelledby="flush-headingRating">
-                                        <div class="accordion-body text-body pt-1">
-                                            <div class="d-flex flex-column gap-2 side-submenu">
-                                                <a href="#"><i class="ri-subtract-fill  mr-5"></i> Stats</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end accordion-item -->
-
-                                <div class="card-body card-header set-submenu-p">
-                                    <div class="side-submenu">
-                                        <a href="#" class="text-uppercase fs-12 fw-medium mb-4">Email Blast</a>
-                                    </div>
-                                </div>
-
-                                <div class="card-body card-header set-submenu-p">
-                                    <div class="side-submenu">
-                                        <a href="#" class="text-uppercase fs-12 fw-medium mb-4">Automation Alerts</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end card -->
-                    </div>
-                    <!-- <div class="col-xl-3 col-lg-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="d-flex mb-3">
-                                    <div class="flex-grow-1">
-                                        <h5 class="fs-16">Messaging</h5>
-                                    </div>
-                                </div>
-                                <div class="engage-client-submenu">
-                                    <ul class="list-unstyled mb-0 filter-list">
-                                        <li>
-                                            <a href="#" class="d-flex py-1 align-items-center active">
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-13 mb-0 listname">Inbox</h5>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="d-flex py-1 align-items-center">
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-13 mb-0 listname">Announcements</h5>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="d-flex py-1 align-items-center">
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-13 mb-0 listname">Email Blast</h5>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="d-flex py-1 align-items-center">
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-13 mb-0 listname">Automation Alerts</h5>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-                    <!-- end col -->
-
-                    <div class="col-xl-9 col-lg-8">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                    <div class="col-6">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- end card header -->
-                                  
-                        </div>
-                        <!-- end card -->
-                    </div>
-                    <!-- end col -->
+         
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <a href="#menu-toggle" class="btn btn-black mb-15" id="menu-toggle"><i class="fas fa-bars"></i></a>
+                <div class="row mb-3 y-middle">
+					<div class="col-12">
+						<div class="page-heading">
+							<label>Smart Marketing Suite</label>
+						</div>
+					</div>
                 </div>
-                <!-- end row -->
-			</div>
-		</div>
-	</div>
-</div><!-- END layout-wrapper -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="pb-100 pt-100">
+                            <div class="container">
+                                <div class="row y-middle">
+                                    <div class="col-lg-6">
+                                        <div class="engage-client-text-section">
+                                            <h3 class="mb-25">Drive business growth and foster meaningful client connections through targeted email and text campaigns & alerts. </h3>
+                                            <p class="mb-15">Elevate your business's performance and cultivate lasting relationships with your clientele by leveraging our innovative marketing solutions. With our comprehensive array of smart tools and actionable insights, you can unlock unprecedented growth opportunities and foster customer loyalty like never before.</p>
+                                            <ul class="mb-25">
+                                                <li>Tailor your message content to match your brand and needs. Our tools drive engagement and conversions for promotions, event invites, or updates.</li>
+                                                <li>You can target all clients, specific demographics, or individuals with personalized messages for results.</li>
+                                                <li>Use the suite of tools available to you to help you engage, grow and retain your clients.</li>
+                                                <li>Our suite of tools supports every step of your customer journey, from acquisition to retention. With CRM features, advanced analytics, and reporting, you'll continuously refine strategies and maximize ROI.</li>
+                                                <li>Harness the power of our smart marketing tools to boost bookings, attendance, and customer loyalty. Surpass your goals with confidence in today's competitive marketplace.</li>
+                                            </ul>
+                                            <!-- <a href="" class="btn btn-red mr-15">Start now</a>
+                                            <a href="" class="btn btn-black">Learn more</a> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="engage-client-img text-center mmt-25 imt-25">
+                                            <img src="http://dev.fitnessity.co//dashboard-design/images/engage-client.png">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </div>                        
+                    </div>
+                    <!-- end card header -->
+                </div>
+                <!-- end card -->
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+</div>
+<!-- /#wrapper -->
+
+
 
 @include('layouts.business.footer')
+
+    <script>
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#client_wrapper").toggleClass("toggled");
+        });
+    </script>
+    <script>
+        function removeClassIfNecessary() {
+            var div = document.getElementById('client_wrapper');
+            if (window.innerWidth <= 768) { // Example breakpoint
+                div.classList.remove('toggled');
+            } else {
+            div.classList.add('toggled');
+            }
+        }
+        window.addEventListener('resize', removeClassIfNecessary);
+        window.addEventListener('DOMContentLoaded', removeClassIfNecessary); // To handle initial load
+    </script>
+   
+
 
 @endsection

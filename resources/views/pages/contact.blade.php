@@ -1,5 +1,8 @@
-@extends('layouts.header')
+@extends('layouts.business.header')
 @section('content')
+
+<link rel='stylesheet' type='text/css' href="http://dev.fitnessity.co//public/css/frontend/general.css">
+
 <img src="http://www.fitnessity.co/public/images/cont-banner.jpg">
 <section class="main-slider contact-banner">
     <div class="container">
@@ -52,7 +55,7 @@
         background-size: cover;
     }
 </style>
-@include('layouts.footer')
+@include('layouts.business.footer')
 
 <script type="text/javascript">
     $(document).ready(function () {

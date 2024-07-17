@@ -88,7 +88,7 @@
 							</div>
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-6">
 								<div class="sub-info-customer">
-									<span>{{$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}}</span>
+									<span>{{@$booking_detail->businessPriceDetailsAgesTrashed->category_title}} </span>
 								</div>
 							</div>
 							

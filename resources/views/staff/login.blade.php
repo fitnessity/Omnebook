@@ -9,7 +9,7 @@
             <div class="register_wrap" id="signup_normal">
                 <input type="hidden" id="showstep" value="">
                 <div class="logo-my">
-                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/logo-small.jpg')}}"> </a>
+                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/logo-small.jpg')}}" alt="Fitnessity"> </a>
                 </div>               
                 <form method="post" action="{{route('dologin')}}" >
                     {{ csrf_field() }}
@@ -52,7 +52,7 @@
 
                     <button class="btn signup-new" id='login_submit' type="submit">Log in </button>
                     <div class="small-logo">
-						<img src="{{ asset('public/images/fit-logo.png')}}">
+						<img src="{{ asset('public/images/fit-logo.png')}}" alt="Fitnessity"> 
 					</div>
                 </form>
             </div>

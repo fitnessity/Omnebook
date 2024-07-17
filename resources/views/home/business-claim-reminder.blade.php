@@ -35,7 +35,7 @@
 					To get access to update the business information, connect with customers, to respond to reviews, showcase services and prices and network with others, you must complete the claim process.</p>
 				<div class="claiming-boxn claim-box-wp">
 					<div class="claim-img">
-						<img src="{{url('/public/img/business-icon-wp.png')}}" alt="Yoga">
+						<img src="{{url('/public/img/business-icon-wp.png')}}" alt="Fitnessity">
 					</div>
 					<div class="business-name">
 						<h3>PROFILE IS UNCLAIMED</h3>
@@ -54,7 +54,7 @@
                 Claim your business or create a new profile today for free! Update your profile so we can showcase what you do to everyone looking for your services.
             </p>
 
-            <img src="{{url('/public/img/claim-your-business-detail.jpg')}}">
+            <img src="{{url('/public/img/claim-your-business-detail.jpg')}}" alt="Fitnessity">
 
         </div>
     </div>

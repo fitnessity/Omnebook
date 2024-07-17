@@ -29,6 +29,7 @@
 	<span class="fs-16" id="errmsgRecurring"></span>
 </div>
 
+<input type="hidden" id="duestax" value="{{Auth::user()->current_company->dues_tax}}">
 <div class="scheduler-table">
 	<div class="table-responsive">
 		<table class="table mb-0">
@@ -63,7 +64,7 @@
 								<input type="hidden" class="form-control valid" name="tax"  id="tax{{$list->id}}" placeholder="0" value="{{$list->tax}}">
 							</div>
 						</td>
-						<td>${{$list['tax']}}</td>
+						<td  id="tdtax{{$list->id}}" >${{$list['tax']}}</td>
 						<td><p id="charged_amt{{$list->id}}">${{$list->total_amount}}</p></td>
 						<td>{{$list->getStripeCard() ?? "N/A" }} </td> 
 						<td>{{$list['status']}}</td>
@@ -117,12 +118,23 @@
     });
 
     function changeChargeAmt(val,id){
-    	var chageAmt = parseFloat(val)  + parseFloat($('#tax'+id).val()) ;
-    	if (isNaN(chageAmt) ){
-    		chageAmt = 0;
+    	var newAmt = parseFloat(val);
+    	if (isNaN(newAmt) ){
+    		newAmt = 0;
     	}
-    	$('#amount'+id).val(chageAmt);
-    	$('#charged_amt'+id).html('$'+chageAmt);
+
+    	newAmt = newAmt.toFixed(2);
+    	var duestax = $('#duestax').val();
+    	var tax = (newAmt * duestax)/100;
+    	tax = tax.toFixed(2);
+
+    	var chargeAmt = parseFloat( newAmt ) +  parseFloat(tax);
+
+    	chargeAmt = chargeAmt.toFixed(2);
+    	$('#amount'+id).val(newAmt);
+    	$('#charged_amt'+id).html('$'+chargeAmt);
+    	$('#tax'+id).val(tax);
+    	$('#tdtax'+id).html('$'+tax);
     }
 
 	$(document).ready(function() {
@@ -134,6 +146,7 @@
 	            data: { 
 	                _token: '{{csrf_token()}}', 
 	                amount: $('#amount'+$(this).data('recurring-id')).val(), 
+	                tax: $('#tax'+$(this).data('recurring-id')).val(), 
 	                payment_date: $('#payment_date'+$(this).data('recurring-id')).val(), 
 	            },
 	            success: function(html){

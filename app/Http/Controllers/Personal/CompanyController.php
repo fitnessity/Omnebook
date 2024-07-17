@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Personal;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\{CompanyInformation,BusinessExperience,BusinessTerms,BusinessService,SGMailService};
+use App\{CompanyInformation,BusinessExperience,BusinessTerms,BusinessService,SGMailService,AddressCountry};
 use Auth;
 use Storage;
 
@@ -33,7 +33,8 @@ class CompanyController extends Controller
         $experience = BusinessExperience::where('cid',@$companyId)->first();
         $service = BusinessService::where('cid',@$companyId)->first();
         $terms = BusinessTerms::where('cid',@$companyId)->first();
-        return view('personal.company.create',compact('company','experience','service','terms'));
+        $countries = AddressCountry::all();
+        return view('personal.company.create',compact('company','experience','service','terms','countries'));
     }
 
     /**
@@ -50,6 +51,11 @@ class CompanyController extends Controller
         if($request->step == 1){
             $companyImage = $request->has('profilePic') ? $request->file('profilePic')->store('company') : $request->oldProfile; 
             if($request->has('profilePic') && $request->oldProfile != ''){
+                Storage::delete($request->oldProfile);
+            }
+
+            $ownerImage = $request->has('owner_pic') ? $request->file('owner_pic')->store('company') : $request->oldowner_pic; 
+            if($request->has('owner_pic') && $request->oldowner_pic != ''){
                 Storage::delete($request->oldProfile);
             }
 
@@ -79,6 +85,11 @@ class CompanyController extends Controller
                 'business_email' => $request->businessEmail,
                 'business_website' => $request->website,
                 'business_type' => $request->businessType,
+                'born' => $request->born,
+                'about_host' => $request->about_host,
+                'years_of_hosting' => $request->years_of_hosting,
+                'years_of_experience' => $request->years_of_experience,
+                "owner_pic" => $ownerImage,
             ];
 
             if($companyId != ''){

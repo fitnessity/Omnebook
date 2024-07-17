@@ -27,7 +27,7 @@
             <div class="col-md-3">
                 <label>Category</label>
                 <div class="form-group mmt-10">
-                    <select class="form-select" name="category" id="category" onchange="changeCategory({{$sid}},'ajax','')">
+                    <select class="form-select" name="category" id="category" onchange="changeCategory('{{$sid}}','ajax','')">
                         <option value="all">All</option>
                         @foreach($categoryList as $c)
                             <option value="{{$c->id}}" @if(@$categoryId ==  $c->id) selected @endif>{{$c->category_title}}</option>
@@ -40,21 +40,20 @@
         <div class="row g-3 mb-10 align-items-center tablist">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                <button class="nav-link @if($type == 'date') active @endif fonts-red" data-id="today" data-bs-toggle="tab" type="button" role="tab" onclick="getbookingmodel({{$sid}},'simple' ,'date' ,'');">Today</button>
+                <button class="nav-link @if($type == 'date') active @endif fonts-red" data-id="today" data-bs-toggle="tab" type="button" role="tab" onclick="getbookingmodel('{{$sid}}','simple' ,'date' ,'');">Today</button>
               </li>
 
               <li class="nav-item" role="presentation">
-                <button class="nav-link @if($type == 'week') active @endif fonts-red" data-id="week" data-bs-toggle="tab" type="button" role="tab" onclick="getbookingmodel({{$sid}},'ajax' ,'week','');">Week</button>
+                <button class="nav-link @if($type == 'week') active @endif fonts-red" data-id="week" data-bs-toggle="tab" type="button" role="tab" onclick="getbookingmodel('{{$sid}}','ajax' ,'week','');">Week</button>
               </li>
 
               <li class="nav-item" role="presentation">
-                <button class="nav-link @if($type == 'month') active @endif fonts-red" data-id="month" data-bs-toggle="tab" type="button" role="tab" onclick="getbookingmodel({{$sid}},'ajax' ,'month','');">Month</button>
+                <button class="nav-link @if($type == 'month') active @endif fonts-red" data-id="month" data-bs-toggle="tab" type="button" role="tab" onclick="getbookingmodel('{{$sid}}','ajax' ,'month','');">Month</button>
               </li>
 
               <li class="nav-item" role="presentation">
-                <button class="nav-link @if($type == '') active @endif fonts-red" data-id="all" data-bs-toggle="tab" type="button" role="tab" onclick="getbookingmodel({{$sid}},'ajax' ,'','');">All</button>
+                <button class="nav-link @if($type == '') active @endif fonts-red" data-id="all" data-bs-toggle="tab" type="button" role="tab" onclick="getbookingmodel('{{$sid}}','ajax' ,'','');">All</button>
               </li>
-                
             </ul>
         </div>
 
@@ -70,7 +69,7 @@
                             <th class="w-px-100">Price Option</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbody">
                         @php $counter = 0; @endphp
                         @forelse($data as $i=>$dt)
                             @if($dt->UserBookingDetail != '' && $dt->UserBookingDetail->customer != '')
@@ -93,7 +92,7 @@
                                 @endif
                             @endif
                         @empty
-                            <tr><td colspan = 5><p class="fonts-red text-center">There Are No Bookings For This Activity Today</p></td></tr>
+                            <tr><td colspan = 5><p class="fonts-red text-center">There Are No Bookings For This Activity </p></td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -114,12 +113,14 @@
      });
 
     function  changeCategory(sid,chk,type,open) {
+        $('tbody').html('<tr> <td colspan="5">Bookings is Loading..</td></tr>');
         var activeLiId =  $('ul.nav-tabs li.nav-item button.active').data('id');
         if(activeLiId == 'today'){
             activeLiId = 'date';
         }else if(activeLiId == 'all'){
             activeLiId = '';
         }
+    
         getbookingmodel(sid,chk,activeLiId,open);
     }
 </script>

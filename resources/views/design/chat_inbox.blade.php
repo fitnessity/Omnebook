@@ -2476,3 +2476,10 @@
 @include('layouts.business.footer')
 
 @endsection
+
+
+@push('scripts')
+    <script src="{{asset('/public/dashboard-design/js/chat.init.js')}}"></script>
+	
+	<script src="{{asset('/public/dashboard-design/js/form-wizard.init.js')}}"></script>
+@endpush

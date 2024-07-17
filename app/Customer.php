@@ -425,8 +425,16 @@ class Customer extends Authenticatable
     }
 
     public function bigSpender(){
-        $transaction = $this->total_spend();
-        return $transaction >= 2000 ? 1 : 0;
+        // $transaction = $this->total_spend();
+        // return $transaction >= 2000 ? 1 : 0;
+
+        $transactionTotal = $this->transaction()
+        ->where('user_type', 'customer')
+        ->where('status', 'complete')
+        ->sum('amount');
+
+        // // Check if the total spend exceeds the threshold
+        return $transactionTotal >= 2000 ? 1 : 0;
     }
 
     public function suspended(){
@@ -434,17 +442,24 @@ class Customer extends Authenticatable
     }
 
     public function suspendedOrNot(){
-        $membership = $this->suspended()->count();
-        return $membership > 0 ? 1 : 0;
+        // $membership = $this->suspended()->count();
+        // return $membership > 0 ? 1 : 0;
+        return $this->bookingDetail()->where('status', 'suspend')->count() > 0 ? 1 : 0;
     }
 
     public function owedDetail(){
-        return $this->recurringDetail()->where('payment_number',NULL)->whereIn('status',['Retry','Failed'])->join('booking_checkin_details as cid','cid.booking_detail_id' ,'=','recurring.booking_detail_id')->whereNotNull('cid.checked_at');
+        // return $this->recurringDetail()->where('payment_number',NULL)->whereIn('status',['Retry','Failed'])->join('booking_checkin_details as cid','cid.booking_detail_id' ,'=','recurring.booking_detail_id')->whereNotNull('cid.checked_at');
+        return $this->recurringDetail()
+        ->whereNull('payment_number')
+        ->whereIn('status', ['Retry', 'Failed'])
+        ->join('booking_checkin_details as cid', 'cid.booking_detail_id', '=', 'recurring.booking_detail_id')
+        ->whereNotNull('cid.checked_at');
     }
 
     public function owedOrnot(){
-        $detail = $this->owedDetail()->count();
-        return $detail > 0 ? 1 : 0;
+        // $detail = $this->owedDetail()->count();
+        // return $detail > 0 ? 1 : 0;
+        return $this->owedDetail()->exists() ? 1 : 0;
     }
 
     public function expired_soon(){
@@ -465,6 +480,7 @@ class Customer extends Authenticatable
                 $user = User::where('email', $this->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($this->fname), strtolower($this->lname)])->first();
                 if($user){
                     $this->stripe_customer_id = $user->stripe_customer_id;
+                    $this->stripe_id_update_from = 'copy_from_user';
                     $this->save();
                     return $this->id;
                 }else{
@@ -475,6 +491,7 @@ class Customer extends Authenticatable
                             'email'=> $this->email,
                         ]);
                         $this->stripe_customer_id = $customer->id;
+                        $this->stripe_id_update_from = 'created';
                         $this->save();
                 
                         return $customer->id;
@@ -485,6 +502,7 @@ class Customer extends Authenticatable
                 }
             }else{
                 $this->stripe_customer_id = $FndCustomer->stripe_customer_id;
+                $this->stripe_id_update_from = 'copy_from_same_customer';
                 $this->save();
                 return $this->id;
             }
@@ -661,6 +679,26 @@ class Customer extends Authenticatable
         }
 
         return $cards != '' ? "<br><h6>Expired CC List</h6>".$cards : '';
+    }
+
+    public function isCardExpired(){
+        $cardDetails = $this->stripePaymentMethods()->get();
+        if(count($cardDetails) > 0){
+            foreach($cardDetails as $card){
+                if($card->exp_year > date('Y') || ($card->exp_year == date('Y')  &&  $card->exp_month > date('n'))){
+                    return 0;
+                }
+            }
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
+    public function isKidOrLetKidCheckIn(){
+        /*if($this->age < 18){
+            return 1;
+        }*/
     }
 
     public function chkRecurringPayment($bookId){

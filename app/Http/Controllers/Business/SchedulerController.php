@@ -23,12 +23,12 @@ class SchedulerController extends BusinessBaseController
           // $schedules = BusinessActivityScheduler::alldayschedule($filterDate,$request->activity_type)->where('cid', $request->current_company->id)->get();
           // dd(\DB::getQueryLog()); 
 
-          $services = BusinessServices::where('cid', $request->current_company->id)->get();
+          $services = BusinessServices::where('cid', $request->current_company->id)->where('is_active','1')->get();
           $categoryIds = [];
 
           foreach ($services as $service) {
                $priceDetails = BusinessPriceDetailsAges::where('serviceid', $service->id)
-                                   ->where('class_type', $service->service_type)
+                                   ->where('class_type', $service->service_type)->where('stype','1')
                                    ->get();
                
                foreach ($priceDetails as $priceDetail) {

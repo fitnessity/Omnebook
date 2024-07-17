@@ -29,7 +29,7 @@
                             <div class="acitivity-item d-flex mb-5">
                                 <div class="flex-shrink-0">
                                     @if( $nd['image'] != '')
-                                        <img src="{{$nd['image']}}" alt="" class="avatar-xs rounded-circle acitivity-avatar shadow" />
+                                        <img src="{{$nd['image']}}" alt="Fitnessity" class="avatar-xs rounded-circle acitivity-avatar shadow" />
                                     @else
                                         <div class="avatar-xsmall">
                                            <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$nd['fl']}}</span>
@@ -134,7 +134,7 @@
 
                 <div class="card sidebar-alert bg-light border-0 text-center mx-4 mb-0 mt-3">
                     <div class="card-body">
-                        <img src="" alt="">
+                        <img src="" alt="Fitnessity">
                         <div class="mt-4">
                             <h5>Refer Another Provider</h5>
                             <p class="text-muted lh-base"> Get a Free Month membership for each provider you refer and they claim or create a business account with Fitnessity</p>

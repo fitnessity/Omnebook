@@ -13590,6 +13590,7 @@ div#CreateCompanyModal #preview img.header_img {
     font-weight: 700;
     margin-bottom: 15px;
     position: relative;
+	font-size:14px;
 }
 
 .claim-rightblock p i {
@@ -14123,7 +14124,7 @@ div#CreateCompanyModal #preview img.header_img {
 
 @media(max-width: 991px) {
     header .header-right {
-        width: auto;
+        width: 100%;
     }
 
     .main-slider .slider-block h1 {
@@ -17210,17 +17211,19 @@ input:checked + .slider:before {
 
 .claiming-business-block h3 {
     font-weight: 700;
-    font-size: 30px;
+    font-size: 32px;
     margin-bottom: 15px;
 }
 
 .claiming-business-block p {
     margin-bottom: 15px;
+	font-size: 15px;
 }
 
 .claiming-business-block h5 {
     font-weight: 700;
     margin-bottom: 30px;
+	font-size: 13px;
 }
 
 .claiming-boxn {
@@ -18774,7 +18777,8 @@ input#zipcode {
 }
 
 .privacy-block {  padding-top: 35px }
-.privacy-block h3{ font-weight: 700; padding-bottom: 15px;  padding-top: 10px; }
+.privacy-block h3{ font-weight: 700; padding-bottom: 15px;  padding-top: 10px; font-size: 22px;}
+.pagecontent h4{font-size: 18px;}
 .privacy-block h5{ font-weight: 700; padding-bottom: 15px; }
 .privacy-block .pagecontent p{ text-transform: none; padding: 10px 0 20px 0px !important; }
 .privacy-block .pagecontent ul li{ list-style-type: disc; font-size: 14px; }
@@ -20277,7 +20281,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	margin-right: 65px;
 }
 .nav-sliders-activites a{
-	color: #016afb;
+	color: #f91942;
 	text-decoration: underline;
 }
 .align-self-center{
@@ -20286,7 +20290,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	justify-content: center;
 }
 .cart-slider{
-	height: 465px;
+	height: 590px;
 }
 .notimeoption{
 	text-align: center;
@@ -21128,14 +21132,15 @@ span.Zebra_DatePicker_Icon_Wrapper {
   color: #0b0b0b;
 }
 .find-activity {
-  border: 1px solid #ede9e9;
-  border-radius: 10px;
-  padding: 8px;
+  border: none;
+  border-radius: 10px;  
+  padding: 0px;
   margin-bottom: 15px;
   margin-top: 15px;
 }
 .find-activity img {
-  width: 116px;
+  /* width: 116px; */
+  width:100%;
   min-height: 148px;
   margin-bottom: 0px;
   border-radius: 10px;
@@ -24930,6 +24935,7 @@ padding-left: 0px;
 	min-height: 45px;
 	padding: 12px;
 	color: #04344d;
+    font-size: 14px;
 }
 .btn-link:hover, .btn-link:focus{
 	text-decoration: none;
@@ -25689,4 +25695,19 @@ padding-left: 0px;
     object-fit: cover;
     object-position: top;
     min-height: 250px !important;
+}
+.check-box-info label {
+    display: inline-block !important;
+    font-size: 15px;
+}
+.btn-red {
+  background-color: #ea1515 !important;
+  border: 1px solid #ea1515;
+  color: #fff !important;
+  border-radius: 10px;
+  font-size: 13px;
+}
+.plr-15{
+	padding-right: 15px; 
+  	padding-left: 15px;
 }

@@ -281,6 +281,33 @@ class BusinessServices extends Model
         return Storage::disk('s3')->exists( $pictures[0]) ? Storage::URL( $pictures[0]) : '/public/images/service-nofound.jpg';
     }
 
+    public function getConverPhotoUrl()
+    {  
+         return Storage::disk('s3')->exists($this->cover_photo) ? Storage::url($this->cover_photo) : '/public/images/service-nofound.jpg';
+        // return $this->cover_photo;
+    }
+    
+    // public function getConverPhotoUrl_img()
+    // {  
+    //     //  return Storage::disk('s3')->exists($this->cover_photo) ? Storage::url($this->cover_photo) : '/public/images/service-nofound.jpg';
+    //     return $this->cover_photo;
+    // }
+    public function getConverPhotoUrl_img()
+    {
+        if($this->cover_photo!='')
+        {
+            return $this->cover_photo;
+        }
+        else{
+            return '/public/images/service-nofound.jpg';
+
+        }
+        // if (!empty($this->cover_photo)) {
+        //     return $this->cover_photo;
+        // } else {
+            // return '/public/images/service-nofound.jpg';
+        // }
+    }
     public function min_price(){
         $pricearr =$discountPriceArr= [];
         $priceVal = '';

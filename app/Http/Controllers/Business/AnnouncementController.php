@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\{User,Announcement,AnnouncementCategory};
+use App\{User,Announcement,AnnouncementCategory,CustomList,BusinessServices,BusinessPriceDetailsAges,AnnouncementContactCustomerList,AnnouncementContactList};
 use Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -24,6 +24,7 @@ class AnnouncementController extends BusinessBaseController
         if($request->status){
             $announcement->where('status',$request->status);
         }
+
         $announcement = $announcement->orderBy('created_at','desc')->get();
 
         $category = AnnouncementCategory::where('business_id',$business_id)->orderBy('name')->get();
@@ -37,7 +38,10 @@ class AnnouncementController extends BusinessBaseController
     public function create(Request $request,$business_id)
     {   
         $category = AnnouncementCategory::where('business_id',$business_id)->get();
-        return view('business.announcement.create',['category'=>$category,'business_id'=>$business_id])->render();
+        $customList = CustomList::where(['business_id'=>$business_id])->get();
+        $programList = BusinessServices::where(['cid'=>$business_id ,'is_active' => 1])->get();
+        $categoryList = BusinessPriceDetailsAges::where(['cid'=>$business_id])->get();
+        return view('business.announcement.create', compact('category','business_id','customList','programList','categoryList'))->render();
     }
     /**
      * Store a newly created resource in storage.
@@ -48,7 +52,9 @@ class AnnouncementController extends BusinessBaseController
     public function store(Request $request,$business_id)
     {
         //print_r($request->all());exit;
-        Announcement::create([
+
+
+        $announcement = Announcement::create([
             'user_id' => Auth::user()->id, 
             'business_id' => $business_id, 
             'title' => $request->title, 
@@ -63,7 +69,27 @@ class AnnouncementController extends BusinessBaseController
             'does_expire' => $request->expire ?? 0, 
             'status' => $request->status, 
             'announcement' => $request->announcement, 
+            'sms_text' => $request->sms_text, 
+            'delivery_timeline' => $request->delivery_timeline, 
+            'delivery_method' => $request->delivery_method, 
+            'delivery_method_sms' => ($request->delivery_method == 'choose') ? ($request->delivery_method_sms ?? 0 ) : 0, 
+            'delivery_method_email' => ($request->delivery_method == 'choose') ? ($request->delivery_method_email ?? 0) : 0, 
+            'delivery_method_push_notification' => ($request->delivery_method == 'choose') ? ($request->delivery_method_push_notification ?? 0) : 0, 
+            'send_sms_push_not_available' => ($request->delivery_method == 'choose') ? ($request->send_sms_push_not_available ?? 0) : 0, 
         ]);
+
+        if(isset($request->list)){
+            foreach ($request->list as $key => $value) {
+                list($value, $type) = explode('~~', $value);
+
+                $list = AnnouncementContactList::firstOrCreate([
+                    'announcement_id' => $announcement->id,
+                    'business_id' => $business_id,
+                    'list_name' => $type,
+                    'value' => $value
+                ]);
+            }
+        }
         return redirect()->route('business.announcement.index');
     }
 
@@ -75,11 +101,14 @@ class AnnouncementController extends BusinessBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($business_id,$id)
-    {
+    public function show($business_id,$id,Request $request)
+    {   
+        $customList = CustomList::where(['business_id'=>$business_id])->get();
+        $programList = BusinessServices::where(['cid'=>$business_id ,'is_active' => 1])->get();
+        $categoryList = BusinessPriceDetailsAges::where(['cid'=>$business_id])->get();
         $announcement = Announcement::find($id);
         $category = AnnouncementCategory::where('business_id',$business_id)->get();
-        return view('business.announcement.edit',['a'=>$announcement,'category'=>$category,'business_id'=>$business_id])->render();
+        return view('business.announcement.edit', compact('category','business_id','customList','programList','categoryList','announcement','business_id'))->render();
     }
 
     /**
@@ -101,6 +130,7 @@ class AnnouncementController extends BusinessBaseController
      */
     public function update(Request $request, $business_id ,$announcementID)
     {   
+        //print_r($request->all());exit;
         $announcement = Announcement::find($announcementID);
         $announcement->update([
             'title' => $request->title, 
@@ -115,7 +145,42 @@ class AnnouncementController extends BusinessBaseController
             'does_expire' => $request->expire ?? 0, 
             'status' => $request->status, 
             'announcement' => $request->announcement, 
+            'sms_text' => $request->sms_text, 
+            'delivery_timeline' => $request->delivery_timeline, 
+            'delivery_method' => $request->delivery_method, 
+            'delivery_method_sms' => $request->delivery_method == 'choose' ? ($request->delivery_method_sms ?? 0 ) : 0, 
+            'delivery_method_email' => $request->delivery_method == 'choose' ? ($request->delivery_method_email ?? 0) : 0, 
+            'delivery_method_push_notification' => $request->delivery_method == 'choose' ? ($request->delivery_method_push_notification ?? 0) : 0, 
+            'send_sms_push_not_available' => $request->delivery_method == 'choose' ? ($request->send_sms_push_not_available ?? 0) : 0, 
         ]);
+
+        $newListIds  = [];
+        $listIDs = $announcement->announcementContactList()->pluck('id')->toArray();
+        if(isset($request->list)){
+            foreach ($request->list as $key => $value) {
+                list($value, $type) = explode('~~', $value);
+
+                $list = AnnouncementContactList::firstOrCreate([
+                    'announcement_id' => $announcement->id,
+                    'business_id' => $business_id,
+                    'list_name' => $type,
+                    'value' => $value
+                ]);
+
+                if (!$list->wasRecentlyCreated) {
+                    $newListIds [] = $list->id;
+                }
+            }
+        }
+
+        $contactListIdsDiff = array_diff($listIDs, $newListIds);
+        foreach ($contactListIdsDiff as $contactListId) {
+            $contactList = AnnouncementContactList::find($contactListId);
+            $contactList->delete();
+        }
+
+        //AnnouncementContactList::whereIn('id',$contactListIdsDiff)->delete();
+
         return redirect()->route('business.announcement.index');
     }
 
@@ -148,6 +213,12 @@ class AnnouncementController extends BusinessBaseController
         $url = Storage::url($path);
         $fileName = basename($path);
         return response()->json(['fileName' => $fileName, 'uploaded'=> 1, 'url' => $url]);*/
+    }
+
+    public function getAnnouncementStats(Request $request)
+    {
+        $announcement = Announcement::find($request->id);
+        return view('business.announcement.stats_modal',compact('announcement'));
     }
 
 }

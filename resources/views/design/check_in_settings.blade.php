@@ -26,54 +26,6 @@
 						
                         <div class="row">
                             <div class="col-lg-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title mb-0">Upload cover Photo</h4>
-                                    </div><!-- end card header -->
-
-                                    <div class="card-body">
-                                        <div class="dropzone">
-                                            <div class="fallback">
-                                                <input name="file" type="file" multiple="multiple">
-                                            </div>
-                                            <div class="dz-message needsclick">
-                                                <div class="mb-3">
-                                                    <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
-                                                </div>
-                                                <h4>Drop files here or click to upload.</h4>
-                                            </div>
-                                        </div>
-
-                                        <ul class="list-unstyled mb-0" id="dropzone-preview">
-                                            <li class="mt-2" id="dropzone-preview-list">
-                                                <!-- This is used as the file preview template -->
-                                                <div class="border rounded">
-                                                    <div class="d-flex p-2">
-                                                        <div class="flex-shrink-0 me-3">
-                                                            <div class="avatar-sm bg-light rounded">
-                                                                <img data-dz-thumbnail class="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="flex-grow-1">
-                                                            <div class="pt-1">
-                                                                <h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
-                                                                <p class="fs-13 text-muted mb-0" data-dz-size></p>
-                                                                <strong class="error text-danger" data-dz-errormessage></strong>
-                                                            </div>
-                                                        </div>
-                                                        <div class="flex-shrink-0 ms-3">
-                                                            <button data-dz-remove class="btn btn-sm btn-danger">Delete</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <!-- end dropzon-preview -->
-                                    </div>
-                                    <!-- end card body -->
-                                </div>
-                                <!-- end card -->
-
                                 <!-- <div class="card">
                                     <div class="card-header align-items-center d-flex">
                                         <h4 class="card-title mb-0 flex-grow-1">Change Button and Text Color</h4>
@@ -109,12 +61,50 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-xxl-11 col-lg-10 col-md-11 col-sm-11 col-10">
-                                                    <h5>Color Theme</h5>
-                                                    <p class="mb-0">Your color theme will be distributed through the buttons in your check in app</p>
+                                                    <h5>Change welcome screen background color</h5>
+                                                    <p class="mb-0">Your color background theme will be change.</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>   
+
+                                    <div class="middle-border">
+                                        <div class="card-body">
+                                            <div class="row y-middle">
+                                                <div class="col-xxl-1 col-lg-2 col-md-1 col-sm-1 col-2">
+                                                    <div class="d-flex flex-wrap gap-2">
+                                                        <div class="nano-colorpicker"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xxl-10 col-lg-8 col-md-10 col-sm-10 col-8">
+                                                    <h5>Change your 4 digit screen background color</h5>
+                                                    <p class="mb-0">Your color background theme will be change.</p>
+                                                </div>
+                                                <!-- <div class="col-xxl-1 col-lg-2 col-md-1 col-sm-1 col-2">
+                                                    <label class="font-red" for="">Skip</label>
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="middle-border">
+                                        <div class="card-body">
+                                            <div class="row y-middle">
+                                                <div class="col-xxl-1 col-lg-2 col-md-1 col-sm-1 col-2">
+                                                    <div class="d-flex flex-wrap gap-2">
+                                                        <div class="nano-colorpicker"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xxl-10 col-lg-8 col-md-10 col-sm-10 col-8">
+                                                    <h5>Change alert pop up background color</h5>
+                                                    <p class="mb-0">Your color background theme will be change.</p>
+                                                </div>
+                                                <!-- <div class="col-xxl-1 col-lg-2 col-md-1 col-sm-1 col-2">
+                                                    <label class="font-red" for="">Skip</label>
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                    </div>
                                     
                                     <div class="middle-border">
                                         <div class="card-body">
@@ -159,25 +149,7 @@
                                             </div>
                                         </div>
                                     </div> 
-                                    
-                                    <div class="middle-border">
-                                        <div class="card-body">
-                                            <div class="row y-middle">
-                                                <div class="col-xxl-1 col-lg-2 col-md-1 col-sm-1 col-2">
-                                                    <div class="d-flex flex-wrap gap-2">
-                                                        <div class="nano-colorpicker"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xxl-10 col-lg-8 col-md-10 col-sm-10 col-8">
-                                                    <h5>Change Background Color</h5>
-                                                    <p class="mb-0">Your color background theme will be change.</p>
-                                                </div>
-                                                <div class="col-xxl-1 col-lg-2 col-md-1 col-sm-1 col-2">
-                                                    <label class="font-red" for="">Skip</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>  
+                                      
                                     
                                    <div class="middle-border">
                                         <div class="card-body">
@@ -220,157 +192,180 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>  
                             </div> <!-- end col -->
-                            <div class="col-lg-6">      
-                                <div class="page-content-register">
-                                    <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
-                                        <div class="bg-overlay"></div>
-
-                                        <div class="shape">
-                                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
-                                                <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <!-- auth page content -->
-                                    <div class="auth-page-content">
-                                        <div class="container">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="text-center mt-sm-5 mb-4 text-white-50">
-                                                        <div class="register-logo-middle">
-                                                            <a href="#" class="d-inline-block auth-logo">
-                                                                <img src="http://dev.fitnessity.co//public/images/fitnessity_logo1_black.png" alt="logo">
-                                                            </a>
-                                                        </div>
-                                                    </div>
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <h4 class="card-title mb-0">Upload welcome screen photo</h4>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="text-right">
+                                                    <a href="" data-bs-toggle="modal" data-bs-target="#welcomeModal">Preview</a>
                                                 </div>
                                             </div>
-                                            <!-- end row -->
+                                        </div>
+                                    </div><!-- end card header -->
 
-                                            <div class="row justify-content-center">
-                                                <div class="col-md-8 col-lg-6 col-xl-12">
-                                                    <div class="card z-1">
-                                                        <div class="card-body p-4 ">
-                                                            <div class="mt-70 mb-70">
-                                                                <div class="row mt-4">
-                                                                    <div class="col-lg-12">
-                                                                        <div class="text-center self-check-sp">
-                                                                            <label for="" class="fs-20 font-red mb-3">Self Check-In</label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-xxl-5 col-lg-12 col-md-5 col-sm-5">
-                                                                        <div class="text-center">
-                                                                            <label class="fs-16 m-b-50 font-red">Already have an account?</label>
-                                                                        </div>
-                                                                        <div class="text-center reg-up-check-setting">
-                                                                            <div class="mb-3">
-                                                                            <img src="http://dev.fitnessity.co//public/dashboard-design/images/u-login.png" alt="logo">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="p-relative mb-25">
-                                                                            <form class="form">
-                                                                                <input type="email" class="form-control" placeholder="Enter phone number or email" />
-                                                                                <button type="button" class="uppercase btn btn-link inner-btn position-absolute end-0 top-0 text-decoration-none shadow-none text-muted password-addon"><i class="fas fa-arrow-right"></i></button>
-                                                                            </form>
-                                                                        </div>
-                                                                        <div class="or-text p-relative pt-15 pb-15">
-                                                                            <div class="border-bottom-or"></div>
-                                                                            <div class="or-set-btn">
-                                                                                <label>OR</label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="mb-3">
-                                                                            <button type="button" class="btn-red-primary btn-red mt-25 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">Enter a quick four digit code </button>
-                                                                        </div>
-                                                                        
-                                                                    </div>
-                                                                    <div class="col-xxl-2 col-lg-12 col-md-2 col-sm-2">
-                                                                        <div class="border-start p-4 h-100 d-flex flex-column center-border"></div>
-                                                                    </div>
-                                                                    <div class="col-xxl-5 col-lg-12 col-md-5 col-sm-5">
-                                                                        <div class="text-center d-grid">
-                                                                            <label class="fs-16 font-red">New to Fitnessity</label>
-                                                                            <label class="fs-16 m-b-50 font-red">Create A New Account</label>
-                                                                        </div>
-                                                                        <div class="text-center sign-up-check-settings">
-                                                                            <img src="http://dev.fitnessity.co//public/dashboard-design/images/reg.png" alt="logo">
-                                                                        </div>
-                                                                        <form action="">
-                                                                            <div class="mb-3">
-                                                                                <button type="button" class="btn-red-primary btn-red w-100"><i class="ri-add-line align-bottom me-1"></i>Create Account</button>
-                                                                            </div>                            
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            
+                                    <div class="card-body">
+                                        <div class="dropzone p-0">
+                                            <div class="fallback">
+                                                <input name="file" type="file" multiple="multiple">
+                                            </div>
+                                            <div class="dz-message needsclick margin-one-em">
+                                                <div class="mb-3">
+                                                    <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
+                                                </div>
+                                                <h4>Drop files here or click to upload.</h4>
+                                            </div>
+                                        </div>
+
+                                        <ul class="list-unstyled mb-0" id="dropzone-preview">
+                                            <li class="mt-2" id="dropzone-preview-list">
+                                                <!-- This is used as the file preview template -->
+                                                <div class="border rounded">
+                                                    <div class="d-flex p-2">
+                                                        <div class="flex-shrink-0 me-3">
+                                                            <div class="avatar-sm bg-light rounded">
+                                                                <img data-dz-thumbnail class="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" />
                                                             </div>
-                                                        </div>            
-                                                    </div>
-                                                    <div class="text-right powerby">
-                                                        <img src="http://dev.fitnessity.co//public/images/fit-logo.png" alt="logo">
-                                                    </div>
-                                                    <!-- end card -->
-                                                </div>
-                                            </div>
-                                            <!-- end row -->
-                                        </div>
-                                        <!-- end container -->
-                                    </div>                                                       
-                                <!--<div class="card z-1">
-                                    <div class="card-body p-4 ">
-                                        <div class="mt-70 mb-70">
-                                            <div class="row mt-4">
-                                                <div class="col-lg-12">
-                                                    <div class="text-center self-check-sp">
-                                                        <label for="" class="fs-20 font-red mb-3">Self Check-In</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xxl-5 col-lg-12 col-md-5 col-sm-5">
-                                                    <div class="text-center">
-                                                        <label class="fs-16 m-b-50 font-red">Already have an account?</label>
-                                                    </div>
-                                                    <div class="text-center reg-up-check-setting">
-                                                        <div class="mb-3">
-                                                        <img src="http://dev.fitnessity.co//public/dashboard-design/images/u-login.png" alt="logo">
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <div class="pt-1">
+                                                                <h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
+                                                                <p class="fs-13 text-muted mb-0" data-dz-size></p>
+                                                                <strong class="error text-danger" data-dz-errormessage></strong>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-shrink-0 ms-3">
+                                                            <button data-dz-remove class="btn btn-sm btn-danger">Delete</button>
                                                         </div>
                                                     </div>
-                                                    <div class="p-relative">
-                                                        <form class="form">
-                                                            <input type="email" class="form-control" placeholder="Enter phone number or email" />
-                                                            <button type="button" class="uppercase btn btn-link inner-btn position-absolute end-0 top-0 text-decoration-none shadow-none text-muted password-addon"><i class="fas fa-arrow-right"></i></button>
-                                                        </form>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <button type="button" class="btn-red-primary btn-red mt-15 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">Enter a quick four digit code </button>
-                                                    </div>
-                                                    
                                                 </div>
-                                                <div class="col-xxl-2 col-lg-12 col-md-2 col-sm-2">
-                                                    <div class="border-start p-4 h-100 d-flex flex-column center-border"></div>
-                                                </div>
-                                                <div class="col-xxl-5 col-lg-12 col-md-5 col-sm-5">
-                                                    <div class="text-center d-grid">
-                                                        <label class="fs-16 font-red">New to Fitnessity</label>
-                                                        <label class="fs-16 m-b-50 font-red">Create A New Account</label>
-                                                    </div>
-                                                    <div class="text-center sign-up-check-settings">
-                                                        <img src="http://dev.fitnessity.co//public/dashboard-design/images/reg.png" alt="logo">
-                                                    </div>
-                                                    <form action="">
-                                                        <div class="mb-3">
-                                                            <button type="button" class="btn-red-primary btn-red w-100"><i class="ri-add-line align-bottom me-1"></i>Create Account</button>
-                                                        </div>                            
-                                                    </form>
+                                            </li>
+                                        </ul>
+                                        <!-- end dropzon-preview -->
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+                                <!-- end card -->
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <h4 class="card-title mb-0">Upload passcode page cover photo </h4>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="text-right">
+                                                    <a href="" data-bs-toggle="modal" data-bs-target="#passcodeModal">Preview</a>
                                                 </div>
                                             </div>
-                                        
                                         </div>
-                                    </div>            
-                                </div>-->
-                            </div>                         
+                                    </div><!-- end card header -->
+
+                                    <div class="card-body">
+                                        <div class="dropzone  p-0">
+                                            <div class="fallback">
+                                                <input name="file" type="file" multiple="multiple">
+                                            </div> 
+                                            <div class="dz-message needsclick margin-one-em">
+                                                <div class="mb-3">
+                                                    <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
+                                                </div>
+                                                <h4>Drop files here or click to upload.</h4>
+                                            </div>
+                                        </div>
+
+                                        <ul class="list-unstyled mb-0" id="dropzone-preview">
+                                            <li class="mt-2" id="dropzone-preview-list">
+                                                <!-- This is used as the file preview template -->
+                                                <div class="border rounded">
+                                                    <div class="d-flex p-2">
+                                                        <div class="flex-shrink-0 me-3">
+                                                            <div class="avatar-sm bg-light rounded">
+                                                                <img data-dz-thumbnail class="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <div class="pt-1">
+                                                                <h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
+                                                                <p class="fs-13 text-muted mb-0" data-dz-size></p>
+                                                                <strong class="error text-danger" data-dz-errormessage></strong>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-shrink-0 ms-3">
+                                                            <button data-dz-remove class="btn btn-sm btn-danger">Delete</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <!-- end dropzon-preview -->
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+                                <!-- end card -->
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <h4 class="card-title mb-0">Upload photo for alert pop up</h4>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="text-right">
+                                                    <a href="" data-bs-toggle="modal" data-bs-target="#alertModal">Preview</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!-- end card header -->
+
+                                    <div class="card-body">
+                                        <div class="dropzone p-0">
+                                            <div class="fallback">
+                                                <input name="file" type="file" multiple="multiple">
+                                            </div>
+                                            <div class="dz-message needsclick margin-one-em">
+                                                <div class="mb-3">
+                                                    <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
+                                                </div>
+                                                <h4>Drop files here or click to upload.</h4>
+                                            </div>
+                                        </div>
+
+                                        <ul class="list-unstyled mb-0" id="dropzone-preview">
+                                            <li class="mt-2" id="dropzone-preview-list">
+                                                <!-- This is used as the file preview template -->
+                                                <div class="border rounded">
+                                                    <div class="d-flex p-2">
+                                                        <div class="flex-shrink-0 me-3">
+                                                            <div class="avatar-sm bg-light rounded">
+                                                                <img data-dz-thumbnail class="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <div class="pt-1">
+                                                                <h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
+                                                                <p class="fs-13 text-muted mb-0" data-dz-size></p>
+                                                                <strong class="error text-danger" data-dz-errormessage></strong>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-shrink-0 ms-3">
+                                                            <button data-dz-remove class="btn btn-sm btn-danger">Delete</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <!-- end dropzon-preview -->
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+                                <!-- end card -->
+                            </div>
                         </div>
                         <!-- end row -->	
 
@@ -381,7 +376,192 @@
         </div><!-- End Page-content -->
      </div><!-- end main content-->
 </div><!-- END layout-wrapper -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Welcome Screen Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div style="background-image:url(../dashboard-design/images/check-in-bg.jpg)">
+                    <div class="container-fuild">
+                        <div class="z-1">
+                            <div class="card-body self-check-sp-preview">
+                                <div class="cross-check-preview">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                                            <div class="page-heading text-right">
+                                                <label class="mb-15">
+                                                    <a class="btn" style="background-color: #ea1515; border: 1px solid #ea1515; color: #fff; border-radius: 10px;" href="http://dev.fitnessity.co/checkin/check-out?type=1">Exit</a></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-12">
+                                            <div class="self-welcome-logo">
+                                                <a href="#" class="d-inline-block auth-logo">
+                                                    <img src="http://dev.fitnessity.co/images/fitnessity_logo1_black.png" alt="logo">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-12">
+                                            <div class="text-right wel-date-time">
+                                                <span>June 10, 2024</span>
+                                                <h3>5:14 AM</h3>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-12">
+                                            <div class="welcome-title-preview d-grid text-center">
+                                                <label>Welcome To</label>
+                                                <span>Fitness Pvt. Ltd. </span>
+                                            </div>
+                                            <div class="text-center">
+                                                <a href="http://dev.fitnessity.co/quick-checkin" class="btn fs-15 mb-15" style="background-color: #ea1515; border: 1px solid #ea1515; color: #fff; border-radius: 10px;"><i class="ri-add-line align-bottom me-1"></i>Check In</a>
+                                                <a href="http://dev.fitnessity.co/business/68/create-customer" class="btn fs-15 mb-15" style="background-color: #000; border: 1px solid #000; color: #fff; border-radius: 10px;"><i class="ri-add-line align-bottom me-1"></i>Sign Up</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-12 mobile-none">
+                                            <div class="float-right qr-code">
+                                                <div class="text-center">
+                                                    <img src="http://dev.fitnessity.co/dashboard-design/images/qr-code.png" alt="logo">
+                                                    <p>Scan QR Code for touchless check-in or sign-up</p>
+                                                </div>                                               
+                                            </div>
+                                        </div>
+                                    </div>                                   
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>                      
+                        <!-- end card -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="passcodeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Passcode Screen Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid ">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6 back-check-img" style="background-image:url(../dashboard-design/images/check-in-bg.jpg)">
+                            <div class="card-check-in-preview p-relative h-100">
+                                <div class="pb-60 text-center">
+                                    <a href="#" class="register-check">
+                                        <img src="http://dev.fitnessity.co//public/images/fitnessity_logo1_black.png" alt="logo">
+                                    </a>
+                                </div>  
+                                <div class="welcome-provider-preview text-center">
+                                    <h3>Welcome to</h3>
+                                    <span>Fitness Pvt. Ltd.</span>
+                                    <p>Please select a check-in option to the right. </p>
+                                </div>  
+                                <div class="self-check-arrow">
+                                    <i class="fas fa-long-arrow-alt-left"></i>
+                                </div>  
+                            </div>
+                        </div>
+                        <div class="col-lg-6 nopadding">
+                            <div class=" bg-white">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="page-heading text-right">
+                                        <label class="mr-10"><a class="btn" style="background-color: #ea1515; border: 1px solid #ea1515; color: #fff; border-radius: 10px;" href="http://dev.fitnessity.co/checkin/check-out?type=1">Exit</a></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-check-in-preview bg-white">
+                                <div class="text-center">
+                                    <label class="fs-16 m-b-50 font-red">Already have an account?</label>
+                                </div>
+                                <div class="text-center reg-up-img-preview">
+                                    <div class="mb-3">
+                                        <img src="http://dev.fitnessity.co//public/dashboard-design/images/u-login.png" alt="logo">
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <div class="row justify-content-center">
+                                        <div class="col-lg-9">
+                                            <div class="or-text p-relative pt-15 pb-15">
+                                                <div class="mb-3">
+                                                    <button type="button" class="btn mt-25 w-100" style="background-color: #ea1515; border: 1px solid #ea1515; color: #fff; border-radius: 10px;" data-bs-toggle="modal" data-bs-target="#exampleModal">Enter a quick four digit code </button>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Passcode Screen Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid ">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-12 nopadding">
+                            <div class="p-0 bg-white">
+                                <div class="row y-middle">
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="checking-popup">
+                                            <img src="https://fitnessity-production.s3.amazonaws.com/checkin/d839c659-2b85-4f57-9917-1209cf2c0d30.jpg">
+                                        </div>																											
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="text-center mb-mv-25">
+                                            <div class="tick-set">
+                                                <img src="http://dev.fitnessity.co/dashboard-design/images/cross.png">
+                                            </div>
+                                            <div class="mb-15">
+                                                    <label class="fs-24 mb-0"> Sorry, I can't check you in yet.</label>
+                                                    <label class="fs-24 mb-0"> You have a failed auto payment.</label>
+                                                    <label class="fs-24 mb-0"> You can see the front desk or resolve now.</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-relative">
+                                        <div class="finish-btn">
+                                            <a href="#" data-modal-chkbackdrop="1" data-reload="1" data-modal-width="" data-behavior="ajax_html_modal" data-url="http://dev.fitnessity.co/checkin/autopay-list?customer_id=380" class="btn" style="background-color: #ea1515; border: 1px solid #ea1515; color: #fff; border-radius: 10px;" onclick="closeModal()">Resolve</a>
+                                            <a class="btn" style="background-color: #ea1515; border: 1px solid #ea1515; color: #fff; border-radius: 10px;" href="http://dev.fitnessity.co/checkin/check-out?type=0">Finish</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
     
-@include('layouts.business.footer')
-	
+@include('layouts.business.footer') 
+
 @endsection
+@push('scripts')
+    <script src="{{asset('/public/dashboard-design/js/dropzone-min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/js/ecommerce-product-create.init.js')}}"></script>
+@endpush

@@ -1,6 +1,9 @@
-@extends('layouts.header')
+@extends('layouts.business.header')
 @section('content')
-
+<head>
+    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
+    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>css/responsive.css">
+</head>
 <style>
     #suggestions {
         -moz-box-sizing: border-box;
@@ -62,8 +65,8 @@
 <div class="claiming-section claimyour-business" style="background-image: url(../img/claim-a-business-design.jpg);">
 
     <div class="container">
-
-        <div class="col-md-6 claiming-business-block">
+		<div class="row">
+        <div class="col-lg-6 col-md-12 col-12 claiming-business-block">
 
             <h3>CLAIMING YOUR BUSINESS LISTING</h3>
 
@@ -133,20 +136,20 @@
             @endif
         </div>
 
-        <div class="col-md-6 claiming-business-block-right">
+        <div class="col-lg-6 col-md-12 col-12 claiming-business-block-right">
 
             <p>
                 Claim your business or create a new profile today for free! Update your profile so we can showcase what you do to everyone looking for your services.
             </p>
 
-            <img src="{{ url('public/img/claim-your-business-detail.jpg') }}">
+            <img src="{{ url('public/img/claim-your-business-detail.jpg') }}" alt="Fitnessity">
 
         </div>
-
+		</div>
     </div>
 
 </div>
-@include('layouts.footer')
+@include('layouts.business.footer')
 
 <script>
     $(document).ready(function () {
@@ -255,11 +258,11 @@
                         if (response.search_data2.length != 0 && response.search_data.length != 0) {
                             response.search_data2.forEach(function (value, key) {
                                 var mysrc = "{{Config::get('constants.USER_IMAGE_THUMB')}}"
-                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'claimed\');"><div class="col-sm-12 row"><div class="col-sm-2"><img src="' + mysrc + '/' + value.logo + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
+                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'claimed\');"><div class="col-sm-12 row"><div class="col-sm-2"><img src="' + mysrc + '/' + value.logo + '" style="width:30px;height:30px;" alt="Fitnessity" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
                                 if (key + 1 == response.search_data2.length) {
                                     response.search_data.forEach(function (value, key) {
                                         var mysrc = "{{Config::get('constants.FRONT_IMAGE')}}"
-                                        str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'unclaimed\');"><div class="col-sm-12 row"><div  class="col-sm-2"><img src="' + mysrc + '/business_large_square.png' + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
+                                        str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'unclaimed\');"><div class="col-sm-12 row"><div  class="col-sm-2"><img src="' + mysrc + '/business_large_square.png' + '" style="width:30px;height:30px;" alt="Fitnessity" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
                                         if (key + 1 == response.search_data.length) {
                                             $('#option-box').empty();
                                             $('#option-box').append(str);
@@ -271,7 +274,7 @@
                         } else {
                             response.search_data2.forEach(function (value, key) {
                                 var mysrc = "{{Config::get('constants.USER_IMAGE_THUMB')}}"
-                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'claimed\');"><div class="col-sm-12 row"><div class="col-sm-2"><img src="' + mysrc + '/' + value.logo + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
+                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'claimed\');"><div class="col-sm-12 row"><div class="col-sm-2"><img src="' + mysrc + '/' + value.logo + '" style="width:30px;height:30px;" alt="Fitnessity" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
                                 if (key + 1 == response.search_data2.length) {
                                     $('#option-box').empty();
                                     $('#option-box').append(str);
@@ -280,7 +283,7 @@
                             })
                             response.search_data.forEach(function (value, key) {
                                 var mysrc = "{{Config::get('constants.FRONT_IMAGE')}}"
-                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'unclaimed\');"><div class="col-sm-12 row"><div  class="col-sm-2"><img src="' + mysrc + '/business_large_square.png' + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
+                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'unclaimed\');"><div class="col-sm-12 row"><div  class="col-sm-2"><img src="' + mysrc + '/business_large_square.png' + '" style="width:30px;height:30px;" alt="Fitnessity" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
                                 if (key + 1 == response.search_data.length) {
                                     $('#option-box').empty();
                                     $('#option-box').append(str);

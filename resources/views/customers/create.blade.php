@@ -21,7 +21,7 @@
                             @if($success == 1)
                             <div class="row mb-3">
                                 <div class="page-heading">
-                                    <span class="font-green fs-16">Customer Successfully Registered.</span>
+                                    <span class="font-green fs-16">Customer Successfully Registered. @if($successMsg) {!! $successMsg !!} @endif </span>
                                 </div>
                             </div>
                             @endif
@@ -35,7 +35,7 @@
                                                     <a class="nav-link active" data-bs-toggle="tab" href="#add" role="tab" aria-selected="false"> Manually Add Client </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-bs-toggle="tab" href="#search" role="tab" aria-selected="false">Search Fitnessity</a>
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#search" role="tab" aria-selected="false">Search OmneBook</a>
                                                 </li>
                                             </ul>
                                             <!-- Tab panes -->
@@ -59,7 +59,7 @@
 
                                                                     <div class="col-md-4 col-lg-3">
                                                                         <label class="mt-10">Email<span id="star">*</span></label>
-                                                                        <input type="email" name="email" id="email" class="myemail form-control" size="30" maxlength="80" autocomplete="off">
+                                                                        <input type="email" name="email" id="email" class="myemail form-control" size="30" maxlength="80" autocomplete="off" on>
                                                                     </div>
 
                                                                     <div class="col-md-4 col-lg-3">
@@ -80,6 +80,14 @@
                                                                             <option value="other">Other</option>
                                                                         </select>
                                                                     </div>
+
+                                                                    <div class="col-md-4 col-lg-3">
+                                                                        <label class="mt-10">Check in Code </label>
+                                                                        <input type="text" name="check_in" id="check_in" size="30" maxlength="4" autocomplete="off" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control">
+                                                                        <div class="font-red" id="check_in_error"></div>
+                                                                        
+                                                                    </div>
+
                                                                 
                                                                     <div class="col-md-4 col-lg-3">
                                                                         <div class="form-group check-box-info ">
@@ -150,12 +158,12 @@
                                                                                             <div class="row">
                                                                                                 <div class="col-md-4 col-lg-3">
                                                                                                     <label class="mt-10">First Name</label>
-                                                                                                    <input type="text" name="fname[]" id="fname" class="form-control required" >
+                                                                                                    <input type="text" name="fname[]" id="fname" class="form-control required fname0" >
                                                                                                     <span class="error" id="err_fname"></span>
                                                                                                 </div>
                                                                                                 <div class="col-md-4 col-lg-3">
                                                                                                     <label class="mt-10">Last Name</label>
-                                                                                                    <input type="text" name="lname[]" id="lname" class="form-control required" >
+                                                                                                    <input type="text" name="lname[]" id="lname" class="form-control required lname0" >
                                                                                                     <span class="error" id="err_lname"></span>
                                                                                                 </div>
                                                                                                 <div class="col-md-4 col-lg-3">
@@ -193,7 +201,7 @@
                                                                                                 </div>
                                                                                                 <div class="col-md-4 col-lg-3">
                                                                                                     <label class="mt-10">Email</label>
-                                                                                                    <input type="email" name="emailid[]" id="emailid" class="form-control email" required>
+                                                                                                    <input type="email" name="emailid[]" id="emailid" class="form-control email" required onblur="getCode(0,'email');">
                                                                                                     <span class="error" id="err_emailid"></span>
                                                                                                 </div>
                                                                                                 <div class="col-md-4 col-lg-3">
@@ -226,6 +234,13 @@
                                                                                                     </select>
                                                                                                     <span class="error" id="err_emergency_relation"></span>
                                                                                                 </div>
+
+                                                                                                <div class="col-md-4 col-lg-3">
+                                                                                                  	<label class="mt-10">Check in Code </label>
+                                                                                                	<input type="text" name="check_in_code[]" id="check_in_code" size="30" maxlength="4" autocomplete="off" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control check_in_code0" onblur="getCode(0,'code');">
+                                                                                                	<div class="font-red" id="check_in_error_family0"></div>
+                                                                                                </div>
+
                                                                                                 <div class="col-md-4 col-lg-3"> 
                                                                                                     <div class="form-group check-box-info">
                                                                                                         <input class="check-box-primary-account primaryAcCheck" type="checkbox" id="primaryAccount" name="primaryAccount" value="1" >
@@ -310,7 +325,7 @@
                                                                     </div>
 
                                                                     <div class="col-md-12">
-                                                                        @if($businessTerms->termcondfaqtext != '' || $businessTerms->liabilitytext != '' || $businessTerms->covidtext != '' || $businessTerms->contracttermstext != '' || $businessTerms->refundpolicytext != '')
+                                                                        @if(@$businessTerms->termcondfaqtext != '' || @$businessTerms->liabilitytext != '' || @$businessTerms->covidtext != '' || @$businessTerms->contracttermstext != '' || @$businessTerms->refundpolicytext != '')
                                                                             <div class="col-lg-12" id="termsdiv">
                                                                                 <div class="terms-head">
                                                                                     <div>
@@ -334,8 +349,9 @@
                                                                             </div>
                                                                         @endif
                                                                     </div>
-
-                                                                    <label class="mt-10">To continue, please read the terms & waivers above. A signature is required to participate. </label>
+                                                                    @if(@$businessTerms)
+                                                                        <label class="mt-10">To continue, please read the terms & waivers above. A signature is required to participate. </label>
+                                                                    @endif
                                                                     <div class="container-fuild">
                                                                         <div class="row">
                                                                             <div class="col-lg-12">
@@ -357,10 +373,17 @@
                                                                 <div class="col-md-12 col-lg-12 text-center">
                                                                     <div class="wrap-sp">
                                                                         <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-                                                                        <label for="b_trm1" class="text-center">I agree to Fitnessity Terms of Service and Privacy Policy</label>
+                                                                        <label for="b_trm1" class="text-center">I agree to OmneBook Terms of Service and Privacy Policy</label>
                                                                     </div>
                                                                     <div id="termserror" class="font-red fs-15 text-center mb-10"></div>
                                                                     <div id="systemMessage" class="mb-10 fs-15 mb-10"></div>
+                                                                    <div class="row d-none" id="loading-img">
+																		<div class="col-md-12">
+																			<div class="loading-container text-center loading-width mb-10">
+																			  	<img src="{{'/public/images/processing.gif'}}" alt="Processing..." />
+																			</div>
+																		</div>
+																	</div>
                                                                 </div>
                                                                 <div class="col-md-12 col-lg-12 text-center">
                                                                     <button type="button" class="btn btn-red register_submit" id="register_submit" onclick="getType('submit');">Add Credit Card</button>
@@ -401,8 +424,8 @@
                                                 <div class="tab-pane" id="search" role="tabpanel">
                                                     <div class="text-center font-black">
                                                         <h3 >Onboard A New Client Fast</h3>
-                                                        <h4>Search for your clients on Fitnessity</h4>
-                                                        <p>“Your client could already have an account on Fitnessity.<br>If so, get access and sync their information fast.”</p>
+                                                        <h4>Search for your clients on OmneBook</h4>
+                                                        <p>“Your client could already have an account on OmneBook.<br>If so, get access and sync their information fast.”</p>
                                                     </div>
                                                     <div class="row check-txt-center claimyour-business">
                                                         <div class="col-md-10 col-xs-10 col-8 frm-claim">
@@ -585,6 +608,7 @@
                     $("#systemMessage").html('');
                     $('#signpath').val(canvas.toDataURL());
 
+                    $('#loading-img').addClass('d-none');
                     if ($('#dob').val() == '') {
                         $("#systemMessage").html('Please Enter Your Birthdate.').addClass('font-red alert-class alert-danger');
                         return false;
@@ -612,7 +636,9 @@
                         $("#termserror").html('');
                         $('.register_submit').prop('disabled', true).css('background','#999999');
                         $('#systemMessage').addClass('font-red');
-                        $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+
+                        $('#loading-img').removeClass('d-none');
+                        //$("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
                     },
                     complete: function () {
                         $('.register_submit').prop('disabled', false).css('background','#ed1b24');
@@ -629,7 +655,8 @@
                                 }, 2000);
                             }
                         } else {
-                             $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+                        	$('#loading-img').addClass('d-none');
+                            $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
                             $('.register_submit').prop('disabled', false).css('background','#ed1b24');
                         }
                     }
@@ -679,6 +706,91 @@
             });
         });
 
+        $(document).on('blur', '#email', function(e){
+            var inputVal = $(this).val();
+
+            $.ajax({
+                url: '{{ route("get_checkin_code") }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    email: inputVal,
+                    fname: $('#firstname').val(),
+                    lname: $('#lastname').val(),
+                },
+                success: function(response) {
+                    $('#check_in').val(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                }
+            });
+        }); 
+
+        $(document).on('blur', '#check_in', function(e){
+            $('#check_in_error').html('');
+            var inputVal = $(this).val();
+
+            $.ajax({
+                url: '{{ route("get_checkin_code") }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    checkin_code: inputVal,
+                    email: $('.myemail').val(),
+                },
+                success: function(response) {
+                    if(response == 1){
+                         $('#check_in_error').html('Code already taken by another user. If you don\'t change this code system will automatically assign you a new check in code.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                }
+            });
+        });
+
+        function getCode(id,type){
+        	if(type == 'code'){
+        		$('#check_in_error_family'+id).html('');
+
+        		$.ajax({
+	                url: '{{ route("get_checkin_code") }}',
+	                type: 'POST',
+	                data: {
+	                    _token: '{{ csrf_token() }}',
+	                    checkin_code: $('.check_in_code'+id).val(),
+	                    email: $('.email'+id).val(),
+	                },
+	                success: function(response) {
+	                    if(response == 1){
+	                    	$('#check_in_error_family'+id).html('Code already taken by another user. If you don\'t change this code system will automatically assign you a new check in code.')
+	                    }
+	                },
+	                error: function(xhr, status, error) {
+	                    console.error('AJAX Error:', error);
+	                }
+	            });
+        	}else{
+        		$.ajax({
+                	url: '{{ route("get_checkin_code") }}',
+	                type: 'POST',
+	                data: {
+	                    _token: '{{ csrf_token() }}',
+	                    email: $('.email'+id).val(),
+	                    fname: $('.fname'+id).val(),
+	                    lname: $('.lname'+id).val(),
+	                },
+	                success: function(response) {
+	                     $('.check_in_code'+id).val(response);
+	                },
+	                error: function(xhr, status, error) {
+	                    console.error('AJAX Error:', error);
+	                }
+	            });
+        	}
+        }
+
         function calculateAge(dateStr) {
            var birthDate = new Date(dateStr);
             var currentDate = new Date();
@@ -722,10 +834,16 @@
             re = re.replaceAll("deletediv"+old_cnt,"deletediv"+new_cnt);
             re = re.replaceAll("Family Member #"+dataTxt,"Family Member #"+txtcount);
             re = re.replaceAll("primaryAcCheck"+old_cnt,"primaryAcCheck"+new_cnt);
+            re = re.replaceAll("getCode("+old_cnt,"getCode("+new_cnt);
+            re = re.replaceAll("fanem"+old_cnt,"fanem"+new_cnt);
+            re = re.replaceAll("lname"+old_cnt,"lname"+new_cnt);
+            re = re.replaceAll("check_in_code"+old_cnt,"check_in_code"+new_cnt);
+            re = re.replaceAll("check_in_error_family"+old_cnt,"check_in_error_family"+new_cnt);
             var $data = $(re);
             $data.find('.check-box-info').remove();
             var modifiedData = $data[0].outerHTML;
             $('#familymaindiv').append(modifiedData);
+            $("#check_in_error_family"+new_cnt).html('');
             $('#deletediv'+new_cnt).html('<div class="setting-icon"> <i class="ri-more-fill"></i> <ul> <li><a onclick="deletediv('+new_cnt+')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li></ul></div>');
 
             $('.relationship').each(function(e) {
@@ -743,7 +861,6 @@
             });
             $('#familycnt').val(cnt);
         });
-
 
         $(document).on('click', '[data-behavior~=termsModelOpen]', function(e){
             e.preventDefault()
@@ -776,7 +893,7 @@
                 $("#clients_name").val( ui.item.firstname + ' ' +  ui.item.lastname);
                 $('#clients_name').data('customer-id', ui.item.id);
                 $('.request-access').css('display','block');
-                $('.request-access').html('<p>To import the name, contact information, family members and credit card information for '+ ui.item.firstname + ' ' +  ui.item.lastname +', they must authorize you access.</p><label>Steps </label><div class="request-step"><p>1. Click the Request Access button below. </p><p>2. Fitnessity will send an email to the customer to authorize you access.</p><p>3. Once authorization has been granted, the sync button will turn green, and you can sync the information immediately.</p><button type="button" style="margin-bottom: 10px;" class="signup-new request_access_btn" id="request_access_btn">Request Access</button></div><div class="error text-center errclass"></div>');
+                $('.request-access').html('<p>To import the name, contact information, family members and credit card information for '+ ui.item.firstname + ' ' +  ui.item.lastname +', they must authorize you access.</p><label>Steps </label><div class="request-step"><p>1. Click the Request Access button below. </p><p>2. OmneBook will send an email to the customer to authorize you access.</p><p>3. Once authorization has been granted, the sync button will turn green, and you can sync the information immediately.</p><button type="button" style="margin-bottom: 10px;" class="signup-new request_access_btn" id="request_access_btn">Request Access</button></div><div class="error text-center errclass"></div>');
                  return false;
             },
         }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {

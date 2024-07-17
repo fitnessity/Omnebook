@@ -21,6 +21,7 @@
         //$(this).toggleClass("rotateBtn");
         $(this).parents(".selectProduct").toggleClass("selected");
         var productID = $(this).parents('.selectProduct').attr('data-id');
+		// alert(productID);
         var inArray = $.inArray(productID, list);
         if (inArray < 0) {
             if (list.length > 2) {
@@ -39,6 +40,7 @@
                 /*var image = $(this).parents('.selectProduct').find(".productImg").attr('src');*/
                 var image = $(this).parents('.selectProduct').attr('data-img');
 					/*alert(image);*/
+					// alert(image);
                 $(".comparePan").append('<div id="' + productID + '" class="relPos titleMargin w3-margin-bottom   w3-col l3 m4 s4"><div class="titleMargin"><a class="selectedItemCloseBtn w3-closebtn cursor">&times</a><img src="' + image + '" alt="image" style="height:100px; padding:10px; width: 100px;"/><p id="' + productID + '" class="topmargin10">' + displayTitle + '</p></div></div>');
                 // change add to compare text
                 $(this).addClass('active-link');

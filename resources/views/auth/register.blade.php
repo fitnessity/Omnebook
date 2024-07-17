@@ -560,18 +560,10 @@ button.Zebra_DatePicker_Icon.Zebra_DatePicker_Icon_Disabled {
 
     width: 100%;
 
-
-
-    
-
   }
 
   .signright-customer {
-
-
-
     width: 100%;
-
   }
 
 

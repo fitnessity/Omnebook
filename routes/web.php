@@ -168,6 +168,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('customers/card_editing_form', 'CustomerController@card_editing_form')->name('customers.card_editing_form');
     Route::get('customers/import', 'CustomerController@importcustomer')->name('customers.import');
     Route::any('customers/refresh_payment_methods', 'CustomerController@refresh_payment_methods')->name('customers.refresh_payment_methods');
+    Route::any('customers/refresh_payment_methods_modal', 'CustomerController@refresh_payment_methods_modal')->name('customers.refresh_payment_methods_modal');
     Route::post('customers/import-customer','CustomerController@importcustomer')->name('customers.import');
     Route::resource('customers', 'CustomerController')->only(['index', 'update','store']);
    
@@ -276,9 +277,18 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
 
 Route::post('/sendgrid/webhook', 'WebhookController@handleWebhook');
 Route::get('/check-in-welcome', 'SelfCheckInController@index')->name('check-in-welcome');
+Route::get('/clear-session-and-welcome',  'SelfCheckInController@clearSessionAndRedirect')->name('clear-session-and-welcome');
+
 Route::get('/quick-checkin', 'SelfCheckInController@quickCheckin')->name('quick-checkin');
 Route::post('/quick-login-for-check-in', 'SelfCheckInController@loginForCheckin')->name('quick-login-for-check-in');
 Route::get('/check-in-portal', 'SelfCheckInController@portal')->name('check-in-portal');
+Route::post('/check-in','SelfCheckInController@checkInStaff')->name('checkin.check');
+
+// my code start
+Route::get('/create-customer_data/','CustomerController@createdata')->name('business_customer_create_data');
+// end
+
+
 Route::post('/quick-check-in', 'SelfCheckInController@checkin')->name('quick-check-in');
 Route::get('/checkin/card_editing_form', 'SelfCheckInController@cardEditingForm')->name('checkin.card_editing_form');
 // addded my me 
@@ -395,6 +405,7 @@ Route::post('stripe_payment_methods/update', 'StripePaymentMethodController@upda
     Route::any('/activities/{filtervalue?}','ActivityController@index')->name('activities_index');
 
     Route::any('/activity-details/{serviceid}', 'ActivityController@show')->name('activities_show');
+    
     Route::post('/get-review/', 'ActivityController@getReview')->name('get_review');
 
 
@@ -452,6 +463,9 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/customers/{id}/visit_modal','CustomerController@visit_modal')->name('visit_modal');
         Route::get('/customers/{id}/visit_autopaymodel','CustomerController@visit_autopaymodel')->name('visit_autopaymodel');
         Route::get('/create-customer/','CustomerController@create')->name('business_customer_create');
+        Route::get('/create-customers/','CustomerController@create_model')->name('business_customer_create_model');
+
+        
         Route::post('/change-checkin-code/','CustomerController@changeCode')->name('change-checkin-code');
 
         Route::post('/customers/upload_docs','CustomerController@uploadDocument')->name('upload_docs');

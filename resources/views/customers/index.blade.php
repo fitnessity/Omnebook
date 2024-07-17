@@ -4,6 +4,14 @@
 @section('content')
 
 	@include('layouts.business.business_topbar')
+	@php
+	    $notifications = getCustomerFilesNotifiy()->pluck('id')->toArray();
+	@endphp
+	@if(!empty($notifications))
+	@php
+	markNotificationsAsSeenAndProcessed($notifications);
+	@endphp
+	@endif
 	    <div class="main-content">
 			<div class="page-content">
 	         <div class="container-fluid">
@@ -32,7 +40,15 @@
 							<div class="">
 								<label id="systemMessage1" class="font-16"></label>
 							</div>
+								{{-- @php 	
+								   $userId = Auth::id();
+									$data=App\BusinessCustomerUploadFiles::where('status',1)->where('user_id', $userId)->first();
+								@endphp
+								@if($data)
+									<label id="systemMessage1" class="font-16 font-green font-16">We are processing your file. Once completed,  we will send you an email and notification.</label>
+								@endif --}}
 
+								<label id="uploadedfile" class="font-16 font-green font-16"></label>
 							<div class="row">
 								<div class="col-lg-12">
 									<div class="card">
@@ -243,11 +259,12 @@
 				</div>					
 			</div>
 			<div class="modal-footer">
-				<button type="button" id="upload-csv" class="btn btn-primary btn-red">Upload File</button>
+					<button type="button" id="upload-csv" class="btn btn-primary btn-red">Upload File</button>
 			</div>
 		</div>
 	</div>
-</div><!-- /.modal -->
+</div>
+<!-- /.modal -->
 
 <div class="modal fade uploadmembership" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
@@ -297,18 +314,19 @@
 					<button type="button" id="upload-csv2" class="btn btn-primary btn-black mb-10" data-bs-toggle="modal" data-bs-target=".uploadmembership" >Upload Membership Details</button>
 					<button type="button" id="upload-csv3" class="btn btn-primary btn-red mb-10" data-bs-toggle="modal" data-bs-target=".uploadAttendance" >Upload Attendance Details</button>
 					<br/>
-					Client Import Logs:
+					{{-- Client Import Logs:
 					@if ($company->client_imported_at)
 					    Skip List: <a href="{{Storage::url($company->client_skip_logs_url)}}">Link</a>
 					    Fail List: <a href="{{Storage::url($company->client_fail_logs_url)}}">Link</a>
 					@else
 					    <button type="button"  data-bs-toggle="modal" data-bs-target=".uploadfile" id="upload-csv1" class="btn btn-primary btn-red mb-10">Upload Client List</button>
-					@endif
+					@endif --}}
 				</div>
 			</div>
 		</div>
 	</div>
-</div><!-- /.modal -->
+</div>
+<!-- /.modal -->
     
 <div class="modal fade uploadAttendance" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
@@ -320,7 +338,7 @@
 			<div class="modal-body">
 				<div class="form-group mt-10">
 					<label for="img">Choose File: </label>
-					<input type="file" class="form-control" name="attendanceFile" id="file1" onchange="readURL(this)">
+					<input type="file" class="form-control" name="attendanceFile" id="fileattendance" onchange="readURL(this)">
 					<p class='err mt-10 font-red'></p>
 					<div class="row">
 						<div class="col-md-12">
@@ -357,12 +375,18 @@
 	     	}
 		}
 	</script>
-
+	<script>
+		$(document).ready(function() {
+			// When the modal is closed
+			$('.uploadAttendance').on('hidden.bs.modal', function () {
+				// Reset the file input field
+				$('#file1').val('');
+			});
+		});
+	</script>
 	<script type="text/javascript">
 		$(document).ready(function () {
-
 			/*updateCustomerCounts();*/
-
 			const counters = [
 		        { type: 'totalMembers', elementId: 'totalMembers' },
 		        { type: 'activeMembers', elementId: 'activeMembers' },
@@ -374,12 +398,107 @@
 		        { type: 'spenderMembers', elementId: 'spenderMembers' },
 		    ];
 
-		    updateCountersSequentially(counters)
-	        .then(function() {
-	            console.log('All counters updated successfully.');
-	        });
+
+			var businessId = '{{ request()->business_id }}';
+				$.ajax({
+					url: '/getCustomerCounts/' + businessId,
+					type: 'GET',
+					dataType: 'json'
+				}).then(function(response) {
+					$('#totalMembers').text(response.totalMembers);
+					$('#activeMembers').text(response.activeMembers);
+					$('#inactiveMembers').text(response.inactiveMembers);
+					$('#prospectMembers').text(response.prospectMembers);
+					$('#suspendedMembers').text(response.suspendedMembers);
+					$('#owedMembers').text(response.owedMembers);
+					$('#atRiskMembers').text(response.atRiskMembers);
+					$('#spenderMembers').text(response.spenderMembers);
+					console.log('All counters updated successfully.');
+				}).fail(function(xhr, status, error) {
+					console.error('Error fetching counters:', error);
+				});
+		    // updateCountersSequentially(counters)
+	        // .then(function() {
+	        //     console.log('All counters updated successfully.');
+	        // });
 
 
+			function Fileupload(businessId, dataId) {
+				var businessId = businessId; 
+				var id=dataId;
+				var url = "/business/" + businessId + "/upload/"+dataId;
+				var csrfToken = $('meta[name="csrf-token"]').attr('content');
+				// alert(url);
+				$.ajax({
+					url: url,
+					type: 'get',
+					data: JSON.stringify({
+						id: dataId
+					}),
+					contentType: 'application/json; charset=utf-8',
+					headers: {
+						'X-CSRF-TOKEN': csrfToken
+					},
+					success: function(response) {
+						console.log("AJAX call successful:", response);
+						$('#uploadedfile').text(response.message);
+						$('#systemMessage1').hide();
+
+					},
+				});
+			}
+
+			// FileuploadMember
+			function FileuploadMember(businessId, dataId) {
+				var businessId = businessId; 
+				var id=dataId;
+				var url = "/business/" + businessId + "/upload_member/"+dataId;
+				var csrfToken = $('meta[name="csrf-token"]').attr('content');
+				// alert(url);
+				$.ajax({
+					url: url,
+					type: 'get',
+					data: JSON.stringify({
+						id: dataId
+					}),
+					contentType: 'application/json; charset=utf-8',
+					headers: {
+						'X-CSRF-TOKEN': csrfToken
+					},
+					success: function(response) {
+						console.log("AJAX call successful:", response);
+						$('#uploadedfile').text(response.message);
+						$('#systemMessage1').hide();
+
+					},
+				});
+			}
+
+			// FileuploadAttendance
+			function FileuploadAttendance(businessId, dataId) {
+				var businessId = businessId; 
+				var id=dataId;
+				var url = "/business/" + businessId + "/upload_attendance/"+dataId;
+				var csrfToken = $('meta[name="csrf-token"]').attr('content');
+				// alert(url);
+				$.ajax({
+					url: url,
+					type: 'get',
+					data: JSON.stringify({
+						id: dataId
+					}),
+					contentType: 'application/json; charset=utf-8',
+					headers: {
+						'X-CSRF-TOKEN': csrfToken
+					},
+					success: function(response) {
+						console.log("AJAX call successful:", response);
+						$('#uploadedfile').text(response.message);
+						$('#systemMessage1').hide();
+
+					},
+				});
+			}
 
 	        $('#upload-csv').click(function(){
 	        	if(profile_pic_var == ''){
@@ -408,7 +527,9 @@
 	                     $('.uploadfile').modal('hide');
 	                     $('#systemMessage1').addClass('font-green font-16');
 	                     $('#systemMessage1').html(response.message);
-	                    /* setTimeout(function(){
+						 Fileupload(response.data.business_id, response.data.id);
+							// console.log(response);
+						 /* setTimeout(function(){
 	                        window.location.reload();
 	                     },2000)*/
 	                  }
@@ -422,6 +543,8 @@
 	         	});
 	        	}
 	    	});
+
+			
 
 	    	$('#upload-membership').click(function(){
 	        	if(profile_pic_var == ''){
@@ -450,9 +573,11 @@
 	                        $('.uploadmembership').modal('hide');
 	                        $('#systemMessage1').addClass('font-green font-16');
 	                        $('#systemMessage1').html(response.message);
+							FileuploadMember(response.data.business_id, response.data.id);
 	                        /*setTimeout(function(){
 	                           window.location.reload();
 	                        },2000)*/
+							// Fileupload();
 	                     }
 	                     else{
 	                   		$('.uploadmembership').modal('hide');
@@ -464,7 +589,9 @@
 	            	});
 	        	}
 	    	})
+		
 
+	
 	    	$('#upload-attendance').click(function(){
 	        	if(profile_pic_var == ''){
 	        		$('.err').html('Select file to upload.');
@@ -489,19 +616,22 @@
 	               	$('.loading-container').addClass('d-none');
 	               	$('#systemMessage1').removeClass();
 	                  if(response.status == 200){
+						$('#fileattendance').val('');
 	                     $('.uploadAttendance').modal('hide');
 	                     $('#systemMessage1').addClass('font-green font-16');
 	                     $('#systemMessage1').html(response.message);
+						 FileuploadAttendance(response.data.business_id, response.data.id);
 	                     /*setTimeout(function(){
 	                        window.location.reload();
 	                     },2000)*/
 	                  }
 	                  else{
+							$('#fileattendance').val('');
 	                		$('.uploadAttendance').modal('hide');
 	                		$('#systemMessage1').addClass('font-red font-16');
 	                		$('#systemMessage1').html(response.message).addClass('alert alert-danger alert-dismissible');
 	                  }
-							$('#file').val('')
+							// $('#file').val('')
 	               }
 	         	});
 	        	}
@@ -559,6 +689,7 @@
 
 
 		function updateCustomerCounts() {
+			// alert('1');
             var businessId = '{{ request()->business_id }}';
             $.ajax({
                 url: '/getCustomerCounts/' + businessId,
@@ -578,6 +709,9 @@
                 }
             });
         }
+
+
+	
 	</script>
 
 	<script type="text/javascript">
@@ -651,5 +785,7 @@
 	         }
 	     });
 	   }
-	</script>
+	</script> 
+
+
 @endsection

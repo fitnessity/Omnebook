@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use DB;
 use App\{Transaction,User,Customer,SGMailService,StripePaymentMethod};
+use Illuminate\Support\Facades\Log;
 
 // /use Illuminate\Database\Eloquent\SoftDeletes;
 

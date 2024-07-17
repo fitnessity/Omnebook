@@ -1,4 +1,4 @@
-@inject('request', 'Illuminate\Http\Request')
+    @inject('request', 'Illuminate\Http\Request')
 @extends('layouts.header')
 
 <head>

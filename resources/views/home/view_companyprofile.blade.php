@@ -15,7 +15,7 @@
                         $profilePic = '/public/images/claim-bg.jpeg';
                     }
                     ?>
-                    <img src="{{ $profilePic }}" class="kickboximg-big">
+                    <img src="{{ $profilePic }}" class="kickboximg-big" alt="Fitnessity">
                     <div class="col-md-12">
                         <h3><?= $value['business_name'] ?></h3>
                         <p><?= $value['location'] ?></p>
@@ -43,7 +43,7 @@
                         $profilePic = '/public/images/claim-bg.jpeg';
                     }
                     ?>
-                    <img src="{{ $profilePic }}" class="kickboximg-big">
+                    <img src="{{ $profilePic }}" class="kickboximg-big" alt="Fitnessity">
                     <div class="col-md-12">
                         <h3><?= $value['username'] ?></h3>
                         <p><?php echo $value['location'] ?></p>

@@ -35,7 +35,7 @@
 }
 </style>
 
-<div class="modal fade " tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="ajax_html_modal" data-bs-focus="false">
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"  id="ajax_html_modal" data-bs-focus="false">
 	<div class="modal-dialog modal-dialog-centered" id="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -46,6 +46,11 @@
 	</div>
 </div>
 
+
+<!-- my code statt -->
+
+
+<!-- ends -->
 <footer id="footer" class="printnone  @if(  request()->is('*register_ep*') || request()->is('*check-in-welcome*') || request()->is('*quick-checkin*')|| request()->is('*check-in-portal*')) d-none @endif" >
 	@if(session()->has('alert-success'))
     	<div class="alert alert-success">

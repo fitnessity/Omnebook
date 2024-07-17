@@ -44,7 +44,7 @@
                 Claim your business or create a new profile today for free! Update your profile so we can showcase what you do to everyone looking for your services.
             </p>
 
-            <img src="{{url('/public/img/claim-your-business-detail.jpg')}}">
+            <img src="{{url('/public/img/claim-your-business-detail.jpg')}}" alt="Fitnessity">
 
         </div>
     </div>

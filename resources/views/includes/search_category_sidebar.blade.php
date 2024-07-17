@@ -3,6 +3,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/js/select/select.css" />
+<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
+<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
 
 <?php		
 	$program_type = '';
@@ -75,7 +77,7 @@
 <!-- Mobile view filter start-->
 <div class="row desktop-none" id="mobileview">
 	<div class="col-sm-12 ">
-		<button type="button" class="btn btn-primary modal-filter-btn" data-toggle="modal" data-target="#filtersModal">
+		<button type="button" class="btn btn-primary modal-filter-btn mt-15" data-bs-toggle="modal" data-bs-target="#filtersModal">
 			<img class="filter-img" src="/public/img/filter-icon.png" width="25">Filters
 		</button>
 		<!-- Modal -->
@@ -84,16 +86,14 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="filterModal"></h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						  <span aria-hidden="true">&times;</span>
-						</button>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
 						<div class="choose-sport-hire">
 							<div class="activity-width">
 								<div class="special-offer">
 									<div class="multiples">
-										<h2>Select Activity</h2>
+										<h2 class="mb-10">Select Activity</h2>
 										<select id="act_programservices" name="program_type[]" class="myfilter" multiple="multiple" >
 											<option>Aerobics</option>
 											<option>Archery</option>
@@ -188,7 +188,7 @@
 							<div class="activity-width">
 								<div class="special-offer">
 									<div class="multiples">
-										<h2>Business Type</h2>
+										<h2 class="mb-10">Business Type</h2>
 										<select id="act_service_type" name="service_type[]" class="myfilter" multiple="multiple" >
 											<option value="individual">Personal Trainer</option>
 											<option value="classes">Classes</option>
@@ -207,7 +207,7 @@
 							<div class="activity-width">
 								<div class="special-offer">
 									<div class="multiples">
-										<h2>Service Type</h2>
+										<h2 class="mb-10">Service Type</h2>
 										<select id="act_servicetypetwo" name="service_type_two[]" class="myfilter" multiple="multiple"  >
 											<option>Personal Training</option>
 											<option>Coaching</option>
@@ -238,7 +238,7 @@
 							<div class="activity-width">
 								<div class="special-offer">
 									<div class="multiples">
-										<h2>Great For</h2>
+										<h2 class="mb-10">Great For</h2>
 										<select id="act_activity_for" multiple name="activity_type[]" class="myfilter"  multiple="multiple"  >
 											<option>Individual</option>
 											<option>Kids</option>
@@ -262,7 +262,7 @@
 							<div class="activity-width">
 								<div class="special-offer">
 									<div class="multiples">
-										<h2>Membership Type</h2>
+										<h2 class="mb-10">Membership Type</h2>
 										<select id="act_membership_type" multiple name="membership_type[]" class="myfilter"  multiple="multiple"  >
 											<option>Drop In</option>
 											<option>Semester</option>
@@ -279,7 +279,7 @@
 							<div class="activity-width">
 								<div class="special-offer">
 									<div class="multiples">
-										<h2>Search By Location</h2>
+										<h2 class="mb-10">Search By Location</h2>
 										<input type="text" name="address" id="act_b_address1" class="form-control pac-target-input" placeholder="search by country, city, state, zip" autocomplete="off"  value="{{$address}}" />
 									</div> 
 								</div> 
@@ -288,7 +288,7 @@
 							<div class="activity-width">
 								<div class="special-offer">
 									<div class="multiples">
-										<h2>Location of Activity</h2>
+										<h2 class="mb-10">Location of Activity</h2>
 										<select id="act_activity_location" multiple name="activity_location[]" class="myfilter"  multiple="multiple"  >
 											@foreach (@$serviceLocation as $slkey => $slval)
 												<option value='{{$slval}}'>{{$slval}}</option>
@@ -306,7 +306,7 @@
 							<div class="activity-width">
 								<div class="special-offer">
 									<div class="multiples">
-										<h2>Age Range</h2>
+										<h2 class="mb-10">Age Range</h2>
 										<select id="act_age_range" multiple name="age_range[]" class="myfilter"  multiple="multiple"  >
 											<option>Baby (0 to 12 months)</option>
 											<option>Toddler (1 to 3 yrs.)</option>
@@ -339,13 +339,13 @@
 	</div>
 </div>
 <!-- Mobile view filter end-->
-<div class="row">
-    <div class="col-md-12 d-none">
+<div class="row mobile-none ipad-none">
+    <div class="col-md-12">
 		<div class="choose-sport-hire">
 			<div class="activity-width">
 				<div class="special-offer">
 					<div class="multiples">
-						<h2>Select Activity</h2>
+						<h2 class="mb-10">Select Activity</h2>
 						<select id="programservices" name="program_type[]" class="myfilter" multiple="multiple" onchange="actFilter('')">
 							<option>Aerobics</option>
 							<option>Archery</option>
@@ -440,7 +440,7 @@
 			<div class="activity-width">
 				<div class="special-offer">
 					<div class="multiples">
-						<h2>Business Type</h2>
+						<h2 class="mb-10">Business Type</h2>
 						<select id="service_type" name="service_type[]" class="myfilter" multiple="multiple" onchange="actFilter('')">
 							<option value="individual">Personal Trainer</option>
 							<option value="classes">Classes</option>
@@ -459,7 +459,7 @@
 			<div class="activity-width">
 				<div class="special-offer">
 					<div class="multiples">
-						<h2>Service Type</h2>
+						<h2 class="mb-10">Service Type</h2>
 						<select id="servicetypetwo" name="service_type_two[]" class="myfilter" multiple="multiple"  onchange="actFilter('')">
 							<option>Personal Training</option>
                             <option>Coaching</option>
@@ -490,7 +490,7 @@
 			<div class="activity-width">
 				<div class="special-offer">
 					<div class="multiples">
-						<h2>Great For</h2>
+						<h2 class="mb-10">Great For</h2>
 						<select id="activity_for" multiple name="activity_type[]" class="myfilter"  multiple="multiple"  onchange="actFilter('')">
 							<option>Individual</option>
 		                    <option>Kids</option>

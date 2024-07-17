@@ -24,11 +24,11 @@
 
                         @if($professional['logo'] != '' && file_exists(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR.$professional['logo']))
 
-                            <img src="<?php echo Config::get('constants.USER_IMAGE_THUMB').$professional['logo'] ?>" height="415" width="354"/>
+                            <img src="<?php echo Config::get('constants.USER_IMAGE_THUMB').$professional['logo'] ?>" height="415" width="354" alt="Fitnessity" />
 
                         @else
 
-                            <img src="<?php echo Config::get('constants.FRONT_IMAGE').'user.png' ?>" height="415" width="354"/>
+                            <img src="<?php echo Config::get('constants.FRONT_IMAGE').'user.png' ?>" height="415" width="354" alt="Fitnessity" alt="Fitnessity" />
 
                         @endif
 
@@ -117,7 +117,7 @@
 
             <button type="button" class="close modal-close" data-dismiss="modal">
 
-                <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
+                <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34" alt="Fitnessity" />
 
             </button>
 

@@ -355,5 +355,37 @@ class DesignController extends Controller {
     public function engage_clients(Request $request){
         return view('design.engage_clients');
     }
+
+    public function engage_clients_sidebar(Request $request){
+        return view('design.engage_clients_sidebar');
+    }
+
+    public function customer_contact_list(Request $request){
+        return view('design.customer_contact_list');
+    }
+
+    public function gift_card(Request $request){
+        return view('design.gift_card');
+    }
+
+    public function manage_gift_card(Request $request){
+        return view('design.manage_gift_card');
+    }
+
+    public function automation_campaigns(Request $request){
+        return view('design.automation_campaigns');
+    }
+
+    public function alerts_details(Request $request){
+        return view('design.alerts_details');
+    }
+
+    public function email_blast(Request $request){
+        return view('design.email_blast');
+    }
+
+    public function email_blast_step1(Request $request){
+        return view('design.email_blast_step1');
+    }
 }
 

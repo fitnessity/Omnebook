@@ -1,5 +1,9 @@
-@extends('layouts.header')
+@extends('layouts.business.header')
 @section('content')
+<head>
+    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
+    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>css/responsive.css">
+</head>
 
 <section class="main-slider inner-banner" style="background-image:url('/public/images/about-bg.jpg')">
     <div class="container">
@@ -31,5 +35,5 @@
       </div>
     </div>
   </section>
-@include('layouts.footer')
+  @include('layouts.business.footer')
 @endsection

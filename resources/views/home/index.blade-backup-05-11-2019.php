@@ -32,7 +32,7 @@
                 <span>
                 <div class="cat-img-name">
                 <span><div class="sports_name"><span>{{ $sports_value->sport_name }}</span></div></span>
-                    <img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>{{ $sports_value->image }}" height="466" width="313" /><p>&nbsp;</p>
+                    <img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>{{ $sports_value->image }}" height="466" width="313" alt="Fitnessity" /><p>&nbsp;</p>
                     <div class="pop-search-detail-sports">
                         <!-- <p>{{ $sports_value->description }} </p> -->
                         <h4>{{ $sports_value->sport_name }}</h4>
@@ -203,7 +203,7 @@
       <div class="row" style="padding-top: 30px">
         <div class="col-md-12">
           <div class="col-md-6">
-            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>howItWorks_image1.jpg" style="width: 100%;height: auto;" />
+            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>howItWorks_image1.jpg" style="width: 100%;height: auto;" alt="Fitnessity" />
           </div>
           <div class="col-md-6">
             <h2 class="subheading">Book A Professional</h2>
@@ -224,7 +224,7 @@
                 </p>
           </div>
           <div class="col-md-6">
-            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>howItWorks_image2.jpg" style="width: 100%;height: auto;"/>
+            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>howItWorks_image2.jpg" style="width: 100%;height: auto;" alt="Fitnessity"/>
           </div>
           
         </div>
@@ -232,7 +232,7 @@
       <div class="row" style="padding-top: 50px;padding-bottom:50px">
         <div class="col-md-12">
           <div class="col-md-6">
-            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>howItWorks_image3.jpg" style="width: 100%;height: auto;"/>
+            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>howItWorks_image3.jpg" style="width: 100%;height: auto;" alt="Fitnessity"/>
           </div>
           <div class="col-md-6">
             <h2 class="subheading">Book Adventures & Activities</h2>
@@ -264,7 +264,7 @@
                 <div id="owl-demo" class="owl-carousel">
                     <div class="item">
                         <div class="rank-item-detail">
-                            <img src="images/rank/1.jpg" height="466" width="313" />
+                            <img src="images/rank/1.jpg" height="466" width="313" alt="Fitnessity"/>
                             <div class="ranker-detail">
                                 <p><i class="fa fa-map-marker"></i> California, USA</p>
                                 <p><i class="fa fa-thumbs-up"></i> 12 / 15</p>
@@ -276,7 +276,7 @@
                     </div>
                     <div class="item">
                         <div class="rank-item-detail">
-                            <img src="images/rank/2.jpg" height="466" width="313" />
+                            <img src="images/rank/2.jpg" height="466" width="313" alt="Fitnessity"/>
                             <div class="ranker-detail">
                                 <p><i class="fa fa-map-marker"></i> California, USA</p>
                                 <p><i class="fa fa-thumbs-up"></i> 12 / 15</p>
@@ -288,7 +288,7 @@
                     </div>
                     <div class="item">
                         <div class="rank-item-detail">
-                            <img src="images/rank/3.jpg" height="466" width="313" />
+                            <img src="images/rank/3.jpg" height="466" width="313" alt="Fitnessity"/>
                             <div class="ranker-detail">
                                 <p><i class="fa fa-map-marker"></i> California, USA</p>
                                 <p><i class="fa fa-thumbs-up"></i> 12 / 15</p>
@@ -300,7 +300,7 @@
                     </div>
                     <div class="item">
                         <div class="rank-item-detail">
-                            <img src="images/rank/1.jpg" height="466" width="313" />
+                            <img src="images/rank/1.jpg" height="466" width="313" alt="Fitnessity"/>
                             <div class="ranker-detail">
                                 <p><i class="fa fa-map-marker"></i> California, USA</p>
                                 <p><i class="fa fa-thumbs-up"></i> 12 / 15</p>
@@ -322,8 +322,7 @@
       <div class="flexslider" id="home_page_banners">
           <ul class="slides">
               <li>
-                <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>how-it-works-bg2.jpg" style="
-      height: 500px;"/>
+                <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>how-it-works-bg2.jpg" style="height: 500px;" alt="Fitnessity"/>
               </li>
           </ul>
       </div>
@@ -784,7 +783,7 @@
                                                     '<span>'+value.sport_name+'</span>'+
                                                 '</div>'+
                                             '</span>'+
-                                            '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" />'+
+                                            '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" alt="Fitnessity" />'+
                                                 '<p>&nbsp;</p>'+
                                                 '<div class="pop-search-detail-sports">'+
                                                     '<h4>'+value.sport_name+'</h4>'+
@@ -811,7 +810,7 @@
                                                             '<span>'+value.sport_name+'</span>'+
                                                         '</div>'+
                                                     '</span>'+
-                                                    '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" />'+
+                                                    '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" alt="Fitnessity" />'+
                                                     '<p>&nbsp;</p>'+
                                                     '<div class="pop-search-detail-sports">'+
                                                         '<h4>'+value.sport_name+'</h4>'+
@@ -835,7 +834,7 @@
                                                             '<span>'+value.sport_name+'</span>'+
                                                         '</div>'+
                                                     '</span>'+
-                                                    '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" />'+
+                                                    '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" alt="Fitnessity" />'+
                                                         '<p>&nbsp;</p>'+
                                                         '<div class="pop-search-detail-sports">'+
                                                             '<h4>'+value.sport_name+'</h4>'+
@@ -910,7 +909,7 @@
                         $('.owl-carousel').append(
                             '<div class="item">'+
                                 '<div class="rank-item-detail">'+
-                                    '<img src="<?php echo Config::get('constants.USER_IMAGE_THUMB'); ?>'+value.profile_pic+'" height="466" width="313" />'+
+                                    '<img src="<?php echo Config::get('constants.USER_IMAGE_THUMB'); ?>'+value.profile_pic+'" height="466" width="313" alt="Fitnessity"/>'+
                                     '<div class="ranker-detail">'+
                                         '<p><i class="fa fa-user"></i> '+ value.firstname+' '+value.lastname +'</p>'    +
                                         '<p><i class="fa fa-map-marker"></i> ' + value.states.state_name +' '+ value.country +' '+ value.zipcode +'</p>'+

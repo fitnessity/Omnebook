@@ -99,6 +99,25 @@
 							</div><!-- end card body -->
 						</div><!-- end card -->
 					</div><!-- end col -->
+
+
+
+					<div class="col-xl-3 col-md-6">
+						<div class="card card-animate">
+							<div class="card-body">
+								<div class="d-flex align-items-center">
+									<div class="white-box flex-grow-1 overflow-hidden">
+										<p class="fw-medium text-muted text-truncate mb-0">Self Check-In Options</p>
+									</div>
+								</div>
+								<div class="d-flex align-items-end justify-content-between mt-4">
+									<div class="fout-digit-info">
+										<p> <b>4 Digit Code: </b> {{$customer->user->unique_code}}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					
 
 					<div class="col-xxl-12 col-lg-12">
@@ -106,6 +125,8 @@
 							<div class="card-header align-items-center d-flex">
 								<h4 class="card-title mb-0 flex-grow-1 font-red">Your Upcoming Classes</h4>
 							</div><!-- end card header -->
+
+							<div class="mt-10 ml-10 fs-14" id="error-message"></div>	
 
 							<div class="card-body">
 								<div class="live-preview">
@@ -130,7 +151,7 @@
 														<td> {{ @$c->order_detail->business_price_detail_with_trashed->price_title }}</td>
 														<td>
 															<div class="">
-																<a class="btn btn-red" href="http://dev.fitnessity.co/design/register_ep">Check-In</a>
+																<a class="btn btn-red" @if(!$c->checked_at) onclick="checkin('{{$c->id}}');" @endif >@if($c->checked_at) Checked @else Check-In @endif</a>
 															</div>
 														</td>
 														<td>
@@ -142,76 +163,12 @@
 												@empty
 													<tr><td>No Upcoming Class Available</td></tr>
 												@endforelse
-												
-												<!-- <tr>
-													<th scope="row">9991/10000 </th>
-													<td>Kickboxing Class </td>
-													<td>02/21/2024 10:00 AM (45 Min) </td>
-													<td>Go Golfers - 30 Minute Private (01 Pack) </td>
-													<td>
-														<div class="">
-															<a class="btn btn-red" href="http://dev.fitnessity.co/design/register_ep">Check-In</a>
-														</div>
-													</td>
-													<td>
-														<div class="">
-															<a class="btn btn-red" href="http://dev.fitnessity.co/personal/orders?business_id=68">View Booking</a>
-														</div>
-													</td>
-												</tr> -->
 											</tbody>
 										</table>
 									</div>
 								</div>
 							</div><!-- end card-body -->
 						</div><!-- end card -->
-
-						<!--<div class="card">
-							<div class="card-header align-items-center d-flex">
-								<h4 class="card-title mb-0 flex-grow-1">Your Upcoming Classes</h4>
-							</div>
-
-							<div class="card-body">
-								<div class="d-flex align-middle y-middle">
-									<div class="row">
-										<div class="col-md-1 col-2"><h5 class="fs-15">Session</h5></div>
-										<div class="col-md-2 col-2"><h5 class="fs-15">Program Name </h5></div>															
-										<div class="col-md-3 col-3"><h5 class="fs-15">Time and Date</h5></div>					
-										<div class="col-md-3 col-4"><h5 class="fs-15">Membership</h5></div>
-										<div class="col-md-3 col-3"></div>
-								
-									@forelse(@$classes as $c)
-										@if($c->order_detail && $c->scheduler)
-										<div class="dashed-border mb-5 w-100">												
-											<div class="row y-middle">
-												<div class="col-md-1 col-2">
-													{{ @$c->order_detail->getremainingsession()."/".@$c->order_detail->pay_session }}
-												</div>
-												<div class="col-md-2 col-2">
-													Kickboxing Class
-												</div>
-												<div class="col-md-3 col-3">
-													02/21/2024 10:00 AM (45 Min)
-													 {{ date('m/d/Y' ,strtotime($c->checkin_date))}}  {{ date("g:i A", strtotime(@$c->scheduler->shift_start))}} 
-												</div>
-												<div class="col-md-3 col-3">
-													{{ @$c->order_detail->business_services_with_trashed->program_name }} - {{ @$c->order_detail->business_price_detail_with_trashed->price_title }}
-												</div>
-												<div class="col-md-3 col-4">
-													<div class="flex-grow-1 ms-3 text-end">
-														<a class="btn btn-red float-right mb-10" href="{{ url('/personal/orders') . '?' . http_build_query(['business_id' => request()->business_id, 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}">View Booking</a>
-														<a class="btn btn-red float-right mb-10 mr-10" href="http://dev.fitnessity.co/design/register_ep">Check-In</a>
-													</div>
-												</div>
-											</div>												
-										</div>
-										@endif
-									@empty
-										No Upcoming Class Available
-									@endforelse
-								</div>
-							</div>
-						</div>  -->
 					</div><!-- end col -->
 
 					<div class="col-xxl-8 col-lg-8">
@@ -283,4 +240,33 @@
 	</div><!-- end main content-->
 </div><!-- END layout-wrapper -->
 @include('layouts.business.footer')
+
+<script type="text/javascript">
+
+	function checkin(id) {
+        $('#error-message').removeClass('text-danger font-green').html('');
+		$.ajax({
+            url: "{{route('quick-check-in')}}", 
+            type: 'POST',
+            data: {
+                checkinId: id,
+                _token: '{{ csrf_token() }}'  
+            },
+            success: function(response) {
+                if (response.success) {
+                	$('#error-message').addClass('font-green').html(response.message1);
+                	setTimeout(function (e){
+                		window.location.reload();
+                	},2000);
+                } else {
+                    $('#error-message').addClass('text-danger').html(response.message || 'An error occurred. Please try again.');
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#error-message').addClass('text-danger').html('An error occurred. Please try again.');
+            }
+        });
+	}	
+</script>
+
 @endsection
