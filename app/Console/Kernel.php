@@ -29,9 +29,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         //$schedule->command('stripe:cron')->everyMinute();
-
         $schedule->call(function () {
-             var_dump('run transfer');
+            // var_dump('run transfer');
             $user_booking_details = UserBookingDetail::whereRaw("transfer_provider_status is NULL or transfer_provider_status !='paid'");
             foreach($user_booking_details->get() as $user_booking_detail){
                 try {

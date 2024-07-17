@@ -271,6 +271,7 @@ class Recurring extends Authenticatable
                 }
             }
         }else{
+
             $this->status = "Retry";
             $this->error_msg = 'No Card Added.';
             $this->attempt += 1;
@@ -293,34 +294,32 @@ class Recurring extends Authenticatable
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $company_information = $this->company_information;
         $transfer_amount = $this->provider_get_total();
-        try {
-            $transfer_amount = $this->provider_get_total();
-            $stripe_account  = $stripe->accounts->retrieveCapability(
-                $company_information->stripe_connect_id,
-                'transfers',
-                []
-            );
 
-            $payment_intent = $stripe->paymentIntents->retrieve(
-                $this->stripe_payment_id,
-                []
-            );
+        $transfer_amount = $this->provider_get_total();
+        $stripe_account  = $stripe->accounts->retrieveCapability(
+            $company_information->stripe_connect_id,
+            'transfers',
+            []
+        );
 
-            if($stripe_account['status'] == 'active'){
-                    
-                $transfer = $stripe->transfers->create([
-                    'amount' => $transfer_amount * 100,
-                    'currency' => 'usd',
-                    'source_transaction' => $payment_intent->charges->data[0]->id,
-                    'destination' => $company_information->stripe_connect_id,
-                ]);
+        $payment_intent = $stripe->paymentIntents->retrieve(
+            $this->stripe_payment_id,
+            []
+        );
 
-                if($transfer->id){
-                    $this->update(['transfer_provider_status'=>'paid', 'provider_amount' => $transfer_amount ,'provider_transaction_id' => $transfer->id]);
-                }
+        if($stripe_account['status'] == 'active'){
+                
+            $transfer = $stripe->transfers->create([
+                'amount' => $transfer_amount * 100,
+                'currency' => 'usd',
+                'source_transaction' => $payment_intent->charges->data[0]->id,
+                'destination' => $company_information->stripe_connect_id,
+            ]);
 
+            if($transfer->id){
+                $this->update(['transfer_provider_status'=>'paid', 'provider_amount' => $transfer_amount ,'provider_transaction_id' => $transfer->id]);
             }
-        } catch(\Stripe\Exception\CardException  | \Stripe\Exception\InvalidRequestException | \Exception $e) {
-        } 
+
+        }
     }
 }

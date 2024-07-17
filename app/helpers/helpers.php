@@ -1,9 +1,7 @@
 <?php
 
     use Carbon\Carbon;
-    use Storage;
-    use DateTime;
-    use View;
+    // use Storage;
     use App\Repositories\{ReviewRepository,UserRepository,NetworkRepository};
     use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction,Products,CustomerNotes,Notification,CompanyInformation,BusinessServices,UserBookingDetail,BusinessPriceDetailsAges,CustomList,BusinessServicesFavorite};
     use App\BusinessCustomerUploadFiles;        
@@ -507,7 +505,7 @@
             $todayBooking = $company->UserBookingDetails()->whereDate('created_at', '=', date('Y-m-d'))->get();
 
             $formatNotification = function ($userData, $action, $type, $text) {
-                $image = Storage::disk('s3')->exists(@$userData->profile_pic) ? Storage::url(@$userData->profile_pic) : '';
+                $image = \Illuminate\Support\Facades\Storage::disk('s3')->exists(@$userData->profile_pic) ? \Illuminate\Support\Facades\Storage::url(@$userData->profile_pic) : '';
                 $date = new DateTime($action->created_at);
 
                 return [
