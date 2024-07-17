@@ -209,7 +209,7 @@ iframe{margin-top: 15px !important;}
             <div class="banner-content">
                <div class="row">
                   <div class="col-md-2">
-                     <img src="<?php echo Config::get('constants.USER_IMAGE_THUMB').$company['logo']; ?>" class="img-fluid">
+                     <img src="<?php echo Config::get('constants.USER_IMAGE_THUMB').$company['logo']; ?>" class="img-fluid" alt="Fitnessity">
                   </div>
                   <div class="col-md-6">
                      <h3 class="indi_com_name">{{$company->company_name}}</h3>
@@ -272,7 +272,7 @@ iframe{margin-top: 15px !important;}
 <div id="big" class="owl-carousel owl-theme">
      @foreach($company->company_images as $value)
   <div class="item">
-    <img src="<?php echo Config::get('constants.USER_IMAGE_THUMB').$value; ?>" style="width: 100%;border-radius:10px;"></img>
+    <img src="<?php echo Config::get('constants.USER_IMAGE_THUMB').$value; ?>" style="width: 100%;border-radius:10px;" alt="Fitnessity"></img>
   </div>
   @endforeach
   
@@ -280,7 +280,7 @@ iframe{margin-top: 15px !important;}
 <div id="thumbs" class="owl-carousel owl-theme">
      @foreach($company->company_images as $value)
   <div class="item">
-    <img src="<?php echo Config::get('constants.USER_IMAGE_THUMB').$value; ?>" style="width: 100%;height: 100px;border-radius: 5px;"></img>
+    <img src="<?php echo Config::get('constants.USER_IMAGE_THUMB').$value; ?>" style="width: 100%;height: 100px;border-radius: 5px;" alt="Fitnessity"></img>
   </div>
    @endforeach
   
@@ -301,7 +301,7 @@ iframe{margin-top: 15px !important;}
                <br>
                <div class="row" style="border-bottom: 1px solid lightgray;">
                 <div class="col-md-2">
-                  <img src="https://demoapus.com/cityo/place-demo/wp-content/plugins/wp-first-letter-avatar/images/default/96/latin_o.png" class="img-fluid">
+                  <img src="https://demoapus.com/cityo/place-demo/wp-content/plugins/wp-first-letter-avatar/images/default/96/latin_o.png" class="img-fluid" alt="Fitnessity">
                 </div>
                 <div class="col-md-7">
                      <h6><b>Owner</b><br><span style="color: gray;font-size: 13px;">June 18, 2019</span></h6>

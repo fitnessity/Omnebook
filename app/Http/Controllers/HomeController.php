@@ -406,6 +406,7 @@ class HomeController extends Controller
                 foreach($array_data as $row)
                 {
                     $output .= '<li class="searchclick" onClick="searchclick('.$row['claim_business_status'].','.$row['cid'].')">
+						<div class="container">
                         <div class="row rowclass-controller">
                             <div class="col-md-2">';
                             if($row['image'] != ''){
@@ -423,7 +424,7 @@ class HomeController extends Controller
                             </div>
                             <input type="hidden" name="claim_business_status" id="claim_business_status" value="'.$row['claim_business_status'].'">
                             <input type="hidden" name="cid" id="cid" value="'.$row['cid'].'">
-                        </div></li>';
+                        </div></div></li>';
                 }
             }
             else

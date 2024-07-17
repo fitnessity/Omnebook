@@ -305,11 +305,11 @@ fitnessityofficial">
 @include('layouts.business.footer')
 
 <script>
-		 flatpickr(".flatpickr", {
-	        dateFormat: "m/d/Y",
-	        maxDate: "01/01/2050",
-			defaultDate: [new Date()],
-	     });
+	flatpickr(".flatpickr", {
+	dateFormat: "m/d/Y",
+	maxDate: "01/01/2050",
+	defaultDate: [new Date()],
+});
 			 
 </script>
 @endsection

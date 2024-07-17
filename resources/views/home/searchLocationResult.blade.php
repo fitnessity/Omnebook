@@ -180,7 +180,7 @@
                                         $profilePic = '/public/images/claim-bg.jpeg';
                                     }
                                     ?>
-                                    <img src="{{ $profilePic }}">
+                                    <img src="{{ $profilePic }}" alt="Fitnessity">
                                     <div class="sorttext">
                                         <div class="fromtxt hide">${{@$value['min_price']}} - ${{@$value['max_price']}}</div>
                                         <div class="claimedtxt hide">CLAIMED</div>
@@ -197,8 +197,8 @@
                                 <div class="bottom-content">
                                     <div class="ratset-img">
                                         <div class="rattxt"><!--<i class="fa fa-star" aria-hidden="true"></i> 4.6 (146)--></div>
-                                        <div class="volarimg"><img src="{{ $companyLogo }}"></div>
-                                        <div class="verifiedimg"><!--<img src="/public/images/verified-logo.png">--></div>
+                                        <div class="volarimg"><img src="{{ $companyLogo }}" alt="Fitnessity"></div>
+                                        <div class="verifiedimg"><!--<img src="/public/images/verified-logo.png" alt="Fitnessity">--></div>
                                     </div>
                                     <h3><?php if(@$value['service_name']!="" && @$value['service_name']!= 'undefined')  echo $value['service_name']; else echo $value['firstname']." ".$value['lastname'];  ?></h3>
                                     <h6 class="card-title card-claimed-businessnew" myposition="{{($loop->iteration -1 )}}" company_id="{{$value['id']}}" business_name="{{$value['business_name']}}" logo="{{$value['logo']}}" latitude="{{$value['latitude']}}" longitude="{{$value['longitude']}}"><a href="/blade-check/<?=$value['id']?>" target="_blank" style="font-size:15px; font-weight:bold; color:red"><?= $value['business_name'] ?></a> </h6>
@@ -220,7 +220,7 @@
                                         $profilePic = '/public/images/claim-bg.jpeg';
                                     }
                                     ?>
-                                    <img src="{{ $profilePic }}">
+                                    <img src="{{ $profilePic }}" alt="Fitnessity">
                                     <div class="sorttext">
                                         <div class="fromtxt hide"><?php /*?>${{@$value['min_price']}} - ${{@$value['max_price']}}<?php */?></div>
                                         <div class="claimedtxt hide">CLAIMED</div>
@@ -237,7 +237,7 @@
                                 <div class="bottom-content">
                                     <div class="ratset-img">
                                         <div class="rattxt"><!--<i class="fa fa-star" aria-hidden="true"></i> 4.6 (146)--></div>
-                                        <div class="volarimg"><img src="{{ $companyLogo }}"></div>
+                                        <div class="volarimg"><img src="{{ $companyLogo }}" alt="Fitnessity"></div>
                                         <div class="verifiedimg"><!--<img src="/public/images/verified-logo.png">--></div>
                                     </div>
                                     <h3><?php echo $value['firstname']." ".$value['lastname'];  ?></h3>

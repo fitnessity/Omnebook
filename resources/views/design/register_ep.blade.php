@@ -42,18 +42,18 @@
                             <div class="container">
                                 <div class="row justify-content-center">
                                     <div class="col-lg-6">
-                                        <div class="p-relative mb-25">
+                                        <!-- <div class="p-relative mb-25">
                                             <form class="form">
                                                 <input type="email" class="form-control" placeholder="Enter phone number or email">
                                                 <button type="button" class="uppercase btn btn-link inner-btn position-absolute end-0 top-0 text-decoration-none shadow-none text-muted"><i class="fas fa-arrow-right"></i></button>
                                             </form>
-                                        </div>
+                                        </div> -->
                                         <div class="or-text p-relative pt-15 pb-15">
-                                            <div class="border-bottom-or"></div>
+                                            <!-- <div class="border-bottom-or"></div>
                                                 <div class="or-set-btn">
                                                     <label>OR</label>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="mb-3">
                                                 <button type="button" class="btn-red-primary btn-red mt-25 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">Enter a quick four digit code </button>
                                             </div>

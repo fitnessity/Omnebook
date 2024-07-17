@@ -435,6 +435,7 @@
 					@php
 						$spot_left = $bookscheduler->spots_left($filter_date);
 					@endphp
+
 					@if ($bookscheduler->price_detail() > 0 && $spot_left > 0)
 						
 						<div class="row">

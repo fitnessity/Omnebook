@@ -16,7 +16,7 @@ class BusinessStaff extends Model
     public $timestamps = false;
     protected $table = 'business_staff';
     protected $fillable = [
-       'id','business_id','first_name','last_name','phone','email','position','password','address','city','state','postcode','birthdate','bio','status','gender','profile_pic','buddy_key'
+       'id','business_id','first_name','last_name','phone','email','position','password','address','city','state','postcode','birthdate','bio','status','gender','profile_pic','buddy_key','unique_code'
     ];
     protected $appends = ['profile_pic_url','full_name'];
 

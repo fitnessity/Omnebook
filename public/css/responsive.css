@@ -1215,7 +1215,7 @@
 	.banner-fs{height: 282px; padding-top: 82px; overflow: hidden;}
 	.help-desk form{width: 100%;}
 	.help-desk{min-height: 541px; padding-top: 15%;}
-	.location-detail{background-size: 1020px 830px;}
+	.location-detail{background-size: 1750px 1090px !important;}
 	#shopping-cart{margin: 10px !important;}
 	.ord-info {  margin-left: 0;}
 	.ord-img img{margin-bottom: 15px;}
@@ -1299,7 +1299,7 @@
 	.kickboxing-slider-activites .owl-nav .owl-prev{left: 720px !important; top: -14%; background: #dadada; width: 25px; height: 25px;}
 	.kickboxing-slider-activites .owl-nav .owl-next i{font-size: 15px; position: absolute; top: 5px; left: 9px;}
 	.kickboxing-slider-activites .owl-nav .owl-prev i{font-size: 15px; position: absolute; top: 5px; right: 9px;}
-	.find-activity img{max-height: 145px !important;} 
+	.find-activity img{max-height: 400px !important;} 
 	.show-all{margin-top: 140px;}
 	.show-all .join-btn{padding: 0px;margin-top: 18px;}
 	.cart-itme-img img{margin-bottom: 15px;}
@@ -1398,6 +1398,9 @@
     .itinerary-image img{object-position: top; margin-bottom: 15px;}
     .mb--mv--0{margin-bottom: 0px;}
     .mb--mv--15{margin-bottom: 15px;}
+    .ipad-none{display: none;}
+	.formfield-block { padding-right: 0px !important; margin-bottom: 15px;}
+	.help-desk{padding-top: 18%;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2255,7 +2258,7 @@
 	.help-rp-font{float: none !important;}
 	.latest-know-list.help_desk{width: 100%;float: right; margin-right: 0;}
 	.breadcrumbs{padding: 20px 0 !important;}
-	.location-detail{background-size: 740px 900px;}
+	.location-detail{background-size: 700px 830px !important;}
 	.payment-toptabs ul{display: grid;}
 	#shopping-cart {  margin: 12px !important;}
 	.ord-info {  margin-left: 0;}
@@ -2488,12 +2491,12 @@
 	.main-slider .slide{padding-top: 200px; min-height: 575px;}
 	.top-search{width: 100% !important; margin-top: 10px !important;}
 	.personal-find-activity{height: 245px;}
-	.inner-owl-slider-hire .owl-nav .owl-prev { width: 25px; height: 25px; text-align: center; opacity: 1; border-radius: 50px; top: 90px; position: absolute; color: #070707; left: 8px; font-size: 15px; background: #dadada !important;}
+	.inner-owl-slider-hire .owl-nav .owl-prev { width: 25px; height: 25px; text-align: center; opacity: 1; border-radius: 50px; top: 195px; position: absolute; color: #070707; left: 8px; font-size: 15px; background: #dadada !important;}
 	.inner-owl-slider-hire .owl-nav .owl-prev i{position: absolute; top: 7px; left: 9px;}
-	.inner-owl-slider-hire .owl-nav .owl-next { width: 25px; height: 25px; text-align: center; opacity: 1; border-radius: 50px; top: 90px; position: absolute; right: 8px; color: #000; font-size: 15px; background: #dadada !important;} 
+	.inner-owl-slider-hire .owl-nav .owl-next { width: 25px; height: 25px; text-align: center; opacity: 1; border-radius: 50px; top: 195px; position: absolute; right: 8px; color: #000; font-size: 15px; background: #dadada !important;} 
 	.inner-owl-slider-hire .owl-nav .owl-next i{position: absolute !important; top: 6px !important; left: 9px !important; font-size: 14px !important;}
 	.inner-owl-slider-hire .owl-nav .owl-prev i{position: absolute !important; top: 6px !important; left: 9px !important; font-size: 14px !important;}
-	.kickboxing-block .kickboxing-topimg-content img{height: 191px; min-height: 0px !important;}
+	.kickboxing-block .kickboxing-topimg-content img{height: 400px; min-height: 0px !important;}  
 	.activity-information{ line-height: 20px; margin-top: 8px !important;}
 	.class-info{height: 45px !important; }
 	.addToCompare{margin-right: 7px;}
@@ -2512,14 +2515,15 @@
 	.companyalink{font-size: 14px;}
 	.activity-information span{font-size: 13px !important; }
 	.activity-information p{font-size: 13px;}
-	.dollar-person{font-size: 13px;}
-	#popular-activities .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	.dollar-person{font-size: 13px;} 
+	/*#popular-activities .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
 	#carousel-slider .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
 	#find-trainers .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
 	#ways-to-workout .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
 	#all-activities .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
 	#inarea-activities .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
-	#trainers-coaches .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	#trainers-coaches .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}*/
+	.activity-information.activites-height { height: auto;}
 	.title-show{float: right;}
 	.show-all-page{position: absolute; bottom: 0px; right: 20px;}
 	.find-business .btn-txt { padding: 11px 0 !important;}
@@ -2589,6 +2593,11 @@
 	.business-info{padding: 23px 10px;}
 	.reset-passthru form {  padding: 0 0px;}
 	.reset-title{padding-left: 0px;}
+	.ipad-none{display: none;}
+	.pmt-105{margin-top: 105px;}
+	.claiming-section { padding: 130px 0 0 !important; }
+	.formfield-block { padding-right: 0px !important; margin-bottom: 15px;}
+	.help-desk{padding-top: 40%;}
 }
 
 @media(max-width: 575px) {

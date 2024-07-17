@@ -3,7 +3,7 @@
 		<div class="row y-middle">
 			<div class="col-lg-1 col-md-2 col-3">
 				<div class="announcement-day">
-					<span>{{$a->formatDateTime($a->start_date.' '.$a->start_time)}}</span>
+					<span>{{$a->formatDateTime($a->announcement_date.' '.$a->announcement_time)}}</span>
 				</div>
 			</div>
 			<div class="col-lg-10 col-md-10 col-9 border-left">

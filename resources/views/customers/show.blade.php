@@ -162,6 +162,17 @@
 																											<span>@if($customerdata->birthdate != '' ) {{date('m/d/Y',strtotime($customerdata->birthdate))}} @else N/A @endif</span>
 																										</div>
 																									</div>
+
+																									<div class="row mb-10"> 
+																										<div class="col-lg-5 col-sm-5">
+																											<label class="font-black">Your Self Check-In Code :</label>
+																										</div>
+																										<div class="col-lg-7 col-sm-7">
+																											<span class="mr-25">{{$customerdata->user->unique_code}}</span>
+																											<a href="#" data-bs-toggle="modal" data-bs-target="#check-in-code">(Add/Edit)</a>
+																										</div>
+																									</div>
+
 																								</div>
 																									
 																								<div class="col-lg-6">
@@ -454,7 +465,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span>{{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </span>
+																																	<span>{{@$booking_detail->businessPriceDetailsAgesTrashed->category_title}} </span>
 																																</div>
 																															</div>
 
@@ -713,7 +724,7 @@
 																																</div>
 																																<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																	<div class="float-end line-break text-right">
-																																		<span>{{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} </span>
+																																		<span>{{@$booking_detail->businessPriceDetailsAgesTrashed->category_title}} </span>
 																																	</div>
 																																</div>
 
@@ -877,8 +888,6 @@
 																												@else
 																													{{$history->status}}
 																												@endif
-
-
 																											</td>
 																											<td><a  class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=>$history->item_id,'customer'=>$customerdata->id])}}" data-item-type="{{$history->item_type_terms()}}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
 																											</td>
@@ -1543,7 +1552,7 @@
 										@if($customerdata->profile_pic)
                           			<img src="{{Storage::Url($customerdata->profile_pic)}}" class="customers-name rounded-circle" alt="">
                           		@else
-                          			<div class="company-list-text"><p>{{$customerdata->fname[0]}}</p></div>
+                          			<div class="company-list-text"><p>{{$customerdata->fname[0] ?? 'A'}}</p></div>
                           		@endif
 									</div>
 								</div>
@@ -1705,7 +1714,70 @@
 	</div>
 </div>
 
+<div class="modal fade" id="check-in-code" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Add/Edit</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group mt-10">
+					<label for="code">Self Check-In Code</label>
+					<input type="text" class="form-control" name="code" id="code">
+				</div>
+
+				<div class="mt-10 ml-10 fs-14" id="error-message"></div>	
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-red" id="submit-code">Submit</button>
+			</div>
+		</div>
+  	</div>
+</div>
+
 @include('layouts.business.footer')
+
+<script type="text/javascript">
+	
+	$('#submit-code').on('click', function(e) {
+        e.preventDefault();
+        $('#error-message').removeClass('text-danger text-success').html('');
+
+        var code = $('#code').val();
+
+        if (code == '') {
+            alert('Please enter a code.');
+            return;
+        }
+
+        $.ajax({
+            url: '{{ route("change-checkin-code") }}', 
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                code: code,
+                business_id: '{{$customerdata->business_id}}',
+                customerId: '{{$customerdata->id}}'
+            },
+            success: function(response) {
+                if(response.success) {
+                	$('#error-message').addClass('text-success').html(response.message);
+                	setTimeout(function(e){
+                		window.location.reload();
+                	},2000);
+                } else {
+                    $('#error-message').addClass('text-danger').html(response.message || 'An error occurred. Please try again.');
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#error-message').addClass('text-danger').html('An error occurred. Please try again.');
+            }
+        });
+    });
+
+</script>
 
 <script>
 	

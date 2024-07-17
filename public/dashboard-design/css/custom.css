@@ -6820,6 +6820,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   display: inline-block;
   margin-left: 10px;
   vertical-align: middle;
+  width: 275px;
 }
 .show-all .table-inner-data-sec .p-name h3 {
   font-size: 18px;
@@ -7846,6 +7847,7 @@ color: #000;
 
 #client_wrapper.toggled #sidebar-wrapper {
   width: 250px;
+  height: 460px;
 }
 
 #page-content-wrapper {
@@ -8723,3 +8725,22 @@ customer-list-table.dataTable > tbody > tr.child ul.dtr-details{
   z-index: 99;
 }
 .break-word{word-wrap: break-word;}
+.play-btn-set{
+position: absolute;
+  bottom: 11px;
+  z-index: 9;
+  right: 9px;	 
+}
+.play-btn-set i{
+	color: #fff;	
+}
+.modal-register-preview{
+	max-height: 740px;
+}
+.pbooking-modal-logo img	{
+	width: 250px;
+  	margin-bottom: 35px;
+}
+.dropzone .dz-message.login-preview-modal{
+	margin: 1em 0;
+}

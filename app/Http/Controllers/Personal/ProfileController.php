@@ -90,7 +90,7 @@ class ProfileController extends Controller
             return $bd->booking_detail_id;
         });
 
-        return view('personal.profile.dashboard',compact('name','notesCnt','activeMembershipCnt','docCnt','docCntNew','announcemetCnt','attendanceCnt','announcemetCntNew','bookingCnt','bookingPct','classes','attendancePct','business','notesCntNew','activeMembershipCntNew'));
+        return view('personal.profile.dashboard',compact('customer','name','notesCnt','activeMembershipCnt','docCnt','docCntNew','announcemetCnt','attendanceCnt','announcemetCntNew','bookingCnt','bookingPct','classes','attendancePct','business','notesCntNew','activeMembershipCntNew'));
     }
 
 

@@ -142,7 +142,7 @@
 																										<td>Membership</td>
 																										<td>${{$p->total_amount}}</td>
 																										<td>1</td>
-																										<td>{{date('Y-m-d' , strtotime($p->payment_date))}}</td>
+																										<td>{{date('m/d/Y' , strtotime($p->payment_date))}}</td>
 																									</tr>	
 																								@endif
 																							@empty

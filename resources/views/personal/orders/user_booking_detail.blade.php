@@ -253,7 +253,10 @@
 @empty
 	<div class="text-center mt-25">
 		<p class="text-center mt-20"> Membership Is Not Available. </p>
-		@if(@$membershipbtn == 1 ) <a class="btn btn-red" data-modal-chkBackdrop="1" data-reload="1" data-modal-width="modal-50" data-behavior="ajax_html_modal" data-url="{{route('checkin.activity_booking_html')}}" class="btn btn-red"> Purchase A Membership </a> @endif 
+		@if(@$membershipbtn == 1 ) 
+		{{-- <a class="btn btn-red" data-modal-chkBackdrop="1" data-reload="1" data-modal-width="modal-50" data-behavior="ajax_html_modal" data-bs-backdrop="static" data-bs-keyboard="false" data-url="{{route('checkin.activity_booking_html')}}" class="btn btn-red"> Purchase A Membership </a>  --}}
+		<a class="btn btn-red" data-bs-toggle="modal" data-modal-chkBackdrop="1" data-reload="1" data-modal-width="modal-50" data-behavior="ajax_html_modal" data-bs-backdrop="static" data-bs-keyboard="false" data-url="{{route('checkin.activity_booking_html')}}"> Purchase A Membership </a>
+		@endif 
 	</div>
 @endforelse
 

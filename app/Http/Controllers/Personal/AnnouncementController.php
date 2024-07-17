@@ -42,8 +42,8 @@ class AnnouncementController  extends Controller
             ->when($request->category, function ($query) use ($request) {
                 return $query->where('category_id', $request->category);
             })->when($request->date, function ($query) use ($request) {
-                return $query->where('start_date', $request->date);
-            })->orderBy('start_date', 'desc')->orderBy('start_time', 'desc')->get();
+                return $query->where('announcement_date', $request->date);
+            })->orderBy('announcement_date', 'desc')->orderBy('announcement_time', 'desc')->get();
 
         return view('personal.announcement_news.index',compact('announcement','categories'));
     }
@@ -119,8 +119,8 @@ class AnnouncementController  extends Controller
             })->when($request->category, function ($query) use ($request) {
                 return $query->where('category_id', $request->category);
             })->when($request->date, function ($query) use ($request) {
-                return $query->where('start_date', $request->date);
-            })->orderBy('start_date', 'desc')->orderBy('start_time', 'desc')->get();
+                return $query->where('announcement_date', $request->date);
+            })->orderBy('announcement_date', 'desc')->orderBy('announcement_time', 'desc')->get();
         return view('personal.announcement_news.announcement-content',compact('announcement'))->render();
     }
 }

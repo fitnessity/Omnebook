@@ -997,40 +997,91 @@
 																	<div class="row">
 																		<div class=" col-lg-12 col-md-12">
 																			<div class="plandaybyday">
-																				<h3>Let’s Plan Your Day By Day</h3>
-																				<p>Give your customers a day by day plan. Include a title, image and description of what the customers will be doing for that day. You can create multiple days. </p>
-																				<input type="hidden" name="planday_count" id="planday_count" value="0">
-																				<div class="add-another-day-schedule-block">
-																					<div class="add_another_day">
-																						<label class="select-dropoff">Day - 1</label>
-																						<div class="row">
-																							<div class="col-md-12 col-sm-12">
-																								<div class="row">
-																									<div class="col-lg-2 col-md-4 col-sm-3">
-																										<div class="photo-upload">
-																											<label for="dayplanpic0" id="label">
-																											<img src="http://dev.fitnessity.co/public/images/Upload-Icon.png" class="pro_card_img blah planblah0" id="showimg">
-																											<span id="span_0">Upload your file here</span>
-																												<input type="file" name="dayplanpic_0" id="dayplanpic0" class="uploadFile img" value="Upload Photo" onchange="planImg(this,0);" required="">
-																											</label>
-																											<span class="error" id="err_oldservicepic20"></span>
-																											<input type="hidden" id="olddayplanpic20" name="olddayplanpic_0" value="">
-																										</div>
-																									</div>
-																									<div class="col-lg-5 col-md-8 col-sm-9">
-																										<div>
-																											<input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle">
-																										</div>
-																										<div class="description-txt">
-																											<textarea class="form-control valid" rows="2" name="days_description[]" id="days_description0" placeholder="Give a description for this day" maxlength="500" oninput="changedesclenght(0);"></textarea>
-																											<span id="days_description_left0" class="word-counter">500 Character Left</span>
+																				<h2>Set Your Itinerary</h2>
+																				<div class="card shadow-none">
+																					<div class="align-items-center d-flex">
+																						<div class="flex-shrink-0">
+																							<div class="form-check form-switch form-switch-right form-switch-md">
+																								<label for="default-base-showcode" class="form-label text-muted">You can set by Day or Time</label>
+																								<input class="form-check-input code-switcher" type="checkbox" id="default-base-showcode">
+																							</div>
+																						</div>
+																					</div><!-- end card header -->
+																					<div class="">
+																						<div class="live-preview">
+																							<h3 class="mt-25">Let’s Plan Your Day By Day</h3>
+																							<p>Give your customers a day by day plan. Include a title, image and description of what the customers will be doing for that day. You can create multiple days. </p>
+																							<input type="hidden" name="planday_count" id="planday_count" value="0">
+																							<div class="add-another-day-schedule-block">
+																								<div class="add_another_day">
+																									<label class="select-dropoff">Day - 1</label>
+																									<div class="row">
+																										<div class="col-md-12 col-sm-12">
+																											<div class="row">
+																												<div class="col-lg-2 col-md-4 col-sm-3">
+																													<div class="photo-upload">
+																														<label for="dayplanpic0" id="label">
+																														<img src="http://dev.fitnessity.co/public/images/Upload-Icon.png" class="pro_card_img blah planblah0" id="showimg">
+																														<span id="span_0">Upload your file here</span>
+																															<input type="file" name="dayplanpic_0" id="dayplanpic0" class="uploadFile img" value="Upload Photo" onchange="planImg(this,0);" required="">
+																														</label>
+																														<span class="error" id="err_oldservicepic20"></span>
+																														<input type="hidden" id="olddayplanpic20" name="olddayplanpic_0" value="">
+																													</div>
+																												</div>
+																												<div class="col-lg-5 col-md-8 col-sm-9">
+																													<div>
+																														<input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle">
+																													</div>
+																													<div class="description-txt">
+																														<textarea class="form-control valid" rows="2" name="days_description[]" id="days_description0" placeholder="Give a description for this day" maxlength="500" oninput="changedesclenght(0);"></textarea>
+																														<span id="days_description_left0" class="word-counter">500 Character Left</span>
+																													</div>
+																												</div>
+																											</div>
 																										</div>
 																									</div>
 																								</div>
 																							</div>
 																						</div>
-																					</div>
-																				</div>
+																						<div class="d-none code-view">	
+																							<h3 class="mt-25">Let’s Plan Your Day By Time</h3>
+																							<p>Give your customers a day by day plan. Include a title, image and description of what the customers will be doing for that day. You can create multiple days. </p>
+																							<input type="hidden" name="planday_count" id="planday_count" value="0">
+																							<div class="add-another-day-schedule-block">
+																								<div class="add_another_day">
+																									<label class="select-dropoff">Time - 9:00 to 10:00 AM</label>
+																									<div class="row">
+																										<div class="col-md-12 col-sm-12">
+																											<div class="row">
+																												<div class="col-lg-2 col-md-4 col-sm-3">
+																													<div class="photo-upload">
+																														<label for="dayplanpic0" id="label">
+																														<img src="http://dev.fitnessity.co/public/images/Upload-Icon.png" class="pro_card_img blah planblah0" id="showimg">
+																														<span id="span_0">Upload your file here</span>
+																															<input type="file" name="dayplanpic_0" id="dayplanpic0" class="uploadFile img" value="Upload Photo" onchange="planImg(this,0);" required="">
+																														</label>
+																														<span class="error" id="err_oldservicepic20"></span>
+																														<input type="hidden" id="olddayplanpic20" name="olddayplanpic_0" value="">
+																													</div>
+																												</div>
+																												<div class="col-lg-5 col-md-8 col-sm-9">
+																													<div>
+																														<input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle">
+																													</div>
+																													<div class="description-txt">
+																														<textarea class="form-control valid" rows="2" name="days_description[]" id="days_description0" placeholder="Give a description for this day" maxlength="500" oninput="changedesclenght(0);"></textarea>
+																														<span id="days_description_left0" class="word-counter">500 Character Left</span>
+																													</div>
+																												</div>
+																											</div>
+																										</div>
+																									</div>
+																								</div>
+																							</div>
+																						</div>
+																					</div><!-- end card-body -->
+																				</div><!-- end card -->
 																			</div>
 																		</div>
 																		<div class="col-md-12">
@@ -2600,7 +2651,390 @@
 															</h2>
 															<div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="stepheadingSix" data-bs-parent="#stepSix">
 																<div class="accordion-body">
-																	<div class="row">
+																	<div class="col-lg-12 col-md-12">
+                                                                		<div class="card-header p-0">
+                                                                      		<div class="row y-middle">  
+                                                                          		<div class="col-lg-6 col-md-6 col-5">
+                                                                                    <label class="fs-17"> Adventures &amp; Tours </label>
+                                                                                </div>
+
+                                                                          		<div class="col-lg-6 col-md-6 col-7">
+                                                                           			<button type="button" class="btn-red-primary btn-red float-right mb-15" id="" data-bs-toggle="modal" data-bs-target=".scheduleclass-modal">Create Adventures &amp; Tours Name </button>
+                                                                            	</div>
+                                                                   			</div>
+                                                               			</div>
+                                                                        <div class="classes-list">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-6 col-md-4 col-sm-6 col-6">
+                                                                                    <div class="fs-14">
+                                                                                        <span>Night Tour</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-lg-6 col-md-8 col-sm-6 col-6">
+                                                                                    <div class="fs-14 float-right links-set setoflinkes">
+                                                                                        <a href="http://dev.fitnessity.co/business/68/schedulers/create?categoryId=554">  </a><a onclick="openScheduleModel('554')">1 Scheduled </a>   
+                                                                                        <label class="mr-5 ml-5"> | </label>
+                                                                                        <a href="" onClick="openaddschedule()">+ Add Schedule </a>
+                                                                                        <label class="mr-5 ml-5"> | </label>
+                                                                                    	<div class="userblock0">
+                                                                                            <div class="login_links" onclick="openNavv('554')">
+                                                                                                <a href="#">+ Price Options </a>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <label class="mr-5 ml-5"> | </label>
+                                                                                        <div class="setting-icon">
+                                                                                            <i class="ri-more-fill"></i>
+                                                                                            <ul id="catUl0">
+                                                                                                <li class="non-collapsing" data-bs-toggle="collapse" data-bs-target=""><a onclick="editClass('554')"><i class="fas fa-plus text-muted"></i>Edit</a></li>
+                                                                                                <li class="non-collapsing" data-bs-toggle="collapse" data-bs-target=""><a onclick="deleteClass('554')"><i class="fas fa-plus text-muted"></i>Delete</a></li>
+                                                                                            </ul>
+                                                                                        </div>
+                                                                                    </div>
+																					<nav class="com-sidebar">
+																						<div class="navbar-wrapper">
+																							<div id="documents_Terms" class="com-sidepanel">
+																								<div class="navbar-content">
+																									<div class="container"> 
+																										<div class="row">
+																											<div class="col-lg-8 col-8">
+																												<div class="setup-title">
+																													<label>Set the schedule for a Experience</label>
+																												</div>
+																											</div>
+																											<div class="col-lg-4 col-4">
+																												<div class="p-relative">
+																													<a href="javascript:void(0)" class="com-cancle fa fa-times" onClick="closeaddschedule()"></a>
+																												</div>
+																											</div>
+																										</div>	
+																									</div>
+																									<div class="border-bottom-grey mt-10 mb-10"></div>	
+																									<div class="card-body">
+																										<div class="live-preview">
+																											<div class="accordion custom-accordionwithicon accordion-border-box mb-10" id="accordionnesting">
+																												<div class="accordion-item shadow">
+																													<h2 class="accordion-header" id="accordionnestingExamp1">
+																														<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollaps1" aria-expanded="true" aria-controls="accor_nestingExamplecollaps1">
+																															Schedule your program
+																														</button>
+																													</h2>
+																													<div id="accor_nestingExamplecollaps1" class="accordion-collapse collapse show" aria-labelledby="accordionnestingExamp1" data-bs-parent="#accordionnesting">
+																														<div class="accordion-body">
+																															<form id="scheduleform" action="http://dev.fitnessity.co/business/68/schedulers" method="post">
+																																<input type="hidden" name="_token" value="FFDEvDl27ITSRFjHwOH38F5wtYptXx8DTzj9VYIP"> 
+																																<input type="hidden" name="categoryId" value="554">   
+																																<input type="hidden" name="cId" value="68">   
+																																<input type="hidden" name="serviceId" value="304">  
+																																<div class="row">
+																																	<div class="col-md-12">
+																																		<div class="step-four">
+																																			<p class="step-four-highlight">Your Setting the schedule for Night Tour  under the program name NYC Airplane Tour.</p>
+																																			<p>Get started by selecting the dates and times this activity will happen</p>
+																																			<p>You can schedule one or more time slots per day for this category.</p>
+																																		</div>
+																																	</div>
+																																	<div class="col-lg-12">
+																																		<div class="row">
+																																			<div class="col-lg-6 col-md-6 col-sm-6">
+																																				<div class="form-group mmt-10 mb-15">
+																																					<label>Activity Starts On </label>
+																																					<div class="activityselect3 special-date">
+																																						<div class="input-group">
+																																							<input type="text" class="form-control border-0 dash-filter-picker shadow flatpickr flatpiker-with-border flatpickr-input" value="05/10/2024" name="starting" readonly="readonly">
+																																						</div>
+																																					</div>
+																																					<div id="errdate"></div>
+																																				</div>
+																																			</div>
+
+																																			<div class="col-lg-6 col-md-6 col-sm-6">
+																																				<div class="form-group mmt-10 mb-15">
+																																					<label>Activity Meets</label>
+																																					<select class="form-select" name="frm_class_meets" id="frm_class_meets">
+																																						<option value="Weekly" selected="">Weekly</option>
+																																						<option value="On a specific day">On a specific day</option>
+																																					</select>
+																																				</div>
+																																			</div>
+
+																																			<div class="col-lg-6 col-md-6 col-sm-6">
+																																				<div class="form-group mmt-10 imt-10 mb-15">
+																																					<label class="schedule-title">Scheduled Until</label>
+																																					<input class="days-input" type="text" name="scheduled" id="scheduled" placeholder="4" value="1">
+																																					<select class="form-select week-section" name="until" id="until">
+																																						<option value="days">  Day(s) </option>
+																																						<option value="week">Week(s)</option>
+																																						<option value="month">Month(s) </option>
+																																						<option value="years" selected="">Year(s)</option>
+																																					</select>
+																																				</div>
+																																				<div id="errschedule"></div>
+																																			</div>
+																																		</div>
+																																	</div>
+																																</div>
+
+																																<input type="hidden" name="duration_cnt" id="duration_cnt" value="0"> 
+																																	<div id="dayduration0">
+																																		<div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnestingin0">
+																																			<div class="accordion-item shadow">
+																																				<h2 class="accordion-header" id="accordionnestinginExample0">
+																																					<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestinginExamplecollapse0" aria-expanded="true" aria-controls="accor_nestinginExamplecollapse0">
+																																						Time Select
+																																					</button>
+																																				</h2>
+																																				<div id="accor_nestinginExamplecollapse0" class="accordion-collapse collapse show" aria-labelledby="accordionnestinginExample0" data-bs-parent="#accordionnestingin0">
+																																					<div class="accordion-body">
+																																						<div id="day-circle">
+																																							<div class="col-md-12" id="deleteschedule0" style="display: none;" onclick="removeschedule(0);">
+																																								<i class="float-right ri-delete-bin-fill align-bottom me-2 text-muted" title="Remove activity"></i>
+																																							</div>
+																																							<div class="daycircle" id="editscheduler">
+																																								<input type="hidden" name="id[]" id="id" value="1198">
+																																								<input type="hidden" name="activity_days[]" id="activity_days" class="activity_days" value="Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday," width="800">
+																																								<div class="weekdays">
+																																									<div class="col-md-12">
+																																										<div class="display-line">
+																																											<div data-day="Monday" class="col-sm-1 timezone-round day_circle Monday dys day_circle_fill">
+																																												<p>Mo</p>
+																																											</div>
+																																											<div data-day="Tuesday" class="col-sm-1 timezone-round day_circle Tuesday dys day_circle_fill">
+																																												<p>Tu</p>
+																																											</div>
+																																											<div data-day="Wednesday" class="col-sm-1 timezone-round day_circle Wednesday dys day_circle_fill">
+																																												<p>We</p>
+																																											</div>
+																																											<div data-day="Thursday" class="col-sm-1 timezone-round day_circle Thursday dys day_circle_fill">
+																																												<p>Th</p>
+																																											</div>
+																																											<div data-day="Friday" class="col-sm-1 timezone-round day_circle Friday dys day_circle_fill">
+																																												<p>Fr</p>
+																																											</div>
+																																										
+																																											<div data-day="Saturday" class="col-sm-1 timezone-round day_circle Saturday dys day_circle_fill">
+																																												<p>Sa</p>
+																																											</div>
+																																											<div data-day="Sunday" class="col-sm-1 timezone-round day_circle Sunday dys day_circle_fill">
+																																												<p>Su</p>
+																																											</div>
+																																										</div>
+																																									</div>
+																																								</div>
+																																								<div class="row">
+																																									<div class="col-lg-4 col-md-5 col-sm-5">
+																																										<div class="form-group mmt-10 mb-15">
+																																											<label>Start Time</label>
+																																											<select name="shift_start[]" id="shift_start" class="shift_start form-control" required="required">
+																																												<option value="">Select Time</option>
+																																												<option value="00:00">12:00 AM</option>
+																																												<option value="00:15">12:15 AM</option>
+																																											</select>
+																																										</div>
+																																									</div>
+
+																																									<div class="col-lg-4 col-md-2 col-sm-2">
+																																										<div class="weekly-time-estimate">
+																																											<label>To</label>
+																																										</div>
+																																									</div>
+
+																																									<div class="col-lg-4 col-md-5 col-sm-5">
+																																										<div class="form-group mmt-10 mb-15">
+																																											<label>End Time</label>
+																																											<select name="shift_end[]" id="shift_end" class="shift_end form-control" required="required">
+																																												<option value="">Select Time</option>
+																																												<option value="00:00">12:00 AM</option>
+																																												<option value="00:15">12:15 AM</option>
+																																											</select>
+																																										</div>
+																																									</div>
+
+																																									<div class="col-lg-4 col-md-6 col-sm-6">
+																																										<label class="mmt-10 imt-10">Duration</label>
+																																										<div class="sp-bottom">
+																																											<input type="text" name="set_duration[]" id="set_duration" value="5 hours 0 minutes 0 second" readonly="" class="set_duration form-control">
+																																										</div>
+																																									</div>
+																																									<div class="col-lg-4 col-md-6 col-sm-6">
+																																										<label class="mmt-10 imt-10"># Spots Available</label>
+																																										<div class="sp-bottom">
+																																											<input type="text" class="form-control valid" name="sport_avail[]" id="sport_avail" value="10" required="required">
+																																										</div>
+																																									</div>
+																																									<div class="col-lg-12 col-md-6 col-sm-6">
+																																										<div class="priceselect sp-select mt-10">
+																																											<label>Choose Instructure</label>
+																																											<input type="hidden" name="instructure[0]" value="">
+																																											<select name="instructure[0][]" id="instructure0" multiple="" tabindex="-1" style="display: none;" data-ssid="ss-36719">
+																																												<option value="2"> Franecki Ardella </option>
+																																												<option value="7"> Discover Test </option>
+																																												<option value="23"> jack Black </option>
+																																												<option value="30"> Eric Smith </option>
+																																												<option value="31"> Gimmy Ttouqe </option>
+																																												<option value="77"> Ashley Wong </option>
+																																												<option value="78"> Berenice Aramburu </option>
+																																												<option value="79"> Bernard Seaborn </option>
+																																												<option value="80"> Christiane Felsky </option>
+																																												<option value="81"> Dan Covel </option>
+																																											</select>
+																																																									<div style="" class="ss-36719 ss-main"><div class="ss-multi-selected"><div class="ss-values"><div class="ss-value" data-id="51535464"><span class="ss-value-text"> Discover Test </span><span class="ss-value-delete">x</span></div></div><div class="ss-add"><span class="ss-plus"></span></div></div><div class="ss-content"><div class="ss-search"><input type="search" placeholder="Search" tabindex="0"></div><div class="ss-list"><div class="ss-option" data-id="1149245"> Franecki Ardella </div><div class="ss-option ss-disabled" data-id="51535464"> Discover Test </div><div class="ss-option" data-id="73136945"> jack Black </div><div class="ss-option" data-id="15430378"> Eric Smith </div><div class="ss-option" data-id="5684149"> Gimmy Ttouqe </div><div class="ss-option" data-id="4016891"> Ashley Wong </div><div class="ss-option" data-id="97459499"> Berenice Aramburu </div><div class="ss-option" data-id="65239780"> Bernard Seaborn </div><div class="ss-option" data-id="4433668"> Christiane Felsky </div><div class="ss-option" data-id="87214099"> Dan Covel </div><div class="ss-option" data-id="4219008"> Dimitri Ehrlich </div><div class="ss-option" data-id="32639535"> Ghass Tabbel </div><div class="ss-option" data-id="34398865"> Harrison Fink </div><div class="ss-option" data-id="75927119"> Justin Walker </div><div class="ss-option" data-id="44653311"> Laura Rivera </div><div class="ss-option" data-id="37315467"> Marissa Roper </div><div class="ss-option" data-id="95332488"> Marthaluz Velez </div><div class="ss-option" data-id="33477071"> Mr. Phipps </div><div class="ss-option" data-id="59211036"> Samuel Beacher </div><div class="ss-option" data-id="48312928"> Sarang Sharma </div><div class="ss-option" data-id="18554995"> Team Jucao </div><div class="ss-option" data-id="37432515"> Thacia Vargas </div><div class="ss-option" data-id="7654123"> Valor Instructor </div><div class="ss-option" data-id="72940844"> Workstudy Valor </div></div></div></div>
+																																				
+																																											<script id="slimSelectScript0">
+																																												new SlimSelect({
+																																												select: '#instructure0'
+																																												});
+																																												const instructure0  = '7';
+																																												const insIds0  = instructure0 ? instructure0.split(',') : [];
+
+																																												const s0  = new SlimSelect({
+																																												select: '#instructure0'
+																																												});
+																																												s0.set(insIds0);
+																																											
+																																											</script>
+																																										</div>
+																																									</div>
+																																								</div>
+																																							</div>
+																																						</div>
+																																					</div>
+																																				</div>
+																																			</div>
+																																		</div>
+																																	</div>
+																																																		
+																																<div id="activity_scheduler_body"></div>
+
+																																<div class="row">
+																																	<div class="col-md-6 col-8">
+																																		<div class="btn-ano-time mt-20">
+																																			<button class="btn btn-red add-another-time" type="button">Add Another Time</button>
+																																		</div>
+																																	</div>
+																																	<div class="col-md-6 col-4">
+																																		<div class="btn-ano-time mt-20 float-right">
+																																			<button class="btn btn-red" type="submit">Save</button>
+																																		</div>
+																																	</div>
+																																</div>
+																															</form>
+																														</div>
+																													</div>
+																												</div>
+																											</div>
+
+																											<div class="accordion custom-accordionwithicon accordion-border-box mb-10" id="accordionnesting22">
+																												<div class="accordion-item shadow">
+																													<h2 class="accordion-header" id="accordionnestingExample22">
+																														<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse2" aria-expanded="false" aria-controls="accor_nestingExamplecollapse2">
+																															Your Schedule Breakdown
+																														</button>
+																													</h2>
+																													<div id="accor_nestingExamplecollapse2" class="accordion-collapse collapse" aria-labelledby="accordionnestingExample22" data-bs-parent="#accordionnesting22">
+																														<div class="accordion-body">
+																															<div class="table-responsive table-schedule">
+																																<table class="schedule-breakdown" style="width:100%">
+																																	<thead>
+																																		<tr>	
+																																			<th>Day </th>
+																																			<th>Date</th>
+																																			<th>Time</th>
+																																			<th>Duration</th>
+																																			<th># of Spots</th>
+																																			<th>Location</th>
+																																		</tr>
+																																	</thead>
+																																	<tbody>
+																																		<tr>
+																																			<td>Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday</td>
+																																			<td>05/10/2024 to 05/10/2025</td>
+																																			<td class="time-zone">09:00 pm  to 02:00 am</td>
+																																			<td>5 hour</td>
+																																			<td>10</td>
+																																			<td>Online,At Business</td>
+																																		</tr>
+																																	</tbody>
+																																</table>
+																															</div>
+																														</div>
+																													</div>
+																												</div>
+																											</div>
+
+																											<div class="btn-ano-time mt-20 float-right">
+																												<a href=" http://dev.fitnessity.co/business/68/services/create?serviceType=experience&amp;serviceId=304#stepFour " class="btn btn-red">Finish</a>
+																											</div> 		
+																										</div>
+																									</div>
+																								</div>
+																							</div>
+																						</div>
+																					</nav>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+																		<div class="classes-list">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-6 col-md-4 col-sm-6 col-6">
+                                                                                    <div class="fs-14">
+                                                                                        <span>Day Tour</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-lg-6 col-md-8 col-sm-6 col-6">
+                                                                                    <div class="fs-14 float-right links-set setoflinkes">
+                                                                                        <a href="http://dev.fitnessity.co/business/68/schedulers/create?categoryId=562">  'Not Scheduled'   </a>
+                                                                                        <label class="mr-5 ml-5"> | </label>
+                                                                                        <a href="http://dev.fitnessity.co/business/68/schedulers/create?categoryId=562">+ Schedule </a>
+                                                                                        <label class="mr-5 ml-5"> | </label>
+                                                                                        <div class="userblock0">
+                                                                                            <div class="login_links" onclick="openNavv('562')">
+                                                                                                <a href="#">+ Price Options </a>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <label class="mr-5 ml-5"> | </label>
+                                                                                        <div class="setting-icon">
+                                                                                            <i class="ri-more-fill"></i>
+                                                                                            <ul id="catUl0">
+                                                                                                <li class="non-collapsing" data-bs-toggle="collapse" data-bs-target=""><a onclick="editClass('562')"><i class="fas fa-plus text-muted"></i>Edit</a></li>
+                                                                                                <li class="non-collapsing" data-bs-toggle="collapse" data-bs-target=""><a onclick="deleteClass('562')"><i class="fas fa-plus text-muted"></i>Delete</a></li>
+                                                                                            </ul>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+																		<div class="classes-list">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-6 col-md-4 col-sm-6 col-6">
+                                                                                    <div class="fs-14">
+                                                                                        <span>Afternoon Tour</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-lg-6 col-md-8 col-sm-6 col-6">
+                                                                                    <div class="fs-14 float-right links-set setoflinkes">
+                                                                                        <a href="http://dev.fitnessity.co/business/68/schedulers/create?categoryId=563">  'Not Scheduled'   </a>
+                                                                                        <label class="mr-5 ml-5"> | </label>
+                                                                                        <a href="http://dev.fitnessity.co/business/68/schedulers/create?categoryId=563">+ Schedule </a>
+                                                                                        <label class="mr-5 ml-5"> | </label>
+                                                                                        <div class="userblock0">
+                                                                                            <div class="login_links" onclick="openNavv('563')">
+                                                                                                <a href="#">+ Price Options </a>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <label class="mr-5 ml-5"> | </label>
+                                                                                        <div class="setting-icon">
+                                                                                            <i class="ri-more-fill"></i>
+                                                                                            <ul id="catUl0">
+                                                                                                <li class="non-collapsing" data-bs-toggle="collapse" data-bs-target=""><a onclick="editClass('563')"><i class="fas fa-plus text-muted"></i>Edit</a></li>
+                                                                                                <li class="non-collapsing" data-bs-toggle="collapse" data-bs-target=""><a onclick="deleteClass('563')"><i class="fas fa-plus text-muted"></i>Delete</a></li>
+                                                                                            </ul>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+																	</div>
+																	<!-- <div class="row">
 																		<div class="col-lg-12 col-md-12">
 																			<div class="row y-middle card-header">	
 																				<div class="col-lg-12 col-md-12 col-12">
@@ -2832,7 +3266,7 @@
 																			
 																		</div>
 																	
-																	</div>
+																	</div> -->
 																</div>
 															</div>
 														</div>
@@ -2999,6 +3433,15 @@
 		</div><!-- /.modal-dialog -->
 	</div>
 	@include('layouts.business.footer')
+<script>
+function openaddschedule() {
+	document.getElementById("documents_Terms").style.width = "650px";
+}
+
+function closeaddschedule() {
+	document.getElementById("documents_Terms").style.width = "0";
+}
+</script>
 
 <script>
 $(function () {

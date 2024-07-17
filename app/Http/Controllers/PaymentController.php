@@ -39,6 +39,7 @@ class PaymentController extends Controller {
         $cartService = new CartService();
 
         $fees = BusinessSubscriptionPlan::where('id',1)->first();
+    
         if($request->grand_total == 0){
             $orderdata = array(
                 'user_id' => $loggedinUser->id,
@@ -296,10 +297,9 @@ class PaymentController extends Controller {
 
             $totalprice =  $priceWithDiscount = 0;
             $totalprice = $request->grand_total;
-
+            // dd($totalprice);
             if($request->has('cardinfo')){
                 $onFilePaymentMethodId = $request->cardinfo;
-
                 try {
                     $onFilePaymentIntent = $stripe->paymentIntents->create([
                         'amount' =>  round($totalprice *100),
@@ -407,7 +407,7 @@ class PaymentController extends Controller {
 
             $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
             $tax = $bspdata->site_tax;
-
+            // dd($bspdata);
             foreach($cartService->items() as $item){
                 $activityScheduler = BusinessActivityScheduler::find($item['actscheduleid']);
                 $businessServices = BusinessServices::find($item['code']);
@@ -415,7 +415,7 @@ class PaymentController extends Controller {
                 $price_detail = $cartService->getPriceDetail($item['priceid']);
 
                 $customer = Customer::where(['business_id' => $businessServices->cid, 'email' => Auth::user()->email, 'user_id' => Auth::user()->id])->first();
-
+                // dd($customer);
                 if(!$customer){
                     $customer = Customer::create([
                         'business_id' => $businessServices->cid,
@@ -435,6 +435,7 @@ class PaymentController extends Controller {
                 }
 
                 $participateLoop =  $cartService->participateLoop($item,$businessServices->cid);
+                // dd($participateLoop);
                 foreach($participateLoop as $d){
                     $participateAry = [];
                     $qtyAry = [];
@@ -452,7 +453,7 @@ class PaymentController extends Controller {
                     $participateAry['id'] = $d['id'];
 
                     $discount = $cartService->getDiscount($item['priceid'],$d['type'],$d['price']);
-
+                    // dd($discount);
                     $addOnServicePrice = @$item['addOnServicesTotalPrice'] ?? 0 ;
                     $priceWithDiscount = $d['price'] - $discount + $addOnServicePrice;
                     $expiredate = $price_detail->getExpirationDate($item['sesdate']);
@@ -501,9 +502,10 @@ class PaymentController extends Controller {
                     $stripe_id = $stripe_charged_amount = $payment_method= '';
                     $amount = $re_i = $reCharge = ''; 
 
-                    $amount = $cartService->getMembershipTotal($item['priceid'],$d['type'],$d['price']) ;
+                    $amount = $cartService->getMembershipTotal($item['priceid'],$d['type'],$d['price']);
+                    // dd($amount);
                     $tax_recurring = $cartService->getMembershipTax($item['priceid'],$d['type'],$d['price']);
-
+                    // dd($price_detail);
                     if($d['type'] == 'adult'){
                         /*$amount = 1 * $price_detail->recurring_first_pmt_adult;*/
                         $re_i = $price_detail->recurring_nuberofautopays_adult; 
@@ -517,13 +519,14 @@ class PaymentController extends Controller {
                         $re_i = $price_detail->recurring_nuberofautopays_infant;
                         $reCharge  = $price_detail->recurring_customer_chage_by_infant;
                     }
-
+                    // dd($re_i);
                     if($re_i != '' && $re_i != 0 && $amount != ''){
                         //$tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
                        // $tax_recurring = number_format( ($amount * $fees->site_tax)/100 ,2);
                         for ($num = $re_i; $num >0 ; $num--) { 
                             $payment_method = $transactionstatus->stripe_payment_method_id;
                             if($num==1){
+                                // dd($transactionstatus->amount);
                                 $stripe_id =  $transactionstatus->transaction_id;
                                 $stripe_charged_amount = number_format($transactionstatus->amount,2);
                                 $paymentDate = $date->format('Y-m-d');
@@ -573,6 +576,7 @@ class PaymentController extends Controller {
                                 "payment_on" => $payment_on,
                                 "status" => $status,
                             );
+                            // dd($recurring);
                             Recurring::create($recurring);
                         }
                     }

@@ -161,7 +161,7 @@
 																				<td>{{$i+1}}</td>
 																				<td><a href="{{url('business/'.request()->business_id.'/customers/'.@$list->id)}}" class="fw-medium" target="_blank">  {{@$list->full_name}}  </a> </td>
 																				<td>{{@$list->email}}</td>
-																				<td>{{date('m/d/Y',strtotime($list->birthdate))}}</td>
+																				<td>{{ $list->birthdate ? date('m/d/Y',strtotime($list->birthdate)) : 'N/A'}}</td>
 																				<td>{{@$list->phone_number ?? 'N/A'}}</td>
 																				<td>{{date('m/d/Y',strtotime($list->created_at))}}</td>
 																				<td class="@if($list->is_active() == 'InActive') font-red @else font-green @endif ">{{$list->is_active() == 'Active' ? 'Member' : $list->is_active()}}</td>

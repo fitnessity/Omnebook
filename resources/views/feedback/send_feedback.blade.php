@@ -1,5 +1,9 @@
-@extends('layouts.header')
+@extends('layouts.business.header')
 @section('content')
+<head>
+    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
+    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>css/responsive.css">
+</head>
 <style>
 .location-right {
   float: left;
@@ -109,8 +113,9 @@ textarea {
 					</div><?php */?>
 				<div class="location-right">
 					<div id='systemMessage' class="contactUsMessage"></div>
-                    <div class="row">
-                    	<div class="col-md-offset-2 col-sm-12 col-md-8 col-lg-8 col-md-offset-2">
+                    <div class="container">
+                    <div class="row justify-content-md-center">
+                    	<div class="col-sm-12 col-md-8 col-lg-8">
 							<form id="frmfeedback" method="post" action="{{url('/feedback/saveFeedback')}}">
 								@csrf
 								<p>
@@ -139,13 +144,15 @@ textarea {
 							<div class="font-green fs-18">{{ session()->get('success') }}</div>
                         </div>
 					</div>
+                    </div>
+                    
 				</div>
 			</div>
 		</div>
     </div>
 </div>      
   
-@include('layouts.footer')
+@include('layouts.business.footer')
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>ratings.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {

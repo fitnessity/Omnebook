@@ -177,6 +177,7 @@ class HomeController extends Controller {
     }
 
     public function postRegistration(Request $request) {
+        // dd('33');
         $postArr = $request->all();
         $rules = [
             'firstname' => 'required',
@@ -230,6 +231,13 @@ class HomeController extends Controller {
                         'email'=> $postArr['email'],
                     ]);
                 $stripe_customer_id = $customer->id;
+
+                // new code start
+                // do {
+                //     $unique_code = rand(1000, 9999);
+                // } while (User::where('unique_code', $unique_code)->exists());
+                $unique_code = generateUniqueCode();
+                // new code end
                 $userObj = New User();
                 $userObj->firstname = $postArr['firstname'];
                 $userObj->lastname = ($postArr['lastname']) ? $postArr['lastname'] : '';
@@ -248,7 +256,7 @@ class HomeController extends Controller {
                 $userObj->status = "approved";
                 $userObj->buddy_key = $postArr['password'];
                 $userObj->isguestuser = 0;
-
+                $userObj->unique_code=$unique_code;
                 //For signup confirmation 
                 $userObj->confirmation_code = Str::random(25);
                 $userObj->save();

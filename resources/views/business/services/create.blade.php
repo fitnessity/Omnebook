@@ -66,6 +66,8 @@
                                                                                 <div class="mb-3">
                                                                                     <label for="choices-publish-status-input" class="form-label">Program Title</label>
                                                                                     <input type="text" value="{{@$service->program_name}}" name="programName" id="programName" class="form-control" placeholder="ex. Kickboxing for adults)" placeholder="ex. Kickboxing for adults)" required>
+                                                                                    <small id="charCount" class="form-text text-muted">0/30 characters used</small>
+                                                                                    <div id="error_msg" class="text-danger"></div>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="steps-title">
@@ -2865,6 +2867,46 @@
     }
 </script>
 
+{{-- my code goes here --}}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const programNameInput = document.getElementById('programName');
+        const charCount = document.getElementById('charCount');
+        const errorMsg = document.getElementById('error_msg');
+        const form = document.getElementById('serviceForm');
+        const maxLength = 30;
+    
+        function updateCharCount() {
+            const currentLength = programNameInput.value.length;
+            charCount.textContent = `${currentLength}/${maxLength} characters used`;
+    
+            if (currentLength > maxLength) {
+                errorMsg.textContent = 'Title cannot exceed 36 characters.';
+            } else {
+                errorMsg.textContent = '';
+            }
+        }
+    
+        updateCharCount();
+    
+        programNameInput.addEventListener('input', function () {
+            if (programNameInput.value.length > maxLength) {
+                programNameInput.value = programNameInput.value.substring(0, maxLength);
+            }
+            updateCharCount();
+        });
+    
+        form.addEventListener('submit', function (event) {
+            if (programNameInput.value.length > maxLength) {
+                event.preventDefault();
+                errorMsg.textContent = 'Title cannot exceed 50 characters.';
+            }
+        });
+    });
+    </script>
+
+{{-- ends here --}}
 @endsection
 @push('scripts')
     <script src="{{asset('/public/dashboard-design/js/dropzone-min.js')}}"></script>

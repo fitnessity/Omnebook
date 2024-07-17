@@ -521,10 +521,13 @@ class ServiceController extends BusinessBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request,$business_id , $id )
+    public function destroy(Request $request,$business_id , $id)
     {
+        // dd('33');
+        // \DB::enableQueryLog();
         $company = $request->current_company;
-        $business_service = $company->service()->findOrFail($id);
+        $business_service = $company->service()->findOrFail($id);        
+        // dd(\DB::getQueryLog()); 
         $business_service->delete();
     }
 
@@ -568,7 +571,8 @@ class ServiceController extends BusinessBaseController
     }
 
     public function storeClass(Request $request){
-        
+
+        // dd('33');
         $validatedData = $request->validate([
             'category_title' => 'required|string|max:255',
         ]);
@@ -616,7 +620,9 @@ class ServiceController extends BusinessBaseController
     }
 
     public function storeClassPriceOption(Request $request ,$business_id){
-       // print_r($request->all());exit;
+    //    print_r($request->all());exit;
+        // dd($request->all());
+        // \DB::enableQueryLog(); // Enable query log
 
         $pIds = $request->input('priceId'.$request->classId);
         $pidArray = explode(',', $pIds);
@@ -643,6 +649,8 @@ class ServiceController extends BusinessBaseController
 
         $diff = array_diff($oldPriceOptions,$ids);
         BusinessClassPriceDetails::whereIn('id',$diff)->delete();
+        // dd(\DB::getQueryLog()); 
+
 
         return redirect()->to('business/'.$business_id.'/services/create?serviceType='.$request->serviceType.'&serviceId='.$request->serviceid.'#stepFour');
     }

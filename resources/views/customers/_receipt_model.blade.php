@@ -84,7 +84,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $orderDetail->business_price_detail_with_trashed ? $orderDetail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title : 'N/A'}}</span>
+                            <span>{{@$orderDetail->businessPriceDetailsAgesTrashed->category_title ?? 'N/A'}} </span>
                         </div>
                     </div>
                     

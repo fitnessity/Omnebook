@@ -312,7 +312,7 @@ class BookingRepository
         $business_services = $booking_details->business_services_with_trashed;
         $businessuser= @$booking_details->business_services_with_trashed->company_information;
         $BusinessPriceDetails = @$booking_details->business_price_detail_with_trashed;
-        $categoty_name = @$BusinessPriceDetails->business_price_details_ages_with_trashed->category_title;
+        $categoty_name = @$booking_details->businessPriceDetailsAgesTrashed->category_title;
         $schedulerdata = @$booking_details->business_activity_scheduler;
         $remaining = @$booking_details->getremainingsession();
         if(@$businessuser->logo != "") {

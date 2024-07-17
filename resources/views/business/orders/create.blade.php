@@ -1728,6 +1728,7 @@
 	function saveparticipate(){
 		$('.durationDiv').removeClass('d-none');
 		var customerId = '{{request()->cus_id}}';
+		// alert(customerId);
 		$('#qty').html('');
 
 		var aducnt = parseInt($('#adultcnt').val()) || 0;
@@ -1796,7 +1797,9 @@
 			$('.participateclosebtn').click();
 			gettotal('','')
 			$("#addpartcipate").modal('hide').removeClass('show');
+			// alert(customerId);
 			if(customerId){
+			// alert('2');
 				$('#addToOrder').prop('disabled', false);
 			}
 			

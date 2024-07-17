@@ -6,8 +6,9 @@
     use View;
     use App\Repositories\{ReviewRepository,UserRepository,NetworkRepository};
     use App\{UserFollower,UserBookingStatus,AddOnService,Customer,StripePaymentMethod,UserFamilyDetail,Transaction,Products,CustomerNotes,Notification,CompanyInformation,BusinessServices,UserBookingDetail,BusinessPriceDetailsAges,CustomList,BusinessServicesFavorite};
-    use App\BusinessCustomerUploadFiles;
-        
+    use App\BusinessCustomerUploadFiles;        
+    use App\BusinessStaff;
+    use App\User;
 
     
     function countStarRatings($serviceId)
@@ -759,14 +760,62 @@
 
         return  $text;
     }
+    // function getCustomerFilesNotifiy()
+    // {
+    //     return BusinessCustomerUploadFiles::where('isseen', 0)->where('status', 0)->get();
+    // }
+    // function getCustomerFilesNotifiy()
+    // {
+    //     $notifications = BusinessCustomerUploadFiles::where('isseen', 0)->where('status', 0)->get();
+
+    //     foreach ($notifications as $notification) {
+    //         $user = User::find($notification->user_id); // Assuming user_id is the column in BusinessCustomerUploadFiles that refers to the user
+    //         // $notification->profile_pic = $user ? $user->profile_pic : ''; // Assuming profile_pic is the column in the users table for the profile picture
+    //         if ($user && Storage::disk('s3')->exists($user->profile_pic)) {
+    //             $notification->profile_pic = Storage::disk('s3')->url($user->profile_pic);            
+    //         }
+    //         $notification->user_name = $user->firstname . ' ' . $user->lastname;
+    //     }
+
+    //     return $notifications;
+    // }
     function getCustomerFilesNotifiy()
     {
-        return BusinessCustomerUploadFiles::where('isseen', 0)->where('status', 0)->get();
+        $notifications = BusinessCustomerUploadFiles::where('isseen', 0)->where('status', 0)->get();
+
+        foreach ($notifications as $notification) {
+            $user = User::find($notification->user_id); // Assuming user_id is the column in BusinessCustomerUploadFiles that refers to the user
+            
+            if ($user) {
+                if (Storage::disk('s3')->exists($user->profile_pic)) {
+                    $notification->profile_pic = Storage::disk('s3')->url($user->profile_pic);
+                } else {
+                    $notification->profile_pic = asset('default_pic.jpg'); // Path to default profile picture
+                }
+                $notification->user_name = $user->firstname . ' ' . $user->lastname;
+            }
+        }
+
+        return $notifications;
     }
     function markNotificationsAsSeenAndProcessed($notificationIds)
     {
         BusinessCustomerUploadFiles::whereIn('id', $notificationIds)
         ->update(['isseen' => 1]);
     }
+
+    // my function starts
+    function generateUniqueCode()
+    {
+        do {
+            $code = mt_rand(1000, 9999);
+            $codeExistsInStaff = BusinessStaff::where('unique_code', $code)->exists();
+            $codeExistsInUser = User::where('unique_code', $code)->exists();
+        } while ($codeExistsInStaff || $codeExistsInUser);
+
+        return $code;
+    }
+
+    // ends
 
 ?>

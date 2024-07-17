@@ -153,7 +153,7 @@
 			<div class="modal-body">
 				<div class="form-group mt-10">
 					<label for="img">Choose File: </label>
-					<input type="file" class="form-control" name="file" id="file" onchange="readURL(this)">
+					<input type="file" class="form-control" name="file" id="staffFile" onchange="readURL(this)">
 					 <p class="err" style="color:red;padding-top:10px;"></p>
 				</div>					
 			</div>
@@ -226,7 +226,7 @@
                		$('#systemMessage1').addClass('font-red font-16');
                		$('#systemMessage1').html("Upload Error, Try again.").addClass('alert alert-danger alert-dismissible');
                  	}
-                 	$('#file').val('')
+                 	$('#staffFile').val('')
               	}
 	        	});
         	}

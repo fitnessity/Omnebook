@@ -14,7 +14,7 @@
 
     <button type="button" class="close modal-close" data-dismiss="modal">
 
-      <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
+      <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34" alt="Fitnessity" />
 
     </button>
 
@@ -26,7 +26,7 @@
             <span>
             <div class="cat-img-name width-img">
             <span><div class="sports_name"><span>{{ $sports_value->sport_name }}</span></div></span>
-                <img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>{{ $sports_value->image }}" height="466" width="313" />
+                <img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>{{ $sports_value->image }}" height="466" width="313" alt="Fitnessity" />
                 <p>&nbsp;</p>
                 <div class="pop-search-detail-sports">
                     <h4>{{ $sports_value->sport_name }}</h4>

@@ -66,7 +66,7 @@
                     ->where('content_alias', 'footer_content')->get(); ?>
             @foreach($footer_fitnessity as $footercon)
                 <div class="footer-logo">
-                    <img  @if($footercon->banner_image) src="{{url('/public/uploads/cms/'.$footercon->banner_image)}}"   @else  src="/public/images/fitnessity-logo-white.png"   @endif style="width:250px">
+                    <img  @if($footercon->banner_image) src="{{url('/public/uploads/cms/'.$footercon->banner_image)}}"   @else  src="/public/images/fitnessity-logo-white.png"   @endif style="width:250px" alt="Fitnessity">
                     <p style="text-align: justify; padding: 5px 50px 5px 0px">
                         {!!$footercon->content!!}
                     </p>
@@ -99,9 +99,9 @@
                 </div> 
                 <div class="footer-bottom-left social-footer">
                     <ul>
-                        <li><a href="https://twitter.com/Fitnessitynyc" target="_blank" ><img src="{{ URL::to('public/img/twitter.png')}}" width="30" /></a>&nbsp;&nbsp;</li>
-                        <li><a href="https://www.instagram.com/fitnessityofficial/?hl=en" target="_blank"><img src="{{ URL::to('public/img/instagram.png')}}" width="30" /></a>&nbsp;&nbsp;</li>
-                        <li><a href="https://www.facebook.com/fitnessityofficial" target="_blank"><img src="{{ URL::to('public/img/facebook.png')}}" width="30" /></a>&nbsp;&nbsp;</li>
+                        <li><a href="https://twitter.com/Fitnessitynyc" target="_blank" ><img src="{{ URL::to('public/img/twitter.png')}}" width="30" alt="Fitnessity" /></a>&nbsp;&nbsp;</li>
+                        <li><a href="https://www.instagram.com/fitnessityofficial/?hl=en" target="_blank"><img src="{{ URL::to('public/img/instagram.png')}}" width="30" alt="Fitnessity" /></a>&nbsp;&nbsp;</li>
+                        <li><a href="https://www.facebook.com/fitnessityofficial" target="_blank"><img src="{{ URL::to('public/img/facebook.png')}}" width="30" alt="Fitnessity" /></a>&nbsp;&nbsp;</li>
                     </ul>
                 </div>
             </div>
@@ -212,34 +212,34 @@
 										<button class="btn-lp" type="button"><a style="color: white;" href="{{url('/activities')}}">Book An Activity </a> </button> 
 									</li>
 									<li class="pc-link">
-									   <span class="pc-micon"><img src="{{asset('/public/img/social-profile.png')}}" alt=""></span><a href="{{route('profile-viewProfile')}}" style="color: white;"> View Personal Profile</a>
+									   <span class="pc-micon"><img src="{{asset('/public/img/social-profile.png')}}" alt="Fitnessity"></span><a href="{{route('profile-viewProfile')}}" style="color: white;"> View Personal Profile</a>
 									</li>
 
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt=""></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt="Fitnessity"></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
 									</li>
 
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt=""></span><a href="{{route('personal.manage-account.index')}}" style="color: white;"> Manage Accounts</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt="Fitnessity"></span><a href="{{route('personal.manage-account.index')}}" style="color: white;"> Manage Accounts</a>
 									</li>
 								
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt=""></span>
+										<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt="Fitnessity"></span>
 										<a href="{{ url('/personal/calendar')}}" style="color: white;">Calendar</a>
 									</li>
 
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt=""></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt="Fitnessity"></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
 									</li>
 
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt=""></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt="Fitnessity"></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
 									</li>
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt=""></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
 									</li>
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt=""></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
 									</li>
 									<li><div class="border-sidebar"></div></li>
 									<li class="lp-per-pro"> <span>Business Center </span></li>
@@ -319,7 +319,7 @@
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.blockUI.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>general.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery-input-mask-phone-number.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{{asset('public/js/moment.js')}}" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/public/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script>

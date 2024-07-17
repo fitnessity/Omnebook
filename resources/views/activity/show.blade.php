@@ -921,7 +921,7 @@ input:disabled{
 					<div class="separator-border-bottom">
 						<div class="mtb-30">
 							<div class="row">
-								@foreach($service->reviews()->latest()->limit(2)->get() as $review)
+								{{-- @foreach($service->reviews()->latest()->limit(2)->get() as $review)
 								<div class="col-lg-6">
 									<div class="row y-middle mb-25">
 										<div class="col-lg-2 col-md-2 col-sm-2 col-3">
@@ -929,14 +929,12 @@ input:disabled{
 												<p class="character">{{$review->User->first_letter}}</p>
 											</div>
 										</div>
-
 										<div class="col-lg-10">
 											<div class="review-sendername">
 												<label>{{$review->User->full_name}}</label>
 												<p>{{$review->User->country}} </p>
 											</div>
 										</div>
-
 										<div class="col-lg-12">
 											<div class="mt-15 inner-review-star">
 												<div class="display-inline-b">
@@ -945,8 +943,7 @@ input:disabled{
 															<i class="fa fa-star text-black" aria-hidden="true"></i>
 														@endfor
 													@endif
-												</div>
-												
+												</div>												
 												<div class="display-inline-b"><i class="fas fa-circle dot-fs"></i></div>
 												<div class="display-inline-b">
 													<label>{{$review->date}}</label>
@@ -956,14 +953,60 @@ input:disabled{
 												<p>{{$review->title}}</p>
 											</div>
 											<div class="mt-15 mb-15">
-												{{-- <a data-toggle="modal" data-target="#exampleModal">Show more</a> --}}
 												<a data-toggle="modal" data-bs-toggle="modal" data-bs-target="#exampleModal">Show More</a>
 											</div>
 										</div>
 									</div>
 								</div>
-								@endforeach
-
+								@endforeach --}}
+								@foreach($service->reviews()->latest()->limit(2)->get() as $review)
+								<div class="col-lg-6">
+									<div class="row y-middle mb-25">
+										<div class="col-lg-2 col-md-2 col-sm-2 col-3">
+											<div class="company-list-text mb-10">
+												@if(is_object($review->User) && property_exists($review->User, 'first_letter'))
+													<p class="character">{{$review->User->first_letter}}</p>
+												@else
+													<p class="character">N/A</p>
+												@endif
+											</div>
+										</div>
+										<div class="col-lg-10">
+											<div class="review-sendername">
+												@if(is_object($review->User))
+													<label>{{$review->User->full_name}}</label>
+													<p>{{$review->User->country}} </p>
+												@else
+													<label>Anonymous</label>
+													<p>N/A</p>
+												@endif
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div class="mt-15 inner-review-star">
+												<div class="display-inline-b">
+													@if($review->all_over_review > 0)
+														@for($i = 1; $i <= $review->all_over_review; $i++)
+															<i class="fa fa-star text-black" aria-hidden="true"></i>
+														@endfor
+													@endif
+												</div>
+												<div class="display-inline-b"><i class="fas fa-circle dot-fs"></i></div>
+												<div class="display-inline-b">
+													<label>{{$review->date}}</label>
+												</div>
+											</div>
+											<div>
+												<p>{{$review->title}}</p>
+											</div>
+											<div class="mt-15 mb-15">
+												<a data-toggle="modal" data-bs-toggle="modal" data-bs-target="#exampleModal">Show More</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							@endforeach
+							
 							</div>
 
 							@if($service->reviews()->count() > 0)
@@ -1262,7 +1305,7 @@ input:disabled{
 		</div>                                          
 	</div>
 
-	<div class="modal fade " id="ActivtityFail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	{{-- <div class="modal fade " id="ActivtityFail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	    <div class="modal-dialog counter-modal-size">
 	        <div class="modal-content">
 	            <div class="modal-body conuter-body">
@@ -1274,8 +1317,28 @@ input:disabled{
                 </div>
 			</div>                                                                       
 		</div>                                          
-	</div>
+	</div> --}}
 
+	{{-- my code starts --}}
+	{{-- <div class="modal fade" id="ActivityFail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog counter-modal-size">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body counter-body">
+					<div class="row">
+						<div class="col-lg-12">
+							<h4 class="modal-title partcipate-model">You can't book this activity for today. Please add another time.</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	 --}}
+	{{-- ends --}}
 	<div class="modal fade" id="Countermodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	    <div class="modal-dialog counter-modal-size">
 	        <div class="modal-content">

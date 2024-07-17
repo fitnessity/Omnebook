@@ -170,7 +170,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName() == 'business.engage_client.index' ) tab-active @endif" href="{{route('business.engage_client.index')}}" >
-                        <i class=" ri-user-follow-fill"></i> <span data-key="t-landing">Engage Clients </span>
+                        <i class=" ri-user-follow-fill"></i> <span data-key="t-landing">Marketing </span>
                     </a>
                 </li>
 
@@ -193,22 +193,22 @@
                     </a>
                 </li>
 
-                <!-- <li class="nav-item">
+               <li class="nav-item">
                     <a class="nav-link menu-link" href="#checkinbar" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="checkinbar">
                         <i class="mdi mdi-account-circle-outline"></i> <span data-key="t-dashboards">Self Check-In</span>
                     </a>
                     <div class="collapse menu-dropdown @if(Route::current()->getName() == 'checkin-portal-settings') collapse show @endif" id="checkinbar">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal"> Check-In Portal </a> -->
+                                <a href="" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal"> Check-In Portal </a>
                                 <!-- <a href="{{route('check-in-welcome')}}" class="nav-link" data-key="t-analytics"> Check-In Portal </a> -->
-                            <!-- </li>
+                            </li>
                             <li class="nav-item">
                                 <a href="{{route('checkin-portal-settings')}}" class="nav-link @if(Route::current()->getName()=='checkin-portal-settings') active @endif" >Check-In Settings </a>
                             </li>
                         </ul>
                     </div>
-                </li>  -->
+                </li>
                 <!-- end Dashboard Menu -->
 
 				<li class="nav-item">

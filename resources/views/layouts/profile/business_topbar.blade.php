@@ -12,7 +12,7 @@
     <!-- Layout config Js-->
     <script src="{{asset('/public/dashboard-design/js/layout.js')}}"></script>
     <!-- Bootstrap Css -->
-    <link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    <!-- <link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" /> -->
     <link href="{{asset('/public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" />
 	
     <!-- Style Css-->
@@ -49,6 +49,12 @@
 
 	<!-- Color Piker Css-->
     <link href="{{asset('/public/dashboard-design/css/nano.min.css')}}" rel="stylesheet" type="text/css" />
+
+	<!-- filepond -->
+	<link rel="stylesheet" href="{{asset('/public/dashboard-design/filepond/filepond.min.css')}}" type="text/css" />
+	<link rel="stylesheet" href="{{asset('/public/dashboard-design/filepond/filepond-plugin-image-preview.min.css')}}" type="text/css" />
+
+	<link rel="stylesheet" href="{{asset('/public/dashboard-design/css/dragula.min.css')}}" type="text/css" />
 </head>
 
  <!-- Begin page -->

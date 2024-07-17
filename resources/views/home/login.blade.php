@@ -17,7 +17,7 @@ if(!empty(@$response)){
             <div class="register_wrap" id="signup_normal">
                 <input type="hidden" id="showstep" value="">
                 <div class="logo-my">
-                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/logo-small.jpg')}}"> </a>
+                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/logo-small.jpg')}}" alt="Fitnessity"> </a>
                 </div>               
                 <form method="post" action="{{route('auth/userlogin')}}">
                     {{ csrf_field() }}

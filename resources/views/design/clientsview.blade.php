@@ -266,6 +266,15 @@
 																										<span>03/22/2023</span>
 																									</div>
 																								</div>
+																								<div class="row mb-10"> 
+																									<div class="col-lg-5 col-sm-5">
+																										<label class="font-black">Your Self Check-In Code :</label>
+																									</div>
+																									<div class="col-lg-7 col-sm-7">
+																										<span class="mr-25">3455</span>
+																										<a href="#" data-bs-toggle="modal" data-bs-target="#check-in-code">(Add/Edit)</a>
+																									</div>
+																								</div>
 																									
 																							</div>
 																							
@@ -1572,6 +1581,27 @@
         </div><!-- End Page-content -->
      </div><!-- end main content-->
 </div><!-- END layout-wrapper -->
+
+<!-- Modal -->
+<div class="modal fade" id="check-in-code" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Add/Edit</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group mt-10">
+					<label for="email">Self Check-In Code</label>
+					<input type="text" class="form-control" name="companyName">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-red">Submit</button>
+			</div>
+		</div>
+  	</div>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="merge_customer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

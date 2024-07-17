@@ -403,7 +403,7 @@
 	.bg-cover{background-size: cover;}
 	.staff-pl-0 { padding-left: 12px;  }
 	.service-pr-0 {	padding-right: 10px; }
-	.show-all .table-inner-data-sec .p-name { width: 77% !important; } 
+	.show-all .table-inner-data-sec .p-name { width: 76% !important; } 
 	.fit-widget-container-banner label{font-size: 45px; line-height: 64px;}
 	.confirmed-slider .owl-nav .owl-prev{left: -15px; font-size: 20px; width: 20px; height: 20px; }
 	.confirmed-slider .owl-nav .owl-next{right: -15px; font-size: 20px; width: 20px; height: 20px;}
@@ -449,6 +449,7 @@
 	.finish-modal-80 {	max-width: 100%;  }
 	.mb-mv-25{padding: 25px; padding-bottom: 70px;}
 	.mr-5{margin-right: 5px;}
+	.pairets{padding: 10px 7px;}
 }
 
 
@@ -462,6 +463,7 @@
 	.space-set{width: 100% !important;}
 	.w-50px {width: 100px; }
 	.powerby img{  width: 225px;}
+	.show-all .table-inner-data-sec .p-name { width: 68% !important; }
 	
 }
 

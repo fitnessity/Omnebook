@@ -134,6 +134,7 @@ class OrderController extends PersonalBaseController
             $customer = Auth::user()->customers()->where('business_id' ,$request->businessId)->first();
             $customerID = @$customer->id;
         }else{
+            $customer = Customer::find($request->customerId);
             $customerID = $request->customerId;
         }
 

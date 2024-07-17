@@ -48,45 +48,6 @@
                                         </div>
                                     </div>
 
-                                <!--<div class="card-body border-bottom-grey">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="text-center">
-                                                    <label class="fs-15">Missed Payments</label>
-                                                    <div>
-                                                        <button type="button" class="btn btn-red">Resolve</button>
-                                                    </div>
-                                                </div>                                                
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="card-body border-bottom-grey">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="text-center">
-                                                    <label class="fs-15">Documents Needed Signed</label>
-                                                    <div>
-                                                        <button type="button" class="btn btn-red">Review & Sign</button>
-                                                    </div>
-                                                </div>                                                
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="card-body border-bottom-grey">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="text-center">
-                                                    <label class="fs-15">Notes</label>
-                                                    <div>
-                                                        <button type="button" class="btn btn-red">View</button>
-                                                    </div>
-                                                </div>                                                
-                                            </div>
-                                        </div>
-                                    </div> -->
-
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
@@ -256,12 +217,163 @@
 																		</div>
 																		<div class="col-lg-4 col-md-4 col-sm-4 col-12">
 																			<div class="flex-grow-1 ms-3 text-end">
-																				<a class="btn btn-red" href="http://dev.fitnessity.co/personal/notes-alerts?business_id=68">View</a>
+																				<button type="button" class="btn btn-red zfold-none ipad-none" onClick="opennotesalerts()"> View </button>
+																				<!-- <a class="btn btn-red" href="http://dev.fitnessity.co/personal/notes-alerts?business_id=68">View</a> -->
 																			</div>
+																			<nav class="com-sidebar">
+																				<div class="navbar-wrapper">
+																					<div id="Notes_Alerts" class="com-sidepanel">
+																						<div class="navbar-content">
+																							<div class="container"> 
+																								<div class="row">
+																									<div class="col-lg-8 col-8">
+																										<div class="setup-title">
+																											<label>Notes and Alerts</label>
+																										</div>
+																									</div>
+																									<div class="col-lg-4 col-4">
+																										<div class="p-relative">
+																											<a href="javascript:void(0)" class="com-cancle fa fa-times" onClick="closenotesalerts()"></a>
+																										</div>
+																									</div>
+																								</div>	
+																							</div>
+																							<div class="border-bottom-grey mt-10 mb-10"></div>	
+																							<div class="container">
+																								<!-- Nav tabs -->
+																								<ul class="nav nav-tabs mb-3" role="tablist">
+																									<li class="nav-item">
+																										<a class="nav-link active" data-bs-toggle="tab" href="#Notes" role="tab" aria-selected="false">
+																											Provider Notes (2)
+																										</a>
+																									</li>
+																									<li class="nav-item">
+																										<a class="nav-link" data-bs-toggle="tab" href="#Alerts" role="tab" aria-selected="false">
+																											Alerts (15)
+																										</a>
+																									</li>
+																								</ul>
+																								<!-- Tab panes -->
+																								<div class="tab-content  text-muted">
+																									<div class="tab-pane active" id="Notes" role="tabpanel">
+																										<div class="container-fluid nopadding">
+																											<div class="row">	
+																												<div class="row mb-10">
+																													<div class="col-md-10">
+																														<div class="row">
+																															<div class="col-md-4">Contact us immediatly</div>
+																															<div class="col-md-4">12/26/2023</div>
+																															<div class="col-md-4">Uploded By  Nipa (Test) Soni</div>
+																														</div>
+																													</div>
+																													
+																													<div class="col-md-2 mb-10">
+																														<div class="text-right">
+																															<button class="btn btn-red btn-sm dropdown" data-bs-toggle="modal" data-bs-target=".notes23" ><i class="ri-eye-fill fs-14" ></i></button>
+																														</div>
+
+																													</div>
+																												</div>
+
+																												<div class="row mb-10">
+																													<div class="col-md-10">
+																														<div class="row">
+																															<div class="col-md-4">for both portal</div>
+																															<div class="col-md-4">12/19/2023</div>
+																															<div class="col-md-4">Uploded By  Nipa (Test) Soni</div>
+																														</div>
+																													</div>
+																													
+																													<div class="col-md-2 mb-10">
+																														<div class="text-right">
+																															<button class="btn btn-red btn-sm dropdown" data-bs-toggle="modal" data-bs-target=".notes18" ><i class="ri-eye-fill fs-14" ></i></button>
+																														</div>
+																														
+																													</div>
+																												</div>
+																										</div>
+																									</div>
+																								</div>
+
+																								<div class="tab-pane" id="Alerts" role="tabpanel">
+																									<div class="row">
+																										<div class="col-xxl-12 col-lg-12">
+																											<div class="card">
+																												<div class="card-body">
+																													<div class="live-preview">
+																														<div class="accordion" id="default-accordion-example">
+																															<div class="accordion-item shadow">
+																																<h2 class="accordion-header" id="headingOne">
+																																	<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+																																		Expired Credit Card (0)
+																																	</button>
+																																</h2>
+																																<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#default-accordion-example">
+																																	<div class="accordion-body">
+																																		Not Expired Credit Card Available
+																																	</div>
+																																</div>
+																															</div>
+																															<div class="accordion-item shadow">
+																																<h2 class="accordion-header" id="headingTwo">
+																																	<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+																																		Missed Payment (15)
+																																	</button>
+																																</h2>
+																																<div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#default-accordion-example">
+																																	<div class="accordion-body">
+																																		<div class="purchase-history">
+																																			<div class="table-responsive">
+																																				<table class="table mb-0">
+																																					<thead>
+																																						<tr>
+																																							<th>Purchase Date </th>
+																																							<th>Item Description </th>
+																																							<th>Item Type</th>
+																																							<th>Price</th>
+																																							<th>Qty</th>
+																																							<th>Payment Failed Date</th>
+																																						</tr>
+																																					</thead>
+																																					<tbody>
+																																						<tr>
+																																							<td>2024-04-05</td>
+																																							<td>Love Tennis<br></td>
+																																							<td>Membership</td>
+																																							<td>$62.06</td>
+																																							<td>1</td>
+																																							<td>05/10/2024</td>
+																																						</tr>	
+																																						<tr>
+																																							<td>2023-10-19</td>
+																																							<td>Spring Lake Day Camp<br></td>
+																																							<td>Membership</td>
+																																							<td>$50.00</td>
+																																							<td>1</td>
+																																							<td>01/04/2024</td>
+																																						</tr>	
+																																					</tbody>
+																																				</table>
+																																			</div>
+																																		</div>
+																																	</div>
+																																</div>
+																															</div>
+																														</div>
+																													</div>
+																												</div>
+																											</div>
+																										</div>
+																									</div>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</nav>
 																		</div>
 																	</div>
 																</div>
-
 																<div class="dashed-border p-tb-10">
 																	<div class="row y-middle">
 																		<div class="col-lg-8 col-md-8 col-sm-8 col-12">
@@ -272,8 +384,72 @@
 																		</div>
 																		<div class="col-lg-4 col-md-4 col-sm-4 col-12">
 																			<div class="flex-grow-1 ms-3 text-end">
-																				<a class="btn btn-red" href="http://dev.fitnessity.co/personal/announcement-news?business_id=68">View</a>
+																				<button type="button" class="btn btn-red zfold-none ipad-none" onClick="openannouncements()"> View </button>
+																				<!-- <a class="btn btn-red" href="http://dev.fitnessity.co/personal/announcement-news?business_id=68">View</a> -->
 																			</div>
+																			<nav class="com-sidebar">
+																				<div class="navbar-wrapper">
+																					<div id="Announcements_News" class="com-sidepanel">
+																						<div class="navbar-content">
+																							<div class="container"> 
+																								<div class="row">
+																									<div class="col-lg-8 col-8">
+																										<div class="setup-title">
+																											<label>Announcement & News</label>
+																										</div>
+																									</div>
+																									<div class="col-lg-4 col-4">
+																										<div class="p-relative">
+																											<a href="javascript:void(0)" class="com-cancle fa fa-times" onClick="closeannouncements()"></a>
+																										</div>
+																									</div>
+																								</div>	
+																							</div>
+																							<div class="border-bottom-grey mt-10 mb-10"></div>	
+																							<div class="container">
+																								<div class="row y-middle">
+																									<div class="col-lg-2 col-md-2 col-3">
+																										<div class="announcement-day">
+																											<span>Today 02:43</span>
+																										</div>
+																									</div>
+																									<div class="col-lg-9 col-md-10 col-9 border-left">
+																										<div class="announcement-heading">
+																											<h5>This is the time of your like</h5>
+																											<p>It's time to get ready</p>
+																										</div>
+																									</div>
+																									<div class="col-lg-1">
+																										<div class="text-right">
+																											<button class="btn btn-red btn-sm dropdown" data-bs-toggle="modal" data-bs-target="#detail-modal84"><i class="ri-eye-fill fs-14"></i></button>
+																										</div>
+																									</div>
+																								</div>
+																								<div class="mb-10">
+																									<div class="row y-middle">
+																										<div class="col-lg-2 col-md-2 col-3">
+																											<div class="announcement-day">
+																												<span>Dec 28 2023</span>
+																											</div>
+																										</div>
+																										<div class="col-lg-9 col-md-10 col-9 border-left">
+																											<div class="announcement-heading">
+																												<h5>Parents Night Out Nerf Wars 2024</h5>
+																												<p>Generate Lorem Ipsum placeholder text with a delicious twist. We are currently working on our site and will be up soon. Please sign up below to be notified when we are live. No spam, promise.</p>
+																											</div>
+																										</div>
+																										<div class="col-lg-1">
+																											<div class="text-right">
+																												<button class="btn btn-red btn-sm dropdown" data-bs-toggle="modal" data-bs-target="#detail-modal84" ><i class="ri-eye-fill fs-14" ></i></button>
+																											</div>
+																										</div>
+																									</div>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</nav>
 																		</div>
 																	</div>
 																</div>
@@ -288,8 +464,81 @@
 																		</div>
 																		<div class="col-lg-4 col-md-4 col-sm-4 col-12">
 																			<div class="flex-grow-1 ms-3 text-end">
-																				<a class="btn btn-red" href="http://dev.fitnessity.co/personal/documents-contract?business_id=68">View</a>
+																				<button type="button" class="btn btn-red zfold-none ipad-none" onClick="opendoc()"> View </button>
+																				<!-- <a class="btn btn-red" href="http://dev.fitnessity.co/personal/documents-contract?business_id=68">View</a> -->
 																			</div>
+																			<nav class="com-sidebar">
+																				<div class="navbar-wrapper">
+																					<div id="documents_Terms" class="com-sidepanel">
+																						<div class="navbar-content">
+																							<div class="container"> 
+																								<div class="row">
+																									<div class="col-lg-8 col-8">
+																										<div class="setup-title">
+																											<label>Agreed Terms & Contracts</label>
+																										</div>
+																									</div>
+																									<div class="col-lg-4 col-4">
+																										<div class="p-relative">
+																											<a href="javascript:void(0)" class="com-cancle fa fa-times" onClick="closedoc()"></a>
+																										</div>
+																									</div>
+																								</div>	
+																							</div>
+																							<div class="border-bottom-grey mt-10 mb-10"></div>	
+																							<div class="container">
+																								<div class="row y-middle border-bottom-documents">
+																									<div class="col-lg-7 col-md-5 col-sm-5 col-7">
+																										<div class="mmt-10 mmb-10">
+																											<span>Covid-19 Protocols  agreed on 12/19/2023  </span>
+																										</div>
+																									</div>
+																									<div class="col-lg-4 col-md-3 col-sm-3 col-7">
+																										<div class="mmt-10 mmb-10">
+																											<span>Signed on 12/19/2023 </span>
+																										</div>
+																									</div>
+																									<div class="col-lg-1 col-md-2 col-sm-2 col-2">
+																										<div class="multiple-options">
+																											<div class="setting-icon">
+																												<i class="ri-more-fill"></i>
+																												<ul>
+																													<li><a onclick="downloadPdf('68', 'covid');"><i class="fas fa-plus text-muted"></i>Download</a></li>
+																													<li><a onclick="viewPdf('covidDiv');"><i class="fas fa-plus text-muted"></i>View</a></li>
+																												</ul>
+																											</div>
+																										</div>
+																									</div>									
+																								</div>
+																								<div class="row y-middle border-bottom-documents">
+																									<div class="col-lg-7 col-md-5 col-sm-5 col-7">
+																										<div class="mmt-10 mmb-10">
+																											<span>Liability Waiver  agreed on 12/19/2023  </span>
+																										</div>
+																									</div>
+
+																									<div class="col-lg-4 col-md-3 col-sm-3 col-7">
+																										<div class="mmt-10 mmb-10">
+																											<span>Signed on 12/19/2023 </span>
+																										</div>
+																									</div>
+																									<div class="col-lg-1 col-md-2 col-sm-2 col-2">
+																										<div class="multiple-options">
+																											<div class="setting-icon">
+																												<i class="ri-more-fill"></i>
+																												<ul>
+																													<li><a onclick="downloadPdf('68', 'liability');"><i class="fas fa-plus text-muted"></i>Download</a></li>
+																													<li><a onclick="viewPdf('liabilityDiv');"><i class="fas fa-plus text-muted"></i>View</a></li>
+																												</ul>
+																											</div>
+																										</div>
+																									</div>								
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</nav>
 																		</div>
 																	</div>
 																</div>
@@ -2043,9 +2292,92 @@
 	</div>
 </div>
 
+<div class="modal fade" tabindex="-1" id="detail-modal84" aria-labelledby="staticBackdropLabel" aria-modal="true" role="dialog" >
+	<div class="modal-dialog modal-dialog-centered modal-50">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body html-content">
+				<h5 class="modal-title text-center" id="staticBackdropLabel">This is the time of your like</h5>
+				<div class="row y-middle mt-10">
+					<div class="col-lg-12 col-sm-12 col-md-12">
+						<div class="mb-3 ck-content">
+							<p>Test, this is another test.</p>
+							<p><img alt="" height="600" src="https://fitnessity-production.s3.amazonaws.com/ck-editor/UbLQY1C49XBCgl5oO5SgOLr84AYqd4CUBYuc0Huv.jpg" width="500" /></p></div>
+						</div>
+						<div class="col-lg-12 col-sm-12 col-md-12 text-center">
+							<div class="mb-3"> Announcement Posted On 05/24/2024</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade notes23" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
+	<div class="modal-dialog modal-dialog-centered modal-30">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="noteHtml">		
+				<h5 class="modal-title text-center" id="staticBackdropLabel">Contact us immediatly</h5>
+				<div class="row y-middle mt-10">
+					<div class="col-lg-12 col-sm-12 col-md-12">
+						<div class="mb-3 ck-content"><p>Student will pay on JaJanuaryniaru 1st for the event now</p><p>&nbsp;</p></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
+<div class="modal fade notes18" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
+	<div class="modal-dialog modal-dialog-centered modal-30">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+																																	
+			<div class="modal-body" id="noteHtml">		
+				<h5 class="modal-title text-center" id="staticBackdropLabel">for both portal</h5>
+				<div class="row y-middle mt-10">
+					<div class="col-lg-12 col-sm-12 col-md-12">
+						<div class="mb-3 ck-content"><p>Hi this is test message for both portal&nbsp;</p></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>																														
 
 @include('layouts.business.footer')
+<script>
+function opennotesalerts() {
+	document.getElementById("Notes_Alerts").style.width = "600px";
+}
+
+function closenotesalerts() {
+	document.getElementById("Notes_Alerts").style.width = "0";
+}
+
+function opendoc() {
+	document.getElementById("documents_Terms").style.width = "600px";
+}
+
+function closedoc() {
+	document.getElementById("documents_Terms").style.width = "0";
+}
+
+function openannouncements() {
+	document.getElementById("Announcements_News").style.width = "600px";
+}
+
+function closeannouncements() {
+	document.getElementById("Announcements_News").style.width = "0";
+}
+</script>
 <script>
 	$('.owl-carousel').owlCarousel({
 	    loop:true,

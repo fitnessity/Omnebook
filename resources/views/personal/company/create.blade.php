@@ -1,4 +1,4 @@
-@inject('request', 'Illuminate\Http\Request')
+ j@inject('request', 'Illuminate\Http\Request')
 @extends('layouts.business.header')
 
 @section('content')
@@ -55,7 +55,7 @@
 													<div class="accordion-item shadow">
 														<h2 class="accordion-header" id="headingOne">
 															<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-																Details Setup
+																Business Setup Details
 															</button>
 														</h2>
 
@@ -174,6 +174,30 @@
 																			</div>
 																		</div>
 
+																		<div class="col-lg-12">
+																			<div class="form-group mt-10">
+																				<label>Quick Business Intro</label>
+																				<textarea class="form-control" rows="4" placeholder="Tell Us Somthing About Company..." name="shortDescription" id="shortDescription" maxlength="150">{{@$company->short_description}}</textarea>
+																				<div class="word-counter">
+																					<span id="companyDescLeft">150</span> 
+																					Characters Left
+																				</div>
+																			</div>
+																		</div>
+																		<div class="col-lg-12">
+																			<div class="form-group mt-10">
+																				<label>Company Description</label>
+																				<textarea class="form-control" rows="5" placeholder="Tell Us Somthing About Company in short..." name="aboutCompany" id="aboutCompany" maxlength="1000">{{@$company->about_company}}</textarea>
+																				<div class="word-counter">
+																					<span id="aboutCompanyLeft">1000</span> 
+																					Characters Left
+																				</div>
+																			</div>
+																		</div>
+
+																		<div class="dropdown-divider mt-20 mb-20"></div>
+
+																		<label class="mt-20 mb-20"><h5>About The Owner</h5></label>
 																		<div class="col-lg-6 col-md-6">
 																			<div class="form-group mt-10">
 																				<label>Company Representative First Name <span id="star">*</span></label>
@@ -199,26 +223,59 @@
 																				<span class="error" id="b_cot"></span>
 																			</div>
 																		</div>
-																		<div class="col-lg-12">
+																		
+																		<div class="col-lg-6">
 																			<div class="form-group mt-10">
-																				<label>Quick Business Intro</label>
-																				<textarea class="form-control" rows="4" placeholder="Tell Us Somthing About Company..." name="shortDescription" id="shortDescription" maxlength="150">{{@$company->short_description}}</textarea>
-																				<div class="word-counter">
-																					<span id="companyDescLeft">150</span> 
-																					Characters Left
-																				</div>
+																				<label>Country Born </label>
+																				<select class="form-select" name="born" id="born">
+																					<option>Select Country</option>
+																					@foreach($countries as $country)
+																						<option value="{{$country->id}}" {{@$company->born == $country->id ? 'selected' : ''}}>{{$country->country_name}}</option>
+																					@endforeach
+																				</select>
+                                                                               <!--  <input type="text" class="form-control" name="born" id="born" placeholder="" value="{{@$company->born}}" maxlength="150"> -->
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-lg-6">
+																			<div class="form-group mt-10">
+																				<label>Years of Hosting </label>
+                                                                               <input type="text" class="form-control" name="years_of_hosting" id="years_of_hosting" placeholder="" value="{{@$company->years_of_hosting}}" maxlength="150">
+                                                                            </div>
+                                                                        </div> 
+
+                                                                        <div class="col-lg-12">
+																			<div class="form-group mt-10">
+																				<label>About The Owner </label>
+                                                                                <textarea name="about_host" id="about_host" class="form-control" rows="4" maxlength="150" required="" placeholder="Let your clients know something about you">{{@$company->about_host}}</textarea>
+                                                                                <div class="float-right"><span id="aboutcLeft">200</span> Characters Left</div>
+                                                                            </div>
+                                                                        </div> 
+
+                                                                       
+                                                                        <div class="col-lg-6 col-md-6">
+																			<div class="form-group mt-10">
+																				<label for="img">Upload Owner Photo</label>
+																				<input type="file" class="form-control" name="owner_pic" id="owner_pic" onchange="readURL(this);">
+																				<input type="hidden" name="oldowner_pic" id="oldowner_pic" value="{{@$company->owner_pic}}">
 																			</div>
 																		</div>
-																		<div class="col-lg-12">
-																			<div class="form-group mt-10">
-																				<label>Company Description</label>
-																				<textarea class="form-control" rows="5" placeholder="Tell Us Somthing About Company in short..." name="aboutCompany" id="aboutCompany" maxlength="1000">{{@$company->about_company}}</textarea>
-																				<div class="word-counter">
-																					<span id="aboutCompanyLeft">1000</span> 
-																					Characters Left
+																		@if(@$company->owner_pic)
+																			<div class="col-lg-6 col-md-6 text-center">
+																				<div class="form-group mt-10">
+																					<img src="{{ @$company->owner_pic != '' ? Storage::Url(@$company->owner_pic) : ''}}" class="pro_card_img blah" id="showimg">
 																				</div>
 																			</div>
-																		</div>
+																		@endif
+
+                                                                        <!-- <div class="col-lg-12">
+																			<div class="form-group mt-10">
+																				<label>Years of Experience </label>
+                                                                                <input type="text" class="form-control" name="years_of_experience" id="years_of_experience" placeholder="" value="{{@$company->years_of_experience}}" maxlength="150">
+                                                                            </div>
+                                                                        </div> --> 
+
+
 																		<div class="col-md-12 col-12">
 																			<button type="submit" class="btn-red-primary btn-red float-right mt-15">Save </button>
 																		</div>
@@ -1432,9 +1489,10 @@
 @include('layouts.business.footer')
 	<script>
 		$(document).ready(function(){ 
+			$('#aboutcLeft').text(200-parseInt($("#about_host").val().length));
 			$('#companyDescLeft').text(150-parseInt($("#shortDescription").val().length));
-       	$('#aboutCompanyLeft').text(1000-parseInt($("#aboutCompany").val().length));
-       	$('#house_rules_terms_left').text(1000-parseInt($("#house_rules_terms").val().length));
+       		$('#aboutCompanyLeft').text(1000-parseInt($("#aboutCompany").val().length));
+       		$('#house_rules_terms_left').text(1000-parseInt($("#house_rules_terms").val().length));
         	$('#cancelation_policy_left').text(1000-parseInt($("#cancelation_policy").val().length));
         	$('#safety_cleaning_left').text(1000-parseInt($("#safety_cleaning").val().length));
         /*	$('#termcondfaqtext_left').text(1000-parseInt($("#termcondfaqtext").val().length));
@@ -1445,29 +1503,36 @@
         	$('#frm_skilldetail_left').text(150-parseInt($("#frm_skilldetail").val().length));
 
 
+        	$("#about_host").on('input', function() {
+            	$('#aboutcLeft').text(200-parseInt(this.value.length));
+        	});
+
         	$("#frm_skilldetail").on('input', function() {
-            $('#frm_skilldetail_left').text(150-parseInt(this.value.length));
-        });
+            	$('#frm_skilldetail_left').text(150-parseInt(this.value.length));
+        	});
         	
-       	$("#shortDescription").on('input', function() {
-            $('#companyDescLeft').text(150-parseInt(this.value.length));
+       		$("#shortDescription").on('input', function() {
+            	$('#companyDescLeft').text(150-parseInt(this.value.length));
         	});
 
         	$("#aboutCompany").on('input', function() {
-            $('#aboutCompanyLeft').text(1000-parseInt(this.value.length));
+            	$('#aboutCompanyLeft').text(1000-parseInt(this.value.length));
         	});
 
         	$("#house_rules_terms").on('input', function() {
-            $('#house_rules_terms_left').text(1000-parseInt(this.value.length));
-	      });
-	      $("#cancelation_policy").on('input', function() {
-	         $('#cancelation_policy_left').text(1000-parseInt(this.value.length));
+            	$('#house_rules_terms_left').text(1000-parseInt(this.value.length));
+	      	});
+
+	      	$("#cancelation_policy").on('input', function() {
+	         	$('#cancelation_policy_left').text(1000-parseInt(this.value.length));
         	});
+
         	$("#safety_cleaning").on('input', function() {
-            $('#safety_cleaning_left').text(1000-parseInt(this.value.length));
+            	$('#safety_cleaning_left').text(1000-parseInt(this.value.length));
         	});
+
         	$("#termcondfaqtext").on('input', function() {
-            $('#termcondfaqtext_left').text(1000-parseInt(this.value.length));
+            	$('#termcondfaqtext_left').text(1000-parseInt(this.value.length));
         	}); 
         /*	$("#contracttermtext").on('input', function() {
             $('#contracttermtext_left').text(2000-parseInt(this.value.length));

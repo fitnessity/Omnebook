@@ -505,3 +505,11 @@
 </script>
 
 @endsection
+
+@push('scripts')
+    <script src="{{asset('/public/dashboard-design/js/dropzone-min.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/js/ecommerce-product-create.init.js')}}"></script>
+    <script src="{{asset('/public/dashboard-design/js/ecommerce-customer-list.init.js')}}"></script>
+    <!-- <script src="{{asset('/public/dashboard-design/js/list.min.js')}}"></script> -->
+	<!-- <script src="{{asset('/public/dashboard-design/js/list.pagination.min.js')}}"></script>  -->
+@endpush

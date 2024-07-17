@@ -38,7 +38,7 @@ return [
             'driver' => 'database',
             'table' => 'jobs',
             'queue' => 'default',
-            'retry_after' => 90,
+            'retry_after' => 9000,
         ],
 
         'beanstalkd' => [
@@ -84,5 +84,6 @@ return [
         'database' => env('DB_CONNECTION', 'mysql'),
         'table' => 'failed_jobs',
     ],
-
+    'max_attempts' => 5, // Increase if needed
+    'timeout' => 3600, 
 ];

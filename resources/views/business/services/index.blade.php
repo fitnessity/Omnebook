@@ -232,9 +232,9 @@
                     data: { 
                         _token: '{{csrf_token()}}', 
                     },
-                    success: function(html){
-                       location.reload();
-                    }
+                    // success: function(html){
+                    //    location.reload();
+                    // }
                 });
             }
         });

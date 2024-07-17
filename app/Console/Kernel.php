@@ -47,7 +47,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->where('attempt' ,'<' ,3)->orderBy('created_at','desc')->get();
             
-            /*print_r($recurringDetails);exit();*/
+            //print_r($recurringDetails);exit();
             foreach($recurringDetails as $recurringDetail){
                 $recurringDetail->createRecurringPayment();
             }
@@ -140,15 +140,16 @@ class Kernel extends ConsoleKernel
             }
         })->daily();
 
-        /*$schedule->call(function (){
+        $schedule->call(function (){
             $current_time = now()->format('H:i');
             $current_date = now()->format('Y-m-d');
-            $announcements = Announcement::where('delivery_method_email' ,1)->whereDate('announcement_date' , '=' , $current_date)->whereRaw("announcement_time = '$current_time'")->get();
+            //$announcements = Announcement::where('delivery_method_email' ,1)->whereDate('announcement_date' , '=' , $current_date)->whereRaw("announcement_time = '$current_time'")->get();
+            $announcements = Announcement::whereDate('announcement_date' , '=' , $current_date)->whereRaw("announcement_time = '$current_time'")->get();
            // print_r($announcements);exit;
             foreach($announcements as $a){
                 $a->sendAnnouncementMail();
             }
-        })->everyMinute();*/
+        })->everyMinute();
 
     }
 

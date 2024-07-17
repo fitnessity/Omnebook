@@ -216,7 +216,7 @@ h6.heading {
             <h6 class="heading">You Might Also Consider <span class="sponsored">Sponsored</span></h6><br>
             <div class="row">
               <div class="col-md-2">
-                <img src="https://s3-media0.fl.yelpcdn.com/bphoto/705mSY8sb2A4q2XKYtuRQw/60s.jpg" class="comment_img">
+                <img src="https://s3-media0.fl.yelpcdn.com/bphoto/705mSY8sb2A4q2XKYtuRQw/60s.jpg" class="comment_img" alt="Fitnessity">
               </div>
               <div class="col-md-10">
                 <h6><b>Body Mechanix Fitness</b></h6>
@@ -235,7 +235,7 @@ h6.heading {
 <br>
             <div class="row">
               <div class="col-md-2">
-                <img src="https://s3-media0.fl.yelpcdn.com/bphoto/705mSY8sb2A4q2XKYtuRQw/60s.jpg" class="comment_img">
+                <img src="https://s3-media0.fl.yelpcdn.com/bphoto/705mSY8sb2A4q2XKYtuRQw/60s.jpg" class="comment_img" alt="Fitnessity">
               </div>
               <div class="col-md-10">
                 <h6><b>Body Mechanix Fitness</b></h6>
@@ -294,7 +294,7 @@ h6.heading {
         <div class="sidebox2">
           <div class="row">
             <div class="col-md-6">
-              <img src="https://s3-media0.fl.yelpcdn.com/assets/public/40x40_claim_your_page_v2@2x.yji-3cb722f5f279036ab19cd949748f4296.png" class="img-fluid">
+              <img src="https://s3-media0.fl.yelpcdn.com/assets/public/40x40_claim_your_page_v2@2x.yji-3cb722f5f279036ab19cd949748f4296.png" class="img-fluid" alt="Fitnessity"> 
             </div>
             <div class="col-md-6">
               <button type="button" class="close" data-dismiss="modal">&times;</button>

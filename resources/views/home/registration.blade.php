@@ -20,7 +20,7 @@
                 <!--{{$show_step}}-->
                 @if($show_step == 1)
                 <div class="logo-my">
-                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/logo-small.jpg')}}"> </a>
+                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/logo-small.jpg')}}" alt="Fitnessity"> </a>
                 </div>
                 <form id="frmregister" method="post">
                     <div class="pop-title ftitle1">
@@ -91,7 +91,7 @@
                             <div class="col-sm-12">
                                 <div class='error' id='systemMessage'></div>
                                 <div class="prfle-wrap">
-                                    <img src="" alt="">
+                                    <img src="" alt="Fitnessity">
                                     {{substr(Auth::user()->firstname,0,1)}}
                                 </div>
                                 <div class="reg-email-step2">{{Auth::user()->email}}</div>
@@ -439,7 +439,7 @@
         //Elements` instance that was used to create the Payment Element
             elements,
             confirmParams: {
-                return_url: '{{route("cards-save",["chkRedirection" => 1])}}',
+                return_url: '{{route("personal.cards-save",["chkRedirection" => 1])}}',
             }
         });
 
