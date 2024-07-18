@@ -13,9 +13,11 @@ class AddDisplayTimeSenderIdInNotifications extends Migration
      */
     public function up()
     {
-        Schema::table('notification', function (Blueprint $table) {
-            $table->string('display_time',255)->nullable()->after('display_date');
-        });
+        if (!Schema::hasColumn('notification', 'display_time')) {
+            Schema::table('notification', function (Blueprint $table) {
+                $table->string('display_time', 255)->nullable()->after('display_date');
+            });
+        }
     }
 
     /**
@@ -25,8 +27,10 @@ class AddDisplayTimeSenderIdInNotifications extends Migration
      */
     public function down()
     {
-        Schema::table('notification', function (Blueprint $table) {
-            //
-        });
+        if (Schema::hasColumn('notification', 'display_time')) {
+            Schema::table('notification', function (Blueprint $table) {
+                $table->dropColumn('display_time');
+            });
+        }
     }
 }

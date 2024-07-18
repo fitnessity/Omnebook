@@ -14,9 +14,9 @@ class AddStypeToBusinessPriceDetailsAgesTable extends Migration
     public function up()
     {
         Schema::table('business_price_details_ages', function (Blueprint $table) {
-            //
-            $table->integer('stype')->default(0)->after('service_description');
-
+            if (!Schema::hasColumn('business_price_details_ages', 'stype')) {
+                $table->integer('stype')->default(0)->after('service_description');
+            }
         });
     }
 
@@ -28,11 +28,9 @@ class AddStypeToBusinessPriceDetailsAgesTable extends Migration
     public function down()
     {
         Schema::table('business_price_details_ages', function (Blueprint $table) {
-            //
-            $table->dropColumn('stype');
-
+            if (Schema::hasColumn('business_price_details_ages', 'stype')) {
+                $table->dropColumn('stype');
+            }
         });
     }
 }
-
-

@@ -14,7 +14,7 @@ class MotifyStatusEnumOnTransaction extends Migration
     public function up()
     {
         Schema::table('transaction', function (Blueprint $table) {
-            $table->enum('status', ['processing','complete','refunding','refund_complete', 'authorized'])->change();
+            $table->string('status')->change();
         });
     }
 
@@ -26,7 +26,7 @@ class MotifyStatusEnumOnTransaction extends Migration
     public function down()
     {
         Schema::table('transaction', function (Blueprint $table) {
-            $table->enum('status', ['processing','complete','refunding','refund_complete'])->change();
+            $table->string('status')->change();
         });
     }
 }

@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\BookingCheckinDetails;
 use App\UserBookingDetail;
+use Illuminate\Support\Facades\Log;
 
 class AddInstructureIdInBookingCheckinDetails extends Migration
 {
@@ -15,18 +16,26 @@ class AddInstructureIdInBookingCheckinDetails extends Migration
      */
     public function up()
     {
-        Schema::table('booking_checkin_details', function (Blueprint $table) {
-             $table->integer('instructor_id')->after('customer_id')->nullable();
-        });
+        if (!Schema::hasColumn('booking_checkin_details', 'instructor_id')) {
+            Schema::table('booking_checkin_details', function (Blueprint $table) {
+                $table->integer('instructor_id')->after('customer_id')->nullable();
+            });
+        }
 
+        // Update existing records
         $chkInDetails = BookingCheckinDetails::all();
         foreach($chkInDetails as $chkd){
-            $userBookingDetail = UserBookingDetail::find($chkd->booking_detail_id);
-            $instructor_id = @$userBookingDetail->business_services != '' ? @$userBookingDetail->business_services->instructor_id : NULL;
-            
-            $chkd->update(['instructor_id' => $instructor_id]);
+            try {
+                $userBookingDetail = UserBookingDetail::findOrFail($chkd->booking_detail_id);
+                $instructor_id = $userBookingDetail->business_services->instructor_id ?? null;
+                
+                $chkd->update(['instructor_id' => $instructor_id]);
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                Log::error("UserBookingDetail with ID {$chkd->booking_detail_id} not found for BookingCheckinDetails ID {$chkd->id}");
+            } catch (\Exception $e) {
+                Log::error("Error updating BookingCheckinDetails ID {$chkd->id}: " . $e->getMessage());
+            }
         }
-        exit;
     }
 
     /**
@@ -36,8 +45,10 @@ class AddInstructureIdInBookingCheckinDetails extends Migration
      */
     public function down()
     {
-        Schema::table('booking_checkin_details', function (Blueprint $table) {
-            //
-        });
+        if (Schema::hasColumn('booking_checkin_details', 'instructor_id')) {
+            Schema::table('booking_checkin_details', function (Blueprint $table) {
+                $table->dropColumn('instructor_id');
+            });
+        }
     }
 }
