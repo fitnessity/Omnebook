@@ -46,8 +46,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-xxl-11 col-lg-10 col-md-11 col-sm-11 col-10">
-                                                        <h5>Change welcome screen background color</h5>
-                                                        <p class="mb-0">Your color background theme will be change.</p>
+                                                        <h5>Change welcome screen button color</h5>
+                                                        <p class="mb-0">Your button color will be change.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -62,8 +62,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-xxl-10 col-lg-8 col-md-10 col-sm-10 col-8">
-                                                        <h5>Change your 4 digit screen background color</h5>
-                                                        <p class="mb-0">Your color background theme will be change.</p>
+                                                        <h5>Change your 4 digit screen button color</h5>
+                                                        <p class="mb-0">Your button color will be change.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -78,8 +78,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-xxl-10 col-lg-8 col-md-10 col-sm-10 col-8">
-                                                        <h5>Change alert pop up background color</h5>
-                                                        <p class="mb-0">Your color background theme will be change.</p>
+                                                        <h5>Change alert pop up button color</h5>
+                                                        <p class="mb-0">Your button color will be change.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -104,6 +104,7 @@
                                                     <div class="col-xxl-11 col-lg-10 col-md-11 col-sm-10 col-9">
                                                         <h5>Logo</h5>
                                                         <p class="mb-0">Add a logo to show off your brand in the check in app</p>
+                                                        <p class="mb-0 fs-12">Please upload 250*250 logo</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -617,9 +618,9 @@
             </div>
             <div class="modal-body">
                @if($data && $data->welcome_cover_photo)
-                       <div id="welcomeModalBackground" style="background-image: url('{{ Storage::url($data->welcome_cover_photo) }}')">
+                       <div id="welcomeModalBackground" class="check-img-set" style="background-image: url('{{ Storage::url($data->welcome_cover_photo) }}')">
                     @else
-                        <div id="welcomeModalBackground" style="background-image: url('../../dashboard-design/images/check-in-bg.jpg')">
+                        <div id="welcomeModalBackground" class="check-img-set" style="background-image: url('../../dashboard-design/images/check-in-bg.jpg')">
                 @endif
                 <div class="container-fuild">
                         <div class="z-1">

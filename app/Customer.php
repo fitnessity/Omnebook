@@ -316,22 +316,58 @@ class Customer extends Authenticatable
         return $this->hasMany(Customer::class, 'parent_cus_id');
     }
 
+    // public function get_families()
+    // {
+    //     $familes = [];
+    //     if($this->parent_cus_id){
+    //         $parent = Customer::where(['id' => $this->parent_cus_id ,'business_id' => $this->business_id])->first();
+    //         if ($parent != '') {
+    //             $familes = Customer::where(['parent_cus_id'=> $parent->id, 'business_id' => $this->business_id])->where('id', '<>', $this->id)->get();
+    //             $familes = $familes->merge(Customer::where(['id'=>$this->parent_cus_id ,'business_id' => $this->business_id])->where('id', '<>', $this->id)->get());
+    //             $familes = $familes->merge(Customer::where(['parent_cus_id'=> $this->id, 'business_id' => $this->business_id])->get());
+    //         }
+            
+    //         return $familes;
+    //     }else{
+    //         return Customer::where(['parent_cus_id'=> $this->id, 'business_id' => $this->business_id])->get();
+    //     }
+    // }
+
     public function get_families()
     {
         $familes = [];
-        if($this->parent_cus_id){
-            $parent = Customer::where(['id' => $this->parent_cus_id ,'business_id' => $this->business_id])->first();
-            if ($parent != '') {
-                $familes = Customer::where(['parent_cus_id'=> $parent->id, 'business_id' => $this->business_id])->where('id', '<>', $this->id)->get();
-                $familes = $familes->merge(Customer::where(['id'=>$this->parent_cus_id ,'business_id' => $this->business_id])->where('id', '<>', $this->id)->get());
-                $familes = $familes->merge(Customer::where(['parent_cus_id'=> $this->id, 'business_id' => $this->business_id])->get());
+        if ($this->parent_cus_id) {
+            $parent = Customer::where(['id' => $this->parent_cus_id, 'business_id' => $this->business_id])->first();
+            if ($parent) {
+                $familes = Customer::where(['parent_cus_id' => $parent->id, 'business_id' => $this->business_id])
+                    ->where('id', '<>', $this->id)
+                    ->with('user') // Ensure we load the related user
+                    ->get();
+
+                $familes = $familes->merge(
+                    Customer::where(['id' => $this->parent_cus_id, 'business_id' => $this->business_id])
+                        ->where('id', '<>', $this->id)
+                        ->with('user')
+                        ->get()
+                );
+
+                $familes = $familes->merge(
+                    Customer::where(['parent_cus_id' => $this->id, 'business_id' => $this->business_id])
+                        ->with('user')
+                        ->get()
+                );
             }
-            
+
             return $familes;
-        }else{
-            return Customer::where(['parent_cus_id'=> $this->id, 'business_id' => $this->business_id])->get();
+        } else {
+            return Customer::where(['parent_cus_id' => $this->id, 'business_id' => $this->business_id])
+                ->with('user')
+                ->get();
         }
     }
+
+
+   
 
     public function get_stripe_card_info(){
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));

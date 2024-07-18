@@ -224,7 +224,8 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 																						</td>
 																					</tr>
 																				@empty
-																					<tr class="text-center"><td colspan="6">No Upcoming Class Available</td></tr>
+																					{{-- <tr class="text-center"><td colspan="6">No Upcoming Class Available</td></tr> --}}
+																					<tr class="text-center"><td colspan="6">No Upcoming Reservations</td></tr>
 																				@endforelse
 																			</tbody>
 																		</table>
@@ -1787,7 +1788,10 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
                 	<div class="text-center text-danger fs-16" id="error-message-code"></div>	
 				</div>
 				<div class="modal-footer">
-					<label class="mb-15"><a type="button" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#exampleModal">Exit</a></label>
+					<label class="mb-15">
+						{{-- <a type="button" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#exampleModal">Exit</a> --}}
+					    <button type="button" class="btn btn-red" id="checkExit">Exit</button>
+					</label>
 	            </div>
 			</div>
 	  	</div>
@@ -1996,19 +2000,18 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 
 
 <script type="text/javascript">
-    
     $(document).ready(function() {
         $('#checkInExit').click(function(e) {
             e.preventDefault();
             $('#error-message-code').removeClass('text-success text-danger').html('');
-            var checkInCode = $('#numberInput').val();
+            var checkInCode = $('#numberexitInput').val();
             if (checkInCode === '') {
                 $('#error-message-code').addClass('text-danger').text('Please enter a 4 digit code.');
                 return;
             }
 
             $.ajax({
-                url: "{{route('checkin.chk-chckin-code')}}", 
+                url: "{{route('checkin.chk-chckin-code_exit')}}", 
                 type: 'POST',
                 data: {
                     code: checkInCode,
@@ -2017,15 +2020,19 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
                 success: function(response) {
                     if (response.success) {
                     	$('#error-message-code').addClass('text-success').text(response.message || 'An error occurred. Please try again.');
+                     
+                    
                         window.location.href = response.url
                     } else {
-                    	$('#numberInput').val('');
+                    	$('#numberexitInput').val('');
                         $('#error-message-code').addClass('text-danger').text(response.message || 'An error occurred. Please try again.');
+                       
                     }
                 },
                 error: function(xhr, status, error) {
-                	$('#numberInput').val('');
+                	$('#numberexitInput').val('');
                     $('#error-message-code').addClass('text-danger').text('An error occurred. Please try again.');
+                   
                 }
             });
         });
@@ -2110,6 +2117,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
                      }
                 	$('.checkinModal').modal('show');
                     $('.checkinContent').html(response.message);
+					$('#' + id).text('Checked In').prop('onclick', null).off('click');
                 } else {
 					if (playSoundValues.includes('fail') && !playSoundValues.includes('none')) {
                             var failuresound = document.getElementById('failure-sound');
@@ -2131,7 +2139,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 
 
  @if(@$settings->customer_return_back_time)
-	<script type="text/javascript">
+	{{-- <script type="text/javascript">
 		$(document).ready(function() {
 			var time = '{{$settings->customer_return_back_time}}';
 		    var idleTime = 0;
@@ -2163,7 +2171,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 			}
 		});
 
-	</script>
+	</script> --}}
 @endif 
 
 
@@ -2704,6 +2712,47 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
         bootstrapModal.hide();
     };
 </script>
+
+
+{{-- exit code starts--}}
+<script type="text/javascript">
+    
+    $(document).ready(function() {
+        $('#checkExit').click(function(e) {
+            e.preventDefault();
+            $('#error-message-code').removeClass('text-success text-danger').html('');
+            var checkInCode = $('#numberInput').val();
+            if (checkInCode === '') {
+                $('#error-message-code').addClass('text-danger').text('Please enter a 4 digit code.');
+                return;
+            }
+
+            $.ajax({
+                url: "{{route('checkin.chk-chckin-code')}}", 
+                type: 'POST',
+                data: {
+                    code: checkInCode,
+                    _token: '{{ csrf_token() }}'  
+                },
+                success: function(response) {
+                    if (response.success) {
+                    	$('#error-message-code').addClass('text-success').text(response.message || 'An error occurred. Please try again.');
+                        window.location.href = response.url
+                    } else {
+                    	$('#numberInput').val('');
+                        $('#error-message-code').addClass('text-danger').text(response.message || 'An error occurred. Please try again.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                	$('#numberInput').val('');
+                    $('#error-message-code').addClass('text-danger').text('An error occurred. Please try again.');
+                }
+            });
+        });
+    });
+
+</script>
+{{-- ends --}}
 
 @endsection
 

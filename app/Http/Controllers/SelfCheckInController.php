@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -162,7 +161,7 @@ class SelfCheckInController extends Controller {
             $classes = BookingCheckinDetails::where('customer_id' ,$request->customer_id)->whereDate('checkin_date' , '>=' , date('Y-m-d'))->orderby('checkin_date','asc')->get()->filter(function ($bd){
                 return $bd->booking_detail_id;
             });
-    
+            // dd(\DB::getQueryLog());
             $bookingDetails = $currentBooking =  [];
             $bookingDetails =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,@$customer);
           
@@ -788,7 +787,8 @@ class SelfCheckInController extends Controller {
             return response()->json([
                 'success' => true,
                 'message' => 'Check out successful!',
-                'url' => route('checkin.check_out', ['type' => 1]),
+                // 'url' => route('checkin.check_out', ['type' => 1]),
+                'url' => route('check-in-welcome'),
             ]);
             
         }
@@ -831,7 +831,7 @@ class SelfCheckInController extends Controller {
         if ($user) {
             return response()->json([
                 'success' => true,
-                'message' => 'Check out successful!',
+                'message' => 'Check out successfuls!',
                 'url' => route('checkin.check_out', ['type' => 1]),
             ]);
         }        

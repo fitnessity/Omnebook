@@ -8744,3 +8744,17 @@ position: absolute;
 .dropzone .dz-message.login-preview-modal{
 	margin: 1em 0;
 }
+.check_img{
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.check-img-set{
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.business-info p{font-size: 15px;}
+.business-info h3{  font-size: 26px !important;}
