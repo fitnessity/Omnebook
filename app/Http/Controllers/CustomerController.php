@@ -1009,7 +1009,7 @@ class CustomerController extends Controller {
                     Log::info('Processing start for chunk');
                     // $job = new ProcessMembershipExcelData($request->business_id, $chunk->toArray());
                     $job = new ProcessMembership($request->business_id, $chunk->toArray(),$user->email);
-                    dispatch($job)->onQueue('membershiprun');
+                    dispatch($job)->onQueue('membership');
                 }
         
                 Log::info('All chunks dispatched');

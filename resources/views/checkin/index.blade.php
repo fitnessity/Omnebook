@@ -4,10 +4,9 @@
 
 @section('content')
     @include('layouts.business.new-header')
-    
     <div class="">
         <!-- auth page content -->
-        <div class="auth-page-content" style="background-image:url('{{ $imageUrl }}')">
+        <div class="auth-page-content check_img" style="background-image:url('{{ $imageUrl }}')">
             <div class="container-fuild">
                 <div class="z-1">
                     <div class="card-body self-check-sp height-vh">
@@ -284,7 +283,7 @@
                                                                                                         </div>
                                                                                                         <div class="col-md-4 col-lg-3">
                                                                                                             <label class="mt-10">Birthday</label>
-                                                                                                            <input type="text" class="form-control add-client-birthdate" name="birthdate[]" id="birthdate" >
+                                                                                                            <input type="text" class="form-control add-client-birthdate" name="birthdate[]" id="birthdate">
                                                                                                         </div>
                                                                                                         <div class="col-md-4 col-lg-3">
                                                                                                             <label class="mt-10">Gender</label>
@@ -433,15 +432,23 @@
                                                                     </div>
 
                                                                     <!-- <div class="add-client-sapre-tor"></div> -->
-
+                                                                    {{-- @php 
+                                                                    $user = Auth::user();
+                                                                    $currentCompany = $user->current_company;
+                                                                    $businessTerms = null;
+                                                                    
+                                                                    if (!empty($currentCompany->id)) {
+                                                                        $businessTerms = App\BusinessTerms::where('cid', $currentCompany->id)->first();
+                                                                    }
+                                                                    @endphp  
                                                                     <div class="create-customer-box">
                                                                         <div class="row"> 
                                                                             <div class="col-md-12 col-lg-12"><h4 class="font-red ">
                                                                                 Agree to Terms, Waiver & Contract Signature</h4>
                                                                             </div>
-
+                                                                    
                                                                             <div class="col-md-12">
-                                                                                @if(@$businessTerms->termcondfaqtext != '' || @$businessTerms->liabilitytext != '' || @$businessTerms->covidtext != '' || @$businessTerms->contracttermstext != '' || @$businessTerms->refundpolicytext != '')
+                                                                                @if($businessTerms->termcondfaqtext != '' || $businessTerms->liabilitytext != '' || $businessTerms->covidtext != '' || $businessTerms->contracttermstext != '' || $businessTerms->refundpolicytext != '')
                                                                                     <div class="col-lg-12" id="termsdiv">
                                                                                         <div class="terms-head">
                                                                                             <div>
@@ -465,9 +472,64 @@
                                                                                     </div>
                                                                                 @endif
                                                                             </div>
-                                                                            @if(@$businessTerms)
+                                                                            @if($businessTerms)
                                                                                 <label class="mt-10">To continue, please read the terms & waivers above. A signature is required to participate. </label>
-                                                                            @endif
+                                                                            @endif --}}
+                                                                            @php 
+                                                                            $user = Auth::user();
+                                                                            $currentCompany = $user->current_company;
+                                                                            $businessTerms = null;
+
+                                                                            if (!empty($currentCompany->id)) {
+                                                                                $businessTerms = App\BusinessTerms::where('cid', $currentCompany->id)->first();
+                                                                            }
+                                                                            @endphp  
+
+                                                                            <div class="create-customer-box">
+                                                                                <div class="row"> 
+                                                                                    <div class="col-md-12 col-lg-12">
+                                                                                        <h4 class="font-red">Agree to Terms, Waiver & Contract Signature</h4>
+                                                                                    </div>
+
+                                                                                    <div class="col-md-12">
+                                                                                        @if($businessTerms && (
+                                                                                            $businessTerms->termcondfaqtext != '' || 
+                                                                                            $businessTerms->liabilitytext != '' || 
+                                                                                            $businessTerms->covidtext != '' || 
+                                                                                            $businessTerms->contracttermstext != '' || 
+                                                                                            $businessTerms->refundpolicytext != '')
+                                                                                        )
+                                                                                            <div class="col-lg-12" id="termsdiv">
+                                                                                                <div class="terms-head">
+                                                                                                    <div>
+                                                                                                        @if($businessTerms->termcondfaqtext != '')
+                                                                                                            <a href="#" data-url="{{ route('getTerms', ['id' => $businessTerms->id, 'termsType' => 'termcondfaqtext', 'termsHeader' => 'Terms, Conditions, FAQ']) }}" class="font-13 color-red-a" data-behavior="termsModelOpen">Terms, Conditions, FAQ</a> | 
+                                                                                                        @endif 
+                                                                                                        
+                                                                                                        @if($businessTerms->liabilitytext != '')
+                                                                                                            <a href="#" data-url="{{ route('getTerms', ['id' => $businessTerms->id, 'termsType' => 'liabilitytext', 'termsHeader' => 'Liability Waiver']) }}" class="font-13 color-red-a" data-behavior="termsModelOpen">Liability Waiver</a> | 
+                                                                                                        @endif 
+
+                                                                                                        @if($businessTerms->covidtext != '')
+                                                                                                            <a href="#" data-url="{{ route('getTerms', ['id' => $businessTerms->id, 'termsType' => 'covidtext', 'termsHeader' => 'Covid - 19 Protocols']) }}" class="font-13 color-red-a" data-behavior="termsModelOpen">Covid - 19 Protocols</a> | 
+                                                                                                        @endif
+
+                                                                                                        @if($businessTerms->contracttermstext != '')
+                                                                                                            <a href="#" data-url="{{ route('getTerms', ['id' => $businessTerms->id, 'termsType' => 'contracttermstext', 'termsHeader' => 'Contract Terms']) }}" class="font-13 color-red-a" data-behavior="termsModelOpen">Contract Terms</a> | 
+                                                                                                        @endif 
+
+                                                                                                        @if($businessTerms->refundpolicytext != '')
+                                                                                                            <a href="#" data-url="{{ route('getTerms', ['id' => $businessTerms->id, 'termsType' => 'refundpolicytext', 'termsHeader' => 'Refund Policy']) }}" class="font-13 color-red-a" data-behavior="termsModelOpen">Refund Policy</a> 
+                                                                                                        @endif
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                    @if($businessTerms)
+                                                                                        <label class="mt-10">To continue, please read the terms & waivers above. A signature is required to participate.</label>
+                                                                                    @endif
+ 
                                                                             <div class="container-fuild">
                                                                                 <div class="row">
                                                                                     <div class="col-lg-12">
@@ -846,7 +908,6 @@
 <script>
  $(document).on('blur', '#email', function(e){
             var inputVal = $(this).val();
-
             $.ajax({
                 url: '{{ route("get_checkin_code") }}',
                 type: 'POST',
@@ -996,6 +1057,8 @@
                 $(this).removeClass("font-red");
             });
             $('#familycnt').val(cnt);
+            // my code 
+
         });
 
         $(document).on('click', '[data-behavior~=termsModelOpen]', function(e){
@@ -1008,7 +1071,6 @@
                 }
             })
         });
-
 </script>
 @php 
 $user = Auth::user();
@@ -1020,6 +1082,17 @@ $currentCompany = $user->current_company;
 <script>
 jQuery(function ($) {
     var businessId = "{{ $currentCompany->id }}";
+            $.validator.addMethod("uniqueCheckInCodes", function(value, element) {
+                var codes = [];
+                $('input[name="check_in_code[]"]').each(function() {
+                    if ($(this).val() !== '') {
+                        codes.push($(this).val());
+                    }
+                });
+                var uniqueCodes = Array.from(new Set(codes));
+                return codes.length === uniqueCodes.length;
+            }, 'Check-in codes must be unique.');
+
             $('#clientRegistration').validate({
                 rules: {
                     firstname: "required",
@@ -1038,6 +1111,12 @@ jQuery(function ($) {
                         required: true,
                         equalTo: '#password'
                     },
+                    'check_in_code[]': {
+                        required: true,
+                        minlength: 4,
+                        maxlength: 4,
+                        uniqueCheckInCodes: true // Use the custom method here
+                    }
                 },
                 messages: {
                     firstname: "Enter your Firstname",
@@ -1056,6 +1135,12 @@ jQuery(function ($) {
                     confirmpassword: {
                         required: 'Please confirm your password',
                         equalTo: 'Passwords do not match'
+                    },
+                            'check_in_code[]': {
+                        required: 'Please enter a check-in code',
+                        minlength: 'Check-in code must be exactly 4 digits',
+                        maxlength: 'Check-in code must be exactly 4 digits',
+                        uniqueCheckInCodes: 'Check-in codes must be unique.'
                     }
                 },
                 submitHandler: function (form) {

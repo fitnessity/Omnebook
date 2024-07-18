@@ -288,7 +288,6 @@ $company_data = Auth::user()->current_company;
     });
  </script>
 <script type="text/javascript">
-    
     $(document).ready(function() {
         $('#checkInButton').click(function(e) {
             e.preventDefault();
@@ -316,12 +315,14 @@ $company_data = Auth::user()->current_company;
                                 var successSound = document.getElementById('success-sound');
                                 successSound.play();
                          }
+                         $('#numberInput').val(''); 
                         window.location.href = response.url
                     } else {
                         if (playSoundValues.includes('fail') && !playSoundValues.includes('none')) {
                             var failuresound = document.getElementById('failure-sound');
                             failuresound.play();
                         }
+                        $('#numberInput').val(''); 
                         $('#error-message').addClass('text-danger').text(response.message || 'An error occurred. Please try again.');
                     }
                 },
@@ -330,6 +331,7 @@ $company_data = Auth::user()->current_company;
                         var failuresound = document.getElementById('failure-sound');
                         failuresound.play();
                     }
+                    $('#numberInput').val(''); 
                     $('#error-message').addClass('text-danger').text('An error occurred. Please try again.');
                 }
             });

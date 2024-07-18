@@ -27,7 +27,7 @@
                                 
                             <div class="col-lg-4">
                                 <div class="text-right mb-15">
-                                    <a href="http://dev.fitnessity.co/design/email_blast_step1" class="btn btn-red"> Add  </a> 
+                                    <a href="http://dev.fitnessity.co/design/email_blast_step1" class="btn btn-red"> Create Email  </a> 
                                 </div>
                             </div>
                         </div>

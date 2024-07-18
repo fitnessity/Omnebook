@@ -944,6 +944,7 @@
 																									<th>Name</th>
 																									<th>Relationship</th>
 																									<th>Age</th>
+																									<th>PassCode</th>
 																									<th class="action-width">Action</th>
 																								</tr>
 																							</thead>
@@ -953,6 +954,7 @@
 																									<td> {{$family_member->full_name}} </td>
 																									<td>{{$family_member->relationship ?? "N/A"}}</td>
 																									<td>{{$family_member->age ?? "N/A"}}</td>
+																									<td>{{$family_member->user->unique_code ?? "N/A"}}</td>
 																									<td class="text-center">
 																										<a onclick="deleteMember('{{$family_member->id}}')" class="btn btn-red mmb-10">Delete</a>
 
