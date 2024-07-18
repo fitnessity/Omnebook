@@ -5,6 +5,8 @@
   <!-- Bootstrap 3.3.6 -->
 
   <link rel="stylesheet" href="/public/AdminLTE/bootstrap/css/bootstrap.min.css">
+  
+  <link rel='stylesheet' type='text/css' href="/public/css/backend/style.css">
 
   <!-- Font Awesome -->
 
@@ -61,6 +63,11 @@
   <!-- Bootstrap Select -->
 
   <link rel="stylesheet" href="/css/bootstrap-select.min.css">
+  
+  
+<!--Slimselect-->
+
+<link rel="stylesheet" type="text/css" href="/public/css/slimselect.min.css" />
 
 
 
@@ -101,3 +108,7 @@
 <script src="/public/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
 
 <script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+
+  <!-- slimselect -->
+
+<script type="text/javascript" src="/public/js/slimselect.min.js"></script>

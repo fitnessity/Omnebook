@@ -1,32 +1,62 @@
 @inject('request', 'Illuminate\Http\Request')
 @extends('layouts.header')
 @section('content')
+<style>
+    .register_wrap form{padding: 0 50px;}
+    .sign-step_2 .reg-title-step2 input{max-width: 340px;}
+    .sign-step_3 h2{letter-spacing: 6px}
+    .sign-step_4 .form-group{padding:10px; width:355px;}
+    .sign-step_5 .form-group{width:355px;}
+    .Zebra_DatePicker_Icon_Wrapper{
+        padding: 0 !important;
+    }
+	.sign-step_4 .form-group input{width: 83%;}
 
+</style>
 <?php 
 													 
 use App\BusinessActivityScheduler;
 use App\BusinessPriceDetails;
 use App\BusinessServiceReview;
 use App\BusinessServicesFavorite;
+use App\BusinessServices;
 
-$total_quantity=0;
- $item_price=0;
+$total_quantity = 0;
+$item_price = 0;
+$discount = 0;
+$totalquantity = 0;
 if(!empty($cart["cart_item"])) {
+	$cartdata = $cart['cart_item'][$priceid];
+    $serprice = BusinessPriceDetails::where('id', $cartdata['priceid'])->orderBy('id', 'ASC')->first();
+
     foreach($cart['cart_item'] as $item){
         $total_quantity = count($cart["cart_item"]);
         $item_price = $item_price + $item["totalprice"];
+
+        if(!empty($item['adult'])){
+            $totalquantity += $item['adult']['quantity'];
+            $discount += ($item['adult']['price'] * is_int($serprice['adult_discount']))/100; 
+        }
+        if(!empty($item['child'])){
+            $totalquantity += $item['child']['quantity'];
+            $discount += ($item['child']['price'] * is_int($serprice['child_discount']))/100;
+        }
+        if(!empty($item['infant'])){
+            $totalquantity += $item['infant']['quantity'];
+            $discount += ($item['infant']['price'] * is_int($serprice['infant_discount']))/100;
+        }
     }
-    $cartdata = $cart['cart_item'][$pid];
-    $totalprice = $cart['cart_item'][$pid]['totalprice'];
-    if ($cart['cart_item'][$pid]['image']!="") {
-    	if (File::exists(public_path("/uploads/profile_pic/thumb/" . $cart['cart_item'][$pid]['image']))) {
-    			$profilePicact = url('/public/uploads/profile_pic/thumb/' . $cart['cart_item'][$pid]['image']);
-    	} else {
-    			$profilePicact = url('/public/images/service-nofound.jpg');
-    	}
-    }else{ $profilePicact = url('/public/images/service-nofound.jpg'); }
+
+    $pid = $cart['cart_item'][$priceid]['code'];
+    $totalprice = $cart['cart_item'][$priceid]['totalprice'];
+    
+    $profilePicact  =  Storage::disk('s3')->exists($cart['cart_item'][$priceid]['image']) ? Storage::URL($cart['cart_item'][$priceid]['image']) : url('/images/service-nofound.jpg');  
 
     $bookschedulercart = BusinessActivityScheduler::where('id', $cartdata["actscheduleid"])->limit(1)->orderBy('id', 'ASC')->first();
+    $act = BusinessServices::where('id', $cartdata["code"])->first();
+    
+    $daynum = '+'.@$serprice['pay_setnum'].' '.strtolower(@$serprice['pay_setduration']);
+	$expired_at  = date('m/d/Y', strtotime(date('Y-m-d'). $daynum ));
     $timecart = $tot_dura= '';
     if(@$bookschedulercart->shift_end !=''){
 			$timecart =  date('h:ia', strtotime( @$bookschedulercart->shift_end)).' - '.date('h:ia', strtotime( @$bookschedulercart->shift_end));
@@ -42,7 +72,8 @@ if(!empty($cart["cart_item"])) {
 				$tot_dura = $hr.$min.$sec; 
 			} 
 		}
-}
+	}
+
 ?>
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
 
@@ -50,23 +81,24 @@ if(!empty($cart["cart_item"])) {
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="cart-title">
+				<div class="cart-title cart-success">
 					<h5>SUCCESSFULLY ADDED TO YOUR CART</h5>
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-5">
-				<div class="bookedcard">
-					<h5>You Just Booked With </h5>
+				<div class="bookedcard text-center">
+					<h3>Your Cart Totals</h3>
+					<!-- <h5>You Just Booked With </h5>
 					<div class="row">
-						<div class="col-md-2">
+						<div class="col-md-2 col-sm-2 col-xs-3">
 							<div class="userblock-card">
 								<div class="login_links">
 									<?php 
 										if(@$companyData->logo != ''){
-	    								if (File::exists(public_path("/uploads/profile_pic/thumb/" . $companyData->logo))) {
-	    									$profilePic = url('/public/uploads/profile_pic/thumb/' . $companyData->logo);
+	    								if (File::exists(public_path("/uploads/profile_pic/" . $companyData->logo))) {
+	    									$profilePic = url('/public/uploads/profile_pic/' . $companyData->logo);
 	    								} else {
 	    									$profilePic = url('/public/images/service-nofound.jpg');
 	    								}
@@ -76,62 +108,319 @@ if(!empty($cart["cart_item"])) {
 								</div>
 							</div>
 						</div>
-						<div class="col-md-10">
+						<div class="col-md-10 col-xs-9">
 							<div class="img-title">
-								<span>{{@$companyData->company_name}}</span>
+								<span>{{@$companyData->dba_business_name}}</span>
 								<p>{{@$companyData->address}}, {{@$companyData->city}}, {{@$companyData->state }} {{@$companyData->zip_code}}</p>
 							</div>
 						</div>
-					</div>
-					<div class="border-center"> </div>
+					</div> -->
 					<div class="cart-items">
 						<span>You have {{$total_quantity}} items In Your Cart</span>
 					</div>
 					<div class="cart-total">
-						<label>Cart Total: </label>
-						<span>${{$item_price}}</span>
+						<label>Cart Total Amount: </label>
+						<span>
+							${{$item_price - $discount}}
+						</span>
 					</div>
+					<div class="border-center"> </div>
 				</div>
 				
 			</div>
 			<div class="col-md-7">
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-4 col-sm-4">
 						<div class="cart-itme-img">
-							<img src="{{$profilePicact}}">
+							<img src="{{@$profilePicact}}">
+							<h4>You Just Booked With </h4>
 						</div>
-					</div>
-					<div class="col-md-8">
-						<div class="kick-adul">
-							<h5>{{$cartdata['name']}}</h5>
-							<h4>Booking Details</h4>
-							<div class="cart-details">
-								<span>@if($cartdata['sesdate']!='' && $cartdata['sesdate']!='0')
-												{{date('l, jS \of F Y', strtotime( $item["sesdate"] ))}}
-											@else  {{date('l, jS \of F Y')}} @endif</span>
-								<span>{{$timecart}}</span>
-								<span>Price: {{$totalprice}}</span>
-								<span>Participants: @if(!empty($item['adult'])) @if($item['adult']['quantity']  != 0) Adult - {{$item['adult']['quantity']}} @endif @endif 
-                     @if(!empty($item['child']))  @if($item['child']['quantity']  != 0) Children - {{$item['child']['quantity']}} @endif @endif
-										@if(!empty($item['infant'])) @if($item['infant']['quantity'] != 0) Infant - {{$item['infant']['quantity'] }} @endif @endif </span>
-								<span>Service Type: {{@$sdata->select_service_type}} </span>
-								<span>Duration: {{$tot_dura}}</span>
-								<span>Activity Location:  {{@$sdata->activity_location}}</span>
-								<span>Service For: {{@$sdata->activity_for}}</span>
-								<span>Age:  {{@$sdata->age_range}}</span>
-								<span>Language: {{@$ser->languages}} </span>
-								<span>Skill Level: {{@$sdata->difficult_level}}</span>
-								<!-- <span>Instructor: Darryl Phipps</span> -->
+
+						<div class="row">
+							<div class="col-md-12 col-xs-12">
+								<div class="img-title com-info">
+									<h4>{{@$companyData->dba_business_name}}</h4>
+									<p>{{@$companyData->address}}, {{@$companyData->city}}, {{@$companyData->state }} {{@$companyData->zip_code}}</p>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-7 col-sm-12">
+					<div class="col-md-8 col-sm-8">
+						<div class="kick-adul">
+							<h5>{{$cartdata['name']}}</h5>
+							<div class="cart-details">
+								<div class="row">
+									<div class="col-md-6 col-xs-6">
+										<div class="info-display">
+											<label></label>
+										</div>
+									</div>
+									<div class="col-md-6 col-xs-6">
+										<div class="info-display info-align">
+											@if($cart['cart_item'][$priceid]['adult'])
+											  x{{$cart['cart_item'][$priceid]['adult']['quantity']}} Adult
+											  	@if($serprice['adult_discount'])
+												    @php
+												      	$adult_discount_price = $cart['cart_item'][$priceid]['adult']['quantity'] * ($cart['cart_item'][$priceid]['adult']['price'] - ($cart['cart_item'][$priceid]['adult']['price'] * $serprice['adult_discount'])/100)
+												    @endphp
+												    ${{$adult_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['adult']['quantity'] * $cart['cart_item'][$priceid]['adult']['price']}}</strike>/person
+												@else
+													${{$cart['cart_item'][$priceid]['adult']['quantity'] * $cart['cart_item'][$priceid]['adult']['price']}}/person
+												@endif
+											  <br/>
+											@endif
+
+											@if($cart['cart_item'][$priceid]['child'])
+											  x{{$cart['cart_item'][$priceid]['child']['quantity']}} Child
+											  	@if($serprice['child_discount'])
+												    @php
+												      $child_discount_price = $cart['cart_item'][$priceid]['child']['quantity'] * ($cart['cart_item'][$priceid]['child']['price'] - ($cart['cart_item'][$priceid]['child']['price'] * $serprice['child_discount'])/100)
+												    @endphp
+											    	${{$child_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['child']['quantity'] *  $cart['cart_item'][$priceid]['child']['price']}}</strike>/person
+											    @else
+													${{$cart['cart_item'][$priceid]['child']['quantity'] * $cart['cart_item'][$priceid]['child']['price']}}/person
+											  	@endif
+											  <br/>
+											@endif
+
+											@if($cart['cart_item'][$priceid]['infant'])
+											  x{{$cart['cart_item'][$priceid]['infant']['quantity']}} Infant
+											  	@if($serprice['infant_discount'])
+												    @php
+													    $infant_discount_price = $cart['cart_item'][$priceid]['infant']['quantity'] * ($cart['cart_item'][$priceid]['infant']['price'] - ($cart['cart_item'][$priceid]['infant']['price'] * $serprice['infant_discount'])/100)
+												    @endphp
+												    ${{$infant_discount_price}}<strike> ${{$cart['cart_item'][$priceid]['infant']['quantity'] * $cart['cart_item'][$priceid]['infant']['price']}}</strike>/person
+											  	@else
+													${{$cart['cart_item'][$priceid]['infant']['quantity'] * $cart['cart_item'][$priceid]['infant']['price'] }}/person
+											  	@endif
+											  <br/>
+											@endif
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6 col-xs-6">
+										<div class="info-display">
+											<label>Date Scheduled:</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-xs-6">
+										<div class="info-display info-align">
+											<span>@if($cartdata["sesdate"]!='' && $cartdata["sesdate"]!='0') {{date('m/d/Y',strtotime($cartdata["sesdate"]))}} @endif</span>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6 col-xs-6"> 
+										<div class="info-display">
+											<label>Time & Duration:</label>
+										</div>
+									</div> 
+									<div class="col-md-6 col-xs-6"> 
+										<div class="info-display info-align"> 
+											<span>{{$timecart}} | {{$tot_dura}}</span>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6 col-xs-6">
+										<div class="info-display">
+											<label>Category:</label>
+										</div>
+									</div>
+									<div class="col-md-6 col-xs-6">
+										<div class="info-display info-align">
+											<span>{{ @$serprice->business_price_details_ages->category_title}}</span>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6 col-xs-6">
+										<div class="info-display">
+											<label>Price Option: </label>
+										</div>
+									</div>
+									<div class="col-md-6 col-xs-6">
+										<div class="info-display info-align">
+											<span>{{@$serprice['price_title']}}</span>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-md-6 col-xs-6">
+										<div class="info-display">
+											<label>Date Booked: </label>
+										</div>
+									</div>
+									<div class="col-md-6 col-xs-6">
+										<div class="info-display info-align">
+											<span>{{date('m/d/Y')}}</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6 col-xs-6">
+										<div class="info-display">
+											<label>Number of Sessions: </label>
+										</div>
+									</div>
+									<div class="col-md-6 col-xs-6">
+										<div class="info-display info-align">
+											<span>{{@$serprice['pay_session']}} Sessions</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="hide-part"> 
+								
+									<div class="row">
+										<div class="col-md-6 col-xs-6">
+											<div class="info-display">
+												<label>Membership Option: </label>
+											</div>
+										</div>
+										<div class="col-md-6 col-xs-6">
+											<div class="info-display info-align">
+												<span>{{@$serprice['membership_type']}}</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6 col-xs-6">
+											<div class="info-display">
+												<label>Participant Quantity: </label>
+											</div>
+										</div>
+										<div class="col-md-6 col-xs-6">
+											<div class="info-display info-align">
+												<span>@if(!empty($cartdata['adult'])) @if($cartdata['adult']['quantity']  != 0) Adult x {{$cartdata['adult']['quantity']}} @endif @endif</span> 
+												<span>@if(!empty($cartdata['child']))  @if($cartdata['child']['quantity']  != 0) Children x {{$cartdata['child']['quantity']}} @endif @endif</span>
+												<span>@if(!empty($cartdata['infant'])) @if($cartdata['infant']['quantity'] != 0) Infant x {{$cartdata['infant']['quantity'] }} @endif @endif</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6 col-xs-6 col-6">
+											<div class="info-display">
+												<label>Add On Service: </label>
+											</div>
+										</div>
+										<div class="col-md-6 col-xs-6 col-6">
+											<div class="info-display info-align">
+												<span>{!! getAddonService($cartdata['addOnServicesId'],$cartdata['addOnServicesQty']) !!} </span>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6 col-xs-6">
+											<div class="info-display">
+												<label>Activity Type:</label>
+											</div>
+										</div>
+										<div class="col-md-6 col-xs-6">
+											<div class="info-display info-align">
+												<span>{{@$act['sport_activity']}}</span>
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="col-md-6 col-xs-6">
+											<div class="info-display">
+												<label>Service Type:</label>
+											</div>
+										</div>
+										<div class="col-md-6 col-xs-6">	
+											<div class="info-display info-align">
+												<span> <?php echo @$act['select_service_type']; ?></span>
+											</div>
+										</div>
+									</div>
+										
+									<div class="row">
+										<div class="col-md-6 col-xs-6">
+											<div class="info-display">
+												<label>Membership Duration: </label>
+											</div>
+										</div>
+										<div class="col-md-6 col-xs-6">	
+											<div class="info-display info-align">
+												<span>{{@$serprice['pay_setnum']}} {{@$serprice['pay_setduration']}}</span>
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="col-md-6 col-xs-6">
+											<div class="info-display">
+												<label>Purchase Date: </label>
+											</div>
+										</div>
+										<div class="col-md-6 col-xs-6">	
+											<div class="info-display info-align">
+												<span>{{date('m/d/Y')}}</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6 col-xs-6">
+											<div class="info-display">
+												<label>Membership Activation Date: </label>
+											</div>
+										</div>
+										<div class="col-md-6 col-xs-6">	
+											<div class="info-display info-align">
+												<span>{{date('m/d/Y')}}</span>
+											</div>
+										</div>
+									</div>
+								
+									<div class="row">
+										<div class="col-md-6 col-xs-6">
+											<div class="info-display">
+												<label>Membership Expiration: </label>
+											</div>
+										</div>
+										<div class="col-md-6 col-xs-6">	
+											<div class="info-display info-align">
+												<span>{{$expired_at}}</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6 col-xs-6">
+											<div class="info-display">
+												<label>Provider Company: </label>
+											</div>
+										</div>
+										<div class="col-md-6 col-xs-6">	
+											<div class="info-display info-align">
+												<span>{{$act->company_information->dba_business_name}}</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="show-more-cart"><a class="show-more">Show More <i class="fas fa-caret-down"></i></a> </div>
+							</div>
+						</div>
 						<div class="cart-btns-continues">
 							<div class="btn-cart-modal">
 								<a type="submit" href="{{route('activities_index')}}" class="btn btn-black mt-10" >Continue Shopping</a>
 							</div>
 							<div class="btn-cart-info instant-detail-booknow">
-								<a type="submit" href="{{route('payments_card')}}" class="btn btn-red mt-10" >View Cart & Checkout</a>
+								@if(Auth::user())
+									<a type="submit" href="{{route('carts_index')}}" class="btn btn-red mt-10" >View Cart & Checkout</a>
+								@else
+									<a type="submit" class="btn btn-red mt-10" data-toggle="modal" data-target="#cartcheckout">View Cart & Checkout</a>
+								@endif
 							</div>
 						</div>
 					</div>
@@ -155,13 +444,13 @@ if(!empty($cart["cart_item"])) {
 		<section class="ptb-65 plr-60 float-left w-100 discover_activities" id="counter">
 			<div class="container-fluid">
 				<div class="cart-sub-title">
-					<span>View Other Activities Provided by {{@$companyData->company_name}} ({{count($discovermore)}} items) <a class="cart-view" href="{{url('/activity-details/'.$pid)}}"> View All</a> </span>
+					<span>View Other Activities Provided by {{@$companyData->dba_business_name}} ({{count($discovermore)}} items) <a class="cart-view" href="{{url('/activity-details/'.$pid)}}"> View All</a> </span>
 				</div>
 				<?php if (isset($discovermore) && count($discovermore)>0) { ?>
 					<div class="owl-slider kickboxing-slider cart-slider">
 						<div id="carousel-slider" class="owl-carousel">
 							<?php
-								$companyid = $companylat = $companylon = $companyname  = $latitude = $longitude = $serviceid = $companylogo = $companyaddress= $profilePic ="";
+								$companyid = $companyname  = $latitude = $longitude = $serviceid =$profilePic ="";
 								$companycity = $companycountry = $pay_price  = "";
 									$servicetype = [];
 									foreach ($discovermore as $loop => $service) {
@@ -172,57 +461,17 @@ if(!empty($cart["cart_item"])) {
 										$area = !empty($service['area']) ? $service['area'] : 'Location';
 
 										$companyid = $companyData->id;
-										$companyaddress = $companyData->address;
-										$companyname = $companyData->company_name;
+										$companyname = $companyData->dba_business_name;
 										$companycity = $companyData->city;
-										$companycountry = $companyData->country;
-										$companylogo = $companyData->logo;
-										$companylat = $companyData->latitude;
-										$companylon = $companyData->longitude;
 													
-										if ($service['profile_pic']!="") {
-											if(str_contains($service['profile_pic'], ',')){
-									    	$pic_image = explode(',', $service['profile_pic']);
-										    if( $pic_image[0] == ''){
-										       $p_image  = $pic_image[1];
-										    }else{
-										       $p_image  = $pic_image[0];
-										    }
-										  }else{
-										  	$pic_image = $service['profile_pic'];
-										   	$p_image = $service['profile_pic'];
-											}
+										$profilePic =  Storage::disk('s3')->exists($service->first_profile_pic()) ? Storage::URL($service->first_profile_pic()) : url('/images/service-nofound.jpg');  
+					                  	$pic_image = explode(',',$service['profile_pic']);
 
-											if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-										   	$profilePic = url('/public/uploads/profile_pic/' . $p_image);
-											}else {
-										   	$profilePic = url('/public/images/service-nofound.jpg');
-											}
-										}else{ $profilePic = '/public/images/service-nofound.jpg'; }
-
-										$bookscheduler='';
-										$time='';
-										$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-										if(@$bookscheduler[0]['set_duration']!=''){
-											$tm=explode(' ',$bookscheduler[0]['set_duration']);
-											$hr=''; $min=''; $sec='';
-											if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-											if($tm[2]!=0){ $min=$tm[2].'min. '; }
-											if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-											if($hr!='' || $min!='' || $sec!='')
-											{ $time =  $hr.$min.$sec; } 
-										}
-										$pricearr = [];
-										$price_all = '';
-										$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
-										if(!empty($price_allarray)){
-											foreach ($price_allarray as $key => $value) {
-												$pricearr[] = $value->pay_price;
-											}
-										}
-										if(!empty($pricearr)){
-											$price_all = min($pricearr);
-										}        
+										$bookscheduler= '';
+										$bookscheduler = App\BusinessActivityScheduler::where('serviceid', $service['id'])->orderBy('id', 'ASC')->first();
+										$time = @$bookscheduler != '' ? @$bookscheduler->get_duration() : '';
+										
+										$price_all = $service->min_price();       
 							?>
 								<div class="item">
 								<div class="kickboxing-block">
@@ -234,33 +483,25 @@ if(!empty($cart["cart_item"])) {
 										<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 											<div class="inner-owl-slider-hire">
 												<div id="owl-demo-learn_thismon{{$service['id']}}" class="owl-carousel owl-theme">
-													<?php 
-														$i = 0;
-														if(is_array($pic_image)){
-															foreach($pic_image as $img){
-																$profilePic1 = '';
-																if($img != ''){
-																	if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
-											           				$profilePic1 = url('/public/uploads/profile_pic/' . $img);
-																	}
-											         		} 
-
-										        				if($profilePic1 != ''){ ?>
-																	<div class="item-inner">
-																		<img src="{{$profilePic1}}" class="productImg">
-																	</div>
-																<?php }
-															}
-														}else{
-															if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
-										   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
-										    				}else {
-										       				$profilePic1 = url('/public/images/service-nofound.jpg');
-										    				} ?>
+													@if(is_array($pic_image))
+														@foreach($pic_image as $img)
+															@if(Storage::disk('s3')->exists($img) && $img != '' )
+																<div class="item-inner">
+																	<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
+																</div>
+															@else
+																<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
+															@endif
+														@endforeach
+													@else
+														@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 															<div class="item-inner">
-																<img src="{{$profilePic1}}">
+																<img src="{{Storage::URL($pic_image)}}">
 															</div>
-													<?php } ?>
+														@else
+															<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
+														@endif
+													@endif
 												</div>
 											</div>
 											<script type="text/javascript">
@@ -285,40 +526,32 @@ if(!empty($cart["cart_item"])) {
 											 <?php } ?></a>
 											</div>
 											@if($price_all != '')
-												<span>From ${{$price_all}}/Person</span>
+												<span>From  {!! $price_all !!}/Person</span>
 											@endif
 										</div>
 									@else
 										<div class="kickboxing-topimg-content">
 											<div class="inner-owl-slider-hire">
 												<div id="owl-demo-learn_thismon{{$service['id']}}" class="owl-carousel owl-theme">
-													<?php 
-														$i = 0;
-														if(is_array($pic_image)){
-															foreach($pic_image as $img){
-																$profilePic1 = '';
-																if($img != ''){
-																	if (file_exists( public_path() . '/uploads/profile_pic/' . $img)) {
-											           				$profilePic1 = url('/public/uploads/profile_pic/' . $img);
-																	}
-											         		} 
-
-										        				if($profilePic1 != ''){ ?>
-																	<div class="item-inner">
-																		<img src="{{$profilePic1}}" class="productImg">
-																	</div>
-																<?php }
-															}
-														}else{
-															if (file_exists( public_path() . '/uploads/profile_pic/' . $pic_image)) {
-										   					$profilePic1 = url('/public/uploads/profile_pic/' . $pic_image);
-										    				}else {
-										       				$profilePic1 = url('/public/images/service-nofound.jpg');
-										    				} ?>
+													@if(is_array($pic_image))
+														@foreach($pic_image as $img)
+															@if(Storage::disk('s3')->exists($img) && $img != '' )
+																<div class="item-inner">
+																	<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
+																</div>
+															@else
+																<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
+															@endif
+														@endforeach
+													@else
+														@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 															<div class="item-inner">
-																<img src="{{$profilePic1}}">
+																<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity">
 															</div>
-													<?php } ?>
+														@else
+															<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
+														@endif
+													@endif
 												</div>
 											</div>
 											<script type="text/javascript">
@@ -334,18 +567,14 @@ if(!empty($cart["cart_item"])) {
 											</script>
 											<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
 											@if($price_all != '')	
-											  <span>From ${{$price_all}}/Person</span>
+											  <span>From ${!! $price_all !!}/Person</span>
 											@endif
 										</div>
 									@endif
 									<?php
 										$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
 										$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
-										$reviews_avg=0;
-										if($reviews_count>0)
-										{	
-											$reviews_avg= round($reviews_sum/$reviews_count,2); 
-										}
+										$reviews_avg=  $reviews_count>0 ? round($reviews_sum/$reviews_count,2):0;
 									?>
 									<div class="bottom-content">
 										<div class="class-info">
@@ -362,11 +591,7 @@ if(!empty($cart["cart_item"])) {
 													@endif
 
 													<div class="claimed">
-														<span>@if($companyData->is_verified == 1)
-																		CLAIMED
-																	@else
-																		UNCLAIMED
-																	@endif</span>
+														<span>{{ $companyData->is_verified == 1 ? "CLAIMED" : "UNCLAIMED"}}</span>
 													</div>
 											</div>
 												<div class="col-md-5 country-instant">
@@ -378,12 +603,6 @@ if(!empty($cart["cart_item"])) {
 										</div>
 											<?php
 												$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
-												$service_type='';
-												if($service['service_type']!=''){
-													if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-													else if( $service['service_type']=='classes' )	$service_type = 'Group Classe'; 
-													else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
-												}
 											?>
 											<div class="activity-information">
 												<span><a 
@@ -394,11 +613,11 @@ if(!empty($cart["cart_item"])) {
 													  <?php }?>
 														  target="_blank">{{ $service['program_name'] }}</a>
 												</span>
-												<p>{{ $service_type }}  | {{ $service['sport_activity'] }}</p>
+												<p>{{ $service->formal_service_types() }} | {{ $service['sport_activity'] }}</p>
 											</div>
 											<hr>
 											<div class="all-details">
-												<a class="showall-btn" href="/activity-details/{{$serviceid}}">More Details</a>
+												<a class="showall-btn" href="/activity-details/{{$serviceid}}">Book Now</a>
 											</div>
 										</div>
 									</div>
@@ -418,68 +637,147 @@ if(!empty($cart["cart_item"])) {
 	</div>
 </div>
 
+<!-- The Modal Checkout-->
+<div class="modal fade compare-model" id="cartcheckout">
+    <div class="modal-dialog cartcheckout">
+        <div class="modal-content">
+			<div class="modal-header" style="text-align: right;"> 
+			  	<div class="closebtn">
+					<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+			</div>
+
+            <!-- Modal body -->
+            <div class="modal-body body-space">
+				<div class="row"> 
+                    <div class="col-lg-12">
+					   <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600;">Continue To Checkout</h4>
+					</div>
+					<div class="col-lg-12 btns-modal">
+						<a href="{{route('addcheckoutsession')}}" class="addbusiness-btn-modal cart-btn-width">Log in</a>
+						<a onclick="openRegistrationModal();" class="addbusiness-btn-modal" >Continue as Guest</a>
+					</div>
+				 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal -->
+
+<!-- The Modal Registraion-->
+<div class="modal fade compare-model" id="registermodal"  tabindex="-1" data-bs-focus="false">
+    <div class="modal-dialog registermodal">
+        <div class="modal-content">
+			<div class="modal-header" style="text-align: right;"> 
+			  	<div class="closebtn">
+					<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+			</div>
+
+            <!-- Modal body -->
+            <div class="modal-body body-space register-bg">
+				
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- end modal -->
+
 @include('layouts.footer')
+<script type="text/javascript">
+	flatpickr(".flatpicker_registration", {
+		dateFormat: 'm/d/Y',
+	    maxDate: '01/01/2050',		
+	}); 
+</script>
+
 
 <script type="text/javascript">
+
 	$(document).ready(function () {
-	  $(document).on('click', '.serv_fav1', function(){
-        var ser_id = $(this).attr('ser_id');
-        // var _token = $("input[name='_token']").val();
-        var _token = $('meta[name="csrf-token"]'). attr('content');
-        $.ajax({
-            type: 'POST',
-            url: '{{route("service_fav")}}',
-            data: {
-                _token: _token,
-                ser_id: ser_id
-            },
-            success: function (data) {
-                if(data.status=='like')
-				{
-					$('#serfav'+ser_id).html('<i class="fas fa-heart"></i>');
-				}
-				else
-				{
-					$('#serfav'+ser_id).html('<i class="far fa-heart"></i>');
-				}
+		$(".show-more").click(function(event) {
+			var txt = $(".hide-part").is(':visible') ? 'Show More <i class="fas fa-caret-down"></i>' : 'Show Less <i class="fas fa-caret-up"></i>';
+			$(".hide-part").toggleClass("show-part");
+			$(this).html(txt);
+			event.preventDefault();
+		});
+
+	  	$(document).on('click', '.serv_fav1', function(){
+	        var ser_id = $(this).attr('ser_id');
+	        var _token = $('meta[name="csrf-token"]'). attr('content');
+	        $.ajax({
+	            type: 'POST',
+	            url: '{{route("service_fav")}}',
+	            data: {
+	                _token: _token,
+	                ser_id: ser_id
+	            },
+	            success: function (data) {
+	                if(data.status=='like')
+					{
+						$('#serfav'+ser_id).html('<i class="fas fa-heart"></i>');
+					}
+					else
+					{
+						$('#serfav'+ser_id).html('<i class="far fa-heart"></i>');
+					}
+	            }
+	        });
+    	});
+  	});
+
+  	function openRegistrationModal(){
+		$.ajax({
+            url: '{{route('openGuestRegistration')}}',
+            type: 'GET',
+            success: function (response) {
+            	$('.register-bg').html(response);
+            	$('#registermodal').modal({ show: true, focus: false});
             }
         });
-    });
-  });
+	}
+
 </script>
+
 <script>
-jQuery("#carousel-slider").owlCarousel({
-  autoplay: true,
-  rewind: true, /* use rewind if you don't want loop */
-  margin: 20,
-   /*
-  animateOut: 'fadeOut',
-  animateIn: 'fadeIn',
-  */
-  responsiveClass: true,
-  autoHeight: true,
-  autoplayTimeout: 7000,
-  smartSpeed: 800,
-  nav: true,
-  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-  responsive: {
-    0: {
-      items: 1
-    },
+	jQuery("#carousel-slider").owlCarousel({
+		autoplay: true,
+		rewind: true, /* use rewind if you don't want loop */
+		margin: 20,
+		/*
+		  	animateOut: 'fadeOut',
+		  	animateIn: 'fadeIn',
+		*/
+	  	responsiveClass: true,
+	  	autoHeight: true,
+	  	autoplayTimeout: 7000,
+	  	smartSpeed: 800,
+	  	nav: true,
+	  	navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+	  	responsive: {
+		    0: {
+		      	items: 1
+	    	},
 
-    600: {
-      items: 3
-    },
+	    	600: {
+	      		items: 3
+	    	},
 
-    1024: {
-      items: 3
-    },
+	    	1024: {
+	      		items: 3
+	    	},
 
-    1366: {
-      items: 3
-    }
-  }
-});
+	    	1366: {
+	      		items: 3
+	    	}
+	  	}
+	});
 </script>
+
 @endsection
 

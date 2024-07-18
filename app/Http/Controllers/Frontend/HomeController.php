@@ -5,21 +5,6 @@ namespace App\Http\Controllers\Frontend;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Slider;
-use App\SportsCategories;
-use App\Cms;
-use App\Sports;
-use App\Trainer;
-use App\Online;
-use App\BusinessClaim;
-use App\UserBookingDetail;
-use App\Repositories\SportsCategoriesRepository;
-use App\Repositories\SportsRepository;
-use App\Repositories\ProfessionalRepository;
-use App\Person;
-use App\Discover;
-use App\Miscellaneous;
-use App\Languages;
 use Validator;
 use ReCaptcha\ReCaptcha;
 use Image;
@@ -27,127 +12,47 @@ use Image;
 use Hash;
 use Redirect;
 use Response;
-use App\Api;
 use Str;
-use App\MailService;
 use DB;
-use App\User;
-use App\Repositories\UserRepository;
-use App\Repositories\ReviewRepository;
-use App\BusinessServices;
-use App\CompanyInformation;
-use App\BusinessPriceDetails;
-use App\BusinessService;
-use App\BusinessCompanyDetail;
-use App\HomeTracker;
+use App\Repositories\{UserRepository,ReviewRepository,SportsCategoriesRepository,SportsRepository,ProfessionalRepository};
+use App\{ActivitySlider,Slider,SportsCategories,Cms,Sports,Trainer,Online,BusinessClaim,UserBookingDetail,Person,Discover,Miscellaneous,Languages,Api,MailService,User,BusinessServices,CompanyInformation,BusinessPriceDetails,BusinessService,BusinessCompanyDetail,BusinessActivityScheduler,HomeTracker,SGMailService,Customer};
 use View;
+use DateTime;
+
+use Illuminate\Support\Facades\Crypt;
 
 class HomeController extends Controller {
-
     /**
      * The user repository instance.
      *
      * @var UserRepository
      */
     protected $users;
-
     public function __construct(UserRepository $users) {
-
         $this->users = $users;
     }
-
     public function index(Request $request) {
-        
-        $companyData = $servicePrice = $businessSpec = [];
-        $serviceData = BusinessServices::where('instant_booking', 1)->get();
-        if (isset($serviceData)) {
-            foreach ($serviceData as $service) {
-                $company = CompanyInformation::where('id', $service['cid'])->get();
-                $company = isset($company[0]) ? $company[0] : [];
-                if(!empty($company)) {
-                	$companyData[$company['id']][] = $company;
-                }
-                
-                $price = BusinessPriceDetails::where('cid', $service['cid'])->get();
-                $price = isset($price[0]) ? $price[0] : [];
-                if(!empty($company)) {
-                	$servicePrice[$company['id']][] = $price;
-                }
-                
-                $business_spec = BusinessService::where('cid', $service['cid'])->get();
-                $business_spec = isset($business_spec[0]) ? $business_spec[0] : [];
-                if(!empty($company)) {
-                	$businessSpec[$company['id']][] = $business_spec;
-                }
-            }
-        }
-        
-        $all_categories = SportsCategories::where('is_deleted', "0")->get();
-
-        /*$most_searched_sports = Sports::latest()->limit(6)->get();*/
-
-        $most_searched_sports = Sports::orderBy('id','DESC')->get();
-
-        $fitnessity_data = Cms::where('status', '1')
-                        ->where('content_alias', 'fitnessity')->get();
-
-        $bepart_data = Cms::where('status', '1')
-                        ->where('content_alias', 'be_a_part')->get();
-						
-		$why_fitnessity = Cms::where('status', '1')
-                        ->where('content_alias', 'about_us')->get();
-		
+        $bepart_data = Cms::where('status', '1')->where('content_alias', 'be_a_part')->first();
+		$whyFitnessity = Cms::where('status', '1')->where('content_alias', 'about_us')->first();
+        $connectBusiness = Cms::where('status', '1')->where('content_alias', 'connect_business')->first();
+        $topBanner = Cms::where('status', '1') ->where('content_alias', 'banner_search_title')->first();
         $sliders = Slider::get();
-
-        $trainers = Trainer::limit(5)->get();
-        $onlines = Online::limit(9)->get();
-        $persons = Person::limit(9)->get();
-        $discovers = Discover::limit(6)->get();
-
-        /*$count_trainer = Trainer::count();*/
-        //$count_online = Online::count();
-
-        /*$count_activity = BusinessServices::where('is_active',1)->count();
-        $count_business = CompanyInformation::where('is_verified',1)->count();*/
-        //$count_business = BusinessClaim::count();
-       /* $count_userbooking = UserBookingDetail::count();*/
-		
-		/*$count_location =  BusinessCompanyDetail::distinct()->count('ZipCode');*/
-
-        $hometracker = HomeTracker::where('id',1)->first();
-
-        $count_trainer = $hometracker->trainers;
-        $count_location = $hometracker->locations;
-        $count_activity = $hometracker->activities;
-        $count_business = $hometracker->businesses;
-        $count_userbooking = $hometracker->bookings;
-       
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
+        $activitySlider = ActivitySlider::all();
         
+        $nxtact = BusinessServices::where('business_services.is_active', 1)->get();
+        $current_date = new DateTime();
+        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtact->pluck('id'))->limit(3)->get();
+        $top4Cities = CompanyInformation::groupBy('city')->whereNotNull('city')->join('business_services as bs' ,'bs.cid' ,'=' , 'company_informations.id')->where('bs.is_active',1)->select('city', DB::raw('count(*) as total'))->orderBy('total', 'desc')->take(4)->pluck('city');
         return view('home.index1', [
-            'cart' => $cart,
-            'serviceData' => $serviceData,
-            'companyData' => $companyData,
-            'servicePrice' => $servicePrice,
-            'businessSpec' => $businessSpec,
-            'sports_categories' => $all_categories,
             'sliders' => $sliders,
-            'most_searched_sports' => $most_searched_sports,
-            'fitnessity_data' => $fitnessity_data,
-            'trainers' => $trainers,
-            'onlines' => $onlines,
-            'persons' => $persons,
-            'discovers' => $discovers,
-            'count_trainer' => $count_trainer,
-            'count_activity' => $count_activity,
-            'count_business' => $count_business,
-            'count_userbooking' => $count_userbooking,
+            'activitySlider' => $activitySlider,
             'bepart_data' => $bepart_data,
-			'count_location' => $count_location,
-			'why_fitnessity' => $why_fitnessity,
+			'whyFitnessity' => $whyFitnessity,
+            'connectBusiness' => $connectBusiness,
+            'topBanner' => $topBanner,
+            'bookschedulers'=>$bookschedulers,
+            'current_date' => $current_date,
+            'top4Cities' => $top4Cities,
         ]);
     }
     public function leftpanel() 
@@ -158,7 +63,6 @@ class HomeController extends Controller {
 	public function testleft (){
 		return view('profiles.leftPanel');
 	}
-
     public function all_trainings() {
         /* $all_categories = $this->sports_cat->getAllSportsCategories();
 
@@ -179,10 +83,8 @@ class HomeController extends Controller {
           $count_business = BusinessClaim::count();
           $count_userbooking = UserBookingDetail::count(); */
 
-
         return view('home.allTrainings');
     }
-
     public function all_sports() {
         /* $all_categories = $this->sports_cat->getAllSportsCategories();
 
@@ -203,13 +105,26 @@ class HomeController extends Controller {
           $count_business = BusinessClaim::count();
           $count_userbooking = UserBookingDetail::count(); */
 
-
         return view('home.allSports');
     }
 
-    public function registration(Request $request) {
+    public function registration(Request $request,$id = null) {
+        $intent = null;
         if (Auth::check()) {
             $show_step = Auth::user()->show_step;
+            $user =Auth::user();
+            if($request->showstep == 7){
+                $user->show_step = 7;
+                $user->save();
+            }
+            \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            if($user->stripe_customer_id != ''){
+                $intent = $stripe->setupIntents->create([
+                    'payment_method_types' => ['card'],
+                    'customer' => $user->stripe_customer_id,
+                ]);
+            }
         } else {
             $show_step = 1;
         }
@@ -217,9 +132,14 @@ class HomeController extends Controller {
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
         }
+        if($id != '' && $id != '7'){
+            $id = Crypt::decryptString($id);
+        }
         return view('home.registration', [
             'show_step' => $show_step,
-            'cart' => $cart
+            'cart' => $cart,
+            'customerId'=>$id,
+            'intent'=>$intent
         ]);
     }
     public function emailvalidation(Request $request) {
@@ -244,10 +164,21 @@ class HomeController extends Controller {
 
     }
 
-    public function postRegistration(Request $request) {
+    public function userNamevalidation(Request $request) {
         $postArr = $request->all();
+        $business = CompanyInformation::where('business_user_tag' ,$request->userName)->first();
+        if($business){
+            $response = array(
+                'type' => 'danger',
+                'msg' => 'User name is already taken by another provider.',
+            );
+            return Response::json($response);
+        }
+    }
 
-
+    public function postRegistration(Request $request) {
+        // dd('33');
+        $postArr = $request->all();
         $rules = [
             'firstname' => 'required',
             'lastname' => 'required',
@@ -301,11 +232,18 @@ class HomeController extends Controller {
                     ]);
                 $stripe_customer_id = $customer->id;
 
+                // new code start
+                // do {
+                //     $unique_code = rand(1000, 9999);
+                // } while (User::where('unique_code', $unique_code)->exists());
+                $unique_code = generateUniqueCode();
+                // new code end
                 $userObj = New User();
                 $userObj->firstname = $postArr['firstname'];
                 $userObj->lastname = ($postArr['lastname']) ? $postArr['lastname'] : '';
                 $userObj->username = $postArr['username'];
                 $userObj->password = Hash::make(str_replace(' ', '', $postArr['password']));
+                $userObj->primary_account = $postArr['primary_account'] ?? 0;
                 $userObj->email = $postArr['email'];
                 $userObj->stripe_customer_id = $stripe_customer_id;
                 $userObj->role = 'customer';
@@ -317,10 +255,15 @@ class HomeController extends Controller {
                 // $userObj->status = "email_activation_pending";
                 $userObj->status = "approved";
                 $userObj->buddy_key = $postArr['password'];
-
+                $userObj->isguestuser = 0;
+                $userObj->unique_code=$unique_code;
                 //For signup confirmation 
                 $userObj->confirmation_code = Str::random(25);
                 $userObj->save();
+
+                if($request->customerId != ''){
+                    Customer::where('id',$request->customerId)->update(['user_id'=>$userObj->id]);
+                }
 
                 if ($userObj) {                    
                     //send notification email to user
@@ -365,7 +308,6 @@ class HomeController extends Controller {
         if (isset($code) && !empty($code)) {
 
             $user = User::SELECT('id', 'email', 'activated')->where('confirmation_code', $code)->first();
-
             if (@count($user) > 0 && $user->activated == 1) {
                 return redirect('/')->with('alert-success', 'Your account is already verified');
             } else if (@count($user) > 0 && $user->activated == 0) {
@@ -379,20 +321,14 @@ class HomeController extends Controller {
     }
 
     public function UserAccountVerify(Request $request) {
-        /* echo $request->confirmation_code;
-          exit; */
-
         if ($request->confirmation_code && $request->confirmation_code != '' && $request->confirmation_code != NULL) {
             $user = User::whereConfirmationCode($request->confirmation_code)->first();
-            //echo $user;
-
             if (!empty($user) > 0 && $user->activated == 0) {
                 $user->activated = 1;
                 $user->show_step = 2;
-
                 if ($user->save()) {
-
-                    MailService::sendEmailVerifiedAcknowledgement($user->id);
+                    // MailService::sendEmailVerifiedAcknowledgement($user->id);
+                    SGMailService::sendWelcomeMail($user->email);
                     Auth::login($user);
                     Auth::loginUsingId($user->id, true);
                     $request->session()->flash('alert-success', 'Your email has been successfully verified!');
@@ -416,12 +352,10 @@ class HomeController extends Controller {
 
     public function VerifyCodeResend(Request $request) {
         $input = $request->all();
-
         if (isset($input) && !empty($input['user_id'])) {
             $user = User::findOrFail($input['user_id']);
 
             if (!empty($user)) {
-
                 if ($user->confirmation_code && !empty($user->confirmation_code)) {
                     MailService::resendEmailVerificationCode($user);
                     $response = array(

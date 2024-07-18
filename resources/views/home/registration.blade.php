@@ -20,7 +20,7 @@
                 <!--{{$show_step}}-->
                 @if($show_step == 1)
                 <div class="logo-my">
-                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/logo-small.jpg')}}"> </a>
+                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/logo-small.jpg')}}" alt="Fitnessity"> </a>
                 </div>
                 <form id="frmregister" method="post">
                     <div class="pop-title ftitle1">
@@ -28,14 +28,34 @@
                     </div>
                     <div id='systemMessage'></div>
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    <input type="hidden" name="customerId" value="{{$customerId}}">
+
                     <input type="text" name="firstname" id="firstname" size="30" maxlength="80" placeholder="First Name">
                     <input type="text" name="lastname" id="lastname" size="30" maxlength="80" placeholder="Last Name">
                     <input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
+
                     <input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-MAIL" maxlength="80" autocomplete="off">
-                    <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="changeformate()">
-                    <input  type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth">
-                    <input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
-                    <input type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
+                    <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
+                    <input type="text" id="dob" name="dob" class=" flatpicker_birthdate1" placeholder="Birthday">
+					<div class="position-relative auth-pass-inputgroup">	
+						<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
+                        <button class="btn-link position-absolute password-addon toggle-password" type="button" data-tp = "password">
+                            <i class="fas fa-eye"></i>
+						</button>
+					</div>
+					<div class="position-relative auth-pass-inputgroup">
+						<input class="password-input" type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
+						<button class="btn-link position-absolute password-addon toggle-password" type="button" data-tp = "confirm_password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+					</div>
+
+                    <div class="form-group check-box-info">
+                        <input class="check-box-primary-account" type="checkbox" id="primary_account" name="primary_account" value="1" >
+                        <label for="primary_account"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="You are paying for yourself and all added family members.">(i)</span></label>
+                    </div>
+                    
+
                     <div class="terms-wrap">
                         <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
                         <label for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
@@ -52,9 +72,7 @@
                             <i class="fa fa-google-plus" aria-hidden="true"></i> Sign with Google+
                         </a> 
                     </div> -->
-                    <p class="already">Already have an account? <a href="{{ Config::get('constants.SITE_URL') }}/userlogin">Login</a></p>
-
-                   
+                    <p class="already">Already have an account? <a href="{{ Config::get('constants.SITE_URL') }}/userlogin">Login</a></p>    
                 </form>
                 @elseif(Auth::check() && Auth::user()->show_step == 2)
                 <form action="#">
@@ -73,7 +91,7 @@
                             <div class="col-sm-12">
                                 <div class='error' id='systemMessage'></div>
                                 <div class="prfle-wrap">
-                                    <img src="" alt="">
+                                    <img src="" alt="Fitnessity">
                                     {{substr(Auth::user()->firstname,0,1)}}
                                 </div>
                                 <div class="reg-email-step2">{{Auth::user()->email}}</div>
@@ -114,9 +132,9 @@
                                     </div>
                                     <div class="radio">
                                         <label for="other">Specify another<input type="radio" name="gender" id="other" value="other" class="" /><span class="checkmark"></span></label>
-                                        <input type="text" name="othergender" id="othergender">
                                     </div>
                                 </div>
+                                <input type="text" name="othergender" id="othergender" class="width-65">
                                 <div class="signup-step-btn">
                                     <button type="button" class="signbutton-next step3_next" id="step3_next">Next</button>
                                 </div>
@@ -178,23 +196,6 @@
                                             <button type="button" class="signbutton-next step4_next" id="step4_next">Next</button>
                                         </div>
                                     </div>
-                                    <div id="adding_photo" class="tab-pane fade">
-                                        <div class="upload-wrp-content">
-                                            <p><b>Put a face to the name </b>and improve your adds to networking success.</p>
-                                            <p>People prefer to network with members who has a profile photo, but if don't have one ready to upload, you can add it later.</p>
-                                        </div>
-                                        <div class="">
-                                            <div class="upload-img">
-                                                <input type="file" name="file_upload" id="file" onchange="readURL(this);">
-                                                <div class="upload-img-msg">
-                                                    <p>Touble uploading profile photo?</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="signup-step-btn">
-                                            <button type="button" class="signbutton-next" id="fileimgnext">Upload</button>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -226,7 +227,7 @@
                                 </ul>
                                 
                                 <div class="tab-content">
-                                   
+                                    <div class='error' id='systemMessage'></div>
                                     <div id="adding_photo" class="tab-pane fade in active">
                                         <div class="upload-wrp-content">
                                             <p><b>Put a face to the name </b>and improve your adds to networking success.</p>
@@ -236,25 +237,25 @@
                                             <div class="upload-img">
                                                 <input type="file" name="file_upload_profile" id="file_upload_profile" onchange="readURL(this);">
                                                 <div class="upload-img-msg">
-                                                    <p>Touble uploading profile photo?</p>
+                                                    <!-- <p>Touble uploading profile photo?</p> -->
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="signup-step-btn">
-                                            <button type="button" class="signbutton-next" id="fileimgnext">Upload</button>
-                                        </div> -->
+                                
                                         <div class="signup-step-btn">
-                                    <button type="button" class="signbutton-next step3_next" id="step44_next">Next</button>
-                                </div>
+                                            <button type="button" class="signbutton-next step44_next" id="step44_next" data-check = "1">Next</button>
+                                            <button type="button" class="signbutton-next step44_next" id="step44_next">Skip</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
-                @else
-                <form action="#">
-                    <div class="sign-step_5">
+                
+                @elseif(Auth::check() && Auth::user()->show_step == 6)
+                 <form id="payment-form" data-secret="{{@$intent->client_secret}}" style="">
+                    <div class="sign-step_4">
                         <div class="filledstep-bar">
                             <div class="row">
                                 <div class="col-sm-12">
@@ -262,75 +263,146 @@
                                     <span class="filledstep"></span>
                                     <span class="filledstep"></span>
                                     <span class="filledstep"></span>
+                                    <span></span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <h2>Activities are much more fun with family</h2>
-                                <div class='error' id='systemMessage'></div>
-                                <h4 style="text-align: center; margin-bottom: 10px;"><b>Add Your Family Members Information</b></h4>
-                                <div class="form-group">
-                                    <input type="text" name="fname" id="fname" class="form-control first_name" placeholder="First Name">
-                                    <span class="error" id="err_fname"></span>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" name="lname" id="lname" class="form-control last_name" placeholder="Last Name">
-                                    <span class="error" id="err_lname"></span>
-                                </div>
-                                <div>
-                                    <div class="birthday_date-position">
-                                        <input type="date" name="birthday_date" id="birthday_date" class="form-control birthday" />
-                                        <span class="error" id="err_birthday_date"></span>
+                                <ul class="">
+                                    <li><i class="fa fa-check"></i><span>Registration Information</span></li>
+                                    <li><i class="fa fa-check"></i><span>Your Identification</span></li>
+                                    <li><i class="fa fa-check"></i><span>Add Personal Information</span></li>
+                                    <li><i class="fa fa-check"></i><span>Adding Photo</span></li>
+                                </ul>
+                                <ul class="nav nav-tabs nav-stacked">
+                                    <li><a data-toggle="tab" href="#adding_photo"><span class="stp-numbr">5</span> <span>Adding Your Card Details</span></a></li>
+                                </ul>
+                                
+                                <div class="tab-content">
+                                    @if (session('stripeErrorMsg'))
+                                        <div class="col-md-12">
+                                            <div class='form-row row'>
+                                                <div class='col-md-12  error form-group'>
+                                                    <div class="alert-danger alert">
+                                                        {{ session('stripeErrorMsg') }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                   
+                                    <div>
+                                        <div id="error-message" class="alert alert-danger" role="alert" style="display: none;"></div>
+                                        <div id="payment-element" style="margin-top: 8px;"></div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <select name="relationship" id="relationship" class="form-control relationship">
-                                        <option value="">Select Relationship</option>
-                                        <option value="Brother">Brother</option>
-                                        <option value="Sister">Sister</option>
-                                        <option value="Father">Father</option>
-                                        <option value="Mother">Mother</option>
-                                        <option value="Wife">Wife</option>
-                                        <option value="Husband">Husband</option>
-                                        <option value="Son">Son</option>
-                                        <option value="Daughter">Daughter</option>
-                                    </select>
-                                    <span class="error" id="err_relationship"></span>
-                                </div>
-                                <div class="form-group">
-                                    <input maxlength="10" type="text" name="mphone" id="mphone" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                                    <span class="error" id="err_mphone"></span>
-                                </div>
-                                <div class="form-group">
-                                    <input maxlength="10" type="text" name="emergency_phone" id="emergency_phone" class="form-control emergency_phone" placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                                    <span class="error" id="err_emergency_phone"></span>
-                                </div>
-                                <div class="form-group">
-                                    <select name="gender" id="gender" class="form-control gender">
-                                        <option value="">Select Gender</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Specify other</option>
-                                    </select>
-                                    <span class="error" id="err_gender"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Email</label>
-                                    <input type="email" name="emailid" id="emailid" class="form-control email" placeholder="Email">
-                                    <span class="error" id="err_emailid"></span>
+                                    <div class="signup-step-btn">
+                                        <button class="signbutton-next" type="submit" id="submit">Add on file</button>
+                                        <button class="signbutton-next" type="button" id="skip_next">Skip</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="signup-step-btn">
-                            <button type="button" class="signbutton-next step5_next" id="step5_next">Save</button>
-                            <button type="button" class="signbutton-next skip5_next" id="skip5_next">Skip</button>
-                        </div>
                     </div>
                 </form>
-
+                @else
+                    <form action="#" id="familyform">
+                        <div class="sign-step_5">
+                            <div class="filledstep-bar">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <span class="filledstep"></span>
+                                        <span class="filledstep"></span>
+                                        <span class="filledstep"></span>
+                                        <span class="filledstep"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h2>Activities are much more fun with family</h2>
+                                    <div class='error' id='systemMessage'></div>
+                                    <h4 style="text-align: center; margin-bottom: 10px;"><b>Add Your Family Members Information</b></h4>
+                                    <div class="error" id="familyerrormessage"></div>
+                                    <input type="hidden" name="familycnt" id="familycnt" value="0">
+                                    <div id="familymaindiv">
+                                        <div class="new-client" id="familydiv0">
+                                            <div class="content1">
+                                                <div class="panel-group" id="accordion">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <h4 class="panel-title">
+                                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse0">Family Member #1</a>
+                                                            </h4>
+                                                        </div>
+                                                        <div id="collapse0" class="panel-collapse collapse in">
+                                                            <div class="panel-body">
+                                                                  <div class="form-group">
+                                                                <input type="text" name="first_name[]" id="first_name" class="form-control first_name required" placeholder="First Name">
+                                                                <span class="error" id="err_fname" ></span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="text" name="last_name[]" id="last_name" class="form-control last_name required" placeholder="Last Name" >
+                                                                <span class="error" id="err_lname"></span>
+                                                            </div>
+                                                            <div>
+                                                                <div class="birthday_date-position">
+                                                                    <input type="text" name="birthday[]" id="birthday" class="form-control birthday  Flatpicker required" placeholder="Birthday"/>
+                                                                    <span class="error" id="err_birthday_date"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <select name="relationship[]" id="relationship required" class="form-control relationship">
+                                                                    <option value="">Select Relationship</option>
+                                                                    <option value="Brother">Brother</option>
+                                                                    <option value="Sister">Sister</option>
+                                                                    <option value="Father">Father</option>
+                                                                    <option value="Mother">Mother</option>
+                                                                    <option value="Wife">Wife</option>
+                                                                    <option value="Husband">Husband</option>
+                                                                    <option value="Son">Son</option>
+                                                                    <option value="Daughter">Daughter</option>
+                                                                </select>
+                                                                <span class="error" id="err_relationship"></span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input maxlength="14" type="text" name="mobile[]" id="mobile" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
+                                                                <span class="error" id="err_mphone"></span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone " placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
+                                                                <span class="error" id="err_emergency_phone" ></span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <select name="gender[]" id="gender" class="form-control gender" required>
+                                                                    <option value="">Select Gender</option>
+                                                                    <option value="male">Male</option>
+                                                                    <option value="female">Female</option>
+                                                                    <option value="other">Specify other</option>
+                                                                </select>
+                                                                <span class="error" id="err_gender"></span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="email" name="email[]" id="email" class="form-control email required" placeholder="Email">
+                                                                <span class="error" id="err_emailid"></span>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="signup-step-btn">
+                                <button type="button" class="signbutton-next" id="add_family">Add New Family Member</button>
+                                <button type="button" class="signbutton-next step5_next" id="step5_next">Save</button>
+                                <button type="button" class="signbutton-next skip5_next" id="skip5_next">Skip</button>
+                            </div>
+                        </div>
+                    </form>
                 @endif
-
             </div>
         </div>
     </div>
@@ -338,6 +410,107 @@
 </section>
 
 @include('layouts.footer')
+
+
+@if(Auth::check() && Auth::user()->show_step == 6)
+<script type="text/javascript">
+    const stripe = Stripe('{{ env('STRIPE_PKEY') }}');
+    const options = {
+        clientSecret: '{{@$intent->client_secret}}',
+        appearance: {
+        theme: 'flat'
+        },
+    };
+
+    // Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 3
+    const elements = stripe.elements(options);
+
+    // Create and mount the Payment Element
+    const paymentElement = elements.create('payment');
+    paymentElement.mount('#payment-element');
+
+    const form = document.getElementById('payment-form');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        $('#submit').text('loading...')
+
+        const {error} = await stripe.confirmSetup({
+        //Elements` instance that was used to create the Payment Element
+            elements,
+            confirmParams: {
+                return_url: '{{route("personal.cards-save",["chkRedirection" => 1])}}',
+            }
+        });
+
+        if (error) {
+          // This point will only be reached if there is an immediate error when
+          // confirming the payment. Show error to your customer (for example, payment
+          // details incomplete)  
+          const messageContainer = document.querySelector('#error-message');
+          messageContainer.textContent = error.message;
+          $('#error-message').show();
+
+        } else {
+          // Your customer will be redirected to your `return_url`. For some payment
+          // methods like iDEAL, your customer will be redirected to an intermediate
+          // site first to authorize the payment, then redirected to the `return_url`.
+        }
+        $('#submit').text('Add on file')
+    });
+</script>
+
+<script src="{{ url('public/js/metisMenu.min.js') }}"></script>
+
+<script src="{{ url('public/js/jquery.payform.min.js') }}" charset="utf-8"></script>
+
+<script src="{{ url('public/js/creditcard.js') }}"></script>
+
+@endif
+
+<script>
+
+    flatpickr(".flatpicker_birthdate1", {
+        dateFormat: "m/d/Y",
+        maxDate: "01/01/2050",
+    });
+
+    $(document).on('focus', '#birthday', function(e){
+        //jQuery.noConflict();
+        $(this).flatpickr( { 
+           dateFormat: "m/d/Y",
+            maxDate: "today",
+        });
+    });
+    
+    $(document).on("click",'#add_family',function(e){
+        var cnt = $('#familycnt').val();
+        var old_cnt = cnt;
+        cnt++;
+        var txtcount = cnt;
+        txtcount += 1;
+        var data = '';
+        data += '<div class="new-client" id="familydiv'+cnt+'">';
+        data += $('#familydiv'+old_cnt).html();
+        data += '</div>';
+        var re = data.replaceAll("heading"+old_cnt,"heading"+cnt);
+        re = re.replaceAll("collapse"+old_cnt,"collapse"+cnt);
+        re = re.replaceAll("birthday_date"+old_cnt,"birthday_date"+cnt);
+        re = re.replaceAll("Family Member #"+cnt,"Family Member #"+txtcount);
+        $('#familymaindiv').append(re);
+        $('.relationship').each(function(e) {
+            $(this).removeClass("font-red");
+        });
+        $('.gender').each(function(e) {
+            $(this).removeClass("font-red");
+        });
+
+        $(".required").each(function() {
+            $(this).removeClass("font-red");
+        });
+        $('#familycnt').val(cnt);
+    });
+</script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/css/default/zebra_datepicker.min.css" type="text/css">
 <script src="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/zebra_datepicker.min.js"></script>
@@ -431,177 +604,79 @@
         $('#err_city_sign').html('');
         $('#err_state_sign').html('');
         $('#err_zipcode_sign').html('');
-        
-        if(address_sign == ''){
-            $('#err_address_sign').html('Please enter address');
-            $('#address_sign').focus();
-            return false;
-        }
-        if(country_sign == ''){
-            $('#err_country_sign').html('Please enter country');
-            $('#country_sign').focus();
-            return false;
-        }
-        if(city_sign == ''){
-            $('#err_city_sign').html('Please enter city');
-            $('#city_sign').focus();
-            return false;
-        }
-        if(state_sign == ''){
-            $('#err_state_sign').html('Please enter state');
-            $('#state_sign').focus();
-            return false;
-        }
-        if(zipcode_sign == ''){
-            $('#err_zipcode_sign').html('Please enter zipcode');
-            $('#zipcode_sign').focus();
-            return false;
-        }
 
-        var posturl = '/auth/saveaddress';
-        var formdata = new FormData();
-        formdata.append('_token', '{{csrf_token()}}')
-        formdata.append('address', address_sign)
-        formdata.append('country', country_sign)
-        formdata.append('city', city_sign)
-        formdata.append('state', state_sign)
-        formdata.append('zipcode', zipcode_sign)
-        formdata.append('lon', lon)
-        formdata.append('lat', lat)
-        formdata.append('show_step', 5)
-        $.ajax({
-            url: posturl,
-            type: 'POST',
-            dataType: 'json',
-            data: formdata,
-            processData: false,
-            contentType: false,
-            headers: {
-                'X-CSRF-TOKEN': $("#_token").val()
-            },
-            beforeSend: function () {
-                $('.step4_next').prop('disabled', true).css('background','#999999');
-                $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
-            },
-            complete: function () {
-                $('.step4_next').prop('disabled', false).css('background','#ed1b24');
-            },
-            success: function (response) {
-                window.location.href = "{{url('/registration/?showstep=1')}}"
-            }
-        });
-       
+        if(address_sign == ''){
+            $('#err_address_sign').html('Please Enter Address..');
+        }else{
+            var posturl = '/auth/saveaddress';
+            var formdata = new FormData();
+            formdata.append('_token', '{{csrf_token()}}')
+            formdata.append('address', address_sign)
+            formdata.append('country', country_sign)
+            formdata.append('city', city_sign)
+            formdata.append('state', state_sign)
+            formdata.append('zipcode', zipcode_sign)
+            formdata.append('lon', lon)
+            formdata.append('lat', lat)
+            formdata.append('show_step', 5)
+            $.ajax({
+                url: posturl,
+                type: 'POST',
+                dataType: 'json',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $("#_token").val()
+                },
+                beforeSend: function () {
+                    $('.step4_next').prop('disabled', true).css('background','#999999');
+                    $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
+                },
+                complete: function () {
+                    $('.step4_next').prop('disabled', false).css('background','#ed1b24');
+                },
+                success: function (response) {
+                    window.location.href = "{{url('/registration/?showstep=1')}}"
+                }
+            });
+        }
     });
 
     /* Step 4 new */
-    $(document).on('click', '#step44_next', function () {
-        
-
-        var posturl = '/auth/savephoto';
-        //var formdata = new FormData();
-         var getData = new FormData($("#myformprofile")[0]);
-        getData.append('_token', '{{csrf_token()}}')       
-        //formdata.append('show_step', 6)
-        $.ajax({
-            url: posturl,
-            type: 'POST',
-            dataType: 'json',
-            data: getData,
-            cache: true,
-            processData: false,
-            contentType: false,
-            /*headers: {
-                'X-CSRF-TOKEN': $("#_token").val()
-            },*/
-            /*beforeSend: function () {
-                $('.step4_next').prop('disabled', true).css('background','#999999');
-                $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
-            },
-            complete: function () {
-                $('.step4_next').prop('disabled', false).css('background','#ed1b24');
-            },*/
-            success: function (response) {
-                window.location.href = "{{url('/registration/?showstep=1')}}"
+    $(document).on('click', '.step44_next', function () {
+        var chk = 0;
+        if($(this).attr('data-check') == 1){
+            if($('#file_upload_profile').val() != ''){
+                chk = 1;
             }
-        });
-       
+        }else{
+            chk = 1;
+        }
+
+        if(chk == 1){
+            var posturl = '/auth/savephoto';
+            var getData = new FormData($("#myformprofile")[0]);
+            getData.append('_token', '{{csrf_token()}}') 
+            $.ajax({
+                url: posturl,
+                type: 'POST',
+                dataType: 'json',
+                data: getData,
+                cache: true,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    window.location.href = "{{url('/registration/?showstep=1')}}"
+                }
+            }); 
+        }else{
+             $("#systemMessage").html('Please Upload Profile Photo.');
+        }
     });
 
-    /* Step 5 add photo */
-    $(document).on('click', '#step5_next', function () {
-        
-        var address_sign = $('#address_sign').val();
-        var country_sign = $('#country_sign').val();
-        var city_sign = $('#city_sign').val();
-        var state_sign = $('#state_sign').val();
-        var zipcode_sign = $('#zipcode_sign').val();
-        
-        $('#err_address_sign').html('');
-        $('#err_country_sign').html('');
-        $('#err_city_sign').html('');
-        $('#err_state_sign').html('');
-        $('#err_zipcode_sign').html('');
-        
-        if(address_sign == ''){
-            $('#err_address_sign').html('Please enter address');
-            $('#address_sign').focus();
-            return false;
-        }
-        if(country_sign == ''){
-            $('#err_country_sign').html('Please enter country');
-            $('#country_sign').focus();
-            return false;
-        }
-        if(city_sign == ''){
-            $('#err_city_sign').html('Please enter city');
-            $('#city_sign').focus();
-            return false;
-        }
-        if(state_sign == ''){
-            $('#err_state_sign').html('Please enter state');
-            $('#state_sign').focus();
-            return false;
-        }
-        if(zipcode_sign == ''){
-            $('#err_zipcode_sign').html('Please enter zipcode');
-            $('#zipcode_sign').focus();
-            return false;
-        }
-
-        var posturl = '/auth/saveaddress';
-        var formdata = new FormData();
-        formdata.append('_token', '{{csrf_token()}}')
-        formdata.append('address', address_sign)
-        formdata.append('country', country_sign)
-        formdata.append('city', city_sign)
-        formdata.append('state', state_sign)
-        formdata.append('zipcode', zipcode_sign)
-        formdata.append('lon', lon)
-        formdata.append('lat', lat)
-        formdata.append('show_step', 6)
-        $.ajax({
-            url: posturl,
-            type: 'POST',
-            dataType: 'json',
-            data: formdata,
-            processData: false,
-            contentType: false,
-            headers: {
-                'X-CSRF-TOKEN': $("#_token").val()
-            },
-            beforeSend: function () {
-                $('.step4_next').prop('disabled', true).css('background','#999999');
-                $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
-            },
-            complete: function () {
-                $('.step4_next').prop('disabled', false).css('background','#ed1b24');
-            },
-            success: function (response) {
-                //window.location.href = "{{url('/registration/?showstep=1')}}"
-                window.location.href = response.redirecturl;
-            }
-        });
-       
+    $(document).on("click",'#skip_next',function(e){
+        window.location.href = "{{url('/registration/?showstep=7')}}"
     });
 
     /* Step 5 */
@@ -643,73 +718,30 @@
     });
 
     $(document).on('click', '#step5_next', function () {
-        
-        var fname = $('#fname').val();
-        var lname = $('#lname').val();
-        var birthday_date = $('#birthday_date').val();
-        var relationship = $('#relationship').val();
-        var mphone = $('#mphone').val();
-        var gender = $('#gender').val();
-        var emailid = $('#emailid').val();
-        
-        $('#err_fname').html('');
-        $('#err_lname').html('');
-        $('#err_birthday_date').html('');
-        $('#err_relationship').html('');
-        $('#err_mphone').html('');
-        $('#err_gender').html('');
-        $('#err_emailid').html('');
-        
-        if(fname == ''){
-            $('#err_fname').html('Please enter first name');
-            $('#fname').focus();
-            return false;
-        }
-        if(lname == ''){
-            $('#err_lname').html('Please enter last name');
-            $('#lname').focus();
-            return false;
-        }
-        if(birthday_date == ''){
-            $('#err_birthday_date').html('Please enter birth date');
-            $('#birthday_date').focus();
-            return false;
-        }
-        if(relationship == ''){
-            $('#err_relationship').html('Please select relationship');
-            $('#relationship').focus();
-            return false;
-        }
-        if(mphone == ''){
-            $('#err_mphone').html('Please enter mobile number');
-            $('#mphone').focus();
-            return false;
-        }
-        if(gender == ''){
-            $('#err_gender').html('Please select gender');
-            $('#gender').focus();
-            return false;
-        }
-        if(emailid == ''){
-            $('#err_emailid').html('Please enter emailid');
-            $('#emailid').focus();
-            return false;
-        }
-        
-        var posturl = '/submit-family-form1';
-        var formdata = new FormData();
-        formdata.append('_token', '{{csrf_token()}}')
-        formdata.append('first_name', $('.first_name').val())
-        formdata.append('last_name', $('.last_name').val())
-        formdata.append('email', $('.email').val())
-        formdata.append('relationship', $('.relationship').val())
-        formdata.append('mobile_number', $('.mobile_number').val())
-        formdata.append('emergency_phone', $('.emergency_phone').val())
-        formdata.append('birthday', $('#birthday_date').val())
-        formdata.append('gender', $('.gender').val())
-        formdata.append('show_step', 6)
 
-        setTimeout(function () {
+        $(".required").each(function() {
+            $(this).removeClass("redClass");
+        });
+        var counter = 0;
+        $(".required").each(function() {
+            if ($(this).val() === "") {
+                $(this).addClass("redClass");
+                counter++;
+            }
+        });
+        if(counter > 0){
+            $('#systemMessage').html("");
+
+            $('#familyerrormessage').html("Looks like some of the fields aren't filled out correctly. They're highlighted in red.");
+            return false;
+        }else{
+            var posturl = '/submit-family-form1';
+            var form = $('#familyform')[0];
+            var formdata = new FormData(form);
+            formdata.append('_token', '{{csrf_token()}}')
+            formdata.append('show_step', 6)
+
+            setTimeout(function () {
             $.ajax({
                 url: posturl,
                 type: 'POST',
@@ -739,73 +771,32 @@
                 }
             });
         }, 1000)
+        }
     });
 
-
     $(document).ready(function () {
+        $('.toggle-password').on('click', function() {
+            var passwordField = $('#password');
+            if($(this).data('tp') == 'confirm_password'){
+                passwordField = $('#confirm_password');
+            }
 
-      /*  $("#register_submit").click(function (e) {
-            e.preventDefault();
-            $('#frmregister').submit();
-        });*/
-        $('.dobdate').Zebra_DatePicker({
-            format: 'm/d/Y',
-            default_position: 'below'
+            var toggleButton = $(this);
+            if (passwordField.attr('type') === 'password') {
+                passwordField.attr('type', 'text');
+                toggleButton.html('<i class="fas fa-eye-slash"></i>');
+            } else {
+                passwordField.attr('type', 'password');
+                toggleButton.html('<i class="fas fa-eye"></i>');
+            }
         });
-        $("#frmregister").submit(function (e) {
-            e.preventDefault();
-            $('#frmregister').validate({
-                rules: {
-                    firstname: "required",
-                    lastname: "required",
-                    username: "required",
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    dob: {
-                        required: true,
-                    },
-                    password: {
-                        required: true,
-                        minlength: 8
-                    },
-                    confirm_password: {
-                        required: true,
-                        minlength: 8,
-                        equalTo: "#password"
-                    },
-                   /* b_trm1: {
-                        required: true,
-                    },*/
-                },
-                messages: {
-                    firstname: "Enter your Firstname",
-                    lastname: "Enter your Lastname",
-                    username: "Enter your Username",
-                    email: {
-                        required: "Please enter a valid email address",
-                        minlength: "Please enter a valid email address",
-                        remote: jQuery.validator.format("{0} is already in use")
-                    },
-                    dob: {
-                        required: "Please provide your date of birth",
-                    },
-                    password: {
-                        required: "Provide a password",
-                        minlength: jQuery.validator.format("Enter at least {0} characters")
-                    },
-                    confirm_password: {
-                        required: "Repeat your password",
-                        minlength: jQuery.validator.format("Enter at least {0} characters"),
-                        equalTo: "Enter the same password as above"
-                    },
-                    /*b_trm1: {
-                        required: "Plese select Terms of Service and Privacy Policy",
-                    },*/
-                },
-                submitHandler: registerUser
-            });
+
+        $(".birthday").keyup(function(){
+            if ($(this).val().length == 2){
+                $(this).val($(this).val() + "/");
+            }else if ($(this).val().length == 5){
+                $(this).val($(this).val() + "/");
+            }
         });
     });
 
@@ -828,7 +819,6 @@
 
     function getAge() {
         var dateString = document.getElementById("dob").value;
-        /*    alert(dateString);*/
         var today = new Date();
         var birthDate = new Date(dateString);
         var age = today.getFullYear() - birthDate.getFullYear();
@@ -841,166 +831,209 @@
         return agechk;
     }
 
-    function registerUser() {
-        var valchk = getAge();
-        /*alert(valchk);*/
-        var validForm = $('#frmregister').valid();
-        var posturl = '/auth/registration';
-        if (!jQuery("#b_trm1").is(":checked")) {
-           $("#termserror").html('Plese Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
-            return false;
-        }
-        if(valchk == 1){
-            $('#register_submit').prop('disabled', true);
-            if (validForm) {
-
-                var formData = $("#frmregister").serialize();
-                $.ajax({
-                    url: posturl,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: formData,
-                    beforeSend: function () {
-                        
-                        $('#register_submit').prop('disabled', true).css('background','#999999');
-                        showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
-                        $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
-                    },
-                    complete: function () {
-                    
-                        $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                    },
-                    success: function (response) {
-                        //alert(response.msg);
-                        
-                        $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                        showSystemMessages('#systemMessage', response.type, response.msg);
-                        if (response.type === 'success') {
-                            window.location.href = response.redirecturl;
-                        } else {
-                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
-                        }
-                    }
-                });
-            }
-        }else{
-            $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
-        }
-    }
-
-    function changeformate() {
-        /*alert($('#contact').val());*/
-        var con = $('#contact').val();
-        var curchr = con.length;
-        if (curchr == 3) {
-            $("#contact").val("(" + con + ")" + "-");
-        } else if (curchr == 9) {
-            $("#contact").val(con + "-");
-        }
-    }
 </script>
+<script type="text/javascript">
+    
+    jQuery(function ($) {
+        $('#frmregister').validate({
+            rules: {
+                firstname: "required",
+                lastname: "required",
+                username: "required",
+                email: {
+                    required: true,
+                    email: true
+                },
+                dob: {
+                    required: true,
+                },
+                password: {
+                    required: true,
+                    minlength: 8
+                },
+                confirm_password: {
+                    required: true,
+                    minlength: 8,
+                    equalTo: "#password"
+                },
+               /* b_trm1: {
+                    required: true,
+                },*/
+            },
+            messages: {
+                firstname: "Enter your Firstname",
+                lastname: "Enter your Lastname",
+                username: "Enter your Username",
+                email: {
+                    required: "Please enter a valid email address",
+                    minlength: "Please enter a valid email address",
+                    remote: jQuery.validator.format("{0} is already in use")
+                },
+                dob: {
+                    required: "Please provide your date of birth",
+                },
+                password: {
+                    required: "Provide a password",
+                    minlength: jQuery.validator.format("Enter at least {0} characters")
+                },
+                confirm_password: {
+                    required: "Repeat your password",
+                    minlength: jQuery.validator.format("Enter at least {0} characters"),
+                    equalTo: "Enter the same password as above"
+                },
+                /*b_trm1: {
+                    required: "Plese select Terms of Service and Privacy Policy",
+                },*/
+            },
+            submitHandler: function (form) {
+                if (!jQuery("#b_trm1").is(":checked")) {
+                    $("#termserror").html('Please Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
+                    return false;
+                }
+                var valchk = getAge();
+                if(valchk == 1){
+                    $('#register_submit').prop('disabled', true);
+                    var formData = $("#frmregister").serialize();
+                    var posturl = '/auth/registration';
 
+                    $.ajax({
+                        url: posturl,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: formData,
+                        beforeSend: function () {
+                            
+                            $('#register_submit').prop('disabled', true).css('background','#999999');
+                            showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+                            $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+                        },
+                        complete: function () {
+                        
+                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                        },
+                        success: function (response) {
+                            //alert(response.msg);
+                            
+                            $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+                            showSystemMessages('#systemMessage', response.type, response.msg);
+                            if (response.type === 'success') {
+                                window.location.href = response.redirecturl;
+                            } else {
+                                $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                            }
+                        }
+                    });  
+                }else{
+                    $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
+                }
+            }
+        });
+    });
+</script>
 
 <script type="text/javascript">
         function initMap() {
-            var map = new google.maps.Map(document.getElementById('map'), {
-              center: {lat: -33.8688, lng: 151.2195},
-              zoom: 13
-            });
-            var input = document.getElementById('address_sign');
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+            if(document.getElementById('map') != '' && document.getElementById('map') != null){
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: -33.8688, lng: 151.2195},
+                    zoom: 13
+                });
+                var input = document.getElementById('address_sign');
+                map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-            var autocomplete = new google.maps.places.Autocomplete(input);
-            autocomplete.bindTo('bounds', map);
+                var autocomplete = new google.maps.places.Autocomplete(input);
+                autocomplete.bindTo('bounds', map);
 
-            var infowindow = new google.maps.InfoWindow();
-            var marker = new google.maps.Marker({
-                map: map,
-                anchorPoint: new google.maps.Point(0, -29)
-            });
+                var infowindow = new google.maps.InfoWindow();
+                var marker = new google.maps.Marker({
+                    map: map,
+                    anchorPoint: new google.maps.Point(0, -29)
+                });
 
-            autocomplete.addListener('place_changed', function() {
-                infowindow.close();
-                marker.setVisible(false);
-                var place = autocomplete.getPlace();
-                if (!place.geometry) {
-                    window.alert("Autocomplete's returned place contains no geometry");
-                    return;
-                }
-          
-                // If the place has a geometry, then present it on a map.
-                if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
-                } else {
-                    map.setCenter(place.geometry.location);
-                    map.setZoom(17);
-                }
-                marker.setIcon(({
-                    url: place.icon,
-                    size: new google.maps.Size(71, 71),
-                    origin: new google.maps.Point(0, 0),
-                    anchor: new google.maps.Point(17, 34),
-                    scaledSize: new google.maps.Size(35, 35)
-                }));
-                marker.setPosition(place.geometry.location);
-                marker.setVisible(true);
-            
-                var address = '';
-                var badd = '';
-                var sublocality_level_1 = '';
-                if (place.address_components) {
-                    address = [
-                      (place.address_components[0] && place.address_components[0].short_name || ''),
-                      (place.address_components[1] && place.address_components[1].short_name || ''),
-                      (place.address_components[2] && place.address_components[2].short_name || '')
-                    ].join(' ');
-                }
-            
-                infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-                infowindow.open(map, marker);
+                autocomplete.addListener('place_changed', function() {
+                    infowindow.close();
+                    marker.setVisible(false);
+                    var place = autocomplete.getPlace();
+                    if (!place.geometry) {
+                        window.alert("Autocomplete's returned place contains no geometry");
+                        return;
+                    }
+              
+                    // If the place has a geometry, then present it on a map.
+                    if (place.geometry.viewport) {
+                        map.fitBounds(place.geometry.viewport);
+                    } else {
+                        map.setCenter(place.geometry.location);
+                        map.setZoom(17);
+                    }
+                    marker.setIcon(({
+                        url: place.icon,
+                        size: new google.maps.Size(71, 71),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(17, 34),
+                        scaledSize: new google.maps.Size(35, 35)
+                    }));
+                    marker.setPosition(place.geometry.location);
+                    marker.setVisible(true);
                 
-                // Location details
-                for (var i = 0; i < place.address_components.length; i++) {
-                    if(place.address_components[i].types[0] == 'postal_code'){
-                      $('#zipcode_sign').val(place.address_components[i].long_name);
+                    var address = '';
+                    var badd = '';
+                    var sublocality_level_1 = '';
+                    if (place.address_components) {
+                        address = [
+                          (place.address_components[0] && place.address_components[0].short_name || ''),
+                          (place.address_components[1] && place.address_components[1].short_name || ''),
+                          (place.address_components[2] && place.address_components[2].short_name || '')
+                        ].join(' ');
                     }
-               
-                    if(place.address_components[i].types[0] == 'locality'){
-                        $('#city_sign').val(place.address_components[i].long_name);
-                    }
-
-                    if(place.address_components[i].types[0] == 'sublocality_level_1'){
-                        sublocality_level_1 = place.address_components[i].long_name;
-                    }
-
-                    if(place.address_components[i].types[0] == 'country'){
-                        $('#country_sign').val(place.address_components[i].long_name);
-                    }
-
-                    if(place.address_components[i].types[0] == 'administrative_area_level_1'){
-                         $('#state_sign').val(place.address_components[i].long_name);
-                    }
-
-                    if(place.address_components[i].types[0] == 'street_number'){
-                       badd = place.address_components[i].long_name ;
-                    }
-
-                    if(place.address_components[i].types[0] == 'route'){
-                       badd += ' '+place.address_components[i].long_name ;
-                    } 
-                }
-                if(badd == ''){
-                  $('#address_sign').val(sublocality_level_1);
-                }else{
-                  $('#address_sign').val(badd);
-                }
-                $('#lat').val(place.geometry.location.lat());
-                $('#lon').val(place.geometry.location.lng());
                 
-            });
+                    infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+                    infowindow.open(map, marker);
+                    
+                    // Location details
+                    for (var i = 0; i < place.address_components.length; i++) {
+                        if(place.address_components[i].types[0] == 'postal_code'){
+                          $('#zipcode_sign').val(place.address_components[i].long_name);
+                        }
+                   
+                        if(place.address_components[i].types[0] == 'locality'){
+                            $('#city_sign').val(place.address_components[i].long_name);
+                        }
+
+                        if(place.address_components[i].types[0] == 'sublocality_level_1'){
+                            sublocality_level_1 = place.address_components[i].long_name;
+                        }
+
+                        if(place.address_components[i].types[0] == 'country'){
+                            $('#country_sign').val(place.address_components[i].long_name);
+                        }
+
+                        if(place.address_components[i].types[0] == 'administrative_area_level_1'){
+                             $('#state_sign').val(place.address_components[i].long_name);
+                        }
+
+                        if(place.address_components[i].types[0] == 'street_number'){
+                           badd = place.address_components[i].long_name ;
+                        }
+
+                        if(place.address_components[i].types[0] == 'route'){
+                           badd += ' '+place.address_components[i].long_name ;
+                        } 
+                    }
+                    if(badd == ''){
+                      $('#address_sign').val(sublocality_level_1);
+                    }else{
+                      $('#address_sign').val(badd);
+                    }
+                    $('#lat').val(place.geometry.location.lat());
+                    $('#lon').val(place.geometry.location.lng());
+                    
+                });
+            }
         }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap" async defer></script>
+
 
 </body>
 </html>

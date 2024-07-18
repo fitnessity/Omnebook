@@ -74,7 +74,8 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                     <select id="actfilbtype" name="actfilbtype" class="bd-bottom bd-right" onchange="actFilter('<?php echo $cid; ?>','0')" autocomplete="off">
                         <option value="">Business Type</option>
                         <option value="individual">Personal Trainer</option>
-                        <option value="classes">Gym/Studio</option>
+                        <option value="classes">Classes</option>
+                        <option value="events">Events</option>
                         <option value="experience">Experience</option>
                     </select>
                 </div>
@@ -135,7 +136,7 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                             if (isset($companyData)) {
 
                                 $companyid = $companyData['id'];
-                                $companyname = $companyData['company_name'];
+                                $companyname = $companyData['dba_business_name'];
                                 $companycity = $companyData['city'];
                                 $companycountry = $companyData['country'];
                                     
@@ -221,7 +222,7 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                                     <span> {{$reviews_avg}} ({{$reviews_count}})  </span>
                                 </div>
                                 @if($time != '')
-                                    <div class="activity-hours time-hours">
+                                    <div class="activity-hours time-hours hours-sp">
                                         <span>{{$time}}</span>
                                     </div>
                                 @endif
@@ -244,11 +245,11 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
 										@else
 											<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
 										@endif
-									<div class="activity-city text-left-page">
-										<span>{{$companycity}}, {{$companycountry}}</span>
+									<div class="activity-city city-space">
+										<span>{{$companycity}}, &nbsp {{$companycountry}}</span>
 										
 									</div>
-                                <div class="activity-information activity-info">
+                                <div class="activity-information">
                                     <span><a 
                                         <?php if (Auth::check()) { ?> 
                                             href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
@@ -257,10 +258,10 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                                         <?php }?>
                                             target="_blank">{{ $service['program_name'] }}</a></span>
                                     <p>{{ $service_type }} | {{ $service['sport_activity'] }}</p>
-                                    <a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $service['id']])}}">More Details</a>
+                                    <a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $service['id']])}}">Book Now</a>
                                 </div>
                                 @if($price_all != '')
-                                    <div>
+                                    <div class="text-center">
                                         <span class="activity-time">From ${{$price_all}}/Person</span>
                                     </div>
                                 @endif

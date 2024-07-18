@@ -1,93 +1,19 @@
 <?php
 namespace App\Http\Controllers;
-
-use Redirect;
-use App\User;
-use App\UserEmploymentHistory;
-use App\UserEducation;
-use App\UserCertification;
-use App\UserService;
-use App\UserSecurityQuestion;
-use App\UserMembership;
-use App\UserProfessionalDetail;
-use App\UserSkillAward;
-use App\UserFamilyDetail;
-use App\UserCustomerDetail;
-use App\BusinessPriceDetailsAges;
-use App\AddrStates;
-use App\AddrCities;
-use App\ProfilePost;
-use App\Event;
-use App\Repositories\PlanRepository;
-use App\Repositories\ProfessionalRepository;
-use App\Repositories\BookingRepository;
-use Validator;
-use App\Http\Controllers\Controller;
-use App\Repositories\UserRepository;
-use Input;
-use Response;
-use Auth;
-use Hash;
+use Illuminate\Support\Facades\Route;
+use Redirect,Validator,Input,Response,Auth,Hash,Image,File,View,Mail,Session,DB,Str;
+use Illuminate\Support\Facades\{Gate,Log,Storage};
+use Illuminate\Pagination\LengthAwarePaginator;
 use App\Http\Requests;
 use Illuminate\Http\Request;
-use App\Miscellaneous;
-use Image;
-use File;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Pagination\LengthAwarePaginator;
-use DB;
-use App\Fit_background_check_faq;
-use App\Fit_vetted_business_faq;
-use App\MailService;
-use App\Evident;
-use App\Evidents;
-use App\Sports;
-use App\ProfileSave;
-use App\InstantForms;
-use Session;
+use App\Http\Controllers\Controller;
+use App\Repositories\{PlanRepository,ProfessionalRepository,BookingRepository,UserRepository};
+use App\{Fit_background_check_faq,Fit_vetted_business_faq,MailService,Evident,Evidents,Sports,ProfileSave,InstantForms,Languages,UserFavourite,UserFollow,UserFollower,Review,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,BusinessActivityScheduler,ProfileFollow,ProfileFav,InquiryBox,ProfileView,PostLike,PostReport,PostComment,PostCommentLike,PagePost,PagePostSave,Notification,BusinessServicesFavorite,UserBookingStatus,UserBookingDetail,ProfilePostViews,BusinessPostViews,StripePaymentMethod,BusinessClaim,Miscellaneous,User,UserEmploymentHistory,UserEducation,UserCertification,UserService,UserSecurityQuestion,UserMembership,UserProfessionalDetail,UserSkillAward,UserFamilyDetail,UserCustomerDetail,BusinessPriceDetailsAges,AddrStates,AddrCities,ProfilePost,Event,Transaction,Customer,SGMailService,CustomersDocuments};
 use App\Repositories\SportsRepository;
-use View;
-use App\BusinessClaim;
-use Mail;
 use App\Mail\BusinessVerifyMail;
 use Twilio\Rest\Client;
 use App\Services\TwilioService;
 use Twilio\TwiML\VoiceResponse;
-use App\Languages;
-use App\UserFavourite;
-use App\UserFollow;
-use App\UserFollower;
-use App\Review;
-use App\BusinessCompanyDetail;
-use App\BusinessExperience;
-use App\BusinessInformation;
-use App\BusinessService;
-use App\BusinessTerms;
-use App\BusinessVerified;
-use App\BusinessServices;
-use App\BusinessServicesMap;
-use App\BusinessPriceDetails;
-use App\BusinessSubscriptionPlan;
-use App\CompanyInformation;
-use App\BusinessActivityScheduler;
-use App\ProfileFollow;
-use App\ProfileFav;
-use App\InquiryBox;
-use App\ProfileView;
-use App\PostLike;
-use App\PostReport;
-use App\PostComment;
-use App\PostCommentLike;
-use App\PagePost;
-use App\PagePostSave;
-use App\Notification;
-use App\BusinessServicesFavorite;
-use App\UserBookingStatus;
-use App\UserBookingDetail;
-use App\StaffMembers;
-use App\ProfilePostViews;
-use App\BusinessPostViews;
 use Carbon\Carbon;
 
 use Request as resAll;
@@ -130,7 +56,7 @@ class UserProfileController extends Controller {
      */
     public function __construct(UserRepository $users, PlanRepository $planRepository, ProfessionalRepository $professionals, SportsRepository $sports, BookingRepository $bookings) {
         
-        $this->middleware('auth', ['except' => ['getBladeDetail1','profileDetail', 'SendVerificationlinkCall', 'SendVerificationlinkMsg', 'makeCall', 'generateVoiceMessage', 'sendCustomMessage', 'getBladeDetail', 'newFUn', 'getBusinessClaim', 'getStateList', 'getCityList', 'familyProfileUpdate', 'submitFamilyForm', 'submitFamilyFormWithSkip', 'check', 'deleteCompany', 'submitFamilyForm1', 'skipFamilyForm1', 'getBusinessClaimDetaill', 'businessClaim', 'getLocationBusinessClaimDetaill', 'VerifySendVerificationlink', 'searchResultLocation', 'searchResultLocation1','profileView','sendmail','mailtemplate','about','postDetail']]);
+        $this->middleware('auth', ['except' => ['getBladeDetail1','profileDetail', 'SendVerificationlinkCall', 'SendVerificationlinkMsg', 'makeCall', 'generateVoiceMessage', 'sendCustomMessage', 'getBladeDetail', 'newFUn', 'getBusinessClaim', 'getStateList', 'getCityList', 'familyProfileUpdate', 'submitFamilyForm', 'submitFamilyFormWithSkip', 'check', 'deleteCompany', 'submitFamilyForm1', 'skipFamilyForm1', 'getBusinessClaimDetaill', 'businessClaim', 'getLocationBusinessClaimDetaill', 'VerifySendVerificationlink', 'searchResultLocation', 'searchResultLocation1','profileView','sendmail','mailtemplate','about','postDetail','varify_email_for_claim_business','varify_code_to_claim_business','resendOpt']]);
 
         $this->bookings = $bookings;
         $this->planRepository = $planRepository;
@@ -163,6 +89,7 @@ class UserProfileController extends Controller {
     }
     public function about() { 
         return view('profiles.about');
+        
     }
 
     public function editpost(Request $request) {
@@ -1177,7 +1104,6 @@ class UserProfileController extends Controller {
     }
     
     public function editBusinessProfile(Request $request) {
-
         if($request->btnedit == 'Edit') {
             User::where('id', Auth::user()->id)->update(['bstep' => 2, 'cid' => $request->cid, 'serviceid' => $request->serviceid]);
             return redirect()->route('createNewBusinessProfile');
@@ -1194,13 +1120,13 @@ class UserProfileController extends Controller {
         }
         
         if($request->btnmanageservice == 'Manage Service') {
-            return redirect('/manage/service/' . $request->cid);
+            return redirect('/business/'.$request->cid.'/services');
         }
     }
     
     
     public function editBusinessService(Request $request) {
-        
+        //print_r($request->all());exit;
         $businessData = [
             'bstep' => 72,
             'cid' => $request->cid,
@@ -1216,38 +1142,20 @@ class UserProfileController extends Controller {
         if($request->btnview == 'View') {
             return redirect('/pcompany/view/'.$request->cid);
         }
-        
-        if($request->btnactive == 'Active') {
-            BusinessServices::where('cid', $request->cid)->where('serviceid', $request->serviceid)->where('userid', Auth::user()->id)->update(['is_active' => 1]);
-            return redirect('/manage/service/' . $request->cid);
-        }
-        
-        if($request->btnactive == 'Inactive') {
-            BusinessServices::where('cid', $request->cid)->where('serviceid', $request->serviceid)->where('userid', Auth::user()->id)->update(['is_active' => 0]);
-            return redirect('/manage/service/' . $request->cid);
-        }
     }
+
     public function createNewBusinessProfile(Request $request) {
         if (!Gate::allows('profile_view_access')) {
             $request->session()->flash('alert-danger', 'Access Restricted');
             return redirect('/');
         }
-
-        
-
+    
         $companyId = !empty(Auth::user()->cid) ? Auth::user()->cid : "";
         
-
-
-
         $serviceId = !empty(Auth::user()->serviceid) ? Auth::user()->serviceid : "";
         $loggedinUser = Auth::user();
         $UserProfileDetail = [];
-        /*$UserProfileDetail = $this->users->getUserProfileDetail($loggedinUser['id'], array('professional_detail', 'history', 'education', 'certification', 'service'));
-        if (isset($UserProfileDetail['ProfessionalDetail']) && @count($UserProfileDetail['ProfessionalDetail']) > 0) {
-            $UserProfileDetail['ProfessionalDetail'] = UserProfessionalDetail::getFormedProfile($UserProfileDetail['ProfessionalDetail']);
-        }*/
-
+       
         $sports_names = $this->sports->getAllSportsNames();
         $approve = []; //Evidents::where('user_id', $loggedinUser['id'])->get();
         $serviceType = Miscellaneous::businessType();
@@ -1261,14 +1169,8 @@ class UserProfileController extends Controller {
         $duration = Miscellaneous::duration();
         $servicePriceOption = Miscellaneous::servicePriceOption();
         $specialDeals = Miscellaneous::specialDeals();
-        /*
-        if ($loggedinUser['role'] == 'business' || $loggedinUser['role'] == 'professional' || $loggedinUser['role'] == 'admin') {
-            $view = 'profiles.viewProfile';
-        } elseif ($loggedinUser['role'] == 'customer') {
-            $view = 'profiles.viewProfileCustomer';
-        }
-        */
-        $family = []; //UserFamilyDetail::where('user_id', Auth::user()->id)->get();
+        
+        $family = []; 
         
         $companyservice = $company_info = $business_details = $business_exp = $business_term = $business_spec = $business_veri = $business_service = $business_price = $business_plan = $business_price_ages =[];
         $business_activity = array();
@@ -1291,7 +1193,7 @@ class UserProfileController extends Controller {
         $business_veri = BusinessVerified::where('cid', $companyId)->get();
         $business_veri = isset($business_veri[0]) ? $business_veri[0] : [];
         
-        $business_service = BusinessServices::where('cid', $companyId)->where('serviceid', $serviceId)->get();
+        $business_service = BusinessServices::where('cid', $companyId)->where('id', $serviceId)->get();
         $business_service = isset($business_service[0]) ? $business_service[0] : [];
       
         if(!empty($business_service)){
@@ -1344,7 +1246,6 @@ class UserProfileController extends Controller {
             $cart = $request->session()->get('cart_item');
         }
 
-        
         return view($view, [
             'cart' => $cart,
             'UserProfileDetail' => $UserProfileDetail,
@@ -1405,40 +1306,40 @@ class UserProfileController extends Controller {
         }
         
 
-/*
-        $company = CompanyInformation::where('id', Auth::user()->cid)->first();        
-        
-        if($company){
+        /*
+            $company = CompanyInformation::where('id', Auth::user()->cid)->first();        
+            
+            if($company){
 
-	        if($company->charges_enabled == '0'){
-		        $stripe_client = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-		        
-		        
-				try{
-					$stripe_account = $stripe_client->accounts->retrieve(
-					  	$company->stripe_connect_id,
-					  	[]
-			  		);
-			  		
-			  		if($stripe_account->charges_enabled){
-			  			$company->charges_enabled = 1;
-				  		$company->save();	
+    	        if($company->charges_enabled == '0'){
+    		        $stripe_client = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+    		        
+    		        
+    				try{
+    					$stripe_account = $stripe_client->accounts->retrieve(
+    					  	$company->stripe_connect_id,
+    					  	[]
+    			  		);
+    			  		
+    			  		if($stripe_account->charges_enabled){
+    			  			$company->charges_enabled = 1;
+    				  		$company->save();	
 
-				  		return redirect()->route('createNewBusinessProfile');				  		
-			  		}
+    				  		return redirect()->route('createNewBusinessProfile');				  		
+    			  		}
 
-		
-			  	}catch(\Stripe\Exception\PermissionException $e){
+    		
+    			  	}catch(\Stripe\Exception\PermissionException $e){
 
-			  	}catch(\Stripe\Exception\InvalidArgumentException $e){
+    			  	}catch(\Stripe\Exception\InvalidArgumentException $e){
 
-			  	}
-	        }else{
-		        return redirect()->route('createNewBusinessProfile');				  		
-	        }
+    			  	}
+    	        }else{
+    		        return redirect()->route('createNewBusinessProfile');				  		
+    	        }
 
-        }
-*/
+            }
+    */
 
         
         return view('business.welcomeBusinessProfile', compact('company', 'firstCompany', 'cart'));
@@ -1492,7 +1393,7 @@ class UserProfileController extends Controller {
 
 
         $companyId = $serviceId = 0;
-        if(isset($request->cid)) {
+        if(isset($request->cid) && $request->cid != 0) {
             $companyId = $request->cid;
         } elseif(isset(Auth::user()->cid) && !empty(Auth::user()->cid)) {
             $companyId = Auth::user()->cid;
@@ -1948,690 +1849,7 @@ class UserProfileController extends Controller {
         }
         
         User::where('id', Auth::user()->id)->update(['bstep' => 7]);
-        //return view('profiles.createNewBusinessProfile');
         return redirect()->route('createNewBusinessProfile');
-        //return redirect()->route('servicesBusinessProfile');
-    }
-
-    /* Step 7 - Business Profile */
-    public function addbusinessservices(Request $request)
-    {   
-      /* print_r($request->all());
-        exit;*/
-
-        $serid_pay=$request->serviceid;
-        $businessData = [
-            "cid" => $request->cid,
-            "userid" => $request->userid
-        ];
-        /* Table - business_services_map */
-        
-        $business_services_map = BusinessServicesMap::where('id', $request->serviceid)->where('cid', $request->cid)->where('userid', Auth::user()->id)->get();
-        $business_services_map_count = BusinessServicesMap::where('id', $request->serviceid)->where('cid', $request->cid)->where('userid', Auth::user()->id)->count();
-        
-        if ($business_services_map_count<=0) {
-            $request->serviceid = BusinessServicesMap::create($businessData)->id;
-        } else {
-            BusinessServicesMap::where('id', $request->serviceid)->where('cid', $request->cid)->where('userid', Auth::user()->id)->update($businessData);
-        }
-
-        $profile_picture = "";
-        $datadayimg = [];
-
-        $bus_count = BusinessServices::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('id',$serid_pay)->first();
-
-        if($request->service_type=='experience') {
-            for ($i=0; $i <count($request->days_title) ; $i++) { 
-                if($request->file('dayplanpic_'.$i)){
-                    $no= $i+1;
-                    $file = $request->file('dayplanpic_'.$i);
-                    $name = time().$no.'.'.$file->extension();
-                    $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
-                    $file->move($thumb_upload_path, $name);  
-                    $datadayimg[$i] = $name;  
-                    $no++;
-                }else{
-                    if($request->input('olddayplanpic_'.$i)){
-                        $datadayimg[$i] = $request->input('olddayplanpic_'.$i);
-                    }else{
-                        $datadayimg[$i] = null;
-                    }
-                }
-            }
-        } 
-       
-       
-        if($bus_count != ''){
-            if($bus_count->profile_pic != ''){
-                $img = rtrim($bus_count->profile_pic,',');
-                $profile_picture .= $img.',';
-            }else{
-                $profile_picture .= '';
-            }
-        }else{
-            $profile_picture .= '';
-        }
-
-        if ($request->hasFile('imgUpload')) {
-            for($i=0;$i<count($request->imgUpload);$i++){
-                $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
-                $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
-                $image_upload = Miscellaneous::uploadPhotoGallery($request->imgUpload[$i], $gallery_upload_path, 1, $thumb_upload_path, 130, 100);
-                /*print_r($image_upload);*/
-                if($image_upload['success'] == true) {
-                    $profile_picture .= $image_upload['filename'].',';
-                }
-            }
-            
-        } else {
-            $profile_picture .= '';
-        }
-
-
-        $request->servicepic = rtrim($profile_picture,',');
-       /* print_r($request->file('imgUpload'));
-        echo $request->servicepic ;exit;*/
-        $instant = $reserve = 0;
-        
-        $servicetype = $servicelocation = $programfor = $agerange = $numberofpeople = "";
-        $experiencelevel = $servicefocuses = $teachingstyle = $hours = $cnumberofpeople = $safe_varification= "";
-        if(isset($request->frm_servicetype) && !empty($request->frm_servicetype)) {
-            $servicetype = @implode(",",$request->frm_servicetype);    
-        }
-        if(isset($request->frm_servicelocation) && !empty($request->frm_servicelocation)) {
-            $servicelocation = @implode(",",$request->frm_servicelocation);    
-        }
-        if(isset($request->frm_programfor) && !empty($request->frm_programfor)) {
-            $programfor = @implode(",",$request->frm_programfor);    
-        }
-        if(isset($request->frm_agerange) && !empty($request->frm_agerange)) {
-            $agerange = @implode(",",$request->frm_agerange);    
-        }
-        if(isset($request->frm_numberofpeople) && !empty($request->frm_numberofpeople)) {
-            $numberofpeople = @implode(",",$request->frm_numberofpeople);    
-        }
-        if(isset($request->frm_experience_level) && !empty($request->frm_experience_level)) {
-            $experiencelevel = @implode(",",$request->frm_experience_level);    
-        }
-        if(isset($request->frm_servicefocuses) && !empty($request->frm_servicefocuses)) {
-            $servicefocuses = @implode(",",$request->frm_servicefocuses);    
-        }
-        if(isset($request->frm_teachingstyle) && !empty($request->frm_teachingstyle)) {
-            $teachingstyle = @implode(",",$request->frm_teachingstyle);    
-        }
-        if(isset($request->hours) && !empty($request->hours)) {
-            $hours = @implode(",",$request->hours);    
-        }
-        if(isset($request->frm_cnumberofpeople) && !empty($request->frm_cnumberofpeople)) {
-            $cnumberofpeople = @implode(",",$request->frm_cnumberofpeople);    
-        }
-        
-        $servicetype1 = $servicelocation1 = $programfor1 = $agerange1 = $experiencelevel1 = $teachingstyle1 = $servicefocuses1 =  $included_thing = $notincluded_thing = $frm_wear= "";  
-       $days_dayplanpic = "";
-        if(isset($request->frm_lservice) && !empty($request->frm_lservice)) {
-            $servicetype1 = @implode(",",$request->frm_lservice);    
-        }
-        if(isset($request->frm_lactivity) && !empty($request->frm_lactivity)) {
-            $servicelocation1 = @implode(",",$request->frm_lactivity);    
-        }
-        if(isset($request->frm_lgreat) && !empty($request->frm_lgreat)) {
-            $programfor1 = @implode(",",$request->frm_lgreat);    
-        }
-        if(isset($request->frm_lagerange) && !empty($request->frm_lagerange)) {
-            $agerange1 = @implode(",",$request->frm_lagerange);    
-        }
-        if(isset($request->frm_ldifficulty) && !empty($request->frm_ldifficulty)) {
-            $experiencelevel1 = @implode(",",$request->frm_ldifficulty);    
-        }
-        if(isset($request->frm_lcustomers) && !empty($request->frm_lcustomers)) {
-            $teachingstyle1 = @implode(",",$request->frm_lcustomers);    
-        }
-        if(isset($request->frm_lproviders) && !empty($request->frm_lproviders)) {
-            $servicefocuses1 = @implode(",",$request->frm_lproviders);    
-        }
-        if(isset($request->frm_included_things) && !empty($request->frm_included_things)) {
-            $included_thing = @implode(",",$request->frm_included_things);    
-        }
-        if(isset($request->frm_notincluded_things) && !empty($request->frm_notincluded_things)) {
-            $notincluded_thing = @implode(",",$request->frm_notincluded_things);    
-        }
-        if(isset($request->frm_wear) && !empty($request->frm_wear)) {
-            $frm_wear = @implode(",",$request->frm_wear);    
-        }
-        if(isset($request->id_proof) && !empty($request->id_proof)) {
-            $safe_varification='id_proof';
-        }
-        if(isset($request->id_vaccine) && !empty($request->id_vaccine)) {
-            $safe_varification .=',id_vaccine';
-        }
-        if(isset($request->id_covid) && !empty($request->id_covid)) {
-            $safe_varification .=',id_covid';
-        }
-        if(isset($request->days_title) && !empty($request->days_title)) {
-            $days_title = json_encode($request->days_title);
-        }
-        if(isset($request->days_description) && !empty($request->days_description)) {
-            $days_desc = json_encode($request->days_description);
-             $days_dayplanpic = json_encode($datadayimg);
-        }
-        /*if(isset($request->dayplanpic) && !empty($request->dayplanpic)) {
-            $days_dayplanpic = json_encode($datadayimg);
-        }*/
-        
-        if($request->has('instantbooking')){
-            $instant = 1;
-        }else{
-            $instant = 0;
-        }
-
-        if($request->has('requestbooking')){
-            $reserve = 1;
-        }else{
-            $reserve = 0;
-        }
-
-        //echo $safe_varification; exit;
-        if($request->service_type=='experience') {
-            $businessData = [
-                "cid" => $request->cid,
-                "userid" => $request->userid,
-                "serviceid" => $request->serviceid,
-                "service_type" => $request->service_type,
-                "sport_activity" => $request->frm_servicesport,
-                "program_name" => $request->frm_programname,
-                "program_desc" => $request->frm_programdesc,
-                "profile_pic" => $request->servicepic,
-                "instant_booking" => $instant,
-                "request_booking" => $reserve,
-                "frm_min_participate" => $request->frm_min_participate,
-                "beforetime" => $request->beforetime,
-                "beforetimeint" => $request->beforetimeint,
-                "notice_value" => $request->notice_value,
-                "notice_key" => $request->notice_key,
-                "advance_value" => $request->advance_value,
-                "advance_key" => $request->advance_key,
-                "activity_value" => $request->activity_value,
-                "activity_key" => $request->activity_key,
-                "cancel_value" => $request->cancel_value2,
-                "cancel_key" => $request->cancel_key2,
-                "willing_to_travel" => $request->willing_to_travel,
-                "miles" => $request->travel_miles,
-                "area" => $request->wanttowork,
-                "select_service_type" => $servicetype,
-                "activity_location" => $servicelocation,
-                "activity_for" => $programfor,
-                "age_range" => $agerange,
-                "meetup_location" => @$request->meetup_location,
-               /* "group_size" => $numberofpeople,*/
-                "difficult_level" => $experiencelevel,
-                "activity_experience" => $servicefocuses,
-                "instructor_habit" => $teachingstyle,
-                "activity_meets" => $request->frm_class_meets,
-                "starting" => $request->starting,
-                "schedule_until" => $request->frm_schedule_until,
-                "sales_tax" => $request->salestax,
-                "sales_tax_percent" => $request->salestaxpercentage,
-                "dues_tax" => $request->duestax,
-                "dues_tax_percent" => $request->duestaxpercentage,
-                "mon_shift_start" => $request->mon_shift_start,
-                "mon_shift_end" => $request->mon_shift_end,  
-                "tue_shift_start" => $request->tue_shift_start,
-                "tue_shift_end" => $request->tue_shift_end,  
-                "wed_shift_start" => $request->wed_shift_start,
-                "wed_shift_end" => $request->wed_shift_end,
-                "thu_shift_start" => $request->thu_shift_start,
-                "thu_shift_end" => $request->thu_shift_end,
-                "fri_shift_start" => $request->fri_shift_start,
-                "fri_shift_end" => $request->fri_shift_end,
-                "sat_shift_start" => $request->sat_shift_start,
-                "sat_shift_end" => $request->sat_shift_end,
-                "sun_shift_start" => $request->sun_shift_start,
-                "sun_shift_end" => $request->sun_shift_end,
-                "mon_duration" => $request->mon_duration,
-                "tue_duration" => $request->tue_duration,
-                "wed_duration" => $request->wed_duration,
-                "thu_duration" => $request->thu_duration,
-                "fri_duration" => $request->fri_duration,
-                "sat_duration" => $request->sat_duration,
-                "sun_duration" => $request->sun_duration,
-                "frm_servicedesc" => $request->frm_servicedesc,
-                "exp_country" => @$request->cus_country,
-                "exp_address" => @$request->cus_st_address,
-                "exp_building" => @$request->cus_addi_address,
-                "exp_city" => @$request->cus_city,
-                "exp_state" => @$request->cus_state,
-                "exp_zip" => @$request->cus_zip,
-                "exp_lat" => @$request->cus_lat,
-                "exp_lng" => @$request->cus_lng,
-                "is_late_fee" => $request->is_late_fee,
-                "late_fee" => $request->late_fee,
-                "instructor_id"=> $request->instructor_id,
-                "included_items" => $included_thing,
-                "notincluded_items" => $notincluded_thing,
-                "bring_wear" => $frm_wear,
-                "req_safety" => $safe_varification,
-                "days_plan_title" => $days_title,
-                "days_plan_desc" => $days_desc,
-                "days_plan_img" => $days_dayplanpic,
-                "exp_highlight" =>$request->exp_highlight,
-                "addi_info" =>$request->frm_addi_info,
-                "accessibility" =>$request->frm_accessibility,
-                "addi_info_help" =>$request->addi_info_help,
-                "desc_location" =>$request->desc_location,
-            ];
-        } else {
-            $businessData = [
-                "cid" => $request->cid,
-                "userid" => $request->userid,
-                "serviceid" => $request->serviceid,
-                "service_type" => $request->service_type,
-                "sport_activity" => $request->frm_servicesport,
-                "program_name" => $request->frm_programname,
-                "program_desc" => $request->frm_programdesc,
-                "profile_pic" => $request->servicepic,
-                "instant_booking" => $instant,
-                "request_booking" => $reserve,
-                "frm_min_participate" => $request->frm_min_participate,
-                "notice_value" => $request->notice_value,
-                "notice_key" => $request->notice_key,
-                "advance_value" => $request->advance_value,
-                "advance_key" => $request->advance_key,
-                "activity_value" => $request->activity_value,
-                "activity_key" => $request->activity_key,
-                "cancel_value" => $request->cancel_value2,
-                "cancel_key" => $request->cancel_key2,
-                "willing_to_travel" => $request->willing_to_travel,
-                "miles" => $request->travel_miles,
-                "area" => $request->wanttowork,
-                "select_service_type" => $servicetype,
-                "activity_location" => $servicelocation,
-                "activity_for" => $programfor,
-                "age_range" => $agerange,
-                /*"group_size" => $numberofpeople,*/
-                "difficult_level" => $experiencelevel,
-                "activity_experience" => $servicefocuses,
-                "instructor_habit" => $teachingstyle,
-                "activity_meets" => $request->frm_class_meets,
-                "starting" => $request->starting,
-                "schedule_until" => $request->frm_schedule_until,
-                "sales_tax" => $request->salestax,
-                "sales_tax_percent" => $request->salestaxpercentage,
-                "dues_tax" => $request->duestax,
-                "dues_tax_percent" => $request->duestaxpercentage,
-                "mon_shift_start" => $request->mon_shift_start,
-                "mon_shift_end" => $request->mon_shift_end,  
-                "tue_shift_start" => $request->tue_shift_start,
-                "tue_shift_end" => $request->tue_shift_end,  
-                "wed_shift_start" => $request->wed_shift_start,
-                "wed_shift_end" => $request->wed_shift_end,
-                "thu_shift_start" => $request->thu_shift_start,
-                "thu_shift_end" => $request->thu_shift_end,
-                "fri_shift_start" => $request->fri_shift_start,
-                "fri_shift_end" => $request->fri_shift_end,
-                "sat_shift_start" => $request->sat_shift_start,
-                "sat_shift_end" => $request->sat_shift_end,
-                "sun_shift_start" => $request->sun_shift_start,
-                "sun_shift_end" => $request->sun_shift_end,
-                "mon_duration" => $request->mon_duration,
-                "tue_duration" => $request->tue_duration,
-                "wed_duration" => $request->wed_duration,
-                "thu_duration" => $request->thu_duration,
-                "fri_duration" => $request->fri_duration,
-                "sat_duration" => $request->sat_duration,
-                "sun_duration" => $request->sun_duration,
-                "is_late_fee" => $request->is_late_fee,
-                "late_fee" => $request->late_fee,
-                "instructor_id"=> $request->instructor_id,
-            ];
-        }
-       /*print_r($businessData); exit;*/
-        $pay_chk = $pay_session_type = $pay_session = $pay_price = $pay_discountcat = $pay_discounttype = $pay_discount = $pay_estearn = $pay_setnum = $pay_setduration = $pay_after = $recurring_price= $recurring_every= $recurring_duration= $fitnessity_fee= $is_recurring ="";
-        if(isset($request->pay_chk) && !empty($request->pay_chk)) {
-            $pay_chk = @implode(",",$request->pay_chk);    
-        }
-        if(isset($request->pay_session_type) && !empty($request->pay_session_type)) {
-            $pay_session_type = @implode(",",$request->pay_session_type);    
-        }
-        if(isset($request->pay_session) && !empty($request->pay_session)) {
-            $pay_session = @implode(",",$request->pay_session);    
-        }
-        if(isset($request->pay_price) && !empty($request->pay_price)) {
-            $pay_price = @implode(",",$request->pay_price);    
-        }
-        if(isset($request->pay_discountcat) && !empty($request->pay_discountcat)) {
-            $pay_discountcat = @implode(",",$request->pay_discountcat);    
-        }
-        if(isset($request->pay_discounttype) && !empty($request->pay_discounttype)) {
-            $pay_discounttype = @implode(",",$request->pay_discounttype);    
-        }
-        if(isset($request->pay_discount) && !empty($request->pay_discount)) {
-            $pay_discount = @implode(",",$request->pay_discount);    
-        }
-        if(isset($request->pay_estearn) && !empty($request->pay_estearn)) {
-            $pay_estearn = @implode(",",$request->pay_estearn);    
-        }
-        if(isset($request->pay_setnum) && !empty($request->pay_setnum)) {
-            $pay_setnum = @implode(",",$request->pay_setnum);    
-        }
-        if(isset($request->pay_setduration) && !empty($request->pay_setduration)) {
-            $pay_setduration = @implode(",",$request->pay_setduration);    
-        }
-        if(isset($request->pay_after) && !empty($request->pay_after)) {
-            $pay_after = @implode(",",$request->pay_after);    
-        }
-        
-        if(isset($request->membership_type) && !empty($request->membership_type)) {
-            $membership_type = @implode(",",$request->membership_type);    
-        }
-        if(isset($request->is_recurring) && !empty($request->is_recurring)) {
-            $is_recurring = @implode(",",$request->is_recurring);    
-        }
-        if(isset($request->recurring_price) && !empty($request->recurring_price)) {
-            $recurring_price = @implode(",",$request->recurring_price);    
-        }
-        if(isset($request->recurring_every) && !empty($request->recurring_every)) {
-            $recurring_every = @implode(",",$request->recurring_every);    
-        }
-        if(isset($request->recurring_duration) && !empty($request->recurring_duration)) {
-            $recurring_duration = @implode(",",$request->recurring_duration);    
-        }
-        if(isset($request->fitnessity_fee) && !empty($request->fitnessity_fee)) {
-            $fitnessity_fee = @implode(",",$request->fitnessity_fee);    
-        }
-        
-        $businessPayment_1 = [
-            "cid" => $request->cid,
-            "userid" => $request->userid,
-            "serviceid" => $serid_pay,
-            "pay_chk" => $pay_chk,
-            "pay_session_type" => $pay_session_type,
-            "pay_session" => $pay_session,
-            "pay_price" => $pay_price,
-            "pay_discountcat" => $pay_discountcat,
-            "pay_discounttype" => $pay_discounttype,
-            "pay_discount" => $pay_discount,
-            "pay_estearn" => $pay_estearn,
-            "pay_setnum" => $pay_setnum,
-            "pay_setduration" => $pay_setduration,
-            "pay_after" => $pay_after,
-            "recurring_price"=>$recurring_price,
-            "recurring_every"=>$recurring_every,
-            "recurring_duration"=>$recurring_duration,
-            "fitnessity_fee"=>$fitnessity_fee
-        ];
-        $bid=0;
-        $business_service_count = BusinessServices::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('id',$serid_pay)->count();
-        $business_service = BusinessServices::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('id', $request->serviceid)->get();
-        
-        if($business_service_count<=0){
-              $bdata=BusinessServices::create($businessData);
-              $bid=$bdata->id;
-              $serid_pay=$bdata->id;
-        } else { 
-            BusinessServices::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('id', $serid_pay)->update($businessData);
-        }
-        //exit;
-        $shift_start = $shift_end = $set_duration = $activity_days = "";
-        if(isset($request->shift_start) && !empty($request->shift_start)) {
-            $shift_start = @implode(",",$request->shift_start);    
-        }
-        if(isset($request->shift_end) && !empty($request->shift_end)) {
-            $shift_end = @implode(",",$request->shift_end);    
-        }
-        if(isset($request->set_duration) && !empty($request->set_duration)) {
-            $set_duration = @implode(",",$request->set_duration);    
-        }
-        if(isset($request->activity_days) && !empty($request->activity_days)) {
-            $activity_days = @implode(",",$request->activity_days);    
-        }
-       
-        
-        $paycount = count($request->category_title);
-        if($paycount > 0) {
-            $alldata_cat = BusinessPriceDetailsAges::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('serviceid', $serid_pay)->get();
-            $alldata_price = BusinessPriceDetails::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('serviceid', $serid_pay)->get();
-            $idary_cat = array();
-            $idary_cat1 = array();
-            $idary_price = array();
-            $idary_price1 = array();
-
-            foreach($alldata_cat as $data_all){
-                $idary_cat[] =  $data_all['id'];
-            }
-            foreach($alldata_price as $data_all){
-                $idary_price[] =  $data_all['id'];
-            }
-
-            for($i=0; $i < $paycount; $i++) {
-                if($request->cat_id_db[$i] != ''){
-                    $idary_cat1[] = $request->cat_id_db[$i];
-                }
-                
-                $businessages= [
-                    "category_title" => isset($request->category_title[$i]) ? $request->category_title[$i] : '',
-                    "cid" => $request->cid,
-                    "userid" => $request->userid,
-                    "serviceid" => $serid_pay,
-                ];
-                if($request->cat_id_db[$i] != ''){
-                    $db_status = 'update';
-                    $create = BusinessPriceDetailsAges::where('id',$request->cat_id_db[$i])->update($businessages);
-                }else{
-                    $db_status = 'create';
-                    $create = BusinessPriceDetailsAges::create($businessages);
-                }
-                /*print_r($create);exit;*/
-                $age_cnt = $request->input('ages_count'.$i);
-                if($age_cnt >= 0){
-                    for($y=0; $y <= $age_cnt; $y++) {
-                        if($request->input('price_id_db_'.$i.$y)){
-                            $idary_price1[] = $request->input('price_id_db_'.$i.$y);
-                        }
-
-                        if($request->input('is_recurring_adult_'.$i.$y) == 1){
-                            /*$recurring_every = $request->input('recurring_every_'.$i.$y);
-                            $recurring_duration = $request->input('recurring_duration_'.$i.$y);*/
-                            $adultrecurring_price = $request->input('recurring_price_adult_'.$i.$y);
-                            $adultrecurring_run_auto_pay = $request->input('run_auto_pay_adult_'.$i.$y);
-                            $adultrecurring_cust_be_charge = $request->input('cust_be_charge_adult_'.$i.$y);
-                            $adultrecurring_every_time_num = $request->input('every_time_num_adult_'.$i.$y);
-                            $adultrecurring_every_time = $request->input('every_time_adult_'.$i.$y);
-                            $adultrecurring_nuberofautopays = $request->input('nuberofautopays_adult_'.$i.$y);
-                            $adultrecurring_happens_aftr_12_pmt = $request->input('happens_aftr_12_pmt_adult_'.$i.$y);
-                            $adultrecurring_client_be_charge_on = $request->input('client_be_charge_on_adult_'.$i.$y);
-                            $adultrecurring_first_pmt = $request->input('first_pmt_adult_'.$i.$y);
-                            $adultrecurring_recurring_pmt = $request->input('recurring_pmt_adult_'.$i.$y);
-                            $adultrecurring_total_contract_revenue = $request->input('total_contract_revenue_adult_'.$i.$y);
-                        }else{
-                            /*$recurring_every = NULL;
-                            $recurring_duration = NULL;*/
-                            $adultrecurring_price = NULL;
-                            $adultrecurring_run_auto_pay  = NULL;
-                            $adultrecurring_cust_be_charge = NULL;
-                            $adultrecurring_every_time_num = NULL;
-                            $adultrecurring_every_time = NULL;
-                            $adultrecurring_nuberofautopays = NULL;
-                            $adultrecurring_happens_aftr_12_pmt = NULL;
-                            $adultrecurring_client_be_charge_on = NULL;
-                            $adultrecurring_first_pmt = NULL;
-                            $adultrecurring_recurring_pmt = NULL;
-                            $adultrecurring_total_contract_revenue = NULL;
-                        }
-
-                        if($request->input('is_recurring_child_'.$i.$y) == 1){
-                            /*$recurring_every = $request->input('recurring_every_'.$i.$y);
-                            $recurring_duration = $request->input('recurring_duration_'.$i.$y);*/
-                            $childrecurring_price = $request->input('recurring_price_child_'.$i.$y);
-                            $childrecurring_run_auto_pay = $request->input('run_auto_pay_child_'.$i.$y);
-                            $childrecurring_cust_be_charge = $request->input('cust_be_charge_child_'.$i.$y);
-                            $childrecurring_every_time_num = $request->input('every_time_num_child_'.$i.$y);
-                            $childrecurring_every_time = $request->input('every_time_child_'.$i.$y);
-                            $childrecurring_nuberofautopays = $request->input('nuberofautopays_child_'.$i.$y);
-                            $childrecurring_happens_aftr_12_pmt = $request->input('happens_aftr_12_pmt_child_'.$i.$y);
-                            $childrecurring_client_be_charge_on = $request->input('client_be_charge_on_child_'.$i.$y);
-                            $childrecurring_first_pmt = $request->input('first_pmt_child_'.$i.$y);
-                            $childrecurring_recurring_pmt = $request->input('recurring_pmt_child_'.$i.$y);
-                            $childrecurring_total_contract_revenue = $request->input('total_contract_revenue_child_'.$i.$y);
-                        }else{
-                            /*$childrecurring_every = NULL;
-                            $childrecurring_duration = NULL;*/
-                            $childrecurring_price = NULL;
-                            $childrecurring_run_auto_pay  = NULL;
-                            $childrecurring_cust_be_charge = NULL;
-                            $childrecurring_every_time_num = NULL;
-                            $childrecurring_every_time = NULL;
-                            $childrecurring_nuberofautopays = NULL;
-                            $childrecurring_happens_aftr_12_pmt = NULL;
-                            $childrecurring_client_be_charge_on = NULL;
-                            $childrecurring_first_pmt = NULL;
-                            $childrecurring_recurring_pmt = NULL;
-                            $childrecurring_total_contract_revenue = NULL;
-                        }
-
-                        if($request->input('is_recurring_infant_'.$i.$y) == 1){
-                            /*$recurring_every = $request->input('recurring_every_'.$i.$y);
-                            $recurring_duration = $request->input('recurring_duration_'.$i.$y);*/
-                            $infantrecurring_price = $request->input('recurring_price_infant_'.$i.$y);
-                            $infantrecurring_run_auto_pay = $request->input('run_auto_pay_infant_'.$i.$y);
-                            $infantrecurring_cust_be_charge = $request->input('cust_be_charge_infant_'.$i.$y);
-                            $infantrecurring_every_time_num = $request->input('every_time_num_infant_'.$i.$y);
-                            $infantrecurring_every_time = $request->input('every_time_infant_'.$i.$y);
-                            $infantrecurring_nuberofautopays = $request->input('nuberofautopays_infant_'.$i.$y);
-                            $infantrecurring_happens_aftr_12_pmt = $request->input('happens_aftr_12_pmt_infant_'.$i.$y);
-                            $infantrecurring_client_be_charge_on = $request->input('client_be_charge_on_infant_'.$i.$y);
-                            $infantrecurring_first_pmt = $request->input('first_pmt_infant_'.$i.$y);
-                            $infantrecurring_recurring_pmt = $request->input('recurring_pmt_infant_'.$i.$y);
-                            $infantrecurring_total_contract_revenue = $request->input('total_contract_revenue_infant_'.$i.$y);
-                        }else{
-                            /*$infantrecurring_every = NULL;
-                            $infantrecurring_duration = NULL;*/
-                            $infantrecurring_price = NULL;
-                            $infantrecurring_run_auto_pay  = NULL;
-                            $infantrecurring_cust_be_charge = NULL;
-                            $infantrecurring_every_time_num = NULL;
-                            $infantrecurring_every_time = NULL;
-                            $infantrecurring_nuberofautopays = NULL;
-                            $infantrecurring_happens_aftr_12_pmt = NULL;
-                            $infantrecurring_client_be_charge_on = NULL;
-                            $infantrecurring_first_pmt = NULL;
-                            $infantrecurring_recurring_pmt = NULL;
-                            $infantrecurring_total_contract_revenue = NULL;
-                        }
-                        
-                        if($db_status == 'update'){
-                            $cat_new_id = $request->cat_id_db[$i];
-                        }else{
-                            $cat_new_id = $create->id;
-                        }
-
-                        $businessPayment = [
-                            "category_id" => $cat_new_id,
-                            "business_service_id"=>$bid,
-                            "cid" => $request->cid,
-                            "userid" => $request->userid,
-                            "serviceid" => $serid_pay,
-                            "pay_chk" => isset($request->pay_chk[$i]) ? $request->pay_chk[$i] : '',
-                            /* "pay_price" => isset($request->pay_price[$i]) ? $request->pay_price[$i] : '',
-                            "pay_discountcat" => isset($request->pay_discountcat[$i]) ? $request->pay_discountcat[$i] : '',
-                            "pay_discounttype" => isset($request->pay_discounttype[$i]) ? $request->pay_discounttype[$i] : '',
-                            "pay_discount" => isset($request->pay_discount[$i]) ? $request->pay_discount[$i] : '',
-                            "pay_estearn" => isset($request->pay_estearn[$i]) ? $request->pay_estearn[$i] : '',*/
-                            "is_recurring_adult"=> $request->input('is_recurring_adult_'.$i.$y),
-                            "recurring_price_adult"=>$adultrecurring_price,
-                            "recurring_run_auto_pay_adult" => $adultrecurring_run_auto_pay,
-                            "recurring_cust_be_charge_adult" => $adultrecurring_cust_be_charge,
-                            "recurring_every_time_num_adult" => $adultrecurring_every_time_num ,
-                            "recurring_every_time_adult" => $adultrecurring_every_time,
-                            "recurring_nuberofautopays_adult" => $adultrecurring_nuberofautopays,
-                            "recurring_happens_aftr_12_pmt_adult" => $adultrecurring_happens_aftr_12_pmt,
-                            "recurring_client_be_charge_on_adult" => $adultrecurring_client_be_charge_on,
-                            "recurring_first_pmt_adult" => $adultrecurring_first_pmt,
-                            "recurring_recurring_pmt_adult" => $adultrecurring_recurring_pmt,
-                            "recurring_total_contract_revenue_adult" => $adultrecurring_total_contract_revenue,
-
-                            "is_recurring_child"=> $request->input('is_recurring_child_'.$i.$y),
-                            "recurring_price_child"=>$childrecurring_price,
-                            "recurring_run_auto_pay_child" => $childrecurring_run_auto_pay,
-                            "recurring_cust_be_charge_child" => $childrecurring_cust_be_charge,
-                            "recurring_every_time_num_child" => $childrecurring_every_time_num ,
-                            "recurring_every_time_child" => $childrecurring_every_time,
-                            "recurring_nuberofautopays_child" => $childrecurring_nuberofautopays,
-                            "recurring_happens_aftr_12_pmt_child" => $childrecurring_happens_aftr_12_pmt,
-                            "recurring_client_be_charge_on_child" => $childrecurring_client_be_charge_on,
-                            "recurring_first_pmt_child" => $childrecurring_first_pmt,
-                            "recurring_recurring_pmt_child" => $childrecurring_recurring_pmt,
-                            "recurring_total_contract_revenue_child" => $childrecurring_total_contract_revenue,
-
-                            "is_recurring_infant"=> $request->input('is_recurring_infant_'.$i.$y),
-                            "recurring_price_infant"=>$infantrecurring_price,
-                            "recurring_run_auto_pay_infant" => $infantrecurring_run_auto_pay,
-                            "recurring_cust_be_charge_infant" => $infantrecurring_cust_be_charge,
-                            "recurring_every_time_num_infant" => $infantrecurring_every_time_num ,
-                            "recurring_every_time_infant" => $infantrecurring_every_time,
-                            "recurring_nuberofautopays_infant" => $infantrecurring_nuberofautopays,
-                            "recurring_happens_aftr_12_pmt_infant" => $infantrecurring_happens_aftr_12_pmt,
-                            "recurring_client_be_charge_on_infant" => $infantrecurring_client_be_charge_on,
-                            "recurring_first_pmt_infant" => $infantrecurring_first_pmt,
-                            "recurring_recurring_pmt_infant" => $infantrecurring_recurring_pmt,
-                            "recurring_total_contract_revenue_infant" => $infantrecurring_total_contract_revenue,
-                            /*"recurring_every"=>$infantrecurring_every,
-                            "recurring_duration"=> $infantrecurring_duration,*/
-                            "fitnessity_fee"=> isset($request->fitnessity_fee) ? $request->fitnessity_fee : '',
-                            "pay_setnum" => $request->input('pay_setnum_'.$i.$y),
-                            "pay_setduration" => $request->input('pay_setduration_'.$i.$y),
-                            "pay_after" => $request->input('pay_after_'.$i.$y),
-                            "pay_session_type" => $request->input('pay_session_type_'.$i.$y),
-                            "membership_type" =>  $request->input('membership_type_'.$i.$y),
-                            "pay_session" => $request->input('pay_session_'.$i.$y),
-                            "price_title" => $request->input('price_title_'.$i.$y),
-                            "adult_cus_weekly_price" => $request->input('adult_cus_weekly_price_'.$i.$y),
-                            "adult_weekend_price_diff" =>  $request->input('adult_weekend_price_diff_'.$i.$y),
-                            "adult_discount" => $request->input('adult_discount_'.$i.$y), 
-                            "adult_estearn" => $request->input('adult_estearn_'.$i.$y),
-                            "weekend_adult_estearn" => $request->input('weekend_adult_estearn_'.$i.$y),
-                            "child_cus_weekly_price" => $request->input('child_cus_weekly_price_'.$i.$y) ,
-                            "child_discount" => $request->input('child_discount_'.$i.$y),
-                            "child_weekend_price_diff" => $request->input('child_weekend_price_diff_'.$i.$y),
-                            "child_estearn" => $request->input('child_estearn_'.$i.$y),
-                            "weekend_child_estearn" => $request->input('weekend_child_estearn_'.$i.$y),
-                            "infant_cus_weekly_price" => $request->input('infant_cus_weekly_price_'.$i.$y) ,
-                            "infant_weekend_price_diff" => $request->input('infant_weekend_price_diff_'.$i.$y), 
-                            "infant_discount" => $request->input('infant_discount_'.$i.$y), 
-                            "infant_estearn" =>  $request->input('infant_estearn_'.$i.$y),  
-                            "weekend_infant_estearn" =>  $request->input('weekend_infant_estearn_'.$i.$y),  
-                        ];
-                       /* print_r($businessPayment);*/
-                        if($request->input('price_id_db_'.$i.$y) != ''){
-                            $create = BusinessPriceDetails::where('id',$request->input('price_id_db_'.$i.$y))->update($businessPayment);
-                        }else{
-                            $create = BusinessPriceDetails::create($businessPayment);
-                        }
-                    }
-                }
-            }
-
-            $differenceArray_cat1 = array_diff($idary_cat, $idary_cat1);
-            foreach($differenceArray_cat1 as $deletdata){
-                BusinessPriceDetailsAges::where('id',$deletdata)->delete();
-            }
-
-            $differenceArray_price1 = array_diff($idary_price, $idary_price1);
-            foreach($differenceArray_price1 as $deletdata){
-                BusinessPriceDetails::where('id',$deletdata)->delete();
-            }
-        }
-            
-        CompanyInformation::where('id', $request->cid)->update(['serviceid' => $request->serviceid]);
-        User::where('id', Auth::user()->id)->update(['bstep' => 7, 'serviceid' => 0, 'servicetype' => '']);
-       
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        $companyInfo = CompanyInformation::where('id', $request->cid)->orderBy('id', 'DESC')->get();
-        $companyservice = BusinessServices::where('userid', Auth::user()->id)->where('cid', $request->cid)->orderBy('id', 'DESC')->get();
-        $popupserviceid = $serid_pay;
-        return view('profiles.manageService', compact('cart', 'companyInfo', 'companyservice','popupserviceid'));
     }
 
     /* Step 8 - Business Profile */
@@ -2643,111 +1861,6 @@ class UserProfileController extends Controller {
         }
     }
 
-    public function addFamily(Request $request) {
-
-        if (!Gate::allows('profile_view_access')) {
-
-            $request->session()->flash('alert-danger', 'Access Restricted');
-
-            return redirect('/');
-        }
-
-        $loggedinUser = Auth::user();
-
-
-
-        $UserProfileDetail = $this->users->getUserProfileDetail($loggedinUser['id'], array('professional_detail', 'history', 'education', 'certification', 'service'));
-
-
-
-        if (isset($UserProfileDetail['ProfessionalDetail']) && @count($UserProfileDetail['ProfessionalDetail']) > 0) {
-
-            $UserProfileDetail['ProfessionalDetail'] = UserProfessionalDetail::getFormedProfile($UserProfileDetail['ProfessionalDetail']);
-        }
-
-        $UserFamilyDetails = UserFamilyDetail::where('user_id', $loggedinUser['id'])->get();
-        $sports_names = $this->sports->getAllSportsNames();
-        $approve = Evidents::where('user_id', $loggedinUser['id'])->get();
-        $serviceType = Miscellaneous::businessType();
-        $programType = Miscellaneous::programType();
-        $programFor = Miscellaneous::programFor();
-        $numberOfPeople = Miscellaneous::numberOfPeople();
-        $ageRange = Miscellaneous::ageRange();
-        $expLevel = Miscellaneous::expLevel();
-        $serviceLocation = Miscellaneous::serviceLocation();
-        $pFocuses = Miscellaneous::pFocuses();
-        $duration = Miscellaneous::duration();
-        $servicePriceOption = Miscellaneous::servicePriceOption();
-        $specialDeals = Miscellaneous::specialDeals();
-        //$loggedinUser['role'] = 'customer';
-        //$loggedinUser->save();
-        //dd($UserProfileDetail);die;
-
-        if ($loggedinUser['role'] == 'business' || $loggedinUser['role'] == 'professional' || $loggedinUser['role'] == 'admin') {
-            $view = 'profiles.viewProfile';
-        } elseif ($loggedinUser['role'] == 'customer') {
-            $view = 'profiles.viewProfileCustomer';
-        }
-        $family = UserFamilyDetail::where('user_id', Auth::user()->id)->get();
-        $business_details = BusinessInformation::where('user_id', Auth::user()->id)->get();
-
-        //  dd($this->users->getStateList($UserProfileDetail['country']));
-        //die;
-
-        $user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
-        $firstCompany = CompanyInformation::where('user_id', Auth::user()->id)->first();
-        $companies = CompanyInformation::where('user_id', Auth::user()->id)->get();
-
-        $view = 'personal-profile.add-family';
-        
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        
-        return view($view, [
-            'cart' => $cart,
-            'UserProfileDetail' => $UserProfileDetail,
-            'firstCompany' => $firstCompany,
-            'countries' => $this->users->getCountriesList(),
-            'states' => $this->users->getStateList($UserProfileDetail['country']),
-            'cities' => $this->users->getCityList($UserProfileDetail['state']),
-            'phonecode' => Miscellaneous::getPhoneCode(),
-            'sports_names' => $sports_names,
-            'serviceType' => $serviceType,
-            'programType' => $programType,
-            'programFor' => $programFor,
-            'numberOfPeople' => $numberOfPeople,
-            'ageRange' => $ageRange,
-            'expLevel' => $expLevel,
-            'serviceLocation' => $serviceLocation,
-            'pFocuses' => $pFocuses,
-            'duration' => $duration,
-            'specialDeals' => $specialDeals,
-            'servicePriceOption' => $servicePriceOption,
-            'pageTitle' => "PROFILE",
-            'approve' => $approve,
-            'family' => $family,
-            'business_details' => $business_details,
-            'companies' => $companies,
-            'UserFamilyDetails' => $UserFamilyDetails,
-        ]);
-    }
 
     public function makeCall(Request $request, TwilioService $twilioService) {
         $sid = getenv("TWILIO_SID");
@@ -2861,7 +1974,6 @@ class UserProfileController extends Controller {
         
         return 200;
         return redirect()->route('profile-viewProfile');
-
     }
     
     public function setCoverPhoto(Request $request) {
@@ -2874,7 +1986,6 @@ class UserProfileController extends Controller {
         }
 
         return redirect()->route('profile-viewProfile');
-
     }
     
     public function unsetCoverPhoto(Request $request) {
@@ -2925,7 +2036,7 @@ class UserProfileController extends Controller {
     public function viewuserpersonalprofile($user_name){
         $ip = \Request::getClientIp(true);
         $UserProfileDetail = User::where('username',$user_name)->first();
-        $user_id=$UserProfileDetail->id;
+        $user_id= @$UserProfileDetail->id;
     
         $gallery = $this->galleryList($user_id);
         /*echo "<pre>";print_r($gallery);
@@ -3063,6 +2174,7 @@ class UserProfileController extends Controller {
     public function searchResultLocation(Request $request) {
 
         $user_data = array();
+        $data_user = array();
         if($request->site_search!= null && $request->site_search != 'undefined')
         {
             $query=explode("(",$request->site_search);
@@ -3082,13 +2194,13 @@ class UserProfileController extends Controller {
         $company = array();
         if ($myloc != null && $myloc != 'undefined') {
             if ($select_zipcode != null && $select_zipcode != 'undefined') {
-                $company = CompanyInformation::where('company_name', 'LIKE', $select_label . '%')->where('city', 'LIKE', $myloc . '%')->where('zip_code', 'LIKE', $select_zipcode . '%')->get();
+                $company = CompanyInformation::where('dba_business_name', 'LIKE', $select_label . '%')->where('city', 'LIKE', $myloc . '%')->where('zip_code', 'LIKE', $select_zipcode . '%')->get();
             } else {
                 $company = CompanyInformation::where('city', 'LIKE', $myloc . '%')->get();
             }
         } else {
             if($select_label!=null && $select_label!= 'undefined') {
-                $company = CompanyInformation::where('company_name', 'LIKE', $select_label . '%')->get();
+                $company = CompanyInformation::where('dba_business_name', 'LIKE', $select_label . '%')->get();
             }
         }
         //dd($data_user); exit;
@@ -3152,7 +2264,7 @@ class UserProfileController extends Controller {
     
                 $user_logo = User::where('id', $value['user_id'])->first();
                 $user_logo1 = $user_logo['profile_pic'];
-                $value['business_name'] = $value['company_name'];
+                $value['business_name'] = $value['dba_business_name'];
                 $value['activity'] = "";
                 $value['website'] = "";
                 $value['location'] = $value['city'];
@@ -3232,9 +2344,9 @@ class UserProfileController extends Controller {
                     if ($found != 0) {
                         $lat = $value['latitude'] + ((floatVal('0.' . rand(1, 9)) * $found) / 10000);
                         $long = $value['longitude'] + ((floatVal('0.' . rand(1, 9)) * $found) / 10000);
-                        $a = [$value['company_name'], $lat, $long, $value['id'], $value['logo']];
+                        $a = [$value['dba_business_name'], $lat, $long, $value['id'], $value['logo']];
                     } else {
-                        $a = [$value['company_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo']];
+                        $a = [$value['dba_business_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo']];
                     }
                     array_push($locations, $a);
                 }
@@ -3299,7 +2411,6 @@ class UserProfileController extends Controller {
                 'expActivity', 
                 'expLevel', 
                 'getTimeSlot'));
-
     }
 
     public function searchResultLocation1(Request $request) {
@@ -3451,7 +2562,7 @@ class UserProfileController extends Controller {
                 $pro_pic_l  = $user_logo->profile_pic;
             }
             $user_logo1 = $pro_pic_l;
-            $value['business_name'] = $value['company_name'];
+            $value['business_name'] = $value['dba_business_name'];
             $value['activity'] = "";
             $value['website'] = "";
             $value['location'] = $value['city'];
@@ -3489,7 +2600,7 @@ class UserProfileController extends Controller {
 
         foreach ($resultnew as $value) {
             if ($value['type'] == 'claimed') {
-                $a = [$value['company_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo']];
+                $a = [$value['dba_business_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo']];
                 array_push($locations, $a);
             }
         }
@@ -3726,7 +2837,7 @@ class UserProfileController extends Controller {
 
         foreach ($company as $key => $value) {
 
-            $value['business_name'] = $value['company_name'];
+            $value['business_name'] = $value['dba_business_name'];
 
             $value['activity'] = "";
 
@@ -3748,13 +2859,13 @@ class UserProfileController extends Controller {
 
         $data = BusinessClaim::where('business_name', 'LIKE', $request->business_name . '%')->where('location', $request->location)->where('is_verified', 0)->get();
 
-        $company = CompanyInformation::where('city', $request->location)->where('company_name', 'LIKE', $request->business_name . '%')->get();
+        $company = CompanyInformation::where('city', $request->location)->where('dba_business_name', 'LIKE', $request->business_name . '%')->get();
 
 
 
         foreach ($company as $key => $value) {
 
-            $value['business_name'] = $value['company_name'];
+            $value['business_name'] = $value['dba_business_name'];
 
             $value['activity'] = "";
 
@@ -4003,7 +3114,7 @@ class UserProfileController extends Controller {
         //DB::update('update users_follow set follow_id = "0" where  user_id = "' . $remove_id . '"');
     }
 
-    public function Punfollow_company(Request $request) {
+    public function unfollow_company(Request $request) {
 
         $unfollow_id = $request->fid;
         $loggedId = Auth::user()->id;
@@ -4023,7 +3134,7 @@ class UserProfileController extends Controller {
         return Response::json($response);
     }
 
-    public function Pfollow_back(Request $request) {
+    public function follow_back(Request $request) {
         if( !empty($request->id) ){ $follow_id = $request->id; } else{ $follow_id =0; }
         $user_id = $request->userid;
 
@@ -4195,16 +3306,6 @@ class UserProfileController extends Controller {
     public function mybusinessusertag(Request $request) {
         $count = CompanyInformation::where('business_user_tag', $request->email)->count();
         return response()->json(['status' => 200, 'count' => $count]);
-    }
-    
-    public function manageService(Request $request, $cid ) {
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        $companyInfo = CompanyInformation::where('id', $cid)->orderBy('id', 'DESC')->get();
-        $companyservice = BusinessServices::where('userid', Auth::user()->id)->where('cid', $cid)->orderBy('id', 'DESC')->get();
-        return view('profiles.manageService', compact('cart', 'companyInfo', 'companyservice'));
     }
 
     public function manageCompany(Request $request) {
@@ -5483,38 +4584,41 @@ class UserProfileController extends Controller {
     }
 
     public function submitFamilyForm1(Request $request) {
-
-
-
-        $family = new UserFamilyDetail();
-
-
-
-        $family->user_id = Auth::user()->id;
-
-        $family->first_name = $request->first_name;
-
-        $family->last_name = $request->last_name;
-
-        $family->email = $request->email;
-
-        $family->mobile = $request->mobile_number;
-
-        $family->gender = $request->gender;
-
-        $family->relationship = $request->relationship;
-
-        $family->emergency_contact = $request->emergency_phone;
-
-        //$dateee = \DateTime::createFromFormat("m-d-Y" , $request->birthday);
-
-        $family->birthday = $request->birthday;
-
-        $family->save();
+        //print_r($request->all());exit();
+        for($i=0;$i<=$request->familycnt;$i++){
+            if($request->first_name[$i] != ''){
+                
+                $family = new UserFamilyDetail();
+                $family->user_id = Auth::user()->id;
+                $family->first_name = $request->first_name[$i];
+                $family->last_name = $request->last_name[$i];
+                $family->email = $request->email[$i];
+                $family->mobile = $request->mobile[$i];
+                $family->gender = $request->gender[$i];
+                $family->relationship = $request->relationship[$i];
+                $family->emergency_contact = $request->emergency_phone[$i];
+                $family->birthday = date('Y-m-d',strtotime($request->birthday[$i]));
+                $family->save();
+            }
+        }
 
         Auth::loginUsingId(Input::get('user_id'), true);
 
-        $url = '/profile/viewProfile';
+        $url = '/';
+        $claim = 'not set';
+        $claim_cid = '';
+        $claim_cname = '';
+        if(session()->has('claim_business_page')) {
+            $claim = 'set';
+            $claim_cid = session()->get('claim_cid');
+            $data = CompanyInformation::where('id',$claim_cid)->first();
+            if($data != ''){
+                $claim_cname = $data->dba_business_name;
+            }
+        }
+        if($claim  == 'set'){
+            $url =  '/claim/reminder/'.$claim_cname."/".$claim_cid; 
+        }
 
         $response = array(
             'type' => 'success',
@@ -5529,7 +4633,21 @@ class UserProfileController extends Controller {
 
         Auth::loginUsingId(Auth::user()->id, true);
 
-        $url = '/profile/viewProfile';
+        $url = '/';
+        $claim = 'not set';
+        $claim_cid = '';
+        $claim_cname = '';
+        if(session()->has('claim_business_page')) {
+            $claim = 'set';
+            $claim_cid = session()->get('claim_cid');
+            $data = CompanyInformation::where('id',$claim_cid)->first();
+            if($data != ''){
+                $claim_cname = $data->dba_business_name;
+            }
+        }
+        if($claim  == 'set'){
+            $url =  '/claim/reminder/'.$claim_cname."/".$claim_cid; 
+        }
 
         $response = array(
             'type' => 'success',
@@ -6876,20 +5994,15 @@ class UserProfileController extends Controller {
     }
     public function savemyprofilepic(Request $request)
     {
-         $loggedinUser = Auth::user();
-         $id = $request->imgId;
-         $imgname = $request->imgname;
+
+
          if($request->hasFile('galaryphoto')) {
-            $file = Input::file('galaryphoto');
-            $name = $file->getClientOriginalName();
 
-            $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'gallery'.DIRECTORY_SEPARATOR. $loggedinUser->id .DIRECTORY_SEPARATOR ."thumb".DIRECTORY_SEPARATOR, $name);
-
-            DB::table('users_add_attachment')->where('id',$id)->update(array('attachment_name'=>$name));
+            $path = $request->file('galaryphoto')->store('gallery');
+            DB::table('users_add_attachment')->where('id',$request->imgId)->update(array('attachment_name'=>$path));
          }
 
         
-
 
 
 
@@ -6976,7 +6089,7 @@ class UserProfileController extends Controller {
                 $value2['amenties'] = $sport['sport_name'];
             }
         }
-        $UserProfileDetail = $this->users->getUserProfileDetail($company['user_id'], array('professional_detail', 'history', 'education', 'certification', 'service'));
+        $UserProfileDetail = $this->users->getUserProfileDetail(@$company['user_id'], array('professional_detail', 'history', 'education', 'certification', 'service'));
         $PagePost = PagePost::where('page_id',$page_id)->limit(1)->orderBy('id','desc')->get();
         $postsave = PagePostSave::where('user_id',Auth::user()->id)->orderBy('id','desc')->get();
         
@@ -7950,7 +7063,7 @@ class UserProfileController extends Controller {
         $co->contact_number = $request->phone_number;
 
         $co->company_name = $request->Companyname;
-
+        $co->dba_business_name = $request->Companyname;
         $co->ein_number = $request->b_EINnumber;
 
         $co->establishment_year = $request->b_Establishmentyear;
@@ -8297,7 +7410,6 @@ class UserProfileController extends Controller {
         ];
 
 
-
         $message = [
 
             'frm_servicesport.required' => 'Sport is required',
@@ -8642,7 +7754,6 @@ class UserProfileController extends Controller {
         }
 
 
-
         $businessType = Miscellaneous::businessType();
 
         $programType = Miscellaneous::programType();
@@ -8673,8 +7784,6 @@ class UserProfileController extends Controller {
 
         $timeSlots = Miscellaneous::getTimeSlot();
 
-
-
         return view('profiles.create_service', [
 
             'service' => $service,
@@ -8702,9 +7811,6 @@ class UserProfileController extends Controller {
     }
 
     public function getmyservices(Request $request) {
-
-
-
         $login_id = Auth::user();
 
         $sports = $this->sports->getAlphabetsWiseSportsNames();
@@ -8830,12 +7936,6 @@ class UserProfileController extends Controller {
                 )
         ]);
 
-
-
-
-
-
-
         $s = Evident::curl_verify(json_encode($verifydata));
 
         $s = json_decode($s, JSON_OBJECT_AS_ARRAY);
@@ -8861,53 +7961,7 @@ class UserProfileController extends Controller {
         }
     }
 
-    public function calendar(Request $request) {
-        $user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
-        $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        $UserProfileDetail['gender'] = $user->gender;
-        $UserProfileDetail['username'] = $user->username;
-        $UserProfileDetail['phone_number'] = $user->phone_number;
-        $UserProfileDetail['address'] = $user->address;
-        $UserProfileDetail['quick_intro'] = $user->quick_intro;
-        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        $UserProfileDetail['email'] = $user->email;
-
-        $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
-
-        if ($request->ajax()) {
-            $data = Event::whereDate('start', '>=', $request->start)
-                    ->whereDate('end', '<=', $request->end)
-                    ->get(['id', 'title', 'start', 'end']);
-            return response()->json($data);
-        }
-        
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        
-        return view('personal-profile.calendar', ['UserProfileDetail' => $UserProfileDetail, 'cart' => $cart]);
-
-        //return view('personal-profile.calendar', ['UserProfileDetail' => $UserProfileDetail]);
-    }
+    
 
     public function cajax(Request $request) {
         switch ($request->type) {
@@ -8939,359 +7993,8 @@ class UserProfileController extends Controller {
                 break;
         }
     }
-
-    public function favorite(Request $request) {
-        
-        $user = User::where('id', Auth::user()->id)->first();
-        $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        //$FavDetail = BusinessServicesFavorite::where('user_id', Auth::user()->id)->get();
-        $FavDetail = BusinessServicesFavorite::select("business_services.id", "business_services.program_name", 
-        "business_services.profile_pic", "business_services.sport_activity", "business_services_favorite.service_id", 
-        "business_services_favorite.user_id")
-                ->join("business_services", "business_services_favorite.service_id", "=", "business_services.id")
-                ->where("business_services_favorite.user_id", Auth::user()->id)
-                ->get();
-        
-        
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        
-        return view('personal-profile.favorite', [
-            'UserProfileDetail' => $UserProfileDetail, 
-            'FavDetail' => $FavDetail,
-            'cart' => $cart
-        ]);
-        
-        /*$user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
-        $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        $UserProfileDetail['gender'] = $user->gender;
-        $UserProfileDetail['username'] = $user->username;
-        $UserProfileDetail['phone_number'] = $user->phone_number;
-        $UserProfileDetail['address'] = $user->address;
-        $UserProfileDetail['quick_intro'] = $user->quick_intro;
-        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        $UserProfileDetail['email'] = $user->email;
-
-        $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
-
-        $follow = UserFavourite::select("company_informations.company_name", "company_informations.first_name", "company_informations.last_name", "company_informations.id", "company_informations.logo", "company_informations.address", "company_informations.contact_number", "users_favourite.favourite_user_id", "users_favourite.user_id", "company_informations.user_id")
-                ->join("company_informations", "users_favourite.favourite_user_id", "=", "company_informations.id")
-                ->where("users_favourite.user_id", Auth::user()->id)
-                ->get();
-
-
-        $FavDetail = $follow;
-        
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        
-        return view('personal-profile.favorite', [
-            'UserProfileDetail' => $UserProfileDetail, 
-            'FavDetail' => $FavDetail,
-            'cart' => $cart
-        ]);*/
-    }
-
-    public function followers(Request $request) {
-        $user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
-        $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        $UserProfileDetail['gender'] = $user->gender;
-        $UserProfileDetail['username'] = $user->username;
-        $UserProfileDetail['phone_number'] = $user->phone_number;
-        $UserProfileDetail['address'] = $user->address;
-        $UserProfileDetail['quick_intro'] = $user->quick_intro;
-        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        $UserProfileDetail['email'] = $user->email;
-
-        $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
-
-        /*$fdata = UserFollow::select("user_id", "follow_id", "follower_id")
-                ->where("user_id", "!=", Auth::user()->id)
-                ->orwhere("follow_id", "=", 4)
-                ->where("follow_id", "=", 1)
-                ->get();*/
-
-        $fdata = UserFollow::select("user_id", "follow_id", "follower_id")
-                ->where("follower_id", "=", Auth::user()->id)
-                ->get();
-        
-        $testdata = '';
-        if(isset($fdata)) {
-        foreach ($fdata as $data) {
-            $query = CompanyInformation::select("first_name", "last_name", "logo", "user_id", "id")
-                    ->where("user_id", $data['user_id'])
-                    ->first();
-            $queryUser = User::select("firstname", "lastname", "profile_pic", "id")
-                    ->where("id", $data['user_id'])
-                    ->first();
-            $isfollow = UserFollow::select("user_id", "follow_id", "follower_id")
-                ->where("follower_id", "=", $queryUser['id'])
-                ->get();
-            $id = $user_id = $logo = $fname = $lname = "";
-            if( !empty($queryUser) ) {
-                $id = isset($query["id"]) ? $query["id"] : "";
-                $user_id = isset($data["user_id"]) ? $data["user_id"] : "";
-                $logo = isset($queryUser["profile_pic"]) ? $queryUser["profile_pic"] : "";
-                $fname = isset($queryUser["firstname"]) ? $queryUser["firstname"] : "";
-                $lname = isset($queryUser["lastname"]) ? $queryUser["lastname"] : "";
-                
-                $queryUserfollowersdata = UserFollow::select("user_id", "follow_id", "follower_id")->where("follower_id", "=", $queryUser["id"])->get();
-                $queryUserfollowingdata = UserFollow::select("user_id", "follow_id", "follower_id")->where("user_id", "=",$queryUser["id"])->get();
-                $testdata .='
-                <div class="followers-block">
-                    <div class="followers-content">';
-                            if(File::exists(public_path("/uploads/profile_pic/thumb/".$logo )))
-                                $testdata .= '<div class="admin-img">
-                                    <img src="/public/uploads/profile_pic/thumb/'.$logo.'" alt="Fitnessity">';
-                            else
-                            {
-                                $testdata .= '<div class="admin-img-text">';
-                                $pf=substr($queryUser["firstname"], 0, 1).substr($queryUser["lastname"], 0, 1);
-                                $testdata .= '<p>'.$pf.'</p>';
-                            }
-                        $testdata .= '</div>
-                        <div class="followers-right-content">
-                          <h5> '.$fname.' '.$lname.' </h5>
-                          <ul>
-                              <li><span>Follower </span> '.$queryUserfollowersdata->count().' </li>
-                              <li><span>Member Since</span> '.date('F Y',strtotime($user->created_at)).'</li>
-                              <li><span>Following </span> '.$queryUserfollowingdata->count().' </li>
-                               
-                          </ul>
-                        </div> ';
-                        if ($isfollow->count()>0) {
-                            $testdata .='Following';
-                        } else {
-                            $testdata .='<a class="followback" id="'.$id.'" data-user="'.$user_id.'">Follow</a> ';
-                        }
-
-                    $testdata .=' </div>
-                    <div class="followers-button">
-                        <a class="following-btn follow-btn remove-btn" id="'.$user_id.'">Remove</a>
-                    </div>
-                </div>';
-            }
-        }
-        }
-        
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        
-        return view('personal-profile.followers', [
-            'UserProfileDetail' => $UserProfileDetail, 
-            'testdata' => $testdata,
-            'cart' => $cart
-        ]);
-    }
-
-    public function following(Request $request) {
-
-        $user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
-        $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        $UserProfileDetail['gender'] = $user->gender;
-        $UserProfileDetail['username'] = $user->username;
-        $UserProfileDetail['phone_number'] = $user->phone_number;
-        $UserProfileDetail['address'] = $user->address;
-        $UserProfileDetail['quick_intro'] = $user->quick_intro;
-        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        $UserProfileDetail['email'] = $user->email;
-
-        $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
-
-        /*$follow = UserFollow::select("company_informations.company_name", "company_informations.first_name", "company_informations.last_name", "company_informations.id", "company_informations.logo")
-                ->join("company_informations", "users_follow.follow_id", "=", "company_informations.id")
-                ->where("users_follow.user_id", "=", Auth::user()->id)
-                ->get();*/
-        $follow = UserFollow::select("user_id", "follow_id", "follower_id")
-                ->where("user_id", "=", Auth::user()->id)
-                ->get();
-        $FollowDetail = $follow;
-        
-        /*$cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }*/
-
-        return view('personal-profile.following', [
-            'UserProfileDetail' => $UserProfileDetail, 
-            'FollowDetail' => $FollowDetail,
-           // 'cart' => $cart
-        ]);
-    }
     
-    public function paymentdelete(Request $request) {
-        print_r($request->all());
-        $user = User::where('id', Auth::user()->id)->first();
-        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        $stripval = $stripe->customers->deleteSource(
-            $user->stripe_customer_id,
-            $request->cardid,
-            []
-        );
-        echo $stripval;
-       /* DB::delete('DELETE FROM users_payment_info WHERE card_stripe_id = "' . $request->cardid . '"');*/
-        /*return Redirect::back()->with('success', 'Card Deleted Successfully.');*/
-    }
-    
-    public function paymentsave(Request $request) {
-        /*dd($request->all());*/
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        $user = User::where('id', Auth::user()->id)->first();
-       
-        $carddetails = $stripe->tokens->create([
-            'card' => [
-                'number' => $request->cardNumber,
-                'exp_month' =>  $request->card_month,
-                'exp_year' =>  $request->card_year,
-                'cvc' =>  $request->cvv,
-                'name' =>  $request->owner,
-            ],
-        ]);
-        $customer_source = $stripe->customers->createSource(
-            $user->stripe_customer_id,
-            [ 'source' =>$carddetails->id]
-        );
-       /* print_r($carddetails);exit;*/
-        $userId = Auth::user()->id;
-        DB::insert('insert into users_payment_info (user_id,card_stripe_id,card_token_id) values (?, ?, ?)', [$userId, $carddetails['card']->id, $carddetails->id]);
-        
 
-        /*$adminId = Auth::user()->id;
-        $payment_type = $request->payment_type;
-        $event = DB::select('select count(id) as cnt from users_payment_info where user_id = ? and card_number = ?', [$adminId, $request->cardNumber]);
-        $flag = 0;*/
-        /*print_r($event);exit;*/
-       /* if ($event[0]->cnt == 0) {
-            DB::insert('insert into users_payment_info (user_id, card_owner, card_cvv, card_number, card_exp_month, card_exp_year, card_type) values (?, ?, ?, ?, ?, ?, ?)', [$adminId, $request->owner, $request->cvv, $request->cardNumber, $request->card_month, $request->card_year, $request->card_type]);
-        } else {
-            DB::update('update users_payment_info set card_owner = ?, card_cvv = ?, card_number = ?, card_exp_month = ?, card_exp_year = ?, card_type = ? where user_id = ? and card_number = ?', [$request->owner, $request->cvv, $request->cardNumber, $request->card_month, $request->card_year, $request->card_type, $adminId, $request->cardNumber]);
-            if($payment_type == 'insert') {
-                $flag = 1;
-            }
-        }*/
-        
-        return redirect('/personal-profile/payment-info');
-        
-    }
-
-    public function paymentinfo(Request $request) {
-
-        $cardInfo = [];
-        $user = User::where('id', Auth::user()->id)->first();
-        /*$savedEvents = DB::select('select * from users_payment_info where user_id = ?', [Auth::user()->id]);*/
-        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        if($user->stripe_customer_id != ''){
-            $savedEvents = $stripe->customers->allSources(
-                $user->stripe_customer_id,
-                ['object' => 'card' ,'limit' => 30]
-            );
-            $savedEvents  = json_decode( json_encode( $savedEvents),true);
-            $cardInfo = $savedEvents['data'];
-        }
-
-        $city = AddrCities::where('id', $user->city)->first();
-        $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        $UserProfileDetail['gender'] = $user->gender;
-        $UserProfileDetail['username'] = $user->username;
-        $UserProfileDetail['phone_number'] = $user->phone_number;
-        $UserProfileDetail['address'] = $user->address;
-        $UserProfileDetail['quick_intro'] = $user->quick_intro;
-        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        $UserProfileDetail['email'] = $user->email;
-
-        $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
-        
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        
-        return view('personal-profile.payment-info', [
-            'UserProfileDetail' => $UserProfileDetail, 
-            'cardInfo' => $cardInfo,
-            'cart' => $cart
-        ]);
-    }
 
     public function review(Request $request) {
 
@@ -9354,28 +8057,9 @@ class UserProfileController extends Controller {
         if (isset($UserProfileDetail['ProfessionalDetail']) && @count($UserProfileDetail['ProfessionalDetail']) > 0) {
             $UserProfileDetail['ProfessionalDetail'] = UserProfessionalDetail::getFormedProfile($UserProfileDetail['ProfessionalDetail']);
         }
-        $sports_names = $this->sports->getAllSportsNames();
-        $approve = Evidents::where('user_id', $loggedinUser['id'])->get();
-        $serviceType = Miscellaneous::businessType();
-        $programType = Miscellaneous::programType();
-        $programFor = Miscellaneous::programFor();
-        $numberOfPeople = Miscellaneous::numberOfPeople();
-        $ageRange = Miscellaneous::ageRange();
-        $expLevel = Miscellaneous::expLevel();
-        $serviceLocation = Miscellaneous::serviceLocation();
-        $pFocuses = Miscellaneous::pFocuses();
-        $duration = Miscellaneous::duration();
-        $servicePriceOption = Miscellaneous::servicePriceOption();
-        $specialDeals = Miscellaneous::specialDeals();
-        /* if($loggedinUser['role']=='business' || $loggedinUser['role']=='professional' || $loggedinUser['role']=='admin'){
-          $view='personal-profile.user-profile';
-          }
-          elseif($loggedinUser['role']=='customer'){
-          $view='profiles.viewProfileCustomer';
-          } */ ///nnnn
+    
         $view = 'personal-profile.user-profile';
-        $family = UserFamilyDetail::where('user_id', Auth::user()->id)->get();
-        $business_details = BusinessInformation::where('user_id', Auth::user()->id)->get();
+
         $user = User::where('id', Auth::user()->id)->first();
         $city = AddrCities::where('id', $user->city)->first();
         $UserProfileDetail['firstname'] = $user->firstname;
@@ -9405,9 +8089,7 @@ class UserProfileController extends Controller {
             $UserProfileDetail['state'] = $state->state_name;
         }
         $UserProfileDetail['country'] = $user->country;
-        $firstCompany = CompanyInformation::where('user_id', Auth::user()->id)->first();
-        $companies = CompanyInformation::where('user_id', Auth::user()->id)->get();
-        
+       
         $cart = [];
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
@@ -9416,28 +8098,7 @@ class UserProfileController extends Controller {
         return view($view, [
             'cart' => $cart,
             'UserProfileDetail' => $UserProfileDetail,
-            'firstCompany' => $firstCompany,
-            'countries' => $this->users->getCountriesList(),
-            'states' => $this->users->getStateList($UserProfileDetail['country']),
-            'cities' => $this->users->getCityList($UserProfileDetail['state']),
-            'phonecode' => Miscellaneous::getPhoneCode(),
-            'sports_names' => $sports_names,
-            'serviceType' => $serviceType,
-            'programType' => $programType,
-            'programFor' => $programFor,
-            'numberOfPeople' => $numberOfPeople,
-            'ageRange' => $ageRange,
-            'expLevel' => $expLevel,
-            'serviceLocation' => $serviceLocation,
-            'pFocuses' => $pFocuses,
-            'duration' => $duration,
-            'specialDeals' => $specialDeals,
-            'servicePriceOption' => $servicePriceOption,
-            'pageTitle' => "PROFILE",
-            'approve' => $approve,
-            'family' => $family,
-            'business_details' => $business_details,
-            'companies' => $companies
+            'pageTitle' => "PROFILE"
         ]);
         //return view('personal-profile.user-profile');
     }
@@ -9458,25 +8119,13 @@ class UserProfileController extends Controller {
             'address' => 'required',
         ]);
 
-        /* $imageName=''; 
-          if ($request->hasFile('profilephoto')) {
-          $file_upload_path = public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR;
-          $thumb_upload_path = public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR.'thumb'.DIRECTORY_SEPARATOR;
-          $image_upload = Miscellaneous::saveFileAndThumbnail($request->file('profilephoto'),$file_upload_path,1,$thumb_upload_path,'247','266');
-          $imageName = $image_upload['filename'];
-          } */
+
         $imageName = '';
-
-        if ($request->hasFile('frm_profile_pic')) {
-            $file_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR;
-            $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
-            $image_upload = Miscellaneous::saveFileAndThumbnail($request->file('frm_profile_pic'), $file_upload_path, 1, $thumb_upload_path, '247', '266');
-            $imageName = $image_upload['filename'];
-            //exit;
-        } else {
-            $image_name = $request->old_profile_pic;
+        if($request->hasFile('frm_profile_pic')){
+            $imageName = $request->file('frm_profile_pic')->store('customer');
+        }else{
+            $imageName = $request->old_profile_pic;
         }
-
 
         $cat = User::find($loggedinUser['id']);
         $cat->firstname = $request->firstname;
@@ -9505,7 +8154,6 @@ class UserProfileController extends Controller {
     }
 
     public function addinstantHire(Request $request) {
-
 
         $activity = $request->sport;
         $qoutes = $request->qoutes;
@@ -9595,7 +8243,6 @@ class UserProfileController extends Controller {
         );
 
         $save = InstantForms::create($savedata);
-        // return redirect('/')->with('message', 'Your Data Saved Successfully!');
         return view('home.instant_success');
     }
 
@@ -9619,30 +8266,12 @@ class UserProfileController extends Controller {
             $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'gallery'.DIRECTORY_SEPARATOR. $loggedinUser->id .DIRECTORY_SEPARATOR ."thumb".DIRECTORY_SEPARATOR, $name);
          }
 
-        /*$imageName = '';
-        if ($request->hasFile('coverphoto')) {
-
-            $file_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'cover-photo' . DIRECTORY_SEPARATOR;
-            $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'cover-photo' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
-            $image_upload = Miscellaneous::saveFileAndThumbnail($request->file('coverphoto'), $file_upload_path, 1, $thumb_upload_path, '247', '266');
-            $imageName = $image_upload['filename'];
-             if($user->cover_photo != ''){
-              @unlink(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'cover-photo'.DIRECTORY_SEPARATOR.$user->cover_photo);
-              @unlink(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'cover-photo'.DIRECTORY_SEPARATOR.'thumb'.DIRECTORY_SEPARATOR.$user->cover_photo);
-              } 
-        }*/
-
-          $affected = DB::table('users_add_attachment')->insert(['user_id' => Auth::user()->id, 'attachment_name' => $name, 'attachment_status' => '1' ,'cover_photo' =>'1']);
-
-       /* $cat = User::find($loggedinUser['id']);
-        $cat->cover_photo = $imageName;*/
-        /*$affected = $cat->update();*/
+       
+        $affected = DB::table('users_add_attachment')->insert(['user_id' => Auth::user()->id, 'attachment_name' => $name, 'attachment_status' => '1' ,'cover_photo' =>'1']);
 
         if ($affected) {
-           /* return redirect('/profile/viewProfile?cover=1');*/
             return Redirect::back()->with('success', 'Cover photo updated successfully.');
         } else {
-           /* return redirect('/profile/viewProfile?cover=0');*/
             return Redirect::back()->with('error', 'Problem in updating cover photo.');
         }
             
@@ -9698,94 +8327,14 @@ class UserProfileController extends Controller {
             return Redirect::back()->with('error', 'Problem in password change.');
     }
 
-    public function addFamilyMember(Request $request) {
-        //dd($request->all());
-        //dd(date('Y-m-d',strtotime($request['birthdate'][0])));
-        /* $request->validate([
-
-          'fname' => 'required',
-          'lname' => 'required|min:8',
-          'email' => 'required|email|unique:users',
-          'mobile' => 'required',
-          'emergency_contact' => 'required',
-          'relationship' => 'required',
-          'gender' => 'required',
-          'birthdate' => 'required',
-          'emergency_name' => 'required'
-          ]); */
-        if (!Gate::allows('profile_view_access')) {
-            $request->session()->flash('alert-danger', 'Access Restricted');
-            return redirect('/');
-        }
-        $prev = $request['previous_family_count'];       
-        $request['family_count'] . "---" . '----' . $prev;
-        $request['family_count'] - $prev;
-
-        $loggedinUser = Auth::user();
-        $user = User::where('id', Auth::user()->id)->first();
-        $data = '';
-
-        if ($prev == $request['family_count'] && $request['family_count'] == 0) {
-            if ($request['removed_family'][0] != 'delete') {
-                $data = UserFamilyDetail::create([
-                            'user_id' => Auth::user()->id,
-                            'first_name' => $request['fname'][0],
-                            'last_name' => $request['lname'][0],
-                            'email' => $request['email'][0],
-                            'mobile' => $request['mobile'][0],
-                            'emergency_contact' => $request['emergency_contact'][0],
-                            'relationship' => $request['relationship'][0],
-                            'gender' => $request['gender'][0],
-                            'birthday' => $request['birthdate'][0],
-                            'emergency_contact_name' => $request['emergency_name'][0],
-                ]);
-            }           
-        } else {          
-            for ($i = 0; $i < $prev; $i++) {
-                if ($request['removed_family'][$i] != 'delete') {
-                    $cat = UserFamilyDetail::find($request['fid'][$i]);
-                    $cat->first_name = $request['fname'][$i];
-                    $cat->last_name = $request['lname'][$i];
-                    $cat->email = $request['email'][$i];
-                    $cat->mobile = $request['mobile'][$i];
-                    $cat->emergency_contact = $request['emergency_contact'][$i];
-                    $cat->relationship = $request['relationship'][$i];
-                    $cat->gender = $request['gender'][$i];
-                    $cat->birthday = $request['birthdate'][$i];
-                    $cat->emergency_contact_name = $request['emergency_name'][$i];
-                    $data = $cat->update();
-                } else {
-                    $data = UserFamilyDetail::where('id', $request['fid'][$i])->delete();
-                }
-            }            
-            for ($j = $prev; $j < $request['family_count']; $j++) {
-                if ($request['removed_family'][$j] != 'delete') {
-                    $data = UserFamilyDetail::create([
-                                'user_id' => Auth::user()->id,
-                                'first_name' => $request['fname'][$j],
-                                'last_name' => $request['lname'][$j],
-                                'email' => $request['email'][$j],
-                                'mobile' => $request['mobile'][$j],
-                                'emergency_contact' => $request['emergency_contact'][$j],
-                                'relationship' => $request['relationship'][$j],
-                                'gender' => $request['gender'][$j],
-                                'birthday' => $request['birthdate'][$j],
-                                'emergency_contact_name' => $request['emergency_name'][$j],
-                    ]);
-                }
-            }
-        }
-        if ($data)
-            return Redirect::back()->with('success', 'Family details has been updated successfully.');
-        else
-            return Redirect::back()->with('error', 'Problem in updating family details.');
-    }
-
     public function removefamily(Request $request) {
-
-        DB::delete('DELETE FROM  user_family_details WHERE id = "' . $request->rm . '"');
-        return Redirect::back()->with('success', 'Family Member Delete.');
+        //print_r($request->all());exit;
+        DB::delete('DELETE FROM  user_family_details WHERE id = "' . $request->id . '"');
+    
+        return Redirect::back()->with('success', 'Family Member Deleted Successfully..');
     }
+
+
     public function spotify() 
     {
         return view('spotify');
@@ -9820,10 +8369,9 @@ class UserProfileController extends Controller {
         $user = BusinessServices::where('id', $request->sid)->first();
         $businessData = [
             'bstep' => 72,
-            'serviceid' => $user['serviceid'],
+            'serviceid' => $user['id'],
             'servicetype' => $user['service_type']
         ];
-        
         User::where('id', Auth::user()->id)->update($businessData);
         echo 'success';
     }
@@ -9840,7 +8388,30 @@ class UserProfileController extends Controller {
         echo 'success';
     }   
 
-     
+    public function resendOpt(Request $request){
+        $digits = 4;
+        $random = rand(pow(10, $digits-1), pow(10, $digits)-1);
+        CompanyInformation::where('id',$request->cid)->update(['claim_business_verification_code'=>$random]);
+        $details = [];
+        $data = CompanyInformation::where('id',$request->cid)->first();
+        if($request->type == 'email'){
+            $details = array(
+                "random_code" => $random,
+                "email" =>$data->business_email
+            );
+            $success = MailService::sendEmailclaimvarification($details);
+        }else if($request->type == 'phone'){
+            $phone_number = str_replace([' ','(',')','-'],'',$data->business_phone);
+            $phone_number = '+1'.$phone_number;
+            $success = $this->sendMessage($random,$phone_number);
+        }else{
+            $phone_number = str_replace([' ','(',')','-'],'',$data->business_phone);
+            $phone_number = '+1'.$phone_number;
+            $success = $this->makeCalluser($random,$phone_number);
+        }
+        
+        return $success;
+    }
 
     public function varify_email_for_claim_business(Request $request){
         $digits = 4;
@@ -9895,7 +8466,7 @@ class UserProfileController extends Controller {
     }
 
     private function sendMessage($message, $recipients)
-    {
+    {   
         $account_sid = getenv("TWILIO_SID");
         $auth_token = getenv("TWILIO_AUTH_TOKEN");
         $twilio_number = getenv("TWILIO_NUMBER");
@@ -9904,42 +8475,35 @@ class UserProfileController extends Controller {
             $client->messages->create($recipients, [ "body" => "Your verification code is: " .$message, 'from' => $twilio_number]);
             $msg = 'Success';
         }catch(\Exception $e) {
-            $msg = 'Fail';
+            $msg =  $e;
         }
         return $msg;
     }
 
-    public function business_claim_varification($cid){
-        return view('home.business-claim-varification',compact('cid'));
+    public function business_claim_varification($cid,$type){
+        return view('home.business-claim-varification',compact('cid','type'));
     } 
 
     public function varify_code_to_claim_business(Request $request){
 
         $data = CompanyInformation::where(['id'=>$request->cid])->first();
-        $address = '';
-        $city = '';
-        $ZipCode = '';
-        $state = '';
+        $address = $city = $ZipCode = $state = '';
 
-       if($data != ''){
+        if(Auth::check()){
+            $id =  Auth::user()->id;
+        }else{
+            $id =  $request->id;
+        }
+        if($data != ''){
             if($data->claim_business_verification_code == $request->code){
-                
-                CompanyInformation::where('id',$request->cid)->update(['is_verified'=>1,'user_id' => Auth::user()->id]);
-                BusinessCompanyDetail::where('id',$request->cid)->update(['showstep'=>2,'userid' => Auth::user()->id]);
-                User::where('id', Auth::user()->id)->update(['bstep' => 2, 'cid' => $request->cid]);
-
-                $detail_data_com=  [];
-                $detail_data_user =  [];
+                CompanyInformation::where('id',$request->cid)->update(['is_verified'=>1,'user_id' => $id]);
+                BusinessCompanyDetail::where('id',$request->cid)->update(['showstep'=>2,'userid' => $id]);
+                $user = User::where('id',$id)->update(['bstep' => 1, 'cid' => $request->cid]);
+                $detail_data_com = [];
                 $detail_data_com['company_data'] = CompanyInformation::where('id',$request->cid)->first();
-                $det_com  = json_decode(json_encode($detail_data_com), true); 
-
-                $detail_data_user['user'] = User::where('id',Auth::user()->id)->first();
-                $det_user  = json_decode(json_encode($detail_data_user), true); 
-                $allDetail = array_merge($det_com,$det_user);
-                MailService::sendEmailafterclaimed($allDetail);
-
+                $allDetail  = json_decode(json_encode($detail_data_com), true); ;
+                SGMailService::welcomeMailOfNewBusinessToCustomer(['cid'=> $request->cid,'email' => $user->email]);
                 $msg = 'Match';
-
             }else{
                 $msg = 'Not Match';
             }   
@@ -9959,6 +8523,9 @@ class UserProfileController extends Controller {
     public function claim_reminder($cname , $cid){
         
         $data = CompanyInformation::where('id',$cid)->first();
+        if($data->user_id){
+            return redirect()->route('business_dashboard');
+        }
         $val = 'null';
         $address = '';
         
@@ -9977,124 +8544,16 @@ class UserProfileController extends Controller {
         if($data->zip_code != ''){
             $address .= $data->zip_code;
         }
+
         return view('home.business-claim-reminder',compact('cname','cid','address'));
     } 
-	public function createmanageStaff(Request $request){
-		return view('profiles.createstaff');
-	}
-	public function staff_scheduled_activities(){
-		return view('profiles.staff-scheduled-activities');
-	}
-	public function manageproduct(){
-		return view('profiles.manageproduct');
-	}
-	public function addproduct(){
-		return view('profiles.addproduct');
-	}
-	public function manage_activity(){
-		return view('profiles.ManageActivity');
-	}
+
+	
 	public function financial_dashboard(){
 		return view('profiles.financial-dashboard');
 	}
 
-    public function manage_customer (){
-        return view('profiles.manage-customer');
-    }
-    public function view_customer (){
-        return view('profiles.view-customer');
-    }
-    public function pricedetails (){
-        return view('profiles.pricedetails');
-    }
-
-    public function businesspricedetails ($catid){
-        $catdata =  BusinessPriceDetailsAges::where('id',$catid)->first();
-        $business_activity = BusinessActivityScheduler::where('cid', $catdata['cid'])->where('serviceid', $catdata['serviceid'])->where('category_id',$catid)->get();
-        $business_activity = isset($business_activity) ? $business_activity : [];
-        return view('profiles.createnewbusinesspricedetails',compact('catid','catdata','business_activity'));
-    }
-
-    public function addbusinessschedule (Request $request){
-        // print_r($request->all());
-        //   exit;
-        $shift_start = $request->duration_cnt;
-        // echo $shift_start; exit;
-        if($shift_start >= 0) {
-            /*BusinessActivityScheduler::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('serviceid',  $request->serviceid)->where('category_id',$request->catid)->delete();*/
-            $alldata = BusinessActivityScheduler::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('serviceid',  $request->serviceid)->where('category_id',$request->catid)->get();
-            
-            $idary = array();
-            $idary1 = array();
-            foreach( $alldata as $data_all){
-                $idary[] =  $data_all['id'];
-            }
-            $date = '';
-            $getdate = explode('/',$request->starting);
-            $date .= $getdate[2].'-'.$getdate[0].'-'.$getdate[1];
-            for($i=0; $i <= $shift_start; $i++) { 
-                if($request->id[$i] != ''){
-                    $idary1[] = $request->id[$i];
-                }
-                
-                if($request->shift_start[$i] != '' && $request->shift_end[$i] != '' && $request->set_duration[$i] != '') {
-
-                    if($request->until == 'days'){
-                        $daynum = '+'.$request->scheduled.' days';
-                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
-                    }else if($request->until == 'month'){
-                        $daynum = '+'.$request->scheduled.' month';
-                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
-                    }else if($request->until == 'years'){
-                        $daynum = '+'.$request->scheduled.' years';
-                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
-                    }else{
-                        $daynum = '+'.$request->scheduled.' week';
-                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
-                    }
-
-                    $activitySchedulerData = [
-                        "cid" => $request->cid,
-                        "category_id" => $request->catid,
-                        "userid" =>Auth::user()->id,
-                        "serviceid" =>$request->serviceid,
-                        "activity_meets" => $request->frm_class_meets,
-                        "starting" => $date,
-                        "activity_days" => isset($request->activity_days[$i]) ? $request->activity_days[$i] : '',
-                        "shift_start" => isset($request->shift_start[$i]) ? $request->shift_start[$i] : '',
-                        "shift_end" => isset($request->shift_end[$i]) ? $request->shift_end[$i] : '',
-                        "set_duration" => isset($request->set_duration[$i]) ? $request->set_duration[$i] : '',
-                        "spots_available" => isset($request->sport_avail[$i]) ? $request->sport_avail[$i] : '',
-                        "scheduled_day_or_week" => $request->until, 
-                        "scheduled_day_or_week_num" => $request->scheduled,
-                        "end_activity_date" => $expdate,
-                        "is_active" => 1,
-                        "schedule_until" => '',
-                        "sales_tax" => '',
-                        "sales_tax_percent" => '',
-                        "dues_tax" => '',
-                        "dues_tax_percent" => ''
-                    ];
-                    if($request->id[$i] != ''){
-                        // echo $request->id[$i];
-                        BusinessActivityScheduler::where('id', $request->id[$i])->update($activitySchedulerData);
-                    }else{
-                        BusinessActivityScheduler::create($activitySchedulerData);
-                    }
-                    
-                }
-            }
-        
-            $differenceArray1 = array_diff($idary, $idary1);
-            foreach($differenceArray1 as $deletdata){
-                BusinessActivityScheduler::where('id',$deletdata)->delete();
-            }
-        }
-        // exit;
-        return redirect()->route('businesspricedetails', [$request->catid]);
-        /*return Redirect::route('businesspricedetails')->with('catid', $request->catid);*/
-        /*return()->route('businesspricedetails',['catid' => $request->catid]);*/
-    }
+  
     public function modelboxsuccess(Request $request){
         /*print_r($request->all());*/
         for($x=0;$x=$request->i;$x++){
@@ -10115,67 +8574,7 @@ class UserProfileController extends Controller {
         }
         return 'success';
     }
-
-
-    public function add_instructor(Request $request){
-        $images = '';
-        if ($request->hasFile('insimg')) 
-        {   
-            $file = $request->file('insimg');
-            $name = date('His').$file->getClientOriginalName();
-            $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'instructureimg'.DIRECTORY_SEPARATOR,$name);
-            if( !empty($name) ){
-                $images = $name;
-            }
-        }
-        $staff_mem = [
-            'name' => $request->insname,
-            'image' => $images,
-            'description' => $request->insdescription,
-            'user_id' => Auth::user()->id,
-        ]; 
-        
-        $create = StaffMembers::create($staff_mem);
-        if($create){
-            $status = "success";
-        }else{
-            $status = "fail";
-        }
-
-        return $status;
-    }
-
-    public function delimageactivity(Request $request){
-        $imgeiddata = BusinessServices::where('id',$request->serviceid)->first();
-        $profile_pic = $imgeiddata->profile_pic;
-        if(str_contains($profile_pic, ',')){
-            $profile_pic1 = explode(',', $profile_pic);
-        }else{
-            $profile_pic1 = $profile_pic;
-        }
-
-        $pro_img = '';
-        if(is_array($profile_pic1)){
-            foreach($profile_pic1 as $key => $data){
-                if ($request->imgname != $data) {
-                    if($data != ''){
-                       $pro_img .= $data.',';
-                    }
-                }
-            }
-        }else{
-            $pro_img = '';
-        }
-
-        $pro_img = rtrim($pro_img,',');
-        $updateval = BusinessServices::where('id',$request->serviceid)->update(['profile_pic' => $pro_img]);
-        if($updateval == true){
-            return "success";
-        }else{
-            return "fail";
-        }
-    }
-
+    
     public function editactivityimg(Request $request) {
         $loggedinUser = Auth::user(); 
         $serviceid = $request->serviceid;
@@ -10187,11 +8586,11 @@ class UserProfileController extends Controller {
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 align-self-modal">
                                 <figure>
-                                    <input id="image_post" type="file" name="image_post[]" />
+                                    <input id="image_post" type="file" name="image_post" />
                                     <a href="#" title="" data-toggle="modal">
                                         <span class="error" id="err_image_sign">
 
-                                   <img src="'.url('/public/uploads/profile_pic/'.$request->imgname).'" alt="">
+                                   <img src="'.Storage::URL($request->imgname).'" alt="">
                                     </a>
                                 </figure>
                             </div>
@@ -10203,16 +8602,12 @@ class UserProfileController extends Controller {
     }
 
     public function activityimgupdate(Request $request) { 
-        $serviceid = $request->serviceid;        
-        $imgeiddata = BusinessServices::where('id',$serviceid)->first();
-         $profile_pic = $imgeiddata->profile_pic;
+        $serviceId = $request->serviceid;        
+        $businessData = BusinessServices::find($serviceId);
+        $profile_pic = $businessData->profile_pic;
 
         if ($request->hasFile('image_post')) {
-            $filename = $request->file('image_post');
-            $name=$filename[0]->getClientOriginalName(); 
-            $filestatus = $filename[0]->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR, $name);
-          /*  $image_name = $image_upload['filename'];*/
-
+            $name = $request->file('image_post')->store('activity');
             if(str_contains($profile_pic, ',')){
                 $profile_pic1 = explode(',', $profile_pic);
             }else{
@@ -10228,16 +8623,16 @@ class UserProfileController extends Controller {
                         }
                     }else{
                         $pro_img .= $name.',';
+                        Storage::delete($request->imgnameajax);
                     }
                 }
             }else{
                 $pro_img = $name;
             }  
-
-        }  
+        }    
         $pro_img = rtrim($pro_img,',');
-        $updateval = BusinessServices::where('id',$request->serviceid)->update(['profile_pic' => $pro_img]);
-        return redirect()->route('createNewBusinessProfile');
+        $updateval = $businessData->update(['profile_pic' => $pro_img]);
+        return redirect()->route('business.services.create',['business_id'=>$businessData->cid ,'serviceType'=>$businessData->service_type, 'serviceId'=> $serviceId]);
     } 
 }
 

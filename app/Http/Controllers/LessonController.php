@@ -5,48 +5,22 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Libraries\Stripes\StripePay;
 use App\Http\Controllers\Controller;
-use App\Repositories\UserRepository;
-use App\Repositories\BookingRepository;
-use App\Repositories\SportsRepository;
+use App\Repositories\{UserRepository,BookingRepository,SportsRepository};
 use Illuminate\Support\Facades\Log;
-use Auth;
+use Auth,Storage;
 use File;
 use Config;
-use App\Jobpostquestions;
 use Redirect;
-use App\Miscellaneous;
-use App\Quote;
 use View;
 use DB;
 use Response;
 use Validator;
-use App\UserBookingStatus;
-use App\User;
-use App\Evidents;
-use App\UserProfessionalDetail;
-use App\UserService;
-use App\CompanyInformation;
-use App\BusinessServices;
-use App\BusinessService;
-use App\BusinessPriceDetails;
-use App\UserBookingDetail;
-use App\BusinessCompanyDetail;
-use App\Fit_Cart;
-use App\Sports;
-use App\Payment;
-use App\UserFamilyDetail;
-use App\MailService;
-use App\Zip_code;
+use App\{UserBookingStatus,User,Evidents,UserProfessionalDetail,UserService,CompanyInformation,BusinessServices,BusinessService,BusinessPriceDetails,UserBookingDetail,BusinessCompanyDetail,Fit_Cart,Sports,Payment,UserFamilyDetail,MailService,Zip_code,UserFavourite,BusinessServicesFavorite,BusinessServiceReview,BusinessActivityScheduler,BusinessSubscriptionPlan,BusinessPriceDetailsAges,Jobpostquestions,Miscellaneous,Quote};
 use Illuminate\Pagination\LengthAwarePaginator;
-use App\UserFavourite;
-use App\BusinessServicesFavorite;
-use App\BusinessServiceReview;
-use App\BusinessActivityScheduler;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use DateTime;
 use DateTimeZone;
-use App\BusinessPriceDetailsAges;
 
 class LessonController extends Controller {
 
@@ -160,32 +134,6 @@ class LessonController extends Controller {
      * @param  Task  $task
      * @return Response
      */
-    /* public function destroy(Request $request, Task $task)
-      {
-      $this->authorize('destroy', $task);
-
-      $task->delete();
-
-      return redirect('/tasks');
-      } */
-
-    /* public function testTwilio(Request $request)
-      {
-      require asset('/twilio/sdk/Services/Twilio.php');
-      //        require asset('/css/material-charts.css');die;
-      // Create an authenticated client for the Twilio API
-      $client = new Services_Twilio($_ENV['TWILIO_ACCOUNT_SID'], $_ENV['TWILIO_AUTH_TOKEN']);
-
-      // Use the Twilio REST API client to send a text message
-      $m = $client->account->messages->sendMessage(
-      $_ENV['TWILIO_NUMBER'], // the text will be sent from your Twilio number
-      $number, // the phone number the text will be sent to
-      $message // the body of the text message
-      );
-
-      // Return the message object to the browser as JSON
-      return $m;
-      } */
 
     /**
      * Display a list of all of the user's task.
@@ -270,65 +218,11 @@ class LessonController extends Controller {
         return view::make('jobpost.submitQuote')->with('qutObj', $qutObj);
     }
 
-    /* sam filter start */
-   /* public function samfilter(Request $r) { 
-        $output = '';
-        $page = $r->page ? $r->page : 1;
-        $offset = ($page * 9) - 9; 
-       // parse_str($r->data, $output);
-        $output = ($r->data);
-        
-        $filter['professional_type'] = (isset($output['professional_type']) && ($output['professional_type'] !== "")) ? $output['professional_type'] : null;
-        $filter['service_typetwo'] = (isset($output['service_typetwo']) && ($output['service_typetwo'] !== "")) ? $output['service_typetwo'] : null;
-        $filter['service_type'] = (isset($output['service_type']) && ($output['service_type'] !== "")) ? $output['service_type'] : null;
-        $filter['program_type'] = (isset($output['program_type']) && ($output['program_type'] !== "")) ? $output['program_type'] : null;
-        $filter['activity_location'] = (isset($output['activity_location']) && ($output['activity_location'] !== "")) ? $output['activity_location'] : null;
-        $filter['location'] = (isset($output['location']) && ($output['location'] !== "")) ? $output['location'] : null;
-        $filter['activity_type'] = (isset($output['activity_type']) && ($output['activity_type'] !== "")) ? $output['activity_type'] : null;
-        $filter['age_range'] = (isset($output['age_range']) && ($output['age_range'] !== "")) ? $output['age_range'] : null;
-        $filter['cnumber_people'] = (isset($output['cnumber_people']) && ($output['cnumber_people'] !== "")) ? $output['cnumber_people'] : null;
-        $filter['duration'] = (isset($output['duration']) && ($output['duration'] !== "")) ? $output['duration'] : null;
-        $filter['difficulty_level'] = (isset($output['difficulty_level']) && ($output['difficulty_level'] !== "")) ? $output['difficulty_level'] : null;
-        $filter['gender'] = (isset($output['gender']) && ($output['gender'] !== "")) ? $output['gender'] : null;
-        $filter['language'] = (isset($output['language']) && ($output['language'] !== "")) ? $output['language'] : null;
-        $filter['activity_exp'] = (isset($output['activity_exp']) && ($output['activity_exp'] !== "")) ? $output['activity_exp'] : null;
-        $filter['personality_habit'] = (isset($output['personality_habit']) && ($output['personality_habit'] !== "")) ? $output['personality_habit'] : null;
-        //$filter['selected_sport'] = (isset($output['selected_sport']) && ($output['selected_sport'] !== "")) ? $output['selected_sport'] : null;
-        //$filter['activity_for'] = (isset($output['activity_for']) && ($output['activity_for'] !== "")) ? $output['activity_for'] : null;
-        //$filter['fitness_goal'] = (isset($output['fitness_goal']) && ($output['fitness_goal'] !== "")) ? $output['fitness_goal'] : null;
-       
-        $filter['activity_Member'] = (isset($output['activity_Member']) && ($output['activity_Member'] !== "")) ? $output['activity_Member'] : null;    
-        $filmember=$filter['activity_Member'];
-       
-        $serviceData = $this->filter($r, $filter);
-        //print_r($serviceData);exit;
-        //echo "<pre>";print_r( $AllProfessionals);die;
-        $serviceData = new LengthAwarePaginator(
-        array_slice($serviceData, $offset, 5, true), count($serviceData), 9, $page, ['path' => $r->url(), 'query' => $r->query()]
-        );
-        $sport_names = $this->sports->getAllSportsNames();
-        return view('jobpost.search', compact('serviceData', 'sport_names','filmember'));
-    }*/
-
     public function filter($request, $filter) {
         $companys = [];
-        //$query = CompanyInformation::get();
-        //DB::enableQueryLog();
-        /* comment by purvi
-        $searchDatas = BusinessServices::where('instant_booking', 1)
-            ->where('is_active', 1);*/
-        
+
         $searchDatas = BusinessServices::where('is_active', 1); 
-        //$searchDatas = DB::table('business_services AS bs')->where('bs.is_active', 1);
-                
-            //->where('program_name', 'LIKE', $keyword . '%')->groupBy('id')->get();
-            //  ->where('sport_activity', 'LIKE', $keyword . '%')->groupBy('id')->get();    
-            /*->where(function($query) use ($keyword){
-                        $query->where('program_name', 'LIKE', $keyword . '%');
-                        //->orWhere('sport_activity', 'LIKE', $keyword . '%');
-                    })->groupBy('id')->get();*/
         
-        //print_r($filter['service_type']); exit;
         //Service Type
         if ($filter['service_typetwo'] != null) {
             $company_ids = [];
@@ -349,26 +243,6 @@ class LessonController extends Controller {
                 }
             });
         }
-        
-        //Program Type - Activity of services
-        /* Comment by purvi
-        if ($filter['program_type'] != null) {
-            $company_ids = [];
-            $search = $filter['program_type'];
-            $searchDatas->where(function($q) use ($search) {
-                if(!in_array("any", $search)){
-                    foreach ($search as $data) {
-                        if(strpos($data,'_')!= ''){
-                            $data = ucwords(str_replace('_',' ', $data));
-                        }
-                        else{
-                            $data = ucwords($data);
-                        }
-                        $q->orWhere('sport_activity', 'LIKE', '%'. $data . '%');
-                    }
-                }
-            });
-        }*/
         
         if ($filter['program_type'] != null) {
             $company_ids = [];
@@ -540,58 +414,7 @@ class LessonController extends Controller {
             $company_ids = [];
             $search = $filter['activity_Member'];
         }
-        
-        
-        
-        /*if ($filter['language'] != null) {
-            $company_ids = [];
-            $search = $filter['language'];
-            $searchDatas->where(function($q) use ($search) {
-                foreach ($search as $data) {
-                    $q->orWhere('languages', 'LIKE', '%'. $data . '%');
-                }
-            });
-            
-        }*/
-        
-        /*
-        Comment by purvi
-        if ($filter['language'] != null) {
-            $company_ids = [];
-            foreach ($filter['language'] as $data) { 
-                $str =  $data;
-                $my_service_data = BusinessService::where('cid', '>', '0')->where('languages', 'LIKE', '%' . $str . '%')->get(['cid']);
-                foreach ($my_service_data as $value2) {
-                    array_push($company_ids, $value2->cid);
-                }
-            }
-            
-            if(count($company_ids) > 0){
-                $searchDatas->whereIn('cid', $company_ids);
-            }
-            
-        }*/
-        
-        //Gender
-        /*if ($filter['gender'] != null) {
-            $company_ids = [];
-            $search = $filter['gender'];
-            $searchDatas->where(function($q) use ($search) {
-                if(!in_array("any", $search)){
-                    foreach ($search as $data) {
-                        $data = ucwords($data);
-                        $q->orWhere('gender', 'LIKE', '%'. $data . '%');
-                    }
-                }
-            });
-        }*/
-        //$query = str_replace(array('?'), array('\'%s\''), $searchDatas->toSql());
-        //$query = vsprintf($query, $searchDatas->getBindings());
-        //dump($query);die;
-        
-        /*$searchDatas->get();
-        dd(\DB::getQueryLog());*/
-        
+     
         $companys = $searchDatas->get()->toArray();
         
         if ($filter['professional_type'] != null) {
@@ -608,31 +431,6 @@ class LessonController extends Controller {
                 $companys = array_merge($companys, $company);
             }
         }
-        /*if ($filter['selected_sport'] != null) {
-            $company_ids = [];
-            $my_service_data = UserService::where('company_id', '!=', null)->where('sport', $filter['selected_sport'])->get();
-            foreach ($my_service_data as $value2) {
-                array_push($company_ids, $value2['company_id']);
-            }
-            $company = CompanyInformation::whereIn('id', $company_ids)->get()->toArray();
-            if (count($company) != 0) {
-                $companys = array_merge($companys, $company);
-            }
-        }*/
-        /*if ($filter['activity_for'] != null) {
-            $company_ids = [];
-            foreach ($filter['activity_for'] as $data) {
-                $str = ':"' . $data;
-                $my_service_data = UserService::where('company_id', '!=', null)->where('activitydesignsfor', 'LIKE', '%' . $str . '%')->get();
-                foreach ($my_service_data as $value2) {
-                    array_push($company_ids, $value2['company_id']);
-                }
-            }
-            $company = CompanyInformation::whereIn('id', $company_ids)->get()->toArray();
-            if (count($company) != 0) {
-                $companys = array_merge($companys, $company);
-            }
-        }*/
         if ($filter['activity_type'] != null) {
             $company_ids = [];
             foreach ($filter['activity_type'] as $data) {
@@ -699,11 +497,7 @@ class LessonController extends Controller {
                 $companys = array_merge($companys, $company);
             }
         }
-        /*if ($filter['fitness_goal'] != null) {
-            foreach ($filter['fitness_goal'] as $value) {
-                $query->where('details.goals_option', 'like', '%' . $value . '%');
-            }
-        }*/
+        
         if ($filter['activity_location'] != null) {
             $company_ids = [];
             if(isset($request->activity_location)) {
@@ -721,19 +515,7 @@ class LessonController extends Controller {
                 $companys = array_merge($companys, $company);
             }
         }
-
-        //   $resultnew =  new LengthAwarePaginator(
-        //              array_slice($result, $offset, $perPage, true),  
-        //              count($result), 
-        //              $perPage, 
-        //              $page, 
-        //              ['path' => $request->url(), 'query' => $request->query()]  
-        //          );
-        /*$searchDatas->get();
-        dd(\DB::getQueryLog());*/
-        //print_r($companys); exit;
         return $companys;
-        //return $query->groupBy('users.id')->paginate(9);
     }
 
     public function filter1($filter) {
@@ -809,8 +591,6 @@ class LessonController extends Controller {
         }
         return $query->groupBy('users.id')->paginate(9);
     }
-
-    /* sam filter end */
 
     public function getDirecthire(Request $request) {
         if (isset($request->selected_sport)) {
@@ -1000,10 +780,7 @@ class LessonController extends Controller {
     
     
     public function getInstanthire(Request $request) {
-       /* if(!empty($request->all())){
-            print_r($request->all());exit;
-        }*/
-       
+    
         if(isset($_GET['action']) && !empty($_GET["action"])) 
         {
             $request->session()->put('selected_location_lng', $request->selected_location_lng);
@@ -1181,11 +958,7 @@ class LessonController extends Controller {
         $miles_radius_filter = $request->session()->get('miles_radius_filter') ? $request->session()->get('miles_radius_filter') : 0;
         $professional_type = $request->session()->get('professional_type') ? $request->session()->get('professional_type') : '1';
         $filter_review_star = $request->session()->get('filter_review_star') ? $request->session()->get('filter_review_star') : null;
-        /*$program_type = $request->session()->get('program_type') ? $request->session()->get('program_type') : null;
-        $service_type = $request->session()->get('service_type') ? $request->session()->get('service_type') : null;
-        $service_type_two = $request->session()->get('service_type_two') ? $request->session()->get('service_type_two') : null;
-        $activity_for = $request->session()->get('activity_for') ? $request->session()->get('activity_for') : null;
-*/
+        
         $sports = $this->sports->getAlphabetsWiseSportsNames();
         $sport_names = $this->sports->getAllSportsNames();
         $businessType = Miscellaneous::businessType();
@@ -1249,7 +1022,7 @@ class LessonController extends Controller {
                    /* ->orWhere('program_name', 'LIKE',  '%'.$select_label . '%')*/;
             });
             $searchDatauserProfile = User::where('username', 'LIKE', '%'.$select_label.'%')->first();
-            $searchDatabusiness = CompanyInformation::where('company_name','LIKE', '%'.$select_label.'%')->first();
+            $searchDatabusiness = CompanyInformation::where('dba_business_name','LIKE', '%'.$select_label.'%')->first();
         }
 
         if ($select_zipcode != null && $select_zipcode != 'undefined') {
@@ -1524,9 +1297,9 @@ class LessonController extends Controller {
                 if ($found != 0) {
                     $lat = $value['latitude'] + ((floatVal('0.' . rand(1, 9)) * $found) / 10000);
                     $long = $value['longitude'] + ((floatVal('0.' . rand(1, 9)) * $found) / 10000);
-                    $a = [$value['company_name'], $lat, $long, $value['id'], $value['logo'],$reviews_avg,$reviews_count];
+                    $a = [$value['dba_business_name'], $lat, $long, $value['id'], $value['logo'],$reviews_avg,$reviews_count];
                 }else {
-                    $a = [$value['company_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo'],$reviews_avg,$reviews_count];
+                    $a = [$value['dba_business_name'], $value['latitude'], $value['longitude'], $value['id'], $value['logo'],$reviews_avg,$reviews_count];
                 }
                 array_push($locations, $a);
             }
@@ -1560,7 +1333,7 @@ class LessonController extends Controller {
         if($searchDatauserProfile != ''){
             return Redirect::to('/userprofile/'.$searchDatauserProfile->username);
         }else if($searchDatabusiness !=''){
-            return Redirect::to('businessprofile/'.$searchDatabusiness->company_name.'/'.$searchDatabusiness->id);
+            return Redirect::to('businessprofile/'.$searchDatabusiness->dba_business_name.'/'.$searchDatabusiness->id);
         }else{
             return view('jobpost.instanthire', [
                 'cart' => $cart,
@@ -1734,18 +1507,10 @@ class LessonController extends Controller {
         $data = array();
 		
         foreach ($profiledetail as $profile) {
-            // print_r($profile);die;
             $c_names = '';
-            // foreach($profile->company as $x => $co) {
-            //     //if($x == 0)
-            //         $c_names = $c_names.$co->company_name;
-            //     if($x+1 != count($profile->company)){
-            //         $c_names = $c_names.', ';
-            //     }
-            // }
 
             $data["profile_" . $profile->id] = array();
-            $data["profile_" . $profile->id]['company_names'] = $profile->company_name;
+            $data["profile_" . $profile->id]['company_names'] = $profile->dba_business_name;
             
             $data["profile_" . $profile->id]['explevel'] = '-';
             $getExpLavel = '';
@@ -1864,88 +1629,6 @@ class LessonController extends Controller {
         $return['data'] = $data;
         return json_encode($return);
     }
-
-//     public function directhireViewProfile($user_id) {  
-//       // $sports = Miscellaneous::getMiscellaneous('sports', 'title', true);
-//       $sports = $this->sports->getAlphabetsWiseSportsNames();
-//       $sports_names = $this->sports->getAllSportsNames();
-//       $UserProfileDetail = $this->users->getUserProfileDetail1($user_id);
-//      // $UserProfileDetail = $this->users->getUserProfileDetail($user_id, array('professional_detail','history','company','education','certification','service'));
-//      //// print_r($UserProfileDetail);die;
-// //dd($UserProfileDetail['ProfessionalDetail']);
-//     //   if(isset($UserProfileDetail['ProfessionalDetail']) && @count($UserProfileDetail['ProfessionalDetail']) > 0){
-//     //       $UserProfileDetail['ProfessionalDetail'] = UserProfessionalDetail::getFormedProfile($UserProfileDetail['ProfessionalDetail']);
-//     //   }
-//       $userSpotPrice = $userSport = array();
-//       $userSport[""] = "Select Sport";
-//       if(@count(@$UserProfileDetail['service']) > 0) {
-//         foreach($UserProfileDetail['service'] as $service) {
-//           if(isset($sports_names[$service['sport']]))
-//           {
-//             $userSport[$service['sport']] = $service['sport'];
-//             $userSpotPrice[$service['sport']] = $service['price'];
-//           }
-//         }
-//       }
-//       $sports_select = '';
-//       if($sports){
-//         $sports_select .= "<option value=''>Choose Activity</option>";
-//         foreach ($sports as $key => $value) {
-//             foreach ($value as $key1 => $value1) {
-//                 if(count($value1->child)){
-//                     $sports_select .= "<optgroup label='".$value1->title."'>";
-//                     foreach ($value1->child as $key2 => $value2) {
-//                         $selected =null;// ($service==$key2)?"selected":"";
-//                         $sports_select .= "<option value='".$key2."' ".$selected." >".$value2."</option>";
-//                     }
-//                     $sports_select .= "</optgroup>";
-//                 } else {
-//                     $selected = null;//($service==$value1->value)?"selected":"";
-//                     $sports_select .= "<option value='".$value1->value."' ".$selected.">".$value1->title."</option>";
-//                 }
-//             }
-//         }
-//     }
-//       $businessType = Miscellaneous::businessType();
-//       $programType = Miscellaneous::programType();
-//       $programFor = Miscellaneous::programFor();
-//       $numberOfPeople = Miscellaneous::numberOfPeople();
-//       $ageRange = Miscellaneous::ageRange();
-//       $expLevel = Miscellaneous::expLevel();
-//       $serviceLocation = Miscellaneous::serviceLocation();
-//       $pFocuses = Miscellaneous::pFocuses();
-//       $duration = Miscellaneous::duration();
-//       $servicePriceOption = Miscellaneous::servicePriceOption();
-//       $specialDeals = Miscellaneous::specialDeals();
-//       $activity = Miscellaneous::activity();
-//       $teaching = Miscellaneous::teaching();
-//       $languages = Miscellaneous::getLanguages();
-//       $timeSlots = Miscellaneous::getTimeSlot();
-//       $approve = Evidents::where('user_id',$user_id)->get();
-//       return view('jobpost.directhire_businessprofile', [
-//             'UserProfileDetail' => $UserProfileDetail,
-//             'userSport' => $userSport,
-//             'userSpotPrice' => $userSpotPrice,
-//             'sports' => $sports,
-//             'sports_names' => $sports_names,
-//             'businessType' => $businessType,
-//             'programType' => $programType,
-//             'programFor' => $programFor,
-//             'numberOfPeople' => $numberOfPeople,
-//             'ageRange' => $ageRange,
-//             'expLevel' => $expLevel,
-//             'serviceLocation' => $serviceLocation,
-//             'pFocuses' => $pFocuses,
-//             'duration'=> $duration,
-//             'specialDeals' => $specialDeals,
-//             'servicePriceOption' => $servicePriceOption,
-//             'pageTitle' => "DIRECT HIRE",
-//             'approve'=>$approve,
-//             'activity'=>$activity,
-//             'alllanguages' => $languages,
-//             'sports_select' => $sports_select,
-//       ]);
-//     }
 
     public function directhireViewProfile($user_id) {
         $company = CompanyInformation::with('employmenthistory', 'education', 'users', 'certification', 'service', 'skill', 'ProfessionalDetail')->where('id', $user_id)->first();
@@ -2328,23 +2011,6 @@ class LessonController extends Controller {
         ]);
     }
 
-    public function test() {
-        $booking_id = 36;
-        $booking = UserBookingStatus::with('UserBookingDetail')->with('Jobpostquestions')->findOrFail($booking_id);
-        $user = User::findOrFail($booking->user_id);
-        $professional = array();
-        if ($booking->booking_type == "direct") {
-            $professional = User::findOrFail($booking->business_id);
-        }
-
-        return view('jobpost.testmail', [
-            'user' => $user,
-            'booking' => $booking,
-            'professional' => $professional,
-            'pageTitle' => "MY BOOKINGS"
-        ]);
-    }
-
     /* sam code */
 
     public function times($u, $t) {
@@ -2421,8 +2087,6 @@ class LessonController extends Controller {
     }
 
     public function getcart(Request $request) {
-
-      //$cartitems = Fit_Cart::where('user_id',getLoggedInUserId())->where('booking_id',$request->booking_id)->get();
         $cartitems = Fit_Cart::where('user_id', getLoggedInUserId())->get();
         if (count($cartitems) != 0) {
             foreach ($cartitems as $item) {
@@ -2568,17 +2232,19 @@ class LessonController extends Controller {
         $cart = [];
          $cardInfo = [];
         if(Auth::user()){
-             $user = User::where('id', Auth::user()->id)->first();
+            $user = User::where('id', Auth::user()->id)->first();
              \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        $savedEvents = $stripe->customers->allSources(
-                $user->stripe_customer_id,
-                ['object' => 'card' ,'limit' => 30]
-            );
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            if($user->stripe_customer_id != ''){
+                $savedEvents = $stripe->customers->allSources(
+                    $user->stripe_customer_id,
+                    ['object' => 'card' ,'limit' => 30]
+                );
+                $savedEvents  = json_decode( json_encode( $savedEvents),true);
+                $cardInfo = $savedEvents['data'];
+            }
 
-        $savedEvents  = json_decode( json_encode( $savedEvents),true);
-            
-       $cardInfo = $savedEvents['data'];
+        
            /* $savedEvents = DB::select('select * from users_payment_info where user_id = ?', [Auth::user()->id]);
             if (count($savedEvents) > 0) {
                 foreach ($savedEvents as $event) {
@@ -2591,8 +2257,6 @@ class LessonController extends Controller {
                     $cardInfo[] = $carddetails;
                 }
             }*/
-        }else{
-            $cardInfo = [];
         }
        
         $cart = $request->session()->get('cart_item') ? $request->session()->get('cart_item') : [];
@@ -2667,8 +2331,6 @@ class LessonController extends Controller {
     }
     
     public function service_fav(Request $request) {
-
-
         $ser_id = $request->ser_id;
         $loggedId = Auth::user()->id;
         $status='';
@@ -2686,13 +2348,66 @@ class LessonController extends Controller {
             BusinessServicesFavorite::create($data);
             $status='like';
         }
-        return response()->json(array("success"=>'success','status'=>$status));
-        
-        
+        return response()->json(array("success"=>'success','status'=>$status));  
     }
+
     public function save_business_service_reviews(Request $request)
     {
-        $sid = $request->sid;
+       // echo "<pre>"; print_r($request->all());exit();
+
+       $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'title' => 'required',
+            'message' => 'required'
+        ], [
+            'name.required' => 'Enter name.',
+            'title.required' => 'Enter title.',
+            'message.required' => 'Enter message.',
+        ]);
+
+        
+
+        $review =  BusinessServiceReview::where('user_id',Auth::user()->id)->where('service_id',$request->sid)->first();
+
+        if($review){
+            return response()->json(['success' => true, 'message' => 'You have already submitted your review for this activity.']);
+        }else{
+            $imgpost = '';
+
+            if ($request->hasFile('images')) {
+                foreach ($request->images as $file) {
+                    $imagestore = $file->store('review');
+                    $imgpost .= $imagestore . ',';
+                }
+            }
+
+            $imgpost = rtrim($imgpost, ',');
+            $data= [
+                "name"=>$request->name,
+                "title"=>$request->title,
+                "message"=>$request->message,
+                "images"=>$imgpost,
+                "user_id" => Auth::user()->id,
+                "service_id" => $request->sid,
+                "ip" => $request->ip(),
+                'cleanliness' => $request->cleanliness,
+                'accuracy' => $request->accuracy,
+                'checkin' => $request->checkin,
+                'communication' => $request->communication,
+                'customer_service' => $request->customer_service,
+                'location' => $request->location,
+                'value' => $request->value,
+                'rating' => 0
+            ];
+
+             BusinessServiceReview::create($data);
+            //print_r($data);exit;
+            return response()->json(['success' => true, 'message' => 'Review submitted successfully.']);
+        }
+
+        
+        
+       /* $sid = $request->sid;
         $rating = $request->rating;
         $review = $request->review;
         $title = $request->rtitle;
@@ -2747,8 +2462,9 @@ class LessonController extends Controller {
         {
             echo 'addreview';
             exit;
-        }
+        }*/
     }
+
     public function viewActreview(Request $request) {
         $aid = $request->aid;
         $data='';
@@ -2784,11 +2500,11 @@ class LessonController extends Controller {
                                 if(!empty($reviews_people)){
                                     foreach($reviews_people as $people){
                                         $userinfo = User::find($people->user_id);
-                                        $data .='<a href="'.config('app.url').'/userprofile/'.@$userinfo->username.'" target="_blank" title="'.$userinfo->firstname.' '.$userinfo->lastname.'" data-toggle="tooltip">';
+                                        $data .='<a href="'.config('app.url').'/userprofile/'.@$userinfo->username.'" target="_blank" title="'.@$userinfo->firstname.' '.@$userinfo->lastname.'" data-toggle="tooltip">';
                                         
-                                        if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
+                                        if(File::exists(public_path("/uploads/profile_pic/thumb/".@$userinfo->profile_pic)))
                                         {
-                                            $data .='<img src="/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic.'" alt="'.$userinfo->firstname.''.$userinfo->lastname.'">';
+                                            $data .='<img src="/public/uploads/profile_pic/thumb/'.@$userinfo->profile_pic.'" alt="'.@$userinfo->firstname.''.@$userinfo->lastname.'">';
                                         }
                                         else
                                         {
@@ -2808,7 +2524,7 @@ class LessonController extends Controller {
                         if(!empty($reviews)) {
                             foreach($reviews as $review) {
                                  $userinfo = User::find($review->user_id);
-                                 if($userinfo->profile_pic!='')
+                                 if(@$userinfo->profile_pic!='')
                                  {
                                      $pic="/public/uploads/profile_pic/thumb/".$userinfo->profile_pic;
                                  }
@@ -2816,19 +2532,19 @@ class LessonController extends Controller {
                                  $data .='<div class="ser-rev-user">
                                             <div class="row">
                                                 <div class="col-md-2">';
-                                                if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
+                                                if(File::exists(public_path("/uploads/profile_pic/thumb/".@$userinfo->profile_pic)))
                                                 {
                                                     $data .='<img class="rev-img" src="'.$pic.'" 
-                                                    alt="'.$userinfo->firstname.' '.$userinfo->lastname.'">';
+                                                    alt="'.@$userinfo->firstname.' '.@$userinfo->lastname.'">';
                                                 }
                                                 else
                                                 {
-                                                    $pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
+                                                    $pf=substr(@$userinfo->firstname, 0, 1).substr(@$userinfo->lastname, 0, 1);
                                                     $data .='<div class="reviewlist-img-text"><p>'.$pf.'</p></div>';
                                                 }
                                                 $data .='</div>
                                                         <div class="col-md-10">
-                                                            <h4>'.$userinfo->firstname.' '.$userinfo->lastname.'
+                                                            <h4>'.@$userinfo->firstname.' '.@$userinfo->lastname.'
                                                             <div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> '.$review->rating.' </div> </h4> 
                                                             <p class="rev-time">'.date('d M-Y',strtotime($review->created_at)).'</p>
                                                         </div>
@@ -2865,718 +2581,6 @@ class LessonController extends Controller {
         return view('jobpost.submit_review');
     }
 
-    /*public function act_detail_filter(Request $request){
-        $actoffer = $request->actoffer;
-        $actloc = $request->actloc;
-        $actfilmtype = $request->actfilmtype;
-        $actfilgreatfor = $request->actfilgreatfor;
-        $actfilparticipant=$request->actfilparticipant;
-        $actfilsType=$request->actfilsType;
-        $btype = $request->btype;
-        $actdate = $request->actdate;
-        $serviceid = $request->serviceid;
-        $companyid = $request->companyid;
-        
-        //DB::enableQueryLog();
-        //$searchData = BusinessServices::where('cid', $companyid)->where('is_active', 1)->where('id', '!=' , $serviceid);
-
-        $searchData = DB::table('business_services')->where('business_services.cid', $companyid)->where('business_services.is_active', 1)->where('business_services.id', '!=' , $serviceid);
-        if( !empty($actoffer) )
-        {
-            $searchData->Where('sport_activity', $actoffer);
-        }
-        if( !empty($actloc) )
-        {
-             $searchData->whereRaw('FIND_IN_SET("'.$actloc.'",activity_location)');
-        }
-        if( !empty($actfilmtype) )
-        {
-            $searchData->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->
-            select('business_services.*','business_price_details.membership_type')->
-            Where('membership_type', $actfilmtype);
-        }
-        if( !empty($actfilparticipant) )
-        {
-            $searchData->join('business_activity_scheduler', 'business_services.id', '=', 'business_activity_scheduler.serviceid')->
-            select('business_services.*','business_activity_scheduler.spots_available')->
-            Where('business_activity_scheduler.spots_available', '>=', $actfilparticipant)->distinct()->groupBy('business_services.id');
-           
-            //$searchData->Where('group_size', $actfilparticipant);
-            //$searchData->Where('business_services.group_size', '>=', $actfilparticipant);
-
-        }
-
-       
-        if( !empty($actfilgreatfor) )
-        {
-            $searchData->whereRaw('FIND_IN_SET("'.$actfilgreatfor.'",activity_for)');
-        }
-        if( !empty($btype) )
-        {
-            $searchData->Where('service_type', $btype);
-        }
-        if( !empty($actdate) )
-        {
-            $dt = date('Y-m-d',strtotime($actdate) );
-            
-            $enddt = date('Y-m-d', strtotime("+1 year", strtotime($actdate)) );
-            
-            //Where('business_activity_scheduler.starting', $dt);
-            $searchData->join('business_activity_scheduler', 'business_services.id', '=', 'business_activity_scheduler.serviceid')->select('business_services.*','business_activity_scheduler.starting')->Where('business_activity_scheduler.starting', '<=', $enddt)->distinct();
-        }
-        if( !empty($actfilsType) )
-        {
-            $searchData->whereRaw('FIND_IN_SET("'.$actfilsType.'",select_service_type)');
-        }
-        //DB::enableQueryLog();
-        $activity1 = $searchData->distinct()->get()->toArray();
-        //dd(\DB::getQueryLog());
-        
-        $activity = json_decode(json_encode($activity1), true);
-        $actbox='';
-        //dd(\DB::getQueryLog());
-        
-        if (!empty($activity)) { 
-            foreach ($activity as  $act) {
-                //echo $act['id'].'--'.$act['program_name'].'<br>';
-                //DB::enableQueryLog();
-                $servicePrice = BusinessPriceDetails::where('serviceid', $act['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-                //dd(\DB::getQueryLog());
-                //print_r($servicePrice);
-                $pay_session1=''; $pay_price1=''; $pay_id1='';
-                if( !empty($servicePrice) )
-                {
-                    if(@$servicePrice[0]['pay_session']!=''){
-                        $pay_session1 = @$servicePrice[0]['pay_session'];
-                    }
-                    if(@$servicePrice[0]['adult_cus_weekly_price']!=''){
-                        $pay_price1 = @$servicePrice[0]['adult_cus_weekly_price'];
-                    }
-                    if(@$servicePrice[0]['id']!=''){
-                        $pay_id1 = @$servicePrice[0]['id'];
-                    }
-                }
-                $reviews_count = BusinessServiceReview::where('service_id', $act['id'])->count();
-                $reviews_sum = BusinessServiceReview::where('service_id', $act['id'])->sum('rating');
-                $reviews_avg=0;
-                if($reviews_count>0)
-                { $reviews_avg = round($reviews_sum/$reviews_count,2); }
-                
-                
-                $servicePrfirst = BusinessPriceDetails::where('serviceid', $act['id'])->orderBy('id', 'ASC')->first();
-                $sercate = BusinessPriceDetailsAges::where('serviceid', $act['id'])->orderBy('id', 'ASC')->get()->toArray();
-                $sercatefirst = BusinessPriceDetailsAges::where('serviceid', $act['id'])->orderBy('id', 'ASC')->get()->first();
-                $servicePr = BusinessPriceDetails::where('serviceid', $act['id'])->orderBy('id', 'ASC')->where('category_id',$sercatefirst['id'])->get()->toArray();
-                $todayday = date("l");
-                if( !empty( $actdate) ){
-                    $todaydate =  date('m/d/Y',strtotime($actdate));
-                }else{
-                    $todaydate = date('m/d/Y');
-                }
-                $bus_schedule = BusinessActivityScheduler::where('category_id',$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get();
-                $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil = 0;  $SpotsLeft =0;
-                if(!empty($bus_schedule)){
-                    foreach($bus_schedule as $data){
-                        if($data['scheduled_day_or_week'] == 'Days'){
-                            $daynum = '+'.$data['scheduled_day_or_week_num'].' days';
-                            $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-                        }else if($data['scheduled_day_or_week'] == 'Months'){
-                            $daynum = '+'.$data['scheduled_day_or_week_num'].' month';
-                            $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-                        }else if($data['scheduled_day_or_week'] == 'Years'){
-                            $daynum = '+'.$data['scheduled_day_or_week_num'].' years';
-                            $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-                        }else{
-                            $daynum = '+'.$data['scheduled_day_or_week_num'].' week';
-                            $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-                        }  
-                        
-                        if($todaydate <=$expdate){
-                            if(@$data['shift_start']!=''){
-                                $start = date('h:i a', strtotime( $data['shift_start'] ));
-                                $timedata .= $start;
-                            }
-                            if(@$data['shift_end']!=''){
-                                $end = date('h:i a', strtotime( $data['shift_end'] ));
-                                 $timedata .= ' - '.$end;
-                            } 
-                            if(@$data['set_duration']!=''){
-                                $tm=explode(' ',$data['set_duration']);
-                                $hr=''; $min=''; $sec='';
-                                if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-                                if($tm[2]!=0){ $min=$tm[2].'min. '; }
-                                if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-                                if($hr!='' || $min!='' || $sec!='')
-                                { $time = $hr.$min.$sec; 
-                                    $timedata .= ' / '.$time;} 
-                            }
-                        }
-
-                        $today = date('Y-m-d');
-                        if( !empty( $actdate) ){ $today = date('Y-m-d', strtotime($actdate)); }
-                        $SpotsLeft = UserBookingDetail::where('sport', @$service['id'] )->whereDate('created_at', '=', $today)->sum('qty');
-                        $SpotsLeftdis=0;
-                        if( !empty($data['spots_available']) ){
-                            $spot_avil=$data['spots_available'];
-                            $SpotsLeftdis = $data['spots_available']-$SpotsLeft;
-                            $Totalspot = $SpotsLeftdis.'/'.@$data['spots_available'];
-                        }
-                    }
-                }
-                                    
-                if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-                    $total_price_val =  $servicePrfirst['adult_weekend_price_diff'];
-                    $selectval = '';$priceid = '';$i=1;
-                    foreach ($servicePr as  $pr) {
-                        if($i==1){ 
-                            $priceid =$pr['id'];
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
-                        if($pr['adult_weekend_price_diff'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
-                        if($pr['child_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
-                        }
-                        if($pr['infant_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
-                        }$i++;
-                    }
-                }else{
-                    $total_price_val =  $servicePrfirst['adult_cus_weekly_price'];
-                    $selectval = '';$priceid = '';$i=1;
-                    foreach ($servicePr as  $pr) {
-                        if($i==1){ 
-                            $priceid =$pr['id'];
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
-                        if($pr['adult_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
-                        if($pr['child_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
-                        }
-                        if($pr['infant_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
-                        }$i++;
-                    }
-                }
-
-                $stype='';
-                if($act['service_type']=='individual'){ $stype = 'Personal Training'; }
-                else { $stype = @$act['service_type']; }
-                $qty=1;
-                if( !empty($actfilparticipant) )
-                {
-                    $qty=$actfilparticipant;
-                    $pay_price1 = (float)$pay_price1*(int)$qty;
-                }
-
-                $fun_para="'".$act['id']."',this.value,'".$qty."','bookajax','".$serviceid."'";
-                $cng_sess="'".$serviceid."','".$act['id']."',this.value,'bookajax'";
-                $bookscheduler = BusinessActivityScheduler::where('serviceid', $act['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-                $ser_mem = BusinessPriceDetails::where('serviceid', $act['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-                if( !empty( $actdate) ){
-                    $p=$act['schedule_until'];
-                    $enddt = date('Y-m-d', strtotime("+".$p, strtotime($act['starting'])) );
-                    $flterdt = date('Y-m-d',strtotime($actdate) );
-                    if( $flterdt <= $enddt ){
-                        $actbox .= '<div class="kickshow-block">
-                                    <div class="topkick" id="kickboxing'.$serviceid.$act['id'].'">
-                                        <h5>'. @$act['program_name'].'
-                                        <p>'.$reviews_count.' Reviews <span> <i class="fa fa-star" aria-hidden="true"></i>
-                                           '.$reviews_avg.'</span></p>
-                                        </h5>
-                                        <div class="lefthalf">
-                                            <div class="divdesc">
-                                                <p class="actsubtitle"> Details: </p>
-                                                <ul>
-                                                    <li>'; 
-                                                        if(@$bookscheduler[0]['starting']!=''){
-                                                            //$actbox .= date('l jS \of F Y',strtotime($bookscheduler[0]['starting'])); 
-                                                            $actbox .= date('l, F jS,  Y', strtotime($actdate) );
-                                                        } 
-                                                        
-                                                    $actbox .= '</li>
-                                                    
-                                                    <li>Service Type: '.@$act['select_service_type'].'</li>
-                                                    <li>Activity: '.@$act['sport_activity'].'</li>
-                                                    <li>Activity Location: '.@$act['activity_location'].'</li>
-                                                    <li>Great For: '.@$act['activity_for'].'</li>
-                                                    <li>Age: '.@$act['age_range'].'</li>
-                                                    <li>Language: '.@$languages.'</li>
-                                                    <li>Skill Level: '.@$act['difficult_level'].'</li>';
-                                                    if(@$ser_mem[0]['membership_type']!=''){
-                                                        $actbox .= '<li>Membership Type : '.@$ser_mem[0]['membership_type'].'</li>';
-                                                    }
-                                                    $actbox .= '<li>Business Type: '.$stype.'</li>
-                                                    
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="righthalf">
-                                            <select id="selcatpr'.$act['id'].'" name="selcatpr'.$act['id'].'" class="price-select-control" onchange="changeactsession('.$cng_sess.')">';
-                                            if (!empty($sercate)) {$c=1;   
-                                                foreach ($sercate as  $sc) {
-                                                    $actbox .= '<option value="'.$sc['id'].'">'.$sc['category_title'].'</option>';
-                                                    $c++;
-                                                }
-                                            }
-                                            $actbox .= '</select>
-                                            <div id="pricechng'.@$serviceid.@$act["id"].'">
-                                                <select id="selprice'.$act['id'].'" name="selprice'.$act['id'].'" class="price-select-control" onchange="changeactpr('.$fun_para.')">'.$selectval.'</select>
-                                            </div>
-                                            <label>Booking Details: </label>
-                                            <div id="bookajax'.@$serviceid.@$act["id"].'">';
-                                                if(@$sercatefirst['category_title'] != ''){
-                                                    $actbox .= '<p>Category: '.@$sercatefirst['category_title'].'</p>';
-                                                }
-                                                $actbox .= '<p>'.$timedata.'</p>
-                                                <p>Spots Left: '.$Totalspot.'</p><br>';
-                                                if(@$servicePrfirst['price_title'] != ''){
-                                                    $actbox .= '<p>Price Title:  '.@$servicePrfirst['price_title'].'</p>';
-                                                }
-                                                if($timedata == 0){
-                                                    $timedata = '';
-                                                }
-                                                $actbox .= '<p>Price Option: '.$servicePrfirst['pay_session'] .' Session</p>
-                                                <p>Participants: '.$qty.'</p>
-                                                <p>Total: $'. $total_price_val.'/person</p>
-                                            </div>
-                                            <input type="hidden" name="price_title_hidden" id="price_title_hidden'.$serviceid.$act['id'].'" value="'.@$servicePrfirst['price_title'].'">
-
-                                            <input type="hidden" name="time_hidden" id="time_hidden'.$serviceid.$act['id'].'" value="'.$timedata.'">
-
-                                            <input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden'.$Totalspot.'">
-
-                                            <form method="post" action="/addtocart">
-                                                <input name="_token" type="hidden" value="'.csrf_token().'">
-                                                <input type="hidden" name="pid" value="'.@$act["id"].'" size="2" />
-                                                <input type="hidden" name="quantity" id="pricequantity'.$serviceid.$act["id"].'" value="'.$qty.'" class="product-quantity" />
-                                                <input type="hidden" name="price" id="pricebookajax'.$serviceid.$act['id'].'" value="'.$pay_price1.'" class="product-price" />
-                                                <input type="hidden" name="session" id="session'.$serviceid.$act["id"].'" value="'.$pay_session1.'" />
-                                                <input type="hidden" name="priceid" value="'.$pay_id1.'" id="priceid'.$serviceid.$act["id"].'" />
-                                                <input type="hidden" name="sesdate" value="'.date('Y-m-d', strtotime($actdate) ).'" id="sesdate'.$serviceid.$act["id"].'" />
-                                                <input type="hidden" name="cate_title" value="'.@$sercatefirst['category_title'].'" id="cate_title'.$serviceid.''.$act['id'].'" />';
-                                                if($SpotsLeft >= $spot_avil)
-                                                {
-                                                    $actbox .= '<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;">Sold Out</a>';
-                                                }
-                                                else
-                                                {
-                                                    if($pay_price1!='' && $timedata!=''){
-                                                        $actbox .= '<input type="submit" value="Add to Cart" onclick="changeqnt('.$act["id"].')" class="btn btn-addtocart mt-10" />';
-                                                    }
-                                                }
-                                            $actbox .= '</form>
-                                        </div>
-                                    </div>
-                                    <div class="bottomkick">
-                                        <div class="viewmore_links">
-                                            <a id="viewmore'.$serviceid.$act['id'].'" style="display:block">View More <img src="public/img/arrow-down.png" alt=""></a>
-                                            <a id="viewless'.$serviceid.$act['id'].'" style="display:none">View Less <img src="public/img/arrow-down.png" alt=""></a>
-                                        </div>
-                                    </div>
-                                </div>';
-                                $actbox .='<script>
-                                $("#viewmore'.$serviceid.$act['id'].'").click(function () {
-                                    $("#kickboxing'.$serviceid.$act['id'].'").addClass("intro");
-                                    $("#viewless'.$serviceid.$act['id'].'").show();
-                                    $("#viewmore'.$serviceid.$act['id'].'").hide();
-                                });
-                                $("#viewless'.$serviceid.$act['id'].'").click(function () {
-                                    $("#kickboxing'.$serviceid.$act['id'].'").removeClass("intro");
-                                    $("#viewless'.$serviceid.$act['id'].'").hide();
-                                    $("#viewmore'.$serviceid.$act['id'].'").show();
-                                });
-                                </script>';
-                    }
-                }else{
-                    $actbox .= '<div class="kickshow-block">
-                                <div class="topkick" id="kickboxing'.$serviceid.$act['id'].'">
-                                    <h5>'. @$act['program_name'].'
-                                    <p>'.$reviews_count.' Reviews <span> <i class="fa fa-star" aria-hidden="true"></i>
-                                       '.$reviews_avg.'</span></p>
-                                    </h5>
-                                    <div class="lefthalf">
-                                        <div class="divdesc">
-                                            <p class="actsubtitle"> Details: </p>
-                                            <ul>
-                                                <li>'; 
-                                                    if(@$bookscheduler[0]['starting']!=''){
-                                                        //$actbox .= date('l jS \of F Y',strtotime($bookscheduler[0]['starting'])); 
-                                                        $actbox .= date('l, F jS,  Y' );
-                                                    } 
-                                                
-                                                $actbox .= '</li>
-                                            
-                                                <li>Service Type: '.@$act['select_service_type'].'</li>
-                                                <li>Activity: '.@$act['sport_activity'].'</li>
-                                                <li>Activity Location: '.@$act['activity_location'].'</li>
-                                                <li>Great For: '.@$act['activity_for'].'</li>
-                                                <li>Age: '.@$act['age_range'].'</li>
-                                                <li>Language: '.@$languages.'</li>
-                                                <li>Skill Level: '.@$act['difficult_level'].'</li>';
-                                                if(@$ser_mem[0]['membership_type']!=''){
-                                                    $actbox .= '<li>Membership Type: '.@$ser_mem[0]['membership_type'].'</li>';
-                                                }
-                                                $actbox .= '<li>Business Type: '.$stype.'</li>
-                                                
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="righthalf">
-                                        <select id="selcatpr'.$act['id'].'" name="selcatpr'.$act['id'].'" class="price-select-control" onchange="changeactsession('.$cng_sess.')">';
-                                            if (!empty($sercate)) {$c=1;   
-                                                foreach ($sercate as  $sc) {
-                                                   
-                                                    $actbox .= '<option value="'.$sc['id'].'">'.$sc['category_title'].'</option>';
-                                                    $c++;
-                                                }
-                                            }
-                                            $actbox .= '</select>
-                                            <div id="pricechng'.@$serviceid.@$act["id"].'">
-                                               <select id="selprice'.$act['id'].'" name="selprice'.$act['id'].'" class="price-select-control" onchange="changeactpr('.$fun_para.')"> '.$selectval.'</select>
-                                        </div>
-                                        <label>Booking Details: </label>
-                                        <div id="bookajax'.@$serviceid.@$act["id"].'">';
-                                            $start = $end =$time ='';
-                                            if(@$sercatefirst['category_title'] != ''){
-                                                $actbox .= '<p>Category: '.@$sercatefirst['category_title'].'</p>';
-                                            }
-                                            
-                                            $actbox .= '<p>'.$timedata.'</p>
-                                            <p>Spots Left: '.$Totalspot.'</p><br>';
-                                            if(@$servicePrfirst['price_title'] != ''){
-                                                $actbox .= '<p>Price Title:  '.@$servicePrfirst['price_title'].'</p>';
-                                            }
-                                            if($timedata == 0){
-                                                $timedata = '';
-                                            }
-                                            $actbox .= '<p>Price Option: '.$servicePrfirst['pay_session'] .' Session</p>
-                                            <p>Participants: '.$qty.'</p>
-                                            <p>Total: $'. $total_price_val.'/person</p>
-                                        </div>
-                                        <input type="hidden" name="price_title_hidden" id="price_title_hidden'.$serviceid.$act['id'].'" value="'.@$servicePrfirst['price_title'].'">
-
-                                        <input type="hidden" name="time_hidden" id="time_hidden'.$serviceid.$act['id'].'" value="'.$timedata.'" >
-
-                                        <input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden'.$serviceid.$act['id'].'" value="'.$Totalspot.'">
-
-                                        <form method="post" action="/addtocart">
-                                            <input name="_token" type="hidden" value="'.csrf_token().'">
-                                            <input type="hidden" name="pid" value="'.@$act["id"].'" />
-                                            <input type="hidden" name="quantity" id="pricequantity'.$serviceid.$act["id"].'" value="'.$qty.'" class="product-quantity"  />
-                                            <input type="hidden" name="price" id="pricebookajax'.$serviceid.$act['id'].'" value="'.$pay_price1.'" class="product-price" />
-                                            <input type="hidden" name="session" id="session'.$serviceid.$act["id"].'" value="'.$pay_session1.'" />
-                                            <input type="hidden" name="priceid" value="'.$pay_id1.'" id="priceid'.$serviceid.$act["id"].'"  />
-                                            <input type="hidden" name="sesdate" value="'.date('Y-m-d').'" id="sesdate'.$serviceid.$act["id"].'" />
-                                            <input type="hidden" name="cate_title" value="'.@$sercatefirst['category_title'].'" id="cate_title'.$serviceid.''.$act['id'].'" />';
-                                            if($SpotsLeft >= $spot_avil)
-                                            {
-                                                $actbox .= '<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;">Sold Out</a>';
-                                            }
-                                            else
-                                            {
-                                                if($pay_price1!='' && $timedata!=''){
-                                                    $actbox .= '<input type="submit" value="Add to Cart" onclick="changeqnt('.$act["id"].')" class="btn btn-addtocart mt-10" />';
-                                                }
-                                            }
-                                        $actbox .= '</form>
-                                    </div>
-                                </div>
-                                <div class="bottomkick">
-                                    <div class="viewmore_links">
-                                        <a id="viewmore'.$serviceid.$act['id'].'" style="display:block">View More <img src="public/img/arrow-down.png" alt=""></a>
-                                        <a id="viewless'.$serviceid.$act['id'].'" style="display:none">View Less <img src="public/img/arrow-down.png" alt=""></a>
-                                    </div>
-                                </div>
-                            </div>';
-                            $actbox .='<script>
-                            $("#viewmore'.$serviceid.$act['id'].'").click(function () {
-                                $("#kickboxing'.$serviceid.$act['id'].'").addClass("intro");
-                                $("#viewless'.$serviceid.$act['id'].'").show();
-                                $("#viewmore'.$serviceid.$act['id'].'").hide();
-                            });
-                            $("#viewless'.$serviceid.$act['id'].'").click(function () {
-                                $("#kickboxing'.$serviceid.$act['id'].'").removeClass("intro");
-                                $("#viewless'.$serviceid.$act['id'].'").hide();
-                                $("#viewmore'.$serviceid.$act['id'].'").show();
-                            });
-                            </script>';
-                }
-            }
-        }
-        $stactivity = BusinessServices::where('id', $serviceid)->where('is_active', 1)->get()->toArray();
-        $stactbox ='';
-        if (!empty($stactivity)) { 
-            foreach ($stactivity as $stact) {
-                //echo $act['id'].'--'.$act['program_name'].'<br>';
-                //DB::enableQueryLog();
-                $servicePrice = BusinessPriceDetails::where('serviceid', $stact['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-                $pay_session1=''; $pay_price1=''; $pay_id1='';
-                if( !empty($servicePrice) )
-                {
-                    if(@$servicePrice[0]['pay_session']!=''){
-                        $pay_session1 = @$servicePrice[0]['pay_session'];
-                    }
-                    if(@$servicePrice[0]['adult_cus_weekly_price']!=''){
-                        $pay_price1 = @$servicePrice[0]['adult_cus_weekly_price'];
-                    }
-                    if(@$servicePrice[0]['id']!=''){
-                        $pay_id1 = @$servicePrice[0]['id'];
-                    }
-                }
-                $reviews_count = BusinessServiceReview::where('service_id', $stact['id'])->count();
-                $reviews_sum = BusinessServiceReview::where('service_id', $stact['id'])->sum('rating');
-                $reviews_avg=0;
-                if($reviews_count>0)
-                { $reviews_avg = round($reviews_sum/$reviews_count,2); }
-                
-                //$SpotsLeft = UserBookingDetail::where('sport', @$stact['id'] )->sum('qty');
-                
-                $bookscheduler = BusinessActivityScheduler::where('serviceid', $stact['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray(); 
-                $ser_mem = BusinessPriceDetails::where('serviceid', $stact['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-                $stype='';
-                if($stact['service_type']=='individual'){ $stype = 'Personal Training'; }
-                else { $stype = @$stact['service_type']; }
-                $qty=1;
-                if( !empty($actfilparticipant) )
-                {
-                    $qty=$actfilparticipant;
-                    $pay_price1 = $pay_price1*$qty;
-                }
-
-                
-                $servicePrfirst = BusinessPriceDetails::where('serviceid', $stact['id'])->orderBy('id', 'ASC')->first();
-                $sercate = BusinessPriceDetailsAges::where('serviceid', $stact['id'])->orderBy('id', 'ASC')->get()->toArray();
-                $sercatefirst = BusinessPriceDetailsAges::where('serviceid', $stact['id'])->orderBy('id', 'ASC')->get()->first();
-                $servicePr = BusinessPriceDetails::where('serviceid', $stact['id'])->orderBy('id', 'ASC')->where('category_id',$sercatefirst['id'])->get()->toArray();
-                $todayday = date("l");
-                $todaydate = date('m/d/Y');
-                $bus_schedule = BusinessActivityScheduler::where('category_id',$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get();
-                $start =$end= $time= '';$timedata ='';$Totalspot= $spot_avil =0; $SpotsLeft =0;
-                if(!empty($bus_schedule)){
-                    foreach($bus_schedule as $data){
-                        if($data['scheduled_day_or_week'] == 'Days'){
-                            $daynum = '+'.$data['scheduled_day_or_week_num'].' days';
-                            $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-                        }else if($data['scheduled_day_or_week'] == 'Months'){
-                            $daynum = '+'.$data['scheduled_day_or_week_num'].' month';
-                            $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-                        }else if($data['scheduled_day_or_week'] == 'Years'){
-                            $daynum = '+'.$data['scheduled_day_or_week_num'].' years';
-                            $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-                        }else{
-                            $daynum = '+'.$data['scheduled_day_or_week_num'].' week';
-                            $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-                        }  
-                        
-                        if($todaydate <=$expdate){
-                            if(@$data['shift_start']!=''){
-                                $start = date('h:i a', strtotime( $data['shift_start'] ));
-                                $timedata .= $start;
-                            }
-                            if(@$data['shift_end']!=''){
-                                $end = date('h:i a', strtotime( $data['shift_end'] ));
-                                 $timedata .= ' - '.$end;
-                            } 
-                            if(@$data['set_duration']!=''){
-                                $tm=explode(' ',$data['set_duration']);
-                                $hr=''; $min=''; $sec='';
-                                if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-                                if($tm[2]!=0){ $min=$tm[2].'min. '; }
-                                if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-                                if($hr!='' || $min!='' || $sec!='')
-                                { $time = $hr.$min.$sec; 
-                                    $timedata .= ' / '.$time;} 
-                            }
-                        }
-
-                        $today = date('Y-m-d');
-                        if( !empty( $actdate) ){ $today = date('Y-m-d', strtotime($actdate)); }
-                        $SpotsLeft = UserBookingDetail::where('sport', @$service['id'] )->whereDate('created_at', '=', $today)->sum('qty');
-                        $SpotsLeftdis=0;
-                        if(!empty($data['spots_available']) ){
-                            $spot_avil=$data['spots_available'];
-                            $SpotsLeftdis = $data['spots_available']-$SpotsLeft;
-                            $Totalspot = $SpotsLeftdis.'/'.@$data['spots_available'];
-                        }
-                    }
-                }
-
-                if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-                    $total_price_val =  $servicePrfirst['adult_weekend_price_diff'];
-                    $selectval = '';$priceid = '';$i=1;
-                    foreach ($servicePr as  $pr) {
-                        if($i==1){ 
-                            $priceid =$pr['id'];
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
-                        if($pr['adult_weekend_price_diff'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
-                        if($pr['child_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
-                        }
-                        if($pr['infant_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
-                        }$i++;
-                    }
-                }else{
-                    $total_price_val =  $servicePrfirst['adult_cus_weekly_price'];
-                    $selectval = '';$priceid = '';$i=1;
-                    foreach ($servicePr as  $pr) {
-                        if($i==1){ 
-                            $priceid =$pr['id'];
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
-                        if($pr['adult_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
-                        if($pr['child_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
-                        }
-                        if($pr['infant_cus_weekly_price'] != ''){
-                            $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
-                        }$i++;
-                    }
-                }
-
-                $fun_para="'".$stact['id']."',this.value,'".$qty."','book','".$serviceid."'";
-                $cng_sess="'".$serviceid."','".$stact['id']."',this.value,'book'";
-                if ((File::exists(public_path("/uploads/profile_pic/thumb/" . @$stact['profile_pic']))) && ($stact['profile_pic'] != '')) {
-                   
-                    $profilePic = url('/public/uploads/profile_pic/thumb/' . @$stact['profile_pic']);
-                } else {
-                    
-                    $profilePic = '/public/images/service-nofound.jpg';
-                }
-                $p=$stact['schedule_until'];
-                $enddt = date('Y-m-d', strtotime("+".$p, strtotime($stact['starting'])) );
-                $flterdt = date('Y-m-d',strtotime($actdate) );
-                if( $flterdt <= $enddt ){
-                
-                    $stactbox .= '<div class="topkick intro" id="kickboxing'.$stact['id'].'"><h5>'.$stact['program_name'].' 
-                        <p>'.$reviews_count.' Reviews <span> <i class="fa fa-star" aria-hidden="true"></i>'.$reviews_avg.'
-                        </span> </p></h5>
-                        <div class="lefthalf">
-                            <div class="divdesc">
-                                <div class="divleftserdes">
-                                    <img src="'.$profilePic.'" />
-                                </div>
-                                <div class="divrightserdes">
-                                    <p> <b> Description </b> </p>
-                                    <p>'.Str::limit($stact['program_desc'], 80, $end='...').'</p>
-                                </div>
-                            </div>
-                            <div class="divdesc">
-                                <p class="actsubtitle"> Details: </p>
-                                <ul>
-                                    <li>'; 
-                                        if(@$bookscheduler[0]['starting']!=''){
-                                            if( !empty( $actdate ) ){
-                                                $stactbox .= date('l, F jS,  Y', strtotime($actdate) );
-                                            }
-                                            else { $stactbox .= date('l, F jS,  Y' ); }
-                                        } 
-                                        $stactbox .= '</li>
-                                    <li>Service Type: '.@$stact['select_service_type'].'</li>
-                                    <li>Activity: '.@$stact['sport_activity'].'</li>
-                                    <li>Activity Location: '.@$stact['activity_location'].'</li>
-                                    <li>Great For: '.@$stact['activity_for'].'</li>
-                                    <li>Age: '.@$stact['age_range'].'</li>
-                                    <li>Language: '.@$languages.'</li>
-                                    <li>Skill Level: '.@$stact['difficult_level'].'</li>';
-                                    if(@$ser_mem[0]['membership_type']!=''){
-                                        $stactbox .= '<li>Membership Type: '.@$ser_mem[0]['membership_type'].'</li>';
-                                    }
-                                    $stactbox .= '<li>Business Type: '.$stype.'</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="righthalf">
-                            <select id="selcatpr'.$stact['id'].'" name="selcatpr'.$stact['id'].'" class="price-select-control" onchange="changeactsession('.$cng_sess.')">';
-                                    if (!empty($sercate)) { 
-                                         $c=1; 
-                                        foreach ($sercate as  $sc) {
-                                           
-                                            $stactbox .= '<option value="'.$sc['id'].'">'.$sc['category_title'].'</option>';
-                                            $c++;
-                                        }
-                                    }
-                                    
-                            $stactbox .= '</select>
-                            <div class="priceoption" id="pricechng'.@$serviceid.$stact['id'].'">
-                                <select id="selprice'.$stact['id'].'" name="selprice'.$stact['id'].'" class="price-select-control" onchange="changeactpr('.$fun_para.')">
-                                    '.$selectval.'</select>
-                            </div>
-                            <label>Booking Details: </label>
-                            <div id="book'.@$serviceid.@$stact["id"].'">';
-                                if(@$sercatefirst['category_title'] != ''){
-                                    $stactbox .= '<p>Category: '.@$sercatefirst['category_title'].'</p>';
-                                }
-                                $stactbox .= '<p>'.$timedata.'</p>
-                                <p>Spots Left: '.$Totalspot.'</p><br>';
-                                if(@$servicePrfirst['price_title'] != ''){
-                                    $stactbox .= '<p>Price Title:  '.@$servicePrfirst['price_title'].'</p>';
-                                }
-                                if($timedata == 0){
-                                    $timedata = '';
-                                }
-                                $stactbox .= '<p>Price Option: '.$servicePrfirst['pay_session'] .' Session</p>
-                                <p>Participants: '.$qty.'</p>
-                                <p>Total: $'. $total_price_val.'/person</p>
-                            </div>
-                            <input type="hidden" name="price_title_hidden" id="price_title_hidden'.$serviceid.$stact['id'].'" value="'.@$servicePrfirst['price_title'].'">
-
-                            <input type="hidden" name="time_hidden" id="time_hidden'.$serviceid.$stact['id'].'" value="'.$timedata.'" >
-
-                            <input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden'.$serviceid.$stact['id'].'" value="'.$Totalspot.'">
-
-                            <form method="post" action="/addtocart">
-                                <input name="_token" type="hidden" value="'.csrf_token().'">
-                                <input type="hidden" name="pid" value="'.@$stact["id"].'" />
-                                <input type="hidden" name="quantity" id="pricequantity'.$serviceid.$stact["id"].'" value="'.$qty.'" class="product-quantity" />
-                                <input type="hidden" name="price" id="price'.$serviceid.$stact['id'].'" value="'.$pay_price1.'" class="product-price" />
-                                <input type="hidden" name="session" id="session'.$serviceid.$stact["id"].'" value="'.$pay_session1.'" />
-                                <input type="hidden" name="priceid" value="'.$pay_id1.'" id="priceid'.$serviceid.$stact["id"].'" size="2" />
-                                <input type="hidden" name="sesdate" value="'.date('Y-m-d').'" id="sesdate'.$serviceid.$stact["id"].'" />
-                                <input type="hidden" name="cate_title" value="'.@$sercatefirst['category_title'].'" id="cate_title'.$serviceid.''.$stact['id'].'" />';
-                                    
-                                if($SpotsLeft >= $spot_avil)
-                                {
-                                    $stactbox .= '<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>';
-                                }
-                                else
-                                {
-                                    if($pay_price1!='' && $timedata!=''){
-                                        $stactbox .= '<input type="submit" value="Add to Cart" onclick="changeqnt('.$stact["id"].')" class="btn btn-addtocart mt-10" />';
-                                    }
-                                }
-                            $stactbox .= '</form>
-                            </div>
-                        </div>
-                        <div class="bottomkick">
-                            <div class="viewmore_links">
-                                <a id="viewmore'.$stact['id'].'" style="display:none">View More <img src="public/img/arrow-down.png" alt=""></a>
-                                <a id="viewless'.$stact['id'].'" style="display:block">View Less <img src="public/img/arrow-down.png" alt=""></a>
-                            </div>
-                        </div>
-                    </div>';
-                    $stactbox .='<script>
-                        $("#viewmore'.$stact['id'].'").click(function () {
-                            $("#kickboxing'.$stact['id'].'").addClass("intro");
-                            $("#viewless'.$stact['id'].'").show();
-                            $("#viewmore'.$stact['id'].'").hide();
-                        });
-                        $("#viewless'.$stact['id'].'").click(function () {
-                            $("#kickboxing'.$stact['id'].'").removeClass("intro");
-                            $("#viewless'.$stact['id'].'").hide();
-                            $("#viewmore'.$stact['id'].'").show();
-                        });
-                    </script>';             
-                }
-            }
-        }
-        
-        echo $actbox.'~~~~~~'.$stactbox;
-        exit;  
-    }*/
-    
-    
     public function createTest(Request $request){
         //echo 'call'; exit;
         return view('profiles.createTest');
@@ -3586,527 +2590,17 @@ class LessonController extends Controller {
     }
 
     public function act_detail_filter_business_pages(Request $request){
-      $actoffer = $request->actoffer;
-      $actloc = $request->actloc;
-      $actfilmtype = $request->actfilmtype;
-      $actfilgreatfor = $request->actfilgreatfor;
-      $actfilparticipant=$request->actfilparticipant;
-      $btype = $request->btype;
-      $actdate = $request->actdate;
-      $actfilsType = $request->actfilsType;
-      $serviceid = $request->serviceid;
-      $companyid = $request->companyid;
+        $actoffer = $request->actoffer;
+        $actloc = $request->actloc;
+        $actfilmtype = $request->actfilmtype;
+        $actfilgreatfor = $request->actfilgreatfor;
+        $actfilparticipant=$request->actfilparticipant;
+        $btype = $request->btype;
+        $actdate = $request->actdate;
+        $actfilsType = $request->actfilsType;
+        $serviceid = $request->serviceid;
+        $companyid = $request->companyid;
         
-        //DB::enableQueryLog();
-        /*  $searchData = DB::table('business_services')->where('business_services.cid', $companyid)->where('business_services.is_active', 1)->where('business_services.id', '!=' , $serviceid)->groupby('business_services.id');
-          if( !empty($actoffer) )
-          {
-            $searchData->Where('sport_activity', $actoffer);
-          }
-
-          if( !empty($actloc) )
-          {
-            $searchData->whereRaw('FIND_IN_SET("'.$actloc.'",activity_location)');
-          }
-          if( !empty($actfilmtype) )
-          {
-            $searchData->join('business_price_details', 'business_services.id', '=', 'business_price_details.serviceid')->
-            select('business_services.*','business_price_details.membership_type')->
-            Where('membership_type', $actfilmtype);
-            }
-            if( !empty($actfilparticipant) )
-          {
-                $searchData->join('business_activity_scheduler', 'business_services.id', '=', 'business_activity_scheduler.serviceid')->select('business_services.*','business_activity_scheduler.spots_available')->Where('business_activity_scheduler.spots_available', '>=', $actfilparticipant)->distinct();
-            //$searchData->Where('business_services.group_size', '>=', $actfilparticipant);
-          }
-          if( !empty($actfilgreatfor) )
-          {
-            $searchData->whereRaw('FIND_IN_SET("'.$actfilgreatfor.'",activity_for)');
-          }
-          if( !empty($btype) )
-          {
-            $searchData->Where('service_type', $btype);
-          }
-            if( !empty($actdate) )
-            {
-                $dt = date('Y-m-d',strtotime($actdate) );
-                $enddt = date('Y-m-d', strtotime("+1 year", strtotime($actdate)) );
-                $searchData->join('business_activity_scheduler', 'business_services.id', '=', 'business_activity_scheduler.serviceid')->select('business_services.*','business_activity_scheduler.starting')->Where('business_activity_scheduler.starting', '<=', $enddt);
-            }
-            if( !empty($actfilsType) )
-            {
-                $searchData->whereRaw('FIND_IN_SET("'.$actfilsType.'",select_service_type)');
-            }
-            $activity1 = $searchData->get();
-            //dd(\DB::getQueryLog());
-            //$activity1 = $searchData->groupby('business_services.id')->get()->toArray();
-            $activity = json_decode(json_encode($activity1), true);*/
-            /* print_r($activity);exit();*/
-            /*$actbox='';
-      
-            if (!empty($activity)) { 
-            foreach ($activity as  $act) {
-              $servicePrice = BusinessPriceDetails::where('serviceid', $act['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-              $pay_session1=''; $pay_price1=''; $priceid1='';
-              if( !empty($servicePrice) )
-              {
-                if(@$servicePrice[0]['pay_session']!=''){
-                  $pay_session1 = @$servicePrice[0]['pay_session'];
-                }
-                if(@$servicePrice[0]['adult_cus_weekly_price']!=''){
-                    $pay_price1 = @$servicePrice[0]['adult_cus_weekly_price'];
-                }
-                if(@$servicePrice[0]['id']!=''){
-                  $priceid1 = @$servicePrice[0]['id'];
-                }
-              }
-              $reviews_count = BusinessServiceReview::where('service_id', $act['id'])->count();
-              $reviews_sum = BusinessServiceReview::where('service_id', $act['id'])->sum('rating');
-              $reviews_avg=0;
-              if($reviews_count>0)
-              { $reviews_avg = round($reviews_sum/$reviews_count,2); }
-              
-              $today = date('Y-m-d');
-              if( !empty( $actdate) ){ 
-                $today = date('Y-m-d', strtotime($actdate)); 
-              }
-              $SpotsLeft = UserBookingDetail::where('sport', @$act['id'] )->whereDate('created_at', '=', $today)->sum('qty');
-              if( !empty($act['group_size']) )
-                $SpotsLeftdis = $act['group_size']-$SpotsLeft;
-              $servicePr = BusinessPriceDetails::where('serviceid', $act['id'])->orderBy('id', 'ASC')->get()->toArray();
-              
-              $stype='';
-              if($act['service_type']=='individual'){ $stype = 'Personal Training'; }
-              else { $stype = @$act['service_type']; }
-              $qty=1;
-              if( !empty($actfilparticipant) )
-              {
-                $qty=$actfilparticipant;
-                $pay_price1 = $pay_price1*$qty;
-              }
-              
-              $fun_para="'".$act['id']."',this.value,'".$qty."','bookajax','".$act['id']."'";
-              $cng_sess="'".$act['id']."','".$act['id']."',this.value,'bookajax'";
-              $bookscheduler = BusinessActivityScheduler::where('serviceid', $act['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-              $ser_mem = BusinessPriceDetails::where('serviceid', $act['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-              
-                $reviews_count = BusinessServiceReview::where('service_id', $act['id'])->count();
-                $reviews_sum = BusinessServiceReview::where('service_id', $act['id'])->sum('rating');
-                $reviews_avg=0;
-                if($reviews_count>0)
-                { 
-                  $reviews_avg= round($reviews_sum/$reviews_count,2); 
-                }
-                if($act['profile_pic']!="") {
-                  if(File::exists(public_path("/uploads/profile_pic/thumb/" . $act['profile_pic']))) {
-                    $profilePic = url('/public/uploads/profile_pic/thumb/'.$act['profile_pic']);
-                  } else {
-                    $profilePic = '/public/images/service-nofound.jpg';
-                  }
-                }else{ 
-                  $profilePic = '/public/images/service-nofound.jpg'; 
-                }
-                $companyid = $companyname = $companycity = $companycountry = $pay_price  =$starting = $shift_start = $shift_end = "";
-                $companyData = CompanyInformation::where('id',$act['cid'])->first();
-                if (isset($companyData)) {
-                  $companyid = $companyData['id'];
-                  $companyname = $companyData['company_name'];
-                  $companycity = $companyData['city'];
-                  $companycountry = $companyData['country'];     
-                }
-                $redlink = str_replace(" ","-",$companyname)."/".$act['id'];
-                $bookscheduler='';
-                $time='';
-                $bookscheduler = BusinessActivityScheduler::where('serviceid', $act['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-                if(@$bookscheduler[0]['set_duration']!=''){
-                  $tm=explode(' ',$bookscheduler[0]['set_duration']);
-                  $hr=''; $min=''; $sec='';
-                  if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-                  if($tm[2]!=0){ $min=$tm[2].'min. '; }
-                  if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-                  if($hr!='' || $min!='' || $sec!='')
-                  { $time =  $hr.$min.$sec; } 
-                }
-
-                if(@$bookscheduler[0]['starting']!=''){
-                   $starting = date('l jS \of F Y', strtotime( $bookscheduler[0]['starting'] )); 
-                } 
-                if(@$bookscheduler[0]['shift_start']!=''){
-                    $shift_start = '<br>'.$bookscheduler[0]['shift_start'];
-                }
-                if(@$bookscheduler[0]['shift_end']!=''){
-                    $shift_end =  ' - '.$bookscheduler[0]['shift_end'];
-                }                                     
-
-
-                $service_type='';
-                if($act['service_type']!=''){
-                  if( $act['service_type']=='individual' ) $service_type = 'Personal Training'; 
-                  else if( $act['service_type']=='classes' )  $service_type = 'Group Classe'; 
-                  else if( $act['service_type']=='experience' ) $service_type = 'Experience'; 
-                }
-
-                $pricearr = [];
-                $price_all = '';
-                $price_allarray = BusinessPriceDetails::where('serviceid', $act['id'])->get();
-                if(!empty($price_allarray)){
-                  foreach ($price_allarray as $key => $value) {
-                    $pricearr[] = $value->pay_price;
-                  }
-                }
-                if(!empty($pricearr)){
-                  $price_all = min($pricearr);
-                }
-
-                $servicePrfirst = BusinessPriceDetails::where('serviceid', $act['id'])->orderBy('id', 'ASC')->first();
-                $sercate = BusinessPriceDetailsAges::where('serviceid', $act['id'])->orderBy('id', 'ASC')->get()->toArray();
-                $sercatefirst = BusinessPriceDetailsAges::where('serviceid', $act['id'])->orderBy('id', 'ASC')->get()->first();
-                $servicePr = BusinessPriceDetails::where('serviceid', $act['id'])->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->get()->toArray();
-              
-                $todayday = date("l");
-                $todaydate = date('m/d/Y');
-                $bus_schedule = BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',$todaydate )->get();
-                $start =$end= $time= '';$timedata = $SpotsLeft = 0; $Totalspot = $spot_avil= 0; 
-                if(!empty($bus_schedule)){
-                    foreach($bus_schedule as $data){
-                        if($data['scheduled_day_or_week'] == 'Days'){
-                            $daynum = '+'.$data['scheduled_day_or_week_num'].' days';
-                            $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-                        }else if($data['scheduled_day_or_week'] == 'Months'){
-                            $daynum = '+'.$data['scheduled_day_or_week_num'].' month';
-                            $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-                        }else if($data['scheduled_day_or_week'] == 'Years'){
-                            $daynum = '+'.$data['scheduled_day_or_week_num'].' years';
-                            $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-                        }else{
-                            $daynum = '+'.$data['scheduled_day_or_week_num'].' week';
-                            $expdate  = date('m/d/Y', strtotime($data['starting']. $daynum ));
-                        }  
-                        
-                        if($todaydate <=$expdate){
-                             $timedata ='';
-                            if(@$data['shift_start']!=''){
-                                $start = date('h:i a', strtotime( $data['shift_start'] ));
-
-                                $timedata .= $start;
-                            }
-                            if(@$data['shift_end']!=''){
-                                $end = date('h:i a', strtotime( $data['shift_end'] ));
-                                 $timedata .= ' - '.$end;
-                            } 
-                            if(@$data['set_duration']!=''){
-                                $tm=explode(' ',$data['set_duration']);
-                                $hr=''; $min=''; $sec='';
-                                if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-                                if($tm[2]!=0){ $min=$tm[2].'min. '; }
-                                if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-                                if($hr!='' || $min!='' || $sec!='')
-                                { $time = $hr.$min.$sec; 
-                                    $timedata .= ' / '.$time;} 
-                            }
-                        }
-                        $today = date('Y-m-d');
-                        $SpotsLeft = UserBookingDetail::where('sport', @$act['id'] )->whereDate('created_at', '=', $today)->sum('qty');
-                        $SpotsLeftdis=0;
-                        if( !empty($data['spots_available']) ){
-                            $spot_avil=$data['spots_available'];
-                            $SpotsLeftdis = $data['spots_available']-$SpotsLeft;
-                            $Totalspot = $SpotsLeftdis.'/'.@$data['spots_available'];
-                        }
-                    }
-                }
-
-                if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-                    $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'];
-                    $selectval = '';$priceid = '';$i=1;
-                    if(!empty(@$servicePr)){
-                        foreach ($servicePr as  $pr) {
-                            if($i==1){ 
-                                $priceid =$pr['id'];
-                                $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
-                            if($pr['adult_weekend_price_diff'] != ''){
-                                $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_weekend_price_diff'].'</option>';}
-                            if($pr['child_cus_weekly_price'] != ''){
-                                $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_weekend_price_diff'].'</option>';
-                            }
-                            if($pr['infant_cus_weekly_price'] != ''){
-                                $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_weekend_price_diff'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_weekend_price_diff'].'</option>';
-                            }$i++;
-                        }
-                    }
-                }else{
-                    $total_price_val =  @$servicePrfirst['adult_cus_weekly_price'];
-                    $selectval = '';$priceid = '';$i=1;
-                    if(!empty(@$servicePr)){
-                        foreach ($servicePr as  $pr) {
-                            if($i==1){ 
-                                $priceid =$pr['id'];
-                                $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Select Price Option</option>'; }
-                            if($pr['adult_cus_weekly_price'] != ''){
-                                $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['adult_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Adult - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['adult_cus_weekly_price'].'</option>';}
-                            if($pr['child_cus_weekly_price'] != ''){
-                                $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['child_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Child - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['child_cus_weekly_price'].'</option>';
-                            }
-                            if($pr['infant_cus_weekly_price'] != ''){
-                                $selectval .='<option value="'.$pr['pay_session'].'~~'.$pr['infant_cus_weekly_price'].'~~'.$pr['id'].'^'.$pr['price_title'].'">Infant - '.$pr['price_title'].' - '.$pr['pay_session'].' Sessions - $'.$pr['infant_cus_weekly_price'].'</option>';
-                            }$i++;
-                        }
-                    }
-                }
-
-                $activity_sche =  BusinessActivityScheduler::where('category_id',@$sercatefirst['id'])->first(); 
-                $p=@$activity_sche['scheduled_day_or_week_num'].' '.@$activity_sche['scheduled_day_or_week'];
-                
-                $enddt = date('m/d/Y', strtotime("+".$p, strtotime(@$servicePrfirst['starting'])) );
-                     // echo $enddt;exit;
-                $flterdt = date('m/d/Y',strtotime($actdate) );
-                if($actdate != ''){
-                    if( $flterdt <= $enddt ){
-                        $actbox .= '<div class="kickshow-block">
-                                    <div class="topkick" id="kickboxing'.$act['id'].'">
-                                        <h5>'.$act['program_name'].'
-                                            <p>'.$reviews_count.' Reviews <span> <i class="fa fa-star" aria-hidden="true"></i>
-                                            '.$reviews_avg.' </span></p>
-                                        </h5> 
-                                        <div class="lefthalf">
-                                            <div class="divdesc">
-                                                <div class="divleftserdes">
-                                                    <img src="'.$profilePic.'" />
-                                                </div>
-                                                <div class="divrightserdes">
-                                                    <p> <b> Description </b> </p>
-                                                    <p>';
-
-                                                    $testval = Str::limit($act['program_desc'], 80, $end='...');
-                                                    $actbox .= ''.$testval.'</p>
-                                                </div>
-                                            </div>
-                                            <div class="divdesc">
-                                                <p class="actsubtitle"> Details: </p>
-                                                <ul>
-                                                    <li>'.$starting.'</li>
-                                                    <li>Service Type: '.@$act['select_service_type'].'</li>
-                                                    <li>Activity: '.@$act['sport_activity'].'</li>
-                                                    <li>Activity Location: '.@$act['activity_location'].'</li>
-                                                    <li>Great For: '.@$act['activity_for'].'</li>
-                                                    <li>Age: '.@$act['age_range'] .'</li>
-                                                    <li>Language: '.@$languages.'</li>
-                                                    <li>Skill Level: '.@$act['difficult_level'].'</li>';
-                                                    if(@$ser_mem[0]['membership_type']!=''){ 
-                                                        $actbox .= '<li>Membership Type:  '.@$ser_mem[0]['membership_type'].'</li>';
-                                                    }
-                                                    $actbox .= '<li>Business Type:';
-                                                            if($act['service_type']=='individual'){
-                                                                $actbox .= 'Personal Training'; 
-                                                            }
-                                                            else { 
-                                                                $actbox .= @$act['service_type']; 
-                                                            } 
-                                                    $actbox .='</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="righthalf">
-                                            <select id="selcatpr'.$act['id'].'" name="selcatpr'.$act['id'].'" class="price-select-control" onchange="changeactsession('.$cng_sess.')">';
-                                                $c=1;  
-                                                if (!empty($sercate)) { 
-                                                    foreach ($sercate as  $sc) {
-                                                        $actbox .='<option value="'.$sc['id'].'">'.$sc['category_title'].'</option>';
-                                                        $c++;
-                                                    }
-                                                }
-                                              
-                                            $actbox .='</select>
-                                            <div id="pricechng'.$act['id'].'">
-                                                <select id="selprice'.$act['id'].'" name="selprice'.$act['id'].'" class="price-select-control" onchange="changeactpr('.$fun_para.')">
-                                            '.$selectval.'</select>
-                                            </div>
-                                            <label>Booking Details</label>
-                                            <div id="bookajax'.$act["id"].'">';
-                                                if(@$sercatefirst['category_title'] != ''){
-                                                    $actbox .= '<p>Category: '.@$sercatefirst['category_title'].'</p>';
-                                                }
-                                                if($timedata != ''){
-                                                    $actbox .= '<p>'.$timedata.'</p>';
-                                                }
-                                                $actbox .= '<p>Spots Left: '.$Totalspot.'</p><br>';
-                                                if(@$servicePrfirst['price_title'] != ''){
-                                                    $actbox .= '<p>Price Title:  '.@$servicePrfirst['price_title'].'</p>';
-                                                }
-                                                
-                                                $actbox .= '<p>Price Option: '.@$servicePrfirst['pay_session'] .' Session</p>
-                                                <p>Participants: '.$qty.'</p>
-                                                <p>Total: $'. $total_price_val.'/person</p>
-                                            </div>
-                                            <input type="hidden" name="price_title_hidden" id="price_title_hidden'.$act['id'].$act['id'].'" value="'.@$servicePrfirst['price_title'].'">
-                                            <input type="hidden" name="time_hidden" id="time_hidden'.$act['id'].$act['id'].'" value="'.$timedata.'">
-                                            <input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden'.$act['id'].$act['id'].'" value="'.$Totalspot.'">
-
-
-                                            <form method="post" action="/addtocart" id="frmcart'.$act["id"].'>
-                                                <input name="_token" type="hidden" value="'.csrf_token().'">
-                                                <input type="hidden" name="pid" value="'.@$act["id"].'" size="2" />
-                                                <input type="hidden" name="quantity" id="pricequantity'.$act["id"].$act["id"].'" value="'.$qty.'" class="product-quantity" />
-                                                <input type="hidden" name="price" id="pricebookajax'.$act["id"].$act['id'].'" value="'.$pay_price1.'" class="product-price" />
-                                                <input type="hidden" name="session" id="session'.$act["id"].$act["id"].'" value="'.$pay_session1.'" />
-                                                <input type="hidden" name="priceid" value="'.$priceid1.'" id="priceid'.$act["id"].$act["id"].'" />
-                                                <input type="hidden" name="sesdate" value="'.date('Y-m-d', strtotime($actdate) ).'" id="sesdate'.$act["id"].$act["id"].'" />
-                                                <input type="hidden" name="cate_title" value="'.@$sercatefirst['category_title'].'" id="cate_title'.$act["id"].''.$act['id'].'" />';
-                                                if($SpotsLeft >= $spot_avil && $spot_avil != 0){
-                                                    $actbox .= '<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;">Sold Out</a>';
-                                                }
-                                                else if($pay_price1 !='' && $timedata !=''){
-                                                    $actbox .= '<input type="submit" value="Add to Cart" onclick="changeqnt('.$act['id'].')" class="btn btn-addtocart mt-10" id="addtocart'.$act['id'].'"/>';
-                                                }
-                                            $actbox .= '</form>
-                                        </div>
-                                    </div>
-                                    <div class="bottomkick">
-                                        <div class="viewmore_links">
-                                            <a id="viewmore'.$act['id'].'" style="display:block">View More <img src=" public/img/arrow-down.png" alt=""></a>
-                                            <a id="viewless'.$act['id'].'" style="display:none">View Less <img src="public/img/arrow-down.png" alt=""></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <script>
-                                    $("#viewmore'.$act['id'].'").click(function () {
-                                        $("#kickboxing'.$act['id'].'").addClass("intro");
-                                        $("#viewless'.$act['id'].'").show();
-                                        $("#viewmore'.$act['id'].'").hide();
-                                    });
-                                    $("#viewless'.$act['id'].'").click(function () {
-                                        $("#kickboxing'.$act['id'].'").removeClass("intro");
-                                        $("#viewless'.$act['id'].'").hide();
-                                        $("#viewmore'.$act['id'].'").show();
-                                    });
-                                </script>
-                                    ';
-                    }
-                }else{
-                    $actbox .= '<div class="kickshow-block">
-                                    <div class="topkick" id="kickboxing'.$act['id'].'">
-                                        <h5>'.$act['program_name'].'
-                                            <p>'.$reviews_count.' Reviews <span> <i class="fa fa-star" aria-hidden="true"></i>
-                                            '.$reviews_avg.' </span></p>
-                                        </h5> 
-                                        <div class="lefthalf">
-                                            <div class="divdesc">
-                                                <div class="divleftserdes">
-                                                    <img src="'.$profilePic.'" />
-                                                </div>
-                                                <div class="divrightserdes">
-                                                    <p> <b> Description </b> </p>
-                                                    <p>';
-
-                                                    $testval = Str::limit($act['program_desc'], 80, $end='...');
-                                                    $actbox .= ''.$testval.'</p>
-                                                </div>
-                                            </div>
-                                            <div class="divdesc">
-                                                <p class="actsubtitle"> Details: </p>
-                                                <ul>
-                                                    <li>'.$starting.'</li>
-                                                    <li>Service Type: '.@$act['select_service_type'].'</li>
-                                                    <li>Activity: '.@$act['sport_activity'].'</li>
-                                                    <li>Activity Location: '.@$act['activity_location'].'</li>
-                                                    <li>Great For: '.@$act['activity_for'].'</li>
-                                                    <li>Age: '.@$act['age_range'] .'</li>
-                                                    <li>Language: '.@$languages.'</li>
-                                                    <li>Skill Level: '.@$act['difficult_level'].'</li>';
-                                                    if(@$ser_mem[0]['membership_type']!=''){ 
-                                                        $actbox .= '<li>Membership Type:  '.@$ser_mem[0]['membership_type'].'</li>';
-                                                    }
-                                                    $actbox .= '<li>Business Type:';
-                                                            if($act['service_type']=='individual'){
-                                                                $actbox .= 'Personal Training'; 
-                                                            }
-                                                            else { 
-                                                                $actbox .= @$act['service_type']; 
-                                                            } 
-                                                    $actbox .='</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="righthalf">
-                                            <select id="selcatpr'.$act['id'].'" name="selcatpr'.$act['id'].'" class="price-select-control" onchange="changeactsession('.$cng_sess.')">';
-                                                $c=1;  
-                                                if (!empty($sercate)) { 
-                                                    foreach ($sercate as  $sc) {
-                                                        $actbox .='<option value="'.$sc['id'].'">'.$sc['category_title'].'</option>';
-                                                        $c++;
-                                                    }
-                                                }
-                                              
-                                            $actbox .='</select>
-                                            <div id="pricechng'.$act['id'].'">
-                                                <select id="selprice'.$act['id'].'" name="selprice'.$act['id'].'" class="price-select-control" onchange="changeactpr('.$fun_para.')">
-                                            '.$selectval.'</select>
-                                            </div>
-                                            <label>Booking Details</label>
-                                            <div id="bookajax'.$act["id"].'">';
-                                                if(@$sercatefirst['category_title'] != ''){
-                                                    $actbox .= '<p>Category: '.@$sercatefirst['category_title'].'</p>';
-                                                }
-                                                if($timedata != ''){
-                                                    $actbox .= '<p>'.$timedata.'</p>';
-                                                }
-                                                $actbox .= '<p>Spots Left: '.$Totalspot.'</p><br>';
-                                                if(@$servicePrfirst['price_title'] != ''){
-                                                    $actbox .= '<p>Price Title:  '.@$servicePrfirst['price_title'].'</p>';
-                                                }
-                                                
-                                                $actbox .= '<p>Price Option: '.@$servicePrfirst['pay_session'] .' Session</p>
-                                                <p>Participants: '.$qty.'</p>
-                                                <p>Total: $'. $total_price_val.'/person</p>
-                                            </div>
-                                            <input type="hidden" name="price_title_hidden" id="price_title_hidden'.$act['id'].$act['id'].'" value="'.@$servicePrfirst['price_title'].'">
-                                            <input type="hidden" name="time_hidden" id="time_hidden'.$act['id'].$act['id'].'" value="'.$timedata.'">
-                                            <input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden'.$act['id'].$act['id'].'" value="'.$Totalspot.'">
-
-
-                                            <form method="post" action="/addtocart" id="frmcart'.$act["id"].'>
-                                                <input name="_token" type="hidden" value="'.csrf_token().'">
-                                                <input type="hidden" name="pid" value="'.@$act["id"].'" size="2" />
-                                                <input type="hidden" name="quantity" id="pricequantity'.$act["id"].$act["id"].'" value="'.$qty.'" class="product-quantity" />
-                                                <input type="hidden" name="price" id="pricebookajax'.$act["id"].$act['id'].'" value="'.$pay_price1.'" class="product-price" />
-                                                <input type="hidden" name="session" id="session'.$act["id"].$act["id"].'" value="'.$pay_session1.'" />
-                                                <input type="hidden" name="priceid" value="'.$priceid1.'" id="priceid'.$act["id"].$act["id"].'" />
-                                                <input type="hidden" name="sesdate" value="'.date('Y-m-d', strtotime($actdate) ).'" id="sesdate'.$act["id"].$act["id"].'" />
-                                                <input type="hidden" name="cate_title" value="'.@$sercatefirst['category_title'].'" id="cate_title'.$act["id"].''.$act['id'].'" />';
-                                                if($SpotsLeft >= $spot_avil && $spot_avil != 0){
-                                                    $actbox .= '<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;">Sold Out</a>';
-                                                }
-                                                else if($pay_price1 !='' && $timedata !=''){
-                                                    $actbox .= '<input type="submit" value="Add to Cart" onclick="changeqnt('.$act['id'].')" class="btn btn-addtocart mt-10" id="addtocart'.$act['id'].'"/>';
-                                                }
-                                            $actbox .= '</form>
-                                        </div>
-                                    </div>
-                                    <div class="bottomkick">
-                                        <div class="viewmore_links">
-                                            <a id="viewmore'.$act['id'].'" style="display:block">View More <img src=" public/img/arrow-down.png" alt=""></a>
-                                            <a id="viewless'.$act['id'].'" style="display:none">View Less <img src="public/img/arrow-down.png" alt=""></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <script>
-                                    $("#viewmore'.$act['id'].'").click(function () {
-                                        $("#kickboxing'.$act['id'].'").addClass("intro");
-                                        $("#viewless'.$act['id'].'").show();
-                                        $("#viewmore'.$act['id'].'").hide();
-                                    });
-                                    $("#viewless'.$act['id'].'").click(function () {
-                                        $("#kickboxing'.$act['id'].'").removeClass("intro");
-                                        $("#viewless'.$act['id'].'").hide();
-                                        $("#viewmore'.$act['id'].'").show();
-                                    });
-                                </script>
-                                    ';
-                }
-            }
-        }*/
-        
-
         $searchData = DB::table('business_services')->where('business_services.cid', $companyid)->where('business_services.is_active', 1)->where('business_services.id', '!=' , $serviceid);
         if( !empty($actoffer) )
         {
@@ -4156,7 +2650,7 @@ class LessonController extends Controller {
                 $companyData = CompanyInformation::where('id',$act['cid'])->first();
                 if (isset($companyData)) {
                     $companyid = $companyData['id'];
-                    $companyname = $companyData['company_name'];
+                    $companyname = $companyData['dba_business_name'];
                     $companycity = $companyData['city'];
                     $companycountry = $companyData['country'];    
                 }
@@ -4421,7 +2915,7 @@ class LessonController extends Controller {
 
           $company = CompanyInformation::where('id',$act['cid'])->first();
           $companyid = $company->id;
-          $companyname = $company->company_name;
+          $companyname = $company->dba_business_name;
           $companycity = $company->city;
           $companycountry = $company->country;
           $companylogo = $company->logo;
@@ -4545,16 +3039,52 @@ class LessonController extends Controller {
     }
     
     public function addToCart(Request $request) {
-        $cart_item = [];
-        if ($request->session()->has('cart_item')) {
-            $cart_item = $request->session()->get('cart_item');
+        //print_r($request->all());exit;
+
+        if(@$request->flushsession == 1){
+            $request->session()->forget('cart_item');
         }
+
+        $cart_item = $request->session()->has('cart_item') ? $request->session()->get('cart_item') : [];
+        $tax = $request->has('value_tax') != '' ? $request->value_tax : 0;
+        $tip_amt_val = $request->has('tip_amt_val') != '' ? $request->tip_amt_val : 0;
+        $dis_amt_val = $request->has('dis_amt_val') != '' ? $request->dis_amt_val : 0;
+        $parti_from_chkout_regi = $request->has('pc_value') != '' ? array('id'=>$request->pc_regi_id, 'from'=>$request->pc_user_tp, 'pc_name'=>$request->pc_value) : array();
+        $categoryid = $request->has('categoryid') != '' ? $request->categoryid : '';
+        $p_session = $request->has('pay_session') != '' ? $request->pay_session : '';
+        $activity_days = $request->has('activity_days') != '' ? $request->activity_days : '';
+        $notes = $request->has('notes') != '' ? $request->notes : '';
+        $repeateTimeType = $request->has('repeateTimeType') != '' ? $request->repeateTimeType : '';
+        $everyWeeks = $request->has('everyWeeks') != '' ? $request->everyWeeks : 0;
+        $monthDays = $request->has('monthDays') != '' ? $request->monthDays : 0;
+        $enddate = $request->has('enddate') != '' ? date('Y-m-d',strtotime($request->enddate)): '';
+        $addOnServicesId = $request->has('addOnServicesId') != '' ? $request->addOnServicesId: '';
+        $addOnServicesQty = $request->has('addOnServicesQty') != '' ? $request->addOnServicesQty: '';
+        $addOnServicesTotalPrice = $request->has('addOnServicesTotalPrice') != '' ? $request->addOnServicesTotalPrice: 0 ;
+    
         $pid = isset($request->pid) ? $request->pid : 0;
+        $priceid = isset($request->priceid) ? $request->priceid : 0;
+        $chk = $msg = '';
+        if($request->has('chk')){
+            if($request->deletepid != $request->pid){
+                unset($cart_item["cart_item"][$request->deletepid]);
+            } 
+            $chk = $request->chk;
+            if($chk == 'calendar_activity_purchase'){
+                if(!empty($cart_item)){
+                    foreach($cart_item["cart_item"] as $proId=>$ci){
+                        if( $ci['chk'] == 'calendar_activity_purchase'){
+                            unset($cart_item["cart_item"][$proId]);
+                        }
+                    }
+                }
+            }
+        }
+        
         $price = isset($request->price) ? $request->price : 0;
         $pricetotal = isset($request->pricetotal) ? $request->pricetotal : 0;
-        $priceid = isset($request->priceid) ? $request->priceid : 0;
         $actscheduleid = isset($request->actscheduleid) ? $request->actscheduleid : 0;
-        $sesdate = isset($request->sesdate) ? $request->sesdate : 0;
+        $sesdate = isset($request->sesdate) ? date('Y-m-d',strtotime($request->sesdate)) : 0;
         $result = DB::select('select * from business_services where id = "'.$pid.'"');
         $infantarray = $childarray = $adultarray= $totparticipate = [];
         $tot_qty = 0;
@@ -4571,39 +3101,44 @@ class LessonController extends Controller {
             $tot_qty += $request->infantquantity;
         }
 
-
-        for ($i=0; $i < $tot_qty; $i++) { 
-            if(Auth::check()){
-                $totparticipate[] = array('id'=>Auth::user()->id, 'from'=>"user");
-            }else{
-                $totparticipate[] = array('id'=>'', 'from'=>"user");
+        if(isset($request->participateAry)){
+            $totparticipate = $request->participateAry;
+        }else{
+            for ($i=0; $i < $tot_qty; $i++) { 
+                if(Auth::check()){
+                    $totparticipate[] = array('id'=>Auth::user()->id, 'from'=>"user");
+                }else{
+                    $totparticipate[] = array('id'=>'', 'from'=>"user");
+                } 
             }
-            
         }
-       
+
         if (count($result) > 0) {
             foreach ($result as $item) {
-                $p_image = '';
-                if ($item->profile_pic != "") {
-                    if(str_contains($item->profile_pic, ',')){
-                        $pic_image = explode(',', $item->profile_pic);
-                        if( $pic_image[0] == ''){
-                           $p_image  = $pic_image[1];
-                        }else{
-                            $p_image  = $pic_image[0];
-                        }
-                    }else{
-                        $p_image = $item->profile_pic;
-                    }
+                $pictures = explode(',',$item->profile_pic);
+                $p_image = @$pictures[0];
 
-                }
-
-                $itemArray = array($request->pid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=> $p_image,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate));
+                $itemArray = array($request->priceid=>array('type'=>$item->service_type, 'name'=>$item->program_name, 'code'=>$item->id, 'image'=> $p_image,'adult'=>$adultarray,'child'=>$childarray,'infant'=>$infantarray,'actscheduleid'=>$actscheduleid, 'sesdate'=>$sesdate,'totalprice'=>$request->pricetotal,'priceid'=>$priceid,'participate'=>$totparticipate,'tax'=>$tax,'discount'=>$dis_amt_val ,'tip'=>$tip_amt_val ,'participate_from_checkout_regi'=> $parti_from_chkout_regi,'chk'=>$chk ,'categoryid'=>$categoryid ,'p_session'=>$p_session,'notes' => $notes,'repeateTimeType' => $repeateTimeType,'everyWeeks' => $everyWeeks,'monthDays' => $monthDays,'enddate' => $enddate,'activity_days'=>$activity_days ,'addOnServicesId'=> $addOnServicesId, 'addOnServicesQty' => $addOnServicesQty, 'addOnServicesTotalPrice' => $addOnServicesTotalPrice));
                 if(!empty($cart_item["cart_item"])) {
-                    if(in_array($request->pid, array_keys($cart_item["cart_item"]))) {
+                    if(in_array($request->priceid, array_keys($cart_item["cart_item"]))) {
                         foreach($cart_item["cart_item"] as $k => $v) {
-                            if($request->pid == $k) {
+                            if($request->priceid == $k) {
                                 $cart_item["cart_item"][$k]["actscheduleid"] = $actscheduleid;
+                                $cart_item["cart_item"][$k]["tip"] = $tip_amt_val;
+                                $cart_item["cart_item"][$k]["discount"] = $dis_amt_val;
+                                $cart_item["cart_item"][$k]["tax"] = $tax;
+                                $cart_item["cart_item"][$k]["categoryid"] = $categoryid;
+                                $cart_item["cart_item"][$k]["p_session"] = $p_session;
+                                $cart_item["cart_item"][$k]["chk"] = $chk ;
+
+                                $cart_item["cart_item"][$k]["notes"] = $notes;
+                                $cart_item["cart_item"][$k]["repeateTimeType"] = $repeateTimeType;
+                                $cart_item["cart_item"][$k]["everyWeeks"] = $everyWeeks;
+                                $cart_item["cart_item"][$k]["monthDays"] = $monthDays;
+                                $cart_item["cart_item"][$k]["enddate"] = $enddate;
+                                $cart_item["cart_item"][$k]["activity_days"] = $activity_days;
+
+                                $cart_item["cart_item"][$k]["participate_from_checkout_regi"] = $parti_from_chkout_regi ;
                                 $cart_item["cart_item"][$k]["sesdate"] = $sesdate;
                                 $cart_item["cart_item"][$k]["totalprice"] = $request->pricetotal;
                                 $cart_item["cart_item"][$k]["priceid"] = $request->priceid;
@@ -4617,10 +3152,49 @@ class LessonController extends Controller {
                                 $cart_item["cart_item"][$k]['child']["quantity"] = $request->childquantity;
 
                                 $cart_item["cart_item"][$k]['infant']["quantity"] = $request->infantquantity;
+
+                                $cart_item["cart_item"][$k]["addOnServicesId"] = $addOnServicesId;
+                                $cart_item["cart_item"][$k]["addOnServicesQty"] = $addOnServicesQty;
+                                $cart_item["cart_item"][$k]["addOnServicesTotalPrice"] = $addOnServicesTotalPrice;
                             }
                         }
-                    } else {
-                        $cart_item["cart_item"] = $cart_item["cart_item"] + $itemArray;
+                    }else {
+                        $tot_qty_cart = 0;
+                        $final_qty_cart = 0;
+                        $remaing  = 0;
+                        $chk_item = 0;
+                        foreach($cart_item["cart_item"] as $k => $v){
+                            if($cart_item["cart_item"][$k]["chk"] == ''){
+                                if($cart_item["cart_item"][$k]["actscheduleid"] == $actscheduleid &&  $cart_item["cart_item"][$k]["sesdate"] == $sesdate){
+                                    $chk_item =1;
+                                    if(!empty($cart_item["cart_item"][$k]['adult'])){
+                                        $tot_qty_cart += $cart_item["cart_item"][$k]['adult']["quantity"];
+                                    }
+                                    if(!empty($cart_item["cart_item"][$k]['child'])){
+                                        $tot_qty_cart += $cart_item["cart_item"][$k]['child']["quantity"];
+                                    }
+                                    if(!empty($cart_item["cart_item"][$k]['infant'])){
+                                        $tot_qty_cart += $cart_item["cart_item"][$k]['infant']["quantity"];
+                                    }
+                                    $db_totalquantity = $this->bookings->gettotalbooking($actscheduleid,$sesdate);
+                                    $bookscheduler = BusinessActivityScheduler::where('id', $actscheduleid)->first();
+                                    if($bookscheduler!= ''){
+                                        $remaing = ($bookscheduler->spots_available - $db_totalquantity ); 
+                                    }
+                                }
+                            }
+                        }
+
+                        if($chk_item == 1){
+                            $final_qty_cart = ($tot_qty +  $tot_qty_cart);
+                            if($remaing >= $final_qty_cart){
+                                $cart_item["cart_item"] = $cart_item["cart_item"] + $itemArray;
+                            }else{
+                                $msg = "no_spots";
+                            }
+                        }else {
+                            $cart_item["cart_item"] = $cart_item["cart_item"] + $itemArray;
+                        }
                     }
                 }else {
                     $cart_item["cart_item"] = $itemArray;
@@ -4632,24 +3206,36 @@ class LessonController extends Controller {
         } else {
             $request->session()->forget('cart_item');
         }
-        /*print_r($cart_item['cart_item']);exit;*/ 
-        return redirect('/success-cart/'.$pid); 
+        //print_r($cart_item['cart_item']);exit;
+        if($request->chk == 'activity_purchase'){
+            return redirect()->route('business.orders.create', ['business_id'=>Auth::user()->cid,'cus_id' => $request->pageid]);
+        }else if($request->chk == 'calendar_activity_purchase'){
+            return config('app.url').'/business/'.Auth::user()->cid.'/paymentModal/'.$request->pageid;;
+        }else if($request->chk == 'checkin'){
+           return 'Membership added successfully.';
+        }else{
+            if($msg == ''){
+                $msg = config('app.url').'/success-cart/'.$priceid;
+            }
+            return $msg;
+        }    
     }
 
-    public function successcart($pid)
+    public function successcart($priceid)
     {   
         $total_quantity=0;
         $cart_item = [];
         if (session()->has('cart_item')) {
             $cart_item = session()->get('cart_item');
         }
-        $sdata = BusinessServices::where('id',$pid)->first();
+        $pricedetails = BusinessPriceDetails::find($priceid);
+        $sdata = BusinessServices::where('id',$pricedetails->serviceid)->first();
         $ser = BusinessService::where('cid', @$sdata->cid)->first();
         $companyData = CompanyInformation::where('id',@$sdata->cid)->first();
-        $discovermore = BusinessServices::where('cid',@$sdata->cid)->where('id','!=',$pid)->limit(4)->get();
-
+        $discovermore = BusinessServices::where('cid',@$sdata->cid)->where('id','!=',$sdata->id)->where('is_active', 1)->limit(4)->get();
+        
         return view('activity.success_cart',[
-            'pid'=> $pid,
+            'priceid'=> $priceid,
             'cart'=> $cart_item,
             'companyData'=> $companyData,
             'sdata'=> $sdata,
@@ -4659,20 +3245,13 @@ class LessonController extends Controller {
     }
     
     public function removeToCart(Request $request) {
-        $cart_item = [];
-        if ($request->session()->has('cart_item')) {
-            $cart_item = $request->session()->get('cart_item');
-        }
-        //echo "<pre>";print_r($cart_item);
+        $cart_item = $request->session()->has('cart_item') ? $request->session()->get('cart_item') : [];
+        
         if(!empty($cart_item["cart_item"])) {
             foreach($cart_item["cart_item"] as $k => $v) {
-                //echo $v['code'].'----'.$_GET['code'].'....<br/>';
-                if($_GET["code"] == $v['code']) {
+                if($_GET["priceid"] == $v['priceid']) {
                     unset($cart_item["cart_item"][$k]);
                 }
-                //if(empty($cart_item["cart_item"]))
-                //unset($cart_item["cart_item"]);
-                
             }
         }
         
@@ -4681,13 +3260,15 @@ class LessonController extends Controller {
         } else {
             $request->session()->forget('cart_item');
         }
-        return redirect('/payments/card'); 
+        if($request->chk == 'purchase'){
+            return redirect()->route('business.orders.create', ['business_id'=>Auth::user()->cid,'cus_id' => $request->pageid]);
+        }else{
+            return redirect('/carts'); 
+        }
     }
     
     public function emptyCart(Request $request) {
         $request->session()->forget('cart_item');
         return redirect('/payments/card'); 
     } 
-
-
 }

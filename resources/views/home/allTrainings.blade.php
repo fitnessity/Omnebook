@@ -28,8 +28,8 @@
 
                             <div class="online_classes_box">
                                 <div class="imageclasses">
-                                    <a href="#"><img src="{{ asset('public/images/classes1.jpg')}}" alt=""></a>
-                                    <span class="live_img"><img src="{{ asset('public/images/liveimg.png')}}" alt=""></span>
+                                    <a href="#"><img src="{{ asset('public/images/classes1.jpg')}}" alt="Fitnessity"></a>
+                                    <span class="live_img"><img src="{{ asset('public/images/liveimg.png')}}" alt="Fitnessity"></span>
                                 </div>
                                 <div class="classes_title">
                                     <h3>SHE FIT STUDIO <span>- WEIGHT LOSS TRAINING</span></h3>
@@ -59,7 +59,7 @@
 
                             <div class="online_classes_box">
                                 <div class="imageclasses">
-                                    <a href="#"><img src="{{ asset('public/images/classes3.jpg')}}" alt=""></a>
+                                    <a href="#"><img src="{{ asset('public/images/classes3.jpg')}}" alt="Fitnessity"></a>
                                 </div>
                                 <div class="classes_title">
                                     <h3>LAURA NASH <span>- CORE STRENGTH TRAINING</span></h3>
@@ -89,7 +89,7 @@
 
                             <div class="online_classes_box">
                                 <div class="imageclasses">
-                                    <a href="#"><img src="{{ asset('public/images/trainings-coming-soon.jpg')}}" alt=""></a>
+                                    <a href="#"><img src="{{ asset('public/images/trainings-coming-soon.jpg')}}" alt="Fitnessity"></a>
                                 </div>
                                 <div class="classes_title">
                                     <h3>SHE FIT STUDIO <span>- WEIGHT LOSS TRAINING</span></h3>
@@ -119,7 +119,7 @@
 
                             <div class="online_classes_box">
                                 <div class="imageclasses">
-                                    <a href="#"><img src="{{ asset('public/images/classes2.jpg')}}" alt=""></a>
+                                    <a href="#"><img src="{{ asset('public/images/classes2.jpg')}}" alt="Fitnessity"></a>
                                 </div>
                                 <div class="classes_title">
                                     <h3>AKIN FITNESS COACH <span>- STRENGTH BUILDING TRAINING</span></h3>
@@ -149,7 +149,7 @@
 
                             <div class="online_classes_box">
                                 <div class="imageclasses">
-                                    <a href="#"><img src="{{ asset('public/images/trainings-coming-soon.jpg')}}" alt=""></a>
+                                    <a href="#"><img src="{{ asset('public/images/trainings-coming-soon.jpg')}}" alt="Fitnessity"></a>
                                 </div>
                                 <div class="classes_title">
                                     <h3>SHE FIT STUDIO <span>- WEIGHT LOSS TRAINING</span></h3>
@@ -179,8 +179,8 @@
 
                             <div class="online_classes_box">
                                 <div class="imageclasses">
-                                    <a href="#"><img src="{{ asset('public/images/trainings-coming-soon.jpg')}}" alt=""></a>
-                                    <span class="live_img"><img src="{{ asset('public/images/liveimg.png')}}" alt=""></span>
+                                    <a href="#"><img src="{{ asset('public/images/trainings-coming-soon.jpg')}}" alt="Fitnessity"></a>
+                                    <span class="live_img"><img src="{{ asset('public/images/liveimg.png')}}" alt="Fitnessity"></span>
                                 </div>
                                 <div class="classes_title">
                                     <h3>SHE FIT STUDIO <span>- WEIGHT LOSS TRAINING</span></h3>

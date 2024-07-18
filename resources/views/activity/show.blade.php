@@ -1,53 +1,14 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
 @section('content')
 <style type="text/css">
-.qty .count {
-    color: #000;
-    display: inline-block;
-    vertical-align: top;
-    font-size: 22px;
-    line-height: 30px;
-    padding: 0 2px
-    ;min-width: 35px;
-    text-align: center;
-}
-.qty .plus {
-    cursor: pointer;
-    display: inline-block;
-    vertical-align: top;
-    width: 30px;
-    height: 30px;
-    color: #000;
-    font: 30px/1 Arial,sans-serif;
-    text-align: center;
-    border-radius: 50%;
-    }
-.qty .minus {
-    cursor: pointer;
-    display: inline-block;
-    vertical-align: top;
-    width: 30px;
-	color: #000;
-    height: 30px;
-    font: 30px/1 Arial,sans-serif;
-    text-align: center;
-    border-radius: 50%;
-    background-clip: padding-box;
-}
-.bg-darkbtn {
-    border: 1px solid #000;
-}
 /*Prevent text selection*/
 span{
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
 }
-.count {  
-    border: 0;
-    width: 2%;
-}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -55,1339 +16,2007 @@ input::-webkit-inner-spin-button {
 }
 input:disabled{
     background-color:white;
-}
-   
+}  
 </style>
+
 <?php
-	use App\UserBookingDetail;
-	use App\BusinessServices;
-	use App\BusinessService;
-	use App\BusinessPriceDetails;
-	use App\BusinessPriceDetailsAges;
-	use App\BusinessServiceReview;
-	use App\BusinessTerms;
-	use App\User;
-	use App\BusinessActivityScheduler;
-	use App\BusinessServicesFavorite;
-	use App\CompanyInformation;
-	use App\BusinessReview;
-	use Carbon\Carbon;
-    use App\StaffMembers;
-
-	$sid = $serviceid;
-	$service = BusinessServices::where('id',$serviceid)->first();
-	$businessSp = BusinessService::where('cid', $service['cid'])->first();
-	if(!empty($businessSp)) {
-        $languages = $businessSp['languages'];
-    }     
-
-    $cancelation = $cleaning = $houserules = $comp_address = $Phonenumber = '';
-    $email = $companylat = $companylon  = $companylogo = '';
-    $comp_data = CompanyInformation::where('id', $service['cid'])->first();
-    $address = '';
-	$Instruname = $comp_data->first_name .' '. $comp_data->last_name;
-	if($comp_data->address != ''){
-		$comp_address = $comp_data->address.', ';
-	}
-	if($comp_data->city != ''){
-		$comp_address .= $comp_data->city.', ';
-		$address .= ', '.$comp_data->city.', ';
-	}
-	if($comp_data->state != ''){
-		$comp_address .= $comp_data->state.', ';
-	}
-	if($comp_data->country != ''){
-		$comp_address .= $comp_data->country;
-		$address .= $comp_data->country.', ';
-	}
-	if($comp_data->zip_code != ''){
-		$address .= $comp_data->zip_code;
-	}
-
-	$staffdata = StaffMembers::where(['id'=>$service->instructor_id])->first(); 
-
-	$companyname = $comp_data->company_name;
-	$companyid = $comp_data->id;
-	$Phonenumber = $comp_data->contact_number;
-	$companylon = $comp_data->longitude;
-	$companylat = $comp_data->latitude;
-	$companylogo  = $comp_data->logo ;
-	$email = $comp_data->email;
-
-	$BusinessTerms = BusinessTerms::where('cid', $comp_data->id)->first();
-	if(!empty($BusinessTerms)){
-		$cancelation = $BusinessTerms->cancelation;
-		$cleaning = $BusinessTerms->cleaning;
-		$houserules = $BusinessTerms->houserules;
-	}
-
-	$current_act = BusinessServices::where('id', $serviceid)->limit(1)->get()->toArray();
-	$companyactid = $current_act[0]['cid'];
-	$redlink = str_replace(" ","-",$companyname)."/".$companyid;
-	/*$address = '';*/
-	/*if(!empty($companycity)) { 
-		$address .= $companycity; 
-	}
-    if(!empty($companycountry)) 
-    { 
-    	$address .= ', '.$companycountry; 
-	}
-    if(!empty($companyzip)) {
-     	$address .=', '.$companyzip; 
- 	}*/ 
-
-
-	$servicePr=[]; $bus_schedule=[];
-	$servicePrfirst = BusinessPriceDetails::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->first();
-	$sercate = BusinessPriceDetailsAges::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->get()->toArray();
-	$sercatefirst = BusinessPriceDetailsAges::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->first();
-	//DB::enableQueryLog();
-	if(@$sercatefirst != ''){
-    	$servicePr = BusinessPriceDetails::where('serviceid',  @$serviceid )->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->get()->toArray();
-	}
-
-	//dd(\DB::getQueryLog());
-    $todayday = date("l");
-    $todaydate = date('m/d/Y');
-    $maxspotValue = 0;
-	if(!empty(@$sercatefirst)){
-    	/*$bus_schedule =  DB::table('business_activity_scheduler')->where('business_activity_scheduler.category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",business_activity_scheduler.activity_days)')->where('business_activity_scheduler.starting','<=',date('Y-m-d') )->where('business_activity_scheduler.end_activity_date','>=',date('Y-m-d') )->join('business_service', 'business_activity_scheduler.cid', '=','business_service.cid' )->select('business_activity_scheduler.*','business_service.special_days_off')->whereRaw('NOT FIND_IN_SET("'.date('d/m/Y').'",business_service.special_days_off)')->get();*/
-    	
-    	
-    	/*DB::enableQueryLog();*/
-    	/*$bus_schedule = BusinessActivityScheduler::where('serviceid',@$serviceid )->where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->join('business_service', 'business_activity_scheduler.cid', '=','business_service.cid' )->select('business_activity_scheduler.*','business_service.special_days_off')->whereRaw('NOT FIND_IN_SET("'.date('d/m/Y').'",business_service.special_days_off)')->get();*/
-    	/*dd(\DB::getQueryLog());*/
-
-    	$bus_schedule = BusinessActivityScheduler::where('serviceid',@$serviceid )->where('category_id',@$sercatefirst['id'])->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->get();
-
-    	$maxspotValue = BusinessActivityScheduler::where('serviceid',@$serviceid )->whereRaw('FIND_IN_SET("'.$todayday.'",activity_days)')->where('starting','<=',date('Y-m-d') )->where('end_activity_date','>=',date('Y-m-d') )->max('spots_available');
-	}
-	
-    $start =$end= $time= '';$timedata = '';$Totalspot= $spot_avil= 0;  $SpotsLeftdis = 0 ;
-    $i=0;
-    if(!empty(@$bus_schedule)){
-        foreach($bus_schedule as $data){
-        	if($i==0){
-        		$SpotsLeftdis = 0; 
-				$SpotsLeft = UserBookingDetail::where('act_schedule_id',$data['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->get()->toArray();
-				$totalquantity = 0;
-				foreach($SpotsLeft as $data1){
-					$item = json_decode($data1['qty'],true);
-					if($item['adult'] != '')
-                        $totalquantity += $item['adult'];
-                    if($item['child'] != '')
-                        $totalquantity += $item['child'];
-                    if($item['infant'] != '')
-                        $totalquantity += $item['infant'];
-				}
-				if( $data['spots_available'] != ''){
-					$SpotsLeftdis = $data['spots_available'] - $totalquantity;
-				} 
-				
-	            $expdate  = date('m/d/Y', strtotime($data['end_activity_date']));
-	            $date_now = new DateTime();
-	            $expdate = new DateTime($expdate);
-	            if($SpotsLeftdis != 0){
-	            	if($date_now <= $expdate){
-		                if(@$data['shift_start']!=''){
-		                    $start = date('h:i a', strtotime( $data['shift_start'] ));
-		                    $timedata .= $start;
-		                }
-		                if(@$data['shift_end']!=''){
-		                    $end = date('h:i a', strtotime( $data['shift_end'] ));
-		                    $timedata .= ' - '.$end;
-		                } 
-
-		                if(@$data['set_duration']!=''){
-		                    $tm=explode(' ',$data['set_duration']);
-		                    $hr=''; $min=''; $sec='';
-		                    if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-		                    if($tm[2]!=0){ $min=$tm[2].'min. '; }
-		                    if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-		                    if($hr!='' || $min!='' || $sec!='')
-		                    { 
-		                    	$time = $hr.$min.$sec; 
-		                        $timedata .= ' / '.$time;
-		                    } 
-		                }
-		                $i++;
-		            }
-	            }
-           	}
-        }
-    }
- 	/*echo $timedata;exit();*/
-	$selectval = $priceid = $total_price_val = '' ;
-	$adult_cnt =$child_cnt =$infant_cnt =0;
-	$adult_price = $child_price = $infant_price =0;
-	if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-        $total_price_val =  @$servicePrfirst['adult_weekend_price_diff'] + @$servicePrfirst['child_weekend_price_diff'] + @$servicePrfirst['infant_weekend_price_diff'] ;
-        if(@$servicePrfirst['adult_weekend_price_diff'] != ''){
-        	$adult_price = @$servicePrfirst['adult_weekend_price_diff'];
-        	$adult_cnt = 1;
-        }
-
-        if(@$servicePrfirst['child_weekend_price_diff'] != ''){
-        	$child_price = @$servicePrfirst['child_weekend_price_diff'];
-        	$child_cnt = 1;
-        }
-
-        if(@$servicePrfirst['infant_weekend_price_diff'] != ''){
-        	$infant_price = @$servicePrfirst['infant_weekend_price_diff'];
-        	$infant_cnt = 1;
-        }
-       
-        $i=1;
-        if (!empty(@$servicePr)) {
-            foreach ($servicePr as  $pr) {
-                if($i==1){
-            		$priceid =$pr['id'];
-            	}
-                $selectval .='<option value="'.$pr['id'].'">'.$pr['price_title'].'</option>';
-                $i++;
-            }
-        }
-    }else{
-		/*print_r($servicePr); exit;*/
-		if(!empty(@$servicePr))
-		{
-
-			$total_price_val =  @$servicePrfirst['adult_cus_weekly_price'] + @$servicePrfirst['child_cus_weekly_price'] + @$servicePrfirst['infant_cus_weekly_price'];
-			if(@$servicePrfirst['adult_cus_weekly_price'] != ''){
-				$adult_price = @$servicePrfirst['adult_cus_weekly_price'];
-	        	$adult_cnt = 1;
-	        }
-
-	        if(@$servicePrfirst['child_cus_weekly_price'] != ''){
-	        	$child_price = @$servicePrfirst['child_cus_weekly_price'];
-	        	$child_cnt = 1;
-	        }
-
-	        if(@$servicePrfirst['infant_cus_weekly_price'] != ''){
-	        	$infant_price = @$servicePrfirst['infant_cus_weekly_price'];
-	        	$infant_cnt = 1;
-	        }
-			$i=1;
-            foreach ($servicePr as  $pr) {
-            	if($i==1){
-            		$priceid =$pr['id'];
-            	}
-				$selectval .='<option value="'.$pr['id'].'">'.$pr['price_title'].'</option>';
-				$i++;
-			}
-		}
-    }
-
-	$mbox =''; 
-    if (!empty(@$servicePr)) {
-    	foreach ($servicePr as  $pr) {
-            $mem_ary [] =  $pr['membership_type'];
-        }
-        $mem_ary = array_unique($mem_ary);
-        foreach ($mem_ary as  $pr) {
-            $mbox .='<option value="'.$pr.'">'.$pr.'</option>';
-        }
-    }
-
-
-    $activities_search = BusinessServices::where('cid', $service['cid'])->where('is_active', '1')->where('id', '!=' , $serviceid)->orderBy('id', 'DESC')->get();
-
+	use App\{BusinessServiceReview,BusinessActivityScheduler};
+	$pro_pic1 = '';
     $pro_pic = $service->profile_pic;
 	if(!empty($pro_pic)){
-		if(str_contains($pro_pic, ',')){
-			$pro_pic1 = explode(',', $pro_pic);
-		}else{
-			$pro_pic1 = $pro_pic;
-		}
+		$pro_pic1 = (str_contains($pro_pic, ',')) ? explode(',', $pro_pic) : [$pro_pic];
 	}
-?>
 
+?>
+<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/w3.css">
 <link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" type="text/css" rel="stylesheet" />
+<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
-<script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
+<!-- <script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script> -->
 <script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
+<script src="{{env('APP_URL')}}/public/js/ratings.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
 
-<div id="mykickboxing" class="mykickboxing-activities kickboxing-moredetails" style="padding-top: 78px">
-<!-- The Modal Add Business-->
-   	<div class="container">
-	   	<div class="row">
-			<div class="col-md-12 col-xs-12">
-				<div class="modal-banner modal-banner-sp galleryfancy">
-					@php $i=0; @endphp
-					@if(is_array(@$pro_pic1))
-	                    @if(!empty(@$pro_pic1))
-	                        @foreach(@$pro_pic1 as $img)
-	                            @if(!empty($img) && File::exists(public_path("/uploads/profile_pic/".$img)))
 
-	                            <div class="bannar-size" @if($i>4) style="display:none" @endif>
-			                    	<a href="{{ url('/public/uploads/profile_pic/'.$img)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
-									<img src="{{ url('/public/uploads/profile_pic/'.$img)}}">
-									@if($i==3) <button class="showall-btn showphotos" ><i class="fas fa-bars"></i>Show all photos</button> @endif
-			                        </a>
-								</div>	                            
-								
-								@endif
-								@php $i++; @endphp
-	                        @endforeach
-	                    @endif
-	                @else
-	                	@if(!empty($pro_pic1) && File::exists(public_path("/uploads/profile_pic/".$pro_pic1)))
-						<div class="bannar-size">
-	                    	<a href="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}" title=""  class="dimgfit firstfancyimg" data-fancybox="gallery">
-							<img src="{{ url('/public/uploads/profile_pic/'.$pro_pic1)}}">
-							<button class="showall-btn showphotos" ><i class="fas fa-bars"></i>Show all photos</button> 
-	                        </a>
+	<div id="mykickboxing" class="mykickboxing-activities kickboxing-moredetails p-activitydetails">
+	   	<div class="container">
+			<div class="row y-middle">
+				<div class="col-lg-10">
+					<div class="mb-25 mb--mv--0">
+						<h3 class="details-titles mb-0">{{@$service->program_name}}</h3>
+						<div class="service-review-desc d-inline-block">
+							<div class="provider_review">
+								<p class="mb-10"> {{$service->reviews()->count()}} Reviews </p> 
+								<div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> {{$service->all_over_review}} </div>
+							</div>
+							<p class="caddress"> <b> Host: </b> <a href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{str_replace(' ','-',$company->dba_business_name).'/'.$company->id}}"> {{ $company->dba_business_name }} </a>{{$company->company_address() }} </p>
 						</div>
-                        @endif
-                    @endif
-              
+					</div>
+				</div>
+				<div class="col-lg-2">
+					<div class="text-right mb--mv--15">
+						<div class="share-wish">
+							<a href="#" class="mr-15"><i class="fas fa-share"></i> Share</a>
+							<a href="#"><i class="far fa-heart"></i> Save</a>
+						</div>
+					</div>
 				</div>
 			</div>
 
-			<div class="col-lg-7 col-xs-12 pr-100">
-				<!--<img src="http://fitnessity.co/public/uploads/profile_pic/thumb/1653996182-aerobics.jpg" class="kickboximg-big">-->
-				<h3 class="details-titles">{{@$service['program_name']}}</h3>
-				<p class="caddress"> <b> Provider: </b> <a href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}"> {{ $companyname }} </a>{{$address }}
-				</p>
-				<div class="service-review-desc">
-					<div class="provider_review">
-					<?php
-						$reviews_count = BusinessServiceReview::where('service_id', $serviceid)->count();
-						$reviews_sum = BusinessServiceReview::where('service_id', $serviceid)->sum('rating');
-						
-						$reviews_avg=0;
-						if($reviews_count>0)
-						{ 
-							$reviews_avg = round($reviews_sum/$reviews_count,2); 
-						}
-					?>
-						<p class="mb-10"> {{$reviews_count}} Reviews </p> 
-						<div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> {{$reviews_avg}} </div>
-					</div>
-				</div>
-				<h3 class="subtitle details-sp"> Description </h3>
-				<p>{{ @$service['program_desc'] }}</p>
-				<h3 class="subtitle details-sp"> Program Details: </h3>
-				<div class="row">
-					<div class="col-md-5 col-sm-5 col-xs-12">
-						<div class="prdetails">
-							<!-- <div>
-								<label>Duration: </label>
-								<span> </span>
-							</div> -->
-							<div>
-								<label>Service Type: </label>
-								<span> {{@$service['select_service_type']}}  </span>
-							</div>
-							<div>
-								<label>Service For: </label>
-								<span> {{@$service['activity_for']}}  </span>
-							</div>
-							<div>
-								<label>Language:</label>
-								<span> {{@$languages}}</span>
-							</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="st-gallery st-border-radius style-masonry">
+	        			<div class="st-list-item-gallery">
+	        				@if($service->cover_photo)
+		                  		<a href="{{Storage::URL($service->cover_photo)}}" data-elementor-open-lightbox="no" class="item-gallery  firstfancyimg "  data-fancybox="gallery">
+									<img src="{{Storage::URL($service->cover_photo)}}" alt="image">
+								</a>
+							@endif
 
-							<div>
-								<label>Instructor:</label>
-								<span>@if(@$staffdata->name != '') {{@$staffdata->name }} @else — @endif </span>
+		                    @foreach(@$pro_pic1 as $img) 
+	                    		@if(!empty($img) && Storage::disk('s3')->exists($img))
+	                    	 		@php $newary [] = $img; @endphp
+	                    	 	@endif
+	                    	@endforeach
+
+		                    @foreach(@$pro_pic1 as $i => $img)
+								<a href="{{Storage::URL($img)}}" data-elementor-open-lightbox="no" class="item-gallery @if(!$service->cover_photo && $i==0) firstfancyimg @endif @if( (!$service->cover_photo && $i > 4) || ($service->cover_photo && $i > 3)) hide @endif"  data-fancybox="gallery">
+									<img src="{{Storage::URL($img)}}" alt="image">
+								</a>
+							 @endforeach
+
+	             		</div>
+	        			<div class="shares dropdown">
+	            			<div class="btn-group">
+	            				@if($service->video)
+	                        		<a href="{{$service->video}}" class="btn btn-transparent has-icon radius st-video-popup" data-fancybox="gallery"><span class="fas fa-play"></span></a>
+	                        	@endif
+	                        	<a class="btn btn-transparent has-icon radius st-gallery-popup showphotos" ><span class="fas fa-th-large"></span>All photos</a>
+	            			</div>
+	        			</div>
+	    			</div>
+				</div>
+			</div>
+		
+			<div class="st-service-feature separator-border-bottom">
+				<div class="row y-middle">
+					<div class="col-lg-2 col-sm-6 col-md-4">
+						<div class="item d-flex align-items-lg-center">
+							<div class="icon">
+								<i class="fas fa-user-clock"></i>              
+							</div>
+							<div class="info">
+								<div class="name">Service Type</div>
+								<p class="value"> {{$service->select_service_type ?? 'N/A'}}</p>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-7 col-sm-7 col-xs-12">
-						<div class="prdetails">
-							<!-- <div>
-								<label>Spots Left:</label>
-								<span> </span>
-							</div> -->
-							<div>
-								<label>Activity: </label>
-								<span>{{@$service['sport_activity']}}</span>
+					<div class="col-lg-2 col-xs-12 col-sm-6 col-md-4">
+						<div class="item d-flex align-items-lg-center">
+							<div class="icon">
+								<i class="fas fa-globe-asia"></i>
 							</div>
-							<div>
-								<label>  Age: </label>
-								<span>  {{@$service['age_range'] }} </span>
+							<div class="info">
+								<div class="name">Language</div>
+								<p class="value"> {{$company->business_service ? $company->business_service->languages : 'English'}}</p>
 							</div>
-							<div>
-								<label> Skill Level: </label>
-								<span>{{@$service['difficult_level']}} </span>
+						</div>
+					</div>
+					<div class="col-lg-2 col-xs-12 col-sm-6 col-md-4">
+						<div class="item d-flex align-items-lg-center">
+							<div class="icon">
+								<i class="fas fa-map-marker-alt"></i>
 							</div>
-							<div>
-								<label>  Activity Location: </label>
-								<span>{{@$service['activity_location'] }}</span>
+							<div class="info">
+								<div class="name">Location</div>
+								<p class="value">{{$service->activity_location ?? 'N/A'}}</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-2 col-xs-12 col-sm-6 col-md-4">
+						<div class="item d-flex align-items-lg-center">
+							<div class="icon">
+								<i class="fas fa-hiking"></i>
+							</div>
+							<div class="info">
+								<div class="name">Activity</div>
+								<p class="value">{{$service->service_type ?? 'N/A'}}</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-2 col-xs-12 col-sm-6 col-md-4">
+						<div class="item d-flex align-items-lg-center">
+							<div class="icon">
+								<i class="fas fa-female"></i>
+							</div>
+							<div class="info">
+								<div class="name">Age</div>
+								<p class="value">{{$service->age_range ?? 'N/A'}} </p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-2 col-xs-12 col-sm-6 col-md-4">
+						<div class="item d-flex align-items-lg-center">
+							<div class="icon">
+								<i class="fas fa-rocket"></i>
+							</div>
+							<div class="info">
+								<div class="name">Skill Level</div>
+								<p class="value">{{$service->difficult_level ?? 'N/A'}} </p>
 							</div>
 						</div>
 					</div>
 				</div>
-				
-				
+			</div>
 
-				<h3 class="subtitle details-sp font-32 mt-20">Things To Know </h3>
-				
-				<h3 class="subsubtitle details-sp">Know Before You Go</h3>
-				@if($houserules != '')
-					<p>{{$houserules}}</p>
-				@else
-					<p>No Details Found</p>
-				@endif
-				
-				<h3 class="subsubtitle details-sp">Cancelation Policy</h3>
-				@if($cancelation != '')
-					<p>{{$cancelation}}</p>
-				@else
-					<p>No Details Found</p>
-				@endif
-				
-				<h3 class="subsubtitle details-sp">Safety and Cleaning Procedures</h3>
-				@if($cleaning != '')
-					<p>{{$cleaning}}</p>
-				@else
-					<p>No Details Found</p>
-				@endif
-				
-				<div class="row">
-					<div class="col-md-9">
-                    <h3 class="subtitle details-sp mt-20">Location</h3>
-						<div class="widget mx-sp">
-							<h4 class="widget-title">Provider: {{$companyname }}</h4>
-							<div class="widget" style="height:300px">
-								<div class="mysrchmap">
-									<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"></div>
+		   	<div class="row">
+
+				<div class="col-lg-8 col-xs-12">
+					<div class="separator-border-bottom">
+						<h3 class="subtitle details-sp pb-0"> Description </h3>
+						<p class="mb-30">{{ @$service['program_desc']  ?? 'N/A'}}</p>
+					</div>
+
+					@if($service->service_type == 'experience' && count($service->days_title_arry) > 0)
+						<div class="separator-border-bottom">
+							<h3 class="subtitle details-sp"> Itinerary </h3>
+							<div class="live-preview mb-25 ">
+								<div class="accordion accordion-border-box" id="itdefault-accordion-example">
+									@foreach($service->days_title_arry as $i=>$title)
+									<div class="accordion-item shadow">
+										<h2 class="accordion-header" id="headingInOne">
+											<button class="accordion-button fs-14 days-details" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInOne{{$i}}" aria-expanded="true" aria-controls="collapseInOne{{$i}}">
+												<span> Day{{$i+1}}  </span>
+												{{$title}}
+											</button>
+										</h2>
+										<div id="collapseInOne{{$i}}" class="accordion-collapse collapse  @if($i==0) show @endif" aria-labelledby="headingInOne{{$i}}" data-bs-parent="#itdefault-accordion-example">
+											<div class="accordion-body">
+												<div class="row">
+													<div class="col-lg-4 col-sm-6 col-xs-12">
+														<div class="itinerary-image">
+															@php
+                                                            	$dayPic = @$service->days_img_arry[$i] != ''  ?  Storage::Url(@$service->days_img_arry[$i]) : url('/public/images/Upload-Icon.png');
+                                                        	@endphp
+															<img class="" src="{{$dayPic}}" alt="image">
+														</div>
+													</div>
+													<div class="col-lg-8 col-sm-6 col-xs-12">
+														 {{$service->days_desc_arry[$i]}}
+														{{-- No charges are put in place by SlickText when subscribers join your text list. This does not mean however that charges 100% will not occur. Charges that may occur fall under part of the compliance statement stating "Message and Data rates may apply." --}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									{{-- <div class="accordion-item shadow">
+										<h2 class="accordion-header" id="headingInTwo">
+											<button class="accordion-button collapsed fs-14 days-details" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInTwo" aria-expanded="false" aria-controls="collapseInTwo">
+												<span> Day 2 </span>
+												Flight Around USA
+											</button>
+										</h2>
+										<div id="collapseInTwo" class="accordion-collapse collapse" aria-labelledby="headingInTwo" data-bs-parent="#itdefault-accordion-example">
+											<div class="accordion-body">
+												<div class="row">
+													<div class="col-lg-4 col-sm-6 col-xs-12">
+														<div class="itinerary-image">
+															<img class="" src="https://fitnessity-production.s3.amazonaws.com/activity/90R9Ri4W577QRFXawD80KDShqZ55bpGI6eXtCfVY.jpg" alt="image">
+														</div>
+													</div>
+													<div class="col-lg-8 col-sm-6 col-xs-12">
+														No charges are put in place by SlickText when subscribers join your text list. This does not mean however that charges 100% will not occur. Charges that may occur fall under part of the compliance statement stating "Message and Data rates may apply."
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="accordion-item shadow">
+										<h2 class="accordion-header" id="headingInThree">
+											<button class="accordion-button collapsed fs-14 days-details" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInThree" aria-expanded="false" aria-controls="collapseInThree">
+												<span> Day 3 </span>
+												Flight Around USA NYCC
+											</button>
+										</h2>
+										<div id="collapseInThree" class="accordion-collapse collapse" aria-labelledby="headingInThree" data-bs-parent="#itdefault-accordion-example">
+											<div class="accordion-body">
+												<div class="row">
+													<div class="col-lg-4 col-sm-6 col-xs-12">
+														<div class="itinerary-image">
+															<img class="" src="https://fitnessity-production.s3.amazonaws.com/activity/90R9Ri4W577QRFXawD80KDShqZ55bpGI6eXtCfVY.jpg" alt="image">
+														</div>
+													</div>
+													<div class="col-lg-8 col-sm-6 col-xs-12">
+														No charges are put in place by SlickText when subscribers join your text list. This does not mean however that charges 100% will not occur. Charges that may occur fall under part of the compliance statement stating "Message and Data rates may apply."
+													</div>
+												</div>
+											</div>
+										</div>
+									</div> --}}
+									@endforeach
 								</div>
-								<div class="maparea">
-									<!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe> -->
-								</div>
+
 							</div>
-							<?php   
-								$locations = []; 
-		                        if($companylat != '' || $companylon  != ''){
-		                          //  $lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-		                    		//$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-									//$lat = 40.777671;
-									//$long = -73.9839877;
-									$lat = $companylat + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-									$long = $companylon + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-		                    		$a = [$companyname, $lat, $long, $companyid, $companylogo];
-		                            array_push($locations, $a);
-								}
+
+							<!-- <div class="panel-group itinerary mb-30" id="dis-accordion" role="tablist" aria-multiselectable="true">
+
+								@foreach($service->days_title_arry as $i=>$title)
+								<div class="panel">
+									<div class="panel-heading" role="tab" id="headingOne{{$i}}">
+										<h4 class="panel-title days-details">
+											<a role="button" data-toggle="collapse" data-parent="#dis-accordion" href="#AcollapseOne{{$i}}" aria-expanded="true" aria-controls="AcollapseOne{{$i}}">
+												<span> Day {{$i+1}} </span>
+												{{$title}}
+											</a>
+										</h4>
+									</div>
+									<div id="AcollapseOne{{$i}}" class="panel-collapse collapse @if($i==0) in @endif" role="tabpanel" aria-labelledby="headingOne{{$i}}">
+										<div class="panel-body">
+											<div class="row">
+												<div class="col-lg-4 col-sm-6 col-xs-12">
+													<div class="itinerary-image">
+														@php
+                                                            $dayPic = @$service->days_img_arry[$i] != ''  ?  Storage::Url(@$service->days_img_arry[$i]) : url('/public/images/Upload-Icon.png');
+                                                        @endphp
+														<img class="" src="{{$dayPic}}" alt="image">
+													</div>
+												</div>
+												<div class="col-lg-8 col-sm-6 col-xs-12">
+													<p>{{$service->days_desc_arry[$i]}}</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 								
-							?>
-							<div class="map-info">
-								<span>
-									<i class="fas fa-map-marker-alt map-fa"></i>
-									<p>{{$comp_address}}</p>
-								</span>
-								<span>
-									<i class="fas fa-phone-alt map-fa"></i>
-									<p>{{$Phonenumber}}</p>
-								</span>
-								<span>
-									<i class="fa fa-envelope map-fa"></i>
-									<p>{{$email}}</p>
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				@if(@$staffdata != '') 
-				<?php 
-					if (@$staffdata->image != "") {
-				    	if (File::exists(public_path("/uploads/instructureimg/" . @$staffdata->image))){
-				    		$profilePicact = url('/public/uploads/instructureimg/' . @$staffdata->image);
-				    	}else{
-				    		$profilePicact = url('/public/images/service-nofound.jpg');
-				    	}
-				    }else{ $profilePicact = url('/public/images/service-nofound.jpg'); }
-	    		?>
-				<div class="col-md-12 col-sm-12 col-xs-12 instructor-details">
-					<div class="row">
-						<div class="col-md-3 col-sm-3 col-xs-12">
-							<div class="instructor-img">
-								<img src="{{$profilePicact}}">
-							</div>
-						</div>
-						<div class="col-md-9 col-sm-9 col-xs-12">
-							<div class="instructor-inner-details">
-								<label>Instructor:</label>
-								<span>{{@$staffdata->name}}</span>
-							</div>
-							<div>
-								<p>{{@$staffdata->description}}</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				@endif 
-				
-				<div class="row" id="user_ratings_div{{$serviceid}}">
-					<div class="col-md-12 col-xs-12">
-						<h3 class="subtitle mt-50">Submit A Review </h3>
-					</div>
-					<div class="col-md-8 col-sm-8 col-xs-12"> 
-						<h3 class="subtitle1"> 
-							<div class="row">
-								<div class="col-md-3 col-sm-2"> Reviews: </div>
-								<div class="col-md-9 col-sm-10">
-									<p> <a class="activered f-16 font-bold"> By Everyone </a>
-										<a class="f-16 font-bold pepole-color"> | By People I know </a>
-									</p>
+								@endforeach
+							</div> -->
+							<!-- end of #accordion -->
+		  				</div>
+		  			@endif
+
+					<div class="separator-border-bottom">
+						<h3 class="subtitle details-sp"> Things To Know </h3>
+						<div class="live-preview mb-25">
+							<div class="accordion accordion-border-box" id="default-accordion-example">
+								<div class="accordion-item shadow">
+									<h2 class="accordion-header" id="headingOne">
+										<button class="accordion-button fs-14" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+											Know Before You Go
+										</button>
+									</h2>
+									<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#default-accordion-example">
+										<div class="accordion-body">
+											{{-- Although you probably won’t get into any legal trouble if you do it just once, why risk it? If you made your subscribers a promise, you should honor that. If not, you run the risk of a drastic increase in opt outs, which will only hurt you in the long run. --}}
+											<p class="break-word">{!! @$service->know_before_you_go !!} </p>
+										</div>
+									</div>
+								</div>
+								<div class="accordion-item shadow">
+									<h2 class="accordion-header" id="headingTwo">
+										<button class="accordion-button collapsed fs-14" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+											What to Bring
+										</button>
+									</h2>
+									<div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#default-accordion-example">
+										<div class="accordion-body">
+											{{-- No charges are put in place by SlickText when subscribers join your text list. This does not mean however that charges 100% will not occur. Charges that may occur fall under part of the compliance statement stating "Message and Data rates may apply." --}}
+											{{@$service->bring_wear  ?? 'N/A'}}
+										</div>
+									</div>
+								</div>
+								<div class="accordion-item shadow">
+									<h2 class="accordion-header" id="headingThree">
+										<button class="accordion-button collapsed fs-14" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+											Accessibility
+										</button>
+									</h2>
+									<div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#default-accordion-example">
+										<div class="accordion-body">
+											{{-- Now that you have a general idea of the amount of texts you will need per month, simply find a plan size that allows you to have this allotment, plus some extra for growth. Don't worry, there are no mistakes to be made here. You can always upgrade and downgrade. --}}
+											{{@$service->accessibility  ?? 'N/A'}}
+										</div>
+									</div>
+								</div>
+								<div class="accordion-item shadow">
+									<h2 class="accordion-header" id="headingFour">
+										<button class="accordion-button collapsed fs-14" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+											Transportation Details
+										</button>
+									</h2>
+									<div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#default-accordion-example">
+										<div class="accordion-body">
+											{{-- Now that you have a general idea of the amount of texts you will need per month, simply find a plan size that allows you to have this allotment, plus some extra for growth. Don't worry, there are no mistakes to be made here. You can always upgrade and downgrade. --}}
+											{{@$service->desc_location  ?? 'N/A'}}
+										</div>
+									</div>
+								</div>
+								<div class="accordion-item shadow">
+									<h2 class="accordion-header" id="headingFive">
+										<button class="accordion-button collapsed fs-14" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+											Cancellation Policy
+										</button>
+									</h2>
+									<div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#default-accordion-example">
+										<div class="accordion-body">
+											{{-- Now that you have a general idea of the amount of texts you will need per month, simply find a plan size that allows you to have this allotment, plus some extra for growth. Don't worry, there are no mistakes to be made here. You can always upgrade and downgrade. --}}
+											{{@$service->cancellation_policy ?? 'N/A'}}
+										</div>
+									</div>
+								</div>
+								<div class="accordion-item shadow">
+									<h2 class="accordion-header" id="headingSix">
+										<button class="accordion-button collapsed fs-14" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+											Safety & Cleaning
+										</button>
+									</h2>
+									<div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#default-accordion-example">
+										<div class="accordion-body">
+											{{-- Now that you have a general idea of the amount of texts you will need per month, simply find a plan size that allows you to have this allotment, plus some extra for growth. Don't worry, there are no mistakes to be made here. You can always upgrade and downgrade. --}}
+											@if($service->id_proof == 1)
+												Require the booker to have ID upon arrival for verificaiton of age and identity <br>
+											@endif
+
+											@if($service->id_vaccine == 1)
+												Require the booker to have proof of Vacination. <br>
+											@endif
+
+											@if($service->id_covid == 1)
+												Require the booker to have proof of a negative Covid-19 test. <br>
+											@endif
+										</div>
+									</div>
 								</div>
 							</div>
-						</h3>
-						<div class="service-review-desc">
-							<div class="row">
-								<div class="col-md-12">
-								<?php
-									$business_reviews_count = BusinessReview::where('page_id', $companyid)->count();
-									$business_reviews_sum = BusinessReview::where('page_id', $companyid)->sum('rating');
+						</div>
+						<!-- <div class="panel-group thingstoknow mb-30" id="things-accordion" role="tablist" aria-multiselectable="true">
+							<div class="panel">
+								<div class="panel-heading" role="tab" id="headingOne">
+									<h4 class="panel-title days-details">
+										<a role="button" data-toggle="collapse" data-parent="#things-accordion" href="#TcollapseOne" aria-expanded="true" aria-controls="TcollapseOne">
+											Know Before You Go
+										</a>
+									</h4>
+								</div>
+								<div id="TcollapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+									<div class="panel-body">
+										<p style="word-wrap: break-word">{!! @$service->know_before_you_go !!} </p>
+									</div>
+								</div>
+							</div>
 
-									$business_reviews_avg=0;
-									$business_reviews_per=0;
-									if($business_reviews_count>0)
-									{ $business_reviews_avg = round($business_reviews_sum/$business_reviews_count,2); 
-										$business_sum_of_rating = $business_reviews_count*5;
-										$business_totalRating = $business_reviews_avg * $business_reviews_count;
-										$business_reviews_per = ($business_totalRating/$business_sum_of_rating)*100;
-									}
+							<div class="panel">
+								<div class="panel-heading" role="tab" id="headingTwo">
+									<h4 class="panel-title days-details">
+										<a class="collapsed" role="button" data-toggle="collapse" data-parent="#things-accordion" href="#TcollapseTwo" aria-expanded="false" aria-controls="TcollapseTwo">
+											What to Bring
+										</a>
+									</h4>
+								</div>
+								<div id="TcollapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+									<div class="panel-body">
+										<p>{{@$service->bring_wear  ?? 'N/A'}}</p>
+									</div>
+								</div>
+							</div>
 
-									$reviews_count = BusinessServiceReview::where('service_id', $serviceid)->count();
-									$reviews_sum = BusinessServiceReview::where('service_id', $serviceid)->sum('rating');
+							<div class="panel">
+								<div class="panel-heading" role="tab" id="headingThree">
+									<h4 class="panel-title days-details">
+										<a class="collapsed" role="button" data-toggle="collapse" data-parent="#things-accordion" href="#TcollapseThree" aria-expanded="false" aria-controls="TcollapseThree">
+											Accessibility
+										</a>
+									</h4>
+								</div>
+								<div id="TcollapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+									<div class="panel-body">
+										<p>{{@$service->accessibility  ?? 'N/A'}} </p>
+									</div>
+								</div>
+							</div>
+							
+							<div class="panel">
+								<div class="panel-heading" role="tab" id="headingFour">
+									<h4 class="panel-title days-details">
+										<a class="collapsed" role="button" data-toggle="collapse" data-parent="#things-accordion" href="#TcollapseFour" aria-expanded="false" aria-controls="TcollapseFour">
+											Transportation Details
+										</a>
+									</h4>
+								</div>
+								<div id="TcollapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+									<div class="panel-body">
+										<p>{{@$service->desc_location  ?? 'N/A'}}</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="panel">
+								<div class="panel-heading" role="tab" id="headingSix">
+									<h4 class="panel-title days-details">
+										<a class="collapsed" role="button" data-toggle="collapse" data-parent="#things-accordion" href="#TcollapseSix" aria-expanded="false" aria-controls="TcollapseSix">
+											Cancellation Policy
+										</a>
+									</h4>
+								</div>
+								<div id="TcollapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+									<div class="panel-body">
+										{{@$service->cancellation_policy ?? 'N/A'}}
+									</div>
+								</div>
+							</div>
+
+							<div class="panel">
+								<div class="panel-heading" role="tab" id="headingSeven">
+									<h4 class="panel-title days-details">
+										<a class="collapsed" role="button" data-toggle="collapse" data-parent="#things-accordion" href="#TcollapseSeven" aria-expanded="false" aria-controls="TcollapseSeven">
+											Safety & Cleaning
+										</a>
+									</h4>
+								</div>
+								<div id="TcollapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+									<div class="panel-body">
+										<p>
+											@if($service->id_proof == 1)
+												Require the booker to have ID upon arrival for verificaiton of age and identity <br>
+											@endif
+
+											@if($service->id_vaccine == 1)
+												Require the booker to have proof of Vacination. <br>
+											@endif
+
+											@if($service->id_covid == 1)
+												Require the booker to have proof of a negative Covid-19 test. <br>
+											@endif
+										</p>
+									</div>
+								</div>
+							</div>
+
+						</div> -->
+						<!-- end of #accordion -->
+	  				</div>
+
+	  				@if($service->service_type == 'experience' && $service->exp_highlight)
+						<div class="separator-border-bottom">
+							<h3 class="subtitle details-sp pb-0"> Highlights </h3>
+							<div class="row ">
+								<div class="col-lg-12">
+									<div class="adventuresandtoures mb-30">
+										<!-- <ul>
+											<li><i class="fas fa-check-circle text-light-green"></i> {!!$service->exp_highlight !!}</li>
+										</ul> -->
+
+										{!!$service->exp_highlight !!}
+									</div>
+								</div>
+							</div>
+						</div>
+					@endif
+
+					@if($service->service_type == 'experience')
+						<div class="separator-border-bottom">
+							<h3 class="subtitle details-sp pb-0"> Included/Not Included </h3>
+							<div class="row ">
+								<div class="col-lg-6 col-sm-6  col-xs-12">
+									<div class="adventuresandtoures mb-30">
+										<ul>
+											@foreach($service->included_items_ary as $items)
+												<li><i class="fas fa-check-circle text-light-green"></i> {{$items}} </li>
+											@endforeach
+										</ul>
+									</div>
+								</div>
+								<div class="col-lg-6 col-sm-6  col-xs-12">
+									<div class="adventuresandtoures mb-30">
+										<ul>
+											@foreach($service->not_included_items_ary as $items)
+												<li><i class="fas fa-check-circle text-light-red"></i> {{$items}} </li>
+											@endforeach
+										</ul>
+									</div>
 									
-									$reviews_avg=0;
-									$reviews_per=0;
-									if($reviews_count>0)
-									{ $reviews_avg = round($reviews_sum/$reviews_count,2); 
-										$sum_of_rating = $reviews_count*5;
-										$totalRating = $reviews_avg * $reviews_count;
-										$reviews_per = ($totalRating/$sum_of_rating)*100;
-									}
-								?>
-									<p class="mb-10"> {{$reviews_count}} Reviews </p> 
-									<div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> {{$reviews_avg}} </div>
 								</div>
 							</div>
 						</div>
-						<div class="progress-bar-main">
-							<div class="pro-inner">
-								<div class="review-name">
-									<label>Review for Activity</label>
-									<label>Review for Business </label>
-								</div>
-								<div class="progress-bar-widget">
-									<div class="progress pr-bt"> 
-										<div class="progress-bar" role="progressbar" aria-valuenow="{{$reviews_avg}}"
-										aria-valuemin="0" aria-valuemax="100" style="width:{{$reviews_per}}%">
-											<span class="sr-only">{{$reviews_per}}% Complete</span>
+					@endif
+
+					{{-- @if($service->businessServicesFaq()->count() > 0) --}}
+						{{-- <div class="separator-border-bottom">
+							<h3 class="subtitle details-sp"> Frequently asked questions </h3>
+							<div class="live-preview mb-25">
+								<div class="accordion accordion-border-box" id="Frdefault-accordion-example">
+									@foreach($service->businessServicesFaq as $i=>$faq)
+									<div class="accordion-item shadow">
+										<h2 class="accordion-header" id="headingFrOne">
+											<button class="accordion-button fs-14 days-details" type="button" data-bs-toggle="collapse{{$i}}" data-bs-target="#collapseFrOne{{$i}}" aria-expanded="true" aria-controls="collapseFrOne{{$i}}">
+												{{$faq->faq_title}}            
+											</button>
+										</h2>
+										<div id="collapseFrOne{{$i}}" class="accordion-collapse collapse show" aria-labelledby="headingFrOne{{$i}}" data-bs-parent="#Frdefault-accordion-example">
+											<div class="accordion-body">
+												{{$faq->faq_answer}} 
+											</div>
 										</div>
 									</div>
-									<div class="progress">
-										<div class="progress-bar" role="progressbar" aria-valuenow="{{$business_reviews_avg}}"
-										aria-valuemin="0" aria-valuemax="100" style="width:{{$business_reviews_per}}%">
-											<span class="sr-only">{{$business_reviews_per}}% Complete</span>
+									@endforeach --}}
+
+									{{-- <div class="accordion-item shadow">
+										<h2 class="accordion-header" id="headingFrTwo">
+											<button class="accordion-button fs-14 days-details collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFrTwo" aria-expanded="false" aria-controls="collapseFrTwo">
+												<span> Day 3 </span>
+												Why do we use it ?
+											</button>
+										</h2>
+										<div id="collapseFrTwo" class="accordion-collapse collapse" aria-labelledby="headingFrTwo" data-bs-parent="#Frdefault-accordion-example">
+											<div class="accordion-body">
+												No charges are put in place by SlickText when subscribers join your text list. This does not mean however that charges 100% will not occur. Charges that may occur fall under part of the compliance statement stating "Message and Data rates may apply."
+											</div>
+										</div>
+									</div> --}}
+								{{-- </div>
+							</div> --}}
+							<!-- <div class="panel-group fre-questions mb-30" id="Fre-accordion" role="tablist" aria-multiselectable="true">
+								{{-- @foreach($service->businessServicesFaq as $i=>$faq) --}}
+									<div class="panel">
+										{{-- <div class="panel-heading" role="tab" id="headingfaq{{$i}}"> --}}
+											<h4 class="panel-title days-details">
+												{{-- <a role="button" data-toggle="collapse" data-parent="#fre-accordion" href="#Fcollapsefaq{{$i}}" aria-expanded="true" aria-controls="Fcollapsefaq{{$i}}"> --}}
+													<span><i class="fas fa-question-circle"></i></span>
+													{{-- {{$faq->faq_title}}                       --}}
+												</a>
+											</h4>
+										</div>
+										{{-- <div id="Fcollapsefaq{{$i}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingfaq{{$i}}"> --}}
+											{{-- <div class="panel-body">{{$faq->faq_answer}}  --}}
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="process-number">
-									<label>{{$reviews_avg}}</label>
-									<label>{{$business_reviews_avg}}</label>
-								</div>
+								{{-- @endforeach --}}
+							</div> -->
+		  				{{-- </div> --}}
+		  			{{-- @endif --}}
+
+
+					  @if($service->businessServicesFaq()->count() > 0)
+					  <div class="separator-border-bottom">
+						  <h3 class="subtitle details-sp"> Frequently asked questions </h3>
+						  <div class="live-preview mb-25">
+							  <div class="accordion accordion-border-box" id="Frdefault-accordion-example">
+								  @foreach($service->businessServicesFaq as $i => $faq)
+									  <div class="accordion-item shadow">
+										  <h2 class="accordion-header" id="headingFrOne{{$i}}">
+											  <button class="accordion-button fs-14 days-details {{ $i === 0 ? '' : 'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFrOne{{$i}}" aria-expanded="{{ $i === 0 ? 'true' : 'false' }}" aria-controls="collapseFrOne{{$i}}">
+												  {{$faq->faq_title}}            
+											  </button>
+										  </h2>
+										  <div id="collapseFrOne{{$i}}" class="accordion-collapse collapse {{ $i === 0 ? 'show' : '' }}" aria-labelledby="headingFrOne{{$i}}" data-bs-parent="#Frdefault-accordion-example">
+											  <div class="accordion-body">
+												  {{$faq->faq_answer}} 
+											  </div>
+										  </div>
+									  </div>
+								  @endforeach
+							  </div>
+						  </div>
+					  </div>
+				  @endif
+				  
+				</div>	
+					
+		        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+	            	<h3 class="subtitle details-sp mb-20 mtxt-cnter text-center" id="check_availability"> Check Availability </h3>
+	            	<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="book-instantly mb-20 text-center">
+								<a class="font-red"> Book Instantly  </a>
+								<span class="book-tool-tip" data-toggle="tooltip" data-placement="top" title="This provider allows you to make booking with them Immediately.">
+									<i class="fas fa-info"></i>
+								</span>
 							</div>
 						</div>
 					</div>
 					
-					<div class="col-md-4 col-sm-4"> 
-						<a class="btn submit-rev mt-10 rev-new" data-toggle="modal" data-target="#busireview"> Submit Review </a>
-						<div class="rev-follow">
-							<a href="#" class="rev-follow-txt">{{$reviews_count}} Followers Reviewed This</a>
-							<div class="users-thumb-list">
-								<?php 
-									$reviews_people = BusinessServiceReview::where('service_id', $serviceid)->orderBy('id','desc')->limit(6)->get(); 
-								?>
-	                            @if(!empty($reviews_people))
-	                                @foreach($reviews_people as $people)
-	                                	<?php $userinfo = User::find($people->user_id); ?>
-	                                    <a href="<?php echo config('app.url'); ?>/userprofile/{{@$userinfo->username}}" target="_blank" title="{{$userinfo->firstname}} {{$userinfo->lastname}}" data-toggle="tooltip">
-	                                        @if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
-	                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
-	                                        @else
-	                                            <?php
-	                                            $pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
-	                                            echo '<div class="admin-img-text"><p>'.$pf.'</p></div>'; ?>
-	                                        @endif
-	                                    </a>
-	                                @endforeach
-	                            @endif
-							</div>
-						</div>
-					</div>
-					<div class="col-md-12 col-sm-12 col-xs-12">	
-						<div class="ser-review-list">
-							<div>
-								<?php
-	    							$reviews = BusinessServiceReview::where('service_id', $serviceid)->get();
-	    						?>
-	                        	@if(!empty($reviews))
-	                                @foreach($reviews as $review)
-	                                <?php $userinfo = User::find($review->user_id); ?>
-								<div class="ser-rev-user">
-										<div class="col-md-2 col-sm-2 col-xs-3 pl-0 pr-0">
-											@if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
-	                                            <img class="rev-img" src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
-	                                        @else
-	                                            <?php
-	                                            $pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
-	                                            echo '<div class="reviewlist-img-text"><p>'.$pf.'</p></div>'; ?>
-	                                        @endif
-										</div>
-										<div class="col-md-10 col-sm-10 col-xs-9 pl-0">
-											<h4> {{$userinfo->firstname}} {{$userinfo->lastname}}
-											<div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> {{$review->rating}}  </div> </h4> 
-											<p class="rev-time"> {{date('d M-Y',strtotime($review->created_at))}} </p>
-										</div>
+	            	<div class="mainboxborder mb-25">	
+						<div class="container">
+							<div class="row">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="">
+										<h3 class="date-title mt-10 mb-20"></h3>
+										<label class="mb-10 fw-600">Step: 1 </label> <span class="">Select Date</span>
+										<div class="">
+											<div class="activityselect3 special-date mb-20">
+												<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" autocomplete="off"  onchange="updatedetail('{{$company->id}}','{{$sid}}','date','');" >
+												<i class="fa fa-calendar"></i>
+											</div>
+										</div> 
+									</div>
+									<div class="border-bottom-grey mb-15"></div>
 								</div>
-								<div class="rev-dt">
+								
+								@php 
+									$date = date('l').', '.date('F d,  Y'); 
+									$totalquantity = 0;
+								@endphp 
+								<div id="updatefilterforcart">
+								</div>
+							</div> 
+						</div>
+						
+						<div class="row">
+							<div class="col-md-12">
+								<div class="font-red text-center mb-10" id="spoterror">
+								</div>
+							</div>
+						</div> 
+						
+					</div>
+
+					<div class="mainboxborder mb-25">
+						<div class="container">
+							<div class="row y-middle">
+								<div class="col-lg-12">
+									<div class="host-details">
+										<h3 class="mb-20">Meet The Owner</h3>
+									</div>
+								</div>
+								<div class="col-lg-4 col-xs-5">
+									<div class="text-center host-photo">
+										@if(Storage::disk('s3')->exists($company->owner_pic) && !empty($company->owner_pic) )
+											<img alt="avatar" width="90" height="90" src="{{Storage::URL($company->owner_pic)}}" class="mb-15">        
+										@else 
+											<div class="company-list-text mb-10">
+												<p class="character">{{substr($company->first_letter, 0, 1)}}</p>
+											</div>
+										@endif
+										<p class="fs-18">{{$company->full_name}}</p>   
+										<p>Host</p>
+									</div>
+								</div>
+								<div class="col-lg-8 col-xs-7">
 									<div class="row">
-										<div class="col-md-12 col-sm-12 col-xs-12">
-											<div class="mx-sp">
-												<p class="mb-15"> {{$review->title}} </p>
-												<p> {{$review->review}} </p>
+										<div class="col-lg-6 col-sm-6 col-xs-12">
+											<div class="host-re-details r-host-re-detail">
+												<label>{{$company->businessReview()->count()}}</label>
+												<p>Review</p>
+											</div>
+											<div class="host-re-details r-host-re-detail">
+												<label>{{$company->business_review_avg}} <i class="fa fa-star text-black" aria-hidden="true"></i></label>
+												<p>Ratings</p>
+											</div>
+											<div class="host-re-details r-host-re-detail">
+												<label>{{$company->UserBookingDetails()->count()}}</label>
+												<p>Bookings</p>
+											</div>
+										</div>
+										<div class="col-lg-6 col-sm-6 col-xs-12">
+											<div class="host-re-details r-host-re-detail activity-top-border">
+												<label>{{$company->years_of_hosting}}</label>
+												<p>Years Hosting</p>
+											</div>
+											<div class="host-re-details r-host-re-detail">
+												<label>{{$company->years_of_exp}} years</label>
+												<p>Experience</p>
+											</div>
+											<div class="host-re-details r-host-re-detail">
+												<label>{{$company->business_service ? $company->business_service->languages : 'English'}}</label>
+												<p>Languages</p>
 											</div>
 										</div>
 									</div>
-									<?php
-										if( !empty($review->images) ){
-											$rimg=explode('|',$review->images);
-											echo '<div class="listrimage">';
-											foreach($rimg as $img)
-											{ ?>
-	                                        	<a href="{{ url('/public/uploads/review/'.$img) }}" data-fancybox="group" data-caption="{{$review->title}}">
-												<img src="{{ url('/public/uploads/review/'.$img) }}" alt="Fitnessity" />
-	                                            </a>
-	                                            <?php
-											}
-											echo '</div>';
-										}
-									?>                                    
 								</div>
-								<!-- <div class="rev-admin">
-									<h4> Author </h4>
-									<p> Thank you, Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
-								</div> -->
-								@endforeach
-	        					@endif
+								
+								<div class="col-lg-12">
+									<div class="separator-border-bottom  mt-15 mb-15"></div>
+
+									@if($company->born)
+										<div class="country-born mb-15">
+											<i class="fas fa-birthday-cake mr-15 d-inline"></i>
+											<p class="d-inline">Country Born: {{$company->owner_country}}</p>
+										</div>
+									@endif
+
+									@if($company->about_host)
+										<div class="separator-border-bottom"></div>
+										<div class="mt-10">
+											<p><i class="fas fa-exclamation-circle"></i> {!! $company->about_host !!}</p>
+										</div>
+									@endif
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>	
-			</div>	
-				
-	        <div class="col-lg-5 col-sm-12 col-xs-12">
-            	<h3 class="subtitle details-sp mb-30"> Check Availability </h3>
-            	<div class="mainboxborder black-border">	
+
+					<div class="mainboxborder">
+						<div class="container">
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="host-details">
+										<h3 class="mb-20">Host Contact Details</h3>
+									</div>
+									<div class="host-contact">
+										<label>Address</label>
+										<p>{{$company->company_address()}}</p>
+
+										<label>Phone</label>
+										<p>{{$company->business_phone}}</p>
+
+										<label>Email</label>
+										<p>{{$company->business_email}}</p>
+
+										<label>Website</label>
+										<p>{{$company->business_website}}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+		        </div>	
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="separator-border-bottom">
+						<h3 class="subtitle details-sp font-32 pb-0"><i class="fa fa-star text-black" aria-hidden="true"></i> {{$service->all_over_review}} · {{$service->reviews->count()}} reviews</h3>
+						
+						<div class="row mb-30">
+							<div class="col-lg-4">
+								<div class="overall-rating  mb-15">
+									<label>Overall rating </label>
+									<div class="row y-middle">
+										<div class="col-lg-2">
+											<div class="rating-total-star">
+												<span class="mb-0">5</span>
+											</div>
+										</div>
+										<div class="col-lg-10">
+											<div class="progress">
+												<div class="progress-bar" role="progressbar" style="width: {{countStarRatings($sid)['star_5']}}%" aria-valuenow="{{countStarRatings($sid)['star_5']}}" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+										</div>
+									</div>
+									<div class="row y-middle">
+										<div class="col-lg-2">
+											<div class="rating-total-star">
+												<span class="mb-0">4</span>
+											</div>
+										</div>
+										<div class="col-lg-10">
+											<div class="progress">
+												<div class="progress-bar" role="progressbar" style="width: {{countStarRatings($sid)['star_4']}}%" aria-valuenow="{{countStarRatings($sid)['star_4']}}" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+										</div>
+									</div>
+									<div class="row y-middle">
+										<div class="col-lg-2">
+											<div class="rating-total-star">
+												<span class="mb-0">3</span>
+											</div>
+										</div>
+										<div class="col-lg-10">
+											<div class="progress">
+												<div class="progress-bar" role="progressbar" style="width: {{countStarRatings($sid)['star_3']}}%" aria-valuenow="{{countStarRatings($sid)['star_3']}}" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+										</div>
+									</div>
+									<div class="row y-middle">
+										<div class="col-lg-2">
+											<div class="rating-total-star">
+												<span class="mb-0">2</span>
+											</div>
+										</div>
+										<div class="col-lg-10">
+											<div class="progress">
+												<div class="progress-bar" role="progressbar" style="width: {{countStarRatings($sid)['star_2']}}%" aria-valuenow="{{countStarRatings($sid)['star_2']}}" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+										</div>
+									</div>
+									<div class="row y-middle">
+										<div class="col-lg-2">
+											<div class="rating-total-star">
+												<span class="mb-0">1</span>
+											</div>
+										</div>
+										<div class="col-lg-10">
+											<div class="progress">
+												<div class="progress-bar" role="progressbar"  style="width: {{countStarRatings($sid)['star_1']}}%" aria-valuenow="{{countStarRatings($sid)['star_1']}}" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-2 col-md-6 col-sm-6 col-6 right-border mb-15">
+								<div class="mb-15">
+									<label>Cleanliness</label>
+									<div class="short-review">
+										<h3>{{getBusinessServiceCount($sid,'cleanliness')}}</h3>	
+										<i class="fas fa-pump-soap"></i>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-2 col-md-6 col-sm-3 col-sm-6 col-6 right-border mb-15">
+								<div class="mb-15">
+									<label>Check-in</label>
+									<div class="short-review">
+										<h3>{{getBusinessServiceCount($sid,'checkin')}}</h3>	
+										<i class="fas fa-key"></i>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-2 col-md-6 col-sm-3 col-sm-6 col-6 right-border mb-15">
+								<div class="mb-15">
+									<label>Communication</label>
+									<div class="short-review">
+										<h3>{{getBusinessServiceCount($sid,'communication')}}</h3>	
+										<i class="fas fa-comment-alt"></i>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-2 col-md-6 col-sm-3 col-sm-6 col-6 right-border mb-15">
+								<div class="mb-15">
+									<label>Customer Service </label>
+									<div class="short-review">
+										<h3>{{getBusinessServiceCount($sid,'customer_service')}}</h3>	
+										<i class="fas fa-users-cog"></i>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-2 col-md-6 col-sm-3 col-sm-6 col-6 right-border mb-15">
+								<div class="mb-15">
+									<label>Location</label>
+									<div class="short-review">
+										<h3>{{getBusinessServiceCount($sid,'location')}}</h3>	
+										<i class="fas fa-map-marker-alt"></i>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-2 col-md-6 col-6 col-sm-6 col-sm-3">
+								<div class="mb-15">
+									<label>Value</label>
+									<div class="short-review">
+										<h3>{{getBusinessServiceCount($sid,'value')}}</h3>	
+										<i class="fas fa-hands"></i>
+									</div>
+								</div>
+							</div>
+							<!-- <div class="col-lg-2 col-xs-6 col-sm-3">
+								<div class="mb-15">
+									<label>Accuracy</label>
+									<div class="short-review">
+										<h3>{{getBusinessServiceCount($sid,'accuracy')}}</h3>	
+										<i class="fas fa-check-circle"></i>
+									</div>
+								</div>
+							</div> -->
+						</div>
+					</div>
+					<div class="separator-border-bottom">
+						<div class="mtb-30">
+							<div class="row">
+								{{-- @foreach($service->reviews()->latest()->limit(2)->get() as $review)
+								<div class="col-lg-6">
+									<div class="row y-middle mb-25">
+										<div class="col-lg-2 col-md-2 col-sm-2 col-3">
+											<div class="company-list-text mb-10">
+												<p class="character">{{$review->User->first_letter}}</p>
+											</div>
+										</div>
+										<div class="col-lg-10">
+											<div class="review-sendername">
+												<label>{{$review->User->full_name}}</label>
+												<p>{{$review->User->country}} </p>
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div class="mt-15 inner-review-star">
+												<div class="display-inline-b">
+													@if($review->all_over_review > 0)
+														@for($i = 1; $i < $review->all_over_review;$i++)
+															<i class="fa fa-star text-black" aria-hidden="true"></i>
+														@endfor
+													@endif
+												</div>												
+												<div class="display-inline-b"><i class="fas fa-circle dot-fs"></i></div>
+												<div class="display-inline-b">
+													<label>{{$review->date}}</label>
+												</div>
+											</div>
+											<div>
+												<p>{{$review->title}}</p>
+											</div>
+											<div class="mt-15 mb-15">
+												<a data-toggle="modal" data-bs-toggle="modal" data-bs-target="#exampleModal">Show More</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								@endforeach --}}
+								@foreach($service->reviews()->latest()->limit(2)->get() as $review)
+								<div class="col-lg-6">
+									<div class="row y-middle mb-25">
+										<div class="col-lg-2 col-md-2 col-sm-2 col-3">
+											<div class="company-list-text mb-10">
+												@if(is_object($review->User) && property_exists($review->User, 'first_letter'))
+													<p class="character">{{$review->User->first_letter}}</p>
+												@else
+													<p class="character">N/A</p>
+												@endif
+											</div>
+										</div>
+										<div class="col-lg-10">
+											<div class="review-sendername">
+												@if(is_object($review->User))
+													<label>{{$review->User->full_name}}</label>
+													<p>{{$review->User->country}} </p>
+												@else
+													<label>Anonymous</label>
+													<p>N/A</p>
+												@endif
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div class="mt-15 inner-review-star">
+												<div class="display-inline-b">
+													@if($review->all_over_review > 0)
+														@for($i = 1; $i <= $review->all_over_review; $i++)
+															<i class="fa fa-star text-black" aria-hidden="true"></i>
+														@endfor
+													@endif
+												</div>
+												<div class="display-inline-b"><i class="fas fa-circle dot-fs"></i></div>
+												<div class="display-inline-b">
+													<label>{{$review->date}}</label>
+												</div>
+											</div>
+											<div>
+												<p>{{$review->title}}</p>
+											</div>
+											<div class="mt-15 mb-15">
+												<a data-toggle="modal" data-bs-toggle="modal" data-bs-target="#exampleModal">Show More</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							@endforeach
+							
+							</div>
+
+							@if($service->reviews()->count() > 0)
+								<div class="btn btn-red mb-15">
+									<a data-toggle="modal" data-bs-toggle="modal" data-bs-target="#exampleModal">Show all {{$service->reviews()->count()}} reviews</a>
+								</div>
+							@endif
+
+							<button class="btn btn-red mb-15 displayReview">Submit Review</button>
+							<div class="review_section">
+								<form id="submit_review" enctype="multipart/form-data">
+									@csrf
+									<input type="hidden" name="sid" value="{{ $sid}}">
+									<div class="row">
+										<div class="col-lg-12">
+											<div class="mb-15">
+												<input class="form-control" type="text" placeholder="Name *" name="name" id="name">
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div class="mb-15">
+												<input class="form-control" type="text" placeholder="Title" name="title" id="title">
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div class="mb-15">
+												<input type="file" id="avatar" class="form-control" name="images[]" accept="image/png, image/jpeg" multiple/>
+											</div>
+										</div>
+										<div class="col-lg-5 col-sm-6 col-xs-12 ">
+											<div class="mb-15 star-rating-review">
+												<div class="row">
+													<div class="col-lg-6 col-sm-6 col-xs-6">
+														<label>Cleanliness</label>
+													</div>
+													<div class="col-lg-6 col-sm-6 col-xs-6">
+														<div class="text-right">
+ 															<input type="hidden" name="cleanliness" id="cleanliness" value="0">
+															<div id="cleanliness-stars" class="starrr stars" style="font-size:22px"></div>
+														</div>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-lg-6 col-sm-6 col-xs-6">
+														<label>Accuracy</label>
+													</div>
+													<div class="col-lg-6 col-sm-6 col-xs-6">
+														<div class="text-right">
+															<input type="hidden" name="accuracy" id="accuracy" value="0">
+															<div id="accuracy-stars" class="starrr" style="font-size:22px"></div>
+														</div>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-lg-6 col-sm-6 col-xs-6">
+														<label>Check-In</label>
+													</div>
+													<div class="col-lg-6 col-sm-6 col-xs-6">
+														<div class="text-right">
+															<input type="hidden" name="checkin" id="checkin" value="0">
+															<div  id="checkin-stars" class="starrr" style="font-size:22px"></div>
+														</div>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-lg-6 col-sm-6 col-xs-6">
+														<label>Communication</label>
+													</div>
+													<div class="col-lg-6 col-sm-6 col-xs-6">
+														<div class="text-right">
+															<input type="hidden" name="communication" id="communication" value="0">
+															<div id="communication-stars" class="starrr" style="font-size:22px"></div>
+														</div>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-lg-6 col-sm-6 col-xs-6">
+														<label>Customer Service</label>
+													</div>
+													<div class="col-lg-6 col-sm-6 col-xs-6">
+														<div class="text-right">
+															<input type="hidden" name="customer_service" id="customer_service" value="0">
+															<div id="customer_service-stars" class="starrr" style="font-size:22px"></div>
+														</div>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-lg-6 col-sm-6 col-xs-6">
+														<label>Location</label>
+													</div>
+													<div class="col-lg-6 col-sm-6 col-xs-6">
+														<div class="text-right">
+															<input type="hidden" name="location" id="location" value="0">
+															<div id="location-stars" class="starrr" style="font-size:22px"></div>
+														</div>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-lg-6 col-sm-6 col-xs-6">
+														<label>Value</label>
+													</div>
+													<div class="col-lg-6 col-sm-6 col-xs-6">
+														<div class="text-right">
+															<input type="hidden" name="value" id="value" value="0">
+															<div id="value-stars" class="starrr" style="font-size:22px"></div>
+														</div>
+													</div>
+												</div>
+
+											</div>
+										</div>
+										
+										<div class="col-lg-7 col-sm-6 col-xs-12">
+											<div class="mb-15">
+												<textarea class="form-control" placeholder="Send us your Review" name="message" id="message" rows="10"></textarea>
+											</div>
+										</div>
+
+										<div class="col-lg-12 col-sm-12 col-xs-12 fs-16 form-error font-red" id="error-message"></div>	
+
+										<div class="col-lg-12 col-sm-12 col-xs-12">
+											<button class="btn btn-red mt-10 mb-15"> Post Review </button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-lg-12">
+					<div class="mx-sp separator-border-bottom">
+						<h3 class="subtitle details-sp font-32 mtb-15 pb-0">Where you'll be</h3>
+						<div class="mb-25">
+							<p>{{$company->company_address()}}</p>
+						</div>
+						<div class="widget map-mb-35" style="height:500px">
+							<div class="mysrchmap">
+								<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"></div>
+							</div>
+							<div class="maparea"></div>
+						</div>
+						<?php   
+							$locations = []; 
+			          		if($company->latitude != '' || $company->longitude  != ''){
+								$lat = $company->latitude + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+								$long = $company->longitude + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
+								$a = [$company->dba_business_name, $lat, $long,$company->id, $company->getCompanyImage()];
+								array_push($locations, $a);
+							}
+						?>
+					</div>
+				</div>
+
+				<div class="col-lg-12">
+					<h3 class="subtitle text-center mtb-30">Other Activities Offered By {{$company->public_company_name}}</h3>
+
 					<div class="row">
-						<div class="col-md-12 col-sm-12 col-xs-12">
-                        	
-							<div class="activities-calendar">
-								<div class="row">
-									<div class="col-md-6 col-sm-6 col-xs-6">
-										<div class="activityselect3 special-date">
-											<input type="text" name="actfildate_forcart" id="actfildate_forcart" placeholder="Date" class="form-control" autocomplete="off"  onchange="updatedetail({{$companyactid}},{{$serviceid}});" value="{{date('M-d-Y')}}">
+						<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+							<div class="container">
+								<div class="row y-middle">
+									<div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+										<div class="activityselect3 special-date dropdowns mb-15 ">
+											<input type="text" name="actfildate" id="actfildate" placeholder="Date" class="form-control" onchange="actFilter('{{$company->id}}','{{$sid}}'')" autocomplete="off" value="{{date('M-d-Y')}}">
 											<i class="fa fa-calendar"></i>
 										</div>
 									</div>
-									<!-- <div class="col-md-6 col-sm-6 col-xs-6">
-										<select id="actfiloffer_forcart" name="actfiloffer_forcart" class="form-control activityselect1" onchange="updateparticipate({{$companyactid}},{{$serviceid}});">
-											<option value="">Participant #</option>
-										</select>
-									</div> -->
-								</div>
-							</div>
-						</div>
-						@php $date = date('l').', '.date('F d,  Y'); @endphp 
-						<div id="updatefilterforcart">
-							<div class="col-md-12 col-sm-12 col-xs-12">
-								<div class="choose-calendar-time">
-									<div class="row">
-										<div class="col-md-6 col-sm-6 col-xs-12">
-											<h3 class="date-title">{{$date}}</h3>
-									
-											<label>Step: 1 </label> <span class="">Select Category</span>
-											<select id="selcatpr<?php echo $serviceid;?>" name="selcatpr{{$serviceid}}" class="price-select-control" onchange="changeactsession('{{$serviceid}}','{{$serviceid}}',this.value,'book','simple')">
-												<?php $c=1;  
-													if (!empty($sercate)) { 
-														foreach ($sercate as  $sc) {
-															echo '<option value="'.$sc['id'].'">'.$sc['category_title'].'</option>';
-															$c++;
-														}
-													}
-												?>
-											</select>
-											
-											<label>Step: 2 </label> <span class=""> Select Membership Type</span>
-											<div id="memberoption">
-												<select id="actfilmtype{{$serviceid}}" name="actfilmtype" class="form-control activityselect1 instant-detail-membertypre" onchange="chngemember({{$serviceid}});">												<?php echo $mbox; ?>
-												</select>
-											</div>
-											<label>Step: 3 </label> <span class="">Select Price Option</span>
-											<div class="priceoption" id="pricechng{{$serviceid}}{{$serviceid}}">
-												<select id="selprice{{$serviceid}}" name="selprice{{$serviceid}}" class="price-select-control" onchange="changeactpr('{{$serviceid}}',this.value,'{{@$spot_avil}}','book','{{$serviceid}}')">
-													<?php echo $selectval; ?>
-												</select>
-											</div>	
-										</div>
-										<?php $bschedule = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->get();
-										$bschedulefirst = BusinessActivityScheduler::where('serviceid', $serviceid)->orderBy('id', 'ASC')->where('category_id',@$sercatefirst['id'])->where('end_activity_date','>=',date('Y-m-d'))->whereRaw('FIND_IN_SET("'.date("l").'",activity_days)')->first();
-										?>
-										<div class="col-md-6 col-sm-6 col-xs-12 membership-opti">
-											<div class="membership-details">
-												<h3 class="date-title">Booking Details</h3>
-												<label>Step: 4 </label> <span class=""> Select Time</span>
-												<div class="row" id="timeschedule">
-													<?php $i=1;$totalquantity = 0;?>
-													@if(!empty(@$bschedule) && count(@$bschedule)>0)
-													@foreach(@$bschedule as $bdata)
-													<?php $SpotsLeftdis = 0; ?>
-													<?php $SpotsLeft = UserBookingDetail::where('act_schedule_id',$bdata['id'])->whereDate('bookedtime', '=', date('Y-m-d'))->get();
-														$totalquantity = 0;
-														foreach($SpotsLeft as $data){
-															$item = json_decode($data['qty'],true);
-															if($item['adult'] != '')
-									                            $totalquantity += $item['adult'];
-									                        if($item['child'] != '')
-									                            $totalquantity += $item['child'];
-									                        if($item['infant'] != '')
-									                            $totalquantity += $item['infant'];
-														}
-													if( $bdata['spots_available'] != ''){
-        												$SpotsLeftdis = $bdata['spots_available'] - $totalquantity;
-        											} ?>
-													<div class="col-md-6">
-														<div class="donate-now">
-															<input type="radio" id="{{$bdata['id']}}" name="amount" value="{{$bdata['shift_start']}}" onclick="addhiddentime({{$bdata['id']}},{{$serviceid}});" 
-															@if($i==1) @if($SpotsLeftdis != 0)  checked  <?php $i++;?> @endif @endif />
-																<label for="{{$bdata['id']}}" >
-                                                                <?php echo date('h:i a', strtotime($bdata['shift_start'])); ?>
-                                                                </label>
-																<p class="end-hr">@if($SpotsLeftdis == 0) Sold Out @else {{$SpotsLeftdis}}/{{$bdata['spots_available']}} Spots Left @endif </p>
-														</div>
-													</div>
+									<div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+										<div class="dropdowns mb-15">
+											<select id="actfiloffer{{$sid}}" name="actfiloffer" class="form-control form-select activityselect1" onchange="actFilter('{{$company->id}}','{{$sid}}')">
+												<option value="">Activity Offered</option>
+												@if (!empty($activityOffered)) 
+													@foreach ($activityOffered as  $off)
+														<option>{{$off['sport_activity']}}</option>
 													@endforeach
-													@else 
-														<p class="notimeoption">No time option available Select category to view available times</p>
-															
-													@endif
+												@endif 
+											</select>
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-4 col-xs-6">
+										<div class="modal-filter-instant morefilter float-right mb-15">
+											<p>More Filters &nbsp; <i class="fas fa-filter"></i></p>
+										</div>
+									</div>
+									<div id="filteroption" class="mt-15" style="display: none">
+										<div class="">
+											<div class="row">
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<div class="dropdowns mb-15">
+														<select id="actfillocation{{$sid}}" name="actfillocation" class="form-control form-select activityselect2" onchange="actFilter('{{$company->id}}','{{$sid}}')">
+															<option value="">Location</option>
+															<option value="Online">Online</option>
+															<option value="At Business">At Business Address</option>
+															<option value="On Location">On Location</option>
+														</select>
+													</div>
 												</div>
-												<div id="book<?php echo $service["id"].$service["id"]; ?>" >
-													
-													<div class="price-cat pt-20">
-														<label>Category:</label>
-														@if(@$sercatefirst['category_title'] != '')
-															<span>{{@$sercatefirst['category_title']}}</span>
-														@endif
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<div class="dropdowns mb-15">
+														<select id="actfilmtype" name="actfilmtype" class="form-control form-select activityselmtype" onchange="actFilter('{{$company->id}}','{{$sid}}')">
+															<option value="">Membership Type</option>
+															<option>Drop In</option>
+															<option>Semester</option>
+														</select>
 													</div>
-													
-													
-													<div id="timeduration">
-														<label>Duration:</label>
-														@if($timedata != '')
-															<span>{{$timedata}}</span>
-														@endif
+												</div>
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<div class="dropdowns mb-15">
+														<select id="actfilgreatfor{{$sid}}" name="actfilgreatfor" class="form-control form-select activityselgreatfor" onchange="actFilter('{{$company->id}}','{{$sid}}')">
+															<option value="">Great For</option>
+															<option>Individual</option>
+															<option>Kids</option>
+															<option>Teens</option>
+															<option>Adults</option>
+															<option>Family</option>
+															<option>Groups</option>
+															<option>Paralympic</option>
+															<option>Prenatal</option>
+															<option>Any</option>
+														</select>
 													</div>
-													
-													<div>
-														<label>Price Title:</label>
-														@if(@$servicePrfirst['price_title'] != '')
-															<span>{{@$servicePrfirst['price_title']}}</span>
-														@endif	
+												</div>
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<div class="dropdowns mb-15">
+														<select id="actfilbtype{{$sid}}" name="actfilbtype" class="form-control form-select activityselbtype" onchange="actFilter('{{$company->id}}','{{$sid}}')">
+															<option value="">Business Type</option>
+															<option value="individual">Personal Trainer</option>
+															<option value="classes">Classes</option>
+															<option value="events">Events</option>
+															<option value="experience">Experience</option>
+														</select>
 													</div>
-														
-													<div>
-														<label>Price Option:</label>
-														@if(@$servicePrfirst['pay_session'] != '')
-														<span>{{@$servicePrfirst['pay_session']}} Session</span>@endif
-													</div>
-													
-													
-													<div>
-														<label>Membership:</label>
-														@if(@$servicePrfirst['membership_type'] != '')
-														<span>{{@$servicePrfirst['membership_type']}} @if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif</span>
-														@endif
-													</div>
-													
-													<div class="personcategory" >
-														<span>Adults x {{$adult_cnt}} = ${{$adult_price}}</span>
-														<span>Kids x {{$child_cnt}} = ${{$child_price}}</span>
-														<span>Infants x {{$infant_cnt}} = ${{$infant_price}}</span>
-													</div>
-													
-													<div class="mt-20">
-														<label>Total </label>
-														@if(@$total_price_val != '')
-															<span id="totalprice">
-														${{@$total_price_val}} USD</span>
-														@else
-															<span id="totalprice">
-														$0 USD</span>
-														@endif
+												</div>
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<div class="dropdowns mb-15">
+														<select id="actfilsType{{$sid}}" name="actfilsType" class="form-control form-select activityselect5" onchange="actFilter('{{$company->id}}','{{$sid}}')">
+															<option value="">Service Type</option>
+															<option>Personal Training</option>
+															<option>Coaching</option>
+															<option>Therapy</option>
+															<option>Group Class</option>
+															<option>Seminar</option>
+															<option>Workshop</option>
+															<option>Clinic</option>
+															<option>Camp</option>
+															<option>Team</option>
+															<option>Corporate</option>
+															<option>Tour</option>
+															<option>Adventure</option>
+															<option>Retreat</option>
+															<option>Workshop</option>
+															<option>Seminar</option>
+															<option>Private experience</option>
+														</select>
 													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-12 col-xs-12">
-								<div class="indetails-btn">
-									@if(!empty(@$servicePrfirst))
-										<input type="hidden" name="price_title_hidden" id="price_title_hidden{{$serviceid}}{{$serviceid}}" value="{{@$servicePrfirst['price_title']}}">
-									@endif
-									<input type="hidden" name="time_hidden" id="time_hidden{{$serviceid}}{{$serviceid}}" @if($timedata != '' ) value="{{$timedata}}" @endif>
-									<input type="hidden" name="sportsleft_hidden" id="sportsleft_hidden{{$serviceid}}{{$serviceid}}" value="{{$Totalspot}}">
-
-									<input type="hidden" name="memtype_hidden" id="memtype_hidden{{$serviceid}}{{$serviceid}}" @if(@$servicePrfirst['membership_type'] != '') value="{{@$servicePrfirst['membership_type'] }}@if(@$servicePrfirst['is_recurring_adult'] == 1) (Recurring) @endif" @endif>
-
-									<form method="post" action="{{route('addtocart')}}" id="{{$serviceid}}">
-										@csrf
-										<input type="hidden" name="pid" value="{{$serviceid}}"  />
-										<input type="hidden" name="persontype" id="persontype" value="adult"/>
-										<input type="hidden" name="quantity" id="pricequantity{{$serviceid}}{{$serviceid}}" value="1" class="product-quantity"/>
-
-										<input type="hidden" name="aduquantity" id="adupricequantity" value="{{$adult_cnt}}" class="product-quantity"/>
-										<input type="hidden" name="childquantity" id="childpricequantity" value="{{$child_cnt}}" class="product-quantity"/>
-										<input type="hidden" name="infantquantity" id="infantpricequantity" value="{{$infant_cnt}}" class="product-quantity"/>
-
-										<input type="hidden" name="cartaduprice" id="cartaduprice" value="{{$adult_price}}" class="product-quantity"/>
-										<input type="hidden" name="cartchildprice" id="cartchildprice" value="{{$child_price}}" class="product-quantity"/>
-										<input type="hidden" name="cartinfantprice" id="cartinfantprice" value="{{$infant_price}}" class="product-quantity"/>
-
-									   <input type="hidden" name="pricetotal" id="pricetotal{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price"/>
-									   <input type="hidden" name="price" id="price{{$serviceid}}{{$serviceid}}" value="{{$total_price_val}}" class="product-price" />
-										<input type="hidden" name="session" id="session{{$serviceid}}" value="{{@$servicePrfirst['pay_session']}}" />
-										<input type="hidden" name="priceid" value="{{$priceid}}" id="priceid{{$serviceid}}" />
-										<input type="hidden" name="actscheduleid" value="{{@$bschedulefirst->id}}" id="actscheduleid{{$serviceid}}" />
-										<input type="hidden" name="sesdate" value="{{date('Y-m-d')}}" id="sesdate{{$serviceid}}" />
-										<input type="hidden" name="cate_title" value="{{@$sercatefirst['category_title']}}" id="cate_title{{$service['id']}}{{$service['id']}}" />
-										
-										<div id="cartadd">
-									
-										@if($totalquantity >= @$bschedulefirst->spots_available && @$bschedulefirst->spots_available !=0)
-											<a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>
-										@else
-                                            @if( @$total_price_val !='' && $timedata != '')
-												<div id="addcartdiv">
-													<div class="btn-cart-modal">
-														<input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/>
-													</div>
-													<div class="btn-cart-modal instant-detail-booknow">
-														<input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow">
-													</div>
-												</div>
-										  	@endif
-										@endif
-										</div>
-									</form>
+									</div> <!--filteroption -->
 								</div>
 							</div>
 						</div>
-					</div>  
-				</div>
-            
-	        </div>	
-            
-            <div class="col-md-12 col-xs-12 mb-80">
-            	@if(count($activities_search)>0)
-					<div class="col-md-12 col-sm-12 col-xs-12">
-						<h3 class="subtitle text-center mtb-30">Other Activities Offered By This Provider</h3>
 					</div>
-				@endif
-            	<div class="modal-sidebox">
-					<div class="row">
-						<div class="col-md-5 col-sm-12 col-xs-12">
-                        	<div class="col-md-12 col-xs-12">
-							<div class="modal-filter-instant morefilter">
-								<p>More Filters &nbsp; <i class="fas fa-filter"></i></p>
-							</div>
-                            </div>
-						
-                        @php 
-							$actoffer = BusinessServices::where('cid',$companyactid)->groupBy('sport_activity')->get()->toArray();
-						@endphp
-						<div class="col-md-6 col-sm-6 col-xs-6">
-							<div class="activityselect3 special-date dropdowns">
-								<input type="text" name="actfildate" id="actfildate{{$serviceid}}" placeholder="Date" class="form-control" onchange="actFilter({{$companyactid}},{{$serviceid}})" autocomplete="off" value="{{date('M-d-Y')}}">
-								<i class="fa fa-calendar"></i>
-							</div>
-							<script>
-								$( function() {
-									$( "#actfildate{{$serviceid}}" ).datepicker( { 
-										minDate: 0,
-										changeMonth: true,
-										changeYear:true,
-							        	yearRange: "1960:2060"} );
-								  } );
-							</script>
-						</div>
-						<div class="col-md-6 col-sm-6 col-xs-6">
-							<div class="dropdowns">
-								<select id="actfiloffer{{$serviceid}}" name="actfiloffer" class="form-control activityselect1" onchange="actFilter({{$companyactid}},{{$serviceid}})">
-                                	<option value="">Activity Offered</option>
-									@if (!empty($actoffer)) 
-										@foreach ($actoffer as  $off)
-	                               	 		<option>{{$off['sport_activity']}}</option>
-	                               		@endforeach
-                               		@endif 
-                            	</select>
-							</div>
-                        </div>
-                        <div id="filteroption" style="display: none">
-	                        <div class="col-md-6 col-sm-6 col-xs-6">
-	                        	<div class="dropdowns">
-		                            <select id="actfillocation{{$serviceid}}" name="actfillocation" class="form-control activityselect2" onchange="actFilter({{$companyactid}},{{$serviceid}})">
-		                                <option value="">Location</option>
-		                                <option value="Online">Online</option>
-		                                <option value="At Business">At Business Address</option>
-		                                <option value="On Location">On Location</option>
-		                            </select>
-		                        </div>
-	                        </div>
-	                        <div class="col-md-6 col-sm-6 col-xs-6">
-	                        	<div class="dropdowns">
-		                            <select id="actfilmtype" name="actfilmtype" class="form-control activityselmtype" onchange="actFilter({{$companyactid}},{{$serviceid}})">
-		                                <option value="">Membership Type</option>
-		                                <option>Drop In</option>
-		                                <option>Semester</option>
-		                            </select>
-		                        </div>
-	                        </div>
-	                        <div class="col-md-6 col-sm-6 col-xs-6">
-	                        	<div class="dropdowns">
-		                            <select id="actfilgreatfor{{$serviceid}}" name="actfilgreatfor" class="form-control activityselgreatfor" onchange="actFilter({{$companyactid}},{{$serviceid}})">
-		                                <option value="">Great For</option>
-		                                <option>Individual</option>
-		                                <option>Kids</option>
-		                                <option>Teens</option>
-		                                <option>Adults</option>
-		                                <option>Family</option>
-		                                <option>Groups</option>
-		                                <option>Paralympic</option>
-		                                <option>Prenatal</option>
-		                                <option>Any</option>
-		                            </select>
-	                            </div>
-	                        </div>
-	                        <div class="col-md-6 col-sm-6 col-xs-6">
-	                        	<div class="dropdowns">
-		                            <select id="actfilbtype{{$serviceid}}" name="actfilbtype" class="form-control activityselbtype" onchange="actFilter({{$companyactid}},{{$serviceid}})" >
-		                                <option value="">Business Type</option>
-		                                <option value="individual">Personal Trainer</option>
-		                                <option value="classes">Gym/Studio</option>
-		                                <option value="experience">Experience</option>
-	                            	</select>
-	                            </div>
-	                        </div>
-	                        <div class="col-md-6 col-sm-6 col-xs-6">
-	                        	<div class="dropdowns">
-		                            <select id="actfilsType{{$serviceid}}" name="actfilsType" class="form-control activityselect5" onchange="actFilter({{$companyactid}},{{$serviceid}})">
-		                                <option value="">Service Type</option>
-		                                <option>Personal Training</option>
-		                                <option>Coaching</option>
-		                                <option>Therapy</option>
-		                                <option>Group Class</option>
-		                                <option>Seminar</option>
-		                                <option>Workshop</option>
-		                                <option>Clinic</option>
-		                                <option>Camp</option>
-		                                <option>Team</option>
-		                                <option>Corporate</option>
-		                                <option>Tour</option>
-		                                <option>Adventure</option>
-		                                <option>Retreat</option>
-		                                <option>Workshop</option>
-		                                <option>Seminar</option>
-		                                <option>Private experience</option>
-		                            </select>
-		                        </div>
-	                        </div>
-                       </div> <!--filteroption -->     
-					</div><!-- col-5 -->
-                    <div class="col-md-12 col-sm-12 col-xs-12">    
-                        <div id="filtersearchdata">
-	 						<?php
-							if (!empty($activities_search)) { 
-								$companyid = $companyname = $serviceid = $companycity = $companycountry = $pay_price  = "";
-								$i=1;
-								foreach ($activities_search as  $service) {
-									$company = $price = $businessSp = [];
-									$serviceid = $service['id'];
-			                        $sport_activity = $service['sport_activity'];
-			                        $companyData = CompanyInformation::where('id',$service['cid'])->first();
-			                        if (isset($companyData)) {
 
-	                                    $companyid = $companyData['id'];
-	                                    $companyname = $companyData['company_name'];
-										$companycity = $companyData['city'];
-										$companycountry = $companyData['country'];
-			                                
-			                        }
-			                       
-			                        if ($service['profile_pic']!="") {
-			                        	if(str_contains($service['profile_pic'], ',')){
-	                                        $pic_image = explode(',', $service['profile_pic']);
-	                                        if( $pic_image[0] == ''){
-	                                           $p_image  = $pic_image[1];
-	                                        }else{
-	                                            $p_image  = $pic_image[0];
-	                                        }
-	                                    }else{
-	                                        $p_image = $service['profile_pic'];
-	                                    }
-
-	                                    if (file_exists( public_path() . '/uploads/profile_pic/' . $p_image)) {
-	                                       $profilePic = url('/public/uploads/profile_pic/' . $p_image);
-	                                    }else {
-	                                       $profilePic = url('/public/images/service-nofound.jpg');
-	                                    }
-
-									}else{ $profilePic = '/public/images/service-nofound.jpg'; }
-									
-									$reviews_count = BusinessServiceReview::where('service_id', $service['id'])->count();
-									$reviews_sum = BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
-									$reviews_avg=0;
-									if($reviews_count>0)
-									{	
-										$reviews_avg= round($reviews_sum/$reviews_count,2); 
-									}
-									$redlink = str_replace(" ","-",$companyname)."/".$service['cid'];
-									$service_type='';
-									if($service['service_type']!=''){
-										if( $service['service_type']=='individual' ) $service_type = 'Personal Training'; 
-										else if( $service['service_type']=='classes' )	$service_type = 'Group Class'; 
-										else if( $service['service_type']=='experience' ) $service_type = 'Experience'; 
-									}
-									$pricearr = [];
-									$price_all = '';
-									$ser_date = '';
-									$price_allarray = BusinessPriceDetails::where('serviceid', $service['id'])->get();
-									if(!empty($price_allarray)){
-										foreach ($price_allarray as $key => $value) {
-											if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-												$pricearr[] = $value->adult_weekend_price_diff;
-											}else{
-												$pricearr[] = $value->adult_cus_weekly_price;
-											}
-										}
-									}
-									if(!empty($pricearr)){
-										$price_all = min($pricearr);
-									}
-									
-	 								$bookscheduler='';
-									$time='';
-									$bookscheduler = BusinessActivityScheduler::where('serviceid', $service['id'])->limit(1)->orderBy('id', 'ASC')->get()->toArray();
-									if(@$bookscheduler[0]['set_duration']!=''){
-										$tm=explode(' ',$bookscheduler[0]['set_duration']);
-										$hr=''; $min=''; $sec='';
-										if($tm[0]!=0){ $hr=$tm[0].'hr. '; }
-										if($tm[2]!=0){ $min=$tm[2].'min. '; }
-										if($tm[4]!=0){ $sec=$tm[4].'sec.'; }
-										if($hr!='' || $min!='' || $sec!='')
-										{ $time =  $hr.$min.$sec; } 
-									}
-									if($i<3){
-										if($time != ''){
-							?>
-								<div class="col-md-4 col-sm-12 col-xs-12 ">
-									<div class="find-activity">
-										<div class="row">
-											<div class="col-md-6 col-sm-6 col-xs-12">
-												<div class="img-modal-left">
-													<img src="{{ $profilePic }}" >
-												</div>
-											</div>
-											<div class="col-md-6 col-sm-6 col-xs-12 activity-data">
-												<div class="activity-inner-data">
-													<i class="fas fa-star"></i>
-													<span> {{$reviews_avg}} ({{$reviews_count}})  </span>
-												</div>
-												@if($time != '')
-													<div class="activity-hours">
-														<span>{{$time}}</span>
-													</div>
-												@endif
-												<div class="activity-city">
-													<span>{{$companycity}}, {{$companycountry}}</span>
-													@if(Auth::check())
-													<?php
-					                                	$loggedId = Auth::user()->id;
-					                                	$favData = BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();              
-					                                ?>
-														<div class="serv_fav1" ser_id="{{$service['id']}}">
-															<a class="fav-fun-2" id="serfav{{$service['id']}}">
-																<?php
-							                                    	if( !empty($favData) ){ ?>
-							                                        	<i class="fas fa-heart"></i>
-							                                        <?php }
-																	else{ ?>
-							                                    		<i class="far fa-heart"></i>
-							                                     <?php } ?></a>
-						                            	</div>
-						                            @else
-						                            	<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-													@endif
-												</div>
-												<div class="activity-information">
-													<span><a 
-						                                <?php if (Auth::check()) { ?> 
-						                                    href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
-						                                <?php } else { ?>
-						                                    href="{{ Config::get('constants.SITE_URL') }}/userlogin" 
-						                                <?php }?>
-						                                    target="_blank">{{ $service['program_name'] }}</a></span>
-													<p>{{ $service_type }} | {{ $service['sport_activity'] }}</p>
-													<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $service['id']])}}">More Details</a>
-												</div>
-												@if($price_all != '')
-													<div>
-														<span class="activity-time">From ${{$price_all}}/Person</span>
-													</div>
-												@endif
-											</div>
-										</div>
-									</div>
-								</div>
-							<?php 
-									$i++;
-										}
-									}
-								}
-								}else{ ?>
-									<div class="col-md-4">
-										<p class="noactivity"> There Is No Activity</p>
-									</div>
-							<?php	} ?>
-						</div>
-
-					</div> <!-- 12 -->
-                        
-                        
-                        
-                        
-                        
-                        
+					<div  id="filtersearchdata">
+						@include('activity.search_activity_file')
 					</div>
 				</div>
-            </div>
-            
-            
+			</div>
 		</div>
-   	</div>            
-<!-- end modal -->
+	</div>            
 
+	<div class="modal fade" id="confirmredirection" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	    <div class="modal-dialog counter-modal-size">
+	        <div class="modal-content">
+	            <div class="modal-body conuter-body">
+	            	<div class="row">
+	            		<div class="col-lg-12">
+                     		<!-- <h4 class="modal-title partcipate-model">Almost Done! Before we add this to the cart, would you like to add another person to this booking? </h4> -->
+                     		<h4 class="modal-title partcipate-model">Almost Done! continue add to the cart..</h4>
+                    	</div>
+                    </div>
+                </div>          
+        		<div class="modal-footer conuter-body">
+        			<div class="btns-modal"> 
+        			</div>
+        		</div>
+			</div>                                                                       
+		</div>                                          
+	</div>
 
-<div class="modal fade" id="Countermodal">
-    <div class="modal-dialog counter-modal-size">
-        <div class="modal-content">
-           <div class="modal-header"> 
-				<div class="closebtn">
-					<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
+	{{-- <div class="modal fade " id="ActivtityFail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	    <div class="modal-dialog counter-modal-size">
+	        <div class="modal-content">
+	            <div class="modal-body conuter-body">
+	            	<div class="row">
+	            		<div class="col-lg-12">
+                     		<h4 class="modal-title partcipate-model">You can't book this activity for today.Please add another time.</h4>
+                    	</div>
+                    </div>
+                </div>
+			</div>                                                                       
+		</div>                                          
+	</div> --}}
+
+	{{-- my code starts --}}
+	{{-- <div class="modal fade" id="ActivityFail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog counter-modal-size">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-			</div>  
-            <div class="modal-body conuter-body" id="Countermodalbody">
-            </div>            
-            <div class="modal-footer conuter-body">
-                <button type="button" onclick="getbookdetails({{$sid}});" class="btn btn-primary rev-submit-btn">Save</button>
-            </div>
-    	</div>                                                                       
-    </div>                                          
-</div>
-
-<div id="busireview" class="modal modalbusireview" tabindex="-1">
-    <div class="modal-dialog rating-star" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="padding:10px 36px 10px 11px!important; text-align: right;min-height: 40px;">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-			</div>
-            <div class="modal-body">
-            	<div class="rev-post-box">
-                	<form method="post" enctype="multipart/form-data" name="sreview{{$sid}}" id="sreview{{$sid}}" >
-                    @csrf
-							<div class="clearfix"></div>
-							<input type="hidden" name="serviceid{{$sid}}" id="serviceid{{$sid}}" value="{{$sid}}">
-	                        <input type="hidden" name="rating" id="rating" value="0">
-                            <div class="rvw-overall-rate rvw-ex-mrgn">
-								<span>Rating</span>
-								<div id="stars" data-service="{{$sid}}" class="starrr" style="font-size:22px"></div>
-							</div>
-							<input type="text" name="rtitle{{$sid}}" id="rtitle{{$sid}}" placeholder="Review Title" class="inputs" />
-	                    	<textarea placeholder="Write your review" name="review{{$sid}}" id="review{{$sid}}"></textarea>
-	                        <input type="file" name="rimg{{$sid}}[]" id="rimg{{$sid}}" class="inputs" multiple="multiple" />
-	                        <div class="reviewerro" id="reviewerro{{$sid}}"> </div>
-	                    	<input type="button" onclick="submit_rating({{$sid}})" value="Submit" class="btn rev-submit-btn mt-10">
-	                    	<script>
-							 $('#stars').on('starrr:change', function(e, value){
-								$('#rating').val(value);
-							 });
-							</script>
-					</form>
+				<div class="modal-body counter-body">
+					<div class="row">
+						<div class="col-lg-12">
+							<h4 class="modal-title partcipate-model">You can't book this activity for today. Please add another time.</h4>
+						</div>
+					</div>
 				</div>
-            </div> <!--body-->
+			</div>
 		</div>
+	</div>	 --}}
+	{{-- ends --}}
+	<div class="modal fade" id="Countermodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	    <div class="modal-dialog counter-modal-size">
+	        <div class="modal-content">
+		
+	           <div class="modal-header"> 
+			   	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>  
+	            <div class="modal-body conuter-body" id="Countermodalbody">
+	            </div>            
+	    	</div>                                                                       
+	    </div>                                          
 	</div>
 </div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  	<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+		<div class="modal-content w-100">
+		<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Reviews</h5>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-lg-4 col-sm-12 col-xs-12">
+						<div class="modal-overall-rating  mb-15">
+							<label>Overall rating</label>
+							<div class="row y-middle">
+								<div class="col-lg-2 col-sm-1 col-xs-2">
+									<div class="modal-rating-total-star">
+										<span class="mb-0">5</span>
+									</div>
+								</div>
+								<div class="col-lg-10 col-sm-6 col-xs-10">
+									<div class="progress">
+										<div class="progress-bar" role="progressbar" style="width: {{countStarRatings($sid)['star_5']}}%" aria-valuenow="{{countStarRatings($sid)['star_5']}}"  aria-valuemin="0" aria-valuemax="100"></div>
+									</div>
+								</div>
+							</div>
+							<div class="row y-middle">
+								<div class="col-lg-2 col-sm-1 col-xs-2">
+									<div class="modal-rating-total-star">
+										<span class="mb-0">4</span>
+									</div>
+								</div>
+								<div class="col-lg-10 col-sm-6 col-xs-10">
+									<div class="progress">
+										<div class="progress-bar" role="progressbar" style="width: {{countStarRatings($sid)['star_4']}}%" aria-valuenow="{{countStarRatings($sid)['star_4']}}"  aria-valuemin="0" aria-valuemax="100"></div>
+									</div>
+								</div>
+							</div>
+							<div class="row y-middle">
+								<div class="col-lg-2 col-sm-1 col-xs-2">
+									<div class="modal-rating-total-star">
+										<span class="mb-0">3</span>
+									</div>
+								</div>
+								<div class="col-lg-10 col-sm-6 col-xs-10">
+									<div class="progress">
+										<div class="progress-bar" role="progressbar" style="width: {{countStarRatings($sid)['star_3']}}%" aria-valuenow="{{countStarRatings($sid)['star_3']}}"  aria-valuemin="0" aria-valuemax="100"></div>
+									</div>
+								</div>
+							</div>
+							<div class="row y-middle">
+								<div class="col-lg-2 col-sm-1 col-xs-2">
+									<div class="modal-rating-total-star">
+										<span class="mb-0">2</span>
+									</div>
+								</div>
+								<div class="col-lg-10 col-sm-6 col-xs-10">
+									<div class="progress">
+										<div class="progress-bar" role="progressbar" style="width: {{countStarRatings($sid)['star_2']}}%" aria-valuenow="{{countStarRatings($sid)['star_2']}}"  aria-valuemin="0" aria-valuemax="100"></div>
+									</div>
+								</div>
+							</div>
+							<div class="row y-middle">
+								<div class="col-lg-2 col-sm-1 col-xs-2">
+									<div class="modal-rating-total-star">
+										<span class="mb-0">1</span>
+									</div>
+								</div>
+								<div class="col-lg-10 col-sm-6 col-xs-10">
+									<div class="progress">
+										<div class="progress-bar" role="progressbar" style="width: {{countStarRatings($sid)['star_1']}}%" aria-valuenow="{{countStarRatings($sid)['star_1']}}"  aria-valuemin="0" aria-valuemax="100"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div>
+							<div class="border-bottom-grey mb-15">
+								<div class="row">
+									<div class="col-lg-2 col-md-2 col-2">
+										<div class="review-avatar-one">
+											<i class="fas fa-pump-soap"></i>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6 col-6">
+										<div class="review-avatar-two">
+											<label>Cleanliness</label>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-4 col-4">
+										<div class="review-avatar-three text-right">
+											<label>{{getBusinessServiceCount($sid,'cleanliness')}}</label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="border-bottom-grey mb-15">
+								<div class="row">
+									<div class="col-lg-2 col-md-2 col-2">
+										<div class="review-avatar-one">
+											<i class="fas fa-key"></i>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6 col-6">
+										<div class="review-avatar-two">
+											<label>Check-in</label>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-4 col-4">
+										<div class="review-avatar-three text-right">
+											<label>{{getBusinessServiceCount($sid,'checkin')}}</label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="border-bottom-grey mb-15">
+								<div class="row">
+									<div class="col-lg-2 col-md-2 col-2">
+										<div class="review-avatar-one">
+											<i class="fas fa-comment-alt"></i>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6 col-6">
+										<div class="review-avatar-two">
+											<label>Communication</label>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-4 col-4">
+										<div class="review-avatar-three text-right">
+											<label>{{getBusinessServiceCount($sid,'communication')}}</label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="border-bottom-grey mb-15">
+								<div class="row">
+									<div class="col-lg-2 col-md-2 col-2">
+										<div class="review-avatar-one">
+											<i class="fas fa-users-cog"></i>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6 col-6">
+										<div class="review-avatar-two">
+											<label>Customer Service</label>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-4 col-4">
+										<div class="review-avatar-three text-right">
+											<label>{{getBusinessServiceCount($sid,'customer_service')}}</label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="border-bottom-grey mb-15">
+								<div class="row">
+									<div class="col-lg-2 col-md-2 col-2">
+										<div class="review-avatar-one">
+											<i class="fas fa-map-marker-alt"></i>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6 col-6">
+										<div class="review-avatar-two">
+											<label>Location</label>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-4 col-4">
+										<div class="review-avatar-three text-right">
+											<label>{{getBusinessServiceCount($sid,'location')}}</label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="border-bottom-grey mb-15">
+								<div class="row">
+									<div class="col-lg-2 col-md-2 col-2">
+										<div class="review-avatar-one">
+											<i class="fas fa-check-circle"></i>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6 col-6">
+										<div class="review-avatar-two">
+											<label>Accuracy</label>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-4 col-4">
+										<div class="review-avatar-three text-right">
+											<label>{{getBusinessServiceCount($sid,'accuracy')}}</label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="border-bottom-grey mb-15">
+								<div class="row">
+									<div class="col-lg-2 col-md-2 col-2">
+										<div class="review-avatar-one">
+											<i class="fas fa-hands"></i>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6 col-6">
+										<div class="review-avatar-two">
+											<label>Value</label>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-4 col-4">
+										<div class="review-avatar-three text-right">
+											<label>{{getBusinessServiceCount($sid,'value')}}</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-8 col-sm-12 col-xs-12">
+						<div class="row mb-25">
+							<div class="col-lg-6 col-sm-6 col-xs-6">
+								<div class="modal-main-title">
+								 	<label>{{$service->reviews()->count()}} reviews</label>
+								</div>
+							</div>
+							<div class="col-lg-6 col-sm-6 col-xs-6">
+								<div class="float-right">
+									<select onchange="getReview(this.value);">
+										<option value="most">Most recent</option>
+										<option value="highest">Highest rated</option>
+										<option value="lowest">Lowest rated</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="reviewDiv">
+							@include('activity.review' ,['reviews' => $service->reviews])
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div> -->
+		</div>
+  	</div>
 </div>
 
-@include('layouts.footer')
+<nav class="navbar navbar-default navbar-fixed-bottom hidden-lg visible-md visible-xs visible-sm book-now-skicky" style="background: none; border-top: none;">
+  	<div class="container">
+		<div class="col-xs-12">
+	    	<p class="navbar-text navbar-right desktop-none" style="text-align:center;">
+	    	<a href="#check_availability" class="showall-btn sticky-book-now" href="http://lvh.me:8080/activities/get_started/events">Book Now</a>
+	    	</p>
+		</div>
+  	</div>
+</nav>
+@php 
+   $company_data = null;
+    if (Auth::check()) {
+        $company_data = Auth::user()->current_company;
+    }
+@endphp
+@include('layouts.business.footer')
 
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}&sensor=false"></script>
+
+<!-- New JS -->
 <script>
-$(document).ready(function() {
-	$('.showphotos').on('click', function(e) {
-		$('.firstfancyimg').click();
-		close: true,
+
+	$(document).ready(function() {
+	    var ratingTypes = [
+	        'cleanliness',
+	        'accuracy',
+	        'checkin',
+	        'communication',
+	        'customer_service',
+	        'location',
+	        'value'
+	    ];
+
+	    ratingTypes.forEach(function(type) {
+	        $('#' + type + '-stars').starrr().on('starrr:change', function(e, value) {
+	            $('#' + type).val(value);
+	        });
+	    });
 	});
-});
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc&sensor=false"></script>
-<script>
-$(document).ready(function () {
-    var locations = @json($locations);
-   /* alert(locations);*/
-    var map = ''
-    var infowindow = ''
-    var marker = ''
-    var markers = []
-    var circle = ''
-    $('#map_canvas').empty();
 
-    if (locations.length != 0) {  console.log('!empty');
-        map = new google.maps.Map(document.getElementById('map_canvas'), {
-            zoom:18,
-            center: new google.maps.LatLng(locations[0][1], locations[0][2]),
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
+
+	function getReview(value){
+		$.ajax({
+            url: "{{route('get_review')}}", 
+            type: 'POST',
+            data:{
+            	_token: '{{csrf_token()}}',
+            	sid: '{{$sid}}',
+            	type: value
+            },
+            success: function(response) {
+            	$('.reviewDiv').html(response);
+            }
         });
-        infowindow = new google.maps.InfoWindow();
-        var bounds = new google.maps.LatLngBounds();
-        var marker, i;
-        var icon = {
-            url: "{{url('/public/images/hoverout2.png')}}",
-            scaledSize: new google.maps.Size(50, 50),
-            labelOrigin: {x: 25, y: 16}
-        };
-        for (i = 0; i < locations.length; i++) {
-            var labelText = i + 1
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-                map: map,
-                icon: icon,
-                title: labelText.toString(),
-                label: {
-                    text: labelText.toString(),
-                    color: '#222222',
-                    fontSize: '12px',
-                    fontWeight: 'bold'
-                }
-            });
+	}
 
-            bounds.extend(marker.position);
+	function validateForm() {
+	    var name = $('#name').val();
+	    var title = $('#title').val();
+	    var message = $('#message').val();
 
-            var img_path = "{{Config::get('constants.USER_IMAGE_THUMB')}}";
-            var contents =
-                    '<div class="card-claimed-business"> <div class="row"><div class="col-lg-12" >' +
-                    '<div class="img-claimed-business">' +
-                    '<img src=' + img_path + encodeURIComponent(locations[i][4]) + ' alt="">' +
-                    '</div></div> </div>' +
-                    '<div class="row"><div class="col-lg-12" ><div class="content-claimed-business">' +
-                    '<div class="content-claimed-business-inner">' +
-                    '<div class="content-left-claimed">' +
-                    '<a href="/pcompany/view/' + locations[i][3] + '">' + locations[i][0] + '</a>' +
-                    '<ul>' +
-                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
-                    '<li class="fill-str"><i class="fa fa-star"></i></li>' +
-                    '<li class="fill-str"><i class="fa fa-star "></i></li>' +
-                    '<li><i class="fa fa-star"></i></li>' +
-                    '<li><i class="fa fa-star"></i></li>' +
-                    '<li class="count">25</li>' +
-                    '</ul>' +
-                    '</div>' +
-                    '<div class="content-right-claimed"></div>' +
-                    '</div>' +
-                    '</div></div></div>' +
-                    '</div>';
+	     var isValid = true;
 
-            google.maps.event.addListener(marker, 'mouseover', (function (marker, contents, infowindow) {
-                return function () {
-                    infowindow.setPosition(marker.latLng);
-                    infowindow.setContent(contents);
-                    infowindow.open(map, this);
-                };
-            })(marker, contents, infowindow));
-            markers.push(marker);
+	    $('.form-error').removeClass('font-green font-red font-danger').html(''); // Clear previous errors
+
+	    if (name.trim() === '') {
+	        $('.form-error').addClass('font-red').html('<div>Please enter your name.</div>');
+	        isValid = false;
+	    }
+	    if (title.trim() === '') {
+	        $('.form-error').addClass('font-red').html('<div>Please enter the review title.</div>');
+	        isValid = false;
+	    }
+	    if (message.trim() === '') {
+	        $('.form-error').addClass('font-red').html('<div>Please enter your message</div>');
+	        isValid = false;
+	    }
+
+	    return isValid;
+	}
+
+
+	$('#submit_review').on('submit', function(event) {
+        event.preventDefault(); 
+        $('.form-error').removeClass('font-green font-red').html('');
+
+        if (!validateForm()) {
+            return false; // Exit if validation fails
         }
 
-        //nnn commented on 18-05-2022 - its not displaying proper map
-       // map.fitBounds(bounds);
-       // map.panToBounds(bounds);
-        
-        $('.mysrchmap').show()
-    } else {
-        $('#mapdetails').hide()
-        
-        /*console.log('else map');
-        map = new google.maps.Map(document.getElementById('map_canvas'), {
-            zoom: 8,
-            center: new google.maps.LatLng(42.567200, -83.807250),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: "{{route('save_business_service_reviews')}}", 
+            type: 'POST',
+            data: formData, 
+            contentType: false,  // Set contentType to false when using FormData
+        	processData: false, 
+            success: function(response) {
+              	if (response.errors) {
+                	$.each(response.errors, function(index, error) {
+                    	$('.form-error').addClass('font-red');
+                    	$('.form-error').append('<div>' + error + '</div>');
+                	});
+              	}else{
+                 	$('.form-error').addClass('font-green');
+                 	$('.form-error').html(response.message);
+                 	setTimeout(function() {
+				        window.location.reload();
+				    }, 1500);
+              	}
+          	},
+	        error: function(xhr) {
+	            if (xhr.responseJSON && xhr.responseJSON.errors) {
+	                $.each(xhr.responseJSON.errors, function(index, error) {
+	                    $('.form-error').addClass('font-red');
+	                    $('.form-error').append('<div>' + error + '</div>');
+	                });
+
+	            } 
+	        }
         });
-        $('.mysrchmap').show()*/
+    });
+
+	$(".otherslider").owlCarousel({
+        loop: true,
+        autoplay: true,
+		margin: 10,
+        autoplayTimeout: 2000, //2000ms = 2s;
+        autoplayHoverPause: true,
+		responsiveClass: true,
+		responsive: {
+			0: {
+				items: 1
+			},
+
+			600: {
+			  	items: 2
+			},
+
+			1024: {
+			  	items: 3
+			},
+			
+			1200: {
+			  	items: 3
+			},
+			
+			1366: {
+			  	items: 3
+			},
+		  },
+    });
+
+</script>
+
+<script>
+	$('.review_section').addClass('hide')
+	$('.displayReview').on('click',function(){
+		$('.review_section').removeClass('hide')
+		/*jQuery('.review_section').toggle();*/
+	})
+</script>
+
+<script>
+	$(document).ready(function() {
+	  //$('.collapse.in').prev('.panel-heading').addClass('active');
+	  $('#dis-accordion')
+	    .on('show.bs.collapse', function(a) {
+	      $(a.target).prev('.panel-heading').addClass('active');
+	    })
+	    .on('hide.bs.collapse', function(a) {
+	      $(a.target).prev('.panel-heading').removeClass('active');
+	    });
+	});
+</script>
+
+<script>
+	$(document).ready(function() {
+	  //$('.collapse.in').prev('.panel-heading').addClass('active');
+	  $('#Fre-accordion')
+	    .on('show.bs.collapse', function(a) {
+	      $(a.target).prev('.panel-heading').addClass('active');
+	    })
+	    .on('hide.bs.collapse', function(a) {
+	      $(a.target).prev('.panel-heading').removeClass('active');
+	    });
+	});
+</script>
+
+<script>
+	$(document).ready(function() {
+  //$('.collapse.in').prev('.panel-heading').addClass('active');
+  $('#things-accordion')
+    .on('show.bs.collapse', function(a) {
+      $(a.target).prev('.panel-heading').addClass('active');
+    })
+    .on('hide.bs.collapse', function(a) {
+      $(a.target).prev('.panel-heading').removeClass('active');
+    });
+	});
+</script>
+
+<!-- New JS -->
+<script>
+
+	$(function () {
+	    $('[data-toggle="tooltip"]').tooltip();
+	});
+
+	function getAllSelectedOptions() {
+        var selectedOptions = [];
+
+        $('#participantDiv').find('select').each(function() {
+            var selectedValue = $(this).val();
+            var dataType = $(this).find('option:selected').data('type');
+            selectedOptions.push({ id: selectedValue, from: dataType });
+        });
+        
+        return selectedOptions;
     }
-});
+
+
+	$(document).ready(function() {
+		$(document).on("click", "#btnaddcart", function(){
+			$('#spoterror').html('');
+			var timechk = $('#timechk').val();
+			var totalQty = parseInt($('#totalQty').val());
+			var maxQty = parseInt($('#maxQty').val());
+			
+			if(timechk == 1){
+				if(totalQty == 0){
+					var message = '';
+
+					if($('#cate_title').val() == ''){
+						message = "Please select category. <br> <span class='fs-12'>Note: If the category is not available or the activity time has passed, please select another date.</span>";
+					}else if($('#priceid').val() == ''){
+						message = "Please select price option. <br> <span class='fs-12'>Note: If price option is not available then try another category.</span>";
+					}else if($('#actscheduleid').val() == ''){
+						if($('.notimeoption').html() != '' && $('.notimeoption').html() != undefined ){
+							message = "<br>Please select time. <br> <span class='fs-12'>Note: If time is not available then try another category.</span>";
+						}else{
+							message = "<br>Please select time.";
+						}
+					}else{
+						message = "Please select a participant.";
+					}
+					
+					$('#spoterror').html(message);
+				}else if(totalQty > maxQty ){
+					$('#spoterror').html("You have "+maxQty+" sports left.");
+				}else{
+					var form = $("#addtocartform");
+
+					var allSelected = true;
+			        $('.familypart').each(function() {
+			            if ($(this).find('option:selected').not('[value=""]').length === 0) {
+			                allSelected = false;
+			                return false;
+			            }
+			        });
+        			if (allSelected) {
+			           @if(Auth::check())
+							var selectedOptions = getAllSelectedOptions();
+							$.each(selectedOptions, function(index, option) {
+					            form.append('<input type="hidden" name="participateAry['+index+'][id]" value="'+option.id+'">');
+					            form.append('<input type="hidden" name="participateAry['+index+'][from]" value="'+option.from+'">');
+					        });
+					    @endif
+						
+				        var url = '{{route("addtocart")}}';
+				        $.ajax({
+				            type: "POST",
+				            url: url,
+				            data: form.serialize(),
+				            success: function(data) {
+				                if(data == 'no_spots'){
+				                 	$('#spoterror').html("There Is No Spots left You Can't Add This Activity.");
+				                }else{
+				                	/*$(".btns-modal").html('<button type="button" class="addbusiness-btn-modal noborder" data-dismiss="modal">Add Another Person</button>     <a href="'+data+'" class=" addbusiness-btn-modal" id="redicttosuccess">Continue Add To Cart</a>');*/
+				                	$(".btns-modal").html(' <a href="'+data+'" class=" addbusiness-btn-modal" id="redicttosuccess">Continue Add To Cart</a>');
+				                	$('#confirmredirection').modal({ backdrop: 'static',keyboard: false});
+				                }
+				                $(".cartitmclass").load(location.href+" .cartitmclass>*","");
+				            }
+				        });
+			        } else {
+			        	$('#spoterror').html('<br>Please select all who is participant.');
+			        }
+					
+				}
+		    }else{
+		    	$('#ActivtityFail').modal('show');
+		    }
+		}); 
+
+		$('.showphotos').on('click', function(e) {
+			$('.firstfancyimg').click();
+		});
+	});
+
+	$('.firstfancyimg').click(function(){
+	  	$.fancybox.close();
+	});
 </script>
 
 <script>
 	$(document).ready(function () {
+		var uniqueAids = {};
+		$('#add-one').prop('readonly', true);
+		$(document).on('click','.addonplus',function(){
+			id = $(this).attr('aid');
+			$('#add-one'+id).val(parseInt($('#add-one'+id).val()) + 1 );
+			if (!uniqueAids[id]) {
+		      	uniqueAids[id] = true; // Mark aid as unique
+		    }
+
+		    var commaSeparatedAids = Object.keys(uniqueAids).join(',');
+		    $('#addOnServicesId').val(commaSeparatedAids);
+		    setAddOnServiceTotal();
+		});
+    	$(document).on('click','.addonminus',function(){
+    		id = $(this).attr('aid');
+    		if (!uniqueAids[id]) {
+		      	uniqueAids[id] = true; // Mark aid as unique
+		    }
+
+			$('#add-one'+id).val(parseInt($('#add-one'+id).val()) - 1 );
+			if ($('#add-one'+id).val() <= 0) {
+				$('#add-one'+id).val(0);
+		    	delete uniqueAids[id];
+			}
+			
+		    var commaSeparatedAids = Object.keys(uniqueAids).join(',');
+		    $('#addOnServicesId').val(commaSeparatedAids);
+
+		    setAddOnServiceTotal();
+	    });
+
 	    $('#adultcnt').prop('readonly', true);
 		$(document).on('click','.adultplus',function(){
-			$('#adultcnt').val(parseInt($('#adultcnt').val()) + 1 );
+		    $('#adultcnt').val(parseInt($('#adultcnt').val()) + 1 );
+		    $('#adultCount').val(parseInt($('#adultcnt').val()));
+		    $('#totalcnt').val(parseInt($('#totalcnt').val() + 1));
+		    calculateTotal();
+		    @if(Auth::check())
+		    	participateCnt('adult');
+		   	@endif
 		});
+
     	$(document).on('click','.adultminus',function(){
 			$('#adultcnt').val(parseInt($('#adultcnt').val()) - 1 );
 			if ($('#adultcnt').val() <= 0) {
 				$('#adultcnt').val(0);
 			}
+			$('#totalcnt').val(parseInt($('#totalcnt').val() - 1));
+			if ($('#totalcnt').val() <= 0) {
+				$('#totalcnt').val(0);
+			}
+			$('#adultCount').val(parseInt($('#adultcnt').val()));
+			calculateTotal();
+			@if(Auth::check())
+				removeParticipateCnt('adult');
+			@endif
 	    });
 
 	    $('#childcnt').prop('readonly', true);
 		$(document).on('click','.childplus',function(){
 			$('#childcnt').val(parseInt($('#childcnt').val()) + 1 );
+			$('#totalcnt').val(parseInt($('#totalcnt').val() + 1));
+			$('#childCount').val(parseInt($('#childcnt').val()));
+			calculateTotal();
+			@if(Auth::check())
+				participateCnt('child');
+			@endif
 		});
     	$(document).on('click','.childminus',function(){
 			$('#childcnt').val(parseInt($('#childcnt').val()) - 1 );
+			$('#totalcnt').val(parseInt($('#totalcnt').val() - 1));
 			if ($('#childcnt').val() <= 0) {
 				$('#childcnt').val(0);
 			}
+			if ($('#totalcnt').val() <= 0) {
+				$('#totalcnt').val(0);
+			}
+			$('#childCount').val(parseInt($('#childcnt').val()));
+			calculateTotal();
+			@if(Auth::check())
+				removeParticipateCnt('child');
+			@endif
 	    }); 
 
 	    $('#infantcnt').prop('disabled', true);
 		$(document).on('click','.infantplus',function(){
 			$('#infantcnt').val(parseInt($('#infantcnt').val()) + 1 );
+			$('#totalcnt').val(parseInt($('#totalcnt').val()) + 1 );
+			$('#infantCount').val(parseInt($('#infantcnt').val()));
+			calculateTotal();
+			@if(Auth::check())
+				participateCnt('infant');
+			@endif
 		});
     	$(document).on('click','.infantminus',function(){
 			$('#infantcnt').val(parseInt($('#infantcnt').val()) - 1 );
+			$('#totalcnt').val(parseInt($('#totalcnt').val()) - 1 );
 			if ($('#infantcnt').val() <= 0) {
 				$('#infantcnt').val(0);
 			}
+			if ($('#totalcnt').val() <= 0) {
+				$('#totalcnt').val(0);
+			}
+			$('#infantCount').val(parseInt($('#infantcnt').val()));
+			calculateTotal();
+			@if(Auth::check())
+				removeParticipateCnt('infant');
+			@endif
 	    });
  	
 		$(document).on('click', '.serv_fav1', function(){
@@ -1420,168 +2049,127 @@ $(document).ready(function () {
 	    	}else{
 	    		$('#filteroption').show();
 	    	}
-
 	    });
 	});
 </script>
 
 <script>
-	function getbookdetails(sid){
-		$('#errordiv').html('');
-		var aducnt = $('#adultcnt').val();
-		var chilcnt = $('#childcnt').val();
-		var infcnt = $('#infantcnt').val();
-		var maxlengthval = $('#maxlengthval').val() ;
-		maxlengthval = parseInt(maxlengthval);
-		
-		if(typeof(aducnt) == 'undefined'){
-			aducnt = 0;
+
+	@if(Auth::check() && !empty($company_data))
+	function participateCnt(type){
+			$.ajax({
+	            type: "POST",
+	            url: '{{route("get-participate-data")}}',
+	            data: {
+	            	'_token' : '{{csrf_token()}}',
+	            	// 'cid' : '{{$company->id}}',
+					'cid' : '{{$company_data->id}}',
+	            	'priceid' : $('#selprice').val(),
+	            	'type' : type,
+	            },
+	            success: function(data) {
+	                $('#participantDiv').append(data);
+	            }
+	        });
 		}
-		if(typeof(chilcnt) == 'undefined'){
-			chilcnt = 0;
+	@endif
+
+	function removeParticipateCnt(type){
+		$('#participantDiv').children('.'+type).last().remove();
+	}
+
+	function  setAddOnServiceTotal() {
+		var totalQty =  0;
+		var sQty = '';
+		var addOnServicesId = $('#addOnServicesId').val();
+		var idArray = addOnServicesId.split(','); 
+		for (var i = 0; i < idArray.length; i++) {
+			sQty +=  $('#add-one' + idArray[i]).val() + ',';
+		    qty  =   parseFloat($('#add-one' + idArray[i]).val()) || 0;
+		    price =   parseFloat($('#add-one' + idArray[i]).attr('apirce')) || 0;
+			totalQty += qty * price;
 		}
-		if(typeof(infcnt) == 'undefined'){
-			infcnt = 0;
+		if (sQty.endsWith(",")) {
+		  	sQty = sQty.slice(0, -1);
 		}
-		
-		var totalcnt = parseInt(aducnt) + parseInt(chilcnt) + parseInt(infcnt);
-	
-		if(aducnt ==0 && chilcnt==0 && infcnt==0){
-			$('#errordiv').html('Please Select participate');
-			$('#cartadd').html('');
-		}else if(maxlengthval == 0){
-			$('#cartadd').html('<div id="cartadd"><a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;">Sold Out</a></div>');
-			$('#errordiv').html('Please Select another Category or Activity.');
-			
-		}else if(totalcnt > maxlengthval){
-			$('#errordiv').html('Sports left only '+maxlengthval);
-			$('#cartadd').html('<div id="addcartdiv"><a href="javascript:void(0)" class="btn btn-addtocart mt-10" style="pointer-events: none;" >Sold Out</a>');
+		sQty = (addOnServicesId != '') ? sQty : '';
+		$('#addOnServicesQty').val(sQty);
+		$('#addOnServicesTotalPrice').val(totalQty);		
+		calculateTotal();
+	}
+
+	function calculateTotal(){
+		var adultCount = parseInt($('#adultCount').val()) || 0;
+		var childCount = parseInt($('#childCount').val()) || 0;
+		var infantCount = parseInt($('#infantCount').val()) || 0;
+		var adultPrice = parseFloat($('#adultDiscountPrice').val()) || 0;
+		var childPrice = parseFloat($('#childDiscountPrice').val()) || 0;
+		var infantPrice = parseFloat($('#infantDiscountPrice').val()) || 0;
+		var addOnServicesTotalPrice = parseFloat($('#addOnServicesTotalPrice').val()) || 0;
+
+		var total = (adultCount * adultPrice) + (childCount * childPrice) + (infantCount * infantPrice);
+		var totalQty =  adultCount + childCount + infantCount;
+		total = (addOnServicesTotalPrice != '') ? ( total + addOnServicesTotalPrice) : total;
+		$('#totalQty').val(totalQty);
+		$('#textPrice').html('$'+ parseFloat(total)+' USD' || '$0 USD');
+		$('#priceTotal').val(parseFloat(total) || 0);
+		$('#price').val(parseFloat(total) || 0);
+	}
+
+	function addhiddentime(id,sid,chk) {
+		if(chk == 1){
+			$('#Countermodalbody').html('<div class="row "> <div class="col-lg-12 text-center"> <div class="modal-inner-txt scheduler-time-txt label-space"><label>You can\'t book this activity for today.</label><label> The time has passed.</label><label>Please choose another time.</label></div> </div></div>');
+			setTimeout(function() {
+				$('.participateDiv').html('<p>No Participate Available</p>');
+			}, 2000);
+			$('#Countermodal').modal('show');
 		}else{
-			var aduprice = $('#adultprice').val();
-			var childprice = $('#childprice').val();
-			var infantprice = $('#infantprice').val();
-			var totalprice = 0;
-			var totalpriceadult = 0;
-			var totalpricechild = 0;
-			var totalpriceinfant = 0; 
-			if(typeof(aduprice) != "undefined" && aduprice != null){
-				totalpriceadult = parseInt(aducnt)*parseInt(aduprice);
-				if(aducnt != 0){
-					$('#cartaduprice').val(aduprice);
-				}else{
-					$('#cartaduprice').val(0);
-				}
-			}
-
-			if(typeof(childprice) != "undefined" && childprice != null){
-				totalpricechild = parseInt(chilcnt)*parseInt(childprice);
-				if(chilcnt != 0){
-					$('#cartchildprice').val(childprice);
-				}else{
-					$('#cartchildprice').val(0);
-				}
-			}
-			if(typeof(infantprice) != "undefined" && infantprice != null){
-				totalpriceinfant = parseInt(infcnt)*parseInt(infantprice);
-				if(infcnt != 0){
-					$('#cartinfantprice').val(infantprice);
-				}else{
-					$('#cartinfantprice').val(0);
-				}
-			}
-
-			var adult = '';
-			var child = '';
-			var infant = '';
-			if(aducnt != 0){
-				adult = '<span>Adults x '+aducnt+' = $'+totalpriceadult+'</span>';
-			}
-
-			if(chilcnt != 0){
-				child = '<span>Kids x  '+chilcnt+' = $'+totalpricechild+'</span>';
-			}
-
-			if(infcnt != 0){
-				infant = '<span>Infants x  '+infcnt+' = $'+totalpriceinfant+'</span>';
-			}
-			
-			totalprice = parseInt(totalpriceadult)+parseInt(totalpricechild)+parseInt(totalpriceinfant);
-			$('.personcategory').html(adult+child+infant);
-			$('#totalprice').html('$'+totalprice+' USD');
-			$('#adupricequantity').val(aducnt);
-			$('#childpricequantity').val(chilcnt);
-			$('#infantpricequantity').val(infcnt);
-
-			$('#pricetotal'+sid+sid).val(totalprice);
-			$("#Countermodal").modal('hide');
-			$('#cartadd').html('<div id="addcartdiv"><div class="btn-cart-modal"><input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/></div><div class="btn-cart-modal instant-detail-booknow"><input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow"></div></div>');
+			updatedetail('{{$company->id}}',sid,'schedule',id);
 		}
 	}
 
-	function addhiddentime(id,sid) {
-		var actscheduleid = $('#actscheduleid'+sid).val(id);
-		var pricetitleid = $('#selprice'+sid).val();
-		var sesdate = $('#sesdate'+sid).val();
-		/*alert(pricetitleid);*/
-		var _token = $("input[name='_token']").val();
-		$.ajax({
-			url: "{{route('getmodelbody')}}",
-			type: 'POST',
-			data:{
-				_token: _token,
-				type: 'POST',
-				pricetitleid:pricetitleid,
-				serviceid:sid,
-				actscheduleid:id,
-				dateval:sesdate
-			},
-			success: function (response) {
-				if(response != ''){
-					var data = response.split('~~');
-					$('#Countermodalbody').html(data[0]);
-					$('#book'+sid+sid).html(data[1]);
-					$('#cartadd').html('');
-				}
-			}
-		});
-		$('#priceid'+sid).val(pricetitleid);
-		$('#Countermodal').modal('show');
-	}
-
-	function updateparticipate(cid,sid){
-		var participate= $('#actfiloffer_forcart').val();
-		$('.personcategory').html('<span>Adults x '+participate+' </span><span>Kids x 0</span><span>Infants x 0</span>');
-		var price = 0;
-		price =$('#price'+sid+sid).val();
-		var totalprice  = price*participate;
-		$('#totalprice').html('$'+totalprice+' USD');
-		if(totalprice != 0)
-		{
-			$('#pricetotal'+sid+sid).val(totalprice);
-		}
-		$('#pricequantity'+sid+sid).val(participate);
-	}
-
-	function updatedetail(cid,sid){
+	function updatedetail(cid,sid,type,val){
 		var actdate = $('#actfildate_forcart').val();
-		var serviceid =sid;
-		/*$('#pricequantity'+sid+sid).val(Participant)
-		$('#sesdate'+sid+sid).val(date);*/
+		var serviceid = sid;
+		var categoryId = $('#selcatpr').val();
+		var priceId = $('#selprice').val();
+		var scheduleId = $('.checkbox-option:checked').attr('id');
+		if(type == 'date'){
+			categoryId = '';
+			scheduleId = '';
+			priceId = '';
+			scheduleId = '';
+		}else if(type == 'category'){
+			categoryId = val;
+			scheduleId = '';
+			priceId = '';
+		}else if(type == 'price'){
+			priceId = val;
+			scheduleId = ''
+		}else if(type == 'schedule'){
+			scheduleId = val;
+		}
+		
 		var _token = $("input[name='_token']").val();
 		$.ajax({
 			url: "{{route('act_detail_filter_for_cart')}}",
 			type: 'POST',
+			dataType: 'JSON',
 			data:{
 				_token: _token,
 				type: 'POST',
 				actdate:actdate,
 				serviceid:serviceid,
 				companyid:cid,
+				categoryId:categoryId,
+				priceId:priceId,
+				scheduleId:scheduleId,
 			},
 			success: function (response) {
 				if(response != ''){
-					$('#updatefilterforcart').html(response);
+					$('#updatefilterforcart').html(response.html);
 					$('#sesdate'+sid).val(actdate);
+					$('.date-title').html(response.date);
 				}else{
 					$('#updatefilterforcart').html('');
 				}
@@ -1589,9 +2177,8 @@ $(document).ready(function () {
 		});
 	}
 
-	function actFilter(cid,sid)
-	{   
-		var actdate=$('#actfildate'+sid).val();
+	function actFilter(cid,sid){   
+		var actdate=$('#actfildate').val();
 		var actfilparticipant=$('#actfilparticipant'+sid).val();
 		var actoffer=$('#actfiloffer'+sid).val();
 		var actloc=$('#actfillocation'+sid).val();
@@ -1627,102 +2214,136 @@ $(document).ready(function () {
 				}else{
 					$('#filtersearchdata').html('<div class="col-md-12 col-sm-8 col-xs-12 "><p>No Activity Found.</p></div>');
 				}
-				/*var data = response.split('~~~~');
-				$('#actsearch'+sid).html(data[0]);
-				$('#statact'+sid).html(data[1]);
-				//alert($('#price'+sid).val());
-				var firstval=$("#selprice"+sid).prop("selectedIndex", 1).val();
-				if(actdate!=''){
-					var actdt = actdate.split('/');
-					$('#sesdate'+sid+sid).val(actdt[2]+'-'+actdt[0]+'-'+actdt[1]);
-				}*/		
 			}
 		});
 	}
 </script>
 
+<?php
+	$next_available_date = null;
+	$activities = BusinessActivityScheduler::where('serviceid', $sid)->get();
+	$result = $arrayofdates = [];
+	foreach($activities as $local_activity){
+		$activity_next_available_date = $local_activity->next_available_date();
+		if($activity_next_available_date != ''){
+			if ($next_available_date === null || $activity_next_available_date < $next_available_date) {
+	            $next_available_date = $activity_next_available_date;
+	        }
+		}
+		array_push($result, [$local_activity->starting, $local_activity->end_activity_date, $local_activity->activity_days]);
+	}
+	
+	if($next_available_date == null){
+		$next_available_date = new DateTime();
+	}
+?>
+
 <script>
+	var active_days = JSON.parse('<?php echo json_encode($result)?>');
+	// console.log(active_days);
+	const days = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',]
 	$( function() {
 		$( "#actfildate_forcart" ).datepicker( { 
 			minDate: 0,
 			changeMonth: true,
 			changeYear:true,
-        	yearRange: "1960:2060"
-		} );
-	} );
-</script>
-<script>
+        	yearRange: "1960:2060",
+        	dateFormat: "M-dd-yy",
+        	beforeShowDay: function(date){
+
+        		for(var i=0; i<active_days.length; i++){
+					var start = new Date(active_days[i][0]);
+					var end = new Date(active_days[i][1]);
+
+					if (date >= start && date <= end) {
+						if(active_days[i][2].match(days[date.getDay()])){
+        					return [1];	
+        				}
+					}
+
+        		}
+        		return [0];
+        	}
+		});
+	});
+
 	$( function() {
-		$( "#actfildate0" ).datepicker( {
-		 	minDate: 0,
+		$('#actfildate_forcart').val('{{$next_available_date->format('M-d-Y')}}');
+        updatedetail('{{$company->id}}','{{$sid}}','date','');
+	});
+
+	$(function() {
+		$("#actfildate" ).datepicker( { 
+			minDate: 0,
 			changeMonth: true,
 			changeYear:true,
-        	yearRange: "1960:2060"
-        } );
-	} );
-</script>
+			yearRange: "1960:2060"
+		});
+	});
+									
+</script> 
 
 <script type="text/javascript">	
 	function submit_rating(sid)
 	{
 		@if(Auth::check())
-		//var formData = $("#sreview"+sid).serialize();
-		var formData = new FormData();
-		var rating=$('#rating').val();
-		var review=$('#review'+sid).val();
-		var rtitle=$('#rtitle'+sid).val();
-		var _token = $("input[name='_token']").val();
-		
-		TotalFiles = $('#rimg'+sid)[0].files.length;
-		
-		let rimg = $('#rimg'+sid)[0];
-		for (let i = 0; i < TotalFiles; i++) {
-			formData.append('rimg' + i, rimg.files[i]);
-		}
-		formData.append('TotalFiles', TotalFiles);
-	    formData.append('rtitle', rtitle);
-		formData.append('review', review);
-		formData.append('rating', rating);
-		formData.append('sid', sid);
-		formData.append('_token', _token);
-		
-		if(rating!='' && review!='')
-		{ 
-			$.ajax({
-				url: "{{route('save_business_service_reviews')}}",
-				type: 'POST',
-	            contentType: 'multipart/form-data',
-	            cache: false,
-	            contentType: false,
-	            processData: false,
-	            data: formData,
-				success: function (response) {
-					$('.progress-bar-main').load(' .progress-bar-main > *')
-					$(".provider_review").load(location.href+" .provider_review >*","");
-					if(response=='submitted')
-					{	$('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Review submitted'); 
-						//$("#user_ratings_div"+sid).load(location.href + " #user_ratings_div"+sid);
-						$("#user_ratings_div"+sid).load(location.href+" #user_ratings_div"+sid+">*","");
-						$('#rating').val(' ');
-						$('#review').val(' '); $('#rtitle'+sid).val(' ');
+			//var formData = $("#sreview"+sid).serialize();
+			var formData = new FormData();
+			var rating=$('#rating').val();
+			var review=$('#review'+sid).val();
+			var rtitle=$('#rtitle'+sid).val();
+			var _token = $("input[name='_token']").val();
+			
+			TotalFiles = $('#rimg'+sid)[0].files.length;
+			
+			let rimg = $('#rimg'+sid)[0];
+			for (let i = 0; i < TotalFiles; i++) {
+				formData.append('rimg' + i, rimg.files[i]);
+			}
+			formData.append('TotalFiles', TotalFiles);
+		    formData.append('rtitle', rtitle);
+			formData.append('review', review);
+			formData.append('rating', rating);
+			formData.append('sid', sid);
+			formData.append('_token', _token);
+			
+			if(rating!='' && review!='')
+			{ 
+				$.ajax({
+					url: "{{route('save_business_service_reviews')}}",
+					type: 'POST',
+		            contentType: 'multipart/form-data',
+		            cache: false,
+		            contentType: false,
+		            processData: false,
+		            data: formData,
+					success: function (response) {
+						$('.progress-bar-main').load(' .progress-bar-main > *')
+						$(".provider_review").load(location.href+" .provider_review >*","");
+						if(response=='submitted')
+						{	$('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Review submitted'); 
+							//$("#user_ratings_div"+sid).load(location.href + " #user_ratings_div"+sid);
+							$("#user_ratings_div"+sid).load(location.href+" #user_ratings_div"+sid+">*","");
+							$('#rating').val(' ');
+							$('#review').val(' '); $('#rtitle'+sid).val(' ');
+						}
+						else if(response=='already')
+						{ $('#reviewerro'+sid).show(); 
+							$('#reviewerro'+sid).html('You have already submitted your review for this activity.'); }
+						else if(response=='addreview')
+						{ $('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Add your review and select rating for activity');  }
+						
 					}
-					else if(response=='already')
-					{ $('#reviewerro'+sid).show(); 
-						$('#reviewerro'+sid).html('You have already submitted your review for this activity.'); }
-					else if(response=='addreview')
-					{ $('#reviewerro'+sid).show(); $('#reviewerro'+sid).html('Add your review and select rating for activity');  }
-					
-				}
-			});
-		}
-		else
-		{
-			$('#reviewerro'+sid).show(); 
-			$('#reviewerro'+sid).html('Please add your reivew and select rating'); 
-			$('#rating').val(' ');
-			$('#review').val(' ');
-			return false;
-		}
+				});
+			}
+			else
+			{
+				$('#reviewerro'+sid).show(); 
+				$('#reviewerro'+sid).html('Please add your reivew and select rating'); 
+				$('#rating').val(' ');
+				$('#review').val(' ');
+				return false;
+			}
 		@else
 			$('#reviewerro'+sid).show(); 
 			$('#reviewerro'+sid).html('Please login in your account to review this activity');
@@ -1732,229 +2353,92 @@ $(document).ready(function () {
 		@endif	
 	}
 
-	function changeactpr(aid,val,part,div,maid)
-	{
-		/*var n = val.split('!^');
-	    var datan = '';
-	    var session = '';
-	    var id = '';
-	    var pr1 = 0;
-	    var price_title = '—';
-	    var memtype_hidden = '';
-	    var persontype = '';
-	    if(n[0] != ''){
-	    	datan1 = n[0].split('~~');
-	    	if(datan1[0] != ''){
-	    		session =  datan1[0]; 
-	    	}
-	    	if(datan1[1] != ''){
-				pr1 =  datan1[1]; 
-	    	}
-	    	if(datan1[2] != ''){
-	    		id=datan1[2];
-	    	}
-	    }
-	    if(n[1] != ''){
-	        datan = n[1].split('^^');
-	        if(datan[0] != ''){
-	            price_title = datan[0];
-	            $('#price_title_hidden'+maid+aid).val(datan[0]);
-	        }
-	        if(datan[1] != ''){
-	            memtype_hidden = datan[1];
-	            $('#memtype_hidden'+maid+aid).val(datan[1]);
-	        }
-	        if(datan[2] != ''){
-	          	persontype = datan[2];
-	            $('#persontype').val(datan[2]);
-	        }
-	  
-	    }
-		var pr; var qty;
-		var actfilparticipant=$('#actfilparticipant'+maid).val();
-		var category_title = $('#cate_title'+maid+aid).val();
-	    var time = $('#time_hidden'+maid+aid).val();
-	    var sportsleft = $('#sportsleft_hidden'+maid+aid).val();
-
-		if(actfilparticipant!='')
-		{
-			pr=actfilparticipant*pr1; 
-			qty=actfilparticipant;
-		}
-		else{ 
-			qty=1; 
-			if( pr1!='' ){ pr=qty*pr1; } else { pr='100'; }
-		}
-		var infantcnt = 0;
-		var childcnt = 0;
-		var adultcnt = 0;
-		var bookdata ='';
-		if(category_title != ''){
-			bookdata += '<div class="price-cat"><label>Category: </label><span> '+ category_title +'</span></div>';
-		}
-		if(time != ''){
-			bookdata += '<div><label>Duration: </label><span>'+ time +'</span></div>';
-		}
-		if(price_title != ''){
-			bookdata += '<div><label>Price Title: </label><span>'+ price_title+'</span></div>';
-		}
-		if(session != ''){
-			bookdata += '<div><label>Price Option: </label><span>'+session+' Session</span></div>';
-		}
-
-		if(session != ''){
-			bookdata += '<div><label>Membership: </label><span> '+memtype_hidden+'</span></div><div class="personcategory"><span>Adults x 1</span><span>Kids x 0</span><span>Infants x 0</span></div>';
-		}
-		if(pr1 !=''){
-			bookdata += '<div><label>Total </label><span id="totalprice">$'+pr1+' USD</span></div>';
-		}
-		bookdata += '</div>';
-
-		if(div=='book'){
-			$('#book'+maid+aid).html(bookdata);
-			$('#pricequantity'+maid+aid).val(qty);
-			$('#price'+maid+aid).val(pr);
-			$('#pricetotal'+maid+aid).val(pr);
-			$('#priceid'+aid).val(id);
-		}
-
-		else if (div=='bookmore'){
-			console.log(aid);
-			$('#bookmore'+maid+aid).html(bookdata);
-			$('#pricebookmore'+maid+aid).val(pr);
-			$('#priceid'+aid).val(id);
-		}
-
-		else if (div=='bookajax'){
-			$('#bookajax'+maid+aid).html(bookdata);
-			$('#pricebookajax'+maid+aid).val(pr);
-			$('#pricequantity'+maid+aid).val(qty);
-			$('#priceid'+aid).val(id);	
-		}
-		$("#actfiloffer_forcart option:selected").prop("selected", false);*/
-	}
-
-	function chngemember(sid) {
-		var actfilmtype = $('#actfilmtype'+sid).val();
-		var catid = $('#selcatpr'+sid).val();
-		$.ajax({
-			url: "{{route('pricemember')}}",
-			type: 'POST',
-			xhrFields: {
-				withCredentials: true
-		    },
-			data:{
-				_token: '{{csrf_token()}}',
-				type: 'POST',
-				mtype:actfilmtype,
-                sid:sid,
-                catid:catid,
-			},
-
-			success: function (response) { /*alert(response);*/
-				$("#pricechng"+sid+sid).html(response);
-				var selval = $("#selprice"+sid).val();
-				$("#priceid"+sid).val(selval);
-			}
-		});
-	}
-
-	function changeactsession(main,aid,val,div,simple)
-	{   
-	   /* alert('hii');*/
-	    var price_title = $('#price_title_hidden'+main+aid).val();
-	    var sesdate = $('#sesdate'+aid).val();
-	    var time = $('#time_hidden'+main+aid).val();
-	    var sportsleft = $('#sportsleft_hidden'+main+aid).val();
-	    var pricequantity = $('#pricequantity'+main+aid).val();
-	    if(div =='book'){
-	        var price = $('#price'+main+aid).val();
-	    }else if (div =='bookmore'){
-	        var price = $('#pricebookmore'+main+aid).val();
-	    }else{
-	        var price = $('#pricebookajax'+main+aid).val();   
-	    }
-
-	    var session = $('#session'+main+aid).val();
-		if(aid != '')
-		{
-			$.ajax({
-				url: "{{route('pricecategory')}}",
-				type: 'POST',
-				xhrFields: {
-					withCredentials: true
-			    },
-				data:{
-					_token: '{{csrf_token()}}',
-					type: 'POST',
-					actid:aid,
-					catid:val,
-	                sid:main,
-	                div:div,
-	                filtertype:simple,
-	                sesdate:sesdate,
-				},
-
-				success: function (response) { /*alert(response);*/
-					var dat = response.split('~~~~~~~~');
-					var bookdata='';
-					var catedata='';
-					var timedata='';
-					var cattitle='';
-					var timedata12='';
-					var pricelistdata='';
-					var memberoption='';
-					
-					if(dat[0] != ''){
-						box = dat[0].split('^^');
-						pricelistdata = box[0];
-						memberoption = box[1];
-					}
-					// alert(pricelistdata);
-					var catedata = dat[1].split('****');
-					if(catedata[0] != ''){
-						bookdata = catedata[0];
-					}
-					/*alert(catedata[1]);*/
-					if(catedata[1] != ''){
-						dt = catedata[1].split('!!~');
-						timedata = dt[0];
-						cdata = dt[1].split('*^');
-						cattitle = cdata[0];
-						getval = cdata[1].split('^~^');
-						setime = getval[0];
-						id= getval[1];
-					}
-					$("#pricechng"+main+aid).html(pricelistdata);
-					$("#memberoption").html(memberoption);
-					if(div =='book'){
-	                    $('#book'+main+aid).html(bookdata);
-	                }else if (div =='bookmore'){
-	                    $('#bookmore'+main+aid).html(bookdata);
-	                }else{
-	                    $('#bookajax'+main+aid).html(bookdata);
-	                }
-
-	                if(cattitle != ''){
-	                    $('#cate_title'+main+aid).val(cattitle);
-	                }
-	                if(timedata == 'no' || timedata == ''){
-	            	 	$('#addcartdiv').html('');
-	            	 	$('#timeschedule').html(setime);
-	            	}else{
-	            		
-	            		$('#timeschedule').html(setime);
-	            		$('#time_hidden'+main+aid).val(timedata);
-						$('#addcartdiv').html('<div class="btn-cart-modal">	<input type="submit" value="Add to Cart" class="btn btn-black mt-10"  id="addtocart"/></div><div class="btn-cart-modal instant-detail-booknow"><input type="submit" value="Book Now" class="btn btn-red mt-10" id="booknow"></div>');
-	            	}
-	            	$('#actscheduleid'+aid).val(id);
-	            	$("#actfiloffer_forcart option:selected").prop("selected", false);
-				}
-			});
-		}
+	function getInsModal(scid){
+		$('.hiddenALinkforIns').html('');
+		var url= "/getInsData/?scheduleId="+scid;
+			$('.hiddenALinkforIns').html('<a data-behavior="ajax_html_modal" data-url="'+url+'" id="hiddenALinkforIns"></a>');
+			$('#hiddenALinkforIns')[0].click();
 	}
 </script>
+
 <script src="/public/js/ratings.js"></script>
+
+<script>
+	$(document).ready(function () {
+	    var locations = @json($locations);
+	    var map = ''
+	    var infowindow = ''
+	    var marker = ''
+	    var markers = []
+	    var circle = ''
+	    $('#map_canvas').empty();
+
+	    if (locations.length != 0) {  console.log('!empty');
+	        map = new google.maps.Map(document.getElementById('map_canvas'), {
+	            zoom:18,
+	            center: new google.maps.LatLng(locations[0][1], locations[0][2]),
+	            mapTypeId: google.maps.MapTypeId.ROADMAP,
+	        });
+	        infowindow = new google.maps.InfoWindow();
+	        var bounds = new google.maps.LatLngBounds();
+	        var marker, i;
+	        var icon = {
+	            url: "{{url('/public/images/hoverout2.png')}}",
+	            scaledSize: new google.maps.Size(50, 50),
+	            labelOrigin: {x: 25, y: 16}
+	        };
+	        for (i = 0; i < locations.length; i++) {
+	            var labelText = i + 1
+	            marker = new google.maps.Marker({
+	                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+	                map: map,
+	                icon: icon,
+	                title: labelText.toString(),
+	                label: {
+	                    text: labelText.toString(),
+	                    color: '#222222',
+	                    fontSize: '12px',
+	                    fontWeight: 'bold'
+	                }
+	            });
+
+	            bounds.extend(marker.position);
+
+	            var img_path = "{{Config::get('constants.USER_IMAGE_THUMB')}}";
+	            var contents =
+	                    '<div class="card-claimed-business"> <div class="row"><div class="col-lg-12" >' +
+	                    '<div class="img-claimed-business">' +
+	                    '<img src="' + locations[i][4] + '" alt="fitnessity">' +
+	                    '</div></div> </div>' +
+	                    '<div class="row"><div class="col-lg-12" ><div class="content-claimed-business">' +
+	                    '<div class="content-claimed-business-inner">' +
+	                    '<div class="content-left-claimed">' +
+	                    '</div>' +
+	                    '<div class="content-right-claimed"></div>' +
+	                    '</div>' +
+	                    '</div></div></div>' +
+	                    '</div>';
+
+	            google.maps.event.addListener(marker, 'mouseover', (function (marker, contents, infowindow) {
+	                return function () {
+	                    infowindow.setPosition(marker.latLng);
+	                    infowindow.setContent(contents);
+	                    infowindow.open(map, this);
+	                };
+	            })(marker, contents, infowindow));
+	            markers.push(marker);
+	        }
+
+	        //nnn commented on 18-05-2022 - its not displaying proper map
+	       // map.fitBounds(bounds);
+	       // map.panToBounds(bounds);
+	        
+	        $('.mysrchmap').show()
+	    } else {
+	        $('#mapdetails').hide()
+	    }
+	});
+</script>
 
 @endsection
 

@@ -39,13 +39,14 @@ class PageController extends Controller
     }
 
     public function GetPageAboutUs(Request $request) {
-        $pageContent = $this->cms->getPageContent('about_us');
+        //$pageContent = $this->cms->getPageContent('about_us');
+        $pageContent = $this->cms->getPageContent('about_us_page');
         $cart = [];
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
         }
         return view('pages.about', [
-            'pageContent' => $pageContent->content,
+            'pageContent' => @$pageContent->content,
             'pageTitle' => "ABOUT US",
             'cart' => $cart
         ]);
@@ -220,6 +221,7 @@ class PageController extends Controller
             'content' => preg_replace('/(^[\"\']|[\"\']$)/', '', html_entity_decode(htmlentities(stripcslashes($pageContent->content)))),
         ]);
     }
+
     public function GetPrivacyPage()
     {
         $pageContent = $this->cms->getPageContent('privacy_policy');

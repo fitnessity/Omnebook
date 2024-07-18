@@ -10,7 +10,7 @@
 	use App\BusinessServices;
 	
 	$totpost = ProfilePost::where('user_id', Auth::user()->id)->count();
-	$FollowingThisweek = UserFollow::where('follower_id', $loggedinUser->id)->whereBetween('created_at', 
+	$FollowingThisweek = UserFollow::where('follower_id', @$loggedinUser->id)->whereBetween('created_at', 
 [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
 
 	
@@ -28,14 +28,14 @@
 			</ul>
 		</div>
 	</div>
-    <div class="widget">
+    <div class="widget mdisplay-none ipad-display">
     	<h4 class="widget-title">Your page</h4> 
 		<div class="your-page">
         	<figure>
-            	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$loggedinUser->profile_pic ))){ ?>
-					<img src="{{ url('/public/uploads/profile_pic/thumb/'.$loggedinUser->profile_pic) }}" alt="Fitnessity">
+            	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$loggedinUser->profile_pic ))){ ?>
+					<img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" alt="Fitnessity">
                 <?php }else{ 
-					$pf=substr($loggedinUser->firstname, 0, 1).substr($loggedinUser->lastname, 0, 1);
+					$pf=substr(@$loggedinUser->firstname, 0, 1).substr(@$loggedinUser->lastname, 0, 1);
 					echo '<div class="youpage-img-text"><p>'.$pf.'</p></div>';
 				} ?>
 			</figure>
@@ -75,14 +75,14 @@
                         	@foreach($FollowingThisweek as $weekf)
                             	<?php $queryUser = User::select("firstname", "lastname", "username", "profile_pic", "id")
 									->where("id", $weekf->user_id)->first(); ?>
-                            	<a href="{{ Config::get('constants.SITE_URL') }}/userprofile/{{ $queryUser->username}}" 
-                                title="{{ $queryUser->username}}" data-toggle="tooltip">
+                            	<a href="{{ Config::get('constants.SITE_URL') }}/userprofile/{{ @$queryUser->username}}" 
+                                title="{{ @$queryUser->username}}" data-toggle="tooltip">
                                 	<?php 
 									
-									if(File::exists(public_path("/uploads/profile_pic/thumb/".$queryUser->profile_pic ))){ ?>
+									if(File::exists(public_path("/uploads/profile_pic/thumb/".@$queryUser->profile_pic ))){ ?>
                                     	<img src="{{ url('public/images/newimage/userlist-1.jpg') }}" alt="">  
                                     <?php }else { 
-                                    	$pf=substr($queryUser->firstname, 0, 1).substr($queryUser->lastname, 0, 1);
+                                    	$pf=substr(@$queryUser->firstname, 0, 1).substr(@$queryUser->lastname, 0, 1);
 										echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
                                     }?>
                                 </a>
@@ -120,7 +120,7 @@
 			</div>
 		</div>
 	</div><!-- page like widget -->
-    <div class="widget-follower stick-widget" style="">
+    <div class="widget-follower stick-widget mdisplay-none ipad-display" style="">
 		<h4 class="widget-title">Who's following</h4>
 		<?php
 			$following = UserFollow::select("user_id", "follow_id", "follower_id")
@@ -132,11 +132,11 @@
 					<?php foreach ($following as $follow) { 
 						$logo='';
 						$queryUser = User::select("firstname", "lastname", "profile_pic", "id","created_at")->where("id", $follow['user_id'])->first();
-						$followpic=$queryUser["profile_pic"];
+						$followpic=@$queryUser["profile_pic"];
 						$querycomp = CompanyInformation::select("first_name", "last_name", "logo", "user_id", "id")->where("user_id", $follow['user_id'])->first();
 						$compid = isset($querycomp["id"]) ? $querycomp["id"] : "0";
 						$isfollow = UserFollow::select("user_id", "follow_id", "follower_id")
-						->where("follower_id", "=", $queryUser['id'])
+						->where("follower_id", "=", @$queryUser['id'])
 						->get();
 					?>
                     <li>
@@ -145,12 +145,12 @@
 						{ ?>
                         	<figure><img src="/public/uploads/profile_pic/thumb/<?php echo $followpic; ?>" alt="fitnessity"></figure>
 						<?php }else{ 
-							$pf=substr($queryUser["firstname"], 0, 1).substr($queryUser["lastname"], 0, 1);
+							$pf=substr(@$queryUser["firstname"], 0, 1).substr(@$queryUser["lastname"], 0, 1);
 						?>
                         	<div class="admin-img-text"><p><?php echo $pf; ?></p></div>
 						<?php } ?>
                         <div class="friend-meta">
-                        	<h4><a href="#"><?php  echo $queryUser["firstname"] . " ".$queryUser['lastname'] ;?></a></h4>
+                        	<h4><a href="#"><?php  echo @$queryUser["firstname"] . " ".@$queryUser['lastname'] ;?></a></h4>
 							<?php
 							if ($isfollow->count()>0) { echo 'Following'; } 
 							else { ?>
@@ -167,13 +167,13 @@
 		foreach($getstarted as $start){
 	?>
     	@if(File::exists(public_path("/uploads/getstarted/thumb/".$start->image)))
-			<div class="get-started">
+			<div class="get-started mdisplay-none">
             	<div class="get-img"><img src="{{ url('/public/uploads/getstarted/thumb/'.$start->image) }}" alt="{{$start->title}}" class="img-fluid"></div>
                 @if ($start->title !='')
                 	<div class="get-text">{{$start->title}}</div>
                 @endif
                 <div class="get-btn-box">
-                	<a href="{{ Config::get('constants.SITE_URL') }}/registration" class="get-btn"> Get Started </a>
+                	<a href="{{ Config::get('constants.SITE_URL') }}/activities" class="get-btn"> Get Started </a>
                 </div>
 			</div>
 		@endif
@@ -183,7 +183,7 @@
 			foreach($bookact as $bc){
 		?>
             @if(File::exists(public_path("/uploads/book/thumb/".$bc->image)))
-                <div class="ad-img">
+                <div class="ad-img mdisplay-none">
                     <img src="{{ url('/public/uploads/book/thumb/'.$bc->image) }}" alt="images" class="img-fluid">
                 </div>
             @endif

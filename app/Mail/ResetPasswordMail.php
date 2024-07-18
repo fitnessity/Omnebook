@@ -30,6 +30,6 @@ class ResetPasswordMail extends Mailable
      */
     public function build()
     {
-        return $this->from('info@raursoft.org')->subject('Reset Password Notification')->view('emails.password');
+        return $this->from(env('MAIL_FROM_ADDRESS'))->subject('Reset Password Notification')->view('emails.password');
     }
 }

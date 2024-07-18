@@ -1,3 +1,4 @@
+@inject('request', 'Illuminate\Http\Request')
 @extends('layouts.header')
 @section('content')
 
@@ -35,9 +36,13 @@
         <!-- Left Sidebar End -->
 
         <div class="page-content-wrapper">
-
+            @if(@$UserProfileDetail['activated'] != 1)
+            <div class="w3-panel w3-red">
+                 <p>Please Verify Your Email.</p>
+             </div> 
+            @endif
             <div class="content-page">
-
+                
                 <div class="container-fluid">
 
                     <div class="page-title-box">
@@ -68,25 +73,11 @@
                                     <label for="mediaFile">Profile Image</label>
                                     <div class="piccrop_block" id="file">
                                         @php
-                                        if(@$UserProfileDetail['profile_pic']!="")
-                                        $path='public/uploads/profile_pic/'.$UserProfileDetail['profile_pic'];
-                                        else
-                                        $path="public/img/upload.png"
+                                            $path = Storage::disk('s3')->exists(@$UserProfileDetail['profile_pic']) ? Storage::URL(@$UserProfileDetail['profile_pic']) : url('/img/upload.png');
                                         @endphp
-                                        <label>Drop files to upload <br> or <br> <img id="thumb-2" src="/{{$path}}" alt=""> <br> <span>Upload Photo</span></label>
+                                        <label>Drop files to upload <br> or <br> <img id="thumb-2" src="{{$path}}" alt=""> <br> <span>Upload Photo</span></label>
                                         <input type="file" id="mediaFile" name="frm_profile_pic" onchange="readURL(this);" accept="image/*" />
-                                       
-                                       <!-- <img class="result" id="result" name="frm_profile_pic1" >-->
                                     </div>
-
-                                    <!--<div class="profile-block">
-                                        <div id="profile">
-                                            <div class="dashes"></div>
-                                           
-                                            <label>Drop files to upload <br> or <br> <img src="/{{$path}}" alt=""> <br> <span>Upload Photo</span></label>
-                                        </div>
-                                        <input type="file" id="mediaFile" name="frm_profile_pic" onchange="readURL(this);" accept="image/*" />
-                                    </div>-->
                                 </div>
 
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -95,7 +86,7 @@
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
                                                 <input type="hidden" name="old_profile_pic" value="{{ $UserProfileDetail['profile_pic'] }}" />
-
+												<label> First Name </label>
                                                 <input type="text" name="firstname" id="firstname" placeholder="First Name" class="form-control" value="{{ $UserProfileDetail['firstname']}}">
                                                 @if ($errors->has('firstname'))
                                                 <span class="help-block" style="color:red">
@@ -107,6 +98,7 @@
 
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> Last Name </label>
                                                 <input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-control" value="{{$UserProfileDetail['lastname'] }}">
                                                 @if ($errors->has('lastname'))
                                                 <span class="help-block" style="color:red">
@@ -118,6 +110,7 @@
 
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> Gender </label>
                                                 <input type="text" name="gender" id="gender" placeholder="Gender" class="form-control" value="{{$UserProfileDetail['gender'] }}">
                                                 @if ($errors->has('gender'))
                                                 <span class="help-block" style="color:red">
@@ -129,24 +122,26 @@
 
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
-                                                <label style="font-size:12px; font-weight: bold">DOB:&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input type="date" name="birthdate" style="line-height:14px; width:125px; float:right"  placeholder="Birth Date" class="form-control rs-birthdate" value="{{$UserProfileDetail['birthdate'] }}">
+                                                <label>DOB:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                                <input type="date" name="birthdate"  placeholder="Birth Date" class="form-control rs-birthdate" value="{{$UserProfileDetail['birthdate'] }}">
                                                 <br><br>
-                                                <input type="radio" name="dobstatus" value="0" @if($UserProfileDetail['dobstatus'] == 0) checked="" @endif>
-                                                <label>Show &nbsp;&nbsp;</label>
-                                                <input type="radio" name="dobstatus" value="1" @if($UserProfileDetail['dobstatus'] == 1) checked="" @endif>
-                                                <label>Hide</label>
-                                                </label>
+                                                <input type="radio" class="radio-dots" name="dobstatus" value="0" @if($UserProfileDetail['dobstatus'] == 0) checked="" @endif>
+                                                <label style="font-weight: normal;">Show &nbsp;&nbsp;</label>
+                                                <input type="radio" class="radio-dots" name="dobstatus" value="1" @if($UserProfileDetail['dobstatus'] == 1) checked="" @endif>
+                                                <label style="font-weight: normal;">Hide</label>
+                                                
                                             </div>
                                         </div>
 
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> User Name </label>
                                                 <input type="text" readonly="readonly" placeholder="@username" class="form-control" value="{{$UserProfileDetail['username'] }}">
                                             </div>
                                         </div>
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> Phone Number </label>
                                                 <input type="text" name="phone_number" id="phone_number" placeholder="Phone Number" class="form-control" onkeypress='return event.charCode >= 48 && event.charCode <= 57' value="{{$phone_number}}" maxlength="14"  onkeyup="changeformate()">
                                                 @if ($errors->has('phone_number'))
                                                 <span class="help-block" style="color:red">
@@ -158,6 +153,7 @@
 
                                          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                             <div class="form-group editform">
+												<label> Address </label>
                                                 <input type="text" name="address" id="address" placeholder="Address" class="form-control" value="{{$UserProfileDetail['address'] }}">
                                                 @if ($errors->has('address'))
                                                 <span class="help-block" style="color:red">
@@ -173,6 +169,7 @@
                                         
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> City </label>
                                                 <input type="text" name="city" id="city" placeholder="City" class="form-control" value="{{$UserProfileDetail['city'] }}">
                                                 @if ($errors->has('city'))
                                                 <span class="help-block" style="color:red">
@@ -184,6 +181,7 @@
                                         
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> State </label>
                                                 <input type="text" name="state" id="state" placeholder="State" class="form-control" value="{{$UserProfileDetail['state'] }}">
                                                 @if ($errors->has('state'))
                                                 <span class="help-block" style="color:red">
@@ -195,6 +193,7 @@
                                         
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> Country </label>
                                                 <input type="text" name="country" id="country" placeholder="Country" class="form-control" value="{{$UserProfileDetail['country'] }}">
                                                 @if ($errors->has('country'))
                                                 <span class="help-block" style="color:red">
@@ -206,6 +205,7 @@
                                         
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group editform">
+												<label> Zipcode </label>
                                                 <input type="text" name="zipcode" id="zipcode" placeholder="Zipcode" class="form-control" value="{{$UserProfileDetail['zipcode'] }}">
                                                 @if ($errors->has('zipcode'))
                                                 <span class="help-block" style="color:red">
@@ -217,9 +217,9 @@
 
                                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                             <div class="form-group editform">
+												<label> Quick Intro </label>
                                                 <textarea name="quick_intro" id="quick_intro" cols="30" minlength="50" maxlength="200" rows="2" placeholder="Quick Intro (max 100 Words)" class="form-control">{{$UserProfileDetail['quick_intro'] }}</textarea>
                                                 <span id="quick_intro_count"><span id="display_count">0</span> words. Words left : <span id="word_left">200</span></span>
-
                                             </div>
                                         </div>
 
@@ -228,17 +228,20 @@
                                     <input type="submit" name="btnprofile" id="btnprofile" value="Update" class="btn-style-one">
                                 </div>
 
-                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 user-top">
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
 
                                     <div class="form-group editform">
+										<label> Email </label>
                                         <input type="text" readonly placeholder="Email" class="form-control" value="{{$UserProfileDetail['email'] }}">
                                     </div>
 
                                     <div class="form-group editform">
+										<label> Favorite Activities </label>
                                         <input type="text" name="favorit_activity" id="favorit_activity" placeholder="Favorite Activities (Can display up to 6 activites)" class="form-control" value="{{$UserProfileDetail['favorit_activity']}}">
                                     </div>
 
                                     <div class="form-group editform">
+										<label> About </label>
                                         <textarea name="business_info" id="business_info" cols="30" rows="7" maxlength="1000" placeholder=" About (a short description about your business - max 1000 words)" class="form-control">{{$UserProfileDetail['business_info']}}</textarea>
                                         <span id="business_info_count"><span id="display_count_business">0</span> words. Words left : <span id="word_left_business">1000</span></span>
                                     </div>
@@ -249,75 +252,7 @@
                         </form>
                     </div>
                     
-                    {{--
-                    <div class="edit_profile_section padding-1 white-bg border-radius1 mt-4">
-
-                        <div class="title-sub">Change Cover Photo</div>
-
-                        <div class="row">
-
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-
-                                <div class="cover-tagbox">
-                                    <i class="fas fa-info-circle"></i>
-                                    <span>Your Cover Photo will be used to customize the header of your profile.</span>
-                                </div>
-
-                                <div class="file-upload">
-                                    <form name="frm_cover" id="frm_cover" action="{{Route('savemycoverphoto')}}" method="post" enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="image-upload-wrap piccrop_block" id="file1"@if(@$UserProfileDetail['cover_photo']!="" ) style="display: none;" @endif>
-                                            <input class="file-upload-input" name="coverphoto" id="coverphoto" type='file' onchange="readURL(this);" accept="image/*" />
-
-                                            <div class="drag-text">
-                                                <h3>Drop your image here</h3>
-                                                <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Select Your File</button>
-                                            </div>
-                                            <img class="result" id="result1">
-                                        </div>
-                                        @if ($errors->has('coverphoto'))
-                                        <span class="help-block" style="color:red">
-                                            <strong>Upload your photo</strong>
-                                        </span>
-                                        @endif
-                                        <div class="file-upload-content piccrop_block" id="file1"@if(@$UserProfileDetail['cover_photo']!="" ) style="display: block;" @endif>
-                                            @php
-                                            if(@$UserProfileDetail['cover_photo']!="")
-                                            $path='public/uploads/cover-photo/'.$UserProfileDetail['cover_photo'];
-                                            else
-                                            $path="#"
-
-                                            @endphp
-                                            <img class="file-upload-image" src="/{{$path}}" alt="your image" />
-                                            
-                                        </div>
-                                        
-                                        <div>
-                                        </div>
-                                        <div class="highlighted-txt-yellow">
-                                            For best result, upload and image that is 1950px by 450px or larger.
-                                        </div>
-
-                                        <p>If you'd like to delete your current cover photo, use the delete Cover Photo button.</p>
-
-                                        <div class="image-title-wrap">
-                                            <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-                                            <button type="submit" id="submit_cover" name="submit_cover" class="remove-image">Save My Cover Photo</button>
-                                            &nbsp;&nbsp;
-                                            <button type="button" style="background:#000" onclick="removeUpload_coverphoto()" class="remove-image">Delete My Cover Photo</button>
-
-                                        </div>
-                                    </form>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                    
-                    --}}
-                    
+        
                     <div class="edit_profile_section changepass-section padding-1 white-bg border-radius1 mt-4">
 
                         <div class="title-sub">Change Password</div>
@@ -328,6 +263,7 @@
                                 <form name="frm_pwd" id="frm_pwd" action="{{Route('updatechangepassword')}}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-group editform">
+										<label> Current Password </label>
                                         <input type="password" name="currpassword" id="currpassword" placeholder="Current Password" class="form-control">
                                         @if ($errors->has('currpassword'))
                                         <span class="help-block" style="color:red">
@@ -337,6 +273,7 @@
                                     </div>
 
                                     <div class="form-group editform">
+										<label> New Password </label>
                                         <input type="password" name="newpassword" id="newpassword" placeholder="New Password" class="form-control">
                                         <img src="{{ url('public/img/icon-verified-autorize.png') }}" alt="" class="password-img">
                                         @if ($errors->has('newpassword'))
@@ -347,6 +284,7 @@
                                     </div>
 
                                     <div class="form-group editform">
+										<label> Retype Password </label>
                                         <input type="password" name="retypepassword" id="retypepassword" placeholder="Retype Password" class="form-control">
                                         <img src="{{ url('public/img/icon-verified-autorize.png') }}" alt="" class="password-img">
                                         @if ($errors->has('retypepassword'))
@@ -689,9 +627,7 @@ $(document).ready(function() {
             }else{
               $('#address').val(badd);
             }
-            var fulladdress = exclude(",",place.formatted_address);
-            alert(fulladdress);
-
+            
             $('#lat').val(place.geometry.location.lat());
             $('#lon').val(place.geometry.location.lng());
             
@@ -701,5 +637,5 @@ $(document).ready(function() {
 </script>
 
 
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap" async defer></script>
 @endsection

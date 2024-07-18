@@ -3,22 +3,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\UserRepository;
 use Auth;
-use App\Sports;
-use App\Repositories\SportsCategoriesRepository;
-use App\Repositories\SportsRepository;
-use App\Repositories\ProfessionalRepository;
-use App\AddrStates;
-use App\AddrCities;
-use App\AddrCountries;
-use App\CompanyInformation;
-use App\BusinessClaim;
-use App\Miscellaneous;
-use App\Languages;
+use App\Repositories\{SportsCategoriesRepository,SportsRepository,ProfessionalRepository,UserRepository};
 use DB;
-use App\User;
 use Session;
+use App\{AddrStates,AddrCities,AddrCountries,CompanyInformation,BusinessServices,BusinessClaim,Miscellaneous,Languages,MailService,SGMailService,Sports,User,Customer,Transaction,StripePaymentMethod,UserFamilyDetail};
+
+use Illuminate\Support\Facades\Crypt;
 
 class HomeController extends Controller
 {
@@ -177,8 +168,8 @@ class HomeController extends Controller
 
 	public function searchaction(Request $request)
 	{
-		 if($request->get('query'))
-		 {
+		if($request->get('query'))
+		{
 			$array_data=array();
 			$query = $request->get('query');
 			//$query = $request->get('query');
@@ -187,18 +178,53 @@ class HomeController extends Controller
 			{
 				$array_data[]=$city->sport_name;
 			}
-			$data_state = CompanyInformation::where('company_name', 'LIKE', "%{$query}%")->get();
+			$comd = CompanyInformation::where('dba_business_name' ,'=' , null)->get();
+			if(!empty($comd)){
+				foreach($comd as $det){
+					CompanyInformation::where('id', $det->id)->update(["dba_business_name" => $det->company_name]);
+				}
+			}
+
+			$data_state = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->get();
 			foreach($data_state as $state)
 			{
-				$array_data[]=$state->company_name."~~business_profile"."~~".str_replace(" ","-",$state->company_name)."/".$state->id;
+				$array_data[]=$state->dba_business_name."~~business_profile"."~~".str_replace(" ","-",$state->dba_business_name)."/".$state->id;
 			}
 			
-			$data_user = User::where('firstname', 'LIKE', "%{$query}%")->orWhere('lastname', 'LIKE', "%{$query}%")->orWhere('username', 'LIKE', "%{$query}%")->get();
+			$searchValues = preg_split('/\s+/', $query, -1, PREG_SPLIT_NO_EMPTY);
+			$data_user = User::where(function ($q) use ($searchValues) {
+            	$serch1 = @$searchValues[0] != '' ? strtolower(@$searchValues[0]) : '';
+                $serch2 = @$searchValues[1] != '' ? strtolower(@$searchValues[1]) : '';
+                $q->orderBy('created_at');
+                if($serch1 != '' && $serch2 != ''){
+                    $q->where(function($q) use ($serch1, $serch2) {
+                        $q->where(DB::raw('LOWER(firstname)'), 'like', "%{$serch1}%")
+                          ->where(DB::raw('LOWER(lastname)'), 'like', "%{$serch2}%");
+                    })
+                    ->orWhere(function($q) use ($serch1, $serch2) {
+                        $q->where(DB::raw('LOWER(firstname)'), 'like', "%{$serch2}%")
+                          ->where(DB::raw('LOWER(lastname)'), 'like', "%{$serch1}%");
+                    });
+                }else{
+                    $q->orWhere(DB::raw('LOWER(firstname)'), 'like', "%{$serch1}%")
+                    ->orWhere(DB::raw('LOWER(lastname)'), 'like', "%{$serch1}%")->orWhere(DB::raw('LOWER(username)'), 'LIKE', "%{$serch1}%");
+                } 
+            })->get();
+
+			//$data_user = User::where('firstname', 'LIKE', "%{$query}%")->orWhere('lastname', 'LIKE', "%{$query}%")->orWhere('username', 'LIKE', "%{$query}%")->get();
+
+
 			foreach($data_user as $user_data)
 			{
-				$array_data[]=$user_data->firstname." ".$user_data->lastname."(".$user_data->username.")"."~~personal_profile"."~~".$user_data->username;
+				$array_data[]=$user_data->full_name."(".$user_data->username.")"."~~personal_profile"."~~".$user_data->username;
 			}
-			
+
+			$data_activity = BusinessServices::where('program_name', 'LIKE', '%'.$query.'%')->get();
+			foreach($data_activity as $name)
+			{
+				$array_data[]=$name->program_name."~~activity_page"."~~".$name->id;
+			}
+
 			sort($array_data);
 			$output = '<ul id="country-list">';
 			if(!empty($array_data)){
@@ -208,19 +234,19 @@ class HomeController extends Controller
 					if(@$exp[1]=='personal_profile')
 						$url= "/userprofile/".$exp[2];
 					else if(@$exp[1]=='business_profile')
-						$url= "/businessprofile/".$exp[2];	
+						$url= "/businessprofile/".$exp[2];
+					else if(@$exp[1]=='activity_page')
+						$url= "/activity-details/".$exp[2];	
 					else
 						$url= "/activities/activity_type=".$row;
 					$output .= '<li class="searchclick" onClick="selectSearch(\''.$url.'\');" data-num="'.trim($exp[0]).'">'.$exp[0].'</li>';
 				}
-			}
-			else
-			{
+			}else{
 				$output .= '<li> Result not found </li>';
 			}
 			$output .= '</ul>';
 		  	echo $output;
-		 }
+		}
 	}
 	public function searchactioncity(Request $request)
 	{
@@ -234,10 +260,10 @@ class HomeController extends Controller
 			{
 				$array_data[]=$city->city_name;
 			}
-			$data_state = CompanyInformation::where('company_name', 'LIKE', "%{$query}%")->get();
+			$data_state = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->get();
 			foreach($data_state as $state)
 			{
-				$array_data[]=$state->company_name;
+				$array_data[]=$state->dba_business_name;
 			}
 			sort($array_data);
 			$output = '<ul id="country-list">';
@@ -263,15 +289,21 @@ class HomeController extends Controller
 				{
 					$array_data[]=$city->sport_name;
 				}
-				$data_state = CompanyInformation::where('company_name', 'LIKE', "%{$query}%")->get();
+				$data_state = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->get();
 				foreach($data_state as $state)
 				{
-					$array_data[]=$state->company_name;
+					$array_data[]=$state->dba_business_name;
 				}
 				$user_name = User::where('username', 'LIKE', '%'.$query.'%')->get();
 				foreach($user_name as $name)
 				{
 					$array_data[]=$name->username;
+				}
+
+				$data_activity = BusinessServices::where('program_name', 'LIKE', '%'.$query.'%')->get();
+				foreach($data_activity as $name)
+				{
+					$array_data[]=$name->program_name;
 				}
 				sort($array_data);
 				$output = '<ul id="country-list">';
@@ -322,7 +354,7 @@ class HomeController extends Controller
             $query = $request->get('query');
             //$query = $request->get('query');
           
-            $data_bus = CompanyInformation::where('company_name', 'LIKE', "%{$query}%")->get();
+            $data_bus = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->orWhere('company_name', 'LIKE', "%{$query}%")->get();
            /* $data_bus1 =BusinessClaim::where('business_name', 'LIKE', "%{$query}%")->where('is_verified',0)->get();*/
             foreach($data_bus as $buss)
             {	
@@ -344,7 +376,7 @@ class HomeController extends Controller
             	}
 
                 $array_data [] = array(
-	                "cname"=>$buss->company_name, 
+	                "cname"=>$buss->public_company_name, 
 	                "cid"=>$buss->id,
 	                "claim_business_status"=> $buss->is_verified,
 	                "image" => $buss->logo,
@@ -374,6 +406,7 @@ class HomeController extends Controller
                 foreach($array_data as $row)
                 {
                     $output .= '<li class="searchclick" onClick="searchclick('.$row['claim_business_status'].','.$row['cid'].')">
+						<div class="container">
                         <div class="row rowclass-controller">
                             <div class="col-md-2">';
                             if($row['image'] != ''){
@@ -391,7 +424,7 @@ class HomeController extends Controller
                             </div>
                             <input type="hidden" name="claim_business_status" id="claim_business_status" value="'.$row['claim_business_status'].'">
                             <input type="hidden" name="cid" id="cid" value="'.$row['cid'].'">
-                        </div></li>';
+                        </div></div></li>';
                 }
             }
             else
@@ -422,10 +455,138 @@ class HomeController extends Controller
 
     public function addcheckoutsession() {
     	Session::put('checkoutsession', 'checkoutsession'); 	
+      	return redirect('/userlogin');
     }
 
     public function already_claim_business() {
     	return view('home.already-claim-business');
+    }
+
+    public function senddummymail(){
+    	$id = Auth::user()->id;
+    	$status = MailService::sendEmaildummy($id);
+    	echo $status;exit;
+    }
+
+    public function searchuser(Request $request) {
+    	$user = User::orderby('created_at','desc');
+    	if($request->term){
+    		$searchValues = preg_split('/\s+/', $request->term, -1, PREG_SPLIT_NO_EMPTY);
+            $user = $user->where(function ($q) use ($searchValues) {
+            	$serch1 = @$searchValues[0] != '' ? strtolower(@$searchValues[0]) : '';
+                $serch2 = @$searchValues[1] != '' ? strtolower(@$searchValues[1]) : '';
+                $q->orderBy('created_at');
+                if($serch1 != '' && $serch2 != ''){
+                    $q->where(function($q) use ($serch1, $serch2) {
+                        $q->where(DB::raw('LOWER(firstname)'), 'like', "%{$serch1}%")
+                          ->where(DB::raw('LOWER(lastname)'), 'like', "%{$serch2}%");
+                    })
+                    ->orWhere(function($q) use ($serch1, $serch2) {
+                        $q->where(DB::raw('LOWER(firstname)'), 'like', "%{$serch2}%")
+                          ->where(DB::raw('LOWER(lastname)'), 'like', "%{$serch1}%");
+                    });
+                }else{
+                    $q->orWhere(DB::raw('LOWER(firstname)'), 'like', "%{$serch1}%")
+                    ->orWhere(DB::raw('LOWER(lastname)'), 'like', "%{$serch1}%");
+                } 
+            });
+            	//->whereRaw('LOWER(`firstname`) LIKE ?', [ '%'. strtolower($request->term) .'%' ]);
+        }
+        $user = $user->get();
+    	return response()->json($user);
+    }
+
+    public function sendGrantAccessMail(Request $request){
+    	$user = User::where('id',$request->id)->first();
+    	$company = CompanyInformation::findOrFail($request->business_id);
+    	$customer = Customer::where([ 'business_id'=>$company->id, 'fname'=>$user->firstname, 'lname'=>$user->lastname ,'email'=> $user->email, 'user_id' => $user->id])->first();
+    	if($customer){
+    		$customer->update(['profile_pic'=> $user->profile_pic,'request_status'=> 1]);
+    		$familyMember = UserFamilyDetail::where(['user_id' => $user->id])->get();
+            foreach($familyMember as $member){
+                $chk = Customer::where(['fname' =>$member->first_name ,'lname' =>$member->last_name, 'business_id'=>$company->id])->first();
+                if($chk == ''){
+                    Customer::create([
+                        'business_id' => $request->business_id,
+                        'fname' => $member->first_name,
+                        'lname' => ($member->last_name) ? $member->last_name : '',
+                        'username' => $member->first_name.' '.$member->last_name,
+                        'email' => $member->email,
+                        'country' => 'US',
+                        'status' => 0,
+                        'phone_number' => $member->mobile,
+                        'birthdate' => $member->birthday,
+                        'gender' => $member->gender,
+                        'user_id' => NULL, //this is null bcz of user is not created at 
+                        'parent_cus_id'=> $customer->id ,
+                        'relationship' =>$member->relationship,
+                        'request_status' =>1
+                    ]);
+                }
+            }
+
+            //$cardData = StripePaymentMethod::where(['user_id' => $user->id , 'user_type' => 'User' ])->get();
+
+            /*foreach($cardData as $data){
+                $stripData = StripePaymentMethod::where(['user_id' =>$customer->id ,'payment_id'=> $data->payment_id ,'exp_year' => $data->exp_year ,'last4' =>$data->last4])->first();
+                if($stripData == ''){
+                    StripePaymentMethod::create([
+                        'payment_id' => $data->payment_id,
+                        'user_type' => 'Customer',
+                        'user_id' => $customer->id,
+                        'pay_type'=> $data->pay_type,
+                        'brand'=> $data->brand,
+                        'exp_month'=> $data->exp_month,
+                        'exp_year'=> $data->exp_year,
+                        'last4'=> $data->last4,
+                    ]);
+                }
+            }*/
+
+            /*$paymentHistory = Transaction::where('user_type', 'User')
+            ->where('user_id', $user->id)
+            ->orWhere(function($subquery) use ($customer) {
+                $subquery->where('user_type', 'Customer')
+                    ->where('user_id', $customer->id);
+            })->get();
+
+            foreach($paymentHistory as $data){
+                $history = Transaction::where(['user_id' =>$customer->id ,'user_type'=>'Customer'])->first();
+                if($history == ''){
+                    Transaction::create([
+                        'item_id' => $data->item_id,
+                        'user_type' => 'Customer',
+                        'user_id' => $customer->id,
+                        'item_type'=> $data->item_type,
+                        'channel'=> $data->channel,
+                        'kind'=> $data->kind,
+                        'transaction_id'=> $data->transaction_id,
+                        'stripe_payment_method_id'=> $data->stripe_payment_method_id,
+                        'amount'=> $data->amount,
+                        'qty'=> $data->qty,
+                        'status'=> $data->status,
+                        'refund_amount'=> $data->refund_amount,
+                        'payload'=> $data->payload
+                    ]);
+                }
+            }*/
+    		return "already";
+    	}else{
+    		$data = array(
+    			"email"=> @$user->email,
+    			"cName"=>$user->full_name ,
+    			"pName"=>$company->dba_business_name,
+    			"url"=> env('APP_URL').'/grant_access/'.Crypt::encryptString($user->id).'/'.Crypt::encryptString($request->business_id)
+    		);
+    		$status = SGMailService::requestAccessMail($data);
+    		return $status;
+    	}
+    }
+
+    public function login_as(Request $request){
+        $user = User::find($request->id);
+        Auth::guard('web')->login($user, true);
+        return redirect('/');
     }
 
 }

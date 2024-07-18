@@ -1,0 +1,1 @@
+(document.querySelectorAll("[toast-list]")||document.querySelectorAll("[data-choices]")||document.querySelectorAll("[data-provider]"))&&(document.writeln("<script type='text/javascript' src='/public/dashboard-design/js/toastify-js.js'><\/script>"),document.writeln("<script type='text/javascript' src='/public/dashboard-design/js/flatpickr.min.js'><\/script>"));

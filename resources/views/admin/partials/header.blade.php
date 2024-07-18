@@ -4,7 +4,7 @@
 
     <a href="/admin/dashboard" class="logo">
 
-      <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>logo.png" style="height:auto;width:190px;" />
+      <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>omnebook-admin.png" style="height: auto; width: 174px; display: block;  padding: 5px;" />
 
       <!-- mini logo for sidebar mini 50x50 pixels -->
 
@@ -54,9 +54,9 @@
 
               <?php
 
-              if(Auth::user() && Auth::user()->profile_pic != '' && file_exists(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR.'thumb150'.DIRECTORY_SEPARATOR.Auth::user()->profile_pic)) {
+              if(auth()->guard('admin')->user() && auth()->guard('admin')->user()->profile_pic != '' && file_exists(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR.'thumb150'.DIRECTORY_SEPARATOR.auth()->guard('admin')->user()->profile_pic)) {
 
-                echo '<img src="'.Config::get('constants.USER_IMAGE_THUMB150').Auth::user()->profile_pic.'" class="user-image"/>';
+                echo '<img src="'.Config::get('constants.USER_IMAGE_THUMB150').auth()->guard('admin')->user()->profile_pic.'" class="user-image"/>';
 
               }
 
@@ -65,10 +65,16 @@
                 echo '<img src="'.Config::get('constants.FRONT_IMAGE').'user.png" class="user-image" />';
 
               }
+              $fname = '';
+              $lname = '';
+              if(auth()->guard('admin')->user()){
+                $fname= auth()->guard('admin')->user()->firstname;
+                $lname= auth()->guard('admin')->user()->lastname;
+              }
 
               ?>
 
-              <span class="hidden-xs">{{Auth::user()->firstname}} {{Auth::user()->lastname}}</span>
+              <span class="hidden-xs">{{$fname }} {{$lname}}</span>
 
             </a>
 
@@ -80,9 +86,9 @@
 
                 <?php
 
-                if(Auth::user()->profile_pic != '' && file_exists(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR.Auth::user()->profile_pic)) {
+                if(auth()->guard('admin')->user()->profile_pic != '' && file_exists(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR.auth()->guard('admin')->user()->profile_pic)) {
 
-                  echo '<img src="'.Config::get('constants.USER_IMAGE').Auth::user()->profile_pic.'" class="img-circle"/>';
+                  echo '<img src="'.Config::get('constants.USER_IMAGE').auth()->guard('admin')->user()->profile_pic.'" class="img-circle"/>';
 
                 }
 
@@ -96,7 +102,7 @@
 
                 <p>
 
-                  {{Auth::user()->firstname}} {{Auth::user()->lastname}}
+                  {{$fname }} {{$lname}}
 
                   <!-- <small>Member since Nov. 2012</small> -->
 

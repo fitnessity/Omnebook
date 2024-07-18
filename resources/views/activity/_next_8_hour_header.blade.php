@@ -11,11 +11,12 @@
 			</div>
 		</div>
 		@foreach ($bookschedulers as $bookscheduler)
+			@php 	$price_all = $bookscheduler->business_service->min_price(); @endphp
 			<div class="col-md-4">
 				<div class="find-activity">
 					<div class="row">
 						<div class="col-md-4 col-sm-4" style="overflow: hidden;">
-							<img style="width: 100%;height: 148px;" src="{{ url('public/uploads/profile_pic/thumb/'.$bookscheduler->business_service->first_profile_pic())}}" >
+							<img alt="Fitnessity" class="personal-find-activity" style="" src="{{ Storage::disk('s3')->exists($bookscheduler->business_service->first_profile_pic()) ? Storage::URL($bookscheduler->business_service->first_profile_pic()) : url('/images/service-nofound.jpg') }}" >
 						</div>
 						<div class="col-md-8 col-sm-8 activity-data">
 							<div class="row">
@@ -35,7 +36,7 @@
 										@auth
 											<div class="serv_fav1" ser_id="{{$bookscheduler->business_service->id}}" data-id="serfavstarts">
 												<a class="fav-fun-2" id="serfavstarts{{$bookscheduler->business_service->id}}">
-
+											
 													<i class="<?php echo ($bookscheduler->business_service->is_liked_by(Auth::id())) ? 'fas' : 'far' ?> fa-heart"></i>
 											</div>
 										@endauth
@@ -46,14 +47,16 @@
 								</div>
 							</div>
 							<div class="activity-information ">
-								<span><a href="{{route('show_businessprofile', ['user_name' => $bookscheduler->company_information->company_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+								<span><a href="{{route('show_businessprofile', ['user_name' => $bookscheduler->company_information->dba_business_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
 								<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
-								<a c class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">More Details</a>
+								<a c class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
 							</div>
 							<div class="row">
 								<div class="col-md-6 col-sm-6 col-xs-6">
 								<div class="dollar-person">
-									<span>From ${{$bookscheduler->price_detail()}}/Person</span>
+									@if($price_all != '')
+										<span>From {!!$price_all!!}/Person</span>
+									@endif
 								</div>
 								</div>
 								<div class="col-md-6 col-sm-6 col-xs-6">

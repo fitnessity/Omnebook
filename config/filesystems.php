@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
+    'default' => env('FILESYSTEM_DRIVER', 's3'),
 
     /*
     |--------------------------------------------------------------------------
@@ -63,6 +63,66 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
+        ],
+
+        'uploadExcel' => [
+            'driver' => 'local',
+            'root' =>  public_path() . '/ExcelUpload',
+            'url' => env('APP_URL').'/public',
+            'visibility' => 'public',
+            'permissions' =>[
+                'file' => [
+                    'private' => 0777,
+                    'public' => 0777,
+                    'custom' => 0777,
+                ],
+
+                'dir' => [
+                    'private' => 0777,
+                    'public' => 0777,
+                    'custom' => 0777,
+                ],
+            ],
+        ],
+
+        'uploadProduct' => [
+            'driver' => 'local',
+            'root' =>  public_path() . '/products',
+            'url' => env('APP_URL').'/public',
+            'visibility' => 'public',
+            'permissions' =>[
+                'file' => [
+                    'private' => 0777,
+                    'public' => 0777,
+                    'custom' => 0777,
+                ],
+
+                'dir' => [
+                    'private' => 0777,
+                    'public' => 0777,
+                    'custom' => 0777,
+                ],
+            ],
+        ],
+
+        'pdf' => [
+            'driver' => 'local',
+            'root' =>  public_path() . '/pdf',
+            'url' => env('APP_URL').'/public',
+            'visibility' => 'public',
+            'permissions' =>[
+                'file' => [
+                    'private' => 0777,
+                    'public' => 0777,
+                    'custom' => 0777,
+                ],
+
+                'dir' => [
+                    'private' => 0777,
+                    'public' => 0777,
+                    'custom' => 0777,
+                ],
+            ],
         ],
 
     ],

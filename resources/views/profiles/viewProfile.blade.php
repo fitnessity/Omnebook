@@ -432,7 +432,7 @@
                     </div>
 
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 nw-user-detail">
-                        <h1 class="nw-user-nm">@if($UserProfileDetail['company_name']!='') {{ $UserProfileDetail['company_name'] }} @else - @endif
+                        <h1 class="nw-user-nm">@if($UserProfileDetail['dba_business_name']!='') {{ $UserProfileDetail['dba_business_name'] }} @else - @endif
                             <a href="/reviews" class="button">Write a review</a>
 
                             @if(in_array(Auth::user()->status, array("draft", "rejected")))
@@ -459,15 +459,15 @@
                             @if($UserProfileDetail['role'] == "business")
                             <!--<div class="nw-dtl-edit">-->
                             <!--  <span class="nw-label">Company Name:</span>-->
-                            <!--  <span id="display_user_company">{{ $UserProfileDetail['company_name'] }}</span>-->
+                            <!--  <span id="display_user_company">{{ $UserProfileDetail['dba_business_name'] }}</span>-->
                             <!--</div>-->
                             <div class="nw-dtl-edit">
                                 <span class="nw-label">Name</span>
-                                <span id="display_user_company">{{ $UserProfileDetail['firstname']." ".$UserProfileDetail['lastname'] }}</span>
+                                <span id="display_user_company">{{ $UserProfileDetail['full_name'] }}</span>
                             </div>
                             <div class="nw-dtl-edit">
                                 <span class="nw-label">Company Representative Name</span>
-                                <span id="display_user_company">{{ $firstCompany['first_name']." ".$firstCompany['last_name'] }}</span>
+                                <span id="display_user_company">{{ $firstCompany['full_name']}}</span>
                             </div>
                             <div class="nw-dtl-edit">
                                 <span class="nw-label">Position</span>
@@ -712,7 +712,7 @@
                     @if(isset($business_details))
                     @foreach($business_details as $value)
                     <tr>
-                        <td><a href="{{url('/company/'.$value->company_name.'/1')}}">{{$value->company_name}}</a></td>
+                        <td><a href="{{url('/company/'.$value->dba_business_name.'/1')}}">{{$value->dba_business_name}}</a></td>
                         <td>{{$value->address}}</td>
                         <td>{{$value->country}}</td>
                         <td>{{$value->state}}</td>
@@ -1395,7 +1395,7 @@ var UserProfileDetail = <?php echo json_encode($UserProfileDetail); ?>;
 var ProfessionalDetail = <?php echo json_encode($UserProfileDetail['ProfessionalDetail']); ?>;
 
 $("#editProfileDetailModal").on("show.bs.modal", function () {
-    $('#editProfileDetailModal').find('#frm_company_name').val(UserProfileDetail.company_name);
+    $('#editProfileDetailModal').find('#frm_company_name').val(UserProfileDetail.dba_business_name);
     $('#editProfileDetailModal').find('#frm_firstname').val(UserProfileDetail.firstname);
     $('#editProfileDetailModal').find('#frm_lastname').val(UserProfileDetail.lastname);
     $('#editProfileDetailModal').find('#frm_username').val(UserProfileDetail.username);

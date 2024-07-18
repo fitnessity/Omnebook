@@ -126,7 +126,7 @@ $bustime = BusinessService::where('cid', request()->page_id)->first();
                             if($company->latitude != '' || $company->longitude  != ''){
                                 $lat = $company->latitude + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
                         		$long = $company->longitude + ((floatVal('0.' . rand(1, 9)) * 1) / 10000);
-                        		$a = [$company->company_name, $lat, $long, $company->id, $company->logo];
+                        		$a = [$company->dba_business_name, $lat, $long, $company->id, $company->logo];
                                 array_push($locations, $a);
 							}
                             ?>
@@ -175,7 +175,7 @@ $bustime = BusinessService::where('cid', request()->page_id)->first();
                 	<div class="get-text">{{$start->title}}</div>
                 @endif
                 <div class="get-btn-box">
-                	<a href="{{ Config::get('constants.SITE_URL') }}/registration" class="get-btn"> Get Started </a>
+                	<a href="{{ Config::get('constants.SITE_URL') }}/activities" class="get-btn"> Get Started </a>
                 </div>
 			</div>
             @endif
@@ -194,7 +194,7 @@ $bustime = BusinessService::where('cid', request()->page_id)->first();
 	</div><!-- profile-description -->
 </div><!-- right-box -->
 <script src="/public/js/compare/jquery-1.9.1.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc&sensor=false"></script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&sensor=false"></script>
 <script>
 $(document).ready(function () {
 	

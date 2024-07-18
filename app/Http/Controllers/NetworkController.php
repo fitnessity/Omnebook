@@ -109,7 +109,7 @@ class NetworkController extends Controller
                     $gdPhone = (isset($entry['gdGphoneNumber'][0]['Gt'])) ? $entry['gdGphoneNumber'][0]['Gt'] : 'No Phone Number';
                     $gdOrgName = (isset($entry['gdGorganization'][0]['gdGorgName']['Gt'])) ? $entry['gdGorganization'][0]['gdGorgName']['Gt'] : 'No Company Name';
 
-                    $contactName = ($gdName != '') ? ucfirst($gdName) : ($gdFName != '') ? ucfirst($gdFName).' '.ucfirst($gdLName) : ucfirst($gdEmail);
+                    $contactName = ($gdName != '') ? ucfirst($gdName) : (($gdFName != '') ? ucfirst($gdFName).' '.ucfirst($gdLName) : ucfirst($gdEmail));
 
                     $output[] = [
                       "tmpid"      => $index,

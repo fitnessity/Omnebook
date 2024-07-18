@@ -71,7 +71,7 @@
     .bepart_easy_content ul li {
         padding-right: 25% !important;
     }
-	.find-activity img {  width: 130px !important;  min-height: 141px !important; }
+	/* .find-activity img {  width: 130px !important;  min-height: 141px !important; } */
 	.instant-hire{ margin-top: 70px !important;}
 	.img-modal-left-bpage img {width: 100% !important; min-height: 101px !important;}
 }
@@ -543,7 +543,20 @@
         padding-top: 40px !important;
         padding-bottom: 20px !important;
     }
-
+	.pr-100 {padding-right: 15px;}
+	.cart-success h5{margin-top: 20px;}
+	.cart-itme-img img{margin-bottom: 20px;}
+    .main-slider{margin-top: 150px;}
+    .st-gallery.style-masonry .item-gallery:not(:nth-child(1)) {display: none;	  }
+	.st-gallery.style-masonry .item-gallery {padding: 0px;	padding-top: 0px;width: 100%; height: auto !important;  }
+	.st-gallery.style-masonry .item-gallery:nth-child(1) {padding-left: 0px;	padding-bottom: 0px;  }
+    .p-activitydetails { padding-top: 170px; }
+    .mb--mv--0{margin-bottom: 0px;}
+    .mb--mv--15{margin-bottom: 15px;}
+    .itinerary-image img{object-position: top; margin-bottom: 15px;}
+    .itinerary .panel-title a{line-height: 30px;}
+    .r-host-re-detail{text-align: center;}
+    .activity-top-border{border-top: 1px solid #ccc;}
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1365px) {
@@ -702,7 +715,7 @@
     }
 
     .header-right {
-        width: 88%;
+        width: 39%;
     }
 
     .slider-block input {
@@ -1202,11 +1215,11 @@
 	.banner-fs{height: 282px; padding-top: 82px; overflow: hidden;}
 	.help-desk form{width: 100%;}
 	.help-desk{min-height: 541px; padding-top: 15%;}
-	.location-detail{background-size: 1020px 830px;}
+	.location-detail{background-size: 1750px 1090px !important;}
 	#shopping-cart{margin: 10px !important;}
 	.ord-info {  margin-left: 0;}
 	.ord-img img{margin-bottom: 15px;}
-	.price-section{float: left;}
+	.price-section{float: left; width: 100%;}
 	.order-sum-rp{padding: 0px 0px 16px 14px;}
 	.modal-inner-txt p{font-size: 16px !important; padding: 25px 0 !important;}
 	.txt-center{text-align: center !important;}
@@ -1221,7 +1234,7 @@
 	.claimyour-business .frm-claim .addbusiness-block button{padding: 6px 12px 6px;}
 	.claim-rightblock{padding-top: 40px;}
 	.side-menu{max-width: 20% !important;}
-	.page-content-wrapper{padding-left: 20% !important;}
+	.page-content-wrapper{padding-left: 0px !important;}
 	.fc-head .fc-widget-header span{font-size: 12px; word-wrap: break-word;}
 	.dob input{width: 166px !important;}
 	.date_block{margin-bottom: 15px;}
@@ -1255,7 +1268,7 @@
 	.title-show a{float: none !important;}
 	.direc-right{float: none !important;}
 	.leftside-kickboxing.kicks .col-map-show{width: 33% !important;}
-	.class-info{padding: 13px 5px 0px 5px !important;}
+	.class-info{padding: 13px 15px 0px 15px !important;}
 	.modal-dialog.modal-lg.business{width: 95% !important;}
 	.showall-btn{padding: 5px 10px !important; font-size: 12px;}
 	.modal-sidebox .modal-filter-instant p{float: right !important;}
@@ -1278,14 +1291,116 @@
 	.cat-age label { color: #f53b49;  font-size: 17px;}
 	.top-area ul.setting-area{padding-left: 0px !important;}
 	.selectProduct { width: 100%;}
-	.find-activity img{width: 197px !important;}
-	.activity-time-main{float: right;}
+	.find-activity img{width: 100% !important; min-height: 125px;}
+	.activity-time-main{float: right;  margin-left: 15px; line-height: 14px;}
+	.dollar-person{margin-top: 0px;}
 	.top-search {  width: 65% !important;}
-	.kickboxing-slider-activites .owl-nav .owl-next{right: 0px !important; top: -14%;}
-	.kickboxing-slider-activites .owl-nav .owl-prev{left: 720px !important; top: -14%;}
-	.find-activity img{max-height: 145px !important;} 
+	.kickboxing-slider-activites .owl-nav .owl-next{right: 0px !important; top: -14%; background: #dadada; width: 25px; height: 25px;}
+	.kickboxing-slider-activites .owl-nav .owl-prev{left: 720px !important; top: -14%; background: #dadada; width: 25px; height: 25px;}
+	.kickboxing-slider-activites .owl-nav .owl-next i{font-size: 15px; position: absolute; top: 5px; left: 9px;}
+	.kickboxing-slider-activites .owl-nav .owl-prev i{font-size: 15px; position: absolute; top: 5px; right: 9px;}
+	.find-activity img{max-height: 400px !important;} 
 	.show-all{margin-top: 140px;}
 	.show-all .join-btn{padding: 0px;margin-top: 18px;}
+	.cart-itme-img img{margin-bottom: 15px;}
+	.customer-details img { width: 100% !important;}
+	.inner_top {  margin-top: 119px;}
+	.manage-customer-search h4{margin-top: 80px;}
+	.search-modal-customer{margin-bottom: 15px;}
+	.inner-accordion-titles label {  width: 50%;}
+	.mobile-scheduler{display: none !important;}
+	.scheduled-activity-info {  text-align: left; margin-top: 16px;}
+	.scheduler-qty{text-align: left;}
+	.scheduler-titles{display: inline-block;}
+	.price-mobileview .price-info {display: inline-block; width: 66%;}
+	.scheduled-location {text-align: left; margin-top: 8px;}	
+	.scheduled-btns{margin-top: 10px; display: inline-block; width: 100%;}
+	.scheduled-btns .btn-edit{width: 49%; display: inline-block;}
+	.manage-cus-btn{float: left;}
+	.scheduler-info-box .timeline{display: block; text-align: left;}
+	.btn-previous{width: auto;}
+	.overlay-activity-label{left: 245px; width: 36%;}
+	.scheduler-info-box label{color: #1d1d1d;}
+	.business-offer-main.manageservice-page{margin-top:90px;}
+	.modal-custom-header{display: none;}
+	.manage-service-display {  display: inline;}
+	.modal-inner-txt.modal-table-data{text-align: left;}
+	.date-activity-scheduler .activityselect3.special-date{width: 75%;}
+	.date-info { margin-top: 10px !important;}
+	.division-hight { height: auto;}
+	.check-client-info { margin-top: 15px;}
+	.inner-top-activity { margin-top: 125px;}
+	.col-md-offset-3-custom { margin-left: 0; }
+	.delcustomer{margin: 0px;}
+	.collapse-img img {float: left;  width: 70px;  height: 70px; border-radius: 100%; overflow: hidden; border: 3px solid #ddd;}
+	.cash-tend{width: 100%;}
+	.nopadding {  padding-left: 15px;  padding-right: 15px;}
+	.post-btn-red{width: 100%; margin-top: 0px;}
+	.membership-save { margin-top: 20px;}
+	.title-middle-part{margin-top: 20px;}
+	.side-border-right { border-right: none;  padding-right: 0;}
+	.inner-accordion-titles span{width: 47%;}
+	.refund-note p {  font-size: 15px;  margin-top: 0px;}
+	.suspend { float: right; margin-top: 3px;}
+	.show-all .table-inner-data-sec .p-name{width: 75%;}
+	.show-all .table-inner-data-sec .p-name span{margin-left: 0px;}
+	.page-content-wrapper .content-page .piccrop_block label img{height: 125px;}
+	.add-family-frnd{width: 48% !important; margin-bottom: 15px; margin-left: 5px !important;}
+	.schedulers-arrows .owl-nav .owl-prev {  position: absolute;  top: 32px;  left: -11px !important;}
+	.schedulers-arrows .owl-nav .owl-next {  position: absolute;  top: 31px;  right: -11px !important;}
+	.kickboxing-moredetails {padding-top: 114px !important;}
+	.modal-banner .bannar-size img{height: 210px !important;}
+	.inner-owl-slider-hire .owl-nav .owl-next{right: 6px !important; top: 47% !important; background: #dadada !important; width: 25px; height: 25px;}  
+	.inner-owl-slider-hire .owl-nav .owl-prev{left: 6px !important; top: 47% !important; background: #dadada !important; width: 25px; height: 25px;}
+	.inner-owl-slider-hire .owl-nav .owl-next i {color: #000; font-size: 13px; position: absolute; top: 6px; left: 9px;}
+	.inner-owl-slider-hire .owl-nav .owl-prev i {color: #000; font-size: 13px; position: absolute; top: 6px; right: 9px;}
+	.home-black-section label{font-size: 25px;}
+	.home-black-section i {top: 7%; left: 46%;}
+	.instant-hire .title h3{margin-bottom: 0px;}
+	.main-slider .slide{padding-top: 310px; min-height: 675px;}
+	.d-none{display: none;}
+	.get-start-sp{margin-top: 55px;}
+	.desktop-none{display: flex;}
+	.float-none{float: none !important;}
+	.title-show{float: right;}
+	.show-all-page{position: absolute; bottom: 0px; right: 20px;}
+	.activity-information { line-height: 19px; margin-top: 10px !important; margin-bottom: 10px !important;}
+	.companyalink {  font-size: 13px;}
+	.activity-information span { font-size: 13px !important;}
+	.activity-information p {  font-size: 13px !important; margin-bottom: 5px !important;}
+	.mysidepanel {  height: 100% !important;}
+	.calendar-address { padding: 0 115px;}
+	.calendar-btns {  margin-top: 10px;}
+	.mdisplay-none{display: none !important;}
+	.cards-block{width: 100% !important;}
+	.mobile-slider .card-info.payment-side{height: 175px !important;}
+	.payment-info .owl-stage-outer{height: 175px !important;}
+	.cards-block .cards-content{box-shadow: 0px 10px 15px 0px #fff !important;}
+	.booking-info-history .cards-content p{padding: 0 12px !important;}
+	.search-wid{width: 75% !important;}
+	.booking-active{left: 125px;}
+	#ajax_html_modal .modal-dialog{width: 95% !important; }
+	.your-booking-page.side-part { min-height: 369px;}
+	.powered-img{width: 100%;}
+	.booking-modal-logo img { width: 30%;}
+	.ipad-display{display: block !important;}
+	.profile-section{display: inline-block !important;}
+	.mb-7{margin-bottom: 7px;}
+	.orderdetails-block h4{font-weight: 500; font-size: 15px;}
+	.highlight-fonts{font-weight: bold;}
+	.special-offer {  float: none !important; margin-bottom: 10px;}
+	.activity-width {  width: 100% !important; }
+	.choose-sport-hire { display: block !important;}
+	.main-box-body {  padding: 0 0px !important;}
+	.custom-multiple-book .owl-prev{left: 13px !important;}
+	.custom-multiple-book .owl-next{right: 0px !important;}
+	.business-info{padding: 25px 20px;}
+    .itinerary-image img{object-position: top; margin-bottom: 15px;}
+    .mb--mv--0{margin-bottom: 0px;}
+    .mb--mv--15{margin-bottom: 15px;}
+    .ipad-none{display: none;}
+	.formfield-block { padding-right: 0px !important; margin-bottom: 15px;}
+	.help-desk{padding-top: 18%;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -1556,11 +1671,25 @@
 	.modal-dialog.modal-lg.business{width: 40% !important;}
 	.dob input{width: 222px !important;}
 	.w-38 {  width: 70%;}
-	.w-85 {  width: 80% !important;}
+	.w-85 {  width: 72% !important;}
 	.modal-dialog.modal-lg.staff-modal{width: 80% !important;}
 	.mykickboxing-activities .modal .modal-dialog.modal-lg{width: 85% !important;}
 	.modal-dialog.modal-lg.location-modal{width: 60% !important;}
 	.modal-dialog.modal-lg.booking-receipt{width: 70% !important;}
+	.modal-dialog.manage-customer{width: 80% !important;}
+	.modal-dialog.registermodal{width: 75% !important;}
+	.scheduler-titles{display: none;}
+	.modal-dialog.bookingcancel{width: 30%;}
+	.modal-dialog.editbooking{width: 50%;}
+	.modal-dialog.latecancel{width: 40%;}
+	.modal-dialog.booking0customer{width: 95%;}
+	.modal-dialog.modal-lg.giftsmodals{width: 50%;}
+	.modal-dialog.eventcalender{width: 40%;}
+	.modal-dialog.book-client-training{width: 90%;}
+	.modal-dialog.booking-time{width: 55%;}
+	.modal-dialog.pay-details{width: 77%;}
+	.modal-dialog.familyorfrnd{width: 80% !important;}
+	
 }
 
 /*media query for laptops & desktops screen start here*/
@@ -1612,17 +1741,18 @@
         text-align: center !important;
     }
 	.modal-dialog.modal-lg.business{width: 35% !important;}
+	.modal-dialog.manage-customer.mobile-1920{  width: 60%;}
 }
 
 @media screen and (min-width:1920px) and (max-width:2500px){
 	.modal-dialog.modal-lg.business{width: 28% !important;}
-	.find-activity img{
+	/* .find-activity img{
 		width: 175px !important;
 		min-height: 157px !important;
-	}
+	} */
 	.activity-information{
-		margin-bottom: 15px !important;
-		margin-top: 15px !important;
+		/* margin-bottom: 15px !important;
+		margin-top: 15px !important; */
 	}
 	.hide-bullets > li > img{
 		width: 127px;
@@ -1637,13 +1767,38 @@
 	.modal-dialog.modal-lg.location-modal{width: 45% !important;}
 	.favorite-block .favorite-button{margin: 3.2% 0px !important;}
 	.img-modal-left-bpage img {width: 100%  !important; min-height: 101px !important;}
+	.modal-dialog.manage-customer{width: 75% !important;}
+	.customer-details img { width: 100% !important;}
+	.modal-dialog.manage-customer{width: 30% !important;}
+	.modal-dialog.registermodal{width: 70% !important;}
+	.scheduler-titles{display: none;}
+	.modal-dialog.bookingcancel{width: 20%;}
+	.modal-dialog.editbooking{width: 40%;}
+	.modal-dialog.latecancel{width: 30%;}
+	.modal-dialog.booking0customer{width: 95%;}
+	.modal-dialog.modal-lg.giftsmodals{width: 40% !important;}
+	.modal-dialog.eventcalender{width: 30%;}
+	.modal-dialog.book-client-training{width: 70%;}
+	.modal-dialog.booking-time{width: 70%;}
+	.booking-activity-view .view-booking {top: 36px !important;}
+	.modal-dialog.pay-details{width: 70%;}
+	.booking-activity-view .view-schedule { top: 36px !important;}
+	.modal-dialog.familyorfrnd{width: 60% !important;}
+	.add-family-frnd .cards-content .familyfrnd-info .edit-family{left: 156px !important;}
+	.modal-dialog.manage-customer.mobile-1920{width: 60% !important;}
 }
+
 @media screen and (min-width:1500px) and (max-width:1920px){
 	.favorite-block .favorite-button{margin: 3.2% 0px !important;}
 }
+
 @media screen and (min-width:1200px){
 	.favorite-block .favorite-content .favorite-right-content{width: 75% !important;}
+	.manage-customer-modal-title h4{font-size: 30px;}
+	.search-info h3{font-size: 30px;}
+	
 }
+
 @media screen and (min-width:1200px) and (max-width:2500px){
 	.table-responsive{overflow-x: hidden;}
 }
@@ -1820,10 +1975,6 @@
         text-align: center;
     }
 
-    header .header-right .btn {
-        font-size: 13px;
-        padding: 6px 10px;
-    }
 
     .without_signin {
         position: relative;
@@ -1958,7 +2109,9 @@
     }
 
     .bepart_easy_content p {
-        text-align: justify;
+        text-align: left;
+		margin-bottom: 7px;
+		line-height: 21px;
     }
 
     .button_title h3 .button_default_1 {
@@ -2045,7 +2198,7 @@
 	.heading-bt-sp{margin-bottom: 0px;}
 	.cat-container.hide{display: none !important;}
 	.cat-img-name img {  height: auto;}
-	.bepart_easy_content ul li{padding-right: 0px; display: block;}
+	.bepart_easy_content ul li{padding-right: 0px; display: grid; margin-bottom: 0px;}
 	.bepart_easy_content ul li strong{padding-right: 7px;}
 	.button{display: none;}
 	.setting-area{padding-left: 0px !important;}
@@ -2105,7 +2258,7 @@
 	.help-rp-font{float: none !important;}
 	.latest-know-list.help_desk{width: 100%;float: right; margin-right: 0;}
 	.breadcrumbs{padding: 20px 0 !important;}
-	.location-detail{background-size: 740px 900px;}
+	.location-detail{background-size: 700px 830px !important;}
 	.payment-toptabs ul{display: grid;}
 	#shopping-cart {  margin: 12px !important;}
 	.ord-info {  margin-left: 0;}
@@ -2119,7 +2272,7 @@
 	.payment-toptabs ul li span{width: 23px; height: 23px;}
 	.payment-toptabs ul li{margin-bottom: 15px; margin-right: 0 !important;}
 	.payment-toptabs{padding: 40px 0 28px;}
-	.folw-detail{float: right; padding: 8px;}
+	.folw-detail{float: right; padding: 3px;}
 	.tabs-business-view .nav-tabs .nav-link{padding: 10px 8px;}
 	.your-page dt{padding: 0 210px 0 0;}
 	.txt-center{text-align: center !important;}
@@ -2153,21 +2306,21 @@
 	.fc-head .fc-widget-header span{font-size: 8px; word-wrap: break-word;}
 	.page-content-wrapper .content-page {  padding: 20px 0px !important;}
 	#calendar .complete-block{position: absolute; top: 85px !important; left: 0;}
-	.fc-view-container{margin-top: 46px;}
+	.fc-view-container{margin-top: 6px;}
 	.review-block .review-content{width: 80% !important;} 
-	.followers-block .followers-content .followers-right-content{width: 65% !important;}
+	.followers-block .followers-content .followers-right-content{width: 100% !important;}
+	.followers-block .followers-content .followers-right-content ul li{width: 100% !important;}
 	.followers-block .followers-content .followers-right-content ul{width: 100% !important;}
 	.followers-block .followers-button{float: none !important;}
 	.followers-block .followers-content{display: block ruby !important;}
 	.booking-info-menu ul li{padding: 0px 8px !important;}
 	.booking-info-tab .nav-tabs{margin-top: 15px;}
-	.book-info-sear .date_block i{right: 30px !important; top: 28px !important;}
+	.book-info-sear .date_block i{right: 40px !important; top: 8px !important;}
 	.date_block{margin-top: 15px; margin-bottom: 15px;}
 	.w-85 {  width: 100% !important;}
 	/*.page-content-wrapper .content-page label{width: 16%;}*/
 	.w-38 { width: 72% !important;}
 	.show_block{margin-top: 15px;}
-	.rs-birthdate{float: none !important;}
 	.w-80 {  width: 100% !important;}
 	.dob input{width: 265px !important;}
 	.divmargin{margin-left: 0px !important;}
@@ -2178,8 +2331,7 @@
 	.ord-details .empty-cart{padding: 120px 0;}
 	.card-btns{width: 100%; margin-bottom: 10px;}
 	#mycamera .fa.fa-camera{left: 7px;top: 8px;position: absolute;}
-	.friend-name {  width: 80%;}
-	.emoji-picker-icon{right: 51%; top: 62%;}
+	.emoji-picker-icon{right: 51%; top: 64.5%;}
 	.cards-block{width: 100% !important; margin-bottom: 15px;}
 	.favorite-block .favorite-content{width: 44% !important;}
 	.favorite-block .favorite-content .favorite-right-content{padding-left: 0 !important;   width: 100% !important;}
@@ -2189,14 +2341,14 @@
 	.pairets{margin-top: 15px; margin-bottom: 0px;}
 	.show-all .header-bg-show .time-base {  float: none;}
 	.show-all .table-inner-data .mg-time {  font-size: 15px;}
-	.instant-hire{margin-top: 0px !important;}
-	.instant-section-info p{margin-top: 7px;}
+	.instant-hire{margin-top: 162px !important;}
+	.instant-section-info p{margin-top: 3px;}
 	.choose-sport-hire {  display: block !important;}
 	.activity-width{width: 100% !important;}
-	.special-offer{margin-bottom: 8px !important;}
+	.special-offer{margin-bottom: 8px !important; float: none;}
 	.find-activity img{width: 100% !important;}
 	.activity-data {  padding-left: 15px !important; }
-	.dollar-person{margin-bottom: 6px;}
+	.dollar-person{margin-bottom: 0px;}
 	.dollar-person span { font-size: 13px;}
 	.activity-time-main span {  font-size: 13px;}
 	.title-show a{float: none !important;}
@@ -2245,15 +2397,207 @@
 	.modal-dialog.counter-modal-size { width: 410px;}
 	.cart-btns-continues{float: none;}
 	.btn-cart-info{margin-left: 20px; margin-right: 0px;}
-	.top-search{display: none !important;}
 	.points-cards-home-text {  display: block;}
-	.activity-time-main{float: right;}
-	.find-activity img{margin-bottom: 15px !important;}
+	.activity-time-main{text-align: center !important; margin-top: 4px;} 
+	.find-activity img{margin-bottom: 0px !important; min-height: 150px !important;}
 	.nav-sliders-activites{float: left;}
-	.instant-banner h4{top: 51%; width: 80%; left: 95px;}
+	.instant-banner h4{top: 60%; width: 70%; left: 15px;}
 	.instant-banner img{max-height: 300px;}
 	.instant-hire-activites {  margin-top: 15px !important;}
 	.show-all .table-inner-data{margin-bottom: 15px;}
+	.home-black-section{display: inline-block;}
+	.home-black-section label{font-size: 22px;}
+	.home-black-section i{display: none;}
+	.collapse-img img{margin-bottom: 15px;}
+	.manage-customer-search h4{margin-top: 80px;}
+	.search-modal-customer{margin-bottom: 15px;}
+	.side-border {  border-left: none;}
+	.panel-space{margin-bottom: 15px !important;}
+	.inner-accordion-titles span {  width: 100%; display: inline-block; margin-bottom: 7px;}
+	.inner-accordion-titles label {  width: 100%;}
+	.padding-0{padding-left: 15px !important; padding-right: 15px !important;}
+	.mobile-custom{padding-left: 0px !important; padding-right: 0px !important;}
+	.manage-cus-btn{float: left;}
+	.manage-search.manage-space {  margin-top: 15px;}
+	.mobile-scheduler{display: none !important;}
+	.scheduled-activity-info {  text-align: left; margin-top: 16px;}
+	.scheduler-qty{text-align: left;}
+	.scheduler-titles{display: inline-block;}
+	.price-mobileview .price-info {display: inline-block; width: 73%;}
+	.scheduled-location {text-align: left; margin-top: 8px;}	
+	.scheduled-btns{margin-top: 10px; display: grid;}
+	.scheduled-btns .btn-edit{width: 100%; display: inline-block; margin-bottom: 5px;}
+	.w-80 {  width: 78% !important;}
+	.priceactivity-scheduler{width: 100%;}
+	.scheduler-info-box .timeline{display: block; text-align: left;}
+	.btn-previous{width: auto;}
+	.overlay-activity-label{top: 48px; left: 9px; width: 60%;}
+	.scheduler-info-box label{color: #000;}
+	.custome-div{padding-left: 15px !important; padding-right: 15px !important;}
+	.newbuiness-txt { padding: 0 0px;}
+	#dropBox{min-width: 350px;}
+	.imagediv .more-option .more{bottom: 50px;}
+	.newbusiness-img{background-size: 100% 18% !important;}
+	.modal-dialog.schedule-model-width {  width: 95%;}
+	.modal-custom-header{display: none;}
+	.manage-service-display {  display: inline;}
+	.modal-inner-txt.modal-table-data{text-align: left;}
+	.business-offer-main.manageservice-page{padding: 14px;}
+	.border-spare-tor-right {  border-right: none;}
+	.division-hight { height: auto; }
+	.price-txt input { margin-top: 0px; }
+	.check-client-info{margin-top: 15px;}
+	.select0service { text-align: left;	}
+	.btn-search-checkout {  width: 100%;}
+	.col-md-offset-3-custom {  margin-left: 0;}
+	.inner-top-activity {  margin-top: 0px;}
+	.classes-info { border-right: none !important;}
+	.nopadding{padding-left: 15px; padding-right: 15px;}
+	.changecalce label{margin-left: 0;}
+	.cash-tend{margin-left: 0px;}
+	.edit-costume{margin-left: 0px;}
+	.terms-wrap{padding-left: 0px;}
+	.terms-wrap #terms_condition{min-height: 17px; width: 19%;}
+	.modal-banner .single-banner{padding: 0 0px;}
+	.delcustomer{margin: 0px;}
+	.customer-profile-info span{text-align: end;}
+	.cash-tend{width: 100%;}
+	.save-pmt-checkbox{display: block ruby;}
+	.post-btn-red{width: 100%; margin-top: 0px;}
+	.title-middle-part{margin-top: 20px;}
+	.side-border-right { border-right: none;  padding-right: 0;}
+	.activation-date .date-activity-check input{width: 100% !important;}
+	.membership-save { margin-top: 20px;}
+	.title-sp-customer{margin-top: 25px;}
+	.void-transaction{width: 100%;}
+	.refund-date {  width: 50%; }
+	.refund-amount input {  width: 44%; }
+	.refund-method select { width: 42%;}
+	.start-date{width: 44%; margin-bottom: 5px;}
+	.suspend{float: right; margin-top: 5px;}
+	.refund-note p {  font-size: 15px;  margin-top: 9px; }
+	.modal-banner .three-banner img{height: 170px;}
+	.modal-banner .single-banner img{height: 170px;}
+	.modal-banner .dual-banner img{height: 170px;}
+	.fsth-0 { margin-top: 30px;}
+	.show-all .table-inner-data-sec .p-name{width: 79%;}
+	.show-all .table-inner-data-sec .p-name span{margin-left: 0px;}
+	.form-control.rs-birthdate{width: 295px;}
+	.page-content-wrapper .content-page .piccrop_block label img{height: 125px;}
+	.sticky-book-now{font-size: 20px; margin-bottom: 15px;}
+	.add-family-frnd{width: 100% !important; margin-bottom: 15px; margin-left: 0px !important;}
+	.schedulers-arrows .owl-nav .owl-next {  position: absolute;  top: 27px !important;  right: -13px !important;}
+	.schedulers-arrows .owl-nav .owl-prev { position: absolute;  top: 27px !important;  left: -13px !important;}
+	.main-slider .slide{padding-top: 200px; min-height: 575px;}
+	.top-search{width: 100% !important; margin-top: 10px !important;}
+	.personal-find-activity{height: 245px;}
+	.inner-owl-slider-hire .owl-nav .owl-prev { width: 25px; height: 25px; text-align: center; opacity: 1; border-radius: 50px; top: 195px; position: absolute; color: #070707; left: 8px; font-size: 15px; background: #dadada !important;}
+	.inner-owl-slider-hire .owl-nav .owl-prev i{position: absolute; top: 7px; left: 9px;}
+	.inner-owl-slider-hire .owl-nav .owl-next { width: 25px; height: 25px; text-align: center; opacity: 1; border-radius: 50px; top: 195px; position: absolute; right: 8px; color: #000; font-size: 15px; background: #dadada !important;} 
+	.inner-owl-slider-hire .owl-nav .owl-next i{position: absolute !important; top: 6px !important; left: 9px !important; font-size: 14px !important;}
+	.inner-owl-slider-hire .owl-nav .owl-prev i{position: absolute !important; top: 6px !important; left: 9px !important; font-size: 14px !important;}
+	.kickboxing-block .kickboxing-topimg-content img{height: 400px; min-height: 0px !important;}  
+	.activity-information{ line-height: 20px; margin-top: 8px !important;}
+	.class-info{height: 45px !important; }
+	.addToCompare{margin-right: 7px;}
+	.bottom-content { height: 216px; }
+	.kickboxing-slider-activites .owl-nav .owl-next{background: #dadada;}
+	.kickboxing-slider-activites .owl-nav .owl-next i{font-size: 15px; position: absolute; top: 8px; left: 11px;}
+	.kickboxing-slider-activites .owl-nav .owl-prev{background: #dadada; right: 40px;}
+	.kickboxing-slider-activites .owl-nav .owl-prev i{font-size: 15px; position: absolute; top: 8px; right: 11px;}
+	.d-none{display: none;}
+	.desktop-none{display: flex;}
+	.float-none{float: none !important;}
+	.padding-r0{padding-right: 0px;}
+	.activity-inner-data{font-size: 11px;}
+	.activity-hours span{font-size: 10px;}
+	.activity-city span{font-size: 12px; color: #000;}
+	.companyalink{font-size: 14px;}
+	.activity-information span{font-size: 13px !important; }
+	.activity-information p{font-size: 13px;}
+	.dollar-person{font-size: 13px;} 
+	/*#popular-activities .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	#carousel-slider .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	#find-trainers .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	#ways-to-workout .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	#all-activities .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	#inarea-activities .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}
+	#trainers-coaches .owl-stage-outer .owl-stage .owl-item {width: 270px !important;}*/
+	.activity-information.activites-height { height: auto;}
+	.title-show{float: right;}
+	.show-all-page{position: absolute; bottom: 0px; right: 20px;}
+	.find-business .btn-txt { padding: 11px 0 !important;}
+	.footer-bottom-left ul{margin-bottom: 19px;}
+	.instant-hire .title .f-16{font-size: 16px; line-height: 26px;}
+	.float-left{text-align: left !important;}
+	.mysidepanel{height: 100% !important;}
+	.pc-sidebar .pc-link {display: flex !important;}
+	.pri-1 a{display: inline !important;}
+	.navbar-content a{color: #fff;}
+	.classes-time label{text-align: center; width: 100%; margin-top: 36px;}
+	.post-btn.activity-scheduler{width: 100% !important;}
+	.classes-time {  display: flex; }
+	.sacecard-title{font-size: 17px !important;}
+	.search-wid {width: 72% !important;}
+	.calendar-address {  padding: 0 25px;}
+	.mdisplay-none{display: none !important;}
+	.mobile-slider .card-info.payment-side{height: 175px !important;}
+	.payment-info .owl-stage-outer{height: 175px !important;}
+	.cards-block .cards-content{box-shadow: 0px 10px 15px 0px #fff !important;}
+	.padding-1{padding: 10px !important; }
+	.booking-info-history .cards-content p{padding: 0 23px !important;}
+	.booking-info-tab .nav-item {padding: 0px 5px !important;}
+	#ajax_html_modal .modal-dialog{width: 96% !important; }
+	.your-booking-page.side-part { min-height: 369px;}
+	#calendar .fc-toolbar.fc-header-toolbar .fc-right{margin-top: 15px;}
+	#calendar .fc-toolbar.fc-header-toolbar .fc-center {margin-top: 22px;}
+	.profile-section .nav > li > a{padding: 10px 8px;}
+	.followers-block{border: none !important; display: flex;} 
+	.activites-price-details-left{padding-left: 15px;}
+	.activites-price-details{margin-top: 10px;}
+	.happning-eight-hr{height: 185px !important; }
+	.custom-fitnessity .title .f-16{font-size: 16px; line-height: 20px; margin-bottom: 5px;}
+	.create-post::before{left: -10px;}
+	.central-meta{padding: 20px 0px;}
+	.postcomment{padding: 5px 23px;}
+	.post-meta{margin-top: 0px;}
+	.post-meta .removepost {  margin-bottom: 20px; margin-left: 20px; margin-top: 15px;}
+	.profile-section{display: inline-block !important;}
+	.video-box{padding: 15px 0;}
+	.video-tab-iframe iframe{height: 225px !important;}
+	.price-section {  float: right;  width: 100%;}
+	.mb-7{margin-bottom: 7px;}
+	.orderdetails-block h4{font-weight: 500; font-size: 15px;}
+	.highlight-fonts{font-weight: bold;}
+	.central-box{padding-right: 10px; padding-left: 10px;}
+	.img-title.com-info{margin-bottom: 20px;}
+	.info-display span { font-size: 14px; margin-bottom: 6px; line-height: 18px;}
+	.info-display label { font-size: 14px; margin-bottom: 6px; line-height: 18px;}
+	.comparePan .w3-col.m4 { width: 50%;}
+	.cmprBtn.addtcmpr-btn{width: 100%;}
+	.comparePanle{bottom: 60px !important;}
+	.user-img-sp .user-pic{margin-left: 10px;}
+	.friend-name{padding-left: 15px; padding-right: 7px;}
+	.post-meta.social-img input{padding-left: 15px;}
+	.mobile-none{display:none;}
+	.main-box-body {  padding: 0 0px !important;}
+	.main-box-body{margin-top: 55px !important;}
+	.multiple-modal-size {  width: 95%;}
+	.calendar-separator-line{border-left: none !important;}
+	.custom-multiple-book .owl-prev{left: 0px;}
+	.custom-multiple-book .owl-next{right: -5px;}
+	.book0total-price {  text-align: right;}
+	#calendar .fc-toolbar.fc-header-toolbar .fc-right .fc-button-group{margin-top: -65px; height: 35px;}
+	#calendar .fc-toolbar.fc-header-toolbar .fc-right{align-items: end !important;}
+	.fc .fc-toolbar h2{text-align: center; width: 100%; }
+	.business-info{padding: 23px 10px;}
+	.reset-passthru form {  padding: 0 0px;}
+	.reset-title{padding-left: 0px;}
+	.ipad-none{display: none;}
+	.pmt-105{margin-top: 105px;}
+	.claiming-section { padding: 130px 0 0 !important; }
+	.formfield-block { padding-right: 0px !important; margin-bottom: 15px;}
+	.help-desk{padding-top: 40%;}
 }
 
 @media(max-width: 575px) {
@@ -2441,7 +2785,8 @@
     }
 	.w-38 { width: 70% !important;}
 	.dob input { width: 249px !important;}
-
+	.booking-active{left: 147px;} 
+	.book-info-sear .date_block i {  right: 59px !important;}
 }
 
 @media(max-width: 400px) {
@@ -2463,13 +2808,18 @@
 	.review-block .review-content {  width: 78% !important;}
 	.w-38 { width: 65% !important;}
 	.dob input {  width: 220px !important;}
-	.emoji-picker-icon {  right: 48%;  top: 62%;}
+	.emoji-picker-icon {  right: 48%;  top: 64%;}
 	.btn-cart{padding: 5px 7px 0px 25px !important;}
 	.btn-cart > span{top: 2px;}
-	header .header-right .btn{font-size: 14px;}
+	header .header-right .btn{font-size: 12px;}
 	.btn-style-one{font-size: 14px;}
 	.modal-dialog.counter-modal-size {  width: 354px;}
 	.showall-btn{padding: 5px 18px;}
+	.home-black-section label{font-size: 12px;}
+	.home-black-section i{display: none;}
+	#dropBox { min-width: 330px;}
+	.form-control.rs-birthdate {  width: 272px;}
+	.booking-active {  left: 120px;}
 }
 
 @media(max-width: 376px) {
@@ -2515,7 +2865,19 @@
     }
 	.dob input { width: 196px !important;}
 	.emoji-picker-icon {  right: 44%;  top: 62%;}
-	
+	.home-black-section label{font-size: 20px;}
+	.home-black-section i{display: none;}
+	#dropBox {  min-width: 300px;}
+	.form-control.rs-birthdate {  width: 240px;}
+	.modal-banner .bannar-size img { height: 140px !important;}
+	.booking-active {  left: 95px;}
+	.profile-section .nav > li > a { padding: 10px 6px;}
+	header .header-right .header-bottom-sp{margin-bottom: 6px;}
+}
+
+@media(max-width: 360px){
+	.user0imgs.set-text {  top: 0 !important;}
+	.plus-set {  top: 0 !important;}
 }
 
 @media(max-width: 280px){
@@ -2570,12 +2932,35 @@
 	.modal-dialog.modal-lg.business-details{width: 50% !important;}
 	.instant-section-info h4{right: 22px; word-break: break-all;}
 	.instant-section-info p {  right: 22px;  margin-top: 24px !important;}
-	.header-right{display: grid !important;}
+	.header-right{display: block !important;}
 	.btn-list-business.business-sp {  margin-right: 0px;}
-	.btn-cart > span{right: 65px !important;} 
+	.btn-cart > span{right: -4px !important; top: -13px;} 
 	.header-right a{margin-top: 5px;}
-	header .header-right .btn{margin-bottom: 5px;}
+	header .header-right .btn{margin-bottom: 5px; font-size: 11px; padding: 6px 6px;}
 	.pstyle{margin-left: 17px;}
-	
+	.activites_content h3{height: auto !important;}
+	.home-black-section label {  font-size: 18px;}
+	.main-slider .slide{min-height: 345px; padding-top: 118px;}
+	.instant-banner h4{width: 90%;}
+	.booking-info-history .cards-content p {  padding: 0 0px !important;}
+	.booking-info-history .cards-content {  padding: 17px 8px !important;}
+	.booking-activity-view .view-booking{font-size: 12px;}
+	.booking-activity-view .view-schedule{font-size: 12px;}
+	.booking-activity-view .view-booking{left: 0px !important;}
+	.booking-activity-view .view-schedule{right: 0px !important;}
+	.padding-2 {  padding: 15px 10px 15px;}
+	.booking-active{left: 56px;}
+	.social-img figure {  width: 104.5%; padding: 0px;}
+	.friend-name {  width: 79% !important;}
+	.activity-schedule-tabs ul li a {padding: 7px 7px; font-size: 12px; border: 0px solid transparent; margin: 0px;}
+	.pairets-inviable a{font-size: 14px;}
+}
+
+@media(max-width: 250px){
+	.activity-schedule-tabs ul li a {padding: 5px 5px; font-size: 12px; border: 0px solid transparent; margin: 0px;}
+	.pairets-inviable a{font-size: 12px;}
+	.pairets .calendar-btn{font-size: 12px;}
+	.pairets-inviable{padding: 10px 6px;}
+	.pairets{padding: 10px 6px;}
 }
 /*MEDIA QUEREIS EDN HERE

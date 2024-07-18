@@ -1,57 +1,35 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use App\Repositories\PlanRepository;
-use App\Repositories\SportsRepository;
-use App\Plan;
-use App\BusinessClaim;
-use App\CompanyInformation;
-use App\UserService;
-use App\BusinessService;
-use App\Sports;
-use App\User;
+use App\Repositories\{PlanRepository,SportsRepository,FeaturesRepository};
 use Auth;
 use Redirect;
 use Response;
 use DB;
 use Validator;
 use Image;
-use Excel;
+use Storage;
 use App\Imports\ClaimImport;
 use Maatwebsite\Excel\HeadingRowImport;
-use App\BusinessCompanyDetail;
-use App\BusinessExperience;
-use App\BusinessInformation;
-use App\BusinessTerms;
-use App\BusinessVerified;
-use App\BusinessServices;
-use App\BusinessServicesMap;
-use App\BusinessPriceDetails;
-use App\BusinessActivityScheduler;
-use App\PagePost;
-use App\PagePostSave;
-use App\PageLike;
-use App\BusinessReview;
-use App\Miscellaneous;
-use App\BusinessPriceDetailsAges;
+use App\{BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessActivityScheduler,PagePost,PagePostSave,PageLike,BusinessReview,Miscellaneous,BusinessPriceDetailsAges,MailService,Plan,BusinessClaim,CompanyInformation,UserService,BusinessService,Sports,User,SGMailService};
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class PlansController extends Controller
 {   
     protected $plan;
     public $error = '';
     protected $sports;
+    protected $features;
 
-    public function __construct(PlanRepository $plan ,SportsRepository $sports)
+    public function __construct(PlanRepository $plan ,SportsRepository $sports ,FeaturesRepository $features)
     {
         $this->middleware('admin');
         $this->plan = $plan;    
         $this->sports = $sports;
+        $this->features = $features;
     }
 
     public function index()
@@ -63,7 +41,185 @@ class PlansController extends Controller
             'pageTitle' => 'Manage Membership Plans'
         ]);
     }
+
+    public function create()
+    {
+        $features = $this->features->getAllFeatures();
+        return view('admin.plan.create', [      
+            'features' => $features,       
+            'pageTitle' => 'Add New Membership Plan'
+
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $features = $this->features->getAllFeatures();
+        $myArray = [];
+        foreach ($features as $key=>$f){
+            $myArray[$f->id] = $request->input('featureValue_'.$f->id);
+        }
+        $image = $request->has('image') ? $request->file('image')->store('plan') : ''; 
+        $plan = $this->plan->create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'price_per_month' => $request->price_per_month,
+            'price_per_year' => $request->price_per_year,
+            'image' => $image,
+            'featurs_details' => json_encode($myArray),
+            'heading' => $request->heading]);
+
+        if($plan)
+        {
+            session(['key' => 'success']);
+            session(['msg' => 'Membership Plan Created Succesfully !']);    
+        }
+
+        return redirect()->route('plan-list');
+    }
+
+    protected function saveValidator($data)
+    {
+        return Validator::make($data, [            
+            'title' => 'required|max:255|unique:membership_plans',
+            'price_per_month' => 'required|integer',
+            'price_per_year' =>'required|integer',
+            'description' =>'required'
+        ],
+        [
+            'title.required' => 'Provide a title',
+            'price_per_month.required' => 'Provide a Price per month',
+            'price_per_year.required' => 'Provide a  Price per year',
+            'description.required' => 'Provide a description',
+        ]);
+    }
+
+    protected function updateValidator($data,$id)
+    {
+        return Validator::make($data, [            
+            'title' => 'required|max:255|unique:membership_plans,title,'.$id,
+            'price_per_month' => 'required|integer',
+            'price_per_year' =>'required|integer',
+            'description' =>'required'
+        ],
+        [
+            'title.required' => 'Provide a title',
+            'price_per_month.required' => 'Provide a Price per month',
+            'price_per_year.required' => 'Provide a Quote per month',
+            'description.required' => 'Provide a description',
+        ]);
+    }
+
+    public function edit($id)
+    {
+        $features = $this->features->getAllFeatures();
+        $plan = $this->plan->getById($id);
+        if($plan){
+            return view('admin.plan.edit', [
+                'pageTitle' => 'Edit Membership Plan',
+                'plan' => $plan,
+                'features' => $features
+            ]);
+        }
+
+        return redirect()->route('plan-list');   
+    }
+
+    public function update($id, Request $request)
+    {
+        /*print_r($request->all());*/
+        $features = $this->features->getAllFeatures();
+        $myArray = [];
+        foreach ($features as $key=>$f){
+            $myArray[$f->id] = $request->input('featureValue_'.$f->id);
+        }
+
+        $image = $request->file('image') ? $request->file('image')->store('plan') : $request->hiddenimage; 
+        $status = $this->plan->update($id,[
+            'title' => $request->title,
+            'description' => $request->description,
+            'price_per_month' => $request->price_per_month,
+            'price_per_year' => $request->price_per_year,
+            'image' => $image,
+            'featurs_details' =>  json_encode($myArray),
+            'heading' => $request->heading]);
+
+        if($status)
+        {
+            session(['key' => 'success']);
+            session(['msg' => 'Membership Plan Updated Succesfully !']);    
+        }
+
+        return redirect()->route('plan-list');
+    }
+
+    public function deactivate(Request $request)
+    {
+        $status = $this->plan->update($request->id, array('is_deleted'=>'1'));
+
+        if($status)
+        {
+            return json_encode([
+                'status' => true
+            ]);
+        }
+        
+        return json_encode([
+            'status' => false
+        ]);
+    }
+
+    public function activate(Request $request)
+    {
+        $status = $this->plan->update($request->id, array('is_deleted'=>'0'));
+
+        if($status)
+        {
+            return json_encode([
+                'status' => true
+            ]);
+        }
+        
+        return json_encode([
+            'status' => false
+        ]);
+    }
+
+    /**
+     * Delete Multiple Plans
+     * 
+     * @param Request $request
+     * @return array
+     */
+    public function deleteAll(Request $request){
+        $input = $request->all();
+
+        if(isset($request->planIds) && count($request->planIds) > 0) {
+
+            $update = Plan::whereIn('id', $input['planIds'])
+                     ->update([
+                        'is_deleted' => 1
+                    ]);
+
+            if(!$update) {
+                $response = array(
+                        'danger' => 'Some error while deactivating plans.',
+                );
+            } else {
+                $response = array(
+                    'success' =>  'Plans Deactivated Successfully.',
+                ); 
+            }
+
+        } else {
+            $response = array(
+                    'danger' =>  'Please select at least one plan.',
+            );
+        }
+        return Redirect::to('/admin/plans/membership-plan')->with('status',$response);
+    }
     
+
     public function businessUnclaim()
     {
         $claims = CompanyInformation::where('is_verified',0)->get();
@@ -132,51 +288,14 @@ class PlansController extends Controller
             Excel::import(new ClaimImport, $request->file('import_file'));
             $repeat_data=\Session::get('user') != null ? \Session::get('user') : [];
             $not_repeat_data=\Session::get('notuser') != null ? \Session::get('notuser') : [];
-
-            //Excel::load($request->file('import_file')->getRealPath(), function ($reader) {
-                //$excel_data    =   $reader->toArray();
-                //if(!empty($excel_data)){
-                    //foreach($excel_data as $key => $row) {
-                        //$firstrow = $row;	
-                        //if( !array_key_exists('business_name', $firstrow) || 
-                        //!array_key_exists('activity', $firstrow) ||
-                        //!array_key_exists('location', $firstrow)|| 
-                        //!array_key_exists('website', $firstrow)|| 
-                        //!array_key_exists('phone', $firstrow)|| 
-                        //!array_key_exists('address', $firstrow)
-                        //) {
-                                //$this->error = 'Problem in header.';
-                                //break;
-                        //}
-                        //else{
-                            //if($row['business_name'] == '' ){
-                                //$this->error = 'Error in data inserted';
-                                //break;
-                            //}
-                            //$business_claim = new BusinessClaim();
-                            //$business_claim->business_name = ucfirst($row['business_name']);
-                            //$business_claim->activity = ($row['activity']);
-                            //$business_claim->location = ($row['location']);
-                            //$business_claim->website = ($row['website']);
-                            //$business_claim->phone = ($row['phone']);
-                            //$business_claim->address = ($row['address']);
-                            //$business_claim->save();
-                        //}
-                    //}
-                //}
-            //});
         }
 
         if($this->error != '')
         {
-        // 	Session::flash('error',$this->error);
-        // 	return redirect()->back();
         	return response()->json(['status'=>500,'message'=>$this->error]);
         }
         else{
             return response()->json(['status'=>200,'message'=>'File imported Successfully','repeat_data'=>$repeat_data,'not_repeat_data'=>$not_repeat_data]);
-        // 	Session::flash('success','File imported Successfully');
-        // 	return redirect()->back();
         }
     }
     
@@ -225,105 +344,17 @@ class PlansController extends Controller
         }  
     }
 
-    public function create()
-    {
-        return view('admin.plan.create', [            
-            'pageTitle' => 'Add New Membership Plan'
-        ]);
-    }
-
-    public function store(Request $request)
-    {
-        $validator = $this->saveValidator($request->all());
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        }
-        $status = $this->plan->create($request->all());
-
-        if($status)
-        {
-            session(['key' => 'success']);
-            session(['msg' => 'Membership Plan Created Succesfully !']);    
-        }
-
-        return redirect()->route('plan-list');
-    }
-
-    protected function saveValidator($data)
-    {
-        return Validator::make($data, [            
-            'title' => 'required|max:255|unique:membership_plans',
-            'price_per_month' => 'required|integer',
-            'quote_per_month' =>'required|integer',
-            'description' =>'required'
-        ],
-        [
-            'title.required' => 'Provide a title',
-            'price_per_month.required' => 'Provide a Price per month',
-            'quote_per_month.required' => 'Provide a Quote per month',
-            'description.required' => 'Provide a description',
-        ]);
-    }
-
-    protected function updateValidator($data,$id)
-    {
-        return Validator::make($data, [            
-            'title' => 'required|max:255|unique:membership_plans,title,'.$id,
-            'price_per_month' => 'required|integer',
-            'quote_per_month' =>'required|integer',
-            'description' =>'required'
-        ],
-        [
-            'title.required' => 'Provide a title',
-            'price_per_month.required' => 'Provide a Price per month',
-            'quote_per_month.required' => 'Provide a Quote per month',
-            'description.required' => 'Provide a description',
-        ]);
-    }
-
-    public function edit($id)
-    {
-        $plan = $this->plan->getById($id);
-
-        if($plan)
-        {
-            return view('admin.plan.edit', [
-                'pageTitle' => 'Edit Membership Plan',
-                'plan' => $plan
-            ]);
-        }
-
-        return redirect()->route('plan-list');   
-    }
-
-    public function update($id, Request $request)
-    {
-        $validator = $this->updateValidator($request->all(),$id);
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        }
-        $status = $this->plan->update($id, $request->all());
-
-        if($status)
-        {
-            session(['key' => 'success']);
-            session(['msg' => 'Membership Plan Updated Succesfully !']);    
-        }
-
-        return redirect()->route('plan-list');
-    }
-
     public function deleteClaim($id){
         $data = BusinessCompanyDetail::where('cid',$id)->first();
-        $delete = BusinessCompanyDetail::where('id',$data->id)->delete();
-
+        if( $data != ''){
+            $delete = BusinessCompanyDetail::where('id',$data->id)->delete();
+        }
+       
         $dd = BusinessService::where('cid',$id)->first();
-        $delete2 = BusinessService::where('id',$dd->id)->delete();
-
+        if($dd != ''){
+            $delete2 = BusinessService::where('id',$dd->id)->delete();
+        }
+        
         $save = CompanyInformation::where('id',$id)->delete();
         if($save){
             session(['key' => 'success']);
@@ -416,20 +447,12 @@ class PlansController extends Controller
         }
 
         if( $address != ''){
-           /* $gaddress = $address.', '.@$request->state;
-            $gaddress = str_replace(' ', '+', $gaddress);
-            $gkey='AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw';
-            $url = "https://maps.googleapis.com/maps/api/geocode/json?address=$gaddress&key=$gkey";
-            $geocode = file_get_contents($url);
-            $json = json_decode($geocode);
-            $data['lat'] = $json->results[0]->geometry->location->lat;
-            $data['lng'] = $json->results[0]->geometry->location->lng;*/
             $data['lat'] = $request->lat; 
             $data['lng'] = $request->lon;
         }
         
 
-        CompanyInformation::where('id',$request->cid)->update(['company_name'=>$request->bname,'business_phone'=>@$request->phone,'state'=>@$request->state,'website'=>@$request->website,'business_email'=>@$request->email,'zip_code'=>@$request->zip,'address'=>@$address,'city'=>@$request->city,'country'=>@$request->country,'about_company'=>@$request->business_desc,'latitude' => $data['lat'],'longitude' => $data['lng']]);
+        CompanyInformation::where('id',$request->cid)->update(['company_name'=>$request->bname,'dba_business_name'=>$request->bname,'business_phone'=>@$request->phone,'state'=>@$request->state,'website'=>@$request->website,'business_email'=>@$request->email,'zip_code'=>@$request->zip,'address'=>@$address,'city'=>@$request->city,'country'=>@$request->country,'about_company'=>@$request->business_desc,'latitude' => $data['lat'],'longitude' => $data['lng']]);
 
         BusinessCompanyDetail::where('id',$request->cid)->update(['Companyname'=>$request->bname,'Phonenumber'=>@$request->phone,'State'=>@$request->state,'Emailb'=>@$request->email,'ZipCode'=>@$request->zip,'Address'=>@$address,'City'=>@$request->city,'Aboutcompany'=>@$request->business_desc,'country'=>@$request->country]);
 
@@ -479,20 +502,13 @@ class PlansController extends Controller
         }
          
         if($address != ''){
-            /*$gaddress = $address.', '.@$request->state;
-            $gaddress = str_replace(' ', '+', $gaddress);
-            $gkey='AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw';
-            $url = "https://maps.googleapis.com/maps/api/geocode/json?address=$gaddress&key=$gkey";
-            $geocode = file_get_contents($url);
-            $json = json_decode($geocode);
-            $data['lat'] = $json->results[0]->geometry->location->lat;
-            $data['lng'] = $json->results[0]->geometry->location->lng;*/
             $data['lat'] = $request->lat; 
             $data['lng'] = $request->lon;
         }
 
         $bc = new CompanyInformation;
         $bc->company_name = $request->bname;
+        $bc->dba_business_name = $request->bname;
         $bc->business_phone = @$request->phone;
         $bc->address = $address ;
         $bc->city = @$request->city;
@@ -505,9 +521,6 @@ class PlansController extends Controller
         $bc->latitude = $data['lat'];
         $bc->longitude = $data['lng'];
         $bc->is_verified= 0;
-        /* $bc->location=@$request->location;
-          $bc->business_type=@$request->buss_type;
-          $bc->activity= @$request->frm_servicesport;*/
         $bc->save();
 
         $bcd = new BusinessCompanyDetail;
@@ -542,6 +555,12 @@ class PlansController extends Controller
         $bs->hours_opt       =  'Open on selected hours';
         $bs->save();
 
+
+        $email_detail = array(
+            'companydata' => $bc,
+            'email' => @$request->email);
+        SGMailService::sendEmailToCustomerforClaim($email_detail);
+        
         session(['key' => 'success']);
         session(['msg' => 'New Unclaim Business Added Succesfully !']); 
         return redirect()->route('businessUnclaim');
@@ -601,11 +620,7 @@ class PlansController extends Controller
     public function list_activity($id){
 		//DB::enableQueryLog();
         $companyInfo = CompanyInformation::where('id', $id)->orderBy('id', 'DESC')->get();
-       // $companyservice = BusinessServices::where('userid', $companyInfo[0]['id'])->where('cid', $id)->orderBy('id', 'DESC')->get();
 	   $companyservice = BusinessServices::where('cid', $id)->orderBy('id', 'DESC')->get();
-		//echo $companyInfo[0]['id'];
-		//print_r($companyInfo); exit;
-		//dd(\DB::getQueryLog());
         return view('admin.plan.list_service', [            
             'pageTitle' => '',
             'companyInfo' => $companyInfo,
@@ -648,9 +663,6 @@ class PlansController extends Controller
                     $no++;
                 }
             }
-            
-            /* using the insertion time only */
-            // $request->servicepic = $profile_picture;
         } else {
             if ($request->hasFile('servicepic')) {
                 $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
@@ -662,9 +674,6 @@ class PlansController extends Controller
             } else {
                 $profile_picture = $request->oldservicepic;
             }
-
-            /* using the insertion time only */
-            /*$request->servicepic = $profile_picture;*/
         }
 
         // experience feild
@@ -759,7 +768,7 @@ class PlansController extends Controller
                 $bpd->cid= $request->cid;
                 $bpd->serviceid= $request->sid;
                 if($comdata->is_verified == 0){
-                    $bpd->userid = Auth::user()->id;
+                    $bpd->userid = auth()->guard('admin')->user()->id;
                 }else{
                     $bpd->userid = $comdata->user_id;
                 } 
@@ -769,8 +778,6 @@ class PlansController extends Controller
                 if($age_cnt >= 0){
                     for($y=0; $y <= $age_cnt; $y++) {
                         if($request->input('is_recurring_adult_'.$i.$y) == 1){
-                            /*$recurring_every = $request->input('recurring_every_'.$i.$y);
-                            $recurring_duration = $request->input('recurring_duration_'.$i.$y);*/
                             $adultrecurring_price = $request->input('recurring_price_adult_'.$i.$y);
                             $adultrecurring_run_auto_pay = $request->input('run_auto_pay_adult_'.$i.$y);
                             $adultrecurring_cust_be_charge = $request->input('cust_be_charge_adult_'.$i.$y);
@@ -783,8 +790,6 @@ class PlansController extends Controller
                             $adultrecurring_recurring_pmt = $request->input('recurring_pmt_adult_'.$i.$y);
                             $adultrecurring_total_contract_revenue = $request->input('total_contract_revenue_adult_'.$i.$y);
                         }else{
-                            /*$recurring_every = NULL;
-                            $recurring_duration = NULL;*/
                             $adultrecurring_price = NULL;
                             $adultrecurring_run_auto_pay  = NULL;
                             $adultrecurring_cust_be_charge = NULL;
@@ -813,8 +818,6 @@ class PlansController extends Controller
                             $childrecurring_recurring_pmt = $request->input('recurring_pmt_child_'.$i.$y);
                             $childrecurring_total_contract_revenue = $request->input('total_contract_revenue_child_'.$i.$y);
                         }else{
-                            /*$childrecurring_every = NULL;
-                            $childrecurring_duration = NULL;*/
                             $childrecurring_price = NULL;
                             $childrecurring_run_auto_pay  = NULL;
                             $childrecurring_cust_be_charge = NULL;
@@ -829,8 +832,6 @@ class PlansController extends Controller
                         }
 
                         if($request->input('is_recurring_infant_'.$i.$y) == 1){
-                            /*$recurring_every = $request->input('recurring_every_'.$i.$y);
-                            $recurring_duration = $request->input('recurring_duration_'.$i.$y);*/
                             $infantrecurring_price = $request->input('recurring_price_infant_'.$i.$y);
                             $infantrecurring_run_auto_pay = $request->input('run_auto_pay_infant_'.$i.$y);
                             $infantrecurring_cust_be_charge = $request->input('cust_be_charge_infant_'.$i.$y);
@@ -859,7 +860,7 @@ class PlansController extends Controller
                         }
 
                         if($comdata->is_verified == 0){
-                            $userid = Auth::user()->id;
+                            $userid = auth()->guard('admin')->user()->id;
                         }else{
                             $userid = $comdata->user_id;
                         } 
@@ -871,11 +872,6 @@ class PlansController extends Controller
                             "serviceid" => $request->sid,
                            
                             "pay_chk" => isset($request->pay_chk[$i]) ? $request->pay_chk[$i] : '',
-                            /* "pay_price" => isset($request->pay_price[$i]) ? $request->pay_price[$i] : '',
-                            "pay_discountcat" => isset($request->pay_discountcat[$i]) ? $request->pay_discountcat[$i] : '',
-                            "pay_discounttype" => isset($request->pay_discounttype[$i]) ? $request->pay_discounttype[$i] : '',
-                            "pay_discount" => isset($request->pay_discount[$i]) ? $request->pay_discount[$i] : '',
-                            "pay_estearn" => isset($request->pay_estearn[$i]) ? $request->pay_estearn[$i] : '',*/
                              "is_recurring_adult"=> $request->input('is_recurring_adult_'.$i.$y),
                             "recurring_price_adult"=>$adultrecurring_price,
                             "recurring_run_auto_pay_adult" => $adultrecurring_run_auto_pay,
@@ -956,7 +952,7 @@ class PlansController extends Controller
     }
 
     public function add_services(Request $request){
-      /* print_r($request->all());*/
+       print_r($request->all());exit;
         $pay_chk = $pay_session_type = $pay_session = $pay_price = $pay_discountcat = $pay_discounttype = $pay_estearn = $pay_setnum = $pay_setduration = $pay_after = $recurring_price= $recurring_every= $recurring_duration= $fitnessity_fee= $is_recurring ="";
          $pay_discount = 0;
 
@@ -1097,7 +1093,7 @@ class PlansController extends Controller
         }
         $bs->serviceid = 0;
         if($comdata->is_verified == 0){
-            $bs->userid = Auth::user()->id;
+            $bs->userid = auth()->guard('admin')->user()->id;
         }else{
             $bs->userid = $comdata->user_id;
         }
@@ -1112,7 +1108,7 @@ class PlansController extends Controller
                 $bpd->cid= $request->cid;
                 $bpd->serviceid= $bs->id;
                 if($comdata->is_verified == 0){
-                    $bpd->userid = Auth::user()->id;
+                    $bpd->userid = auth()->guard('admin')->user()->id;
                 }else{
                     $bpd->userid = $comdata->user_id;
                 } 
@@ -1212,7 +1208,7 @@ class PlansController extends Controller
                         }
 
                         if($comdata->is_verified == 0){
-                            $userid = Auth::user()->id;
+                            $userid = auth()->guard('admin')->user()->id;
                         }else{
                             $userid = $comdata->user_id;
                         } 
@@ -1224,12 +1220,6 @@ class PlansController extends Controller
                             "serviceid" =>  $bs->id,
                            
                             "pay_chk" => isset($request->pay_chk[$i]) ? $request->pay_chk[$i] : '',
-                            /* "pay_price" => isset($request->pay_price[$i]) ? $request->pay_price[$i] : '',
-                            "pay_discountcat" => isset($request->pay_discountcat[$i]) ? $request->pay_discountcat[$i] : '',
-                            "pay_discounttype" => isset($request->pay_discounttype[$i]) ? $request->pay_discounttype[$i] : '',
-                            "pay_discount" => isset($request->pay_discount[$i]) ? $request->pay_discount[$i] : '',
-                            "pay_estearn" => isset($request->pay_estearn[$i]) ? $request->pay_estearn[$i] : '',*/
-
                             "is_recurring_adult"=> $request->input('is_recurring_adult_'.$i.$y),
                             "recurring_price_adult"=>$adultrecurring_price,
                             "recurring_run_auto_pay_adult" => $adultrecurring_run_auto_pay,
@@ -1324,72 +1314,6 @@ class PlansController extends Controller
         ]);
     }
 
-    public function deactivate(Request $request)
-    {
-        $status = $this->plan->update($request->id, array('is_deleted'=>'1'));
-
-        if($status)
-        {
-            return json_encode([
-                'status' => true
-            ]);
-        }
-        
-        return json_encode([
-            'status' => false
-        ]);
-    }
-
-    public function activate(Request $request)
-    {
-        $status = $this->plan->update($request->id, array('is_deleted'=>'0'));
-
-        if($status)
-        {
-            return json_encode([
-                'status' => true
-            ]);
-        }
-        
-        return json_encode([
-            'status' => false
-        ]);
-    }
-
-    /**
-     * Delete Multiple Plans
-     * 
-     * @param Request $request
-     * @return array
-     */
-    public function deleteAll(Request $request){
-        $input = $request->all();
-
-        if(isset($request->planIds) && count($request->planIds) > 0) {
-
-            $update = Plan::whereIn('id', $input['planIds'])
-                     ->update([
-                        'is_deleted' => 1
-                    ]);
-
-            if(!$update) {
-                $response = array(
-                        'danger' => 'Some error while deactivating plans.',
-                );
-            } else {
-                $response = array(
-                    'success' =>  'Plans Deactivated Successfully.',
-                ); 
-            }
-
-        } else {
-            $response = array(
-                    'danger' =>  'Please select at least one plan.',
-            );
-        }
-        return Redirect::to('/admin/plans/membership-plan')->with('status',$response);
-    }
-	
 	public function business_delete($id){
 		//$comp = CompanyInformation::where('id', $id)->first();
 		$del = CompanyInformation::where('id',$id)->delete();
@@ -1444,7 +1368,7 @@ class PlansController extends Controller
             if($busschedata != ''){
                 $userid= $busschedata['userid'];
             }else{
-                $userid= Auth::user()->id;
+                $userid= auth()->guard('admin')->user()->id;
             }
             BusinessActivityScheduler::where('cid', $request->cid)->where('userid',$userid)->where('serviceid',  $request->serviceid)->where('category_id',$request->catid)->delete();
             
@@ -1477,5 +1401,25 @@ class PlansController extends Controller
             }
         }
         return redirect()->route('admin_businesspricedetails', [$request->catid]);
+    }
+
+    public function sendemail(Request $request){
+
+       /* $detail_data_com['company_data'] = CompanyInformation::where('id',$request->cid)->first();
+        $AllDetail  = json_decode(json_encode($detail_data_com), true); 
+        $status = MailService::sendEmailfromadmin($AllDetail);*/
+
+        $company_data= CompanyInformation::where('id',$request->cid)->first();
+        $email_detail = array(
+            'companydata' => $company_data,
+            'email' => @$company_data->business_email);
+        $status = SGMailService::sendEmailToCustomerforClaim($email_detail);
+        return $status;
+    }
+
+
+    protected function throwValidationException(Request $request, $validator)
+    {
+        throw new HttpResponseException(response()->json(['error' => $validator->errors()], 422));
     }
 }

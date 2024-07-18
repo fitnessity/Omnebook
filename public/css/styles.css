@@ -21,11 +21,13 @@
 
 .tab-hed1 {
     padding: 4px 0px;
-    font-size: 24px;
+    font-size: 19px;
     font-weight: bold;
     color: black;
     font-family: sans-serif;
     text-transform: uppercase;
+	text-align: center;
+	margin-top: 11px;
 }
 
 .tab-para {
@@ -105,7 +107,7 @@
 .pro_card_img1 {
     border-radius: 50%;
     width: 95px;
-    height: 90px;
+    height: 95px;
 }
 
 .pro_card_img2 {
@@ -137,7 +139,7 @@
     display: block;
     border-radius: 0px;
     box-shadow: 0px 4px 6px 2px rgba(0, 0, 0, 0.2);
-    margin-top: -5px;
+    /*margin-top: -5px;*/
 	color: #fff !important;
     background-color: #2e2e2e !important;
     border-color: #000 !important;
@@ -392,7 +394,8 @@ fieldset[disabled] .form-control {
 
 .custome-div {
     position: relative;
-    padding: 0px !important;
+    padding-left: 35px;
+	padding-right: 35px;
     margin-bottom: 30px;
 }
 
@@ -409,7 +412,8 @@ fieldset[disabled] .form-control {
 
 .custome-div .row p {
     font-size: 13px;
-    margin-top: 15px;
+    margin-top: 10px;
+	height: 60px;
 }
 
 .custome-div [type="radio"]:checked,
@@ -421,12 +425,14 @@ fieldset[disabled] .form-control {
 .custome-div [type="radio"]:checked + label,
 .custome-div [type="radio"]:not(:checked) + label {
     position: relative;
-    padding: 20px 20px 20px 40px;
+    padding: 20px 10px 10px 10px;
     cursor: pointer;
     line-height: 20px;
     display: inline-block;
     color: #666;
     width: 100%;
+	box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, .20);
+	border-radius: 12px;
 }
 
 .custome-div [type="radio"]:checked + label:before,
@@ -585,13 +591,14 @@ a.tooltip-custom:hover {
 }
 
 .button-fitness {
-    padding: 6px 13px;
+    padding: 6px 20px;
     background: red;
     color: #fff;
     font-size: 14px;
     text-decoration: none;
     display: inline-block;
     cursor: pointer;
+	border: none;
 }
 
 .button-fitness:hover {
@@ -2131,3 +2138,50 @@ a.tooltip-custom:hover {
     top: 0;
     left: 0;
 }
+.newbuiness-txt{
+	padding: 0 50px;
+}
+.newbusiness-img{
+	background-image: url(/public/images/newimage/your-business.png);
+	background-repeat: no-repeat;
+	background-size: 100% 80%;
+}
+.claimyour-business .frm-claim #option-box ul li{
+	list-style: none !important;
+}
+
+.ui-menu .ui-menu-item {
+	list-style: none !important;
+}
+/*
+.ui-menu .ui-menu-item-wrapper {
+  padding: 0px !important;
+} */
+.ui-menu.ui-widget .ui-menu-item .ui-menu-item-wrapper:hover{
+	border: none !important;
+	background: none !important;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active{
+	border: none !important;
+	background: none !important;
+	color: #000 !important; 
+	/*margin-top: 4px !important;
+	margin-bottom: 4px !important;*/
+}
+.ui-menu .ui-menu-item{
+	border-bottom: 1px solid #000; 
+}
+.ui-menu .ui-menu-item:first-child {
+	border-bottom: none;
+}
+.ui-menu .ui-state-active {
+  margin: 0px !important;
+}
+
+.ui-menu.ui-widget {
+	height: 400px;
+	overflow: auto;
+	overflow-x: hidden;
+}
+

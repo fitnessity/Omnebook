@@ -9,7 +9,9 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
+        "barryvdh/laravel-dompdf": "^2.0",
         "braintree/braintree_php": "^6.4",
+        "doctrine/dbal": "^2.6",
         "fideloper/proxy": "^4.0",
         "intervention/image": "^2.5",
         "laravel/framework": "^6.18.35",
@@ -17,11 +19,16 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "*",
         "laravelcollective/html": "^6.1",
+        "league/flysystem-aws-s3-v3": "~1.0",
         "maatwebsite/excel": "~3.1.30",
+        "sendgrid/sendgrid": "~7",
+        "sentry/sentry-laravel": "^3.1",
         "stripe/stripe-php": "^7.100",
-        "twilio/sdk": "^6.9"
+        "twilio/sdk": "^6.9",
+        "yajra/laravel-datatables-oracle": "^9.21"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.6",
         "facade/ignition": "^1.4",
         "fzaninotto/faker": "^1.9.1",
         "mockery/mockery": "^1.0",
@@ -31,7 +38,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "extra": {
         "laravel": {
@@ -50,6 +60,14 @@
             "app/helpers/general_helper.php",
             "app/helpers/helpers.php",
             "app/helpers/userfeed_helper.php"
+        ],
+        "exclude-from-classmap": [
+            "app/Exports/ExportInactiveClient.php",
+            "app/Http/Controllers/Admin/AdminAuthController_bkp.php",
+            "app/Http/Controllers/-DesignController.php",
+            "app/Http/Controllers/Personal/OnBoardedController.php",
+            "app/Libraries/vendor/braintree/braintree_php/tests/",
+            "app/Libraries/vendor/composer/"
         ]
     },
     "autoload-dev": {
@@ -63,6 +81,9 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
+        ],
+        "post-install-cmd": [
+            "sed -i '/use DateTime;/d' app/helpers/helpers.php"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""

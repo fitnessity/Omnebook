@@ -166,7 +166,7 @@ class AuthController extends Controller
          $user->latitude=$request->lat;
          $user->longitude=$request->lon;
          $user->save();
-         $url = '/profile/viewProfile';
+         $url = '/';
          return response()->json(['status'=>200,'redirecturl'=>$url]);
      }
 
@@ -174,15 +174,10 @@ class AuthController extends Controller
      {   
          $user = User::where('id',Auth::user()->id)->first();
          if ($request->hasFile('file_upload_profile')) {
-			 $name = $request->file('file_upload_profile')->getClientOriginalName();
-			 $file_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR;
-	
-			$thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
-	
-			$image_upload = Miscellaneous::saveFileAndThumbnail($request->file('file_upload_profile'), $file_upload_path, 1, $thumb_upload_path, '415', '354');
-			$user->profile_pic =  $image_upload['filename']; 
+            $name = $request->file('file_upload_profile')->store('customer');
+			$user->profile_pic =  $name; 
 		 }
-         $user->show_step=6;
+         $user->show_step = 6;
 		 $user->save();
          return response()->json(['status'=>200]);
      }
@@ -305,6 +300,7 @@ class AuthController extends Controller
         else{
         $show_step=1;
         }
+        $customerId = '';
         return view('home.registration',compact('show_step'));
     }
 
@@ -894,7 +890,7 @@ class AuthController extends Controller
                     //Login
                     // Auth::loginUsingId($user->id);
                     // $request->session()->flash('alert-success', 'Your email has been successfully verified. Please login to access Fitnessity.');
-$s= Api::create_users($user);
+                    $s= Api::create_users($user);
                     Auth::login($user);
                     
                     Auth::loginUsingId($user->id, true);

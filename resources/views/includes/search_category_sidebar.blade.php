@@ -3,6 +3,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/js/select/select.css" />
+<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
+<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
 
 <?php		
 	$program_type = '';
@@ -71,17 +73,280 @@
 ?>
 <!-- <form method="post" action="/" id="frmsearch"> -->
 <!-- @csrf -->
-<input type="text" name="session">
-<div class="row">
+<input type="hidden" name="session">
+<!-- Mobile view filter start-->
+<div class="row desktop-none" id="mobileview">
+	<div class="col-sm-12 ">
+		<button type="button" class="btn btn-primary modal-filter-btn mt-15" data-bs-toggle="modal" data-bs-target="#filtersModal">
+			<img class="filter-img" src="/public/img/filter-icon.png" width="25">Filters
+		</button>
+		<!-- Modal -->
+		<div class="modal fade" id="filtersModal" tabindex="-1" role="dialog" aria-labelledby="filterModal" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="filterModal"></h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="choose-sport-hire">
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2 class="mb-10">Select Activity</h2>
+										<select id="act_programservices" name="program_type[]" class="myfilter" multiple="multiple" >
+											<option>Aerobics</option>
+											<option>Archery</option>
+											<option>Badminton</option>
+											<option>Barre</option>
+											<option>Baseball</option>
+											<option>Basketball</option>
+											<option>Beach Vollyball</option>
+											<option>Bouldering</option>
+											<option>Bungee Jumping</option>
+											<optgroup label="Camps & Clinics">
+												<option>Day Camp</option>
+												<option>Sleep Away</option>
+												<option>Winter Camp</option>
+											</optgroup>
+											<option>Canoeing</option>
+											<optgroup label="Cycling">
+												<option>Indoor cycling</option>
+											</optgroup>
+											<option>Dance</option>
+											<option>Diving</option>
+											<optgroup label="Field Hockey">
+												<option>Ice Hockey</option>
+											</optgroup>
+											<option>Football</option>
+											<option>Golf</option>
+											<option>Gymnastics</option>
+											<option>Hang Gliding</option>
+											<option>Hiit</option>
+											<option>Hiking - Backpacking</option>
+											<option>Horseback Riding</option>
+											<option>Ice Skating</option>
+											<option>Kayaking</option>
+											<option>lacrosse</option>
+											<option>Laser Tag</option>
+											<optgroup label="Martial Arts">
+												<option>Boxing</option>
+												<option>Jiu-Jitsu</option>
+												<option>Karate</option>
+												<option>Kickboxing</option>
+												<option>Kung Fu</option>
+												<option>MMA</option>
+												<option>Self-Defense</option>
+												<option>Tai Chi</option>
+												<option>Wrestling</option>
+											</optgroup>
+											<option>Massage Therapy</option>
+											<option>Nutrition</option>
+											<option>Paint Ball</option>
+											<option>Physical Therapy</option>
+											<option>Pilates</option>
+											<option>Rafting</option>
+											<option>Rapelling</option>
+											<option>Rock Climbing</option>
+											<option>Rowing</option>
+											<option>Running</option>
+											<optgroup label="Sightseeing Tours">
+												<option>Airplane Tour</option>
+												<option>ATV Tours</option>
+												<option>Boat Tours</option>
+												<option>Bus Tour</option>
+												<option>Caving Tours</option>
+												<option>Helicopter Tour</option>
+											</optgroup>
+											<option>Sailing</option>
+											<option>Scuba Diving</option>
+											<option>Sky diving</option>
+											<option>Snow Skiing</option>
+											<option>Snowboarding</option>
+											<option>Strength &amp; Conditioning</option>
+											<option>Surfing</option>
+											<option>Swimming</option>
+											<option>Tennis</option>
+											<option>Tours</option>
+											<option>Vollyball</option>
+											<option>Weight training</option>
+											<option>Windsurfing</option>
+											<option>Yoga</option>
+											<option>Zip-Line</option>
+											<option>Zumba</option>
+										</select>
+										<script type="text/javascript">
+											var categ = new SlimSelect({
+												select: '#act_programservices'
+											});
+										</script>
+										 
+									</div>
+								</div>
+							</div>
+								
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2 class="mb-10">Business Type</h2>
+										<select id="act_service_type" name="service_type[]" class="myfilter" multiple="multiple" >
+											<option value="individual">Personal Trainer</option>
+											<option value="classes">Classes</option>
+											<option value="events">Events</option>
+											<option value="experience">Experience</option>
+										</select>
+										<script type="text/javascript">
+											var categ = new SlimSelect({
+												select: '#act_service_type'
+											});
+										</script>
+									</div>
+								</div>
+							</div>
+							
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2 class="mb-10">Service Type</h2>
+										<select id="act_servicetypetwo" name="service_type_two[]" class="myfilter" multiple="multiple"  >
+											<option>Personal Training</option>
+											<option>Coaching</option>
+											<option>Therapy</option>
+											<option>Group Class</option>
+											<option>Seminar</option>
+											<option>Workshop</option>
+											<option>Clinic</option>
+											<option>Camp</option>
+											<option>Team</option>
+											<option>Corporate</option>
+											<option>Tour</option>
+											<option>Adventure</option>
+											<option>Retreat</option>
+											<option>Workshop</option>
+											<option>Seminar</option>
+											<option>Private experience</option>
+										</select>
+										<script type="text/javascript">
+											var categ = new SlimSelect({
+												select: '#act_servicetypetwo'
+											});
+										</script>
+									</div>
+								</div>
+							</div>
+							
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2 class="mb-10">Great For</h2>
+										<select id="act_activity_for" multiple name="activity_type[]" class="myfilter"  multiple="multiple"  >
+											<option>Individual</option>
+											<option>Kids</option>
+											<option>Teens</option>
+											<option>Adults</option>
+											<option>Family</option>
+											<option>Groups</option>
+											<option>Paralympic</option>
+											<option>Prenatal</option>
+											<option>Any</option>
+										</select>
+										<script type="text/javascript">
+											var categ = new SlimSelect({
+												select: '#act_activity_for'
+											});
+										</script>
+									</div>
+								</div>
+							</div>
+						
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2 class="mb-10">Membership Type</h2>
+										<select id="act_membership_type" multiple name="membership_type[]" class="myfilter"  multiple="multiple"  >
+											<option>Drop In</option>
+											<option>Semester</option>
+										</select>
+										<script type="text/javascript">
+											var categ = new SlimSelect({
+												select: '#act_membership_type'
+											});
+										</script>
+									</div>
+								</div>
+							</div>
+							
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2 class="mb-10">Search By Location</h2>
+										<input type="text" name="address" id="act_b_address1" class="form-control pac-target-input" placeholder="search by country, city, state, zip" autocomplete="off"  value="{{$address}}" />
+									</div> 
+								</div> 
+							</div> 
+							
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2 class="mb-10">Location of Activity</h2>
+										<select id="act_activity_location" multiple name="activity_location[]" class="myfilter"  multiple="multiple"  >
+											@foreach (@$serviceLocation as $slkey => $slval)
+												<option value='{{$slval}}'>{{$slval}}</option>
+											@endforeach
+										</select>
+										<script type="text/javascript">
+											var categ = new SlimSelect({
+												select: '#act_activity_location'
+											});
+										</script>
+									</div>
+								</div>
+							</div>
+							
+							<div class="activity-width">
+								<div class="special-offer">
+									<div class="multiples">
+										<h2 class="mb-10">Age Range</h2>
+										<select id="act_age_range" multiple name="age_range[]" class="myfilter"  multiple="multiple"  >
+											<option>Baby (0 to 12 months)</option>
+											<option>Toddler (1 to 3 yrs.)</option>
+											<option>Preschool (4 to 5 yrs.)</option>
+											<option>Grade School (6 to 12 yrs.)</option>
+											<option>Teen (13 to 17 yrs.)</option>
+											<option>Young Adult (18 to 21 yrs.)</option>
+											<option>Older Adult (21 to 39 yrs.)</option>
+											<option>Middle Age (40 to 59 yrs.) </option>
+											<option>Senior Adult (60 +)</option>
+											<option>Any</option>
+										</select>
+										<script type="text/javascript">
+											var categ = new SlimSelect({
+												select: '#act_age_range'
+											});
+										</script>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="showall-btn" onclick="actFilter('act_');">Submit</button>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Mobile view filter end-->
+<div class="row mobile-none ipad-none">
     <div class="col-md-12">
-    	
-        
 		<div class="choose-sport-hire">
 			<div class="activity-width">
 				<div class="special-offer">
 					<div class="multiples">
-						<h2>Select Activity</h2>
-						<select id="programservices" name="program_type[]" class="myfilter" multiple="multiple" onchange="actFilter()">
+						<h2 class="mb-10">Select Activity</h2>
+						<select id="programservices" name="program_type[]" class="myfilter" multiple="multiple" onchange="actFilter('')">
 							<option>Aerobics</option>
 							<option>Archery</option>
 							<option>Badminton</option>
@@ -175,10 +440,11 @@
 			<div class="activity-width">
 				<div class="special-offer">
 					<div class="multiples">
-						<h2>Business Type</h2>
-						<select id="service_type" name="service_type[]" class="myfilter" multiple="multiple" onchange="actFilter()">
+						<h2 class="mb-10">Business Type</h2>
+						<select id="service_type" name="service_type[]" class="myfilter" multiple="multiple" onchange="actFilter('')">
 							<option value="individual">Personal Trainer</option>
-							<option value="classes">Gym/Studio</option>
+							<option value="classes">Classes</option>
+							<option value="events">Events</option>
 							<option value="experience">Experience</option>
 						</select>
 						<script type="text/javascript">
@@ -193,8 +459,8 @@
 			<div class="activity-width">
 				<div class="special-offer">
 					<div class="multiples">
-						<h2>Service Type</h2>
-						<select id="servicetypetwo" name="service_type_two[]" class="myfilter" multiple="multiple"  onchange="actFilter()">
+						<h2 class="mb-10">Service Type</h2>
+						<select id="servicetypetwo" name="service_type_two[]" class="myfilter" multiple="multiple"  onchange="actFilter('')">
 							<option>Personal Training</option>
                             <option>Coaching</option>
                             <option>Therapy</option>
@@ -224,8 +490,8 @@
 			<div class="activity-width">
 				<div class="special-offer">
 					<div class="multiples">
-						<h2>Great For</h2>
-						<select id="activity_for" multiple name="activity_type[]" class="myfilter"  multiple="multiple"  onchange="actFilter()">
+						<h2 class="mb-10">Great For</h2>
+						<select id="activity_for" multiple name="activity_type[]" class="myfilter"  multiple="multiple"  onchange="actFilter('')">
 							<option>Individual</option>
 		                    <option>Kids</option>
 		                    <option>Teens</option>
@@ -245,8 +511,8 @@
 				</div>
 			</div>
 			
-			<button  type="button" class="show-1-yes btn-hide-show" ><img class="filter-img" src="http://dev.fitnessity.co/public/img/filter-icon.png" width="25">More Filters</button>
-			<button  type="button" class="hide-1-yes btn-hide-show"><img class="filter-img" src="http://dev.fitnessity.co/public/img/filter-icon.png" width="25">More Filters</button>
+			<button  type="button" class="show-1-yes btn-hide-show" ><img class="filter-img" src="/public/img/filter-icon.png" width="25">More Filters</button>
+			<button  type="button" class="hide-1-yes btn-hide-show"><img class="filter-img" src="/public/img/filter-icon.png" width="25">More Filters</button>
 		</div>
         <div>
         	
@@ -261,7 +527,7 @@
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Membership Type</h2>
-									<select id="membership_type" multiple name="membership_type[]" class="myfilter"  multiple="multiple"  onchange="actFilter()">
+									<select id="membership_type" multiple name="membership_type[]" class="myfilter"  multiple="multiple"  onchange="actFilter('')">
 										<option>Drop In</option>
                     					<option>Semester</option>
 									</select>
@@ -278,20 +544,20 @@
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Search By Location</h2>
-                                    <input type="text" name="address" id="b_address1" class="form-control pac-target-input" placeholder="search by country, city, state, zip" autocomplete="off"  value="{{$address}}" />
+                                    <input type="text" name="address" id="b_address1" class="form-control pac-target-input" placeholder="search by country, city, state, zip" autocomplete="off" value="{{$address}}" />
                                 </div> 
-                                <div id="map" style="display: none; position: relative; overflow: hidden;"></div>
+                                <!-- <div id="map" style="display: none; position: relative; overflow: hidden;"></div>
                                 <input type="hidden"  name="City" id="b_city1" value="{{$City}}">
                                 <input type="hidden"  name="State" id="b_state1" value="{{$State}}">
                                 <input type="hidden"  name="Country" id="country1" value="{{$Country}}">
-                                <input type="hidden"  name="ZipCode" id="b_zipcode1" value="{{$zip_code}}">
-                         </div> 
-                     </div> 
+                                <input type="hidden"  name="ZipCode" id="b_zipcode1" value="{{$zip_code}}"> -->
+							</div> 
+						</div> 
 						<div class="activity-width">
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Location of Activity</h2>
-									<select id="activity_location" multiple name="activity_location[]" class="myfilter"  multiple="multiple"  onchange="actFilter()">
+									<select id="activity_location" multiple name="activity_location[]" class="myfilter"  multiple="multiple"  onchange="actFilter('')">
 										@foreach (@$serviceLocation as $slkey => $slval)
 						                    <option value='{{$slval}}'>{{$slval}}</option>
 					                    @endforeach
@@ -309,7 +575,7 @@
 							<div class="special-offer">
 								<div class="multiples">
 									<h2>Age Range</h2>
-									<select id="age_range" multiple name="age_range[]" class="myfilter"  multiple="multiple"  onchange="actFilter()">
+									<select id="age_range" multiple name="age_range[]" class="myfilter"  multiple="multiple"  onchange="actFilter('')">
 										<option>Baby (0 to 12 months)</option>
 					                    <option>Toddler (1 to 3 yrs.)</option>
 					                    <option>Preschool (4 to 5 yrs.)</option>
@@ -335,6 +601,13 @@
 		</div>
 	</div>
 </div>
+
+<div id="map" style="display: none; position: relative; overflow: hidden;"></div>
+<input type="hidden"  name="City" id="b_city1" value="{{$City}}">
+<input type="hidden"  name="State" id="b_state1" value="{{$State}}">
+<input type="hidden"  name="Country" id="country1" value="{{$Country}}">
+<input type="hidden"  name="ZipCode" id="b_zipcode1" value="{{$zip_code}}">
+
 <!-- </form> -->
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
 <!-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ Config::get('constants.MAP_KEY') }}&sensor=false"></script> -->
@@ -353,8 +626,13 @@
 		    });
 		    const serviceSelect4 = new SlimSelect({
 		        select: '#activity_for'
+		    }); 
+
+		    const serviceSelect41 = new SlimSelect({
+		        select: '#act_activity_for'
 		    });
 		    serviceSelect4.set(programforarr);
+		    serviceSelect41.set(programforarr);
 	    }
 
 	    var programtypearr = [];
@@ -368,6 +646,11 @@
 		        select: '#programservices'
 		    });
 		    serviceSelect1.set(programtypearr);
+
+		    const serviceSelect11 = new SlimSelect({
+		        select: '#act_programservices'
+		    });
+		    serviceSelect11.set(programtypearr);
 	    }
 	   
 	    var service_typearr = [];
@@ -382,6 +665,11 @@
 		        select: '#service_type'
 		    });
 		    serviceSelect2.set(service_typearr);
+
+		    const serviceSelect21 = new SlimSelect({
+		        select: '#act_service_type'
+		    });
+		    serviceSelect21.set(service_typearr);
 	    }
 
 	    var service_type_twoarr = [];
@@ -395,6 +683,11 @@
 		        select: '#servicetypetwo'
 		    });
 		    serviceSelect3.set(service_type_twoarr);
+
+		    const serviceSelect31 = new SlimSelect({
+		        select: '#act_servicetypetwo'
+		    });
+		    serviceSelect31.set(service_type_twoarr);
 	    }
 
 	    var membership_typearr = [];
@@ -408,6 +701,11 @@
 		        select: '#membership_type'
 		    });
 		    serviceSelect5.set(membership_typearr);
+
+		    const serviceSelect51 = new SlimSelect({
+		        select: '#act_membership_type'
+		    });
+		    serviceSelect51.set(membership_typearr);
 	    }
 
 	    var activity_locationarr = [];
@@ -421,6 +719,11 @@
 		        select: '#activity_location'
 		    });
 		    serviceSelect3.set(activity_locationarr);
+
+		    const serviceSelect31 = new SlimSelect({
+		        select: '#act_activity_location'
+		    });
+		    serviceSelect31.set(activity_locationarr);
 	    }
 
 	    var age_rangearr = [];
@@ -434,6 +737,10 @@
 		        select: '#age_range'
 		    });
 		    serviceSelect6.set(age_rangearr);
+		    const serviceSelect61 = new SlimSelect({
+		        select: '#act_age_range'
+		    });
+		    serviceSelect61.set(age_rangearr);
 	    }
 
 	    var address =  $('#b_address1').val();
@@ -504,8 +811,8 @@
 </script>
 
 <script>
-	function actFilter()
-	{  /*alert('hii');*/
+	function actFilter(type)
+	{  
 		var sessionprogramfor = '{{ $activity_type }}';
 		var sessionprogram_type = '{{ $program_type }}';
 		var sessionservice_type= '{{ $service_type }}';
@@ -514,46 +821,46 @@
 		var sessionactivity_location = '{{ $activity_location }}';
 		var sessionage_range = '{{ $age_range }}';
 
-		var activity_for=$('#activity_for').val();
-		var programservices=$('#programservices').val();
-		var service_type=$('#service_type').val();
-		var service_type_two=$('#servicetypetwo').val();
-		var membership_type=$('#membership_type').val();
-		var activity_location=$('#activity_location').val();
-		var age_range=$('#age_range').val();
-		var address =  $('#b_address1').val();
+		var activity_for=$('#'+type+'activity_for').val();
+		var programservices=$('#'+type+'programservices').val();
+		var service_type=$('#'+type+'service_type').val();
+		var service_type_two=$('#'+type+'servicetypetwo').val();
+		var membership_type=$('#'+type+'membership_type').val();
+		var activity_location=$('#'+type+'activity_location').val();
+		var age_range=$('#'+type+'age_range').val();
+
+		var address =  $('#'+type+'b_address1').val();
 		var city =  $('#b_city1').val();
         var country =  $('#country1').val();
         var state =  $('#b_state1').val();
         var zipcode =  $('#b_zipcode1').val();
 
-		/*alert(age_range);*/
-		if(activity_for == '' || activity_for == null){
+
+		if((activity_for == '' || activity_for == null) && type == ''){
 			activity_for = 'no';
 		}
-		if(programservices == ''  || programservices == null){
+		if((programservices == ''  || programservices == null) && type == ''){
 			programservices = 'no';
 		}
-		if(service_type == '' || service_type == null){
+		if((service_type == '' || service_type == null) && type == ''){
 			service_type = 'no';
 		}
-		if(service_type_two == '' || service_type_two == null){
+		if((service_type_two == '' || service_type_two == null) && type == ''){
 			service_type_two = 'no';
 		}
-		if(membership_type == '' || membership_type == null){
+		if((membership_type == '' || membership_type == null) && type == ''){
 			membership_type = 'no';
 		}
-		if(activity_location == '' || activity_location == null){
+		if((activity_location == '' || activity_location == null) && type == ''){
 			activity_location = 'no';
 		}
-		if(age_range == '' || age_range == null){
+		if((age_range == '' || age_range == null) && type == ''){
 			age_range = 'no';
 		}
 
 		if(sessionprogramfor == ''){
 			sessionprogramfor = 'no';
-		}
-		else{
+		}else{
 			if(activity_for == 'no'){
 				activity_for = sessionprogramfor;
 			}
@@ -561,8 +868,7 @@
 
 		if(sessionprogram_type == ''){
 			sessionprogram_type = 'no';
-		}
-		else{
+		}else{
 			if(programservices == 'no'){
 				programservices = sessionprogram_type;
 			}
@@ -570,8 +876,7 @@
 
 		if(sessionservice_type == ''){
 			sessionservice_type = 'no';
-		}
-		else{
+		}else{
 			if(service_type == 'no'){
 				service_type = sessionservice_type;
 			}
@@ -608,89 +913,93 @@
 				age_range = sessionage_range;
 			}
 		}
-	
 		var locationval = '';
 
-		if(service_type != 'no'){
+		if(service_type != 'no' && service_type != null){
 			service_type = service_type.toString().replace(/ /g, "%20");
 			locationval += 'btype='+service_type+'~';
 		}
 
-		if(programservices != 'no'){
+		if(programservices != 'no' && programservices != null){
 			programservices = programservices.toString().replace(/ /g, "%20");
 			locationval += 'ptype='+programservices+'~';
 		}
 
-		if(service_type_two != 'no'){
+		if(service_type_two != 'no' && service_type_two != null){
 			service_type_two = service_type_two.toString().replace(/ /g, "%20");
 			locationval += 'stype='+service_type_two+'~';
 		}
 
-		if(activity_for != 'no'){
+		if(activity_for != 'no' && activity_for != null){
 			activity_for = activity_for.toString().replace(/ /g, "%20");
 			locationval += 'gfor='+activity_for+'~';
 		}
 
-		if(membership_type != 'no'){
+		if(membership_type != 'no' && membership_type != null){
 			membership_type = membership_type.toString().replace(/ /g, "%20");
 			locationval += 'memtype='+membership_type+'~';
 		}
 
-		if(activity_location != 'no'){
+		if(activity_location != 'no' && activity_location != null){
 			activity_location = activity_location.toString().replace(/ /g, "%20");
 			locationval += 'actloctype='+activity_location+'~';
 		}
 
-		if(age_range != 'no'){
+		if(age_range != 'no' && age_range != null){
 			age_range = age_range.toString().replace(/ /g, "%20");
 			locationval += 'agerange='+age_range+'~';
-		}
-
-		if(city != ''){
-			city = city.toString().replace(/ /g, "%20");
-			locationval += 'city='+city+'~';
-		}
-
-		if(state != ''){
-			state = state.toString().replace(/ /g, "%20");
-			locationval += 'state='+state+'~';
-		}
-
-		if(country != ''){
-			country = country.toString().replace(/ /g, "%20");
-			locationval += 'country='+country+'~';
-		}
-
-		if(zipcode != ''){
-			zipcode = zipcode.toString().replace(/ /g, "%20");
-			locationval += 'zip_code='+zipcode+'~';
 		}
 
 		if(address != ''){
 			address = address.toString().replace(/ /g, "%20");
 			locationval += 'address='+address+'~';
+
+			if(city != ''){
+				city = city.toString().replace(/ /g, "%20");
+				locationval += 'city='+city+'~';
+			}
+
+			if(state != ''){
+				state = state.toString().replace(/ /g, "%20");
+				locationval += 'state='+state+'~';
+			}
+
+			if(country != ''){
+				country = country.toString().replace(/ /g, "%20");
+				locationval += 'country='+country+'~';
+			}
+
+			if(zipcode != ''){
+				zipcode = zipcode.toString().replace(/ /g, "%20");
+				locationval += 'zip_code='+zipcode+'~';
+			}
 		}
-
-		/*alert(activity_location);*/
-
-		/*if(programservices != 'no'){
-			locationval += 'ptype='+programservices+'~';
-		}*/
 		var name = '{{ env('APP_URL') }}';
 		var url = window.location.href;
 		var urldynamic = name+'activities/'+locationval;
-		/*alert(url);
-		alert(urldynamic);*/
-		if(url != urldynamic){
+		// alert(url);
+		// alert(urldynamic);
+		if(type == ''){
+			if(url != urldynamic){
+				window.location = urldynamic;
+			}
+		}else{
 			window.location = urldynamic;
 		}
 	}
 </script>
+
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
+
 <script type="text/javascript">
 	$('#instant-hire').scroll(function(){ 
 		//Set new top to autocomplete dropdown
-		newTop = $('#b_address1').offset().top + $('#b_address1').outerHeight();
+		if($('#mobileview').is(":visible")){
+			newTop = $('#act_b_address1').offset().top + $('#act_b_address1').outerHeight();
+        }else{
+        	newTop = $('#b_address1').offset().top + $('#b_address1').outerHeight();
+        }
+		
 		alert(newTop);
 		$('.pac-container').css('top', newTop + 'px');
 	});
@@ -707,7 +1016,11 @@
             zoom: 13
         });
 
-        var input = document.getElementById('b_address1');
+        if($('#mobileview').is(":visible")){
+			var input = document.getElementById('act_b_address1');
+        }else{
+        	var input = document.getElementById('b_address1');
+        }
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
         var autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.bindTo('bounds', map);
@@ -774,87 +1087,94 @@
                   $('#b_zipcode1').val(place.address_components[i].long_name);
                 }
             }
-            var address =  $('#b_address1').val();
-            var city =  $('#b_city1').val();
-            var country =  $('#country1').val();
-            var state =  $('#b_state1').val();
-            var zipcode =  $('#b_zipcode1').val();
-     
-            var activity_for=$('#activity_for').val();
-			var programservices=$('#programservices').val();
-			var service_type=$('#service_type').val();
-			var service_type_two=$('#servicetypetwo').val();
-			var membership_type=$('#membership_type').val();
-			var activity_location=$('#activity_location').val();
-			var age_range=$('#age_range').val();
 
-	   		var locationval = '';
-			if(service_type !=  null && service_type != ''){
-				service_type = service_type.toString().replace(/ /g, "%20");
-				locationval += 'btype='+service_type+'~';
-			}
-			if(programservices != null && programservices != ''){
-				programservices = programservices.toString().replace(/ /g, "%20");
-				locationval += 'ptype='+programservices+'~';
-			}
+            if($('#mobileview').is(":visible")){
+				var address =  $('#act_b_address1').val();
+	        }else{
+	        	var address =  $('#b_address1').val();
+	        	var city =  $('#b_city1').val();
+	            var country =  $('#country1').val();
+	            var state =  $('#b_state1').val();
+	            var zipcode =  $('#b_zipcode1').val();
+	     
+	            var activity_for=$('#activity_for').val();
+				var programservices=$('#programservices').val();
+				var service_type=$('#service_type').val();
+				var service_type_two=$('#servicetypetwo').val();
+				var membership_type=$('#membership_type').val();
+				var activity_location=$('#activity_location').val();
+				var age_range=$('#age_range').val();
 
-			if(service_type_two  != null &&  service_type_two != ''){
-				service_type_two = service_type_two.toString().replace(/ /g, "%20");
-				locationval += 'stype='+service_type_two+'~';
-			}
+		   		var locationval = '';
+				if(service_type !=  null && service_type != ''){
+					service_type = service_type.toString().replace(/ /g, "%20");
+					locationval += 'btype='+service_type+'~';
+				}
+				if(programservices != null && programservices != ''){
+					programservices = programservices.toString().replace(/ /g, "%20");
+					locationval += 'ptype='+programservices+'~';
+				}
 
-			if(activity_for  != null &&  activity_for != ''){
-				activity_for = activity_for.toString().replace(/ /g, "%20");
-				locationval += 'gfor='+activity_for+'~';
-			}
+				if(service_type_two  != null &&  service_type_two != ''){
+					service_type_two = service_type_two.toString().replace(/ /g, "%20");
+					locationval += 'stype='+service_type_two+'~';
+				}
 
-			if(membership_type != null &&  membership_type != ''){
-				membership_type = membership_type.toString().replace(/ /g, "%20");
-				locationval += 'memtype='+membership_type+'~';
-			}
+				if(activity_for  != null &&  activity_for != ''){
+					activity_for = activity_for.toString().replace(/ /g, "%20");
+					locationval += 'gfor='+activity_for+'~';
+				}
 
-			if(activity_location != null &&  activity_location != ''){
-				activity_location = activity_location.toString().replace(/ /g, "%20");
-				locationval += 'actloctype='+activity_location+'~';
-			}
+				if(membership_type != null &&  membership_type != ''){
+					membership_type = membership_type.toString().replace(/ /g, "%20");
+					locationval += 'memtype='+membership_type+'~';
+				}
 
-			if(age_range != null &&  age_range != ''){
-				age_range = age_range.toString().replace(/ /g, "%20");
-				locationval += 'agerange='+age_range+'~';
-			}
+				if(activity_location != null &&  activity_location != ''){
+					activity_location = activity_location.toString().replace(/ /g, "%20");
+					locationval += 'actloctype='+activity_location+'~';
+				}
 
-	        if(city != ''){
-				city = city.toString().replace(/ /g, "%20");
-				locationval += 'city='+city+'~';
-			}
+				if(age_range != null &&  age_range != ''){
+					age_range = age_range.toString().replace(/ /g, "%20");
+					locationval += 'agerange='+age_range+'~';
+				}
 
-			if(state != ''){
-				state = state.toString().replace(/ /g, "%20");
-				locationval += 'state='+state+'~';
-			}
+		        if(city != ''){
+					city = city.toString().replace(/ /g, "%20");
+					locationval += 'city='+city+'~';
+				}
 
-			if(country != ''){
-				country = country.toString().replace(/ /g, "%20");
-				locationval += 'country='+country+'~';
-			}
+				if(state != ''){
+					state = state.toString().replace(/ /g, "%20");
+					locationval += 'state='+state+'~';
+				}
 
-			if(zipcode != ''){
-				zipcode = zipcode.toString().replace(/ /g, "%20");
-				locationval += 'zip_code='+zipcode+'~';
-			}
-			if(address != ''){
-				address = address.toString().replace(/ /g, "%20");
-				locationval += 'address='+address+'~';
-			}
-			
-			var name = '{{ env('APP_URL') }}';
-			var url = window.location.href;
-			var urldynamic = name+'activities/'+locationval;
-			/*alert(url);
-			alert(urldynamic);*/
-			if(url != urldynamic){
-				window.location = urldynamic;
-			}
+				if(country != ''){
+					country = country.toString().replace(/ /g, "%20");
+					locationval += 'country='+country+'~';
+				}
+
+				if(zipcode != ''){
+					zipcode = zipcode.toString().replace(/ /g, "%20");
+					locationval += 'zip_code='+zipcode+'~';
+				}
+				
+				if(address != ''){
+					address = address.toString().replace(/ /g, "%20");
+					locationval += 'address='+address+'~';
+				}
+				
+				var name = '{{ env('APP_URL') }}';
+				var url = window.location.href;
+				var urldynamic = name+'activities/'+locationval;
+				/*alert(url);
+				alert(urldynamic);*/
+				if(url != urldynamic){
+					window.location = urldynamic;
+				}
+	        }
+
         });
     }
 </script>

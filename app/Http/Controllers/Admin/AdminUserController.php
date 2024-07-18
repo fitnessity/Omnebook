@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use Input;
 use View;
 use Validator;
-use App\User;
+use App\{User,Admin};
 use Hash;
 use Redirect;
 use Response;
@@ -25,16 +25,17 @@ use DB;
 
 class AdminUserController extends Controller
 {
-    protected $loginPath = '/admin';
-    protected $redirectTo = '/admin';
+    /*protected $loginPath = '/admin';
+    protected $redirectTo = '/admin';*/
     protected $users;
     protected $booking;
 
     public function __construct(UserRepository $users,BookingRepository $booking)
     {
         
+        
         $this->users = $users;
-        $this->middleware('admin');
+        $this->middleware('admin:admin');
         $this->booking = $booking;
     }
 
@@ -74,7 +75,8 @@ class AdminUserController extends Controller
 
     }
     public function index()
-    {   
+    {    
+        
         $socialMediaUsers = $this->users->getUserCount('social_media_users');
         $totalUsers = $this->users->getUserCount();
         $totalBusinessUsers = $this->users->getUserCount('business_users');
@@ -91,8 +93,10 @@ class AdminUserController extends Controller
         //Booking
         $totalBooking = $this->booking->getBookingCount();
         $totalConfirmedBooking = $this->booking->getBookingCount('confirmed');
-        $totalBookedProfessional = $this->booking->getTotalBookedProfessional();
-        
+
+        //$totalBookedProfessional = $this->booking->getTotalBookedProfessional();
+        $totalBookedProfessional = 0;
+          
         return view('admin.dashboard', [
                 'socialMediaUsers' => $socialMediaUsers,
                 'totalUsers' => $totalUsers,
@@ -115,19 +119,14 @@ class AdminUserController extends Controller
     public function viewCustomers()
     {   
         //$customers = $this->users->getCustomers();
-       //$customers = User::where('role','!=','admin')->get();   
+        //$customers = User::where('role','!=','admin')->get();   
 		$customers = User::where('is_deleted','=','0')->get();    
         return view('admin.customers.index', [
                 'allCustomers' => $customers,
-                'pageTitle' => "Manage Customers"
+                //'pageTitle' => "Manage Customers"
+                'pageTitle' => "Manage Users"
                 ]);
 
-    }
-
-    public function login_as(Request $request){
-        $user = User::find($request->id);
-        Auth::login($user, true);
-        return redirect('/');
     }
 
     public function postCustomers(Request $request){
@@ -166,7 +165,7 @@ class AdminUserController extends Controller
                     'danger' =>  'Please select at least one customer.',
             );
         }
-        return Redirect::to('/admin/customers')->with('status',$response);
+        return Redirect::to('/admin/users')->with('status',$response);
     }
 
     public function getCustomerDetails($id)
@@ -177,7 +176,7 @@ class AdminUserController extends Controller
             $response = array(
                     'danger' =>  'Customer not found.',
             );
-            return Redirect::to('/admin/customers')->with('status',$response);
+            return Redirect::to('/admin/users')->with('status',$response);
         }    
         return view('admin.customers.edit', [
             'customerDetails' => $customer_details,
@@ -202,7 +201,7 @@ class AdminUserController extends Controller
             $response = array(
                     'danger' =>  $errMsg,
             );
-            return redirect('/admin/customers/edit/'.$request->id)->with('status', $response);
+            return redirect('/admin/users/edit/'.$request->id)->with('status', $response);
         }
 
         $loggedinUser = Auth::user();
@@ -257,7 +256,7 @@ class AdminUserController extends Controller
             $response = array(
                     'danger' => 'Some error while updating profile picture.',
             );
-            return redirect('/admin/customers/edit/'.$request->id)->with('status', $response);
+            return redirect('/admin/users/edit/'.$request->id)->with('status', $response);
         }else {
 
             if(isset($request->about_me) && $userObj->role == "customer")
@@ -287,7 +286,7 @@ class AdminUserController extends Controller
             $response = array(
                     'success' => 'Profile updated succesfully!',
             );
-            return Redirect::to('/admin/customers/edit/'.$request->id)->with('status',$response);
+            return Redirect::to('/admin/users/edit/'.$request->id)->with('status',$response);
         }
     }
 
@@ -299,7 +298,7 @@ class AdminUserController extends Controller
             $response = array(
                     'danger' =>  'Customer not found.',
             );
-            return Redirect::to('/admin/customers')->with('status',$response);
+            return Redirect::to('/admin/users')->with('status',$response);
         }
         
         return view('admin.customers.view', [
@@ -332,7 +331,7 @@ class AdminUserController extends Controller
                     'danger' =>  'Customer not found.',
             );
         }
-        return Redirect::to('/admin/customers')->with('status',$response);
+        return Redirect::to('/admin/users')->with('status',$response);
 
     }
 
@@ -361,8 +360,7 @@ class AdminUserController extends Controller
                     'danger' =>  'Customer not found.',
             );
         }
-        return Redirect::to('/admin/customers')->with('status',$response);
-
+        return Redirect::to('/admin/users')->with('status',$response);
     }
 
     protected function customerValidator($data)
@@ -398,6 +396,10 @@ class AdminUserController extends Controller
             'profile_pic' => 'Please upload an only image',
             'about_me.required' => 'Provide about me'
         ]);
+    }
+
+    public function updatefitnessityfee(Request $request){
+        User::where('id',$request->uid)->update(['fitnessity_fee'=>$request->fitness_fee, 'recurring_fee'=>$request->recurring_fee]);
     }
 
 }

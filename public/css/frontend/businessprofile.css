@@ -5667,7 +5667,7 @@ table.dp_monthpicker.dp_body td { padding: 15px !important; }
 
 
 
-	.emoji-picker-icon{
+	/*.emoji-picker-icon{
 
 		right: 61%;
 
@@ -5675,7 +5675,7 @@ table.dp_monthpicker.dp_body td { padding: 15px !important; }
 
 		font-size: 17px;
 
-	}
+	}*/
 
 	.emoji-menu{
 
@@ -6980,167 +6980,173 @@ table.dp_monthpicker.dp_body td { padding: 15px !important; }
 	
 
 	@media screen and (min-width: 1000px) and (max-width: 1049px){
-
-		.emoji-picker-icon{ right: 61%; top: 68%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 62% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1050px) and (max-width: 1099px){
-
-		.emoji-picker-icon{ right: 43%; top: 67%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 62% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1100px) and (max-width: 1149px){
-
-		.emoji-picker-icon{ right: 64%; top: 67%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 63% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1150px) and (max-width: 1199px){
-
-		.emoji-picker-icon{ right: 48%; top: 67%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 65% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1200px) and (max-width: 1249px){
-
-		.emoji-picker-icon{ right: 67%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 67% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1250px) and (max-width: 1299px){
-
-		.emoji-picker-icon{ right: 68%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 69% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1300px) and (max-width: 1349px){
-
-		.emoji-picker-icon{ right: 69%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 69% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1350px) and (max-width: 1399px){
-
-		.emoji-picker-icon{ right: 71%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px !important; top: 68% !important; font-size: 17px; right: 0px !important; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 71% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1400px) and (max-width: 1449px){
-
-		.emoji-picker-icon{ right: 72%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 72% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1450px) and (max-width: 1499px){
-
-		.emoji-picker-icon{ right: 73%; top: 67%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 73% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1500px) and (max-width: 1549px){
-
-		.emoji-picker-icon{ right: 74%; top: 68%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 74% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1550px) and (max-width: 1599px){
-
-		.emoji-picker-icon{ right: 75%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 74% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1600px) and (max-width: 1649px){
-
-		.emoji-picker-icon{ right: 76%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 76% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1650px) and (max-width: 1699px){
-
-		.emoji-picker-icon{ right: 76%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 76% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1700px) and (max-width: 1749px){
-
-		.emoji-picker-icon{ right: 77%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 77% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 
 	@media screen and (min-width: 1750px) and (max-width: 1799px){
-
-		.emoji-picker-icon{ right: 78%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 77% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 
 	}
 	
 	@media screen and (min-width: 1800px) and (max-width: 1849px){
-		.emoji-picker-icon{ right: 78%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 78% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 	}
 	
 	@media screen and (min-width: 1850px) and (max-width: 1899px){
-		.emoji-picker-icon{ right: 79%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 79% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 	}
 
 	@media screen and (min-width: 1900px) and (max-width: 1949px){
-		.emoji-picker-icon{ right: 79%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 79% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 	}
 	
 	@media screen and (min-width: 1950px) and (max-width: 1999px){
-		.emoji-picker-icon{ right: 79%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 80% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 	}
 	
 	@media screen and (min-width: 2000px) and (max-width: 2049px){
-		.emoji-picker-icon{ right: 81%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
 		.newpst-input { width: 85%; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 81% !important;}
+		.emoji-wysiwyg-editor{position: relative;}
 	}
 	
 	@media screen and (min-width: 2050px) and (max-width: 2099px){
-		.emoji-picker-icon{ right: 81%; top: 66%; font-size: 17px; }
-
+		.emoji-picker-icon{position: absolute; left: 170px; top: 66%; font-size: 17px; }
+		.emoji-menu{position: absolute; top: 74% !important; right: 81% !important;}
 		.newpst-input { width: 85%; }
+		.emoji-wysiwyg-editor{position: relative;}
 	}
 
 
@@ -7245,7 +7251,9 @@ table.dp_monthpicker.dp_body td { padding: 15px !important; }
     font-weight: 900 !important;
 }
 .img-modal-left-bpage img{
-	width: 100%;
+	width: 100% !important;
+	min-height: auto !important;
+	border-radius: 0px !important;
 }
 .business-right-panel{
 	padding-right: 0px !important;;

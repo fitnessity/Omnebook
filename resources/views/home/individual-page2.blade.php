@@ -147,10 +147,10 @@
             <div class="banner-content">
                <div class="row">
                   <div class="col-md-2">
-                     <img src="<?php echo Config::get('constants.USER_IMAGE_THUMB').$company['logo']; ?>" class="img-fluid">
+                     <img alt="Fitnessity" src="<?php echo Config::get('constants.USER_IMAGE_THUMB').$company['logo']; ?>" class="img-fluid">
                   </div>
                   <div class="col-md-6">
-                     <h3>{{$company->company_name}}</h3>
+                     <h3>{{$company->dba_business_name}}</h3>
                      <p>{{$company->short_description}}</p>
                      <div class="banner_add">
                         <a href="#"><i class="fa fa-phone" aria-hidden="true"></i> {{$company->contact_number}}</a>
@@ -219,7 +219,7 @@
             <div id="sync1" class="owl-carousel owl-theme">
                 @foreach($company->company_images as $value)
               <div class="item">
-                <img src="<?php echo Config::get('constants.USER_IMAGE_THUMB').$value; ?>"></img>
+                <img alt="Fitnessity" src="<?php echo Config::get('constants.USER_IMAGE_THUMB').$value; ?>"></img>
                 </div>
                 @endforeach
             </div>
@@ -265,7 +265,7 @@
                <br>
                <div class="row" style="border-bottom: 1px solid lightgray;">
                 <div class="col-md-2">
-                  <img src="https://demoapus.com/cityo/place-demo/wp-content/plugins/wp-first-letter-avatar/images/default/96/latin_o.png" class="img-fluid">
+                  <img src="https://demoapus.com/cityo/place-demo/wp-content/plugins/wp-first-letter-avatar/images/default/96/latin_o.png" class="img-fluid" alt="Fitnessity">
                 </div>
                 <div class="col-md-7">
                      <h6><b>Owner</b><br><span style="color: gray;font-size: 13px;">June 18, 2019</span></h6>

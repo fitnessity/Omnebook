@@ -1,15 +1,6 @@
 <?php
 use App\User;
 $total_quantity = 0;
-
-
-// exit();
-if(isset($cart["cart_item"])){
-    foreach($cart["cart_item"] as $item){
-    	$total_quantity = count($cart["cart_item"]);
-        /*$total_quantity += (int)$item["quantity"];*/
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -36,19 +27,47 @@ if(isset($cart["cart_item"])){
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
         <link rel="shortcut icon" href="{{ url('/public/images/email/favicon.ico') }}">
         <link rel="icon" href="{{ url('/public/images/email/favicon.ico') }}">
-        <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,900'>
-        <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'>
-        <!-- <link rel='stylesheet' type='text/css' href="<?php //echo Config::get('constants.FRONT_CSS'); ?>font-awesome.css"> -->
-        <link rel="stylesheet" type="text/css" href="<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
-        <link rel='stylesheet' type='text/css' href="<?php echo Config::get('constants.FRONT_CSS'); ?>owl.css">
-        <link rel='stylesheet' type='text/css' href="<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap.css">
-        <link rel='stylesheet' type='text/css' href="<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap-select.min.css">
-        <link rel='stylesheet' type='text/css' href="<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
-        <link rel='stylesheet' type='text/css' href="<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/custom.css">
-        <link rel='stylesheet' type='text/css' href="<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
-        <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.1.11.1.min.js"></script>
-		<script src="/public/js/ratings.js"></script>
-        <style>/*
+        <link rel='stylesheet' type='text/css' href="{{asset('public/css/font_family.css')}}">
+        <link rel='stylesheet' type='text/css' href="{{asset('public/css/font_family_roboto.css')}}">
+        <link rel='stylesheet' type='text/css' href="{{url('/public/css/font-awesome.css')}}"> 
+        <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
+        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>owl.css">
+		
+		@if(Route::current()->getName() == 'design.home' ) 
+			<link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+		@endif
+		
+		@if(Route::current()->getName() != 'design.dashboard' && Route::current()->getName() != 'design.createNewBusinessProfile' && Route::current()->getName() != 'design.home') 
+			<!--<link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" /> -->
+			<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap.css"> 
+
+       		<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
+			
+			<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/custom.css">
+       	@endif
+        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap-select.min.css">
+		<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/header-footer.css">
+        
+        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
+		<link rel="stylesheet" href="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+		<script src="{{env('APP_URL')}}/public/js/jquery2.1.3.js"></script>
+       <!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
+	<!-- 	<script src="{{env('APP_URL')}}/public/js/ratings.js"></script> -->
+
+		<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/style.css')}}">
+		<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>
+
+		@if(Route::current()->getName() == 'design.shopping_cart' || Route::current()->getName() == 'carts_index') 
+			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/custom.css')}}">
+			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/responsive.css')}}">
+			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}">
+			<script src="{{asset('public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
+		@endif
+		
+
+        <style>
+
+		/*
             .btn-style-one {
                 position: relative;
                 display: inline-block;
@@ -121,101 +140,10 @@ if(isset($cart["cart_item"])){
 			  	cursor: pointer;
 			  	transition: all 0.2s ease;
 			}			
-			.pc-sidebar {
-				background: rgb(47 47 47);
-				box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
-			   	/* width: 298px;*/
-				/*position: fixed;*/
-				top: 72px;
-				bottom: 0;
-				z-index: 1026;
-			}
-			.pc-sidebar .navbar-content { position: relative; /*height: calc(100vh - 70px);*/ }
-			.ps {
-				overflow: hidden !important;
-				overflow-anchor: none;
-				touch-action: auto;
-			}
-			.pc-sidebar ul {
-				list-style: none;
-				padding-left: 0;
-				margin-bottom: 0;
-			}
+			
 			.profile-img{ }
 			.text-lp{ color: white; /*padding: 15px 15px 15px 15px;*/ }
-			.pc-sidebar .pc-caption {
-				color: white;
-				display: block;
-				padding: 5px 28px 0px;
-				text-align: center;
-				font-size: 15px;
-			}
-			.pc-sidebar .pc-caption-1 {
-				color: white;
-				display: block;
-				text-align: center;
-				font-size: 18px;
-			}
-			.lp-tag{
-				color: white;
-				display: block;
-				padding: 0px 28px 0px;
-				font-size: 14px;
-				text-align: center;
-				margin-bottom: 10px;
-			}
-			.lp-per-pro{
-				color: white;
-				display: block;
-				padding: 0px 28px 5px;
-				font-size: 16px;
-				text-align: center;
-			}
-			.btn-lp{
-				background: #f91942;
-				color: white;
-				padding: 7px 25px 7px 25px;
-				border-radius: 7px;
-				margin-top: 0px;
-				margin-bottom: 15px;
-				border: 1px solid #f91942;
-			}
-			.pc-navbar .btn-lp:hover{
-				background: #000;
-				color: white;
-				padding: 7px 25px 7px 25px;
-				border-radius: 7px;
-				margin-top: 0px;
-				margin-bottom: 15px;
-				border: 1px solid #000;
-			}
-			.border-1{ border-bottom: 1.5px solid #c9c9c9; padding: 0px; text-align: center; margin-bottom: 7px; }
-			.pc-sidebar .pc-link {
-				display: block;
-				padding: 5px 30px;
-				color: white;
-				font-size: 15px;
-				font-weight: 400;
-				text-align: left;
-			}
-			.pc-micon{ margin-right: 15px; }
-			.pri-1{ color: white; text-align: center; margin-top: 12px; font-size: 10px; }
-			.pri-2{ color: white; text-align: center; font-size: 10px; }
-			.cancle{ color: white; padding: 15px; }
-			.cancle:hover{color: #fff;}
-			.sidepanel  {
-			  width: 0;
-			  position: fixed;
-			  z-index: 9;
-			  height: 100%;
-			  top: 0;
-			  /*left: 78%;*/
-			  right: 0;
-			  background-color: #2f2f2f;
-			  overflow-x: hidden;
-			  transition: 0.5s;
-			  padding-top: 10px;
-			}
+					
 			.openbtn {
 				font-size: 20px;
 				cursor: pointer;
@@ -225,33 +153,6 @@ if(isset($cart["cart_item"])){
 				border: none;
 			}
 			
-			.top-search {
-			  float: left;
-			  margin-top: 0px;
-			  text-align: left;
-			  width: 32%;
-			}
-			.top-search form { display: inline-block; position: relative; width: 100%; }
-			.top-search button {
-			  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-			  color: #f91942;
-			  font-size: 15px;
-			  position: absolute;
-			  left: 6px;
-			  top: 47%;
-			  transform: translateY(-50%);
-			  padding: 9px;
-			  border: none;
-			}
-			.top-search form input {
-				background: white;
-				border: medium none;
-				font-size: 13px;
-				padding: 8px 40px;
-				width: 100%;
-				color: #2e2e2e;
-				border-radius: 5px;
-			}
 			.btn-style-srch {
 			  position: relative;
 			  display: inline-block;
@@ -271,22 +172,7 @@ if(isset($cart["cart_item"])){
 			  margin: 0 !important;
 			  border: 0;
 			}
-			.logo {width: 100%;}
-			.top-area {
-			  display: contents;
-			  text-align: right;
-			  vertical-align: middle;
-			  width: 84%;
-			}
-			.top-area ul.setting-area {
-			  display: inline-block;
-			  float: left;
-			  list-style: outside none none;
-			  margin-bottom: 0;
-			  padding-left: 10px;
-			  vertical-align: middle;
-			}
-			.top-area ul.setting-area li { display: inline-block; position: relative; vertical-align: top; z-index: 2; }
+			
 			.top-area ul.setting-area li  a {
 			  color: #b9b9b9;
 			  font-size: 18px;
@@ -376,7 +262,6 @@ if(isset($cart["cart_item"])){
 			}
 			.help-us-side{
 				font-size: 11px;
-				margin-left: 35px;
 			}
 			.border-sidebar{
 				border-bottom: 1px solid #fff;
@@ -394,6 +279,7 @@ if(isset($cart["cart_item"])){
 			}
 			@media screen and (min-width: 1920px) and (max-width: 2500px){ }
 			*/
+			
 	</style>
 	
 	<!-- Google tag (gtag.js) -->
@@ -412,15 +298,17 @@ if(isset($cart["cart_item"])){
         $companyid = (isset($companyid) && $companyid != "") ? $companyid : 0;
         $module = explode(".co/", url()->current());?>
         <header>
-            <div class="col-lg-12">
-        		<div class="menu_nav">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="menu_nav">
                 
-					<div class="logo-header">
-                    <a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo1.png') }}"> </a>
-					</div>
-                
-					<div class="top-area">
-                    <?php if( !request()->is('/') ) { ?>
+						<div class="logo-header">
+						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo1_black.png') }}" alt="Fitnessity"> </a>
+						</div>
+					
+						<div class="top-area">
+                    <?php /*if( !request()->is('/') ) {*/ ?>
                         <div class="top-search">
                             <!-- <form method="get" action="/instant-hire"> -->
                             <form method="get" action="/activities/">
@@ -429,7 +317,7 @@ if(isset($cart["cart_item"])){
                                 <button id="serchbtn" ><i class="fa fa-search"></i></button>
                             </form>
 						</div>
-					<?php } ?>
+					<?php /*}*/ ?>
                         <?php /*?>
 						<ul class="setting-area">
                             <li><a href="{{ url('') }}" title="Home" data-ripple=""><i class="fa fa-home"></i></a></li>
@@ -463,38 +351,38 @@ if(isset($cart["cart_item"])){
                     </nav><?php */?>
 					
 						<div class="header-right">
-                        	<ul class="setting-area">
-                            @if(Auth::check())
-                            	<?php $user = User::where('id', Auth::user()->id)->first(); ?>
-                                <li><!--<a href="<?php echo config('app.url'); ?>/userprofile/{{@$user['username']}}" title="Home" data-ripple="" style="margin-top: 12%;">
-                                    <i class="fa fa-home" style="font-size:18px;"></i></a>-->
-                                </li>
-                            @else
-                            	<li><!--<a href="{{ Config::get('constants.SITE_URL') }}" title="Home" data-ripple="" style="margin-top: 12%;">
-                                    <i class="fa fa-home" style="font-size:18px;"></i></a>-->
-                                </li>
-							@endif
-                            </ul>
-							<!--<a href="{{route('pricedetails')}}" class="btn btn-list-business business-sp">Price detail</a>-->
-						
-							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp">List My Business</a>
+                           <?php /* @if(Session('StaffLogin'))
+                            	<a href="{{ Config::get('constants.SITE_URL') }}/userlogout" class="btn btn-list-business mr-15 header-bottom-sp"  style="color: white;">Logout </a>
+							@elseif(Auth::check() == '0')
+								<a  class="btn btn-list-business mr-15 header-bottom-sp" href="{{route('staff_login')}}">Staff Login</a>
+							@endif  */?>
+							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp header-bottom-sp">List My Business</a>
 							<div class="button"><span></span></div>
-							<input type="button" value="Book an Activity" class="btn-style-one" onclick="location.href='/activities'">
-							<a class="btn-cart">
-								<img src="{{ asset('/public/images/shoping-cart-header.png') }}" alt="cart"><span id="cart-item">0</span>
+
+							<a value="Book an Activity" class="btn business-sp btn-style-two" href="{{route('activities_index')}}">Book An Activity</a>
+							<div  class="cartitmclass mobile-none">
+								<?php 
+									$newcart['cart_item'] = [];
+									if(isset($cart["cart_item"])){
+									    foreach($cart["cart_item"] as $item){
+									    	if($item['chk'] == ''){
+									    		$newcart['cart_item'] [] = $item;
+									    	}
+									    }
+									} 
+									$total_quantity = count($newcart["cart_item"]);?>
+							<a class="btn-cart" href="{{route('carts_index')}}">
+								<img src="{{ asset('/public/images/shoping-cart-header-black.png') }}" alt="cart"><span id="cart-item">
+									 {{$total_quantity}}</span>
                                 <!--<img src="{{ asset('/public/images/cart-icon.png') }}" alt="cart"><span id="cart-item">0</span>-->
                             </a>
+							</div>
 							
                         	@if(Auth::check())
-						 	<div class="userblock">
+						 	<div class="userblock mobile-none">
                         		<div class="login_links" onclick="openNav()">
-                                
-                                @if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
-                                	<img src="{{ url('/public/uploads/profile_pic/thumb/'.Auth::user()->profile_pic) }}"
+                                	<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon-black.png') }}"
                                      alt="Fitnessity" >
-                                @else
-                                	<img src="{{ asset('/public/images/user-icon.png') }}" alt="Fitnessity">
-                                @endif
                                 </div>
 								<nav class="pc-sidebar">
 									<div class="navbar-wrapper">
@@ -503,12 +391,7 @@ if(isset($cart["cart_item"])){
 												<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeNav()"></a>
 												<ul class="pc-navbar">
 													<li style="text-align: center;"> 
-                                                    @if(File::exists(public_path("/uploads/profile_pic/thumb/".Auth::user()->profile_pic)))
-                                                        <img src="{{ url('/public/uploads/profile_pic/thumb/'.Auth::user()->profile_pic) }}" alt="Fitnessity" class="sidemenupic" >
-                                                    @else
-                                                        <img src="{{ asset('/public/images/user-icon.png') }}" alt="Fitnessity" class="sidemenupic">
-                                                    @endif
-														
+                                                        <img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" class="sidemenupic">
 													</li>
 													<li class="pc-caption"><span> Welcome</span></li>
                                                     <li class="pc-caption-1">
@@ -525,41 +408,55 @@ if(isset($cart["cart_item"])){
                                                     	<span class="pc-micon"><i class="fa fa-user"></i></span>
                                                         <a href="{{route('profile-viewProfile')}}" style="color: white;">View Personal Profile</a>
                                                     </li>
-                                                   <?php /*?> <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fa fa-user"></i></span>
-                                                      	<a href="{{route('profile-viewbusinessProfile')}}" style="color: white;">Business Profile</a>
-                                                    </li><?php */?>
+                                                 	
+                                                 	<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt="Fitnessity"></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
+													</li>
+
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt="Fitnessity"></span><a href="{{route('personal.manage-account.index')}}" style="color: white;">Manage Accounts</a>
+													</li>
+
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt="Fitnessity"></span><a href="{{ url('/personal/calendar')}}" style="color: white;">Calendar</a>
+													</li>
+
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt="Fitnessity"></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
+													</li>
+
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt="Fitnessity"></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
+													</li>
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
+													</li>
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
+													</li>
+																	
+													<li><div class="border-sidebar"></div></li>
+													<li class="lp-per-pro"> <span>Business Center </span></li>
+													<li class="pc-link"><span class="pc-micon"><i class="fas fa-clipboard-list"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">Create A Business</a>
+                                                    </li>
+
+                                                    @if(count(Auth::user()->company) > 0)
                                                     <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;">Edit Personal Profile</a>
-                                                    </li>
-													<!-- <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
-                                                    </li> -->
-													<li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/add-family" style="color: white;">Add Family Members</a>
-                                                    </li>
-													<li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-file-alt"></i></span>
-															<a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/booking-info" style="color: white;">Booking Info</a>
-                                                    </li>
-													<!-- <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-user-plus"></i></span><a href="#" style="color: white;">Invite Friends</a>
-                                                    </li> -->
+														<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('business_dashboard')}}"  style="color: white;">Manage My Business</a>
+													</li>
+													
+														@if(!Session('StaffLogin'))
+															<li class="pc-link">
+																<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('staff_login')}}"  style="color: white;">Staff Login</a>
+															</li>
+														@endif
+													@endif
+													<li><div class="border-sidebar"></div></li>
+													<li class="lp-per-pro"> <span>Support </span> </li>
 													<li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-comments"></i></span>
                                                         <a href="{{ Config::get('constants.SITE_URL') }}/feedback" style="color: white;">Give Feedback<br><p class="help-us-side">(Help us improve)<p></a>
-                                                    </li>
-													<li><div class="border-sidebar"></div></li>
-													<li class="lp-per-pro"> <span>Business Center </span></li>
-													<li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-clipboard-list"></i></span>
-                                                        <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">List My Business</a>
-                                                    </li>
-                                                    <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('manageCompany')}}" style="color: white;">Manage My Business</a>
-                                                    </li>
-													<li><div class="border-sidebar"></div></li>
-													<li class="lp-per-pro"> <span>Support </span> </li>
+                                                    </li>	
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fas fa-question-circle"></i></span>
                                                         <a href="{{route('help')}}" style="color: white;">Help Desk</a>
@@ -576,7 +473,7 @@ if(isset($cart["cart_item"])){
 												</ul>
 											</div>
 											<p class="pri-1"> <a href="{{ Config::get('constants.SITE_URL') }}/privacy-policy" style="color: white;"> Privacy </a> - <a href="{{ Config::get('constants.SITE_URL') }}/terms-condition" style="color: white;">Terms </a></p>
-											<p class="pri-2">Fitnessity, Inc 2021</p>
+											<p class="pri-2">Fitnessity, Inc {{date('Y')}}</p>
 										</div>
 									</div>
 								</nav>
@@ -585,7 +482,7 @@ if(isset($cart["cart_item"])){
 							<!-- old nav -->
                          	<div class="userblock">
                         		<div class="login_links">
-									<img class="sign-in-header" src="{{ asset('/public/images/login-header.png') }}" alt="cart">
+									<img class="sign-in-header" src="{{ asset('/public/images/login-header-black.png') }}" alt="cart">
 									<a href="{{ Config::get('constants.SITE_URL') }}/userlogin">Sign in or </a> 
 									<a href="{{ Config::get('constants.SITE_URL') }}/registration"> Register </a>
 									<!--<img src="{{ asset('/public/images/user-icon.png') }}" alt="">-->
@@ -613,8 +510,7 @@ if(isset($cart["cart_item"])){
                         	@endif
                             
 							<script>
-                                $(".btn-cart").attr("href","/payments/card");
-                                $("#cart-item").html('<?=$total_quantity?>');
+                                //$("#cart-item").html('<?=$total_quantity?>');
                             </script>
                     	</div>
 					
@@ -641,6 +537,8 @@ if(isset($cart["cart_item"])){
                             </div>-->
 					</div>
 				</div>
+					</div>
+				</div>
 			</div>
 		</header>
 
@@ -661,6 +559,7 @@ if(isset($cart["cart_item"])){
         
     </body>
 </html>
+
 
 <script>
 	
@@ -875,14 +774,17 @@ function openNav() {
 function closeNav() {
 	document.getElementById("mySidepanel").style.width = "0";
 }
+
 </script>
-<link href=
-'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css'  rel='stylesheet'>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script>
+
+<link href='{{asset("/public/css/frontend/jquery-ui.css")}}'  rel='stylesheet'>
+<!-- <link href=
+'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css'  rel='stylesheet'> -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script> -->
 <script type="text/javascript">
-$(document).ready(function () { 
+/*$(document).ready(function () { 
 	$( ".birthdate" ).datepicker();
-});
+});*/
 </script>
 <script>
 	$(document).on('click', '#serchbtn', function() {

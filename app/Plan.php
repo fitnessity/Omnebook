@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Storage;
 class Plan extends Model
 {
 
@@ -21,13 +21,13 @@ class Plan extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'title',
-        'description',
-        'price_per_month',
-        'quote_per_month',
-        'is_deleted'
-    ];
+    protected $guarded = [];
 
-     
+    public function getPic(){
+        $plan_pic = '';
+        if(Storage::disk('s3')->exists($this->image)){
+            $plan_pic = Storage::url($this->image);
+        }
+        return $plan_pic;
+    }
 }

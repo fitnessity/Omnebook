@@ -1,5 +1,9 @@
-@extends('layouts.header')
+@extends('layouts.business.header')
 @section('content')
+<head>
+    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
+    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>css/responsive.css">
+</head>
 <style>
 .location-right {
   float: left;
@@ -73,9 +77,7 @@ textarea {
 </style>
 <img src="/images/feedback.jpg"  style="width: 100%;">
 <section class="main-slider contact-banner">
-    <div class="container">
-        <h1>Feedback</h1>
-    </div>
+    <div class="container"> <h1>Feedback</h1> </div>
 </section>
 
 <section class="breadcrumbs">
@@ -86,11 +88,11 @@ textarea {
         </ul>
     </div>
 </section>                                
-<div class="alert alert-success fade in alert-dismissible show successmsg" style="display: none;">
+<!-- <div class="alert alert-success fade in alert-dismissible show successmsg" style="display: none;">
 	<button type="button" class="close" data-dismiss="alert" aria-label="Close" >
     	<span aria-hidden="true" style="font-size:20px">×</span>
 	</button> {{ session()->get('success') }}
-</div>  
+</div>  --> 
 <div class="location-detail contactpage-sec feedback-sec">
     <div class="container">
 		<div class="row">
@@ -111,43 +113,46 @@ textarea {
 					</div><?php */?>
 				<div class="location-right">
 					<div id='systemMessage' class="contactUsMessage"></div>
-                    <div class="row">
-                    	<div class="col-md-offset-2 col-sm-12 col-md-8 col-lg-8 col-md-offset-2">
-						<form id="frmfeedback" method="post" action="{{url('/feedback/saveFeedback')}}">
-							@csrf
-							<p>
-                            	<input type="hidden" name="rating" id="rating" value="0">
-								<span class="rat-fb">Ratings</span>
-								<div id="stars" class="starrr fb-rat-star"></div>
-							</p> 
-							@if (Auth::guest())
-								<p><input type="text" placeholder="Name" name="name" id="name" /></p>
-								<p><input type="text" placeholder="Email" name="email" id="email" autocomplete="off" /></p>
-								 @else
-								  <?php $loggedinUser = Auth::user(); ?>
-								  <input type="text" name="name" id="name" size="255" maxlength="255" placeholder="name" value="{{ $loggedinUser['firstname'] }} {{ $loggedinUser['lastname'] }}" readonly>
-									<input type="email" name="email" id="email" size="255" placeholder="Email Address" maxlength="255" value="{{ $loggedinUser['email'] }}" readonly>
-								  @endif 
+                    <div class="container">
+                    <div class="row justify-content-md-center">
+                    	<div class="col-sm-12 col-md-8 col-lg-8">
+							<form id="frmfeedback" method="post" action="{{url('/feedback/saveFeedback')}}">
+								@csrf
+								<p>
+	                            	<input type="hidden" name="rating" id="rating" value="0">
+									<span class="rat-fb">Ratings</span>
+									<div id="stars" class="starrr fb-rat-star"></div>
+								</p> 
+								@if (Auth::guest())
+									<p><input type="text" placeholder="Name" name="name" id="name" /></p>
+									<p><input type="text" placeholder="Email" name="email" id="email" autocomplete="off" /></p>
+								@else
+									<?php $loggedinUser = Auth::user(); ?>
+									<input type="text" name="name" id="name" size="255" maxlength="255" placeholder="name" value="{{ $loggedinUser['firstname'] }} {{ $loggedinUser['lastname'] }}" readonly>
+										<input type="email" name="email" id="email" size="255" placeholder="Email Address" maxlength="255" value="{{ $loggedinUser['email'] }}" readonly>
+							    @endif 
 								<textarea placeholder="Say something About Fitnessity" name="comment" id="comment" rows="5"></textarea>
 								<textarea placeholder="Any suggestions for us ?" name="suggestion" id="suggestion" rows="5"></textarea>
 								@if ($errors->has('suggestion'))
-								<span class="help-block" style="color:red">
-									<strong>{{ $errors->first('suggestion') }}</strong>
-								</span>
-							   @endif
+									<span class="help-block" style="color:red">
+										<strong>{{ $errors->first('suggestion') }}</strong>
+									</span>
+							   	@endif
 								<input type="hidden" name="_token" id="token" value="{{csrf_token()}}">
 								<button type="submit">SEND  FEEDBACK </button>
-							
-						</form>
+							</form>
+							<div class="font-green fs-18">{{ session()->get('success') }}</div>
                         </div>
 					</div>
+                    </div>
+                    
 				</div>
 			</div>
 		</div>
     </div>
 </div>      
   
-@include('layouts.footer')
+@include('layouts.business.footer')
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>ratings.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {

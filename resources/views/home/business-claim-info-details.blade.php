@@ -1,6 +1,9 @@
-@extends('layouts.header')
+@extends('layouts.business.header')
 @section('content')
-
+<head>
+    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
+    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>css/responsive.css">
+</head>
 <style>
     #suggestions {
         -moz-box-sizing: border-box;
@@ -29,9 +32,7 @@
 </style>
 <?php
     use App\CompanyInformation;
-    $phone_number = '';
-    $extension = '';
-    $email = '';
+    $phone_number = $extension = $email = $user = $activePlan ='';
     $val = "null";
     $data = CompanyInformation::where('id',$cid)->first();
    
@@ -50,25 +51,37 @@
             $arr_email = explode("@", $email);
             $extension = 'username@'.$arr_email[1];
         }
-        
+
+        if(Auth::check()){
+            $user = Auth::user();
+        }
+
+        if($user){
+            $user->update(['show_step' =>1]);
+            $activePlan = $user->CustomerPlanDetails()->where('amount','!=',0)->whereDate('expire_date','>=',date('Y-m-d'))->whereDate('starting_date','<=',date('Y-m-d'))->latest()->first();
+        }
     }
 ?>
 <div class="claiming-section claimyour-business" style="background-image: url(../img/claim-a-business-design.jpg);">
 
     <div class="container">
-
-        <div class="col-md-6 claiming-business-block">
+		<div class="row">
+        <div class="col-lg-6 col-md-12 col-12 claiming-business-block">
 
             <h3>CLAIMING YOUR BUSINESS LISTING</h3>
 
             <p>
-                Let's get started! By continuing, you agree to Fitnessity's <a href="#"> Terms of Service</a> and Fitnessity's <a href="#">Privacy Policy</a>. You are claiming as <b>{{Auth::user()->email}}</b>.You represent that you are the owner/representative to claim this account on behalf of this business. 
+                Let's get started! By continuing, you agree to Fitnessity's <a href="{{url('/terms-condition')}}"> Terms of Service</a> and Fitnessity's <a href="{{url('/privacy-policy')}}">Privacy Policy</a>. You are claiming as <b>{{Auth::user()->email}}</b>.You represent that you are the owner/representative to claim this account on behalf of this business. 
             </p>
 
-            <h5>How Would You Would Like to Verify Ownership of {{$data->company_name}}</h5>
+            <h5>How Would You Would Like to Verify Ownership of {{$data->dba_business_name}}</h5>
+            @if($user && !$activePlan) 
+                <!-- <h3 class="fs-16 font-red">You have no active plan. Please <a href="{{route('choose-plan.index')}}" >buy plan.</a></h3>   -->
 
+                <h3 class="fs-16 font-red">You have no active plan. Please buy plan.</h3>
+            @endif
             <div id="error-email" style="display: none">
-                    <h5 class="Alertred">Your Email Is Not Match With Our Data. You Can't Claim This Business..</h5>
+                <h5 class="Alertred">Your Email Is Not Match With Our Data. You Can't Claim This Business..</h5>
             </div>
             <input type="hidden" name="cid" id="cid" value="{{$cid}}">
             @if($email != '')
@@ -83,7 +96,7 @@
                        <!--  <span>@gmail.com</span> -->
                         <span class="text-danger" id="email-error"></span>
                     </div>
-                    <input type="submit" value="Send" class="btnsend">
+                    <button type="submit" value="Send" class="btnsend" @if($user && !$activePlan) disabled @endif >Send</button>
                 </form>
             </div>
             @endif
@@ -99,7 +112,7 @@
                         <span>Send text to: +1 {{$phone_number}}</span>
                         <input type="hidden" name="phone_num" id="phone_num" class="form-control" value="{{$phone_number}}">
                     </div>
-                    <input type="submit" value="Send" class="btnsend">
+                    <button type="submit" value="Send" class="btnsend" @if($user && !$activePlan) disabled @endif >Send</button>
                 </form>
                 <br>
                 <!-- <h5>Note: Please add Your Country Code before Phone Number.</h5> -->
@@ -117,26 +130,26 @@
                         <span>Call this number: + 1 {{$phone_number}}</span>
                        <!-- <input type="number" name="" id="" class="form-control" placeholder="555-555-5555">-->
                     </div>
-                    <input type="submit" value="Send" class="btnsend">
+                    <button type="submit" value="Send" class="btnsend" @if($user && !$activePlan) disabled @endif >Send</button>
                 </form>
             </div> 
             @endif
         </div>
 
-        <div class="col-md-6 claiming-business-block-right">
+        <div class="col-lg-6 col-md-12 col-12 claiming-business-block-right">
 
             <p>
                 Claim your business or create a new profile today for free! Update your profile so we can showcase what you do to everyone looking for your services.
             </p>
 
-            <img src="{{ url('public/img/claim-your-business-detail.jpg') }}">
+            <img src="{{ url('public/img/claim-your-business-detail.jpg') }}" alt="Fitnessity">
 
         </div>
-
+		</div>
     </div>
 
 </div>
-@include('layouts.footer')
+@include('layouts.business.footer')
 
 <script>
     $(document).ready(function () {
@@ -158,7 +171,7 @@
                 },
                 success:function(response){
                     if(response == 'Success'){
-                        window.location.href = '/business-claim-varification/'+cid;
+                        window.location.href = '/business-claim-varification/'+cid+'/'+type_enter;
                     }else{
                         $('#error-email').show();
                     }
@@ -183,7 +196,7 @@
                 },
                 success:function(response){
                     if(response == 'Success'){
-                        window.location.href = '/business-claim-varification/'+cid;
+                        window.location.href = '/business-claim-varification/'+cid+'/'+type_enter;
                     }else{
                         $('#error-phone').show();
                     }
@@ -208,7 +221,7 @@
                 },
                 success:function(response){
                     if(response == 'Success'){
-                        window.location.href = '/business-claim-varification/'+cid;
+                        window.location.href = '/business-claim-varification/'+cid+'/'+type_enter;
                     }else{
                         $('#error-call').show();
                     }
@@ -245,11 +258,11 @@
                         if (response.search_data2.length != 0 && response.search_data.length != 0) {
                             response.search_data2.forEach(function (value, key) {
                                 var mysrc = "{{Config::get('constants.USER_IMAGE_THUMB')}}"
-                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'claimed\');"><div class="col-sm-12 row"><div class="col-sm-2"><img src="' + mysrc + '/' + value.logo + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
+                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'claimed\');"><div class="col-sm-12 row"><div class="col-sm-2"><img src="' + mysrc + '/' + value.logo + '" style="width:30px;height:30px;" alt="Fitnessity" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
                                 if (key + 1 == response.search_data2.length) {
                                     response.search_data.forEach(function (value, key) {
                                         var mysrc = "{{Config::get('constants.FRONT_IMAGE')}}"
-                                        str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'unclaimed\');"><div class="col-sm-12 row"><div  class="col-sm-2"><img src="' + mysrc + '/business_large_square.png' + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
+                                        str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'unclaimed\');"><div class="col-sm-12 row"><div  class="col-sm-2"><img src="' + mysrc + '/business_large_square.png' + '" style="width:30px;height:30px;" alt="Fitnessity" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
                                         if (key + 1 == response.search_data.length) {
                                             $('#option-box').empty();
                                             $('#option-box').append(str);
@@ -261,7 +274,7 @@
                         } else {
                             response.search_data2.forEach(function (value, key) {
                                 var mysrc = "{{Config::get('constants.USER_IMAGE_THUMB')}}"
-                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'claimed\');"><div class="col-sm-12 row"><div class="col-sm-2"><img src="' + mysrc + '/' + value.logo + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
+                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'claimed\');"><div class="col-sm-12 row"><div class="col-sm-2"><img src="' + mysrc + '/' + value.logo + '" style="width:30px;height:30px;" alt="Fitnessity" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
                                 if (key + 1 == response.search_data2.length) {
                                     $('#option-box').empty();
                                     $('#option-box').append(str);
@@ -270,7 +283,7 @@
                             })
                             response.search_data.forEach(function (value, key) {
                                 var mysrc = "{{Config::get('constants.FRONT_IMAGE')}}"
-                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'unclaimed\');"><div class="col-sm-12 row"><div  class="col-sm-2"><img src="' + mysrc + '/business_large_square.png' + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
+                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'unclaimed\');"><div class="col-sm-12 row"><div  class="col-sm-2"><img src="' + mysrc + '/business_large_square.png' + '" style="width:30px;height:30px;" alt="Fitnessity" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
                                 if (key + 1 == response.search_data.length) {
                                     $('#option-box').empty();
                                     $('#option-box').append(str);

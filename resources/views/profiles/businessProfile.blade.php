@@ -131,7 +131,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                         @else
                             <?php
                             echo '<div class="company-profile-text">';
-                            $pf=substr($company->company_name, 0, 1);
+                            $pf=substr($company->dba_business_name, 0, 1);
                             echo '<p>'.$pf.'</p></div>';
                             ?>
                         @endif
@@ -239,7 +239,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
             <div class="col-lg-6 col-sm-6">
                 <div class="bnr-information">
                     <div class="viewdisplay">
-                        <h2 style="text-transform: capitalize;">@if($company->dba_business_name != '') {{$company->dba_business_name}} @else {{$company->company_name}} @endif <!-- <i class="fa fa-pencil usernameedit" id="{{$customerName}}" style="color: #f53b49" data-toggle="modal" data-target="#editusername"></i>-->
+                        <h2 style="text-transform: capitalize;">{{$company->dba_business_name}}  <!-- <i class="fa fa-pencil usernameedit" id="{{$customerName}}" style="color: #f53b49" data-toggle="modal" data-target="#editusername"></i>-->
                     <?php /*?><span>Claimed</span><?php */?>
 					<!--<img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="images" width="45" height="20">-->
 					   </h2></div>
@@ -250,8 +250,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 					<div class="url-copy">	
 						<div> 
 							<p>
-								<a class="colorgrey" href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '-', $company->company_name)).'/'.$company->id; ?> ">
-							<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '-', $company->company_name)).'/'.$company->id; ?> </a> </p>
+								<a class="colorgrey" href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '-', $company->dba_business_name)).'/'.$company->id; ?> ">
+							<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '-', $company->dba_business_name)).'/'.$company->id; ?> </a> </p>
 							<!-- <button onclick="myFunction()" style="background: white;border: none; margin-left: 10px;">Copy URL</button>-->
 					   </div>
 					  		
@@ -458,7 +458,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
         <div class="modal-content">
             <div class="modal-body login-pad">  
                 <div class="pop-title employe-title">
-                    <h3>Change Photohh</h3>
+                    <h3>Change Photo</h3>
                 </div>
                 <button type="button" class="close modal-close" data-dismiss="modal">
                     <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
@@ -468,7 +468,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                             <div class="cover-tagbox">
                                 <i class="fas fa-info-circle"></i>
-                                <span>Your Cover Photo will be used to customize the header of your profile.</span>
+                                <span>Your Cover Photo will be used to customize the header of your profile.</span><br>
+                                <span>Required Dimensions for Your Cover Photo Is 800 X 450.</span>
                             </div>
                             <div class="file-upload">
                                 <form name="frm_cover" id="frm_cover" action="{{Route('savegallarypics')}}" method="post" enctype="multipart/form-data">
@@ -495,12 +496,13 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                     </div>
                                     <div>
                                     </div>
-
+                                    &nbsp;
                                     <div class="image-title-wrap">
                                         <input type="hidden" name="_token" value="{!! csrf_token() !!}">
                                         <button type="submit" id="submit_cover" name="submit_cover" class="remove-image">Save My Cover Photo</button>
                                         &nbsp;&nbsp;
                                     </div>
+                                    &nbsp;
                                 </form>
                             </div>
 
@@ -672,6 +674,9 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                             <li class="nav-item">
 								<a class="nav-link" href="#reviews">Reviews</a>
 							</li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('business_activity_schedulers',['business_id' =>$compinfo['id']])}}">Schedule</a>
+                            </li>
 							
                             <?php /*if($loggedinUser->id == $company->user_id) { ?>
 							<li class="nav-item">
@@ -847,7 +852,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     		<div class="" id="timeline">
             	<div class="desc-text" id="mydesc">
 					<span class="create-post">Timeline
-                        <a href="<?php echo config('app.url'); ?>/businessprofile/timeline/<?php echo strtolower(str_replace(' ', '', $compinfo->company_name)).'/'.$compinfo->id; ?>" class="showmore"> Show More <i class="fas fa-caret-right"></i> </a>
+                        <a href="<?php echo config('app.url'); ?>/businessprofile/timeline/<?php echo strtolower(str_replace(' ', '', $compinfo->dba_business_name)).'/'.$compinfo->id; ?>" class="showmore"> Show More <i class="fas fa-caret-right"></i> </a>
                     </span>
                     @if($page_posts->count() == 0 ) 
                         <div class="central-meta item">
@@ -858,7 +863,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                             @else
                                                 <?php
                                                 echo '<div class="company-img-text">';
-                                                $pf=substr($compinfo->company_name, 0, 1);
+                                                $pf=substr($compinfo->dba_business_name, 0, 1);
                                                 echo '<p>'.$pf.'</p></div>';
                                                 ?>
                                             @endif</figure>
@@ -898,12 +903,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 									<?php } ?>
 									<div class="friend-info">
                                     	<figure>
-                                            @if(File::exists(public_path("/uploads/profile_pic/thumb/".$company['logo'])))
+                                            @if($compinfo['logo'] != '' &&  File::exists(public_path("/uploads/profile_pic/thumb/".$company['logo'])))
                                             <img src="{{ url('/public/uploads/profile_pic/thumb/'.$company['logo']) }}" alt="fitnessity" class="img-fluid">
                                             @else
                                                 <?php
                                                 echo '<div class="company-img-text">';
-                                                $pf=substr($company->company_name, 0, 1);
+                                                $pf=substr($company->dba_business_name, 0, 1);
                                                 echo '<p>'.$pf.'</p></div>';
                                                 ?>
                                             @endif
@@ -926,7 +931,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 													</ul>
 												</div>
 											</div>
-											<ins><a href="#" title="">{{ucfirst($PageData->company_name)}} </a> Post Album</ins>
+											<ins><a href="#" title="">{{ucfirst($PageData->dba_business_name)}} </a> Post Album</ins>
 											<span><i class="fa fa-globe"></i> published: {{date('F, j Y H:i:s A', strtotime($page_post->created_at))}}</span>
 										</div>
 										<div class="post-meta">
@@ -1297,7 +1302,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                 @else
                                                     <?php
                                                     echo '<div class="company-img-text">';
-                                                    $pf=substr($company->company_name, 0, 1);
+                                                    $pf=substr($company->dba_business_name, 0, 1);
                                                     echo '<p>'.$pf.'</p></div>';
                                                     ?>
                                                 @endif

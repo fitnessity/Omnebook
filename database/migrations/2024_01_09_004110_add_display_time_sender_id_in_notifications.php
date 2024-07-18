@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class AddDisplayTimeSenderIdInNotifications extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        if (!Schema::hasColumn('notification', 'display_time')) {
+            Schema::table('notification', function (Blueprint $table) {
+                $table->string('display_time', 255)->nullable()->after('display_date');
+            });
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        if (Schema::hasColumn('notification', 'display_time')) {
+            Schema::table('notification', function (Blueprint $table) {
+                $table->dropColumn('display_time');
+            });
+        }
+    }
+}

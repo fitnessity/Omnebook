@@ -1,4 +1,4 @@
-@inject('request', 'Illuminate\Http\Request')
+    @inject('request', 'Illuminate\Http\Request')
 @extends('layouts.header')
 
 <head>
@@ -53,12 +53,12 @@ $loggedinUser = User::where('id',$compinfo->user_id)->first();
 $loggedinUserorignal = Auth::user();
 $loggedinUserId=$customerfname =$customerlname=''; $customerName =''; $profilePicture =''; $coverPicture ='';
 if($loggedinUser != ''){
-	$loggedinUserId=$loggedinUser->id;
-    $customerfname=$loggedinUser->firstname;
-    $customerlname=$loggedinUser->lastname;
-	$customerName = $loggedinUser->firstname . ' ' . $loggedinUser->lastname;
-    $profilePicture = $loggedinUser->profile_pic;
-    $coverPicture = $loggedinUser->cover_photo;
+	$loggedinUserId=@$loggedinUser->id;
+    $customerfname=@$loggedinUser->firstname;
+    $customerlname=@$loggedinUser->lastname;
+	$customerName = @$loggedinUser->firstname . ' ' . @$loggedinUser->lastname;
+    $profilePicture = @$loggedinUser->profile_pic;
+    $coverPicture = @$loggedinUser->cover_photo;
 }
 
 if (isset($_GET['cover']) && $_GET['cover'] == 1) {
@@ -160,7 +160,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                     @else
                     	<?php
                     	echo '<div class="company-profile-text">';
-						$pf=substr($compinfo->company_name, 0, 1);
+						$pf=substr($compinfo->dba_business_name, 0, 1);
 						echo '<p>'.$pf.'</p></div>';
 						?>
                     @endif
@@ -212,7 +212,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                 <div class="bnr-information">
                     <div class="viewdisplay">
                     
-                        <h2 style="text-transform: capitalize;">@if($compinfo->dba_business_name == '') {{$compinfo->company_name}} @else {{$compinfo->dba_business_name}} @endif <?php /*?> <i class="fa fa-pencil usernameedit" id="{{$customerName}}" style="color: #f53b49" data-toggle="modal" data-target="#editusername"></i><?php */?>
+                        <h2 style="text-transform: capitalize;">{{$compinfo->dba_business_name}}<?php /*?> <i class="fa fa-pencil usernameedit" id="{{$customerName}}" style="color: #f53b49" data-toggle="modal" data-target="#editusername"></i><?php */?>
                     <?php /*?><span>Claimed</span><?php */?>
 					<!--<img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="images" width="45" height="20">-->
 					</h2></div>
@@ -223,8 +223,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 					<div class="url-copy">	
 						<div> 
 							<p>
-								<a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $compinfo->company_name)).'/'.$compinfo->id;; ?>">
-									<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $compinfo->company_name)).'/'.$compinfo->id;; ?> </a> </p>
+								<a href="<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $compinfo->dba_business_name)).'/'.$compinfo->id;; ?>">
+									<?php echo config('app.url'); ?>/businessprofile/<?php echo strtolower(str_replace(' ', '', $compinfo->dba_business_name)).'/'.$compinfo->id;; ?> </a> </p>
 							<!-- <button onclick="myFunction()" style="background: white;border: none; margin-left: 10px;">Copy URL</button>-->
 					   </div>
 					</div>
@@ -370,6 +370,9 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 										<li class="nav-item">
 											<a class="nav-link" href="#reviews">Reviews</a>
 										</li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{route('business_activity_schedulers',['business_id' =>$compinfo['id']])}}">Schedule</a>
+                                        </li>
 									</ul>
 								</div>
 								<div class="col-sm-12 col-md-12 col-lg-2 followdiv">
@@ -542,7 +545,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 								<div class="desc-text" id="mydesc">
 									<span class="create-post">Timeline
 										
-										<a href="<?php echo config('app.url'); ?>/businessprofile/timeline/<?php echo strtolower(str_replace(' ', '', $compinfo->company_name)).'/'.$compinfo->id; ?>" class="showmore"> Show More <i class="fas fa-caret-right"></i> </a>
+										<a href="<?php echo config('app.url'); ?>/businessprofile/timeline/<?php echo strtolower(str_replace(' ', '', $compinfo->dba_business_name)).'/'.$compinfo->id; ?>" class="showmore"> Show More <i class="fas fa-caret-right"></i> </a>
 									 
 									</span>
 									 @if($page_posts->count() == 0 ) 
@@ -555,7 +558,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 													@else
 													<?php
 														echo '<div class="company-img-text">';
-														$pf=substr($compinfo->company_name, 0, 1);
+														$pf=substr($compinfo->dba_business_name, 0, 1);
 														echo '<p>'.$pf.'</p></div>';
 													?>
 													@endif
@@ -598,12 +601,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 												<?php } ?>
 												<div class="friend-info">
 													<figure>
-														@if(File::exists(public_path("/uploads/profile_pic/thumb/".$compinfo['logo'])))
+														@if($compinfo['logo'] != '' && File::exists(public_path("/uploads/profile_pic/thumb/".$compinfo['logo'])))
 														<img src="{{ url('/public/uploads/profile_pic/thumb/'.$compinfo['logo']) }}" alt="fitnessity" class="img-fluid">
 														@else
 															<?php
 															echo '<div class="company-img-text">';
-															$pf=substr($compinfo->company_name, 0, 1);
+															$pf=substr($compinfo->dba_business_name, 0, 1);
 															echo '<p>'.$pf.'</p></div>';
 															?>
 														@endif
@@ -625,7 +628,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																</ul>
 															</div>
 														</div><?php */?>
-														<ins><a href="#" title="">{{ucfirst($PageData->company_name)}} </a> Post Album</ins>
+														<ins><a href="#" title="">{{ucfirst($PageData->dba_business_name)}} </a> Post Album</ins>
 														<span><i class="fa fa-globe"></i> published: {{date('F, j Y H:i:s A', strtotime($page_post->created_at))}}</span>
 													</div>
 													<div class="post-meta">
@@ -1253,12 +1256,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																@if(!empty($reviews_people))
 																	@foreach($reviews_people as $people)
 																		<?php $userinfo = User::find($people->user_id); ?>
-																		<a href="<?php echo config('app.url'); ?>/userprofile/{{@$userinfo->username}}" target="_blank" title="{{$userinfo->firstname}} {{$userinfo->lastname}}" target="_blank" title="Purvi Patel" data-toggle="tooltip">
-																			@if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
-																		<img src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
+																		<a href="<?php echo config('app.url'); ?>/userprofile/{{@$userinfo->username}}" target="_blank" title="{{@$userinfo->firstname}} {{@$userinfo->lastname}}" target="_blank" title="Purvi Patel" data-toggle="tooltip">
+																			@if(File::exists(public_path("/uploads/profile_pic/thumb/".@$userinfo->profile_pic)) && @$userinfo->profile_pic != '')
+																		<img src="{{ url('/public/uploads/profile_pic/thumb/'.@$userinfo->profile_pic) }}" alt="{{@$userinfo->firstname}} {{@$userinfo->lastname}}">
 																		@else
 																			<?php
-																			$pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
+																			$pf=substr(@$userinfo->firstname, 0, 1).substr(@$userinfo->lastname, 0, 1);
 																			echo '<div class="admin-img-text"><p>'.$pf.'</p></div>'; ?>
 																		@endif
 																		</a>
@@ -1278,16 +1281,16 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																<div class="ser-rev-user">
 																	<div class="row">
 																		<div class="col-md-2 pr-0">
-																			@if(File::exists(public_path("/uploads/profile_pic/thumb/".$userinfo->profile_pic)))
-																			<img class="rev-img" src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{$userinfo->firstname}} {{$userinfo->lastname}}">
+																			@if(File::exists(public_path("/uploads/profile_pic/thumb/".@$userinfo->profile_pic)) && @$userinfo->profile_pic != '')
+																			<img class="rev-img" src="{{ url('/public/uploads/profile_pic/thumb/'.$userinfo->profile_pic) }}" alt="{{@$userinfo->firstname}} {{@$userinfo->lastname}}">
 																			@else
 																				<?php
-																				$pf=substr($userinfo->firstname, 0, 1).substr($userinfo->lastname, 0, 1);
+																				$pf=substr(@$userinfo->firstname, 0, 1).substr(@$userinfo->lastname, 0, 1);
 																				echo '<div class="reviewlist-img-text"><p>'.$pf.'</p></div>'; ?>
 																			@endif
 																		</div>
 																		<div class="col-md-10 pl-0">
-																			<h4> {{$userinfo->firstname}} {{$userinfo->lastname}}
+																			<h4> {{@$userinfo->firstname}} {{@$userinfo->lastname}}
 																				<div class="rattxt activered"><i class="fa fa-star" aria-hidden="true"></i> {{$review->rating}} </div> </h4> 
 																			<p class="rev-time"> {{date('d M-Y',strtotime($review->created_at))}} </p>
 																		</div>

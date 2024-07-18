@@ -28,7 +28,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/sports1.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/sports1.jpg')}}" alt="Fitnessity" />
                                 </div>
                                 <div class="cat-detail">
                                     <h1>Aerobics</h1>
@@ -40,7 +40,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/sports2.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/sports2.jpg')}}" alt="Fitnessity" />
                                 </div>
                                 <div class="cat-detail">
                                     <h1>Badminton</h1>
@@ -52,7 +52,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/sports3.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/sports3.jpg')}}" alt="Fitnessity" />
                                 </div>
                                 <div class="cat-detail">
                                     <h1>Archery</h1>
@@ -64,7 +64,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" alt="Fitnessity" />
                                 </div>
                                 <div class="cat-detail">
                                     <h1>Barre</h1>
@@ -76,7 +76,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" alt="Fitnessity" />
                                 </div>
                                 <div class="cat-detail">
                                     <h1>BADMINTON</h1>
@@ -88,7 +88,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" alt="Fitnessity" />
                                 </div>
                                 <div class="cat-detail">
                                     <h1>ARCHERY</h1>
@@ -100,7 +100,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" alt="Fitnessity" />
                                 </div>
                                 <div class="cat-detail">
                                     <h1>Barre</h1>
@@ -112,7 +112,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" alt="Fitnessity" />
                                 </div>
                                 <div class="cat-detail">
                                     <h1>BASEBALL</h1>
@@ -124,7 +124,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" alt="Fitnessity"/>
                                 </div>
                                 <div class="cat-detail">
                                     <h1>BASKETBALL</h1>
@@ -136,7 +136,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" alt="Fitnessity"/>
                                 </div>
                                 <div class="cat-detail">
                                     <h1>BEACH VOLLEYBALL</h1>
@@ -148,7 +148,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" alt="Fitnessity" />
                                 </div>
                                 <div class="cat-detail">
                                     <h1>BOULDERING</h1>
@@ -160,7 +160,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" alt="Fitnessity" />
                                 </div>
                                 <div class="cat-detail">
                                     <h1>BUNGEE JUMPING</h1>
@@ -172,7 +172,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" alt="Fitnessity" />
                                 </div>
                                 <div class="cat-detail">
                                     <h1>CAMPS & CLINIC</h1>
@@ -185,7 +185,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" alt="Fitnessity" />
                                 </div>
                                 <div class="cat-detail">
                                     <h1>CANOEING</h1>
@@ -197,7 +197,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="cat-item style_prevu_sp">
                                 <div class="cat-img-name width-img">
-                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" />
+                                    <img class="cat-img-name-allsport-img" src="{{ asset('public/images/sports/coming-soon.jpg')}}" alt="Fitnessity" />
                                 </div>
                                 <div class="cat-detail">
                                     <h1>CYCLING</h1>

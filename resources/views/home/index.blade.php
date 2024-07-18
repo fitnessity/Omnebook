@@ -59,7 +59,7 @@ form#frmlogin input {
 
                 <span><div class="sports_name"><span>{{ $sports_value->sport_name }}</span></div></span>
 
-                    <img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>{{ $sports_value->image }}" height="466" width="313" /><p>&nbsp;</p>
+                    <img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>{{ $sports_value->image }}" height="466" width="313" alt="Fitnessity" /><p>&nbsp;</p>
 
                     <div class="pop-search-detail-sports">
 
@@ -247,7 +247,7 @@ form#frmlogin input {
 
                      <div class="col-md-4">
 
-                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img">
+                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img" alt="Fitnessity">
 
                      </div>
 
@@ -309,7 +309,7 @@ form#frmlogin input {
 
                      <div class="col-md-4">
 
-                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img">
+                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img" alt="Fitnessity">
 
                      </div>
 
@@ -371,7 +371,7 @@ form#frmlogin input {
 
                      <div class="col-md-4">
 
-                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img">
+                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img" alt="Fitnessity">
 
                      </div>
 
@@ -433,7 +433,7 @@ form#frmlogin input {
 
                      <div class="col-md-4">
 
-                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img">
+                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img" alt="Fitnessity">
 
                      </div>
 
@@ -505,7 +505,7 @@ form#frmlogin input {
 
                      <div class="col-md-4">
 
-                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img">
+                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img" alt="Fitnessity">
 
                      </div>
 
@@ -567,7 +567,7 @@ form#frmlogin input {
 
                      <div class="col-md-4">
 
-                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img">
+                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img" alt="Fitnessity">
 
                      </div>
 
@@ -629,7 +629,7 @@ form#frmlogin input {
 
                      <div class="col-md-4">
 
-                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img">
+                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img" alt="Fitnessity">
 
                      </div>
 
@@ -691,7 +691,7 @@ form#frmlogin input {
 
                      <div class="col-md-4">
 
-                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img">
+                        <img src="https://kellyewhitney.files.wordpress.com/2018/03/jack-dorsey.jpeg?w=256&h=256&crop=1" class="img-fluid card_img" alt="Fitnessity">
 
                      </div>
 
@@ -867,7 +867,7 @@ Participate in activities alone, with family, friends, or a group. We create a c
       <div class="row pad-50 why_fitnessity_hp">
 
           <div class="col-md-4  works-heading" style="min-height: 375px;">
-            <img src="{{ asset('public/images/sporty-black.jpg') }}" style="width: 100%;padding: 10px 0px;border-radius: 33px;height: 260px;">
+            <img src="{{ asset('public/images/sporty-black.jpg') }}" style="width: 100%;padding: 10px 0px;border-radius: 33px;height: 260px;" alt="Fitnessity">
             <h4 style="font-weight: bold;text-transform: uppercase;">FIND ACTIVITES ONLINE</h4>
 
             <p>Experience activities you love without leaving your home</p>
@@ -875,7 +875,7 @@ Participate in activities alone, with family, friends, or a group. We create a c
           </div>
 
           <div class="col-md-4 works-heading" style="min-height: 375px;">
-             <img src="{{ asset('public/images/private-lessons-header.jpg') }}" style="width: 100%;padding: 10px 0px;border-radius: 33px;height: 260px;">
+             <img src="{{ asset('public/images/private-lessons-header.jpg') }}" style="width: 100%;padding: 10px 0px;border-radius: 33px;height: 260px;" alt="Fitnessity">
 
             <h4 style="font-weight: bold;text-transform: uppercase;">FIND 1:1 PERSONAL TRAINING AND COACHING LESSONS</h4>
 
@@ -883,7 +883,7 @@ Participate in activities alone, with family, friends, or a group. We create a c
 
           </div>
           <div class="col-md-4 works-heading" style="min-height: 375px;">
-             <img src="{{ asset('public/images/hitt_training.jpeg') }}" style="width: 100%;padding: 10px 0px;border-radius: 33px;height: 260px;">
+             <img src="{{ asset('public/images/hitt_training.jpeg') }}" style="width: 100%;padding: 10px 0px;border-radius: 33px;height: 260px;" alt="Fitnessity">
 
             <h4 style="font-weight: bold;text-transform: uppercase;">FIND CLASSES NEAR YOU </h4>
 
@@ -891,14 +891,14 @@ Participate in activities alone, with family, friends, or a group. We create a c
 
           </div>
            <div class="col-md-4  works-heading" style="min-height: 375px;">
-            <img src="{{ asset('public/images/kayak.jpg') }}" style="width: 100%;padding: 10px 0px;border-radius: 33px;height: 260px;">
+            <img src="{{ asset('public/images/kayak.jpg') }}" style="width: 100%;padding: 10px 0px;border-radius: 33px;height: 260px;" alt="Fitnessity">
             <h4 style="font-weight: bold;text-transform: uppercase;">FIND ACTIVE EXPERIENCES </h4>
 
             <p>Turn your weekend or planned vacation into an adventure.</p>
 
           </div>
          <div class="col-md-4  works-heading" style="min-height: 375px;">
-            <img src="{{ asset('public/images/Balsam_Mountain.jpg') }}" style="width: 100%;padding: 10px 0px;border-radius: 33px;height: 260px;">
+            <img src="{{ asset('public/images/Balsam_Mountain.jpg') }}" style="width: 100%;padding: 10px 0px;border-radius: 33px;height: 260px;" alt="Fitnessity">
             <h4 style="font-weight: bold;text-transform: uppercase;">FIND ACTIVITIES AND EXPERIENCES FOR KIDS</h4>
 
             <p>Keep your child busy with active activities. Find camps, clinics, local teams, classes, adventures, and more to keep them engages and active.
@@ -1130,7 +1130,7 @@ HAPPENING NOW SECTION TITLE
 
                         <div class="rank-item-detail hp">
 
-                            <img src="public/uploads/profile_pic/{{ $professionals_list_value->profile_pic }}" height="466" width="313" />
+                            <img src="public/uploads/profile_pic/{{ $professionals_list_value->profile_pic }}" height="466" width="313" alt="Fitnessity" />
 
                             <div class="ranker-detail">
 
@@ -1159,7 +1159,7 @@ HAPPENING NOW SECTION TITLE
 
                         <div class="rank-item-detail">
 
-                            <img src="images/rank/2.jpg" height="466" width="313" />
+                            <img src="images/rank/2.jpg" height="466" width="313" alt="Fitnessity" />
 
                             <div class="ranker-detail">
 
@@ -1183,7 +1183,7 @@ HAPPENING NOW SECTION TITLE
 
                         <div class="rank-item-detail">
 
-                            <img src="images/rank/3.jpg" height="466" width="313" />
+                            <img src="images/rank/3.jpg" height="466" width="313" alt="Fitnessity" />
 
                             <div class="ranker-detail">
 
@@ -1207,7 +1207,7 @@ HAPPENING NOW SECTION TITLE
 
                         <div class="rank-item-detail">
 
-                            <img src="images/rank/1.jpg" height="466" width="313" />
+                            <img src="images/rank/1.jpg" height="466" width="313" alt="Fitnessity" />
 
                             <div class="ranker-detail">
 
@@ -1303,7 +1303,7 @@ HAPPENING NOW SECTION TITLE
 
 
 
-                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/1.jpg" height="466" width="313" />
+                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/1.jpg" height="466" width="313" alt="Fitnessity" />
 
 
 
@@ -1353,7 +1353,7 @@ HAPPENING NOW SECTION TITLE
 
 
 
-                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/2.jpg" height="466" width="313" />
+                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/2.jpg" height="466" width="313" alt="Fitnessity" />
 
 
 
@@ -1403,7 +1403,7 @@ HAPPENING NOW SECTION TITLE
 
 
 
-                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/3.jpg" height="466" width="313" />
+                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/3.jpg" height="466" width="313" alt="Fitnessity" />
 
 
 
@@ -1453,7 +1453,7 @@ HAPPENING NOW SECTION TITLE
 
 
 
-                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/1.jpg" height="466" width="313" />
+                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/1.jpg" height="466" width="313" alt="Fitnessity" />
 
 
 
@@ -1503,7 +1503,7 @@ HAPPENING NOW SECTION TITLE
 
 
 
-                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/2.jpg" height="466" width="313" />
+                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/2.jpg" height="466" width="313" alt="Fitnessity" />
 
 
 
@@ -1553,7 +1553,7 @@ HAPPENING NOW SECTION TITLE
 
 
 
-                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/3.jpg" height="466" width="313" />
+                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/3.jpg" height="466" width="313" alt="Fitnessity" />
 
 
 
@@ -1603,7 +1603,7 @@ HAPPENING NOW SECTION TITLE
 
 
 
-                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/1.jpg" height="466" width="313" />
+                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/1.jpg" height="466" width="313" alt="Fitnessity" />
 
 
 
@@ -1653,7 +1653,7 @@ HAPPENING NOW SECTION TITLE
 
 
 
-                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/2.jpg" height="466" width="313" />
+                            <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>/rank/2.jpg" height="466" width="313" alt="Fitnessity" />
 
 
 
@@ -2109,7 +2109,7 @@ function initialize1(q) {
 
                 $('.blah').attr('src', e.target.result);
 
-            	var html = '<img src="'+e.target.result+'">';
+            	var html = '<img src="'+e.target.result+'" alt="Fitnessity">';
 
             	$('.uploadedpic').html(html);
 
@@ -2919,7 +2919,7 @@ if(window.location.href == '{{url("/p/login")}}'){
 
                                             '</span>'+
 
-                                            '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" />'+
+                                            '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" alt="Fitnessity" />'+
 
                                                 '<p>&nbsp;</p>'+
 
@@ -2973,7 +2973,7 @@ if(window.location.href == '{{url("/p/login")}}'){
 
                                                     '</span>'+
 
-                                                    '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" />'+
+                                                    '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" alt="Fitnessity" />'+
 
                                                     '<p>&nbsp;</p>'+
 
@@ -3021,7 +3021,7 @@ if(window.location.href == '{{url("/p/login")}}'){
 
                                                     '</span>'+
 
-                                                    '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" />'+
+                                                    '<img src="<?php echo Config::get('constants.SPORTS_IMAGE_THUMB'); ?>'+value.image+'" height="466" width="313" alt="Fitnessity" />'+
 
                                                         '<p>&nbsp;</p>'+
 
@@ -3169,7 +3169,7 @@ $('.happening_now').click(function(e) {
 
                <?php }?>
 
-$('.test').append('<div class="item">' + '<div class="rank-item-detail">' + '<img src="public/uploads/profile_pic/<?php echo Config::get('constants.USER_IMAGE_THUMB '); ?>' + value.profile_pic + '" height="466" width="313" />' + '<div class="ranker-detail">' + '<p><i class="fa fa-user"></i> ' + value.firstname + ' ' + value.lastname + '</p>' + '<p><i class="fa fa-map-marker"></i> ' + value.states.state_name + ' ' + value.country + ' ' + value.zipcode + '</p>' + '<p><i class="fa fa-thumbs-up"></i>' + value.bookingcount + '</p>' + '<p><i class="fa fa-futbol-o"></i>' + sports_title + '</p>' + '</div>' + '</div>' + a_url + '<div>');
+$('.test').append('<div class="item">' + '<div class="rank-item-detail">' + '<img src="public/uploads/profile_pic/<?php echo Config::get('constants.USER_IMAGE_THUMB '); ?>' + value.profile_pic + '" height="466" width="313" alt="Fitnessity" />' + '<div class="ranker-detail">' + '<p><i class="fa fa-user"></i> ' + value.firstname + ' ' + value.lastname + '</p>' + '<p><i class="fa fa-map-marker"></i> ' + value.states.state_name + ' ' + value.country + ' ' + value.zipcode + '</p>' + '<p><i class="fa fa-thumbs-up"></i>' + value.bookingcount + '</p>' + '<p><i class="fa fa-futbol-o"></i>' + sports_title + '</p>' + '</div>' + '</div>' + a_url + '<div>');
 
             });
 

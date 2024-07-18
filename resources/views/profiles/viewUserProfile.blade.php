@@ -21,7 +21,7 @@
     <?php /*?><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><?php */?>
     <link rel="stylesheet" type="text/css" href="{{ url('public/css/comment-icons.css') }}">
     <link rel="stylesheet" href="{{ url('public/css/jquery-ui.css') }}">
-    <link rel="stylesheet" href="{{ url('public/css/date-range-picker.css') }}">
+   <!--  <link rel="stylesheet" href="{{ url('public/css/date-range-picker.css') }}"> -->
     <link href="{{ url('public/css/frontend/userprofile.css') }}" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ url('public/css/frontend/jquery.fancybox.min.css') }}">
@@ -67,6 +67,16 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     <?php
 }
 ?>
+<style>
+.removepost {
+  height: auto !important;
+}
+.removepost{
+	padding: 0px !important;
+}
+
+
+</style>
 
 <div class="banner banner-fs bannerstyle">
 
@@ -79,7 +89,8 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     @if (!empty($viewgallery))
         @foreach (array_slice($viewgallery, 0, 4) as $pic)
             <div class="business-slider">
-                <img src="/public/uploads/gallery/<?= $loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" />
+              <!--   <img src="/public/uploads/gallery/<?= $loggedinUser->id ?>/thumb/<?= $pic['name'] ?>" /> -->
+              <img src="{{Storage::url($pic['name'])}}" />
                <!--  <i class="fa fa-pen editpic editpic-fs"  id="{{$pic['id']}}"  imgname="{{$pic['name']}}" data-toggle="modal" data-target="#uploadgalaryPic"></i> -->
             </div>
         @endforeach
@@ -694,7 +705,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                                             <img  src="{{ url('public/images/newimage/fitness-img-1.jpg') }}">
                                                                             <label> Joined Fitnessity on </label>
                                                                             <span class="spanstyle"><?php 
-                                                                                $date=date_create($UserProfileDetail->created_at); echo date_format($date,"d/m/Y"); ?>
+                                                                                $date=date_create($UserProfileDetail->created_at); echo date_format($date,"m/d/Y"); ?>
                                                                                     
                                                                             </span>
                                                                         </div>
@@ -822,7 +833,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">                   
                                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                     <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" alt="fitnessity">
                                                                     </a>
                                                                 </figure>
@@ -839,14 +850,14 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 @if(isset($getimages[0]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
                                                                         </a>
                                                                     </figure>
                                                                 @endif
                                                                 @if(isset($getimages[1]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
                                                                         </a>
                                                                     </figure>
@@ -855,21 +866,21 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 @if(isset($getimages[2]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity">
                                                                         </a>
                                                                     </figure>
                                                                 @endif
                                                                 @if(isset($getimages[3]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="">
                                                                         </a>
                                                                     </figure>
                                                                 @endif
                                                                 @if(isset($getimages[4]))
                                                                     <figure>
-                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                        <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                             <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="fitnessity">
                                                                         </a>
                                                                         <div class="more-photos">
@@ -886,7 +897,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">                   
                                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
                                                                     </a>
                                                                 </figure>
@@ -895,21 +906,21 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">   
                                                             <div class="col-lg-4 col-md-4 col-sm-4"> 
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" height="170">
                                                                     </a>
                                                                 </figure>   
                                                             </div> 
                                                             <div class="col-lg-4 col-md-4 col-sm-4"> 
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" height="170">
                                                                     </a>
                                                                 </figure>    
                                                             </div> 
                                                             <div class="col-lg-4 col-md-4 col-sm-4">  
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity" height="170">
                                                                     </a>
                                                                 </figure>   
@@ -922,19 +933,19 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity" width="100" height="335">
                                                                     </a>
                                                                 </figure>
                                                             </div>
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" width="100" height="165">
                                                                     </a>
                                                                 </figure>
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" width="100" height="165">
                                                                     </a>
                                                                 </figure>
@@ -946,14 +957,14 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
                                                                     </a>
                                                                 </figure>
                                                             </div>
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
                                                                     </a>
                                                                 </figure>
@@ -966,7 +977,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                         <div class="row">
                                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <figure>
-                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{$profile_post->id}}">
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" class="firstfancyimg" data-fancybox="gallery{{$profile_post->id}}">
                                                                         <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
                                                                     </a>
                                                                 </figure>
@@ -1217,7 +1228,12 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                     { ?>
                                                         <div class="col-sm-3 col-md-4 col-lg-4">
                                                             <div class="photo-tab-imgs">
-                                                                <img height="170" width="170" class="bixrwtb6" src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}">
+                                                                <figure>
+                                                                    <a href="{{ URL::to('public/uploads/gallery')}}/{{$data->user_id}}/{{$img_part[$i]}}" data-fancybox="gallery_photo{{$i}}" class="firstfancyimg">
+                                                                        <img height="170" width="170" lass="bixrwtb6" src="{{ URL::to('public/uploads/gallery')}}/{{$data->user_id}}/{{$img_part[$i]}}" alt="fitnessity">
+                                                                    </a>
+                                                                </figure>
+                                                                <!-- <img height="170" width="170" class="bixrwtb6" src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}"> -->
                                                             </div>
                                                         </div>
                                                     <?php 
@@ -1259,6 +1275,9 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                 <!--</div>--> <!-- comment by nnn -->
             </section>
 
+
+
+
 @include('layouts.footer')
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
@@ -1271,15 +1290,20 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-<script src="{{ url('public/js/pixelarity-face.js') }}"></script>
+<!-- <script src="{{ url('public/js/pixelarity-face.js') }}"></script> -->
 <script src="{{ url('public/js/jquery.shares.js') }}"></script>
+<script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
 <!-- emoji -->
 <script src="{{ url('public/emoji/lib/js/config.js') }}"></script>
 <script src="{{ url('public/emoji/lib/js/util.js') }}"></script>
 <script src="{{ url('public/emoji/lib/js/jquery.emojiarea.js') }}"></script>
 <script src="{{ url('public/emoji/lib/js/emoji-picker.js') }}"></script>
-<script src="{{ url('public/js/date-range-picker.js') }}"></script>
+<!-- <script src="{{ url('public/js/date-range-picker.js') }}"></script> -->
 <script src="{{ url('public/js/webcam.min.js') }}"></script>
+
+
 <script type="text/javascript"> 
     
     function take_snapshot() {
@@ -1417,13 +1441,14 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
             $('#add_image').html(html);
                 $('#previewmodel').modal('show');
             });
-        </script>
+</script>
 
-<script>
+<!-- <script>
     $(document).ready(function(){
         $('a.share').shares();
     });
-</script>
+
+</script> -->
 <script>
     $(function() {
         // Initializes and creates emoji set from sprite sheet
@@ -1558,6 +1583,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
             reader.readAsDataURL(input.files[0]); //  convert to base64 string
         }
     }
+
     /* page load scroll*/
     var page =0;
     var cnfload = true;
@@ -1606,500 +1632,504 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     }
     //load_data(page);
 
-$('#image_post').on("change", previewImages);
-$('#video').on("change", previewVideo);
-function previewVideo(){
-    var $preview = $('.postImage').empty(); 
-    $preview.append('<input type="hidden" id="videourl"></span><video width="320" height="240" controls>Your browser does not support the video tag.</video>');
-    let file = event.target.files[0];
-    let blobURL = URL.createObjectURL(file);
-    document.querySelector("video").src = blobURL;
-    $('#videourl').val(blobURL);
-}
-$('#music_post').on("change", previewMusic);
-function previewMusic(){
-    var $preview = $('.postImage').empty(); 
-    $preview.append('<input type="hidden" id="musicurl"></span><video width="320" height="240" controls>Your browser does not support the video tag.</video>');
-    let file = event.target.files[0];
-    let blobURL = URL.createObjectURL(file);
-    document.querySelector("video").src = blobURL;
-    $('#musicurl').val(blobURL);
-}
-
-function previewImages() {
-    var $preview = $('.postImage').empty(); 
-    if (this.files) $.each(this.files, readAndPreview);
-    function readAndPreview(i, file) {
-        if (!/\.(jpe?g|png|gif)$/i.test(file.name)){
-            return alert(file.name +" is not an image");
-        } // else...
-        var reader = new FileReader();
-        $(reader).on("load", function() {
-            $preview.append($('<img>', {src:this.result, height:100, width:100, class:'postimgarray'}));
-        });
-        reader.readAsDataURL(file);
+    $('#image_post').on("change", previewImages);
+    $('#video').on("change", previewVideo);
+    
+    function previewVideo(){
+        var $preview = $('.postImage').empty(); 
+        $preview.append('<input type="hidden" id="videourl"></span><video width="320" height="240" controls>Your browser does not support the video tag.</video>');
+        let file = event.target.files[0];
+        let blobURL = URL.createObjectURL(file);
+        document.querySelector("video").src = blobURL;
+        $('#videourl').val(blobURL);
     }
-}
+   
+    $('#music_post').on("change", previewMusic);
+    function previewMusic(){
+        var $preview = $('.postImage').empty(); 
+        $preview.append('<input type="hidden" id="musicurl"></span><video width="320" height="240" controls>Your browser does not support the video tag.</video>');
+        let file = event.target.files[0];
+        let blobURL = URL.createObjectURL(file);
+        document.querySelector("video").src = blobURL;
+        $('#musicurl').val(blobURL);
+    }
 
-$(document).on('click', '.editpic', function(){
-    //$('.editpic').click(function () {
-    var imgname = $(this).attr('imgname');
-    var id = $(this).attr('id');
-    var foldernm = '<?php echo $loggedinUser->id;  ?>';
-    $('#imgId').val(id);
-    $('#imgname').val(imgname);
-    $(".srcappend").attr("src","/public/uploads/gallery/"+foldernm+"/thumb/"+imgname);
-});
-
-$(document).on('click', '.reportPost', function(){
-    //$('.reportPost').click(function () {
-    var _token = $("input[name='_token']").val();
-    var postId =$(this).attr('id');
-    var is_report = $(this).attr('is_report');
-    $.ajax({
-        url: "{{url('/reportPost')}}" + "/"+postId,
-         xhrFields: {
-                            withCredentials: true
-                        },
-        type: 'post',
-        data:{
-            _token:_token,
-            is_report:is_report
-        },
-        success: function (data) {
-            if(data.success=='success'){
-                $('#likecount'+postId).html(data.count);
-            }
+    function previewImages() {
+        var $preview = $('.postImage').empty(); 
+        if (this.files) $.each(this.files, readAndPreview);
+        function readAndPreview(i, file) {
+            if (!/\.(jpe?g|png|gif)$/i.test(file.name)){
+                return alert(file.name +" is not an image");
+            } // else...
+            var reader = new FileReader();
+            $(reader).on("load", function() {
+                $preview.append($('<img>', {src:this.result, height:100, width:100, class:'postimgarray'}));
+            });
+            reader.readAsDataURL(file);
         }
-    }); 
-});
+    }
 
-$(document).on('click', '.showcomments', function(){
-    var commentdisplay = $('#commentdisplay').val();
-    var postId =$(this).attr('id');
-    $('.commentappendremove').html("");
-    $.ajax({
-        url: "{{url('/showcomments')}}" + "/"+postId,
-         xhrFields: {
-                            withCredentials: true
-                        },
-        type: 'get',
-        data:{
-            commentdisplay:commentdisplay
-        },
-        success: function (data) {
-            if(data.success=='success'){
-                //$('#likecount'+postId).html(data.count);
-                $('.commentappend'+postId).html(data.html);
-                var commentsum = parseInt(commentdisplay)+parseInt(5);
-                $('#commentdisplay').val(commentsum);
-            }
-        }
-    }); 
-});
-
-$(document).on('click', '.thumblike', function(){
-    //$('html, body').stop();
-    var _token = $("input[name='_token']").val();
-    var postId =$(this).attr('id');
-    var is_like = $(this).attr('is_like');
-    $.ajax({
-        url: "{{url('/like-post')}}" + "/"+postId,
-         xhrFields: {
-            withCredentials: true
-        },
-        type: 'post',
-        data:{
-            _token:_token,
-            is_like:is_like
-        },
-        success: function (data) {
-            if(data.success=='success'){
-                $("#users-thumb-list"+postId).load(" #users-thumb-list"+postId+" > *");
-                $("#ulike-dislike"+postId).load(" #ulike-dislike"+postId+" > *");
-                $('#likecount'+postId).html(data.count);
-            }
-        }
+    $(document).on('click', '.editpic', function(){
+        //$('.editpic').click(function () {
+        var imgname = $(this).attr('imgname');
+        var id = $(this).attr('id');
+        var foldernm = '<?php echo $loggedinUser->id;  ?>';
+        $('#imgId').val(id);
+        $('#imgname').val(imgname);
+        $(".srcappend").attr("src","/public/uploads/gallery/"+foldernm+"/thumb/"+imgname);
     });
-});
-$(document).on('click', '.commentlike', function(){
-    var _token = $("input[name='_token']").val();
-    var comId =$(this).attr('id');
-    var postId =$(this).attr('post-id');
-    alert(comId);
-    $.ajax({
-        url: "{{url('/like-comment')}}" + "/"+comId,
-         xhrFields: {
-            withCredentials: true
-        },
-        type: 'post',
-        data:{
-            _token:_token,
-            postId:postId
-        },
-        success: function (data) {
-            if(data.success=='success'){
-                $('#comlikecounter'+comId).html(data.count);
-                if(data.status=='like')
-                { $('#comlikei'+comId).css("color", "#f91942"); }
-                if(data.status=='unlike')
-                { $('#comlikei'+comId).css("color", "#000000"); $('#comlikei'+comId).removeClass("commentLiked"); }
-            }
-        }
-    });
-});
 
-$("#coverphoto").change(function() {
-    readURLCOVER(this);
-});
+    $(document).on('click', '.reportPost', function(){
+        //$('.reportPost').click(function () {
+        var _token = $("input[name='_token']").val();
+        var postId =$(this).attr('id');
+        var is_report = $(this).attr('is_report');
+        $.ajax({
+            url: "{{url('/reportPost')}}" + "/"+postId,
+             xhrFields: {
+                                withCredentials: true
+                            },
+            type: 'post',
+            data:{
+                _token:_token,
+                is_report:is_report
+            },
+            success: function (data) {
+                if(data.success=='success'){
+                    $('#likecount'+postId).html(data.count);
+                }
+            }
+        }); 
+    });
+
+    $(document).on('click', '.showcomments', function(){
+        var commentdisplay = $('#commentdisplay').val();
+        var postId =$(this).attr('id');
+        $('.commentappendremove').html("");
+        $.ajax({
+            url: "{{url('/showcomments')}}" + "/"+postId,
+             xhrFields: {
+                                withCredentials: true
+                            },
+            type: 'get',
+            data:{
+                commentdisplay:commentdisplay
+            },
+            success: function (data) {
+                if(data.success=='success'){
+                    //$('#likecount'+postId).html(data.count);
+                    $('.commentappend'+postId).html(data.html);
+                    var commentsum = parseInt(commentdisplay)+parseInt(5);
+                    $('#commentdisplay').val(commentsum);
+                }
+            }
+        }); 
+    });
+
+    $(document).on('click', '.thumblike', function(){
+        //$('html, body').stop();
+        var _token = $("input[name='_token']").val();
+        var postId =$(this).attr('id');
+        var is_like = $(this).attr('is_like');
+        $.ajax({
+            url: "{{url('/like-post')}}" + "/"+postId,
+             xhrFields: {
+                withCredentials: true
+            },
+            type: 'post',
+            data:{
+                _token:_token,
+                is_like:is_like
+            },
+            success: function (data) {
+                if(data.success=='success'){
+                    $("#users-thumb-list"+postId).load(" #users-thumb-list"+postId+" > *");
+                    $("#ulike-dislike"+postId).load(" #ulike-dislike"+postId+" > *");
+                    $('#likecount'+postId).html(data.count);
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '.commentlike', function(){
+        var _token = $("input[name='_token']").val();
+        var comId =$(this).attr('id');
+        var postId =$(this).attr('post-id');
+        alert(comId);
+        $.ajax({
+            url: "{{url('/like-comment')}}" + "/"+comId,
+             xhrFields: {
+                withCredentials: true
+            },
+            type: 'post',
+            data:{
+                _token:_token,
+                postId:postId
+            },
+            success: function (data) {
+                if(data.success=='success'){
+                    $('#comlikecounter'+comId).html(data.count);
+                    if(data.status=='like')
+                    { $('#comlikei'+comId).css("color", "#f91942"); }
+                    if(data.status=='unlike')
+                    { $('#comlikei'+comId).css("color", "#000000"); $('#comlikei'+comId).removeClass("commentLiked"); }
+                }
+            }
+        });
+    });
+
+    $("#coverphoto").change(function() {
+        readURLCOVER(this);
+    });
 
 
 </script>
 <script>
-$(document).ready(function () {
 
-    $('.delimg').click(function () {
-        $.ajax({
-            url: "{{url('/delete-image-user?myindex=')}}" + $(this).attr('myindex'),
-             xhrFields: {
-                withCredentials: true
-            },
-            type: 'get',
-            beforeSend: function () {
-                $('.loader').show();
-            },
-            complete: function () {
-                $('.loader').hide();
-            },
-            success: function (response) {
-                //if(response.status ==200){
-                window.location.reload()
-                $(this).parent().remove();
-                //}
-            }
-        });
-    });
+    $(document).ready(function () {
 
-    $('.delPhoto').click(function () {
-        var txt;
-        var r = confirm("Are you sure, you want to delete?");
-        if (r == true) {
+        $('.delimg').click(function () {
             $.ajax({
-                url: "{{url('/delete-image-gallery?delId=')}}" + $(this).attr('delId'),
+                url: "{{url('/delete-image-user?myindex=')}}" + $(this).attr('myindex'),
                  xhrFields: {
                     withCredentials: true
                 },
                 type: 'get',
-                beforeSend: function () { $('.loader').show(); },
-                complete: function () { $('.loader').hide(); },
+                beforeSend: function () {
+                    $('.loader').show();
+                },
+                complete: function () {
+                    $('.loader').hide();
+                },
                 success: function (response) {
                     //if(response.status ==200){
-                    window.location.reload();
+                    window.location.reload()
                     $(this).parent().remove();
                     //}
                 }
             });
-        }
-    });
+        });
 
-    $('.selectPhoto').click(function () {
-        var txt;
-        var r = confirm("Are you sure, you want to set cover photo?");
-        if (r == true) {
+        $('.delPhoto').click(function () {
+            var txt;
+            var r = confirm("Are you sure, you want to delete?");
+            if (r == true) {
+                $.ajax({
+                    url: "{{url('/delete-image-gallery?delId=')}}" + $(this).attr('delId'),
+                     xhrFields: {
+                        withCredentials: true
+                    },
+                    type: 'get',
+                    beforeSend: function () { $('.loader').show(); },
+                    complete: function () { $('.loader').hide(); },
+                    success: function (response) {
+                        //if(response.status ==200){
+                        window.location.reload();
+                        $(this).parent().remove();
+                        //}
+                    }
+                });
+            }
+        });
+
+        $('.selectPhoto').click(function () {
+            var txt;
+            var r = confirm("Are you sure, you want to set cover photo?");
+            if (r == true) {
+                $.ajax({
+                    url: "{{url('/set-cover-photo?selectId=')}}" + $(this).attr('selectId'),
+                     xhrFields: {
+                        withCredentials: true
+                    },
+                    type: 'get',
+                    beforeSend: function () { $('.loader').show(); },
+                    complete: function () { $('.loader').hide(); },
+                    success: function (response) {
+                        //if(response.status ==200){
+                        window.location.reload();
+                        $(this).parent().remove();
+                        //}
+                    }
+                });
+            }
+        });
+                        
+        $('.unselectPhoto').click(function () {
+            var txt;
+            var r = confirm("Are you sure, you want to unset cover photo?");
+            if (r == true) {
+                $.ajax({
+                    url: "{{url('/unset-cover-photo?selectId=')}}" + $(this).attr('selectId'),
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    type: 'get',
+                    beforeSend: function () { $('.loader').show(); },
+                    complete: function () { $('.loader').hide(); },
+                    success: function (response) {
+                        //if(response.status ==200){
+                        window.location.reload();
+                        $(this).parent().remove();
+                        //}
+                    }
+                });
+            }
+        });
+
+        //Loads the html to each slider. Write in the "div id="slide-content-x" what you want to show in each slide
+        $('#carousel-text').html($('#slide-content-0').html());
+        //Handles the carousel thumbnails
+        $('[id^=carousel-selector-]').click(function () {
+            var id = this.id.substr(this.id.lastIndexOf("-") + 1);
+            var id = parseInt(id);
+            $('#myCarousel').carousel(id);
+        });
+        // When the carousel slides, auto update the text
+        $('#myCarousel').on('slid.bs.carousel', function (e) {
+            var id = $('.item.active').data('slide-number');
+            $('#carousel-text').html($('#slide-content-' + id).html());
+        });
+
+        $('.coemail').attr('href', "{{'mailto:'.$UserProfileDetail['email']}}");
+        $('.cophone').attr('href', "{{'tel:'.$UserProfileDetail['phone_number']}}");
+        $('.coaddress').attr('href', "{{'http://maps.google.com/?q='.$UserProfileDetail['address']}}");
+        $('.prfl-nme').html('');
+        if (window.location.href.split('?').pop() == 'companyCreate=1') {
+            $('#create_company_btn').click()
+        }
+
+        $("#resetPassword").click(function () {
+            formdata = new FormData();
+            var token = '{{csrf_token()}}';
+            var email = '{{Auth::user()->email}}';
+            formdata.append("_token", token);
+            formdata.append("email", email);
             $.ajax({
-                url: "{{url('/set-cover-photo?selectId=')}}" + $(this).attr('selectId'),
+                url: '/password/email',
                  xhrFields: {
                     withCredentials: true
                 },
-                type: 'get',
-                beforeSend: function () { $('.loader').show(); },
-                complete: function () { $('.loader').hide(); },
-                success: function (response) {
-                    //if(response.status ==200){
-                    window.location.reload();
-                    $(this).parent().remove();
-                    //}
-                }
-            });
-        }
-    });
-                    
-    $('.unselectPhoto').click(function () {
-        var txt;
-        var r = confirm("Are you sure, you want to unset cover photo?");
-        if (r == true) {
-            $.ajax({
-                url: "{{url('/unset-cover-photo?selectId=')}}" + $(this).attr('selectId'),
-                xhrFields: {
-                    withCredentials: true
+                type: 'POST',
+                dataType: 'json',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                beforeSend: function () {
+                    // $('#submit_profiledetail').prop('disabled', true);
                 },
-                type: 'get',
-                beforeSend: function () { $('.loader').show(); },
-                complete: function () { $('.loader').hide(); },
+                complete: function () {
+                    // $('#submit_profiledetail').prop('disabled', false);
+                },
                 success: function (response) {
-                    //if(response.status ==200){
-                    window.location.reload();
-                    $(this).parent().remove();
-                    //}
+                    showSystemMessages('#systemMessage_detail', response.type, response.msg);
                 }
             });
-        }
+        });
+        /*$('#datepicker-on-change').Zebra_DatePicker({
+            default_position: 'below',
+            container: $('.datepicker-position')
+        });
+        $('#frm1_birthday').Zebra_DatePicker({
+            default_position: 'below',
+            direction: -1,
+            format: 'm-d-Y',
+            container: $('#datepicker-position')
+        });*/
     });
 
-    //Loads the html to each slider. Write in the "div id="slide-content-x" what you want to show in each slide
-    $('#carousel-text').html($('#slide-content-0').html());
-    //Handles the carousel thumbnails
-    $('[id^=carousel-selector-]').click(function () {
-        var id = this.id.substr(this.id.lastIndexOf("-") + 1);
-        var id = parseInt(id);
-        $('#myCarousel').carousel(id);
-    });
-    // When the carousel slides, auto update the text
-    $('#myCarousel').on('slid.bs.carousel', function (e) {
-        var id = $('.item.active').data('slide-number');
-        $('#carousel-text').html($('#slide-content-' + id).html());
-    });
-
-    $('.coemail').attr('href', "{{'mailto:'.$UserProfileDetail['email']}}");
-    $('.cophone').attr('href', "{{'tel:'.$UserProfileDetail['phone_number']}}");
-    $('.coaddress').attr('href', "{{'http://maps.google.com/?q='.$UserProfileDetail['address']}}");
-    $('.prfl-nme').html('');
-    if (window.location.href.split('?').pop() == 'companyCreate=1') {
-        $('#create_company_btn').click()
-    }
-
-    $("#resetPassword").click(function () {
-        formdata = new FormData();
-        var token = '{{csrf_token()}}';
-        var email = '{{Auth::user()->email}}';
-        formdata.append("_token", token);
-        formdata.append("email", email);
-        $.ajax({
-            url: '/password/email',
-             xhrFields: {
-                withCredentials: true
-            },
-            type: 'POST',
-            dataType: 'json',
-            data: formdata,
-            processData: false,
-            contentType: false,
-            beforeSend: function () {
-                // $('#submit_profiledetail').prop('disabled', true);
-            },
-            complete: function () {
-                // $('#submit_profiledetail').prop('disabled', false);
-            },
-            success: function (response) {
-                showSystemMessages('#systemMessage_detail', response.type, response.msg);
-            }
+    $(function () {
+        $("#my_date_picker").datepicker({
+            format: 'yy/mm/dd',
         });
     });
-    $('#datepicker-on-change').Zebra_DatePicker({
-        default_position: 'below',
-        container: $('.datepicker-position')
+
+    $(document).on('click', '.delete', function () {
+        var j = $(this).attr('num')
+        var hell = $('.add-more-div').toArray();
+        hell[j].remove();
+        console.log($(this).attr('num'))
     });
-    $('#frm1_birthday').Zebra_DatePicker({
-        default_position: 'below',
-        direction: -1,
-        format: 'm-d-Y',
-        container: $('#datepicker-position')
-    });
-});
 
-                $(function () {
-                    $("#my_date_picker").datepicker({
-                        format: 'yy/mm/dd',
-                    });
-                });
+    $('.add-more').click(function () {
+        var lastcount = $('.delete').length + 1;
+        var html = '<div class="row add-more-div"><hr />'
+                + '<div class="col-sm-6">'
+                + '<div class="row col-sm-12 text-left">'
+                + '<label>Company Name<span class="color-red">*</span></label>'
+                + ' </div>'
+                + '<input type="text" name="Companyname" id="b_companyname" size="30" maxlength="80" placeholder="Company Name">'
+                + ' <span class="error" id="b_cmpo"></span>'
+                + '<div class="row col-sm-12 text-left">'
+                + '<label>City<span class="color-red">*</span></label>'
+                + '</div>'
+                + '<input type="text" name="City" id="b_city" size="30" placeholder="City" size="30" maxlength="80"> '
+                + '<span class="error" id="b_ct"></span>'
+                + '<div class="row col-sm-12 text-left">'
+                + '<label>Zip Code<span class="color-red">*</span></label>'
+                + '</div>'
+                + '<input type="number" name="Zip Code" id="b_zipcode" size="30" placeholder="Zip Code">'
+                + '<span class="error" id="b_zip"></span>'
+                + '<div class="row col-sm-12 text-left">'
+                + '<label>EIN Number<span class="color-red">*</span></label>'
+                + '</div>'
+                + '<input type="text" name="b_EINnumber" maxlength="10" id="b_EINnumber" maxlength="10"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" placeholder="EIN Number">'
+                + '<span class="error" id="b_ein"></span>'
+                + '</div>'
 
-                $(document).on('click', '.delete', function () {
-                    var j = $(this).attr('num')
-                    var hell = $('.add-more-div').toArray();
-                    hell[j].remove();
-                    console.log($(this).attr('num'))
-                });
+                + '<div class="col-sm-6">'
+                + '<div class="row col-sm-12 text-left">'
+                + ' <label>Address<span class="color-red">*</span></label>'
+                + ' </div>'
+                + ' <input type="text" name="Address" id="b_address" placeholder="Address">'
+                + ' <span class="error" id="b_addr"></span>'
+                + ' <div class="row col-sm-12 text-left">'
+                + ' <label>State<span class="color-red">*</span></label>'
+                + ' </div>'
+                + '<input type="text" name="State" id="b_state" size="30" placeholder="State" size="30" maxlength="80">'
+                + '<span class="error" id="b_sta"></span>'
 
-                $('.add-more').click(function () {
-                    var lastcount = $('.delete').length + 1;
-                    var html = '<div class="row add-more-div"><hr />'
-                            + '<div class="col-sm-6">'
-                            + '<div class="row col-sm-12 text-left">'
-                            + '<label>Company Name<span class="color-red">*</span></label>'
-                            + ' </div>'
-                            + '<input type="text" name="Companyname" id="b_companyname" size="30" maxlength="80" placeholder="Company Name">'
-                            + ' <span class="error" id="b_cmpo"></span>'
-                            + '<div class="row col-sm-12 text-left">'
-                            + '<label>City<span class="color-red">*</span></label>'
-                            + '</div>'
-                            + '<input type="text" name="City" id="b_city" size="30" placeholder="City" size="30" maxlength="80"> '
-                            + '<span class="error" id="b_ct"></span>'
-                            + '<div class="row col-sm-12 text-left">'
-                            + '<label>Zip Code<span class="color-red">*</span></label>'
-                            + '</div>'
-                            + '<input type="number" name="Zip Code" id="b_zipcode" size="30" placeholder="Zip Code">'
-                            + '<span class="error" id="b_zip"></span>'
-                            + '<div class="row col-sm-12 text-left">'
-                            + '<label>EIN Number<span class="color-red">*</span></label>'
-                            + '</div>'
-                            + '<input type="text" name="b_EINnumber" maxlength="10" id="b_EINnumber" maxlength="10"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" placeholder="EIN Number">'
-                            + '<span class="error" id="b_ein"></span>'
-                            + '</div>'
+                + '<div class="row col-sm-12 text-left">'
+                + '<label>Country<span class="color-red">*</span></label>'
+                + '</div>'
+                + '<input type="text" name="Country" value="" id="b_country" size="30" placeholder="Country">'
 
-                            + '<div class="col-sm-6">'
-                            + '<div class="row col-sm-12 text-left">'
-                            + ' <label>Address<span class="color-red">*</span></label>'
-                            + ' </div>'
-                            + ' <input type="text" name="Address" id="b_address" placeholder="Address">'
-                            + ' <span class="error" id="b_addr"></span>'
-                            + ' <div class="row col-sm-12 text-left">'
-                            + ' <label>State<span class="color-red">*</span></label>'
-                            + ' </div>'
-                            + '<input type="text" name="State" id="b_state" size="30" placeholder="State" size="30" maxlength="80">'
-                            + '<span class="error" id="b_sta"></span>'
+                + '<span class="error" id="b_cont"></span>'
+                + '<div class="row col-sm-12 text-left">'
+                + '<label>Establishment Year<span class="color-red">*</span></label>'
+                + '</div>'
+                + '<input type="number" name="b_Establishmentyear" id="b_Establishmentyear" size="30" maxlength="4" placeholder="Establishment Year" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">'
+                + '<span class="error" id="b_estb"></span>'
+                + '</div>'
+                + '<div class="text-right">'
+                + '<button type="button" class="btn btn-secondary delete" num="' + lastcount + '">Delete</button>'
+                + '</div>'
+                + '</div>'
+        $("div.add-more-div:last").after(html);
+        lastcout = lastcount + 1;
+    })
 
-                            + '<div class="row col-sm-12 text-left">'
-                            + '<label>Country<span class="color-red">*</span></label>'
-                            + '</div>'
-                            + '<input type="text" name="Country" value="" id="b_country" size="30" placeholder="Country">'
-
-                            + '<span class="error" id="b_cont"></span>'
-                            + '<div class="row col-sm-12 text-left">'
-                            + '<label>Establishment Year<span class="color-red">*</span></label>'
-                            + '</div>'
-                            + '<input type="number" name="b_Establishmentyear" id="b_Establishmentyear" size="30" maxlength="4" placeholder="Establishment Year" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">'
-                            + '<span class="error" id="b_estb"></span>'
-                            + '</div>'
-                            + '<div class="text-right">'
-                            + '<button type="button" class="btn btn-secondary delete" num="' + lastcount + '">Delete</button>'
-                            + '</div>'
-                            + '</div>'
-                    $("div.add-more-div:last").after(html);
-                    lastcout = lastcount + 1;
-                })
-
-                $('#b_v_2').click(function () {
-                    $(".error").empty();
-                    if ($("#frm_organisationname").val() != '') {
-                        if ($("#frm_position").val() != '') {
-                            if ($("#dp1").val() != '') {
-                                if ($("#dp2").val() != '') {
-                                    if ($("#frm_course").val() != '') {
-                                        if ($("#frm_university").val() != '') {
-                                            if ($("#passingyear").val() != '') {
-                                                if ($("#certification").val() != '') {
-                                                    if ($("#completionyear").val() != '') {
-                                                        if ($("#skiils_achievments_awards").val() != '') {
-                                                            if ($("#skillcompletionpicker").val() != '') {
-                                                                $('#fitnessity_for_business_step2').hide();
-                                                                $('#fitnessity_for_business_step3').show();
-                                                            } else {
-                                                                $("#b_skillyear").text("Please Enter the skill completion date");
-                                                            }
-                                                        } else {
-                                                            $("#b_skilltype").text("Please select skill type");
-                                                        }
-                                                    } else {
-                                                        $("#b_certificateyear").text("Please Enter the Certication completion date");
-                                                    }
+    $('#b_v_2').click(function () {
+        $(".error").empty();
+        if ($("#frm_organisationname").val() != '') {
+            if ($("#frm_position").val() != '') {
+                if ($("#dp1").val() != '') {
+                    if ($("#dp2").val() != '') {
+                        if ($("#frm_course").val() != '') {
+                            if ($("#frm_university").val() != '') {
+                                if ($("#passingyear").val() != '') {
+                                    if ($("#certification").val() != '') {
+                                        if ($("#completionyear").val() != '') {
+                                            if ($("#skiils_achievments_awards").val() != '') {
+                                                if ($("#skillcompletionpicker").val() != '') {
+                                                    $('#fitnessity_for_business_step2').hide();
+                                                    $('#fitnessity_for_business_step3').show();
                                                 } else {
-                                                    $("#b_certification").text("Please Enter the certification");
+                                                    $("#b_skillyear").text("Please Enter the skill completion date");
                                                 }
                                             } else {
-                                                $("#b_year").text("Please select passing year ");
+                                                $("#b_skilltype").text("Please select skill type");
                                             }
-
                                         } else {
-                                            $("#b_university").text("Please Enter the university ");
+                                            $("#b_certificateyear").text("Please Enter the Certication completion date");
                                         }
                                     } else {
-                                        $("#b_degree").text("Please enter the course ");
+                                        $("#b_certification").text("Please Enter the certification");
                                     }
                                 } else {
-                                    $("#b_employmentto").text("Please enter the to date ");
+                                    $("#b_year").text("Please select passing year ");
                                 }
+
                             } else {
-                                $("#b_employmentfrom").text("Please enter the from date ");
+                                $("#b_university").text("Please Enter the university ");
                             }
                         } else {
-                            $("#b_position").text("Please enter the position ");
+                            $("#b_degree").text("Please enter the course ");
                         }
                     } else {
-                        $("#b_organisationname").text("Please enter the organisation name ");
+                        $("#b_employmentto").text("Please enter the to date ");
                     }
-
-                });
-                $("label.present_work_btn").click(function () {
-                    $("#frm_ispresentcheck").attr("checked", !$("#frm_ispresentcheck").attr("checked"));
-                    changeDateBasedonPresent();
-                });
-
-                function changeDateBasedonPresent()
-                {
-                    if ($("#frm_ispresentcheck").attr("checked")) {
-                        $("#frm_ispresent").val("1");
-                        $("#dp2").val("Till Date");
-                        $("#dp2").attr("disabled", true);
-                    } else {
-                        $("#frm_ispresent").val("0");
-                        $("#dp2").val("");
-                        $("#dp2").attr("disabled", false);
-                    }
+                } else {
+                    $("#b_employmentfrom").text("Please enter the from date ");
                 }
+            } else {
+                $("#b_position").text("Please enter the position ");
+            }
+        } else {
+            $("#b_organisationname").text("Please enter the organisation name ");
+        }
 
-                //     $('#passingyear').Zebra_DatePicker({
-                //          view: 'years',
-                //          format: 'Y',
-                //         default_position: 'below',
-                //         container : $('#passingpicker-position')      
-                // });
-                $('#dp1').Zebra_DatePicker({
-                    default_position: 'below',
-                    container: $('#dp1-position')
-                });
-                $('#dp2').Zebra_DatePicker({
-                    default_position: 'below',
-                    container: $('#dp2-position')
-                });
-                $('#completionyear').Zebra_DatePicker({
-                    default_position: 'below',
-                    container: $('#completionpicker-position')
-                });
-                $('#skillcompletionpicker').Zebra_DatePicker({
-                    default_position: 'below',
-                    container: $('#skillcompletionpicker-position')
-                });
+    });
+    $("label.present_work_btn").click(function () {
+        $("#frm_ispresentcheck").attr("checked", !$("#frm_ispresentcheck").attr("checked"));
+        changeDateBasedonPresent();
+    });
 
-                $('#imagedropbox').click(function () {
-                    console.log("Photo Upload");
-                    $('#Modal').modal('show');
-                });
+    function changeDateBasedonPresent()
+    {
+        if ($("#frm_ispresentcheck").attr("checked")) {
+            $("#frm_ispresent").val("1");
+            $("#dp2").val("Till Date");
+            $("#dp2").attr("disabled", true);
+        } else {
+            $("#frm_ispresent").val("0");
+            $("#dp2").val("");
+            $("#dp2").attr("disabled", false);
+        }
+    }
 
-                $('textarea#message_area').on('keyup', function () {
-                    var maxlen = $(this).attr('maxlength');
+    //     $('#passingyear').Zebra_DatePicker({
+    //          view: 'years',
+    //          format: 'Y',
+    //         default_position: 'below',
+    //         container : $('#passingpicker-position')      
+    // });
+    $('#dp1').Zebra_DatePicker({
+        default_position: 'below',
+        container: $('#dp1-position')
+    });
+    $('#dp2').Zebra_DatePicker({
+        default_position: 'below',
+        container: $('#dp2-position')
+    });
+    $('#completionyear').Zebra_DatePicker({
+        default_position: 'below',
+        container: $('#completionpicker-position')
+    });
+    $('#skillcompletionpicker').Zebra_DatePicker({
+        default_position: 'below',
+        container: $('#skillcompletionpicker-position')
+    });
 
-                    var length = $(this).val().length;
-                    if (length > (maxlen - 10)) {
-                        $('#textarea_message').text('max length ' + maxlen + ' characters only!')
-                    } else
-                    {
-                        $('#textarea_message').text('');
-                    }
-                });
+    $('#imagedropbox').click(function () {
+        console.log("Photo Upload");
+        $('#Modal').modal('show');
+    });
 
-                $('textarea#about_msg').on('keyup', function () {
-                    var maxlen = $(this).attr('maxlength');
-                    var length = $(this).val().length;
-                    if (length > (maxlen - 10)) {
-                        $('#aboutarea_message').text('max length ' + maxlen + ' characters only!')
-                    } else
-                    {
-                        $('#aboutarea_message').text('');
-                    }
-                });
+    $('textarea#message_area').on('keyup', function () {
+        var maxlen = $(this).attr('maxlength');
+
+        var length = $(this).val().length;
+        if (length > (maxlen - 10)) {
+            $('#textarea_message').text('max length ' + maxlen + ' characters only!')
+        } else
+        {
+            $('#textarea_message').text('');
+        }
+    });
+
+    $('textarea#about_msg').on('keyup', function () {
+        var maxlen = $(this).attr('maxlength');
+        var length = $(this).val().length;
+        if (length > (maxlen - 10)) {
+            $('#aboutarea_message').text('max length ' + maxlen + ' characters only!')
+        } else
+        {
+            $('#aboutarea_message').text('');
+        }
+    });
 
                    // Follow script
-/*    $(".follower-fun").click(function () {
+    /*$(".follower-fun").click(function () {
         var _token = $("input[name='_token']").val();
        
         $.ajax({
@@ -2115,219 +2145,224 @@ $(document).ready(function () {
     });*/
                 
 
-$('.usernameedit').click(function () {
-   var edituser = $(this).attr('id');
-   $('#username').val(edituser);
-});
+    $('.usernameedit').click(function () {
+       var edituser = $(this).attr('id');
+       $('#username').val(edituser);
+    });
 
- $(document).on('click', '.inquiryfrm', function () {
-        
-        var name = $('#name').val();
-        var email = $('#email').val();
-        var message = $('#message').val();
-
-        var ret = true;
-        
-        $('#err_name_sign').html('');
-        $('#err_email_sign').html('');
-        $('#err_message_sign').html('');
-        
-        if(name == ''){
-            $('#err_name_sign').html('Please enter name');
-            $('#name').focus();
-            //return false;
-            return false;
-        }
-        if(email == ''){
-            $('#err_email_sign').html('Please enter email');
-            $('#email').focus();
-            //return false;
-            return false;
-        }
-        if(message == ''){
-            $('#err_message_sign').html('Please enter message');
-            $('#message').focus();
-            //return false;
-            return false;
-        }
-        
-        if(ret == true){
-        $('.get_started').submit();
-
-    }
-});
-
-function sharediv(){
-    $(".shareapp").css("display", "block");
-}
-
-$( document ).ready(function() {
-      $('.removepost').removeClass('emoji-wysiwyg-editor');
-      $('.removepost').removeAttr("data-id");
-      $('.removepost').removeAttr("data-type");
-      $('.removepost').removeAttr("contenteditable");
-      $('.removepost').closest('.clickable').removeClass('grown').addClass('spot');
-      $(".post-meta").find('i').removeClass("emoji-picker emoji-picker-icon fa fas fa-smile");
-
-        var ret = true;
-        $(document).on('click', '.profilepostbtn', function () {
-        
-            var post_text = $('#post_text').val();
-            var image_post = $('#image_post').val();
-            var video_post = $('#video').val();
-            var music_post = $('#music_post').val();
-            var selfieimg = $('#selfieimg').val();
+     $(document).on('click', '.inquiryfrm', function () {
             
+            var name = $('#name').val();
+            var email = $('#email').val();
+            var message = $('#message').val();
+
             var ret = true;
-            $('#err_image_sign').html('');
-            $('#err_post_sign').html('');
-             
-            if(post_text == '' && image_post == '' && video_post == '' && music_post == '' && selfieimg=="")
-            {
-                $('#err_post_sign').html('Please add your post data!!!');
-                $('#post_text').focus();
-                ret=false;
-                return false;   
+            
+            $('#err_name_sign').html('');
+            $('#err_email_sign').html('');
+            $('#err_message_sign').html('');
+            
+            if(name == ''){
+                $('#err_name_sign').html('Please enter name');
+                $('#name').focus();
+                //return false;
+                return false;
             }
+            if(email == ''){
+                $('#err_email_sign').html('Please enter email');
+                $('#email').focus();
+                //return false;
+                return false;
+            }
+            if(message == ''){
+                $('#err_message_sign').html('Please enter message');
+                $('#message').focus();
+                //return false;
+                return false;
+            }
+            
             if(ret == true){
-                $('#profilepostfrm').submit();
-            }       
-        });
+            $('.get_started').submit();
 
-    $(document).on('click', '.postcomment', function () {
-        var postId =$(this).attr('id');
-        var comment = $('#comment'+postId).val();     
-        var ret_post = true;
-        $('#err_comment'+postId).html('');
-        if(comment == ''){
-            $('#err_comment'+postId).html('Please enter comment!');
-            $('#comment').focus();
-            return false;
         }
-        if(ret_post == true){
-            var _token = $("input[name='_token']").val();
-                $.ajax({
-                url: "{{url('/postcomment')}}" + "/"+postId,
-                 xhrFields: {
-                        withCredentials: true
-                    },
-                type: 'post',
-                data:{
-                    _token:_token,
-                    comment:comment
-                },          
-                success: function (data) {
-                    $('.commentappend'+postId).append(data.html);
-                    $('#comment'+postId).val('');
-                     $(".comment"+postId).load(" .comment"+postId+" > *");
+    });
+
+    function sharediv(){
+        $(".shareapp").css("display", "block");
+    }
+
+    $( document ).ready(function() {
+          $('.removepost').removeClass('emoji-wysiwyg-editor');
+          $('.removepost').removeAttr("data-id");
+          $('.removepost').removeAttr("data-type");
+          $('.removepost').removeAttr("contenteditable");
+          $('.removepost').closest('.clickable').removeClass('grown').addClass('spot');
+          $(".post-meta").find('i').removeClass("emoji-picker emoji-picker-icon fa fas fa-smile");
+
+            var ret = true;
+            $(document).on('click', '.profilepostbtn', function () {
+            
+                var post_text = $('#post_text').val();
+                var image_post = $('#image_post').val();
+                var video_post = $('#video').val();
+                var music_post = $('#music_post').val();
+                var selfieimg = $('#selfieimg').val();
+                
+                var ret = true;
+                $('#err_image_sign').html('');
+                $('#err_post_sign').html('');
+                 
+                if(post_text == '' && image_post == '' && video_post == '' && music_post == '' && selfieimg=="")
+                {
+                    $('#err_post_sign').html('Please add your post data!!!');
+                    $('#post_text').focus();
+                    ret=false;
+                    return false;   
                 }
+                if(ret == true){
+                    $('#profilepostfrm').submit();
+                }       
             });
-        }       
-    });      
-});
-$(".followback").click(function(){
-    var _token = $("input[name='_token']").val();
-    var id = $(this).attr('id');
-    var userid = $(this).attr('data-user');
-    
-    $.ajax({
-        type: 'POST',
-        url: '{{route("follow_back")}}',
-         xhrFields: {
-            withCredentials: true
-        },
-        data: {
-          _token: _token,
-          id:id,
-          userid:userid
-        },
-        success: function(data) {
-            if(data.type=='success'){ $("#myfollowers").load(" #myfollowers > *"); 
-                $(".followdiv").load(" .followdiv > *");
+
+        $(document).on('click', '.postcomment', function () {
+            var postId =$(this).attr('id');
+            var comment = $('#comment'+postId).val();     
+            var ret_post = true;
+            $('#err_comment'+postId).html('');
+            if(comment == ''){
+                $('#err_comment'+postId).html('Please enter comment!');
+                $('#comment').focus();
+                return false;
             }
-        }
+            if(ret_post == true){
+                var _token = $("input[name='_token']").val();
+                    $.ajax({
+                    url: "{{url('/postcomment')}}" + "/"+postId,
+                     xhrFields: {
+                            withCredentials: true
+                        },
+                    type: 'post',
+                    data:{
+                        _token:_token,
+                        comment:comment
+                    },          
+                    success: function (data) {
+                        $('.commentappend'+postId).append(data.html);
+                        $('#comment'+postId).val('');
+                         $(".comment"+postId).load(" .comment"+postId+" > *");
+                    }
+                });
+            }       
+        });      
     });
-});
-$(document).on('click', '.savepost', function(){ 
-    var _token = $("input[name='_token']").val();
-    var postId =$(this).attr('postid');
-    $.ajax({
-        url: "{{url('/profilesavePost')}}",
-         xhrFields: {
-            withCredentials: true
-        },
-        type: 'post',
-        data:{
-            _token:_token,
-            postid:postId,
-        },
-        success: function (data) {
-            if(data.success=='success'){ 
-                $('#savepost'+postId).addClass("activesavedpost");
+
+    $(".followback").click(function(){
+        var _token = $("input[name='_token']").val();
+        var id = $(this).attr('id');
+        var userid = $(this).attr('data-user');
+        
+        $.ajax({
+            type: 'POST',
+            url: '{{route("follow_back")}}',
+             xhrFields: {
+                withCredentials: true
+            },
+            data: {
+              _token: _token,
+              id:id,
+              userid:userid
+            },
+            success: function(data) {
+                if(data.type=='success'){ $("#myfollowers").load(" #myfollowers > *"); 
+                    $(".followdiv").load(" .followdiv > *");
+                }
             }
-            else if(data.success=='delsave'){ 
-                $('#savepost'+postId).removeClass("activesavedpost");
+        });
+    });
+
+    $(document).on('click', '.savepost', function(){ 
+        var _token = $("input[name='_token']").val();
+        var postId =$(this).attr('postid');
+        $.ajax({
+            url: "{{url('/profilesavePost')}}",
+             xhrFields: {
+                withCredentials: true
+            },
+            type: 'post',
+            data:{
+                _token:_token,
+                postid:postId,
+            },
+            success: function (data) {
+                if(data.success=='success'){ 
+                    $('#savepost'+postId).addClass("activesavedpost");
+                }
+                else if(data.success=='delsave'){ 
+                    $('#savepost'+postId).removeClass("activesavedpost");
+                }
             }
-        }
+        });
     });
-});
-$(".followProfile").click(function(){
-    var _token = $("input[name='_token']").val();
-    var profileid = $(this).attr('profileid');
-    var userid = $(this).attr('userid');
-    
-    $.ajax({
-        type: 'POST',
-        url: '{{route("followProfile")}}',
-         xhrFields: {
-            withCredentials: true
-        },
-        data: {
-          _token: _token,
-          profileid:profileid,
-          userid:userid
-        },
-        success: function(data) { 
-            if(data.type=='success'){ 
-                $("#profileControls").load(" #profileControls > *"); 
-                $(".followdiv").load(" .followdiv > *"); 
-                $("#myfollowers").load(" #myfollowers > *"); 
-                $("#timeline").load(" #timeline > *"); 
+
+    $(".followProfile").click(function(){
+        var _token = $("input[name='_token']").val();
+        var profileid = $(this).attr('profileid');
+        var userid = $(this).attr('userid');
+        
+        $.ajax({
+            type: 'POST',
+            url: '{{route("followProfile")}}',
+             xhrFields: {
+                withCredentials: true
+            },
+            data: {
+              _token: _token,
+              profileid:profileid,
+              userid:userid
+            },
+            success: function(data) { 
+                if(data.type=='success'){ 
+                    $("#profileControls").load(" #profileControls > *"); 
+                    $(".followdiv").load(" .followdiv > *"); 
+                    $("#myfollowers").load(" #myfollowers > *"); 
+                    $("#timeline").load(" #timeline > *"); 
+                }
             }
-        }
+        });
     });
-});
-</script>
-<script>
-function fbPost(){
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId            : '320348730100999',
-      autoLogAppEvents : true,
-      xfbml            : true,
-      version          : 'v12.0'
-    });
-  };
-}
+
 </script>
 
 <script>
-$("#myDate").datepicker({ 
-// OPTIONS HERE
-});
+    function fbPost(){
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId            : '320348730100999',
+          autoLogAppEvents : true,
+          xfbml            : true,
+          version          : 'v12.0'
+        });
+      };
+    }
 </script>
 
 <script>
-$("#myDate").datepicker({ 
-    // an array of excluded dates
-    disableddates: [new Date("04/24/2015"), new Date("04/21/2015")],
-    // an array of pre-selected dates
-    daterange = [new Date("3/1/2014"),new Date("3/2/2014"),new Date("3/3/2014")
-    // appearance options
-    showButtonPanel:true,  
-    showWeek: true,
-    firstDay: 1
-});
+    $("#myDate").datepicker({ 
+    // OPTIONS HERE
+    });
+</script>
+
+<script>
+    $("#myDate").datepicker({ 
+       // an array of excluded dates
+        disableddates: [new Date("04/24/2015"), new Date("04/21/2015")],
+        // an array of pre-selected dates
+        daterange: [new Date("3/1/2014"),new Date("3/2/2014"),new Date("3/3/2014")],
+        // appearance options
+        showButtonPanel:true,  
+        showWeek: true,
+        firstDay: 1
+    });
 </script>
 
 <script>
@@ -2336,14 +2371,16 @@ $("#myDate").datepicker({
     });
     r.getDateRange()
 </script>
-<script>
-document.querySelector('.show-btn').addEventListener('click', function() {
-  document.querySelector('.sm-menu').classList.toggle('active');
-});
-</script>
+
+<!-- <script>
+    document.querySelector('.show-btn').addEventListener('click', function() {
+      document.querySelector('.sm-menu').classList.toggle('active');
+    });
+</script> -->
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
-<script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
+
+
 
 @endsection
             

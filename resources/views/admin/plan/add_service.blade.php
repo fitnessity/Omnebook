@@ -339,7 +339,7 @@
 
               </div>
 
-              <div class="row itenerary_div" style="display:none">
+              <!-- <div class="row itenerary_div" style="display:none">
 
                 <div class="form-group col-md-12">
 
@@ -699,7 +699,7 @@
 
                 </div>
 
-              </div>
+              </div> -->
 
             </div>
 
@@ -735,7 +735,7 @@
 
                 <a href="/admin/unclaimbusiness" class="btn btn-danger ">Back</a>
 
-                <button type="button" id="next1" class="btn btn-primary ">Continue</button>
+                <button type="button" id="next1" class="btn btn-primary">Continue</button>
 
               </div>
 
@@ -748,333 +748,656 @@
 
           <div class="panel-body">
 
-            <div class="row">
-
-               <div class="col-md-12">
-
-                <div class="col-md-6 location_div_experience" style="display: none">
-
-                  <div class="row">
-
-                      <div class="form-group col-md-12" >
-
-                          <h3 style="font-size: 17px;font-weight: bold;">Describe the location</h3>
-
-                          <div class="form-group">
-
-                              <label>Tell customers how to meet up, where to meet up, meeting point name and how to find you once the customers arrive.Don't leave it up to customers to figure out how to meet up with you. Let them know before hand.</label><br>
-
-                              <textarea class="form-control" value="yes" name="meetup_location" placeholder="(Ex. Please arrive at the location of our business. The address reminder is ABC Anytown, town 12345 USA.) Or; We will pick you up at your hotel. Or; Please talk with your front desk staff about the meeting poing, Or; Please meet us at Central Park at the entrance of 81st and Central Park West (CPW). Wait at the seating area if you arrive early. The instructor will have on a red hat and yellow vest. Please arrive 10 minutes before your activity starts.)"></textarea>
-
-                          </div>
-
-                      </div>
-
-                  </div>
-
-                </div>
-
-                <div class="col-md-6 ">
-
-                    <br>
+          
+           
+            <br/>
+            <div class="col-md-12">
+                <div class="service_type">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="step-one">
+                                <h3>Step 2: Booking Settings</h3>
+                                <p>Provide more details to get booked</p>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row">
-
-                        <div class="form-group col-md-12">
-
-                            <label style="width: 100%">Select Service Type You Offer</label>
-
-                            <select name="frm_servicetype[]" id="categSType" multiple>
-
-                                <option value="Personal Training">Personal Training</option>
-
-                                <option value="Coaching">Coaching</option>
-
-                                <option value="Therapy">Therapy</option>
-
-                            </select>
-
-                            <script>
-
-                                var p = new SlimSelect({
-
-                                    select: '#categSType'
-
-                                });
-
-                            </script>
-
+                        <div class="col-md-1">  
+                            <div class="instantl-book map-sp">
+                                <div class="">
+                                    <label class="switch" for="instantbooking">
+                                        <input type="checkbox" name="instantbooking" id="instantbooking"  checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="form-group col-md-12">
-
-                            <label style="width: 100%">Location of Activity</label>
-
-                            <select name="frm_servicelocation[]" id="frm_servicelocation" multiple>
-
-                                <option value="Online">Online</option>
-
-                                <option value="At Business">At Business</option>
-
-                                <option value="On Location">On Location</option>
-
-                            </select>
-
-                            <script>
-
-                                var p = new SlimSelect({
-
-                                    select: '#frm_servicelocation'
-
-                                });
-
-                            </script>
-
+                        <div class="col-md-11">
+                            <div class="booking-title">
+                                <label>INSTANT BOOKING:</label>
+                                <p>Allow customers to book you instantly (Recommeded to get more bookings)</p>
+                            </div>
                         </div>
-
-                        <div class="form-group col-md-12">
-
-                            <label style="width: 100%">Activity Great For</label>
-
-                            <select name="frm_programfor[]" id="frm_programfor" multiple>
-
-                               <?php /*?> <option>Individual</option><?php */?>
-
-                                <option value="Kids">Kids</option>
-
-                                <option value="Teens">Teens</option>
-
-                                <option value="Adults">Adults</option>
-
-                                <option value="Family">Family</option>
-
-                                <option value="Groups">Groups</option>
-
-                                <option value="Paralympic">Paralympic</option>
-
-                                <option value="Prenatal">Prenatal</option>
-
-                                <option value="Any">Any</option>
-
-                            </select>
-
-                            <script>
-
-                                var p = new SlimSelect({
-
-                                    select: '#frm_programfor'
-
-                                });
-
-                            </script>
-
+                        
+                        <div class="col-md-1">  
+                            <div class="instantl-book map-sp">
+                                <div class="">
+                                    <label class="switch" for="requestbooking">
+                                        <input type="checkbox" name="requestbooking" id="requestbooking">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="form-group col-md-12">
-
-                            <label style="width: 100%">Age Range</label>
-
-                            <select name="frm_agerange[]" id="frm_agerange" multiple>
-
-                                <option value="Baby (0 to 12 months)">Baby (0 to 12 months)</option>
-
-                                <option value="Toddler (1 to 3 yrs.)">Toddler (1 to 3 yrs.)</option>
-
-                                <option value="Preschool (4 to 5 yrs.)">Preschool (4 to 5 yrs.)</option>
-
-                                <option value="Grade School (6 to 12 yrs.)">Grade School (6 to 12 yrs.)</option>
-
-                                <option value="Teen (13 to 17 yrs.)">Teen (13 to 17 yrs.)</option>
-
-                                <option value="Young Adult (18 to 21 yrs.)">Young Adult (18 to 21 yrs.)</option>
-
-                                <option value="Older Adult (21 to 39 yrs.)">Older Adult (21 to 39 yrs.)</option>
-
-                                <option value="Middle Age (40 to 59 yrs.)">Middle Age (40 to 59 yrs.)</option>
-
-                                <option value="Senior Adult (60 +)">Senior Adult (60 +)</option>
-
-                                <option value="Any">Any</option>
-
-                            </select>
-
-                            <script>
-
-                                var p = new SlimSelect({
-
-                                    select: '#frm_agerange'
-
-                                });
-
-                            </script>
-
+                        <div class="col-md-11">
+                            <div class="booking-title">
+                                <label>REQUEST BOOKING:</label>
+                                <p>Customers can request a booking, but you want to confirm first.(Less booking frequency with this option) </p>
+                            </div>
                         </div>
+                        <script type="text/javascript">
 
-                        <div class="form-group col-md-12">
+                            $("#instantbooking").on('change', function() {
+                                if ($(this).is(':checked')) {
+                                    switchStatus = $(this).is(':checked');
+                                    $("#requestbooking").prop("checked", false);
+                                    $('#requestbooking').value(1);
+                                }
+                                else {
+                                    $("#requestbooking").prop("checked", true);
+                                    $('#requestbooking').value(0); 
+                                }
+                            });
 
-                            <label style="width: 100%">Difficulty Level</label>
+                            $("#requestbooking").on('change', function() {
+                                if ($(this).is(':checked')) {
+                                    switchStatus = $(this).is(':checked');
+                                    $("#instantbooking").prop("checked", false);
+                                    $('#instantbooking').value(1);
+                                }
+                                else {
+                                    switchStatus = $(this).is(':checked');
+                                    $("#instantbooking").prop("checked", true);
+                                    $('#instantbooking').value(1);
+                                }
+                            });
 
-                            <select name="frm_experience_level[]" id="frm_experience_level" multiple>
+                        </script>
+                    </div>
 
-                                <option>Easy</option>
+                    <div class="row">
+                        <div class="col-md-6 col-lg-5">
+                            <div class="participant-req">
+                                <p>What is the minimum participant requirement for each booking?</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="sp-bottom">
+                                <input type="text" class="form-control valid" name="frm_min_participate" id="frm_min_participate" placeholder="1" value="1">
+                            </div>
+                        </div>
+                    </div>
 
-                                <option>Medium</option>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="priceselect sp-select">
+                                <label>Select Service Type</label>
+                                <div id="individualstype">
+                                    <select name="frm_servicetype[]" id="categSTypeidividual" multiple>
+                                        <option value="Personal Training">Personal Training</option>
+                                        <option value="Coaching">Coaching</option>
+                                        <option value="Therapy">Therapy</option>
+                                        <option value="Event">Event </option>
+                                        <option value="Seminar">Seminar </option>
+                                    </select>
+                                </div>
+                                <div id="experiencestype" style="display:none;">
+                                    <select name="frm_servicetype[]" id="categSType" multiple>
+                                        <option value="Personal Training">Personal Training</option>
+                                        <option value="Coaching">Coaching</option>
+                                        <option value="Class">Class</option>
+                                        <option value="Therapy">Therapy</option>
+                                        <option value="Gym">Gym</option>
+                                        <option value="Adventure">Adventure</option>
+                                        <option value="Trip">Trip</option>
+                                        <option value="Tour">Tour</option>
+                                        <option value="Camp">Camp</option>
+                                        <option value="Team">Team</option>
+                                        <option value="Clinic">Clinic</option>
+                                        <option value="Event">Event </option>
+                                        <option value="Seminar">Seminar </option>
+                                    </select>
+                                </div>
+                                <script>
+                                    var p = new SlimSelect({
+                                        select: '#categSType'
+                                    });
+                                </script>
+                                <script>
+                                    var p = new SlimSelect({
+                                        select: '#categSTypeidividual'
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="priceselect sp-select">
+                                <label>Location of Activity ?</label>
+                                <select name="frm_servicelocation[]" id="frm_servicelocation" multiple>
+                                    <option value="Online">Online</option>
+                                    <option value="At Business">At Business</option>
+                                    <option value="On Location">On Location</option>
+                                </select>
+                                <script>
+                                    var p = new SlimSelect({
+                                        select: '#frm_servicelocation'
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3 col-sm-6">
+                            <div class="priceselect sp-select">
+                                <label>Activity Great For ?</label>
+                                <select name="frm_programfor[]" id="frm_programfor" multiple>
+                                    <option value="Kids">Kids</option>
+                                    <option value="Teens">Teens</option>
+                                    <option value="Adults">Adults</option>
+                                    <option value="Family">Family</option>
+                                    <option value="Groups">Groups</option>
+                                    <option value="Paralympic">Paralympic</option>
+                                    <option value="Prenatal">Prenatal</option>
+                                    <option value="Any">Any</option>
+                                </select>
+                                <script>
+                                    var p = new SlimSelect({
+                                        select: '#frm_programfor'
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3 col-sm-6">
+                            <div class="priceselect sp-select">
+                                <label>What age is this for?</label>
+                                <select name="frm_agerange[]" id="frm_agerange" multiple>
+                                    <option value="Baby (0 to 12 months)">Baby (0 to 12 months)</option>
+                                    <option value="Toddler (1 to 3 yrs.)">Toddler (1 to 3 yrs.)</option>
+                                    <option value="Preschool (4 to 5 yrs.)">Preschool (4 to 5 yrs.)</option>
+                                    <option value="Grade School (6 to 12 yrs.)">Grade School (6 to 12 yrs.)</option>
+                                    <option value="Teen (13 to 17 yrs.)">Teen (13 to 17 yrs.)</option>
+                                    <option value="Young Adult (18 to 21 yrs.)">Young Adult (18 to 21 yrs.)</option>
+                                    <option value="Older Adult (21 to 39 yrs.)">Older Adult (21 to 39 yrs.)</option>
+                                    <option value="Middle Age (40 to 59 yrs.)">Middle Age (40 to 59 yrs.)</option>
+                                    <option value="Senior Adult (60 +)">Senior Adult (60 +)</option>
+                                    <option value="Any">Any</option>
+                                </select>
+                                <script>
+                                    var p = new SlimSelect({
+                                        select: '#frm_agerange'
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
 
-                                <option>Hard</option>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="priceselect sp-select">
+                                <label>Difficulty Levels?</label>
+                                <select name="frm_experience_level[]" id="frm_experience_level" multiple>
+                                    <option>Easy</option>
+                                    <option>Medium</option>
+                                    <option>Hard</option>
+                                    <option>Any</option>
+                                </select>
+                                <script>
+                                    var p = new SlimSelect({
+                                        select: '#frm_experience_level'
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="priceselect sp-select">
+                                <label>Customers Experience for this Activity?</label>
+                                <select name="frm_servicefocuses[]" id="frm_servicefocuses" multiple>
+                                    <option value="Have Fun"> Have Fun</option>
+                                    <option value="Adventurous">Adventurous</option>
+                                    <option value="Thrilling">Thrilling</option>
+                                    <option value="Physically Challenging">Physically Challenging </option>
+                                    <option value="Mentally Challenging">Mentally Challenging </option>
+                                    <option value="Peaceful">Peaceful</option>
+                                    <option value="Calm">Calm</option>
+                                    <option value="Gain Focus">Gain Focus</option>
+                                    <option value="Learning a skill">Learning a skill</option>
+                                    <option value="To accomplish a goal">To accomplish a goal</option>
+                                    <option value="Gain Discipline">Gain Discipline</option>
+                                    <option value="Gain Confidence">Gain Confidence</option>
+                                    <option value="Better hand-eye coordination">Better hand-eye coordination</option>
+                                    <option value="Get a toned body">Get a toned body</option>
+                                    <option value="Get better nutrition habits">Get better nutrition habits</option>
+                                    <option value="Release Pain">Release Pain</option>
+                                    <option value="Relax">Relax</option>
+                                    <option value="Body Alignment">Body Alignment</option>
+                                    <option value="Strength and Conditioning">Strength and Conditioning </option>
+                                    <option value="Athletic Conditioning">Athletic Conditioning</option>
+                                    <option value="Better Technique">Better Technique</option>
+                                    <option value="Weight Loss Help">Weight Loss Help</option>
+                                    <option value="Competition training and prep">Competition training and prep</option>
+                                    <option value="Gain better cardio">Gain better cardio</option>
+                                </select>
 
-                                <option>Any</option>
+                                <script>
+                                    var p = new SlimSelect({
+                                        select: '#frm_servicefocuses'
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 col-sm-6">
+                            <div class="priceselect sp-select">
+                                <label>Personality & Habits of Instructor?</label>
+                                <select name="frm_teachingstyle[]" id="teaching" multiple>
+                                    <option value="An educator">An Educator</option>
+                                    <option value="A teacher">A Teacher</option>
+                                    <option value="A lot of energy">A lot of energy</option>
+                                    <option value="A drill sergeant">A drill sergeant</option>
+                                    <option value="Inspiring">Inspiring</option>
+                                    <option value="Motivational">Motivational</option>
+                                    <option value="Supportive, Soft and Nurturing">Supportive, Soft and Nurturing</option>
+                                    <option value="Tough and Firm">Tough and Firm</option>
+                                    <option value="Gentle">Gentle</option>
+                                    <option value="Intense">Intense</option>
+                                    <option value="Likes to talk">Likes to talk</option>
+                                    <option value="Punctual">An entertainer</option>
+                                    <option value="Organized">Stern</option>
+                                    <option value="Stern">Friendly & outgoing</option>
+                                    <option value="Tells jokes and funny">Tells jokes and funny</option>
+                                    <option value="Loves to talk">Loves to talk about the details</option>
+                                    <option value="Very Organized">Very Organized</option>
+                                    <option value="Punctual">Punctual</option>
+                                    <option value="On Time">On Time</option>
+                                </select>
 
+                                <script>
+                                    var p = new SlimSelect({
+                                        select: '#teaching'
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div  id="experienceitinerary" style="display:none;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="itinerary-data">
+                                    <h3>Set Up Your Itinerary</h3> <p>( Let customers know what they will be doing for this experience)</p>
+                                    <hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 5px;">
+                                </div>
+                                <div class="highlights-title">
+                                    <label>Experience Highlights</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <textarea class="form-control valid" rows="6" name="exp_highlight" id="exp_highlight" maxlength="1000" placeholder="Briefly describe a few highlights so customer understand what they will be doing. "></textarea>
+                                            <span id="exp_highlight_left">1,000 Character Left</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 15px;">
                                 
+                            <div class="col-md-12">
+                                <div class="booking-titles">
+                                    <h3>What’s Included with this experience?</h3>
+                                    <p>What do you provide for your customers?</p>
+                                    <p>Examples: You provide pick up and drop off transportation from hotels etc., provider, food and drinks, special equipment, video and photography services etc.)</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="activity-width">
+                                            <div class="special-offer select-dropoff">
+                                                <div class="multiples">
+                                                    <select name="frm_included_things[]" id="frm_included_things" multiple class="mt-10">
+                                                        <option value="Safety & Protective Gear">Safety & Protective Gear</option>
+                                                        <option value="Activity Equipment">Activity Equipment</option>
+                                                        <option value="Breakfast">Breakfast</option>
+                                                        <option value="Lunch">Lunch</option>
+                                                        <option value="Dinner">Dinner</option>
+                                                        <option value="Snacks">Snacks</option>
+                                                        <option value="Drinks (tea, coffee, soda, bottled water, etc.) ">Drinks (tea, coffee, soda, bottled water, etc.)</option>
+                                                        <option value="Alcohol (beer, champagne, wine, mixed drink etc.)">Alcohol (beer, champagne, wine, mixed drink etc.)</option>
+                                                        <option value="Transportation">Transportation</option>
+                                                        <option value="Insurance Coverage">Insurance Coverage</option>
+                                                        <option value="Entrance Fees ">Entrance Fees </option>
+                                                        <option value="Airfare">Airfare</option>
+                                                        <option value="Taxes">Taxes</option>
+                                                        <option value="Professional Guide">Professional Guide</option>
+                                                        <option value="Guide Gratuity">Guide Gratuity</option>
+                                                        <option value="Accommodations">Accommodations</option>
+                                                        <option value="Video">Video</option>
+                                                        <option value="Photography">Photography</option>
+                                                        <option value="Fully Narrated">Fully Narrated</option>
+                                                        <option value="Historic landmarks">Historic landmarks</option>
+                                                        <option value="Rest period">Rest period</option>
+                                                        <option value="Typical souvenir">Typical souvenir</option>
+                                                    </select>
 
-                            </select>
-
-                            <script>
-
-                                var p = new SlimSelect({
-
-                                    select: '#frm_experience_level'
-
-                                });
-
-                            </script>
-
+                                                    <script>
+                                                        var p = new SlimSelect({
+                                                            select: '#frm_included_things'
+                                                        });
+                                                    </script>
+                                                    <span class="error" id="err_what_included"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="booking-titles">
+                                    <h3>What’s Not Included with this experience?</h3>
+                                    <p>List the items or services that are not includes with this experience. i.e. no food or drinks, no equipment, no insurance, etc. </p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="activity-width">
+                                            <div class="special-offer select-dropoff">
+                                                <div class="multiples">
+                                                    <select name="frm_notincluded_things[]" id="frm_notincluded_things" multiple>
+                                                        <option value="Safety & Protective Gear">Safety & Protective Gear</option>
+                                                        <option value="Activity Equipment">Activity Equipment</option>
+                                                        <option value="Breakfast">Breakfast</option>
+                                                        <option value="Lunch">Lunch</option>
+                                                        <option value="Dinner">Dinner</option>
+                                                        <option value="Snacks">Snacks</option>
+                                                        <option value="Drinks (tea, coffee, soda, bottled water, etc.) ">Drinks (tea, coffee, soda, bottled water, etc.)</option>
+                                                        <option value="Alcohol (beer, champagne, wine, mixed drink etc.)">Alcohol (beer, champagne, wine, mixed drink etc.)</option>
+                                                        <option value="Transportation">Transportation</option>
+                                                        <option value="Insurance Coverage">Insurance Coverage</option>
+                                                        <option value="Entrance Fees ">Entrance Fees </option>
+                                                        <option value="Airfare">Airfare</option>
+                                                        <option value="Taxes">Taxes</option>
+                                                        <option value="Professional Guide">Professional Guide</option>
+                                                        <option value="Guide Gratuity">Guide Gratuity</option>
+                                                        <option value="Accommodations">Accommodations</option>
+                                                        <option value="Video">Video</option>
+                                                        <option value="Photography">Photography</option>
+                                                        <option value="Fully Narrated">Fully Narrated</option>
+                                                        <option value="Historic landmarks">Historic landmarks</option>
+                                                        <option value="Rest period">Rest period</option>
+                                                        <option value="Typical souvenir">Typical souvenir</option>
+                                                    </select>
+                                                    <script>
+                                                        var p = new SlimSelect({
+                                                            select: '#frm_notincluded_things'
+                                                        });
+                                                    </script>
+                                                     <span class="error" id="err_what_not_included"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="booking-titles">
+                                    <h3>What Should Guest Bring and Wear?</h3>
+                                    <p>If guests need anything in order to enjoy your experience, this is the place to tell them. Be as detailed as possible and add each item individually.</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="activity-width">
+                                            <div class="special-offer select-dropoff">
+                                                <div class="multiples">
+                                                    <select name="frm_wear[]" id="frm_wear" multiple>
+                                                        <option value="Any Clothing Type">Any Clothing Type</option>
+                                                        <option value="Dress for warm weather">Dress for warm weather</option>
+                                                        <option value="Dress for wet weather">Dress for wet weather</option>
+                                                        <option value="Dress for cold weather">Dress for cold weather</option>
+                                                        <option value="Dress for nature activities">Dress for nature activities</option>
+                                                        <option value="Dress for wet activities">Dress for wet activities</option>
+                                                        <option value="Dress for cold activities">Dress for cold activities</option>
+                                                        <option value="Pants">Pants</option>
+                                                        <option value="Long Sleeve">Long Sleeve</option>
+                                                        <option value="Jacket">Jacket</option>
+                                                        <option value="Sandals">Sandals</option>
+                                                        <option value="Shoes">Shoes</option>
+                                                        <option value="Hats">Hats</option>
+                                                        <option value="Sunglasses">Sunglasses</option>
+                                                        <option value="Sunblock">Sunblock</option>
+                                                        <option value="Bug Spray">Bug Spray</option>
+                                                        <option value="Safety Goggles">Safety Goggles</option>
+                                                        <option value="Dinner">Dinner</option>
+                                                        <option value="Snacks">Snacks</option>
+                                                        <option value="First Aid Kit">First Aid Kit</option>
+                                                        <option value="Rain jacket">Rain jacket</option>
+                                                        <option value="Daypack">Daypack</option>
+                                                        <option value="Backpack">Backpack</option>
+                                                        <option value="Headlamp">Headlamp</option>
+                                                        <option value="Water bottle">Water bottle</option>
+                                                        <option value="Compass">Compass</option>
+                                                        <option value="Swimsuit">Swimsuit</option>
+                                                        <option value="Drybag (waterproof)">Drybag (waterproof)</option>
+                                                        <option value="Bandana or Buff headwear">Bandana or Buff headwear</option>
+                                                        <option value="Sleeping bag">Sleeping bag</option>
+                                                        <option value="Padlock">Padlock</option>
+                                                        <option value="Duct Tape">Duct Tape</option>
+                                                        <option value="Ear Plugs">Ear Plugs</option>
+                                                        <option value="Tent">Tent</option>
+                                                        <option value="Small Cooking Kit">Small Cooking Kit</option>
+                                                        <option value="Rope">Rope</option>
+                                                        <option value="Utility Knife">Utility Knife</option>
+                                                    </select>
+                                                    <script>
+                                                        var p = new SlimSelect({
+                                                            select: '#frm_wear'
+                                                        });
+                                                    </script>
+                                                    <span class="error" id="err_what_guest_bring"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="booking-titles">
+                                    <h3>Accessibility</h3>
+                                    <p>Explain if there is easy access for the disabled </p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="accessibility select-dropoff">
+                                            <textarea class="form-control valid" rows="3" name="frm_accessibility" id="frm_accessibility" maxlength="500" ></textarea>
+                                            <span id="frm_accessibility_left">500 Character Left</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="booking-titles">
+                                    <h3>Additional Information & FAQ</h3>
+                                    <p>Have a few things you want your customers to know before arriving? </p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="accessibility select-dropoff">
+                                            <textarea class="form-control valid" rows="6" name="frm_addi_info" id="frm_addi_info" maxlength="1000" ></textarea>
+                                            <span id="frm_addi_info_left">1,000 Character Left</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 15px;">
                         </div>
 
-                        <div class="form-group col-md-12">
-
-                            <label style="width: 100%">Activity Experience</label>
-
-                            <select name="frm_servicefocuses[]" id="frm_servicefocuses" multiple>
-
-                                <option value="Have Fun"> Have Fun</option>
-
-                                <option value="Adventurous">Adventurous</option>
-
-                                <option value="Thrilling">Thrilling</option>
-
-                               <?php /*?> <option value="Dangerous">Dangerous </option><?php */?>
-
-                                <option value="Physically Challenging">Physically Challenging </option>
-
-                                <option value="Mentally Challenging">Mentally Challenging </option>
-
-                                <option value="Peaceful">Peaceful</option>
-
-                                <option value="Calm">Calm</option>
-
-                                <option value="Gain Focus">Gain Focus</option>
-
-                                <option value="Learning a skill">Learning a skill</option>
-
-                                <option value="To accomplish a goal">To accomplish a goal</option>
-
-                                <option value="Gain Discipline">Gain Discipline</option>
-
-                                <option value="Gain Confidence">Gain Confidence</option>
-
-                                <option value="Better hand-eye coordination">Better hand-eye coordination</option>
-
-                                <option value="Get a toned body">Get a toned body</option>
-
-                                <option value="Get better nutrition habits">Get better nutrition habits</option>
-
-                                <option value="Release Pain">Release Pain</option>
-
-                                <option value="Relax">Relax</option>
-
-                                <option value="Body Alignment">Body Alignment</option>
-
-                                <option value="Strength and Conditioning">Strength and Conditioning </option>
-
-                                <option value="Athletic Conditioning">Athletic Conditioning</option>
-
-                                <option value="Better Technique">Better Technique</option>
-
-                                <option value="Weight Loss Help">Weight Loss Help</option>
-
-                                <option value="Competition training and prep">Competition training and prep</option>
-
-                                <option value="Gain better cardio">Gain better cardio</option>
-
-                            </select>
-
-                            <script>
-
-                                var p = new SlimSelect({
-
-                                    select: '#frm_servicefocuses'
-
-                                });
-
-                            </script>
-
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="plandaybyday">
+                                    <h3>Let’s Plan Your Day By Day</h3>
+                                    <p>Give your customers a day by day plan. Include a title, image and description of what the customers will be doing for that day. You can create multiple days. </p>
+                                    <input type="hidden"  name="planday_count" id="planday_count" value="0" />
+                                    <div class="add-another-day-schedule-block">
+                                        <div class="add_another_day">
+                                            <label class="select-dropoff">Day - 1</label>
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="photo-upload">
+                                                                <label for="dayplanpic0" id="label">
+                                                                    <img src="{{url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah planblah0" id="showimg" >
+                                                                    <span id="span_0">Upload your file here</span>
+                                                                    <input type="file" name="dayplanpic_0" id="dayplanpic0" class="uploadFile img" value="Upload Photo" onchange="planImg(this,0);" required>
+                                                                </label>
+                                                                <span class="error" id="err_oldservicepic20"></span>
+                                                                <input type="hidden" id="olddayplanpic20" name="olddayplanpic_0" value="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div>
+                                                                <input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle">
+                                                            </div>
+                                                            <div class="description-txt">
+                                                                <textarea class="form-control valid" rows="2" name="days_description[]" id="days_description0" placeholder="Give a description for this day" maxlength="500" oninput="changedesclenght(0);"></textarea>
+                                                                <span id="days_description_left0">500 Character Left</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <span class="addnewdiv add-another-day-schedule">+ Add another day</span>
+                            </div>
+                            <hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 15px;">
                         </div>
 
-                        <div class="form-group col-md-12">
-
-                            <label style="width: 100%">Personality & Habits of Instructor</label>
-
-                            <select name="frm_teachingstyle[]" id="teaching" multiple>
-
-                                <option value="An educator &amp; teacher">An Educator</option>
-
-                                <option value="A lot of energy">A Teacher</option>
-
-                                <option value="A drill sergeant">A lot of energy</option>
-
-                                <option value="Inspiring">A drill sergeant</option>
-
-                                <option value="Inspiring">Inspiring</option>
-
-                                <option value="Motivational">Motivational</option>
-
-                                <option value="Supportive, Soft and Nurturing">Supportive, Soft and Nurturing</option>
-
-                                <option value="Tough and Firm">Tough and Firm</option>
-
-                                <option value="Gentle">Gentle</option>
-
-                                <option value="Intense">Intense</option>
-
-                                <option value="Likes to talk">Likes to talk</option>
-
-                                <option value="Punctual">An entertainer</option>
-
-                                <option value="Organized">Stern</option>
-
-                                <option value="Stern">Friendly & outgoing</option>
-
-                                <option value="Tells jokes and funny">Tells jokes and funny</option>
-
-                                <option value="Loves to talk">Loves to talk about the details</option>
-
-                                <option value="Very Organized">Very Organized</option>
-
-                                <option value="Punctual">Punctual</option>
-
-                                <option value="On Time">On Time</option>
-
-                            </select>
-
-                            <script>
-
-                                var p = new SlimSelect({
-
-                                    select: '#teaching'
-
-                                });
-
-                            </script>
-
+                        <div class="row">   
+                            <div class="col-md-6">
+                                <div class="return-info">
+                                    <h3>Departure & Return Info & Describe the Location</h3>
+                                    <p>Tell customers how and when you will depart and return, how to meet up, where to meet up, meeting point name and how to find you once the customer arrives. Don’t leave it up to customers to figure out how to meet up with you. Let them know before hand.</p>
+                                    
+                                    <textarea class="form-control valid" rows="6" name="desc_location" id="desc_location" placeholder="(Ex. Please arrive at the location of our business. The address reminder  is ABC Anytown, town, 12345 USA.) Or; We will pick you up at your hotel. Or; Please talk with your front desk staff about the meeting point, Or; Please meet us at Central Park at the entrance of 81st and Central Park West (CPW). Wait at the seating area if you arrive early. The instructor will have on a red hat and yellow vest. Please arrive 10 minutes before your activity starts.)" maxlength="500"></textarea>
+                                    <span id="desc_location_left">500 Character Left</span>
+                                </div>
+                            </div>
                         </div>
+                        
+                        <div class="row">   
+                            <div class="col-md-7">                  
+                                <div class="companydetails">
+                                    <h3>Where should customers meet you?</h3>
+                                    <p>If the meet up spot is different from the address you set earlier in Company Details, then you can set it here.</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="companydetails-info">
+                                            <label>Street address </label>
+                                            <input type="text" name="cus_st_address" id="cus_st_address" class="form-control" value="">
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="address_p" value="">
+                                    <input type="hidden" name="cus_lat" id="cus_lat" value="">
+                                    <input type="hidden" name="cus_lng" id="cus_lng" value="">
+                                    <div id="cus_map" style="display: none;"></div>
+                                    <div class="col-md-6">
+                                        <div class="companydetails-info">
+                                            <label>Country / Region </label>
+                                            <input type="text" name="cus_country" id="cus_country" class="form-control" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="companydetails-info">
+                                            <label>Bldg (optional)</label>
+                                            <input type="text" name="cus_addi_address" id="cus_addi_address" class="form-control" value=""> 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div>
+                                            <label> City </label>
+                                            <input type="text" name="cus_city" id="cus_city" class="form-control" value="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div>
+                                            <label>State  </label>
+                                            <input type="text" name="cus_state" id="cus_state" class="form-control" value="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div>
+                                            <label> ZIP code</label>
+                                            <input type="text" name="cus_zip" id="cus_zip" class="form-control" value="">
+                                        </div>
+                                    </div>
+                                    <div class="reviewerro" id="cus_map_error"></div>
+                                    <div class="col-md-12">
+                                        <div class="select-dropoff">
+                                            <button class="showall-btn" type="button"  onclick="loadMaponclick();">Update Map</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="pin-on-map">
+                                            <h3>Adjust the pin on the map</h3>
+                                            <p>You can drag the map so the pin is in the right location.</p>
+                                          <div class="mysrchmap_cus" style="height: 100%;min-height: 300px;">
+                                                <div id="map_canvas_cus">
+                                                    <div class="maparea">
+                                                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24176.251535935986!2d-73.96828678121815!3d40.76133318281456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c4d85a0d8d%3A0x11f877ff0b8ffe27!2sRoosevelt%20Island!5e0!3m2!1sen!2sin!4v1620041765199!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr style="border: 1px solid #ec1b24; width: 100%; float: left; margin-top: 15px;">
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="customers-help">
+                                    <h3>Confirm your phone number if customers need your help</h3>
+                                    <p>If customers have trouble finding your location, or need questions with help, they may need to call you. The number on file we'll give them. </p>
+                                    <h3>Any additinal information for help</h3>
+                                    <textarea class="form-control valid" rows="3" maxlength="500" name="addi_info_help" id="addi_info_help"></textarea>
+                                    <span id="addi_info_help_left">500 Character Left</span>
+                                </div>
+                            </div>
+                        </div>
+                  
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="customers-help">
+                                    <h3>Require Safety Verifications </h3>
+                                    <p>The primary booker has to successfully complete verified ID in order for them and their guests to attend your experience.</p>
 
-                    </div><!-- row -->
+                                    <input type="checkbox" id="id_proof" name="id_proof" value="1" />
+                                    <label for="id_proof">Require the booker to have ID upon arrival for verificaiton of age and identity</label><br>
+                                   
+                                    <input type="checkbox" id="id_vaccine" name="id_vaccine" value="1" />
 
+                                    <label for="id_vaccine">Require the booker to have proof of Vacination. </label><br>
+
+                                    <input type="checkbox" id="id_covid" name="id_covid" value="1" />
+                                    <label for="id_covid">Require the booker to have proof of a negative Covid-19 test. </label><br> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-              </div>
-
-            </div><!-- row -->
+            </div>
 
           </div>
 
@@ -2982,6 +3305,11 @@
             $("#trems_payment_"+val+i+j).html('Terms: '+part+' Monthly Payments');
         }
     }
+
+    function changedesclenght(i){
+        var desc = $('#days_description'+i).val();
+        $('#days_description_left'+i).text(500-parseInt(desc.length));
+    }
 </script>
 
 <script type="text/javascript">
@@ -2989,14 +3317,20 @@
     $("input[name=service_type]").on( "change", function() {
       var btn = $(this).val();
       if(btn == 'experience'){
+        $("#experiencestype").show();
+        $("#individualstype").hide();
         $('#hidd_service_type').val('experience');
-        $('.itenerary_div').show();
+        $('#experienceitinerary').show();
       }else if(btn == 'classes'){
+        $("#experiencestype").show();
+        $("#individualstype").hide();
         $('#hidd_service_type').val('classes');
-        $('.itenerary_div').hide();
+        $('#experienceitinerary').hide();
       }else{
+        $("#individualstype").show();
+        $("#experiencestype").hide();
         $('#hidd_service_type').val('individual');
-        $('.itenerary_div').hide();
+        $('#experienceitinerary').hide();
       }
     });
 
@@ -3053,6 +3387,32 @@
       $('#frm_what_you_doing').text(150-parseInt(this.value.length));
     });
 
+   
+    $('#frm_accessibility_left').text(500-parseInt($("#frm_accessibility").val().length));
+    $("#frm_accessibility").on('input', function() {
+        $('#frm_accessibility_left').text(500-parseInt(this.value.length));
+    }); 
+
+    $('#addi_info_help_left').text(500-parseInt($("#addi_info_help").val().length));
+    $("#addi_info_help").on('input', function() {
+        $('#addi_info_help_left').text(500-parseInt(this.value.length));
+    }); 
+
+    $('#frm_addi_info_left').text(1000-parseInt($("#frm_addi_info").val().length));
+    $("#frm_addi_info").on('input', function() {
+        $('#frm_addi_info_left').text(1000-parseInt(this.value.length));
+    });
+
+    $('#exp_highlight_left').text(1000-parseInt($("#exp_highlight").val().length));
+    $("#exp_highlight").on('input', function() {
+        $('#exp_highlight_left').text(1000-parseInt(this.value.length));
+    });
+
+    $('#desc_location_left').text(500-parseInt($("#desc_location").val().length));
+    $("#desc_location").on('input', function() {
+        $('#desc_location_left').text(500-parseInt(this.value.length));
+    });
+
     $('#next1').on('click',function(e){
       e.preventDefault();
       var err = 0;
@@ -3097,9 +3457,8 @@
           $('#frm_programdesc').focus();
 
           return false;
-
-      }else if(service_type == 'experience'){
-
+      
+      /*}else if(service_type == 'experience'){
         if(what_you_doing == '' || what_you_doing == null){ 
 
           $('#err_what_you_doing').html('Please enter what will you be doing.');
@@ -3142,7 +3501,7 @@
 
           $('#divstep1').hide();
 
-        }
+        }*/
 
       }else{
 
@@ -3347,22 +3706,31 @@
 
 
     $("body").on("click", ".add-another-day-schedule", function(){
-      var cnt=$('#planday_count').val();
-      cnt++;
-      $('#planday_count').val(cnt);
-      var service_price = ""; var daycnt='';
-      daycnt = cnt+1;
-      service_price += '<div class="row add_another_day planday'+cnt+'" style="margin-top:20px; padding-top:10px;border-top:1px dotted #000;">';
-      service_price += '<div class="col-md-11"></div><div class="col-md-1"><i class="remove-day-schedule fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove Day"></i></div>';
-      service_price += '<div class="col-md-12"> <label class="mb-10"> Day '+daycnt+' </label></div><div class="col-md-3 text-center"><div class="imagePreview divImgPreview"><img src="" class="imagePreview planblah'+cnt+'" id="showimgDayPlan"></div><label class="img-tab-btn">Upload Image<input type="file" name="dayplanpic[]" class="uploadFile img" value="Upload Photo" onchange="planImg(this,'+cnt+');" style="width: 0px;height: 0px;overflow: hidden;"></label><span class="error" id="err_oldservicepic2'+cnt+'"></span><input type="hidden" id="olddayplanpic2'+cnt+'" name="olddayplanpic" value=""></div>';
+        var cnt=$('#planday_count').val();
+        cnt++;
+        $('#planday_count').val(cnt);
+        var service_price = ""; var daycnt='';
+        daycnt = cnt+1;                          
+        
+        service_price += '<div class="add_another_day planday'+cnt+'" style="margin-top:20px; padding-top:10px;border-top:1px dotted #000;">'; 
 
-      service_price +='<div class="col-md-9"><input type="text" class="form-control" name="days_title[]" id="days_title0" placeholder="Give Heading for This Day"/><br /><textarea class="form-control" rows="6" name="days_description[]" id="days_description" placeholder="Give Description For This Day" maxlength="500"></textarea>';
 
-      service_price += '</div>';
-      $(".add-another-day-schedule-block").append(service_price);
+        service_price += '<div class="col-md-11"></div><div class="col-md-1"><i class="remove-day-schedule fa fa-trash-o" style="color:red; font-weight:bold; cursor:pointer; float:right" title="Remove Day"></i></div>';
+
+        var img = "{{url('/public/images/Upload-Icon.png')}}";
+
+      service_price += '<label class="select-dropoff">Day - '+daycnt+' </label><div class="row"><div class="col-md-8"><div class="row"><div class="col-md-3"><div class="photo-upload"><label for="dayplanpic'+cnt+'" id="label"><img src="'+img+'" class="pro_card_img blah planblah'+cnt+'" id="showimg" ><span id="span_'+cnt+'">Upload your file here</span><input type="file" name="dayplanpic_'+cnt+'" id="dayplanpic'+cnt+'" class="uploadFile img" value="Upload Photo" onchange="planImg(this,'+cnt+');" required></label><span class="error" id="err_oldservicepic2'+cnt+'"></span><input type="hidden" id="olddayplanpic2'+cnt+'" name="olddayplanpic_'+cnt+'" value=""></div></div><div class="col-md-6"><div><input type="text" class="form-control" name="days_title[]" id="days_title" placeholder="Give a heading for this day." title="servicetitle"></div><div class="description-txt"><textarea class="form-control valid" rows="2" name="days_description[]" id="days_description'+cnt+'" placeholder="Give a description for this day" maxlength="150" oninput="changedesclenght('+cnt+');"></textarea><span id="days_description_left'+cnt+'">500 Character Left</span> </div></div> </div></div></div>';
+
+        service_price += '</div>';
+
+        $(".add-another-day-schedule-block").append(service_price);
+
     });
 
     $("body").on("click", ".remove-day-schedule", function(){
+      var cnt=$('#planday_count').val();
+      cnt--;
+      $('#planday_count').val(cnt)
       $(this).parent().parent().remove();
     });
 
@@ -3750,8 +4118,275 @@
 
 
 
-</script>
+ function submit_staffmember() {
+        var insname=$('#insname').val();
+        var insimg=$('#insimg').val();
+        var insdescription=$('#insdescription').val();
+        var _token = $("input[name='_token']").val();
 
+        if(insname !='' && insdescription !='')
+        { 
+            var formData = new FormData($("#addinsform")[0]);
+            $.ajax({
+                url: "{{route('add_instructor')}}",
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    if(response)
+                    {   
+                        $("#addinsform")[0].reset();
+                        $('.selectinstructor').load(' .selectinstructor > *')
+                        $('#addinserro').show(); 
+                        $('#addinserro').html('Instructure Added Successfully..'); 
+                        $("#submit_member").prop('disabled', true);
+                    }                    
+                }
+            });
+        }
+        else
+        {
+            $('#addinserro').show(); 
+            $('#addinserro').html('Please add your Instructure Name and Instructure Description rating'); 
+            return false;
+        }
+    }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
+<script type="text/javascript">
+    
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -33.8688, lng: 151.2195},
+            zoom: 13
+        });
+
+        var autocomplete2 = new google.maps.places.Autocomplete(document.getElementById('cus_st_address'), { types: [ 'geocode' ] });
+        google.maps.event.addListener(autocomplete2, 'place_changed', function() {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete2.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+
+            marker.setIcon(({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            var address = '';
+            var badd = '';
+            var sublocality_level_1 = '';
+            if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindow.open(map, marker);
+           
+            // Location details
+            for (var i = 0; i < place.address_components.length; i++) {
+                if(place.address_components[i].types[0] == 'postal_code'){
+                  $('#cus_zip').val(place.address_components[i].long_name);
+                }
+                if(place.address_components[i].types[0] == 'country'){
+                  $('#cus_country').val(place.address_components[i].long_name);
+                }
+
+                if(place.address_components[i].types[0] == 'locality'){
+                    $('#cus_city').val(place.address_components[i].long_name);
+                }
+
+                if(place.address_components[i].types[0] == 'sublocality_level_1'){
+                    sublocality_level_1 = place.address_components[i].long_name;
+                }
+
+                if(place.address_components[i].types[0] == 'street_number'){
+                   badd = place.address_components[i].long_name ;
+                }
+
+                if(place.address_components[i].types[0] == 'route'){
+                   badd += ' '+place.address_components[i].long_name ;
+                } 
+
+                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
+                  $('#cus_state').val(place.address_components[i].long_name);
+                }
+            }
+
+            if(badd == ''){
+              $('#cus_st_address').val(sublocality_level_1);
+            }else{
+              $('#cus_st_address').val(badd);
+            }
+            $('#address_p').val(place.formatted_address);
+            $('#cus_lat').val(place.geometry.location.lat());
+            $('#cus_lng').val(place.geometry.location.lng());
+        });
+
+        var input = document.getElementById('b_address');
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed', function() {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+
+            marker.setIcon(({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            var address = '';
+            var badd = '';
+            var sublocality_level_1 = '';
+            if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindow.open(map, marker);
+
+            // Location details
+            for (var i = 0; i < place.address_components.length; i++) {
+                if(place.address_components[i].types[0] == 'postal_code'){
+                  $('#b_zipcode').val(place.address_components[i].long_name);
+                }
+
+                if(place.address_components[i].types[0] == 'locality'){
+                    $('#b_city').val(place.address_components[i].long_name);
+                }
+
+                if(place.address_components[i].types[0] == 'sublocality_level_1'){
+                    sublocality_level_1 = place.address_components[i].long_name;
+                }
+
+                if(place.address_components[i].types[0] == 'street_number'){
+                   badd = place.address_components[i].long_name ;
+                }
+
+                if(place.address_components[i].types[0] == 'route'){
+                   badd += ' '+place.address_components[i].long_name ;
+                } 
+
+                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
+                  $('#b_state').val(place.address_components[i].long_name);
+                }
+            }
+
+            if(badd == ''){
+              $('#b_address').val(sublocality_level_1);
+            }else{
+              $('#b_address').val(badd);
+            }
+
+            $('#lat').val(place.geometry.location.lat());
+            $('#lon').val(place.geometry.location.lng());
+        });
+    }
+
+    function loadMaponclick(){
+        $('#cus_map_error').hide();
+        var locations = $('#address_p').val();
+        var cus_lat = $('#cus_lat').val();
+        var cus_lng = $('#cus_lng').val();
+        var map1 = ''
+        var infowindow1 = ''
+        var marker1 = ''
+        var markers1 = []
+        var circle = ''
+        
+        if (locations.length != 0) { 
+            $('#map_canvas_cus').empty(); 
+            console.log('!empty');
+            map1 = new google.maps.Map(document.getElementById('map_canvas_cus'), {
+                zoom:18,
+                center: new google.maps.LatLng(cus_lat, cus_lng),
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+            });
+            infowindow1 = new google.maps.InfoWindow();
+            var bounds = new google.maps.LatLngBounds();
+            var marker1;
+            var icon1 = {
+                url: "{{url('/public/images/hoverout2.png')}}",
+                scaledSize: new google.maps.Size(50, 50),
+                labelOrigin: {x: 25, y: 16}
+            };
+            for (var i = 0; i < locations.length; i++) {
+                var labelText = i + 1
+                marker1 = new google.maps.Marker({
+                    position: new google.maps.LatLng(cus_lat,cus_lng),
+                    map: map1,
+                    icon: icon1,
+                    title: labelText.toString(),
+                    label: {
+                        text: labelText.toString(),
+                        color: '#222222',
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                    }
+                });
+
+                bounds.extend(marker1.position);
+            }               
+            $('.mysrchmap_cus').show()
+        } else {
+            $('#cus_map_error').show(); 
+            $('#cus_map_error').html('Plese Enter All Value For Map');
+        }
+    }
+</script>
 @endsection
 
 

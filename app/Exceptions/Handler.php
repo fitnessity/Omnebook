@@ -36,6 +36,10 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        if ($this->shouldReport($exception) && app()->bound('sentry')) {
+            app('sentry')->captureException($exception);
+        }
+
         parent::report($exception);
     }
 
@@ -50,6 +54,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) 
+        {
+          abort(404);
+        }
+
         return parent::render($request, $exception);
     }
 }

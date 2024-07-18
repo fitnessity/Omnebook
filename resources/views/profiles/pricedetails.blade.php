@@ -785,7 +785,7 @@
 				
 			<div class="row">
 				<div class="col-md-3">
-					<label class="pay-card" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/visa-card-bg.jpg );">
+					<label class="pay-card" style="color:#ffffff; background-image: url(/public/img/visa-card-bg.jpg );">
 						<input name="plan" class="payment-radio" type="radio" checked>
 						<span class="plan-details">
 							<div class="row">
@@ -804,7 +804,7 @@
 					</label>
 				</div>
 				<div class="col-md-3">
-					<label class="pay-card" style="color:#ffffff; background-image: url(http://dev.fitnessity.co/public/img/visa-card-bg.jpg );">
+					<label class="pay-card" style="color:#ffffff; background-image: url(/public/img/visa-card-bg.jpg );">
 						<input name="plan" class="payment-radio" type="radio">
 						<span class="hidden-visually">Pro - $50 per month, 5 team members, 500 GB per month, 5 concurrent builds</span>
 						<span class="plan-details">
@@ -940,7 +940,7 @@
 									<div class="col-md-3">
 										<div class="photo-upload">
 											<label for="input" id="label">
-											  <img src="http://dev.fitnessity.co/public/images/Upload-Icon.png" class="pro_card_img blah" id="showimg">
+											  <img src="/public/images/Upload-Icon.png" class="pro_card_img blah" id="showimg">
 											  <span id="span">Upload your file here</span>
 											  <input id="input" type="file">
 											</label>
@@ -1072,15 +1072,100 @@
 				</div>
 			</div>
 			
+			<div class="row">
+				<div class="col-md-6">
+					<a href="#" class="showall-btn add-cate" data-toggle="modal" data-target="#cartcheckout">View Cart & Checkout</a>
+				</div>
+
+			</div>
+<!-- The Modal Add Business-->
+<div class="modal fade compare-model" id="cartcheckout">
+    <div class="modal-dialog cartcheckout">
+        <div class="modal-content">
+			<div class="modal-header" style="text-align: right;"> 
+			  	<div class="closebtn">
+					<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+			</div>
+
+            <!-- Modal body -->
+            <div class="modal-body body-space">
+				<div class="row"> 
+                    <div class="col-lg-12">
+					   <h4 class="modal-title" style="text-align: center; color: #000; line-height: inherit; font-weight: 600;">Continue Checkout</h4>
+					</div>
+					<div class="col-lg-12 btns-modal">
+						<a href="#" class="addbusiness-btn-modal cart-btn-width">Log in</a>
+						<a href="#" class="addbusiness-btn-modal" data-toggle="modal" data-target="#registermodal">Continue as Guest</a>
+					</div>
+				 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal -->
+<!-- The Modal Add Business-->
+<div class="modal fade compare-model" id="registermodal">
+    <div class="modal-dialog registermodal">
+        <div class="modal-content">
+			<div class="modal-header" style="text-align: right;"> 
+			  	<div class="closebtn">
+					<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+			</div>
+
+            <!-- Modal body -->
+            <div class="modal-body body-tbm register-bg">
+				<div class="row"> 
+                    <div class="col-lg-6 col-xs-12 register-modal">
+						<div class="logo-my">
+							<a href="#"> <img src="/public/images/logo-small.jpg"> </a>
+						</div>
+						<div class="manage-customer-from">
+							<form>
+								<div class="register-pop-title ftitle1">
+									<h3>Tell Us About You</h3>
+								</div>
+								<input type="text" name="firstname" id="" size="30" maxlength="80" placeholder="First Name">
+								<input type="text" name="lastname" id="" size="30" maxlength="80" placeholder="Last Name">
+								<input type="text" name="username" id="" size="30" maxlength="80" placeholder="Username" autocomplete="off">
+								<input type="email" name="email" id="" class="myemail" size="30" placeholder="e-Mail" maxlength="80" autocomplete="off">
+								<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone">
+								<input type="text" id="dob" name="dob" class=" dobdate" placeholder="Date Of Birth (mm/dd/yyyy)">
+								<input type="password" name="password" id="" size="30" placeholder="Password" autocomplete="off">
+								<input type="password" name="confirm_password" id="" size="30" placeholder="Confirm Password" autocomplete="off">
+								<div class="row check-txt-center">
+									<div class="col-md-8">
+										<div class="terms-wrap wrap-sp">
+											<input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
+											<label for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
+										</div>
+										<button type="button" style="margin:0px;" class="signup-new" id="register_submit" >Create Account</button>
+									</div>
+								</div>
+								
+							</form>
+						</div>
+                    </div>
+				 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal -->
 		</div>
 		
 	</div>
 	
 </div>
-
-				
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
 @include('layouts.footer')
+
 <script>
 	document.getElementById("input").addEventListener("change", (e) => {
   document.getElementById("span").innerText = e.target.files[0].name;
@@ -1561,9 +1646,6 @@ $("body").on("click", ".daycircle", function(){
 
     });
 
-
-
-  }); 
 
 
 </script>

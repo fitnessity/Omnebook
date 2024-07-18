@@ -147,7 +147,7 @@ h6.heading {
     <div class="banner">
     <div class="container">
       <div class="banner-content">
-        <h1>{{$company->company_name}}</h1>
+        <h1>{{$company->dba_business_name}}</h1>
         <div class="star_btn">
           <button class="btn write_a_review_btn"><i class="fa fa-star"></i></button>
           <button class="btn write_a_review_btn"><i class="fa fa-star"></i></button>
@@ -157,7 +157,7 @@ h6.heading {
           <h5>5 reviews <span class="label">Details</span></h5>
         </div>
         <div class="banner_btm_content">
-          <h5 class="Unclaimed">Claimed . {{$company->company_name}} <span class="label">Edit</span></h5>
+          <h5 class="Unclaimed">Claimed . {{$company->dba_business_name}} <span class="label">Edit</span></h5>
           <h5 class="open_time"><span>Open</span> 11:00AM - 1:30PM</h5>
         </div>
       </div>
@@ -216,7 +216,7 @@ h6.heading {
             <h6 class="heading">You Might Also Consider <span class="sponsored">Sponsored</span></h6><br>
             <div class="row">
               <div class="col-md-2">
-                <img src="https://s3-media0.fl.yelpcdn.com/bphoto/705mSY8sb2A4q2XKYtuRQw/60s.jpg" class="comment_img">
+                <img src="https://s3-media0.fl.yelpcdn.com/bphoto/705mSY8sb2A4q2XKYtuRQw/60s.jpg" class="comment_img" alt="Fitnessity">
               </div>
               <div class="col-md-10">
                 <h6><b>Body Mechanix Fitness</b></h6>
@@ -235,7 +235,7 @@ h6.heading {
 <br>
             <div class="row">
               <div class="col-md-2">
-                <img src="https://s3-media0.fl.yelpcdn.com/bphoto/705mSY8sb2A4q2XKYtuRQw/60s.jpg" class="comment_img">
+                <img src="https://s3-media0.fl.yelpcdn.com/bphoto/705mSY8sb2A4q2XKYtuRQw/60s.jpg" class="comment_img" alt="Fitnessity">
               </div>
               <div class="col-md-10">
                 <h6><b>Body Mechanix Fitness</b></h6>
@@ -294,7 +294,7 @@ h6.heading {
         <div class="sidebox2">
           <div class="row">
             <div class="col-md-6">
-              <img src="https://s3-media0.fl.yelpcdn.com/assets/public/40x40_claim_your_page_v2@2x.yji-3cb722f5f279036ab19cd949748f4296.png" class="img-fluid">
+              <img src="https://s3-media0.fl.yelpcdn.com/assets/public/40x40_claim_your_page_v2@2x.yji-3cb722f5f279036ab19cd949748f4296.png" class="img-fluid" alt="Fitnessity"> 
             </div>
             <div class="col-md-6">
               <button type="button" class="close" data-dismiss="modal">&times;</button>

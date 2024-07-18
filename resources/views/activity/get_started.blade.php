@@ -19,6 +19,7 @@
 <style>
 	section.instant-hire{
 		margin-top: 69px;
+		text-align: center;
 	}
 </style>
 
@@ -37,7 +38,7 @@
 @if($activity_get_start_fast)
 	<section class="instant-hire" >
 		<div class="instant-banner">
-			<img src="{{url('/public/uploads/discover/thumb/'.@$activity_get_start_fast->image) }}">
+			<img src="{{url('/public/uploads/discover/thumb/'.@$activity_get_start_fast->image) }}" alt="Fitnessity">
 			<h4>{{@$activity_get_start_fast->title}}</h4>
 		</div>
 	</section>
@@ -328,7 +329,7 @@
 
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc&sensor=false"></script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}&sensor=false"></script>
 
 <script>
 $(document).ready(function () {

@@ -232,8 +232,8 @@
 				</div>
 			</div>
 			
-			<button  type="button" class="show-1-yes btn-hide-show" ><img class="filter-img" src="http://dev.fitnessity.co/public/img/filter-icon.png" width="25">More Filters</button>
-			<button  type="button" class="hide-1-yes btn-hide-show"><img class="filter-img" src="http://dev.fitnessity.co/public/img/filter-icon.png" width="25">More Filters</button>
+			<button  type="button" class="show-1-yes btn-hide-show" ><img class="filter-img" src="/img/filter-icon.png" width="25">More Filters</button>
+			<button  type="button" class="hide-1-yes btn-hide-show"><img class="filter-img" src="/img/filter-icon.png" width="25">More Filters</button>
 		
 		</div>
 		
@@ -380,7 +380,7 @@
 				                        $company = CompanyInformation::where('id',$service['cid'])->first();
 				                        if ($company!= '') {
 			                                $companyid = $company->id;
-			                                $companyname = $company->company_name;
+			                                $companyname = $company->dba_business_name;
 											$companycity = $company->city;
 											$companycountry = $company->country;
 				                        }

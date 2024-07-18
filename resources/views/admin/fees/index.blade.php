@@ -35,7 +35,20 @@
 
           <div class="row">
             <div class="col-xs-12 form-group {{ $errors->has('service_fees') ? ' has-error' : '' }} ">
-                {!! Form::label('service_fee', 'Service Fees', ['class' => 'control-label']) !!} 
+                {!! Form::label('fitnessity_fee', 'Fitnessity Fees / Provider Fees (%)', ['class' => 'control-label']) !!} 
+                {!! Form::text('fitnessity_fee', $fee->fitnessity_fee, ['id' => 'fitnessity_fee', 'class' => 'form-control', 'placeholder' => '']) !!}
+                <p class="help-block"></p>
+                    @if($errors->has('fitnessity_fee'))
+                        <p class="help-block">
+                            {{ $errors->first('fitnessity_fee') }}
+                        </p>
+                    @endif
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12 form-group {{ $errors->has('service_fees') ? ' has-error' : '' }} ">
+                {!! Form::label('service_fee', 'Service Fees / Customer Fees (%)', ['class' => 'control-label']) !!} 
                 {!! Form::text('service_fee', $fee->service_fee, ['id' => 'service_fee', 'class' => 'form-control', 'placeholder' => '']) !!}
                 <p class="help-block"></p>
                     @if($errors->has('service_fee'))
@@ -48,7 +61,7 @@
 
           <div class="row">
             <div class="col-xs-12 form-group {{ $errors->has('stext') ? ' has-error' : '' }} ">
-                {!! Form::label('site_tax', 'Tax', ['class' => 'control-label']) !!} 
+                {!! Form::label('site_tax', 'Tax (%)', ['class' => 'control-label']) !!} 
                 {!! Form::text('site_tax', $fee->site_tax, ['id' => 'site_tax', 'class' => 'form-control', 'placeholder' => '']) !!}
                 <p class="help-block"></p>
                     @if($errors->has('site_tax'))

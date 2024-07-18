@@ -121,7 +121,7 @@
               
                 <div class="nw-dtl-edit">
                   <span class="nw-label">Company Name:</span>
-                  <span id="display_user_company">{{ $company['company_name'] }}</span>
+                  <span id="display_user_company">{{ $company['dba_business_name'] }}</span>
                 </div>
                 
                 <div class="nw-dtl-edit">

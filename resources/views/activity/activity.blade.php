@@ -1,5 +1,5 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
 @section('content')
 <?php
 	use App\UserFavourite;
@@ -45,6 +45,8 @@
 		}
 ?>
 
+<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
+<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/w3.css">
 <link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" type="text/css" rel="stylesheet" />
@@ -232,8 +234,8 @@
 				</div>
 			</div>
 			
-			<button  type="button" class="show-1-yes btn-hide-show" ><img class="filter-img" src="{{url('/public/img/filter-icon.png')}}" width="25">More Filters</button>
-			<button  type="button" class="hide-1-yes btn-hide-show"><img class="filter-img" src="{{url('/public/img/filter-icon.png')}}" width="25">More Filters</button>
+			<button  type="button" class="show-1-yes btn-hide-show" ><img class="filter-img" src="{{url('/public/img/filter-icon.png')}}" width="25" alt="Fitnessity">More Filters</button>
+			<button  type="button" class="hide-1-yes btn-hide-show"><img class="filter-img" src="{{url('/public/img/filter-icon.png')}}" width="25" alt="Fitnessity">More Filters</button>
 		
 		</div>
 		
@@ -367,7 +369,7 @@
 						<div class="col-md-4 col-sm-4 col-map-show">
 							<div class="kickboxing-block">
 								<div class="kickboxing-topimg-content">
-									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654003844-yoga-outside.webp" class="productImg">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654003844-yoga-outside.webp" class="productImg" alt="Fitnessity">
 									<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
 								</div>
 								
@@ -408,7 +410,7 @@
 						<div class="col-md-4 col-sm-4 col-map-show">
 							<div class="kickboxing-block">
 								<div class="kickboxing-topimg-content">
-									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654092155-dance3.jpg" class="productImg">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654092155-dance3.jpg" class="productImg" alt="Fitnessity">
 									<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
 								</div>
 								
@@ -449,7 +451,7 @@
 						<div class="col-md-4 col-sm-4 col-map-show">
 							<div class="kickboxing-block">
 								<div class="kickboxing-topimg-content">
-									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654093746-GettyImages-136131022-56ca8aa35f9b5879cc4e7a73.jpg" class="productImg">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654093746-GettyImages-136131022-56ca8aa35f9b5879cc4e7a73.jpg" class="productImg" alt="Fitnessity">
 										<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
 								</div>
 								
@@ -490,7 +492,7 @@
 						<div class="col-md-4 col-sm-4 col-map-show">
 							<div class="kickboxing-block">
 								<div class="kickboxing-topimg-content">
-									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654183325-badminton-1428046__480.jpg" class="productImg">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654183325-badminton-1428046__480.jpg" class="productImg" alt="Fitnessity">
 										<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
 								</div>
 								
@@ -531,7 +533,7 @@
 						<div class="col-md-4 col-sm-4 col-map-show">
 							<div class="kickboxing-block">
 								<div class="kickboxing-topimg-content">
-									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654693172-Aerobics-1.jpg" class="productImg">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1654693172-Aerobics-1.jpg" class="productImg" alt="Fitnessity">
 										<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
 								</div>
 								
@@ -572,7 +574,7 @@
 						<div class="col-md-4 col-sm-4 col-map-show">
 							<div class="kickboxing-block">
 								<div class="kickboxing-topimg-content">
-									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1655126994-5.jpg" class="productImg">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1655126994-5.jpg" class="productImg" alt="Fitnessity">
 									<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
 								</div>
 								
@@ -613,7 +615,7 @@
 						<div class="col-md-4 col-sm-4 col-map-show">
 							<div class="kickboxing-block">
 								<div class="kickboxing-topimg-content">
-									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1655389294-badminton-1428046__480.jpg" class="productImg">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1655389294-badminton-1428046__480.jpg" class="productImg" alt="Fitnessity">
 									<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
 								</div>
 								
@@ -653,7 +655,7 @@
 						<div class="col-md-4 col-sm-4 col-map-show">
 							<div class="kickboxing-block">
 								<div class="kickboxing-topimg-content">
-									<img src="/public/images/service-nofound.jpg" class="productImg">
+									<img src="/public/images/service-nofound.jpg" class="productImg" alt="Fitnessity">
 									<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
 								</div>
 								
@@ -694,7 +696,7 @@
 						<div class="col-md-4 col-sm-4 col-map-show">
 							<div class="kickboxing-block">
 								<div class="kickboxing-topimg-content">
-									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1660784581-IMG-20220817-WA0023.jpg" class="productImg">
+									<img src="https://fitnessity.govindcrankrod.com/public/uploads/profile_pic/thumb/1660784581-IMG-20220817-WA0023.jpg" class="productImg" alt="Fitnessity">
 										<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
 								</div>
 								
@@ -735,7 +737,7 @@
 						<div class="col-md-4 col-sm-4 col-map-show">
 							<div class="kickboxing-block">
 								<div class="kickboxing-topimg-content">
-									<img src="/public/images/service-nofound.jpg" class="productImg">
+									<img src="/public/images/service-nofound.jpg" class="productImg" alt="Fitnessity">
 									<a class="fav-fun-2" href="/userlogin"><i class="far fa-heart"></i></a>
 								</div>
 								<div class="bottom-content">
@@ -796,7 +798,7 @@
 		</div>
 	</div>
 </section>
-@include('layouts.footer')
+@include('layouts.business.footer')
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ Config::get('constants.MAP_KEY') }}&sensor=false"></script>
 

@@ -252,7 +252,7 @@
 </section>                    
 
 <!-- The Modal Add Business-->
-<div class="modal fade compare-model" id="successmodelbox">
+<div class="modal fade" id="successmodelbox" tabindex="-1" role="dialog" aria-labelledby="successmodelboxLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg location-modal">
         <div class="modal-content">
             <!-- Modal body -->
@@ -359,6 +359,10 @@
 
     $(".closebtn").click(function(e) {
     	$('#add_status').val("no");
+    });
+
+    $(".close-btn-location").click(function(e) {
+    	$('#add_status').val("no");
     }); 
 
     $(".addbusiness-btn-modal").click(function(e) {
@@ -398,11 +402,13 @@
 	            success: function(data) {
 	            	if(data != 'added'){
 						$('#add_status').val("yes");
-						$('#location').modal('toggle');
+						//$('#location').modal('toggle');
+						$('#location').modal({ backdrop: 'static',keyboard: false});
 						$('#modelbody_already_bus').html(data);
 	            	}else{
 	            		$("#add_details")[0].reset();
-						$('#successmodelbox').modal('toggle');
+						$('#successmodelbox').modal({ backdrop: 'static',keyboard: false});
+						
 	            	}
 	            },
 	        });
@@ -681,7 +687,7 @@
 
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap" async defer></script>
 
 
 @endsection

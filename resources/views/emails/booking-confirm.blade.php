@@ -9,6 +9,7 @@ use App\UserBookingDetail;
 use App\BusinessActivityScheduler;
 use App\BusinessTerms;
 use App\UserFamilyDetail;
+use App\StaffMembers;
 	
 	$url = env('APP_URL');
 	$dt = Carbon::now();
@@ -81,7 +82,7 @@ use App\UserFamilyDetail;
 	    $bring_wear = $str_arr = explode (",", @$BookingDetail1['businessservices']['bring_wear']);
 	    $meetup_location = @$BookingDetail1['businessservices']['meetup_location'];
 
-	    $company_name = @$BookingDetail1['businessuser']['company_name'];
+	    $company_name = @$BookingDetail1['businessuser']['dba_business_name'];
 	    $sport_activity = @$BookingDetail1['businessservices']['sport_activity'];
 	    $select_service_type = @$BookingDetail1['businessservices']['select_service_type'];
 	    $program_name = @$BookingDetail1['businessservices']['program_name'];
@@ -95,6 +96,12 @@ use App\UserFamilyDetail;
 	    $contact_number = @$BookingDetail1['businessuser']['contact_number'];
 	    $service_type = @$BookingDetail1['businessservices']['service_type'];
 	    $program_desc = @$BookingDetail['businessservices']['program_desc'];
+	    $instructor_name = @$bususername;
+	    $instructor_id = @$BookingDetail1['businessservices']['instructor_id'];
+	    if($instructor_id != ''){
+	    	$instructor_dta = StaffMembers::select('name')->where('id',$instructor_id)->first();
+	    	$instructor_name = $instructor_dta->name;
+	    }
 	}
 
 	foreach ($cart as $key => $value) {
@@ -456,7 +463,7 @@ use App\UserFamilyDetail;
 																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px;">Your Instructor Is:</h2>
 																			</td>
 																			<td>
-																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{ @$bususername }}</h2>
+																				<h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300;margin-bottom: 0px; text-align: right">{{ @$instructor_name }}</h2>
 																			</td>
 																		</tr>
 																		<tr>

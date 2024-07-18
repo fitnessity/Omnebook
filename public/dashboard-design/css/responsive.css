@@ -1,0 +1,499 @@
+@media screen and (min-width: 1900px) and (max-width: 2500px){
+	.modal-80 {  max-width: 90%;}
+	.modal-70 {  max-width: 50%;}
+	.overlay-activity-label{width: auto !important;}
+	.service-details p {  height: 60px;}
+	.fix-box {  height: 340px;}
+	.bsw-35{max-width: 35%;}
+	.layout-rightside-col .layout-rightside{margin-right: 0px;}
+	.manage-customer-modal-title h3{}
+	.desktop-none-booking{display: none;}
+	.dots {  overflow-x: visible !important;}
+	.desktop-none-client{display: none;}
+	.client-contact-list-modal{max-width: 70%;}
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1900px){
+	.desktop-none-booking{display: none;}
+	.dots {  overflow-x: visible !important;}
+	.self-check-sp { margin-bottom: 40px; }
+	.home-banner-title{  padding: 150px 0 150px;}
+	.desktop-none-client{display: none;}
+	.notification-close{right: 28px;}
+	.card-check-in {padding: 100px 100px;  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 992px){
+	#page-topbar{top: 65px;} 
+	:is([data-layout="vertical"], [data-layout="semibox"])[data-sidebar-size="sm"] .navbar-menu{padding-top: 0px;}
+	.mobile-none{display:none;}
+	.page-content { padding: calc(60px + 6.5rem) calc(1.5rem * .5) 60px calc(1.5rem * .5);}
+	.mb-15{ margin-bottom: 15px;}
+	.mb-55{margin-bottom: 55px;}
+	.dropBoximg{ min-width: 100% !important;}
+	.search-width { width: 100%;}
+	.dash-sidebar-menu{margin-top: 20px;}
+	.set-price{margin-bottom: 10px !important;}
+	.equal-earn {  margin-top: 25px;}
+	.checkbox-selection label{display: inline;}
+	.addanother a{width: 100%; display: grid;}
+	.modal-80 {  max-width: 95%;}
+	.modal-70 {  max-width: 95%;}
+	.modal-40 {  max-width: 95%;}
+	.overlay-activity-label{width: auto !important;}
+	.scheduled-activity-info{margin-top: 7px !important;}
+	.manage-customer-from form input{width: 85%;}
+	.manage-customer-modal-title h3{left: 345px;}
+	.manage-customer-search h4 {  font-size: 24px;}
+	.btn-previous{width: 137px; display: inline-block; padding: 5px 10px;}	
+	.service-details p { height: 80px;}
+	.cat-age label { color: #878a99 !important;  font-size: 13px !important;}
+	.estimated-earn {  width: 49% !important;}
+	.age-cat {  width: 49% !important; text-align: center;}
+	.weekly-customer {  width: 49% !important;}
+	.weekend-price {  width: 49% !important;}
+	.re-discount { width: 49% !important;}
+	.single-dash {  width: 20% !important;}
+	.single-equal {  width: 20% !important;}
+	.fit-fees {  width: 49% !important;}
+	.equal label {  margin-top: 40px;}
+	.desh label {  margin-top: 40px;}
+	.booking-titles h3{margin-top: 15px;}
+	.photo-upload label{height: 175px;}
+	.manage-customer-from form input{width: 100%;}
+	.manage-customer-from form select{width: 100%;}
+	.signup-step-btn {  margin: 0 0px;}
+	#divstep1 form{padding: 0 15px;}
+	.heading-step{margin: 15px 0;}
+	#divstep3 form{padding: 0 15px;}
+	.sign-step_2, .sign-step_3, .sign-step_4, .sign-step_5{padding: 30px 0px;}
+	#divstep4 form{padding: 0 15px;}
+	.manage-customer-search h4{padding: 15px;}
+	#divstep5 form{padding: 0 15px;}
+	#divstep6 form{padding: 0 15px;}
+	.mwidth-50{width: 33%;}
+	.btn-inline input{ display: inline; }
+	.mwidth-30{width: 33%;}
+	.imt-10{margin-top: 10px;}
+	.company-specifics{	padding: 20px 0px !important;}
+	.custom-radio-btns span { font-size: 14px;}
+	.custom-radio-btns input {  width: 17px;  height: 17px; margin-left: 10px; top: 1px}
+	.customer-modal-width{max-width: 75%;}
+	.inner-accordion-titles label { width: 100%;}
+	.powered-img{width: 100%;}
+	.booking-modal-logo img { width: 30%;}
+	.modal-50 {  max-width: 95%;} 
+	.side-border-right {  border-right: 0; padding-right: 0;}
+	.membership-save { width: 30%;  margin-top: 19px;}
+	.mt-150 {  margin-top: 30px;}
+	.mmb-10{margin-bottom: 10px;}
+	.ticket-summery h4{padding: 15px 0;}
+	.cash-tend {  margin-left: 0px;}
+	#calendar .fc-basic-view .fc-body .fc-row {  min-height: 10.6em !important;}
+	.desktop-add-client-none{display: block;}
+	.btn-grp button{padding: 13px 15px;}
+	.chat-leftsidebar {  height: calc(70vh - 70px - 60px - 8px) !important;}
+	.chat-conversation { height: calc(70vh - 275px) !important;}
+	.width-100per{width: 100%;}
+	.free-trial-img img {  margin-bottom: -45px;  margin-top: -40px;}
+	.mobile0view-flex{display: flex;}
+	.steps-free-trial-img img { margin-bottom: -45px; margin-top: -43px;}
+	.sports-side-img img { width: 405px; float: none; margin-top: 15px; margin-bottom: 15px;}
+	.set-searchbox {  margin-top: 55px;}
+	.banner-img img{height: 300px;}
+	.home-black-section label{font-size: 30px; padding: 15px;}
+	.home-black-section i {  top: 75px;}
+	.hpl-50 {padding-left: 12px;}
+	.mt--25 {  margin-top: 25px;}
+	.pro-background-overlay{width: 97%;}
+	.up-down-sp {  padding: 20px 30px 20px 30px;}
+	.classes-list{padding: 5px 0px;}
+	.links-set a{font-size: 14px;}
+	/* .setoflinkes{width: 100%;} */
+	.custom-table-header{height: 75px;}
+	.badge-soft-red{font-size: 9px;}
+	.w-ipad{width: 225px;}
+	.bg-cover{background-size: cover;}
+	.pro-background-overlay-banner{background-image: linear-gradient(102deg, #fff 18%, transparent 37%);}
+	.home-banner-title{ padding: 150px 0 150px; }
+	/* .staff-pl-0 { padding-left: 12px;  } */
+	/* .service-pr-0 {	padding-right: 10px; } */
+	.show-all {	margin-top: 0;  }
+	.show-all .join-btn{margin-top: 0; padding: 0px !important;}
+	.star-rest .activity-inner-data{padding: 0 0;}
+	.fit-widget-container-banner label{font-size: 45px; line-height: 64px;}
+	.i-none{display: none !important;}
+	.confirmed-slider .owl-nav .owl-next{right: -55px !important; width: 20px; height: 20px; font-size: 18px;}
+	.confirmed-slider .owl-nav .owl-prev{left: -55px !important; width: 20px; height: 20px; font-size: 18px;}
+	.mil-5 { margin-left: 5px;  }
+	.com-sidepanel{top: 67px;}
+	.ipad-none{display: none;}
+	.notification-close{right: 35px;} 
+	#sidebar-wrapper{left: 322px; top: 136px;}
+	#page-content-wrapper{padding: 0px;}
+	.clinet-page-content{padding: calc(40px + 6.5rem) calc(1.5rem * .5) 60px calc(1.5rem * .5);}
+	.imt-25{margin-top: 25px;}
+	.finish-modal-80 {	max-width: 97%;  }
+}
+
+@media screen and (min-width: 700px) and (max-width: 768px){
+	.price-selection label {  margin-right: 13px !important;  width: auto !important;}
+	.modal-80 {  max-width: 95% !important;}
+	.modal-70 {  max-width: 95% !important;}
+	.display-flex{display: flex;}
+	.mr-15{margin-right: 15px;}
+	.overlay-activity-label{width: auto !important;}
+	.scheduled-activity-info{margin-top: 7px !important;}
+	.manage-customer-modal-title h3{left: 319px;}
+	#page-topbar{top: 144px;}
+	.page-content {  padding: calc(150px + 6.5rem) calc(1.5rem * .5) 60px calc(1.5rem * .5);}
+	.btn-previous.btn-sp {  margin-right: 7px;}
+	.btn-previous{width: 135px;}
+	.cat-age label { color: #878a99 !important;  font-size: 13px !important;}
+	.estimated-earn {  width: 100% !important;}
+	.age-cat {  width: 100% !important;}
+	.weekly-customer {  width: 100% !important;}
+	.weekend-price {  width: 100% !important;}
+	.re-discount { width: 100% !important;}
+	.single-dash {  width: 100% !important;}
+	.single-equal {  width: 100% !important;}
+	.fit-fees {  width: 100% !important;}
+	.weekly-customer{margin-right: 7 !important; margin-left: 0 !important;}
+	.age-cat{padding-left: 0 !important;}
+	.weekend-price{margin-right: 7 !important; margin-left: 0 !important;}
+	.re-discount{ margin-right: 7 !important; margin-left: 0 !important;}
+	.single-dash {margin-right: 7 !important; margin-left: 0 !important;}
+	.fit-fees {margin-right: 7 !important; margin-left: 0 !important;}
+	.single-equal{margin-right: 7 !important; margin-left: 0 !important;}
+	.estimated-earn{margin-right: 7 !important; margin-left: 0 !important;}
+	.cat-age label { color: #878a99 !important;  font-size: 13px !important;}
+	.equal label { margin-top: 0px !important;}
+	.desh label {  margin-top: 0px !important;}
+	.search-width {  width: 100%;}
+	.booking-titles h3{margin-top: 15px;}
+	.manage-customer-from form input{width: 100%;}
+	.manage-customer-from form select{width: 100%;}
+	.signup-step-btn {  margin: 0 0px;}
+	#divstep1 form{padding: 0 15px;}
+	.heading-step{margin: 15px 0;}
+	#divstep3 form{padding: 0 15px;}
+	.sign-step_2, .sign-step_3, .sign-step_4, .sign-step_5{padding: 30px 0px;}
+	#divstep4 form{padding: 0 15px;}
+	.manage-customer-search h4{padding: 15px;}
+	#divstep5 form{padding: 0 15px;}
+	#divstep6 form{padding: 0 15px;}
+	.mwidth-50{width: 32%;}
+	.btn-inline input{ display: inline; }
+	.mwidth-30{width: 32%;}
+	.imt-10{margin-top: 10px;}
+	.time-zone{width: 100px;}
+	.company-specifics{padding: 25px 0px !important;}
+	.custom-radio-btns input { width: 20px; height: 20px;}
+	.btn-previous {font-size: 13px;}
+	.font-13{font-size: 13px;}
+	.customer-modal-width{max-width: 85%;}
+	.inner-accordion-titles span{display: inline;}
+	.powered-img{width: 100%;}
+	.booking-modal-logo img { width: 30%;}
+	.modal-50 {  max-width: 95%;}
+	.side-border-right {  border-right: 0; padding-right: 0;}
+	.membership-save { width: 30%;  margin-top: 19px;}
+	.mt-150 {  margin-top: 30px;}
+	.mmb-10{margin-bottom: 10px;}
+	.ticket-summery h4{padding: 15px 0;}
+	.cash-tend {  margin-left: 0px;}
+	.chat-leftsidebar {  height: calc(70vh - 70px - 60px - 8px) !important;}
+	.chat-conversation { height: calc(70vh - 275px) !important;}
+	.zfold-none{	display: none;  }
+	.sidebar-progress-bar{display: block;}
+	.com-sidepanel{top: 104px;}
+	#page-topbar { top: 104px;  }
+	.com-cancle{color: #000 !important;}
+}
+
+@media screen and (min-width: 560px) and (max-width: 699px){ 
+	.price-selection label{width: 96% !important;}
+	.btn-previous{padding: 5px 6px;}
+	.modal-content{margin-left: 15px; margin-right: 15px;}
+	.customer-modal-width{max-width: 98%;}
+	.small0width{width: 100%;}
+	.inner-accordion-titles span{display: inline;}
+	.powered-img{width: 100%;}
+	.booking-modal-logo img { width: 30%;}
+	.ticket-summery h4{padding: 15px 0;}
+	.schedulers-container{max-width: 615px;}
+	#calendar .fc-toolbar.fc-header-toolbar .fc-center { margin-top: 9px; }
+	#calendar .fc-toolbar.fc-header-toolbar .fc-right {align-items: center;  margin-top: 0px;}
+	#calendar .fc-toolbar.fc-header-toolbar .fc-right .fc-button-group{display: block !important;}
+	.fc .fc-toolbar .fc-center, .fc .fc-toolbar .fc-left {display: grid;}
+	div#pricediv{order: 3;}
+	div#imgdiv{order: 1;}
+	div#bookdiv{order: 2 !important;}
+	.width-100per{width: 100%;}
+	.check-cancel label{font-size: 12px;}
+	.width-105{width: 105px;}
+	.width-185{width: 185px;}
+	.select-staff-member{ margin-top: 15px;}
+	.free-trial-img img { margin-bottom: 0; margin-top: -85px !important;}
+	.mobile0view-flex{display: flex;}
+	.save-exit{margin-top: 0px;}
+	.sports-side-img img { width: 405px; float: none; margin-top: 15px; margin-bottom: 15px;}
+	.searchbox .btn{padding: 10px 10px;}
+	.searchbox .form-control.padding-lrtb { padding: 10px 0 10px;}
+	.searchbox .form-control.padding-lrtb-one {padding: 10px 0px 10px 0px;}
+	.searchbox {  padding: 10px 15px;}
+	.width-345 { max-width: 345px;}
+	.desktop-none-customer {display: block !important;  }
+	.navbar-menu{ z-index: 2000 !important;	overflow: scroll;  position: fixed; top: 0;}
+	.w-fold{width: 250px;}
+	.show-all {	margin-top: 0;  }
+	.show-all .join-btn{margin-top: 0; padding: 0px !important;}
+	.star-rest .activity-inner-data{padding: 0 0;}
+	.ipad-none{display: none;}
+	.photo-upload label {height: 155px !important; }
+}
+
+@media screen and (max-width: 699px){ 
+	#page-topbar{top: 102px;}
+	.mobile-none{display:none;}
+	.page-content { padding: calc(100px + 6.5rem) calc(1.5rem * .5) 60px calc(1.5rem * .5);}
+	.mb-15{ margin-bottom: 15px;}
+	.mb-55{margin-bottom: 55px;}
+	.service-nav{padding: 10px 5px;}
+	.dropBoximg{ min-width: 100% !important;}
+	.search-width { width: 100%;}
+	.setting-icon i { margin-right: 15px; margin-top: -17px;}
+	.setting-icon:hover > ul{right: 5px;}
+	.mmb-15{margin-bottom: 15px;}
+	.set-price { text-align: left; margin-bottom: 15px !important;}
+	.info-txt-price{margin-top: 0;}
+	.price-selection label { margin-right: 0px;  width: 91%;}
+	.equal-earn { margin-top: 0;}
+	.priceoptiondelete i{margin-right: 0;}
+	.checkbox-selection label{display: inline;}
+	.delete-recurring {margin-left: 0px;}
+	.set-num { text-align: left; margin-bottom: 10px;}
+	.set-num.after label {margin-top: 7px;}
+	.after-select { margin-top: 0px;}
+	.btn-red-primary{padding: 7px 8px;}
+	.modal-70 {  max-width: 100%;}
+	.addanother a{width: 100%; display: grid;}
+	.modal-80 {  max-width: 100%;}
+	.mmt-10{margin-top: 10px;}
+	.mmb-10{margin-bottom: 10px;}
+	.manage-txt {  margin-top: 0px !important;}
+	.priceoptionsettings .setting-icon i {margin-top: 0px;}
+	.overlay-activity-label{width: auto !important;}
+	.scheduled-activity-info{margin-top: 7px !important;}
+	.card-350-body{padding-left: 10px !important; padding-right: 10px !important;}
+	.manage-customer-search h4{margin-top: 20px; font-size: 23px;}
+	.scheduler-box{padding: 8px 10px;}
+	.btn-previous{width: 45%; display: inline-block;}
+	.weekly-customer{margin-right: 0 !important; margin-left: 0 !important; width: 100%;}
+	.age-cat{padding-left: 0 !important; width: 100%;}
+	.weekend-price{margin-right: 0 !important; margin-left: 0 !important; width: 100%;}
+	.re-discount{ margin-right: 0 !important; margin-left: 0 !important; width: 100%;}
+	.single-dash {margin-right: 0 !important; margin-left: 0 !important; width: 100%;}
+	.fit-fees {margin-right: 0 !important; margin-left: 0 !important; width: 100%;}
+	.single-equal{margin-right: 0 !important; margin-left: 0 !important; width: 100%;}
+	.estimated-earn{margin-right: 0 !important; margin-left: 0 !important; width: 100%;}
+	.cat-age label { color: #878a99 !important;  font-size: 13px !important; width: 100%;}
+	.booking-titles h3{margin-top: 15px;}
+	.photo-upload label{height: 285px;}
+	.manage-customer-from form input{width: 100%;}
+	.manage-customer-from form select{width: 100%;}
+	.signup-step-btn {  margin: 0 0px;}
+	#divstep1 form{padding: 0 15px;}
+	.heading-step{margin: 15px 0;}
+	#divstep3 form{padding: 0 15px;}
+	.sign-step_2, .sign-step_3, .sign-step_4, .sign-step_5{padding: 30px 0px;}
+	#divstep4 form{padding: 0 15px;}
+	#divstep5 form{padding: 0 15px;}
+	#divstep6 form{padding: 0 15px;}
+	.display-line {display: block;}  
+	.day_circle.timezone-round{margin: 20px 4px 10px 0px;}
+	.weekly-time-estimate label { margin-top: 15px;}
+	.custom-radio-btns span{text-align: left; margin-left: 30px;}
+	.custom-radio-btns input{top: 23px; margin-left: 0; width: 21px; height: 21px;}
+	.custom-radio-btns {display: grid;}
+	.width-50{max-width: 100%;}
+	.desh label {  margin-top: 0px;}
+	.equal label { margin-top: 0px;}
+	.service-create { margin-top: 12px;}
+	.font-13{font-size: 13px;}
+	.customer-modal-width { max-width: 100%;}
+	.mfloat-left{float: left !important;}
+	.modal-50 {  max-width: 100%;}
+	.modal-40 {  max-width: 100%;}
+	.side-border-right {  border-right: 0; padding-right: 0;}
+	.membership-save { width: 100%; margin-top: 20px;}
+	.mt-150 {  margin-top: 30px;}
+	.refund-date { width: 100%;}
+	.refund-amount input {  width: 100%;}
+	.refund-method select{width: 100%;}
+	.mmb-10{margin-bottom: 10px;}
+	.layout-rightside-col .layout-rightside{margin-right: -13px;}
+	.ticket-summery h4{padding: 15px 0;}
+	.cash-tend{margin-left: 0px;}
+	.changecalce label {  margin-left: 0px;}
+	.modal-dialog.counter-modal-size {  width: 96%;}
+	#calendar .fc-toolbar.fc-header-toolbar .fc-center { margin-top: 9px; }
+	#calendar .fc-toolbar.fc-header-toolbar .fc-right {align-items: center;  margin-top: 0px;}
+	#calendar .fc-toolbar.fc-header-toolbar .fc-right .fc-button-group{display: block !important;}
+	.fc .fc-toolbar .fc-center, .fc .fc-toolbar .fc-left {display: grid;}
+	#calendar .fc-basic-view .fc-body .fc-row {  min-height: 135px !important;}
+	.side-border-right-red {border-bottom: 1px solid red; margin-bottom: 15px; border-right: none;}
+	.nav-tabs-custom.card-header-tabs .nav-link { padding: 16px 8px;}
+	.desktop-add-client-none{display: block;}
+	.manage-customer-modal-title h3{display: none;}
+	.btn-grp button{padding: 12px 15px;}
+	div#pricediv{order: 2; text-align: right;}
+	div#imgdiv{order: 1;}
+	div#bookdiv{order: 3;}
+	.chat-leftsidebar {  height: calc(100vh - 70px - 60px - 8px) !important;}
+	.chat-conversation { height: calc(100vh - 275px) !important;}
+	.width-100per{width: 100%;}
+	.width-105{width: 105px;}
+	.width-185{width: 185px;}
+	.width-120{width: 120px;}
+	.multi-oops .setting-icon > ul{width: 150px !important;}
+	.free-trial-img img {  margin-bottom: 0;  margin-top: 45px;}
+	.free-trial-img{text-align: center;}
+	.free-trial-text{text-align: center;}
+	.mobile-none{display: none;}
+	#calendar .fc-left .fc-button-group .fc-prev-button, #calendar .fc-left .fc-button-group .fc-next-button{margin-bottom: 35px;}
+	.mmt-25{margin-top: 25px;}
+	.steps-titles{display: none;}
+	.steps-titles-about{display: none;}
+	.steps-titles-payout{display: none;}
+	.steps-titles-plan{display: none;}
+	.steps-titles-service{display: none;}
+	.progress-nav .progress {  top: 50%;}
+	.steps-free-trial-img img { margin-bottom: -45px; margin-top: 17px; }
+	.steps-free-trial-img{text-align: center;}
+	.save-exit{margin-top: 0px;}
+	.cre-service {  margin-right: 0;}
+	.sports-side-img img { width: 315px; float: none;}
+	.modal-60 {  max-width: 100%;}
+	.banner-img img{  height: 350px;}
+	.set-searchbox { margin-top: 35px; }
+	.searchbox { padding: 20px 20px;}
+	.searchbox .btn{border-radius: 10px;}
+	.home-black-section{max-height: 365px;}
+	.hpl-50 {padding-left: 12px;}
+	.mt--25 {  margin-top: 25px;} 
+	.providers-bg-image{padding: 15px 15px 15px 15px;}
+	.pro-background-overlay{width: 94%;}
+	.up-down-sp {padding: 20px 30px 20px 30px;}
+	.joinus-box{padding: 40px 30px 40px 30px;}
+	.classes-list{padding: 5px 0px;}
+	.links-set a{font-size: 14px;}
+	.setoflinkes{display: block;}
+	.width-345 { max-width: 100%;}
+	.desktop-none-customer {display: block !important;  }
+	.width-40 {	max-width: 100%; }
+	.navbar-menu{ z-index: 2000 !important;	overflow: scroll;  position: fixed; top: 0;}
+	.w-250 {width: 180px;  }
+	.space-set{width: 100% !important;}
+	.w-50px {width: 120px; }
+	.modal-belt{width: 50px;}
+	.home-banner-title{  padding: 150px 0 150px;}
+	.searchbox .form-control.padding-lrtb-one{  padding: 20px 0px 20px 0px; }
+	.searchbox .btn{padding: 15px 15px;}
+	.bg-cover{background-size: cover;}
+	.staff-pl-0 { padding-left: 12px;  }
+	.service-pr-0 {	padding-right: 10px; }
+	.show-all .table-inner-data-sec .p-name { width: 76% !important; } 
+	.fit-widget-container-banner label{font-size: 45px; line-height: 64px;}
+	.confirmed-slider .owl-nav .owl-prev{left: -15px; font-size: 20px; width: 20px; height: 20px; }
+	.confirmed-slider .owl-nav .owl-next{right: -15px; font-size: 20px; width: 20px; height: 20px;}
+	.wel-date-time {text-align: center; margin-top: 35px;}
+	.self-check-sp {padding: 82px 5px !important;  }
+	.qr-code{text-align: center;}
+	.card-check-in {padding: 170px 10px;}
+	.fall-schedule {padding-right: 10px; padding-left: 10px;  }
+	.self-welcome-logo{ text-align: center;}
+	.welcome-title label {font-size: 45px; }
+	.welcome-title span { font-size: 45px; line-height: 55px;}  
+	.com-sidepanel{top: 103px;}
+	.com-cancle{color: #000 !important;}
+	.sidebar-progress-bar{	display: block;	  }
+	.notification-close{right: 35px;}
+	#signatureCanvas{width: 100%;}
+	.accordion-body{ padding: 6px;}
+	.mcard-body-sp{padding: 15px 5px;}
+	.mp-5{padding: 5px;}
+	.mp-6{padding: 6px;}
+	.customer-details-img{display: block; margin-left: auto; margin-right: auto; width: 50%; }
+	.m-customer-detials{text-align: center;}
+	.m-d-grid{display: grid;}
+	.blog-sidepanel{top: 104px;}
+	.side-footer-set{bottom: 80px;}
+	.mb-165 { margin-bottom: 275px;	}
+	.suggested-set{bottom: 180px;}
+	.create-customer-box{padding: 15px 10px;}
+	#dropzone-preview li div .pt-1{word-wrap: anywhere;} 
+	.personal-sidebar .simplebar-mask{position: absolute; top: 0px;}
+	#sidebar-wrapper{left: 250px; top: 173px; height: 13%;}
+	.clinet-page-content{padding: calc(78px + 6.5rem) calc(1.5rem * .5) 60px calc(1.5rem * .5);}
+	#client_wrapper.toggled #page-content-wrapper {	position: relative;	margin-right: -250px;	  }
+	#page-content-wrapper{position: relative; padding: 0;}
+	#sidebar-wrapper{overflow-y: scroll;}
+	#client_wrapper.toggled #sidebar-wrapper {	width: 195px;  }
+	#client_wrapper.toggled {padding-left: 190px; }
+	.navbar-nav.sidebar-nav .nav-link i{display: none;}
+	.sidebar-nav{position: relative; width: 100%;}
+	.customer-list-table td{text-align: left;}
+	.engage-client-img img{width: 100%;}
+	.tab-right-border {	border-bottom: 1px solid #f3f3f9; 	border-right: none;  }
+	.finish-modal-80 {	max-width: 100%;  }
+	.mb-mv-25{padding: 25px; padding-bottom: 70px;}
+	.mr-5{margin-right: 5px;}
+	.pairets{padding: 10px 7px;}
+}
+
+
+
+@media screen and (min-width: 351px) and (max-width: 370px){
+	.btn-previous {  width: 100% !important;  display: inline-block !important;}
+	.btn-grp button {padding: 15px 11px;}
+	header .header-right .header-bottom-sp{margin-bottom: 6px;}
+	table.dataTable.nowrap th, table.dataTable.nowrap td{white-space: unset !important;}
+	.ph-provider {  margin-right: 0;}
+	.space-set{width: 100% !important;}
+	.w-50px {width: 100px; }
+	.powerby img{  width: 225px;}
+	.show-all .table-inner-data-sec .p-name { width: 68% !important; }
+	
+}
+
+@media screen and (min-width: 280px) and (max-width: 350px){
+	.price-selection label{width: 82%; line-height: 16px;}
+	.add-category-btn{font-size: 13px; padding: 7px 8px; line-height: 27px;}
+	.card-350-body{padding-left: 7px !important; padding-right: 7px !important;}
+	.btn-previous {  width: 100% !important;  display: inline-block !important;}
+	.ph-provider {  margin-right: 0;}
+} 
+
+@media screen and (max-width: 280px){
+	.flip-view{display: block !important; }
+	#page-topbar {  top: 194px;}
+	.dropBoximg{ min-width: 100% !important;}
+	.search-width { width: 100%;}
+	.setting-icon i { margin-right: 0px; margin-top: -15px;}
+	.setting-icon:hover > ul{right: 5px;}
+	.mmb-15{margin-bottom: 15px;}
+	.set-price { text-align: left; margin-bottom: 15px !important;}
+	.price-selection label {margin-right: 0px; width: 82%;}
+	.modal-80 {  max-width: 100%;}
+	.add-category-btn{padding: 6px 9px; line-height: 31px; font-size: 13px;}
+	.card-350-body{padding-left: 3px; padding-right: 3px;}
+	.ph-provider {  margin-right: 0;}
+}
+
+@media screen and (min-width: 625px) and (max-width: 675px){
+	.price-selection label {
+	  margin-right: 0px;
+	  width: 94%;
+	}
+}
