@@ -65,10 +65,7 @@ class SelfCheckInController extends Controller {
 	        ]);
 	    }else{
 	    	$business = Auth::user()->current_company;
-            // \DB::enableQueryLog(); // Enable query log
 	    	$customer = $user->customers()->where('business_id',$business->id)->first();
-            // dd(\DB::getQueryLog()); // Show results of log
-            // dd($business);
             if($customer){
                 session()->put('self_checkin_customer_id', $customer->id);
         		return response()->json([
@@ -275,7 +272,6 @@ class SelfCheckInController extends Controller {
     
     public function checkInStaff(Request $request)   
     {
-        // dd('33');
         $user = Auth::user();
         $company = $user->current_company;
         // dd($company->id);
@@ -778,20 +774,46 @@ class SelfCheckInController extends Controller {
         $customer = Customer::find(session()->get('self_checkin_customer_id'));
         $user = $customer->user()->where('unique_code', $request->code)->first();
        
-        if (!$user) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid 4 digit code. Please try again.', 
-            ]);
-        }else{
+        // if (!$user) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'Invalid 4 digit code. Please try again.', 
+        //     ]);
+        // }else{
+        //     return response()->json([
+        //         'success' => true,
+        //         'message' => 'Check out successful!',
+        //         // 'url' => route('checkin.check_out', ['type' => 1]),
+        //         'url' => route('check-in-welcome'),
+        //     ]);
+            
+        // }
+
+        if ($user) {
             return response()->json([
                 'success' => true,
-                'message' => 'Check out successful!',
-                // 'url' => route('checkin.check_out', ['type' => 1]),
+                'message' => 'Check out successfuls!',
                 'url' => route('check-in-welcome'),
+                // 'url' => route('checkin.check_out', ['type' => 1]),
             ]);
-            
-        }
+        }        
+        $user = Auth::user();
+        $company = $user->current_company;
+
+        $businessStaff = BusinessStaff::where('unique_code', $request->code)->where('business_id',$company->id)->first();
+        // $businessStaff = BusinessStaff::where('unique_code', $request->code)->first();
+        // dd($businessStaff);
+        if ($businessStaff) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Check out successful!.',
+                'url' => route('business_dashboard'),
+            ]);
+        }    
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid 4 digit code. Please try again.',
+        ]);
 
             
     }
@@ -835,7 +857,45 @@ class SelfCheckInController extends Controller {
                 'url' => route('checkin.check_out', ['type' => 1]),
             ]);
         }        
-        $businessStaff = BusinessStaff::where('unique_code', $request->code)->first();
+        $user = Auth::user();
+        $company = $user->current_company;
+
+        $businessStaff = BusinessStaff::where('unique_code', $request->code)->where('business_id',$company->id)->first();
+        // $businessStaff = BusinessStaff::where('unique_code', $request->code)->first();
+        if ($businessStaff) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Check out successful!.',
+                'url' => route('business_dashboard'),
+            ]);
+        }    
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid 4 digit code. Please try again.',
+        ]);
+        // ends
+            
+    }
+    // my function starts
+    
+    public function chkChekouStaffExit(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'code' => 'required', 
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(), 
+
+            ]);
+        }
+
+        $user = Auth::user();
+        $company = $user->current_company;
+
+        $businessStaff = BusinessStaff::where('unique_code', $request->code)->where('business_id',$company->id)->first();
         if ($businessStaff) {
             return response()->json([
                 'success' => true,
@@ -847,9 +907,9 @@ class SelfCheckInController extends Controller {
             'success' => false,
             'message' => 'Invalid 4 digit code. Please try again.',
         ]);
-        // ends
-            
     }
+
+    // ends
     public function memberhsipPay(Request $request){
         $loggedinUser = Customer::find($request->customer_id);
 

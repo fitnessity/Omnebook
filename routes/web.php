@@ -308,7 +308,7 @@ Route::post('/get-membership-payment', 'SelfCheckInController@getMembershipPayme
 Route::post('/memberhsip-pay', 'SelfCheckInController@memberhsipPay')->name('checkin.memberhsipPay');
 Route::post('/chk-chckin-code', 'SelfCheckInController@chkCheckinCode')->name('checkin.chk-chckin-code');
 Route::post('/chk-chckin-code_exit', 'SelfCheckInController@chkCheckinCodeExit')->name('checkin.chk-chckin-code_exit');
-
+Route::post('/chk-chckin-code_staffexit', 'SelfCheckInController@chkChekouStaffExit')->name('checkin.chk-chckin-code_staffexit');
 // chkCheckinCodeExit
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
     Route::resource('orders', 'OrderController')->only(['index','show']);

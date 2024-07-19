@@ -98,7 +98,7 @@
                                             <div class="row mb-3">
                                                 <div class="col-12">
                                                     <div class="page-heading">
-                                                        <label>Add A New Client Manually -Or- Onboard A New Client Fast</label>
+                                                        <label>Register A New Account or Search for Your Account</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -106,7 +106,7 @@
                                                 <div class="col-xxl-12">
                                                     <ul class="nav nav-tabs mb-3" role="tablist">
                                                         <li class="nav-item">
-                                                            <a class="nav-link active" data-bs-toggle="tab" href="#add" role="tab" aria-selected="false"> Manually Add Client </a>
+                                                            <a class="nav-link active" data-bs-toggle="tab" href="#add" role="tab" aria-selected="false"> Create Account </a>
                                                         </li>
                                                         <li class="nav-item">
                                                             <a class="nav-link" data-bs-toggle="tab" href="#search" role="tab" aria-selected="false">Search OmneBook</a>
@@ -618,14 +618,14 @@
                                                        
                                                         </div>
                                                         <div class="tab-pane" id="search" role="tabpanel">
-                                                            <div class="text-center font-black">
-                                                                <h3 >Onboard A New Client Fast</h3>
-                                                                <h4>Search for your clients on OmneBook</h4>
-                                                                <p>“Your client could already have an account on OmneBook.<br>If so, get access and sync their information fast.”</p>
+                                                            <div class="text-center font-black mt-20 mb-20">
+                                                                <h3 class="mb-10">Already have an account on OmneBook?</h3>
+                                                                <h4>Search for your name and get access and sync your information fast.</h4>
+                                                                <!-- <p>“Your client could already have an account on OmneBook.<br>If so, get access and sync their information fast.”</p> -->
                                                             </div>
                                                             <div class="row check-txt-center claimyour-business">
                                                                 <div class="col-md-10 col-xs-10 col-8 frm-claim">
-                                                                    <input id="clients_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Search by typing your clients name" autocomplete="off" data-customer-id="">
+                                                                    <input id="clients_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Search for your name" autocomplete="off" data-customer-id="">
                                                                     
                                                                     <div class="request-access" style="display:none">
                                                                     </div>
