@@ -154,8 +154,12 @@
             $qty = explode(',', $qtys);
             foreach ($ids as $key => $id) {
                 $aOService = AddOnService::find($id);
-                $price =  $aOService->service_price * $qty[$key];
-                $text .= $qty[$key].' x '.$aOService->service_name.' = $'. $price.'<br>';
+                if ($aOService) {
+                    $price = $aOService->service_price * $qty[$key];
+                    $text .= $qty[$key] . ' x ' . $aOService->service_name . ' = $' . $price . '<br>';
+                } 
+                // $price =  $aOService->service_price * $qty[$key];
+                // $text .= $qty[$key].' x '.$aOService->service_name.' = $'. $price.'<br>';
             }
         }else{
             $text = "N/A";

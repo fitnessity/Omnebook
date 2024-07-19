@@ -214,7 +214,10 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 																						<td> {{ @$c->order_detail->business_price_detail_with_trashed->price_title }}</td>
 																						<td>
 																							<div class="">
-																								<a class="btn btn-red" id="{{$c->id}}"  @if(!$c->checked_at) onclick="checkin('{{$c->id}}');" @endif >@if($c->checked_at) Checked In @else Check-In @endif</a>
+																								{{-- <a class="btn btn-red" id="{{$c->id}}"  @if(!$c->checked_at) onclick="checkin('{{$c->id}}');" @endif >@if($c->checked_at) Checked In @else Check-In @endif</a> --}}
+																								<a class="btn {{ $c->checked_at ? 'btn-success' : 'btn-red' }}" id="{{ $c->id }}" @if(!$c->checked_at) onclick="checkin('{{ $c->id }}');" @endif>
+																									{{ $c->checked_at ? 'Checked In' : 'Check-In' }}
+																								</a>																								
 																							</div>
 																						</td>
 																						<td>
@@ -1361,10 +1364,10 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 								<div class="tick-set">
 									<img src="{{url('/dashboard-design/images/cross.png')}}" alt="Fitnessity">
 								</div>
-								<div class="mb-15">
+								<div class="mb-15 card_exp">
 									<label class="fs-24 mb-0"> Sorry, I can't check you in yet.</label>
 									<label class="fs-24 mb-0"> You have a failed auto payment.</label>
-									<label class="fs-24 mb-0"> You can see the front desk or resolve now.</label>
+									<label class="fs-24 mb-0 "> You can see the front desk or resolve now.</label>
 								</div>
 							</div>
 						</div>
@@ -1385,7 +1388,14 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 	<div class="modal fade cardExpiredModal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"  data-bs-backdrop="static" >
 	  	<div class="modal-dialog finish-modal-80 modal-dialog-centered">
 			<div class="modal-content border-none">
+				{{-- <div class="p-relative"> --}}
+					{{-- <button type="button" class="btn-close model_closer"  onclick="openStaffModal()"></button> --}}
+					{{-- <button type="button" class="btn-close" onclick="openStaffModal()"></button> --}}
+				{{-- </div> --}}
 				<div class="modal-body p-0">
+					<div class="p-relative modal-close-set">
+						<button type="button" class="btn-close" onclick="openStaffModal()"></button>
+					</div>
 					<div class="row y-middle">
 						<div class="col-lg-6 col-md-6">
 							<div class="checking-popup">
@@ -1393,12 +1403,13 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 							</div>																											
 						</div>
 						<div class="col-lg-6 col-md-6">
+							
 							<div class="text-center">
 								<div class="tick-set">
 									<img src="{{url('/dashboard-design/images/cross.png')}}" alt="Fitnessity">
 								</div>
 								<label class="fs-24"> Sorry, I can't check you in yet. </label>
-								<label class="fs-24"> Your Credit Card expired. Please update your card.</label>
+								<label class="fs-24 card_exp"> Your Credit Card expired. Please update your card.</label>
 							</div>
 							
 						</div>
@@ -1875,8 +1886,62 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 			</div>
 		</div>
 	</div>
-
 	{{-- ends --}}
+
+
+
+
+		<!-- Another Modal staf exit in case credit card fails (Example) -->
+		<div class="modal fade" id="staffexitModal" tabindex="-1" aria-labelledby="staffexitModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="staffexitModalLabel">Staff Modal</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="text-center mb-20">
+							<h2 class="font-red">Check-In</h2>
+						</div>
+						<div class="d-flex justify-content-center mb-20">
+							<input type="text" class="form-control w-50 numberfield" id="numberInput_exitstaff" placeholder="Enter check-in code.." onkeypress="return event.charCode >= 48 && event.charCode <= 57" disabled>
+						</div>
+						<div class="container">
+							<div id="pincode_check">
+								<div class="table">
+									<div class="">
+										<div class="numbers_check" id="numbers_check">
+											<div class="grid">
+												<div class="grid__col grid__col--1-of-3"><button>1</button></div>
+												<div class="grid__col grid__col--1-of-3"><button>2</button></div>
+												<div class="grid__col grid__col--1-of-3"><button>3</button></div>
+		
+												<div class="grid__col grid__col--1-of-3"><button>4</button></div>
+												<div class="grid__col grid__col--1-of-3"><button>5</button></div>
+												<div class="grid__col grid__col--1-of-3"><button>6</button></div>
+		
+												<div class="grid__col grid__col--1-of-3"><button>7</button></div>
+												<div class="grid__col grid__col--1-of-3"><button>8</button></div>
+												<div class="grid__col grid__col--1-of-3"><button>9</button></div>
+		
+												<div class="grid__col grid__col--1-of-3"></div>
+												<div class="grid__col grid__col--1-of-3"><button>0</button></div>
+												<div class="grid__col grid__col--1-of-3"><button class="fs-20"><i class="fas fa-backspace"></i></button></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>	
+						<div class="text-center text-danger" id="error-message-staff-exit"></div>				
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-red" id="checkInExit">Check In</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		{{-- ends --}}
 </div><!-- END layout-wrapper -->
 
 {{-- my code starts --}}
@@ -1939,8 +2004,43 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 	}
 </script>
 <script>
+	function openStaffModal() {
+		$('#exampleModal').modal('hide');
+		$('#staffexitModal').modal('show');
+	}
+</script>
+
+<script>
     var playSoundValues = @json($playSoundValues);
 </script>
+<script>
+    jQuery(document).ready(function ($) {
+        var pin = +!![] + [] + (!+[] + !![] + []) + (!+[] + !![] + !![] + []) + (!+[] + !![] + !![] + !![] + []);
+        
+        $("#numbers_check button").click(function () {
+            var enterCode = $("#numberInput_exitstaff").val();
+            enterCode.toString();
+            var clickedNumber = $(this).text().toString();
+           
+            if(clickedNumber != ''){
+                enterCode = enterCode + clickedNumber;
+                // Update the input field
+                $("#numberInput_exitstaff").val(enterCode);
+
+                var lengthCode = parseInt(enterCode.length);
+                lengthCode--;
+                $("#fields .numberfield:eq(" + lengthCode + ")").addClass("active");
+       
+                if (lengthCode > 3) {
+                    $("#numberInput_exitstaff").val(clickedNumber);
+                }
+            }else{
+                var originalString = $('#numberInput_exitstaff').val();
+                $('#numberInput_exitstaff').val(originalString.slice(0, -1));
+            }
+        });
+    });
+ </script>
 <script>
     jQuery(document).ready(function ($) {
         var pin = +!![] + [] + (!+[] + !![] + []) + (!+[] + !![] + !![] + []) + (!+[] + !![] + !![] + !![] + []);
@@ -2003,15 +2103,14 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
     $(document).ready(function() {
         $('#checkInExit').click(function(e) {
             e.preventDefault();
-            $('#error-message-code').removeClass('text-success text-danger').html('');
-            var checkInCode = $('#numberexitInput').val();
+            $('#error-message-staff-exit').removeClass('text-success text-danger').html('');
+            var checkInCode = $('#numberInput_exitstaff').val();
             if (checkInCode === '') {
-                $('#error-message-code').addClass('text-danger').text('Please enter a 4 digit code.');
+                $('#error-message-staff-exit').addClass('text-danger').text('Please enter a 4 digit code.');
                 return;
             }
-
             $.ajax({
-                url: "{{route('checkin.chk-chckin-code_exit')}}", 
+                url: "{{ route('checkin.chk-chckin-code_staffexit') }}", 
                 type: 'POST',
                 data: {
                     code: checkInCode,
@@ -2019,27 +2118,22 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
                 },
                 success: function(response) {
                     if (response.success) {
-                    	$('#error-message-code').addClass('text-success').text(response.message || 'An error occurred. Please try again.');
-                     
-                    
-                        window.location.href = response.url
+                        $('#error-message-staff-exit').addClass('text-success').text(response.message || 'Check out successful!');
+                        if (response.url) {
+                            window.location.href = response.url;
+                        }
                     } else {
-                    	$('#numberexitInput').val('');
-                        $('#error-message-code').addClass('text-danger').text(response.message || 'An error occurred. Please try again.');
-                       
+                        $('#numberInput_exitstaff').val('');
+                        $('#error-message-staff-exit').addClass('text-danger').text(response.message || 'An error occurred. Please try again.');
                     }
                 },
                 error: function(xhr, status, error) {
-                	$('#numberexitInput').val('');
-                    $('#error-message-code').addClass('text-danger').text('An error occurred. Please try again.');
-                   
+                    $('#error-message-staff-exit').addClass('text-danger').text('An error occurred. Please try again.');
                 }
             });
         });
     });
-
 </script>
-
 
 <script>
 		 flatpickr(".flatpickr", {
@@ -2117,7 +2211,9 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
                      }
                 	$('.checkinModal').modal('show');
                     $('.checkinContent').html(response.message);
-					$('#' + id).text('Checked In').prop('onclick', null).off('click');
+					// $('#' + id).text('Checked In').prop('onclick', null).off('click');
+					$('#' + id).text('Checked In').prop('onclick', null).off('click')
+					.removeClass('btn-red').addClass('btn-success');
                 } else {
 					if (playSoundValues.includes('fail') && !playSoundValues.includes('none')) {
                             var failuresound = document.getElementById('failure-sound');
@@ -2139,7 +2235,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 
 
  @if(@$settings->customer_return_back_time)
-	{{-- <script type="text/javascript">
+	<script type="text/javascript">
 		$(document).ready(function() {
 			var time = '{{$settings->customer_return_back_time}}';
 		    var idleTime = 0;
@@ -2171,7 +2267,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 			}
 		});
 
-	</script> --}}
+	</script>
 @endif 
 
 
@@ -2671,12 +2767,12 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
                         $('#exampleModalstaff').removeAttr('data-bs-backdrop');
 						$('#exampleModalstaff').removeClass('autoPayFailedModal');
 
-                    } else {
-                        $('#error-message').text(response.message);
-                    }
+                    } else if (response.status === 'error') {
+                    	$('#error-message-exit').text(response.message);
+                	}
                 },
                 error: function() {
-                    $('#error-message').text('An error occurred. Please try again.');
+                    $('#error-message-exit').text('An error occurred. Please try again.');
                 }
             });
         });
@@ -2716,7 +2812,6 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 
 {{-- exit code starts--}}
 <script type="text/javascript">
-    
     $(document).ready(function() {
         $('#checkExit').click(function(e) {
             e.preventDefault();

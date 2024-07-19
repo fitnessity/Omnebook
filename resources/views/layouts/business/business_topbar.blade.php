@@ -12,8 +12,8 @@
     <!-- Layout config Js-->
     <script src="{{asset('/public/dashboard-design/js/layout.js')}}"></script>
     <!-- Bootstrap Css 
-    <link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('/public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" /> -->
+    <link href="{{asset('public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" /> -->
 	
     <!-- Style Css-->
     <!-- <link href="{{asset('/public/dashboard-design/css/style.css')}}" rel="stylesheet" type="text/css" /> -->

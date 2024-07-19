@@ -32,11 +32,11 @@ $total_quantity = 0;
         <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'> -->
 
 		<!-- Bootstrap Css -->
-		<link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    	<link href="{{asset('/public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" />
+		<link href="{{asset('public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    	<link href="{{asset('public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" />
 
 		 <!-- Style Css-->
-		 <link href="{{asset('/public/dashboard-design/css/style.css')}}" rel="stylesheet" type="text/css" />
+		 <link href="{{asset('public/dashboard-design/css/style.css')}}" rel="stylesheet" type="text/css" />
 	
 		<!-- Custom Css-->
 		<link href="{{asset('/public/dashboard-design/css/custom.css')}}" rel="stylesheet" type="text/css" />

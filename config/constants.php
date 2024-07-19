@@ -2,7 +2,8 @@
 
 return [
 
-    'URL' => 'http://development.fitnessity.co/',
+    // 'URL' => 'http://development.fitnessity.co/',
+    'URL' => 'https://d2bgo0bc1t29nh.cloudfront.net/',
 
     // 'URL' => 'http://'.$_SERVER["HTTP_HOST"],
 
@@ -18,14 +19,14 @@ return [
      
 
 
-    'FRONT_IMAGE' => config('constants.URL').'/public/images/',
+    'FRONT_IMAGE' => config('constants.URL').'public/images/',
 
-    'FRONT_JS'    => config('constants.URL').'/public/js/',
+    'FRONT_JS'    => config('constants.URL').'public/js/',
 
-    'FRONT_CSS'	  => config('constants.URL').'/public/css/',
+    'FRONT_CSS'	  => config('constants.URL').'public/css/',
 	
-	'FRONT_NEW_CSS'	  => config('constants.URL').'/public/css/front/',
-	'FRONT_NEW_JS'    => config('constants.URL').'/public/js/front/',
+	'FRONT_NEW_CSS'	  => config('constants.URL').'public/css/front/',
+	'FRONT_NEW_JS'    => config('constants.URL').'public/js/front/',
 
     
 

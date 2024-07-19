@@ -378,7 +378,7 @@
 	<script src="{{asset('/public/dashboard-design/js/datatable/buttons.print.min.js')}}"></script>
     <script src="{{asset('/public/dashboard-design/js/datatable/buttons.html5.min.js')}}"></script>
 	<script src="{{asset('/public/dashboard-design/js/datatable/vfs_fonts.js')}}"></script>
-	<script src="{{asset('/public/dashboard-design/js/datatable/pdfmake.min.js')}}"></script>
+	<script src="{{asset('public/dashboard-design/js/datatable/pdfmake.min.js')}}"></script>
 	<script src="{{asset('/public/dashboard-design/js/datatable/jszip.min.js')}}"></script>    
 
     <!-- <script src="assets/js/pages/datatables.init.js"></script> -->
