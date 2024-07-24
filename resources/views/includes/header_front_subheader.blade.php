@@ -444,7 +444,7 @@ function put(r){
               },
               complete: function () {
                  $('.loader').hide();
-                 $.getScript("<?php echo Config::get('constants.FRONT_JS'); ?>ajax_request.js");
+                 $.getScript("{{url('/public/js/ajax_request.js')}}");
               },
               success: function (response) { 
                 $('#CreateCompanyModal').html(response);

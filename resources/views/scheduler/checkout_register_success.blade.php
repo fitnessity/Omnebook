@@ -1,10 +1,10 @@
 @extends('layouts.header')
 @section('content')
 @include('layouts.userHeader')
-<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
-<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/w3.css">
+<link rel="stylesheet" href="{{url('public/css/compare/style.css')}}">
+<link rel="stylesheet" href="{{url('public/css/compare/w3.css')}}">
 <style>.payment-section{margin-top:-200px}</style>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
+<script src="{{url('public/css/compare/Compare.js')}}"></script>
 <script src="{{ url('public/js/owl.carousel.js') }}"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
 <div class="payment-section">

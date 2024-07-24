@@ -1,4 +1,4 @@
-    <script src="<?php echo Config::get('constants.FRONT_JS'); ?>ratings.js"></script>
+    <script src="{{url('/public/ratings.js')}}"></script>
 
     <!-- Modal content-->
 

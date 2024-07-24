@@ -2,10 +2,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" />
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
-<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>stylenew.css">
+<link rel="stylesheet" href="{{url('/public/css/all.css')}}">
+<link rel="stylesheet" href="{{url('/public/css/stylenew.css')}}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" type='text/css' href="/public/css/servicesmodal.css">
+<link rel="stylesheet" type='text/css' href="{{url('/public/css/servicesmodal.css')}}">
 
 <style>
     #shopping-cart {margin: 40px;}
@@ -1676,18 +1676,18 @@ use App\Review;
 
     @include('layouts.footer')
 
-    <script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.1.11.1.min.js"></script>
+    <script src="{{url('/public/js/jquery.1.11.1.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="/public/js/owl.js"></script>
+    <script src="{{url('/public/js/owl.js')}}"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script type="text/javascript">
         $(document).on('click', '.reviewbtn', function () {
             //alert("hii");
         });
     </script>
-    <script src="<?php echo Config::get('constants.FRONT_JS'); ?>ratings.js"></script>
+    <script src="{{url('/public/js/ratings.js')}}"></script>
 
     <script>
         $(document).ready(function () {

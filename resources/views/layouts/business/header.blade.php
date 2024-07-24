@@ -32,38 +32,36 @@ $total_quantity = 0;
         <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'> -->
 
 		<!-- Bootstrap Css -->
-		<link href="{{asset('public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    	<link href="{{asset('public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" />
+		<link href="{{ url('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    	<link href="{{ url('/public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" />
 
 		 <!-- Style Css-->
-		 <link href="{{asset('public/dashboard-design/css/style.css')}}" rel="stylesheet" type="text/css" />
-	
+		 <link href="{{ url('/public/dashboard-design/css/style.css')}}" rel="stylesheet" type="text/css" />
+
 		<!-- Custom Css-->
-		<link href="{{asset('/public/dashboard-design/css/custom.css')}}" rel="stylesheet" type="text/css" />
+		<link href="{{ url('/public/dashboard-design/css/custom.css')}}" rel="stylesheet" type="text/css" />
 
-        <link rel='stylesheet' type='text/css' href="{{asset('public/css/font_family.css')}}">
-        <link rel='stylesheet' type='text/css' href="{{asset('public/css/font_family_roboto.css')}}">
-
+        <link rel='stylesheet' type='text/css' href="{{ url('/public/css/font_family.css')}}">
+        <link rel='stylesheet' type='text/css' href="{{ url('/public/css/font_family_roboto.css')}}">
 		<!-- fullcalendar css >-->
-		<link rel="stylesheet" type="text/css" href="{{ url('public/css/metismenu.min.css') }}">
-		<link rel="stylesheet" type="text/css" href="{{ url('public/css/fullcalendar/fullcalendar.min.css') }}"> 
-		<link href="{{asset('/public/dashboard-design/css/glightbox.min.css')}}" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="{{ url('/public/css/metismenu.min.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{ url('/public/css/fullcalendar/fullcalendar.min.css')}}"> 
+		<link href="{{url('/public/dashboard-design/css/glightbox.min.css')}}" rel="stylesheet" type="text/css" />
 		<!-- icon -->
-		<link href="{{asset('/public/dashboard-design/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
+		<link href="{{ url('/public/dashboard-design/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
 
-		<link href="{{asset('/public/css/slimselect.min.css')}}" rel="stylesheet" type="text/css" />
-		<link href="{{asset('/public/js/select/select.css')}}" rel="stylesheet" type="text/css" />
-		<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>
+		<link href="{{ url('/public/css/slimselect.min.css')}}" rel="stylesheet" type="text/css" />
+		<link href="{{ url('/public/css/select.css')}}" rel="stylesheet" type="text/css" />
+		<script src="{{ url('/public/dashboard-design/js/plugins.js')}}"></script>
 
-      <!--   <link rel='stylesheet' type='text/css' href="<?php //echo Config::get('constants.FRONT_CSS'); ?>font-awesome.css">  -->
-        <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
-        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>owl.css">
+        <link rel="stylesheet" type="text/css" href="{{url('/public/css/all.css')}}">
+        <link rel='stylesheet' type='text/css' href="{{url('/public/css/owl.css')}}">
 	
-        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap-select.min.css">
-		<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/header-footer.css">
+        <link rel='stylesheet' type='text/css' href="{{url('/public/css/bootstrap-select.min.css')}}">
+		<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/header-footer.css')}}">
         
-        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
-		<link rel="stylesheet" href="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+        <link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
+		<!-- <link rel="stylesheet" href="{{url('/public/css/AdminLTE/plugins/datatables/dataTables.bootstrap.css')}}"> -->
 		<!--datatable css-->
 		<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
 		<!--datatable responsive css-->
@@ -71,12 +69,14 @@ $total_quantity = 0;
 		<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
 		
 		<!-- font glyphicon -->
-		<link href="{{asset('/public/css/glyphicon.css')}}" rel="stylesheet" type="text/css" />
+		<link href="{{url('/public/css/glyphicon.css')}}" rel="stylesheet" type="text/css" />
 
         <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
-        <script src="{{env('APP_URL')}}/public/dashboard-design/js/jquery-3.6.4.min.js"></script>
-        <script src="{{asset('/public/js/slimselect.min.js')}}"></script>
+        <!-- <script src="https://d2bgo0bc1t29nh.cloudfront.net/public/dashboard-design/js/jquery-3.6.4.min.js"></script>
+        <script src="https://d2bgo0bc1t29nh.cloudfront.net/public/js/slimselect.min.js"></script> -->
 		<!-- <script src="{{env('APP_URL')}}/public/js/ratings.js"></script> -->
+		<script src="{{url('/public/dashboard-design/js/jquery-3.6.4.min.js')}}"></script>
+        <script src="{{url('/public/js/slimselect.min.js')}}"></script>
 	
   		<!-- <script type="text/javascript"
         src="https://maps.google.com/maps/api/js?key={{ env('AUTO_COMPLETE_ADDRESS_GOOGLE_KEY') }}" ></script> -->
@@ -322,7 +322,7 @@ $total_quantity = 0;
 						<div class="menu_nav">
                 
 						<div class="logo-header">
-						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo1_black.png') }}"> </a>
+						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="https://d2bgo0bc1t29nh.cloudfront.net/public/images/fitnessity_logo1_black.png"> </a>
 						</div>
 					
 						<div class="top-area">
@@ -353,7 +353,7 @@ $total_quantity = 0;
 									} 
 									$total_quantity = count($newcart["cart_item"]);?>
 							<a class="btn-cart" href="{{route('carts_index')}}">
-								<img src="{{ asset('/public/images/shoping-cart-header-black.png') }}" alt="cart"><span id="cart-item">
+								<img src="https://d2bgo0bc1t29nh.cloudfront.net/public/images/shoping-cart-header-black.png" alt="cart"><span id="cart-item">
 									 {{$total_quantity}}</span>
                             </a>
 							</div>
@@ -692,8 +692,10 @@ function closeNav() {
 
 </script>
 
-<link href='{{asset("/public/css/frontend/jquery-ui.css")}}'  rel='stylesheet'>
-<script src='{{asset("/public/dashboard-design/js/jquery-ui.min.js")}}'></script>
+<!-- <link href='https://d2bgo0bc1t29nh.cloudfront.net/public/css/frontend/jquery-ui.css'  rel='stylesheet'>
+<script src='https://d2bgo0bc1t29nh.cloudfront.net/public/dashboard-design/js/jquery-ui.min.js'></script> -->
+<link href="{{url('public/css/frontend/jquery-ui.css')}}"  rel='stylesheet'>
+<script src="{{url('public/dashboard-design/js/jquery-ui.min.js')}}"></script>
 <script type="text/javascript">
 $(document).ready(function () { 
 	$( ".birthdate" ).datepicker();

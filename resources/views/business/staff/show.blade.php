@@ -37,7 +37,7 @@
 													<div class="text-center">
 														<div class="profile-user position-relative d-inline-block mx-auto  mb-4">
 															@if($staffMember->profile_pic != '')
-																<img src="{{Storage::Url($staffMember->profile_pic)}}" alt="" class="rounded-circle avatar-xl img-thumbnail user-profile-image shadow">
+																<img src="{{Storage::Url($staffMember->profile_pic)}}" alt="fitnessity" class="rounded-circle avatar-xl img-thumbnail user-profile-image shadow" loading="lazy">
 															@else
 																<div class="avatar-xl">
 																	<span class="mini-stat-icon avatar-title msmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$staffMember->first_name[0]}}</span>
@@ -153,7 +153,7 @@
 												<div class="col-lg-2 col-md-3 col-sm-3">
 													<div class="avatar-lg">
 														@if($staffMember->profile_pic != '')
-															<img src="{{Storage::Url($staffMember->profile_pic)}}" alt="" class="rounded-circle avatar-lg img-thumbnail user-profile-image  shadow">
+															<img src="{{Storage::Url($staffMember->profile_pic)}}" alt="fitnessity" class="rounded-circle avatar-lg img-thumbnail user-profile-image  shadow" loading="lazy">
 														@else
 															<span class="mini-stat-icon avatar-title msmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$staffMember->first_name[0]}}</span>
 														@endif
@@ -507,6 +507,7 @@
 </div><!-- END layout-wrapper -->
 
  @include('layouts.business.footer')
+ @include('layouts.business.scripts')
     <script type="text/javascript">
     	flatpickr('.flatpickr-input',{
     		dateFormat: "m/d/Y",

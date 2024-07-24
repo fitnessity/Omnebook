@@ -1,9 +1,8 @@
 @extends('layouts.business.header')
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 @section('content')
-<head>
-    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
-    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>css/responsive.css">
-</head>
+
 
   <section class="inner-banner pmt-105" style="background-image:url('/public/uploads/cms/{{ $banner_image }}')">
       <div class="container">

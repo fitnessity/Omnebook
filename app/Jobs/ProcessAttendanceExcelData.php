@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Jobs;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,12 +19,6 @@ use App\Mail\ImportAttendanceMail;
 class ProcessAttendanceExcelData implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
     protected $business_id;
     protected $data;
     public function __construct($business_id,$data)
@@ -33,29 +26,20 @@ class ProcessAttendanceExcelData implements ShouldQueue
         $this->business_id = $business_id;
         $this->data = $data;
     }
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
     public function handle()
     {
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', '1000');
-
         $totalRows = 0;
         $successfulRows = 0;
         $skippedRows = 0;
         $failedRows = 0;
         $processedEntries = [];
-
         foreach ($this->data as $i => $rowData) {
             if ($i === 0) {
-                // Skip header row if present
                 continue;
             }
             $totalRows++;
-
             try {
                 $entryKey = $this->generateEntryKey($rowData);
                 if (isset($processedEntries[$entryKey])) {
@@ -63,15 +47,12 @@ class ProcessAttendanceExcelData implements ShouldQueue
                     continue;
                 }
                 $processedEntries[$entryKey] = true;
-
                 $string = htmlentities($rowData[4], null, 'utf-8');
                 $content1 = str_replace("&nbsp;", "", $string);
                 $content1 = str_replace(" ", "", $content1);
                 $content = html_entity_decode($content1);
                 $name = explode(',', $content);
-
                 $customerData = Customer::whereRaw('LOWER(lname) = ? AND LOWER(fname) = ? AND business_id = ?', [strtolower(@$name[0]), strtolower(@$name[1]), $this->business_id])->first();
-                
                 if (!$customerData) {
                     $customerData = Customer::create([
                         'fname' => @$name[1],
@@ -80,7 +61,6 @@ class ProcessAttendanceExcelData implements ShouldQueue
                     ]);
                     $successfulRows++;
                 }
-
                 if ($customerData) {
                     $priceDetailsData = BusinessPriceDetails::where('cid', $this->business_id)->get();
                     $title = str_replace("&nbsp;", "", htmlentities($rowData[8], null, 'utf-8'));
@@ -88,7 +68,6 @@ class ProcessAttendanceExcelData implements ShouldQueue
                     $priceDetail = $priceDetailsData->first(function ($pd) use ($title) {
                         return str_replace(" ", "", $pd->price_title) === str_replace(" ", "", $title);
                     });
-
                     if ($priceDetail && $rowData[9] && $rowData[3]) {
                         $exDate = explode('/', $rowData[9]);
                         $checkinDate = explode('/', $rowData[3]);
@@ -98,7 +77,6 @@ class ProcessAttendanceExcelData implements ShouldQueue
                             'user_id' => $customerData->id,
                             'priceid' => $priceDetail->id,
                         ])->whereDate('expired_at', '=', $expired_at)->first();
-
                         if ($bookingDetail) {
                             $exceltime = date('H:i', strtotime($rowData[2]));
                             $scheduleInfo = $priceDetail->business_price_details_ages->BusinessActivityScheduler->first(function ($schedule) use ($exceltime) {
@@ -116,7 +94,6 @@ class ProcessAttendanceExcelData implements ShouldQueue
                                 'after_use_session_amount' => $rowData[10],
                                 'source_type' => 'in_person',
                             ];
-
                             if (!$bookingDetail->act_schedule_id) {
                                 $bookingDetail->update(['bookedtime' => $chkDate, 'act_schedule_id' => @$scheduleInfo->id]);
                             }
@@ -126,14 +103,12 @@ class ProcessAttendanceExcelData implements ShouldQueue
                 }
                 $user = Auth::user();
                 Mail::to($user->email)->send(new ImportAttendanceMail($totalRows, $successfulRows, $skippedRows, $failedRows));
-
             } catch (\Exception $e) {
                 Log::error('Failed processing row:', ['row' => $rowData, 'error' => $e->getMessage()]);
                 $failedRows++;
                 continue;
             }
         }
-
         Log::info('Processing complete:', [
             'total_rows' => $totalRows,
             'successful_rows' => $successfulRows,
@@ -141,15 +116,12 @@ class ProcessAttendanceExcelData implements ShouldQueue
             'failed_rows' => $failedRows,
         ]);
     }
-
     private function generateEntryKey($entry)
     {
         // Assuming these indexes correspond to client name, date, and time
         $clientName = $entry[4] ?? '';
         $date = $entry[3] ?? '';
         $time = $entry[2] ?? '';
-        
-        // Create a more specific key
         return md5($clientName . $date . $time);
     }
 }

@@ -180,12 +180,12 @@
     
 </footer>
     
-    <link href="<?php echo Config::get('constants.FRONT_CSS'); ?>toastr.min.css" rel="stylesheet">
-    <link href="<?php echo Config::get('constants.FRONT_CSS'); ?>toastr-custom.css" rel="stylesheet">
+    <link href="{{url('/public/css/toastr.min.css')}}" rel="stylesheet">
+    <link href="{{url('/public/css/toastr-custom.css')}}" rel="stylesheet">
 
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> -->
-    <script src="<?php echo Config::get('constants.FRONT_JS'); ?>toastr.min.js"></script>
-    <script src="<?php echo Config::get('constants.FRONT_JS'); ?>toastr-custom.js"></script>
+    <script src="{{url('/public/css/toastr.min.js')}}"></script>
+    <script src="{{url('/public/css/toastr-custom.js')}}"></script>
 
 
     @if(!Auth::guest() && Auth::user()->role == "business")
@@ -250,12 +250,12 @@
 
         
 <div id='tempDiv'></div>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>bootstrap.min.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>JQueryValidate/jquery.validate.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>JQueryValidate/additional-methods.min.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>auth.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.blockUI.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>general.js"></script>
+<script src="{{url('/public/js/bootstrap.min.js')}}"></script>
+<script src="{{url('/public/js/JQueryValidate/jquery.validate.js')}}"></script>
+<script src="{{url('/public/js/JQueryValidate/additional-methods.min.js')}}"></script>
+<script src="{{url('/public/js/auth.js')}}"></script>
+<script src="{{url('/public/js/jquery.blockUI.js')}}"></script>
+<script src="{{url('/public/js/general.js')}}"></script>
 <!--<script src="<?php //echo Config::get('constants.FRONT_JS'); ?>bootstrap-datepicker.js"></script>-->
 
 <script>

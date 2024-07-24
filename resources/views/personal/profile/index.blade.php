@@ -358,6 +358,7 @@
 
 
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 <script type="text/javascript">
 
     var user_intro = $("#user_intro").val();

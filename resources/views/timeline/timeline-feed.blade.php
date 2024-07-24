@@ -4,11 +4,11 @@
 
 @include('includes.search_banner')
 
-<link href="<?php echo Config::get('constants.FRONT_CSS'); ?>dropzone.css" rel="stylesheet">
-<link href="<?php echo Config::get('constants.FRONT_CSS'); ?>feedpost/jquery.lightbox-0.5.css" rel="stylesheet">
-<link href="<?php echo Config::get('constants.FRONT_CSS'); ?>lightbox2.min.css" rel="stylesheet">
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>lightbox-plus-jquery.min.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>lightbox.js"></script>
+<link href="{{url('public/css/dropzone.css')}}" rel="stylesheet">
+<link href="{{url('public/css/feedpost/jquery.lightbox-0.5.css')}}" rel="stylesheet">
+<link href="{{url('public/css/lightbox2.min.css')}}" rel="stylesheet">
+<script src="{{url('public/js/lightbox-plus-jquery.min.js')}}"></script>
+<script src="{{url('public/js/lightbox.js')}}"></script>
 <div class="profile-div">
 
   <div class="container">

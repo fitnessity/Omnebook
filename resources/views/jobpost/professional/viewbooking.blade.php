@@ -788,9 +788,9 @@ $(document).ready(function(){
 
 @if($data['jobsObj']['booking_type'] == "direct" && isset($UserBookingDetail['schedule']))
 
-    <link href="<?php echo Config::get('constants.FRONT_CSS'); ?>scheduleHours/jquery.businessHours.css" rel="stylesheet">
+    <link href="{{url('/public/css/scheduleHours/jquery.businessHours.css')}}" rel="stylesheet">
 
-    <script src="<?php echo Config::get('constants.FRONT_JS'); ?>scheduleHours/jquery.businessHours.js"></script>
+    <script src="{{url('/public/css/scheduleHours/jquery.businessHours.js')}}"></script>
 
 
 

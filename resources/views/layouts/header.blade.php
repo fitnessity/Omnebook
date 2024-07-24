@@ -27,41 +27,49 @@ $total_quantity = 0;
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
         <link rel="shortcut icon" href="{{ url('/public/images/email/favicon.ico') }}">
         <link rel="icon" href="{{ url('/public/images/email/favicon.ico') }}">
-        <link rel='stylesheet' type='text/css' href="{{asset('public/css/font_family.css')}}">
-        <link rel='stylesheet' type='text/css' href="{{asset('public/css/font_family_roboto.css')}}">
+        <link rel='stylesheet' type='text/css' href="{{url('public/css/font_family.css')}}">
+        <link rel='stylesheet' type='text/css' href="{{url('public/css/font_family_roboto.css')}}">
         <link rel='stylesheet' type='text/css' href="{{url('/public/css/font-awesome.css')}}"> 
-        <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
-        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>owl.css">
-		
+    
+		<link href="{{url('/public/css/all.css')}}" rel="stylesheet" type="text/css" />
+		<link href="{{url('/public/css/owl.css')}}" rel="stylesheet" type="text/css" />
 		@if(Route::current()->getName() == 'design.home' ) 
-			<link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+			<link href="{{url('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
 		@endif
 		
 		@if(Route::current()->getName() != 'design.dashboard' && Route::current()->getName() != 'design.createNewBusinessProfile' && Route::current()->getName() != 'design.home') 
-			<!--<link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" /> -->
-			<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap.css"> 
 
-       		<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
-			
-			<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/custom.css">
-       	@endif
-        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap-select.min.css">
-		<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/header-footer.css">
+			<link rel='stylesheet' type='text/css' href="{{url('/public/css/bootstrap.css')}}"> 
+
+			<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+		 
+			 <link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/custom.css')}}">
+			 
+			@endif
+		<script src="{{url('public/js/jquery2.1.3.js')}}"></script> 
+		<link rel='stylesheet' type='text/css' href="{{url('/public/css/bootstrap-select.min.css')}}">
+		<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/header-footer.css')}}">
         
-        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
+		<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/header-footer.css')}}">
+		<link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 		<link rel="stylesheet" href="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
 		<script src="{{env('APP_URL')}}/public/js/jquery2.1.3.js"></script>
-       <!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
-	<!-- 	<script src="{{env('APP_URL')}}/public/js/ratings.js"></script> -->
 
-		<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/style.css')}}">
-		<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>
+		<script type="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+		<!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
+	<!-- 	<script src="https://d2bgo0bc1t29nh.cloudfront.net//public/js/ratings.js"></script> -->
+
+		<link rel='stylesheet' type='text/css' href="{{url('/public/dashboard-design/css/style.css')}}">
+		<script src="{{url('/public/dashboard-design/js/plugins.js')}}"></script>
 
 		@if(Route::current()->getName() == 'design.shopping_cart' || Route::current()->getName() == 'carts_index') 
-			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/custom.css')}}">
-			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/responsive.css')}}">
-			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}">
-			<script src="{{asset('public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
+			<link rel='stylesheet' type='text/css' href="{{url('/public/dashboard-design/css/custom.css')}}">
+			<link rel='stylesheet' type='text/css' href="{{url('/public/dashboard-design/css/responsive.css')}}">
+			<link rel='stylesheet' type='text/css' href="{{url('/public/dashboard-design/css/bootstrap.min.css')}}">
+			{{-- <script src="https://d2bgo0bc1t29nh.cloudfront.net/dashboard-design/js/bootstrap.bundle.min.js"></script> --}}
+			<script src="{{url('public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
+
 		@endif
 		
 
@@ -304,7 +312,7 @@ $total_quantity = 0;
 						<div class="menu_nav">
                 
 						<div class="logo-header">
-						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo1_black.png') }}" alt="Fitnessity"> </a>
+						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ url('/public/images/fitnessity_logo1_black.png') }}" alt="Fitnessity"> </a>
 						</div>
 					
 						<div class="top-area">
@@ -372,9 +380,9 @@ $total_quantity = 0;
 									} 
 									$total_quantity = count($newcart["cart_item"]);?>
 							<a class="btn-cart" href="{{route('carts_index')}}">
-								<img src="{{ asset('/public/images/shoping-cart-header-black.png') }}" alt="cart"><span id="cart-item">
+								<img src="{{ url('/public/images/shoping-cart-header-black.png') }}" alt="cart"><span id="cart-item">
 									 {{$total_quantity}}</span>
-                                <!--<img src="{{ asset('/public/images/cart-icon.png') }}" alt="cart"><span id="cart-item">0</span>-->
+                                <!--<img src="{{ url('/public/images/cart-icon.png') }}" alt="cart"><span id="cart-item">0</span>-->
                             </a>
 							</div>
 							
@@ -410,11 +418,11 @@ $total_quantity = 0;
                                                     </li>
                                                  	
                                                  	<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt="Fitnessity"></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
+														<span class="pc-micon"><img src="{{url('/public/img/edit-2.png')}}" alt="Fitnessity"></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt="Fitnessity"></span><a href="{{route('personal.manage-account.index')}}" style="color: white;">Manage Accounts</a>
+														<span class="pc-micon"><img src="{{url('/public/img/menu-icon5.svg')}}" alt="Fitnessity"></span><a href="{{route('personal.manage-account.index')}}" style="color: white;">Manage Accounts</a>
 													</li>
 
 													<li class="pc-link">
@@ -422,17 +430,17 @@ $total_quantity = 0;
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt="Fitnessity"></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
+														<span class="pc-micon"><img src="{{url('/public/img/credit-card.png')}}" alt="Fitnessity"></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt="Fitnessity"></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
+														<span class="pc-micon"><img src="{{url('/public/img/favorite.png')}}" alt="Fitnessity"></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
 													</li>
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
+														<span class="pc-micon"><img src="{{url('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
 													</li>
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
+														<span class="pc-micon"><img src="{{url('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
 													</li>
 																	
 													<li><div class="border-sidebar"></div></li>
@@ -482,10 +490,10 @@ $total_quantity = 0;
 							<!-- old nav -->
                          	<div class="userblock">
                         		<div class="login_links">
-									<img class="sign-in-header" src="{{ asset('/public/images/login-header-black.png') }}" alt="cart">
+									<img class="sign-in-header" src="{{ url('/public/images/login-header-black.png') }}" alt="cart">
 									<a href="{{ Config::get('constants.SITE_URL') }}/userlogin">Sign in or </a> 
 									<a href="{{ Config::get('constants.SITE_URL') }}/registration"> Register </a>
-									<!--<img src="{{ asset('/public/images/user-icon.png') }}" alt="">-->
+									<!--<img src="{{ url('/public/images/user-icon.png') }}" alt="">-->
 								</div>
                            		<div class="dropdown_login">
                                 	<!--<svg focusable="false" class="icon--nav-triangle-borderless" viewBox="0 0 20 9" role="presentation">
@@ -776,8 +784,11 @@ function closeNav() {
 }
 
 </script>
+<link href='{{url("/public/css/frontend/jquery-ui.css")}}'  rel='stylesheet'>
 
-<link href='{{asset("/public/css/frontend/jquery-ui.css")}}'  rel='stylesheet'>
+<!-- <link href='{{url("/public/css/frontend/jquery-ui.css")}}'  rel='stylesheet'> -->
+<link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" type="text/css" rel="stylesheet" />
+
 <!-- <link href=
 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css'  rel='stylesheet'> -->
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script> -->

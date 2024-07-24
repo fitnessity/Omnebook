@@ -2005,15 +2005,15 @@ z-index:99999;
 
 </style>
 
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>owl.carousel.js"></script>
+<script src="{{url('/public/js/owl.carousel.js')}}"></script>
 
 
 
-<script defer src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.flexslider.js"></script>
+<script defer src="{{url('/public/js/jquery.flexslider.js')}}"></script>
 
 
 
-<script type="text/javascript" src="<?php echo Config::get('constants.FRONT_JS'); ?>lightbox.js"></script>
+<script type="text/javascript" src="{{url('/public/js/lightbox.js')}}"></script>
 
 
 
@@ -2021,7 +2021,7 @@ z-index:99999;
 
 
 
-<script type="text/javascript" src="<?php echo Config::get('constants.FRONT_JS'); ?>home.js"></script>
+<script type="text/javascript" src="{{url('/public/js/home.js')}}"></script>
 
 
 

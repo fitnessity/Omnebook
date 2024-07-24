@@ -4002,7 +4002,7 @@
                                 <label for="test1">
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <img src="/public/images/newimage/individual.jpeg" class="pro_card_img1">
+                                            <img src="/public/images/newimage/individual.jpeg" class="pro_card_img1" loading="lazy">
                                         </div>
                                         <div class="col-md-10">
                                             <div class="tab-hed1">Individual</div>
@@ -4017,7 +4017,7 @@
                                 <label for="test2">
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <img src="/public/images/newimage/media.jpg" class="pro_card_img1">
+                                            <img src="/public/images/newimage/media.jpg" class="pro_card_img1" loading="lazy">
                                         </div>
                                         <div class="col-md-10">
                                             <div class="tab-hed1">Classes</div>
@@ -4032,7 +4032,7 @@
                                 <label for="test3">
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <img src="/public/images/newimage/get-started.jpg" class="pro_card_img1">
+                                            <img src="/public/images/newimage/get-started.jpg" class="pro_card_img1" loading="lazy">
                                         </div>
                                         <div class="col-md-10">
                                             <div class="tab-hed1">Experience</div>

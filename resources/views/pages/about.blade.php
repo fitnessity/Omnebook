@@ -1,9 +1,9 @@
 @extends('layouts.business.header')
 @section('content')
-<head>
-    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
-    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>css/responsive.css">
-</head>
+
+    <link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+    <link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
+
 
 <section class="main-slider inner-banner" style="background-image:url('/public/images/about-bg.jpg')">
     <div class="container">

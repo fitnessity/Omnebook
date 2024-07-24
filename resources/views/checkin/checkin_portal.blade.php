@@ -1973,6 +1973,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 </div>
 {{-- ends --}}
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 <audio id="success-sound" src="{{ asset('music/success.mp3') }}" preload="auto"></audio>
 <audio id="failure-sound" src="{{ asset('music/failure.mp3') }}" preload="auto"></audio>
 

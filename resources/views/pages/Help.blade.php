@@ -1,8 +1,8 @@
 @extends('layouts.business.header')
-<head>
-    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
-    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>css/responsive.css">
-</head>
+
+    <link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+    <link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
+
 <style>
 .latest-know-list i {
 	margin-right: 0px !important;

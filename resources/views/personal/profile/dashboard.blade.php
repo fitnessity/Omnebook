@@ -240,6 +240,7 @@
 	</div><!-- end main content-->
 </div><!-- END layout-wrapper -->
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 
 <script type="text/javascript">
 

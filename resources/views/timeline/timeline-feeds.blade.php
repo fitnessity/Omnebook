@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<link href="<?php echo Config::get('constants.FRONT_CSS'); ?>sweet-alert/sweetalert.css" rel="stylesheet">
+<link href="{{url('public/css/sweet-alert/sweetalert.css')}}" rel="stylesheet">
 
 {{--  @if(count(@$repository->getAllFeeds($user->id)) <= 0)
   {!! "<h4 class='empty-timeline-msg'>No Timeline Post Yet</h4>" !!}

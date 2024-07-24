@@ -30,15 +30,15 @@ $total_quantity = 0;
         <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,900'>
         <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'>
         <link rel='stylesheet' type='text/css' href="{{url('/public/css/font-awesome.css')}}"> 
-        <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
-        <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>owl.css">
+        <link rel='stylesheet' type='text/css' href="{{url('/public/css/all.css')}}"> 
+		<link rel='stylesheet' type='text/css' href="{{url('/public/css/owl.css')}}"> 
 		
 		@if(Route::current()->getName() == 'design.home' ) 
-			<link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+			<link href="{{url('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
 		@endif
 		
 		@if(Route::current()->getName() != 'design.dashboard' && Route::current()->getName() != 'design.createNewBusinessProfile' && Route::current()->getName() != 'design.home') 
-			<!--<link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" /> -->
+			<!--<link href="{{url('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" /> -->
 			<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap.css"> 
 
        		<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
@@ -53,14 +53,14 @@ $total_quantity = 0;
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 		<script src="{{env('APP_URL')}}/public/js/ratings.js"></script>
 
-		<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/style.css')}}">
-		<script src="{{asset('/public/dashboard-design/js/plugins.js')}}"></script>
+		<link rel='stylesheet' type='text/css' href="{{url('/public/dashboard-design/css/style.css')}}">
+		<script src="{{url('/public/dashboard-design/js/plugins.js')}}"></script>
 
 		@if(Route::current()->getName() == 'design.shopping_cart' || Route::current()->getName() == 'carts_index') 
-			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/custom.css')}}">
-			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/responsive.css')}}">
-			<link rel='stylesheet' type='text/css' href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}">
-			<script src="{{asset('public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
+			<link rel='stylesheet' type='text/css' href="{{url('/public/dashboard-design/css/custom.css')}}">
+			<link rel='stylesheet' type='text/css' href="{{url('/public/dashboard-design/css/responsive.css')}}">
+			<link rel='stylesheet' type='text/css' href="{{url('/public/dashboard-design/css/bootstrap.min.css')}}">
+			<script src="{{url('public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
 		@endif
 		
 
@@ -770,7 +770,7 @@ function closeNav() {
 
 </script>
 
-<link href='{{asset("/public/css/frontend/jquery-ui.css")}}'  rel='stylesheet'>
+<link href='{{url("/public/css/frontend/jquery-ui.css")}}'  rel='stylesheet'>
 <!-- <link href=
 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css'  rel='stylesheet'> -->
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script>
