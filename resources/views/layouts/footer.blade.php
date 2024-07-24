@@ -302,27 +302,28 @@
 <!-- Sticky Footer  -->
 
 <script src="https://js.stripe.com/v3/"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>owl.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.flexslider.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>lightbox.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>sly.min.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>home.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>toastr.min.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>toastr-custom.js"></script>
+<script src="{{ url('public/js/owl.js') }}"></script>
+<script src="{{ url('public/js/jquery.flexslider.js') }}"></script>
+<script src="{{ url('public/js/lightbox.js') }}"></script>
+<script src="{{ url('public/js/sly.min.js') }}"></script>
+<script src="{{ url('public/js/home.js') }}"></script>
+<script src="{{ url('public/js/toastr.min.js') }}"></script>
+<script src="{{ url('public/js/toastr-custom.js') }}"></script>
 @if(Route::current()->getName() != 'design.dashboard' && Route::current()->getName() != 'design.createNewBusinessProfile')
-<!--<script src="{{asset('/public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script> -->
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>bootstrap.min.js"></script>
+<script src="{{ url('public/js/bootstrap.min.js') }}"></script>
 @endif
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>JQueryValidate/jquery.validate.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>JQueryValidate/additional-methods.min.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>auth.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.blockUI.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>general.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery-input-mask-phone-number.js"></script>
-<script src="{{asset('public/js/moment.js')}}" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="/public/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-<script>
+<script src="{{ url('public/js/JQueryValidate/jquery.validate.js') }}"></script>
+<script src="{{ url('public/js/JQueryValidate/additional-methods.min.js') }}"></script>
+<script src="{{ url('public/js/auth.js') }}"></script>
+<script src="{{ url('public/js/jquery.blockUI.js') }}"></script>
+<script src="{{ url('public/js/general.js') }}"></script>
+<script src="{{ url('public/js/jquery-input-mask-phone-number.js') }}"></script>
+<script src="{{ url('public/js/moment.js') }}"></script>
+<script src="{{ url('/public/AdminLTE/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url('/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+
+
+
 function openMobileNav() {
 	document.getElementById("myMobileSidepanel").style.width = "300px";
 }

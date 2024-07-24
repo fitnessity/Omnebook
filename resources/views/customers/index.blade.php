@@ -356,7 +356,8 @@
 	</div><!-- /.modal-dialog -->
 </div>
 
-@include('layouts.business.footer')					
+@include('layouts.business.footer')			
+@include('layouts.business.scripts')		
 
 	<script>
 		var profile_pic_var = '';

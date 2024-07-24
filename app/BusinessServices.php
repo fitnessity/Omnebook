@@ -276,7 +276,7 @@ class BusinessServices extends Model
     	}
     }
 
-    // public function first_profile_pic(){
+    // public function first_profile_pic_home(){
     //     $pictures = explode(',',$this->profile_pic);
     //     return Storage::disk('s3')->exists( $pictures[0]) ? Storage::URL( $pictures[0]) : '/public/images/service-nofound.jpg';
     // }

@@ -107,8 +107,8 @@
 
 </style>
 
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>bootstrap-select.min.js"></script> 
-<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap-select.min.css">
+<script src="{{url('/public/js/bootstrap-select.min.js')}}"></script> 
+<link rel="stylesheet" href="{{url('/public/css/bootstrap-select.min.css')}}">
 <section class="category viewallcontainer">
     <div class="cat-container">
         <div class="categoryfilter width-auto">

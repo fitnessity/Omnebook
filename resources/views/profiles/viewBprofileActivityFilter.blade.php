@@ -109,8 +109,8 @@ $actoffer = BusinessServices::where('cid', $cid)->groupBy('sport_activity')->get
                     <i class="fa fa-calendar"></i>
                     </div>
                     <script>
-                        $( function() {
-                            $( "#actfildate" ).datepicker( { minDate: 0 } );
+                        $(function() {
+                            $("#actfildate").datepicker( { minDate: 0 } );
                         } );
                     </script>
                 </div>

@@ -1177,11 +1177,11 @@ input,select {
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.1.11.1.min.js"></script>
+<script src="{{url('/public/js/jquery.1.11.1.min.js')}}"></script>
 <link href="https://cdn.rawgit.com/dubrox/Multiple-Dates-Picker-for-jQuery-UI/master/jquery-ui.multidatespicker.css" rel="stylesheet"/>
 
 <script src="https://cdn.rawgit.com/dubrox/Multiple-Dates-Picker-for-jQuery-UI/master/jquery-ui.multidatespicker.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery-ui.min.js"></script>
+<script src="{{url('/public/js/jquery-ui.min.js')}}"></script>
        
 <script>
  $('#updateBusinessDetialBtn').click(function(){

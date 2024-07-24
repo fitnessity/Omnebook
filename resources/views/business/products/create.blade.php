@@ -67,7 +67,7 @@
                                                             </div>
                                                             <div class="avatar-lg">
                                                                 <div class="avatar-title bg-light rounded">
-                                                                    <img src="@if(@$product->product_image != '' ) {{Storage::URL($product->product_image)}} @endif" id="product-img" class="avatar-md h-auto" />
+                                                                    <img src="@if(@$product->product_image != '' ) {{Storage::URL($product->product_image)}} @endif" id="product-img" class="avatar-md h-auto" loading="lazy" alt="fitnessity"/>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -98,7 +98,7 @@
                                                                 <div class="d-flex p-2">
                                                                     <div class="flex-shrink-0 me-3">
                                                                         <div class="avatar-sm bg-light rounded">
-                                                                            <img data-dz-thumbnail class="img-fluid rounded d-block" src="#" alt="Product-Image"  />
+                                                                            <img data-dz-thumbnail class="img-fluid rounded d-block" src="#" alt="Product-Image"  loading="lazy"/>
                                                                         </div>
                                                                     </div>
                                                                     <div class="flex-grow-1">
@@ -122,7 +122,7 @@
                                                                     <div class="d-flex p-2">
                                                                         <div class="flex-shrink-0 me-3">
                                                                             <div class="avatar-sm bg-light rounded product-display">
-                                                                                <img class="img-fluid rounded d-block" src="{{Storage::URL($img)}}" alt="Product-Image"  />
+                                                                                <img class="img-fluid rounded d-block" src="{{Storage::URL($img)}}" alt="Product-Image"  loading="lazy"/>
                                                                             </div>
                                                                         </div>
                                                                         <div class="flex-grow-1">
@@ -326,7 +326,7 @@
         																		<label class="form-label">Image</label>
         																			<div class="text-center">
         																				<div class="profile-user position-relative d-inline-block mx-auto  mb-4">
-        																				    <img src="@if(@$product->agreement_img)  {{Storage::URL($product->agreement_img)}} @endif" alt="" class="rounded-circle avatar-xl img-thumbnail user-profile-image shadow">
+        																				    <img src="@if(@$product->agreement_img)  {{Storage::URL($product->agreement_img)}} @endif" alt="" class="rounded-circle avatar-xl img-thumbnail user-profile-image shadow" loading="lazy">
         																					<div class="avatar-xs p-0 rounded-circle profile-photo-edit">
         																						<input id="profile-img-file-input" type="file" class="profile-img-file-input" name="agreement_img"><label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
         																							<span class="avatar-title rounded-circle bg-light text-body shadow">
@@ -613,6 +613,7 @@
     </div><!-- END layout-wrapper -->
 
 	@include('layouts.business.footer')
+    @include('layouts.business.scripts')
 	<script>
         $(document).ready(function() {
             function toggleDisplay(productType) {

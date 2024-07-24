@@ -87,6 +87,7 @@
 </div>
 	
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 
 <script type="text/javascript">
 	function  getInfo(company) {

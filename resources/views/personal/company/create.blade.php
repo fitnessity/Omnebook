@@ -1,4 +1,4 @@
- j@inject('request', 'Illuminate\Http\Request')
+@inject('request', 'Illuminate\Http\Request')
 @extends('layouts.business.header')
 
 @section('content')
@@ -1487,6 +1487,7 @@
 </div>
     
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 	<script>
 		$(document).ready(function(){ 
 			$('#aboutcLeft').text(200-parseInt($("#about_host").val().length));

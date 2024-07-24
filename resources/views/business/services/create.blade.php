@@ -108,7 +108,7 @@
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
-                                                                                                    <img src="{{Storage::Url(@$service->cover_photo)}}">
+                                                                                                    <img src="{{Storage::Url(@$service->cover_photo)}}" loading="lazy">
                                                                                                 </div>
                                                                                             @endif
                                                                                         </div>
@@ -166,7 +166,7 @@
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                         </div>
-                                                                                                        <img src="{{Storage::Url($img)}}">
+                                                                                                        <img src="{{Storage::Url($img)}}" loading="lazy">
                                                                                                     </div>
                                                                                                     @endif
                                                                                                 @endforeach
@@ -187,7 +187,7 @@
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
-                                                                                                    <img src="{{Storage::Url($profile_pic)}}">
+                                                                                                    <img src="{{Storage::Url($profile_pic)}}" loading="lazy">
                                                                                                 </div>
                                                                                             @endif
                                                                                         @endif
@@ -792,7 +792,7 @@
                                                                                                                         <label for="dayplanpic{{$i}}" id="label">
                                                                                                                         @php    $old_pic = @$dplanimg[$i] != ''  ?  @$dplanimg[$i] : ''; 
                                                                                                                                 $day_pic = @$dplanimg[$i] != ''  ?  Storage::Url(@$dplanimg[$i]) : url('/public/images/Upload-Icon.png'); @endphp
-                                                                                                                        <img src="{{$day_pic}}" class="pro_card_img blah planblah{{$i}}" id="showimg">
+                                                                                                                        <img src="{{$day_pic}}" class="pro_card_img blah planblah{{$i}}" id="showimg" loading="lazy">
                                                                                                                         <span id="span_{{$i}}">Upload your file here</span>
                                                                                                                             <input name="dayplanpic_{{$i}}" id="dayplanpic{{$i}}" onchange="planImg(this,{{$i}});" type="file" class="uploadFile img" value="Upload Photo" >
                                                                                                                         </label>
@@ -834,7 +834,7 @@
                                                                                                             <div class="col-lg-2 col-md-4 col-sm-3">
                                                                                                                 <div class="photo-upload">
                                                                                                                     <label for="dayplanpic0" id="label">
-                                                                                                                        <img src="{{url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah planblah0" id="showimg" >
+                                                                                                                        <img src="{{url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah planblah0" id="showimg" loading="lazy">
                                                                                                                         <span id="span_0">Upload your file here</span>
                                                                                                                         <input type="file" name="dayplanpic_0" id="dayplanpic0" class="uploadFile img" value="Upload Photo" onchange="planImg(this,0);">
                                                                                                                     </label>
@@ -1689,7 +1689,7 @@
 
 @endif
 @include('layouts.business.footer')
-
+@include('layouts.business.scripts')
 <script>
 
     CKEDITOR.replace('desc', {

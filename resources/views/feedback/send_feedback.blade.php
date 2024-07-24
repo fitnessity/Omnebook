@@ -1,8 +1,8 @@
 @extends('layouts.business.header')
 @section('content')
 <head>
-    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
-    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>css/responsive.css">
+    <link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+    <link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 </head>
 <style>
 .location-right {
@@ -153,7 +153,7 @@ textarea {
 </div>      
   
 @include('layouts.business.footer')
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>ratings.js"></script>
+<script src="{{url('/public/js/ratings.js')}}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $(".main-slider").remove();

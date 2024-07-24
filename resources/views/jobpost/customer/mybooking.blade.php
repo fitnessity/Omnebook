@@ -37,8 +37,8 @@
          
         <div class=" review-dtl-block">
         @if(count($jobpostobj)>0)
-        <link href="<?php echo Config::get('constants.FRONT_CSS'); ?>scheduleHours/jquery.businessHours.css" rel="stylesheet">
-  <script src="<?php echo Config::get('constants.FRONT_JS'); ?>scheduleHours/jquery.businessHours.js"></script>
+        <link href="{{url('/public/css/scheduleHours/jquery.businessHours.css')}}" rel="stylesheet">
+  <script src="{{url('/public/js/scheduleHours/jquery.businessHours.js')}}"></script>
 
           @foreach( $jobpostobj as $job )
            <div class="review-list-block">

@@ -1,11 +1,11 @@
 @extends('layouts.profile')
 
 @section('content')
-<link href="<?php echo Config::get('constants.FRONT_CSS'); ?>dropzone.css" rel="stylesheet">
-<link href="<?php echo Config::get('constants.FRONT_CSS'); ?>sweet-alert/sweetalert.css" rel="stylesheet">
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>sweet-alert/sweetalert.min.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>bootstrap-select.min.js"></script> 
-<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>bootstrap-select.min.css">
+<link href="{{url('public/css/dropzone.css')}}" rel="stylesheet">
+<link href="{{url('public/css/sweet-alert/sweetalert.css')}}" rel="stylesheet">
+<script src="{{url('public/js/sweet-alert/sweetalert.min.js')}}"></script>
+<script src="{{url('public/js/bootstrap-select.min.js')}}"></script> 
+<link rel="stylesheet" href="{{url('public/css/bootstrap-select.min.css')}}">
 
 
 <div class="business-offer-main">

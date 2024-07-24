@@ -81,7 +81,7 @@
 															<tr>
 																<td class="">
 																	@if(Storage::disk('s3')->exists($cf->profile_pic))
-																		<img src="{{Storage::Url($cf->profile_pic)}}" alt="" class="avatar-xs rounded-circle me-2 shadow">
+																		<img src="{{Storage::Url($cf->profile_pic)}}" alt="fitnessity" class="avatar-xs rounded-circle me-2 shadow" loading="lazy">
 																	@else
 																		<div class="avatar-xsmall">
 																			<span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$cf->first_name[0]}}</span>
@@ -164,6 +164,7 @@
 	</div>
 </div>
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 <script>
 	var profile_pic_var = '';
 	var ext = '';

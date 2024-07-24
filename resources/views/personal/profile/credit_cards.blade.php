@@ -80,7 +80,7 @@
 
 	
 @include('layouts.business.footer')
-
+@include('layouts.business.scripts')
 <script>
 
     const stripe = Stripe('{{ env('STRIPE_PKEY') }}');

@@ -1,5 +1,5 @@
-<link href="<?php echo Config::get('constants.FRONT_CSS'); ?>jquery.lineProgressbar.css" rel="stylesheet" type="text/css">
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>jquery.lineProgressbar.js"></script>
+<link href="{{url('/public/css/jquery.lineProgressbar.css')}}" rel="stylesheet" type="text/css">
+<script src="{{url('/public/js/jquery.lineProgressbar.js')}}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
   $('#5star').LineProgressbar({

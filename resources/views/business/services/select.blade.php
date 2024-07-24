@@ -34,7 +34,7 @@
                                         <a class="card card-animate fix-box" data-id="individual">
                                             <div class="card-body">
                                                 <div class="text-center selection-service">
-													<img src="{{url('/public/images/newimage/bus-individual.png')}}" class="pro_card_img1">
+													<img src="{{url('/public/images/newimage/bus-individual.png')}}" class="pro_card_img1" loading="lazy">
                                                 </div>
                                                 <div class="text-center mt-4 service-details">
 													<div class="selecting-title">Personal Trainer</div>
@@ -52,7 +52,7 @@
                                         <a class="card card-animate fix-box" data-id="classes">
                                            <div class="card-body">
                                                 <div class="text-center selection-service">
-													<img src="{{url('/public/images/newimage/bus-gym.png')}}" class="pro_card_img1">
+													<img src="{{url('/public/images/newimage/bus-gym.png')}}" class="pro_card_img1" loading="lazy">
                                                 </div>
                                                 <div class="text-center mt-4 service-details">
 													<div class="selecting-title">CLASSES</div>
@@ -70,7 +70,7 @@
                                         <a class="card card-animate fix-box" data-id="experience">
                                             <div class="card-body">
                                                 <div class="text-center selection-service">
-													<img src="{{url('/public/images/newimage/bus-experience.png')}}" class="pro_card_img1">
+													<img src="{{url('/public/images/newimage/bus-experience.png')}}" class="pro_card_img1" loading="lazy">
                                                 </div>
                                                 <div class="text-center mt-4 service-details">
 													<div class="selecting-title">Adventures & Tours</div>
@@ -88,7 +88,7 @@
                                         <a class="card card-animate fix-box" data-id="events">
                                             <div class="card-body">
                                                 <div class="text-center selection-service">
-													<img src="{{url('/public/dashboard-design/images/yoga.jpeg')}}" class="pro_card_img1">
+													<img src="{{url('/public/dashboard-design/images/yoga.jpeg')}}" class="pro_card_img1" loading="lazy">
                                                 </div>
                                                 <div class="text-center mt-4 service-details">
 													<div class="selecting-title">EVENTS</div>
@@ -370,6 +370,7 @@
     <!-- END layout-wrapper -->
 
 	@include('layouts.business.footer')
+	@include('layouts.business.scripts')
 
 <script>
 

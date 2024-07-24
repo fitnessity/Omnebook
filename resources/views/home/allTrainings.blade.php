@@ -237,34 +237,34 @@
         <a href="#top" class="cd-top"><span class="fa fa-arrow-up"></span></a>
     </p>
 
-    <script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>owl.js"></script>
+    <script src="{{url('/public/js/owl.js')}}"></script>
 
     <!--<script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>jquery.flexslider.js"></script>
 
     <script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>lightbox.js"></script>-->
 
-    <script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>plugins.js"></script>
+    <script src="{{url('/public/js/plugins.js')}}"></script>
 
-    <script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>sly.min.js"></script>
+    <script src="{{url('/public/js/sly.min.js')}}"></script>
 
-    <script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>home.js"></script>
+    <script src="{{url('/public/js/home.js')}}"></script>
 
     <!--<script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>toastr.min.js"></script>
 
     <script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>toastr-custom.js"></script>-->
 
-    <script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>bootstrap.min.js"></script>
+    <script src="{{url('/public/js/bootstrap.min.js')}}"></script>
 
     <!--<script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>JQueryValidate/jquery.validate.js"></script>
 
     <script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>JQueryValidate/additional-methods.min.js"></script>
 
     <script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>auth.js"></script>-->
-     <script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>bootstrap-select.min.js"></script>
+     <script src="{{url('/public/js/bootstrap-select.min.js')}}"></script>
 
     <!--<script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>jquery.blockUI.js"></script>-->
 
-    <script src="<?php echo Config::get('constants.FRONT_NEW_JS'); ?>general.js"></script>
+    <script src="{{url('/public/js/general.js')}}"></script>
 
     <script>
         $(document).ready(function() {

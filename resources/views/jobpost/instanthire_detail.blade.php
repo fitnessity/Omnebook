@@ -281,11 +281,11 @@ input:disabled{
   /* echo $selectval ;exit();*/
 ?>
 
-<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
-<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/w3.css">
+<link rel="stylesheet" href="{{url('/public/css/compare/style.css')}}">
+<link rel="stylesheet" href="{{url('/public/css/compare/w3.css')}}">
 <link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" type="text/css" rel="stylesheet" />
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
+<script src="{{url('/public/js/compare/Compare.js')}}"></script>
+<script src="{{url('/public/js/compare/jquery-1.9.1.min.js')}}"></script>
 <script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
 <script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
 

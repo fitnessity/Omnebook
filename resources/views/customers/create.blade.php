@@ -455,6 +455,7 @@
     </div>
 </div>
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 
 @if(request()->customer_id)
     <script type="text/javascript">

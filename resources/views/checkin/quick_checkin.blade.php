@@ -230,7 +230,7 @@ $company_data = Auth::user()->current_company;
 </script>
 {{-- ends --}}
 @include('layouts.business.footer')
-
+@include('layouts.business.scripts')
 <script>
     jQuery(document).ready(function ($) {
         var pin = +!![] + [] + (!+[] + !![] + []) + (!+[] + !![] + !![] + []) + (!+[] + !![] + !![] + !![] + []);

@@ -79,7 +79,7 @@
     </div><!-- End Page-content -->
     </div><!-- END layout-wrapper -->
 
-    {{-- my new code goes here --}}
+    <!-- {{-- my new code goes here --}} -->
     <!-- Modal -->
     <div class="modal fade" id="customerModal" tabindex="-1" aria-labelledby="customerModalLabel" aria-hidden="true" data-bs-focus="false">
         <div class="modal-dialog modal-xl">
@@ -193,7 +193,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        {{-- <div class="container-fuild">
+                                                                        <!-- {{-- <div class="container-fuild">
                                                                             <div class="row">
                                                                                 <div class="col-lg-12">
                                                                                     <canvas id="signatureCanvas"
@@ -209,10 +209,10 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div> --}}
+                                                                        </div> --}} -->
                                                                     </div>
 
-                                                                    {{-- my new code start --}}
+                                                                    <!-- {{-- my new code start --}} -->
                                                                     
                                                                     <div class="create-customer-box">
                                                                         <div class="row">
@@ -283,7 +283,7 @@
                                                                                                         </div>
                                                                                                         <div class="col-md-4 col-lg-3">
                                                                                                             <label class="mt-10">Birthday</label>
-                                                                                                            <input type="text" class="form-control add-client-birthdate" name="birthdate[]" id="birthdate">
+                                                                                                            <input type="text" class="form-control mulbirthdate" name="birthdate[]" id="birthdate">
                                                                                                         </div>
                                                                                                         <div class="col-md-4 col-lg-3">
                                                                                                             <label class="mt-10">Gender</label>
@@ -432,7 +432,7 @@
                                                                     </div>
 
                                                                     <!-- <div class="add-client-sapre-tor"></div> -->
-                                                                    {{-- @php 
+                                                                    <!-- {{-- @php 
                                                                     $user = Auth::user();
                                                                     $currentCompany = $user->current_company;
                                                                     $businessTerms = null;
@@ -474,7 +474,7 @@
                                                                             </div>
                                                                             @if($businessTerms)
                                                                                 <label class="mt-10">To continue, please read the terms & waivers above. A signature is required to participate. </label>
-                                                                            @endif --}}
+                                                                            @endif --}} -->
                                                                             @php 
                                                                             $user = Auth::user();
                                                                             $currentCompany = $user->current_company;
@@ -547,7 +547,7 @@
                                                                     </div>
                                                                     
                                                                     
-                                                                    {{-- ends --}}
+                                                                    <!-- {{-- ends --}} -->
                                                                     <div class="row">
                                                                         <div class="col-md-12 col-lg-12 text-center">
                                                                             <div class="wrap-sp">
@@ -650,7 +650,7 @@
     </div>
     
 
-    {{-- ends here --}}
+    <!-- {{-- ends here --}} -->
     <!-- my code start -->
 
     <div class="modal fade exitModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -820,8 +820,10 @@
         }
     </script>
     @include('layouts.business.footer')
+    @include('layouts.business.scripts')
 
     <script type="text/javascript">
+    $(document ).ready(function() {
         flatpickr('.add-client-birthdate', {
             altInput: true,
             altFormat: "m/d/Y",
@@ -839,8 +841,32 @@
                 }
             }
         });
-    </script>
+    });
 
+    </script>
+    <script type="text/javascript">
+        $(document ).ready(function() {
+            flatpickr('.mulbirthdate', {
+                altInput: true,
+                altFormat: "m/d/Y",
+                dateFormat: "Y-m-d",
+                maxDate: "today",
+                onChange: function(selectedDates, dateStr, instance) {
+                    var age = calculateAge(dateStr);
+                    if (age < 18) {
+                        $('.check-box-primary-account:first').prop('disabled', true);
+                        if ($('.check-box-primary-account:first').is(':checked')) {
+                            $('.check-box-primary-account:first').prop('checked', false);
+                        }
+                    } else {
+                        $('.check-box-primary-account:first').prop('disabled', false);
+                    }
+                }
+            });
+        });
+        </script>
+  
+ 
     <script type="text/javascript">
         const canvas = document.getElementById('signatureCanvas');
         const ctx = canvas.getContext('2d');
@@ -904,7 +930,7 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
     </script>
-    {{-- my code start --}}
+    <!-- {{-- my code start --}} -->
 <script>
  $(document).on('blur', '#email', function(e){
             var inputVal = $(this).val();
@@ -1025,6 +1051,7 @@
             data += '<div class="new-client mb-10" id="familydiv'+new_cnt+'" data-i="'+new_cnt+'" data-text="'+txtcount+'" >';
             data += $('#familydiv'+old_cnt).html();
             data += '</div>';
+            
             var re = data.replaceAll("heading"+old_cnt,"heading"+new_cnt);
             re = re.replaceAll("collapse"+old_cnt,"collapse"+new_cnt);
             re = re.replaceAll("birthday_date"+old_cnt,"birthday_date"+new_cnt);
@@ -1059,7 +1086,10 @@
             $('#familycnt').val(cnt);
             // my code 
 
+
         });
+
+
 
         $(document).on('click', '[data-behavior~=termsModelOpen]', function(e){
             e.preventDefault()
@@ -1078,7 +1108,7 @@ $currentCompany = $user->current_company;
 @endphp
 
 @if(isset($currentCompany))
-{{-- {{ $currentCompany->id }} --}}
+<!-- {{-- {{ $currentCompany->id }} --}} -->
 <script>
 jQuery(function ($) {
     var businessId = "{{ $currentCompany->id }}";

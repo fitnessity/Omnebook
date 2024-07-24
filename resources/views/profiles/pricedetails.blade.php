@@ -1171,7 +1171,7 @@
   document.getElementById("span").innerText = e.target.files[0].name;
 });
 </script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
+<script src="{{url('/public/css/compare/jquery-1.9.1.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.js"></script>
 <script>
     $(document).ready(function() {

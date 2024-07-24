@@ -49,7 +49,7 @@
                         </div>
                         <div class="col-md-12 text-center">
 
-                            <p class="tab-para1"><img src="/public/images/fitnessity_logo.png"> <span style="font-size: 33px;">+</span> <img width=300 src="/public/images/stripe.jpg"></p>
+                            <p class="tab-para1"><img src="/public/images/fitnessity_logo.png" loading="lazy"> <span style="font-size: 33px;">+</span> <img width=300 src="/public/images/stripe.jpg" loading="lazy"></p>
 
                             <p class="tab-para1"><b>Your Stripe Payment Verification Process Is</b></p>
                                                         

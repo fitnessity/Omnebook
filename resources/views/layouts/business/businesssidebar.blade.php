@@ -1,3 +1,5 @@
+
+
 <?php
     if(request()->business_id){
         
@@ -260,3 +262,4 @@
         location.href = '/dashboard/dates=/'+id;
     }
 </script>
+

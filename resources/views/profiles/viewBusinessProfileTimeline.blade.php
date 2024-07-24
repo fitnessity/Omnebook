@@ -7,23 +7,40 @@
     <meta name="description" content="Looking for a place to grow your career. There are many good reasons to consider the great insurance jobs available through Legends United.">
     <meta name="keywords" content="Great Insurance Jobs">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <link rel="stylesheet" type="text/css" href="{{asset('public/js/timeline/css/owl.carousel.min.css')}}">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo Config::get('constants.FRONT_CSS'); ?>stylenew.css">
+    <!-- <link rel="stylesheet" type="text/css" href="https://dev.fitnessity.co/<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
+    <link rel="stylesheet" type="text/css" href="https://dev.fitnessity.co/<?php echo Config::get('constants.FRONT_CSS'); ?>stylenew.css"> -->
+
+    <link rel="stylesheet" type="text/css" href="{{asset('public/css/all.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('public/css/stylenew.css')}}">
+    <!-- <link rel="stylesheet" type="text/css" href="https://dev.fitnessity.co/<?php echo Config::get('constants.FRONT_CSS'); ?>stylenew.css"> -->
+    
    <!--  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
     <link rel="stylesheet" type="text/css" href="{{ url('public/css/pixelarity.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url('public/css/profile.css') }}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{asset('public/js/timeline/css/bootstrap.min.css')}}">
+ 
     <link href="{{ url('public/emoji/lib/css/emoji.css') }}" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="{{ url('public/css/comment-icons.css') }}">
     <?php /*?><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><?php */?>
 	<link rel="stylesheet" type="text/css" href="{{ url('public/css/frontend/businessprofile.css') }}">
     <link rel="stylesheet" href="{{ url('public/css/frontend/jquery.fancybox.min.css') }}">
+
+    <link rel="stylesheet" type="text/css" href="{{asset('public/js/timeline/js/jquery-3.7.1.min.js')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('public/js/timeline/js/jquery.min.js')}}">
+    
+
+    <!--added by me today start  -->
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script> -->
+
+    <link rel="stylesheet" href="{{ url('public/js/timeline/css/jquery-ui.css') }}">
+    <!--ends  -->
 </head>
 @section('content')
 <?php
+
 	use App\CompanyInformation;
 	use App\Review; 
 	use App\User;
@@ -35,7 +52,7 @@
 	use App\Http\Requests;
 	use App\PageLike;
     use App\BusinessPostViews;
-    
+
 ?>
 <style>
     .removepost{ height: auto !important; }
@@ -64,7 +81,6 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 
 
 ?>
-
 <div class="banner banner-fs bannerstyle">
     <?php   $totalcount = count($viewgallery);
         $rem = 4 -$totalcount;
@@ -86,8 +102,6 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     </div>
     @endfor
 </div>
-
-
 @if (count($errors) > 0)
 	<div class="alert alert-danger">
 		<ul>
@@ -251,7 +265,6 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
         </div>
     </div>
 </section>
-
 <!-- Modal -->
 <div class="modal" id="uploadCoverPic" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -324,7 +337,6 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
         </div>
     </div>
 </div>
-
 <!-- Modal -->
 <div class="modal" id="uploadgalaryPic" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -450,7 +462,6 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
         </div>
     </div>
 </div>
-
 <section class="desc-sec">
     <div class="container-fluid">
         <div class="row">
@@ -1770,16 +1781,21 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 
 @include('layouts.footer')
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
-<link href="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/css/default/zebra_datepicker.min.css" />
+<script src="{{ url('public/js/timeline/js/owl.carousel.min.js') }}"></script>
+<script src="{{ url('public/js/timeline/js/sweetalert.min.js') }}"></script>
+<script src="{{ url('public/js/timeline/js/bootstrap-datepicker.min.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{asset('public/js/timeline/css/bootstrap-datepicker.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('public/js/timeline/css/zebra_datepicker.min.css')}}">
+
+<script src="{{ url('public/js/timeline/js/zebra_datepicker.src.js') }}"></script>
+<script src="{{ url('public/js/timeline/js/jquery-ui.min.js') }}"></script>
+<script src="{{ url('public/js/timeline/js/jquery.validate.min.js') }}"></script>
+<script src="{{ url('public/js/timeline/js/jquery.easing.min.js') }}"></script>
+
 <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Zebra_datepicker/1.9.15/zebra_datepicker.src.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+
+
+
 <script src="{{ url('public/js/pixelarity-face.js') }}"></script>
 <script src="{{ url('public/js/jquery.shares.js') }}"></script>
 <script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
@@ -1792,7 +1808,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="{{ url('public/js/date-range-picker.js') }}"></script>
 <script src="{{ url('public/js/webcam.min.js') }}"></script>
 
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>ratings.js"></script>
+<script src="{{url('/public/js/ratings.js')}}"></script>
 
 <script>
 
