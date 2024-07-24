@@ -1,5 +1,7 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 @section('content')
 
 
@@ -23,7 +25,7 @@
 					</div>
 
                     @if(session('errorMsg'))
-                        <div id='systemMessage' class="alert alert-class alert-danger">
+                        <div id='systemMessage' class="alert alert-class alert-danger fs-14">
                             {{ session('errorMsg') }}
                         </div>
                     @endif
@@ -32,14 +34,14 @@
                     <input type="search" name="searchCompany" id="searchCompany" class="myemail" size="30" autocomplete="off" placeholder="Seach Company Name" maxlength="80" required>
 
                     <input type="email" name="email" id="email" class="myemail" size="30" autocomplete="off" placeholder="e-MAIL" maxlength="80" required>
-                    <span class="text-danger cls-error" id="erremail"></span>        
+                    <span class="text-danger cls-error fs-14" id="erremail"></span>        
 					<div class="position-relative auth-pass-inputgroup">
 						<input class="password-input" type="password" name="password" id="password" size="30" placeholder="Password" required>
 
 						<button class="btn-link position-absolute password-addon" type="button" id="toggle-password">
 							<i class="fas fa-eye"></i>
 						</button>
-						<span class="text-danger cls-error" id="errpass"></span>   
+						<span class="text-danger cls-error fs-14" id="errpass"></span>   
 					</div>
 					<div class="row">
 						<div class="col-md-6"></div> 
@@ -60,7 +62,7 @@
     </div>
 </section>
 
-@include('layouts.footer')                          
+@include('layouts.business.footer')
 <script>
     $(document).ready(function () {
 

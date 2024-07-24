@@ -323,7 +323,7 @@
 <script src="{{ url('/public/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
 
 
-
+<script>
 function openMobileNav() {
 	document.getElementById("myMobileSidepanel").style.width = "300px";
 }

@@ -23,7 +23,7 @@
             <div class="powered-img">
                 <label>Powered By</label>
                 <div class="booking-modal-logo">
-                    <img src="{{url('/public/images/fitnessity_logo1.png')}}">
+                    <img src="{{url('/public/images/fitnessity_logo1.png')}}" loading="lazy" alt="fitnessity">
                 </div>
             </div>
         </div>

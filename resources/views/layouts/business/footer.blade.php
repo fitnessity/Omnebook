@@ -290,7 +290,7 @@
 
 
 	<!--<script src="{{url('/public/dashboard-design/js/dashboard-projects.init.js')}}"></script>-->
-
+  
 
 	<!-- profile-setting init js -->
 	<script src="{{url('/public/dashboard-design/js/profile-setting.init.js')}}"></script>
@@ -431,8 +431,6 @@ function openMobileNav() {
 function closeMobileNav() {
 	document.getElementById("myMobileSidepanel").style.width = "0";
 }
-
-
 </script>
 
 <script type="text/javascript">

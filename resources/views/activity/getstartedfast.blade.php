@@ -8,11 +8,16 @@
 
 
 
-<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
-<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/w3.css">
+<link href="{{url('/public/css/compare/style.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{url('/public/css/compare/w3.css')}}" rel="stylesheet" type="text/css" />
 <link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" type="text/css" rel="stylesheet" />
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
+
+
+<script src="{{url('/public/js/compare/Compare.js')}}"></script>
+<script src="{{url('/public/js/compare/jquery-1.9.1.min.js')}}"></script>
+
+
+
 <script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
 <script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
 
@@ -233,7 +238,7 @@
 										@endphp
 										<div class="activity-information activites-height">
 											<span><a 
-												@if (Auth::check())  
+											@if (Auth::check())  
 				                           href="{{ Config::get('constants.SITE_URL') }}/businessprofile/{{$redlink}}" 
 				                        @else 
 				                           href="{{ Config::get('constants.SITE_URL') }}/userlogin" 

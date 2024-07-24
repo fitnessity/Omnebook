@@ -1,14 +1,16 @@
 @inject('request', 'Illuminate\Http\Request')
 @extends('layouts.business.header')
-@section('content')
-<head>
+
     <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
-    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>css/responsive.css">
-</head>
+    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
+
+@section('content')
+
 
 <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.css" rel="stylesheet"> -->
 
 <style>
+	body{background: #fff;}
 	label{font-size: 14px;}
 	.form-group {
 		margin-bottom: 15px;
@@ -29,7 +31,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="business-banner">
-					<img src="{{url('/public/images/newimage/addbusiness-customer.jpg')}}" alt="">
+					<img src="{{url('/public/images/newimage/addbusiness-customer.jpg')}}" alt="fitnessity" loading="lazy">
 				</div>
 			</div>
 		</div>
@@ -244,7 +246,7 @@
 						<div class="">
 							<div class="col-auto">
 								<div class="photo-select-review">
-									<img src="{{ url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah" id="showimg">
+									<img src="{{ url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah" id="showimg" loading="lazy">
 									<input type="file" name="rimg[]" id="files" class="text-center" multiple="multiple" />
 									<!-- <label for="files">Upload Image</label> -->
 								</div>
@@ -335,6 +337,7 @@
 <!-- end modal -->
 
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.js"></script>
 <script>

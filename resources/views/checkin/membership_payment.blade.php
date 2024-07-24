@@ -222,7 +222,7 @@
                                 $('#messages').text('Payment successfully done!').show();
                                 $('#submit-button').html('Pay');
                                 setTimeout(function() {
-                                    window.location.href = "/check-in-portal?activetab=booking";
+									window.location.href = "/check-in-portal";
                                 }, 2000); 
                             },
                             error: function(xhr) {
@@ -246,7 +246,7 @@
                         $('#messages').text('Payment successfully done!').show();
                         $('#submit-button').html('Pay');
                         setTimeout(function() {
-                            window.location.href = "/check-in-portal?activetab=booking";
+                            window.location.href = "/check-in-portal";
                         }, 2000); 
                     },
                     error: function(xhr) {

@@ -8,9 +8,7 @@ use App\Repositories\{SportsCategoriesRepository,SportsRepository,ProfessionalRe
 use DB;
 use Session;
 use App\{AddrStates,AddrCities,AddrCountries,CompanyInformation,BusinessServices,BusinessClaim,Miscellaneous,Languages,MailService,SGMailService,Sports,User,Customer,Transaction,StripePaymentMethod,UserFamilyDetail};
-
 use Illuminate\Support\Facades\Crypt;
-
 class HomeController extends Controller
 {
     protected $sports_cat;
@@ -19,44 +17,17 @@ class HomeController extends Controller
         $this->sports = $sports;
         $this->professional = $professional;
     }
-    /**
-     * Display a list of all of the user's home.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
     public function index(Request $request)
     {
         $all_categories = $this->sports_cat->getAllSportsCategories();
         $most_searched_sports = $this->sports->getSportsFromCatId(1);
         $flag = 'topprof';
         $sport_names = $this->sports->getAllSportsNames();
-        if($flag){
-            $professionals_list = $this->professional->getTopBookedProfessionals($flag);
-        }
+        if($flag){ $professionals_list = $this->professional->getTopBookedProfessionals($flag); }
         if(@$professionals_list)
-        {
-            $flag = 'topprof';
-        } else {
-         $professionals_list=array();
-        }
-        //die;
-        //$professionals_list = $this->professional->getTopBookedProfessionals('topprof');
-        //print_r($sport_names); die;
-		//print_r($popup);die;
-		// if($request->popup == 'login'){
-		//     return view('home.index', [
-		//             'product_categories' => $all_categories,
-		//             'most_searched_sports' => $most_searched_sports,
-		//             'professionals_list' => $professionals_list,
-		//             'sport_names' => $sport_names,
-		//             'popup' => 'login'
-		//         ]);
-		// }
-		//for book activity model
+        { $flag = 'topprof'; } else { $professionals_list=array(); }
 		$activity = Miscellaneous::activity();
 		$all_categories = $this->sports_cat->getAllSportsCategories();
-		//$sports_list = $this->sports->getSportsFromCatId('all');
 		$return = Sports::select(DB::raw('sports.*'),DB::raw('sports_categories.category_name'),DB::raw('IF((select count(*) from sports as sports1 where sports1.is_deleted = "0" AND sports1.parent_sport_id = sports.id ) > 0,1,0) as has_child'))
        ->leftjoin("sports_categories", DB::raw('sports.category_id'), '=', 'sports_categories.id');
         $return->where('sports.is_deleted','0');
@@ -107,16 +78,14 @@ class HomeController extends Controller
         $all_categories = $this->sports_cat->getAllSportsCategories();
         $all_sports = $this->sports->getSportsFromCatId('all');
         return view('home.viewAllSports', [
-            'product_categories' => $all_categories,
-            'all_sports' => $all_sports
+            'product_categories' => $all_categories,'all_sports' => $all_sports
         ]);
     }
     public function jsModalChildSports($id){
         $child_sports = $this->sports->getChildSportsList($id);
         $parent_sport = $this->sports->getSportDetail($id);
         return view('home.viewChildSports', [
-            'child_sports' => $child_sports,
-            'parent_sport_name' => @$parent_sport[0]['sport_name']
+            'child_sports' => $child_sports,'parent_sport_name' => @$parent_sport[0]['sport_name']
         ]);
     }
     public function getFilter(UserRepository $users, Request $request)
@@ -128,15 +97,10 @@ class HomeController extends Controller
         $selected_label = isset($request->label) ? $request->label: NULL;
         $selected_location = isset($request->location) ? $request->location: NULL;
         $selected_zipcode = isset($request->zipcode) ? $request->zipcode: NULL;
-
         if(isset($request->top))
-        {
-           $result = $this->users->getTopFilter($selected_label);
-        }
+        { $result = $this->users->getTopFilter($selected_label); }
         else
-        {
-            $result = $this->users->getFilter($selected_label, $selected_location, $selected_zipcode);
-        }
+        { $result = $this->users->getFilter($selected_label, $selected_location, $selected_zipcode); }
         foreach($result as $key1=> $value)
         {
             $str = '';
@@ -165,32 +129,26 @@ class HomeController extends Controller
             'pageTitle' => "Search"
       ]);
     }
-
 	public function searchaction(Request $request)
 	{
 		if($request->get('query'))
 		{
 			$array_data=array();
 			$query = $request->get('query');
-			//$query = $request->get('query');
 		  	$data_city = Sports::where('sport_name', 'LIKE', "%{$query}%")->get();
 			foreach($data_city as $city)
-			{
-				$array_data[]=$city->sport_name;
-			}
+			{ $array_data[]=$city->sport_name; }
 			$comd = CompanyInformation::where('dba_business_name' ,'=' , null)->get();
 			if(!empty($comd)){
 				foreach($comd as $det){
 					CompanyInformation::where('id', $det->id)->update(["dba_business_name" => $det->company_name]);
 				}
 			}
-
 			$data_state = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->get();
 			foreach($data_state as $state)
 			{
 				$array_data[]=$state->dba_business_name."~~business_profile"."~~".str_replace(" ","-",$state->dba_business_name)."/".$state->id;
 			}
-			
 			$searchValues = preg_split('/\s+/', $query, -1, PREG_SPLIT_NO_EMPTY);
 			$data_user = User::where(function ($q) use ($searchValues) {
             	$serch1 = @$searchValues[0] != '' ? strtolower(@$searchValues[0]) : '';
@@ -210,23 +168,16 @@ class HomeController extends Controller
                     ->orWhere(DB::raw('LOWER(lastname)'), 'like', "%{$serch1}%")->orWhere(DB::raw('LOWER(username)'), 'LIKE', "%{$serch1}%");
                 } 
             })->get();
-
-			//$data_user = User::where('firstname', 'LIKE', "%{$query}%")->orWhere('lastname', 'LIKE', "%{$query}%")->orWhere('username', 'LIKE', "%{$query}%")->get();
-
-
 			foreach($data_user as $user_data)
 			{
 				$array_data[]=$user_data->full_name."(".$user_data->username.")"."~~personal_profile"."~~".$user_data->username;
 			}
-
 			$data_activity = BusinessServices::where('program_name', 'LIKE', '%'.$query.'%')->get();
 			foreach($data_activity as $name)
 			{
 				$array_data[]=$name->program_name."~~activity_page"."~~".$name->id;
 			}
-
-			sort($array_data);
-			$output = '<ul id="country-list">';
+			sort($array_data); $output = '<ul id="country-list">';
 			if(!empty($array_data)){
 				foreach($array_data as $row)
 				{
@@ -254,7 +205,6 @@ class HomeController extends Controller
 		{
 			$array_data=array();
 			$query = $request->get('query');
-			//$query = $request->get('query');
 		  	$data_city = AddrCities::where('city_name', 'LIKE', "%{$query}%")->get();
 			foreach($data_city as $city)
 			{
@@ -283,40 +233,27 @@ class HomeController extends Controller
 			{
 				$array_data=array();
 				$query = $request->get('query');
-				$query = $request->get('query');
 				$data_city = Sports::where('sport_name', 'LIKE', "%{$query}%")->get();
 				foreach($data_city as $city)
-				{
-					$array_data[]=$city->sport_name;
-				}
+				{ $array_data[]=$city->sport_name; }
 				$data_state = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->get();
 				foreach($data_state as $state)
-				{
-					$array_data[]=$state->dba_business_name;
-				}
+				{ $array_data[]=$state->dba_business_name; }
 				$user_name = User::where('username', 'LIKE', '%'.$query.'%')->get();
 				foreach($user_name as $name)
-				{
-					$array_data[]=$name->username;
-				}
-
+				{ $array_data[]=$name->username; }
 				$data_activity = BusinessServices::where('program_name', 'LIKE', '%'.$query.'%')->get();
 				foreach($data_activity as $name)
-				{
-					$array_data[]=$name->program_name;
-				}
+				{ $array_data[]=$name->program_name; }
 				sort($array_data);
 				$output = '<ul id="country-list">';
 				foreach($array_data as $row)
-				{
-					$output .= '<li class="searchclickactivity" data-num="'.trim($row).'">'.$row.'</li>';
-				}
+				{ $output .= '<li class="searchclickactivity" data-num="'.trim($row).'">'.$row.'</li>'; }
 				$output .= '</ul>';
 				echo $output;
 		 	}
 		 }
 	}
-
 	function searchactionlocation(Request $request)
 	{
 		if($request->get('query'))
@@ -325,9 +262,7 @@ class HomeController extends Controller
 		  	$data_city = AddrCities::where('city_name', 'LIKE', "%{$query}%")->get();
 			$array_data=array();
 			foreach($data_city as $city)
-			{
-				$array_data[]=$city->city_name;
-			}
+			{ $array_data[]=$city->city_name; }
 			$data_state = AddrStates::where('state_name', 'LIKE', "%{$query}%")->get();
 			foreach($data_state as $state)
 			{
@@ -343,19 +278,12 @@ class HomeController extends Controller
 		  	echo $output;
 		}
 	}
-
-	
 	public function searchbussinessaction(Request $request) {
         if($request->get('query'))
         {
             $array_data=array();
-            /*$array_data1=array();
-            $array_data2=array();*/
             $query = $request->get('query');
-            //$query = $request->get('query');
-          
             $data_bus = CompanyInformation::where('dba_business_name', 'LIKE', "%{$query}%")->orWhere('company_name', 'LIKE', "%{$query}%")->get();
-           /* $data_bus1 =BusinessClaim::where('business_name', 'LIKE', "%{$query}%")->where('is_verified',0)->get();*/
             foreach($data_bus as $buss)
             {	
             	$address = '';
@@ -374,7 +302,6 @@ class HomeController extends Controller
             	if($buss->zip_code != ''){
             		$address .= $buss->zip_code;
             	}
-
                 $array_data [] = array(
 	                "cname"=>$buss->public_company_name, 
 	                "cid"=>$buss->id,
@@ -382,25 +309,7 @@ class HomeController extends Controller
 	                "image" => $buss->logo,
 	                "address" => $address);
             }
-
-           /* foreach($data_bus1 as $buss)
-            {
-            	if($buss->address == 'null'){
-            		$address = '';
-            	}else{
-            		$address =  $buss->address;
-            	}
-                $array_data2[]= array(
-                    "cname"=>$buss->business_name, 
-                    "cid"=>$buss->id,
-                    "claim_business_status"=>$buss->is_verified,
-                    "image" => '',
-                    "address" => $address);
-            }
-            $array_data = array_merge($array_data1,$array_data2);*/
-                    
             sort($array_data);
-            /*print_r($array_data);*/
             $output = '<ul id="bussiness-list">';
             if(!empty($array_data)){
                 foreach($array_data as $row)
@@ -416,11 +325,9 @@ class HomeController extends Controller
 										$pf=substr($row['cname'], 0, 1);
 								$output .='<p class="img-controller">'.$pf.'</p></div>';
                             }
-
                             $output .='</div>
                             <div class="col-md-10 div-controller">
-                                <p class="pstyle">'.$row['cname'].'</p>
-                                <p class="pstyle liaddress">'.$row['address'].'</p>
+                                <p class="pstyle">'.$row['cname'].'</p> <p class="pstyle liaddress">'.$row['address'].'</p>
                             </div>
                             <input type="hidden" name="claim_business_status" id="claim_business_status" value="'.$row['claim_business_status'].'">
                             <input type="hidden" name="cid" id="cid" value="'.$row['cid'].'">
@@ -436,38 +343,31 @@ class HomeController extends Controller
             echo $output;
         }
     }
-
     public function set_session_for_claim($cid ,$status) {
     	Session::put('claim_business_page', 'claim'); 
     	Session::put('claim_cid', $cid); 
     	Session::put('claim_status', $status); 
     }
-
     public function set_unset_session_business_welcome($check) {
     	if($check == 'not'){
     		Session::put('business_welcome', 'welcome'); 	
     	}
     }
-
     public function set_session() {
     	Session::put('manage_company', 'company'); 	
     }
-
     public function addcheckoutsession() {
     	Session::put('checkoutsession', 'checkoutsession'); 	
       	return redirect('/userlogin');
     }
-
     public function already_claim_business() {
     	return view('home.already-claim-business');
     }
-
     public function senddummymail(){
     	$id = Auth::user()->id;
     	$status = MailService::sendEmaildummy($id);
     	echo $status;exit;
     }
-
     public function searchuser(Request $request) {
     	$user = User::orderby('created_at','desc');
     	if($request->term){
@@ -490,12 +390,10 @@ class HomeController extends Controller
                     ->orWhere(DB::raw('LOWER(lastname)'), 'like', "%{$serch1}%");
                 } 
             });
-            	//->whereRaw('LOWER(`firstname`) LIKE ?', [ '%'. strtolower($request->term) .'%' ]);
         }
         $user = $user->get();
     	return response()->json($user);
     }
-
     public function sendGrantAccessMail(Request $request){
     	$user = User::where('id',$request->id)->first();
     	$company = CompanyInformation::findOrFail($request->business_id);
@@ -524,52 +422,6 @@ class HomeController extends Controller
                     ]);
                 }
             }
-
-            //$cardData = StripePaymentMethod::where(['user_id' => $user->id , 'user_type' => 'User' ])->get();
-
-            /*foreach($cardData as $data){
-                $stripData = StripePaymentMethod::where(['user_id' =>$customer->id ,'payment_id'=> $data->payment_id ,'exp_year' => $data->exp_year ,'last4' =>$data->last4])->first();
-                if($stripData == ''){
-                    StripePaymentMethod::create([
-                        'payment_id' => $data->payment_id,
-                        'user_type' => 'Customer',
-                        'user_id' => $customer->id,
-                        'pay_type'=> $data->pay_type,
-                        'brand'=> $data->brand,
-                        'exp_month'=> $data->exp_month,
-                        'exp_year'=> $data->exp_year,
-                        'last4'=> $data->last4,
-                    ]);
-                }
-            }*/
-
-            /*$paymentHistory = Transaction::where('user_type', 'User')
-            ->where('user_id', $user->id)
-            ->orWhere(function($subquery) use ($customer) {
-                $subquery->where('user_type', 'Customer')
-                    ->where('user_id', $customer->id);
-            })->get();
-
-            foreach($paymentHistory as $data){
-                $history = Transaction::where(['user_id' =>$customer->id ,'user_type'=>'Customer'])->first();
-                if($history == ''){
-                    Transaction::create([
-                        'item_id' => $data->item_id,
-                        'user_type' => 'Customer',
-                        'user_id' => $customer->id,
-                        'item_type'=> $data->item_type,
-                        'channel'=> $data->channel,
-                        'kind'=> $data->kind,
-                        'transaction_id'=> $data->transaction_id,
-                        'stripe_payment_method_id'=> $data->stripe_payment_method_id,
-                        'amount'=> $data->amount,
-                        'qty'=> $data->qty,
-                        'status'=> $data->status,
-                        'refund_amount'=> $data->refund_amount,
-                        'payload'=> $data->payload
-                    ]);
-                }
-            }*/
     		return "already";
     	}else{
     		$data = array(
@@ -582,11 +434,9 @@ class HomeController extends Controller
     		return $status;
     	}
     }
-
     public function login_as(Request $request){
         $user = User::find($request->id);
         Auth::guard('web')->login($user, true);
         return redirect('/');
     }
-
 }
