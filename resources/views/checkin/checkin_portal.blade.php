@@ -18,7 +18,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
                   <div class="col">
                     <div class="h-100">
                         <div class="row mb-3">
-							<div class="col-lg-10 col-md-11 col-sm-11 col-xs-11 mt-10">
+							<div class="col-lg-9 col-md-11 col-sm-11 col-xs-11 mt-10">
 								<div class="page-heading">
 									<label class="mb-15">Check-in Portal </label>
 								</div>
@@ -33,9 +33,12 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 								</div>
 							</div>
 
-							<div class="col-lg-2 col-md-1 col-sm-1 col-xs-1 mt-10">
+							<div class="col-lg-3 col-md-1 col-sm-1 col-xs-1 mt-10">
 								<div class="page-heading text-right d-flex float-end">
 									<!-- <label class="mb-15"><a class="btn btn-red" href="{{route('checkin.check_out' ,['type' => 1])}}">Exit</a></label> -->
+									<label class="mb-15 me-3">
+										<a class="btn btn-red" data-modal-chkBackdrop="1" data-reload="1" data-modal-width="modal-50" data-behavior="ajax_html_modal" data-url="{{route('checkin.activity_booking_html')}}" class="btn btn-red"> Purchase A Membership </a>
+									</label>
 									<label class="mb-15 me-3">
 										{{-- <a class="btn btn-red" href="{{ route('clear-session-and-welcome') }}" style="background-color: {{ $settings ? $settings->digit_screen_color : '' }}; 
 											border-color: {{ $settings ? $settings->digit_screen_color : '' }};" onclick="clearLocalStorage()"> Finish
@@ -2848,6 +2851,8 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
     });
 
 </script>
+
+
 {{-- ends --}}
 
 @endsection

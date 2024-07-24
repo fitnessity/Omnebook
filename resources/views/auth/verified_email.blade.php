@@ -1,6 +1,8 @@
-@extends('layouts.header')
-
+@extends('layouts.business.header')
 @section('content')
+
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 <link href="<?php echo Config::get('constants.FRONT_CSS'); ?>dropzone.css" rel="stylesheet">
 <link href="<?php echo Config::get('constants.FRONT_CSS'); ?>feedpost/jquery.lightbox-0.5.css" rel="stylesheet">
 <link href="<?php echo Config::get('constants.FRONT_CSS'); ?>lightbox2.min.css" rel="stylesheet">
@@ -12,24 +14,23 @@
 			<div class="user-verify">
 				<!-- $user['email']-->
 
-
 				<!-- Old code -->
-					<h2>Verify your email address to access all of Fitnessity</h2><br />
-					<p>We've just sent an email to your address : <strong> <?php if(isset($user['email'])){
+					<h2 class="fs-17">Verify your email address to access all of Fitnessity</h2><br />
+					<p class="fs-15">We've just sent an email to your address : <strong> <?php if(isset($user['email'])){
 						print_r($user['email']);
 					}?> </strong></p>
-					<p> Please check your email and click on the link provided to verify your address.</p><br />
-					<p>
+					<p class="fs-15"> Please check your email and click on the link provided to verify your address.</p><br />
+					<p class="fs-15"> 
 						<input type="hidden" name="user_id" id="user_id" value="<?php echo $user['id'];?>">
 						<input type="hidden" name="_token" id="token" value="{{csrf_token()}}">
-						<button type="submit" class="btn-primary btn-verify" id="resendBtn">Please re-send that verification email</button>
+						<button type="submit" class="btn btn-red btn-verify fs-14" id="resendBtn">Please re-send that verification email</button>
 					</p>
 					<label style="padding-top: 1px; color: #f53b49; display: none;" id="process">Processing...</label>
 			</div>
 		</div>
 	</div>
 </div>
-@include('layouts.footer')
+@include('layouts.business.footer')
 <script>
 	$(document).ready( function($){
 		

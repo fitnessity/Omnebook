@@ -2204,7 +2204,7 @@
 	.setting-area{padding-left: 0px !important;}
 	.logo-header{text-align: center;margin: auto;}
 	.main-slider .active .content-column .title{ line-height:22px;}
-	.register_wrap{float: none;}
+	.register_wrap{float: none; margin-top: 50px;}
 	.register_wrap form{float: none; padding: 0 25px;}
 	.register{padding-top: 200px;}
 	#frmsearchCategory{width: 100%; position: inherit; top: 2%;}
@@ -2239,7 +2239,7 @@
 	.direct-hire-sidebar{padding: 20px 25px;}
 	.direc-right.direc-right-new{padding: 7px 5px 0;}
 	.business-offer-main{margin-top: 0px !important;}
-	.inner_top{margin-top: 0px; display: table;}
+	.inner_top{margin-top: 100px; display: table;}
 	.tab-hed{margin-left: 0px !important;}
 	.com-setup-space{padding-right: 0px !important;}
 	.btn-txt-rp{text-align: left !important; margin-top: 15px;}

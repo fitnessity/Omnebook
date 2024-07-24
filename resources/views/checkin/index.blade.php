@@ -283,7 +283,7 @@
                                                                                                         </div>
                                                                                                         <div class="col-md-4 col-lg-3">
                                                                                                             <label class="mt-10">Birthday</label>
-                                                                                                            <input type="text" class="form-control mulbirthdate" name="birthdate[]" id="birthdate">
+                                                                                                            <input type="text" class="form-control birthday_date0" name="birthdate[]" id="birthdate0">
                                                                                                         </div>
                                                                                                         <div class="col-md-4 col-lg-3">
                                                                                                             <label class="mt-10">Gender</label>
@@ -843,13 +843,35 @@
         });
     });
 
-    </script>
-    <script type="text/javascript">
-        $(document ).ready(function() {
-            flatpickr('.mulbirthdate', {
+        function assignfliptpicker(val)
+        { alert('call');
+            flatpickr('.'+val, {
                 altInput: true,
                 altFormat: "m/d/Y",
                 dateFormat: "Y-m-d",
+                maxDate: "today",
+                onChange: function(selectedDates, dateStr, instance) {
+                    var age = calculateAge(dateStr);
+                    if (age < 18) {
+                        $('.check-box-primary-account:first').prop('disabled', true);
+                        if ($('.check-box-primary-account:first').is(':checked')) {
+                            $('.check-box-primary-account:first').prop('checked', false);
+                        }
+                    } else {
+                        $('.check-box-primary-account:first').prop('disabled', false);
+                    }
+                }
+            });
+        }
+
+
+    </script>
+    <script type="text/javascript">
+        $(document ).ready(function() {
+            flatpickr('#birthdate0', {
+               // altInput: true,
+               // altFormat: "m/d/Y",
+                dateFormat: "m/d/Y",
                 maxDate: "today",
                 onChange: function(selectedDates, dateStr, instance) {
                     var age = calculateAge(dateStr);
@@ -1051,10 +1073,10 @@
             data += '<div class="new-client mb-10" id="familydiv'+new_cnt+'" data-i="'+new_cnt+'" data-text="'+txtcount+'" >';
             data += $('#familydiv'+old_cnt).html();
             data += '</div>';
-            
             var re = data.replaceAll("heading"+old_cnt,"heading"+new_cnt);
             re = re.replaceAll("collapse"+old_cnt,"collapse"+new_cnt);
             re = re.replaceAll("birthday_date"+old_cnt,"birthday_date"+new_cnt);
+            re = re.replaceAll("birthdate"+old_cnt,"birthdate"+new_cnt);
             re = re.replaceAll("deletediv"+old_cnt,"deletediv"+new_cnt);
             re = re.replaceAll("Family Member #"+dataTxt,"Family Member #"+txtcount);
             re = re.replaceAll("primaryAcCheck"+old_cnt,"primaryAcCheck"+new_cnt);
@@ -1084,9 +1106,22 @@
                 $(this).removeClass("font-red");
             });
             $('#familycnt').val(cnt);
-            // my code 
-
-
+           var varnm='#birthdate'+new_cnt;
+           flatpickr(varnm, {
+                dateFormat: "m/d/Y", maxDate: "today",
+                onChange: function(selectedDates, dateStr, instance) {
+                    var age = calculateAge(dateStr);
+                    if (age < 18) {
+                        $('.check-box-primary-account:first').prop('disabled', true);
+                        if ($('.check-box-primary-account:first').is(':checked')) {
+                            $('.check-box-primary-account:first').prop('checked', false);
+                        }
+                    } else {
+                        $('.check-box-primary-account:first').prop('disabled', false);
+                    }
+                }
+            });
+           
         });
 
 
@@ -1216,8 +1251,8 @@ jQuery(function ($) {
                     success: function (response) {
                        
                         if (response.type === 'success') {
-                            if($('#buttonType').val() == 'skip'){
-                                window.location.href = '/business/' + businessId + '/create-customer'; 
+                            if ($('#buttonType').val() == 'skip') {
+                                window.location.href = 'check-in-welcome';
                             }
                             else {
                                  $.ajax({
@@ -1388,7 +1423,7 @@ jQuery(function ($) {
         });
 
         $(document).on('click', '#skip_next', function () {
-            window.location.href = '/business/' + businessId + '/create-customer';
+            window.location.href = 'check-in-welcome';
         });
     </script>
 @endif
@@ -1440,6 +1475,7 @@ $currentCompany = $user->current_company;
 
         $(document).on('click', '#skip_next', function () {
             $('#customerModal').modal('hide');
+            window.location.href = 'check-in-welcome';
         });
     }
 </script>

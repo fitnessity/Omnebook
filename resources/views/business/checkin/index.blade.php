@@ -90,7 +90,7 @@
                                                 <div class="row y-middle">
                                                     <div class="col-xxl-1 col-lg-2 col-md-1 col-sm-2 col-3">
                                                         <div class="profile-user position-relative d-inline-block mx-auto mb-2">
-                                                            <img src="{{url('/public/images/fitnessity_logo1_black.png')}}" class="avatar-sm img-thumbnail user-profile-image  shadow" alt="upload-image" >
+                                                            <img src="{{url('/public/images/fitnessity_logo1_black.png')}}" class="avatar-sm img-thumbnail user-profile-image  shadow" alt="upload-image" loading="lazy">
                                                             <div class="avatar-xxs p-0 rounded-circle profile-photo-edit">
                                                                 <input id="profile-img-file-input" type="file" class="profile-img-file-input" name="logo">
                                                                 <label for="profile-img-file-input" class="profile-photo-edit logo-change avatar-xxs">
@@ -211,7 +211,7 @@
                                                         <div class="d-flex p-2">
                                                             <div class="flex-shrink-0 me-3">
                                                                 <div class="avatar-sm bg-light rounded">
-                                                                    <img data-dz-thumbnail class="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" />
+                                                                    <img data-dz-thumbnail class="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" loading="lazy"/>
                                                                 </div>
                                                             </div>
                                                             <div class="flex-grow-1">
@@ -235,7 +235,7 @@
                                                             <div class="d-flex p-2">
                                                                 <div class="flex-shrink-0 me-3">
                                                                     <div class="avatar-sm bg-light rounded product-display">
-                                                                        <img class="img-fluid rounded d-block" src="{{Storage::URL($data->welcome_cover_photo)}}" alt="Product-Image"  />
+                                                                        <img class="img-fluid rounded d-block" src="{{Storage::URL($data->welcome_cover_photo)}}" alt="Product-Image"  loading="lazy"/>
                                                                     </div>
                                                                 </div>
                                                                 <div class="flex-grow-1">
@@ -292,7 +292,7 @@
                                                         <div class="d-flex p-2">
                                                             <div class="flex-shrink-0 me-3">
                                                                 <div class="avatar-sm bg-light rounded">
-                                                                    <img data-dz-thumbnail class="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" />
+                                                                    <img data-dz-thumbnail class="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" loading="lazy"/>
                                                                 </div>
                                                             </div>
                                                             <div class="flex-grow-1">
@@ -316,7 +316,7 @@
                                                             <div class="d-flex p-2">
                                                                 <div class="flex-shrink-0 me-3">
                                                                     <div class="avatar-sm bg-light rounded product-display">
-                                                                        <img class="img-fluid rounded d-block" src="{{Storage::URL($data->passcode_cover_photo)}}" alt="Product-Image"  />
+                                                                        <img class="img-fluid rounded d-block" src="{{Storage::URL($data->passcode_cover_photo)}}" alt="Product-Image"  loading="lazy"/>
                                                                     </div>
                                                                 </div>
                                                                 <div class="flex-grow-1">
@@ -373,7 +373,7 @@
                                                         <div class="d-flex p-2">
                                                             <div class="flex-shrink-0 me-3">
                                                                 <div class="avatar-sm bg-light rounded">
-                                                                    <img data-dz-thumbnail class="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" />
+                                                                    <img data-dz-thumbnail class="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" loading="lazy"/>
                                                                 </div>
                                                             </div>
                                                             <div class="flex-grow-1">
@@ -396,7 +396,7 @@
                                                                 <div class="d-flex p-2">
                                                                     <div class="flex-shrink-0 me-3">
                                                                         <div class="avatar-sm bg-light rounded product-display">
-                                                                            <img class="img-fluid rounded d-block" src="{{Storage::URL($data->alerts_photo)}}" alt="Product-Image"  />
+                                                                            <img class="img-fluid rounded d-block" src="{{Storage::URL($data->alerts_photo)}}" alt="Product-Image"  loading="lazy"/>
                                                                         </div>
                                                                     </div>
                                                                     <div class="flex-grow-1">
@@ -453,7 +453,7 @@
                                                                     <div class="col-lg-6 col-12">
                                                                         <div class="self-welcome-logo">
                                                                             <a href="#" class="d-inline-block auth-logo">
-                                                                                <img src="{{url('/public/images/fitnessity_logo1_black.png')}}" alt="logo">
+                                                                                <img src="{{url('/public/images/fitnessity_logo1_black.png')}}" alt="logo" loading="lazy">
                                                                             </a>
                                                                         </div>
                                                                     </div>
@@ -476,7 +476,7 @@
                                                                     <div class="col-lg-6 col-12 mobile-none">
                                                                         <div class="float-right qr-code">
                                                                             <div class="text-center">
-                                                                                <img src="http://dev.fitnessity.co/dashboard-design/images/qr-code.png" alt="logo">
+                                                                                <img src="http://dev.fitnessity.co/dashboard-design/images/qr-code.png" alt="logo" loading="lazy">
                                                                                 <p>Scan QR Code for touchless check-in or sign-up</p>
                                                                             </div>                                               
                                                                         </div>
@@ -502,7 +502,7 @@
                                                         <div class="card-check-in-preview p-relative h-100">
                                                             <div class="pb-60 text-center">
                                                                 <a href="#" class="register-check">
-                                                                    <img src="{{url('/public/images/fitnessity_logo1_black.png')}}" alt="logo">
+                                                                    <img src="{{url('/public/images/fitnessity_logo1_black.png')}}" alt="logo" loading="lazy">
                                                                 </a>
                                                             </div>  
                                                             <div class="welcome-provider-preview text-center">
@@ -530,7 +530,7 @@
                                                             </div>
                                                             <div class="text-center reg-up-img-preview">
                                                                 <div class="mb-3">
-                                                                    <img src="http://dev.fitnessity.co//public/dashboard-design/images/u-login.png" alt="logo">
+                                                                    <img src="http://dev.fitnessity.co//public/dashboard-design/images/u-login.png" alt="logo" loading="lazy">
                                                                 </div>
                                                             </div>
                                                             <div class="container">
@@ -565,13 +565,13 @@
                                                             <div class="row y-middle">
                                                                 <div class="col-lg-6 col-md-6">
                                                                     <div class="checking-popup">
-                                                                        <img src="https://fitnessity-production.s3.amazonaws.com/checkin/d839c659-2b85-4f57-9917-1209cf2c0d30.jpg">
+                                                                        <img src="https://fitnessity-production.s3.amazonaws.com/checkin/d839c659-2b85-4f57-9917-1209cf2c0d30.jpg" loading="lazy">
                                                                     </div>                                                                                                          
                                                                 </div>
                                                                 <div class="col-lg-6 col-md-6">
                                                                     <div class="text-center mb-mv-25">
                                                                         <div class="tick-set">
-                                                                            <img src="http://dev.fitnessity.co/dashboard-design/images/cross.png">
+                                                                            <img src="http://dev.fitnessity.co/dashboard-design/images/cross.png" loading="lazy">
                                                                         </div>
                                                                         <div class="mb-15">
                                                                             <label class="fs-24 mb-0"> Sorry, I can't check you in yet.</label>
@@ -640,7 +640,7 @@
                                         <div class="col-lg-6 col-12">
                                             <div class="self-welcome-logo">
                                                 <a href="#" class="d-inline-block auth-logo">
-                                                    <img src="http://dev.fitnessity.co/images/fitnessity_logo1_black.png" alt="logo">
+                                                    <img src="http://dev.fitnessity.co/images/fitnessity_logo1_black.png" alt="logo" loading="lazy">
                                                 </a>
                                             </div>
                                         </div>
@@ -664,7 +664,7 @@
                                         <div class="col-lg-6 col-12 mobile-none">
                                             <div class="float-right qr-code">
                                                 <div class="text-center">
-                                                    <img src="http://dev.fitnessity.co/dashboard-design/images/qr-code.png" alt="logo">
+                                                    <img src="http://dev.fitnessity.co/dashboard-design/images/qr-code.png" alt="logo" loading="lazy">
                                                     <p>Scan QR Code for touchless check-in or sign-up</p>
                                                 </div>                                               
                                             </div>
@@ -705,7 +705,7 @@
                     <div class="card-check-in-preview p-relative h-100">
                                 <div class="pb-60 text-center">
                                     <a href="#" class="register-check">
-                                        <img src="http://dev.fitnessity.co//public/images/fitnessity_logo1_black.png" alt="logo">
+                                        <img src="http://dev.fitnessity.co//public/images/fitnessity_logo1_black.png" alt="logo" loading="lazy">
                                     </a>
                                 </div>  
                                 <div class="welcome-provider-preview text-center">
@@ -735,7 +735,7 @@
                                 </div>
                                 <div class="text-center reg-up-img-preview">
                                     <div class="mb-3">
-                                        <img src="http://dev.fitnessity.co//public/dashboard-design/images/u-login.png" alt="logo">
+                                        <img src="http://dev.fitnessity.co//public/dashboard-design/images/u-login.png" alt="logo" loading="lazy">
                                     </div>
                                 </div>
                                 <div class="container">
@@ -778,9 +778,9 @@
                                     <div class="col-lg-6 col-md-6">
                                         <div class="checking-popup">           
                                         @if(@$data->alerts_photo)
-                                            <img src="{{Storage::URL($data->alerts_photo)}}" />
+                                            <img src="{{Storage::URL($data->alerts_photo)}}" loading="lazy"/>
                                         @else                       
-                                        <img src="https://fitnessity-production.s3.amazonaws.com/checkin/d839c659-2b85-4f57-9917-1209cf2c0d30.jpg">
+                                        <img src="https://fitnessity-production.s3.amazonaws.com/checkin/d839c659-2b85-4f57-9917-1209cf2c0d30.jpg" loading="lazy">
                                         @endif
                                         <!-- <img src="https://fitnessity-production.s3.amazonaws.com/checkin/d839c659-2b85-4f57-9917-1209cf2c0d30.jpg"> -->
                                     </div>																											
@@ -788,7 +788,7 @@
                                     <div class="col-lg-6 col-md-6">
                                         <div class="text-center mb-mv-25">
                                             <div class="tick-set">
-                                                <img src="http://dev.fitnessity.co/dashboard-design/images/cross.png">
+                                                <img src="http://dev.fitnessity.co/dashboard-design/images/cross.png" loading="lazy">
                                             </div>
                                             <div class="mb-15">
                                                     <label class="fs-24 mb-0"> Sorry, I can't check you in yet.</label>
@@ -819,6 +819,7 @@
 
 {{-- end --}}
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 
    
     <script>

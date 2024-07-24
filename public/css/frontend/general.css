@@ -18637,7 +18637,7 @@ input#zipcode {
 }
 
 .inner_top {
-    margin-top: 75px;
+    margin-top: 64px;
 }
 
 .viewall_sports {
@@ -18677,11 +18677,12 @@ input#zipcode {
 }
 
 .register {
-    padding-top: 120px;
+    padding-top: 120px !important;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 	background-attachment: fixed;
+	padding-bottom: 65px;
 }
 
 .register_wrap {
@@ -23930,7 +23931,7 @@ padding-left: 0px;
 	font-style: italic;
 }
 .reset-passthru form{
-	padding: 0 110px;
+	padding: 0 80px;
 }
 .reset-passthru p{
 	width: 100%;
@@ -25710,4 +25711,8 @@ padding-left: 0px;
 .plr-15{
 	padding-right: 15px; 
   	padding-left: 15px;
+}
+.signup-new:hover{
+	background: #2d2d2d !important;
+	color: fff !important;
 }

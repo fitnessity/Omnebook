@@ -1414,6 +1414,7 @@
             });
             $(document).on('click', '#skip_next', function () {
                 $('#customerModal').modal('hide');
+                window.location.href = 'check-in-welcome'; 
             });
         });
         }

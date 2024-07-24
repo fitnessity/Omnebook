@@ -22,7 +22,7 @@
 		</div>
 		<div class="col-lg-2 col-md-3 col-3">
 			<div class="mb-15">
-				<img src="{{$product->getPic()}}" class="rounded avatar-md shadow">
+				<img src="{{$product->getPic()}}" class="rounded avatar-md shadow" loading="lazy" alt="fitnessity">
 			</div>
 		</div>
 		<div class="col-lg-10 col-md-9 col-9">

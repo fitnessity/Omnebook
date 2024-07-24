@@ -860,7 +860,7 @@
 																			<div class="row">
 																			   <div class="col-md-12 col-xs-12">
 																				  <div class="payment-method-img">
-																					  <img src="{{asset('/public/images/cash-icon.png')}}" alt="img" class="w-100" width="100">
+																					  <img src="{{asset('/public/images/cash-icon.png')}}" alt="img" class="w-100" width="100" loading="lazy">
 																				  </div>
 																			   </div>
 																			   <div class="col-md-12 col-xs-12">
@@ -885,7 +885,7 @@
 																					<div class="row">
 																						<div class="col-md-12 col-xs-12">
 																							<div class="payment-method-img">
-																								<img src="{{asset('/public/images/cc-on-file.png')}}" alt="img" class="w-100" width="100">
+																								<img src="{{asset('/public/images/cc-on-file.png')}}" alt="img" class="w-100" width="100" loading="lazy">
 																							</div>
 																						</div>
 																						<div class="col-md-12 col-xs-12">
@@ -911,7 +911,7 @@
 																			<div class="row">
 																				<div class="col-md-12 col-xs-12">
 																					<div class="payment-method-img">
-																						<img src="{{asset('/public/images/input-cc.png')}}" alt="img" class="w-100" width="100">
+																						<img src="{{asset('/public/images/input-cc.png')}}" alt="img" class="w-100" width="100" loading="lazy">
 																					</div>
 																				</div>
 																				<div class="col-md-12 col-xs-12">
@@ -934,7 +934,7 @@
 																			<div class="row">
 																				<div class="col-md-12 col-xs-12">
 																					<div class="payment-method-img">
-																						<img src="{{asset('/public/images/check.png')}}" alt="img" class="w-100" width="100">
+																						<img src="{{asset('/public/images/check.png')}}" alt="img" class="w-100" width="100" loading="lazy">
 																					</div>
 																				</div>
 																				<div class="col-md-12 col-xs-12">
@@ -954,7 +954,7 @@
 																			<div class="row">
 																				<div class="col-md-12 col-xs-12">
 																					<div class="payment-method-img">
-																						<img src="{{asset('/public/images/comp.png')}}" alt="img" class="w-100" width="100">
+																						<img src="{{asset('/public/images/comp.png')}}" alt="img" class="w-100" width="100" loading="lazy">
 																					</div>
 																				</div>
 																				<div class="col-md-12 col-xs-12">
@@ -2346,6 +2346,7 @@
 </script>
 
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 
 <script>
 	$(window).on('load', function() {
