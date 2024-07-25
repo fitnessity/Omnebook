@@ -4,7 +4,7 @@
 	<div class="row">
 		<div class="col-lg-3 col-md-3 col-sm-3">
 			<div class="photo-select">
-				<img src="{{asset('/public/images/service-nofound.jpg')}}" class="pro_card_img blah" id="showimg">
+				<img src="{{asset('/public/images/service-nofound.jpg')}}" class="pro_card_img blah" id="showimg" loading="lazy" alt="fitnessity">
 				<input type="file" id="files" name="files" class="hidden">
 				<label for="files">Upload Image</label>
 			</div>

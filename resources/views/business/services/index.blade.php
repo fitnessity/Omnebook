@@ -36,7 +36,7 @@
                                                                 <div class="row y-middle">
                                                                     <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12 col-3">  
                                                                         @if(Storage::disk('s3')->exists($profilePic) && $profilePic != '')
-                                                                            <img src="{{Storage::URL($profilePic) }}" alt="Avatar" class="avatar">
+                                                                            <img src="{{Storage::URL($profilePic) }}" alt="Avatar" class="avatar" loading="lazy">
                                                                         @else 
                                                                             @php $sF=substr($service->program_name, 0, 1); @endphp
                                                                             <div class="company-list-text">
@@ -175,6 +175,7 @@
     <!-- END layout-wrapper -->
 
     @include('layouts.business.footer')
+    @include('layouts.business.scripts')
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
     <script>
         
