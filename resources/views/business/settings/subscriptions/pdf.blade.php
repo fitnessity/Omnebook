@@ -99,7 +99,7 @@
 		<div class="row">
 			<div class="width-50">
 				<div class="fit-logo">
-					<img src="{{env('APP_URL')}}/images/fitnessity_logo1_black.png">
+					<img src="{{env('APP_URL')}}/images/fitnessity_logo1_black.png" loading="lazy" alt="fitnessity">
 				</div>
 			</div>
 			<div class="width-50">				

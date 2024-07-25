@@ -14,18 +14,22 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ImportMembershipMail;
-use App\Events\MembershipProcessingCompleted;
+use App\ChunkProcessTracker;
 class ProcessMembership implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected $business_id;
     protected $data;
     protected $email;
-    public function __construct($business_id,$data,$email)
+    protected $upid;
+    protected $tracker_id;
+    public function __construct($business_id,$data,$email,$upid,$tracker_id)
     {
         $this->business_id = $business_id;
         $this->data = $data;
         $this->email = $email;
+        $this->upid=$upid;
+        $this->tracker_id = $tracker_id;
     }
     public function handle()
     {
@@ -36,12 +40,6 @@ class ProcessMembership implements ShouldQueue
         try {
             foreach ($this->data as $i => $rowData) {
                 $totalRows++;
-                Log::info("Processed row data: " . json_encode($rowData));
-                Log::info('Checking row ' . $i . ': ' . json_encode($rowData));
-                Log::info('Column 1 '.$rowData[0]);
-                Log::info('Column 4'.$rowData[3]);
-                Log::info('Column 3 '.$rowData[2]);
-                Log::info('Column 5 '.$rowData[4]);
                 if (!empty($rowData[0]) && !empty($rowData[3]) && !empty($rowData[4]) && $rowData[2] != 'Declined') {
                     $string = htmlentities($rowData[0], null, 'utf-8');
                     $content = str_replace("&nbsp;", "", $string);
@@ -109,9 +107,7 @@ class ProcessMembership implements ShouldQueue
                                     'order_type' => 'Excel Order',
                                     'bookedtime' => Carbon::now()->format('Y-m-d')
                                 ];
-                                Log::info("orderdata " . json_encode($orderdata));
                                 $userBookingStatus = UserBookingStatus::create($orderdata);
-                                Log::info("userBookingStatus " . json_encode($userBookingStatus));
                                 // Create transaction
                                 $transactiondata = [
                                     'user_type' => 'Customer',
@@ -128,7 +124,6 @@ class ProcessMembership implements ShouldQueue
                                     'refund_amount' => 0,
                                     'payload' => ''
                                 ];
-                                Log::info("transaction data " . json_encode($transactiondata));
                                 $transactionstatus = Transaction::create($transactiondata);
                                 $status = strtolower($this->data[$i][3]);
                                 if ($status === 'terminated') {
@@ -138,7 +133,6 @@ class ProcessMembership implements ShouldQueue
                                 } elseif ($status === 'expired') {
                                     $status = 'complete';
                                 }
-                                Log::info("transaction " . json_encode($transactionstatus));
                                 $booking_detail = UserBookingDetail::create([
                                     'booking_id' => $userBookingStatus->id,
                                     'sport' => $priceDetail->BusinessServices->id,
@@ -171,33 +165,52 @@ class ProcessMembership implements ShouldQueue
                                     'use_session_amount' => 0,
                                     'source_type' => 'in_person',
                                 ]);
-
-                                Log::info("Processed booking detail for customer: " . $customerData->id . ", booking ID: " . $booking_detail->id);
+                                $successfulRows++; 
                             } else {
-                                Log::info("Booking detail already exists for customer: " . $customerData->id . ", skipping.");
+                                $skippedRows++;
                             }
                         }
                     } else {
-                        Log::info("Customer not found for data row: " . json_encode($rowData));
                         $failedRows++;
                     }
                 } else {
-                    Log::info("Skipping row due to missing or invalid data: " . json_encode($rowData));
                     $skippedRows++;
                 }
             }
-            Log::info('ProcessMembershipExcelData job completed successfully. -> test');
+
             try {
-                Log::info('ProcessMembership. Total Rows: '.$totalRows.', Successful Rows: '.$successfulRows.', Skipped Rows: '.$skippedRows.', Failed Rows: '.$failedRows);
                 Mail::to($this->email)->send(new ImportMembershipMail($totalRows, $successfulRows, $skippedRows, $failedRows));
-                Log::info('Email sent successfully');
+                $uploadFile = BusinessCustomerUploadFiles::find($this->data);
+                if($uploadFile)
+                {
+                    $uploadFile->isseen='0';
+                    $uploadFile->status='0';
+                }   
+                $tracker = ChunkProcessTracker::find($this->tracker_id);
+                if ($tracker) {
+                    $tracker->processed_chunks+1;
+                    $tracker->save();
+                    if ($tracker->processed_chunks >= $tracker->total_chunks && !$tracker->email_sent) {
+                        try {
+                            Log::info('ProcessMembership. Total Rows: '.$totalRows.', Successful Rows: '.$successfulRows.', Skipped Rows: '.$skippedRows.', Failed Rows: '.$failedRows);
+    
+                            Mail::to($this->email)->send(new ImportMembershipMail($totalRows, $successfulRows, $skippedRows, $failedRows));
+                            Log::info('Email sent successfully');
+                            $tracker->email_sent = true;
+                            $tracker->save();
+                        } catch (\Exception $e) {
+                            Log::error('Failed to send email inside tracker: ' . $e->getMessage());
+                        }
+                    }
+                }      
+                else{
+                    Log::error('error: '.$this->tracker_id);
+                }
             } catch (\Exception $e) {
-                Log::info('Email',$this->email);
-                Log::error('Failed to send email: ' . $e->getMessage());
-            }
+                Log::error('Failed to send emails: ' . $e->getMessage(), ['exception' => $e]);            
+            }            
         } catch (\Exception $e) {
             Log::error('Error processing membership excel data:  '. __LINE__ . $e->getMessage());
         }
     }
-
 }

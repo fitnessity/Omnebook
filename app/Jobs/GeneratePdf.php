@@ -33,3 +33,4 @@ class GeneratePdf implements ShouldQueue
         });
     }
 }
+

@@ -43,11 +43,10 @@ class SelfCheckInController extends Controller {
 	}
 
 	public function loginForCheckin(Request $request){
+        ini_set('memory_limit', '-1'); ini_set('max_execution_time', -1);
 		$validator = Validator::make($request->all(), [
 	        'code' => 'required', 
 	    ]);
-
-	    // Check if validation fails
 	    if ($validator->fails()) {
 	        return response()->json([
 	            'success' => false,
@@ -57,7 +56,6 @@ class SelfCheckInController extends Controller {
 	    }
 
 	    $user = User::where('unique_code', $request->code)->first();
-        // dd($user);
 	    if (!$user) {
 	        return response()->json([
 	            'success' => false,
@@ -65,7 +63,7 @@ class SelfCheckInController extends Controller {
 	        ]);
 	    }else{
 	    	$business = Auth::user()->current_company;
-	    	$customer = $user->customers()->where('business_id',$business->id)->first();
+        	$customer = $user->customers()->where('business_id',$business->id)->first();
             if($customer){
                 session()->put('self_checkin_customer_id', $customer->id);
         		return response()->json([
@@ -788,7 +786,7 @@ class SelfCheckInController extends Controller {
         //     ]);
             
         // }
-
+       
         if ($user) {
             return response()->json([
                 'success' => true,
