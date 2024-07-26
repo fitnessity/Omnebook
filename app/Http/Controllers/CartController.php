@@ -1,33 +1,25 @@
 <?php
-
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use Hash;
 use Str;
 use App\{UserFamilyDetail,StripePaymentMethod,GiftedActivityDetails,Customer,User,SGMailService,BusinessTerms};
-
 class CartController extends Controller {
-
     public function __construct() {
     	$this->middleware('auth');
     }
-
     public function index(Request $request){
 
     	if($request->session()->has('checkoutsession')){
     	    $request->session()->forget('checkoutsession');
     	}
-
     	$cardInfo = [];
-
 	    $user = Auth::user();
 	    $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
 	    $cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id', $user->id)->get();
 	    $cart = [];
-
 	    $cartdata  =  $request->session()->get('cart_item', []);
-	 
 	    if(!empty($cartdata) && count($cartdata) >0 ) {
 		    foreach($cartdata['cart_item'] as $key=>$dt){
 		    	if($dt['chk'] == '' ){
@@ -35,17 +27,13 @@ class CartController extends Controller {
 		    	}
 		    }
 		}
-
 		if($user->stripe_customer_id == '')
 			$user->create_stripe_customer_id();
-		
 		$intent = null;
 		$intent = $stripe->setupIntents->create([
             'payment_method_types' => ['card'],
             'customer' => $user->stripe_customer_id,
         ]);
-
-		// dd($cart);
     	return view('cart.index',[
 	        'cart' => $cart,
 	        'cardInfo' => $cardInfo,
@@ -53,7 +41,6 @@ class CartController extends Controller {
 	        'user' => $user, 
     	]);
     }
-
     public function addfamilyfromcart(Request $request){
     	$user = Auth::user();
     	$data = UserFamilyDetail::create([
@@ -86,7 +73,6 @@ class CartController extends Controller {
                 'gender' => $request['gender'],
                 'birthdate' => date('Y-m-d',strtotime($request['birthdate'])),
             ]);
-
             if($key == 0){
                 $User = User::create([
                     'role' => 'customer',
@@ -101,26 +87,18 @@ class CartController extends Controller {
                     'gender' => $request['gender'],
                     'birthdate' => date('Y-m-d',strtotime($request['birthdate'])),
                     'activated' => 1,
-                    //'stripe_customer_id' => $Customer->stripe_customer_id
                 ]);
-
                 $status = SGMailService::sendWelcomeMailToCustomer($Customer->id,$c->id,$random_password); 
             }
             $Customer->update(['user_id'=>$User->id , 'stripe_customer_id' =>@$User->stripe_customer_id ]);            
         } 
-
     	return redirect('/carts');
     }
-
     public function addactivitygift(Request $request){
-    	//print_r($request->all());exit;
-    	/*$data = GiftedActivityDetails::where(['priceid'=> $request->priceid ,'schedual_date' => date('y-m-d',strtotime($request->sc_date)) ,'userid' => Auth::user()->id])->first();*/
     	$List = implode(', ', $request->Emailb);
     	$List = rtrim($List , ', ');
     	$price_show = "0";
-    	if($request->has('price_show')){
-    		$price_show = "1";
-    	}
+    	if($request->has('price_show')){ $price_show = "1"; }
     	$List = rtrim($List,",");
     	if($request->table_id == ''){
     		GiftedActivityDetails::create([
@@ -133,32 +111,25 @@ class CartController extends Controller {
                 'comment' => $request->comment,
     		]);
     	}else{
-			//$email = $data->email .', '.$List;
     		GiftedActivityDetails::where(['priceid'=> $request->priceid ,'schedual_date' => date('y-m-d',strtotime($request->sc_date)) ,'userid' => Auth::user()->id])->update(['priceid' => $request->priceid,'email' => $List, 'price_show_chk' => $price_show,'gift_from' => $request->gift_from, 'comment' => $request->comment]);
     	}
-
     	return redirect('/carts');
     }
-
     public function activity_gift_model(Request $request){
     	$getdata = GiftedActivityDetails::where(['priceid'=> $request->pid ,'schedual_date' => date('y-m-d',strtotime($request->date)) ,'userid' => Auth::user()->id])->first();
     	$email_array = [];
     	if(@$getdata->email != ''){
     		$email_array = explode(',' ,@$getdata->email); 
     	}
-
     	$html = '';
     	$html .='<form action="'.route("addactivitygift").'" method="post" id="giftform">
 			<input type="hidden" name="_token" value="'.csrf_token().'">
 			<input type="hidden" name="priceid" id="priceid" value="'.$request->pid.'">
 			<input type="hidden" name="sc_date" id="sc_date" value="'.$request->date.'">
 			<input type="hidden" name="table_id" id="table_id" value="'.@$getdata->id.'">
-
 			<div class="row">
 				<div class="col-lg-2 col-sm-4 col-4">
-					<div class="activity-title-img">
-						<img src="'.$request->img.'" alt="Avatar" class="avatar-cart">
-					</div>
+					<div class="activity-title-img"><img src="'.$request->img.'" alt="Avatar" class="avatar-cart"></div>
 				</div>
 				<div class="col-lg-10 col-sm-8 col-8">
 					<div class="activity-details">
@@ -167,7 +138,6 @@ class CartController extends Controller {
 					</div>
 				</div>
 			</div>
-
 			<div class="row">
 				<div class="col-lg-6">
 					<div class="gift-comments">
@@ -186,12 +156,10 @@ class CartController extends Controller {
 						}else{
 							$html .='<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="" required>';
 						}
-
 					$html .='</div>
 					<a href="#" class="addnewemail fs-13" onclick="addemail();">+Add another email</a>
 				</div>
 			</div>
-
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="booking-checkbox">
@@ -208,11 +176,8 @@ class CartController extends Controller {
 				</div>
 			</div>
     	</form>';
-
     	return $html;
     }
-
-
     public function getTerms(Request $request){
     	$termsDesc =BusinessTerms::where('id',$request->id)->pluck($request->termsType)->first();
     	$termsHeader = $request->termsHeader;

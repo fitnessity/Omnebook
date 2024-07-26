@@ -229,6 +229,7 @@ class BusinessServices extends Model
     public function BusinessPriceDetailsAges() {
         return $this->hasMany(BusinessPriceDetailsAges::class, 'serviceid');
     }
+   
 
 	public function user()
     {

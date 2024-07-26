@@ -669,9 +669,10 @@ class SelfCheckInController extends Controller {
         $business = Auth::user()->current_company;
         $companyId = $business->id; 
         $customerId =  session()->get('self_checkin_customer_id');
-        // $services = $business->business_services()->where('is_active' ,1)->whereHas('schedulers', function ($query) {
-        //     $query->where('end_activity_date', '>', now())->orWhereNull('end_activity_date');
-        // })->get();
+        $services = $business->business_services()->where('is_active' ,1)->whereHas('schedulers', function ($query) {
+            $query->where('end_activity_date', '>', now())->orWhereNull('end_activity_date');
+        })->get();
+        // \DB::enableQueryLog(); // Enable query log
 
         $services = $business->business_services()
         ->where('is_active', 1)
@@ -679,11 +680,13 @@ class SelfCheckInController extends Controller {
             $query->where('end_activity_date', '>', now())->orWhereNull('end_activity_date');
         })
         ->whereHas('priceDetailsAges', function ($query) {
-            $query->where('stype', 1);
+            $query->where('stype', 1)->orWhere('serviceid', 0);
         })
         ->get();
-
-        return view('checkin.booking_html_modal', compact('companyId','services','customerId'));
+        $userId = Auth::id();
+       
+        $PriceAgesDetail = BusinessPriceDetailsAges::where('userid', $userId )->where('cid', $business->id)->where('serviceid', 0)->get();
+        return view('checkin.booking_html_modal', compact('companyId','services','customerId','PriceAgesDetail'));
     }
 
     public function getActivityDates(Request $request)

@@ -120,7 +120,7 @@
 								<div class="mini-stats-wid d-flex align-items-center width-185">
 									<div class="avatar-sm mr-15">
 										@if($cus->profile_pic)
-											<img class='mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4' src="{{Storage::Url($cus->profile_pic)}}" width=60 height=60 alt="">
+											<img class='mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4' src="{{Storage::Url($cus->profile_pic)}}" width=60 height=60 alt="fitnessity" loading="lazy">
 										@else
 											<div class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">
 												<span> {{$cus->first_letter}} </span>
@@ -200,7 +200,7 @@
 						<tr>
 							<td colspan="8"> 
 								<div class="no0signup text-center">
-									<img src="{{url('/dashboard-design/images/sports-set.jpg')}}">
+									<img src="{{url('/dashboard-design/images/sports-set.jpg')}}" loading="lazy" alt="fitnessity">
 									<h3>No one is signed up. Add them to this activity</h3>
 								</div>
 							</td>

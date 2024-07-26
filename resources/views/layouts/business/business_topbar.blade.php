@@ -974,7 +974,7 @@
 									<div class="p-3">
 										<div class="row align-items-center">
 											<div class="col">
-												<h6 class="m-0 fs-16 fw-semibold text-white"> Notifications </h6>
+												<h6 class="m-0 fs-16 fw-semibold text-white"> Notifications {{$customerFilesNotifyCount}} </h6>
 											</div>
 										</div>
 									</div>

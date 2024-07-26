@@ -4,9 +4,16 @@
   	<tr>
       <td>
     <div class="container">
-      <img src="http://pngimg.com/uploads/facebook_logos/facebook_logos_PNG19748.png" class="img-fluid footer_icon" width="40px" height="40px" style="border-radius: 3px;margin-right: 10px; width:40px; height:40px;">
-      <img src="https://image.flaticon.com/icons/png/512/124/124021.png"  class="img-fluid footer_icon" width="40px" height="40px" style="
-    border-radius: 3px;margin-right: 10px; width:40px; height:40px;">
+      <a href="https://www.facebook.com/fitnessityofficial" target="_blank">
+        <img src="http://pngimg.com/uploads/facebook_logos/facebook_logos_PNG19748.png" class="img-fluid footer_icon" width="40px" height="40px" style="border-radius: 3px;margin-right: 10px; width:40px; height:40px;">
+      </a>
+      <a href="https://www.instagram.com/fitnessityofficial/?hl=en" target="_blank">
+        <img src="https://pngimg.com/uploads/instagram/instagram_PNG11.png"  class="img-fluid footer_icon" width="40px" height="40px" style="border-radius: 3px;margin-right: 10px; width:40px; height:40px;">
+      </a>
+      <a href="https://twitter.com/Fitnessitynyc" target="_blank">
+        <img src="https://pngimg.com/uploads/twitter/twitter_PNG6.png"  class="img-fluid footer_icon" width="40px" height="40px" style="border-radius: 3px;margin-right: 10px; width:40px; height:40px;">
+      </a>
+      
       {{-- <img src="https://cdn.freebiesupply.com/logos/large/2x/google-plus-logo-png-transparent.png"  class="img-fluid footer_icon" width="40px" height="40px" style="border-radius: 1px; width:40px; height:40px;"> --}}
     </div>
 </td>

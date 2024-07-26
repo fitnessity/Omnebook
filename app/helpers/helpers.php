@@ -788,7 +788,7 @@
         $notifications = BusinessCustomerUploadFiles::where('isseen', 0)->where('status', 0)->get();
 
         foreach ($notifications as $notification) {
-            $user = User::find($notification->user_id); // Assuming user_id is the column in BusinessCustomerUploadFiles that refers to the user
+            $user = User::find($notification->user_id); 
             
             if ($user) {
                 if (Storage::disk('s3')->exists($user->profile_pic)) {

@@ -1,13 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Response;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-/*use PhpOffice\PhpSpreadsheet\Writer\Xlsx*/;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use Aws\S3\S3Client;
-use App\Jobs\{ProcessAttendanceExcelData,ProcessCustomerExcelData,ProcessMembershipExcelData,ProcessAttendance,ProcessMembership};
+use App\Jobs\{ProcessAttendanceExcelData,ProcessCustomerExcelData,ProcessMembershipExcelData,ProcessAttendance,ProcessMembership,Membership};
 use GuzzleHttp\Client;
 use App\Http\Requests;
 use Illuminate\Http\Request;
@@ -28,35 +26,21 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 use App\BusinessStaff;
+use App\ChunkProcessTracker;
 class CustomerController extends Controller {
-    /**
-     * The user repository instance.
-     *
-     * @var CustomerRepository
-     */
-
     protected $customers;
     protected $company;
     protected $resultDate;
     public $error = '';
-
     public function __construct(CustomerRepository $customers,BookingRepository $bookings,UserRepository $users) {
-        $this->middleware('auth');
-        $this->customers = $customers;
-        $this->bookings = $bookings;
-        $currentDate = Carbon::now();
+        $this->middleware('auth'); $this->customers = $customers; $this->bookings = $bookings; $currentDate = Carbon::now();
         $this->resultDate = $currentDate->subYears(18);
     }
-
-    public function client(){
-        return view('customers.add_client');
-    }
-
+    public function client(){ return view('customers.add_client'); }
     public function index(Request $request, $business_id){
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
         $customers = $company->customers()->orderBy('fname');
-        
         if($request->term){
             $searchValues = preg_split('/\s+/', $request->term, -1, PREG_SPLIT_NO_EMPTY);
             $customers = $customers->where('business_id', $business_id)
@@ -81,26 +65,14 @@ class CustomerController extends Controller {
                     }  
                 });
         }
-
         if($request->customer_id){
             $customers = $customers->where('id',$request->customer_id);
         }
-
-        
-        $customers = $customers->get();
-        $customerCount = count($customers);
-
-        set_time_limit(8000000); 
-        ini_set('memory_limit', '-1');
-        ini_set('max_execution_time', 10000);
-
-
+        $customers = $customers->get(); $customerCount = count($customers); set_time_limit(8000000); ini_set('memory_limit', '-1'); ini_set('max_execution_time', 10000);
         $customerStatusCounts = $customers->mapToGroups(function ($customer) {
             return [$customer->is_active() => $customer];
         });
-
         $validLetters = [];
-
         $customersCollection = '';
         if(!$request->customer_type){
             $currentCount =  $customerCount;
@@ -144,12 +116,9 @@ class CustomerController extends Controller {
                 $customersCollection = $bigSpender->sortByDesc(function ($customer) {
                     return $customer->total_spend;
                 })->take(20);
-
                 $currentCount = $bigSpenderCount;
             }
-
             for ($asciiValue = ord('A'); $asciiValue <= ord('Z'); $asciiValue++) {
-
                 $letter = chr($asciiValue);
                 if ($customersCollection->contains(function ($customer) use ($letter) {
                     return stripos($customer->fname, $letter) === 0;
@@ -158,74 +127,17 @@ class CustomerController extends Controller {
                 }
             }
         }
-
         if ($request->ajax()) {
             return response()->json($customers);
         }
-
-        //$activeMembersCount = $inActiveMembersCount = $prospectMembersCount = $atRiskMembersCount = $bigSpenderCount = $suspendCount = $owdCount =0;
-        /*return view('customers.index', compact(['company','customerCount','activeMembersCount','inActiveMembersCount','prospectMembersCount','atRiskMembersCount','bigSpenderCount','suspendCount','owdCount','currentCount','validLetters','customersCollection']));*/
         return view('customers.index', compact(['company','customerCount','currentCount','validLetters','customersCollection']));
     }
-
-
-    // public function getCustomerCounts($business_id,Request $request)
-    // {
-    //     $counterType = $request->input('counterType');
-    //     // dd($counterType);
-    //     $user = Auth::user();
-    //     $company = $user->businesses()->findOrFail($business_id);
-    //     $customers = $company->customers()->orderBy('fname');
-    //     $customers = $customers->get();
-    //     $customerCount = count($customers);
-
-        // $customerStatusCounts = $customers->mapToGroups(function ($customer) {
-        //     return [$customer->is_active() => $customer];
-        // });
-
-    //     // Logic to fetch and return the appropriate counter value
-    //     switch ($counterType) {
-    //         case 'totalMembers':
-    //             $count = 'Total Members ('.$customerCount.')';
-    //             break;
-    //         case 'activeMembers':
-    //             $count = 'Active Members (' .$customerStatusCounts->get('Active', collect())->count() .')';
-    //             break;
-    //         case 'inactiveMembers':
-    //             $count = 'Inactive Members ('.$customerStatusCounts->get('InActive', collect())->count() .')';
-    //             break; 
-    //         case 'prospectMembers':
-    //             $count = 'Prospects (' .$customerStatusCounts->get('Prospect', collect())->count() .')';
-    //             break; 
-    //         case 'suspendedMembers':
-    //             $count = 'Suspended ('.$customers->filter->suspendedOrNot()->count() .')';
-    //             break;
-    //         case 'owedMembers':
-    //             $count = 'Owed ('.$customers->filter->owedOrnot()->count() .')';
-    //             break;
-    //         case 'atRiskMembers':
-    //             $count = 'At-Risk ('.$customers->filter->customerAtRisk()->count() .')';
-    //             break;
-    //         case 'spenderMembers':
-    //             $count = 'Big Spenders ('.$customers->filter->bigSpender()->count() .')';
-    //             break;
-    //         default:
-    //             $count = 0; // Default to 0 if counter type is unknown
-    //             break;
-    //     }
-
-    //     return response()->json(['count' => $count]);
-    // }
     public function getCustomerCounts($business_id,Request $request)
     {
-        // dd('33');
-        $user = Auth::user();
-        $company = $user->businesses()->findOrFail($business_id);
-        $customers = $company->customers()->get();
+        $user = Auth::user(); $company = $user->businesses()->findOrFail($business_id); $customers = $company->customers()->get();
         $customerStatusCounts = $customers->mapToGroups(function ($customer) {
             return [$customer->is_active() => $customer];
         });
-        // Calculate counts
         $customerCount = $customers->count();
         $activeCount =$customerStatusCounts->get('Active', collect())->count();
         $inactiveCount = $customerStatusCounts->get('InActive', collect())->count();
@@ -234,14 +146,6 @@ class CustomerController extends Controller {
         $owedCount = $customers->filter->owedOrnot()->count();
         $atRiskCount = $customers->filter->customerAtRisk()->count();
         $spenderCount = $customers->filter->bigSpender()->count();
- 
-        
-        // $suspendedCount =55;
-        // $owedCount = 53;
-        // $atRiskCount = 53;
-        // $spenderCount = 53;
- 
-        // // Prepare response
         $counts = [
             'totalMembers' => 'Total Members (' . $customerCount . ')',
             'activeMembers' => 'Active Members (' . $activeCount . ')',
@@ -252,58 +156,17 @@ class CustomerController extends Controller {
             'atRiskMembers' => 'At-Risk (' . $atRiskCount . ')',
             'spenderMembers' => 'Big Spenders (' . $spenderCount . ')'
         ];
-    
         return response()->json($counts);
     }
-    
-
-    /*public function getCustomerCounts($business_id)
-    {   
-        $user = Auth::user();
-        $company = $user->businesses()->findOrFail($business_id);
-        $customers = $company->customers()->orderBy('fname');
-        $customers = $customers->get();
-        $customerCount = count($customers);
-
-        $customerStatusCounts = $customers->mapToGroups(function ($customer) {
-            return [$customer->is_active() => $customer];
-        });
-
-        $activeMembersCount =  $customerStatusCounts->get('Active', collect())->count();
-        $forInActive =  $customerStatusCounts->get('InActive', collect())->count();
-        $forPros =  $customerStatusCounts->get('Prospect', collect())->count();
-        $suspend = $customers->filter->suspendedOrNot()->count();
-        $bigSpender = $customers->filter->bigSpender()->count();
-        $owd = $customers->filter->owedOrnot()->count();
-        $atRiskMembers = $customers->filter->customerAtRisk()->count();
-
-        $customerCounts = [
-            'totalMembers' => $customerCount,
-            'activeMembers' => $activeMembersCount,
-            'inactiveMembers' => $forInActive,
-            'prospectMembers' => $forPros,
-            'suspendedMembers' => $suspend,
-            'owedMembers' => $owd,
-            'atRiskMembers' => $atRiskMembers,
-            'spenderMembers' => $bigSpender,
-            
-        ];
-
-        return response()->json($customerCounts);
-    }*/
-
     public function loadView(Request $request)
     {
         $char = $request->input('char');
         $cid = Auth::user()->cid;
         $company = CompanyInformation::find($cid);
-
         $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->orderBy('fname')->get();
-
         $customerStatusCounts = $customers->mapToGroups(function ($customer) {
             return [$customer->is_active() => $customer];
         });
-
         if($request->customer_type == 'active'){
             $customers =  $customerStatusCounts->get('Active', collect());
         }else if($request->customer_type == 'in-active'){
@@ -331,32 +194,21 @@ class CustomerController extends Controller {
                     }
                 }
             }
-            //print_r( $customers);exit();
         }else if($request->customer_type == 'at-risk'){
             $customers = $customers->filter->customerAtRisk();
         }else if($request->customer_type == 'big-spenders'){
             $customers = $customers->filter->bigSpender();
         }
-
         return view('customers.customer-detail-list',compact('customers' ,'char','company'));
     }
-
-
         public function create(Request $request, $business_id){
             $intent = $clientSecret = null;
             $success = 0; $successMsg = '';
             if(!$request->customer_id){
-                if (session()->has('success-register')) {
-                    $success = session('success-register');
-                }
-
-                if (session()->has('auto_generate_msg')) {
-                    $successMsg = session('auto_generate_msg');
-                }
-                session()->forget('success-register');
-                session()->forget('auto_generate_msg');
+                if (session()->has('success-register')) { $success = session('success-register'); }
+                if (session()->has('auto_generate_msg')) { $successMsg = session('auto_generate_msg'); }
+                session()->forget('success-register'); session()->forget('auto_generate_msg');
             }
-
             $businessTerms = BusinessTerms::where('cid',$business_id)->first();
             if($request->customer_id){
                 $customer = Customer::find($request->customer_id);
@@ -370,41 +222,15 @@ class CustomerController extends Controller {
                     $clientSecret = $intent['client_secret'];
                 } 
             }
-            // my code startss
-            // $data = [
-            //     'clientSecret' => $clientSecret,
-            //     'business_id' => $business_id,
-            //     'success' => $success,
-            //     'businessTerms' => $businessTerms,
-            //     'successMsg' => $successMsg
-            // ];
-
-            // Render the view as HTML
-            // $html = view('customers.create', $data)->render();
-            // $html = preg_replace('/[\r\n\t]+/', ' ', $html);
-            // return response()->json(['html' => $html]);
-            // ends
-            // dd($clientSecret);
             return view('customers.create',compact('clientSecret', 'business_id','success', 'businessTerms','successMsg'));
         }
-
-
         public function createdata(Request $request){
-            $business_id=$request->businessId;
-            $intent = $clientSecret = null;
-            $success = 0; $successMsg = '';
+            $business_id=$request->businessId; $intent = $clientSecret = null; $success = 0; $successMsg = '';
             if(!$request->customer_id){
-                if (session()->has('success-register')) {
-                    $success = session('success-register');
-                }
-
-                if (session()->has('auto_generate_msg')) {
-                    $successMsg = session('auto_generate_msg');
-                }
-                session()->forget('success-register');
-                session()->forget('auto_generate_msg');
+                if (session()->has('success-register')) { $success = session('success-register'); }
+                if (session()->has('auto_generate_msg')) { $successMsg = session('auto_generate_msg'); }
+                session()->forget('success-register'); session()->forget('auto_generate_msg');
             }
-
             $businessTerms = BusinessTerms::where('cid',$business_id)->first();
             if($request->customer_id){
                 $customer = Customer::find($request->customer_id);
@@ -412,39 +238,24 @@ class CustomerController extends Controller {
                 $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
                 if($customer->stripe_customer_id != ''){
                     $intent = $stripe->setupIntents->create([
-                        'payment_method_types' => ['card'],
-                        'customer' => $customer->stripe_customer_id,
+                        'payment_method_types' => ['card'], 'customer' => $customer->stripe_customer_id,
                     ]);
                     $clientSecret = $intent['client_secret'];
                 } 
             }
-            
-            // return view('customers.create',compact('clientSecret', 'business_id','success', 'businessTerms','successMsg'));
             return response()->json([
-                'clientSecret' => $clientSecret,
-                'customer_id'=>$customer->id,
-                'business_id' => $business_id,
-                'success' => $success,
-                'businessTerms' => $businessTerms,
+                'clientSecret' => $clientSecret, 'customer_id'=>$customer->id, 'business_id' => $business_id, 'success' => $success, 'businessTerms' => $businessTerms,
                 'successMsg' => $successMsg
             ]);
         }
-
         public function create_model(Request $request, $business_id){
-            $intent = $clientSecret = null;
-            $success = 0; $successMsg = '';
+            $intent = $clientSecret = null; $success = 0; $successMsg = '';
             if(!$request->customer_id){
-                if (session()->has('success-register')) {
-                    $success = session('success-register');
-                }
-
-                if (session()->has('auto_generate_msg')) {
-                    $successMsg = session('auto_generate_msg');
-                }
+                if (session()->has('success-register')) {  $success = session('success-register'); }
+                if (session()->has('auto_generate_msg')) { $successMsg = session('auto_generate_msg'); }
                 session()->forget('success-register');
                 session()->forget('auto_generate_msg');
             }
-
             $businessTerms = BusinessTerms::where('cid',$business_id)->first();
             if($request->customer_id){
                 $customer = Customer::find($request->customer_id);
@@ -452,89 +263,53 @@ class CustomerController extends Controller {
                 $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
                 if($customer->stripe_customer_id != ''){
                     $intent = $stripe->setupIntents->create([
-                        'payment_method_types' => ['card'],
-                        'customer' => $customer->stripe_customer_id,
+                        'payment_method_types' => ['card'],'customer' => $customer->stripe_customer_id,
                     ]);
                     $clientSecret = $intent['client_secret'];
                 } 
-
                 $data = [
-                    'customer_id'=>$customer->id,
-                    'clientSecret' => $clientSecret,
-                    'business_id' => $business_id,
-                    'success' => $success,
-                    'businessTerms' => $businessTerms,
-                    'successMsg' => $successMsg,
+                    'customer_id'=>$customer->id, 'clientSecret' => $clientSecret, 'business_id' => $business_id, 'success' => $success,
+                    'businessTerms' => $businessTerms,'successMsg' => $successMsg,
                 ];
-            
                 return response()->json($data);
             }
-            // my code startss
             $data = [
-                'clientSecret' => $clientSecret,
-                'business_id' => $business_id,
-                'success' => $success,
-                'businessTerms' => $businessTerms,
-                'successMsg' => $successMsg
+                'clientSecret' => $clientSecret,'business_id' => $business_id,'success' => $success, 'businessTerms' => $businessTerms,'successMsg' => $successMsg
             ];
-    
-            // dd($data);
-            // Render the view as HTML
             $html = view('customers.create_model', $data)->render();
             $html = preg_replace('/[\r\n\t]+/', ' ', $html);
             return response()->json(['html' => $html]);
-            // ends
-            // return view('customers.create',compact('clientSecret', 'business_id','success', 'businessTerms','successMsg'));
         }
     public function delete(Request $request, $business_id){
         $customerdata = $this->customers->findById($request->id);
-        if( $customerdata != ''){
-            Customer::where('id',$request->id)->delete();
-        }
+        if( $customerdata != ''){  Customer::where('id',$request->id)->delete(); }
     }
-
     public function show(Request $request, $business_id, $id){
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
         $terms = $company->business_terms->first();
         $customerdata = $company->customers->find($id);
-        if(!$customerdata){
-            return redirect()->route('business_customer_index');
-        }
-
+        if(!$customerdata){ return redirect()->route('business_customer_index'); }
         $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
         $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->orderBy('created_at','desc')->get() : [];
-
-        // \DB::enableQueryLog(); 
         $purchase_history = @$customerdata != '' ?  @$customerdata->purchase_history()->orderBy('created_at','desc')->get() : [];
-        // dd(\DB::getQueryLog()); 
-
-        // dd($purchase_history);
-
         $complete_booking_details = @$customerdata != '' ? $customerdata->complete_booking_details()->get() : [];
         $strpecarderror = '';
         if (session()->has('strpecarderror')) {
             $strpecarderror = Session::get('strpecarderror');
         }
-
         $auto_pay_payment_msg = '';
         if($request->session()->has('recurringPayment')){
             $auto_pay_payment_msg =  $request->session()->get('recurringPayment');
             $request->session()->forget('recurringPayment');
         }
-
-
         $documents = CustomersDocuments::where(['customer_id'=>$id])->get();
         $lastBooking = $customerdata->bookingDetail()->orderby('created_at','desc')->first();
         $notes = CustomerNotes::where(['customer_id'=>$id])->get();
-
         $cardSuccessMsg =0;
-
         if(Session::has('cardSuccessMsg')){
-            $cardSuccessMsg = 1;
-            Session::forget('cardSuccessMsg');
+            $cardSuccessMsg = 1; Session::forget('cardSuccessMsg');
         }
-
         return view('customers.show', [
             'customerdata'=>$customerdata,
             'strpecarderror'=>$strpecarderror,
@@ -551,30 +326,19 @@ class CustomerController extends Controller {
             'resultDate' =>$this->resultDate,
         ]);
     }
-
     public function searchcustomersaction(Request $request) {
         if($request->get('query'))
         {
-            $array_data=array();
-            $query = $request->get('query');
-          
-            // $data_cus = $this->customers->findByfname($query); 
+            $array_data=array(); $query = $request->get('query');
             $data_cus = User::where('firstname', 'LIKE', "%{$query}%")->orWhere('lastname', 'LIKE', "%{$query}%")->orWhere('username', 'LIKE', "%{$query}%")->get();
-           
             foreach($data_cus as $cuss)
             {   
                 $array_data [] = array(
-                    "name"=>$cuss->fname .' '.$cuss->lname , 
-                    "cus_id"=>$cuss->id,
-                    "image" => $cuss->profile_pic,
-                    "email" => $cuss->email,
-                    "phone_number" => $cuss->phone_number,
-                    "age" => $cuss->getcustage(),
+                    "name"=>$cuss->fname .' '.$cuss->lname, "cus_id"=>$cuss->id, "image" => $cuss->profile_pic, "email" => $cuss->email,
+                    "phone_number" => $cuss->phone_number, "age" => $cuss->getcustage(),
                 );
             }
-
             sort($array_data);
-          
             $output = '<ul class="customer-list">';
             if(!empty($array_data)){
                 foreach($array_data as $row)
@@ -582,23 +346,17 @@ class CustomerController extends Controller {
                     $output .= '<li class="searchclick" >
                         <div class="row rowclass-controller">
                             <div class="col-md-2">';
-                            if($row['image'] != ''){
-                                $output .='<img src="'.asset('/customers/images/'.$row['image']).'">';
+                            if($row['image'] != ''){ $output .='<img src="'.asset('/customers/images/'.$row['image']).'">';
                             }else{
-                                $output .='<div class="company-profile-img-controller">';
-                                        $pf=substr($row['name'], 0, 1);
+                                $output .='<div class="company-profile-img-controller">';$pf=substr($row['name'], 0, 1);
                                 $output .='<p class="img-controller">'.$pf.'</p></div>';
                             }
                             $age = '';
-                            if($row['age'] != '—'){
-                                $age = '('.$row['age'].'  Years Old)';
-                            }
-
+                            if($row['age'] != '—'){ $age = '('.$row['age'].'  Years Old)'; }
                             $output .='</div>
                             <div class="col-md-10 div-controller">
                                 <p class="pstyle">'.$row['name'].' <label class="liaddress">'.$age.'<label></p>
-                                <p class="pstyle liaddress">'.$row['email'].'</p>
-                                <p class="pstyle liaddress">'.$row['phone_number'].'</p>
+                                <p class="pstyle liaddress">'.$row['email'].'</p><p class="pstyle liaddress">'.$row['phone_number'].'</p>
                             </div>
                             <input type="hidden" name="cid" id="cid" value="'.$row['cus_id'].'">
                         </div></li>';
@@ -606,19 +364,15 @@ class CustomerController extends Controller {
             }
             else
             {
-                $output .= '<li class="liimage"> ';
-                $output .= "Looks like there's no client with that name listed.</li>";
+                $output .= '<li class="liimage"> '; $output .= "Looks like there's no client with that name listed.</li>";
             }
-           
             echo $output;
         }
     }
-
     public function export(Request $request)
     {   
         return Excel::download(new ExportCustomer($request->id,$request->chk), 'customer.xlsx');
     }
-
     public function sendemailtocutomer(Request $request){
         $customer = Customer::findOrFail($request->cid);
         if(@$customer->password != ''){
@@ -630,92 +384,12 @@ class CustomerController extends Controller {
         $status =  SGMailService::sendWelcomeMailToCustomer($request->cid,$request->bid,$password);
        return  $status;
     }
-
-    // public function importmembership(Request $request){
-    //     $user = Auth::user();
-    //     $current_company =  $user->current_company;
-    //     if($current_company->id == $request->business_id && $current_company->membership_uploading == 0){
-    //         if($request->hasFile('import_file')){
-    //             $ext = $request->file('import_file')->getClientOriginalExtension();
-    //             if($ext != 'csv' && $ext != 'csvx' && $ext != 'xls' && $ext != 'xlsx')
-    //             {
-    //                 return response()->json(['status'=>500,'message'=>'File format is not supported.']);
-    //             }
-    //             ini_set('max_execution_time', 10000); 
-    //             $headings = (new HeadingRowImport(2))->toArray($request->file('import_file'));
-                
-    //             if(!empty($headings)){
-    //                 foreach($headings as $key => $row) {
-    //                     $firstrow = $row[0];
-    //                     /*if($firstrow[0] != 'name' || $firstrow[1] != 'membership_type' ||  $firstrow[2] != 'status'|| $firstrow[3] != 'member_from'|| $firstrow[4] != 'member_to') 
-    //                     {
-    //                         $this->error = 'Problem in header.';
-    //                         break;
-    //                     }*/
-                       
-    //                     if($firstrow[1] != 'name' || $firstrow[2] != 'membership_type' ||  $firstrow[3] != 'status'|| $firstrow[4] != 'member_from'|| $firstrow[5] != 'member_to') 
-    //                     {
-
-    //                         return response()->json(['status'=>500,'message'=>'Problem in header.']);
-    //                     }
-    //                 }
-    //             }
-
-    //             //$current_company->update(['membership_uploading' => 1]);
-    //             // $name = Str::random(8).'.csv';
-    //             // Storage::disk('uploadExcel')->put($name,'');
-    //             // $target = '../public/ExcelUpload/'.$name;
-
-    //             // $reader = new Xlsx();
-    //             // $spreadsheet = $reader->load($request->file('import_file'));
-    //             // $writer = new Csv($spreadsheet);
-    //             // $writer->save($target);
-    //             // $excel = Excel::toArray(new ImportMembership,$target);
-    //             // $excel = isset($excel[0])?$excel[0]:array();
-    //             // ProcessMembershipExcelData::dispatch($request->business_id,$excel);
-                
-    //             //Excel::import(new ImportMembership($request->business_id),  $target);
-
-    //             // unlink('../public/ExcelUpload/'.$name);
-
-    //             $file = $request->file('import_file');
-    //             $timestamp = now()->timestamp;
-    //             $uid = $user->id;
-    //             $newFileName = $request->business_id.'-'.$timestamp.'-'.$uid.'.'.$file->getClientOriginalExtension();
-    //             $path = $file->storeAs('ExcelFiles', $newFileName);
-    //             Storage::disk('s3')->put($path, file_get_contents($file));
-    //             $exltracker = new ExcelUploadTracker;
-    //             $exltracker->user_id = $uid;
-    //             $exltracker->business_id = $request->business_id;
-    //             $exltracker->excel_file_name = $newFileName;
-    //             $exltracker->status= 0;
-    //             $exltracker->save();
-    //             $excel = Excel::toArray(new ImportMembership,$path);
-    //             $excel = isset($excel[0])?$excel[0]:array();
-    //             ProcessMembershipExcelData::dispatch($request->business_id,$excel);
-    //             $exltracker->status= 1;
-    //             $exltracker->update();
-    //             $current_company->update(['membership_uploading' => 0]);
-    //         }
-        
-    //         if($this->error != '')
-    //         {
-    //             return response()->json(['status'=>500,'message'=>$this->error]);
-    //         }
-    //         else{
-    //             return response()->json(['status'=>200,'message'=>'File imported Successfully']);
-    //         }
-    //     }else{
-    //         return response()->json(['status'=>500,'message'=>'You Don\'t have permission to upload files at this moment']);
-    //     }
-    // }
     public function importmembership(Request $request)
     {
         $business_id = $request->input('business_id');
         $user = Auth::user();
         $current_company = $user->businesses()->findOrFail($business_id);
         $file = $request->file('import_file');
-        // if($request->hasFile('import_file'))
         if($file)
         {
             $ext = $file->getClientOriginalExtension();
@@ -728,301 +402,75 @@ class CustomerController extends Controller {
                     $fileName = time() . '_' . str_replace(' ', '_', $originalName);
                     $file->move(public_path('uploads/customers'), $fileName);
                     $data = BusinessCustomerUploadFiles::create([
-                        'user_id' => $user->id,
-                        'business_id' => $business_id,
+                        'user_id' => $user->id, 'business_id' => $business_id,
                         'file' => 'uploads/customers/' . $fileName,
-                        'file_type'=>'Members file',
-                        'status' => 1,
+                        'file_type'=>'Members file', 'status' => 1,
                     ]);
-                    return response()->json(['status' => 200, 'message' => 'We are processing your file. Once completed, We will send you an email and notification.', 'data' => $data]);
+                    // return response()->json(['status' => 200, 'message' => 'We are processing your file. Once completed, We will send you an email and notification.', 'data' => $data]);
+                    return response()->json(['status' => 200,'data' => $data]);
                 } 
             catch (\Exception $e) 
-                {
-                    return response()->json(['status' => 500, 'message' => 'An error occurred while uploading the file.','error' => $e->getMessage()]);
-                }
+            {
+                return response()->json(['status' => 500, 'message' => 'An error occurred while uploading the file.','error' => $e->getMessage()]);
+            }
         }
         return response()->json(['status' => 500, 'message' => 'No file uploaded.']);
     }
-
-    // public function uploadFileMember(Request $request, $business_id, $id)
-    // {
-    //     // dd('33');
-    //     $user = Auth::user();
-    //     $current_company =  $user->current_company;
-    //     if($current_company->id == $request->business_id && $current_company->membership_uploading == 0){
-    //             $data = BusinessCustomerUploadFiles::find($id);
-    //             $newFileNames = $data->file;
-    //             $filePath = public_path($newFileName);
-    //             $headings = (new HeadingRowImport)->toArray($filePath);
-
-    //             if(!empty($headings)){
-    //                 foreach($headings as $key => $row) {
-    //                     $firstrow = $row[0];
-    //                     if($firstrow[1] != 'name' || $firstrow[2] != 'membership_type' ||  $firstrow[3] != 'status'|| $firstrow[4] != 'member_from'|| $firstrow[5] != 'member_to') 
-    //                     {
-    //                         return response()->json(['status'=>500,'message'=>'Problem in header.']);
-    //                     }
-    //                 }
-    //             }
-
-    //             $file = $newFileNames;
-    //             $timestamp = now()->timestamp;
-    //             $uid = $user->id;
-    //             $newFileName = $request->business_id.'-'.$timestamp.'-'.$uid.'.'.$file->getClientOriginalExtension();
-    //             $path = $file->storeAs('ExcelFiles', $newFileName);
-    //             Storage::disk('s3')->put($path, file_get_contents($file));
-    //             $exltracker = new ExcelUploadTracker;
-    //             $exltracker->user_id = $uid;
-    //             $exltracker->business_id = $request->business_id;
-    //             $exltracker->excel_file_name = $newFileName;
-    //             $exltracker->status= 0;
-    //             $exltracker->save();
-    //             $excel = Excel::toArray(new ImportMembership,$path);
-    //             $excel = isset($excel[0])?$excel[0]:array();
-    //             ProcessMembershipExcelData::dispatch($request->business_id,$excel);
-    //             $exltracker->status= 1;
-    //             $exltracker->update();
-    //             $current_company->update(['membership_uploading' => 0]);
-    //         // }
-        
-    //         if($this->error != '')
-    //         {
-    //             return response()->json(['status'=>500,'message'=>$this->error]);
-    //         }
-    //         else{
-    //             return response()->json(['status'=>200,'message'=>'File imported Successfully']);
-    //         }
-    //     }else{
-    //         return response()->json(['status'=>500,'message'=>'You Don\'t have permission to upload files at this moment']);
-    //     }
-    // }
-
-        // public function uploadFileMember(Request $request, $business_id, $id)
-        // {
-        //     $user = Auth::user();
-        //     $current_company = $user->current_company;
-        //     if ($current_company->id == $request->business_id && $current_company->membership_uploading == 0) {
-        //         $data = BusinessCustomerUploadFiles::find($id);
-        //         // dd($data);
-        //         $newFileName = $data->file;
-        //         $filePath = public_path($newFileName);
-        //         $headings = (new HeadingRowImport(2))->toArray($filePath);
-        //         if (!empty($headings)) {
-        //             foreach ($headings as $key => $row) {
-        //                 $firstrow = $row[0];
-        //                 if (
-        //                     $firstrow[1] != 'name' || $firstrow[2] != 'membership_type' || $firstrow[3] != 'status' ||
-        //                     $firstrow[4] != 'member_from' || $firstrow[5] != 'member_to'
-        //                 ) {
-        //                     return response()->json(['status' => 500, 'message' => 'Problem in header.']);
-        //                 }
-        //             }
-        //         }
-
-        //         $file = $newFileName;
-        //         $timestamp = now()->timestamp;
-        //         $uid = $user->id;
-        //         $newFileName = $request->business_id . '-' . $timestamp . '-' . $uid . '.' . pathinfo($file, PATHINFO_EXTENSION);
-        //         $path = $file->storeAs('ExcelFiles', $newFileName);
-        //         Storage::disk('s3')->put($path, file_get_contents($file));
-                
-        //         $exltracker = new ExcelUploadTracker;
-        //         $exltracker->user_id = $uid;
-        //         $exltracker->business_id = $request->business_id;
-        //         $exltracker->excel_file_name = $newFileName;
-        //         $exltracker->status = 0;
-        //         $exltracker->save();
-
-        //         $excel = Excel::toArray(new ImportMembership, $filePath);
-        //         $excel = isset($excel[0]) ? $excel[0] : array();
-                
-        //         // Process data in chunks
-        //         $chunks = array_chunk($excel, 1000);
-        //         foreach ($chunks as $chunk) {
-        //             ProcessMembershipExcelData::dispatch($request->business_id, $chunk);
-        //         }
-
-        //         $exltracker->status = 1;
-        //         $exltracker->update();
-        //         $current_company->update(['membership_uploading' => 0]);
-
-        //         return response()->json(['status' => 200, 'message' => 'File imported Successfully']);
-        //     } else {
-        //         return response()->json(['status' => 500, 'message' => 'You don\'t have permission to upload files at this moment']);
-        //     }
-        //     $data->isseen = '0';
-        //     $data->status = '0';
-        //     $data->save();
-        // }
-    
-  
-       
-
-
-
-      
-
-        // public function uploadFileMember(Request $request, $business_id, $id)
-        // {
-        //     $user = Auth::user();
-        //     $current_company = $user->current_company;
-        
-        //     if ($current_company->id == $request->business_id && $current_company->membership_uploading == 0) {
-        //         $data = BusinessCustomerUploadFiles::find($id);
-        //         $newFileName = $data->file;
-        //         $filePath = public_path($newFileName);        
-        
-        //         Log::info('File path: ' . $filePath);
-        
-        //         try {
-        //             $rows = Excel::toCollection(null, $filePath)[0];
-        //         } catch (\Exception $e) {
-        //             Log::error('Error reading Excel file: ' . $e->getMessage());
-        //             return response()->json(['status' => 500, 'message' => 'Error reading Excel file']);
-        //         }
-        
-        //         Log::info('Total rows read: ' . count($rows));
-        
-        //         $headerFound = false;
-        //         $filteredRows = collect(); // Ensure $filteredRows is a collection
-        
-        //         foreach ($rows as $index => $row) {
-        //             if ($row === null || empty(array_filter($row->toArray()))) {
-        //                 Log::info('Row ' . $index . ' is null or empty, skipping.'); // Log skip for debugging
-        //                 continue;
-        //             }
-        
-        //             Log::info('Row ' . $index . ': ' . json_encode($row)); // Log each row for debugging
-    
-        //             if ($this->isHeaderRow($row)) {
-        //                 Log::info('Header found at row ' . $index);
-        //                 $headerFound = true;
-        //                 continue; // Skip adding header rows to $filteredRows
-        //             }
-            
-        //             if ($headerFound) {
-        //                 // If a header has been found, add this row to $filteredRows
-        //                 Log::info('Row data ' . $index . ': ' . json_encode($row));
-        //                 $filteredRows->push($row); // Push row to collection
-        //             } else {
-        //                 Log::info('Row data before first header ' . $index . ': ' . json_encode($row));
-        //             }
-                    
-        //         }
-        
-        //         Log::info('Total filtered rows: ' . $filteredRows->count());
-        
-        //         if ($filteredRows->isEmpty()) {
-        //             Log::warning('No filtered rows found.');
-        //             Log::info($filteredRows);
-        //         }
-        
-        //         $chunks = $filteredRows->chunk(1000); // Now $filteredRows is a collection
-                
-        //         // foreach ($chunks as $chunkIndex => $chunk) {
-        //         //     Log::info('Chunk ' . $chunkIndex . ':', $chunk->toArray());
-        //         // }
-        //         $data->total_chunks = $chunks->count();
-        //         $data->chunks_processed = 0; // Initialize processed chunks
-        //         $data->save();
-
-        //         foreach ($chunks as $chunk) {
-        //             Log::info('Processing start for chunk');
-        //             // $job = new ProcessMembershipExcelData($request->business_id, $chunk->toArray());
-        //             $job = new ProcessMembership($request->business_id, $chunk->toArray(),$user->email,$data->id);
-        //             dispatch($job)->onQueue('membershiprun');
-        //         }
-        
-        //         Log::info('All chunks dispatched');
-        //         // $current_company->update(['membership_uploading' => 0]);
-        //         // $data->isseen = '0';
-        //         // $data->status = '0';
-        //         // $data->save();
-        //         return response()->json(['status' => 200, 'message' => 'File is processing in background...']);
-        //     } else {
-        //         return response()->json(['status' => 500, 'message' => 'You don\'t have permission to upload files at this moment']);
-        //     }
-        // }
-        
         public function uploadFileMember(Request $request, $business_id, $id)
         {
-            $user = Auth::user();
-            $current_company = $user->current_company;
-        
-            if ($current_company->id == $request->business_id && $current_company->membership_uploading == 0) {
-                $data = BusinessCustomerUploadFiles::find($id);
-                $newFileName = $data->file;
-                $filePath = public_path($newFileName);        
-        
-                Log::info('File path: ' . $filePath);
-        
-                try {
-                    $rows = Excel::toCollection(null, $filePath)[0];
-                } catch (\Exception $e) {
-                    Log::error('Error reading Excel file: ' . $e->getMessage());
-                    return response()->json(['status' => 500, 'message' => 'Error reading Excel file']);
-                }
-        
-                Log::info('Total rows read: ' . count($rows));
-        
-                $headerFound = false;
-                $filteredRows = collect(); // Ensure $filteredRows is a collection
-        
-                foreach ($rows as $index => $row) {
-                    if ($row === null || empty(array_filter($row->toArray()))) {
-                        Log::info('Row ' . $index . ' is null or empty, skipping.'); // Log skip for debugging
-                        continue;
+                ini_set('memory_limit', '-1'); 
+                ini_set('max_execution_time', -1);
+                $user = Auth::user();
+                $current_company = $user->current_company;
+                if ($current_company->id == $request->business_id && $current_company->membership_uploading == 0) {
+                    $data = BusinessCustomerUploadFiles::find($id);
+                    $newFileName = $data->file;
+                    $filePath = public_path($newFileName);
+                    Log::info('File path: ' . $filePath);
+                    try { $rows = Excel::toCollection(null, $filePath)[0]; }
+                    catch (\Exception $e) {
+                        Log::error('Error reading Excel file: ' . $e->getMessage());
+                        return response()->json(['status' => 500, 'message' => 'Error reading Excel file']);
                     }
-        
-                    Log::info('Row ' . $index . ': ' . json_encode($row)); // Log each row for debugging
-    
-                    if ($this->isHeaderRow($row)) {
-                        Log::info('Header found at row ' . $index);
-                        $headerFound = true;
-                        continue; // Skip adding header rows to $filteredRows
+                    Log::info('Total rows read: ' . count($rows));
+                    $headerFound = false;
+                    $filteredRows = collect(); // Ensure $filteredRows is a collection
+                    foreach ($rows as $index => $row) {
+                        if ($row === null || empty(array_filter($row->toArray()))) {
+                            continue;
+                        }
+                        if ($this->isHeaderRow($row)) {
+                            $headerFound = true;
+                            continue; // Skip adding header rows to $filteredRows
+                        }
+                        if ($headerFound) {
+                            $filteredRows->push($row); // Push row to collection
+                        } 
                     }
-            
-                    if ($headerFound) {
-                        // If a header has been found, add this row to $filteredRows
-                        Log::info('Row data ' . $index . ': ' . json_encode($row));
-                        $filteredRows->push($row); // Push row to collection
+                    if ($filteredRows->isEmpty()) {
+                        Log::warning('No filtered rows found.'); Log::info($filteredRows);
+                    }
+                    // dd($request->business_id);
+                    $bid=$request->business_id;
+                    $upid=$data->id;
+                    $totalChunks = $filteredRows->chunk(1000)->count();
+                    $tracker = new ChunkProcessTracker();
+                    $tracker->business_id = $request->business_id;
+                    $tracker->total_chunks = $totalChunks;
+                    $tracker->processed_chunks = 0;
+                    $tracker->email_sent = false;
+                    $tracker->save();
+                    $chunks = $filteredRows->chunk(1000);                                    
+                        foreach ($chunks as $chunk) {
+                            $job = new Membership($request->business_id, $chunk->toArray(),$user->email,$upid,$tracker->id,$user->id);
+                            dispatch($job)->onQueue('membership');
+                        }
+                        // return response()->json(['status' => 200, 'message' => 'File imported Successfully']);
+                        return response()->json(['status' => 200, 'message' => 'We are processing your file. Once completed, We will send you an email and notification.', 'data' => $data]);
                     } else {
-                        Log::info('Row data before first header ' . $index . ': ' . json_encode($row));
+                        return response()->json(['status' => 500, 'message' => 'You don\'t have permission to upload files at this moment']);
                     }
-                    
-                }
-        
-                Log::info('Total filtered rows: ' . $filteredRows->count());
-        
-                if ($filteredRows->isEmpty()) {
-                    Log::warning('No filtered rows found.');
-                    Log::info($filteredRows);
-                }
-        
-                $chunks = $filteredRows->chunk(1000); // Now $filteredRows is a collection
-                
-                foreach ($chunks as $chunkIndex => $chunk) {
-                    Log::info('Chunk ' . $chunkIndex . ':', $chunk->toArray());
-                }
-        
-                foreach ($chunks as $chunk) {
-                    Log::info('Processing start for chunk');
-                    // $job = new ProcessMembershipExcelData($request->business_id, $chunk->toArray());
-                    $job = new ProcessMembership($request->business_id, $chunk->toArray(),$user->email);
-                    dispatch($job)->onQueue('membership');
-                }
-        
-                Log::info('All chunks dispatched');
-                $current_company->update(['membership_uploading' => 0]);
-                $data->isseen = '0';
-                $data->status = '0';
-                $data->save();
-                return response()->json(['status' => 200, 'message' => 'File imported Successfully']);
-            } else {
-                return response()->json(['status' => 500, 'message' => 'You don\'t have permission to upload files at this moment']);
-            }
         }
-        
         private function isHeaderRow($row)
         {
             Log::info('Original row: ' . json_encode($row));
@@ -1030,101 +478,13 @@ class CustomerController extends Controller {
             $rowValues = collect($row)->map(function ($value) {
                 return strtolower(str_replace(["\u{00a0}", ' '], '_', $value));
             })->slice(0, count($expectedHeaders))->values()->toArray();
-        
             Log::info('Processed row values for header check: ' . json_encode($rowValues));
             Log::info('Expected headers: ' . json_encode($expectedHeaders));
-        
             return $rowValues === $expectedHeaders;
         }
-                
-
-
-        
-        // -----------------------------------------my code ends---------------------------------------------------------------------------------
-       
-
-    // public function importattendance(Request $request){
-        // set_time_limit(8000000); 
-        // ini_set('memory_limit', '-1');
-        // ini_set('max_execution_time', 10000);
-        // $user = Auth::user();
-    //     $current_company =  $user->current_company;
-    //     if($current_company->id == $request->business_id  && $current_company->attendance_uploading == 0){
-    //         if($request->hasFile('import_file')){
-    //             $ext = $request->file('import_file')->getClientOriginalExtension();
-    //             if($ext != 'csv' && $ext != 'csvx' && $ext != 'xls' && $ext != 'xlsx' )
-    //             {
-    //                 return response()->json(['status'=>500,'message'=>'File format is not supported.']);
-    //             }
-    //             $headings = (new HeadingRowImport)->toArray($request->file('import_file'));
-    //             if(!empty($headings)){
-    //                 foreach($headings as $key => $row) {
-    //                     $firstrow = $row[0];
-    //                     if( $firstrow[0] != 'date' ||$firstrow[1] != 'day' || $firstrow[2] != 'time' ||$firstrow[4] != 'client'  || $firstrow[8] != 'pricing_option' || $firstrow[9] != 'exp_date'|| $firstrow[10] != 'visits_rem' ) 
-    //                     {
-    //                         return response()->json(['status'=>500,'message'=>'Problem in header.']);
-    //                     }
-    //                 }
-    //             }
-
-    //             //$current_company->update(['attendance_uploading' => 1]);
-
-    //             // $name = Str::random(8).'.csv';
-    //             // Storage::disk('uploadExcel')->put($name,'');
-    //             // $target = '../public/ExcelUpload/'.$name;
-
-    //             // $reader = new Xlsx();
-    //             // $spreadsheet = $reader->load($request->file('import_file'));
-    //             // $writer = new Csv($spreadsheet);
-    //             // $writer->save($target);
-                
-    //             // $excel = Excel::toArray(new customerAtendanceImport,$target);
-    //             // $excel = isset($excel[0])?$excel[0]:array();
-    //             // ProcessAttendanceExcelData::dispatch($request->business_id,$excel);
-
-    //             //Excel::import(new customerAtendanceImport($request->business_id),  $target);
-    //             //unlink('../public/ExcelUpload/'.$name);
-
-    //             $file = $request->file('import_file');
-    //             $timestamp = now()->timestamp;
-    //             $uid = $user->id;
-    //             $newFileName = $request->business_id.'-'.$timestamp.'-'.$uid.'.'.$file->getClientOriginalExtension();
-    //             $path = $file->storeAs('ExcelFiles', $newFileName);
-    //             Storage::disk('s3')->put($path, file_get_contents($file));
-
-    //             $exltracker = new ExcelUploadTracker;
-    //             $exltracker->user_id = $uid;
-    //             $exltracker->business_id = $request->business_id;
-    //             $exltracker->excel_file_name = $newFileName;
-    //             $exltracker->status= 0;
-    //             $exltracker->save();
-
-    //             $excel = Excel::toArray(new customerAtendanceImport,$path);
-    //             $excel = isset($excel[0])?$excel[0]:array();
-    //             ProcessAttendanceExcelData::dispatch($request->business_id,$excel);
-    //             $exltracker->status= 1;
-    //             $exltracker->update();
-    //             $current_company->update(['attendance_uploading' => 0]);
-    //         }
-        
-    //         if($this->error != '')
-    //         {
-    //             return response()->json(['status'=>500,'message'=>$this->error]);
-    //         }
-    //         else{
-    //             return response()->json(['status'=>200,'message'=>'File imported Successfully']);
-    //         }
-    //     }else{
-    //         return response()->json(['status'=>500,'message'=>'You Don\'t have permission to upload files at this moment']);
-    //     }
-    // }
-
-
-    // ============================================my attendance code starts======================================================================
     public function importattendance(Request $request){
-        ini_set('memory_limit', '-1');
+        ini_set('memory_limit', '-1'); 
         ini_set('max_execution_time', -1);
-
         $business_id = $request->input('business_id');
         $user = Auth::user();
         $current_company = $user->businesses()->findOrFail($business_id);
@@ -1141,11 +501,8 @@ class CustomerController extends Controller {
                     $fileName = time() . '_' . str_replace(' ', '_', $originalName);
                     $file->move(public_path('uploads/customers'), $fileName);
                     $data = BusinessCustomerUploadFiles::create([
-                        'user_id' => $user->id,
-                        'business_id' => $business_id,
-                        'file' => 'uploads/customers/' . $fileName,
-                        'file_type'=>'Attendance file',
-                        'status' => 1,
+                        'user_id' => $user->id,'business_id' => $business_id,'file' => 'uploads/customers/' . $fileName,
+                        'file_type'=>'Attendance file','status' => 1,
                     ]);
                     return response()->json(['status' => 200, 'message' => 'We are processing your file. Once completed, We will send you an email and notification.', 'data' => $data]);
                 } 
@@ -1155,23 +512,16 @@ class CustomerController extends Controller {
                 }
         }
         return response()->json(['status' => 500, 'message' => 'No file uploaded.']);
-
     }
-
     public function uploadFileAttendance(Request $request, $business_id, $id)
     {
-        // dd($business_id,$id);
-        ini_set('memory_limit', '-1');
-        ini_set('max_execution_time', -1);
-
+        ini_set('memory_limit', '-1'); ini_set('max_execution_time', -1);
         $user = Auth::user();
         $current_company = $user->businesses()->findOrFail($business_id);
-    
         $data = BusinessCustomerUploadFiles::find($id);
         $newFileName = $data->file;
         $filePath = public_path($newFileName);
         $headings = (new HeadingRowImport)->toArray($filePath);
-    
         if(!empty($headings)){
             foreach($headings as $key => $row) {
                 $firstrow = $row[0];
@@ -1180,29 +530,19 @@ class CustomerController extends Controller {
                     return response()->json(['status'=>500,'message'=>'Problem in header.']);
                 }
             }
-        }    
-
+        }
         $excel = Excel::toArray([], $filePath);
         $excel = isset($excel[0]) ? $excel[0] : array();
         $chunkSize = 1000; // Define the chunk size
-        $chunks = array_chunk($excel, $chunkSize);        
-        // dd($chunks);
+        $chunks = array_chunk($excel, $chunkSize);
         foreach ($chunks as $chunk) {
             $job = new ProcessAttendance($request->business_id, $chunk,$user->email);
             dispatch($job)->onQueue('attendance');
-            Log::info('All chunks started');
         }
-        Log::info('All chunks dispatched');
         $current_company->update(['membership_uploading' => 0]);
-        $data->isseen = '0';
-        $data->status = '0';
-        $data->save();
+        $data->isseen = '0'; $data->status = '0'; $data->save();
         return response()->json(['status' => 200, 'message' => 'File imported Successfully']);
-    
-        // dd($headings);
     }
-
-    // ===========================================ends=============================================================================================
     public function visit_modal(Request $request, $business_id, $id){
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
@@ -1210,7 +550,6 @@ class CustomerController extends Controller {
         $visits = $customer->visits()->where('booking_detail_id', $request->booking_detail_id)->get();
         return view('customers.activity_visits', ['visits' => $visits, 'customer' => $customer]);
     }
-
     public function visit_membership_modal(Request $request, $business_id ){
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
@@ -1218,7 +557,6 @@ class CustomerController extends Controller {
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
         return view('customers._edit_membership_info_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id ,"customer_id"=>$request->id]);
     }
-
     public function void_or_refund_modal(Request $request, $business_id ){
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
@@ -1226,7 +564,6 @@ class CustomerController extends Controller {
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
         return view('customers.edit_refund_or_void_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id ,"customer_id"=>$request->id]);
     }
-
     public function terminate_or_suspend_modal(Request $request, $business_id ){
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
@@ -1234,28 +571,19 @@ class CustomerController extends Controller {
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
         return view('customers.edit_terminate_or_suspend_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id ,"customer_id"=>$request->id]);
     }
-
     public function add_family ($id){
         $UserFamilyDetails  = [];
         $customer = Customer::find($id);
         $UserFamilyDetails  = $customer->get_families();
         $companyId = $customer->business_id;
         return view('customers.add_family', [
-            'UserFamilyDetails' => $UserFamilyDetails,
-            'companyId' => $companyId,
-            'parent_cus_id' => $id,
-            'resultDate' => $this->resultDate,
+            'UserFamilyDetails' => $UserFamilyDetails,'companyId' => $companyId,'parent_cus_id' => $id,'resultDate' => $this->resultDate,
         ]);
-        //return view('profiles.viewcustomer');
     }
-
     public function addFamilyMemberCustomer(Request $request) {
-        //print_r($request->all());
-        $idArray = $userIdArray = []; $userId = '';
-        $parent_id = null;
+        $idArray = $userIdArray = []; $userId = ''; $parent_id = null;
         for ($i=0; $i <= $request->family_count ; $i++) { 
             $customer = Customer::firstOrNew(['id' => $request['cus_id'][$i]]);
-
             $customer->fill([
                 'business_id'       => $request['business_id'],
                 'fname'             => $request['fname'][$i],
@@ -1270,15 +598,12 @@ class CustomerController extends Controller {
                 'primary_account' => 0,
                 'request_status' => 1,
             ])->save();
-
             if (@$request['primaryAccountHolder'][$i] == 1 && $parent_id === null) {
                 $parent_id = $customer->id;
             }else{
                 $idArray[$i][] = $customer->id;   
             }
-
             $customer->create_stripe_customer_id();
-
             $is_user = User::where('email', $request['email'][$i])->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($request['fname'][$i]), strtolower($request['lname'][$i])])->first();
             if(!$is_user){
                 $familyUser = New User();
@@ -1298,34 +623,24 @@ class CustomerController extends Controller {
             }else{
                 $customer->user_id =  @$is_user->id;
             }
-
             $userIdArray[] = $customer->user_id;   
             $customer->save();
         }
-       
         if($parent_id){
             $cus = Customer::where('id', $request['parent_cus_id'])->first();
             $cusParent = Customer::where('id',  $parent_id)->first();
             Customer::whereIn('id', $idArray)->update(['parent_cus_id' => $parent_id]);
             $cus->update(['parent_cus_id' => $parent_id,'primary_account' => 0]);
             $cusParent->update(['parent_cus_id' => null,'primary_account' => 1]);
-
             User::whereIn('id', $userIdArray)->update(['primary_account' => 0]);
             User::where('id', $cusParent->user_id)->update(['primary_account' => 1]);
         }
-
         return redirect()->route('customer.add_family',['id' => $request['parent_cus_id']]);
-        //return Redirect::back();
     }
-
     public function removefamilyCustomer(Request $request) {
-      
         $customer = Customer::find($request->id);
         $customer->update(['parent_cus_id' => NULL]);
-       /* DB::delete('DELETE FROM customers WHERE id = "'.$request->id.'"');
-        return Redirect::back()->with('success', 'Family Member Delete.');*/
     }
-
     public function addFamilyViaSearch(Request $request){
         $customer = Customer::find($request->cid);
         $parentCustomer = Customer::find($request->currentCid);
@@ -1339,19 +654,14 @@ class CustomerController extends Controller {
             $customer->update(['parent_cus_id' => $pid]);
         }
     }
-
     public function update_customer(Request $request){
-        //print_r($request->all());exit;
         session()->forget('strpecarderror');
         if($request->chk == 'update_billing'){
             \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
             $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-            
             $customerdata = Customer::find($request->cus_id);
             $customerdata->create_stripe_customer_id();
-
             $stripe_customer_id = $customerdata->stripe_customer_id;
-
             if($request->payment_type == 'update'){
                 $stripval = $stripe->customers->deleteSource(
                     $stripe_customer_id,
@@ -1359,12 +669,10 @@ class CustomerController extends Controller {
                     []
                 );
             }
-
             try{
                 if($request->card_month == ''){
                     $request->card_month = $request->card_monthhidden;
                 }
-
                 if($request->card_year == ''){
                     $request->card_year = $request->card_yearhidden;
                 }
@@ -1381,11 +689,9 @@ class CustomerController extends Controller {
                     $stripe_customer_id,
                     [ 'source' =>$carddetails->id]
                 );
-
                 $cust = Customer::find($request->cus_id);
                 $data = array(
-                    "card_stripe_id"=>$carddetails['card']->id,
-                    "card_token_id"=> $carddetails->id,
+                    "card_stripe_id"=>$carddetails['card']->id, "card_token_id"=> $carddetails->id,
                 );
                 $cust = Customer::find($request->cus_id);
                 $cust->update($data);
@@ -1401,32 +707,23 @@ class CustomerController extends Controller {
             if(@$data['birthdate'] != ''){
                 $data['birthdate'] = date('Y-m-d',strtotime($request->birthdate));
             }
-
-            unset($data['_token']);
-            unset($data['cus_id']);
-            
+            unset($data['_token']); unset($data['cus_id']);
             $cust = Customer::find($request->cus_id);
             if($request->primary_account == 1){
-                $data['parent_cus_id'] = NULL;
-                $data['primary_account']  = 1;
+                $data['parent_cus_id'] = NULL; $data['primary_account']  = 1;
             }else{
                 $data['primary_account'] = 0;
             }
-
             if($data['primary_account'] == 1 && $cust->primary_account == 0){
                 if($cust->parent_cus_id){
                     Customer::where(['parent_cus_id' => $cust->parent_cus_id])->update(['parent_cus_id' => $cust->id]);
                 }
-                
                 $oldParent = Customer::where(['id' => $cust->parent_cus_id])->first();
                 if($oldParent){
-
                     $oldParent->update(['parent_cus_id' => $cust->id ,'primary_account' => 0]);
-
                     User::where(['email' => @$oldParent->email, 'id' => @$oldParent->user_id])->update(['primary_account' => 0]);
                 }
             }
-
             User::where(['email' => $cust['email'] , 'id' => $cust['user_id']])->update(['primary_account' => $data['primary_account'] ,'profile_pic'=> $data['profile_pic'] ?? $cust->profile_pic ]);
             $cust->update($data);
         }elseif($request->chk == 'update_terms'){
@@ -1436,12 +733,9 @@ class CustomerController extends Controller {
             $contract = (@$data['terms_contract'] == 1) ? date('Y-m-d'): '';
             $cust = Customer::find($request->cus_id);
             $cust->update(['terms_covid' =>$covid,'terms_liability' =>$liability,'terms_contract' =>$contract,]);
-
         }
-        
         return redirect()->route('business_customer_show',['business_id' => $cust->company_information->id, 'id'=>$request->cus_id]);
     }
-
     public function paymentdeletecustomer(Request $request) {
         $customer = Customer::where('id', $request->cus_id)->first();
         if($customer != ''){
@@ -1455,7 +749,6 @@ class CustomerController extends Controller {
             echo $stripval;
         }
     }
-
     public function sendReceiptToCustomer(Request $request){
         if($request->odetailid == ''){
             $bookingStatus = UserBookingStatus::where('id',$request->oid)->first();
@@ -1476,7 +769,6 @@ class CustomerController extends Controller {
         }
         return $status;
     }
-
     public function request_access_mail(Request $request){
         $business = Auth::user()->current_company;
         $customer = $business->customers()->findOrFail($request->id);
@@ -1489,13 +781,11 @@ class CustomerController extends Controller {
         $status = SGMailService::requestAccessMail($data);
         return $status;
     }
-
     public function grant_access($id,$business_id){
         $user_id = Crypt::decryptString($id);
         $bId = Crypt::decryptString($business_id);
         $user = User::where('id',$user_id)->first();
         $chk = Customer::where(['business_id' =>$bId  ,'email' => @$user->email,'fname' => @$user->first_name,'lname' => @$user->last_name])->first();
-
         if($chk == ''){
             profileSyncToBusiness($bId, $user);
         }else{
@@ -1509,82 +799,23 @@ class CustomerController extends Controller {
                         'fname' => $member->first_name,
                         'lname' => ($member->last_name) ? $member->last_name : '',
                         'username' => $member->first_name.' '.$member->last_name,
-                        'email' => $member->email,
-                        'country' => 'US',
-                        'status' => 0,
+                        'email' => $member->email, 'country' => 'US', 'status' => 0,
                         'phone_number' => $member->mobile,
                         'birthdate' => $member->birthday,
                         'gender' => $member->gender,
                         'user_id' => NULL, //this is null bcz of user is not created at 
                         'parent_cus_id'=> $chk->id ,
-                        'relationship' =>$member->relationship,
-                        'request_status' =>1,
+                        'relationship' =>$member->relationship, 'request_status' =>1,
                     ]);
                 }
             }
-
-            /*$cardData = StripePaymentMethod::where(['user_id' => $user->id , 'user_type' => 'User' ])->get();
-
-            foreach($cardData as $data){
-                $stripData = StripePaymentMethod::where(['user_id' =>$chk->id ,'payment_id'=> $data->payment_id ,'exp_year' => $data->exp_year ,'last4' =>$data->last4])->first();
-                if($stripData == ''){
-                    StripePaymentMethod::create([
-                        'payment_id' => $data->payment_id,
-                        'user_type' => 'Customer',
-                        'user_id' => $customer->id,
-                        'pay_type'=> $data->pay_type,
-                        'brand'=> $data->brand,
-                        'exp_month'=> $data->exp_month,
-                        'exp_year'=> $data->exp_year,
-                        'last4'=> $data->last4,
-                    ]);
-                }
-            }*/
-
-            /*$paymentHistory = Transaction::where('user_type', 'User')
-            ->where('user_id', $user->id)
-            ->orWhere(function($subquery) use ($chk) {
-                $subquery->where('user_type', 'Customer')
-                    ->where('user_id', $chk->id);
-            })->get();
-
-            foreach($paymentHistory as $data){
-                $history = Transaction::where(['user_id' =>$chk->id ,'user_type'=>'Customer'])->first();
-                if($history == ''){
-                    Transaction::create([
-                        'item_id' => $data->item_id,
-                        'user_type' => 'Customer',
-                        'user_id' => $chk->id,
-                        'item_type'=> $data->item_type,
-                        'channel'=> $data->channel,
-                        'kind'=> $data->kind,
-                        'transaction_id'=> $data->transaction_id,
-                        'stripe_payment_method_id'=> $data->stripe_payment_method_id,
-                        'amount'=> $data->amount,
-                        'qty'=> $data->qty,
-                        'status'=> $data->status,
-                        'refund_amount'=> $data->refund_amount,
-                        'payload'=> $data->payload
-                    ]);
-                }
-            }*/
         }
-
         Notification::create([
-            'user_id' => Auth::user()->id,
-            'customer_id' =>  NULL,
-            'table_id' => Auth::user()->id,
-            'table' =>  'User',
-            'display_date' => date('Y-m-d'),
-            'display_time' => date("H:i"),
-            'type' => 'business',
-            'business_id' =>  $bId,
-            'status'  =>  'Alert'
+            'user_id' => Auth::user()->id, 'customer_id' =>  NULL, 'table_id' => Auth::user()->id, 'table' =>  'User',
+            'display_date' => date('Y-m-d'), 'display_time' => date("H:i"), 'type' => 'business', 'business_id' =>  $bId, 'status'  =>  'Alert'
         ]);
-        
         return Redirect()->route('personal.orders.index');
     }
-
     public function remove_grant_access(Request $request, $id,$customerId,$type = null){
         $customers = Customer::where('id',$customerId)->update(['user_id'=> null]); 
         if($request->type){
@@ -1593,71 +824,50 @@ class CustomerController extends Controller {
             return Redirect()->route('personal.family_members.index',['business_id'=>$id,'customerId'=>$customerId]);
         }
     }
-
     public function receiptmodel($orderId,$customer,$isFrom = null){
         $customerData = Customer::where('id',$customer)->first();
         $transaction = Transaction::where('item_id',$orderId)->first();
         if(!$isFrom){
             if(@$transaction->item_type == 'UserBookingStatus'){
-                $oid = $orderId;
-                $bookingArray = UserBookingDetail::where('booking_id',$oid)->pluck('id')->toArray();
+                $oid = $orderId; $bookingArray = UserBookingDetail::where('booking_id',$oid)->pluck('id')->toArray();
             }else{
-                $orderId = @$transaction->Recurring->booking_detail_id;
-                $oid = $orderId;
+                $orderId = @$transaction->Recurring->booking_detail_id; $oid = $orderId;
                 $bookingArray = UserBookingDetail::where('id',$orderId)->pluck('id')->toArray();
             }
             $transactionType = @$transaction->item_type;
         }else{
-             $oid = $orderId;
+            $oid = $orderId;
             $bookingArray = UserBookingDetail::where('id',$orderId)->pluck('id')->toArray();
             $transactionType = 'Membership';
         }
         return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $oid ,'type' =>$transactionType]);
     }
-
     public function getMoreRecords(Request $request)
     {
         $char = $request->char;
         $offset = $request->get('offset', 0); // Offset for pagination, passed from the frontend
         $limit = 20; // Number of records to load per request
-        
         $cid = Auth::user()->cid;
         $company = CompanyInformation::find($cid);
-        // Fetch the next set of records using your query logic
         $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->skip($offset)->take($limit)->orderBy('fname')->get();
         return view('customers.customer-detail-list',compact('customers' ,'char','company'));
     }
-
     public function sendTermsMail(Request $request){
-        $company = CompanyInformation::find($request->business_id);
-        $terms = $company->businessterms;
-        
+        $company = CompanyInformation::find($request->business_id); $terms = $company->businessterms;
         $termNameToMap = [
-            'Covid' => 'covidtext',
-            'Liability' => 'liabilitytext',
-            'Contract' => 'contracttermstext',
-            'Refund' => 'refundpolicytext',
-            'Terms' => 'termcondfaqtext',
+            'Covid' => 'covidtext','Liability' => 'liabilitytext','Contract' => 'contracttermstext','Refund' => 'refundpolicytext','Terms' => 'termcondfaqtext',
         ];
-
         $termsTextProperty = $termNameToMap[$request->termsName];
         $termsText = $terms->{$termsTextProperty};
-        
         $customer = Customer::find($request->cid);
         $logo = @$company->logo != '' ? Storage::Url(@$company->logo) : '';
         $emailDetail = array(
-            'companyImage' => $logo, 
-            'companyName'=> $company->company_name,
-            'companyAddress'=> $company->company_address(),
-            'companyEmail'=> $company->business_email,
-            'companyPhone'=> $company->business_phone,
-            'termsName' => $request->termsName,
-            'email' => $customer->email,
-            'termsText' => $termsText
+            'companyImage' => $logo, 'companyName'=> $company->company_name,
+            'companyAddress'=> $company->company_address(), 'companyEmail'=> $company->business_email,
+            'companyPhone'=> $company->business_phone, 'termsName' => $request->termsName, 'email' => $customer->email, 'termsText' => $termsText
         );
         $status  = SGMailService::sendTermsMail($emailDetail);
     }
-
     public function uploadDocument(Request $request, $business_id){
         $path = $request->hasFile('file') ? $request->file('file')->store('Customer-Documents') : '';
         $create = CustomersDocuments::create([
@@ -1677,64 +887,22 @@ class CustomerController extends Controller {
             return response()->json(['status'=>500,'message'=>'Something Went Wrong.']);
         }
     }
-
     public function uploadDocsName(Request $request){
-        //print_r($request->all());exit;
-        /*$document = CustomersDocuments::find($request->docId);
-        if(!empty($request->docName)){
-            for($i=0; $i< count($request->docName);$i++){
-                if($request->docName[$i] != ''){
-                    $data = CustomerDocumentsRequested::updateOrCreate([
-                            'id' => $request->contentID[$i],
-                        ],
-                        [
-                            'user_id' => @$document->user_id,
-                            'business_id' => @$document->business_id,
-                            'customer_id' => @$document->customer_id,
-                            'doc_id' => $request->docId,
-                            'content' => $request->docName[$i],
-                        ]
-                    ); 
-
-                    if($request->contentID[$i]){
-                        Notification::updateOrCreate([
-                            'display_date' => date('Y-m-d'),
-                            'table_id' => $data->id,
-                            'table' => 'CustomerDocumentsRequested',
-                            'business_id' => $document->business_id,
-                        ],[
-                            'user_id' => $document->user_id , 'customer_id' => $document->customer_id , 'display_date' => date('Y-m-d') , 'table_id' => $data->id , 'table' => 'CustomerDocumentsRequested',  'display_time' =>date('H:i'), 'business_id' => $document->business_id,'type' => 'personal','status'=>'Alert'
-                        ]); 
-                    }
-                }
-            }
-        }
-        if(!empty($request->deletIds)){
-            CustomerDocumentsRequested::whereIn('id', $request->deletIds)->delete();
-        } */  
-
         $customer = Customer::find($request->customerId);
         $document = CustomersDocuments::create([
             'user_id' => Auth::user()->id, 
             'staff_id' => session('StaffLogin') ?? '', 
-            'business_id' => $customer->business_id,
-            'customer_id' => $request->customerId,
-            'title' => $request->title,
-            'doc_requested_date' => date('Y-m-d'),
+            'business_id' => $customer->business_id,'customer_id' => $request->customerId,
+            'title' => $request->title,'doc_requested_date' => date('Y-m-d'),
         ]);
-
         if(!empty($request->docName)){
             for($i=0; $i< count($request->docName);$i++){
                 if($request->docName[$i] != ''){
                     $data = CustomerDocumentsRequested::Create([
-                            'user_id' => @$document->user_id,
-                            'business_id' => @$document->business_id,
-                            'customer_id' => @$document->customer_id,
-                            'doc_id' => $document->id,
-                            'content' => $request->docName[$i],
+                            'user_id' => @$document->user_id,'business_id' => @$document->business_id,
+                            'customer_id' => @$document->customer_id,'doc_id' => $document->id,'content' => $request->docName[$i],
                         ]
                     ); 
-
                     Notification::Create([
                         'user_id' => $document->user_id , 'customer_id' => $document->customer_id , 'display_date' => date('Y-m-d') , 'table_id' => $data->id , 'table' => 'CustomerDocumentsRequested',  'display_time' =>date('H:i'), 'business_id' => $document->business_id,'type' => 'personal','status'=>'Alert'
                     ]); 
@@ -1742,20 +910,15 @@ class CustomerController extends Controller {
                 }
             }
         }
-
         $request->session()->flash('success', 'Documents Content Added successfully.');
         return redirect()->route('business_customer_show',['business_id'=>@$document->business_id ,'id'=> @$document->customer_id]);
     }
-
     public function docContent($customerId){
-        //$content = CustomerDocumentsRequested::where('doc_id',$id)->get();
         return view('customers.documents_contents',compact('customerId'))->render();
     }
-
     public function requestSign($business_id,$id){
         $document = CustomersDocuments::find($id);
         $document->update(['status' =>1 ,'sign_requested_date' => date('Y-m-d')]);
-
         Notification::create([
             'user_id' => Auth::user()->id,
             'customer_id' =>  $document->customer_id,
@@ -1768,7 +931,6 @@ class CustomerController extends Controller {
             'status'  =>  'Alert'
         ]);
     }
-
     public function download($id)
     {
         $document = CustomersDocuments::findOrFail($id);
@@ -1776,23 +938,20 @@ class CustomerController extends Controller {
         $name = str_replace("Customer-Documents/", "", $document->path);
         $imageContent = file_get_contents($filePath);
         $headers = [
-            'Content-Type'        => 'image/jpeg', // Change the content type based on your image type
+            'Content-Type' => 'image/jpeg', // Change the content type based on your image type
             'Content-Disposition' => 'attachment; filename='.$name,
         ];
         return Response::make($imageContent, 200, $headers);
     }
-   
     public function removeDoc($id){
         $docs = CustomersDocuments::find($id);
         Storage::disk('s3')->delete($docs->path);
         $docs->delete();
     }
-
     public function removenote($business_id, $id){
         $note = CustomerNotes::find($id);
         @$note->delete();
     }
-
     public function addNotes(Request $request, $business_id){
         $note = CustomerNotes::updateOrCreate(
             ['id' =>  $request->id],
@@ -1808,9 +967,7 @@ class CustomerController extends Controller {
                 'status' => 1,
             ]
         );
-
         $data = ['user_id' => $note->user_id , 'customer_id' => $note->customer_id , 'display_date' => $note->due_date , 'table_id' => $note->id , 'table' => 'CustomerNotes',  'display_time' => $note->time, 'business_id' => $note->business_id,'type' => 'business','status'=>'Alert'];
-
         if($note->display_chk == 1){
             $data['type'] = 'personal';
             Notification::updateOrCreate([
@@ -1821,7 +978,6 @@ class CustomerController extends Controller {
                 'business_id' => $note->business_id,
             ],$data);
         }
-
         $data['type'] = 'business';
         Notification::updateOrCreate([
                 'display_date' => $note->due_date,
@@ -1830,7 +986,6 @@ class CustomerController extends Controller {
                 'type' => 'business',
                 'business_id' => $note->business_id,
             ],$data);
-        
         if($note){
             $word = $request->id ? 'updated' : 'Added';
             return response()->json(['status'=>200,'message'=>'Note '.$word.' Successfully.']);
@@ -1838,34 +993,28 @@ class CustomerController extends Controller {
             return response()->json(['status'=>500,'message'=>'Something Went Wrong.']);
         }
     }
-
     public function updateNote(Request $request, $business_id){
         $business = Auth::user()->current_company;
         $ids = explode(',', $request->input('id'));
         $business->CustomerNotes()->whereIn('id', $ids)->update(['status' => 1]);
     }
-
     public function getNote($business_id,$cusId, $id = null){
         $note = CustomerNotes::find($id);
         return view('customers._note' ,compact('note','cusId'));
     }
-
     public function changeCode(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'code' => 'required|string|max:255',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'message' => $validator->errors()->first(), 
             ]);
         }
-
         $customer = Customer::find($request->customerId);
         $customerUser = $customer->user;
-
         $user = User::where('unique_code' , $request->code)->whereNotIn('id' ,[$customerUser->id])->first();
         $chkBusinessStaff = BusinessStaff::where('unique_code', $checkInCode)->first();//my code
         if($user || $chkBusinessStaff){
@@ -1876,33 +1025,21 @@ class CustomerController extends Controller {
         }else{
             $customerUser->update(['unique_code'=> $request->code]);
         }
-
         return response()->json([
             'success' => true,
             'message' => 'Checkin code changed successfully.',
         ]);
     }
-
     public function getCheckinCode(Request $request){
         if($request->checkin_code){
             $user = User::where('unique_code' , $request->checkin_code)->where('email' , '!=' , $request->email)->first();
-            if($user){
-                return 1;
-            }
+            if($user){ return 1; }
             return 0;
         }else{
             $user = User::where(['email' => $request->email])->whereRaw('LOWER(firstname) = ?', [strtolower($request->fname)])
                 ->whereRaw('LOWER(lastname) = ?', [strtolower($request->lname)])->first();
-
-            if($user){
-                return $user->unique_code;
-            }else{
-                // return getCode();
-                return generateUniqueCode();
-            }
-        } 
+            if($user){ return $user->unique_code;}
+            else{ return generateUniqueCode(); }
+        }
     }
-
-
-   
 }

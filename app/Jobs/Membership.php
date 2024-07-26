@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\{Customer,BusinessPriceDetails,UserBookingDetail,UserBookingStatus,Transaction,BookingCheckinDetails,BusinessCustomerUploadFiles};
+use App\{Customer,BusinessPriceDetails,UserBookingDetail,UserBookingStatus,Transaction,BookingCheckinDetails,BusinessCustomerUploadFiles,BusinessPriceDetailsAges};
 use Carbon\Carbon;
 use Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ImportMembershipMail;
 use App\ChunkProcessTracker;
-class ProcessMembership implements ShouldQueue
+class Membership implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected $business_id;
@@ -23,16 +23,20 @@ class ProcessMembership implements ShouldQueue
     protected $email;
     protected $upid;
     protected $tracker_id;
-    public function __construct($business_id,$data,$email,$upid,$tracker_id)
+    protected $userid;
+    public function __construct($business_id,$data,$email,$upid,$tracker_id,$userid)
     {
         $this->business_id = $business_id;
         $this->data = $data;
         $this->email = $email;
         $this->upid=$upid;
         $this->tracker_id = $tracker_id;
+        $this->userid = $userid;
     }
     public function handle()
     {
+        ini_set('memory_limit', '-1'); 
+        ini_set('max_execution_time', -1);
         $totalRows = 0;
         $successfulRows = 0;
         $skippedRows = 0;
@@ -40,7 +44,14 @@ class ProcessMembership implements ShouldQueue
         try {
             foreach ($this->data as $i => $rowData) {
                 $totalRows++;
+                Log::info("Processed row data: " . json_encode($rowData));
+                Log::info('Checking row ' . $i . ': ' . json_encode($rowData));
+                Log::info('Column 1 '.$rowData[0]);
+                Log::info('Column 4'.$rowData[3]);
+                Log::info('Column 3 '.$rowData[2]);
+                Log::info('Column 5 '.$rowData[4]);
                 if (!empty($rowData[0]) && !empty($rowData[3]) && !empty($rowData[4]) && $rowData[2] != 'Declined') {
+                    Log::info('main if part:');
                     $string = htmlentities($rowData[0], null, 'utf-8');
                     $content = str_replace("&nbsp;", "", $string);
                     $content = html_entity_decode($content);
@@ -52,6 +63,7 @@ class ProcessMembership implements ShouldQueue
                             'lname' => @$nameary[0],
                             'business_id' => $this->business_id
                         ]);
+                        Log::info('customer not found if: ');
                         $successfulRows++; 
                     }
                     if ($customerData) {
@@ -62,6 +74,7 @@ class ProcessMembership implements ShouldQueue
                             return str_replace(" ", "", $pd->price_title) === str_replace(" ", "", $title);
                         });
                         if ($priceDetail) {
+                            Log::info('pricedetail if: ');
                             $conDate = explode('/', $rowData[3]);
                             $exDate = explode('/', $rowData[4]);
                             $member_to = @$exDate[2] . '-' . @$exDate[0] . '-' . @$exDate[1];
@@ -165,38 +178,71 @@ class ProcessMembership implements ShouldQueue
                                     'use_session_amount' => 0,
                                     'source_type' => 'in_person',
                                 ]);
+                                Log::info('BookingDetail not found if: ');
                                 $successfulRows++; 
                             } else {
+                                Log::info('BookingDetail found if: ');
+                                $skippedRows++;
+                            }
+                        }
+                        else{
+                            Log::info('price detail else: ');
+                            $title = str_replace("&nbsp;", "", htmlentities($rowData[1], null, 'utf-8'));
+                            $title = html_entity_decode($title);
+                            $existingRecord = BusinessPriceDetailsAges::where([
+                                ['userid', '=', $this->userid],
+                                ['cid', '=', $this->business_id],
+                                ['serviceid', '=', 0],
+                                ['category_title', '=', $title]
+                            ])->first();
+                        
+                            if (!$existingRecord) {
+                                $insAgedetails = new BusinessPriceDetailsAges();
+                                $insAgedetails->userid = $this->userid;
+                                $insAgedetails->cid = $this->business_id;
+                                $insAgedetails->serviceid = 0;
+                                $insAgedetails->category_title = $title;
+                                $insAgedetails->save();    
+                                $successfulRows++;                     
+                            } else {
+                                Log::info('Record already exists with the same title: ' . $title);
                                 $skippedRows++;
                             }
                         }
                     } else {
+                        Log::info('no customer else part: ');
                         $failedRows++;
                     }
                 } else {
+                    Log::info('main if else part: ');
                     $skippedRows++;
                 }
             }
 
-            try {
-                Mail::to($this->email)->send(new ImportMembershipMail($totalRows, $successfulRows, $skippedRows, $failedRows));
-                $uploadFile = BusinessCustomerUploadFiles::find($this->data);
-                if($uploadFile)
-                {
-                    $uploadFile->isseen='0';
-                    $uploadFile->status='0';
-                }   
+            try {   
                 $tracker = ChunkProcessTracker::find($this->tracker_id);
+                Log::info('test: '.$this->tracker_id);
                 if ($tracker) {
-                    $tracker->processed_chunks+1;
+                    Log::info('inside if: '.$this->tracker_id);
+                    $tracker->processed_chunks += 1;
                     $tracker->save();
-                    if ($tracker->processed_chunks >= $tracker->total_chunks && !$tracker->email_sent) {
+                    if ($tracker->processed_chunks >= $tracker->total_chunks && $tracker->email_sent==0) {
                         try {
+                            Log::info('another if: '.$this->tracker_id);
                             Log::info('ProcessMembership. Total Rows: '.$totalRows.', Successful Rows: '.$successfulRows.', Skipped Rows: '.$skippedRows.', Failed Rows: '.$failedRows);
                             Mail::to($this->email)->send(new ImportMembershipMail($totalRows, $successfulRows, $skippedRows, $failedRows));
                             Log::info('Email sent successfully');
                             $tracker->email_sent = true;
                             $tracker->save();
+                            $uploadFile = BusinessCustomerUploadFiles::find($this->upid);
+                            Log::info('upid'.$this->upid);
+                            if($uploadFile)
+                            {
+                                Log::info('upload file');
+                                $uploadFile->isseen='0';
+                                $uploadFile->status='0';
+                                $uploadFile->save();
+                            }
                         } catch (\Exception $e) {
                             Log::error('Failed to send email inside tracker: ' . $e->getMessage());
                         }

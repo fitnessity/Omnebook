@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\URL;
@@ -12,52 +11,35 @@ use DateTime;
 use Session;
 
 class OnBoardedController extends Controller {
-
-
     protected $features;
-
     public function __construct(FeaturesRepository $features)
     {
         $this->features = $features;
     }
-
     public function index(Request $request) { 
-        
         $cid = $request->cid ?? '';
         $id = $request->id ?? '';
-            
         $companyDetail = CompanyInformation::find($cid);
         $companay = CompanyInformation::where('id' ,$cid)->whereNotNull('stripe_connect_id')->first();
         $user = $companyDetail != '' ? $companyDetail->users : '';
-        if($id){
-            $user = User::find($id);
-        }
-        if(Auth::check()){
-            $user = Auth::user();
-        }
-
+        if($id){ $user = User::find($id); }
+        if(Auth::check()){ $user = Auth::user(); }
         if($request->displaystep){
             if($cid == ''){
-                if($user){
-                    @$user->update(['show_step' => 1]);
-                }else{
-                    return redirect('/onboard_process');
-                }
+                if($user){ @$user->update(['show_step' => 1]); }
+                else{ return redirect('/onboard_process'); }
             }else{
                 return redirect('/onboard_process?cid='.$cid);
             }
         }
-        
         if($request->show == 3 ){
             $user->update(['show_step' => 3]);
             return redirect('/onboard_process?cid='.$cid.'&id='.$user->id);
         }
-
         if($request->show == 6 ){
             $user->update(['show_step' => 6]);
             return redirect('/onboard_process?cid='.$cid);
         }
-
         $show = @$user->show_step ?? 1;
         $plans = Plan::get();
         $features = $this->features->getAllFeatures();
@@ -68,23 +50,15 @@ class OnBoardedController extends Controller {
         }
         return view('on-boarded.index',compact('show','cid','companyDetail','user','id','show','plans','features','freePlan','faqs'));
     }
-
     public function store(Request $request){
-        //print_r($request->all());    exit;
-
         $userDt = User::find($request->id);
         $companyDt = CompanyInformation::find($request->cid);
         if($request->step == 1){
-
             $show_step = 2;
             $companyChk = CompanyInformation::where(['id'=>$request->cid , 'user_id' => @$userDt->id])->first();
-            if(Auth::check() || $companyChk || @$companyDt->id == ''){
-                $show_step = 3;
-            }
-        
+            if(Auth::check() || $companyChk || @$companyDt->id == ''){ $show_step = 3; }
             $proPic = $request->has('profile_pic') ? $request->file('profile_pic')->store('customer') : @$userDt->profile_pic;
             $birthdate = $request->birthdate ?? date('Y-m-d');
-
             $user = [
                 "firstname" => $request->fname,
                 "lastname" => $request->lname,
@@ -108,24 +82,18 @@ class OnBoardedController extends Controller {
                 "business_info" => $request->business_info,
                 "show_step" => $show_step,
             ];
-
             if ($request->password !== null) {
                 $user["password"] = bcrypt($request->password);
                 $user["buddy_key"] = $request->password;
             }
-
             if ($request->email !== null) {
                 $user["email"] = $request->email;
             }
-
             $user  =  User::updateOrCreate(['id' => $request->id],$user);
-
             $data = [
-                'cid' => @$companyDt->id,
-                'id' => $user->id,
+                'cid' => @$companyDt->id, 'id' => $user->id,
             ];
         }else{
-    
             $companyImage = $request->has('logo') ? $request->file('logo')->store('company') :  @$companyDt->logo;; 
             $company = [
                 "user_id" => @$userDt->id,
@@ -153,24 +121,15 @@ class OnBoardedController extends Controller {
                 "about_company" => $request->aboutCompany,
                 "short_description" => $request->shortDescription,
             ];
-
             @$userDt->update(['show_step'=>4]);
-
             $companyDetail  =  CompanyInformation::updateOrCreate(['id' => $request->cid],$company);
-
             if ($companyDetail->wasRecentlyCreated) {
                 SGMailService::welcomeMailOfNewBusinessToCustomer(['cid'=> $companyDetail->id,'email' => @$userDt->email]);
             }
-
-            $data = [
-                'cid' => $companyDetail->id,
-                'id' => $companyDetail->user_id,
-            ];
+            $data = ['cid' => $companyDetail->id, 'id' => $companyDetail->user_id, ];
         } 
-
         return response()->json($data); 
     }
-
     public function welcome(Request $request){
         $cid = $request->cid;
         $company = CompanyInformation::where('id', $cid)->first();
@@ -178,42 +137,32 @@ class OnBoardedController extends Controller {
         if(Auth::check()){
             $user = Auth::user();
         }
-
         if($user){
             $user->update(['show_step' =>1]);
             $activePlan = $user->CustomerPlanDetails()->where('amount','!=',0)->whereDate('expire_date','>=',date('Y-m-d'))->whereDate('starting_date','<=',date('Y-m-d'))->latest()->first();
             $company = $user->company;
         }
-
-        //$company = $user->company;
         $activePlan = @$activePlan ?? '';
         session()->put('redirectToOnboard', URL::full());
         return view('on-boarded.welcome_provider',compact('cid','activePlan','user','company'));
     }
-
     public function stripeDashboard(Request $request){
         $stripe_client = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $company = CompanyInformation::where('id', $request->cid)->first();
         $current_user = User::where('id',@$company->user_id)->first();
-
         if(!@$company->stripe_connect_id) $company->stripe_connect_id = '111111111';
-        
         try{
             $stripe_account = $stripe_client->accounts->retrieve(
               $company->stripe_connect_id,
               []
             );
-
         }catch(\Stripe\Exception\PermissionException $e){
             $stripe_account = $stripe_client->accounts->create([
-                'type' => 'express', 
-                'email' => $current_user->email,
+                'type' => 'express', 'email' => $current_user->email,
             ]);
             $company->stripe_connect_id = $stripe_account->id;
             $company->save();
         }
-
-
         if($stripe_account->charges_enabled){
             $company->charges_enabled = 1;
             $company->save();
@@ -230,48 +179,35 @@ class OnBoardedController extends Controller {
               ]
             );
             $url = $link['url'];
-
-        }       
+        }
         $current_user->show_step = 5;
         $current_user->save();
-    
         return redirect($url);
     }
-
     public function storePlan(Request $request){
         $currentDate = new DateTime();
         $sDate = $currentDate->format('Y-m-d');
         $currentDate->modify('+14 days');
         $eDate = $currentDate->format('Y-m-d');
-
         $company = CompanyInformation::find($request->cid);
         $user = User::find($company->user_id);
-
         $chkPlan = CustomerPlanDetails::where(['user_id' => $user->id])->whereDate('expire_date' ,'=', $eDate)->first();
         if($chkPlan == ''){
             CustomerPlanDetails::create([
-                'user_id'=> $user->id,
-                'plan_id'=> $request->id,
-                'starting_date'=> $sDate,
-                'expire_date'=> $eDate
+                'user_id'=> $user->id, 'plan_id'=> $request->id,'starting_date'=> $sDate, 'expire_date'=> $eDate
             ]);
         }
         $user->update(['show_step' => 6]);
     }
-
     public function getCardForm(Request $request){
         $company = CompanyInformation::find($request->cid);
         $user = User::find($company->user_id);
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $intent = $stripe->setupIntents->create(
-          [
-            'customer' => @$user->stripe_customer_id,
-            'payment_method_types' => ['card'],
-          ]
+          [ 'customer' => @$user->stripe_customer_id, 'payment_method_types' => ['card'], ]
         );
         return view('on-boarded.card_form', compact('intent','user','company'));
     }
-
     public function storeCards(Request $request){
         $company = CompanyInformation::find($request->cid);
         $user = User::where('id', $company->user_id)->first();
@@ -288,11 +224,8 @@ class OnBoardedController extends Controller {
             } else {
                 $fingerprints[] = $fingerprint;
                 $stripePaymentMethod = StripePaymentMethod::firstOrNew([
-                    'payment_id' => $payment_method['id'],
-                    'user_type' => 'User',
-                    'user_id' => $user->id,
+                    'payment_id' => $payment_method['id'], 'user_type' => 'User', 'user_id' => $user->id,
                 ]);
-
                 $stripePaymentMethod->pay_type = $payment_method['type'];
                 $stripePaymentMethod->brand = $payment_method['card']['brand'];
                 $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
@@ -303,7 +236,6 @@ class OnBoardedController extends Controller {
         }
         return redirect('/onboard_process?show=5&cid='.$request->cid);
     }
-
     public function doLoginProcess(Request $request){
         $company = CompanyInformation::find($request->cid);
         if(!Auth::check()){
@@ -316,4 +248,4 @@ class OnBoardedController extends Controller {
             return redirect()->route('business.service.select' ,['business_id' => $request->cid]);
         }
     }
-}   
+}

@@ -63,267 +63,99 @@ use App\BusinessTerms;
 
 class ProfileController extends Controller
 {
-    /**
-     * The user repository instance.
-     *
-     * @var UserRepository
-     */
     protected $users;
-    /**
-     * Plan Repository
-     *
-     * @var PlanRepository Object
-     */
     protected $planRepository;
-
-	/**
-     * Professionals Repository
-     *
-     * @var professionals Object
-     */
     protected $professionals;
-    /**
-     * sports Repository
-     *
-     * @var sports Object
-     */
     protected $sports;
-    /**
-     * Create a new controller instance.
-     *
-     * @param  UserRepository  $users
-     * @return void
-     */
     public function __construct(UserRepository $users, PlanRepository $planRepository, ProfessionalRepository $professionals, SportsRepository $sports)
     {
         $this->middleware('auth', ['except' => ['getBladeDetail1','SendVerificationlinkCall','SendVerificationlinkMsg','makeCall','generateVoiceMessage','sendCustomMessage','getBladeDetail','newFUn','getBusinessClaim','getStateList', 'getCityList','familyProfileUpdate','submitFamilyForm','submitFamilyFormWithSkip','check','deleteCompany','submitFamilyForm1','skipFamilyForm1','getBusinessClaimDetaill','businessClaim','getLocationBusinessClaimDetaill','VerifySendVerificationlink','searchResultLocation','searchResultLocation1']]);
-
         $this->planRepository = $planRepository;
         $this->users = $users;
         $this->professionals = $professionals;
-
         $this->sports = $sports;
-
         $this->arr = [];
-
-        
-
-        if(Auth::check()){
-
-           
-        // View::share('languages', $languages);
-
-        // View::share('UserProfileDetail', $UserProfileDetail);
-
-        // View::share('sports_select', $sports_select);
-
-        // View::share('sport_dd', $sport_dd + $sports_names);
-
-        // View::share('businessType', $businessType);
-
-        // View::share('activity', $activity);
-
-        // View::share('programType', $programType);
-
-        // View::share('programFor', $programFor);
-
-        // View::share('teaching', $teaching);
-
-        // View::share('numberOfPeople', $numberOfPeople);
-
-        // View::share('ageRange', $ageRange);
-
-        // View::share('expLevel', $expLevel);
-
-        // View::share('serviceLocation', $serviceLocation);
-
-        // View::share('pFocuses', $pFocuses);
-
-        // View::share('duration', $duration);
-
-        // View::share('specialDeals', $specialDeals);
-
-        // View::share('servicePriceOption', $servicePriceOption);
-
-        // View::share('allLanguages', $languages);
-
-        // View::share('timeSlots', $timeSlots);
-
-        // View::share('mydetails', $mydetails);
-
-        }
-
-       
-
+        if(Auth::check()){ }
     }
-    
-    public function manojTest(Request $request) {
-        die('createNewBusinessProfile');
-    }
-
+    public function manojTest(Request $request) { die('createNewBusinessProfile'); }
     public function createNewBusinessProfile(Request $request)
     {
-      //die('createNewBusinessProfile');
       if(! Gate::allows('profile_view_access')) 
       {
-        $request->session()->flash('alert-danger', 'Access Restricted');
-        return redirect('/');
+        $request->session()->flash('alert-danger', 'Access Restricted'); return redirect('/');
       }
-
       $loggedinUser = Auth::user();
-
       $UserProfileDetail = $this->users->getUserProfileDetail($loggedinUser['id'],array('professional_detail','history','education','certification','service'));
-
       if(isset($UserProfileDetail['ProfessionalDetail']) && @count($UserProfileDetail['ProfessionalDetail']) > 0)
       {
-
         $UserProfileDetail['ProfessionalDetail'] = UserProfessionalDetail::getFormedProfile($UserProfileDetail['ProfessionalDetail']);
       }
-
       $sports_names = $this->sports->getAllSportsNames();
-
       $approve = Evidents::where('user_id',$loggedinUser['id'])->get();
-
       $serviceType = Miscellaneous::businessType();
-
       $programType = Miscellaneous::programType();
-
       $programFor = Miscellaneous::programFor();
-
       $numberOfPeople = Miscellaneous::numberOfPeople();
-
       $ageRange = Miscellaneous::ageRange();
-
       $expLevel = Miscellaneous::expLevel();
-
       $serviceLocation = Miscellaneous::serviceLocation();
-
       $pFocuses = Miscellaneous::pFocuses();
-
       $duration = Miscellaneous::duration();
-
       $servicePriceOption = Miscellaneous::servicePriceOption();
-
       $specialDeals = Miscellaneous::specialDeals();
-
-      //  $loggedinUser['role'] = 'customer';
-
-        // $loggedinUser->save();
-        //dd($UserProfileDetail);die;
-
       if($loggedinUser['role']=='business' || $loggedinUser['role']=='professional' || $loggedinUser['role']=='admin')
-      {
-        $view='profiles.viewProfile';
-      }
-
+      { $view='profiles.viewProfile'; }
       elseif($loggedinUser['role']=='customer')
-      {
-        $view='profiles.viewProfileCustomer';
-      }
-
+      { $view='profiles.viewProfileCustomer'; }
       $family = UserFamilyDetail::where('user_id',Auth::user()->id)->get();
       $business_details = BusinessInformation::where('user_id',Auth::user()->id)->get();
-
-    //  dd($this->users->getStateList($UserProfileDetail['country']));
-       //die;
-
       $user = User::where('id',Auth::user()->id)->first();
       $city = AddrCities::where('id',$user->city)->first();
-      if(empty($city)){
-        $UserProfileDetail['city'] = $user->city;;
-      }
-      else
-      {
-        $UserProfileDetail['city'] = $city->city_name;
-      }
-
+      if(empty($city)){  $UserProfileDetail['city'] = $user->city; }
+      else{ $UserProfileDetail['city'] = $city->city_name; }
       $state = AddrStates::where('id',$user->state)->first();
-
       if(empty($state))
-      {
-        $UserProfileDetail['state'] = $user->state;;
-      }
-
+      { $UserProfileDetail['state'] = $user->state;;}
       else
-      {
-        $UserProfileDetail['state'] = $state->state_name;
-      }
-
+      { $UserProfileDetail['state'] = $state->state_name;  }
       $UserProfileDetail['country'] = $user->country;
-
       $firstCompany = CompanyInformation::where('user_id',Auth::user()->id)->first();
-
       $companies = CompanyInformation::where('user_id',Auth::user()->id)->get();
-
-//dd($UserProfileDetail);die;
-      
-  
-		  $view='profiles.createNewBusinessProfile';
-
+	$view='profiles.createNewBusinessProfile';
       return view($view, [
-
             'UserProfileDetail' => $UserProfileDetail,
-
             'firstCompany' => $firstCompany,
-
             'countries' => $this->users->getCountriesList(),
-
             'states' => $this->users->getStateList($UserProfileDetail['country']),
-
             'cities' => $this->users->getCityList($UserProfileDetail['state']),
-
             'phonecode' => Miscellaneous::getPhoneCode(),
-
             'sports_names' => $sports_names,
-
             'serviceType' => $serviceType,
-
             'programType' => $programType,
-
             'programFor' => $programFor,
-
             'numberOfPeople' => $numberOfPeople,
-
             'ageRange' => $ageRange,
-
             'expLevel' => $expLevel,
-
             'serviceLocation' => $serviceLocation,
-
             'pFocuses' => $pFocuses,
-
             'duration'=> $duration,
-
             'specialDeals' => $specialDeals,
-
             'servicePriceOption' => $servicePriceOption,
-
             'pageTitle' => "PROFILE",
-
             'approve'=>$approve,
-
             'family'=>$family,
-
             'business_details'=>$business_details,
-
             'companies'=>$companies,
-
         ]);
-
-	  //return view('profiles.createNewBusinessProfile');
-
     }
-    
+
     public function addbstep(Request $request)
     {
-      User::where('id', Auth::user()->id)->update(['bstep' => 1]);
-     return view('profiles.createNewBusinessProfile');
+        User::where('id', Auth::user()->id)->update(['bstep' => 1]);
+        return view('profiles.createNewBusinessProfile');
     }
     public function addbusinesscompanydetail(Request $request)
     {
-
-      //echo "<pre>";print_r($request->all()); echo"<pre>";exit;
-
       $this->validate($request, [
         'Companyname' => 'required',
         'Address' => 'required',
@@ -341,58 +173,26 @@ class ProfileController extends Controller
         'Shortdescription' => 'required',
         'userid' => 'required',
       ]);
-
-      /*$data=[
-          "Companyname"=> $request->Companyname,
-          "Address"=>$request->Address,
-          "City"=>$request->City,
-          "State"=>$request->State,
-          "ZipCode"=>$request->ZipCode,
-          "Country"=>$request->Country,
-          "Establishmentyear"=>$request->Establishmentyear,
-          "Businessusername"=>$request->Businessusername,
-          "Firstnameb"=>$request->Firstnameb,
-          "Lastnameb"=>$request->Lastnameb,
-          "Emailb"=>$request->Emailb,
-          "Phonenumber"=>$request->Phonenumber,
-          "Aboutcompany"=>$request->Aboutcompany,
-          "Shortdescription"=>$request->Shortdescription,
-          "EINnumber"=>$request->EINnumber,
-          "Profilepic"=>$request->Profilepic
-      ];*/
-
       BusinessCompanyDetail::create($request->all());
-
       User::where('id', Auth::user()->id)->update(['bstep' => 2]);
-      //return redirect()->route('createNewBusinessProfile');
-     return view('profiles.createNewBusinessProfile');
-      
+      return view('profiles.createNewBusinessProfile');
     }
     public function addbusinessexperience(Request $request)
     {
-      //echo "<pre>";print_r($request->all()); echo"<pre>";exit;
       BusinessExperience::create($request->all());
       User::where('id', Auth::user()->id)->update(['bstep' => 3]);
       return view('profiles.createNewBusinessProfile');
     }
     public function addbusiness_service(Request $request)
     {
-      //echo "<pre>";print_r($request->all()); echo"<pre>";exit;
-     
       $input =array();
       foreach ($request->languages as $key => $row1) 
-      {
-        $input[] = $row1;
-      }
+      {$input[] = $row1; }
       $languages = implode(",",$input);
-
       $input1 =array();
       foreach ($request->serBusinessoff1 as $key => $row2) 
-      {
-        $input1[] = $row2;
-      }
+      { $input1[] = $row2; }
       $serBusinessoff1 = implode(",",$input1);
-
       $data = [
         [
           'userid'=>$request->userid, 
@@ -405,169 +205,85 @@ class ProfileController extends Controller
           'serBusinessoff1'=> $serBusinessoff1
         ]
       ];
-
       BusinessService::insert($data); 
       return view('profiles.createNewBusinessProfile');
-
     }
     public function addbusinessterms(Request $request)
     {
-      //echo "<pre>";print_r($request->all()); echo"<pre>";exit;
       BusinessTerms::create($request->all());
       return view('profiles.createNewBusinessProfile');
     }
-
     public function addFamily(Request $request)
-
 	{ 
-
 		if (! Gate::allows('profile_view_access')) {
-
             $request->session()->flash('alert-danger', 'Access Restricted');
-
             return redirect('/');
-
         }
-
         $loggedinUser = Auth::user();
-
-
-
         $UserProfileDetail = $this->users->getUserProfileDetail($loggedinUser['id'],array('professional_detail','history','education','certification','service'));
-
-        
-
         if(isset($UserProfileDetail['ProfessionalDetail']) && @count($UserProfileDetail['ProfessionalDetail']) > 0){
-
             $UserProfileDetail['ProfessionalDetail'] = UserProfessionalDetail::getFormedProfile($UserProfileDetail['ProfessionalDetail']);
-
         }
-
        $UserFamilyDetails = UserFamilyDetail::where('user_id',$loggedinUser['id'])->get();
-
         $sports_names = $this->sports->getAllSportsNames();
-
         $approve = Evidents::where('user_id',$loggedinUser['id'])->get();
-
         $serviceType = Miscellaneous::businessType();
-
         $programType = Miscellaneous::programType();
-
         $programFor = Miscellaneous::programFor();
-
         $numberOfPeople = Miscellaneous::numberOfPeople();
-
         $ageRange = Miscellaneous::ageRange();
-
         $expLevel = Miscellaneous::expLevel();
-
         $serviceLocation = Miscellaneous::serviceLocation();
-
         $pFocuses = Miscellaneous::pFocuses();
-
         $duration = Miscellaneous::duration();
-
         $servicePriceOption = Miscellaneous::servicePriceOption();
-
         $specialDeals = Miscellaneous::specialDeals();
-
-      //  $loggedinUser['role'] = 'customer';
-
-        // $loggedinUser->save();
-
-        //dd($UserProfileDetail);die;
-
         if($loggedinUser['role']=='business' || $loggedinUser['role']=='professional' || $loggedinUser['role']=='admin'){
-
             $view='profiles.viewProfile';
-
         }
-
         elseif($loggedinUser['role']=='customer'){
             $view='profiles.viewProfileCustomer';
         }
         $family = UserFamilyDetail::where('user_id',Auth::user()->id)->get();
         $business_details = BusinessInformation::where('user_id',Auth::user()->id)->get();
-
-    //  dd($this->users->getStateList($UserProfileDetail['country']));
-       //die;
-
         $user = User::where('id',Auth::user()->id)->first();
-
        $city = AddrCities::where('id',$user->city)->first();
-
-       if(empty($city)){
-           $UserProfileDetail['city'] = $user->city;;
-       }
-       else{
-           $UserProfileDetail['city'] = $city->city_name;
-       }
+       if(empty($city)){  $UserProfileDetail['city'] = $user->city; }
+       else{ $UserProfileDetail['city'] = $city->city_name; }
        $state = AddrStates::where('id',$user->state)->first();
-       if(empty($state)){
-           $UserProfileDetail['state'] = $user->state;;
-       }
-       else{
-           $UserProfileDetail['state'] = $state->state_name;
-       }
+       if(empty($state)){ $UserProfileDetail['state'] = $user->state; }
+       else{ $UserProfileDetail['state'] = $state->state_name; }
        $UserProfileDetail['country'] = $user->country;
        $firstCompany = CompanyInformation::where('user_id',Auth::user()->id)->first();
        $companies = CompanyInformation::where('user_id',Auth::user()->id)->get();
-
-		$view='personal-profile.add-family';
-
+        $view='personal-profile.add-family';
         return view($view, [
-
             'UserProfileDetail' => $UserProfileDetail,
-
             'firstCompany' => $firstCompany,
-
             'countries' => $this->users->getCountriesList(),
-
             'states' => $this->users->getStateList($UserProfileDetail['country']),
-
             'cities' => $this->users->getCityList($UserProfileDetail['state']),
-
             'phonecode' => Miscellaneous::getPhoneCode(),
-
             'sports_names' => $sports_names,
-
             'serviceType' => $serviceType,
-
             'programType' => $programType,
-
             'programFor' => $programFor,
-
             'numberOfPeople' => $numberOfPeople,
-
             'ageRange' => $ageRange,
-
             'expLevel' => $expLevel,
-
             'serviceLocation' => $serviceLocation,
-
             'pFocuses' => $pFocuses,
-
             'duration'=> $duration,
-
             'specialDeals' => $specialDeals,
-
             'servicePriceOption' => $servicePriceOption,
-
             'pageTitle' => "PROFILE",
-
             'approve'=>$approve,
-
             'family'=>$family,
-
             'business_details'=>$business_details,
-
             'companies'=>$companies,
 			'UserFamilyDetails'=>$UserFamilyDetails,
-
         ]);
-
 	}
-
     public function makeCall(Request $request, TwilioService $twilioService)
     {
         $sid = getenv("TWILIO_SID");
@@ -581,987 +297,219 @@ class ProfileController extends Controller
                             "twiml" => "<Response><Say voice='woman' language='en-IN'>Your one time password is 123456</Say></Response>"
                         ]
               );
-
-        //  $voiceMessage = new VoiceResponse();
-
-        //  $voiceMessage->say('Your one time password is 123456', ['voice' => 'woman', 'language' => 'en-IN']);
-
-       // $voiceMessage->say('This is an automated call providing you your OTP from the test app.');
-
-      //  $voiceMessage->say('Your one time password is ' . $otpCode);
-
-      //  $voiceMessage->pause(['length' => 1]);
-
-      //  $voiceMessage->say('Your one time password is ' . $otpCode);
-
-      //  $voiceMessage->say('GoodBye');
-
-    //   return response($voiceMessage)
-
-    //          ->header('Content-Type', 'application/xml');
-
-      // print_r($voiceMessage);die;
-
-       // $otp = $OTPService->createOtp();
-
-    //   $otp = '123456';
-
-       // $callId = $twilioService->makeOtpVoiceCall(env('AUTHORIZED_PHONE_NUMBER'), $otp);
-
-       // return view('otp.validate', ['callId' => $callId]);
     }
-
     public function generateVoiceMessage(Request $request, $otpCode, TwilioService $twilioService)
     {
         $twimlResponse = $twilioService->generateTwimlForVoiceCall($otpCode);
-		print_r($twimlResponse);die;
-        // return response($twimlResponse)
-        //     ->header('Content-Type', 'application/xml');
+	//	print_r($twimlResponse);die;
     }
 	public function sendCustomMessage(Request $request)
     {
-        // $validatedData = $request->validate([
-        //     'users' => 'required|array',
-        //     'body' => 'required',
-        // ]);
-        // $recipients = $validatedData["users"];
-
-        // // iterate over the array of recipients and send a twilio request for each
-
-        // foreach ($recipients as $recipient) {
-
-        //     $this->sendMessage($validatedData["body"], $recipient);
-
-        // }
-
-        // return back()->with(['success' => "Messages on their way!"]);
-
         $account_sid = getenv("TWILIO_SID");
-
         $auth_token = getenv("TWILIO_AUTH_TOKEN");
-
         $twilio_number = getenv("TWILIO_NUMBER");
-
         $client = new Client($account_sid, $auth_token);
-
-       // $client->messages->create(+919782051806, ['from' => +15005550006, 'body' => 'Send sms from twillio']);
-
        try{
-
        $message = $client->messages
-
                   ->create("+918854862050", // to
-
                            [
-
                                "body" => "Hey Mr Nugget, you the bomb!",
-
                                "from" => $twilio_number
-
                            ]
-
                   );
-
        }
-
        catch(\Exception $e){
-
           return  $e->getMessage();
-
        }
-
     }
-
-    
-
     public function deleteImageCompany(Request $request)
-
     {
-
         $company = CompanyInformation::where('id',$request->company_id)->first();
-
         $image = json_decode($company->company_images);
-
-      //  print_r(gettype($image));die;
-
-       // unset($image[$request->myindex]);
-
        array_splice($image, $request->myindex,1);
-
         $company->company_images = count($image) == 0 ? null :json_encode($image);
-
         $company->save();
-
         return 200;
-
     }
-
-    
-
     public function deleteImageCompany1(Request $request)
-
     {
-
         $company = User::where('id',Auth::user()->id)->first();
-
         $image = json_decode($company->company_images);
-
-      //  print_r(gettype($image));die;
-
-       // unset($image[$request->myindex]);
-
        array_splice($image, $request->myindex,1);
-
         $company->company_images = count($image) == 0 ? null :json_encode($image);
-
         $company->save();
-
         return 200;
-
     }
-
-    
-
     public function getBladeDetail($company_id, Request $request)
-
     {
-
-        $company = CompanyInformation::with('employmenthistory',
-
-'education',
-
-'users',
-
-'certification',
-
-'service',
-
-'skill',
-
-'ProfessionalDetail')->where('id',$company_id)->first();
-
+        $company = CompanyInformation::with('employmenthistory','education','users','certification','service','skill','ProfessionalDetail')->where('id',$company_id)->first();
         $company['company_images'] = $company['company_images'] == null ? [] : json_decode($company['company_images']);
-
         $max_price = UserService::where('company_id',$company['id'])->max('price');
-
-               $min_price = UserService::where('company_id',$company['id'])->min('price');
-
-    //    print_r($company['company_images']);die;
-
+        $min_price = UserService::where('company_id',$company['id'])->min('price');
         $user_professional_detail = UserProfessionalDetail::where('company_id',$company_id)->first();
-
         $user_professional_detail->availability = $user_professional_detail->availability != null ? json_decode(json_decode($user_professional_detail->availability)) : null;
-
-       // return $user_professional_detail->availability->sunday_start;
-
-               // $service = '';
-
-               $services = UserService::where('company_id',$company['id'])->get();
-
+        $services = UserService::where('company_id',$company['id'])->get();
                foreach($services as $key2=>$value2){
-
                    $sport =Sports::where('id',$value2['sport'])->first();
-
                    $value2['amenties'] = $sport['sport_name'];
-
                }
-
         return view('home.individual-page',compact('company','user_professional_detail','services','max_price','min_price'));
-
     }
-
-    
-
     public function getBladeDetail1($company_id, Request $request)
-
     {
-
-        $company = CompanyInformation::with('employmenthistory',
-
-'education',
-
-'users',
-
-'certification',
-
-'service',
-
-'skill',
-
-'ProfessionalDetail')->where('id',$company_id)->first();
-
+        $company = CompanyInformation::with('employmenthistory','education','users','certification','service','skill','ProfessionalDetail')->where('id',$company_id)->first();
         $company['company_images'] = $company['company_images'] == null ? [] : json_decode($company['company_images']);
-
         $max_price = UserService::where('company_id',$company['id'])->max('price');
-
-               $min_price = UserService::where('company_id',$company['id'])->min('price');
-
-    //    print_r($company['company_images']);die;
-
+        $min_price = UserService::where('company_id',$company['id'])->min('price');
         $user_professional_detail = UserProfessionalDetail::where('company_id',$company_id)->first();
-
         $user_professional_detail->availability = $user_professional_detail->availability != null ? json_decode(json_decode($user_professional_detail->availability)) : null;
-
-       // return $user_professional_detail->availability->sunday_start;
-
-               // $service = '';
-
-               $services = UserService::where('company_id',$company['id'])->get();
-
+        $services = UserService::where('company_id',$company['id'])->get();
                foreach($services as $key2=>$value2){
-
                    $sport =Sports::where('id',$value2['sport'])->first();
-
                    $value2['amenties'] = $sport['sport_name'];
-
                }
-
         return view('home.individual-page-new',compact('company','user_professional_detail','services','max_price','min_price'));
-
     }
-
-    
-
-     public function newFUn(Request $request)
-
+    public function newFUn(Request $request)
     {
-
          return redirect('/search-result-location?location='.$request->location.'&page=1&page_size=10');
-
     }
-
-    
-
     public function searchResultLocation(Request $request)
-
     {
-
-       	// print_r($request->selected_sport);die;
-
        	$company_ids = [];
-
        	$myloc = $request->location;
-
        	$language = $request->language;
-
        	$select_language = $request->language;
-
 		$select_label = $request->label;
-
 		$select_zipcode = $request->zipcode;
-
 		$company=array();
-
-       /* if($select_label != null && $select_label != 'undefined')
-
-        {*/
-
 			if($myloc != null && $myloc != 'undefined')
-
 			{
-
 				if($select_zipcode != null && $select_zipcode != 'undefined')
-
 				{
-            
 					$company = CompanyInformation::where('company_name','LIKE',$select_label.'%')->where('city','LIKE',$myloc.'%')->where('zip_code','LIKE',$select_zipcode.'%')->get(); 
-
 				}
-
 				else
-
 				{
-
 					$company = CompanyInformation::where('city','LIKE',$myloc.'%')->get(); 
-
 				}
-
 			}
-
 			else
-
 			{
-
 				$company = CompanyInformation::where('company_name','LIKE',$select_label.'%')->get(); 
-
 			}
-
-		//}
-
-
-		/*if($request->selected_sport != null && $request->selected_sport != 'undefined')
-
-        {
-
-        	$my_service_data = UserService::where('company_id','!=',null)->where('sport',$request->selected_sport)->get();
-
-            foreach($my_service_data as $value2){
-
-                array_push($company_ids,$value2['company_id']);
-
-            }
-
-           	// dd($company_ids);
-
-            $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->get();
-
-           	// dd(count($company));
-
-        }
-
-        
-
-        if($request->age_range != null && $request->age_range != 'undefined')
-
-        {
-
-            foreach($request->age_range as $data){
-
-                $str = ':"'.$data;
-
-            
-
-                $my_service_data = UserService::where('company_id','!=',null)->where('agerange','LIKE','%'.$str.'%')->get();
-
-                    foreach($my_service_data as $value2){
-
-                        array_push($company_ids,$value2['company_id']);
-
-                    }
-
-            }
-
-            $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->get();
-
-           // dd(count($company));
-
-        } 
-
-        
-
-        if($request->activity_for != null && $request->activity_for != 'undefined')
-
-        {
-
-            foreach($request->activity_for as $data){
-
-                $str = ':"'.$data;
-
-            
-
-                $my_service_data = UserService::where('company_id','!=',null)->where('activitydesignsfor','LIKE','%'.$str.'%')->get();
-
-                    foreach($my_service_data as $value2){
-
-                        array_push($company_ids,$value2['company_id']);
-
-                    }
-
-            }
-
-           // dd($company_ids);
-
-            $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->get();
-
-           // dd(count($company));
-
-        }
-
-        
-
-        if($request->activity_type != null && $request->activity_type != 'undefined')
-
-        {
-
-            foreach($request->activity_type as $data){
-
-                $str = ':"'.$data;
-
-            
-
-                $my_service_data = UserService::where('company_id','!=',null)->where('activitytype','LIKE','%'.$str.'%')->get();
-
-                    foreach($my_service_data as $value2){
-
-                        array_push($company_ids,$value2['company_id']);
-
-                    }
-
-            }
-
-           // dd($company_ids);
-
-            $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->get();
-
-           // dd(count($company));
-
-        }
-
-        
-
-        if($request->language != null && $request->language != 'undefined')
-
-        {
-
-            foreach($request->language as $data){
-
-                $str = ':"'.$data;
-
-            
-
-                $my_service_data = UserProfessionalDetail::where('company_id','!=',null)->where('languages','LIKE','%'.$str.'%')->get();
-
-                    foreach($my_service_data as $value2){
-
-                        array_push($company_ids,$value2['company_id']);
-
-                    }
-
-            }
-
-           $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->get();
-
-         }
-
-         
-
-        if($request->professional_type != null && $request->professional_type != 'undefined')
-
-        {
-
-            foreach($request->professional_type as $data){
-
-                $str = ':"'.$data;
-
-                //print_r($str);die;
-
-                $my_service_data = UserService::where('company_id','!=',null)->where('servicetype','LIKE','%'.$str.'%')->get();
-
-              //  print_r($my_service_data);die;
-
-                    foreach($my_service_data as $value2){
-
-                        array_push($company_ids,$value2['company_id']);
-
-                    }
-
-            }
-
-           $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->get();
-
-         }
-
-        
-
-        if($request->activity_location != null && $request->activity_location != 'undefined')
-
-        {
-
-            foreach($request->activity_location as $data){
-
-                 $str = ':"'.$data;
-
-                $my_service_data = UserProfessionalDetail::where('company_id','!=',null)->where('work_locations','LIKE','%'.$str.'%')->get();
-
-                    foreach($my_service_data as $value2){
-
-                        array_push($company_ids,$value2['company_id']);
-
-                    }
-
-            }
-
-            
-
-            $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->get();
-
-        }
-
-        
-
-       
-
-        if($request->personality_habit != null && $request->personality_habit != 'undefined')
-
-        {
-
-            foreach($request->personality_habit as $data){
-
-                $str = ':"'.$data;
-
-                $my_service_data = UserProfessionalDetail::where('company_id','!=',null)->where('personality','LIKE','%'.$str.'%')->get();
-
-                    foreach($my_service_data as $value2){
-
-                        array_push($company_ids,$value2['company_id']);
-
-                    }
-
-            }
-
-            $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->get();
-
-        }
-
-        
-
-        if($request->activity_exp != null && $request->activity_exp != 'undefined')
-
-        {
-
-            foreach($request->activity_exp as $data){
-
-                $str = ':"'.$data;
-
-                $my_service_data = UserProfessionalDetail::where('company_id','!=',null)->where('experience_level','LIKE','%'.$str.'%')->get();
-
-                    foreach($my_service_data as $value2){
-
-                        array_push($company_ids,$value2['company_id']);
-
-                    }
-
-            }
-
-            $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->get();
-
-        } */
-
-        
-
-		//$data = BusinessClaim::where('location','LIKE',$myloc.'%')->where('is_verified',0)->get();
-
-      //$data = Sports::where('sport_name','LIKE',$select_label.'%')->get();  
-
-
-                   
-
-                    
-
-        /*if(!($request->selected_sport != null && $request->selected_sport != 'undefined') && 
-
-        !($request->language != null && $request->language != 'undefined')&& 
-
-        !($request->activity_location != null && $request->activity_location != 'undefined')&&
-
-        !($request->age_range != null && $request->age_range != 'undefined') && 
-
-        !($request->activity_for != null && $request->activity_for != 'undefined')&& 
-
-        !($request->activity_type != null && $request->activity_type != 'undefined')&&
-
-        !($request->personality_habit != null && $request->personality_habit != 'undefined') && 
-
-        !($request->professional_type != null && $request->professional_type != 'undefined') && 
-
-        !($request->activity_exp != null && $request->activity_exp != 'undefined')
-
-        
-
-        )
-
-        
-
-if($request->label != null && $request->label != 'undefined') {
-
- if($request->zipcode != null && $request->zipcode != 'undefined'){
-
-    $sport_id = Sports::where('sport_name',$request->label)->first();
-
-    if(!empty($sport_id)){
-
-          $my_service_data = UserService::where('company_id','!=',null)->where('sport',$sport_id->id)->get();
-
-            foreach($my_service_data as $value2){
-
-                array_push($company_ids,$value2['company_id']);
-
-            }
-
-            if($myloc != NULL){
-
-             $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->where('zip_code', $request->zipcode)->get();
-
-            }else{
-
-               $company = CompanyInformation::whereIn('id',$company_ids)->where('zip_code', $request->zipcode)->get(); 
-
-            }
-
-    }
-
- }else{
-
-     $sport_id = Sports::where('sport_name',$request->label)->first();
-
-    if(!empty($sport_id)){
-
-          $my_service_data = UserService::where('company_id','!=',null)->where('sport',$sport_id->id)->get();
-
-            foreach($my_service_data as $value2){
-
-                array_push($company_ids,$value2['company_id']);
-
-            }
-
-            if(isset($myloc) && $myloc != NULL){
-
-             $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->get();
-
-            }else{
-
-               $company = CompanyInformation::whereIn('id',$company_ids)->get(); 
-
-            }
-
-    }
-
- }
-
-}else if($request->zipcode != null && $request->zipcode != 'undefined'){
-
-    $company = CompanyInformation::where('city','LIKE',$myloc.'%')->where('zip_code', $request->zipcode)->get();
-
-}else{
-
-        
-
-         $company = CompanyInformation::where('city','LIKE',$myloc.'%')->get();
-
-}  */
-
         $sports = $this->sports->getAlphabetsWiseSportsNames();
-
       	$sports_names = $this->sports->getAllSportsNames();
-
       	$sports_child_parent = $this->sports->getSportsChildParentWise();
-
-      
-
-   		//$UserProfileDetail = $this->users->getUserProfileDetail1($user_id);
-
-
-
       	$userSpotPrice = $userSport = array();
-
-      
-
-    	//   if(count($UserProfileDetail['service']) > 0) {
-
-    //     foreach($UserProfileDetail['service'] as $service) {
-
-
-
-    //       if(@$sports_child_parent[$service['sport']] > 0){
-
-    //         if(isset($sports_names[$service['sport']])){
-
-    //           $userSport[@$sports_names[@$sports_child_parent[$service['sport']]]]['child'][$service['sport']] = @$sports_names[$service['sport']];
-
-    //           $userSpotPrice[$service['sport']] = $service['price'];
-
-    //         }
-
-    //       } else {
-
-    //         if(isset($sports_names[$service['sport']])){
-
-    //           $userSport[@$sports_names[$service['sport']]]['self'][$service['sport']] = @$sports_names[$service['sport']];
-
-    //           $userSpotPrice[$service['sport']] = $service['price'];
-
-    //         }
-
-    //       }
-
-    //     }
-
-    //   }
-
-      	
-
 		$sports_select = '';
-
       	if($sports){
-
         	$sports_select .= "<option value=''>Choose Activity</option>";
-
         	foreach ($sports as $key => $value) {
-
             	foreach ($value as $key1 => $value1) {
-
                 	if(count($value1->child)){
-
                     	$sports_select .= "<optgroup label='".$value1->title."'>";
-
                     	foreach ($value1->child as $key2 => $value2) {
-
-                       		// $selected =null;// ($service==$key2)?"selected":"";
-
                       	 	$selected = $request->selected_sport && $request->selected_sport == $key2 ? "selected" :"";
-
                         	$sports_select .= "<option value='".$key2."' ".$selected." >".$value2."</option>";
-
                     	}
-
                     	$sports_select .= "</optgroup>";
-
                 	} 
-
 					else {
-
                     	$selected = $request->selected_sport && $request->selected_sport == $value1->value ? "selected" :"";
-
                     	$sports_select .= "<option  value='".$value1->value."' ".$selected.">".$value1->title."</option>";
-
                 	}
-
             	}
-
         	}
-
     	}
-
-    
-
    		$businessType = Miscellaneous::businessType();
-
       	$programType = Miscellaneous::programType();
-
       	$programFor = Miscellaneous::programFor();
-
       	$numberOfPeople = Miscellaneous::numberOfPeople();
-
       	$ageRange = Miscellaneous::ageRange();
-
       	$expLevel = Miscellaneous::expLevel();
-
       	$serviceLocation = Miscellaneous::serviceLocation();
-
       	$pFocuses = Miscellaneous::pFocuses();
-
       	$duration = Miscellaneous::duration();
-
       	$servicePriceOption = Miscellaneous::servicePriceOption();
-
       	$specialDeals = Miscellaneous::specialDeals();
-
       	$activity = Miscellaneous::activity();
-
       	$teaching = Miscellaneous::teaching();
-
       	$alllanguages = Miscellaneous::getLanguages();
-
       	$timeSlots = Miscellaneous::getTimeSlot();
-
-    	// $data = BusinessClaim::where('location','LIKE','dal%')->where('is_verified',0)->get();
-
-    	//   $company = CompanyInformation::where('city','LIKE','dal%')->get();
-
        	$locations = array();
-
-
        	foreach($company as $key=>$value){
-
        		$value['company_images'] = $value['company_images'] == null ? [] : json_decode($value['company_images']); 
-
             $max_price = UserService::where('company_id',$value['id'])->max('price');
-
             $min_price = UserService::where('company_id',$value['id'])->min('price');
-
             $str = '';
-
             $services = UserService::where('company_id',$value['id'])->get();
-
            	foreach($services as $key2=>$value2){
-
             	$sport =Sports::where('id',$value2['sport'])->first();
-
                 $str = $str.$sport['sport_name'];
-
                 if(($key2+1) != count($services)){
-
                 	$str = $str.', ';
-
             	}
-
          	}
-
            	$user_logo = User::where('id',$value['user_id'])->first();
-
             $user_logo1 = $user_logo['profile_pic'];
-
-               
-
             $value['business_name'] = $value['company_name'];
-
             $value['activity'] = "";
-
             $value['website'] = "";
-
             $value['location'] = $value['city'];
-
             $value['address'] = $value['address'];
-
             $value['phone'] = $value['contact_number'];
-
             $value['type'] = "claimed";
-
             $value['type'] = "claimed";
-
             $value['max_price'] = $max_price;
-
             $value['min_price'] = $min_price;
-
            	$value['service_name'] = $str;
-
             $value['user_logo'] = $user_logo1;
-
      	}
-
-        //dd($locations);
-
-           //die;
-
-           /*foreach($data as $key=>$value){
-
-              $value['type'] = "unclaimed";
-
-           }*/
-
-          /* foreach($data as $key=>$value){
-
-              $value['type'] = "unclaimed";
-              $value['business_name'] = $value['sport_name'];
-              $value['location'] = '';
-              $value['phone'] = '';
-
-           }
-
-           $search_data = $data;*/
-
-           $search_data2 = $company;
-
-
-        /* if(empty($company->toArray()))
-         {
-           $result = array_merge($company->toArray(), $data->toArray());
-         } else{*/
-          $result = $company->toArray();
-         //}
-         
-
-
-           $page = $request->page ? $request->page :1;  
-
-    	   $perPage = $request->page_size ? $request->page_size :10; 
-
-    	   $offset = ($page * $perPage) - $perPage;
-
-    		
-
-    			//dd($result);
-
-    
-
+        $search_data2 = $company;
+        $result = $company->toArray();
+        $page = $request->page ? $request->page :1;  
+    	$perPage = $request->page_size ? $request->page_size :10; 
+    	$offset = ($page * $perPage) - $perPage;
     $request_location = $request->location;
-
     $select_activity_location = $request->activity_location;
-
     $select_personality = $request->personality_habit;
-
     $select_experience = $request->activity_exp;
-
     $select_age = $request->age_range;
-
     $select_activity_for = $request->activity_for;
-
     $select_activity_type = $request->activity_type;
-
-     $select_professional_type = $request->professional_type;
-
-    //print_r($request_location);die;
-
-    
-
-    
-
-    
-
+    $select_professional_type = $request->professional_type;
     		$resultnew =  new LengthAwarePaginator(
-
     			array_slice($result, $offset, $perPage, true),  
-
     			count($result), 
-
     			$perPage, 
-
     			$page, 
-
     			['path' => $request->url(), 'query' => $request->query()]  
-
     		);
-
-    	    	
-
     		foreach($resultnew as $value){
-
     		    if($value['type'] == 'claimed'){
-
     		        $found = 0;
-
-    		        
-
-    		        
-
     		        foreach($locations as $key2=>$value2){
-
     		            if(($value2[1] == $value['latitude']) && ($value2[2] == $value['longitude']) ){
-
-    		               // print_r($value2);die;
-
     		                $found = $found + 1;
-
     		            }
-
     		        }
-
-    		        
-
     		        if($found != 0){
-
     		          $lat = $value['latitude'] + ((floatVal('0.'.rand(1, 9)) *$found) / 10000);
-
     		            $long = $value['longitude'] + ((floatVal('0.'.rand(1, 9)) *$found) / 10000);
-
     		            $a = [$value['company_name'],$lat,$long,$value['id'],$value['logo']];
-
                     }
-
     		        else{
-
     		          $a = [$value['company_name'],$value['latitude'],$value['longitude'],$value['id'],$value['logo']];
-
                     }
-
     		        array_push($locations,$a);
-
     		    }
-
     		}    	  
-
-        $return = Sports::select(DB::raw('sports.*'),DB::raw('sports_categories.category_name'),DB::raw('IF((select count(*) from sports as sports1 where sports1.is_deleted = "0" AND sports1.parent_sport_id = sports.id ) > 0,1,0) as has_child'))
-
-       ->leftjoin("sports_categories", DB::raw('sports.category_id'), '=', 'sports_categories.id');
-
+        $return = Sports::select(DB::raw('sports.*'),DB::raw('sports_categories.category_name'),DB::raw('IF((select count(*) from sports as sports1 where sports1.is_deleted = "0" AND sports1.parent_sport_id = sports.id ) > 0,1,0) as has_child'))->leftjoin("sports_categories", DB::raw('sports.category_id'), '=', 'sports_categories.id');
         $return->where('sports.is_deleted','0');
-
         $return->where('sports.parent_sport_id',NULL);
-
         $return->groupBy('sports.id');
-
         $return->orderBy('sports.sport_name');
-
         $sports_list  = $return->get();
         $teaching = Miscellaneous::teaching();
         $gender = Miscellaneous::gender();
@@ -1576,151 +524,57 @@ if($request->label != null && $request->label != 'undefined') {
         $expActivity = Miscellaneous::expActivity();
         $expLevel = Miscellaneous::expLevel();
         $getTimeSlot = Miscellaneous::getTimeSlot();
-        
            return view('home.searchLocationResult',compact('resultnew','businessType','select_professional_type','select_professional_type','sports_select','sports','request_location','activity','select_activity_for','select_activity_type','programType','ageRange','select_age','alllanguages','select_language','pFocuses','select_experience','select_personality','serviceLocation','sports_list','select_activity_location','locations','language','travelUpto','StartActivity','trainingLocation','dayactivity','participateActivity','gender','teaching','activeLevel','expProfessional','expActivity','expLevel','getTimeSlot'));
-
-       //return response()->json(['status'=>200,'search_data'=>$data,'search_data2'=>$company]);
-
-        //return view('home.searchLocationResult',compact('search_data','search_data2','locations'));
-
     }
-
-    
-
     public function searchResultLocation1(Request $request)
-
     {
-
         $company_ids = [];
-
         $myloc = $request->location;
-
         $language = $request->language;
-
         $select_language = $request->language;
-
 		$select_label = $request->label;
-
 		$select_zipcode = $request->zipcode;
-
-        
-
-        
-
-        //print_r($request->professional_type);die;
-
-         
-
        if($request->selected_sport != null && $request->selected_sport != 'undefined')
-
         {
-
             $my_service_data = UserService::where('company_id','!=',null)->where('sport',$request->selected_sport)->get();
-
             foreach($my_service_data as $value2){
-
                 array_push($company_ids,$value2['company_id']);
-
             }
-
-           // dd($company_ids);
-
             $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->get();
-
-           // dd(count($company));
-
         }
-
-        
-
         if($request->age_range != null && $request->age_range != 'undefined')
-
         {
-
             foreach($request->age_range as $data){
-
                 $str = ':"'.$data;
-
-            
-
                 $my_service_data = UserService::where('company_id','!=',null)->where('agerange','LIKE','%'.$str.'%')->get();
-
                     foreach($my_service_data as $value2){
-
                         array_push($company_ids,$value2['company_id']);
-
                     }
-
             }
-
             $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->get();
-
-           // dd(count($company));
-
         } 
-
-        
-
         if($request->activity_for != null && $request->activity_for != 'undefined')
-
         {
-
             foreach($request->activity_for as $data){
-
                 $str = ':"'.$data;
-
-            
-
                 $my_service_data = UserService::where('company_id','!=',null)->where('activitydesignsfor','LIKE','%'.$str.'%')->get();
-
                     foreach($my_service_data as $value2){
-
                         array_push($company_ids,$value2['company_id']);
-
                     }
-
             }
-
-           // dd($company_ids);
-
             $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->get();
-
-           // dd(count($company));
-
         }
-
-        
-
         if($request->activity_type != null && $request->activity_type != 'undefined')
-
         {
-
             foreach($request->activity_type as $data){
-
                 $str = ':"'.$data;
-
-            
-
                 $my_service_data = UserService::where('company_id','!=',null)->where('activitytype','LIKE','%'.$str.'%')->get();
-
                     foreach($my_service_data as $value2){
-
                         array_push($company_ids,$value2['company_id']);
-
                     }
-
             }
-
-           // dd($company_ids);
-
             $company = CompanyInformation::whereIn('id',$company_ids)->where('city','LIKE',$myloc.'%')->get();
-
-           // dd(count($company));
-
         }
-
-        
-
         if($request->language != null && $request->language != 'undefined')
 
         {

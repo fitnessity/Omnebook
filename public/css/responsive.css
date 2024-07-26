@@ -72,7 +72,7 @@
         padding-right: 25% !important;
     }
 	/* .find-activity img {  width: 130px !important;  min-height: 141px !important; } */
-	.instant-hire{ margin-top: 70px !important;}
+	.instant-hire{ margin-top: 61px !important;}
 	.img-modal-left-bpage img {width: 100% !important; min-height: 101px !important;}
 }
 
@@ -557,6 +557,7 @@
     .itinerary .panel-title a{line-height: 30px;}
     .r-host-re-detail{text-align: center;}
     .activity-top-border{border-top: 1px solid #ccc;}
+	.activity-information.activites-height{height: 95px;}
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1365px) {
@@ -1292,7 +1293,7 @@
 	.top-area ul.setting-area{padding-left: 0px !important;}
 	.selectProduct { width: 100%;}
 	.find-activity img{width: 100% !important; min-height: 125px;}
-	.activity-time-main{float: right;  margin-left: 15px; line-height: 14px;}
+	.activity-time-main{ margin-left: 15px; line-height: 14px;}
 	.dollar-person{margin-top: 0px;}
 	.top-search {  width: 65% !important;}
 	.kickboxing-slider-activites .owl-nav .owl-next{right: 0px !important; top: -14%; background: #dadada; width: 25px; height: 25px;}
@@ -1352,8 +1353,8 @@
 	.modal-banner .bannar-size img{height: 210px !important;}
 	.inner-owl-slider-hire .owl-nav .owl-next{right: 6px !important; top: 47% !important; background: #dadada !important; width: 25px; height: 25px;}  
 	.inner-owl-slider-hire .owl-nav .owl-prev{left: 6px !important; top: 47% !important; background: #dadada !important; width: 25px; height: 25px;}
-	.inner-owl-slider-hire .owl-nav .owl-next i {color: #000; font-size: 13px; position: absolute; top: 6px; left: 9px;}
-	.inner-owl-slider-hire .owl-nav .owl-prev i {color: #000; font-size: 13px; position: absolute; top: 6px; right: 9px;}
+	.inner-owl-slider-hire .owl-nav .owl-next i {color: #000; font-size: 13px; position: absolute; top: 2px; left: 6px;}
+	.inner-owl-slider-hire .owl-nav .owl-prev i {color: #000; font-size: 13px; position: absolute; top: 2px; right: 6px;}
 	.home-black-section label{font-size: 25px;}
 	.home-black-section i {top: 7%; left: 46%;}
 	.instant-hire .title h3{margin-bottom: 0px;}
@@ -1763,7 +1764,7 @@
 	.ord-summary{
 		min-height: 1005px;
 	}
-	.instant-hire{ margin-top: 70px !important;}
+	.instant-hire{ margin-top: 61px !important;}
 	.modal-dialog.modal-lg.location-modal{width: 45% !important;}
 	.favorite-block .favorite-button{margin: 3.2% 0px !important;}
 	.img-modal-left-bpage img {width: 100%  !important; min-height: 101px !important;}
@@ -2335,7 +2336,7 @@
 	.cards-block{width: 100% !important; margin-bottom: 15px;}
 	.favorite-block .favorite-content{width: 44% !important;}
 	.favorite-block .favorite-content .favorite-right-content{padding-left: 0 !important;   width: 100% !important;}
-	.show-all{margin-top: 0px !important;}
+	.show-all{margin-top: 110px !important;}
 	.border-list{margin-top: 15px;}
 	.pairets-inviable{margin-bottom: 0px; margin-top: 15px;}
 	.pairets{margin-top: 15px; margin-bottom: 0px;}
