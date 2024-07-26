@@ -23,34 +23,22 @@ use DateTimeZone;
 use App\Services\CartService;
 
 class PaymentController extends Controller {
-
     public function __construct(BookingRepository $bookings) {
-        
         $this->middleware('auth');
         $this->bookings = $bookings;
         $this->arr = [];        
     }
-
     public function createCheckoutSession(Request $request) {
-       //print_r($request->all());exit;
         $loggedinUser = Auth::user();
         $customer='';
-
         $cartService = new CartService();
-
         $fees = BusinessSubscriptionPlan::where('id',1)->first();
-    
         if($request->grand_total == 0){
             $orderdata = array(
-                'user_id' => $loggedinUser->id,
-                'status' => 'active',
-                'currency_code' => 'usd',
-                'amount' => $request->grand_total,
-                'order_type' => 'simpleorder',
-                'bookedtime' => Carbon::now()->format('Y-m-d'),
+                'user_id' => $loggedinUser->id, 'status' => 'active', 'currency_code' => 'usd', 'amount' => $request->grand_total,
+                'order_type' => 'simpleorder', 'bookedtime' => Carbon::now()->format('Y-m-d'),
             );
             $userBookingStatus = UserBookingStatus::create($orderdata);
-
             $transactiondata = array( 
                 'user_type' => 'user',
                 'user_id' => $loggedinUser->id,
@@ -66,18 +54,14 @@ class PaymentController extends Controller {
                 'refund_amount' =>0,
                 'payload' =>'',
             );
-
             $transactionstatus = Transaction::create($transactiondata);
             $lastid = $userBookingStatus->id; 
-
             foreach($cartService->items() as $item){
                 $activityScheduler = BusinessActivityScheduler::find($item['actscheduleid']);
                 $businessServices = BusinessServices::find($item['code']);
                 $user = $businessServices->users;
                 $price_detail = $cartService->getPriceDetail($item['priceid']);
-                
                 $customer = Customer::where(['business_id' => $businessServices->cid, 'email' => Auth::user()->email, 'user_id' => Auth::user()->id])->first();
-
                 if(!$customer){
                     $customer = Customer::create([
                         'business_id' => $businessServices->cid,
@@ -92,10 +76,8 @@ class PaymentController extends Controller {
                         'user_id' => Auth::user()->id,
                         'stripe_customer_id' => Auth::user()->stripe_customer_id,
                     ]);
-
                     $customer->create_stripe_customer_id();
                 }
-
                 $participateLoop =  $cartService->participateLoop($item,$businessServices->cid);
                 foreach($participateLoop as $d){
                     $participateAry = [];
@@ -112,7 +94,6 @@ class PaymentController extends Controller {
                     }
                     $participateAry['from'] ='customer';
                     $participateAry['id'] = $d['id'];
-
                     $addOnServicePrice = @$item['addOnServicesTotalPrice'] ?? 0 ;
                     $expiredate = $price_detail->getExpirationDate($item['sesdate']);
                     $expired_duration   = $price_detail->pay_setnum.' '.$price_detail->pay_setduration;
@@ -150,34 +131,24 @@ class PaymentController extends Controller {
                         'addOnservice_total' => $addOnServicePrice,
                         'order_type' => 'Membership',
                     ]);
-
-
                     $price_detail = $cartService->getPriceDetail($item['priceid']);
                     $re_i = 0;
                     $date = Carbon::now();
                     $stripe_id = $stripe_charged_amount = $payment_method= '';
                     $amount = $re_i = $reCharge = ''; 
-
                     $amount = $cartService->getMembershipTotal($item['priceid'],$d['type'],$d['price']);
                     $tax_recurring = $cartService->getMembershipTax($item['priceid'],$d['type'],$d['price']);
-
                     if($d['type'] == 'adult'){
-                        //$amount = 1 * $price_detail->recurring_first_pmt_adult;
                         $re_i = $price_detail->recurring_nuberofautopays_adult; 
                         $reCharge  = $price_detail->recurring_customer_chage_by_adult;
                     }else if($d['type'] == 'child'){
-                        //$amount =  1 * $price_detail->recurring_first_pmt_child;
                         $re_i = $price_detail->recurring_nuberofautopays_child; 
                         $reCharge  = $price_detail->recurring_customer_chage_by_child;
                     }else if($d['type'] == 'infant'){
-                        //$amount =  1 * $price_detail->recurring_first_pmt_infant;
                         $re_i = $price_detail->recurring_nuberofautopays_infant;
                         $reCharge  = $price_detail->recurring_customer_chage_by_infant;
                     }
-
                     if($re_i != '' && $re_i != 0 && $amount != ''){
-                       // $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
-                        //$tax_recurring = number_format( ($amount * $fees->site_tax)/100 ,2);
                         for ($num = $re_i; $num >0 ; $num--) { 
                             $payment_method = $transactionstatus->stripe_payment_method_id;
                             if($num==1){
@@ -192,7 +163,6 @@ class PaymentController extends Controller {
                                 $timeChk = @$Chk[1];
                                 $afterHowmanytime = @$Chk[0];
                                 $addTime  = $afterHowmanytime * ($num - 1);
-
                                 if($timeChk == 'Month'){
                                     $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
                                     $additionalPaymentDate = Carbon::parse($paymentDate)->addMonths($afterHowmanytime)->format('Y-m-d');
@@ -203,18 +173,15 @@ class PaymentController extends Controller {
                                     $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
                                     $additionalPaymentDate = Carbon::parse($paymentDate)->addYears($afterHowmanytime)->format('Y-m-d');
                                 }
-
                                 if($num == $re_i && $additionalPaymentDate){
                                     $booking_detail->expired_at = $additionalPaymentDate;
                                     $booking_detail->expired_duration = ($re_i * $afterHowmanytime).' '.$timeChk.'s';
                                     $booking_detail->save();
                                 }
-
                                 $status = 'Scheduled';
                                 $payment_number = NULL;
                                 $payment_on = NULL;
                             } 
-
                             $recurring = array(
                                 "booking_detail_id" => $booking_detail->id,
                                 "user_id" => $d['id'],
@@ -233,7 +200,6 @@ class PaymentController extends Controller {
                             Recurring::create($recurring);
                         }
                     }
-
                     BookingCheckinDetails::create([
                         'business_activity_scheduler_id' => @$activityScheduler->id,
                         'instructor_id' => @$activityScheduler->instructure_ids,
@@ -243,14 +209,12 @@ class PaymentController extends Controller {
                         'use_session_amount' => 0,
                         'source_type' => 'marketplace',
                     ]);
-
                     $getreceipemailtbody = $this->bookings->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
                     $MailCustomer = Customer::find($d['id']);
                     $email_detail = array(
                         'getreceipemailtbody' => $getreceipemailtbody,
                         'email' => @$MailCustomer->email);
                     SGMailService::sendBookingReceipt($email_detail);
-
                     $email_detail2 = $this->generateEmailDetails(
                         @$businessServices->company_information->business_email,
                         $businessServices,
@@ -260,7 +224,6 @@ class PaymentController extends Controller {
                         $activityScheduler,
                         $price_detail
                     );
-
                     SGMailService::confirmationMail($email_detail2);
                     $company = @$cartService->getCompany($businessServices->cid);
                     $businessTerms = @$company->businessterms; 
@@ -277,27 +240,22 @@ class PaymentController extends Controller {
                         "CancellationText" => @$businessTerms->cancelation, 
                         "RefundText" => @$businessTerms->refundpolicytext
                     );
-
                     SGMailService::confirmationMailForCustomer(array_merge($email_detail2,$email_detail1));
                 }
             }
-
             $updatedCartitems = $cartService->updatedCartitems();
             session()->put('cart_item', $updatedCartitems);
             return view('jobpost.confirm-payment-instant');
         }else{
             \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
             $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-
             if($loggedinUser->stripe_customer_id != '') {
                 $stripe_customer_id = $loggedinUser->stripe_customer_id;
             }else{
                 $stripe_customer_id = $loggedinUser->create_stripe_customer_id();
             }
-
             $totalprice =  $priceWithDiscount = 0;
             $totalprice = $request->grand_total;
-            // dd($totalprice);
             if($request->has('cardinfo')){
                 $onFilePaymentMethodId = $request->cardinfo;
                 try {
@@ -310,9 +268,7 @@ class PaymentController extends Controller {
                         'confirm' => true,
                         'metadata' => [],
                     ]);
-
                     if($onFilePaymentIntent['status']=='succeeded'){
-
                         $orderdata = array(
                             'user_id' => Auth::user()->id,
                             'status' => 'active',
@@ -321,7 +277,6 @@ class PaymentController extends Controller {
                             'bookedtime' =>Carbon::now()->format('Y-m-d'),
                         ); 
                         $userBookingStatus = UserBookingStatus::create($orderdata);
-
                         $transactiondata = array( 
                             'user_type' => 'user',
                             'user_id' => $loggedinUser->id,
@@ -337,11 +292,9 @@ class PaymentController extends Controller {
                             'refund_amount' =>0,
                             'payload' =>json_encode($onFilePaymentIntent,true),
                         );
-
                         $transactionstatus = Transaction::create($transactiondata);
                     }
-                }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
-                    //$errormsg = $e->getError()->message;
+                }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {;
                     $errormsg = "Your card is not connected with your account. Please add your card again.";
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }catch( \Exception $e) {
@@ -352,29 +305,21 @@ class PaymentController extends Controller {
                 $newCardPaymentMethodId = $request->new_card_payment_method_id;
                 try {
                     $newCardPaymentIntent = $stripe->paymentIntents->create([
-                        'amount' =>  round($totalprice *100),
-                        'currency' => 'usd',
-                        'customer' => $stripe_customer_id,
+                        'amount' =>  round($totalprice *100), 'currency' => 'usd', 'customer' => $stripe_customer_id,
                         'payment_method' => $newCardPaymentMethodId,
-                        'off_session' => true,
-                        'confirm' => true,
+                        'off_session' => true, 'confirm' => true,
                         'metadata' => [],
                     ]);
                     if($request->save_card != 1){
                         $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $newCardPaymentMethodId)->firstOrFail();
                         $stripePaymentMethod->delete();
                     }
-
                     if($newCardPaymentIntent['status'] == 'succeeded'){
                         $orderdata = array(
-                            'user_id' => Auth::user()->id,
-                            'status' => 'active',
-                            'currency_code' => 'usd',
-                            'amount' => $totalprice,
+                            'user_id' => Auth::user()->id, 'status' => 'active', 'currency_code' => 'usd', 'amount' => $totalprice,
                             'bookedtime' => Carbon::now()->format('Y-m-d'),
                         ); 
                         $userBookingStatus = UserBookingStatus::create($orderdata);
-
                         $transactiondata = array( 
                             'user_type' => 'user',
                             'user_id' => $loggedinUser->id,
@@ -390,7 +335,6 @@ class PaymentController extends Controller {
                             'refund_amount' =>0,
                             'payload' =>json_encode($newCardPaymentIntent,true),
                         );
-
                         $transactionstatus = Transaction::create($transactiondata);
                     }
                 }catch(\Stripe\Exception\CardException  $e) {
@@ -404,18 +348,14 @@ class PaymentController extends Controller {
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }
             }
-
             $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
             $tax = $bspdata->site_tax;
-            // dd($bspdata);
             foreach($cartService->items() as $item){
                 $activityScheduler = BusinessActivityScheduler::find($item['actscheduleid']);
                 $businessServices = BusinessServices::find($item['code']);
                 $user = $businessServices->user;
                 $price_detail = $cartService->getPriceDetail($item['priceid']);
-
                 $customer = Customer::where(['business_id' => $businessServices->cid, 'email' => Auth::user()->email, 'user_id' => Auth::user()->id])->first();
-                // dd($customer);
                 if(!$customer){
                     $customer = Customer::create([
                         'business_id' => $businessServices->cid,
@@ -430,12 +370,9 @@ class PaymentController extends Controller {
                         'user_id' => Auth::user()->id,
                         'stripe_customer_id' => Auth::user()->stripe_customer_id,
                     ]);
-
                     $customer->create_stripe_customer_id();
                 }
-
                 $participateLoop =  $cartService->participateLoop($item,$businessServices->cid);
-                // dd($participateLoop);
                 foreach($participateLoop as $d){
                     $participateAry = [];
                     $qtyAry = [];
@@ -451,14 +388,11 @@ class PaymentController extends Controller {
                     }
                     $participateAry['from'] ='customer';
                     $participateAry['id'] = $d['id'];
-
                     $discount = $cartService->getDiscount($item['priceid'],$d['type'],$d['price']);
-                    // dd($discount);
                     $addOnServicePrice = @$item['addOnServicesTotalPrice'] ?? 0 ;
                     $priceWithDiscount = $d['price'] - $discount + $addOnServicePrice;
                     $expiredate = $price_detail->getExpirationDate($item['sesdate']);
                     $expired_duration   = $price_detail->pay_setnum.' '.$price_detail->pay_setduration;
-
                     $booking_detail = UserBookingDetail::create([                 
                         'booking_id' => $userBookingStatus->id,
                         'user_id'=> $d['id'],
@@ -493,40 +427,27 @@ class PaymentController extends Controller {
                         'addOnservice_total' =>  $addOnServicePrice,
                         'order_type' => 'Membership',
                     ]);
-
-
                     $price_detail = $cartService->getPriceDetail($item['priceid']);
-
                     $re_i = 0;
                     $date = Carbon::now();
                     $stripe_id = $stripe_charged_amount = $payment_method= '';
                     $amount = $re_i = $reCharge = ''; 
-
                     $amount = $cartService->getMembershipTotal($item['priceid'],$d['type'],$d['price']);
-                    // dd($amount);
                     $tax_recurring = $cartService->getMembershipTax($item['priceid'],$d['type'],$d['price']);
-                    // dd($price_detail);
                     if($d['type'] == 'adult'){
-                        /*$amount = 1 * $price_detail->recurring_first_pmt_adult;*/
                         $re_i = $price_detail->recurring_nuberofautopays_adult; 
                         $reCharge  = $price_detail->recurring_customer_chage_by_adult;
                     }else if($d['type'] == 'child'){
-                        /*$amount =  1 * $price_detail->recurring_first_pmt_child;*/
                         $re_i = $price_detail->recurring_nuberofautopays_child; 
                         $reCharge  = $price_detail->recurring_customer_chage_by_child;
                     }else if($d['type'] == 'infant'){
-                        /*$amount =  1 * $price_detail->recurring_first_pmt_infant;*/
                         $re_i = $price_detail->recurring_nuberofautopays_infant;
                         $reCharge  = $price_detail->recurring_customer_chage_by_infant;
                     }
-                    // dd($re_i);
                     if($re_i != '' && $re_i != 0 && $amount != ''){
-                        //$tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
-                       // $tax_recurring = number_format( ($amount * $fees->site_tax)/100 ,2);
                         for ($num = $re_i; $num >0 ; $num--) { 
                             $payment_method = $transactionstatus->stripe_payment_method_id;
                             if($num==1){
-                                // dd($transactionstatus->amount);
                                 $stripe_id =  $transactionstatus->transaction_id;
                                 $stripe_charged_amount = number_format($transactionstatus->amount,2);
                                 $paymentDate = $date->format('Y-m-d');
@@ -538,7 +459,6 @@ class PaymentController extends Controller {
                                 $timeChk = @$Chk[1];
                                 $afterHowmanytime = @$Chk[0];
                                 $addTime  = $afterHowmanytime * ($num - 1);
-
                                  if($timeChk == 'Month'){
                                     $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
                                     $additionalPaymentDate = Carbon::parse($paymentDate)->addMonths($afterHowmanytime)->format('Y-m-d');
@@ -549,18 +469,15 @@ class PaymentController extends Controller {
                                     $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
                                     $additionalPaymentDate = Carbon::parse($paymentDate)->addYears($afterHowmanytime)->format('Y-m-d');
                                 }
-
                                 if($num == $re_i && $additionalPaymentDate){
                                     $booking_detail->expired_at = $additionalPaymentDate;
                                     $booking_detail->expired_duration = ($re_i * $afterHowmanytime).' '.$timeChk.'s';
                                     $booking_detail->save();
                                 }
-
                                 $status = 'Scheduled';
                                 $payment_number = NULL;
                                 $payment_on = NULL;
                             } 
-
                             $recurring = array(
                                 "booking_detail_id" => $booking_detail->id,
                                 "user_id" =>  $d['id'],
@@ -576,11 +493,9 @@ class PaymentController extends Controller {
                                 "payment_on" => $payment_on,
                                 "status" => $status,
                             );
-                            // dd($recurring);
                             Recurring::create($recurring);
                         }
                     }
-
                     BookingCheckinDetails::create([
                         'business_activity_scheduler_id' => @$activityScheduler->id,
                         'instructor_id' => @$activityScheduler->instructure_ids,
@@ -590,14 +505,12 @@ class PaymentController extends Controller {
                         'use_session_amount' => 0,
                         'source_type' => 'marketplace',
                     ]);
-
                     $getreceipemailtbody = $this->bookings->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
                     $MailCustomer = Customer::find($d['id']);
                     $email_detail = array(
                         'getreceipemailtbody' => $getreceipemailtbody,
                         'email' => @$MailCustomer->email);
                     SGMailService::sendBookingReceipt($email_detail);
-                    
                     $email_detail2 = $this->generateEmailDetails(
                         @$businessServices->company_information->business_email,
                         $businessServices,
@@ -607,7 +520,6 @@ class PaymentController extends Controller {
                         $activityScheduler,
                         $price_detail
                     );
-
                     SGMailService::confirmationMail($email_detail2);
                     $company = @$cartService->getCompany($businessServices->cid);
                     $businessTerms = @$company->businessterms; 
@@ -623,17 +535,14 @@ class PaymentController extends Controller {
                         "thingsToKnow" => @$businessTerms->houserules, 
                         "CancellationText" => @$businessTerms->cancelation, 
                         "RefundText" => @$businessTerms->refundpolicytext);
-
                     SGMailService::confirmationMailForCustomer(array_merge($email_detail2,$email_detail1));
                 }
             }
-
             $updatedCartitems = $cartService->updatedCartitems();
             session()->put('cart_item', $updatedCartitems);
             return redirect('/instant-hire/confirm-payment');
         }
     }
-
     public function generateEmailDetails($email, $businessServices, $cartService, $participateAry, $item, $activityScheduler, $price_detail){
         return array(
             "email" => $email,  
@@ -649,12 +558,9 @@ class PaymentController extends Controller {
             "CategoryName"=> $price_detail->business_price_details_ages_with_trashed->category_title
         );
     }
-
-
     public function confirmpaymentinstant(Request $request) {
         return view('jobpost.confirm-payment-instant');
     }
-
     public function form_participate(Request $request){
         $cart_item = [];
         if ($request->session()->has('cart_item')) {
@@ -677,9 +583,7 @@ class PaymentController extends Controller {
             }
         }
         $request->session()->put('cart_item', $cart_item);
-    } 
-
-
+    }
     public function refresh_payment_methods(Request $request){
         $user = User::findOrFail($request->user_id);
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
@@ -693,9 +597,7 @@ class PaymentController extends Controller {
             } else {
                 $fingerprints[] = $fingerprint;
                 $stripePaymentMethod = StripePaymentMethod::firstOrNew([
-                    'payment_id' => $payment_method['id'],
-                    'user_type' => 'User',
-                    'user_id' => $user->id,
+                    'payment_id' => $payment_method['id'],'user_type' => 'User','user_id' => $user->id,
                 ]);
 
                 $stripePaymentMethod->pay_type = $payment_method['type'];
@@ -704,31 +606,10 @@ class PaymentController extends Controller {
                 $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
                 $stripePaymentMethod->last4 = $payment_method['card']['last4'];
                 $stripePaymentMethod->save();
-
                 $user->update(['default_card'=>$payment_method['card']['last4']]);
-                
-                /*$customer = Customer::where(['fname' =>$user->firstname,'lname' =>$user->lastname, 'email' => $user->email])->get();
-
-                if ($stripePaymentMethod->wasRecentlyCreated && !empty($customer) ) {
-                  
-                    foreach($customer as $cus){
-                        $spmForCus = StripePaymentMethod::create([
-                            'payment_id' => $payment_method['id'],
-                            'user_type' => 'Customer',
-                            'user_id' => $cus->id,
-                            'pay_type' => $payment_method['type'],
-                            'brand' => $payment_method['card']['brand'],
-                            'exp_month' => $payment_method['card']['exp_month'],
-                            'exp_year' => $payment_method['card']['exp_year'],
-                            'last4' => $payment_method['card']['last4'],
-                        ]);
-
-                    }
-                }*/
             }
         }
         if($request->return_url)
             return redirect($request->return_url);
     }
-    
 }

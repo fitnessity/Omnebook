@@ -12,6 +12,9 @@
 				@foreach($services as $s)
 			    	<option value="{{$s->id}}">{{$s->program_name}}</option>
 			    @endforeach
+				@foreach($PriceAgesDetail as $m)
+				<option value="{{$m->id}}">{{$m->category_title}}</option>
+				@endforeach
 			</select>
 		</div>
 	</div>

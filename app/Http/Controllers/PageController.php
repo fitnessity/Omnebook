@@ -39,7 +39,6 @@ class PageController extends Controller
     }
 
     public function GetPageAboutUs(Request $request) {
-        //$pageContent = $this->cms->getPageContent('about_us');
         $pageContent = $this->cms->getPageContent('about_us_page');
         $cart = [];
         if ($request->session()->has('cart_item')) {
@@ -51,7 +50,6 @@ class PageController extends Controller
             'cart' => $cart
         ]);
     }
-    
     public function GetPageDiscover(Request $request)
     {
         $pageContent = $this->cms->getPageContent('discover');
@@ -60,7 +58,6 @@ class PageController extends Controller
             'pageTitle' => "DISCOVER"
         ]);
     }
-    
     public function GetPageBeaPart(Request $request)
     {
         $pageContent = $this->cms->getPageContent('be_a_part');
@@ -69,7 +66,6 @@ class PageController extends Controller
             'pageTitle' => "BE A PART"
         ]);
     }
-    
     public function GetPageHireTrainer(Request $request)
     {
         $pageContent = $this->cms->getPageContent('hire_trainer');
@@ -84,13 +80,11 @@ class PageController extends Controller
             'pageTitle' => "STORE"
         ]);
     }
-    
     public function GetPageJobs(Request $request) {
         return view('pages.jobs', [
             'pageTitle' => "JOBS"
         ]);
     }
-
     public function GetPageContactUs(Request $request) {        
         $cart = [];
         if ($request->session()->has('cart_item')) {
@@ -103,7 +97,6 @@ class PageController extends Controller
             'cart' => $cart
         ]);
     }
-
     public function PostPageContactUs(Request $request)
     {
         $postArr = $request->all();
@@ -126,7 +119,6 @@ class PageController extends Controller
         } else {
             ContactUs::create($postArr);
             try {
-
                 MailService::sendContactUs($postArr);
                 $response = array(
                     'type' => 'success',
@@ -141,7 +133,6 @@ class PageController extends Controller
            return Response::json($response);
         }
     }
-
     public function CustomerSupport(Request $request)
     {
         return view('pages.Help', [
@@ -168,14 +159,12 @@ class PageController extends Controller
             $questions = Fit_Help::where('cat_name',$list)->get();
             array_push($new_list,['name'=>$list,'questions'=>$questions]);
         }
-       // print_r($new_list[0]);die;
         return view('pages.Help', [
 
             'pageTitle' => "Help Center",
             'lists' => $new_list,
         ]);
     }
-
     public function GetPageNetwork()
     {
         return view('pages.usernetwork', [
@@ -221,7 +210,6 @@ class PageController extends Controller
             'content' => preg_replace('/(^[\"\']|[\"\']$)/', '', html_entity_decode(htmlentities(stripcslashes($pageContent->content)))),
         ]);
     }
-
     public function GetPrivacyPage()
     {
         $pageContent = $this->cms->getPageContent('privacy_policy');
@@ -233,7 +221,6 @@ class PageController extends Controller
     }
     public function GetPageHowItWorksCustomer()
     {
-
         $pageContent = $this->cms->getPageContent('how_it_works_for_customer');
         return view('pages.howitworks_customer', [
             'pageTitle' => $pageContent->content_title,

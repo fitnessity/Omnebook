@@ -19,7 +19,6 @@ class AddStypeToBusinessPriceDetailsAgesTable extends Migration
 
         });
     }
-
     /**
      * Reverse the migrations.
      *
