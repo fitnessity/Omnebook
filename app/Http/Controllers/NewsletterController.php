@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,7 +12,6 @@ use Response;
 class NewsletterController extends Controller
 {
     protected $newsletter;
-
     public function __construct(NewsletterRepository $newsletter)
     {
         $this->newsletter = $newsletter;    
@@ -28,26 +25,22 @@ class NewsletterController extends Controller
     public function saveNewsletter(Request $request)
     {
         $input = $request->all();
-
         $validator = $this->validator($input);
         if ($validator->fails()) {
             $this->throwValidationException(
                 $request, $validator
             );
         }
-
         if($input['name'] != "" && $input['email'] != "")
         {
             $data = $this->newsletter->getByEmail($input['email']);
-            
             if(!empty($data))
             {
-                echo '1';
+                //echo '1';
             }
             else
             {
                 $status = $this->newsletter->create($request->all());
-                echo '2';
             }
         }
         else
@@ -55,15 +48,13 @@ class NewsletterController extends Controller
             echo "Error";
         }
     }
-
     protected function validator($data)
     {
         return Validator::make($data, [            
             'name' => 'required|max:255|regex:/^[a-zA-Z ]*$/',
             'email' => 'required|string|email|max:255',
         ]);
-    }    
-
+    }
     protected function emailvalidator($data)
     {
         return Validator::make($data, [            
@@ -71,42 +62,35 @@ class NewsletterController extends Controller
         ]);
     }
     public function addnewsletter(Request $request)
-    {        
+    {
        $getData = Newsletter::where('email',$request->email)->first();
        if(!empty($getData)){   
-        return response()->json(['success'=>'false']);    
-    }else{      
-        $data = array(
-            "name" => $request->name,
-            "email" => $request->email,
-        );
-        Newsletter::create($data);
-        return response()->json(['success'=>'success']);  
+            return response()->json(['success'=>'false']);    
+        }else{
+            $data = array(
+                "name" => $request->name,
+                "email" => $request->email,
+            );
+            Newsletter::create($data);
+            return response()->json(['success'=>'success']);  
+        }
     }
-        /* $request->session()->flash('alert-success', 'Subscribe Succesfully !');
-         return redirect('/');*/
-    }
-
     public function getUnsubscribe()
     {
         return view('unsubscribe');
     }
-
     public function unsubscribe(Request $request)
     {
         $input = $request->all();
-
         $validator = $this->emailvalidator($input);
         if ($validator->fails()) {
             $this->throwValidationException(
                 $request, $validator
             );
         }
-
         if($input['email'] != "")
         {
             $data = $this->newsletter->getByEmail($input['email']);
-            
             if(!empty($data))
             {
                 $status = $this->newsletter->deleteNewsletter($data->id);
@@ -124,12 +108,10 @@ class NewsletterController extends Controller
             else
             {
                 $response = array(
-                    'type' => 'danger',
-                    'msg' => 'we can not find this Subscriber',
+                    'type' => 'danger', 'msg' => 'we can not find this Subscriber',
                 );
-                    
                 return Response::json($response);
             }
-        }        
+        }
     }
 }

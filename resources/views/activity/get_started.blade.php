@@ -1,5 +1,5 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
 @section('content')
 <?php
 	use App\UserFavourite;
@@ -22,7 +22,8 @@
 		text-align: center;
 	}
 </style>
-
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 <link href="{{url('/public/css/compare/style.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{url('/public/css/compare/w3.css')}}" rel="stylesheet" type="text/css" />
 <link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" type="text/css" rel="stylesheet" />
@@ -92,7 +93,7 @@
 
 		
 		<div class="row align-self-center">
-			<div class="col-md-6 col-xs-12">
+			<div class="col-lg-6 col-md-9 col-xs-12">
 				<div class="find-business">
 					<div class="row">
 						<div class="col-md-8">
@@ -103,7 +104,7 @@
 						</div>
 						<div class="col-md-4">
 							<div class="btn-txt">
-								<a href="#" class="showall-btn" data-toggle="modal" data-target="#addbusiness">Add A Business</a>
+								<a href="#" class="showall-btn" data-bs-toggle="modal" data-bs-target="#addbusiness">Add A Business</a>
 							</div>
 						</div>
 					</div>
@@ -136,13 +137,16 @@
 <div class="modal fade compare-model" id="addbusiness">
     <div class="modal-dialog modal-lg business">
         <div class="modal-content">
-			<div class="modal-header" style="text-align: right;"> 
+			<div class="modal-header">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<!-- <div class="modal-header" style="text-align: right;"> 
 			  	<div class="closebtn">
 					<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
 				</div>
-			</div>
+			</div> -->
 
             <!-- Modal body -->
             <div class="modal-body">
@@ -267,7 +271,7 @@
     </div>
 <!-- end modal -->
 
-@include('layouts.footer')
+@include('layouts.business.footer')
 	
 <script type="text/javascript">
 	$(document).ready(function () {

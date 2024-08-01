@@ -152,6 +152,9 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/membership-revenue/export','MembershipRevenueReportController@export')->name('membership_revenue.export'); 
     Route::get('/engage-client','EngageClientsController@index')->name('engage_client.index'); 
     Route::get('/customer-contact-list','EngageClientsController@contactList')->name('engage_client.contact-list'); 
+    Route::get('/website_integration','WebsiteIntegrationConroller@index')->name('website_integration'); //added by me 01_8
+    Route::post('/login_details','WebsiteIntegrationConroller@update')->name('login_details');
+
     Route::post('/store-list','EngageClientsController@storeList')->name('store_list'); 
     Route::post('/update_list','EngageClientsController@updateList')->name('update_list'); 
     Route::get('/delete_list','EngageClientsController@deleteList')->name('delete_list'); 

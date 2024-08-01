@@ -45,10 +45,10 @@
                                                 border-color: {{ $settings ? $settings->welcome_screen_color : '' }};">
                                             <i class="ri-add-line align-bottom me-1"></i>Check In
                                         </a> 
-                                         {{-- <a href="{{route('business_customer_create',$business->id)}}"
+                                         <!-- {{-- <a href="{{route('business_customer_create',$business->id)}}"
                                         class="btn btn-black fs-15"><i class="ri-add-line align-bottom me-1"></i>Sign
                                         Up old
-                                        </a>  --}}
+                                        </a>  --}} -->
                                         <a href="javascript:void(0);" class="btn btn-black fs-15"
                                             data-business-id="{{ $business->id }}"
                                             data-url="{{ route('business_customer_create_model', $business->id) }}"
