@@ -339,6 +339,7 @@
 </div><!-- END layout-wrapper -->
     
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 	
 @php $downloadUrl = route("business.membership_revenue.export"); @endphp
 

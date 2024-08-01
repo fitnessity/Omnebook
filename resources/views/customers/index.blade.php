@@ -572,8 +572,8 @@
 	                  	$('#systemMessage1').removeClass();
 	                     if(response.status == 200){
 	                        $('.uploadmembership').modal('hide');
-	                        $('#systemMessage1').addClass('font-green font-16');
-	                        $('#systemMessage1').html(response.message);
+	                        // $('#systemMessage1').addClass('font-green font-16');
+	                        // $('#systemMessage1').html(response.message);
 							FileuploadMember(response.data.business_id, response.data.id);
 	                        /*setTimeout(function(){
 	                           window.location.reload();
@@ -621,6 +621,7 @@
 	                     $('.uploadAttendance').modal('hide');
 	                     $('#systemMessage1').addClass('font-green font-16');
 	                     $('#systemMessage1').html(response.message);
+						 $('#file1').val('');
 						 FileuploadAttendance(response.data.business_id, response.data.id);
 	                     /*setTimeout(function(){
 	                        window.location.reload();
@@ -631,6 +632,7 @@
 	                		$('.uploadAttendance').modal('hide');
 	                		$('#systemMessage1').addClass('font-red font-16');
 	                		$('#systemMessage1').html(response.message).addClass('alert alert-danger alert-dismissible');
+							$('#file1').val('');
 	                  }
 							// $('#file').val('')
 	               }
