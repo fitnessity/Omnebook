@@ -1,5 +1,7 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 @section('content')
 <style>
     .register_wrap form{padding: 0 50px;}
@@ -91,7 +93,7 @@
                             <div class="col-sm-12">
                                 <div class='error' id='systemMessage'></div>
                                 <div class="prfle-wrap">
-                                    <img src="" alt="Fitnessity">
+                                    <img src="" alt="">
                                     {{substr(Auth::user()->firstname,0,1)}}
                                 </div>
                                 <div class="reg-email-step2">{{Auth::user()->email}}</div>
@@ -162,12 +164,12 @@
                                     <li><i class="fa fa-check"></i><span>Your Identification</span></li>
                                 </ul>
                                 <ul class="nav nav-tabs nav-stacked">
-                                    <li class="active"><a data-toggle="tab" href="#add_personel_info"><span class="stp-numbr">3</span> <span>Add Personal Information</span></a></li>
-                                    <li><a data-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
+                                    <li ><a class=" active" data-bs-toggle="tab" href="#add_personel_info"><span class="stp-numbr">3</span> <span>Add Personal Information</span></a></li>
+                                    <li ><a data-bs-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
                                 </ul>
                                 
                                 <div class="tab-content">
-                                    <div id="add_personel_info" class="tab-pane fade in active">
+                                    <div id="add_personel_info" class="tab-pane fade show active">
                                         <div class='error' id='systemMessage'></div>
                                         <div class="form-group">
                                             <input type="text" name="address_sign" id="address_sign" placeholder="Address" class="form-control b_address" oninput="initialize1(this)">
@@ -223,12 +225,12 @@
                                 </ul>
                                 <ul class="nav nav-tabs nav-stacked">
                                    
-                                    <li><a data-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
+                                    <li><a data-bs-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
                                 </ul>
                                 
                                 <div class="tab-content">
                                     <div class='error' id='systemMessage'></div>
-                                    <div id="adding_photo" class="tab-pane fade in active">
+                                    <div id="adding_photo" class="tab-pane fade show active">
                                         <div class="upload-wrp-content">
                                             <p><b>Put a face to the name </b>and improve your adds to networking success.</p>
                                             <p>People prefer to network with members who has a profile photo, but if don't have one ready to upload, you can add it later.</p>
@@ -276,7 +278,7 @@
                                     <li><i class="fa fa-check"></i><span>Adding Photo</span></li>
                                 </ul>
                                 <ul class="nav nav-tabs nav-stacked">
-                                    <li><a data-toggle="tab" href="#adding_photo"><span class="stp-numbr">5</span> <span>Adding Your Card Details</span></a></li>
+                                    <li><a data-bs-toggle="tab" href="#adding_photo"><span class="stp-numbr">5</span> <span>Adding Your Card Details</span></a></li>
                                 </ul>
                                 
                                 <div class="tab-content">
@@ -332,10 +334,10 @@
                                                     <div class="panel panel-default">
                                                         <div class="panel-heading">
                                                             <h4 class="panel-title">
-                                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse0">Family Member #1</a>
+                                                             <a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapse0">Family Member #1</a>
                                                             </h4>
                                                         </div>
-                                                        <div id="collapse0" class="panel-collapse collapse in">
+                                                        <div id="collapse0" class="panel-collapse collapse show">
                                                             <div class="panel-body">
                                                                   <div class="form-group">
                                                                 <input type="text" name="first_name[]" id="first_name" class="form-control first_name required" placeholder="First Name">
@@ -347,7 +349,7 @@
                                                             </div>
                                                             <div>
                                                                 <div class="birthday_date-position">
-                                                                    <input type="text" name="birthday[]" id="birthday" class="form-control birthday  Flatpicker required" placeholder="Birthday"/>
+                                                                    <input type="text" name="birthday[]" id="birthday" class="form-control birthday  Flatpicker required flatpicker_birth" placeholder="Birthday"/>
                                                                     <span class="error" id="err_birthday_date"></span>
                                                                 </div>
                                                             </div>
@@ -409,7 +411,7 @@
 
 </section>
 
-@include('layouts.footer')
+@include('layouts.business.footer')
 
 
 @if(Auth::check() && Auth::user()->show_step == 6)
@@ -469,6 +471,11 @@
 @endif
 
 <script>
+
+    flatpickr(".flatpicker_birth", {
+        dateFormat: "m/d/Y",
+        maxDate: "01/01/2050",
+    });
 
     flatpickr(".flatpicker_birthdate1", {
         dateFormat: "m/d/Y",

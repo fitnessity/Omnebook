@@ -44,8 +44,8 @@ class Membership implements ShouldQueue
         try {
             foreach ($this->data as $i => $rowData) {
                 $totalRows++;
-                Log::info("Processed row data: " . json_encode($rowData));
-                Log::info('Checking row ' . $i . ': ' . json_encode($rowData));
+                Log::info("Processed row data: ".json_encode($rowData));
+                Log::info('Checking row ' . $i .':'.json_encode($rowData));
                 Log::info('Column 1 '.$rowData[0]);
                 Log::info('Column 4'.$rowData[3]);
                 Log::info('Column 3 '.$rowData[2]);
@@ -79,12 +79,17 @@ class Membership implements ShouldQueue
                             $exDate = explode('/', $rowData[4]);
                             $member_to = @$exDate[2] . '-' . @$exDate[0] . '-' . @$exDate[1];
                             $member_from = @$conDate[2] . '-' . @$conDate[0] . '-' . @$conDate[1];
+                            Log::info('customerid : '.$customerData->id);
+                            Log::info('price id :'.$priceDetail->id);
+
                             $BookingDetail = UserBookingDetail::where([
                                 'user_id' => $customerData->id,
                                 'priceid' => $priceDetail->id
                             ])->whereDate('expired_at', '=', $member_to)->whereDate('contract_date', '=', $member_from)->first();
+                            
                             if (!$BookingDetail) {
-                                // Calculate prices and quantities
+                                Log::info('booking detail :'.$priceDetail->id);
+
                                 $adultPrice = $priceDetail->adult_cus_weekly_price;
                                 $childPrice = $priceDetail->child_cus_weekly_price;
                                 $infantPrice = $priceDetail->infant_cus_weekly_price;
@@ -111,7 +116,7 @@ class Membership implements ShouldQueue
                                 ];
                                 // Create booking status
                                 $orderdata = [
-                                    'user_id' => Auth::user()->id,
+                                    'user_id' =>  $this->userid,
                                     'customer_id' => $customerData->id,
                                     'user_type' => 'customer',
                                     'status' => 'active',
@@ -232,7 +237,7 @@ class Membership implements ShouldQueue
                             Log::info('ProcessMembership. Total Rows: '.$totalRows.', Successful Rows: '.$successfulRows.', Skipped Rows: '.$skippedRows.', Failed Rows: '.$failedRows);
                             Mail::to($this->email)->send(new ImportMembershipMail($totalRows, $successfulRows, $skippedRows, $failedRows));
                             Log::info('Email sent successfully');
-                            $tracker->email_sent = true;
+                            $tracker->email_sent = 1;
                             $tracker->save();
                             $uploadFile = BusinessCustomerUploadFiles::find($this->upid);
                             Log::info('upid'.$this->upid);
@@ -254,8 +259,13 @@ class Membership implements ShouldQueue
             } catch (\Exception $e) {
                 Log::error('Failed to send emails: ' . $e->getMessage(), ['exception' => $e]);            
             }            
-        } catch (\Exception $e) {
-            Log::error('Error processing membership excel data:  '. __LINE__ . $e->getMessage());
+        } 
+        // catch (\Exception $e) {
+        //     Log::error('Error processing membership excel data:  '. __LINE__ . $e->getMessage());
+        // }
+        catch (\Exception $e) {
+            Log::error('Error processing membership excel data at line ' . $e->getLine() . ': ' . $e->getMessage());
         }
+        
     }
 }

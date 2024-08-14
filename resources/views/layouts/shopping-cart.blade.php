@@ -23,13 +23,13 @@
                 	<div class="row mb-3">
 						<div class="col-12">
 							<div class="page-heading">
-								<label>Shopping Cart</label>
+								<label>Shopping Carts</label>
+								<input type="hidden" value="{{ config("services.stripe.pkey") }}" id="stripekey">
 							</div>
 						</div>
-					</div>
-                	
+					</div>                	
                 	@if (!empty($cart['cart_item'])) 
-                		<form action="{{route('create-checkout-session')}}" method="POST" class="validation" data-cc-on-file="false"  data-stripe-publishable-key="{{ env('STRIPE_PKEY') }}" id="payment-form">
+                		<form action="{{route('create-checkout-session')}}" method="POST" class="validation" data-cc-on-file="false" data-stripe-publishable-key="{{ env('STRIPE_PKEY') }}" id="payment-form">
                 			@csrf
 							<div class="row">
 								<div class="col-xl-8">
@@ -956,10 +956,10 @@
         })
     });
 </script>
-	
 <script type="text/javascript">
 	$(function() {
-		stripe = Stripe('{{ env("STRIPE_PKEY") }}');	
+		var str=$('#stripekey').val();
+		var stripe = Stripe(str);	
 		const client_secret = '{{$intent ? $intent->client_secret : null}}';
 		const options = {
 		  clientSecret: client_secret,
