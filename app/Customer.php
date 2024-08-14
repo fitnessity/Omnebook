@@ -660,7 +660,6 @@ class Customer extends Authenticatable
         if(!$startDate){
             $startDate = Carbon::now()->subMonths(3);
         }
-
         $checkindetail = BookingCheckinDetails::where('customer_id', $this->id)->orderby('checkin_date','desc');
         $chk = $checkindetail->get();
         if($chk->isNotEmpty()){
@@ -668,7 +667,6 @@ class Customer extends Authenticatable
             if($endDate){
                 $detail = $checkindetail->whereDate("checkin_date","<=",$endDate);
             }
-
             $detail = $detail->first();
             return $detail != '' ? 'Active' : 'InActive';
         }else{

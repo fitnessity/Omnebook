@@ -22,7 +22,7 @@
 .sp-foot{
   margin-top: 6px;
 }
-.social-footer{margin-top:180px;}
+.social-footer{margin-top:20px;}
 
 @media screen and (max-width: 400px){
   .social-footer{margin-top:0px;}
@@ -63,7 +63,7 @@
 	</div>
     <div class="cat-container">
         <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="col-lg-5 col-md-3 col-sm-12 col-xs-12">
             <?php $footer_fitnessity = App\Cms::where('status', '1')
                     ->where('content_alias', 'footer_content')->get(); ?>
             @foreach($footer_fitnessity as $footercon)
@@ -72,18 +72,18 @@
                     <p style="text-align: justify; padding: 5px 50px 5px 0px">
                         {!!$footercon->content!!}
                     </p>
-                    <div class="footer-bottom-left">
+                    <!-- <div class="footer-bottom-left">
                         <p class="location">
                             {!!$footercon->address!!}<br/>
                             <i class="far fa-envelope"></i><a href="mailto:{{$footercon->email}}"> {{$footercon->email}} </a>
                         </p>
-                    </div>
+                    </div> -->
                 </div>
             @endforeach
             </div>
             <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                <div class="footer-link">
-                    <a href="{{ url('') }}">FITNESSITY</a><br/>
+                <div class="footer-link footer-widget-title">
+                    <a class="foot-title" href="{{ url('') }}">FITNESSITY</a><br/>
                     <?php /*?><a href="{{ Config::get('constants.SITE_URL') }}/about-us">About Us</a>
                     <a href="{{ Config::get('constants.SITE_URL') }}/be-a-part">Be A Part</a>
                     <a href="{{ Config::get('constants.SITE_URL') }}/discover">Discover</a>
@@ -91,29 +91,35 @@
                     <a href="{{ Config::get('constants.SITE_URL') }}/privacy-policy">Privacy Policy</a>
                     <a href="{{ Config::get('constants.SITE_URL') }}/terms-condition">Terms & Condition</a>
                     <a href="{{ Config::get('constants.SITE_URL') }}/about-us">About Us</a>
+                    <a href="{{ Config::get('constants.SITE_URL') }}/contact-us">Contact Us</a>
+                    <a href="{{route('help')}}">Help Center</a>
+                    <a id="btn_feedback" href="{{ Config::get('constants.SITE_URL') }}/feedback">Send Us Feedback</a>  
                 </div>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                <div class="footer-link">
-                    <a href="#">BUSINESS</a><br/>
+                <div class="footer-link footer-widget-title">
+                    <a class="foot-title" href="#">BUSINESS</a><br/>
                     <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business">Claim your Business</a>
 					<a href="{{route('staff_login')}}">Staff Login</a>
                 </div> 
+                
+            </div>
+            <div class="col-lg-3 col-md-2 col-sm-12 col-xs-12">
+                <div class="footer-link footer-widget-title">
+                    <a  class="foot-title" href="{{route('help')}}">Contacts</a><br/>
+                </div>
+                <div class="footer-newsletter">
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-map-marker-alt"></i>Based in New York, NY</li>
+                        <li><a href="#"><i class="far fa-envelope"></i><span class="__cf_email__" data-cfemail="contact@omnebook.com"> contact@omnebook.com </span></a></li>
+                    </ul>
+                </div>
                 <div class="footer-bottom-left social-footer">
                     <ul>
                         <li><a href="https://twitter.com/Fitnessitynyc" target="_blank" ><img src="{{asset('public/img/twitter.png')}}" width="30px" height="30px" height="30px" alt="Fitnessity" loading="lazy"/></a>&nbsp;&nbsp;</li>
                         <li><a href="https://www.instagram.com/fitnessityofficial/?hl=en" target="_blank"><img src="{{asset('public/img/instagram.png')}}" width="30px" height="30px" alt="Fitnessity" loading="lazy"/></a>&nbsp;&nbsp;</li>
                         <li><a href="https://www.facebook.com/fitnessityofficial" target="_blank"><img src="{{asset('public/img/facebook.png')}}" width="30" height="30px" alt="Fitnessity" loading="lazy"/></a>&nbsp;&nbsp;</li>
                     </ul>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                <div class="footer-link">
-                    <a href="{{route('help')}}">NEED HELP?</a><br/>
-                    <a href="{{ Config::get('constants.SITE_URL') }}/contact-us">Contact Us</a>
-                    <a href="{{route('help')}}">Help Center</a>
-                    <a id="btn_feedback" href="{{ Config::get('constants.SITE_URL') }}/feedback">Send Us Feedback</a>  
-                   
                 </div>
             </div>
         </div>
@@ -322,7 +328,11 @@
 <!-- <script src="<?php echo Config::get('constants.FRONT_JS'); ?>owl.js"></script> -->
 <script src="{{ url('public/js/jquery.flexslider.js') }}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc"></script>
-{{-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}"></script> --}}
+<!--  <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}"></script> -->
+
+
+<script src="{{ url('public/js/general.js') }}"></script>
+
 <script type="text/javascript">
     	function initMapCall(addressInputID, cityElementID, stateElementID, countryElementID, zipcodeElementID, latElementID, lonElementID) {
         	var map = new google.maps.Map(document.getElementById('map'), {

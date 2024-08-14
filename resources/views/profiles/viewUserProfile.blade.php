@@ -1,5 +1,5 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
 <head>
     <title> Fitnessity </title>
     <meta charset="utf-8">
@@ -74,7 +74,9 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 .removepost{
 	padding: 0px !important;
 }
-
+body{
+    background: #fff;
+}
 
 </style>
 
@@ -568,17 +570,17 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                 <div class="row flex-column-reverse flex-md-row">
                                     <div class="col-sm-12 col-md-12 col-lg-9">
                                         <ul class="nav nav-tabs" role="">
-                                            <li class="active">
-                                                <a class="nav-link" data-toggle="tab" href="#timeline" role="tab">Timeline</a>
+                                            <li class="nav-item">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#timeline" role="tab">Timeline</a>
                                             </li>
-                                            <li>
-                                                <a class="nav-link" data-toggle="tab" href="#about" role="tab">About</a>
+                                            <li  class="nav-item">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#about" role="tab">About</a>
                                             </li>
-                                            <li>
-                                                <a class="nav-link" data-toggle="tab" href="#photos" role="tab">Photos</a>
+                                            <li  class="nav-item">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#photos" role="tab">Photos</a>
                                             </li>
-                                            <li>
-                                                <a class="nav-link" data-toggle="tab" href="#videos" role="tab">Videos</a>
+                                            <li  class="nav-item">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#videos" role="tab">Videos</a>
                                             </li>
                                             
                                             <?php /*?>
@@ -1216,7 +1218,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="photos" role="tabpanel">
-                                    <div class="desc-text" id="mydesc">
+                                    <div class="desc-text row" id="mydesc">
                                         <?php 
                                             if (!empty($images)) 
                                             {
@@ -1277,8 +1279,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 
 
 
-
-@include('layouts.footer')
+            @include('layouts.business.footer')
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>

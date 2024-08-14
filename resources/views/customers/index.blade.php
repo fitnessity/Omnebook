@@ -40,13 +40,13 @@
 							<div class="">
 								<label id="systemMessage1" class="font-16"></label>
 							</div>
-								{{-- @php 	
+								<!-- {{-- @php 	
 								   $userId = Auth::id();
 									$data=App\BusinessCustomerUploadFiles::where('status',1)->where('user_id', $userId)->first();
 								@endphp
 								@if($data)
 									<label id="systemMessage1" class="font-16 font-green font-16">We are processing your file. Once completed,  we will send you an email and notification.</label>
-								@endif --}}
+								@endif --}} -->
 
 								<label id="uploadedfile" class="font-16 font-green font-16"></label>
 							<div class="row">

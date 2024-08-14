@@ -13,6 +13,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\CompanyInformation;
 use App\Http\Controllers\Customers_Auth\HomeController;
 use App\Http\Controllers\Products\ProductController;
+use App\Http\Controllers\Business\WebsiteIntegrationConroller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 
@@ -36,9 +37,9 @@ Route::any('/getCardFormPlan','MembershipPlanController@getCardForm')->name('cho
 Route::any('/checkPromoCode','MembershipPlanController@checkPromoCode')->name('choose-plan.checkPromoCode');
 Route::any('/getCardData','MembershipPlanController@getCardData')->name('choose-plan.getCardData');
 Route::get('/add-client','CustomerController@client')->name('client');
+Route::get('/login_integration','Business\WebsiteIntegrationConroller@Loginindex')->name('login_integration');//added_13_08
 Route::post('/get-checkin-code', 'CustomerController@getCheckinCode')->name('get_checkin_code');
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
-    // Scheduler
     Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
     Route::get('schedulers/cancel_all', 'SchedulerController@cancel_all')->name('schedulers.cancel_all');
     Route::post('cancel-all-activity', 'SchedulerController@cancel_all_store')->name('cancel_all_store');
@@ -153,8 +154,10 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/engage-client','EngageClientsController@index')->name('engage_client.index'); 
     Route::get('/customer-contact-list','EngageClientsController@contactList')->name('engage_client.contact-list'); 
     Route::get('/website_integration','WebsiteIntegrationConroller@index')->name('website_integration'); //added by me 01_8
-    Route::post('/login_details','WebsiteIntegrationConroller@update')->name('login_details');
-
+    Route::post('/login_details','WebsiteIntegrationConroller@update')->name('login_details');//added by me 01_8
+    Route::post('/register_details','WebsiteIntegrationConroller@update_register')->name('register_details'); //added by me 02_8
+    Route::get('/login_integration','WebsiteIntegrationConroller@Loginindex')->name('login_integration'); //added by me 01_8
+    
     Route::post('/store-list','EngageClientsController@storeList')->name('store_list'); 
     Route::post('/update_list','EngageClientsController@updateList')->name('update_list'); 
     Route::get('/delete_list','EngageClientsController@deleteList')->name('delete_list'); 

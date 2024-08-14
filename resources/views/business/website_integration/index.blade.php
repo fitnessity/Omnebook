@@ -100,14 +100,14 @@
                                                         <label for="">Link type</label>
                                                         <select class="form-select mb-3" id="selectField">
                                                             <option selected="selected">Select...</option>
-                                                            <option value="option1">Login</option>     
-                                                            <option value="option2">Register</option>  
-                                                            <option value="option3">Booking Schedule</option>                                                       
+                                                            <option value="login">Login</option>     
+                                                            <option value="register">Register</option>  
+                                                            {{-- <option value="option3">Booking Schedule</option>--}}
                                                         </select>
                                                     </div>
                                                 </div>                                                  
                                             </div>
-                                            <div id="option1" class="lrcontent">
+                                            <div id="login" class="lrcontent">
                                                     <div class="row">
                                                             <div class="col-lg-12">
                                                                 <form action="{{route('business.login_details')}}" method="POST" enctype="multipart/form-data">
@@ -150,9 +150,15 @@
                                                                                               <label for="">Upload Logo</label>
                                                                                           </div>
                                                                                       </div>
+
                                                                                       <div class="col-lg-6">
                                                                                           <div class="profile-user position-relative mx-auto mb-2">
-                                                                                              <img src="http://dev.fitnessity.co/public/images/fitnessity_logo1_black.png" class="avatar-lg img-thumbnail user-profile-image shadow" alt="upload-image">
+                                                                                              {{-- <img src="{{asset('images/fitnessity_logo1_black.png')}}" class="avatar-lg img-thumbnail user-profile-image shadow" alt="upload-image"> --}}
+                                                                                              @if($logoUrl)
+                                                                                              <img src="{{ $logoUrl }}" class="avatar-lg img-thumbnail user-profile-image shadow" alt="upload-image">
+                                                                                            @else
+                                                                                                <img src="{{ asset('images/fitnessity_logo1_black.png') }}" class="avatar-lg img-thumbnail user-profile-image shadow" alt="default-logo">
+                                                                                            @endif
                                                                                               <div class="avatar-xxs p-0 rounded-circle profile-photo-edit">
                                                                                                   <input id="profile-img-file-input" type="file" class="profile-img-file-input" name="logo">
                                                                                                   <label for="profile-img-file-input" class="profile-photo-edit logo-change avatar-xxs">
@@ -184,16 +190,7 @@
                                                                               </div>
                                                                               <!-- end card header -->
           
-                                                                            <div class="card-body">
-                                                                                  <!-- <div class="dropzone dz-clickable">
-                                                                                      <div class="dz-message login-preview-modal needsclick">
-                                                                                          <div class="mb-3">
-                                                                                              <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
-                                                                                          </div>
-                                                                                          <h4>Drop files here or click to upload.</h4>
-                                                                                      </div>
-                                                                                  </div>  -->
-          
+                                                                            <div class="card-body">          
                                                                                   <div class="dropzone dropzone-checkin">
                                                                                     <div class="fallback">
                                                                                         <input name="check_in_photo" type="file" >
@@ -229,6 +226,28 @@
                                                                                             </div>
                                                                                         </div>
                                                                                       </li>
+                                                                                      @if(@$data->background_img)
+                                                                                      <li class="mt-2" id="ddropzone-preview">
+                                                                                          <input type="hidden" name="cover" value="{{$data->background_img}}">
+                                                                                          <div class="border rounded">
+                                                                                              <div class="d-flex p-2">
+                                                                                                  <div class="flex-shrink-0 me-3">
+                                                                                                      <div class="avatar-sm bg-light rounded product-display">
+                                                                                                          <img class="img-fluid rounded d-block" src="{{Storage::URL($data->background_img)}}" alt="Product-Image"  loading="lazy"/>
+                                                                                                      </div>
+                                                                                                  </div>
+                                                                                                  <div class="flex-grow-1">
+                                                                                                      <div class="pt-1">
+                                                                                                          <h5 class="fs-14 mb-1">&nbsp;{{basename($data->background_img)}}</h5>
+                                                                                                      </div>
+                                                                                                  </div>
+                                                                                                  <div class="flex-shrink-0 ms-3">
+                                                                                                      <button class="btn btn-sm btn-danger delete-btn" type="button">Delete</button>
+                                                                                                  </div>
+                                                                                              </div>
+                                                                                          </div>
+                                                                                      </li>
+                                                                                  @endif
                                                                                   </ul>
                                                                                   <!-- end dropzon-preview -->
                                                                               </div>
@@ -239,693 +258,761 @@
                                                                     <button type="submit" class="btn btn-black">Save and Deploy</button>
                                                                 </form>
                                                             </div>
-                                                        </div>
-                                            </div>
-                                            <div id="option2" class="lrcontent">
-                                                <div class="row">
-                                                    <div class="col-xl-3 col-lg-4">
-                                                        <div class="card">
-                                                            <div class="card-header">
-                                                                <div class="d-flex">
-                                                                    <div class="flex-grow-1">
-                                                                        <h5 class="fs-16">Registration Link Settings</h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="accordion accordion-flush filter-accordion">
-                                                                <div class="accordion-item">
-                                                                    <h2 class="accordion-header" id="flush-headingBrands">
-                                                                        <button class="accordion-button bg-transparent shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseBrands" aria-expanded="true" aria-controls="flush-collapseBrands">
-                                                                            <span class="text-muted text-uppercase fs-12 fw-medium">Style</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
-                                                                        </button>
-                                                                    </h2>
-
-                                                                    <div id="flush-collapseBrands" class="accordion-collapse collapse show" aria-labelledby="flush-headingBrands">
-                                                                        <div class="accordion-body text-body pt-0">
-                                                                        
-                                                                            <div class="gap-2 mt-3 filter-check">
-                                                                                <label for="">Colors</label>
-                                                                                <p>By not setting a color, the defaults will be used.</p>
-                                                                                <label for="">Text Color</label>
-                                                                                <div class="pickr mb-15">
-                                                                                    <div class="nano-colorpicker" data-picker="1"></div>
-                                                                                    <input type="hidden" id="selectedColor3" name="text_color">
-                                                                                    <!-- <button type="button" class="pcr-button w-100" role="button" aria-label="toggle color picker dialog" style="--pcr-color: rgba(244, 67, 54, 1);"></button> -->
-                                                                                </div>
-                                                                                <label for="">Button Background</label>
-                                                                                <div class="pickr mb-15">
-                                                                                    <div class="nano-colorpicker" data-picker="1"></div>
-                                                                                    <input type="hidden" id="selectedColor4" name="text_color">
-                                                                                    <!-- <button type="button" class="pcr-button w-100" role="button" aria-label="toggle color picker dialog" style="--pcr-color: rgba(156, 39, 176, 1);"></button> -->
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>                                    
-                                                                    </div>
-                                                                </div>
-                                                                <!-- end accordion-item -->    
-                                                                <div class="accordion-item">
-                                                                    <h2 class="accordion-header" id="flush-headingDiscount">
-                                                                        <button class="accordion-button bg-transparent shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseDiscount" aria-expanded="true" aria-controls="flush-collapseDiscount">
-                                                                            <span class="text-muted text-uppercase fs-12 fw-medium">Content</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
-                                                                        </button>
-                                                                    </h2>
-                                                                    <div id="flush-collapseDiscount" class="accordion-collapse collapse" aria-labelledby="flush-headingDiscount">
-                                                                        <div class="accordion-body text-body pt-1">
-                                                                            <div class="gap-2 mt-3 filter-check">
-                                                                                <label for="">Send Email Notifications</label>
-                                                                                <div>
-                                                                                    <button href="#" class="btn btn-red mb-15"><i class="ri-add-line align-bottom me-1"></i> Add an email</button>  
-                                                                                    <p>When a new registration is added or a duplicate email is detected, we will send a notification email to these addresses. </p>
-                                                                                </div>                                                                                  
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- end accordion-item -->                            
-                                                                <div class="accordion-item">
-                                                                    <h2 class="accordion-header" id="flush-headingRating">
-                                                                        <button class="accordion-button bg-transparent shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseRating" aria-expanded="false" aria-controls="flush-collapseRating">
-                                                                            <span class="text-muted text-uppercase fs-12 fw-medium">Region</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
-                                                                        </button>
-                                                                    </h2>
-
-                                                                    <div id="flush-collapseRating" class="accordion-collapse collapse" aria-labelledby="flush-headingRating">
-                                                                        <div class="accordion-body text-body">
-                                                                            <div class="gap-2 filter-check">
-                                                                                <label for="">Language</label>
-                                                                                <select class="form-select mb-3" aria-label="Default select example">
-                                                                                    <option selected="">English </option>
-                                                                                    <option value="1">Hindi </option>
-                                                                                    <option value="2">Arabela </option>
-                                                                                    <option value="3">Egyptian Arabic </option>
-                                                                                    <option value="3">Auslan </option>
-                                                                                </select>
-                                                                            </div>
-                                                                            <div class="gap-2 filter-check">
-                                                                                <label for="">Default Selected Country</label>
-                                                                                <select class="form-select mb-3" aria-label="Default select example">
-                                                                                    <option selected="">United States </option>
-                                                                                    <option value="1">Canada </option>
-                                                                                    <option value="2">India </option>
-                                                                                </select>
-                                                                            </div>
-                                                                            <div class="gap-2 filter-check">
-                                                                                <label for="">Default Selected State</label>
-                                                                                <select class="form-select mb-3" aria-label="Default select example">
-                                                                                    <option selected="">None Selected </option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div> 
-                                                                <!-- end accordion-item -->
-                                                            </div>
-                                                            <div class="card-footer">
-                                                                <div class="d-flex mt-3 mb-3">
-                                                                    <div class="flex-grow-1">
-                                                                        <a href="http://dev.fitnessity.co/design/deploy_widget" class="btn btn-black w-100">Save and Deploy</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
-                                                    <div class="col-xl-9 col-lg-8">
-                                                        <div class="card">
-                                                            <div class="card-header align-items-center d-flex">
-                                                                <h4 class="card-title mb-0 flex-grow-1">Preview</h4>
-                                                                <div class="flex-shrink-0">
-                                                                    <div>
-                                                                        
-                                                                    </div>
-                                                                    <!-- <div class="form-check form-switch form-switch-right form-switch-md">
-                                                                        <label for="dropdown-base-example" class="form-label text-muted">Preview Size</label>
-                                                                        <input class="form-check-input code-switcher" type="checkbox" id="dropdown-base-example">
-                                                                    </div> -->
-                                                                </div>
-                                                            </div><!-- end card header -->
-
-                                                            <div class="card-body">
-                                                                <div class="live-preview">
-                                                                    <div class="row justify-content-md-center">
-                                                                        <div class="col-lg-10">
-                                                                            <form action="">
-                                                                                <div class="row ">
-                                                                                    <div class="col-md-12 col-lg-12"><h4 class="font-red ">Personal Info</h4></div>
-                                                                                    <div class="col-md-4 col-lg-3">
-                                                                                        <label class="mt-10 ">First Name<span id="star">*</span></label>
-                                                                                        <input type="text" name="firstname" id="firstname" size="30" maxlength="80" class="form-control">
-                                                                                    </div>
-                                                                                    <div class="col-md-4 col-lg-3">
-                                                                                        <label class="mt-10">Last Name<span id="star">*</span></label>
-                                                                                        <input type="text" name="lastname" id="lastname" size="30" maxlength="80" class="form-control">
-                                                                                    </div>
-                                                                                    <div class="col-md-4 col-lg-3">
-                                                                                        <label class="mt-10">Email<span id="star">*</span></label>
-                                                                                        <input type="email" name="email" id="email" class="myemail form-control" size="30" maxlength="80" autocomplete="off">
-                                                                                    </div>
-                                                                                    <div class="col-md-4 col-lg-3">
-                                                                                        <label class="mt-10">Birthday<span id="star">*</span></label>
-                                                                                        <input type="hidden" class="form-control add-client-birthdate flatpickr-input" id="dob" name="dob"><input class="form-control add-client-birthdate form-control input" placeholder="" tabindex="0" type="text" readonly="readonly">
-                                                                                    </div>
-
-                                                                                    <div class="col-md-4 col-lg-3">
-                                                                                        <label class="mt-10">Phone <span id="star">*</span></label>
-                                                                                        <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone" class="form-control">
-                                                                                    </div>
-
-                                                                                    <div class="col-md-4 col-lg-3">
-                                                                                        <label class="mt-10">Gender<span id="star">*</span></label>
-                                                                                        <select class="form-control" name="gender">
-                                                                                            <option value="male">Male</option>
-                                                                                            <option value="female">Female</option>
-                                                                                            <option value="other">Other</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                                
-                                                                                    <div class="col-md-4 col-lg-3">
-                                                                                        <div class="form-group check-box-info ">
-                                                                                            <input class="check-box-primary-account" type="checkbox" id="primaryAccountHolder" name="primaryAccountHolder" value="1">
-                                                                                            <label for="primaryAccountHolder"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="You are paying for yourself and all added family members.">(i)</span></label>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="add-client-sapre-tor"></div>
-
-                                                                                <div class="row">
-                                                                                    <div class="col-md-12 col-lg-12"><h4 class="font-red ">Address</h4></div>
-                                                                                    <div class="col-md-4 col-lg-3 mt-10">
-                                                                                        <label>Address <span id="star">*</span></label>
-                                                                                        <input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="addressCustomer" value="" required="" oninput="initMapCall('addressCustomer', 'cityCustomer', 'stateCustomer', 'countryCustomer', 'zipcodeCustomer', 'latitudeCustomer', 'longitudeCustomer')" aria-required="true"> 
-                                                                                    </div>
-                                                                                    <div class="col-md-4 col-lg-3 mt-10">
-                                                                                        <label for="City">City <span id="star">*</span></label>
-                                                                                        <input type="text" class="form-control" name="city" id="cityCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
-                                                                                    </div>
-                                                                                    <input type="hidden" name="lon" id="longitudeCustomer" value="">
-                                                                                    <input type="hidden" name="lat" id="latitudeCustomer" value="">
-
-                                                                                    <div class="col-md-4 col-lg-3 mt-10">
-                                                                                        <label for="state">State <span id="star">*</span></label>
-                                                                                        <input type="text" class="form-control" name="state" id="stateCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
-                                                                                    </div>
-                                                                                    <div class="col-md-4 col-lg-3 mt-10">
-                                                                                        <label for="country">Country <span id="star">*</span></label>
-                                                                                        <input type="text" class="form-control" name="country" id="countryCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
-                                                                                    </div> 
-
-                                                                                    <div class="col-md-4 col-lg-3 mt-10">
-                                                                                        <label for="zipcode">Zip Code <span id="star">*</span></label>
-                                                                                        <input type="text" class="form-control" name="zipcode" id="zipcodeCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="add-client-sapre-tor"></div>
-                                                                                <div class="row">
-                                                                                    <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">Add Family Members (Optional)</h4></div>
-                                                                                    <div class="error mb-10" id="familyerrormessage"></div>
-                                                                                    <input type="hidden" name="familycnt" id="familycnt" value="0">
-                                                                                    <div id="familymaindiv">
-                                                                                        <div class="new-client mb-10" id="familydiv0" data-i="0" data-text="1">
-                                                                                            <div class="accordion" id="default-accordion-example">
-                                                                                                <div class="accordion-item shadow">
-                                                                                                    <h2 class="accordion-header" id="heading0">
-                                                                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0" aria-expanded="false" aria-controls="collapse0">
-                                                                                                            <div class="container-fluid nopadding">
-                                                                                                                <div class="row"> 
-                                                                                                                    <div class="col-lg-6 col-md-6 col-8"> Family Member #1 </div> 
-                                                                                                                    <div class="col-lg-6 col-md-6 col-4"> 
-                                                                                                                        <div class="multiple-options" id="deletediv0"> </div> 
-                                                                                                                    </div> 
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </button>
-                                                                                                    </h2>
-                                                                                                    <div id="collapse0" class="accordion-collapse collapse" aria-labelledby="heading0" data-bs-parent="#default-accordion-example" style="">
-                                                                                                        <div class="accordion-body">
-                                                                                                            <div class="row">
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">First Name</label>
-                                                                                                                    <input type="text" name="fname[]" id="fname" class="form-control required" aria-required="true">
-                                                                                                                    <span class="error" id="err_fname"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Last Name</label>
-                                                                                                                    <input type="text" name="lname[]" id="lname" class="form-control required" aria-required="true">
-                                                                                                                    <span class="error" id="err_lname"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Birthday</label>
-                                                                                                                    <input type="text" class="form-control" name="birthdate[]" id="birthdate">
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Gender</label>
-                                                                                                                    <select name="familygender[]" id="gender" class="form-select gender" required="" aria-required="true">
-                                                                                                                        <option value="male">Male</option>
-                                                                                                                        <option value="female">Female</option>
-                                                                                                                        <option value="other">Specify other</option>
-                                                                                                                    </select>
-                                                                                                                    <span class="error" id="err_gender"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Relationship</label>
-                                                                                                                    <select name="relationship[]" id="relationship" class="form-select relationship required" aria-required="true">
-                                                                                                                        <option value="">Select Relationship</option>
-                                                                                                                        <option value="Brother">Brother</option>
-                                                                                                                        <option value="Sister">Sister</option>
-                                                                                                                        <option value="Father">Father</option>
-                                                                                                                        <option value="Mother">Mother</option>
-                                                                                                                        <option value="Wife">Wife</option>
-                                                                                                                        <option value="Husband">Husband</option>
-                                                                                                                        <option value="Son">Son</option>
-                                                                                                                        <option value="Daughter">Daughter</option>
-                                                                                                                    </select>
-                                                                                                                    <span class="error" id="err_relationship"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Phone</label>
-                                                                                                                    <input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone">
-                                                                                                                    <span class="error" id="err_mphone"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Email</label>
-                                                                                                                    <input type="email" name="emailid[]" id="emailid" class="form-control email" required="" aria-required="true">
-                                                                                                                    <span class="error" id="err_emailid"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Emergency Name</label>
-                                                                                                                    <input type="text" name="emergency_name[]" id="emergency_name" class="form-control emergency_name">
-                                                                                                                    <span class="error" id="err_emergency_name"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Emergency Phone</label>
-                                                                                                                    <input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone">
-                                                                                                                    <span class="error" id="err_emergency_phone"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Emergency Email</label>
-                                                                                                                    <input type="text" name="emergency_email[]" id="emergency_email" class="form-control emergency_email">
-                                                                                                                    <span class="error" id="err_emergency_email"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Emergency Relation</label>
-                                                                                                                    <select name="emergency_relation[]" id="emergency_relation" class="form-select emergency_relation">
-                                                                                                                        <option value="">Select Emergency Relationship</option>
-                                                                                                                        <option value="Brother">Brother</option>
-                                                                                                                        <option value="Sister">Sister</option>
-                                                                                                                        <option value="Father">Father</option>
-                                                                                                                        <option value="Mother">Mother</option>
-                                                                                                                        <option value="Wife">Wife</option>
-                                                                                                                        <option value="Husband">Husband</option>
-                                                                                                                        <option value="Son">Son</option>
-                                                                                                                        <option value="Daughter">Daughter</option>
-                                                                                                                    </select>
-                                                                                                                    <span class="error" id="err_emergency_relation"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3"> 
-                                                                                                                    <div class="form-group check-box-info">
-                                                                                                                        <input class="check-box-primary-account primaryAcCheck" type="checkbox" id="primaryAccount" name="primaryAccount" value="1">
-                                                                                                                        <label for="primaryAccount"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Choose the primary account holder to determine whose card covers bookings for up to two family members (e.g., Mom or Dad). All cards stored under the primary account will be available at checkout.">(i)</span></label>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="">
-                                                                                        <div class="col-md-12 col-lg-12 text-right">
-                                                                                            <button type="button" class="btn btn-red mt-10" id="add_family">Add New Family Member</button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="add-client-sapre-tor"></div>
-                                                                                <div class="row">
-                                                                                    <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">How did you hear about us</h4></div>
-                                                                                    <div class="row">
-                                                                                        <div class="col-md-4 col-lg-4 mt-10">
-                                                                                            <label class="mt-10">How did you hear about us?</label>
-                                                                                            <select class="form-select" name="know_from">
-                                                                                                <option value="male">Search engine (Google, Bing, etc)</option>
-                                                                                                <option value="Google maps search">Google maps search</option>
-                                                                                                <option value="Referral">Referral</option>
-                                                                                                <option value="Social media">Social media</option>
-                                                                                                <option value="Online communities / forums">Online communities / forums</option>
-                                                                                                <option value="Online advertisement">Online advertisement</option>
-                                                                                                <option value="Offine advertisement">Offine advertisement</option>
-                                                                                                <option value="Noticed the physical location">Noticed the physical location</option>
-                                                                                                <option value="Website">Website</option>
-                                                                                                <option value="Event">Event</option>
-                                                                                                <option value="School">School</option>
-                                                                                                <option value="Other">Other</option>
-                                                                                            </select>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="add-client-sapre-tor"></div>
-                                                                                <div class="row">
-                                                                                    <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">Account Password</h4></div>
-                                                                                    <div class="row">
-                                                                                        <label class="mt-10">Please pick a password to log-in to your account later.</label>
-                                                                                        <div class="col-md-4 col-lg-3 mt-10">
-                                                                                            <label class="mt-10">Password</label>
-                                                                                            <input type="text" name="password" id="password" class="form-control">
-                                                                                        </div>
-                                                                                        <div class="col-md-4 col-lg-3 mt-10">
-                                                                                            <label class="mt-10">Confirm Password</label>
-                                                                                            <input type="text" name="confirmpassword" id="confirmpassword" class="form-control">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="add-client-sapre-tor"></div>
-                                                                                <div class="row"> 
-                                                                                    <div class="col-md-12 col-lg-12 mt-20">
-                                                                                        <h4 class="font-red "> Agree to Terms, Waiver &amp; Contract Signature</h4>
-                                                                                    </div>
-                                                                                    <div class="col-md-12">
-                                                                                        <div class="col-lg-12" id="termsdiv">
-                                                                                            <div class="terms-head">
-                                                                                                <div>
-                                                                                                    <a href="#" data-url="http://dev.fitnessity.co/getTerms?id=29&amp;termsType=refundpolicytext&amp;termsHeader=Refund%20Policy" class="font-13 color-red-a" data-behavior="termsModelOpen">Refund Policy</a> 
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <label class="mt-10">To continue, please read the terms &amp; waivers above. A signature is required to participate. </label>
-                                                                                    <div class="row">
-                                                                                        <div class="col-lg-12">
-                                                                                            <canvas id="signatureCanvas" name="signatureCanvas"></canvas>
-                                                                                            <input type="hidden" name="signpath" id="signpath" value="">
-                                                                                        </div>
-                                                                                        <div class="col-lg-12">
-                                                                                            <div class="col-md-4 col-lg-3 col-lg-3">
-                                                                                                <button type="button" id="clearButton" class="btn btn-primary btn-black">Clear</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="row">
-                                                                                    <div class="col-md-12 col-lg-12 text-center">
-                                                                                        <div class="wrap-sp">
-                                                                                            <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-                                                                                            <label for="b_trm1" class="text-center">I agree to Fitnessity Terms of Service and Privacy Policy</label>
-                                                                                        </div>
-                                                                                        <div id="termserror" class="font-red fs-15 text-center mb-10"></div>
-                                                                                        <div id="systemMessage" class="mb-10 fs-15 mb-10"></div>
-                                                                                    </div>
-                                                                                    <div class="col-md-12 col-lg-12 text-center">
-                                                                                        <button type="button" class="btn btn-red register_submit" id="register_submit" onclick="getType('submit');">Add Credit Card</button>
-                                                                                        <button type="button" class="btn btn-red register_submit" id="register_skip" data-type="skip" onclick="getType('skip');">Skip</button>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="d-none code-view">
-                                                                    <div class="row justify-content-md-center">
-                                                                        <div class="col-lg-7">
-                                                                            <form action="">
-                                                                                <div class="row ">
-                                                                                    <div class="col-md-12 col-lg-12"><h4 class="font-red ">Personal Info</h4></div>
-                                                                                    <div class="col-md-4 col-lg-3">
-                                                                                        <label class="mt-10 ">First Name<span id="star">*</span></label>
-                                                                                        <input type="text" name="firstname" id="firstname" size="30" maxlength="80" class="form-control">
-                                                                                    </div>
-                                                                                    <div class="col-md-4 col-lg-3">
-                                                                                        <label class="mt-10">Last Name<span id="star">*</span></label>
-                                                                                        <input type="text" name="lastname" id="lastname" size="30" maxlength="80" class="form-control">
-                                                                                    </div>
-                                                                                    <div class="col-md-4 col-lg-3">
-                                                                                        <label class="mt-10">Email<span id="star">*</span></label>
-                                                                                        <input type="email" name="email" id="email" class="myemail form-control" size="30" maxlength="80" autocomplete="off">
-                                                                                    </div>
-                                                                                    <div class="col-md-4 col-lg-3">
-                                                                                        <label class="mt-10">Birthday<span id="star">*</span></label>
-                                                                                        <input type="hidden" class="form-control add-client-birthdate flatpickr-input" id="dob" name="dob"><input class="form-control add-client-birthdate form-control input" placeholder="" tabindex="0" type="text" readonly="readonly">
-                                                                                    </div>
-
-                                                                                    <div class="col-md-4 col-lg-3">
-                                                                                        <label class="mt-10">Phone <span id="star">*</span></label>
-                                                                                        <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone" class="form-control">
-                                                                                    </div>
-
-                                                                                    <div class="col-md-4 col-lg-3">
-                                                                                        <label class="mt-10">Gender<span id="star">*</span></label>
-                                                                                        <select class="form-control" name="gender">
-                                                                                            <option value="male">Male</option>
-                                                                                            <option value="female">Female</option>
-                                                                                            <option value="other">Other</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                                
-                                                                                    <div class="col-md-4 col-lg-3">
-                                                                                        <div class="form-group check-box-info ">
-                                                                                            <input class="check-box-primary-account" type="checkbox" id="primaryAccountHolder" name="primaryAccountHolder" value="1">
-                                                                                            <label for="primaryAccountHolder"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="You are paying for yourself and all added family members.">(i)</span></label>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="add-client-sapre-tor"></div>
-
-                                                                                <div class="row">
-                                                                                    <div class="col-md-12 col-lg-12"><h4 class="font-red ">Address</h4></div>
-                                                                                    <div class="col-md-4 col-lg-3 mt-10">
-                                                                                        <label>Address <span id="star">*</span></label>
-                                                                                        <input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="addressCustomer" value="" required="" oninput="initMapCall('addressCustomer', 'cityCustomer', 'stateCustomer', 'countryCustomer', 'zipcodeCustomer', 'latitudeCustomer', 'longitudeCustomer')" aria-required="true"> 
-                                                                                    </div>
-                                                                                    <div class="col-md-4 col-lg-3 mt-10">
-                                                                                        <label for="City">City <span id="star">*</span></label>
-                                                                                        <input type="text" class="form-control" name="city" id="cityCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
-                                                                                    </div>
-                                                                                    <input type="hidden" name="lon" id="longitudeCustomer" value="">
-                                                                                    <input type="hidden" name="lat" id="latitudeCustomer" value="">
-
-                                                                                    <div class="col-md-4 col-lg-3 mt-10">
-                                                                                        <label for="state">State <span id="star">*</span></label>
-                                                                                        <input type="text" class="form-control" name="state" id="stateCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
-                                                                                    </div>
-                                                                                    <div class="col-md-4 col-lg-3 mt-10">
-                                                                                        <label for="country">Country <span id="star">*</span></label>
-                                                                                        <input type="text" class="form-control" name="country" id="countryCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
-                                                                                    </div> 
-
-                                                                                    <div class="col-md-4 col-lg-3 mt-10">
-                                                                                        <label for="zipcode">Zip Code <span id="star">*</span></label>
-                                                                                        <input type="text" class="form-control" name="zipcode" id="zipcodeCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="add-client-sapre-tor"></div>
-                                                                                <div class="row">
-                                                                                    <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">Add Family Members (Optional)</h4></div>
-                                                                                    <div class="error mb-10" id="familyerrormessage"></div>
-                                                                                    <input type="hidden" name="familycnt" id="familycnt" value="0">
-                                                                                    <div id="familymaindiv">
-                                                                                        <div class="new-client mb-10" id="familydiv0" data-i="0" data-text="1">
-                                                                                            <div class="accordion" id="default-accordion-example">
-                                                                                                <div class="accordion-item shadow">
-                                                                                                    <h2 class="accordion-header" id="heading0">
-                                                                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0" aria-expanded="false" aria-controls="collapse0">
-                                                                                                            <div class="container-fluid nopadding">
-                                                                                                                <div class="row"> 
-                                                                                                                    <div class="col-lg-6 col-md-6 col-8"> Family Member #1 </div> 
-                                                                                                                    <div class="col-lg-6 col-md-6 col-4"> 
-                                                                                                                        <div class="multiple-options" id="deletediv0"> </div> 
-                                                                                                                    </div> 
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </button>
-                                                                                                    </h2>
-                                                                                                    <div id="collapse0" class="accordion-collapse collapse" aria-labelledby="heading0" data-bs-parent="#default-accordion-example" style="">
-                                                                                                        <div class="accordion-body">
-                                                                                                            <div class="row">
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">First Name</label>
-                                                                                                                    <input type="text" name="fname[]" id="fname" class="form-control required" aria-required="true">
-                                                                                                                    <span class="error" id="err_fname"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Last Name</label>
-                                                                                                                    <input type="text" name="lname[]" id="lname" class="form-control required" aria-required="true">
-                                                                                                                    <span class="error" id="err_lname"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Birthday</label>
-                                                                                                                    <input type="text" class="form-control" name="birthdate[]" id="birthdate">
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Gender</label>
-                                                                                                                    <select name="familygender[]" id="gender" class="form-select gender" required="" aria-required="true">
-                                                                                                                        <option value="male">Male</option>
-                                                                                                                        <option value="female">Female</option>
-                                                                                                                        <option value="other">Specify other</option>
-                                                                                                                    </select>
-                                                                                                                    <span class="error" id="err_gender"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Relationship</label>
-                                                                                                                    <select name="relationship[]" id="relationship" class="form-select relationship required" aria-required="true">
-                                                                                                                        <option value="">Select Relationship</option>
-                                                                                                                        <option value="Brother">Brother</option>
-                                                                                                                        <option value="Sister">Sister</option>
-                                                                                                                        <option value="Father">Father</option>
-                                                                                                                        <option value="Mother">Mother</option>
-                                                                                                                        <option value="Wife">Wife</option>
-                                                                                                                        <option value="Husband">Husband</option>
-                                                                                                                        <option value="Son">Son</option>
-                                                                                                                        <option value="Daughter">Daughter</option>
-                                                                                                                    </select>
-                                                                                                                    <span class="error" id="err_relationship"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Phone</label>
-                                                                                                                    <input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone">
-                                                                                                                    <span class="error" id="err_mphone"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Email</label>
-                                                                                                                    <input type="email" name="emailid[]" id="emailid" class="form-control email" required="" aria-required="true">
-                                                                                                                    <span class="error" id="err_emailid"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Emergency Name</label>
-                                                                                                                    <input type="text" name="emergency_name[]" id="emergency_name" class="form-control emergency_name">
-                                                                                                                    <span class="error" id="err_emergency_name"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Emergency Phone</label>
-                                                                                                                    <input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone">
-                                                                                                                    <span class="error" id="err_emergency_phone"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Emergency Email</label>
-                                                                                                                    <input type="text" name="emergency_email[]" id="emergency_email" class="form-control emergency_email">
-                                                                                                                    <span class="error" id="err_emergency_email"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                                    <label class="mt-10">Emergency Relation</label>
-                                                                                                                    <select name="emergency_relation[]" id="emergency_relation" class="form-select emergency_relation">
-                                                                                                                        <option value="">Select Emergency Relationship</option>
-                                                                                                                        <option value="Brother">Brother</option>
-                                                                                                                        <option value="Sister">Sister</option>
-                                                                                                                        <option value="Father">Father</option>
-                                                                                                                        <option value="Mother">Mother</option>
-                                                                                                                        <option value="Wife">Wife</option>
-                                                                                                                        <option value="Husband">Husband</option>
-                                                                                                                        <option value="Son">Son</option>
-                                                                                                                        <option value="Daughter">Daughter</option>
-                                                                                                                    </select>
-                                                                                                                    <span class="error" id="err_emergency_relation"></span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4 col-lg-3"> 
-                                                                                                                    <div class="form-group check-box-info">
-                                                                                                                        <input class="check-box-primary-account primaryAcCheck" type="checkbox" id="primaryAccount" name="primaryAccount" value="1">
-                                                                                                                        <label for="primaryAccount"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Choose the primary account holder to determine whose card covers bookings for up to two family members (e.g., Mom or Dad). All cards stored under the primary account will be available at checkout.">(i)</span></label>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="">
-                                                                                        <div class="col-md-12 col-lg-12 text-right">
-                                                                                            <button type="button" class="btn btn-red mt-10" id="add_family">Add New Family Member</button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="add-client-sapre-tor"></div>
-                                                                                <div class="row">
-                                                                                    <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">How did you hear about us</h4></div>
-                                                                                    <div class="row">
-                                                                                        <div class="col-md-4 col-lg-5 mt-10">
-                                                                                            <label class="mt-10">How did you hear about us?</label>
-                                                                                            <select class="form-select" name="know_from">
-                                                                                                <option value="male">Search engine (Google, Bing, etc)</option>
-                                                                                                <option value="Google maps search">Google maps search</option>
-                                                                                                <option value="Referral">Referral</option>
-                                                                                                <option value="Social media">Social media</option>
-                                                                                                <option value="Online communities / forums">Online communities / forums</option>
-                                                                                                <option value="Online advertisement">Online advertisement</option>
-                                                                                                <option value="Offine advertisement">Offine advertisement</option>
-                                                                                                <option value="Noticed the physical location">Noticed the physical location</option>
-                                                                                                <option value="Website">Website</option>
-                                                                                                <option value="Event">Event</option>
-                                                                                                <option value="School">School</option>
-                                                                                                <option value="Other">Other</option>
-                                                                                            </select>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="add-client-sapre-tor"></div>
-                                                                                <div class="row">
-                                                                                    <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">Account Password</h4></div>
-                                                                                    <div class="row">
-                                                                                        <label class="mt-10">Please pick a password to log-in to your account later.</label>
-                                                                                        <div class="col-md-4 col-lg-4 mt-10">
-                                                                                            <label class="mt-10">Password</label>
-                                                                                            <input type="text" name="password" id="password" class="form-control">
-                                                                                        </div>
-                                                                                        <div class="col-md-4 col-lg-4 mt-10">
-                                                                                            <label class="mt-10">Confirm Password</label>
-                                                                                            <input type="text" name="confirmpassword" id="confirmpassword" class="form-control">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="add-client-sapre-tor"></div>
-                                                                                <div class="row"> 
-                                                                                    <div class="col-md-12 col-lg-12 mt-20">
-                                                                                        <h4 class="font-red "> Agree to Terms, Waiver &amp; Contract Signature</h4>
-                                                                                    </div>
-                                                                                    <div class="col-md-12">
-                                                                                        <div class="col-lg-12" id="termsdiv">
-                                                                                            <div class="terms-head">
-                                                                                                <div>
-                                                                                                    <a href="#" data-url="http://dev.fitnessity.co/getTerms?id=29&amp;termsType=refundpolicytext&amp;termsHeader=Refund%20Policy" class="font-13 color-red-a" data-behavior="termsModelOpen">Refund Policy</a> 
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <label class="mt-10">To continue, please read the terms &amp; waivers above. A signature is required to participate. </label>
-                                                                                    <div class="row">
-                                                                                        <div class="col-lg-12">
-                                                                                            <canvas id="signatureCanvas" name="signatureCanvas"></canvas>
-                                                                                            <input type="hidden" name="signpath" id="signpath" value="">
-                                                                                        </div>
-                                                                                        <div class="col-lg-12">
-                                                                                            <div class="col-md-4 col-lg-3 col-lg-3">
-                                                                                                <button type="button" id="clearButton" class="btn btn-primary btn-black">Clear</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="row">
-                                                                                    <div class="col-md-12 col-lg-12 text-center">
-                                                                                        <div class="wrap-sp">
-                                                                                            <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-                                                                                            <label for="b_trm1" class="text-center">I agree to Fitnessity Terms of Service and Privacy Policy</label>
-                                                                                        </div>
-                                                                                        <div id="termserror" class="font-red fs-15 text-center mb-10"></div>
-                                                                                        <div id="systemMessage" class="mb-10 fs-15 mb-10"></div>
-                                                                                    </div>
-                                                                                    <div class="col-md-12 col-lg-12 text-center">
-                                                                                        <button type="button" class="btn btn-red register_submit" id="register_submit" onclick="getType('submit');">Add Credit Card</button>
-                                                                                        <button type="button" class="btn btn-red register_submit" id="register_skip" data-type="skip" onclick="getType('skip');">Skip</button>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div><!-- end card-body -->
-                                                        </div><!-- end card -->
-                                                    </div> <!-- end col -->
-                                                </div> <!-- end row-->
                                             </div>
-                                            <div id="option3" class="lrcontent">
+                                            <div id="register" class="lrcontent">
+                                                    <div class="row">
+                                                        <div class="col-xl-3 col-lg-4">
+                                                            <form action="{{route('business.register_details')}}" method="POST" enctype="multipart/form-data">
+                                                            @csrf
+                                                                <div class="card">
+                                                                    <div class="card-header">
+                                                                        <div class="d-flex">
+                                                                            <div class="flex-grow-1">
+                                                                                <h5 class="fs-16">Registration Link Settings</h5>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="accordion accordion-flush filter-accordion">
+                                                                        <div class="accordion-item">
+                                                                            <h2 class="accordion-header" id="flush-headingBrands">
+                                                                                <button class="accordion-button bg-transparent shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseBrands" aria-expanded="true" aria-controls="flush-collapseBrands">
+                                                                                    <span class="text-muted text-uppercase fs-12 fw-medium">Style</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
+                                                                                </button>
+                                                                            </h2>
+                                                                            <div id="flush-collapseBrands" class="accordion-collapse collapse show" aria-labelledby="flush-headingBrands">
+                                                                                <div class="accordion-body text-body pt-0">
+                                                                                    <div class="gap-2 mt-3 filter-check">
+                                                                                        <label for="">Colors</label>
+                                                                                        <p>By not setting a color, the defaults will be used.</p>
+                                                                                        <label for="">Text Color</label>
+                                                                                        <div class="pickr mb-15">
+                                                                                            <div class="nano-colorpicker" data-picker="3"></div>
+                                                                                            <input type="hidden" id="selectedColor3" name="reg_text_color">
+                                                                                        </div>
+                                                                                        <label for="">Button Background</label>
+                                                                                        <div class="pickr mb-15">
+                                                                                            <div class="nano-colorpicker" data-picker="4"></div>
+                                                                                            <input type="hidden" id="selectedColor4" name="reg_bg_color">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>                                    
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- end accordion-item -->    
+                                                                        <div class="accordion-item">
+                                                                            <h2 class="accordion-header" id="flush-headingDiscount">
+                                                                                <button class="accordion-button bg-transparent shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseDiscount" aria-expanded="true" aria-controls="flush-collapseDiscount">
+                                                                                    <span class="text-muted text-uppercase fs-12 fw-medium">Content</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
+                                                                                </button>
+                                                                            </h2>
+                                                                            <div id="flush-collapseDiscount" class="accordion-collapse collapse" aria-labelledby="flush-headingDiscount">
+                                                                                <div class="accordion-body text-body pt-1">
+                                                                                    <div class="gap-2 mt-3 filter-check">
+                                                                                        <label for="">Send Email Notifications</label>
+                                                                                        <div>
+                                                                                            <button href="#" class="btn btn-red mb-15"><i class="ri-add-line align-bottom me-1"></i> Add an email</button>  
+                                                                                            <p>When a new registration is added or a duplicate email is detected, we will send a notification email to these addresses. </p>
+                                                                                        </div>                                                                                  
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- end accordion-item -->                            
+                                                                        <div class="accordion-item">
+                                                                            <h2 class="accordion-header" id="flush-headingRating">
+                                                                                <button class="accordion-button bg-transparent shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseRating" aria-expanded="false" aria-controls="flush-collapseRating">
+                                                                                    <span class="text-muted text-uppercase fs-12 fw-medium">Region</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
+                                                                                </button>
+                                                                            </h2>
+
+                                                                            <div id="flush-collapseRating" class="accordion-collapse collapse" aria-labelledby="flush-headingRating">
+                                                                                <div class="accordion-body text-body">
+                                                                                    {{-- <div class="gap-2 filter-check">
+                                                                                        <label for="">Language</label>
+                                                                                        <select class="form-select mb-3" aria-label="Default select example">
+                                                                                            <option selected="">English </option>
+                                                                                            <option value="1">Hindi </option>
+                                                                                            <option value="2">Arabela </option>
+                                                                                            <option value="3">Egyptian Arabic </option>
+                                                                                            <option value="3">Auslan </option>
+                                                                                        </select>
+                                                                                    </div> --}}
+                                                                                    <div class="gap-2 filter-check">
+                                                                                        <label for="">Default Selected Country</label>
+                                                                                        <select class="form-select mb-3" aria-label="Default select example" name="country">
+                                                                                            <option value="United States" {{ isset($data) && $data->default_country == 'United States' ? 'selected' : '' }}>United States</option>
+                                                                                            <option value="Canada" {{ isset($data) && $data->default_country == 'Canada' ? 'selected' : '' }}>Canada</option>
+                                                                                            <option value="India" {{ isset($data) && $data->default_country == 'India' ? 'selected' : '' }}>India</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    
+                                                                                    <div class="gap-2 filter-check">
+                                                                                        <label for="">Default Selected State</label>
+                                                                                        <select class="form-select mb-3" aria-label="Default select example" name="state"> 
+                                                                                            <option value="" {{ $selectedState == '' ? 'selected' : '' }}>None Selected</option>
+                                                                                            {{-- <option selected="">None Selected </option> --}}
+                                                                                                       <!-- United States -->
+                                                                                            <optgroup label="United States">
+                                                                                                <option value="AL" {{ $selectedState == 'AL' ? 'selected' : '' }}>Alabama</option>
+                                                                                                <option value="AK" {{ $selectedState == 'AK' ? 'selected' : '' }}>Alaska</option>
+                                                                                                <option value="AZ" {{ $selectedState == 'AZ' ? 'selected' : '' }}>Arizona</option>
+                                                                                                <option value="AR" {{ $selectedState == 'AR' ? 'selected' : '' }}>Arkansas</option>
+                                                                                                <option value="CA" {{ $selectedState == 'CA' ? 'selected' : '' }}>California</option>
+                                                                                                <option value="CO" {{ $selectedState == 'CO' ? 'selected' : '' }}>Colorado</option>
+                                                                                                <option value="CT" {{ $selectedState == 'CT' ? 'selected' : '' }}>Connecticut</option>
+                                                                                                <option value="DE" {{ $selectedState == 'DE' ? 'selected' : '' }}>Delaware</option>
+                                                                                                <option value="FL" {{ $selectedState == 'FL' ? 'selected' : '' }}>Florida</option>
+                                                                                                <option value="GA" {{ $selectedState == 'GA' ? 'selected' : '' }}>Georgia</option>
+                                                                                                <option value="HI" {{ $selectedState == 'HI' ? 'selected' : '' }}>Hawaii</option>
+                                                                                                <option value="ID" {{ $selectedState == 'ID' ? 'selected' : '' }}>Idaho</option>
+                                                                                                <option value="IL" {{ $selectedState == 'IL' ? 'selected' : '' }}>Illinois</option>
+                                                                                                <option value="IN" {{ $selectedState == 'IN' ? 'selected' : '' }}>Indiana</option>
+                                                                                            </optgroup>
+                                                                                            <!-- Canada -->
+                                                                                            <optgroup label="Canada">
+                                                                                                <option value="AB" {{ $selectedState == 'AB' ? 'selected' : '' }}>Alberta</option>
+                                                                                                <option value="BC" {{ $selectedState == 'BC' ? 'selected' : '' }}>British Columbia</option>
+                                                                                                <option value="MB" {{ $selectedState == 'MB' ? 'selected' : '' }}>Manitoba</option>
+                                                                                                <option value="NB" {{ $selectedState == 'NB' ? 'selected' : '' }}>New Brunswick</option>
+                                                                                                <option value="NL" {{ $selectedState == 'NL' ? 'selected' : '' }}>Newfoundland and Labrador</option>
+                                                                                                <option value="NS" {{ $selectedState == 'NS' ? 'selected' : '' }}>Nova Scotia</option>
+                                                                                                <option value="NT" {{ $selectedState == 'NT' ? 'selected' : '' }}>Northwest Territories</option>
+                                                                                                <option value="NU" {{ $selectedState == 'NU' ? 'selected' : '' }}>Nunavut</option>
+                                                                                                <option value="ON" {{ $selectedState == 'ON' ? 'selected' : '' }}>Ontario</option>
+                                                                                                <option value="PE" {{ $selectedState == 'PE' ? 'selected' : '' }}>Prince Edward Island</option>
+                                                                                                <option value="QC" {{ $selectedState == 'QC' ? 'selected' : '' }}>Quebec</option>
+                                                                                                <option value="SK" {{ $selectedState == 'SK' ? 'selected' : '' }}>Saskatchewan</option>
+                                                                                                <option value="YT" {{ $selectedState == 'YT' ? 'selected' : '' }}>Yukon</option>
+                                                                                            </optgroup>
+                                                                                            <!-- India -->
+                                                                                            <optgroup label="India">
+                                                                                                <option value="AP" {{ $selectedState == 'AP' ? 'selected' : '' }}>Andhra Pradesh</option>
+                                                                                                <option value="AR" {{ $selectedState == 'AR' ? 'selected' : '' }}>Arunachal Pradesh</option>
+                                                                                                <option value="AS" {{ $selectedState == 'AS' ? 'selected' : '' }}>Assam</option>
+                                                                                                <option value="BR" {{ $selectedState == 'BR' ? 'selected' : '' }}>Bihar</option>
+                                                                                                <option value="CT" {{ $selectedState == 'CT' ? 'selected' : '' }}>Chhattisgarh</option>
+                                                                                                <option value="GA" {{ $selectedState == 'GA' ? 'selected' : '' }}>Goa</option>
+                                                                                                <option value="GJ" {{ $selectedState == 'GJ' ? 'selected' : '' }}>Gujarat</option>
+                                                                                                <option value="HR" {{ $selectedState == 'HR' ? 'selected' : '' }}>Haryana</option>
+                                                                                                <option value="HP" {{ $selectedState == 'HP' ? 'selected' : '' }}>Himachal Pradesh</option>
+                                                                                                <option value="JK" {{ $selectedState == 'JK' ? 'selected' : '' }}>Jammu and Kashmir</option>
+                                                                                                <option value="JH" {{ $selectedState == 'JH' ? 'selected' : '' }}>Jharkhand</option>
+                                                                                                <option value="KA" {{ $selectedState == 'KA' ? 'selected' : '' }}>Karnataka</option>
+                                                                                                <option value="KL" {{ $selectedState == 'KL' ? 'selected' : '' }}>Kerala</option>
+                                                                                                <option value="MP" {{ $selectedState == 'MP' ? 'selected' : '' }}>Madhya Pradesh</option>
+                                                                                                <option value="MH" {{ $selectedState == 'MH' ? 'selected' : '' }}>Maharashtra</option>
+                                                                                                <option value="MN" {{ $selectedState == 'MN' ? 'selected' : '' }}>Manipur</option>
+                                                                                                <option value="ML" {{ $selectedState == 'ML' ? 'selected' : '' }}>Meghalaya</option>
+                                                                                                <option value="MZ" {{ $selectedState == 'MZ' ? 'selected' : '' }}>Mizoram</option>
+                                                                                                <option value="NL" {{ $selectedState == 'NL' ? 'selected' : '' }}>Nagaland</option>
+                                                                                                <option value="OD" {{ $selectedState == 'OD' ? 'selected' : '' }}>Odisha</option>
+                                                                                                <option value="PB" {{ $selectedState == 'PB' ? 'selected' : '' }}>Punjab</option>
+                                                                                                <option value="RJ" {{ $selectedState == 'RJ' ? 'selected' : '' }}>Rajasthan</option>
+                                                                                                <option value="SK" {{ $selectedState == 'SK' ? 'selected' : '' }}>Sikkim</option>
+                                                                                                <option value="TN" {{ $selectedState == 'TN' ? 'selected' : '' }}>Tamil Nadu</option>
+                                                                                                <option value="TS" {{ $selectedState == 'TS' ? 'selected' : '' }}>Telangana</option>
+                                                                                                <option value="TR" {{ $selectedState == 'TR' ? 'selected' : '' }}>Tripura</option>
+                                                                                                <option value="UP" {{ $selectedState == 'UP' ? 'selected' : '' }}>Uttar Pradesh</option>
+                                                                                                <option value="UT" {{ $selectedState == 'UT' ? 'selected' : '' }}>Uttarakhand</option>
+                                                                                                <option value="WB" {{ $selectedState == 'WB' ? 'selected' : '' }}>West Bengal</option>
+                                                                                            </optgroup>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div> 
+                                                                        <!-- end accordion-item -->
+                                                                    </div>
+                                                                    <div class="card-footer">
+                                                                        <div class="d-flex mt-3 mb-3">
+                                                                            <div class="flex-grow-1">
+                                                                                {{-- <a href="http://dev.fitnessity.co/design/deploy_widget" class="btn btn-black w-100">Save and Deploy</a> --}}
+                                                                                <button class="btn btn-black w-100">Save and Deploy</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="col-xl-9 col-lg-8">
+                                                            <div class="card">
+                                                                <div class="card-header align-items-center d-flex">
+                                                                    <h4 class="card-title mb-0 flex-grow-1">Preview</h4>
+                                                                    <div class="flex-shrink-0">
+                                                                        <div>
+                                                                            
+                                                                        </div>
+                                                                        <!-- <div class="form-check form-switch form-switch-right form-switch-md">
+                                                                            <label for="dropdown-base-example" class="form-label text-muted">Preview Size</label>
+                                                                            <input class="form-check-input code-switcher" type="checkbox" id="dropdown-base-example">
+                                                                        </div> -->
+                                                                    </div>
+                                                                </div><!-- end card header -->
+
+                                                                <div class="card-body">
+                                                                    <div class="live-preview">
+                                                                        <div class="row justify-content-md-center">
+                                                                            <div class="col-lg-10">
+                                                                                <form action="">
+                                                                                    <div class="row ">
+                                                                                        <div class="col-md-12 col-lg-12"><h4 class="font-red ">Personal Info</h4></div>
+                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                            <label class="mt-10 ">First Name<span id="star">*</span></label>
+                                                                                            <input type="text" name="firstname" id="firstname" size="30" maxlength="80" class="form-control">
+                                                                                        </div>
+                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                            <label class="mt-10">Last Name<span id="star">*</span></label>
+                                                                                            <input type="text" name="lastname" id="lastname" size="30" maxlength="80" class="form-control">
+                                                                                        </div>
+                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                            <label class="mt-10">Email<span id="star">*</span></label>
+                                                                                            <input type="email" name="email" id="email" class="myemail form-control" size="30" maxlength="80" autocomplete="off">
+                                                                                        </div>
+                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                            <label class="mt-10">Birthday<span id="star">*</span></label>
+                                                                                            <input type="hidden" class="form-control add-client-birthdate flatpickr-input" id="dob" name="dob"><input class="form-control add-client-birthdate form-control input" placeholder="" tabindex="0" type="text" readonly="readonly">
+                                                                                        </div>
+
+                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                            <label class="mt-10">Phone <span id="star">*</span></label>
+                                                                                            <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone" class="form-control">
+                                                                                        </div>
+
+                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                            <label class="mt-10">Gender<span id="star">*</span></label>
+                                                                                            <select class="form-control" name="gender">
+                                                                                                <option value="male">Male</option>
+                                                                                                <option value="female">Female</option>
+                                                                                                <option value="other">Other</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                                    
+                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                            <div class="form-group check-box-info ">
+                                                                                                <input class="check-box-primary-account" type="checkbox" id="primaryAccountHolder" name="primaryAccountHolder" value="1">
+                                                                                                <label for="primaryAccountHolder"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="You are paying for yourself and all added family members.">(i)</span></label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="add-client-sapre-tor"></div>
+
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12 col-lg-12"><h4 class="font-red ">Address</h4></div>
+                                                                                        <div class="col-md-4 col-lg-3 mt-10">
+                                                                                            <label>Address <span id="star">*</span></label>
+                                                                                            <input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="addressCustomer" value="" required="" oninput="initMapCall('addressCustomer', 'cityCustomer', 'stateCustomer', 'countryCustomer', 'zipcodeCustomer', 'latitudeCustomer', 'longitudeCustomer')" aria-required="true"> 
+                                                                                        </div>
+                                                                                        <div class="col-md-4 col-lg-3 mt-10">
+                                                                                            <label for="City">City <span id="star">*</span></label>
+                                                                                            <input type="text" class="form-control" name="city" id="cityCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
+                                                                                        </div>
+                                                                                        <input type="hidden" name="lon" id="longitudeCustomer" value="">
+                                                                                        <input type="hidden" name="lat" id="latitudeCustomer" value="">
+
+                                                                                        <div class="col-md-4 col-lg-3 mt-10">
+                                                                                            <label for="state">State <span id="star">*</span></label>
+                                                                                            <input type="text" class="form-control" name="state" id="stateCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
+                                                                                        </div>
+                                                                                        <div class="col-md-4 col-lg-3 mt-10">
+                                                                                            <label for="country">Country <span id="star">*</span></label>
+                                                                                            <input type="text" class="form-control" name="country" id="countryCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
+                                                                                        </div> 
+
+                                                                                        <div class="col-md-4 col-lg-3 mt-10">
+                                                                                            <label for="zipcode">Zip Code <span id="star">*</span></label>
+                                                                                            <input type="text" class="form-control" name="zipcode" id="zipcodeCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="add-client-sapre-tor"></div>
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">Add Family Members (Optional)</h4></div>
+                                                                                        <div class="error mb-10" id="familyerrormessage"></div>
+                                                                                        <input type="hidden" name="familycnt" id="familycnt" value="0">
+                                                                                        <div id="familymaindiv">
+                                                                                            <div class="new-client mb-10" id="familydiv0" data-i="0" data-text="1">
+                                                                                                <div class="accordion" id="default-accordion-example">
+                                                                                                    <div class="accordion-item shadow">
+                                                                                                        <h2 class="accordion-header" id="heading0">
+                                                                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0" aria-expanded="false" aria-controls="collapse0">
+                                                                                                                <div class="container-fluid nopadding">
+                                                                                                                    <div class="row"> 
+                                                                                                                        <div class="col-lg-6 col-md-6 col-8"> Family Member #1 </div> 
+                                                                                                                        <div class="col-lg-6 col-md-6 col-4"> 
+                                                                                                                            <div class="multiple-options" id="deletediv0"> </div> 
+                                                                                                                        </div> 
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </button>
+                                                                                                        </h2>
+                                                                                                        <div id="collapse0" class="accordion-collapse collapse" aria-labelledby="heading0" data-bs-parent="#default-accordion-example" style="">
+                                                                                                            <div class="accordion-body">
+                                                                                                                <div class="row">
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">First Name</label>
+                                                                                                                        <input type="text" name="fname[]" id="fname" class="form-control required" aria-required="true">
+                                                                                                                        <span class="error" id="err_fname"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Last Name</label>
+                                                                                                                        <input type="text" name="lname[]" id="lname" class="form-control required" aria-required="true">
+                                                                                                                        <span class="error" id="err_lname"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Birthday</label>
+                                                                                                                        <input type="text" class="form-control" name="birthdate[]" id="birthdate">
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Gender</label>
+                                                                                                                        <select name="familygender[]" id="gender" class="form-select gender" required="" aria-required="true">
+                                                                                                                            <option value="male">Male</option>
+                                                                                                                            <option value="female">Female</option>
+                                                                                                                            <option value="other">Specify other</option>
+                                                                                                                        </select>
+                                                                                                                        <span class="error" id="err_gender"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Relationship</label>
+                                                                                                                        <select name="relationship[]" id="relationship" class="form-select relationship required" aria-required="true">
+                                                                                                                            <option value="">Select Relationship</option>
+                                                                                                                            <option value="Brother">Brother</option>
+                                                                                                                            <option value="Sister">Sister</option>
+                                                                                                                            <option value="Father">Father</option>
+                                                                                                                            <option value="Mother">Mother</option>
+                                                                                                                            <option value="Wife">Wife</option>
+                                                                                                                            <option value="Husband">Husband</option>
+                                                                                                                            <option value="Son">Son</option>
+                                                                                                                            <option value="Daughter">Daughter</option>
+                                                                                                                        </select>
+                                                                                                                        <span class="error" id="err_relationship"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Phone</label>
+                                                                                                                        <input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone">
+                                                                                                                        <span class="error" id="err_mphone"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Email</label>
+                                                                                                                        <input type="email" name="emailid[]" id="emailid" class="form-control email" required="" aria-required="true">
+                                                                                                                        <span class="error" id="err_emailid"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Emergency Name</label>
+                                                                                                                        <input type="text" name="emergency_name[]" id="emergency_name" class="form-control emergency_name">
+                                                                                                                        <span class="error" id="err_emergency_name"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Emergency Phone</label>
+                                                                                                                        <input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone">
+                                                                                                                        <span class="error" id="err_emergency_phone"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Emergency Email</label>
+                                                                                                                        <input type="text" name="emergency_email[]" id="emergency_email" class="form-control emergency_email">
+                                                                                                                        <span class="error" id="err_emergency_email"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Emergency Relation</label>
+                                                                                                                        <select name="emergency_relation[]" id="emergency_relation" class="form-select emergency_relation">
+                                                                                                                            <option value="">Select Emergency Relationship</option>
+                                                                                                                            <option value="Brother">Brother</option>
+                                                                                                                            <option value="Sister">Sister</option>
+                                                                                                                            <option value="Father">Father</option>
+                                                                                                                            <option value="Mother">Mother</option>
+                                                                                                                            <option value="Wife">Wife</option>
+                                                                                                                            <option value="Husband">Husband</option>
+                                                                                                                            <option value="Son">Son</option>
+                                                                                                                            <option value="Daughter">Daughter</option>
+                                                                                                                        </select>
+                                                                                                                        <span class="error" id="err_emergency_relation"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3"> 
+                                                                                                                        <div class="form-group check-box-info">
+                                                                                                                            <input class="check-box-primary-account primaryAcCheck" type="checkbox" id="primaryAccount" name="primaryAccount" value="1">
+                                                                                                                            <label for="primaryAccount"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Choose the primary account holder to determine whose card covers bookings for up to two family members (e.g., Mom or Dad). All cards stored under the primary account will be available at checkout.">(i)</span></label>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="">
+                                                                                            <div class="col-md-12 col-lg-12 text-right">
+                                                                                                <button type="button" class="btn btn-red mt-10" id="add_family">Add New Family Member</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="add-client-sapre-tor"></div>
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">How did you hear about us</h4></div>
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-4 col-lg-4 mt-10">
+                                                                                                <label class="mt-10">How did you hear about us?</label>
+                                                                                                <select class="form-select" name="know_from">
+                                                                                                    <option value="male">Search engine (Google, Bing, etc)</option>
+                                                                                                    <option value="Google maps search">Google maps search</option>
+                                                                                                    <option value="Referral">Referral</option>
+                                                                                                    <option value="Social media">Social media</option>
+                                                                                                    <option value="Online communities / forums">Online communities / forums</option>
+                                                                                                    <option value="Online advertisement">Online advertisement</option>
+                                                                                                    <option value="Offine advertisement">Offine advertisement</option>
+                                                                                                    <option value="Noticed the physical location">Noticed the physical location</option>
+                                                                                                    <option value="Website">Website</option>
+                                                                                                    <option value="Event">Event</option>
+                                                                                                    <option value="School">School</option>
+                                                                                                    <option value="Other">Other</option>
+                                                                                                </select>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="add-client-sapre-tor"></div>
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">Account Password</h4></div>
+                                                                                        <div class="row">
+                                                                                            <label class="mt-10">Please pick a password to log-in to your account later.</label>
+                                                                                            <div class="col-md-4 col-lg-3 mt-10">
+                                                                                                <label class="mt-10">Password</label>
+                                                                                                <input type="text" name="password" id="password" class="form-control">
+                                                                                            </div>
+                                                                                            <div class="col-md-4 col-lg-3 mt-10">
+                                                                                                <label class="mt-10">Confirm Password</label>
+                                                                                                <input type="text" name="confirmpassword" id="confirmpassword" class="form-control">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="add-client-sapre-tor"></div>
+                                                                                    <div class="row"> 
+                                                                                        <div class="col-md-12 col-lg-12 mt-20">
+                                                                                            <h4 class="font-red "> Agree to Terms, Waiver &amp; Contract Signature</h4>
+                                                                                        </div>
+                                                                                        <div class="col-md-12">
+                                                                                            <div class="col-lg-12" id="termsdiv">
+                                                                                                <div class="terms-head">
+                                                                                                    <div>
+                                                                                                        <a href="#" data-url="http://dev.fitnessity.co/getTerms?id=29&amp;termsType=refundpolicytext&amp;termsHeader=Refund%20Policy" class="font-13 color-red-a" data-behavior="termsModelOpen">Refund Policy</a> 
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <label class="mt-10">To continue, please read the terms &amp; waivers above. A signature is required to participate. </label>
+                                                                                        <div class="row">
+                                                                                            <div class="col-lg-12">
+                                                                                                <canvas id="signatureCanvas" name="signatureCanvas"></canvas>
+                                                                                                <input type="hidden" name="signpath" id="signpath" value="">
+                                                                                            </div>
+                                                                                            <div class="col-lg-12">
+                                                                                                <div class="col-md-4 col-lg-3 col-lg-3">
+                                                                                                    <button type="button" id="clearButton" class="btn btn-primary btn-black">Clear</button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12 col-lg-12 text-center">
+                                                                                            <div class="wrap-sp">
+                                                                                                <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
+                                                                                                <label for="b_trm1" class="text-center">I agree to Fitnessity Terms of Service and Privacy Policy</label>
+                                                                                            </div>
+                                                                                            <div id="termserror" class="font-red fs-15 text-center mb-10"></div>
+                                                                                            <div id="systemMessage" class="mb-10 fs-15 mb-10"></div>
+                                                                                        </div>
+                                                                                        <div class="col-md-12 col-lg-12 text-center">
+                                                                                            <button type="button" class="btn btn-red register_submit" id="register_submit" style="background-color: {{ $color4 ?: '#ea1515' }}; border: 1px solid {{ $color4 ?: '#ea1515' }}; color: {{ $color3 ?: '#fff' }};">Add Credit Card</button>
+                                                                                            <button type="button" class="btn btn-red register_submit" id="register_skip" style="background-color: {{ $color4 ?: '#ea1515' }}; border: 1px solid {{ $color4 ?: '#ea1515' }}; color: {{ $color3 ?: '#fff' }};">Skip</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {{-- <div class="d-none code-view">
+                                                                        <div class="row justify-content-md-center">
+                                                                            <div class="col-lg-7">
+                                                                                <form action="">
+                                                                                    <div class="row ">
+                                                                                        <div class="col-md-12 col-lg-12"><h4 class="font-red ">Personal Info</h4></div>
+                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                            <label class="mt-10 ">First Name<span id="star">*</span></label>
+                                                                                            <input type="text" name="firstname" id="firstname" size="30" maxlength="80" class="form-control">
+                                                                                        </div>
+                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                            <label class="mt-10">Last Name<span id="star">*</span></label>
+                                                                                            <input type="text" name="lastname" id="lastname" size="30" maxlength="80" class="form-control">
+                                                                                        </div>
+                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                            <label class="mt-10">Email<span id="star">*</span></label>
+                                                                                            <input type="email" name="email" id="email" class="myemail form-control" size="30" maxlength="80" autocomplete="off">
+                                                                                        </div>
+                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                            <label class="mt-10">Birthday<span id="star">*</span></label>
+                                                                                            <input type="hidden" class="form-control add-client-birthdate flatpickr-input" id="dob" name="dob"><input class="form-control add-client-birthdate form-control input" placeholder="" tabindex="0" type="text" readonly="readonly">
+                                                                                        </div>
+
+                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                            <label class="mt-10">Phone <span id="star">*</span></label>
+                                                                                            <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone" class="form-control">
+                                                                                        </div>
+
+                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                            <label class="mt-10">Gender<span id="star">*</span></label>
+                                                                                            <select class="form-control" name="gender">
+                                                                                                <option value="male">Male</option>
+                                                                                                <option value="female">Female</option>
+                                                                                                <option value="other">Other</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                                    
+                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                            <div class="form-group check-box-info ">
+                                                                                                <input class="check-box-primary-account" type="checkbox" id="primaryAccountHolder" name="primaryAccountHolder" value="1">
+                                                                                                <label for="primaryAccountHolder"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="You are paying for yourself and all added family members.">(i)</span></label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="add-client-sapre-tor"></div>
+
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12 col-lg-12"><h4 class="font-red ">Address</h4></div>
+                                                                                        <div class="col-md-4 col-lg-3 mt-10">
+                                                                                            <label>Address <span id="star">*</span></label>
+                                                                                            <input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="addressCustomer" value="" required="" oninput="initMapCall('addressCustomer', 'cityCustomer', 'stateCustomer', 'countryCustomer', 'zipcodeCustomer', 'latitudeCustomer', 'longitudeCustomer')" aria-required="true"> 
+                                                                                        </div>
+                                                                                        <div class="col-md-4 col-lg-3 mt-10">
+                                                                                            <label for="City">City <span id="star">*</span></label>
+                                                                                            <input type="text" class="form-control" name="city" id="cityCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
+                                                                                        </div>
+                                                                                        <input type="hidden" name="lon" id="longitudeCustomer" value="">
+                                                                                        <input type="hidden" name="lat" id="latitudeCustomer" value="">
+
+                                                                                        <div class="col-md-4 col-lg-3 mt-10">
+                                                                                            <label for="state">State <span id="star">*</span></label>
+                                                                                            <input type="text" class="form-control" name="state" id="stateCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
+                                                                                        </div>
+                                                                                        <div class="col-md-4 col-lg-3 mt-10">
+                                                                                            <label for="country">Country <span id="star">*</span></label>
+                                                                                            <input type="text" class="form-control" name="country" id="countryCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
+                                                                                        </div> 
+
+                                                                                        <div class="col-md-4 col-lg-3 mt-10">
+                                                                                            <label for="zipcode">Zip Code <span id="star">*</span></label>
+                                                                                            <input type="text" class="form-control" name="zipcode" id="zipcodeCustomer" size="30" maxlength="50" value="" required="" aria-required="true">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="add-client-sapre-tor"></div>
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">Add Family Members (Optional)</h4></div>
+                                                                                        <div class="error mb-10" id="familyerrormessage"></div>
+                                                                                        <input type="hidden" name="familycnt" id="familycnt" value="0">
+                                                                                        <div id="familymaindiv">
+                                                                                            <div class="new-client mb-10" id="familydiv0" data-i="0" data-text="1">
+                                                                                                <div class="accordion" id="default-accordion-example">
+                                                                                                    <div class="accordion-item shadow">
+                                                                                                        <h2 class="accordion-header" id="heading0">
+                                                                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0" aria-expanded="false" aria-controls="collapse0">
+                                                                                                                <div class="container-fluid nopadding">
+                                                                                                                    <div class="row"> 
+                                                                                                                        <div class="col-lg-6 col-md-6 col-8"> Family Member #1 </div> 
+                                                                                                                        <div class="col-lg-6 col-md-6 col-4"> 
+                                                                                                                            <div class="multiple-options" id="deletediv0"> </div> 
+                                                                                                                        </div> 
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </button>
+                                                                                                        </h2>
+                                                                                                        <div id="collapse0" class="accordion-collapse collapse" aria-labelledby="heading0" data-bs-parent="#default-accordion-example" style="">
+                                                                                                            <div class="accordion-body">
+                                                                                                                <div class="row">
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">First Name</label>
+                                                                                                                        <input type="text" name="fname[]" id="fname" class="form-control required" aria-required="true">
+                                                                                                                        <span class="error" id="err_fname"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Last Name</label>
+                                                                                                                        <input type="text" name="lname[]" id="lname" class="form-control required" aria-required="true">
+                                                                                                                        <span class="error" id="err_lname"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Birthday</label>
+                                                                                                                        <input type="text" class="form-control" name="birthdate[]" id="birthdate">
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Gender</label>
+                                                                                                                        <select name="familygender[]" id="gender" class="form-select gender" required="" aria-required="true">
+                                                                                                                            <option value="male">Male</option>
+                                                                                                                            <option value="female">Female</option>
+                                                                                                                            <option value="other">Specify other</option>
+                                                                                                                        </select>
+                                                                                                                        <span class="error" id="err_gender"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Relationship</label>
+                                                                                                                        <select name="relationship[]" id="relationship" class="form-select relationship required" aria-required="true">
+                                                                                                                            <option value="">Select Relationship</option>
+                                                                                                                            <option value="Brother">Brother</option>
+                                                                                                                            <option value="Sister">Sister</option>
+                                                                                                                            <option value="Father">Father</option>
+                                                                                                                            <option value="Mother">Mother</option>
+                                                                                                                            <option value="Wife">Wife</option>
+                                                                                                                            <option value="Husband">Husband</option>
+                                                                                                                            <option value="Son">Son</option>
+                                                                                                                            <option value="Daughter">Daughter</option>
+                                                                                                                        </select>
+                                                                                                                        <span class="error" id="err_relationship"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Phone</label>
+                                                                                                                        <input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone">
+                                                                                                                        <span class="error" id="err_mphone"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Email</label>
+                                                                                                                        <input type="email" name="emailid[]" id="emailid" class="form-control email" required="" aria-required="true">
+                                                                                                                        <span class="error" id="err_emailid"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Emergency Name</label>
+                                                                                                                        <input type="text" name="emergency_name[]" id="emergency_name" class="form-control emergency_name">
+                                                                                                                        <span class="error" id="err_emergency_name"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Emergency Phone</label>
+                                                                                                                        <input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone">
+                                                                                                                        <span class="error" id="err_emergency_phone"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Emergency Email</label>
+                                                                                                                        <input type="text" name="emergency_email[]" id="emergency_email" class="form-control emergency_email">
+                                                                                                                        <span class="error" id="err_emergency_email"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                                                        <label class="mt-10">Emergency Relation</label>
+                                                                                                                        <select name="emergency_relation[]" id="emergency_relation" class="form-select emergency_relation">
+                                                                                                                            <option value="">Select Emergency Relationship</option>
+                                                                                                                            <option value="Brother">Brother</option>
+                                                                                                                            <option value="Sister">Sister</option>
+                                                                                                                            <option value="Father">Father</option>
+                                                                                                                            <option value="Mother">Mother</option>
+                                                                                                                            <option value="Wife">Wife</option>
+                                                                                                                            <option value="Husband">Husband</option>
+                                                                                                                            <option value="Son">Son</option>
+                                                                                                                            <option value="Daughter">Daughter</option>
+                                                                                                                        </select>
+                                                                                                                        <span class="error" id="err_emergency_relation"></span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-4 col-lg-3"> 
+                                                                                                                        <div class="form-group check-box-info">
+                                                                                                                            <input class="check-box-primary-account primaryAcCheck" type="checkbox" id="primaryAccount" name="primaryAccount" value="1">
+                                                                                                                            <label for="primaryAccount"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Choose the primary account holder to determine whose card covers bookings for up to two family members (e.g., Mom or Dad). All cards stored under the primary account will be available at checkout.">(i)</span></label>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="">
+                                                                                            <div class="col-md-12 col-lg-12 text-right">
+                                                                                                <button type="button" class="btn btn-red mt-10" id="add_family">Add New Family Member</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="add-client-sapre-tor"></div>
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">How did you hear about us</h4></div>
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-4 col-lg-5 mt-10">
+                                                                                                <label class="mt-10">How did you hear about us?</label>
+                                                                                                <select class="form-select" name="know_from">
+                                                                                                    <option value="male">Search engine (Google, Bing, etc)</option>
+                                                                                                    <option value="Google maps search">Google maps search</option>
+                                                                                                    <option value="Referral">Referral</option>
+                                                                                                    <option value="Social media">Social media</option>
+                                                                                                    <option value="Online communities / forums">Online communities / forums</option>
+                                                                                                    <option value="Online advertisement">Online advertisement</option>
+                                                                                                    <option value="Offine advertisement">Offine advertisement</option>
+                                                                                                    <option value="Noticed the physical location">Noticed the physical location</option>
+                                                                                                    <option value="Website">Website</option>
+                                                                                                    <option value="Event">Event</option>
+                                                                                                    <option value="School">School</option>
+                                                                                                    <option value="Other">Other</option>
+                                                                                                </select>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="add-client-sapre-tor"></div>
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">Account Password</h4></div>
+                                                                                        <div class="row">
+                                                                                            <label class="mt-10">Please pick a password to log-in to your account later.</label>
+                                                                                            <div class="col-md-4 col-lg-4 mt-10">
+                                                                                                <label class="mt-10">Password</label>
+                                                                                                <input type="text" name="password" id="password" class="form-control">
+                                                                                            </div>
+                                                                                            <div class="col-md-4 col-lg-4 mt-10">
+                                                                                                <label class="mt-10">Confirm Password</label>
+                                                                                                <input type="text" name="confirmpassword" id="confirmpassword" class="form-control">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="add-client-sapre-tor"></div>
+                                                                                    <div class="row"> 
+                                                                                        <div class="col-md-12 col-lg-12 mt-20">
+                                                                                            <h4 class="font-red "> Agree to Terms, Waiver &amp; Contract Signature</h4>
+                                                                                        </div>
+                                                                                        <div class="col-md-12">
+                                                                                            <div class="col-lg-12" id="termsdiv">
+                                                                                                <div class="terms-head">
+                                                                                                    <div>
+                                                                                                        <a href="#" data-url="http://dev.fitnessity.co/getTerms?id=29&amp;termsType=refundpolicytext&amp;termsHeader=Refund%20Policy" class="font-13 color-red-a" data-behavior="termsModelOpen">Refund Policy</a> 
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <label class="mt-10">To continue, please read the terms &amp; waivers above. A signature is required to participate. </label>
+                                                                                        <div class="row">
+                                                                                            <div class="col-lg-12">
+                                                                                                <canvas id="signatureCanvas" name="signatureCanvas"></canvas>
+                                                                                                <input type="hidden" name="signpath" id="signpath" value="">
+                                                                                            </div>
+                                                                                            <div class="col-lg-12">
+                                                                                                <div class="col-md-4 col-lg-3 col-lg-3">
+                                                                                                    <button type="button" id="clearButton" class="btn btn-primary btn-black">Clear</button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12 col-lg-12 text-center">
+                                                                                            <div class="wrap-sp">
+                                                                                                <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
+                                                                                                <label for="b_trm1" class="text-center">I agree to Fitnessity Terms of Service and Privacy Policy</label>
+                                                                                            </div>
+                                                                                            <div id="termserror" class="font-red fs-15 text-center mb-10"></div>
+                                                                                            <div id="systemMessage" class="mb-10 fs-15 mb-10"></div>
+                                                                                        </div>
+                                                                                        <div class="col-md-12 col-lg-12 text-center">
+                                                                                            <button type="button" class="btn btn-red register_submit" id="register_submit" onclick="getType('submit');">Add Credit Card</button>
+                                                                                            <button type="button" class="btn btn-red register_submit" id="register_skip" data-type="skip" onclick="getType('skip');">Skip</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> --}}
+                                                                </div><!-- end card-body -->
+                                                            </div><!-- end card -->
+                                                        </div> <!-- end col -->
+                                                    </div> 
+                                                    <!-- end row-->
+                                            </div>
+                                            {{-- <div id="option3" class="lrcontent">
                                                 <div class="row">
                                                     <div class="col-xl-3 col-lg-4">
                                                         <div class="card">
@@ -1475,31 +1562,28 @@
                                                         </div><!-- end card -->
                                                     </div> <!-- end col -->
                                                 </div> <!-- end row-->
-                                            </div>
+                                            </div> --}}
                                         </div>
-                                        
                                     </div>
                                 </div>
 
-                                <div class="card bg-soft-grey ">
+                                <div class="card bg-soft-grey">
                                     <div class="card-header align-items-center d-flex bg-soft-grey">
                                         <h4 class="card-title mb-0 flex-grow-1">Copy your code</h4>
                                     </div>
-
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="copy-code">
                                                     <p>Paste the code into your webpage where you would like the link to appear. Changes made above automatically update your code.</p>
-                                                    <textarea class="form-control" placeholder="<script src=http://dev.fitnessity.co//public/dashboard-design/js/jquery-3.6.4.min.js></script><script src=https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw async defer></script> <script async src=https://www.googletagmanager.com/gtag/js?id=G-KQRG55N3Q1></script>" id="des-info-description-input" rows="4" required=""></textarea>
+                                                    <textarea class="form-control" id="des-info-description-input" rows="4" readonly>{!! $selectLink !!}</textarea>
                                                     <button class="btn btn-red mt-15">Copy</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
-
+                        
                             </div>
                             <div class="tab-pane" id="site_settings" role="tabpanel">
                                 <div class="">
@@ -1708,14 +1792,15 @@
 
                             </div>
                         </div>
-                    </div><!--end col-->
+                    </div>
+                    <!--end col-->
                 </div>
             </div>
         </div>
-    </div><!-- container-fluid -->
-</div><!-- end main content-->	
-</div><!-- END layout-wrapper -->
-
+    </div>
+    <!-- container-fluid -->
+</div>
+<!-- end main content-->	
 
 <!-- Modal -->
 <div class="modal fade" id="login_preview" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1755,15 +1840,16 @@
                                     <span for="remember" class="rememberme">Remember me</span>
                                 </div>
                                 <div id="capchaimg"></div>
-                                <button class="btn signup-new" id="login_submit" type="submit">Log in </button>
+                                {{-- <button class="btn signup-new" id="login_submit" type="submit">Log in </button> --}}
+                                <button class="btn signup-new" id="login_submit" type="button" style="background-color: {{ $color2 ?: '#ea1515' }}; border: 1px solid {{ $color2 ?: '#ea1515' }}; color: {{ $color1 ?: '#fff' }};">Log in</button>           
                                 <p class="or-data">OR</p>
                                 <div class="social-login">
-                                    <a href="login/facebook" class="fb-login">
+                                    <a class="fb-login">
                                         <i class="fab fa-facebook" aria-hidden="true"></i> Login with Facebook
                                     </a>
                                 </div>
                                 <div class="text-center mb-10">
-                                    <a href="login/google" class="fb-login btn signup-new">
+                                    <a class="fb-login btn signup-new">
                                         <i class="fab fa-google" aria-hidden="true"></i>   <span class="ml-10">Login with Google</span>
                                     </a>
                                 </div>
@@ -1773,7 +1859,7 @@
                                 <a class="forgotpass" href="http://dev.fitnessity.co/staff_login">Login For Staff Member?</a>
 
                                 <p class="already">Don't have an account?
-                                    <a href="/registration">SIGN UP</a>
+                                    <a style="color: {{ $color1 ?: '#fff' }};" id="sign_up">SIGN UP</a>     
                                 </p>
                             </form>
                         </div>
@@ -2107,24 +2193,20 @@
 @include('layouts.business.footer')
 
 @push('scripts')
-<script>
-        $('ul#dropzone-preview').on('click', 'button.delete-btn', function() {
-        // Remove the parent <li> element when the delete button is clicked
-            $(this).closest('li').remove();
-        });
+    <script>
+            $('ul#dropzone-preview').on('click', 'button.delete-btn', function() {
+                $(this).closest('li').remove();
+            });
 
-        $('ul#dropzone-preview-passcode').on('click', 'button.delete-btn', function() {
-        // Remove the parent <li> element when the delete button is clicked
-            $(this).closest('li').remove();
-        });
+            $('ul#dropzone-preview-passcode').on('click', 'button.delete-btn', function() {
+                $(this).closest('li').remove();
+            });
 
-        $('ul#dropzone-preview-checkin').on('click', 'button.delete-btn', function() {
-        // Remove the parent <li> element when the delete button is clicked
-            $(this).closest('li').remove();
-        });
+            $('ul#dropzone-preview-checkin').on('click', 'button.delete-btn', function() {
+                $(this).closest('li').remove();
+            });
 
     </script>
-
     <script src="{{asset('/public/dashboard-design/js/dropzone-min.js')}}"></script>
     <!--  <script src="{{asset('/public/dashboard-design/js/ecommerce-product-create.init.js')}}"></script> -->
     <script src="{{asset('/public/dashboard-design/js/dropzoneCover.js')}}"></script>
@@ -2133,30 +2215,17 @@
 
 <script src="{{asset('/public/dashboard-design/js/pickr.min.js')}}"></script>
 <script>
-// Inputs
-// const valueInput = document.querySelector('input[type="text"]');
 const colorInput = document.querySelector('input[type="color"]');
-
-// Sync the color from the picker
 const syncColorFromPicker = () => {
   valueInput.value = colorInput.value;
 };
-
-// Sync the color from the field
 const syncColorFromText = () => {
   colorInput.value = valueInput.value;
 };
-
-// Bind events to callbacks
 colorInput.addEventListener("input", syncColorFromPicker, false);
 valueInput.addEventListener("input", syncColorFromText, false);
-
-// Optional: Trigger the picker when the text field is focused
 valueInput.addEventListener("focus", () => colorInput.click(), false);
-
-// Refresh the text field
 syncColorFromPicker();
-
 </script>
 
 <script>
@@ -2192,11 +2261,13 @@ $(function() {
 
 <script>
     $(document).ready(function() {
-        const colors = {
-            1: '#ea1515',
-            2: '#ea1515',
-        };
-        
+        const colors = 
+        {
+            1: '{{ $color1 }}',
+            2: '{{ $color2 }}',
+            3:'{{$color3}}',
+            4:'{{$color4}}',
+         };
         $('.nano-colorpicker').each(function() {
             const pickerElement = $(this)[0];
             const pickerIndex = $(this).data('picker');
@@ -2236,12 +2307,29 @@ $(function() {
                 const selectedColor = color.toHEXA().toString();
                 $(inputSelector).val(selectedColor);
                 if (pickerIndex == 1) {
-                    $('#exitButton, #checkInButton').css({
-                        'background-color': selectedColor,
-                        'border-color': selectedColor
+                    $('#login_submit').css({
+                        'color': selectedColor,
+                    });
+                    $('#sign_up').css({
+                        'color': selectedColor,
                     });
                 } else if (pickerIndex == 2) {
-                    $('#passcodeExitButton, #quickCodeButton').css({
+                    $('#login_submit').css({
+                        'background-color': selectedColor,
+                        'border-color': selectedColor
+
+                    });
+                }
+                else if (pickerIndex == 3) {
+                    $('#register_submit').css({
+                        'color': selectedColor,
+                    });
+                    $('#register_skip').css({
+                        'color': selectedColor,
+                    });
+                }
+                else if (pickerIndex == 4) {
+                    $('#register_submit','#register_skip').css({
                         'background-color': selectedColor,
                         'border-color': selectedColor
                     });
@@ -2250,6 +2338,42 @@ $(function() {
             });
         });
     });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var selectField = document.getElementById("selectField");
+        selectField.selectedIndex = 0; 
+    });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const selectField = document.getElementById('selectField');
+    const textArea = document.getElementById('des-info-description-input');
+    const loginContent = `{!! $login !!}`;
+    const registerContent = `{!! $register !!}`;
+    const selectContent=`{!! $selectLink !!}`;
+    selectField.addEventListener('change', function() {
+        let selectedValue = selectField.value;
+        let contentToDisplay;
+
+        if (selectedValue === 'login') {
+            contentToDisplay = loginContent;
+        } else if (selectedValue === 'register') {
+            contentToDisplay = registerContent;
+        } else {
+            contentToDisplay = selectContent;
+        }
+        textArea.value = contentToDisplay;
+    });
+});
+
+function copyToClipboard() {
+    const textArea = document.getElementById('des-info-description-input');
+    textArea.select();
+    document.execCommand('copy');
+}
+
 </script>
 @endpush
 @endsection

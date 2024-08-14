@@ -967,9 +967,7 @@
 								<i class='bx bx-bell fs-22'></i>
 								<span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">{{$totalNotifications}}<span class="visually-hidden">unread messages</span></span>
 							</button>
-
 							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
-
 								<div class="dropdown-head bg-primary bg-pattern rounded-top">
 									<div class="p-3">
 										<div class="row align-items-center">
@@ -978,7 +976,6 @@
 											</div>
 										</div>
 									</div>
-									
 									<div class="px-2 pt-2">
 										<ul class="nav nav-tabs dropdown-tabs nav-tabs-custom" data-dropdown-tabs="true" id="notificationItemsTab" role="tablist">
 											<li class="nav-item waves-effect waves-light">
@@ -997,7 +994,6 @@
 										</ul>
 									</div>
 								</div>
-
 								<div class="tab-content position-relative" id="notificationItemsTabContent">
 									<div class="tab-pane fade show active py-2 ps-2 alerts-scroll" id="all-noti-tab" role="tabpanel">
 										<div class="pe-2">

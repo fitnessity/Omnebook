@@ -321,8 +321,9 @@ $total_quantity = 0;
 					<div class="col-lg-12">
 						<div class="menu_nav">
                 
-						<div class="logo-header">
-						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="https://d2bgo0bc1t29nh.cloudfront.net/public/images/fitnessity_logo1_black.png"> </a>
+						<div class="logo-header"> 
+							<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"><img src="/public/images/omnebook.png" alt="logo"></a>
+						<!-- <a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="https://d2bgo0bc1t29nh.cloudfront.net/public/images/fitnessity_logo1_black.png"> </a> -->
 						</div>
 					
 						<div class="top-area">
