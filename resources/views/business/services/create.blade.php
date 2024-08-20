@@ -1689,16 +1689,32 @@
 @include('layouts.business.footer')
 @include('layouts.business.scripts')
 <script>
+<<<<<<< HEAD
+=======
+
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
     CKEDITOR.replace('desc', {
         height: 200,
         extraPlugins: 'colorbutton,font,editorplaceholder,justify,widget'
     }); 
 
     $(document).ready(function(){ 
+<<<<<<< HEAD
         if (window.location.hash === '#stepFour') {
             $('.collapseFourbtn').click();
         }
         $('#serviceForm').on('submit', function(event) {
+=======
+
+        if (window.location.hash === '#stepFour') {
+            $('.collapseFourbtn').click();
+        }
+
+        $('#serviceForm').on('submit', function(event) {
+
+           
+
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
             var imageCount = $('#gallery img').length;
             var coverCount = $('#gallery1 img').length;
 
@@ -2148,17 +2164,23 @@
     }
 
     function changeWDayPrice(i,j,type){
+<<<<<<< HEAD
         // alert(j);        
         console.log('i',i);
         console.log('j',j);
         
+=======
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         var discount = 0;
         var contract_revenue = 0;
         var pay_price =  $('#'+type+'_cus_weekly_price'+i+j).val();
         var discount =  $('#'+type+'_discount'+i+j).val();
         var fitnessity_fee = '{{$fitnessity_fee}}';
+<<<<<<< HEAD
         // alert(j);
         // console.log($('#'+type+'_cus_weekly_price'+i+j).val());
+=======
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         $('#'+type+'_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*discount)/100);
         $('#'+type+'_estearn'+i+j).attr('readonly', true);
         pay_price = pay_price == '' ? 0 :pay_price
@@ -2364,19 +2386,32 @@
         data += '<div id="priceoption'+i+cnt+'" class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3">';
         data += $('#priceoption'+i+j).html();
         data += '</div>';
+<<<<<<< HEAD
+=======
+
+        ///start 
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         var newCategory=$("#priceoption"+i+cnt);
         newCategory.find('[id]').each(function() {
             var oldName = $(this).attr('id');
             var newName = oldName.replace(i, cnt);
             $(this).attr('id', newName);
         });
+<<<<<<< HEAD
         // adult_cus_weekly_price
         /*var re = data.replaceAll(i+","+j,i+","+cnt);
+=======
+        ////end 
+
+    
+        var re = data.replaceAll(i+","+j,i+","+cnt);
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         re = re.replaceAll("_"+i+j,"_"+i+cnt);
         if(i==0){
             re = re.replaceAll("0"+j,"0"+cnt);
         }else{
             re = re.replaceAll(i+''+j,i+''+cnt);
+<<<<<<< HEAD
         }*/
 
         // Temporarily replace value attributes with placeholders
@@ -2406,6 +2441,11 @@
         console.log(re);
         $('#priceOptionDiv'+i).append(re);
         
+=======
+        }
+
+        $('#priceOptionDiv'+i).append(re);
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         if(j==0){
             $('#ul'+i+cnt).append('<li class="dropdown-divider"></li><li><a href="" onclick="deletePriceOption('+i+','+cnt+')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>');
         }
@@ -2416,8 +2456,13 @@
         $('#accor_nestingprice'+i+j).removeClass("show");
         $('#accor_nestingprice'+i+cnt).addClass("collapse show");
     }
+<<<<<<< HEAD
    
      $('.non-collapsing').on('click', function (e) {
+=======
+
+    $('.non-collapsing').on('click', function (e) {
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         e.stopPropagation();
     });
 

@@ -792,7 +792,11 @@ input:disabled{
 						<div class="row mb-30">
 							<div class="col-lg-4">
 								<div class="overall-rating  mb-15">
+<<<<<<< HEAD
 									<label>Overall rating</label>
+=======
+									<label>Overall rating </label>
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 									<div class="row y-middle">
 										<div class="col-lg-2">
 											<div class="rating-total-star">
@@ -969,10 +973,17 @@ input:disabled{
 									<div class="row y-middle mb-25">
 										<div class="col-lg-2 col-md-2 col-sm-2 col-3">
 											<div class="company-list-text mb-10">
+<<<<<<< HEAD
 												@if(is_object($review->User) && property_exists($review->User, 'profile_pic'))
 													<p class="character">{{$review->User->profile_pic}}</p>
 												@else
 													<p class="character">{{$review->User->first_letter}}</p>
+=======
+												@if(is_object($review->User) && property_exists($review->User, 'first_letter'))
+													<p class="character">{{$review->User->first_letter}}</p>
+												@else
+													<p class="character">N/A</p>
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 												@endif
 											</div>
 										</div>
@@ -1621,9 +1632,15 @@ input:disabled{
         $company_data = Auth::user()->current_company;
     }
 @endphp
+<<<<<<< HEAD
 {{-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}&sensor=false"></script> --}}
 @include('layouts.business.footer')
 
+=======
+@include('layouts.business.footer')
+
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}&sensor=false"></script>
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 
 <!-- New JS -->
 <script>
@@ -1697,7 +1714,11 @@ input:disabled{
         }
 
         var formData = new FormData(this);
+<<<<<<< HEAD
 		// alert('11');
+=======
+
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         $.ajax({
             url: "{{route('save_business_service_reviews')}}", 
             type: 'POST',

@@ -169,7 +169,10 @@
  </div>
 
 @include('layouts.business.footer')
+<<<<<<< HEAD
 @include('layouts.business.scripts')
+=======
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 
 <script>
 	new DataTable('#announcement_list', {

@@ -78,11 +78,14 @@ class BusinessPriceDetailsAges extends Model
     public function BusinessPriceDetails(){
         return $this->hasMany(BusinessPriceDetails::class, 'category_id');
     }
+<<<<<<< HEAD
     
     public function BusinessPriceDetailsData(){
         return $this->hasMany(BusinessPriceDetails::class, 'category_id');
     }
     
+=======
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 
     public function AddOnService(){
         return $this->hasMany(AddOnService::class, 'category_id');

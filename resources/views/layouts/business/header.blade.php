@@ -4,6 +4,7 @@ $total_quantity = 0;
 ?>
 
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html class="no-js" lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
     <head>
         <title>Fitnessity</title>
@@ -15,6 +16,14 @@ $total_quantity = 0;
         <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta content="charset=utf-8"> -->
+=======
+<html class="no-js" lang="en">
+    <head>
+        <title>Fitnessity</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta content="charset=utf-8">
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="description" content=" Fitnessity: Because Fitness=Necessity ">
         <meta itemprop="name" content="">
@@ -31,8 +40,13 @@ $total_quantity = 0;
         <meta property="og:image" content="">
         <meta property="og:site_name" content="Fitnessity">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<<<<<<< HEAD
         <link rel="shortcut icon" href="{{ url('/public/images/email/favicon.png') }}">
         <link rel="icon" href="{{ url('/public/images/email/favicon.png') }}">
+=======
+        <link rel="shortcut icon" href="{{ url('/public/images/email/favicon.ico') }}">
+        <link rel="icon" href="{{ url('/public/images/email/favicon.ico') }}">
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         <!-- <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,900'>
         <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'> -->
 
@@ -359,8 +373,12 @@ $total_quantity = 0;
 									} 
 									$total_quantity = count($newcart["cart_item"]);?>
 							<a class="btn-cart" href="{{route('carts_index')}}">
+<<<<<<< HEAD
 								<img src="{{asset('images/shoping-cart-header-black.png')}}" alt="cart"><span id="cart-item">
 								<!-- <img src="https://d2bgo0bc1t29nh.cloudfront.net/public/images/shoping-cart-header-black.png" alt="cart"><span id="cart-item"> -->
+=======
+								<img src="https://d2bgo0bc1t29nh.cloudfront.net/public/images/shoping-cart-header-black.png" alt="cart"><span id="cart-item">
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 									 {{$total_quantity}}</span>
                             </a>
 							</div>

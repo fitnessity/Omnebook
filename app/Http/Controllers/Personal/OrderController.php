@@ -6,7 +6,11 @@ use App\Http\Controllers\Personal\PersonalBaseController;
 use Illuminate\Http\Request;
 use Auth;
 use App\{Customer,User,BusinessServices};
+<<<<<<< HEAD
 use DB;
+=======
+
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 use App\Repositories\{BookingRepository};
 
 class OrderController extends PersonalBaseController
@@ -27,13 +31,20 @@ class OrderController extends PersonalBaseController
 
     public function index(Request $request)
     {
+<<<<<<< HEAD
         
+=======
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         $user = Auth::user();
         $business = $user->company()->where('id',request()->business_id)->first();
         if(!request()->business_id){
             return redirect()->route('personal.manage-account.index');
         }
+<<<<<<< HEAD
         // DB::enableQueryLog();
+=======
+
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         if($request->customer_id){
             if(request()->type == 'user'){
                 $familyMember = Auth::user()->user_family_details()->where('id',request()->customer_id)->first();
@@ -51,16 +62,24 @@ class OrderController extends PersonalBaseController
 
         $bookingDetails = $currentBooking =  [];
         $bookingDetails =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,@$customer);
+<<<<<<< HEAD
         // DB::enableQueryLog();
         $currentBookingData = $this->booking_repo->currentTab($request->serviceType,$request->business_id,@$customer);
        
+=======
+      
+        $currentBookingData = $this->booking_repo->currentTab($request->serviceType,$request->business_id,@$customer);
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         foreach($currentBookingData as $i=>$book_details){
             $currentBooking[@$book_details->business_services_with_trashed->id .'!~!'.@$book_details->business_services_with_trashed->program_name] [] = $book_details;
         }
 
         $tabval = $request->tab; 
+<<<<<<< HEAD
         // dd($currentBooking);
         // dd(\DB::getQueryLog()); 
+=======
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 
         return view('personal.orders.index', compact('bookingDetails','currentBooking','tabval','customer','name','business'));
     }
@@ -164,6 +183,10 @@ class OrderController extends PersonalBaseController
             }
 
             //print_r($orderDetails);exit();
+<<<<<<< HEAD
+=======
+
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
             return view('personal.orders.user_booking_detail',compact('orderDetails','tabName'))->render();
         }
     }

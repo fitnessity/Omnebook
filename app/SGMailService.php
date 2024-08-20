@@ -36,7 +36,11 @@ class SGMailService{
 
 
 		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 		/*try {
             $response = $sendgrid->send($email);
             if ($response->statusCode() == 202) {

@@ -20,7 +20,11 @@ class CheckInController extends Controller
 
     public function store(Request $request){
     	// print_r($request->all());exit;
+<<<<<<< HEAD
         // dd($request->all());
+=======
+
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         $data = BusinessCheckinSettings::where('business_id', $request->business_id)->first();
 
         $input = [];
@@ -63,6 +67,10 @@ class CheckInController extends Controller
 			BusinessCheckinSettings::create($input);
     	}
 
+<<<<<<< HEAD
     	return redirect()->back();
+=======
+    	return redirect()->route('checkin-portal-settings', ['business_id' => $request->business_id]);
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
     }
 }

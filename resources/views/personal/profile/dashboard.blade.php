@@ -237,10 +237,15 @@
 				</div>
 			</div><!-- container-fluid -->
 		</div>
+<<<<<<< HEAD
 	</div>
 	<!-- end main content-->
 </div>
 <!-- END layout-wrapper -->
+=======
+	</div><!-- end main content-->
+</div><!-- END layout-wrapper -->
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 @include('layouts.business.footer')
 @include('layouts.business.scripts')
 

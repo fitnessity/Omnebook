@@ -71,7 +71,11 @@ html {
 .liimage{
     text-align: justify; padding: 30px 20px 30px 20px !important; font-size: 13px;
 }
+<<<<<<< HEAD
 .h4color{ color: #98002e; font-size: 14px; font-weight:700; padding-left:10px; }
+=======
+.h4color{ color: #f91942; font-size: 14px; font-weight:700; padding-left:10px; }
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 .close-btn-design{
     margin-top: 0 !important;
     color: white !important;
@@ -79,9 +83,15 @@ html {
     position: absolute !important;    opacity: 1.2;
 }
 .close-btn-design:hover{ opacity: 1.2; }
+<<<<<<< HEAD
 .info-display a:focus { color: #98002e !important; text-decoration: none; }
 .info-display a:hover { color: #000 !important; text-decoration: none; }
 .info-display a{ color: #98002e !important; }
+=======
+.info-display a:focus { color: #fe0000 !important; text-decoration: none; }
+.info-display a:hover { color: #000 !important; text-decoration: none; }
+.info-display a{ color: #fe0000 !important; }
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 .linkdiv{ padding-right: 0 !important; padding-left: 0 !important; }
 .titletext{ text-align: left !important; }
 .closebtn{
@@ -136,7 +146,11 @@ html {
     font-family: 'OswaldLight';
     padding: 10px 15px
 }
+<<<<<<< HEAD
 .navbar-inverse .navbar-nav > li > a:hover { color: #98002e; }
+=======
+.navbar-inverse .navbar-nav > li > a:hover { color: #f53b49; }
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 .btn.btn-info.btn-lg.header-search-a {
     border-left: 1px solid #98002e;
     border-radius: 0;
@@ -876,7 +890,11 @@ html {
 }
 
 .app a:hover {
+<<<<<<< HEAD
     color: #98002e;
+=======
+    color: #f53b49;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 
 .app a span {
@@ -5312,7 +5330,11 @@ ul.pagination > li > a:hover {
 }
 
 /* ul.pagination > li > a {
+<<<<<<< HEAD
     color: #98002e !important;
+=======
+    color: #f53b49 !important;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 } */
 
 /********************** event **********************/
@@ -9799,7 +9821,11 @@ req-line.thumb-light a {
 }
 
 .addToCompare:hover {
+<<<<<<< HEAD
     color: #98002e;
+=======
+    color: #f53b49;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
     font-weight: bold
 }
 .cmprBtn {
@@ -19264,12 +19290,21 @@ input#zipcode {
 }
 
 .sports-list:hover, .sports-list.active{
+<<<<<<< HEAD
     background: #98002e;
     border: 1px solid #98002e;
     color:  white;
     /*text-align: center;
     margin-bottom: 20px;
     background: #98002e;
+=======
+    background: #f91942;
+    border: 1px solid #f91942;
+    color:  white;
+    /*text-align: center;
+    margin-bottom: 20px;
+    background: #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
     border: none;
     padding: 10px 14px;
     border-radius: 20px;
@@ -20283,7 +20318,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	margin-right: 65px;
 }
 .nav-sliders-activites a{
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	text-decoration: underline;
 }
 .align-self-center{
@@ -20482,20 +20521,33 @@ span.Zebra_DatePicker_Icon_Wrapper {
   color: #000;
 }
 .ui-widget-header {
+<<<<<<< HEAD
   border: 1px solid #98002e24 !important;
+=======
+  border: 1px solid #eb1515 !important;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
   background: #f6a828 url("") 50% 50% repeat-x !important;
     background-color: rgb(246, 168, 40);
   color: #ffffff !important;
   font-weight: bold !important;
+<<<<<<< HEAD
   background-color: #98002e24 !important;
+=======
+  background-color: #eb1515 !important;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active{
 	color: #000 !important;
 }
 
 .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight{
+<<<<<<< HEAD
 	border: 1px solid #98002e !important;
 	background: #98002e24 url("") 50% top repeat-x !important;
+=======
+	border: 1px solid #eb1515 !important;
+	background: #ff6d6d url("") 50% top repeat-x !important;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, ui-state-focus, .ui-widget-content .ui-state-focus, ui-widget-header .ui-state-focus, ui-button:hover, .ui-button:focus{
@@ -20522,7 +20574,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	text-align: center;
 }
 .kickboxing-more-one .modal-header .close span {
+<<<<<<< HEAD
   background: #98002e;
+=======
+  background: #df0003;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
   color: #fff;
   margin: 0;
   width: 24px;
@@ -20549,7 +20605,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	color: #000;
 }
 .modal-img-title a:hover{
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .txt-space{
 	padding-left: 0px;
@@ -20562,13 +20622,21 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	color: #000;
 }
 .modal-links a:hover{
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .modal-links{
 	text-align: left;
 }
 .addbusiness-btn-modal {
+<<<<<<< HEAD
   background: #98002e;
+=======
+  background: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
   color: #fff;
   padding: 12px 15px;
   display: inline-block;
@@ -20578,7 +20646,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
   margin: 10px 0;
   font-family: "Segoe UI",Arial,sans-serif;
   text-transform: uppercase;
+<<<<<<< HEAD
   border: 1px solid #98002e;
+=======
+  border: 1px solid #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .addbusiness-btn-modal:hover{
 	color: #fff;
@@ -20749,6 +20821,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
   transition: all 0.2s linear 0s;
   width: 100%;
   font-weight: 400;
+<<<<<<< HEAD
   color: #98002e;
 }
 .imagediv .more-option .more-post-optns > ul > li > a {
@@ -20757,6 +20830,16 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .imagediv .more-option .more-post-optns > ul > li i {
   color: #98002e;
+=======
+  color: #f91942;
+}
+.imagediv .more-option .more-post-optns > ul > li > a {
+  color: #f91942 !important;
+  float: left;
+}
+.imagediv .more-option .more-post-optns > ul > li i {
+  color: #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
   display: inline-block;
   font-size: 14px;
   margin-right: 8px;
@@ -21155,7 +21238,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
   font-size: 13px;
 }
 .activity-inner-data i {
+<<<<<<< HEAD
   color: #98002e;
+=======
+  color: #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .activity-inner-data span {
   font-weight: 600;
@@ -21201,7 +21288,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
   font-size: 14px;
 }
 .showall-btn {
+<<<<<<< HEAD
   background: #98002e;
+=======
+  background: #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
   border: none;
   padding: 5px 19px;
   color: #fff !important;
@@ -21355,7 +21446,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	color: #040404;
 }
 .client-info{
+<<<<<<< HEAD
 	border-bottom: 2px solid #98002e;
+=======
+	border-bottom: 2px solid #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	margin-bottom: 10px;
 }
 .client-info a{
@@ -21402,7 +21497,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
   opacity: 2;
 }
 /*.view-customer .nav-tabs .nav-item .nav-link.active{
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }*/
 .visit-table-data span{
 	margin-right: 20px;
@@ -21538,7 +21637,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	width: 100% !important;
 }
 .font-red{
+<<<<<<< HEAD
 	color: #98002e !important;
+=======
+	color: #ed1b24 !important;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .scheduler-txt{
 	font-size: 21px !important;
@@ -21559,7 +21662,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .manage-search .sub button {
   background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+<<<<<<< HEAD
   color: #98002e;
+=======
+  color: #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
   font-size: 15px;
   position: absolute;
   left: 6px;
@@ -21609,7 +21716,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	border-radius: 4px;
 }
 .scheduler-qty span{
+<<<<<<< HEAD
 	background: #98002e;
+=======
+	background: #ed1b24;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	padding: 10px 0;
 	width: 60px;
 	border-radius: 100%;
@@ -21650,7 +21761,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	display: grid;
 }
 .scheduled-btns .btn-edit{
+<<<<<<< HEAD
 	background: #98002e;
+=======
+	background: #ed1b24;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	color: #fff;
 	padding: 1px 7px;
 	border: unset;
@@ -21677,7 +21792,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	font-size: 14px;
 }
 .btn-previous{
+<<<<<<< HEAD
 	background: #98002e;
+=======
+	background: #ed1b24;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	color: #fff;
 	padding: 5px 20px;
 	border: unset;
@@ -21776,7 +21895,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	position: absolute;
 	top: 19px;
 	left: 19px;
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #ed1b24;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .checkbox-check{
 	margin-left: 25px;	
@@ -21785,7 +21908,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	background: #ff0b34;	
 }
 .w3-red{
+<<<<<<< HEAD
 	background: #98002e;
+=======
+	background: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .w3-panel.w3-red p{
 	padding: 8px;
@@ -22406,7 +22533,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .modal-custom-header{
 	border: 1px solid #c9c9c9;
 	padding: 7px;
+<<<<<<< HEAD
 	background: #98002e;
+=======
+	background: #df0003;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	color: #fff;
 	text-align: center;
 }
@@ -22685,7 +22816,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .close-cross-icon i{
 	position: absolute;
 	top: 7px;
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	right: 37px;
 }
 .close-cross-icon-trash{
@@ -22696,7 +22831,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
   top: 1px;
   color: #fff;
   right: 0px;
+<<<<<<< HEAD
   background: #98002e;
+=======
+  background: #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
   padding: 6px;
   border-radius: 4px;
 }
@@ -22832,7 +22971,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	margin-bottom: 20px;
 }
 .activity-schedule-tabs .nav-tabs > li.active > a:active{
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #ed1b24;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .classes-info h2{
 	font-size: 17px;
@@ -22851,7 +22994,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .post-btn.activity-scheduler{
 	width: 100%;
+<<<<<<< HEAD
 	background: #98002e;
+=======
+	background: #ed1b24;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	border-radius: 0px;
 }
 .classes-time{
@@ -22886,7 +23033,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	color: #d0d0d0 !important;
 }
 .activity-schedule-tabs .nav-tabs > li.active > a{
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	border: none !important;
 	font-weight: 600;
 }
@@ -22908,7 +23059,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .close-div .close-cross{
 	position: absolute;
 	left: 0px;
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #ed1b24;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .changecalce label{
 	margin-left: 30px;
@@ -22948,7 +23103,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 
 .companyalink{
     font-size: 16px;
+<<<<<<< HEAD
     color: #98002e !important;
+=======
+    color: #f91942 !important;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
     font-weight: 600;
 }
 .modal-banner .single-banner {
@@ -23058,7 +23217,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	overflow: hidden;
 	border: 3px solid #ddd;
 	vertical-align: middle;
+<<<<<<< HEAD
 	background-color: #98002e;
+=======
+	background-color: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	margin-top: 4px;
 	margin-bottom: 4px;
 }
@@ -23104,7 +23267,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	margin-left: 8px;
 	font-size: 17px;
 	font-weight: 600;
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #ed1b24;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .visiting-view{
 	color: #333;
@@ -23112,7 +23279,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	margin-bottom: 6px;
 }
 .visiting-view:hover{
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .edit-booking-customer{
 	color: #333;
@@ -23120,7 +23291,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	margin-bottom: 6px;
 }
 .edit-booking-customer:hover{
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 
 .edit-booking-title{
@@ -23206,7 +23381,11 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	margin-top: 15px;
 }
 .red-sparetor{
+<<<<<<< HEAD
 	border: 2px solid #98002e;
+=======
+	border: 2px solid #ed1b24;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	margin-top: 7px;
 }
 .refund-details label{
@@ -23388,7 +23567,11 @@ padding-left: 0px;
 	font-weight: normal;
 }
 .side-border-right-red{
+<<<<<<< HEAD
 	border-right: 1px solid #98002e;
+=======
+	border-right: 1px solid #df0003;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	padding-right: 11px;
 }
 .search-customer{
@@ -23469,7 +23652,11 @@ padding-left: 0px;
 	color: #000;
 }
 .btn-nxt-part{
+<<<<<<< HEAD
 	background: #98002e;
+=======
+	background: #ed1b24;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	color: #fff;
 	padding: 6px 15px;
 	border: unset;
@@ -23605,10 +23792,17 @@ padding-left: 0px;
 }
 
 .repeat input:checked + label {
+<<<<<<< HEAD
   background-color: #98002e;
   top: 0;
   left: 0;
   border: 2px solid #98002e !important;
+=======
+  background-color: #ed1b24;
+  top: 0;
+  left: 0;
+  border: 2px solid #ed1b24 !important;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
   z-index: 2;
   color: white;
 }
@@ -23682,7 +23876,11 @@ padding-left: 0px;
 	float: right;
 }
 .auto-pay:hover{
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .auto-amount{
 	display: inline-flex;
@@ -23756,7 +23954,11 @@ padding-left: 0px;
 .show-more-photos{
 	float: right;
 	font-size: 15px;
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	font-weight: 500;
 }
 .new-client .panel {
@@ -23784,7 +23986,11 @@ padding-left: 0px;
 }
 
 .new-client .panel-heading {
+<<<<<<< HEAD
   background-color: #98002e;
+=======
+  background-color: #f53b49;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
   border-radius: 0;
   border: none;
   color: #fff;
@@ -23798,7 +24004,10 @@ padding-left: 0px;
   position: relative;
   font-size: 16px;
   font-weight: 400;
+<<<<<<< HEAD
   background: #98002e;
+=======
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .new-client .panel-body {
   background: #fff;
@@ -23850,7 +24059,11 @@ padding-left: 0px;
 	margin-top: 70px;
 }
 .access-req{
+<<<<<<< HEAD
 	background: #98002e;
+=======
+	background: #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	border: none;
 	padding: 10px 11px;
 	color: #fff;
@@ -23867,7 +24080,11 @@ padding-left: 0px;
 	color: #000; 
 	line-height: inherit; 
 	font-weight: 600; 
+<<<<<<< HEAD
 	border-bottom: 2px solid #98002e;
+=======
+	border-bottom: 2px solid #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	font-size: 21px;
 }
 .modal-access-autho{
@@ -23889,7 +24106,11 @@ padding-left: 0px;
 	margin-left: 7px;
 }
 .granting-access{
+<<<<<<< HEAD
 	border: 1px solid #98002e;
+=======
+	border: 1px solid #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	padding: 20px 20px 20px 20px;
 	border-radius: 10px;
 }
@@ -24049,7 +24270,11 @@ padding-left: 0px;
 .shortcut-sticky a{
 	display: grid;
 	background: none;
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .shortcut-sticky a i{
 	font-size: 16px;
@@ -24100,7 +24325,11 @@ padding-left: 0px;
 	border: 1px solid #ede9e9;
 }
 .addbusiness-btn-black:hover {
+<<<<<<< HEAD
   color: #98002e !important;
+=======
+  color: #ea1515 !important;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .modal-middle{
 	margin: 0 auto;
@@ -24110,7 +24339,11 @@ padding-left: 0px;
 	margin-top: 15px;
 }
 .autopay-schedule .nav-tabs > li > a.active{
+<<<<<<< HEAD
 	  background: #98002e;
+=======
+	  background: #ed1b24;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	color: #fff;
 	font-size: 15px;
 }
@@ -24191,10 +24424,17 @@ padding-left: 0px;
   padding: 6px;
   padding-right: 10px;
   padding-left: 10px;
+<<<<<<< HEAD
   background: #98002e;
   color: #fff !important;
   border-radius: 30px;
   border: 1px solid #98002e;
+=======
+  background: #ed1b24;
+  color: #fff !important;
+  border-radius: 30px;
+  border: 1px solid #ed1b24;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
   margin-bottom: 5px;
   margin-right: 5px;
 }
@@ -24260,7 +24500,11 @@ padding-left: 0px;
 	font-weight: 500;
 }
 .custom-multiple-book .item .active a{
+<<<<<<< HEAD
 	background-color: #98002e !important;
+=======
+	background-color: #ea1515 !important;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	color: #fff !important;
 }
 
@@ -24289,11 +24533,19 @@ padding-left: 0px;
   width: 100%;
 }
 .multiple0select.btn-group .select input:checked + label {
+<<<<<<< HEAD
   background-color: #98002e;
   color: #fff;
 }
 .multiple0select.btn-group .select input:checked + label:hover, .multiple0select.btn-group .select input:checked + label:focus, .multiple0select.btn-group .select input:checked + label:active {
   background-color: #98002e;
+=======
+  background-color: #ea1515;
+  color: #fff;
+}
+.multiple0select.btn-group .select input:checked + label:hover, .multiple0select.btn-group .select input:checked + label:focus, .multiple0select.btn-group .select input:checked + label:active {
+  background-color: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .multiple0select.btn-group .select input {
   opacity: 0;
@@ -24335,7 +24587,11 @@ padding-left: 0px;
 }
 .selecting-month label{
 	font-size: 17px;
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .justify-content-md-center{
 	justify-content: center !important;
@@ -24388,7 +24644,11 @@ padding-left: 0px;
 	font-weight: 500;
 }
 .time-slots-saprator{
+<<<<<<< HEAD
 	border-bottom: 1px solid #98002e;
+=======
+	border-bottom: 1px solid #f91942;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .confirm-booking table tr td{
 	padding: 10px 5px;
@@ -24449,11 +24709,19 @@ padding-left: 0px;
   width: 100%;
 }
 .add-onservice.btn-group .select input:checked + label {
+<<<<<<< HEAD
   background-color: #98002e;
   color: #fff;
 }
 .add-onservice.btn-group .select input:checked + label:hover, .add-onservice.btn-group .select input:checked + label:focus, .add-onservice.btn-group .select input:checked + label:active {
   background-color: #98002e;
+=======
+  background-color: #ea1515;
+  color: #fff;
+}
+.add-onservice.btn-group .select input:checked + label:hover, .add-onservice.btn-group .select input:checked + label:focus, .add-onservice.btn-group .select input:checked + label:active {
+  background-color: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .add-onservice.btn-group .select input {
   opacity: 0;
@@ -24670,7 +24938,11 @@ padding-left: 0px;
     overflow: auto;
     overflow-x: hidden;
 	width: 280px !important;
+<<<<<<< HEAD
 	scrollbar-color: #98002e #dedfde;
+=======
+	scrollbar-color: #f91942 #dedfde;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	scrollbar-width: thin;
 }
 .staff-login-home .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover{
@@ -24685,7 +24957,11 @@ padding-left: 0px;
 	line-height: 25px;
 }
 .book-tool-tip{
+<<<<<<< HEAD
 	background: #98002e;
+=======
+	background: #ed1b24;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	border-radius: 100%;
 	font-size: 11px;
 	color: #fff;
@@ -24730,7 +25006,11 @@ padding-left: 0px;
 /*buttons*/
 .step-forms #msform .action-button {
 	width: 100px;
+<<<<<<< HEAD
 	background: #98002e;
+=======
+	background: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	font-weight: bold;
 	color: #fff;
 	border: 0 none;
@@ -24765,7 +25045,11 @@ padding-left: 0px;
 }
 .step-forms #progressbar li {
 	list-style-type: none;
+<<<<<<< HEAD
 	color: #98002e;
+=======
+	color: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	text-transform: uppercase;
 	font-size: 9px;
 	width: 20%;
@@ -24790,7 +25074,11 @@ padding-left: 0px;
 	content: '';
 	width: 100%;
 	height: 2px;
+<<<<<<< HEAD
 	background: #98002e;
+=======
+	background: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	position: absolute;
 	left: -50%;
 	top: 9px;
@@ -24803,7 +25091,11 @@ padding-left: 0px;
 /*marking active/completed steps green*/
 /*The number of the step and the connector before it = green*/
 .step-forms #progressbar li.active:before,  #progressbar li.active:after{
+<<<<<<< HEAD
 	background: #98002e;
+=======
+	background: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	color: #fff;
 }
 
@@ -24858,12 +25150,20 @@ padding-left: 0px;
 } 
 
 .step-forms input[type="radio"]:checked + label span {
+<<<<<<< HEAD
   background: #98002e;
+=======
+  background: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
   box-shadow: 0px 0px 0px 3px white inset;
 }
 
 .step-forms input[type="radio"]:checked + label{
+<<<<<<< HEAD
   color: #98002e; 
+=======
+  color: #ea1515; 
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .not-claimed{
 	height: 665px;
@@ -25281,7 +25581,11 @@ padding-left: 0px;
     overflow: hidden;
     border: 3px solid #ddd;
     vertical-align: middle;
+<<<<<<< HEAD
     background-color: #98002e;
+=======
+    background-color: #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 .review-text p {
     font-size: 24px;
@@ -25500,7 +25804,11 @@ padding-left: 0px;
     margin-right: 15px;
 }
 .share-wish a:hover{
+<<<<<<< HEAD
     color: #98002e;
+=======
+    color: #ed1b24;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }
 
 
@@ -25692,7 +26000,11 @@ padding-left: 0px;
     border-radius: 50%;
 }
 .mini-stat-icon-modal{
+<<<<<<< HEAD
     color: #98002e !important;
+=======
+    color: #ea1515 !important;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
     font-size: 85px !important;
 }
 .other-activity-slider img{
@@ -25705,8 +26017,13 @@ padding-left: 0px;
     font-size: 15px;
 }
 .btn-red {
+<<<<<<< HEAD
   background-color: #98002e !important;
   border: 1px solid #98002e !important;
+=======
+  background-color: #ea1515 !important;
+  border: 1px solid #ea1515;
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
   color: #fff !important;
   border-radius: 10px;
   font-size: 13px;
@@ -25719,9 +26036,12 @@ padding-left: 0px;
 	background: #2d2d2d !important;
 	color: fff !important;
 }
+<<<<<<< HEAD
 .sign-step_4 ul.nav-tabs li a.active{ 
     border: none !important;
 }
 .sign-step_4 .upload-wrp-content{
     font-size: 14px;
 }
+=======
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394

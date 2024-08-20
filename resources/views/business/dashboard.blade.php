@@ -1,6 +1,37 @@
 @inject('request', 'Illuminate\Http\Request')
 @extends('layouts.business.header')
 
+<<<<<<< HEAD
+=======
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
+<head>
+
+    <meta charset="utf-8" />
+    <title>Fitnessity </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+
+    <!-- Layout config Js-->
+    <script src="{{asset('/public/dashboard-design/js/layout.js')}}"></script>
+    <!-- Bootstrap Css -->
+    <link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    <!-- <link href="{{asset('/public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" /> -->
+	
+    <!-- Style Css-->
+    <link href="{{asset('/public/dashboard-design/css/style.css')}}" rel="stylesheet" type="text/css" />
+	
+	<!-- Custom Css-->
+    <link href="{{asset('/public/dashboard-design/css/custom.css')}}" rel="stylesheet" type="text/css" />
+	<link href="{{asset('/public/dashboard-design/css/responsive.css')}}" rel="stylesheet" type="text/css" />
+	
+	<!-- icon -->
+	<link rel="stylesheet" type="text/css" href="{{asset('/public/dashboard-design/css/icons.min.css')}}" />
+</head>
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	
 @section('content')
     <!-- Begin page -->
@@ -89,7 +120,11 @@
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <div class="px-3">
+<<<<<<< HEAD
                                                                 <img src="{{url('dashboard-design/images/user-illustarator-2.png')}}" class="img-fluid" alt="fitnessity" loading="lazy">
+=======
+                                                                <img src="{{url('dashboard-design/images/user-illustarator-2.png')}}" class="img-fluid" alt="">
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
                                                             </div>
                                                         </div>
                                                     </div>
@@ -786,7 +821,10 @@
     </div> 
 
 	@include('layouts.business.footer')
+<<<<<<< HEAD
     @include('layouts.business.scripts')
+=======
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 
 	<script type="text/javascript">
 		flatpickr(".flatpickr-schedule", {

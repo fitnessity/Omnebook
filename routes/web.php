@@ -23,12 +23,15 @@ Route::get('/clear-cache', function () {
     Artisan::call('config:clear');
     return 'Cache cleared successfully.';
 });
+<<<<<<< HEAD
 
 route::get('/iframe',function(){
     return view('iframe');
 });
 Route::get('/test','HomeController@Test')->name('test');
 
+=======
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 Route::get('/invitation/accept','HomeController@invitation_accept')->name('invitation_accept');
 Route::any('/welcome_provider/','OnBoardedController@welcome')->name('onboard_process.welcome');
 Route::get('/onboard_process/','OnBoardedController@index')->name('onboard_process.index');
@@ -44,9 +47,12 @@ Route::any('/checkPromoCode','MembershipPlanController@checkPromoCode')->name('c
 Route::any('/getCardData','MembershipPlanController@getCardData')->name('choose-plan.getCardData');
 Route::get('/add-client','CustomerController@client')->name('client');
 Route::get('/login_integration','Business\WebsiteIntegrationConroller@Loginindex')->name('login_integration');//added_13_08
+<<<<<<< HEAD
 Route::get('/loginuser/{uniquecode}','Business\WebsiteIntegrationConroller@Loginuser')->name('loginuser');//added_16_08
 Route::any('/customer_dashboard', 'Business\WebsiteIntegrationConroller@customerdashboard')->name('customer_dashboard');//added_20_08
 
+=======
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 Route::post('/get-checkin-code', 'CustomerController@getCheckinCode')->name('get_checkin_code');
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
     Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
@@ -433,9 +439,12 @@ Route::get('registration/confirm/{confirmation_code}', 'Frontend\HomeController@
 Route::get('verifyuser/{confirmation_code}', 'Frontend\HomeController@UserAccountVerify');
 Route::get('/userlogin', 'Frontend\LoginController@index')->name('userlogin');
 Route::post('auth/userlogin', 'Frontend\LoginController@postLogin')->name('auth/userlogin');
+<<<<<<< HEAD
 Route::post('auth/user', 'Business\WebsiteIntegrationConroller@UserLogin')->name('auth/user');
 // Route::get('/loginuser','Business\WebsiteIntegrationConroller@Loginuser')->name('loginuser');//added_16_08
 
+=======
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 Route::get('/userlogout', 'Frontend\LoginController@logout');
 Route::any('logout', function (Request $request) {
     Auth::logout();

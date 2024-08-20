@@ -535,7 +535,11 @@ header{ position: fixed !important; }
 	color:  var(--vz-black-font-color);
 }
 .accordion-custom-btn.accordion-button:not(.collapsed){
+<<<<<<< HEAD
 	background-color: rgba(152, 0, 46, 0.05);
+=======
+	background-color: rgba(237, 36, 45, 0.05);
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 	color: #98002e;
 }
 .priceselect label{
@@ -8859,6 +8863,7 @@ height: 400px;
 .footer-bottom-left  ul{
   padding-left: 0px;
 }
+<<<<<<< HEAD
 .purchase-method ul li{
   margin-left: 25px;
 }
@@ -8876,4 +8881,9 @@ height: 400px;
 .cls-error{
   font-size: 14px;
 }
+=======
+
+
+
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 

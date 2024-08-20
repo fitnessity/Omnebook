@@ -41,8 +41,11 @@ return [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' =>env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('APP_URL').'login/google/callback',
+<<<<<<< HEAD
     ],
     'stripe' => [
         'pkey' => env('STRIPE_PKEY'),
+=======
+>>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
     ],
 ];
