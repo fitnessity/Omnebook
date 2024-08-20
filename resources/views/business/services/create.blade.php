@@ -2149,7 +2149,9 @@
 
     function changeWDayPrice(i,j,type){
         // alert(j);        
-        // console.log('i',i);
+        console.log('i',i);
+        console.log('j',j);
+        
         var discount = 0;
         var contract_revenue = 0;
         var pay_price =  $('#'+type+'_cus_weekly_price'+i+j).val();
