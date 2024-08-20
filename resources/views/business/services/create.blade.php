@@ -2148,11 +2148,15 @@
     }
 
     function changeWDayPrice(i,j,type){
+        // alert(j);        
+        // console.log('i',i);
         var discount = 0;
         var contract_revenue = 0;
         var pay_price =  $('#'+type+'_cus_weekly_price'+i+j).val();
         var discount =  $('#'+type+'_discount'+i+j).val();
         var fitnessity_fee = '{{$fitnessity_fee}}';
+        // alert(j);
+        // console.log($('#'+type+'_cus_weekly_price'+i+j).val());
         $('#'+type+'_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*discount)/100);
         $('#'+type+'_estearn'+i+j).attr('readonly', true);
         pay_price = pay_price == '' ? 0 :pay_price
