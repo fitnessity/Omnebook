@@ -1,4 +1,4 @@
-<div class="main-content">
+f<div class="main-content">
     <div id="client_wrapper" class="clinet-page-content toggled ">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
@@ -57,7 +57,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="http://dev.fitnessity.co/design/integration_portal">
+                    <a class="nav-link menu-link" href="{{route('business.website_integration')}}">
                         <i class="fas fa-cogs fs-15"></i> <span class="fs-15" data-key="t-widgets">Website Integration</span>
                     </a>
                 </li>

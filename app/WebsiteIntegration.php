@@ -8,6 +8,6 @@ class WebsiteIntegration extends Model
 {
     //
     protected $table = 'website_integrations'; 
-    protected $fillable = ['textcolor','bg_color','logo','background_img','default_country','default_state'];
+    protected $fillable = ['user_id','business_id','log_textcolor','log_bg_color','logo','background_img','reg_bg_color','reg_textcolor','default_country','default_state'];
 
 }

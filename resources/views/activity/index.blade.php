@@ -1902,7 +1902,7 @@
             <div class="w3-col l12 m12 s12 w3-margin-top">
                 <h4 style="text-transform: uppercase; font-weight: bold; margin-bottom: 30px;">
                     Added for Comparison
-                    <span title="Close" class="closeItems" style="float:right; padding-right:15px; cursor: pointer;color:#ea1515">
+                    <span title="Close" class="closeItems" style="float:right; padding-right:15px; cursor: pointer;color:#98002e">
                     <i class="fas fa-times-circle"></i> </span>
                 </h4>                            
             </div>
@@ -1948,8 +1948,8 @@
 <div class="modal fade compare-model" id="myModal">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-			<div class="modal-header" style="text-align: right;">
-			  <button class="clear_compare_list" type="button" style="color: white; border-color: red; background-color: red; margin-top: -5px;" data-dismiss="modal">×</button>
+			<div class="modal-header" style="text-align: right; display: block;">
+			  <button class="clear_compare_list" type="button" style="color: white; border-color: #98002e; background-color: #98002e; margin-top: -5px;" data-dismiss="modal">×</button>
 			</div>
 
             <!-- Modal body -->

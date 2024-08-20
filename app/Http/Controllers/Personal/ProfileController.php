@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Auth,Redirect,Storage,Hash,Response;
 use App\{UserFollow,BusinessServicesFavorite,StripePaymentMethod,User,CompanyInformation,Customer,Transaction,CustomerNotes,Recurring,CustomersDocuments,Announcement,BookingCheckinDetails};
 use App\Repositories\{BookingRepository};
-
 class ProfileController extends Controller
 {
     /**
@@ -30,7 +29,9 @@ class ProfileController extends Controller
 
     public function dashboard(Request $request)
     {
-        $business = CompanyInformation::find($request->business_id);
+        // $business = CompanyInformation::find($request->business_id);
+        $businessId = $request->business_id ?? auth()->user()->cid;//updated
+        $business = CompanyInformation::find($businessId);//updated
         if($request->customer_id){
             if(request()->type == 'user'){
                 $familyMember = $this->user->user_family_details()->where('id',request()->customer_id)->first();
@@ -42,10 +43,10 @@ class ProfileController extends Controller
                 $name = @$customer->full_name;
             }
         }else{
-            $customer = Customer::where(['business_id'=>$request->business_id,'user_id'=>Auth::user()->id])->first();
+            // $customer = Customer::where(['business_id'=>$request->business_id,'user_id'=>Auth::user()->id])->first();
+            $customer = Customer::where(['business_id'=>$request->business_id ?? auth()->user()->cid,'user_id'=>Auth::user()->id])->first();//updated
             $name = @$customer->full_name;
         }
-
         $attendanceCnt = BookingCheckinDetails::where('customer_id' ,@$customer->id)->whereMonth('checkin_date', '>=', date('m'))->whereMonth('checkin_date', '<=', date('m'))->whereNotNull('checked_at')->count();
         $attendanceCntPre = BookingCheckinDetails::where('customer_id' ,@$customer->id)->whereMonth('checkin_date', '>=', date('m') - 1)->whereMonth('checkin_date', '<=', date('m') - 1 )->whereNotNull('checked_at')->count();
         $attendancePct =  $attendanceCntPre != 0 ? number_format(($attendanceCnt - $attendanceCntPre)*100/$attendanceCntPre,2,'.','') : 0;

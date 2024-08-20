@@ -6,7 +6,7 @@ use App\Http\Controllers\Personal\PersonalBaseController;
 use Illuminate\Http\Request;
 use Auth;
 use App\{Customer,User,BusinessServices};
-
+use DB;
 use App\Repositories\{BookingRepository};
 
 class OrderController extends PersonalBaseController
@@ -27,12 +27,13 @@ class OrderController extends PersonalBaseController
 
     public function index(Request $request)
     {
+        
         $user = Auth::user();
         $business = $user->company()->where('id',request()->business_id)->first();
         if(!request()->business_id){
             return redirect()->route('personal.manage-account.index');
         }
-
+        // DB::enableQueryLog();
         if($request->customer_id){
             if(request()->type == 'user'){
                 $familyMember = Auth::user()->user_family_details()->where('id',request()->customer_id)->first();
@@ -50,13 +51,16 @@ class OrderController extends PersonalBaseController
 
         $bookingDetails = $currentBooking =  [];
         $bookingDetails =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,@$customer);
-      
+        // DB::enableQueryLog();
         $currentBookingData = $this->booking_repo->currentTab($request->serviceType,$request->business_id,@$customer);
+       
         foreach($currentBookingData as $i=>$book_details){
             $currentBooking[@$book_details->business_services_with_trashed->id .'!~!'.@$book_details->business_services_with_trashed->program_name] [] = $book_details;
         }
 
         $tabval = $request->tab; 
+        // dd($currentBooking);
+        // dd(\DB::getQueryLog()); 
 
         return view('personal.orders.index', compact('bookingDetails','currentBooking','tabval','customer','name','business'));
     }
@@ -160,7 +164,6 @@ class OrderController extends PersonalBaseController
             }
 
             //print_r($orderDetails);exit();
-
             return view('personal.orders.user_booking_detail',compact('orderDetails','tabName'))->render();
         }
     }

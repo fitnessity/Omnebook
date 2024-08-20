@@ -535,7 +535,7 @@ header{ position: fixed !important; }
 	color:  var(--vz-black-font-color);
 }
 .accordion-custom-btn.accordion-button:not(.collapsed){
-	background-color: rgba(237, 36, 45, 0.05);
+	background-color: rgba(152, 0, 46, 0.05);
 	color: #98002e;
 }
 .priceselect label{
@@ -8859,7 +8859,21 @@ height: 400px;
 .footer-bottom-left  ul{
   padding-left: 0px;
 }
-
-
-
+.purchase-method ul li{
+  margin-left: 25px;
+}
+.nav-pills .nav-link.active{
+  background-color: #1c256c;
+}
+.btn-primary{
+  background: #1c256c;
+  border: 1px solid #1c256c;
+}
+.btn-primary:hover{
+  background: #98002e;
+  border: 1px solid #98002e;
+}
+.cls-error{
+  font-size: 14px;
+}
 

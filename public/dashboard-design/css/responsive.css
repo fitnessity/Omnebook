@@ -11,6 +11,7 @@
 	.dots {  overflow-x: visible !important;}
 	.desktop-none-client{display: none;}
 	.client-contact-list-modal{max-width: 70%;}
+	#_cbhtml #divSnippetHandle{position: fixed;}
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1900px){
@@ -21,6 +22,7 @@
 	.desktop-none-client{display: none;}
 	.notification-close{right: 28px;}
 	.card-check-in {padding: 100px 100px;  }
+	#_cbhtml #divSnippetHandle{position: fixed;}
 }
 
 @media screen and (min-width: 768px) and (max-width: 992px){
@@ -134,6 +136,7 @@
 	.clinet-page-content{padding: calc(40px + 6.5rem) calc(1.5rem * .5) 60px calc(1.5rem * .5);}
 	.imt-25{margin-top: 25px;}
 	.finish-modal-80 {	max-width: 97%;  }
+	#sidebar-wrapper{margin-left: -70px;}
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){

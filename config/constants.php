@@ -2,8 +2,8 @@
 
 return [
 
-    // 'URL' => 'http://development.fitnessity.co/',
-    'URL' => 'https://d2bgo0bc1t29nh.cloudfront.net/',
+    'URL' => 'http://development.fitnessity.co/',
+    // 'URL' => 'https://d2bgo0bc1t29nh.cloudfront.net/',
 
     // 'URL' => 'http://'.$_SERVER["HTTP_HOST"],
 

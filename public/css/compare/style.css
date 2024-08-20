@@ -194,7 +194,7 @@ a{
     margin-top: 7px;
 }
 .showall-btn{
-    background: #f91942;
+    background: #98002e;
     border: none;
     padding: 5px 19px;
     color: #fff;
@@ -239,7 +239,7 @@ a{
     font-size: 13px;
 }
 .activity-inner-data i{
-    color: #f91942;
+    color: #98002e;
 }
 .activity-inner-data span{
     font-weight: 600;
@@ -276,7 +276,7 @@ a{
     margin-bottom: 4px;
 }
 .activity-time.red-txt{
-    color: #f91942;
+    color: #98002e;
 }
 .mapsb{
     margin-right: 0px !important;
@@ -305,7 +305,7 @@ a{
 }
 .kickboxing-block .kickboxing-topimg-content .fav-fun-2 {
     top: 12px;
-    color: #f91942;
+    color: #98002e;
     position: absolute;
     background: rgba(255, 255, 255, 0.8);
     padding: 6px 8px;
@@ -316,7 +316,7 @@ a{
 }
 .kickboxing-block .kickboxing-topimg-content span {
     top: 12px;
-    color: #f91942;
+    color: #98002e;
     position: absolute;
     background: rgba(255, 255, 255, 0.8);
     padding: 6px 8px;
@@ -326,7 +326,7 @@ a{
 	font-size: 12px;
 }
 .ratset-img .rattxt i{
-    color: #f91942;
+    color: #98002e;
 }
 .all-details{
     text-align: center;
@@ -375,7 +375,7 @@ a{
     font-weight: normal !important;
 }
 .addbusiness-btn{
-    background: #ea1515;
+    background: #98002e;
     color: #fff;
     padding: 6px 12px;
     display: inline-block;
@@ -390,7 +390,7 @@ a{
 .modal-inner-txt p{font-size: 18px; text-align: center; padding: 18px; color: #000;}
 .btns-modal{text-align: center;}
 .addbusiness-btn-modal{
-    background: #ea1515;
+    background: #98002e;
     color: #fff;
     padding: 12px 15px;
     display: inline-block;
@@ -415,8 +415,8 @@ a{
     text-transform: uppercase;
     border: 1px solid #ede9e9;
 }
-.addbusiness-btn-black:hover{color: #ea1515 !important}
-.addbusiness-btn-black:focus{color: #ea1515 !important;}
+.addbusiness-btn-black:hover{color: #98002e !important}
+.addbusiness-btn-black:focus{color: #98002e !important;}
 .close-btn-design-part {
   margin-top: 1 !important;
   color: white !important;
@@ -473,7 +473,7 @@ a{
 }*/
 .choose-calendar-time .start-time span{
     width: 100%;
-    background: #f91942;
+    background: #98002e;
     padding: 6px 11px;
     border-radius: 8px;
     font-weight: 600;
@@ -524,11 +524,11 @@ a{
     padding-left: 15px;
 }
 .btn-addtocart {
-  background-color: #ea1515;
+  background-color: #98002e;
   color: #fff !important;
   text-transform: uppercase;
   border-radius: 5px;
-  border: 1px solid #ea1515;
+  border: 1px solid #98002e;
   text-align: center;
   font-size: 10px;
   font-weight: bold;

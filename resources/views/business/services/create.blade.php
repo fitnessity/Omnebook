@@ -1689,22 +1689,16 @@
 @include('layouts.business.footer')
 @include('layouts.business.scripts')
 <script>
-
     CKEDITOR.replace('desc', {
         height: 200,
         extraPlugins: 'colorbutton,font,editorplaceholder,justify,widget'
     }); 
 
     $(document).ready(function(){ 
-
         if (window.location.hash === '#stepFour') {
             $('.collapseFourbtn').click();
         }
-
         $('#serviceForm').on('submit', function(event) {
-
-           
-
             var imageCount = $('#gallery img').length;
             var coverCount = $('#gallery1 img').length;
 
@@ -2364,26 +2358,48 @@
         data += '<div id="priceoption'+i+cnt+'" class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3">';
         data += $('#priceoption'+i+j).html();
         data += '</div>';
-
-        ///start 
         var newCategory=$("#priceoption"+i+cnt);
         newCategory.find('[id]').each(function() {
             var oldName = $(this).attr('id');
             var newName = oldName.replace(i, cnt);
             $(this).attr('id', newName);
         });
-        ////end 
-
-    
-        var re = data.replaceAll(i+","+j,i+","+cnt);
+        // adult_cus_weekly_price
+        /*var re = data.replaceAll(i+","+j,i+","+cnt);
         re = re.replaceAll("_"+i+j,"_"+i+cnt);
         if(i==0){
             re = re.replaceAll("0"+j,"0"+cnt);
         }else{
             re = re.replaceAll(i+''+j,i+''+cnt);
-        }
+        }*/
 
+        // Temporarily replace value attributes with placeholders
+    // Use unique placeholders for value attributes
+    var placeholders = {};
+    var tempData = data.replace(/value=["']?([^"']*)["']?/g, function(match, p1) {
+        var placeholder = 'PLACEHOLDER_' + Math.random().toString(36).substring(2);
+        placeholders[placeholder] = p1;
+        return 'value="' + placeholder + '"';
+    });
+
+    // Perform replacements
+    var re = tempData.replace(new RegExp(i + "," + j, "g"), i + "," + cnt);
+    re = re.replace(new RegExp("_" + i + j, "g"), "_" + i + cnt);
+
+    if (i == 0) {
+        re = re.replace(new RegExp("0" + j, "g"), "0" + cnt);
+    } else {
+        re = re.replace(new RegExp(i + '' + j, "g"), i + '' + cnt);
+    }
+
+    // Restore value attributes from placeholders
+    re = re.replace(/value="([^"]*)"/g, function(match, p1) {
+        return 'value="' + (placeholders[p1] || '') + '"';
+    });
+
+        console.log(re);
         $('#priceOptionDiv'+i).append(re);
+        
         if(j==0){
             $('#ul'+i+cnt).append('<li class="dropdown-divider"></li><li><a href="" onclick="deletePriceOption('+i+','+cnt+')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>');
         }
@@ -2394,8 +2410,8 @@
         $('#accor_nestingprice'+i+j).removeClass("show");
         $('#accor_nestingprice'+i+cnt).addClass("collapse show");
     }
-
-    $('.non-collapsing').on('click', function (e) {
+   
+     $('.non-collapsing').on('click', function (e) {
         e.stopPropagation();
     });
 

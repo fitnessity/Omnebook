@@ -57,7 +57,12 @@ class CompanyController extends Controller
             $ownerImage = $request->has('owner_pic') ? $request->file('owner_pic')->store('company') : $request->oldowner_pic; 
             if($request->has('owner_pic') && $request->oldowner_pic != ''){
                 Storage::delete($request->oldProfile);
-            }
+            }                
+            
+            do {
+                $uniqueCode = random_int(100000, 999999);
+            } while (CompanyInformation::where('unique_code', $uniqueCode)->exists());
+
 
             $company = [
                 "user_id" => Auth::user()->id,
@@ -90,6 +95,7 @@ class CompanyController extends Controller
                 'years_of_hosting' => $request->years_of_hosting,
                 'years_of_experience' => $request->years_of_experience,
                 "owner_pic" => $ownerImage,
+                "unique_code"=>$uniqueCode,
             ];
 
             if($companyId != ''){

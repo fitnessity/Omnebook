@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Validator;
 use App\Http\Controllers\Controller;
 use App\Repositories\FeedbackRepository;
@@ -13,24 +11,11 @@ use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
 {
-    /**
-     * The user repository instance.
-     *
-     * @var FeedbackRepository
-     */
     protected $feedback;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @param  FeedbackRepository  $feedback
-     * @return void
-     */
     public function __construct(FeedbackRepository $feedback)
     {
         $this->feedback = $feedback;
     }
-
     protected function feedbackValidator($data)
     {
         return Validator::make($data, [            
@@ -51,21 +36,15 @@ class FeedbackController extends Controller
     {
         return view('feedback.feedback');
     }
-
     public function saveFeedback(Request $request) {
-
         $this->validate($request, [
-            'rating' => 'required',
-            'suggestion' => 'required',           
+            'rating' => 'required','suggestion' => 'required',
             ]);
-        
         $status = $this->feedback->saveFeedback($request);
-
         $request->session()->flash($status['type'], $status['msg']);
         $response = array(
-                   'type' => $status['type'],
-                   'msg' => $status['msg']
+            'type' => $status['type'], 'msg' => $status['msg']
         );
        return redirect()->route('feedback')->with('message','Thank you for submitting your feedback with us!');
-    }  
+    }
 }

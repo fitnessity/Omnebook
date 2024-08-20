@@ -607,12 +607,15 @@
             }   
 
             foreach ($transaction as $tr) {
+                if (is_object($tr) && isset($tr->user_type)) {
                 if($tr->user_type == 'user'){
                     $userData =  $tr->User;
                 }else{
                     $userData = $tr->Customer;
                 }
-                $notificationAry[] = $formatNotification($userData, $tr, 'transaction',' made a payment of $'.$tr->amount);
+                $userData='';
+                    $notificationAry[] = $formatNotification($userData, $tr, 'transaction',' made a payment of $'.$tr->amount);
+                }
             }
 
             $booking = $company->UserBookingDetails();
@@ -764,28 +767,11 @@
 
         return  $text;
     }
-    // function getCustomerFilesNotifiy()
-    // {
-    //     return BusinessCustomerUploadFiles::where('isseen', 0)->where('status', 0)->get();
-    // }
-    // function getCustomerFilesNotifiy()
-    // {
-    //     $notifications = BusinessCustomerUploadFiles::where('isseen', 0)->where('status', 0)->get();
 
-    //     foreach ($notifications as $notification) {
-    //         $user = User::find($notification->user_id); // Assuming user_id is the column in BusinessCustomerUploadFiles that refers to the user
-    //         // $notification->profile_pic = $user ? $user->profile_pic : ''; // Assuming profile_pic is the column in the users table for the profile picture
-    //         if ($user && Storage::disk('s3')->exists($user->profile_pic)) {
-    //             $notification->profile_pic = Storage::disk('s3')->url($user->profile_pic);            
-    //         }
-    //         $notification->user_name = $user->firstname . ' ' . $user->lastname;
-    //     }
-
-    //     return $notifications;
-    // }
     function getCustomerFilesNotifiy()
     {
-        $notifications = BusinessCustomerUploadFiles::where('isseen', 0)->where('status', 0)->get();
+        $userid=auth()->id();
+        $notifications = BusinessCustomerUploadFiles::where('isseen', 0)->where('status', 0)->where('user_id',$userid)->get();
 
         foreach ($notifications as $notification) {
             $user = User::find($notification->user_id); 

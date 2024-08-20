@@ -792,7 +792,7 @@ input:disabled{
 						<div class="row mb-30">
 							<div class="col-lg-4">
 								<div class="overall-rating  mb-15">
-									<label>Overall rating </label>
+									<label>Overall rating</label>
 									<div class="row y-middle">
 										<div class="col-lg-2">
 											<div class="rating-total-star">
@@ -969,10 +969,10 @@ input:disabled{
 									<div class="row y-middle mb-25">
 										<div class="col-lg-2 col-md-2 col-sm-2 col-3">
 											<div class="company-list-text mb-10">
-												@if(is_object($review->User) && property_exists($review->User, 'first_letter'))
-													<p class="character">{{$review->User->first_letter}}</p>
+												@if(is_object($review->User) && property_exists($review->User, 'profile_pic'))
+													<p class="character">{{$review->User->profile_pic}}</p>
 												@else
-													<p class="character">N/A</p>
+													<p class="character">{{$review->User->first_letter}}</p>
 												@endif
 											</div>
 										</div>
@@ -1621,9 +1621,9 @@ input:disabled{
         $company_data = Auth::user()->current_company;
     }
 @endphp
+{{-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}&sensor=false"></script> --}}
 @include('layouts.business.footer')
 
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}&sensor=false"></script>
 
 <!-- New JS -->
 <script>
@@ -1697,7 +1697,7 @@ input:disabled{
         }
 
         var formData = new FormData(this);
-
+		// alert('11');
         $.ajax({
             url: "{{route('save_business_service_reviews')}}", 
             type: 'POST',

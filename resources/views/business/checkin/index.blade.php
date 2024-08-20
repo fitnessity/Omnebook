@@ -178,7 +178,7 @@
                                 <div class="col-lg-6">  
                                     <div class="card">
                                         <div class="card-header">
-                                            {{-- <h4 class="card-title mb-0">Upload welcome screen photo</h4> --}}
+                                            <!-- {{-- <h4 class="card-title mb-0">Upload welcome screen photo</h4> --}} -->
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <h4 class="card-title mb-0">Upload welcome screen photo</h4>
@@ -259,7 +259,7 @@
 
                                     <div class="card">
                                         <div class="card-header">
-                                            {{-- <h4 class="card-title mb-0">Upload passcode page cover photo </h4> --}}
+                                            <!-- {{-- <h4 class="card-title mb-0">Upload passcode page cover photo </h4> --}} -->
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <h4 class="card-title mb-0">Upload passcode page cover photo </h4>
@@ -436,7 +436,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- end container -->
+                                             end container/ -->
                                              <div style="background-image:url('/public/dashboard-design/images/check-in-bg.jpg')">
                                                 <div class="container-fuild">
                                                     <div class="z-1">
@@ -630,7 +630,7 @@
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
                                             <div class="page-heading text-right">
                                                 <label class="mb-15">
-                                                    {{-- <a class="btn" id="exitButton" style="background-color: #ea1515; border: 1px solid #ea1515; color: #fff; border-radius: 10px;" href="http://dev.fitnessity.co/checkin/check-out?type=1">Exit</a></label> --}}
+                                                    <!-- {{-- <a class="btn" id="exitButton" style="background-color: #ea1515; border: 1px solid #ea1515; color: #fff; border-radius: 10px;" href="http://dev.fitnessity.co/checkin/check-out?type=1">Exit</a></label> --}} -->
                                                     <a class="btn" id="exitButton" 
                                                     style="background-color: {{ $color1 ?: '#ea1515' }}; border: 1px solid {{ $color1 ?: '#ea1515' }}; color: #fff; border-radius: 10px;" 
                                                     href="http://dev.fitnessity.co/checkin/check-out?type=1">Exit</a>                                                 
@@ -656,7 +656,7 @@
                                                 <span>Fitness Pvt. Ltd. </span>
                                             </div>
                                             <div class="text-center">
-                                                {{-- <a href="http://dev.fitnessity.co/quick-checkin" class="btn fs-15 mb-15" id="checkInButton" style="background-color: #ea1515; border: 1px solid #ea1515; color: #fff; border-radius: 10px;"><i class="ri-add-line align-bottom me-1"></i>Check In</a> --}}
+                                                <!-- {{-- <a href="http://dev.fitnessity.co/quick-checkin" class="btn fs-15 mb-15" id="checkInButton" style="background-color: #ea1515; border: 1px solid #ea1515; color: #fff; border-radius: 10px;"><i class="ri-add-line align-bottom me-1"></i>Check In</a> --}} -->
                                                 <a href="http://dev.fitnessity.co/quick-checkin" class="btn fs-15 mb-15" id="checkInButton" style="background-color: {{ $color1 ?: '#ea1515' }}; border: 1px solid {{ $color1 ?: '#ea1515' }}; color: #fff; border-radius: 10px;"><i class="ri-add-line align-bottom me-1"></i>Check In</a>
                                                 <a href="http://dev.fitnessity.co/business/68/create-customer" class="btn fs-15 mb-15" style="background-color: #000; border: 1px solid #000; color: #fff; border-radius: 10px;"><i class="ri-add-line align-bottom me-1"></i>Sign Up</a>
                                             </div>
@@ -817,11 +817,10 @@
 
 
 
-{{-- end --}}
+<!-- {{-- end --}} -->
 @include('layouts.business.footer')
-@include('layouts.business.scripts')
-
-   
+@include('layouts.business.scripts')  
+@push('scripts')
     <script>
         $('ul#dropzone-preview').on('click', 'button.delete-btn', function() {
         // Remove the parent <li> element when the delete button is clicked
@@ -839,92 +838,83 @@
         });
 
     </script>
+        <script src="{{asset('/public/dashboard-design/js/dropzone-min.js')}}"></script>
+        <!--  <script src="{{asset('/public/dashboard-design/js/ecommerce-product-create.init.js')}}"></script> -->
+        <script src="{{asset('/public/dashboard-design/js/dropzoneCover.js')}}"></script>
+        <script src="{{asset('/public/dashboard-design/js/dropzonePasscode.js')}}"></script>
+        <script src="{{asset('/public/dashboard-design/js/dropzoneCheckin.js')}}"></script>
+        <script src="{{asset('/public/dashboard-design/js/pickr.min.js')}}"></script>
 
+        <script>
+            $(document).ready(function() {
+                const colors = {
+                    1: '{{ $color1 }}',
+                    2: '{{ $color2 }}',
+                    3: '{{ $color3 }}'
+                };
+                $('.nano-colorpicker').each(function() {
+                    const pickerElement = $(this)[0];
+                    const pickerIndex = $(this).data('picker');
+                    const inputSelector = '#selectedColor' + pickerIndex;
+                    const defaultColor = colors[pickerIndex] || '#ea1515';
 
-@endsection
-   
-@push('scripts')
-    <script src="{{asset('/public/dashboard-design/js/dropzone-min.js')}}"></script>
-    <!--  <script src="{{asset('/public/dashboard-design/js/ecommerce-product-create.init.js')}}"></script> -->
-    <script src="{{asset('/public/dashboard-design/js/dropzoneCover.js')}}"></script>
-    <script src="{{asset('/public/dashboard-design/js/dropzonePasscode.js')}}"></script>
-    <script src="{{asset('/public/dashboard-design/js/dropzoneCheckin.js')}}"></script>
-    <script src="{{asset('/public/dashboard-design/js/pickr.min.js')}}"></script>
-
-    <script>
-        $(document).ready(function() {
-
-            const colors = {
-                1: '{{ $color1 }}',
-                2: '{{ $color2 }}',
-                3: '{{ $color3 }}'
-            };
-
-            $('.nano-colorpicker').each(function() {
-                const pickerElement = $(this)[0];
-                const pickerIndex = $(this).data('picker');
-                const inputSelector = '#selectedColor' + pickerIndex;
-                const defaultColor = colors[pickerIndex] || '#ea1515';
-
-                const pickr = Pickr.create({
-                    el: pickerElement,
-                    theme: 'nano',
-                    default: defaultColor,
-                    swatches: [
-                        'rgba(244, 67, 54, 1)',
-                        'rgba(233, 30, 99, 0.95)',
-                        'rgba(156, 39, 176, 0.9)',
-                        'rgba(103, 58, 183, 0.85)',
-                        'rgba(63, 81, 181, 0.8)',
-                        'rgba(33, 150, 243, 0.75)',
-                        'rgba(3, 169, 244, 0.7)'
-                    ],
-                    defaultRepresentation: 'HEXA',
-                    components: {
-                        preview: true,
-                        opacity: true,
-                        hue: true,
-                        interaction: {
-                            hex: false,
-                            rgba: false,
-                            hsva: false,
-                            input: true,
-                            clear: true,
-                            save: true
+                    const pickr = Pickr.create({
+                        el: pickerElement,
+                        theme: 'nano',
+                        default: defaultColor,
+                        swatches: [
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(233, 30, 99, 0.95)',
+                            'rgba(156, 39, 176, 0.9)',
+                            'rgba(103, 58, 183, 0.85)',
+                            'rgba(63, 81, 181, 0.8)',
+                            'rgba(33, 150, 243, 0.75)',
+                            'rgba(3, 169, 244, 0.7)'
+                        ],
+                        defaultRepresentation: 'HEXA',
+                        components: {
+                            preview: true,
+                            opacity: true,
+                            hue: true,
+                            interaction: {
+                                hex: false,
+                                rgba: false,
+                                hsva: false,
+                                input: true,
+                                clear: true,
+                                save: true
+                            }
                         }
-                    }
-                });
-
-                pickr.on('save', (color, instance) => {
-                    const selectedColor = color.toHEXA().toString();
-                    $(inputSelector).val(selectedColor);
-                    // $('#exitButton, #checkInButton').css({
-                    //     'background-color': selectedColor,
-                    //     'border-color': selectedColor
-                    // });
-                    if (pickerIndex == 1) {
-                    $('#exitButton, #checkInButton').css({
-                        'background-color': selectedColor,
-                        'border-color': selectedColor
                     });
-                    } else if (pickerIndex == 2) {
-                        $('#passcodeExitButton, #quickCodeButton').css({
+
+                    pickr.on('save', (color, instance) => {
+                        const selectedColor = color.toHEXA().toString();
+                        $(inputSelector).val(selectedColor);
+                        // $('#exitButton, #checkInButton').css({
+                        //     'background-color': selectedColor,
+                        //     'border-color': selectedColor
+                        // });
+                        if (pickerIndex == 1) {
+                        $('#exitButton, #checkInButton').css({
+                            'background-color': selectedColor,
+                            'border-color': selectedColor
+                        });
+                        } else if (pickerIndex == 2) {
+                            $('#passcodeExitButton, #quickCodeButton').css({
+                                'background-color': selectedColor,
+                                'border-color': selectedColor
+                            });
+                        }
+                        else if (pickerIndex == 3) {
+                        $('#resolveButton, #finishButton').css({
                             'background-color': selectedColor,
                             'border-color': selectedColor
                         });
                     }
-                    else if (pickerIndex == 3) {
-                    $('#resolveButton, #finishButton').css({
-                        'background-color': selectedColor,
-                        'border-color': selectedColor
+                        pickr.hide(); // Optional: hide the color picker after selection
                     });
-                }
-                    pickr.hide(); // Optional: hide the color picker after selection
                 });
             });
-        });
-    </script>
-    
-</body>
-
-@endpush
+        </script>
+    @endpush
+@endsection

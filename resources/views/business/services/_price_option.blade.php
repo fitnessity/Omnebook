@@ -149,8 +149,7 @@
                                             <div class="cus-week-price sp-select">
                                                 <label>Everyday Price</label>
                                                 <p> (Monday - Sunday)</p>
-                                                 <input name="adult_cus_weekly_price_{{$i}}{{$j}}" id="adult_cus_weekly_price{{$i}}{{$j}}"  value="{{@$price->adult_cus_weekly_price}}" onkeyup="changeWDayPrice({{$i}},{{$j}},'adult');" type="text" class="form-control" onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$">
-                                                {{-- <a href="bbbb400ccccc">aaaaaa</a> --}}
+                                                    <input name="adult_cus_weekly_price_{{$i}}{{$j}}" id="adult_cus_weekly_price{{$i}}{{$j}}" value="{{@$price->adult_cus_weekly_price}}" onkeyup="changeWDayPrice({{$i}},{{$j}},'adult');" type="text" class="form-control" onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$">
                                             </div> 
                                         </div>
                                         <div class="weekend-price Weekend{{$i}}{{$j}} @if(@$price->dispaly_section == 'weekdayprice') d-none @endif">

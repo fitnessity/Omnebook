@@ -20,7 +20,7 @@ class CheckInController extends Controller
 
     public function store(Request $request){
     	// print_r($request->all());exit;
-
+        // dd($request->all());
         $data = BusinessCheckinSettings::where('business_id', $request->business_id)->first();
 
         $input = [];
@@ -63,6 +63,6 @@ class CheckInController extends Controller
 			BusinessCheckinSettings::create($input);
     	}
 
-    	return redirect()->route('checkin-portal-settings', ['business_id' => $request->business_id]);
+    	return redirect()->back();
     }
 }

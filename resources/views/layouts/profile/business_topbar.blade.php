@@ -1,13 +1,4 @@
-<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
-<head>
-    <meta charset="utf-8" />
-    <title>Fitnessity </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
-	
+
 
     <!-- Layout config Js-->
     <script src="{{url('/public/dashboard-design/js/layout.js')}}"></script>
@@ -24,7 +15,6 @@
 	
 	<!-- icon -->
 	<link href="{{url('/public/dashboard-design/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
-	<link href="{{url('/public/dashboard-design/css/icons.css')}}" rel="stylesheet" type="text/css" />
 
 	<link href="{{url('/public/css/slimselect.min.css')}}" rel="stylesheet" type="text/css" />
 	<link href="{{url('/public/js/select/select.css')}}" rel="stylesheet" type="text/css" />
@@ -55,7 +45,7 @@
 	<link rel="stylesheet" href="{{url('/public/dashboard-design/filepond/filepond-plugin-image-preview.min.css')}}" type="text/css" />
 
 	<link rel="stylesheet" href="{{url('/public/dashboard-design/css/dragula.min.css')}}" type="text/css" />
-</head>
+
 
  <!-- Begin page -->
     <div id="layout-wrapper">

@@ -36,7 +36,7 @@ html {
     position: relative;
 }
 .pr-loacation-add span>a {
-    color: #f53b49 !important;
+    color: #98002e !important;
 }
 .btn-finest {
     background-color: #ed1b24;
@@ -150,7 +150,7 @@ html {
     padding: 40px;
 }
 .reatingbox>h5>span {
-    color: #f53b49;
+    color: #98002e;
     font-size: 18px;
 }
 .social>ul>li {
@@ -285,7 +285,7 @@ section.menublck {
     border: 1px solid #f5f5f5;
 }*/
 .pr-verification {
-    background-color: #f53b49;
+    background-color: #98002e;
     padding: 30px 0;
 }
 .pr-verification>h1 {
@@ -364,7 +364,7 @@ section.menublck {
 a.get-btn {
     font-size: 26px;
     text-transform: uppercase;
-    background-color: #f53b49;
+    background-color: #98002e;
     padding: 20px;
     display: block;
     text-align: center;
@@ -386,7 +386,7 @@ a.get-btn {
     border: 1px solid gray;
     padding: 6px 22px;
     text-transform: uppercase;
-    color: #f53b49;
+    color: #98002e;
     cursor: pointer;
         transition: 0.5s;
 }
@@ -395,21 +395,21 @@ a.get-btn {
     border-bottom: 1px solid #f5f5f5;
 }
 .claim-business:hover {
-    background-color: #f53b49;
+    background-color: #98002e;
     color: #fff;
-    border: 1px solid #f53b49;
+    border: 1px solid #98002e;
 }
 .clamwithblack .claim-business {
     color: #fff;
 }
 .clamwithblack .claim-business:hover {
-    background-color: #f53b49;
+    background-color: #98002e;
     color: #fff;
-    border: 1px solid #f53b49;
+    border: 1px solid #98002e;
 }
 span.pr-climed {
     font-size: 12px;
-    color: #f53b49;
+    color: #98002e;
     margin-left: 10px;
 }
 .menu-white{
@@ -433,7 +433,7 @@ span.pr-climed {
     margin-bottom: 0;
 }
 .pr-table-hd>span{
-    color: #f53b49;
+    color: #98002e;
     margin-bottom: 0;
     margin-right: 10px;
 }
@@ -458,7 +458,7 @@ td.pr-open-all-day {
     font-size: 14px;
 }
 .pr-busin-dire>i{
-    color: #f53b49;
+    color: #98002e;
 }
 .pr-loacation-add {
     padding: 20px 10px;
@@ -479,7 +479,7 @@ color: #999;
     font-weight: 400;
 }
 .pr-loacation-add>h6 span {
-    color: #f53b49;
+    color: #98002e;
 }
 .pr-devider{
     background-color: #fafafa;

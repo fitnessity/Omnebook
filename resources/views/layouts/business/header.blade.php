@@ -4,12 +4,17 @@ $total_quantity = 0;
 ?>
 
 <!DOCTYPE html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
     <head>
         <title>Fitnessity</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta content="Fitnessity: Because Fitness=Necessity" name="description" />
+		<meta content="" name="author" />
+
+        <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta content="charset=utf-8">
+        <meta content="charset=utf-8"> -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="description" content=" Fitnessity: Because Fitness=Necessity ">
         <meta itemprop="name" content="">
@@ -26,8 +31,8 @@ $total_quantity = 0;
         <meta property="og:image" content="">
         <meta property="og:site_name" content="Fitnessity">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-        <link rel="shortcut icon" href="{{ url('/public/images/email/favicon.ico') }}">
-        <link rel="icon" href="{{ url('/public/images/email/favicon.ico') }}">
+        <link rel="shortcut icon" href="{{ url('/public/images/email/favicon.png') }}">
+        <link rel="icon" href="{{ url('/public/images/email/favicon.png') }}">
         <!-- <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,900'>
         <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'> -->
 
@@ -354,7 +359,8 @@ $total_quantity = 0;
 									} 
 									$total_quantity = count($newcart["cart_item"]);?>
 							<a class="btn-cart" href="{{route('carts_index')}}">
-								<img src="https://d2bgo0bc1t29nh.cloudfront.net/public/images/shoping-cart-header-black.png" alt="cart"><span id="cart-item">
+								<img src="{{asset('images/shoping-cart-header-black.png')}}" alt="cart"><span id="cart-item">
+								<!-- <img src="https://d2bgo0bc1t29nh.cloudfront.net/public/images/shoping-cart-header-black.png" alt="cart"><span id="cart-item"> -->
 									 {{$total_quantity}}</span>
                             </a>
 							</div>

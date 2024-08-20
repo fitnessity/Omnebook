@@ -51,6 +51,7 @@ class OnBoardedController extends Controller {
         return view('on-boarded.index',compact('show','cid','companyDetail','user','id','show','plans','features','freePlan','faqs'));
     }
     public function store(Request $request){
+        // dd('33');
         $userDt = User::find($request->id);
         $companyDt = CompanyInformation::find($request->cid);
         if($request->step == 1){
@@ -94,34 +95,71 @@ class OnBoardedController extends Controller {
                 'cid' => @$companyDt->id, 'id' => $user->id,
             ];
         }else{
-            $companyImage = $request->has('logo') ? $request->file('logo')->store('company') :  @$companyDt->logo;; 
-            $company = [
-                "user_id" => @$userDt->id,
-                "company_name" => $request->companyName,
-                "dba_business_name" => $request->dbaBusinessName,
-                "contact_number" => $request->contact,
-                "logo" => $companyImage,
-                "address" => $request->bAddress,
-                "state" => $request->bstate,
-                "country" => $request->bcountry,
-                "zip_code" => $request->bzipcode,
-                "city" => $request->bcity,
-                "business_user_tag" => $request->businessUserName,
-                "latitude" => $request->blat,
-                "longitude" => $request->blon,
-                "additional_address" => $request->additionalAddress,
-                "neighborhood" => $request->neighborhood,
-                "business_phone" => $request->business_phone,
-                "business_email" => $request->businessEmail,
-                "business_website" => $request->website,
-                "business_type" => $request->businessType,
-                "first_name" => @$userDt ->firstname,
-                "last_name" => @$userDt->lastname,
-                "email" => $request->email,
-                "about_company" => $request->aboutCompany,
-                "short_description" => $request->shortDescription,
-            ];
+            $companyImage = $request->has('logo') ? $request->file('logo')->store('company') :  @$companyDt->logo;
+            if (empty($request->cid)) {
+                do {
+                    $uniqueCode = random_int(100000, 999999);
+                } while (CompanyInformation::where('unique_code', $uniqueCode)->exists());
+            
+                $company = [
+                    "user_id" => @$userDt->id,
+                    "company_name" => $request->companyName,
+                    "dba_business_name" => $request->dbaBusinessName,
+                    "contact_number" => $request->contact,
+                    "logo" => $companyImage,
+                    "address" => $request->bAddress,
+                    "state" => $request->bstate,
+                    "country" => $request->bcountry,
+                    "zip_code" => $request->bzipcode,
+                    "city" => $request->bcity,
+                    "business_user_tag" => $request->businessUserName,
+                    "latitude" => $request->blat,
+                    "longitude" => $request->blon,
+                    "additional_address" => $request->additionalAddress,
+                    "neighborhood" => $request->neighborhood,
+                    "business_phone" => $request->business_phone,
+                    "business_email" => $request->businessEmail,
+                    "business_website" => $request->website,
+                    "business_type" => $request->businessType,
+                    "first_name" => @$userDt ->firstname,
+                    "last_name" => @$userDt->lastname,
+                    "email" => $request->email,
+                    "about_company" => $request->aboutCompany,
+                    "short_description" => $request->shortDescription,
+                    "unique_code"=>$uniqueCode,
+                ];
+            } 
+            else{
+                $company = [
+                    "user_id" => @$userDt->id,
+                    "company_name" => $request->companyName,
+                    "dba_business_name" => $request->dbaBusinessName,
+                    "contact_number" => $request->contact,
+                    "logo" => $companyImage,
+                    "address" => $request->bAddress,
+                    "state" => $request->bstate,
+                    "country" => $request->bcountry,
+                    "zip_code" => $request->bzipcode,
+                    "city" => $request->bcity,
+                    "business_user_tag" => $request->businessUserName,
+                    "latitude" => $request->blat,
+                    "longitude" => $request->blon,
+                    "additional_address" => $request->additionalAddress,
+                    "neighborhood" => $request->neighborhood,
+                    "business_phone" => $request->business_phone,
+                    "business_email" => $request->businessEmail,
+                    "business_website" => $request->website,
+                    "business_type" => $request->businessType,
+                    "first_name" => @$userDt ->firstname,
+                    "last_name" => @$userDt->lastname,
+                    "email" => $request->email,
+                    "about_company" => $request->aboutCompany,
+                    "short_description" => $request->shortDescription,
+                ];  
+            }
+            // dd($uniqueCode);
             @$userDt->update(['show_step'=>4]);
+            // dd($company);
             $companyDetail  =  CompanyInformation::updateOrCreate(['id' => $request->cid],$company);
             if ($companyDetail->wasRecentlyCreated) {
                 SGMailService::welcomeMailOfNewBusinessToCustomer(['cid'=> $companyDetail->id,'email' => @$userDt->email]);

@@ -1,9 +1,12 @@
 (function() {
+    var container = $('#your-login-widget-container'); 
+    var uniqueCode = container.attr('data-unique-code'); 
     var iframe = document.createElement('iframe');
-    iframe.src = 'http://dev.fitnessity.co/login_integration';
+    // iframe.src = 'http://dev.fitnessity.co/loginuser';
+    iframe.src = 'http://dev.fitnessity.co/loginuser/' + uniqueCode;
     iframe.style.border = 'none';
-    iframe.style.width = '300px';
-    iframe.style.height = '200px';
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
     
     var container = document.getElementById('your-login-widget-container');
     container.appendChild(iframe);
@@ -15,3 +18,5 @@
         }
     }, false);
 })();
+
+

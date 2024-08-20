@@ -17,6 +17,7 @@ class ServiceController extends BusinessBaseController
     public function index(Request $request ,$business_id)
     {   
         $companyInfo = $request->current_company;
+        // dd($companyInfo);
         $services = @$companyInfo->service->sortByDesc('created_at');
         $companyId = @$companyInfo->id;
         $companyName = @$companyInfo->dba_business_name;
@@ -59,7 +60,6 @@ class ServiceController extends BusinessBaseController
         $categoryData = $category ?  $category->where('class_type', NULL)->get() : [];
         $classes = optional($service)->BusinessPriceDetailsAges() ? optional($service)->BusinessPriceDetailsAges()->where('class_type', $serviceType)->get() : [];
 
-
         $reqSafety = explode(',',@$service->req_safety);
         $proofVerification = empty($reqSafety) ? "" : (in_array("id_proof", $reqSafety) ? "checked" : "");
         $vaccinefVerification = empty($reqSafety) ? "" : (in_array("id_vaccine", $reqSafety) ? "checked" : "");
@@ -97,7 +97,8 @@ class ServiceController extends BusinessBaseController
     public function store(Request $request)
     {   
         //ini_set('memory_limit', '-1');
-        //print_r($request->all()); //exit(); 
+        //print_r($request->all()); //exit();
+        // dd($request->step); 
         $profilePicture = $dayImage = $safe_varification ="";
 
         $user = Auth::user();

@@ -33,6 +33,7 @@ class LoginController extends Controller {
     }
 	
     public function postLogin(Request $request) {
+        // dd('22');
         $postArr = $request->input();
     	//dd($postArr);
     	$rules = [

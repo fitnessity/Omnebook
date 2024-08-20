@@ -5,7 +5,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use Aws\S3\S3Client;
-use App\Jobs\{ProcessAttendanceExcelData,ProcessCustomerExcelData,ProcessMembershipExcelData,ProcessAttendance,ProcessMembership,Membership};
+use App\Jobs\{ProcessAttendanceExcelData,ProcessCustomerExcelData,ProcessMembershipExcelData,ProcessAttendance,ProcessMembership,Membership,MembershipRun};
 use GuzzleHttp\Client;
 use App\Http\Requests;
 use Illuminate\Http\Request;
@@ -160,13 +160,17 @@ class CustomerController extends Controller {
     }
     public function loadView(Request $request)
     {
+         // Enable query log
         $char = $request->input('char');
         $cid = Auth::user()->cid;
         $company = CompanyInformation::find($cid);
         $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->orderBy('fname')->get();
+        // \DB::enableQueryLog();
         $customerStatusCounts = $customers->mapToGroups(function ($customer) {
             return [$customer->is_active() => $customer];
         });
+        // dd(\DB::getQueryLog()); // Show results of log
+
         if($request->customer_type == 'active'){
             $customers =  $customerStatusCounts->get('Active', collect());
         }else if($request->customer_type == 'in-active'){
@@ -285,6 +289,7 @@ class CustomerController extends Controller {
         if( $customerdata != ''){  Customer::where('id',$request->id)->delete(); }
     }
     public function show(Request $request, $business_id, $id){
+        // \DB::enableQueryLog();
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
         $terms = $company->business_terms->first();
@@ -310,6 +315,7 @@ class CustomerController extends Controller {
         if(Session::has('cardSuccessMsg')){
             $cardSuccessMsg = 1; Session::forget('cardSuccessMsg');
         }
+        // dd(\DB::getQueryLog()); 
         return view('customers.show', [
             'customerdata'=>$customerdata,
             'strpecarderror'=>$strpecarderror,
@@ -441,14 +447,15 @@ class CustomerController extends Controller {
                         }
                         if ($this->isHeaderRow($row)) {
                             $headerFound = true;
-                            continue; // Skip adding header rows to $filteredRows
+                            continue; 
                         }
                         if ($headerFound) {
-                            $filteredRows->push($row); // Push row to collection
+                            $filteredRows->push($row); 
                         } 
                     }
                     if ($filteredRows->isEmpty()) {
-                        Log::warning('No filtered rows found.'); Log::info($filteredRows);
+                        Log::info('No filtered rows found.'); 
+                        Log::info($filteredRows);
                     }
                     // dd($request->business_id);
                     $bid=$request->business_id;
@@ -1042,4 +1049,5 @@ class CustomerController extends Controller {
             else{ return generateUniqueCode(); }
         }
     }
+    
 }
