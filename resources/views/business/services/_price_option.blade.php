@@ -29,7 +29,7 @@
     }
     
 ?>
-<div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="priceoption{{$i}}{{$j}}">
+<div class="accordion priceoption nesting2-accordion custom-accordionwithicon accordion-border-box mt-3 priceoption_accord" id="priceoption{{$i}}{{$j}}">
     <div class="accordion-item shadow">
         <h2 class="accordion-header" id="acc_nesting{{$i}}{{$j}}">
             <button class="accordion-custom-btn accordion-button @if($displayRecPrice != @$price->id) collapsed @endif " type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingprice{{$i}}{{$j}}" aria-expanded="true" aria-controls="accor_nestingprice{{$i}}{{$j}}">
@@ -149,7 +149,8 @@
                                             <div class="cus-week-price sp-select">
                                                 <label>Everyday Price</label>
                                                 <p> (Monday - Sunday)</p>
-                                                <input name="adult_cus_weekly_price_{{$i}}{{$j}}" id="adult_cus_weekly_price{{$i}}{{$j}}" value="{{@$price->adult_cus_weekly_price}}" onkeyup="changeWDayPrice({{$i}},{{$j}},'adult');" type="text" class="form-control "onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$"></div> 
+                                                    <input name="adult_cus_weekly_price_{{$i}}{{$j}}" id="adult_cus_weekly_price{{$i}}{{$j}}" value="{{@$price->adult_cus_weekly_price}}" onkeyup="changeWDayPrice({{$i}},{{$j}},'adult');" type="text" class="form-control" onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$">
+                                            </div> 
                                         </div>
                                         <div class="weekend-price Weekend{{$i}}{{$j}} @if(@$price->dispaly_section == 'weekdayprice') d-none @endif">
                                             <div class="cus-week-price sp-select">
@@ -169,7 +170,7 @@
                                             <div class="mb-15 mt-15 checkbox-selection">
                                                 <input data-count="0"  type="checkbox" id="is_recurring_adult{{$i}}{{$j}}" name="is_recurring_adult_{{$i}}{{$j}}" @if(@$price->is_recurring_adult == '1') Checked value="1" @else value="0"" @endif onclick="openmodelbox({{$i}},{{$j}},'adult');" >
                                                 <button id="btn_recurring_adult{{$i}}{{$j}}" name="btn_recurring_adult_{{$i}}{{$j}}[]" type="button" data-count="0" class="btn btn-primary recurrint_id d-none" data-bs-toggle="modal" data-bs-target=".edit-adult{{$i}}{{$j}}" onclick="recurrint_id({{$i}},{{$j}},'adult');">Launch demo modal</button>
-                                                <label for="adults1" id="recurringtxtadult{{$i}}{{$j}}">Is This A Recurring Payment? Set the payment terms for Adults @if(@$price->is_recurring_adult == '1') {{$adultTxt}} <a href="" data-bs-toggle="modal" data-bs-target=".edit-adult{{$i}}{{$j}}" class="">Edit</a> ) <div class="delete-recurring" onclick="deleteRecurring('{{$i}}','{{$j}}','adult')"><i class="fas fa-trash-alt"></i></div> @endif </label>
+                                                <label for="adults1" id="recurringtxtadult{{$i}}{{$j}}">Is This A Recurring Payment? Set the payment terms for Adults @if(@$price->is_recurring_adult == '1') {{$adultTxt}} <a href="" data-bs-toggle="modal" data-bs-target=".edit-adult{{$i}}{{$j}}" class="">Edit</a>) <div class="delete-recurring" onclick="deleteRecurring('{{$i}}','{{$j}}','adult')"><i class="fas fa-trash-alt"></i></div> @endif </label>
                                             </div>
                                         </div>
                                     </div>
@@ -179,7 +180,7 @@
                     </div>
                 </div>
 
-                <div class="accordion nesting4-accordion custom-accordionwithicon accordion-border-box mt-3 displaysectiondiv{{$i}}{{$j}} {{@$price->child_cus_weekly_price != ''  ? '': 'd-none'}}" id="accor_nestingchild{{$i}}{{$j}}" >
+                <div class="accordion nesting4-accordion custom-accordionwithicon accordion-border-box mt-3 displaysectiondiv{{$i}}{{$j}} {{@$price->child_cus_weekly_price != ''  ? '': 'd-none'}}" id="accor_nestingchild{{$i}}{{$j}}">
                     <div class="accordion-item shadow">
                         <h2 class="accordion-header" id="accordionnesting4Example2">
                             <button class="accordion-custom-btn accordion-button collapsed font-red" type="button" data-bs-toggle="collapse" data-bs-target="#accor_child{{$i}}{{$j}}" aria-expanded="false" aria-controls="accor_child{{$i}}{{$j}}">
@@ -312,7 +313,7 @@
             </div>
         </div>
 
-        <div class="modal fade edit-adult{{$i}}{{$j}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal fade modaldiv_new edit-adult{{$i}}{{$j}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-70">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -464,7 +465,7 @@
             </div>
         </div>
 
-        <div class="modal fade edit-child{{$i}}{{$j}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal fade modaldiv_new edit-child{{$i}}{{$j}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-70">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -614,7 +615,7 @@
             </div>
         </div>
 
-        <div class="modal fade edit-infant{{$i}}{{$j}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal fade modaldiv_new edit-infant{{$i}}{{$j}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-70">
                 <div class="modal-content">
                     <div class="modal-header">
