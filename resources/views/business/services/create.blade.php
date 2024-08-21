@@ -1687,7 +1687,7 @@
 
 @endif
 @include('layouts.business.footer')
-@include('layouts.business.scripts')
+
 <script>
     CKEDITOR.replace('desc', {
         height: 200,
