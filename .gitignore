@@ -1,6 +1,5 @@
 # Node artifact files
 /node_modules
-/public
 /public/hot
 /public/storage
 /public/log

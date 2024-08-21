@@ -10,28 +10,95 @@
         @include('business.engage-clients.engage_clients_sidebar')
         <link href="http://dev.fitnessity.co//public/dashboard-design/drag-and-drop/assets/frameworks/foundation-emails/css/app.css" rel="stylesheet" type="text/css" />
         <link href="http://dev.fitnessity.co//public/dashboard-design/drag-and-drop/nlbuilder/newsletterbuilder.css" rel="stylesheet" type="text/css" /> 
-        <style>
-            #btnSave{
-                font-size: 15px;
-                font-weight: bold;
-                color: #ffffff;
-                text-decoration: none;
-                display: inline-block;
-                padding: 8px 16px 8px 16px;
-                border: 0 solid #1c256c;
-                /* margin: 10px 0 0 10px; */
-                background-color: #1c256c;
-                text-transform: capitalize;
-                border-radius: 10px;
-            }
-            .is-selectbox{background: #1c256c;color: #ffffff;}
-            .is-selectbox:hover {background: #1c256c;}
-            .is-selectbox .is-icon-flex{fill: rgba(255, 255, 255, 0.9);}
-            .header-right{line-height: 0;}
-            .pc-navbar{line-height: 1.5;}
-        </style>
+         
         <!-- Page Content -->
         <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <a href="#menu-toggle" class="btn btn-black mb-15" id="menu-toggle"><i class="fas fa-bars"></i></a>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mb-35">
+                            <div class="row y-middle">
+                                <div class="col-lg-2">
+                                    <div class="text-left">
+                                        <a href="#" class="btn btn-red mr-5"> Back  </a> 
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="text-center">
+                                        <label>Step 1 to 4: Create blast email</label>
+                                        <h3>Choose a template</h3>
+                                    </div>
+                                </div>
+                                    
+                                <div class="col-lg-2">
+                                    <div class="text-right">
+                                        <a href="#" class="btn btn-red mr-5"> Next Step  </a> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                <div class="gift-card-radio-buttons">
+                                    <label class="gift-custom-radio w-100">
+                                        <input type="radio" name="radio" checked>
+                                        <span class="gift-btn"><i class="las la-check"></i>
+                                            <div class="hobbies-icon">
+                                            <img src="http://dev.fitnessity.co/public/dashboard-design/images/temp-1.jpg">
+                                            </div>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                <div class="gift-card-radio-buttons">
+                                    <label class="gift-custom-radio  w-100">
+                                        <input type="radio" name="radio" >
+                                        <span class="gift-btn"><i class="las la-check"></i>
+                                            <div class="hobbies-icon">
+                                                <img src="http://dev.fitnessity.co/public/dashboard-design/images/temp-2.jpg">
+                                            </div>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                <div class="gift-card-radio-buttons">
+                                    <label class="gift-custom-radio  w-100">
+                                        <input type="radio" name="radio" >
+                                        <span class="gift-btn"><i class="las la-check"></i>
+                                            <div class="hobbies-icon">
+                                                <img src="http://dev.fitnessity.co/public/dashboard-design/images/temp-3.jpg">
+                                            </div>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                <div class="gift-card-radio-buttons">
+                                    <label class="gift-custom-radio  w-100">
+                                        <input type="radio" name="radio" >
+                                        <span class="gift-btn"><i class="las la-check"></i>
+                                            <div class="hobbies-icon">
+                                                <img src="http://dev.fitnessity.co/public/dashboard-design/images/temp-4.jpg">
+                                            </div>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                          
+                        </div>
+                      
+
+                    </div>
+                    <!-- end card header -->
+                </div>
+                <!-- end card -->
+            </div>
+
             <div class="container-fluid">
                 <a href="#menu-toggle" class="btn btn-black mb-15" id="menu-toggle"><i class="fas fa-bars"></i></a>
 
@@ -85,13 +152,12 @@
     </div>
 </div>
 <!-- /#wrapper -->
+
 <script src="http://dev.fitnessity.co//public/dashboard-design/drag-and-drop/nlbuilder/newsletterbuilder.min.js" type="text/javascript"></script>
 <script src="http://dev.fitnessity.co//public/dashboard-design/drag-and-drop/assets/email-blocks/content-inlined.js" type="text/javascript"></script>
 
 
 @include('layouts.business.footer')
-@include('layouts.business.scripts')
-
 <script type="text/javascript">
 	var builder = new NewsletterBuilder({
 		container: '#contentarea',
@@ -143,6 +209,11 @@
         window.addEventListener('resize', removeClassIfNecessary);
         window.addEventListener('DOMContentLoaded', removeClassIfNecessary); // To handle initial load
     </script>
+    <script>
+        new DataTable('#add_clients', {
+            responsive: true
+        });
+	</script>
 
 
 @endsection
