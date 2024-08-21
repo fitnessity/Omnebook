@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\{StripePaymentMethod,Customer};
 
 class StripePaymentMethodController extends Controller
 {
@@ -66,9 +67,47 @@ class StripePaymentMethodController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+
+        $customer = Customer::find($request->customerID);
+        $card = StripePaymentMethod::where('payment_id',$request->cardId)->first();
+        //echo $card ;exit;
+        try {
+
+            \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+
+            $stripe->paymentMethods->update(
+                $request->cardId,
+                [
+                    'card' => [
+                        'exp_month' => $request->month, 
+                        'exp_year' => $request->year
+                    ]
+                ]
+            );
+
+            /*$stripe->customers->updateSource(
+                $customer->stripe_customer_id,
+                $request->cardId,
+                [
+                    'exp_month' => $request->month, 
+                    'exp_year' => $request->year, 
+                ]
+            );
+*/
+            $card->exp_month = $request->month;
+            $card->exp_year =  $request->year;
+            $card->save();
+            return "success";
+        } catch (InvalidRequestException $e) {
+            // Handle Stripe API errors
+            return 'Error updating card: ' . $e->getMessage();
+        } catch (\Exception $e) {
+            // Handle other exceptions
+            return 'Error updating card: ' . $e->getMessage();
+        }
     }
 
     /**
@@ -79,7 +118,7 @@ class StripePaymentMethodController extends Controller
      */
     public function destroy($id)
     {
-        $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $id)->firstOrFail();
+        $stripePaymentMethod = StripePaymentMethod::where('payment_id', $id)->firstOrFail();
 
         $stripePaymentMethod->delete();
     }

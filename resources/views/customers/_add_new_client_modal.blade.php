@@ -10,7 +10,7 @@
 	<div class="modal-dialog modal-dialog-centered modal-80">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="window.location.reload()"></button>
 			</div>
 			<div class="modal-body body-tbm">
 				<div class="row">
@@ -53,38 +53,7 @@
 								</form>
 							</div>
 							
-							<div id="divstep2" style="display: none;">
-								<form action="#">
-									<div class="sign-step_2">
-										<div class="filledstep-bar">
-											<div class="row">
-												<div class="col-sm-12">
-													<span class="filledstep"></span>
-													<span class=""></span>
-													<span class=""></span>
-													<span class=""></span>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-12">
-												<div class="error" id="systemMessage"></div>
-												<div class="prfle-wrap">
-													<img src="" alt="">
-												</div>
-												<div class="reg-email-step2"></div>
-												<h2>Welcome to Fitnessity</h2>
-												<p>Your answer to the next few question will help us find the right ideas for you</p>
-												<div class="signup-step-btn">
-													<button type="button" class="signup-new btn-red" id="step2_next">Next</button>
-												</div>
-											</div>
-										</div>
-									</div>
-								</form>
-							</div>
-							
-							<div id="divstep3" style="display: none;">
+							<div id="divstep3" style="display: block;">
 
 								<form action="#">
 									<input type="hidden" name="cust_id" id="cust_id" value="">
@@ -126,7 +95,7 @@
 								</form>
 							</div>
 							
-							<div id="divstep4" style="display: none;">
+							<div id="divstep4" style="display: block;">
 								<form action="#">
 									<h4 class="heading-step">Step 3</h4>
 									<div class="sign-step_4">
@@ -155,7 +124,7 @@
 													<div id="add_personel_info" class="tab-pane fade show active manage-customer-from-step-two">
 														<div class="error" id="systemMessage"></div>
 														<div class="form-group">
-															<input type="text" class="form-control" autocomplete="nope" name="Addresstopbar" id="b_address_topbar" placeholder="Address" value="">
+															<input type="text" class="form-control" autocomplete="nope" name="Addresstopbar" id="b_address_topbar" placeholder="Address" value="" oninput="initMapCall('b_address_topbar', 'b_city', 'b_state', 'b_country','b_zipcode', 'lat', 'lon')">
 															<span class="error" id="err_address_sign"></span>
 														</div>
 														<div id="map" style="display: none;"></div>
@@ -188,7 +157,7 @@
 								</form>
 							</div>
 							
-							<div id="divstep5" style="display: none ;">
+							<div id="divstep5" style="display: block ;">
 								<form action="#" id="familyform">
 									<h4 class="heading-step">Step 5</h4>
 									<div class="sign-step_5">
@@ -216,7 +185,17 @@
 														<div class="accordion" id="default-accordion-example">
 															<div class="accordion-item shadow">
 																<h2 class="accordion-header" id="heading0">
-																	<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0" aria-expanded="true" aria-controls="collapse0">Family Member #1</button>
+																	<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0" aria-expanded="true" aria-controls="collapse0">
+																		<div class="container-fluid nopadding">
+																			<div class="row"> 
+																				<div class="col-lg-6 col-md-6 col-8"> Family Member #1 </div> 
+																				<div class="col-lg-6 col-md-6 col-4"> 
+																					<div class="multiple-options"  id="deletediv0"> 
+																					</div> 
+																				</div> 
+																			</div>
+																		</div>
+																	</button>
 																</h2>
 																<div id="collapse0" class="accordion-collapse collapse show" aria-labelledby="heading0" data-bs-parent="#default-accordion-example">
 																	<div class="accordion-body">
@@ -647,13 +626,11 @@
     	$("#divstep5").css("display","none");
 		$("#divstep6").css("display","block");
 		executeScript($('#cust_id').val());
-    	//window.location.href = '/business/{{$business_id}}/customers/'+$('#cust_id').val();
     });
 
     $(document).on('click', '#skip7_next', function () {
     	window.location.href = '/business/{{$business_id}}/customers/'+$('#cust_id').val();
     });
-
 
     function getAge() {
         var dateString = document.getElementById("dob").value;
@@ -669,7 +646,12 @@
         return agechk;
     }
 
-   
+    function deletediv(i){
+    	var cnt = $('#familycnt').val();
+    	cnt--;
+    	$('#familycnt').val(cnt);
+    	$('#familydiv'+i).remove();
+    }
 
 	$(document).on("click",'#add_family',function(e){
 		var cnt = $('#familycnt').val();
@@ -684,12 +666,15 @@
         var re = data.replaceAll("heading"+old_cnt,"heading"+cnt);
         re = re.replaceAll("collapse"+old_cnt,"collapse"+cnt);
         re = re.replaceAll("birthday_date"+old_cnt,"birthday_date"+cnt);
+        re = re.replaceAll("deletediv"+old_cnt,"deletediv"+cnt);
         re = re.replaceAll("Family Member #"+cnt,"Family Member #"+txtcount);
         var $data = $(re);
        	$data.find('.check-box-info').remove();
        	var modifiedData = $data[0].outerHTML;
 
         $('#familymaindiv').append(modifiedData);
+        $('#deletediv'+cnt).html('<div class="setting-icon"> <i class="ri-more-fill"></i> <ul> <li><a onclick="deletediv('+cnt+')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li></ul></div>');
+
         $('.relationship').each(function(e) {
         	$(this).removeClass("font-red");
         });
@@ -744,7 +729,7 @@
         		$('.request-access').css('display','block');
         		$('.request-access').html('<p>To import the name, contact information, family members and credit card information for '+ ui.item.firstname + ' ' +  ui.item.lastname +', they must authorize you access.</p><label>Steps </label><div class="request-step"><p>1. Click the Request Access button below. </p><p>2. Fitnessity will send an email to the customer to authorize you access.</p><p>3. Once authorization has been granted, the sync button will turn green, and you can sync the information immediately.</p><button type="button" style="margin-bottom: 10px;" class="signup-new request_access_btn" id="request_access_btn">Request Access</button></div><div class="error text-center errclass"></div>');
                  return false;
-	        }
+	        },
     	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
     		 let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.firstname.charAt(0).toUpperCase() + '</p></div></div> ';
 
@@ -765,105 +750,6 @@
   	});
 </script>
 
-
-<script type="text/javascript">
-    function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: -33.8688, lng: 151.2195},
-            zoom: 13
-        });
-
-        var input = document.getElementById('b_address_topbar');
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-        var autocomplete = new google.maps.places.Autocomplete(input);
-        autocomplete.bindTo('bounds', map);
-        var infowindow = new google.maps.InfoWindow();
-        var marker = new google.maps.Marker({
-            map: map,
-            anchorPoint: new google.maps.Point(0, -29)
-        });
-
-        autocomplete.addListener('place_changed', function() {
-            infowindow.close();
-            marker.setVisible(false);
-            var place = autocomplete.getPlace();
-            if (!place.geometry) {
-                window.alert("Autocomplete's returned place contains no geometry");
-                return;
-            }
-
-            // If the place has a geometry, then present it on a map.
-            if (place.geometry.viewport) {
-                map.fitBounds(place.geometry.viewport);
-            } else {
-                map.setCenter(place.geometry.location);
-                map.setZoom(17);
-            }
-
-            marker.setIcon(({
-                url: place.icon,
-                size: new google.maps.Size(71, 71),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(17, 34),
-                scaledSize: new google.maps.Size(35, 35)
-            }));
-
-            marker.setPosition(place.geometry.location);
-            marker.setVisible(true);
-            var address = '';
-            var badd = '';
-            var sublocality_level_1 = '';
-            if (place.address_components) {
-                address = [
-                  (place.address_components[0] && place.address_components[0].short_name || ''),
-                  (place.address_components[1] && place.address_components[1].short_name || ''),
-                  (place.address_components[2] && place.address_components[2].short_name || '')
-                ].join(' ');
-            }
-
-            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-            infowindow.open(map, marker);
-            // Location details
-            for (var i = 0; i < place.address_components.length; i++) {
-                if(place.address_components[i].types[0] == 'postal_code'){
-                  $('#b_zipcode').val(place.address_components[i].long_name);
-                }
-                if(place.address_components[i].types[0] == 'country'){
-                  $('#b_country').val(place.address_components[i].long_name);
-                }
-
-                if(place.address_components[i].types[0] == 'locality'){
-                    $('#b_city').val(place.address_components[i].long_name);
-                }
-
-                if(place.address_components[i].types[0] == 'sublocality_level_1'){
-                    sublocality_level_1 = place.address_components[i].long_name;
-                }
-
-                if(place.address_components[i].types[0] == 'street_number'){
-                   badd = place.address_components[i].long_name ;
-                }
-
-                if(place.address_components[i].types[0] == 'route'){
-                   badd += ' '+place.address_components[i].long_name ;
-                } 
-
-                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
-                  $('#b_state').val(place.address_components[i].long_name);
-                }
-            }
-
-            if(badd == ''){
-              $('#b_address_topbar').val(sublocality_level_1);
-            }else{
-              $('#b_address_topbar').val(badd);
-            }
-            
-        });
-    }
-</script>
-
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{env('AUTO_COMPLETE_ADDRESS_GOOGLE_KEY')}}&callback=initMap" async defer></script>
 
 <script>
 $(document).ready(function() {
@@ -889,10 +775,7 @@ $(document).ready(function() {
 	        },
 	    };
 
-	    // Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 3
 	    const elements1 = stripe1.elements(options1);
-
-	    // Create and mount the Payment Element
 	    const paymentElement1 = elements1.create('payment');
 	    paymentElement1.mount('#payment-element1');
 
@@ -904,7 +787,6 @@ $(document).ready(function() {
 	        $('#submit1').text('loading...')
 
 	        const {error} = await stripe1.confirmSetup({
-	        //Elements` instance that was used to create the Payment Element
 	            elements: elements1,
 	            confirmParams: {
 	                return_url: '{{ route('business.customers.refresh_payment_methods',['business_id' => $business_id ])}}?customer_id=' + cus_id,
@@ -912,21 +794,14 @@ $(document).ready(function() {
 	        });
 
 	        if (error) {
-	          // This point will only be reached if there is an immediate error when
-	          // confirming the payment. Show error to your customer (for example, payment
-	          // details incomplete)  
 	          const messageContainer1 = document.querySelector('#error-message1');
 	          messageContainer1.textContent = error.message;
 	          $('#error-message1').show();
 
 	        } else {
-	          	// Your customer will be redirected to your `return_url`. For some payment
-	          	// methods like iDEAL, your customer will be redirected to an intermediate
-	          	// site first to authorize the payment, then redirected to the `return_url`.
+	          	
 	        }
 	        $('#submit1').text('Add on file')
 	    });
   	}
 </script>
-
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" ></script> -->

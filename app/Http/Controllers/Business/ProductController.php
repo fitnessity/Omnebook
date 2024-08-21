@@ -264,6 +264,8 @@ class ProductController extends Controller
             $model = ProductMaterial::class;
         } elseif ($request->type == 'vender') {
             $model = Vender::class;
+        }elseif ($request->type == 'category') {
+            $model = ProductsCategory::class;
         }
 
         if ($model) {

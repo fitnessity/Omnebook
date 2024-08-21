@@ -8,7 +8,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use Aws\S3\S3Client;
 use App\Jobs\{ProcessAttendanceExcelData,ProcessCustomerExcelData,ProcessMembershipExcelData};
-
+use GuzzleHttp\Client;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -19,7 +19,7 @@ use Session,Redirect,DB,Input,Auth,Hash,Validator,View,Mail,Str,Config,Excel,Spl
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\{CustomerRepository,BookingRepository,UserRepository};
-use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation,ExcelUploadTracker,UserFamilyDetail,Transaction,StripePaymentMethod,CustomersDocuments,CustomerNotes};
+use App\{BusinessCompanyDetail,BusinessServices,User,Customer,CustomerFamilyDetail,BusinessTerms,UserBookingDetail,SGMailService,MailService,UserBookingStatus,CompanyInformation,ExcelUploadTracker,UserFamilyDetail,Transaction,StripePaymentMethod,CustomersDocuments,CustomerNotes,CustomerDocumentsRequested,Notification};
 
 use Illuminate\Support\Facades\Storage;
 
@@ -34,12 +34,19 @@ class CustomerController extends Controller {
 
     protected $customers;
     protected $company;
+    protected $resultDate;
     public $error = '';
 
     public function __construct(CustomerRepository $customers,BookingRepository $bookings,UserRepository $users) {
         $this->middleware('auth');
         $this->customers = $customers;
         $this->bookings = $bookings;
+        $currentDate = Carbon::now();
+        $this->resultDate = $currentDate->subYears(18);
+    }
+
+    public function client(){
+        return view('customers.add_client');
     }
 
     public function index(Request $request, $business_id){
@@ -76,16 +83,246 @@ class CustomerController extends Controller {
             $customers = $customers->where('id',$request->customer_id);
         }
 
+        
         $customers = $customers->get();
         $customerCount = count($customers);
+
+        set_time_limit(8000000); 
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 10000);
+
+
+        $customerStatusCounts = $customers->mapToGroups(function ($customer) {
+            return [$customer->is_active() => $customer];
+        });
+
+        $validLetters = [];
+
+        $customersCollection = '';
+        if(!$request->customer_type){
+            $currentCount =  $customerCount;
+            for ($asciiValue = ord('A'); $asciiValue <= ord('Z'); $asciiValue++) {
+                $validLetters[] = chr($asciiValue);
+            }
+        }else{
+            if($request->customer_type == 'active'){
+                $forActive =  $customerStatusCounts->get('Active', collect());
+                $activeMembersCount = $forActive->count();
+                $customersCollection = $forActive;
+                $currentCount = $activeMembersCount ;
+            }else if($request->customer_type == 'in-active'){
+                $forInActive =  $customerStatusCounts->get('InActive', collect());
+                $inActiveMembersCount = $forInActive->count();
+                $customersCollection = $forInActive;
+                $currentCount = $inActiveMembersCount ;
+            }else if($request->customer_type == 'prospect'){
+                $forPros =  $customerStatusCounts->get('Prospect', collect());
+                $prospectMembersCount = $forPros->count();
+                $customersCollection = $forPros;
+                $currentCount = $prospectMembersCount;
+            }else if($request->customer_type == 'suspended'){
+                $suspend = $customers->filter->suspendedOrNot();
+                $suspendCount = $suspend->count();
+                $customersCollection = $suspend;
+                $currentCount = $suspendCount;
+            }else if($request->customer_type == 'owed'){
+                $owd = $customers->filter->owedOrnot();
+                $owdCount = $owd->count();
+                $customersCollection = $owd;
+                $currentCount = $owdCount;
+            }else if($request->customer_type == 'at-risk'){
+                $atRiskMembers = $customers->filter->customerAtRisk();
+                $atRiskMembersCount = $atRiskMembers->count();
+                $customersCollection = $atRiskMembers;
+                $currentCount = $atRiskMembersCount;
+            }else if($request->customer_type == 'big-spenders'){
+                $bigSpender = $customers->filter->bigSpender(); 
+                 $bigSpenderCount = $bigSpender->count();
+                $customersCollection = $bigSpender->sortByDesc(function ($customer) {
+                    return $customer->total_spend;
+                })->take(20);
+
+                $currentCount = $bigSpenderCount;
+            }
+
+            for ($asciiValue = ord('A'); $asciiValue <= ord('Z'); $asciiValue++) {
+
+                $letter = chr($asciiValue);
+                if ($customersCollection->contains(function ($customer) use ($letter) {
+                    return stripos($customer->fname, $letter) === 0;
+                })) {
+                    $validLetters[] = $letter;
+                }
+            }
+        }
 
         if ($request->ajax()) {
             return response()->json($customers);
         }
-        return view('customers.index', [
-            'company' => $company,
-            'customerCount' => $customerCount,
-        ]); 
+
+        //$activeMembersCount = $inActiveMembersCount = $prospectMembersCount = $atRiskMembersCount = $bigSpenderCount = $suspendCount = $owdCount =0;
+        /*return view('customers.index', compact(['company','customerCount','activeMembersCount','inActiveMembersCount','prospectMembersCount','atRiskMembersCount','bigSpenderCount','suspendCount','owdCount','currentCount','validLetters','customersCollection']));*/
+        return view('customers.index', compact(['company','customerCount','currentCount','validLetters','customersCollection']));
+    }
+
+
+    public function getCustomerCounts($business_id,Request $request)
+    {
+        $counterType = $request->input('counterType');
+        $user = Auth::user();
+        $company = $user->businesses()->findOrFail($business_id);
+        $customers = $company->customers()->orderBy('fname');
+        $customers = $customers->get();
+        $customerCount = count($customers);
+
+        $customerStatusCounts = $customers->mapToGroups(function ($customer) {
+            return [$customer->is_active() => $customer];
+        });
+
+        // Logic to fetch and return the appropriate counter value
+        switch ($counterType) {
+            case 'totalMembers':
+                $count = 'Total Members ('.$customerCount.')';
+                break;
+            case 'activeMembers':
+                $count = 'Active Members (' .$customerStatusCounts->get('Active', collect())->count() .')';
+                break;
+            case 'inactiveMembers':
+                $count = 'Inactive Members ('.$customerStatusCounts->get('InActive', collect())->count() .')';
+                break; 
+            case 'prospectMembers':
+                $count = 'Prospects (' .$customerStatusCounts->get('Prospect', collect())->count() .')';
+                break; 
+            case 'suspendedMembers':
+                $count = 'Suspended ('.$customers->filter->suspendedOrNot()->count() .')';
+                break;
+            case 'owedMembers':
+                $count = 'Owed ('.$customers->filter->owedOrnot()->count() .')';
+                break;
+            case 'atRiskMembers':
+                $count = 'At-Risk ('.$customers->filter->customerAtRisk()->count() .')';
+                break;
+            case 'spenderMembers':
+                $count = 'Big Spenders ('.$customers->filter->bigSpender()->count() .')';
+                break;
+            default:
+                $count = 0; // Default to 0 if counter type is unknown
+                break;
+        }
+
+        return response()->json(['count' => $count]);
+    }
+
+
+    /*public function getCustomerCounts($business_id)
+    {   
+        $user = Auth::user();
+        $company = $user->businesses()->findOrFail($business_id);
+        $customers = $company->customers()->orderBy('fname');
+        $customers = $customers->get();
+        $customerCount = count($customers);
+
+        $customerStatusCounts = $customers->mapToGroups(function ($customer) {
+            return [$customer->is_active() => $customer];
+        });
+
+        $activeMembersCount =  $customerStatusCounts->get('Active', collect())->count();
+        $forInActive =  $customerStatusCounts->get('InActive', collect())->count();
+        $forPros =  $customerStatusCounts->get('Prospect', collect())->count();
+        $suspend = $customers->filter->suspendedOrNot()->count();
+        $bigSpender = $customers->filter->bigSpender()->count();
+        $owd = $customers->filter->owedOrnot()->count();
+        $atRiskMembers = $customers->filter->customerAtRisk()->count();
+
+        $customerCounts = [
+            'totalMembers' => $customerCount,
+            'activeMembers' => $activeMembersCount,
+            'inactiveMembers' => $forInActive,
+            'prospectMembers' => $forPros,
+            'suspendedMembers' => $suspend,
+            'owedMembers' => $owd,
+            'atRiskMembers' => $atRiskMembers,
+            'spenderMembers' => $bigSpender,
+            
+        ];
+
+        return response()->json($customerCounts);
+    }*/
+
+    public function loadView(Request $request)
+    {
+        $char = $request->input('char');
+        $cid = Auth::user()->cid;
+        $company = CompanyInformation::find($cid);
+
+        $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->orderBy('fname')->get();
+
+        $customerStatusCounts = $customers->mapToGroups(function ($customer) {
+            return [$customer->is_active() => $customer];
+        });
+
+        if($request->customer_type == 'active'){
+            $customers =  $customerStatusCounts->get('Active', collect());
+        }else if($request->customer_type == 'in-active'){
+            $customers =  $customerStatusCounts->get('InActive', collect());
+        }else if($request->customer_type == 'prospect'){
+            $customers =  $customerStatusCounts->get('Prospect', collect());
+        } else if($request->customer_type == 'suspended'){
+            $customersAry = $customers->filter->suspendedOrNot();
+            $customers = [];
+            foreach ($customersAry as $key => $value) {
+                if(!empty($value->suspended())){
+                    foreach ($value->suspended() as $key => $ubd) {
+                        $customers[] = $ubd;
+                    }
+                }
+            }
+        }else if($request->customer_type == 'owed'){
+            $customersAry = $customers->filter->owedOrnot();
+            //print_r( $customersAry);exit();
+            $customers = [];
+            foreach ($customersAry as $key => $value) {
+                if(!empty($value->owedDetail()->get())){
+                    foreach ($value->owedDetail()->get()     as $key => $owed) {
+                        $customers[] = $owed;
+                    }
+                }
+            }
+            //print_r( $customers);exit();
+        }else if($request->customer_type == 'at-risk'){
+            $customers = $customers->filter->customerAtRisk();
+        }else if($request->customer_type == 'big-spenders'){
+            $customers = $customers->filter->bigSpender();
+        }
+
+        return view('customers.customer-detail-list',compact('customers' ,'char','company'));
+    }
+
+
+    public function create(Request $request, $business_id){
+        $intent = $clientSecret = null;
+        $success = 0;
+        if(!$request->customer_id){
+            if (session()->has('success-register')) {
+                $success = session('success-register');
+            }
+            session()->forget('success-register');
+        }
+
+        $businessTerms = BusinessTerms::where('cid',$business_id)->first();
+        if($request->customer_id){
+            $customer = Customer::find($request->customer_id);
+            \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            if($customer->stripe_customer_id != ''){
+                $intent = $stripe->setupIntents->create([
+                    'payment_method_types' => ['card'],
+                    'customer' => $customer->stripe_customer_id,
+                ]);
+                $clientSecret = $intent['client_secret'];
+            } 
+        }
+        return view('customers.create',compact('clientSecret', 'business_id','success','businessTerms'));
     }
 
     public function delete(Request $request, $business_id){
@@ -122,7 +359,15 @@ class CustomerController extends Controller {
 
 
         $documents = CustomersDocuments::where(['customer_id'=>$id])->get();
+        $lastBooking = $customerdata->bookingDetail()->orderby('created_at','desc')->first();
         $notes = CustomerNotes::where(['customer_id'=>$id])->get();
+
+        $cardSuccessMsg =0;
+
+        if(Session::has('cardSuccessMsg')){
+            $cardSuccessMsg = 1;
+            Session::forget('cardSuccessMsg');
+        }
 
         return view('customers.show', [
             'customerdata'=>$customerdata,
@@ -135,6 +380,9 @@ class CustomerController extends Controller {
             'auto_pay_payment_msg' =>$auto_pay_payment_msg,
             'documents' =>$documents,
             'notes' =>$notes,
+            'lastBooking' =>$lastBooking,
+            'cardSuccessMsg' =>$cardSuccessMsg,
+            'resultDate' =>$this->resultDate,
         ]);
     }
 
@@ -229,7 +477,7 @@ class CustomerController extends Controller {
                 }
                 ini_set('max_execution_time', 10000); 
                 $headings = (new HeadingRowImport(2))->toArray($request->file('import_file'));
-
+                
                 if(!empty($headings)){
                     foreach($headings as $key => $row) {
                         $firstrow = $row[0];
@@ -238,15 +486,16 @@ class CustomerController extends Controller {
                             $this->error = 'Problem in header.';
                             break;
                         }*/
+                       
                         if($firstrow[1] != 'name' || $firstrow[2] != 'membership_type' ||  $firstrow[3] != 'status'|| $firstrow[4] != 'member_from'|| $firstrow[5] != 'member_to') 
                         {
-                            $this->error = 'Problem in header.';
-                            break;
+
+                            return response()->json(['status'=>500,'message'=>'Problem in header.']);
                         }
                     }
                 }
 
-                $current_company->update(['membership_uploading' => 1]);
+                //$current_company->update(['membership_uploading' => 1]);
                 // $name = Str::random(8).'.csv';
                 // Storage::disk('uploadExcel')->put($name,'');
                 // $target = '../public/ExcelUpload/'.$name;
@@ -314,13 +563,12 @@ class CustomerController extends Controller {
                         $firstrow = $row[0];
                         if( $firstrow[0] != 'date' ||$firstrow[1] != 'day' || $firstrow[2] != 'time' ||$firstrow[4] != 'client'  || $firstrow[8] != 'pricing_option' || $firstrow[9] != 'exp_date'|| $firstrow[10] != 'visits_rem' ) 
                         {
-                            $this->error = 'Problem in header.';
-                            break;
+                            return response()->json(['status'=>500,'message'=>'Problem in header.']);
                         }
                     }
                 }
 
-                $current_company->update(['attendance_uploading' => 1]);
+                //$current_company->update(['attendance_uploading' => 1]);
 
                 // $name = Str::random(8).'.csv';
                 // Storage::disk('uploadExcel')->put($name,'');
@@ -404,57 +652,91 @@ class CustomerController extends Controller {
         return view('customers.edit_terminate_or_suspend_model', ['booking_detail' => $booking_detail ,'business_id' =>$business_id ,"customer_id"=>$request->id]);
     }
 
-    public function addcustomerfamily ($id){
-        $UserFamilyDetails  = [];
-        $customer = Customer::find($id);
-        $UserFamilyDetails  = $customer->get_families();
-        $companyId = $customer->business_id;
-            
-        return view('customers.==add_family', [
-            'UserFamilyDetails' => $UserFamilyDetails,
-            'companyId' => $companyId,
-            'parent_cus_id' => $id,
-        ]);
-        //return view('profiles.viewcustomer');
-    }
-
     public function add_family ($id){
         $UserFamilyDetails  = [];
         $customer = Customer::find($id);
         $UserFamilyDetails  = $customer->get_families();
         $companyId = $customer->business_id;
-            
         return view('customers.add_family', [
             'UserFamilyDetails' => $UserFamilyDetails,
             'companyId' => $companyId,
             'parent_cus_id' => $id,
+            'resultDate' => $this->resultDate,
         ]);
         //return view('profiles.viewcustomer');
     }
 
     public function addFamilyMemberCustomer(Request $request) {
+        //print_r($request->all());
+        $idArray = $userIdArray = []; $userId = '';
+        $parent_id = null;
         for ($i=0; $i <= $request->family_count ; $i++) { 
-            $update = [];
-            $update = [
-                'business_id' => $request['business_id'],
-                'fname' => $request['fname'][$i],
-                'lname' => $request['lname'][$i],
-                'email' => $request['email'][$i],
-                'phone_number' => $request['mobile'][$i],
-                'emergency_contact' => $request['emergency_contact'][$i],
-                'relationship' => $request['relationship'][$i],
-                'gender' => $request['gender'][$i],
-                'birthdate' => $request['birthdate'][$i] != '' ? date('Y-m-d',strtotime($request['birthdate'][$i])) : null,
-                'parent_cus_id' => $request['parent_cus_id'],
-            ];
+            $customer = Customer::firstOrNew(['id' => $request['cus_id'][$i]]);
 
-            Customer::updateOrInsert(['id'=> $request['cus_id'][$i] ] , $update);
+            $customer->fill([
+                'business_id'       => $request['business_id'],
+                'fname'             => $request['fname'][$i],
+                'lname'             => $request['lname'][$i],
+                'email'             => $request['email'][$i],
+                'phone_number'      => $request['mobile'][$i],
+                'emergency_contact' => $request['emergency_contact'][$i],
+                'relationship'      => $request['relationship'][$i],
+                'gender'            => $request['gender'][$i],
+                'birthdate'         => $request['birthdate'][$i] != '' ? date('Y-m-d', strtotime($request['birthdate'][$i])) : null,
+                'parent_cus_id'     => $request['parent_cus_id'],
+                'primary_account' => 0,
+                'request_status' => 1,
+            ])->save();
+
+            if (@$request['primaryAccountHolder'][$i] == 1 && $parent_id === null) {
+                $parent_id = $customer->id;
+            }else{
+                $idArray[$i][] = $customer->id;   
+            }
+
+            $customer->create_stripe_customer_id();
+
+            $is_user = User::where('email', $request['email'][$i])->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($request['fname'][$i]), strtolower($request['lname'][$i])])->first();
+            if(!$is_user){
+                $familyUser = New User();
+                $familyUser->role = 'customer';
+                $familyUser->firstname =  $request['fname'][$i];
+                $familyUser->lastname =  $request['lname'][$i];
+                $familyUser->username = $request['fname'][$i].$request['lname'][$i];
+                $familyUser->email = $request['email'][$i];
+                $familyUser->gender = $request['gender'][$i];
+                $familyUser->primary_account = 0;
+                $familyUser->country = 'United Status';
+                $familyUser->phone_number = $request['mobile'][$i];
+                $familyUser->birthdate =  $request['birthdate'][$i] != '' ? date('Y-m-d', strtotime($request['birthdate'][$i])) : null;
+                $familyUser->stripe_customer_id =  $customer->stripe_customer_id;
+                $familyUser->save(); 
+                $customer->user_id =  $familyUser->id;
+            }else{
+                $customer->user_id =  @$is_user->id;
+            }
+
+            $userIdArray[] = $customer->user_id;   
+            $customer->save();
+        }
+       
+        if($parent_id){
+            $cus = Customer::where('id', $request['parent_cus_id'])->first();
+            $cusParent = Customer::where('id',  $parent_id)->first();
+            Customer::whereIn('id', $idArray)->update(['parent_cus_id' => $parent_id]);
+            $cus->update(['parent_cus_id' => $parent_id,'primary_account' => 0]);
+            $cusParent->update(['parent_cus_id' => null,'primary_account' => 1]);
+
+            User::whereIn('id', $userIdArray)->update(['primary_account' => 0]);
+            User::where('id', $cusParent->user_id)->update(['primary_account' => 1]);
         }
 
-        return Redirect::back();
+        return redirect()->route('customer.add_family',['id' => $request['parent_cus_id']]);
+        //return Redirect::back();
     }
 
     public function removefamilyCustomer(Request $request) {
+      
         $customer = Customer::find($request->id);
         $customer->update(['parent_cus_id' => NULL]);
        /* DB::delete('DELETE FROM customers WHERE id = "'.$request->id.'"');
@@ -537,33 +819,41 @@ class CustomerController extends Controller {
                 $data['birthdate'] = date('Y-m-d',strtotime($request->birthdate));
             }
 
-            if(@$data['terms_covid'] != ''){
-                $data['terms_covid'] = date('Y-m-d');
-            }
-
-            if(@$data['terms_liability'] != ''){
-                $data['terms_liability'] = date('Y-m-d');
-            }
-
-            if(@$data['terms_contract'] != ''){
-                $data['terms_contract'] = date('Y-m-d');
-            }
-            
-            $position = array_search(request()->_token, $data);
-            $position1 = array_search(request()->cus_id, $data);
-            unset($data[$position]);
-            unset($data[$position1]);
+            unset($data['_token']);
+            unset($data['cus_id']);
             
             $cust = Customer::find($request->cus_id);
             if($request->primary_account == 1){
                 $data['parent_cus_id'] = NULL;
-                 $data['primary_account']  = 1;
+                $data['primary_account']  = 1;
             }else{
                 $data['primary_account'] = 0;
             }
 
-            User::where(['email' => $cust['email'] , 'id' => $cust['user_id']])->update(['primary_account' => $data['primary_account'] ]);
+            if($data['primary_account'] == 1 && $cust->primary_account == 0){
+                if($cust->parent_cus_id){
+                    Customer::where(['parent_cus_id' => $cust->parent_cus_id])->update(['parent_cus_id' => $cust->id]);
+                }
+                
+                $oldParent = Customer::where(['id' => $cust->parent_cus_id])->first();
+                if($oldParent){
+
+                    $oldParent->update(['parent_cus_id' => $cust->id ,'primary_account' => 0]);
+
+                    User::where(['email' => @$oldParent->email, 'id' => @$oldParent->user_id])->update(['primary_account' => 0]);
+                }
+            }
+
+            User::where(['email' => $cust['email'] , 'id' => $cust['user_id']])->update(['primary_account' => $data['primary_account'] ,'profile_pic'=> $data['profile_pic'] ?? $cust->profile_pic ]);
             $cust->update($data);
+        }elseif($request->chk == 'update_terms'){
+            $data = $request->all();
+            $covid = (@$data['terms_covid'] == 1) ? date('Y-m-d'): '';
+            $liability = (@$data['terms_liability'] == 1) ? date('Y-m-d'): '';
+            $contract = (@$data['terms_contract'] == 1) ? date('Y-m-d'): '';
+            $cust = Customer::find($request->cus_id);
+            $cust->update(['terms_covid' =>$covid,'terms_liability' =>$liability,'terms_contract' =>$contract,]);
+
         }
         
         return redirect()->route('business_customer_show',['business_id' => $cust->company_information->id, 'id'=>$request->cus_id]);
@@ -621,14 +911,16 @@ class CustomerController extends Controller {
         $user_id = Crypt::decryptString($id);
         $bId = Crypt::decryptString($business_id);
         $user = User::where('id',$user_id)->first();
-        $chk = Customer::where('user_id' , $user->id)->first();
+        $chk = Customer::where(['business_id' =>$bId  ,'email' => @$user->email,'fname' => @$user->first_name,'lname' => @$user->last_name])->first();
+
         if($chk == ''){
             profileSyncToBusiness($bId, $user);
         }else{
+            $chk->update(['profile_pic'=> $user->profile_pic ,'request_status' =>1]);
             $familyMember = UserFamilyDetail::where(['user_id' => $user->id])->get();
             foreach($familyMember as $member){
-                $chkFamily = Customer::where(['fname' =>$member->first_name ,'lname' =>$member->last_name])->first();
-                if($chkFamily == ''){
+                $chkFamily = Customer::whereRaw('LOWER(fname) = ? AND LOWER(lname) = ?', [strtolower($member->first_name), strtolower($member->last_name)])->where(['email' => $member->email ,'business_id' =>$bId ])->first();
+                if(!$chkFamily){
                     Customer::create([
                         'business_id' => $bId,
                         'fname' => $member->first_name,
@@ -642,12 +934,13 @@ class CustomerController extends Controller {
                         'gender' => $member->gender,
                         'user_id' => NULL, //this is null bcz of user is not created at 
                         'parent_cus_id'=> $chk->id ,
-                        'relationship' =>$member->relationship
+                        'relationship' =>$member->relationship,
+                        'request_status' =>1,
                     ]);
                 }
             }
 
-            $cardData = StripePaymentMethod::where(['user_id' => $user->id , 'user_type' => 'User' ])->get();
+            /*$cardData = StripePaymentMethod::where(['user_id' => $user->id , 'user_type' => 'User' ])->get();
 
             foreach($cardData as $data){
                 $stripData = StripePaymentMethod::where(['user_id' =>$chk->id ,'payment_id'=> $data->payment_id ,'exp_year' => $data->exp_year ,'last4' =>$data->last4])->first();
@@ -663,9 +956,9 @@ class CustomerController extends Controller {
                         'last4'=> $data->last4,
                     ]);
                 }
-            }
+            }*/
 
-            $paymentHistory = Transaction::where('user_type', 'User')
+            /*$paymentHistory = Transaction::where('user_type', 'User')
             ->where('user_id', $user->id)
             ->orWhere(function($subquery) use ($chk) {
                 $subquery->where('user_type', 'Customer')
@@ -673,7 +966,7 @@ class CustomerController extends Controller {
             })->get();
 
             foreach($paymentHistory as $data){
-            $history = Transaction::where(['user_id' =>$chk->id ,'user_type'=>'Customer'])->first();
+                $history = Transaction::where(['user_id' =>$chk->id ,'user_type'=>'Customer'])->first();
                 if($history == ''){
                     Transaction::create([
                         'item_id' => $data->item_id,
@@ -691,8 +984,20 @@ class CustomerController extends Controller {
                         'payload'=> $data->payload
                     ]);
                 }
-            }
+            }*/
         }
+
+        Notification::create([
+            'user_id' => Auth::user()->id,
+            'customer_id' =>  NULL,
+            'table_id' => Auth::user()->id,
+            'table' =>  'User',
+            'display_date' => date('Y-m-d'),
+            'display_time' => date("H:i"),
+            'type' => 'business',
+            'business_id' =>  $bId,
+            'status'  =>  'Alert'
+        ]);
         
         return Redirect()->route('personal.orders.index');
     }
@@ -700,33 +1005,31 @@ class CustomerController extends Controller {
     public function remove_grant_access(Request $request, $id,$customerId,$type = null){
         $customers = Customer::where('id',$customerId)->update(['user_id'=> null]); 
         if($request->type){
-            return Redirect()->route('personal.orders.index',['business_id'=>$id ]);
+            return Redirect()->route('personal.orders.index',['business_id'=>$id ,'customer_id' =>$customerId]);
         }else{
             return Redirect()->route('personal.family_members.index',['business_id'=>$id,'customerId'=>$customerId]);
         }
     }
 
-    public function receiptmodel($orderId,$customer){
+    public function receiptmodel($orderId,$customer,$isFrom = null){
         $customerData = Customer::where('id',$customer)->first();
         $transaction = Transaction::where('item_id',$orderId)->first();
-        if(@$transaction->item_type == 'UserBookingStatus'){
-            $oid = $orderId;
-            $bookingArray = UserBookingDetail::where('booking_id',$oid)->pluck('id')->toArray();
+        if(!$isFrom){
+            if(@$transaction->item_type == 'UserBookingStatus'){
+                $oid = $orderId;
+                $bookingArray = UserBookingDetail::where('booking_id',$oid)->pluck('id')->toArray();
+            }else{
+                $orderId = @$transaction->Recurring->booking_detail_id;
+                $oid = $orderId;
+                $bookingArray = UserBookingDetail::where('id',$orderId)->pluck('id')->toArray();
+            }
+            $transactionType = @$transaction->item_type;
         }else{
-            $orderId = @$transaction->Recurring->booking_detail_id;
-            $oid = $orderId;
+             $oid = $orderId;
             $bookingArray = UserBookingDetail::where('id',$orderId)->pluck('id')->toArray();
+            $transactionType = 'Membership';
         }
-        return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $oid ,'type' =>$transaction->item_type]);
-    }
-
-    public function loadView(Request $request)
-    {
-        $char = $request->input('char');
-        $cid = Auth::user()->cid;
-        $company = CompanyInformation::find($cid);
-        $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->orderBy('fname')->get();
-        return view('customers.customer-detail-list',compact('customers' ,'char','company'));
+        return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $oid ,'type' =>$transactionType]);
     }
 
     public function getMoreRecords(Request $request)
@@ -773,7 +1076,7 @@ class CustomerController extends Controller {
     }
 
     public function uploadDocument(Request $request, $business_id){
-        $path = $request->file('file')->store('Customer-Documents');
+        $path = $request->hasFile('file') ? $request->file('file')->store('Customer-Documents') : '';
         $create = CustomersDocuments::create([
             'user_id' => Auth::user()->id, 
             'staff_id' => session('StaffLogin') ?? '', 
@@ -782,15 +1085,108 @@ class CustomerController extends Controller {
             'title' => $request->title,
             'path' => $path
         ]);
-
         if($create){
+            if($request->sign == 1){
+                $this->requestSign($business_id , $create->id);
+            }
             return response()->json(['status'=>200,'message'=>'Document Added Successfully.']);
         }else{
             return response()->json(['status'=>500,'message'=>'Something Went Wrong.']);
         }
     }
 
-    public function download($business_id,$id)
+    public function uploadDocsName(Request $request){
+        //print_r($request->all());exit;
+        /*$document = CustomersDocuments::find($request->docId);
+        if(!empty($request->docName)){
+            for($i=0; $i< count($request->docName);$i++){
+                if($request->docName[$i] != ''){
+                    $data = CustomerDocumentsRequested::updateOrCreate([
+                            'id' => $request->contentID[$i],
+                        ],
+                        [
+                            'user_id' => @$document->user_id,
+                            'business_id' => @$document->business_id,
+                            'customer_id' => @$document->customer_id,
+                            'doc_id' => $request->docId,
+                            'content' => $request->docName[$i],
+                        ]
+                    ); 
+
+                    if($request->contentID[$i]){
+                        Notification::updateOrCreate([
+                            'display_date' => date('Y-m-d'),
+                            'table_id' => $data->id,
+                            'table' => 'CustomerDocumentsRequested',
+                            'business_id' => $document->business_id,
+                        ],[
+                            'user_id' => $document->user_id , 'customer_id' => $document->customer_id , 'display_date' => date('Y-m-d') , 'table_id' => $data->id , 'table' => 'CustomerDocumentsRequested',  'display_time' =>date('H:i'), 'business_id' => $document->business_id,'type' => 'personal','status'=>'Alert'
+                        ]); 
+                    }
+                }
+            }
+        }
+        if(!empty($request->deletIds)){
+            CustomerDocumentsRequested::whereIn('id', $request->deletIds)->delete();
+        } */  
+
+        $customer = Customer::find($request->customerId);
+        $document = CustomersDocuments::create([
+            'user_id' => Auth::user()->id, 
+            'staff_id' => session('StaffLogin') ?? '', 
+            'business_id' => $customer->business_id,
+            'customer_id' => $request->customerId,
+            'title' => $request->title,
+            'doc_requested_date' => date('Y-m-d'),
+        ]);
+
+        if(!empty($request->docName)){
+            for($i=0; $i< count($request->docName);$i++){
+                if($request->docName[$i] != ''){
+                    $data = CustomerDocumentsRequested::Create([
+                            'user_id' => @$document->user_id,
+                            'business_id' => @$document->business_id,
+                            'customer_id' => @$document->customer_id,
+                            'doc_id' => $document->id,
+                            'content' => $request->docName[$i],
+                        ]
+                    ); 
+
+                    Notification::Create([
+                        'user_id' => $document->user_id , 'customer_id' => $document->customer_id , 'display_date' => date('Y-m-d') , 'table_id' => $data->id , 'table' => 'CustomerDocumentsRequested',  'display_time' =>date('H:i'), 'business_id' => $document->business_id,'type' => 'personal','status'=>'Alert'
+                    ]); 
+                    
+                }
+            }
+        }
+
+        $request->session()->flash('success', 'Documents Content Added successfully.');
+        return redirect()->route('business_customer_show',['business_id'=>@$document->business_id ,'id'=> @$document->customer_id]);
+    }
+
+    public function docContent($customerId){
+        //$content = CustomerDocumentsRequested::where('doc_id',$id)->get();
+        return view('customers.documents_contents',compact('customerId'))->render();
+    }
+
+    public function requestSign($business_id,$id){
+        $document = CustomersDocuments::find($id);
+        $document->update(['status' =>1 ,'sign_requested_date' => date('Y-m-d')]);
+
+        Notification::create([
+            'user_id' => Auth::user()->id,
+            'customer_id' =>  $document->customer_id,
+            'table_id' => $document->id,
+            'table' =>  'CustomersDocuments',
+            'display_date' => date('Y-m-d'),
+            'display_time' => date("H:i"),
+            'type' => 'personal',
+            'business_id' => $document->business_id,
+            'status'  =>  'Alert'
+        ]);
+    }
+
+    public function download($id)
     {
         $document = CustomersDocuments::findOrFail($id);
         $filePath = Storage::url($document->path);
@@ -802,13 +1198,12 @@ class CustomerController extends Controller {
         ];
         return Response::make($imageContent, 200, $headers);
     }
-
-    public function removeDoc($business_id, $id){
+   
+    public function removeDoc($id){
         $docs = CustomersDocuments::find($id);
         Storage::disk('s3')->delete($docs->path);
         $docs->delete();
     }
-
 
     public function removenote($business_id, $id){
         $note = CustomerNotes::find($id);
@@ -822,6 +1217,7 @@ class CustomerController extends Controller {
                 'user_id' => Auth::user()->id, 
                 'business_id' => $business_id,
                 'customer_id' => $request->cid,
+                'title' => $request->title,
                 'note' => $request->notes,
                 'due_date' => $request->due_date,
                 'time' => $request->time,
@@ -830,6 +1226,28 @@ class CustomerController extends Controller {
             ]
         );
 
+        $data = ['user_id' => $note->user_id , 'customer_id' => $note->customer_id , 'display_date' => $note->due_date , 'table_id' => $note->id , 'table' => 'CustomerNotes',  'display_time' => $note->time, 'business_id' => $note->business_id,'type' => 'business','status'=>'Alert'];
+
+        if($note->display_chk == 1){
+            $data['type'] = 'personal';
+            Notification::updateOrCreate([
+                'display_date' => $note->due_date,
+                'table_id' => $note->id,
+                'table' => 'CustomerNotes',
+                'type' => 'personal',
+                'business_id' => $note->business_id,
+            ],$data);
+        }
+
+        $data['type'] = 'business';
+        Notification::updateOrCreate([
+                'display_date' => $note->due_date,
+                'table_id' => $note->id,
+                'table' => 'CustomerNotes',
+                'type' => 'business',
+                'business_id' => $note->business_id,
+            ],$data);
+        
         if($note){
             $word = $request->id ? 'updated' : 'Added';
             return response()->json(['status'=>200,'message'=>'Note '.$word.' Successfully.']);

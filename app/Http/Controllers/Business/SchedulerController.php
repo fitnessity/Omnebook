@@ -11,7 +11,7 @@ use Config;
 use DateInterval;
 use DateTimeZone;
 use Illuminate\Support\Facades\Session;
-
+use App\BusinessServices;
 class SchedulerController extends BusinessBaseController
 {  
      public function __construct(){ 
@@ -19,9 +19,28 @@ class SchedulerController extends BusinessBaseController
 
      public function index(Request $request){
           $filterDate = Carbon::parse($request->date);
-          $schedules = BusinessActivityScheduler::alldayschedule($filterDate,$request->activity_type)->where('cid', $request->current_company->id)->get();
-         
-          //print_r($schedules);exit;
+          // \DB::enableQueryLog(); 
+          // $schedules = BusinessActivityScheduler::alldayschedule($filterDate,$request->activity_type)->where('cid', $request->current_company->id)->get();
+          // dd(\DB::getQueryLog()); 
+
+          $services = BusinessServices::where('cid', $request->current_company->id)->get();
+          $categoryIds = [];
+
+          foreach ($services as $service) {
+               $priceDetails = BusinessPriceDetailsAges::where('serviceid', $service->id)
+                                   ->where('class_type', $service->service_type)
+                                   ->get();
+               
+               foreach ($priceDetails as $priceDetail) {
+                    $categoryIds[] = $priceDetail->id;
+               }
+          }
+
+          $schedules = BusinessActivityScheduler::alldayschedule($filterDate, $request->activity_type)
+                         ->where('cid', $request->current_company->id)
+                         ->whereIn('category_id', $categoryIds)
+                         ->get();
+
           return view('business.scheduler.index', [
               'schedules' => $schedules, 
               'filterDate' => $filterDate,
@@ -34,7 +53,7 @@ class SchedulerController extends BusinessBaseController
           }
           $category =  BusinessPriceDetailsAges::where('id',$request->categoryId)->first();
           $staffData = BusinessStaff::where('business_id',$business_id)->get();
-          $staffDataHTml = '<input type="hidden" name="instructure[0]" value=""><select name="instructure[0]" id="instructure0" multiple >';
+          $staffDataHTml = '<input type="hidden" name="instructure[0]" value=""><select name="instructure[0][]" id="instructure0" multiple>';
           foreach($staffData as $data){
                $selected ='';
                if(@$service->instructor_id == $data->id) {
@@ -48,6 +67,7 @@ class SchedulerController extends BusinessBaseController
      }
 
      public function store(Request $request){
+          //print_r($request->all());exit;
           $shift_start = $request->duration_cnt;
           if($shift_start >= 0) {
                $idary = BusinessActivityScheduler::where('cid', $request->cId)->where('userid', Auth::user()->id)->where('serviceid',  $request->serviceId)->where('category_id',$request->categoryId)->pluck('id')->toArray();
@@ -90,7 +110,25 @@ class SchedulerController extends BusinessBaseController
                     BusinessActivityScheduler::where('id',$deletdata)->delete();
                }
           }
-          return redirect()->route('business.schedulers.create', ["business_id"=>$request->cId,"categoryId"=>$request->categoryId]);
+
+          /*$category = BusinessPriceDetailsAges::where('id' , $request->categoryId)->whereNotNull('class_type')->first();
+          if($category){
+              $service = $category->BusinessServices;
+              return redirect()->to('business/'.$request->cId.'/services/create?serviceType='.$service->service_type.'&serviceId='.$request->serviceId.'#stepFour');
+          }else{*/
+              /*return redirect()->route('business.schedulers.create', ["business_id"=>$request->cId,"categoryId"=>$request->categoryId]);*/
+          /*}*/
+
+          if($request->has('returnUrl')){
+              $category = BusinessPriceDetailsAges::where('id' , $request->categoryId)->whereNotNull('class_type')->first();
+              $service = $category->BusinessServices;
+              $url = '/business/'.$request->cId.'/services/create?serviceType='.$service->service_type.'&serviceId='.$service->id.'#stepFour';
+              return redirect($url);
+
+              //return redirect()->to($request->returnUrl);
+          }else{
+              return redirect()->route('business.schedulers.create', ["business_id"=>$request->cId,"categoryId"=>$request->categoryId]);
+          }
      }
 
      public function destroy(Request $request){
@@ -133,7 +171,7 @@ class SchedulerController extends BusinessBaseController
                          "mail_type"=>$mail_type,
                          "email"=>$userdata->email,
                     ];
-                    $status = SGMailService::sendEmailCustomerforScheduleChange($emailDetail);
+                    $status = SGMailService::bookingCancellationToCustomer($emailDetail);
                } 
           }
 
@@ -159,7 +197,7 @@ class SchedulerController extends BusinessBaseController
                                         "email"=>$insdata->email,
                                         "mail_type"=>$mail_type,
                                    ];
-                                   $status = SGMailService::sendEmailInstructorforScheduleChange($emailDetail);
+                                   $status = SGMailService::bookingCancellationToTrainer($emailDetail);
                               }
                          }
                     }
@@ -250,7 +288,7 @@ class SchedulerController extends BusinessBaseController
                          "mail_type"=>$mail_type,
                          "email"=>$userdata->email,
                     ];
-                    $status = SGMailService::sendEmailCustomerforScheduleChange($emailDetail);
+                    $status = SGMailService::bookingCancellationToCustomer($emailDetail);
                } 
           }
 
@@ -276,7 +314,7 @@ class SchedulerController extends BusinessBaseController
                                         "email"=>$insdata->email,
                                         "mail_type"=>$mail_type,
                                    ];
-                                   $status = SGMailService::sendEmailInstructorforScheduleChange($emailDetail);
+                                   $status = SGMailService::bookingCancellationToTrainer($emailDetail);
                               }
                          }
                     }
@@ -335,7 +373,7 @@ class SchedulerController extends BusinessBaseController
                               "mail_type"=>$mail_type,
                               "email"=> $cid->customer->email,
                          ];
-                         $status = SGMailService::sendEmailCustomerforScheduleChange($emailDetail);
+                         $status = SGMailService::bookingCancellationToCustomer($emailDetail);
                     } 
                }
 
@@ -357,7 +395,7 @@ class SchedulerController extends BusinessBaseController
                                              "email"=>$insdata->email,
                                              "mail_type"=>$mail_type,
                                         ];
-                                        $status = SGMailService::sendEmailInstructorforScheduleChange($emailDetail);
+                                        $status = SGMailService::bookingCancellationToTrainer($emailDetail);
                                    }
                               }
                          }

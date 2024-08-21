@@ -57,11 +57,20 @@ if(!empty(@$response)){
                     <button class="btn signup-new" id='login_submit' type="submit">Log in </button>
                     <p class="or-data">OR</p>
                     <div class="social-login">
-                        <a href="{{ Config::get('constants.SITE_URL') }}/login/facebook" class="fb-login">
-                            <i class="fa fa-facebook" aria-hidden="true"></i> Login with Facebook
+                        <a href="{{ Config::get('constants.SITE_URL') }}login/facebook" class="fb-login">
+                            <i class="fab fa-facebook" aria-hidden="true"></i> Login with Facebook
                         </a>
                     </div>
+                    <div class="text-center mb-10">
+                        <a href="{{ Config::get('constants.SITE_URL') }}login/google" class="fb-login btn signup-new">
+                            <i class="fab fa-google" aria-hidden="true"></i>   <span class="ml-10">Login with Google</span>
+                        </a>
+                    </div>
+
                     <a class="forgotpass" data-behavior="ajax_html_modal" data-url="{{route('jsModalpassword')}}">Forgot Password?</a>
+
+                    <a class="forgotpass" href="{{route('staff_login')}}">Login For Staff Member?</a>
+
                     <p class="already">Don't have an account?
                         @if(@$onboardCid)
                             <a href="{{ Config::get('constants.SITE_URL') }}/welcome_provider?cid={{@$onboardCid}}">SIGN UP</a>
@@ -116,51 +125,6 @@ if(!empty(@$response)){
             // LoginUser();
         });
     });
-
-   /* function LoginUser() {
-        var validForm = $('#frmlogin').valid();
-        var posturl = '{{route("auth/userlogin")}}';
-        if (validForm) {
-            var formData = $("#frmlogin").serialize();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: posturl,
-                type: 'POST',
-                dataType: 'json',
-                data: formData,
-                beforeSend: function () {
-                    $('#login_submit').prop('disabled', true).css('background','#999999');
-                    showSystemMessages('#systemMessage', 'info', 'Please wait while we login you with Fitnessity.');
-                    $("#systemMessage").html('Please wait while we login you with Fitnessity.').addClass('alert-class alert-danger');
-                },
-                complete: function () {
-                    $('#login_submit').prop('disabled', false).css('background','#ed1b24');
-                },
-                success: function(response) {
-                    $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
-                    showSystemMessages('#systemMessage', response.type, response.msg);
-                    if (response.type == 'success') {
-                        //window.location = 'profile/viewProfile';
-                        if(response.claim  == 'set'){
-                            window.location.href = "/claim/reminder/"+response.claim_cname+"/"+response.claim_cid;
-                        }else if(response.claim_welcome != ''){
-                            window.location.href = "/business-welcome";
-                        }else if(response.claim_company != ''){
-                            window.location.href = "/manage/company";
-                        }else{
-                            window.location.href = "{{ route('profile-viewProfile')}}";
-                        }
-                    } else {
-                        $('#login_submit').prop('disabled', false).css('background','#ed1b24');
-                    }
-                }
-            });
-        }
-    }*/
 </script>
 @endsection
 

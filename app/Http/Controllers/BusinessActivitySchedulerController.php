@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use App\{CompanyInformation,UserBookingStatus,UserBookingDetail,BusinessActivityScheduler,Customer,BusinessPriceDetails,BookingCheckinDetails,SGMailService};
 use App\Repositories\BookingRepository;
 use DateTime;
-use Auth;
+use App\BusinessPriceDetailsAges;
+use Auth,View;
 use Session;
+use DB;
 
 class BusinessActivitySchedulerController extends Controller
 {
@@ -27,7 +29,6 @@ class BusinessActivitySchedulerController extends Controller
     public function index(Request $request , $business_id)
     {
         $chkScheduleSession = '';
-
         $company = CompanyInformation::findOrFail($business_id);
         $companyName = $company->dba_business_name;
         $companyName = $companyName ?? $company->company_name ; 
@@ -50,21 +51,34 @@ class BusinessActivitySchedulerController extends Controller
         $user = Auth::user();
         $userCompany = @$user->company ?? [];
         $customer = Customer::where(['user_id'=>@$user->id, 'business_id'=>$business_id])->first();
-        if($user != '' && count($userCompany) == 0  && $request->customer_id == ''){
+
+        if($user != '' && $request->customer_id == ''){
             $request->customer_id = $customer->id;
         }
 
         if($request->customer_id){
-            $customer = Customer::where('id',$request->customer_id)->first();
-            $memberships = $customer->active_memberships()->pluck('sport')->unique();
-            $business_services = $company->service()->whereIn('id', $memberships)->get();
+            if(request()->type == 'user'){
+                $familyMember = Auth::user()->user_family_details()->where('id',request()->customer_id)->first();
+                $user = User::where(['firstname'=> @$familyMember->first_name, 'lastname'=>@$familyMember->last_name, 'email'=>@$familyMember->email])->first();
+                $customer = Customer::where(['user_id' => @$user->id])->first();
+            }else{
+                $customer = Customer::where('id',$request->customer_id)->first();
+            }
+            
+            $memberships = @$customer->active_memberships()->pluck('sport')->unique();
+            /*$business_services = $business_services->whereIn('id', @$memberships);*/
         }
+
+
 
         if($request->business_service_id){
             $servicetype = $request->stype;
-            $business_services = $company->service()->where(['id'=>$request->business_service_id,'is_active'=>1, 'service_type' => $servicetype]); 
+            $business_services = $business_services->where(['id'=>$request->business_service_id,'is_active'=>1, 'service_type' => $servicetype]); 
         }
-
+        
+        // my code start
+            $serviceids=BusinessPriceDetailsAges::wherein('serviceid',$business_services->pluck('id'))->where('stype','1')->where('class_type', $business_services->pluck('service_type'));
+        // my code ends
         $filter_date = new DateTime();
         $shift = 1;
         if($request->date && (new DateTime($request->date)) > $filter_date){
@@ -77,15 +91,22 @@ class BusinessActivitySchedulerController extends Controller
             $d = clone($filter_date);
             $days[] = $d->modify('+'.($i+$shift).' day');
         }
+        // \DB::enableQueryLog(); // Enable query log
+        // $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('shift_start', 'asc')->get();//old
+        $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $serviceids->pluck('serviceid'))->orderBy('shift_start', 'asc')->get();//added by me
+        // dd(\DB::getQueryLog());
 
-        $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('end_activity_date', 'desc')->get();
+
         $services = [];
-
-        //print_r($bookschedulers);exit;
         foreach($bookschedulers as $bs){
-            $services []= $bs->business_service;
+            $services [] = $bs->business_service;
+        }
+
+        if($user != '' && count($userCompany) == 0){
+            $request->customer_id = '';
         }
         $services = array_unique($services);
+
         // /print_r( $services);exit;
         return view('business-activity-schedular.index',[
             'days' => $days,
@@ -173,15 +194,17 @@ class BusinessActivitySchedulerController extends Controller
         if($request->priceId != ''){
             $priceDetail = BusinessPriceDetails::find($request->priceId);
             $bookingDetail = UserBookingDetail::where(['sport'=> $request->sid ,'user_id'=>$request->cid,'priceid' => $request->priceId])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->first();
-            $remaining= @$bookingDetail != '' ? @$bookingDetail->getremainingsession() : 0;
+            $remaining = max(@$bookingDetail != '' ? @$bookingDetail->getremainingsession() - 1 : 0, 0);
+            @$bookingDetail != '' ? @$bookingDetail->getremainingsession() - 1 : 0;
             if($remaining != 0 ){
                 $html .= '<option value="'.$priceDetail->id.'" data-did="'.$bookingDetail->id.'">'.$priceDetail->price_title.'</option>';
             }
         }else{
-            $customer = $request->user()->customers()->find($request->cid);
-            $active_memberships = $customer->active_memberships()->where('user_booking_details.user_id',$request->cid)->get();
+            $customer = Customer::where('business_id' ,$request->businessId)->find($request->cid);
+            $active_memberships = $customer ? @$customer->active_memberships()->where('user_booking_details.user_id',$request->cid)->get() : [];
+
             foreach($active_memberships as $active_membership){
-                $remainingSession = $active_membership->getremainingsession();
+                $remainingSession = max($active_membership->getremainingsession() - 1, 0);
                 if($remainingSession > 0 && $active_membership->business_price_detail){
                     $priceDetail = $active_membership->business_price_detail;
                     $html .= '<option value="'.$priceDetail->id.'" data-did ="'.$active_membership->id.'">'.$priceDetail->price_title.'</option>';
@@ -195,33 +218,44 @@ class BusinessActivitySchedulerController extends Controller
         
         if($html != ''){
 
-            $data .='<select class="mb-10 form-control" id="priceId" onchange="getRemainingSession()">'.$html.'</select><div class="font-red text-center" id="remainingSession">'.$remaining.' Session Remaining.</div>';
+            $data .='<select class="mb-10 form-select" id="priceId" onchange="getRemainingSession()">'.$html.'</select><div class="font-red text-center" id="remainingSession">'.$remaining.' Session Remaining.</div>';
         }
         return $data;
     }
 
     public function chksession($dId,$date = null,$timeid = null,$chk = null){
+        $inSession = 0;
         $detail = UserBookingDetail::find($dId);
+        $inSessionArray = Session::get('multibooking') ?? [];
         $remaining = $detail->getremainingsession();
-        if($chk == 1){
-            $remaining = $remaining - 1;
-        }
+       /* echo $remaining.'<br>';*/
         if($date != ''){
-            $inSessionArray = Session::get('multibooking') ?? [];
             foreach($inSessionArray as $i=>$ary){
-                if($ary['serviceID'] == $detail->sport && $ary['timeId'] == $timeid && $ary['date'] == $date){
+                if($ary['timeId'] == $timeid && $ary['date'] == $date){
                     $inSessionArray[$i]['priceId'] = $detail->priceid;
                     $inSessionArray[$i]['oId'] = $detail->id;
                 }
             }
-            $sessionAry = session::put('multibooking', $inSessionArray);
+            session::put('multibooking', $inSessionArray);
         }
-        return $remaining;
+
+        if($chk == 1){            
+            foreach($inSessionArray as $i=>$ary){
+                if($ary['priceId'] == $detail->priceid && $ary['oId'] == $detail->id){
+                    $inSession++; 
+                }
+            }
+            
+        }
+
+        $inSession = max(1, $inSession);
+        $remaining = $remaining - $inSession;
+
+        return max(0, $remaining);
     }
 
     public function multibooking(Request $request, $business_id){
-        
-
+        // dd('test');
         $company = CompanyInformation::findOrFail($business_id);
         $filter_date = new DateTime();
         $shift = 1;
@@ -238,7 +272,7 @@ class BusinessActivitySchedulerController extends Controller
 
         $business_services = $company->service()->where('is_active',1)->orderBy('created_at','desc');
         if($request->business_service_id){
-            $business_services = $company->service()->where(['id'=>$request->business_service_id,'is_active'=>1]);            
+            $business_services = $company->service()->where(['id'=>$request->business_service_id,'is_active'=>1]);
         }
 
         $user = Auth::user();
@@ -246,15 +280,15 @@ class BusinessActivitySchedulerController extends Controller
         $customer = Customer::where(['user_id'=>@$user->id, 'business_id'=>$business_id])->first();
         if($user != '' && count($userCompany) == 0  && $request->customer_id == ''){
             $request->customer_id = $customer->id;
-        }
+        }   
 
         if($request->customer_id){
             $customer = Customer::where('id',$request->customer_id)->first();
             $memberships = $customer->active_memberships()->pluck('sport')->unique();
-            $business_services = $company->service()->whereIn('id', $memberships)->get();
+            /*$business_services = $company->service()->whereIn('id', $memberships)->get();*/
         }
 
-        $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('end_activity_date', 'desc')->get();
+        $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('shift_start', 'asc')->get();
 
         $services = [];
         foreach($bookschedulers as $bs){
@@ -270,6 +304,7 @@ class BusinessActivitySchedulerController extends Controller
 
         if(!empty($sessionAry)){
             foreach($sessionAry as $i=>$ary){
+                $ary['priceId'] = ''; 
                 if($ary['date'] == date('Y-m-d') &&  date( "H:i", strtotime($ary['time']) ) < date( "H:i", strtotime(date('Y-m-d H:i:s')) ) ||  $ary['date'] <  date('Y-m-d')){
                     unset($sessionAry[$i]);
                 }else{
@@ -277,7 +312,7 @@ class BusinessActivitySchedulerController extends Controller
                 }
             }
         }
-        $sessionAry = session::put('multibooking', $sessionAry);
+        session::put('multibooking', $finalSessionAry);
         return view('business-activity-schedular.multibooking',[
             'days' => $days,
             'filter_date' => $filter_date,
@@ -298,7 +333,7 @@ class BusinessActivitySchedulerController extends Controller
             return $query->orWhere('priceid', $priceId);
         })
         ->whereDate('expired_at' ,'>' ,date('Y-m-d'))->orderby('created_at','desc')->first();
-        //secho $UserBookingDetails;
+        //echo $UserBookingDetails;
         if($UserBookingDetails != ''){
             $cnt = 0;
             $multiBookingAry =[];
@@ -371,7 +406,7 @@ class BusinessActivitySchedulerController extends Controller
                 'cid' => $request->customerID,
                 'timeId' =>$request->timeid,
                 'pname' =>$request->pname,
-                'catname' =>$UserBookingDetails->business_price_detail->business_price_details_ages->category_title,
+                'catname' => @$UserBookingDetails->business_price_detail->business_price_details_ages->category_title,
                 'serviceID' =>$request->serviceID,
                 'businessId' =>$request->businessId,
                 'time' => $request->time,
@@ -393,18 +428,27 @@ class BusinessActivitySchedulerController extends Controller
     }
 
     public function getReviewData($cid,$business_id){
+        $sessionAry = Session::get('multibooking',[]);
+        $finalSessionAry = collect($sessionAry)->filter(function($ary) use ($cid) {
+            return $ary['cid'] == $cid;
+        })->all();
+       // print_r($finalSessionAry);
+        $company = CompanyInformation::find($business_id);
+        return view('business-activity-schedular.reviewData',compact('finalSessionAry','company','cid'));
+    }
 
+    public function loadMembershipDropdown(Request $request){
+        $cid = $request->cid;
+        $i = $request->i;
         $sessionAry = Session::get('multibooking',[]);
         $finalSessionAry = collect($sessionAry)->filter(function($ary) use ($cid) {
             return $ary['cid'] == $cid;
         })->all();
         
-        $company = CompanyInformation::find($business_id);
-        return view('business-activity-schedular.reviewData',compact('finalSessionAry','company','cid'));
+        return view('business-activity-schedular.multibookin_select_box',compact('finalSessionAry','cid','i'));
     }
 
     public function deleteFromSession(Request $request){
-        
         $sessionAry = Session::get('multibooking',[]);
         $sessionAry = collect($sessionAry)->reject(function ($ary) use ($request) {
             return $ary['serviceID'] == $request->serviceID && $ary['date'] == $request->date && $ary['timeId'] == $request->timeId; 
@@ -420,36 +464,49 @@ class BusinessActivitySchedulerController extends Controller
     }
 
     public function save(Request $request){
+        $confirmBooking = [];
         $sessionAry = Session::get('multibooking');
-        //print_r($sessionAry);exit();
+        //print_r($sessionAry);exit;
         foreach($sessionAry as $i=>$ary){
             if($ary['cid'] == $request->cid && $ary['priceId'] != ''){
                 $customer = Customer::where(['id'=>$ary['cid']])->first();
                 $UserBookingDetails = UserBookingDetail::where('id',$ary['oId'])->where('priceid',$ary['priceId'])->whereDate('expired_at','>', date('Y-m-d'))->orderby('created_at','desc')->first();
-                //echo $UserBookingDetails->id;exit;
                 if($UserBookingDetails != ''){
                     $sendmail = 0;
                     $checkIndetail = $UserBookingDetails->BookingCheckinDetails()->whereDate('checkin_date','=',$ary['date'])->where(['checked_at' =>null,'business_activity_scheduler_id'=>$ary['timeId']])->first();
                     if($checkIndetail != ''){
                         $checkIndetail->update(["business_activity_scheduler_id"=>$ary['timeId'],
                                 "checkin_date"=>$ary['date']]);
+                        $confirmBooking[] =$checkIndetail->id; 
                         $sendmail = 1;
                     }else{
-                        $chkData = $UserBookingDetails->BookingCheckinDetails()->whereDate('business_activity_scheduler_id',0)->where(['checkin_date' =>null])->first();
+                        $chkData = $UserBookingDetails->BookingCheckinDetails()->where('business_activity_scheduler_id',0)->where(['checkin_date' =>null])->first();
                         if($chkData != ''){
                             $chkData->update(["business_activity_scheduler_id"=>$ary['timeId'],
                                 "checkin_date"=>$ary['date'], "instructor_id"=>@$activitySchedulerData->instructure_ids]);
+                            $confirmBooking[] =$chkData->id; 
                             $sendmail = 1;
                         }else{
                             $chkMissSession = $UserBookingDetails->BookingCheckinDetails()->whereDate('checkin_date','<',date('Y-m-d'))->where(['checked_at' =>null,'business_activity_scheduler_id'=>$ary['timeId']])->first();
                             if($chkMissSession != ''){
                                 $chkMissSession->update(["business_activity_scheduler_id"=>$ary['timeId'],
                                 "checkin_date"=>$ary['date']]);
+                                $confirmBooking[] =$chkMissSession->id; 
                                 $sendmail = 1;
                             }else{
+                                
+                                $chkUpdate = $UserBookingDetails->BookingCheckinDetails()->whereDate('checkin_date','>',date('Y-m-d'))->where(['checked_at' =>null])->first();
+
+                                if($UserBookingDetails->pay_session == 1 && $chkUpdate){
+                                    $chkUpdate->update(["business_activity_scheduler_id"=>$ary['timeId'],
+                                    "checkin_date"=>$ary['date']]);
+                                    $confirmBooking[] = $chkUpdate->id; 
+                                    $sendmail = 1;
+                                }
+
                                 if($UserBookingDetails->BookingCheckinDetails()->count() < $UserBookingDetails->pay_session){
                                     $schedule = BusinessActivityScheduler::find($ary['timeId']);
-                                    BookingCheckinDetails::create([
+                                    $cDetail = BookingCheckinDetails::create([
                                         "business_activity_scheduler_id"=>$ary['timeId'], 
                                         "instructor_id"=>@$schedule->instructure_ids, 
                                         "customer_id" => $ary['cid'],
@@ -458,6 +515,8 @@ class BusinessActivitySchedulerController extends Controller
                                         "use_session_amount" => 0,
                                         "source_type" => 'online_scheduler'
                                     ]);
+
+                                    $confirmBooking[] = $cDetail->id; 
                                     $sendmail = 1;
                                 }
                             }
@@ -493,10 +552,25 @@ class BusinessActivitySchedulerController extends Controller
             }
             unset($sessionAry[$i]);
         }
+        //print_r($confirmBooking);
         session::put('multibooking', $sessionAry);
+        session::put('multibooking-confirm-booking', $confirmBooking);
 
-        return "You booked schedule succesfully";
+        if(empty($sessionAry)){
+            return "You booked schedule succesfully";
+        }
     }
+
+    public function confirmation(){
+        $data = [];
+        $checkInData = Session::get('multibooking-confirm-booking',[]);
+        foreach($checkInData as $d){
+            $data[] = BookingCheckinDetails::find($d);
+        }
+      
+        session::put('multibooking-confirm-booking', );
+        return view('business-activity-schedular.multiBookingSuccess',compact('data'));
+    } 
 
     public function setSessionOfSchedule(Request $request){
         Session::put('schedule', $request->businessId);   

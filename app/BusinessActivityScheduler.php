@@ -48,6 +48,11 @@ class BusinessActivityScheduler extends Model
     public function businessPriceDetailsAges(){
         return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id');
     }
+    public function businessPriceDetailsAges_Cat(){
+        return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id')
+                    ->where('stype', 1);
+    }
+    
 
     public static function findById($id){
         return BusinessActivityScheduler::where('id',$id)->first();
@@ -181,6 +186,11 @@ class BusinessActivityScheduler extends Model
         return intval($this->spots_available) - BookingCheckinDetails::where('business_activity_scheduler_id', $this->id)->whereDate('checkin_date', $current_time->format("Y-m-d"))->count();
     }
 
+
+    public function chkReservedToday($date){
+        return BookingCheckinDetails::where('business_activity_scheduler_id', $this->id)->whereDate('checkin_date', $date)->count();
+    }
+    
     public function price_detail() {
         $price_detail = BusinessPriceDetails::where('serviceid', $this->serviceid)
                             ->where('category_id', $this->category_id)
@@ -218,6 +228,27 @@ class BusinessActivityScheduler extends Model
 
     public function spots_reserved($current_time){
         return BookingCheckinDetails::where(['business_activity_scheduler_id' => $this->id ])->whereDate('checkin_date', '=', $current_time->format("Y-m-d"))->count();
+    }
+    public function businessPriceDetailsAges_n()
+    {
+        return $this->hasMany(BusinessPriceDetailsAges::class, 'cid', 'cid');
+    }
+    public function bookingCheckinDetails()
+    {
+        return $this->hasMany(BookingCheckinDetails::class, 'business_activity_scheduler_id', 'id');
+    }
+  
+    public function spots_reserved_cat($current_time)
+    {
+        $query = BookingCheckinDetails::where('business_activity_scheduler_id', $this->id)
+            ->whereDate('checkin_date', '=', $current_time->format("Y-m-d"))
+            ->whereHas('businessActivityScheduler', function($query) {
+                $query->whereHas('businessPriceDetailsAges_n', function($query) {
+                    $query->where('stype', 1);
+                });
+            });
+
+        return $query->count();
     }
 
     public function getcanceldata($date,$sid){
@@ -267,4 +298,27 @@ class BusinessActivityScheduler extends Model
         $name = rtrim($name, ', ');
         return $name;
     }
+
+    public function getInstructureIds($date){
+        $name = '';
+        $checkInData = BookingCheckinDetails::where('business_activity_scheduler_id' ,$this->id)->whereDate('checkin_date',$date)->first();
+        return @$checkInData->instructor_id ?? $this->instructure_ids;
+    }
+
+
+    public function getInsdata(){
+        $staffData = [];
+        if($this->instructure_ids){
+            foreach(explode(',',$this->instructure_ids) as $id){
+                $staff = BusinessStaff::find($id);
+                if($staff){
+                    $staffData [] = $staff;
+                }
+            }
+        }
+
+        return $staffData;
+    }
+
+
 }

@@ -39,7 +39,7 @@
 			                        </div>
 										<div class="col-sm-auto">
 											<div class="float-end">
-												<a href="/activities" class="fs-15 color-red-a">Continue Shopping</a>
+												<a href="{{route('activities_index')}}" class="fs-15 color-red-a">Continue Shopping</a>
 											</div>
 										</div>
 									</div>
@@ -132,15 +132,21 @@
 												<div class="row">
 													<div class="col-sm-auto col-6" id="imgdiv">
 														<div class="avatar-lg-custom bg-light rounded p-1 mmb-10 mb-10">
-															<img src="{{$profilePic}}" alt="" class="img-fluid d-block">
+															<img src="{{$profilePic}}" alt="Fitnessity" class="img-fluid d-block">
 														</div>
 													</div>
 													<div class="col-sm" id="bookdiv">
 														<h5 class="fs-20 text-truncate"><a href="#" class="text-dark">{{$item["name"]}}</a></h5>
 														<a class="fs-13 color-red-a" data-bs-toggle="modal" data-bs-target="#booking-details{{$it}}">Booking Details</a>
 														<div class="row">
-															<?php //$family = App\UserFamilyDetail::where('user_id', Auth::user()->id)->get()->toArray();
-																$family = getFamilyMember(@$act["cid"]);
+															<?php 
+															//$family = App\UserFamilyDetail::where('user_id', Auth::user()->id)->get()->toArray();
+																$family = getFamilyMember('',@$act["cid"]); //old commented by me
+																
+																if (!empty($company_data)) {
+																	$company_data = Auth::user()->current_company;
+																	$family = getFamilyMember('', $company_data->id);
+																}
 																//print_r($family);exit;
 																for($i=0; $i<$totalquantity ; $i++)
 																{ ?>
@@ -149,16 +155,14 @@
 																			<h6 class="mb-3 mt-3 fs-12">Select Who's Participating</h6>
 																		</div>
 																		<div class="hstack gap-3 px-3 mx-n3">
-																			<select class="form-select fs-13 familypart" name="participat[]" id="participats" >
-
-																				<option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">Choose or Add Participant</option>
-	                                            								
-	                                            								<option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">{{Auth::user()->firstname}} {{ Auth::user()->lastname }}</option>
-	                                            								<?php foreach($family as $fa){ ?>   
-									                                            	<option value="{{$fa['id']}}"  data-name="{{$fa['fname']}}  {{$fa['lname']}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-age="" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="{{$fa['type']}}">
-									                                                    {{$fa['fname']}} {{$fa['lname']}}</option>
-									                                            <?php } ?>
-
+																			<select class="form-select fs-13 familypart" name="participat[]" id="participats">
+																				<option value="" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user">Choose or Add Participant</option>	                                            								
+	                                            									<option value="{{Auth::user()->id}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-type="user" @if(@$item['participate'][$i]['id'] == Auth::user()->id) selected @endif>{{Auth::user()->firstname}} {{ Auth::user()->lastname }}</option>
+	                                            									@foreach($family as $fa)
+									                                            		<option value="{{$fa['id']}}"  data-name="{{$fa['full_name']}}" data-cnt="{{$i}}" data-priceid="{{$item['priceid']}}" data-age="" @if(@$item['participate'][$i]['id'] == $fa['id']) selected @endif data-type="{{$fa['type']}}">
+									                                                   	 {{$fa['full_name']}}
+																						</option>
+									                                            	@endforeach
 	                                           	 								<option value="addparticipate">+ Add New Participant</option>
 																			</select>
 																		</div>
@@ -481,7 +485,73 @@
 																	</div>
 																</div>
 															</div>
+															<div class="row">
+																<div class="col-md-6 col-xs-6 col-6">
+																	<div class="info-display">
+																		<label>Instructor: </label>
+																		<div class="d-none hiddenALinkforIns"></div>
+																	</div>
+																</div>
+																<div class="col-md-6 col-xs-6 col-6">
+																	<div class="info-display info-align">
+																		<span>
+																			@if(!empty($schedule->getInsdata())) 
+																				@foreach($schedule->getInsdata() as $key => $ins) 
+																					{{$ins->full_name}} 
+																				  	@if($key < count($schedule->getInsdata()) - 1) 
+																				  		,
+																				   	@endif
+																				@endforeach
+																				<a class="font-red" data-bs-toggle="modal" data-bs-target="#ins-details{{$it}}">View Instructure</a>
+																			@else
+																			 	"N/A" 
+																			@endif
+																			
+																		</span>
+																	</div>
+																</div>
+															</div>
 															
+														</div>
+													</div>
+												</div>
+											</div>
+
+
+											<div class="modal" id="ins-details{{$it}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+												<div class="modal-dialog modal-dialog-centered">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title" id="exampleModalLabel">Instructor Data</h5>
+															<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+														</div>
+														<div class="modal-body">
+															<div class="row y-middle">
+												            	@forelse($schedule->getInsdata() as $ins)
+																		<div class="col-md-2 mb-10">
+																			<div class="instructor-img">
+																				@if($ins->profile_pic_url)
+																				<img src="{{$ins->profile_pic_url}}" class="instructor-img-cart" alt="Fitnessity">
+																				@else
+																					<div class="mini-stats-wid ">
+																						<div class="avatar-md mr-15">
+																							<div class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">
+																								<span> ap </span>
+																							</div>
+																						</div>
+																					</div>
+																				@endif
+																			</div>
+																		</div>
+																		<div class="col-md-10 mb-10">
+																			<div class="instructor-inner-details">
+																				<span class="fs-14">{{@$ins->full_name}}</span>
+																			</div>
+																			<div><p class="fs-14">{{@$ins->bio}}</p></div>
+																		</div>
+												            	@empty
+												            	@endforelse
+												            </div>
 														</div>
 													</div>
 												</div>
@@ -511,7 +581,7 @@
 														<span class="fs-15 float-end">{{$cartCount}}</span>
 													</div>
 													<div class="col-6">
-														<label class="fs-15">Subtotal {{$discount}}</label>
+														<label class="fs-15">Subtotal</label>
 													</div>
 													<div class="col-6">
 														<span class="fs-15 float-end">
@@ -537,13 +607,16 @@
 													<div class="col-6">
 														<label class="fs-15 float-end">${{$total_amount}}</label>
 													</div>
+													<div class="col-lg-12 col-12">
+														<div class="border-wid-grey"></div>
+													</div>
 													<div class="col-12">
+														<label class="fs-15">Terms & Agreement</label>
 														<div class="terms-wrap">
 															<input type="checkbox" id="terms_condition" name="terms_condition" value="">
 															<p class="cart-terms fs-13"> The provider(s) require that you agree to some terms and conditions before booking this activity. 
 															<br> <br> By checking this box, you {{$username}} agree on {{ date('m/d/Y')}} to the terms the provider(s) require upon booking. You agree that you are 18+ to book this activity. You also agree to the Fitnessity privacy policy & terms of agreement. </p>
 														</div>
-														<div id="error_check" style="display: none;"><p class="alertcolor font-14 pl-25 font-red">Please select Terms & Conditions</p></div>
 													</div>
 												</div>
 											</div>
@@ -561,7 +634,7 @@
 														<div class="col-6">
 															<!-- <a href="/personal-profile/payment-info" class="edit-cart fs-15 color-red-a float-end"> Edit</a> -->
 
-															<a href="{{route('creditCardInfo')}}" class="edit-cart fs-15 color-red-a float-end"> Edit</a>
+															<a href="{{route('personal.credit-cards')}}" class="edit-cart fs-15 color-red-a float-end"> Edit</a>
 														</div>
 													</div>
 														
@@ -620,6 +693,12 @@
 									                            </div>
 									                        </div>
 								                        @endif
+
+								                        <div id="error_check" class="d-none"><p class="font-14 font-red text-center">Please select Terms & Conditions.</p></div>
+														<div class="text-center mb-4">
+															<span class="font-red fs-14 d-none participateAlert">Please Select Who Is Participating.</span>
+														</div>
+
 														<div class="text-end mb-4">
 															<button class="btn btn-cart-checkout btn-label right ms-auto" type="submit"  id="checkout-button" @if($soldOutChk == 1 || $timeChk == 1) disabled @endif >
 																<i class="fas fa-arrow-right label-icon align-bottom fs-16 ms-2"></i> Check out
@@ -710,10 +789,9 @@
 				<div class="modal-header">
 					<h5 class="modal-title" id="staticBackdropLabel">Leave a gift for your friends and family</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				  </div>
+				</div>
 
 	            <!-- Modal body -->
-	            
 	        	<div class="modal-body" id="leavegiftbody">
 	        	</div>					        
 	       	</div>
@@ -728,14 +806,14 @@
 				<h5 class="modal-title" id="exampleModalLabel">Add Family or Friends</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
 			</div>
-			<form action="{{route('family-member.store')}}" method="post">
+			<form action="{{route('personal.manage-account.store')}}" method="post">
 				@csrf
 				<div class="modal-body">
 					<div class="row">	
 						<div class="col-lg-4 col-md-4 col-sm-6">
 							<div class="photo-select product-edit user-dash-img mb-10">
 								<input type="hidden" name="old_pic" value="">
-								<img src="{{'/images/service-nofound.jpg'}}" class="pro_card_img blah" id="showimg">
+								<img src="{{'/images/service-nofound.jpg'}}" class="pro_card_img blah" id="showimg" alt="Fitnessity">
 									<input type="file" id="profile_pic" name="profile_pic" class="text-center fs-12">
 							</div>
 						</div>
@@ -831,6 +909,15 @@
 		dateFormat: "m-d-Y",
         maxDate: "today",
 	});
+
+
+	function getInsModal(scid){
+		$('.hiddenALinkforIns').html('');
+		var url= "/getInsData/?scheduleId="+scid;
+			$('.hiddenALinkforIns').html('<a data-behavior="ajax_html_modal" data-url="'+url+'" id="hiddenALinkforIns"></a>');
+			$('#hiddenALinkforIns')[0].click();
+	}
+
 	function opengiftpopup(pid,img,name,date){
 		var checkBox = document.getElementById("payforcheckbox"+pid);
 		if (checkBox.checked == true){
@@ -866,7 +953,6 @@
             }
         })
     });
-
 </script>
 	
 <script type="text/javascript">
@@ -884,15 +970,16 @@
 		paymentElement.mount('#payment-element');
 
 	    var $form = $(".validation");
+	  
 	    $('form.validation').bind('submit', function(e) {
 	    	e.preventDefault()
 	    	var $form = $(this);
 	    	$('.error').addClass('hide').find('.alert').text('');
-
+	    	 $('#error_check').addClass('d-none');
 	        $('#checkout-button').html('loading...').prop('disabled', true);
 	        var check = document.querySelector( 'input[name="terms_condition"]:checked');
 	        if(check == null) {
-	            $('#error_check').show();
+	        	$('#error_check').removeClass('d-none');
 	            $('#checkout-button').html('<i class="fas fa-arrow-right label-icon align-bottom fs-16 ms-2"></i>Check Out').prop('disabled', false);
 	            return false;
 	        }
@@ -988,6 +1075,23 @@
                 });
             @endif
         });
+
+        $('form').submit(function() {
+		    var isValid = true;
+
+		    $('.familypart').each(function() {
+		      	var selectedValue = $(this).val();
+		      	if (!selectedValue || selectedValue === 'addparticipate') {
+		      		$('.participateAlert').removeClass('d-none');
+			        isValid = false;
+			        return false; 
+			    }else{
+			    	$('.participateAlert').addClass('d-none');
+			    }
+		    });
+
+		    return isValid;
+		});
     });
 </script>
 

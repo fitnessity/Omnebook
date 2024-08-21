@@ -22,24 +22,35 @@
 </style>
 
 	@include('layouts.business.business_topbar')
-   <div class="main-content printnone">
+    <div class="main-content printnone">
 		<div class="page-content">
-         <div class="container-fluid">
-            <div class="row">
-               <div class="col">
-                  <div class="h-100">
-                     <div class="row mb-3">
+         	<div class="container-fluid">
+	            <div class="row">
+	                <div class="col">
+	                   <div class="h-100">
+	                        <div class="row mb-3">
 								<div class="col-12">
 									<div class="page-heading">
 										<label>Manage Customers</label>
 									</div>
 								</div>
 							</div>
+
+							@if(session('success'))
+							    <div class="alert alert-success">
+							        {{ session('success') }}
+							    </div>
+							@endif
+
+							@if($cardSuccessMsg == 1)
+								<div class="fs-15 font-green mb-10">Your Card is uploaded successfully.</div>
+					  	 	@endif
+
 							<div class="row">
 								<div class="col-xl-12">
 									<div class="card">
 										<div class="card-header align-items-center d-flex">
-											<h4 class="card-title mb-0 flex-grow-1">{{@$customerdata->full_name}}'s Account</h4>
+											<h4 class="card-title mb-0 flex-grow-1">{{@$customerdata->full_name}}'s Account </h4>
 										</div><!-- end card header -->
 										<div class="card-body">
 											<div class="live-preview">
@@ -60,10 +71,10 @@
 																	</h2>
 																	<div id="accor_nesting7Examplecollapse2" class="accordion-collapse collapse show" aria-labelledby="accordionnesting7Example2" data-bs-parent="#accordionnesting7">
 																		<div class="accordion-body">
-																			<div class="container-fluid">
-																				<div class="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
+																			<div class="container-fluid mp-5">
+																				<div class="pt-4 mb-lg-3 pb-lg-4 profile-wrapper">
 																					<div class="row d-flex align-items-center">
-																						<div class="col-auto col-md-3 col-lg-2 col-sm-4">
+																						<div class="col-12 col-md-3 col-lg-2 col-sm-4 customer-details-img">
 																							<div class="avatar-lg">
 																								@if(@$customerdata->profile_pic)
 																									<img src="{{Storage::Url($customerdata->profile_pic)}}" class="customers-name rounded-circle" alt="">
@@ -74,14 +85,15 @@
 																								
 																						</div>
 																						<!--end col-->
-																						<div class="col-lg-7 col-md-6 col-sm-5 col-xs-12 col-auto">
-																							<div class="p-2 mmt-10">
-																								<h3 class="mb-1">{{$customerdata->full_name}}</h3>
+																						<div class="col-lg-7 col-md-6 col-sm-5 col-xs-12 col-12">
+																							<div class="p-2 mmt-10 m-customer-detials">
+																								<h3 class="mb-1 m-d-grid">{{$customerdata->full_name}} @if($customerdata->primary_account == '1') <span class="font-green fs-14">(Primary Account)</span> @endif </h3>
+																								<h3> <span class="fs-14">Member Id {{@$customerdata->user->unique_user_id}}</span></h3>
 																							</div>
 																						</div>
 																						<!--end col-->
 																						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 col-lg-auto order-last order-lg-0">
-																							<div class="flex-shrink-0 float-end mfloat-left small0width">
+																							<div class="flex-shrink-0 float-end small0width">
 																								<div class="multiple-options">
 																									<div class="setting-icon">
 																										<i class="ri-more-fill"></i>
@@ -106,7 +118,7 @@
 																					<!--end row-->
 																				</div>
 																				<div class="card card-border">
-																					<div class="card-body">
+																					<div class="card-body mcard-body-sp">
 																						<div class="container-fluid">
 																							<div class="row">
 																								<div class="col-lg-6">
@@ -139,7 +151,7 @@
 																											<label class="font-black">Last Visited :</label>
 																										</div>
 																										<div class="col-lg-7 col-sm-7">
-																											<span>{{$customerdata->get_last_seen()}}</span>
+																											<span>{{$customerdata->get_last_seen() ?? 'N/A'}}</span>
 																										</div>
 																									</div>
 																									<div class="row mb-10">
@@ -179,10 +191,19 @@
 																									</div>
 																									<div class="row mb-10"> 
 																										<div class="col-lg-5 col-sm-5">
-																											<label class="font-black">Customers Since :</label>
+																											<label class="font-black">Member Since :</label>
 																										</div>
 																										<div class="col-lg-7 col-sm-7">
 																											<span>{{date('m/d/Y',strtotime($customerdata->created_at))}}</span>
+																										</div>
+																									</div>
+
+																									<div class="row mb-10"> 
+																										<div class="col-lg-5 col-sm-5">
+																											<label class="font-black">Member Id :</label>
+																										</div>
+																										<div class="col-lg-7 col-sm-7">
+																											<span>{{@$customerdata->user->unique_user_id}}</span>
 																										</div>
 																									</div>
 																								</div>
@@ -191,7 +212,7 @@
 																					</div><!-- end card body -->
 																				</div>
 																				<div class="card card-border">
-																					<div class="card-body">
+																					<div class="card-body mcard-body-sp">
 																						<div class="container-fluid">
 																							<div class="row">
 																								<div class="col-lg-12">
@@ -207,11 +228,8 @@
 																											<label class="font-black">Status</label>
 																										</div>
 																										<div class="col-lg-6 col-sm-6">
-																											@if($customerdata->is_active() == 0)
-																												<span class="red-fonts">InActive</span>
-																											@else
-																												<span class="green-fonts">Active</span>
-																											@endif
+																											<span class="@if($customerdata->is_active() == 'InActive') font-red-fonts @else font-green @endif ">{{$customerdata->is_active()}}</span>
+																											
 																										</div>
 																									</div>
 																									<div class="row mb-10">
@@ -308,10 +326,10 @@
 																								<div class="accordion nesting4-accordion custom-accordionwithicon accordion-border-box mt-3" id="accordionnestinga{{$i}}">
 																									<div class="accordion-item shadow">
 																										<h2 class="accordion-header" id="accordionnesting4Examplea{{$i}}}">
-																											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting4Examplecollapsea{{$i}}" aria-expanded="false" aria-controls="accor_nesting4Examplecollapse2">
+																											<button class="accordion-button collapsed mp-6" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting4Examplecollapsea{{$i}}" aria-expanded="false" aria-controls="accor_nesting4Examplecollapse2">
 																												<div class="container-fluid nopadding">
 																													<div class="row mini-stats-wid d-flex align-items-center ">
-																														<div class="col-lg-10 col-md-10 col-8"> {{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} |Started On {{date('m/d/Y',strtotime(@$booking_detail->contract_date))}} | Expires On {{date('m/d/Y',strtotime(@$booking_detail->expired_at))}} </div>
+																														<div class="col-lg-10 col-md-10 col-8"> {{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}} @if($booking_detail->contract_date) | Started On {{date('m/d/Y',strtotime(@$booking_detail->contract_date))}} @endif  @if($booking_detail->expired_at) | Expires On {{date('m/d/Y',strtotime(@$booking_detail->expired_at))}} @endif </div>
 																														
 																														<div class="col-lg-2 col-md-2 col-4">
 																															<div class="multiple-options">
@@ -319,8 +337,8 @@
 																																	<i class="ri-more-fill"></i>
 																																	<ul>
 																																		<li>
-																					                                       	<a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id])}}" data-modal-width="modal-70" ><i class="fas fa-plus text-muted">
-																					                                       	</i> View Visits </a>
+																																			<a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id])}}" data-modal-width="modal-70" ><i class="fas fa-plus text-muted">
+																																			</i> View Visits </a>
 																																		</li>
 																																		<li>
 																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
@@ -335,11 +353,11 @@
 																																			</i>Suspend or Terminate</a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-50" data-reload="1"><i class="fas fa-plus text-muted">
 																																			</i>Autopay Schedule</a>
 																																		</li>
 																																		<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'history'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'history'])}}" data-modal-width="modal-50"><i class="fas fa-plus text-muted">
 																																			</i>Autopay History</a>
 																																		</li>
 																																	</ul>
@@ -458,7 +476,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span> {{date('m/d/Y',strtotime(@$booking_detail->contract_date))}}</span>
+																																	<span> @if($booking_detail->contract_date) {{date('m/d/Y',strtotime(@$booking_detail->contract_date))}} @else N/A  @endif</span>
 																																</div>
 																															</div>
 
@@ -469,7 +487,7 @@
 																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="float-end line-break text-right">
-																																	<span> {{date('m/d/Y',strtotime(@$booking_detail->expired_at))}}</span>
+																																	<span>@if($booking_detail->expired_at)  {{date('m/d/Y',strtotime(@$booking_detail->expired_at))}} @else N/A @endif</span>
 																																</div>
 																															</div>
 																														
@@ -564,19 +582,19 @@
 																												<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting01Examplecollapsec{{$i}}" aria-expanded="false" aria-controls="accor_nesting01Examplecollapsec{{$i}}">
 																													 <div class="container-fluid nopadding">
 																														<div class="row mini-stats-wid d-flex align-items-center ">
-																															<div class="col-lg-8 col-md-8 col-8">
+																															<div class="col-lg-10 col-md-8 col-8">
 																																{{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}}
 																																
 																																@if($booking_detail->status == 'refund')
-																																	  | <span class="font-red">  Status: Refunded on {{date('m/d/Y',strtotime($booking_detail->refund_date))}}	</span>
+																																	  | <span class="font-red">  Status: Refunded on {{date('m/d/Y',strtotime($booking_detail->refund_date))}} by {{$booking_detail->refunded_person}}	</span>
 																																@endif
 
 																																@if($booking_detail->status == 'terminate')
-																																	| <span class="font-red">  Status: Terminated on {{date('m/d/Y',strtotime($booking_detail->terminated_at))}}	</span>
+																																	| <span class="font-red">  Status: Terminated on {{date('m/d/Y',strtotime($booking_detail->terminated_at))}}  by {{$booking_detail->terminated_person}}		</span>
 																																@endif
 
 																																@if($booking_detail->status == 'suspend')
-																																	| <span class="font-red"> Status: Freeze from {{date('m/d/Y',strtotime($booking_detail->suspend_started))}}	to {{date('m/d/Y',strtotime($booking_detail->suspend_ended))}}</span>
+																																	| <span class="font-red"> Status: Freeze from {{date('m/d/Y',strtotime($booking_detail->suspend_started))}}	to {{date('m/d/Y',strtotime($booking_detail->suspend_ended))}} by {{$booking_detail->suspended_person}}	 </span>
 																																	
 																																@endif
 
@@ -584,24 +602,24 @@
 																																	| <span class="font-red">  Status: Void </span>
 																																@endif						
 																															</div>
-																															<div class="col-lg-4 col-md-4 col-4">
+																															<div class="col-lg-2 col-md-4 col-4">
 																																<div class="multiple-options">
 																																	<div class="setting-icon">
 																																		<i class="ri-more-fill"></i>
 																																		<ul>
 																																			<li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-100"> <i class="fas fa-plus text-muted">
+																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
 																																			</i>Edit Booking </a>
 																																		</li>
 																																			<li><a class="visiting-view" data-behavior="ajax_html_modal" data-url="{{route('visit_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id])}}" data-modal-width="modal-70" >
 																																					<i class="fas fa-plus text-muted"></i> View Visits </a>
 																																			</li>
 																																			<li>
-																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
+																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-50" data-reload="1"><i class="fas fa-plus text-muted">
 																																				</i>Autopay Schedule</a>
 																																			</li>
 																																			<li>
-																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'history'])}}" data-modal-width="modal-80"><i class="fas fa-plus text-muted">
+																																				<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'history'])}}" data-modal-width="modal-50"><i class="fas fa-plus text-muted">
 																																				</i>Autopay History</a>
 																																			</li>
 																																		</ul>
@@ -845,9 +863,9 @@
 																								</thead>
 																								<tbody>
 																									@foreach($purchase_history as $history) 
-																										@if($history->item_description(request()->business_id)['itemDescription'] != '')
+																										@if($history->item_description(request()->business_id)['itemDescription'] != '' )
 																										<tr>
-																											<td>{{date('m/d/Y',strtotime($history->created_at))}}</td>
+																											<td>@if($history->created_at) {{date('m/d/Y',strtotime($history->created_at))}} @else N/A @endif </td>
 																											<td>{!!$history->item_description(request()->business_id)['itemDescription']!!}</td>
 																											<td>{{$history->item_type_terms()}}</td>
 																											<td>{{$history->getPmtMethod()}}</td>
@@ -855,7 +873,8 @@
 																											<td>{{$history->item_description(request()->business_id)['qty']}}</td>
 																											<td>
 																												@if(($history->can_void() && $history->item_type=="UserBookingStatus") || ($history->can_refund()))
-																													<a href="#" data-behavior="ajax_html_modal" data-url="{{route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => $booking_detail->id , 'booking_id' => $booking_detail->booking_id])}}" data-modal-width="modal-100">Void</a>
+																													<a href="#" data-behavior="ajax_html_modal" data-url="{{route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-100">Void</a>
+
 																												@else
 																													{{$history->status}}
 																												@endif
@@ -927,7 +946,7 @@
 																									<td>{{$family_member->relationship ?? "N/A"}}</td>
 																									<td>{{$family_member->age ?? "N/A"}}</td>
 																									<td class="text-center">
-																										<a onclick="deleteMember({{$family_member->id}})" class="btn btn-red mmb-10">Delete</a>
+																										<a onclick="deleteMember('{{$family_member->id}}')" class="btn btn-red mmb-10">Delete</a>
 
 																										<a href="#" trget="_blank" onclick="redirctAddfamily({{$customerdata->id}});" class="btn btn-black mmb-10">Edit</a>
 
@@ -974,24 +993,26 @@
 																							</thead>
 																							<tbody>
 																								@foreach($visits as $visit)
-																									<tr>
-																										<td>{{date('m/d/Y',strtotime($visit->checkin_date))}}</td>
-																										<td>
-																											{{date('h:i A', strtotime($visit->checked_at))}}
-																										</td>
-																										<td>{{$visit->order_detail->business_services_with_trashed->program_name}}</td>
-																										<td>{{$visit->order_detail->business_price_detail_with_trashed->price_title}}</td>
-																										
-																										<td>
-																											@if($visit->status_term())
-																												{{$visit->status_term()}}
-																											@else
-																												<a class="font-red" onclick="getCheckInDetails({{$visit->order_detail->business_id}}, {{$visit->business_activity_scheduler_id}} ,'{{$visit->checkin_date}}','{{$customerdata->id}}');">Unprocess</a>
-																											@endif
+																								 	@if($visit->order_detail)
+																										<tr>
+																											<td>@if($visit->checkin_date) {{date('m/d/Y',strtotime($visit->checkin_date))}} @else N/A @endif</td>
+																											<td>
+																												{{date('h:i A', strtotime($visit->checked_at))}}
+																											</td>
+																											<td>{{$visit->order_detail->business_services_with_trashed->program_name}}</td>
+																											<td>{{$visit->order_detail->business_price_detail_with_trashed->price_title}}</td>
 																											
-																										</td>
-																										<td>{{ App\BusinessStaff::getinstructorname($visit->order_detail->business_services_with_trashed->instructor_id)}}</td>
-																									</tr>
+																											<td>
+																												@if($visit->status_term())
+																													{{$visit->status_term()}}
+																												@else
+																													<a class="font-red" onclick="getCheckInDetailsModel({{$visit->order_detail->business_id}}, {{$visit->business_activity_scheduler_id}} ,'{{$visit->checkin_date}}','{{$customerdata->id}}');">Unprocess</a>
+																												@endif
+																												
+																											</td>
+																											<td>{{ App\BusinessStaff::getinstructorname($visit->order_detail->business_services_with_trashed->instructor_id)}}</td>
+																										</tr>
+																									@endif
 																								@endforeach
 																							</tbody>
 																						</table>
@@ -1015,7 +1036,7 @@
 																								  <i class="ri-more-fill"></i>
 																								  <ul>
 																									<li>
-																										<a href="#" data-modal-width=" " data-behavior="ajax_html_modal" data-url="{{route('business.customers.card_editing_form', ['customer_id' => $customerdata->id, 'return_url' => url()->full()])}}">
+																										<a href="#" data-reload="1" data-modal-width=" " data-behavior="ajax_html_modal" data-url="{{route('business.customers.card_editing_form', ['customer_id' => $customerdata->id, 'return_url' => url()->full()])}}" >
 																										<i class="fas fa-plus text-muted"></i>Add</a>
 																									</li>
 																								  </ul>
@@ -1031,7 +1052,7 @@
 																				<div class="row">
 																					@foreach($customerdata->stripePaymentMethods()->get() as $card)
 																							<div class="col-lg-3 col-sm-6">
-																								<div class="cards-block dispalycard" style="cursor: pointer" data-name="{{$card->name}}" data-cvv="{{$card->last4}}" data-cnumber="{{$card->exp_month}}" data-month="{{$card->exp_month}}" data-year="$card->exp_year" data-type="{{strtolower($card->brand)}}" data-id="{{$card->id}}">
+																								<div class="cards-block dispalycard" style="cursor: pointer" data-name="{{$card->name}}" data-cvv="{{$card->last4}}" data-cnumber="{{$card->exp_month}}" data-month="{{$card->exp_month}}" data-year="{{$card->exp_year}}" data-type="{{strtolower($card->brand)}}" data-id="{{$card->id}}">
 																									<div class="cards-content" style="background-image: url({{ url('public/img/visa-card-bg.jpg')}});">
 																										<img src="{{ url('/public/images/creditcard/'.strtolower($card->brand).'.jpg') }}" alt="">
 																										<span></span>
@@ -1043,6 +1064,12 @@
 																										<a class="float-end card-remove" data-behavior="delete_card" data-url="{{route('stripe_payment_methods.destroy', ['stripe_payment_method' => $card->payment_id])}}" data-cardid="{{$card->id}}" class="delCard">
 																											<i class="fa fa-trash"></i> 
 																										</a>
+
+																										<a class="float-end card-remove mr-10" onclick="editCard('{{$card->payment_id}}','{{$card->exp_month}}','{{$card->exp_year}}')" data-cardid="{{$card->id}}">
+																											<i class="fas fa-pencil-alt"></i> 
+																										</a>
+
+																										<h3>{{$card->exp_month}}/{{$card->exp_year}}</h3>
 																									</div>
 																								</div>
 																							</div>
@@ -1083,7 +1110,7 @@
 																							<div class="row">
 																								<div class="col-md-10">
 																									<div class="row">
-																										<div class="col-md-3">{!!$n->limit_note_character!!}</div>
+																										<div class="col-md-3">{!!$n->title!!}</div>
 																										<div class="col-md-2">{{date('M d, Y', strtotime($n->created_at))}} </div>
 																										<div class="col-md-2">Due {{date('M d, Y', strtotime($n->due_date))}} , {{ date('h:i A', strtotime($n->time))}} </div>
 																										<div class="col-md-2">{{ $n->display_chk == 0 ? "Not" : ''}} visible to member</div>
@@ -1131,7 +1158,7 @@
 																						<div class="row">
 																							<div class="col-lg-10 col-md-10 col-10">
 																								<span>1.</span>
-																								<span>Covid-19 Protocols agreed on @if(@$customerdata->terms_covid != '') {{date('m/d/Y',strtotime(@$customerdata->terms_covid))}} @endif </span>
+																								<span>Covid-19 Protocols @if(@$customerdata->terms_covid != '') Agreed & Signed on  {{date('m/d/Y',strtotime(@$customerdata->terms_covid))}} @endif </span>
 																							</div>
 																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
@@ -1154,7 +1181,7 @@
 																							</div>
 																							<div class="col-lg-10 col-md-10 col-10">
 																								<span> 2. </span>
-																								<span>Liability Waiver agreed on @if(@$customerdata->terms_liability != '') {{date('m/d/Y',strtotime(@$customerdata->terms_liability))}} @endif  </span>
+																								<span>Liability Waiver @if(@$customerdata->terms_liability != '')  Agreed & Signed on {{date('m/d/Y',strtotime(@$customerdata->terms_liability))}} @endif  </span>
 																							</div>
 																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
@@ -1177,7 +1204,7 @@
 																							</div>
 																							<div class="col-lg-10 col-md-10 col-10">
 																								<span>3. </span>
-																								<span>Contract Terms  agreed on @if(@$customerdata->terms_contract != '') {{date('m/d/Y',strtotime(@$customerdata->terms_contract))}} @endif</span>
+																								<span>Contract Terms @if(@$customerdata->terms_contract != '') Agreed & Signed on {{date('m/d/Y',strtotime(@$customerdata->terms_contract))}} @endif</span>
 																							</div>
 																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
@@ -1198,9 +1225,12 @@
 																									</div>
 																								</div>
 																							</div>
+																							@php 
+																								$refundDate = @$lastBooking->created_at != '' ? date('m/d/Y',strtotime(@$lastBooking->created_at)) : date('m/d/Y',strtotime(@$customerdata->terms_refund)); 
+																							@endphp
 																							<div class="col-lg-10 col-md-10 col-10">
 																								<span>4. </span>
-																								<span>Refund Policy </span>
+																								<span>Refund Policy @if(@$refundDate) agreed on {{$refundDate}} @endif</span>
 																							</div>
 																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
@@ -1221,9 +1251,13 @@
 																									</div>
 																								</div>
 																							</div>
+
+																							@php 
+																								$termsDate = @$lastBooking->created_at != '' ? date('m/d/Y',strtotime(@$lastBooking->created_at)) : date('m/d/Y',strtotime(@$customerdata->terms_condition)); 
+																							@endphp
 																							<div class="col-lg-10 col-md-10 col-10">
 																								<span>5. </span>
-																								<span>Terms, Conditions, FAQ </span>
+																								<span>Terms, Conditions, FAQ @if(@$termsDate) agreed on {{$refundDate}} @endif</span>
 																							</div>
 																							<div class="col-lg-2 col-md-2 col-2">
 																								<div class="multiple-options">
@@ -1260,7 +1294,8 @@
 																											<div class="setting-icon">
 																												<i class="ri-more-fill"></i>
 																												  <ul>
-																														<li><a href="#" data-bs-toggle="modal" data-bs-target=".documents"><i class="fas fa-plus text-muted"></i>Add</a></li>
+																														<li><a href="#" data-bs-toggle="modal" data-bs-target=".documents"><i class="fas fa-plus text-muted"></i>Add New Document</a></li>
+																														<li><a href="#/" onclick="openModalDoc()" ><i class="fas fa-plus text-muted"></i>Request A Document</a></li>
 																													</ul>
 																											</div>
 																										</div>
@@ -1271,17 +1306,62 @@
 																					</h2>
 																					<div id="accor_nesting" class="accordion-collapse collapse" aria-labelledby="accordionnesting" data-bs-parent="#accordionnesting8">
 																						<div class="accordion-body">
+																							<div class="row mb-15">
+																								<div class="col-md-3"> <span class="fs-14 font-black"> Document Name </span></div>
+																								<div class="col-md-3"><span class="fs-14 font-black"> Uploaded On </span></div>
+																								<div class="col-md-2"> <span class="fs-14 font-black">Uploaded By </span></div>
+																								<div class="col-md-3"><span class="fs-14 font-black"> Status </span></div>
+																							</div>
 																							@forelse($documents as $d)
 																							<div class="row">
-																								<div class="col-md-3"><i class="fas fa-download"></i> {{$d->title}}</div>
-																								<div class="col-md-3"><i class="fas fa-paperclip"></i> Uploaded on {{date('m/d/Y', strtotime($d->created_at))}}</div>
-																								<div class="col-md-3"> Uploaded by {{@$d->uploaded_by}}</div>
 																								<div class="col-md-3">
+																									<a  @if(!$d->CustomerDocumentsRequested->isEmpty()) href="#" onclick="event.preventDefault(); openDocumentModal('{{$d->id}}','load')"  @elseif($d->path) href="{{ route('download', ['id' => $d->id]) }}" target="_blank" @endif  ><i class="fas fa-download"></i> {{$d->title}}</a>
+																								</div>
+
+																								<div class="col-md-3">
+																									<i class="fas fa-paperclip"></i>
+																									{{date('m/d/Y', strtotime($d->created_at))}}
+																								</div>
+																								<div class="col-md-2">{{@$d->uploaded_by}}</div>
+																								<div class="col-md-3"> 
+																									@if($d->status == 1)
+																										@if($d->sign_requested_date && !$d->sign_date)
+																							            <span class="font-red">Sign Requested on {{ date('m/d/Y' , strtotime($d->sign_requested_date)) }}</span>
+																							         @endif
+																							         @if($d->sign_date)
+																							            <span class="font-green">Signed On {{ date('m/d/Y' , strtotime($d->sign_date)) }}</span>
+																							         @endif 
+																							      @endif
+
+																							      @if(!$d->CustomerDocumentsRequested->isEmpty()) 
+																							       	@if($d->doc_requested_date && !$d->doc_completed_date)
+																							            <span class="font-red">Document Requested on {{ date('m/d/Y' , strtotime($d->doc_requested_date)) }}</span>
+																							         @endif
+																							         @if($d->doc_completed_date)
+																							            <span class="font-green">Document Request Completed On {{ date('m/d/Y' , strtotime($d->doc_completed_date)) }}</span>
+																							         @endif
+																							      @endif 
+																							   </div>
+																								<div class="col-md-1">
 																									<div class="multiple-options">
 																										<div class="setting-icon">
 																											<i class="ri-more-fill"></i>
 																											  <ul>
-																											  		<li><a href="{{ route('download', ['id' => $d->id]) }}" target="_blank"><i class="fas fa-plus text-muted"></i>Download</a></li>
+
+																											  		@if($d->CustomerDocumentsRequested->isEmpty())
+																												  		@if($d->status == 0)
+																												  			<li><a onclick="requestSign({{$d->id}})"><i class="fas fa-plus text-muted"></i>Request Signature</a></li>
+																												  		@elseif($d->status == 1)
+																												  			<li><a><i class="fas fa-plus text-muted"></i>Signature Requested</a></li>
+																												  		@else
+																												  			<li><a><i class="fas fa-plus text-muted"></i>Signature Signed</a></li>
+																												  		@endif
+																												  	@endif
+																											  		<!-- <li><a onclick="openModalDoc({{$d->id}})"><i class="fas fa-plus text-muted"></i>Request Document</a></li> -->
+																											  		<li>
+																											  			<a @if(!$d->CustomerDocumentsRequested->isEmpty())  onclick="event.preventDefault(); openDocumentModal('{{$d->id}}','load')"  @elseif($d->path) href="{{ route('download', ['id' => $d->id]) }}" target="_blank" @endif ><i class="fas fa-plus text-muted"></i>Download
+																											  			</a>
+																											  		</li>
 																													<li><a onclick="deleteDoc({{$d->id}})"><i class="fas fa-plus text-muted"></i>Delete </a></li>
 																												</ul>
 																										</div>
@@ -1308,11 +1388,11 @@
 								</div>
 							</div>
 						</div>
-               </div> 
-            </div>
-         </div>
-      </div>
-   </div>
+               		</div> 
+            	</div>
+        	</div>
+      	</div>
+   	</div>
 </div>
 
 <div class="row mt-25">
@@ -1325,6 +1405,43 @@
 		<div class="col-md-12 text-center printDiv mb-10 printnone" id="refundDiv">{!!@$terms->refundpolicytext!!}</div>
 
 		<div class="col-md-12 text-center printDiv mb-10 printnone" id="termsDiv">{!!@$terms->termcondfaqtext!!}</div>
+</div>
+
+
+<div class="modal fade editCard" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Edit Card</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form id="editCardForm">
+				<input type="hidden" id="cardId" name="cardId" value="">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="mb-10">
+								<label>Expiration Month</label>
+								<input class="form-control" type="text" id="month" name="month" value="">
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="mb-10">
+								<label>Expiration Year</label>
+								<input class="form-control" type="text" id="year" name="year" value="">
+							</div>
+						</div>
+					</div>	
+					<div class="col-md-12">
+						<span class="card-error fs-16"></span>
+					</div>				
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary btn-red" onclick="updateCard();">Submit</button>
+				</div>
+			</form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
 </div>
 
 <div class="modal fade editprofile" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
@@ -1368,7 +1485,7 @@
 							<div class="mb-10">
 								<label>	Birthdate </label>
 								<div class="input-group">
-									<input type="text" name="birthdate" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border" value="@if($customerdata->birthdate != '') {{date('m/d/Y',strtotime($customerdata->birthdate))}} @endif" placeholder="Birthday">
+									<input type="text" name="birthdate" class="form-control flatpiker-with-border flatpickr-date" value="@if($customerdata->birthdate != '') {{date('m/d/Y',strtotime($customerdata->birthdate))}} @endif" placeholder="Birthday">
 								</div>
 							</div>
 						</div>
@@ -1376,9 +1493,9 @@
 							<div class="mb-10">
 								<label>	Gender </label>
 								<div>
-								<input type="radio" name="gender" value="male" {{$customerdata->gender == 'male' ? "checked" : '' }}> Male
-								<input type="radio" name="gender" value="female" {{$customerdata->gender == 'female' ? "checked" : '' }}> Female
-								<input type="radio" name="gender" value="other" {{$customerdata->gender == 'other' ? "checked" : '' }}> Other
+								<input type="radio" name="gender" value="male" {{strtolower($customerdata->gender) == 'male' ? "checked" : '' }}> Male
+								<input type="radio" name="gender" value="female" {{strtolower($customerdata->gender) == 'female' ? "checked" : '' }}> Female
+								<input type="radio" name="gender" value="other" {{strtolower($customerdata->gender) == 'other' ? "checked" : '' }}> Other
 								</div>
 							</div>
 						</div>
@@ -1414,7 +1531,8 @@
 							</div>
 
 							<div class="mb-10">
-								<input class="check-box-primary-account" type="checkbox" id="primary_account" name="primary_account" value="1" @if($customerdata->primary_account == '1') checked @endif>
+								<input class="check-box-primary-account" type="checkbox" id="primary_account" name="primary_account" value="1" @if($customerdata->primary_account == '1') checked @endif  >
+								<!-- @if($resultDate->format('Y-m-d') <= $customerdata->birthdate) disabled @endif -->
 								<label for="primary_account"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="You are paying for yourself and all added family members.">(i)</span></label>
 							</div>
 						</div>
@@ -1461,13 +1579,19 @@
 						<div class="mb-10">
 							<input type="file" class="form-control mt-10" name="document" id="file" onchange="readURL(this)">
 						</div>
+						<div class="mb-10">
+							<div class="form-check form-switch form-switch-right form-switch-md">
+	                     <label> Signature Needed </label>
+	                     <input class="custom-switch form-check-input" type="checkbox" name="signature" id="signature" value="1">
+                     </div>
+						</div>
 						<p class='err mt-10 font-red'></p>
 						<label id="docMessage" class="font-16"></label>
 					</div>
 				</div>					
 			</div>
 			<div class="modal-footer">
-				<button type="button" id="upload-pdf" class="btn btn-primary btn-red">Add Document</button>
+				<button type="button" id="upload-pdf" class="btn btn-primary btn-red upload-pdf">Add Document</button>
 			</div>
 		</div>
 	</div>
@@ -1497,7 +1621,7 @@
 			<form action="{{route('update_customer')}}" method="post" enctype="multipart/form-data">
 				@csrf
 				<input type="hidden" id="cus_id" name="cus_id" value="{{$customerdata->id}}">
-				<input type="hidden" id="chk" name="chk" value="update_personal">
+				<input type="hidden" id="chk" name="chk" value="update_terms">
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-lg-12">
@@ -1540,8 +1664,7 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->	
 
-
-<div class="modal fade checkinDetails" tabindex="-1" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+<div class="modal fade checkinDetails" tabindex="-1" aria-labelledby="mySmallModalLabel" >
 	<div class="modal-dialog modal-dialog-centered modal-70">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -1555,11 +1678,39 @@
 	</div>
 </div>
 
+<div class="modal fade modalDocument" tabindex="-1" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Documents</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="modalDocumentHtml">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade modalDocumentDisplay" tabindex="-1" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-dialog-centered modal-70" id="doc-width">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myModalLabel">Requested Documents</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="modalDocumentDisplayHtml">
+
+			</div>
+		</div>
+	</div>
+</div>
+
 @include('layouts.business.footer')
 
 <script>
-	var docToUpload = '';
-	var ext = '';
+	
+	var docToUpload = ''; ext = '';
 
 	function readURL(input) {
 	   if (input.files && input.files[0]) {
@@ -1576,12 +1727,98 @@
       }
 	}
 
+	function editCard(cardId,month,year){
+		$('#cardId').val(cardId);
+		$('#year').val(year);
+		$('#month').val(month);
+		$('.editCard').modal('show');
+	}
+
+	function updateCard(){
+		$('.card-error').removeClass('font-green font-red');
+
+       	var cardId = $('#cardId').val();
+       	$.ajax({
+         	type: 'POST',
+         	url: '/stripe_payment_methods/update',
+          	data: {
+          		year: $('#year').val(),
+          		month: $('#month').val(),
+          		customerID: '{{$customerdata->id}}',
+          		cardId: $('#cardId').val(),
+          		_token:'{{csrf_token()}}'
+          	},
+	        success: function (response) {
+            	if(response == 'success'){
+            		$('.card-error').addClass('font-green').html('Card updated successfully.');
+            		setTimeout(function() {
+				        window.location.reload();
+				    }, 1000);
+
+            	}else{
+            		$('.card-error').addClass('font-red').html(response);
+            	}
+         	}
+      	});
+	}
+
+	function openDocumentModal(id,type){
+		$.ajax({
+         type: 'GET',
+         url: '/personal/getContent/'+id+'/'+type,
+         success: function (response) {
+         	$('#doc-width').removeClass('modal-50');
+         	if(type == 'upload'){
+         		if(!$('#doc-width').hasClass('modal-70')){
+         			$('#doc-width').addClass('modal-70');
+         		}
+         	}else{
+         		$('#doc-width').addClass('modal-50');
+         	}
+            $('#modalDocumentDisplayHtml').html(response);
+				$('.modalDocumentDisplay').modal('show');
+         }
+      });
+	}
+
+	function requestSign(id){
+		$.ajax({
+         	type: 'GET',
+         	url: '/business/'+'{{request()->business_id}}'+'/requestSign/'+id,
+         	success: function (data) {
+            	window.location.reload();
+         	}
+      	});
+	}
+
+	function openModalDoc(){
+		var cust_id =  '{{$customerdata->id}}'
+		$.ajax({
+         	type: 'GET',
+         	url: '/docContent/'+cust_id,
+         	success: function (response) {
+            	$('#modalDocumentHtml').html(response);
+				$('.modalDocument').modal('show');
+         	}
+      	});
+	}
+
+	function requestDoc(id){
+		$.ajax({
+         	type: 'GET',
+         	url: '/business/'+'{{request()->business_id}}'+'/requestDoc/'+id,
+         	success: function (data) {
+            	window.location.reload();
+         	}
+      	});
+	}
+
 	function deleteDoc(id){
 		let text = "You are about to delete the document. Are you sure you want to continue?";
 		if (confirm(text)) {
 	      $.ajax({
 	         type: 'GET',
-	         url: '/business/'+'{{request()->business_id}}'+'/removeDoc/'+id,
+	         url: '/removeDoc/'+id,
 	         success: function (data) {
 	            window.location.reload();
 	         }
@@ -1604,63 +1841,57 @@
 
 	function getNote(id){
 		$.ajax({
-         type: 'GET',
-         url: '/business/'+'{{request()->business_id}}'+'/customer/'+'{{$customerdata->id}}'+'/getNote/'+id,
-         success: function (data) {
-            $('#noteHtml').html(data);
-            if(id){
-            	$('.note-title').html('Edit Note');
-            }else{
-            	$('.note-title').html('Add Note');
-            }
-            $('.notes').modal('show');
-         }
+         	type: 'GET',
+         	url: '/business/'+'{{request()->business_id}}'+'/customer/'+'{{$customerdata->id}}'+'/getNote/'+id,
+         	success: function (data) {
+            	$('#noteHtml').html(data);
+	            if(id){
+	            	$('.note-title').html('Edit Note');
+	            }else{
+	            	$('.note-title').html('Add Note');
+	            }
+            	$('.notes').modal('show');
+         	}
 	   });
 	}
 
-	$(document).ready(function () {
-
-      $('#upload-pdf').click(function(){
-        	if(docToUpload == ''){
-        		$('.err').html('Select file to upload.');
-        	}else if(ext != 'pdf' && ext != 'jpg' && ext != 'jpeg' && ext != 'png'){
-            	$('.err').html('File format is not supported.')
-        	}else{
-        		$('.err').html('');
-         	var formdata = new FormData();
-         	formdata.append('file',docToUpload);
-         	formdata.append('id','{{$customerdata->id}}');
-         	formdata.append('title',$('#docTitle').val());
-          	formdata.append('_token','{{csrf_token()}}')
-          	$.ajax({
-               url: '{{route('upload_docs')}}',
-               type:'post',
-               dataType: 'json',
-               enctype: 'multipart/form-data',
-               data:formdata,
-               processData: false,
-               contentType: false,
-               headers: {'X-CSRF-TOKEN': $("#_token").val()},
-               success: function (response) { 
-               	$('#docMessage').removeClass();
-                  if(response.status == 200){
-                     $('#docMessage').addClass('font-green font-16');
-                     $('#docTitle').val('');
-                     $('#docMessage').html(response.message);
-                     setTimeout(function() {
-						        window.location.reload();
-						   }, 1000);
-                  }
-                  else{
-                		$('#docMessage').addClass('font-red font-16');
-                		$('#docMessage').html(response.message).addClass('alert alert-danger alert-dismissible');
-                  }
-                  $('#file').val('')
+	$('.upload-pdf').click(function(){
+     	$('.err').html('');
+     	var signature = ($('#signature').val() !== undefined && $('#signature').val() !== null) ? $('#signature').val() : 0;
+      	var formdata = new FormData();
+      	formdata.append('file',docToUpload);
+      	formdata.append('sign',signature);
+      	formdata.append('id','{{$customerdata->id}}');
+      	formdata.append('title',$('#docTitle').val());
+       	formdata.append('_token','{{csrf_token()}}')
+       	$.ajax({
+            url: '{{route('upload_docs')}}',
+            type:'post',
+            dataType: 'json',
+            enctype: 'multipart/form-data',
+            data:formdata,
+            processData: false,
+            contentType: false,
+            headers: {'X-CSRF-TOKEN': $("#_token").val()},
+            success: function (response) { 
+            	$('#docMessage').removeClass();
+               if(response.status == 200){
+                  $('#docMessage').addClass('font-green font-16');
+                  $('#docTitle').val('');
+                  $('#docMessage').html(response.message);
+                  setTimeout(function() {
+					        window.location.reload();
+					   }, 1000);
                }
-         	});
-        	}
-    	});
-   });
+               else{
+             		$('#docMessage').addClass('font-red font-16');
+             		$('#docMessage').html(response.message).addClass('alert alert-danger alert-dismissible');
+               }
+               $('#file').val('')
+            }
+      	});
+    });
+
 </script>
 
 	<script type="text/javascript">
@@ -1711,37 +1942,34 @@
 		$(document).ready(function () {
 			var business_id = '{{request()->business_id}}';
 	     	var url = "{{ url('/business/business_id/customers') }}";
-	      url = url.replace('business_id', business_id);
+	      	url = url.replace('business_id', business_id);
 
 			$("#serchFamilyMember").autocomplete({
-	         source: url,
-	         focus: function( event, ui ) {
-	              return false;
-	         },
-	         select: function( event, ui ) {
-	         	callAddFamily(ui.item.id , business_id);
-	            return false;
-	         }
-	     	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-	         let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
+	         	source: url,
+	         	focus: function( event, ui ) {
+	              	return false;
+	         	},
+	         	select: function( event, ui ) {
+	         		callAddFamily(ui.item.id , business_id);
+	            	return false;
+	         	}
+     		}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+         		let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
 
-	         if(item.profile_pic_url){
-	             profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
-	         }
+         		if(item.profile_pic_url){
+             		profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
+         		}
 
-	         var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
-	                   '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
-	                   '<p class="pstyle liaddress">' + item.email +'</p>' + 
-	                   '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
-	        
-	         return $( "<li></li>" )
-	                 .data( "item.autocomplete", item )
-	                 .append(inner_html)
-	                 .appendTo( ul );
-	     	};
-	   });
+         		var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
+                   '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
+                   '<p class="pstyle liaddress">' + item.email +'</p>' + 
+                   '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
+        
+        		return $( "<li></li>" ).data( "item.autocomplete", item ).append(inner_html).appendTo( ul );
+     		};
+   		});
 
-		function getCheckInDetails(business_id,scheduleId,date,cid){
+		function getCheckInDetailsModel(business_id,scheduleId,date,cid){
 			if(scheduleId != 0){
 				$.ajax({	
 					url:"/business/"+business_id+"/schedulers/"+scheduleId+"/checkin_details?date="+date+"&customerId="+cid,
@@ -1754,8 +1982,20 @@
 			}	
 		}
 
-	   function deleteMember(id) {
-			if(id == undefined){
+		function getCheckInDetails(scheduleId,date,chkInID,cus_id,chk,chkMsg,chkInMsg){
+			var business_id = '{{$customerdata->business_id}}';
+			$.ajax({	
+				url:"/business/"+business_id+"/schedulers/"+scheduleId+"/checkin_details?date="+date+"&chkInId="+chkInID+"&cus_id="+cus_id+"&chk="+chk+"&msg="+chkMsg+"&chkInMsg="+chkInMsg,
+				type:'GET',
+				success:function(data){
+					$('#checkInHtml').html(data);
+					$('.checkinDetails').modal('show');
+				}
+			});	
+		}
+
+	   	function deleteMember(id) {
+			if(id == ''){
 				window.location.reload();
 			}else{
 				var _token = $("input[name='_token']").val();
@@ -1767,7 +2007,7 @@
 		               id: id
 		            },
 		            success: function (data) {
-		               window.location.reload();
+		               //window.location.reload();
 		            }
 		        });
 			}
@@ -1792,90 +2032,112 @@
 			}
 		});
 
-	   function callAddFamily(cid ,business_id){
-	   	if(cid == '{{$customerdata->id}}'){
-	   		alert("You can't add your self as your family member..");
-	   		return false;
+	   	function callAddFamily(cid ,business_id){
+	   		if(cid == '{{$customerdata->id}}'){
+	   			alert("You can't add your self as your family member..");
+	   			return false;
+	   		}
+	   		$.ajax({
+	            type: 'POST',
+	            url: '{{route("addFamilyViaSearch")}}',
+	            data: { 
+	            	_token: '{{csrf_token()}}',
+	            	business_id: business_id,
+	            	cid: cid,
+	            	currentCid:'{{$customerdata->id}}'
+	         	},
+	            success: function(data) {
+	               location.reload();
+	            }
+         	});
 	   	}
-	   	$.ajax({
-            type: 'POST',
-            url: '{{route("addFamilyViaSearch")}}',
-            data: { 
-            	_token: '{{csrf_token()}}',
-            	business_id: business_id,
-            	cid: cid,
-            	currentCid:'{{$customerdata->id}}'
-         	},
-            success: function(data) {
-               location.reload();
-            }
-         });
-	   }
-      
-		flatpickr(".flatpickr-range", {
+  
+		flatpickr(".flatpickr-date", {
         	dateFormat: "m/d/Y",
         	maxDate: "01/01/2050",
-      });
+        	onChange: function(selectedDates, dateStr, instance) {
+              	var age = calculateAge(dateStr);
+              	if (age < 18) {
+                  $('.check-box-primary-account').prop('disabled', true);
+                  if ($('.check-box-primary-account').is(':checked')) {
+                      $('.check-box-primary-account').prop('checked', false);
+                  }
+              	} else {
+                 $('.check-box-primary-account').prop('disabled', false);
+              	}
+          	}
+      	});
 
-      function printTerms(divId,termsName){
-      	var chk = $('#'+divId).html() != '' ? 1 : 0;
-      	if(chk == 1){
-	      	const divName = ['covidDiv','liabilityDiv','contractDiv','refundDiv','termsDiv'];
-	      	divName.forEach(function(div) {
-				   if(divId == div){
-				   	$('#'+divId).removeClass('printnone');
-	      			$('#'+divId).addClass('exclude-from-print');
-				   }else{
-				   	$('#'+div).addClass('printnone');
-	      			$('#'+div).removeClass('exclude-from-print');
-				   }
+      	function calculateAge(dateStr) {
+        	var birthDate = new Date(dateStr);
+        	var currentDate = new Date();
+        	var age = currentDate.getFullYear() - birthDate.getFullYear();
+        	var monthDiff = currentDate.getMonth() - birthDate.getMonth();
+        	if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < birthDate.getDate())) {
+            	age--;
+        	}
+        	return age;
+    	}
+
+      	function printTerms(divId,termsName){
+      		var chk = $('#'+divId).html() != '' ? 1 : 0;
+      		if(chk == 1){
+	      		const divName = ['covidDiv','liabilityDiv','contractDiv','refundDiv','termsDiv'];
+	      		divName.forEach(function(div) {
+				   	if(divId == div){
+				   		$('#'+divId).removeClass('printnone');
+	      				$('#'+divId).addClass('exclude-from-print');
+				   	}else{
+				   		$('#'+div).addClass('printnone');
+	      				$('#'+div).removeClass('exclude-from-print');
+				   	}
 				});
 	      	
-	      	print();
-	      }else{
-	      	alert("There is not any " +termsName + " policy.");
-	      }
-      }
+	      		print();
+	      	}else{
+	      		alert("There is not any " +termsName + " policy.");
+	      	}
+       	}
 
-      function emailTerms(divId,business_id,termsName,cid){
-      	var chk = $('#'+divId).html() != '' ? 1 : 0;
-      	if(chk == 1){
-	      	$.ajax({
-               type: 'POST',
-               url: '{{route("sendTermsMail")}}',
-               data: { 
-               	_token: '{{csrf_token()}}',
-               	business_id: business_id,
-               	cid: cid,
-               	termsName: termsName,
-            	},
-               success: function(data) {
-                  alert('Email sent successfully.')
-               }
-            });
-	      }else{
-	      	alert("There is not any " +termsName + " policy.");
-	      }
-      }
+      	function emailTerms(divId,business_id,termsName,cid){
+	      	var chk = $('#'+divId).html() != '' ? 1 : 0;
+	      	if(chk == 1){
+		      	$.ajax({
+	               type: 'POST',
+	               url: '{{route("sendTermsMail")}}',
+	               data: { 
+	               	_token: '{{csrf_token()}}',
+	               	business_id: business_id,
+	               	cid: cid,
+	               	termsName: termsName,
+	            	},
+	               success: function(data) {
+	                  alert('Email sent successfully.')
+	               }
+	            });
+		    }else{
+		      	alert("There is not any " +termsName + " policy.");
+		    }
+      	}
 
 		$(document).on("click", "[data-behavior~=delete_card]", function(e){
     		e.preventDefault()
-         if (confirm('You are sure to delete card?')) {
-            var cardid = $(this).data("cardid");
-            $.ajax({
-               type: 'DELETE',
-               url: $(this).data('url'),
-               data: { _token: '{{csrf_token()}}'},
-               success: function(data) {
-                  location.reload();
-               }
-            });
-         }
-     });
-   	
-   	function redirctAddfamily(id){
-   		window.open('/customer/add-family/'+id, '_blank');
-   	}
+         	if (confirm('You are sure to delete card?')) {
+            	var cardid = $(this).data("cardid");
+            	$.ajax({
+	               	type: 'DELETE',
+	               	url: $(this).data('url'),
+	               	data: { _token: '{{csrf_token()}}'},
+	               	success: function(data) {
+	                  	location.reload();
+	               	}
+            	});
+         	}
+     	});
+	
+   		function redirctAddfamily(id){
+   			window.open('/customer/add-family/'+id, '_blank');
+   		}
 	</script>
 
 	<script type="text/javascript">

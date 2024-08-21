@@ -119,12 +119,13 @@ $bustime = BusinessService::where('cid', request()->page_id)->first();
 				
 				<div class="map-info">
                 	<?php $locations = []; ?>
-                	@if ($company->address !='')
+                	@if ($company->address)
 					<span>
 						<i class="fas fa-map-marker-alt map-fa"></i><p>{{ $company->address }}
-                        	@if ($company->city !='') <?php echo ', '.$company->city; ?> @endif
-                            @if ($company->state !='') <?php echo ', '.$company->state; ?> @endif
-                            @if ($company->country !='') <?php echo ', '.$company->country; ?> @endif
+                        	@if ($company->city) <?php echo ', '.$company->city; ?> @endif
+                            @if ($company->state) <?php echo ', '.$company->state; ?> @endif
+                            @if ($company->country) <?php echo ', '.$company->country; ?> @endif
+                            @if ($company->zip_code) <?php echo ', '.$company->zip_code; ?> @endif
                             
                             <?php
                             if($company->latitude != '' || $company->longitude  != ''){
@@ -137,9 +138,9 @@ $bustime = BusinessService::where('cid', request()->page_id)->first();
                         </p>
 					</span>
                     @endif
-                    @if ($company->contact_number !='')
+                    @if ($company->business_phone)
                     @php
-                        $phone_num = $company->contact_number;
+                        $phone_num = $company->business_phone;
                         if (preg_match('/()-/', $phone_num)){
                            
                             $phone_number = $phone_num;
@@ -152,14 +153,14 @@ $bustime = BusinessService::where('cid', request()->page_id)->first();
 						<i class="fas fa-phone-alt map-fa"></i><p>{{ $phone_number }}</p>
 					</span>
                     @endif
-                    @if ($company->email !='')
+                    @if ($company->business_email)
 					<span>
-						<i class="fa fa-envelope map-fa"></i><p>{{ $company->email }}</p>
+						<i class="fa fa-envelope map-fa"></i><p>{{ $company->business_email }}</p>
 					</span>
                     @endif
-                    @if ($company->website !='')
+                    @if ($company->business_website)
 					<span>
-						<i class="fas fa-globe map-fa"></i><p>{{ $company->website }}</p>
+						<i class="fas fa-globe map-fa"></i><p>{{ $company->business_website }}</p>
 					</span>
                     @endif
 				</div>

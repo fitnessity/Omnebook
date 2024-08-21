@@ -48,7 +48,9 @@
 							<div class="col-xl-12">
 								<div class="card">
 									<div class="card-header align-items-center d-flex">
-										<h4 class="card-title mb-0 flex-grow-1">Check Out</h4>
+										<h4 class="card-title mb-0 ">Check Out</h4>
+										<h4 class="card-title mb-0 ml-10 mr-10">|</h4>
+										<a class="card-title mb-0 text-black" href="http://dev.fitnessity.co/design/manage_gift_card">Gift Cards</a>
 									</div>
 									<div class="card-body">
 										<div class="row g-3 mb-25">
@@ -68,7 +70,7 @@
 										<div class="row">
 											<div class="col-lg-7 col-md-12 col-sm-12">
 												<div class="row">
-													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+													<!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 														<div class="check-client-info">
 															<div class="row">
 																<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -124,7 +126,7 @@
 																</div>
 															</div>
 														</div>
-													</div>
+													</div> -->
 													
 													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 														<div class="check-out-steps">
@@ -194,11 +196,11 @@
 																	</div>
 																</div>
 
-																<div class="col-md-6 col-sm-6 col-xs-12">
+																<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 																	<div class="select0service">
-																		<label>Select Add-On Service (Optional)</label>
+																		<label>Add Ons</label>
 																	</div>
-																	<div class="accordion cart-accordion" id="default-accordion-exampleaddon">
+																	<div class="accordion cart-accordion mb-15" id="default-accordion-exampleaddon">
 																		<div class="accordion-item">
 																			<h2 class="accordion-header" id="headingOneaddon">
 																				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOneaddon" aria-expanded="true" aria-controls="collapseOneaddon">Add On Service
@@ -209,6 +211,14 @@
 																				</div>
 																			</div>
 																		</div>
+																	</div>
+																</div>
+
+																<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+																	<div class="select0service mb-10">
+																		<label>Select Product</label>
+																		<!-- <button type="button" data-bs-toggle="modal" data-bs-target="#addproduct" class="btn btn-red width-100 search-add-client"> Select </button> -->
+																		<button type="button" onclick="openProductModal('{{$companyId}}' , '' ,'','','','','')" class="btn btn-red width-100 search-add-client"> Select </button>
 																	</div>
 																</div>
 															</div>
@@ -272,13 +282,9 @@
 																	</div> -->
 																</div>
 
-																<div class="col-md-4 col-sm-4 col-xs-12">
-																	<div class="select0service mb-10">
-																		<label>Select Product</label>
-																		<!-- <button type="button" data-bs-toggle="modal" data-bs-target="#addproduct" class="btn btn-red width-100 search-add-client"> Select </button> -->
-																		<button type="button" onclick="openProductModal('{{$companyId}}' , '' ,'','','','','')" class="btn btn-red width-100 search-add-client"> Select </button>
-																	</div>
-																</div>
+																<!-- <div class="col-md-4 col-sm-4 col-xs-12">
+																	
+																</div> -->
 															</div>
 														</div>
 													</div>
@@ -348,25 +354,34 @@
 																		</div>
 																	</div>
 																</div>
-																<div class="col-lg-5 col-md-4 col-sm-6 col-xs-12">
+																
+																<div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
 																	<div class="select0service mb-10">
-																		<div class="date-activity-scheduler date-activity-check paynowset">
-																			<input type="checkbox" id="paynow" name="paynow" value="1" checked>
-																			<label for="paynow"> Pay Now</label>
+																		<label>The Date This Starts</label>
+																		<div class="input-group">
+																			<input type="text" id="managecalendarservice" class="form-control border-0 flatpickr-range flatpiker-with-border flatpickr-input active" readonly="readonly" value="{{date('m/d/Y')}}" onchange="changedate('simple');" autocomplete="off">
+																		</div>
+																		<div class="select0service mb-10 ">
+																			<div class="date-activity-scheduler date-activity-check paynowset  text-right">
+																				<input type="checkbox" id="paynow" name="paynow" value="1" checked>
+																				<label for="paynow"> Pay Now</label>
+																			</div>
 																		</div>
 																	</div>
-																	
 																</div>
-																<div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
+
+																
+
+																<div class="col-lg-6 col-md-4 col-sm-6 col-xs-12 durationDiv">
 																	<div class="select0service mb-10">
 																		<label>Duration</label>
 																		<div class="row">
 																			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-																				<input type="text" class="form-control valid mb-10" id="duration_int" name=duration_int placeholder="12" value="1" onkeyup="changevalue();" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
+																				<input type="text" class="form-control valid mb-10" id="duration_int" name=duration_int placeholder="12" value="1" onkeyup="changevalue();" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))" disabled>
 																			</div>
 																			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 																				<div class="choose-tip mb-10">
-																					<select name="duration_dropdown" id="duration_dropdown" class="form-select" onchange="loaddropdown('duration',this,this.value);">
+																					<select name="duration_dropdown" id="duration_dropdown" class="form-select" onchange="loaddropdown('duration',this,this.value);" disabled>
 																						<option value="Days">Day(s) </option>
 																						<option value="Weeks">Week(s)</option>
 																						<option value="Months">Month(s) </option>
@@ -377,14 +392,7 @@
 																		</div>
 																	</div>
 																</div>
-																<div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-																	<div class="select0service mb-10">
-																		<label>The Date This Starts</label>
-																		<div class="input-group">
-																			<input type="text" id="managecalendarservice" class="form-control border-0 flatpickr-range flatpiker-with-border flatpickr-input active" readonly="readonly" value="{{date('m/d/Y')}}" onchange="changedate('simple');" autocomplete="off">
-																		</div>
-																	</div>
-																</div>
+
 															</div>
 															
 														</div>
@@ -565,7 +573,7 @@
 													
 												</div>
 											</div>
-											<!-- @php print_r(@$cart['cart_item']); @endphp -->  
+											<!-- @php print_r(@$cart['cart_item']); @endphp   -->
 											<div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
 												<div class="activity_purchase-box">
 													<div class="ticket-summery ticket-title">
@@ -592,7 +600,7 @@
 																				$taxes += $taxval;
 																				$act = BusinessServices::where('id', $item["code"])->first();
 																				$serprice = $act != '' ? @$act->price_details->find(@$item['priceid']) : '';
-																				$serpricecate = $act != '' ? $act->businessPriceDetailsAges->find(@$serprice->category_id) : '';
+																				$serpricecate = $act != '' ? $act->businessPriceDetailsAges->find(@$item['categoryid']) : '';
 
 																				$total =($item['totalprice'] + $item['tip']  - $item['discount'] ) + $taxval ;
 																				$iprice = number_format($total,0, '.', '');
@@ -606,11 +614,11 @@
 																			<input type="hidden" name="itemparticipate[]" id="itemparticipate" value="" />
 																			<div class="d-flex">
 																				<div class="close-cross-icon mr-10"> 
-																					<a class="p-red-color editcartitemaks" data-toggle="modal" data-priceid="{{$item['priceid']}}" data-pageid="{{$pageid}}" data-customerId="{{$item['customerId']}}" data-orderType = "{{$item['orderType']}}"> 
+																					<a class="p-red-color editcartitemaks" data-toggle="modal" data-priceid="{{$item['priceid']}}" data-pageid="{{$pageid}}" data-customerId="{{$item['customerId']}}" data-orderType = "{{$item['orderType']}}"data-productIds = "{{@$item['productIds']}}"> 
 																					<i class="fas fa-pencil-alt"></i></a>
 																				</div>
 																				<div class="close-cross-icon-trash">
-																					<a href="{{route('business.removeFromCartForCheckout',['priceid'=>@$item['priceid'],'pageid'=>$pageid ,'customerID'=>$item['customerId'],'orderType' =>@$item['orderType'], ])}}" class="p-red-color">
+																					<a href="{{route('business.removeFromCartForCheckout',['priceid'=>@$item['priceid'],'pageid'=>$pageid ,'customerID'=>$item['customerId'],'orderType' =>@$item['productIds'].''.@$item['orderType'], ])}}" class="p-red-color">
 																					<i class="fas fa-trash-alt"></i></a>
 																				</div>
 																			</div>
@@ -686,7 +694,7 @@
 																						<label>Duration:</label>
 																					</div>
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
-																						<span>{{ @$serprice['actscheduleid'] != '' ? @$serprice['actscheduleid'] :  "N/A" }} </span>
+																						<span>{{ @$item['actscheduleid'] != '' ? @$item['actscheduleid'] :  "N/A" }} </span>
 																					</div>
 
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
@@ -1692,6 +1700,7 @@
 		var pageid = $(this).attr('data-pageid');
 		var customerId = $(this).attr('data-customerId');
 		var orderType = $(this).attr('data-orderType');
+		var productIds = $(this).attr('data-productIds');
 		$.ajax({
 			url: '{{route("business.editcartmodel")}}',
 			type: 'post',
@@ -1701,6 +1710,7 @@
 				'customerId':customerId,
 				'companyId': '{{$companyId}}',
 				'orderType': orderType,
+				'productIds': productIds,
 				_token: '{{csrf_token()}}', 
 			},
 			success:function(response){
@@ -1716,58 +1726,56 @@
 <script type="text/javascript">
 
 	function saveparticipate(){
+		$('.durationDiv').removeClass('d-none');
+		var customerId = '{{request()->cus_id}}';
 		$('#qty').html('');
-		var aducnt = $('#adultcnt').val();
-		var childcnt = $('#childcnt').val();
-		var infcnt = $('#infantcnt').val();
-		if(typeof(aducnt) == 'undefined'){
-			aducnt = 0;
-		}
-		if(typeof(childcnt) == 'undefined'){
-			childcnt = 0;
-		}
-		if(typeof(infcnt) == 'undefined'){
-			infcnt = 0;
-		}
 
-		if(parseInt(aducnt) + parseInt(childcnt) + parseInt(infcnt) == 0){
+		var aducnt = parseInt($('#adultcnt').val()) || 0;
+		var childcnt = parseInt($('#childcnt').val())	 || 0;
+		var infcnt = parseInt($('#infantcnt').val()) || 0;
+
+		if(aducnt + childcnt + infcnt == 0){
 			$('#addToOrder').prop('disabled', true);
 			alert("Please select participate.");
-		}else if(parseInt(aducnt) + parseInt(childcnt) + parseInt(infcnt) > 1){
+		}else if(aducnt + childcnt + infcnt > 1){
 			$('#addToOrder').prop('disabled', true);
 			alert("You can select only 1 participate.");
 		}else{
 
-			var adult = '';
-			var child = '';
-			var infant = '';
+			var adult = '', child = '', infant = '';
+			var totalprice = 0, totalprice = 0, totalpriceadult =0;totalpricechild = 0; totalpriceinfant = 0;
 
-			var totalprice = 0;
-			var totalpriceadult = 0;
-			var totalpricechild = 0;
-			var totalpriceinfant = 0; 
-			var aduprice = $('#adultprice').val();
-			var childprice = $('#childprice').val();
-			var infantprice = $('#infantprice').val();
+			var aduprice = parseFloat($('#adultprice').val()) || 0;
+	        var childprice = parseFloat($('#childprice').val()) || 0;
+	        var infantprice = parseFloat($('#infantprice').val()) || 0;
+
+	        if (aducnt === 1 && $('#isRecurringAdult').val() == 1) {
+			    $('.durationDiv').addClass('d-none');
+			} else if (childcnt === 1 && $('#isRecurringChild').val() == 1) {
+			    $('.durationDiv').addClass('d-none');
+			} else if (infcnt === 1 && $('#isRecurringInfant').val() == 1) {
+			    $('.durationDiv').addClass('d-none');
+			}
+
 			var pay_session = $('#session_val').val();
 		
-			if(typeof(aduprice) != "undefined" && aduprice != null && aduprice != ''){
-				totalpriceadult = parseInt(aducnt)*parseFloat(aduprice);
+			if(aduprice !== 0){
+				totalpriceadult = aducnt * aduprice;
 				if(aducnt != 0){
 					adult = '<span>Adults x '+aducnt+'</span><br>';
 				}
 				$('#adupricequantity').val(aducnt);
 			}
 
-			if(typeof(childprice) != "undefined" && childprice != null && childprice != ''){
-				totalpricechild = parseInt(childcnt)*parseFloat(childprice);
+			if(childprice !== 0){
+				totalpricechild = childcnt * childprice;
 				if(childcnt != 0){
 					child = '<span>Kids x  '+childcnt+'</span><br>';
 				}
 				$('#childpricequantity').val(childcnt);
 			}
-			if(typeof(infantprice) != "undefined" && infantprice != null && infantprice != ''){
-				totalpriceinfant = parseInt(infcnt)*parseFloat(infantprice);
+			if(infantprice !== 0){
+				totalpriceinfant = infcnt * infantprice;
 				if(infcnt != 0){
 					infant = '<span>Infants x  '+infcnt+'</span>';
 				}
@@ -1778,7 +1786,7 @@
 			$('#cartinfantprice').val(infantprice);
 			$('#cartchildprice').val(childprice);
 
-			totalprice = parseFloat(totalpriceadult)+parseFloat(totalpricechild)+parseFloat(totalpriceinfant);
+			totalprice = totalpriceadult + totalpricechild + totalpriceinfant ;
 		
 			$('#price').val(totalprice);
 			$('#p_session').val(pay_session);
@@ -1787,9 +1795,11 @@
 			$('#qty').html(adult+' '+child+' '+infant);
 			$('.participateclosebtn').click();
 			gettotal('','')
-			$("#addpartcipate").modal('hide');
-			$("#addpartcipate").removeClass('show');
-			$('#addToOrder').prop('disabled', false);
+			$("#addpartcipate").modal('hide').removeClass('show');
+			if(customerId){
+				$('#addToOrder').prop('disabled', false);
+			}
+			
 		}
 	}
 
@@ -1816,16 +1826,11 @@
 		if(chk == 'program'){
 			$('#pid').val(id);
 			$('#p_name').html(selectedText);
-			$('#category_list').html('');
-			$('#priceopt_list').html('');
-			$('#membership_opt_list').html('');
-			$('.addondata').html('');
-
+			$('#category_list, #priceopt_list, #membership_opt_list, .addondata').html('');
 		}
 		if(chk == 'category'){
 			$('#c_name').html(selectedText);
-			$('#priceopt_list').html('');
-			$('#membership_opt_list').html('');
+			$('#priceopt_list, #membership_opt_list').html('');
 			$('#categoryid').val(id);
 		}
 		if(chk == 'priceopt'){
@@ -1892,10 +1897,7 @@
 				}
 				
 				if(chk != 'participat' && chk != 'mpopt' && chk != 'duration'){
-					$('#adultcnt').val(0);
-					$('#childcnt').val(0);
-					$('#infantcnt').val(0);
-					$('#price').val(0);
+					$('#adultcnt, #childcnt, #infantcnt, #price').val(0);
 				}
 
 				if(chk == 'participat'){
@@ -1907,6 +1909,7 @@
 	}
 
 	function gettotal(chk,dropval){
+		//alert('hii');
 		var dis_val = tip_val = sub_tot = sub_tot_tip = sub_tot_dis = tax =salestax= duestax= 0;
 
 		var price = parseFloat($('#price').val()) || 0; 
@@ -1940,7 +1943,6 @@
 		 		if($('#dis_amt').val() != ''){
 		 			if(dis == '' || dis == '%'){
 		 				sub_tot_dis = (price * dis_val) /100;
-		 				alert(sub_tot_dis);
 		 				$('#dis_amt_span').html($('#dis_amt').val() + ' %');
 			 		}else{
 			 			sub_tot_dis = dis_val;
@@ -1949,6 +1951,7 @@
 			 		$('#dis_amt_val').val(sub_tot_dis);
 		 		}else{
 		 			$('#dis_amt_val').val(0);
+		 			$('#dis_amt_span').html('$ 0.00');
 		 		}
 		 	}
 
@@ -2003,16 +2006,24 @@
 			 		$('#dis_amt_val').val(sub_tot_dis);
 		 		}else{
 		 			$('#dis_amt_val').val(0);
+		 			$('#dis_amt_span').html('$ 0.00');
 		 		}
 		 	}
 		 	tax = parseFloat(tax.toFixed(2));
+
+		 	if($("#tax").is(":checked")){
+	 			tax = 0;
+	 			$('#value_tax').val(0);
+	 		}else{
+		 		$('#value_tax').val(tax);
+	 		}
 
 	 		var tot = productTotalPrice + tax - parseFloat(sub_tot_dis);
 	 		tot = tot.toFixed(2);
 	 		$('#total_amount').html('$'+ tot);
 	 		$('#pricetotal').val(productTotalPrice);
 	 		
-	 		$('#value_tax').val(tax);
+	 		//$('#value_tax').val(tax);
 			$('#taxvalspan').html('$'+tax);
 	 		if(tot != 0){
 				$('#addToOrder').prop('disabled', false);
@@ -2027,11 +2038,7 @@
 	}   
 
 	function getdis(){
-		var dis_val = 0;
-		var tip_val = 0;
-		var sub_tot = 0;
-		var sub_tot_tip = 0;
-		var sub_tot_dis = tax = 0;
+		var dis_val = 0; tip_val = 0; sub_tot = 0; sub_tot_tip = 0; sub_tot_dis = tax = 0;
 		var price = parseFloat($('#priceajax').val());
 		var dis = $('#dis_amt_dropajax').val();
 	 	var tip = $('#tip_amt_dropajax').val();
@@ -2248,39 +2255,37 @@
 <script type="text/javascript">
 
 	function saveparticipateajax(chk){
-		var aducnt = $('#adultcntajax').val();
-		var childcnt = $('#childcntajax').val();
-		var infcnt = $('#infantcntajax').val();
-		if(typeof(aducnt) == 'undefined'){
-			aducnt = 0;
-		}
-		if(typeof(childcnt) == 'undefined'){
-			childcnt = 0;
-		}
-		if(typeof(infcnt) == 'undefined'){
-			infcnt = 0;
-		}
-
-		if(parseInt(aducnt) + parseInt(childcnt) + parseInt(infcnt) > 1){
+		 $('.durationDivAjax').removeClass('d-none');
+		var aducnt = parseInt ($('#adultcntajax').val()) || 0;
+		var childcnt = parseInt ($('#childcntajax').val()) || 0;
+		var infcnt = parseInt ($('#infantcntajax').val()) || 0;
+	
+		if(aducnt + childcnt + infcnt > 1){
 			alert("You can select only 1 participate.");
 		}else{
-			var totalprice = 0;
-			var totalpriceadult = 0;
-			var totalpricechild = 0;
-			var totalpriceinfant = 0; 
-			var aduprice = $('#adultpriceajax').val();
-			var childprice = $('#childpriceajax').val();
-			var infantprice = $('#infantpriceajax').val();
-		
-			if(typeof(aduprice) != "undefined" && aduprice != null && aduprice != ''){
-				totalpriceadult = parseInt(aducnt)*parseFloat(aduprice);
+			var totalprice = 0; totalpriceadult = 0; totalpricechild = 0; totalpriceinfant = 0; 
+
+			if (aducnt === 1 && $('#isRecurringAdultajax').val() == 1) {
+			    $('.durationDivAjax').addClass('d-none');
+			} else if (childcnt === 1 && $('#isRecurringChildajax').val() == 1) {
+			    $('.durationDivAjax').addClass('d-none');
+			} else if (infcnt === 1 && $('#isRecurringInfantajax').val() == 1) {
+			    $('.durationDivAjax').addClass('d-none');
 			}
 
-			if(typeof(childprice) != "undefined" && childprice != null && childprice != ''){
-				totalpricechild = parseInt(childcnt)*parseFloat(childprice);
+			var aduprice = parseFloat( $('#adultpriceajax').val()) || 0;
+			var childprice = parseFloat( $('#childpriceajax').val()) || 0;
+			var infantprice = parseFloat( $('#infantpriceajax').val()) || 0;
+		
+			if(aduprice !== 0){
+				totalpriceadult = aducnt * aduprice;
 			}
-			if(typeof(infantprice) != "undefined" && infantprice != null && infantprice != ''){
-				totalpriceinfant = parseInt(infcnt)*parseFloat(infantprice);
+
+			if(childprice !== 0){
+				totalpricechild = childcnt * childprice;
+			}
+			if(infantprice !== 0){
+				totalpriceinfant = infcnt * infantprice;
 			}
 			
 			$('#adupricequantityajax').val(aducnt);
@@ -2290,7 +2295,7 @@
 			$('#cartinfantpriceajax').val(infantprice);
 			$('#cartchildpriceajax').val(childprice);
 
-			totalprice = parseFloat(totalpriceadult)+parseFloat(totalpricechild)+parseFloat(totalpriceinfant);
+			totalprice =  totalpriceadult + totalpricechild + totalpriceinfant ;
 			
 			var addOnServicesTotalPrice = parseFloat($('#addOnServicesTotalPriceajax').val()) || 0;
 	 		var productTotalPrice = parseFloat($('#productTotalPricesajax').val()) || 0;
@@ -2301,8 +2306,7 @@
 			$('#pricetotalajax').val(totalprice);
 			$('.participateclosebtnajax').click();
 			get_total_ajax(chk);
-			$("#addpartcipateajax").modal('hide');
-			$("#addpartcipateajax").removeClass('show');
+			$("#addpartcipateajax").modal('hide').removeClass('show');
 			$("#editcartitempp").modal('show');
 		}
 	}

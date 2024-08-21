@@ -263,5 +263,97 @@ class DesignController extends Controller {
 	public function invoice_details(Request $request){
         return view('design.invoice_details');
     }
+	
+	public function announcement_news(Request $request){
+        return view('design.announcement_news');
+    }
+	
+	public function task(Request $request){
+        return view('design.task');
+    }
+	
+	public function attendance_belt(Request $request){
+        return view('design.attendance_belt');
+    }
+	
+	public function announcements_provider(Request $request){
+        return view('design.announcements_provider');
+    }
+	
+	public function announcements_provider_category(Request $request){
+        return view('design.announcements_provider_category');
+    }
+	
+	public function customer_dashboard(Request $request){
+        return view('design.customer_dashboard');
+    }
+	
+	public function notes_alerts(Request $request){
+        return view('design.notes_alerts');
+    }
+	
+	public function pdf_booking(Request $request){
+        return view('design.pdf_booking');
+    }
+
+    public function provider_adds_belt_rank_skills(Request $request){
+        return view('design.provider_adds_belt_rank_skills');
+    }
+
+    public function provider_edit_belt_rank_skills(Request $request){
+        return view('design.provider_edit_belt_rank_skills');
+    }
+
+    public function client_promote_belt(Request $request){
+        return view('design.client_promote_belt');
+    }
+
+    public function manually_promote(Request $request){
+        return view('design.manually_promote');
+    }
+
+    public function register_ep(Request $request){
+        return view('design.register_ep');
+    }
+
+    public function check_in_settings(Request $request){
+        return view('design.check_in_settings');
+    }
+
+    public function check_in_portal(Request $request){
+        return view('design.check_in_portal');
+    }
+
+    public function task_list(Request $request){
+        return view('design.task_list');
+    }
+
+    public function integration_portal(Request $request){
+        return view('design.integration_portal');
+    }
+
+    public function registration_widget(Request $request){
+        return view('design.registration_widget');
+    }
+
+    public function schedule_widget(Request $request){
+        return view('design.schedule_widget');
+    }
+
+    public function deploy_widget(Request $request){
+        return view('design.deploy_widget');
+    }
+
+    public function confirmation(Request $request){
+        return view('design.confirmation');
+    }
+
+    public function selfcheck_in_welcome(Request $request){
+        return view('design.selfcheck_in_welcome');
+    }
+
+    public function engage_clients(Request $request){
+        return view('design.engage_clients');
+    }
 }
 

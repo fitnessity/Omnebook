@@ -15,8 +15,9 @@ class AlterCustomersDocuments extends Migration
     {
         Schema::table('customers_documents', function (Blueprint $table) {
             $table->integer('status')->default(0)->after('path')->comment('0: Not Request,1: Requested, 2: Signed');
-            $table->string('sign_path',255)->nullable()->after('status');
-            $table->string('sign_date',255)->nullable()->after('sign_path');
+            $table->Date('sign_requested_date')->nullable()->after('status');
+            $table->string('sign_path',255)->nullable()->after('requested_dates');
+            $table->Date('sign_date',255)->nullable()->after('sign_path');
         });
     }
 

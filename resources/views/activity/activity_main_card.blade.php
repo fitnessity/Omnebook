@@ -12,10 +12,10 @@
 						@foreach ($activity->profile_pictures() as $picture)
 							@if(Storage::disk('s3')->exists($picture) && $picture != '' )
 								<div class="item-inner">
-									<img src="{{Storage::URL($picture)}}" class="productImg">
+									<img src="{{Storage::URL($picture)}}" class="productImg" alt="Fitnessity">
 								</div>
 							@else
-								<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+								<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 							@endif
 						@endforeach
 					</div>
@@ -70,6 +70,8 @@
 				</div>
 				<div class="activity-information activites-height">
 					<span><a href="{{route('show_businessprofile', ['user_name' => $activity->company_information->dba_business_name, 'id' => $activity->company_information->id])}}" target="_blank">{{$activity->program_name}}</a>
+					</span>
+					<span><a href="{{route('show_businessprofile', ['user_name' => $activity->company_information->dba_business_name, 'id' => $activity->company_information->id])}}" target="_blank" class="companyalink">{{$activity->company_information->company_name}}</a>
 					</span>
 					<p>{{ $activity->formal_service_types() }}  | {{$activity->sport_activity}}</p>
 				</div>
