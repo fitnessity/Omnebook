@@ -1689,32 +1689,16 @@
 @include('layouts.business.footer')
 @include('layouts.business.scripts')
 <script>
-<<<<<<< HEAD
-=======
-
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
     CKEDITOR.replace('desc', {
         height: 200,
         extraPlugins: 'colorbutton,font,editorplaceholder,justify,widget'
     }); 
 
     $(document).ready(function(){ 
-<<<<<<< HEAD
         if (window.location.hash === '#stepFour') {
             $('.collapseFourbtn').click();
         }
         $('#serviceForm').on('submit', function(event) {
-=======
-
-        if (window.location.hash === '#stepFour') {
-            $('.collapseFourbtn').click();
-        }
-
-        $('#serviceForm').on('submit', function(event) {
-
-           
-
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
             var imageCount = $('#gallery img').length;
             var coverCount = $('#gallery1 img').length;
 
@@ -2024,7 +2008,8 @@
         var marker1 = ''
         $('#map_canvas').empty();
 
-        if (locations.length != 0) {  console.log('not');
+        if (locations.length != 0) {  
+            // console.log('not');
             map1 = new google.maps.Map(document.getElementById('map_canvas'), {
                 zoom:18,
                 center: new google.maps.LatLng(lat,lng),
@@ -2164,23 +2149,18 @@
     }
 
     function changeWDayPrice(i,j,type){
-<<<<<<< HEAD
         // alert(j);        
-        console.log('i',i);
-        console.log('j',j);
-        
-=======
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
+        // console.log('i',i);
         var discount = 0;
         var contract_revenue = 0;
         var pay_price =  $('#'+type+'_cus_weekly_price'+i+j).val();
+        // alert(pay_price);
+        // alert(i);
+        // alert(j);
         var discount =  $('#'+type+'_discount'+i+j).val();
         var fitnessity_fee = '{{$fitnessity_fee}}';
-<<<<<<< HEAD
         // alert(j);
         // console.log($('#'+type+'_cus_weekly_price'+i+j).val());
-=======
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         $('#'+type+'_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*discount)/100);
         $('#'+type+'_estearn'+i+j).attr('readonly', true);
         pay_price = pay_price == '' ? 0 :pay_price
@@ -2199,6 +2179,7 @@
     }
 
     function add_another_price_ages(i) {
+        // alert('22');
         var cnt = $('#priceCount'+i).val();
         cnt++;
         $('#priceCount'+i).val(cnt);
@@ -2380,89 +2361,99 @@
     }
 
     function add_another_price_duplicate_session(i,j){
-        var cnt = $('#priceCount'+i).val();
+        // var cnt = $('#priceCount'+i).val();
+        var cnt = $('input[name="priceCount' + i + '"]').val();
         cnt++;
         var data = '';
-        data += '<div id="priceoption'+i+cnt+'" class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3">';
-        data += $('#priceoption'+i+j).html();
+        data += '<div id="priceoption'+i+''+cnt+'" class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3">';
+        data += $('#priceoption'+i+''+j).html();
         data += '</div>';
-<<<<<<< HEAD
-=======
-
-        ///start 
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         var newCategory=$("#priceoption"+i+cnt);
         newCategory.find('[id]').each(function() {
             var oldName = $(this).attr('id');
             var newName = oldName.replace(i, cnt);
             $(this).attr('id', newName);
         });
-<<<<<<< HEAD
+
         // adult_cus_weekly_price
         /*var re = data.replaceAll(i+","+j,i+","+cnt);
-=======
-        ////end 
-
-    
-        var re = data.replaceAll(i+","+j,i+","+cnt);
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         re = re.replaceAll("_"+i+j,"_"+i+cnt);
         if(i==0){
             re = re.replaceAll("0"+j,"0"+cnt);
         }else{
             re = re.replaceAll(i+''+j,i+''+cnt);
-<<<<<<< HEAD
         }*/
 
         // Temporarily replace value attributes with placeholders
     // Use unique placeholders for value attributes
-    var placeholders = {};
-    var tempData = data.replace(/value=["']?([^"']*)["']?/g, function(match, p1) {
-        var placeholder = 'PLACEHOLDER_' + Math.random().toString(36).substring(2);
-        placeholders[placeholder] = p1;
-        return 'value="' + placeholder + '"';
-    });
+        var placeholders = {};
+        var tempData = data.replace(/value=["']?([^"']*)["']?/g, function(match, p1) {
+            var placeholder = 'PLACEHOLDER_' + Math.random().toString(36).substring(2);
+            placeholders[placeholder] = p1;
+            return 'value="' + placeholder + '"';
+        });
 
-    // Perform replacements
-    var re = tempData.replace(new RegExp(i + "," + j, "g"), i + "," + cnt);
-    re = re.replace(new RegExp("_" + i + j, "g"), "_" + i + cnt);
+        // Perform replacements
+        var re = tempData.replace(new RegExp(i + "," + j, "g"), i + "," + cnt);
+        re = re.replace(new RegExp("_" + i + j, "g"), "_" + i + cnt);
 
-    if (i == 0) {
-        re = re.replace(new RegExp("0" + j, "g"), "0" + cnt);
-    } else {
-        re = re.replace(new RegExp(i + '' + j, "g"), i + '' + cnt);
-    }
-
-    // Restore value attributes from placeholders
-    re = re.replace(/value="([^"]*)"/g, function(match, p1) {
-        return 'value="' + (placeholders[p1] || '') + '"';
-    });
-
-        console.log(re);
-        $('#priceOptionDiv'+i).append(re);
-        
-=======
+        if (i == 0) {
+            re = re.replace(new RegExp("0" + j, "g"), "0" + cnt);
+        } else {
+            re = re.replace(new RegExp(i + '' + j, "g"), i + '' + cnt);
         }
 
+        // Restore value attributes from placeholders
+        re = re.replace(/value="([^"]*)"/g, function(match, p1) {
+            return 'value="' + (placeholders[p1] || '') + '"';
+        });
+        
+
+        // start
+        newCategory.find('input[name]').each(function() {
+                var oldid = $(this).attr('id');
+                if (oldid) {
+                    var newid = oldid.replace(/\d+$/, cnt +''+i);
+                    $(this).attr('id', newid);
+                } 
+                else {
+                    // console.log(i);
+                    var newid = 'input_' +  parseFloat(cnt + i);
+                    $(this).attr('id', newid);
+                    // console.log('New ID created:', newid);
+                }
+            });
+            newCategory.find('p[id]').each(function() {
+                var oldid = $(this).attr('id');
+                if (oldid) {
+                    var newid = oldid.replace(/\d+$/, cnt + '' + i);
+                    $(this).attr('id', newid);
+                    // console.log('Old ID:', oldid, 'New ID:', newid);
+                } else {
+                    var newid = 'p_' + parseFloat(cnt + i);
+                    $(this).attr('id', newid);
+                    // console.log('New ID created:', newid);
+                }
+            });
+        // end
         $('#priceOptionDiv'+i).append(re);
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
+        
         if(j==0){
             $('#ul'+i+cnt).append('<li class="dropdown-divider"></li><li><a href="" onclick="deletePriceOption('+i+','+cnt+')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>');
         }
-        $('#priceCount'+i).val(cnt);
+        // alert(cnt);
+        // $('#priceCount'+i).val(cnt);
+        $('input[name="priceCount' + i + '"]').val(cnt);
+
+
         $('#priceoption'+i+cnt).find("input[name='price_id_db_"+i+cnt+"']").val('');
         var firstClass = $('#acc_nesting'+i+cnt).find('.accordion-button').first();
         firstClass.removeClass('collapsed');
         $('#accor_nestingprice'+i+j).removeClass("show");
         $('#accor_nestingprice'+i+cnt).addClass("collapse show");
     }
-<<<<<<< HEAD
    
      $('.non-collapsing').on('click', function (e) {
-=======
-
-    $('.non-collapsing').on('click', function (e) {
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         e.stopPropagation();
     });
 
@@ -2628,116 +2619,145 @@
         
     // }
 
-    function add_another_price_duplicate_category(i) {
-        var cnt = $('#categoryCount').val();
-        var agecnt = $('#priceCount' + i).val();
-        var aosCnt = $('#addOnServiceCount' + i).val();
-        cnt++;
-        $('#categoryCount').val(cnt);
-        var originalCategory = $('#category' + i);
-        var newCategory = originalCategory.clone().attr('id', 'category' + cnt);
+    function add_another_price_duplicate_category(i) 
+    {
+            var cnt = $('#categoryCount').val();
+            var agecnt = $('#priceCount' + i).val();
+            var aosCnt = $('#addOnServiceCount' + i).val();
+            cnt++;
+            $('#categoryCount').val(cnt);
+            var originalCategory = $('#category' + i);
+            var newCategory = originalCategory.clone().attr('id', 'category' + cnt);
 
-        // Update IDs, aria-controls, data-bs-target, etc.
-        newCategory.find('[id^="accor_nestingcategory"]').each(function() {
-            var oldId = $(this).attr('id');
-            var newId = oldId.replace(i, cnt);
-            $(this).attr('id', newId);
-            var ariaControls = $(this).attr('aria-controls');
-            if (ariaControls) {
-                var newAriaControls = ariaControls.replace(i, cnt);
-                $(this).attr('aria-controls', newAriaControls);
+            // Update IDs, aria-controls, data-bs-target, etc.
+            newCategory.find('[id^="accor_nestingcategory"]').each(function() {
+                var oldId = $(this).attr('id');
+                var newId = oldId.replace(i, cnt);
+                $(this).attr('id', newId);
+                var ariaControls = $(this).attr('aria-controls');
+                if (ariaControls) {
+                    var newAriaControls = ariaControls.replace(i, cnt);
+                    $(this).attr('aria-controls', newAriaControls);
+                }
+            });
+
+            newCategory.find('[data-bs-target]').each(function() {
+                var target = $(this).attr('data-bs-target');
+                var newTarget = target.replace(i, cnt);
+                $(this).attr('data-bs-target', newTarget);
+            });
+
+            newCategory.find('.accordion-collapse').each(function() {
+                var oldId = $(this).attr('id');
+                var newId = oldId.replace(i, cnt);
+                $(this).attr('id', newId);
+                var ariaLabelledby = $(this).attr('aria-labelledby');
+                if (ariaLabelledby) {
+                    var newAriaLabelledby = ariaLabelledby.replace(i, cnt);
+                    $(this).attr('aria-labelledby', newAriaLabelledby);
+                }
+            });
+
+    
+            // Update input names
+            newCategory.find('input[name]').each(function() {
+                var oldName = $(this).attr('name');
+                var newName = oldName.replace(i, cnt);
+                $(this).attr('name', newName);
+            });
+
+                newCategory.find('input[name]').each(function() {
+                var oldid = $(this).attr('id');
+                if (oldid) {
+                    var newid = oldid.replace(/\d+$/, cnt +''+i);
+                    $(this).attr('id', newid);
+                    // console.log('Old ID:', oldid, 'New ID:', newid);
+                } 
+                else {
+                    // console.log(i);
+                    var newid = 'input_' +  parseFloat(cnt + i);
+                    $(this).attr('id', newid);
+                    // console.log('New ID created:', newid);
+                }
+            });
+            newCategory.find('p[id]').each(function() {
+                var oldid = $(this).attr('id');
+                if (oldid) {
+                    var newid = oldid.replace(/\d+$/, cnt + '' + i);
+                    $(this).attr('id', newid);
+                    // console.log('Old ID:', oldid, 'New ID:', newid);
+                } else {
+                    var newid = 'p_' + parseFloat(cnt + i);
+                    $(this).attr('id', newid);
+                    // console.log('New ID created:', newid);
+                }
+            });
+       
+            // Update the HTML content inside the new category
+            newCategory.html(newCategory.html()
+                .replaceAll("categoryTitle" + i, "categoryTitle" + cnt)
+                .replaceAll("changeCategoryTittle(" + i, "changeCategoryTittle(" + cnt)
+                .replaceAll("accordionnestingcat" + i, "accordionnestingcat" + cnt)
+                .replaceAll("priceCount" + i, "priceCount" + cnt)
+                .replaceAll("addOnServiceCount" + i, "addOnServiceCount" + cnt)
+                .replaceAll("priceOptionDiv" + i, "priceOptionDiv" + cnt)
+                .replaceAll("addOnServiceDiv" + i, "addOnServiceDiv" + cnt)
+                .replaceAll("catUl" + i, "catUl" + cnt)
+                .replaceAll("(" + i + ")", "(" + cnt + ")")
+                .replaceAll("(" + i + ",", "(" + cnt + ",")
+            );
+
+            newCategory.find('.modaldiv_new').each(function() {
+                var oldClass = $(this).attr('class');
+                var newClass = oldClass.replace('edit-adult' + i, 'edit-adult' + cnt);            
+                $(this).attr('class', newClass);
+            });
+            
+            newCategory.find('.modaldiv_new').each(function() {
+                var oldClasses = $(this).attr('class');
+                var newClasses = oldClasses.replace('edit-child' + i, 'edit-child' + cnt);
+                $(this).attr('class', newClasses);
+            });
+            newCategory.find('.modaldiv_new').each(function() {
+                var oldClasses = $(this).attr('class');
+                var newClasses = oldClasses.replace('edit-infant' + i, 'edit-infant' + cnt);
+                $(this).attr('class', newClasses);
+            });
+
+            //   newCategory.find('[id^="priceoption' + i + '"]').each(function() {
+            //         var oldId = $(this).attr('id');
+            //         var newId = oldId.replace('priceoption' + i, 'priceoption' + cnt);
+            //         $(this).attr('id', newId);
+            //     });
+
+            newCategory.find('.priceoption_accord').each(function() {
+                var oldClass = $(this).attr('id');
+                var newClass = oldClass.replace('priceoption' + i, 'priceoption' + cnt);
+                $(this).attr('id', newClass);
+            });
+
+            // Clear specific input fields
+            for (var z = 0; z <= agecnt; z++) {
+                newCategory.find("input[name='price_id_db_" + cnt + "" + z + "']").val('');
             }
-        });
 
-        newCategory.find('[data-bs-target]').each(function() {
-            var target = $(this).attr('data-bs-target');
-            var newTarget = target.replace(i, cnt);
-            $(this).attr('data-bs-target', newTarget);
-        });
-
-        newCategory.find('.accordion-collapse').each(function() {
-            var oldId = $(this).attr('id');
-            var newId = oldId.replace(i, cnt);
-            $(this).attr('id', newId);
-            var ariaLabelledby = $(this).attr('aria-labelledby');
-            if (ariaLabelledby) {
-                var newAriaLabelledby = ariaLabelledby.replace(i, cnt);
-                $(this).attr('aria-labelledby', newAriaLabelledby);
+            for (var s = 0; s <= aosCnt; s++) {
+                var sprice = $('#service_price' + i + s).val();
+                newCategory.find('#service_price' + cnt + s).val(sprice);
+                newCategory.find("input[name='add_on_service_id_db_" + cnt + s + "']").val('');
             }
-        });
 
-        // Update input names
-        newCategory.find('input[name]').each(function() {
-            var oldName = $(this).attr('name');
-            var newName = oldName.replace(i, cnt);
-            $(this).attr('name', newName);
-        });
+            // Handle delete option for the first category
+            if (i == 0) {
+                newCategory.find('#catUl' + cnt).append('<li class="dropdown-divider"></li><li><a href="" onclick="removeCategoryDiv(' + cnt + ');"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>');
+            }
 
-        // Update the HTML content inside the new category
-        newCategory.html(newCategory.html()
-            .replaceAll("categoryTitle" + i, "categoryTitle" + cnt)
-            .replaceAll("changeCategoryTittle(" + i, "changeCategoryTittle(" + cnt)
-            .replaceAll("accordionnestingcat" + i, "accordionnestingcat" + cnt)
-            .replaceAll("priceCount" + i, "priceCount" + cnt)
-            .replaceAll("addOnServiceCount" + i, "addOnServiceCount" + cnt)
-            .replaceAll("priceOptionDiv" + i, "priceOptionDiv" + cnt)
-            .replaceAll("addOnServiceDiv" + i, "addOnServiceDiv" + cnt)
-            .replaceAll("catUl" + i, "catUl" + cnt)
-            .replaceAll("(" + i + ")", "(" + cnt + ")")
-            .replaceAll("(" + i + ",", "(" + cnt + ",")
-        );
+            newCategory.find("input[name='cat_id_db[]']").val('');
+            newCategory.find('.accordion-button').first().removeClass('collapsed');
+            $('#accor_nestingcategory' + i).removeClass("show");
+            $('#accor_nestingcategory' + cnt).addClass("collapse show");
 
-        // Update modal class names
-        newCategory.find('.modaldiv_new').each(function() {
-            var oldClass = $(this).attr('class');
-            var newClass = oldClass.replace('edit-adult' + i, 'edit-adult' + cnt);
-            $(this).attr('class', newClass);
-        });
-        newCategory.find('.modaldiv_new').each(function() {
-            var oldClasses = $(this).attr('class');
-            var newClasses = oldClasses.replace('edit-child' + i, 'edit-child' + cnt);
-            $(this).attr('class', newClasses);
-        });
-        newCategory.find('.modaldiv_new').each(function() {
-            var oldClasses = $(this).attr('class');
-            var newClasses = oldClasses.replace('edit-infant' + i, 'edit-infant' + cnt);
-            $(this).attr('class', newClasses);
-        });
-
-    //   newCategory.find('[id^="priceoption' + i + '"]').each(function() {
-    //         var oldId = $(this).attr('id');
-    //         var newId = oldId.replace('priceoption' + i, 'priceoption' + cnt);
-    //         $(this).attr('id', newId);
-    //     });
-
-        newCategory.find('.priceoption_accord').each(function() {
-            var oldClass = $(this).attr('id');
-            var newClass = oldClass.replace('priceoption' + i, 'priceoption' + cnt);
-            $(this).attr('id', newClass);
-        });
-
-        // Clear specific input fields
-        for (var z = 0; z <= agecnt; z++) {
-            newCategory.find("input[name='price_id_db_" + cnt + "" + z + "']").val('');
-        }
-
-        for (var s = 0; s <= aosCnt; s++) {
-            var sprice = $('#service_price' + i + s).val();
-            newCategory.find('#service_price' + cnt + s).val(sprice);
-            newCategory.find("input[name='add_on_service_id_db_" + cnt + s + "']").val('');
-        }
-
-        // Handle delete option for the first category
-        if (i == 0) {
-            newCategory.find('#catUl' + cnt).append('<li class="dropdown-divider"></li><li><a href="" onclick="removeCategoryDiv(' + cnt + ');"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>');
-        }
-
-        newCategory.find("input[name='cat_id_db[]']").val('');
-        newCategory.find('.accordion-button').first().removeClass('collapsed');
-        $('#accor_nestingcategory' + i).removeClass("show");
-        $('#accor_nestingcategory' + cnt).addClass("collapse show");
-
-        $('#categoryMainDiv').append(newCategory);
+            $('#categoryMainDiv').append(newCategory);
     }
 
 

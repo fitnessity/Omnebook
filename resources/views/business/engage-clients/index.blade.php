@@ -34,11 +34,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="engage-client-img text-center mmt-25 imt-25">
-<<<<<<< HEAD
                                             <img src="{{url('/dashboard-design/images/engage-client.png')}}" loading="lazy">
-=======
-                                            <img src="{{url('/dashboard-design/images/engage-client.png')}}">
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
                                         </div>
                                     </div>
                                 </div>
@@ -58,10 +54,7 @@
 
 
 @include('layouts.business.footer')
-<<<<<<< HEAD
 @include('layouts.business.scripts')
-=======
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 
     <script>
         $("#menu-toggle").click(function(e) {

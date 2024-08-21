@@ -5,11 +5,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use Aws\S3\S3Client;
-<<<<<<< HEAD
 use App\Jobs\{ProcessAttendanceExcelData,ProcessCustomerExcelData,ProcessMembershipExcelData,ProcessAttendance,ProcessMembership,Membership,MembershipRun};
-=======
-use App\Jobs\{ProcessAttendanceExcelData,ProcessCustomerExcelData,ProcessMembershipExcelData,ProcessAttendance,ProcessMembership,Membership};
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 use GuzzleHttp\Client;
 use App\Http\Requests;
 use Illuminate\Http\Request;
@@ -164,26 +160,17 @@ class CustomerController extends Controller {
     }
     public function loadView(Request $request)
     {
-<<<<<<< HEAD
          // Enable query log
-=======
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         $char = $request->input('char');
         $cid = Auth::user()->cid;
         $company = CompanyInformation::find($cid);
         $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->orderBy('fname')->get();
-<<<<<<< HEAD
         // \DB::enableQueryLog();
         $customerStatusCounts = $customers->mapToGroups(function ($customer) {
             return [$customer->is_active() => $customer];
         });
         // dd(\DB::getQueryLog()); // Show results of log
 
-=======
-        $customerStatusCounts = $customers->mapToGroups(function ($customer) {
-            return [$customer->is_active() => $customer];
-        });
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         if($request->customer_type == 'active'){
             $customers =  $customerStatusCounts->get('Active', collect());
         }else if($request->customer_type == 'in-active'){
@@ -302,10 +289,7 @@ class CustomerController extends Controller {
         if( $customerdata != ''){  Customer::where('id',$request->id)->delete(); }
     }
     public function show(Request $request, $business_id, $id){
-<<<<<<< HEAD
         // \DB::enableQueryLog();
-=======
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
         $terms = $company->business_terms->first();
@@ -331,10 +315,7 @@ class CustomerController extends Controller {
         if(Session::has('cardSuccessMsg')){
             $cardSuccessMsg = 1; Session::forget('cardSuccessMsg');
         }
-<<<<<<< HEAD
         // dd(\DB::getQueryLog()); 
-=======
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         return view('customers.show', [
             'customerdata'=>$customerdata,
             'strpecarderror'=>$strpecarderror,
@@ -466,7 +447,6 @@ class CustomerController extends Controller {
                         }
                         if ($this->isHeaderRow($row)) {
                             $headerFound = true;
-<<<<<<< HEAD
                             continue; 
                         }
                         if ($headerFound) {
@@ -476,16 +456,6 @@ class CustomerController extends Controller {
                     if ($filteredRows->isEmpty()) {
                         Log::info('No filtered rows found.'); 
                         Log::info($filteredRows);
-=======
-                            continue; // Skip adding header rows to $filteredRows
-                        }
-                        if ($headerFound) {
-                            $filteredRows->push($row); // Push row to collection
-                        } 
-                    }
-                    if ($filteredRows->isEmpty()) {
-                        Log::warning('No filtered rows found.'); Log::info($filteredRows);
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
                     }
                     // dd($request->business_id);
                     $bid=$request->business_id;
@@ -1079,8 +1049,5 @@ class CustomerController extends Controller {
             else{ return generateUniqueCode(); }
         }
     }
-<<<<<<< HEAD
     
-=======
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 }

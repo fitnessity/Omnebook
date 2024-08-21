@@ -11,21 +11,9 @@ use DateTime;
 use Carbon\Carbon;
 use Session;
 class MembershipPlanController extends Controller {
-<<<<<<< HEAD
     protected $features;
     public function __construct(FeaturesRepository $features)
     { $this->features = $features;}
-=======
-
-
-    protected $features;
-
-    public function __construct(FeaturesRepository $features)
-    {
-        $this->features = $features;
-    }
-
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
     public function index(Request $request) { 
         $plans = Plan::get();
         $currentPlan = Auth::user()->currentPlan();
@@ -36,13 +24,7 @@ class MembershipPlanController extends Controller {
         }
         return view('membership-plan.index',compact('plans','features','currentPlan','faqs'));
     }
-<<<<<<< HEAD
     public function store(Request $request){
-=======
-
-    public function store(Request $request){
-        //print_r($request->all());exit;
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         $user = Auth::user();
         if($request->type == 'month'){
             $eDate = Carbon::now()->addMonth()->format('Y-m-d');
@@ -51,12 +33,6 @@ class MembershipPlanController extends Controller {
             $eDate = Carbon::now()->addYear()->format('Y-m-d');
             $sDate = Carbon::now()->format('Y-m-d');
         }
-<<<<<<< HEAD
-=======
-
-       /* $chkPlan = CustomerPlanDetails::where(['user_id' => $user->id])->whereDate('starting_date' ,'=', $sDate)->whereDate('expire_date' ,'=', $eDate)->first();*/
-       
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         $paymentIntentData = [
             'amount' => round($request->total * 100),
             'currency' => 'usd',
@@ -65,10 +41,6 @@ class MembershipPlanController extends Controller {
             'confirm' => true,
             'metadata' => [],
         ];
-<<<<<<< HEAD
-=======
-
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         $stripPayment = 0;
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         if ($request->cardinfo != '') {
@@ -97,10 +69,6 @@ class MembershipPlanController extends Controller {
                 'payload' =>'',
             ]);
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         if($stripPayment == 1){
             try {
                 $paymentIntent = $stripe->paymentIntents->create($paymentIntentData);
@@ -120,13 +88,7 @@ class MembershipPlanController extends Controller {
                         'payment_id' => $paymentIntent["id"],
                         'payload' =>json_encode($paymentIntent,true),
                     ]);
-<<<<<<< HEAD
                     $user->update(['default_card'=>$paymentIntent['charges']['data'][0]['payment_method_details']['card']['last4']]);
-=======
-
-                    $user->update(['default_card'=>$paymentIntent['charges']['data'][0]['payment_method_details']['card']['last4']]);
-                    
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
                 }
             } catch (\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
                 $errormsg = "Your card is not connected with your account. Please add your card again.";
@@ -139,13 +101,7 @@ class MembershipPlanController extends Controller {
         }else{
             return '/business/'.Auth::user()->cid.'/subscription'; 
         }
-<<<<<<< HEAD
     }
-=======
-   
-    }
-
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
     public function getCardForm(Request $request){
         $user = Auth::user();
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
@@ -161,10 +117,6 @@ class MembershipPlanController extends Controller {
         $cards = View('membership-plan.cards',['cardInfo' =>$cardInfo])->render();
         return view('membership-plan.card_form', compact('intent','user','cardInfo','request','total','cards'));
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
     public function checkPromoCode(Request $request){
         $data = PromoCodes::where('code',$request->pCode)->first();
         if($data){
@@ -189,10 +141,6 @@ class MembershipPlanController extends Controller {
         }
         return json_encode($responseArray);
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
     public function getCardData(){
         $user = Auth::user();
         $cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id', $user->id)->get();

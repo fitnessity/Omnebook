@@ -33,10 +33,7 @@ class LoginController extends Controller {
     }
 	
     public function postLogin(Request $request) {
-<<<<<<< HEAD
         // dd('22');
-=======
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         $postArr = $request->input();
     	//dd($postArr);
     	$rules = [

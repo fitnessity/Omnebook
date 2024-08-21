@@ -51,10 +51,7 @@ class OnBoardedController extends Controller {
         return view('on-boarded.index',compact('show','cid','companyDetail','user','id','show','plans','features','freePlan','faqs'));
     }
     public function store(Request $request){
-<<<<<<< HEAD
         // dd('33');
-=======
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
         $userDt = User::find($request->id);
         $companyDt = CompanyInformation::find($request->cid);
         if($request->step == 1){
@@ -98,7 +95,6 @@ class OnBoardedController extends Controller {
                 'cid' => @$companyDt->id, 'id' => $user->id,
             ];
         }else{
-<<<<<<< HEAD
             $companyImage = $request->has('logo') ? $request->file('logo')->store('company') :  @$companyDt->logo;
             if (empty($request->cid)) {
                 do {
@@ -164,36 +160,6 @@ class OnBoardedController extends Controller {
             // dd($uniqueCode);
             @$userDt->update(['show_step'=>4]);
             // dd($company);
-=======
-            $companyImage = $request->has('logo') ? $request->file('logo')->store('company') :  @$companyDt->logo;; 
-            $company = [
-                "user_id" => @$userDt->id,
-                "company_name" => $request->companyName,
-                "dba_business_name" => $request->dbaBusinessName,
-                "contact_number" => $request->contact,
-                "logo" => $companyImage,
-                "address" => $request->bAddress,
-                "state" => $request->bstate,
-                "country" => $request->bcountry,
-                "zip_code" => $request->bzipcode,
-                "city" => $request->bcity,
-                "business_user_tag" => $request->businessUserName,
-                "latitude" => $request->blat,
-                "longitude" => $request->blon,
-                "additional_address" => $request->additionalAddress,
-                "neighborhood" => $request->neighborhood,
-                "business_phone" => $request->business_phone,
-                "business_email" => $request->businessEmail,
-                "business_website" => $request->website,
-                "business_type" => $request->businessType,
-                "first_name" => @$userDt ->firstname,
-                "last_name" => @$userDt->lastname,
-                "email" => $request->email,
-                "about_company" => $request->aboutCompany,
-                "short_description" => $request->shortDescription,
-            ];
-            @$userDt->update(['show_step'=>4]);
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
             $companyDetail  =  CompanyInformation::updateOrCreate(['id' => $request->cid],$company);
             if ($companyDetail->wasRecentlyCreated) {
                 SGMailService::welcomeMailOfNewBusinessToCustomer(['cid'=> $companyDetail->id,'email' => @$userDt->email]);

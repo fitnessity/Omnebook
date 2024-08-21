@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-f<div class="main-content">
-=======
 <div class="main-content">
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
     <div id="client_wrapper" class="clinet-page-content toggled ">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
@@ -61,11 +57,7 @@ f<div class="main-content">
                     </a>
                 </li>
                 <li class="nav-item">
-<<<<<<< HEAD
                     <a class="nav-link menu-link" href="{{route('business.website_integration')}}">
-=======
-                    <a class="nav-link menu-link" href="http://dev.fitnessity.co/design/integration_portal">
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
                         <i class="fas fa-cogs fs-15"></i> <span class="fs-15" data-key="t-widgets">Website Integration</span>
                     </a>
                 </li>

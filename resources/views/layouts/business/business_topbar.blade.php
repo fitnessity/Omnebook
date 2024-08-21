@@ -1,57 +1,11 @@
-<<<<<<< HEAD
 
     <script src="{{url('/public/dashboard-design/js/layout.js')}}"></script>
 
 	<link href="{{url('/public/dashboard-design/css/responsive.css')}}" rel="stylesheet" type="text/css" /> 
-=======
-<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
-<head>
-    <meta charset="utf-8" />
-    <title>Fitnessity </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
-    <!-- App favicon -->
-    <!-- <link rel="shortcut icon" href="{{ url('/public/images/email/favicon.ico') }}"> -->
-	
-
-    <!-- Layout config Js-->
-    <script src="{{url('/public/dashboard-design/js/layout.js')}}"></script>
-    <!-- Bootstrap Css 
-    <link href="{{url('public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{url('public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" /> -->
-	
-    <!-- Style Css-->
-    <!-- <link href="{{url('/public/dashboard-design/css/style.css')}}" rel="stylesheet" type="text/css" /> -->
-	
-	<!-- Custom Css-->
-    <!-- <link href="{{url('/public/dashboard-design/css/custom.css')}}" rel="stylesheet" type="text/css" /> -->
-    
-		<!-- <script src="https://cdn.ckeditor.com/4.21.0/standard-all/ckeditor.js"></script>  -->
-
-   <!-- <script src="{{url('/public/dashboard-design/js/ckeditor/ckeditor.js')}}"></script>
-	<link href="{{url('/public/dashboard-design/css/responsive.css')}}" rel="stylesheet" type="text/css" /> -->
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 
 	<script src="{{url('/public/dashboard-design/js/ckeditor/ckeditor.js')}}"></script>
 	<!-- <link href="{{url('/public/dashboard-design/css/responsive.css')}}" rel="stylesheet" type="text/css" /> -->
 	<link href="{{url('/public/dashboard-design/css/responsive.css')}}" rel="stylesheet" type="text/css" />
-<<<<<<< HEAD
-=======
-	
-	
-	<!-- icon
-	<link href="{{url('/public/dashboard-design/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
-
-	<link href="{{url('/public/css/slimselect.min.css')}}" rel="stylesheet" type="text/css" />
-	<link href="{{url('/public/js/select/select.css')}}" rel="stylesheet" type="text/css" />
-	<script src="{{url('/public/dashboard-design/js/plugins.js')}}"></script> -->
-	
-	<!-- fullcalendar css >
-	<link rel="stylesheet" type="text/css" href="{{ url('public/css/metismenu.min.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url('public/css/fullcalendar/fullcalendar.min.css') }}"> -->
-	
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 
 	<!-- dropzone css -->
 	<!-- <link href="{{url('/public/dashboard-design/css/dropzone.css')}}" rel="stylesheet" type="text/css" /> -->
@@ -62,12 +16,6 @@
 
 	<!-- Emoji icons -->
 	<link href="{{url('/public/dashboard-design/css/emojionearea.min.css')}}" rel="stylesheet" type="text/css" />
-<<<<<<< HEAD
-=======
-	
-	<!-- app css 
-	<link href="{{url('/public/dashboard-design/css/app.min.css')}}" rel="stylesheet" type="text/css" />-->
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 
 	<!-- Color Piker Css-->
     <link href="{{url('/public/dashboard-design/css/nano.min.css')}}" rel="stylesheet" type="text/css" />
@@ -78,10 +26,6 @@
 
 	<link rel="stylesheet" href="{{url('/public/dashboard-design/css/dragula.min.css')}}" type="text/css" />
 
-<<<<<<< HEAD
-=======
-</head>
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 
  <!-- Begin page -->
    <div id="layout-wrapper printnone">
@@ -828,11 +772,7 @@
 																					<div class="col-lg-12">
 																						<div class="mb-3">
 																							<label for="name" class="form-label">Name</label>
-<<<<<<< HEAD
 																							<input type="text" class="form-control" id="name">
-=======
-																							<input type="text" class="form-control" id="name"">
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 																						</div>
 																						<div class="mb-3">
 																							<label for="email" class="form-label">Email</label>
@@ -865,11 +805,7 @@
 																					<div class="col-lg-12">
 																						<div class="mb-3">
 																							<label for="name" class="form-label">Name</label>
-<<<<<<< HEAD
 																							<input type="text" class="form-control" id="name">
-=======
-																							<input type="text" class="form-control" id="name"">
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 																						</div>
 																						<div class="mb-3">
 																							<label for="email" class="form-label">Email</label>

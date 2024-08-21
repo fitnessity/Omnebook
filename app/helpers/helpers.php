@@ -607,22 +607,12 @@
             }   
 
             foreach ($transaction as $tr) {
-<<<<<<< HEAD
-                if (is_object($tr) && isset($tr->user_type)) {
-=======
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
                 if($tr->user_type == 'user'){
                     $userData =  $tr->User;
                 }else{
                     $userData = $tr->Customer;
                 }
-<<<<<<< HEAD
-                $userData='';
-                    $notificationAry[] = $formatNotification($userData, $tr, 'transaction',' made a payment of $'.$tr->amount);
-                }
-=======
                 $notificationAry[] = $formatNotification($userData, $tr, 'transaction',' made a payment of $'.$tr->amount);
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
             }
 
             $booking = $company->UserBookingDetails();
@@ -774,36 +764,11 @@
 
         return  $text;
     }
-<<<<<<< HEAD
 
     function getCustomerFilesNotifiy()
     {
         $userid=auth()->id();
         $notifications = BusinessCustomerUploadFiles::where('isseen', 0)->where('status', 0)->where('user_id',$userid)->get();
-=======
-    // function getCustomerFilesNotifiy()
-    // {
-    //     return BusinessCustomerUploadFiles::where('isseen', 0)->where('status', 0)->get();
-    // }
-    // function getCustomerFilesNotifiy()
-    // {
-    //     $notifications = BusinessCustomerUploadFiles::where('isseen', 0)->where('status', 0)->get();
-
-    //     foreach ($notifications as $notification) {
-    //         $user = User::find($notification->user_id); // Assuming user_id is the column in BusinessCustomerUploadFiles that refers to the user
-    //         // $notification->profile_pic = $user ? $user->profile_pic : ''; // Assuming profile_pic is the column in the users table for the profile picture
-    //         if ($user && Storage::disk('s3')->exists($user->profile_pic)) {
-    //             $notification->profile_pic = Storage::disk('s3')->url($user->profile_pic);            
-    //         }
-    //         $notification->user_name = $user->firstname . ' ' . $user->lastname;
-    //     }
-
-    //     return $notifications;
-    // }
-    function getCustomerFilesNotifiy()
-    {
-        $notifications = BusinessCustomerUploadFiles::where('isseen', 0)->where('status', 0)->get();
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 
         foreach ($notifications as $notification) {
             $user = User::find($notification->user_id); 

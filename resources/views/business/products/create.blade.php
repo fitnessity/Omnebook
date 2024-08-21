@@ -77,11 +77,7 @@
                                                 <div>
                                                     <h5 class="fs-14 mb-1">Product Gallery</h5>
                                                     <p class="text-muted">Add Product Gallery Images.</p>
-<<<<<<< HEAD
                                                     
-=======
-
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
                                                     <div class="dropzone" >
                                                         <div class="fallback">
                                                             <input name="file[]" type="file" multiple="multiple" >
@@ -734,19 +730,15 @@
         });
     
     </script>
-<<<<<<< HEAD
     <script type="text/javascript">
         CKEDITOR.replace("ckeditor-classic");
     </script>
 
     
-=======
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
 @endsection
 
 
 @push('scripts')
-<<<<<<< HEAD
 
     <script src="{{asset('/public/dashboard-design/js/dropzone-min.js')}}"></script>
     <script src="{{asset('/public/dashboard-design/js/dropzoneCover.js')}}"></script>
@@ -757,8 +749,3 @@
     <script src="{{url('/public/dashboard-design/js/ckeditor/ckeditor.js')}}"></script>
 @endpush
 
-=======
-    <script src="{{asset('/public/dashboard-design/js/dropzone-min.js')}}"></script>
-    <script src="{{asset('/public/dashboard-design/js/ecommerce-product-create.init.js')}}"></script>
-@endpush
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394

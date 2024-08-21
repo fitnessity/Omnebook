@@ -17,13 +17,10 @@ class HomeController extends Controller
         $this->sports = $sports;
         $this->professional = $professional;
     }
-<<<<<<< HEAD
 	public function test()
 	{
 		return view('demo');
 	}
-=======
->>>>>>> ce3ab0fefd0bf653e3a91b71d818121ea9ec8394
     public function index(Request $request)
     {
         $all_categories = $this->sports_cat->getAllSportsCategories();
