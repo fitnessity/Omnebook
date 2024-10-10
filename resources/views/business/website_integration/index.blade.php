@@ -3,6 +3,20 @@
 
 @section('content')
 @include('layouts.business.business_topbar')
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Signika:wght@300..700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Sofadi+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Sofadi+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sofadi+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Playpen+Sans:wght@100..800&family=Sofadi+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Great+Vibes&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Playpen+Sans:wght@100..800&family=Sofadi+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Arsenal+SC:ital,wght@0,400;0,700;1,400;1,700&family=Gowun+Batang:wght@400;700&family=Great+Vibes&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Playpen+Sans:wght@100..800&family=Sofadi+One&display=swap');
+</style>
 
         <!-- ========================= Main ==================== -->
         @include('business.engage-clients.engage_clients_sidebar')
@@ -102,8 +116,15 @@
                                                             <option selected="selected">Select...</option>
                                                             <option value="login">Login</option>     
                                                             <option value="register">Register</option>  
-                                                            {{-- <option value="option3">Booking Schedule</option>--}}
+                                                            <option value="booking">Booking Schedule</option>
                                                         </select>
+                                                        {{-- <select class="form-select mb-3" id="selectField">
+                                                            <option value="select" {{ session('message') != 'login' && session('message') != 'register' && session('message') != 'booking' ? 'selected' : '' }}>Select...</option>
+                                                            <option value="login" {{ session('message') == 'login' ? 'selected' : '' }}>Login</option>
+                                                            <option value="register" {{ session('message') == 'register' ? 'selected' : '' }}>Register</option>
+                                                            <option value="booking" {{ session('message') == 'booking' ? 'selected' : '' }}>Booking Schedule</option>
+                                                        </select> --}}
+                                                        
                                                     </div>
                                                 </div>                                                  
                                             </div>
@@ -119,30 +140,31 @@
                                                                                   <div class="row">
                                                                                       <div class="col-12">
                                                                                           <div class="mt-3 filter-check">
-                                                                                              <label for="">Text Color</label>
+                                                                                              <label for="">Button Text Color</label>
                                                                                           </div>
                                                                                           <div class="d-flex flex-wrap gap-2">
                                                                                               <div class="pickr">
                                                                                                   <div class="nano-colorpicker" data-picker="1"></div>
-                                                                                                  <input type="hidden" id="selectedColor1" name="text_color">
+                                                                                                  <input type="hidden" id="selectedColor1" name="text_color" value="{{$color1}}">
 
                                                                                                   <!-- <button type="button" class="pcr-button" role="button" aria-label="toggle color picker dialog" style="--pcr-color: rgba(156, 39, 176, 1);"></button>  -->
                                                                                               </div>
                                                                                           </div>
                                                                                       </div>
-                                                                                      <div class="col-12">
+                                                                                      <div class="col-12" >
                                                                                           <div class="mt-3 filter-check">
-                                                                                              <label for="">Background Color</label>
+                                                                                              <label for="">Button Color</label>
                                                                                           </div>
                                                                                           <div class="d-flex flex-wrap gap-2">
                                                                                               <div class="pickr">
                                                                                                   <div class="nano-colorpicker" data-picker="2"></div>
-                                                                                                  <input type="hidden" id="selectedColor2" name="background_color">
+                                                                                                  <input type="hidden" id="selectedColor2" name="background_color" value="{{$color2}}">
 
                                                                                                   <!-- <button type="button" class="pcr-button" role="button" aria-label="toggle color picker dialog" style="--pcr-color: rgba(244, 67, 54, 1);"></button> -->
                                                                                               </div>
                                                                                           </div>
                                                                                       </div>
+                                                                                     
                                                                                   </div>
                                                                                   <div class="row">
                                                                                       <div class="col-lg-12 col-md-12 col-12">
@@ -189,7 +211,6 @@
                                                                                   </div>
                                                                               </div>
                                                                               <!-- end card header -->
-          
                                                                             <div class="card-body">          
                                                                                   <div class="dropzone dropzone-checkin">
                                                                                     <div class="fallback">
@@ -202,7 +223,6 @@
                                                                                         <h4>Drop files here or click to upload.</h4>
                                                                                     </div>
                                                                                 </div>
-
                                                                                   <ul class="list-unstyled mb-0" id="dropzone-preview-checkin">
                                                                                       <li class="mt-2" id="dropzone-preview-list-checkin">
                                                                                           <input type="hidden" name="cover" value="">
@@ -242,12 +262,16 @@
                                                                                                       </div>
                                                                                                   </div>
                                                                                                   <div class="flex-shrink-0 ms-3">
-                                                                                                      <button class="btn btn-sm btn-danger delete-btn" type="button">Delete</button>
+                                                                                                      {{-- <button class="btn btn-sm btn-danger delete-btn" type="button">Delete</button> --}}
+                                                                                                      <div class="flex-shrink-0 ms-3">
+                                                                                                        <button class="btn btn-sm btn-danger delete-btn" data-id="{{ $data->id }}" type="button">Delete</button>
+                                                                                                    </div>
+                                                                                                    
                                                                                                   </div>
                                                                                               </div>
                                                                                           </div>
                                                                                       </li>
-                                                                                  @endif
+                                                                                    @endif
                                                                                   </ul>
                                                                                   <!-- end dropzon-preview -->
                                                                               </div>
@@ -288,12 +312,18 @@
                                                                                         <label for="">Text Color</label>
                                                                                         <div class="pickr mb-15">
                                                                                             <div class="nano-colorpicker" data-picker="3"></div>
-                                                                                            <input type="hidden" id="selectedColor3" name="reg_text_color">
+                                                                                            <input type="hidden" id="selectedColor3" name="reg_text_color" value="{{$color5}}">
                                                                                         </div>
                                                                                         <label for="">Button Background</label>
                                                                                         <div class="pickr mb-15">
                                                                                             <div class="nano-colorpicker" data-picker="4"></div>
-                                                                                            <input type="hidden" id="selectedColor4" name="reg_bg_color">
+                                                                                            <input type="hidden" id="selectedColor4" name="reg_bg_color" value="{{$color4}}">
+                                                                                        </div>
+
+                                                                                        <label for="">Background</label>
+                                                                                        <div class="pickr mb-15">
+                                                                                            <div class="nano-colorpicker" data-picker="7"></div>
+                                                                                            <input type="hidden" id="selectedColor7" name="backreg_color" value="{{$color8}}">
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>                                    
@@ -436,12 +466,11 @@
                                                             </form>
                                                         </div>
                                                         <div class="col-xl-9 col-lg-8">
-                                                            <div class="card">
+                                                            <div class="card" id="preview_reg_color" style="background-color: {{ $color8 }}">
                                                                 <div class="card-header align-items-center d-flex">
                                                                     <h4 class="card-title mb-0 flex-grow-1">Preview</h4>
                                                                     <div class="flex-shrink-0">
                                                                         <div>
-                                                                            
                                                                         </div>
                                                                         <!-- <div class="form-check form-switch form-switch-right form-switch-md">
                                                                             <label for="dropdown-base-example" class="form-label text-muted">Preview Size</label>
@@ -449,14 +478,13 @@
                                                                         </div> -->
                                                                     </div>
                                                                 </div><!-- end card header -->
-
                                                                 <div class="card-body">
                                                                     <div class="live-preview">
                                                                         <div class="row justify-content-md-center">
                                                                             <div class="col-lg-10">
                                                                                 <form action="">
-                                                                                    <div class="row ">
-                                                                                        <div class="col-md-12 col-lg-12"><h4 class="font-red ">Personal Info</h4></div>
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12 col-lg-12"><h4 class="font-red" id="personal" style="color: {{ $color3 ?: '#EA1515' }};">Personal Info</h4></div>
                                                                                         <div class="col-md-4 col-lg-3">
                                                                                             <label class="mt-10 ">First Name<span id="star">*</span></label>
                                                                                             <input type="text" name="firstname" id="firstname" size="30" maxlength="80" class="form-control">
@@ -498,9 +526,9 @@
                                                                                     <div class="add-client-sapre-tor"></div>
 
                                                                                     <div class="row">
-                                                                                        <div class="col-md-12 col-lg-12"><h4 class="font-red ">Address</h4></div>
+                                                                                        <div class="col-md-12 col-lg-12"><h4 class="font-red" id="address" style="color: {{ $color3 ?: '#EA1515' }};">Address</h4></div>
                                                                                         <div class="col-md-4 col-lg-3 mt-10">
-                                                                                            <label>Address <span id="star">*</span></label>
+                                                                                            <label >Address <span id="star">*</span></label>
                                                                                             <input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="addressCustomer" value="" required="" oninput="initMapCall('addressCustomer', 'cityCustomer', 'stateCustomer', 'countryCustomer', 'zipcodeCustomer', 'latitudeCustomer', 'longitudeCustomer')" aria-required="true"> 
                                                                                         </div>
                                                                                         <div class="col-md-4 col-lg-3 mt-10">
@@ -526,7 +554,7 @@
                                                                                     </div>
                                                                                     <div class="add-client-sapre-tor"></div>
                                                                                     <div class="row">
-                                                                                        <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">Add Family Members (Optional)</h4></div>
+                                                                                        <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red" id="family_mem" style="color: {{ $color3 ?: '#EA1515' }};">Add Family Members (Optional)</h4></div>
                                                                                         <div class="error mb-10" id="familyerrormessage"></div>
                                                                                         <input type="hidden" name="familycnt" id="familycnt" value="0">
                                                                                         <div id="familymaindiv">
@@ -641,13 +669,13 @@
                                                                                         </div>
                                                                                         <div class="">
                                                                                             <div class="col-md-12 col-lg-12 text-right">
-                                                                                                <button type="button" class="btn btn-red mt-10" id="add_family">Add New Family Member</button>
+                                                                                                <button type="button" class="btn btn-red mt-10" id="add_family"  style="background-color: {{ $color4 ?: '#ea1515' }}; border: 1px solid {{ $color4 ?: '#ea1515' }}; color: {{ $color3 ?: '#fff' }};">Add New Family Member</button>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="add-client-sapre-tor"></div>
                                                                                     <div class="row">
-                                                                                        <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">How did you hear about us</h4></div>
+                                                                                        <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red" id="about" style="color: {{ $color3 ?: '#EA1515' }};">How did you hear about us</h4></div>
                                                                                         <div class="row">
                                                                                             <div class="col-md-4 col-lg-4 mt-10">
                                                                                                 <label class="mt-10">How did you hear about us?</label>
@@ -670,7 +698,7 @@
                                                                                     </div>
                                                                                     <div class="add-client-sapre-tor"></div>
                                                                                     <div class="row">
-                                                                                        <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red ">Account Password</h4></div>
+                                                                                        <div class="col-md-12 col-lg-12 mt-20"><h4 class="font-red" id="accounts_pass" style="color: {{ $color3 ?: '#EA1515' }};">Account Password</h4></div>
                                                                                         <div class="row">
                                                                                             <label class="mt-10">Please pick a password to log-in to your account later.</label>
                                                                                             <div class="col-md-4 col-lg-3 mt-10">
@@ -686,7 +714,7 @@
                                                                                     <div class="add-client-sapre-tor"></div>
                                                                                     <div class="row"> 
                                                                                         <div class="col-md-12 col-lg-12 mt-20">
-                                                                                            <h4 class="font-red "> Agree to Terms, Waiver &amp; Contract Signature</h4>
+                                                                                            <h4 class="font-red" id="agree_terms" style="color: {{ $color3 ?: '#EA1515' }};"> Agree to Terms, Waiver &amp; Contract Signature</h4>
                                                                                         </div>
                                                                                         <div class="col-md-12">
                                                                                             <div class="col-lg-12" id="termsdiv">
@@ -705,7 +733,7 @@
                                                                                             </div>
                                                                                             <div class="col-lg-12">
                                                                                                 <div class="col-md-4 col-lg-3 col-lg-3">
-                                                                                                    <button type="button" id="clearButton" class="btn btn-primary btn-black">Clear</button>
+                                                                                                    <button type="button" id="clearButton" class="btn btn-primary btn-black"  style="background-color: {{ $color4 ?: '#ea1515' }}; border: 1px solid {{ $color4 ?: '#ea1515' }}; color: {{ $color3 ?: '#fff' }};">Clear</button>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -1012,562 +1040,584 @@
                                                     </div> 
                                                     <!-- end row-->
                                             </div>
-                                            {{-- <div id="option3" class="lrcontent">
-                                                <div class="row">
-                                                    <div class="col-xl-3 col-lg-4">
-                                                        <div class="card">
-                                                            <div class="card-header">
-                                                                <div class="d-flex ">
-                                                                    <div class="flex-grow-1">
-                                                                        <h5 class="fs-16">Widget Settings</h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="accordion accordion-flush filter-accordion">
-                                                                <div class="accordion-item">
-                                                                    <h2 class="accordion-header" id="flush-headingBrands">
-                                                                        <button class="accordion-button bg-transparent shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseBrands" aria-expanded="true" aria-controls="flush-collapseBrands">
-                                                                            <span class="text-muted text-uppercase fs-12 fw-medium">Style</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
-                                                                        </button>
-                                                                    </h2>
-
-                                                                    <div id="flush-collapseBrands" class="accordion-collapse collapse show" aria-labelledby="flush-headingBrands">
-                                                                        <div class="accordion-body text-body pt-0">
-                                                                            <div class="mb-25">
-                                                                                <div class="gap-2 mt-3 filter-check">
-                                                                                    <label class="font-15">Color Scheme</label>
-                                                                                </div>
-                                                                                <div class="gap-2 mt-3 filter-check">                                            
-                                                                                    <label for="">Primary</label>
-                                                                                    <div class="col-lg-auto">
-                                                                                        <div class="d-flex flex-wrap gap-2">
-                                                                                            <div class="pickr">
-                                                                                                <button type="button" class="pcr-button" role="button" aria-label="toggle color picker dialog" style="--pcr-color: rgba(244, 67, 54, 1);"></button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <!-- <div class="pickesettings">
-                                                                                            <input type="text" autocomplete="off" spellcheck="false">
-                                                                                            <input type="color" value="#FFB61A">
-                                                                                        </div> -->
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="gap-2 mt-3 filter-check">                                            
-                                                                                    <label for="">Secondary</label>
-                                                                                    <div class="col-lg-auto">
-                                                                                        <div class="d-flex flex-wrap gap-2">
-                                                                                            <div class="pickr">
-                                                                                                <button type="button" class="pcr-button" role="button" aria-label="toggle color picker dialog" style="--pcr-color: rgba(244, 67, 54, 1);"></button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <!-- <div class="pickesettings">
-                                                                                            <input type="text" autocomplete="off" spellcheck="false">
-                                                                                            <input type="color" value="#4b38b3">
-                                                                                        </div> -->
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="gap-2 mt-3 filter-check">                                            
-                                                                                    <label for="">Secondary</label>
-                                                                                    <div class="col-lg-auto">
-                                                                                        <div class="d-flex flex-wrap gap-2">
-                                                                                            <div class="pickr">
-                                                                                                <button type="button" class="pcr-button" role="button" aria-label="toggle color picker dialog" style="--pcr-color: rgba(244, 67, 54, 1);"></button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <!-- <div class="pickesettings">
-                                                                                            <input type="text" autocomplete="off" spellcheck="false">
-                                                                                            <input type="color" value="#ea1515">
-                                                                                        </div> -->
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>            
-                                                                            <div class="mb-25">
-                                                                                <div class="gap-2 mt-3 filter-check">                                            
-                                                                                    <label for="">Font</label>
-                                                                                    <select class="form-select" name="know_from">
-                                                                                        <option Selected>Arial</option>
-                                                                                        <option>Calibri</option>
-                                                                                        <option>Cambria</option>
-                                                                                        <option>Monospace</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>  
-                                                                            <div class="mb-25">
-                                                                                <div class="gap-2 mt-3 filter-check">                                            
-                                                                                    <label for="">Button Text</label>
-                                                                                    <select class="form-select" name="know_from">
-                                                                                        <option Selected>Register</option>
-                                                                                        <option>Enroll</option>
-                                                                                        <option>Sign Up</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div> 
-                                                                            <div class="mb-25">
-                                                                                <div class="gap-2 mt-3 filter-check">                                            
-                                                                                    <label for="">Button Style</label>
-                                                                                    <div>
-                                                                                        <input type="radio" id="html" name="fav_language" value="HTML">
-                                                                                        <label for="html">Text only</label><br>
-                                                                                        <input type="radio" id="css" name="fav_language" value="CSS">
-                                                                                        <label for="css">Outline</label><br>
-                                                                                        <input type="radio" id="javascript" name="fav_language" value="JavaScript">
-                                                                                        <label for="javascript">Solid</label> 
-                                                                                    </div>                                               
-                                                                                </div>
-                                                                            </div>
-
-                                                                        </div>                                    
-                                                                    </div>
-                                                                </div>
-                                                                <!-- end accordion-item -->    
-                                                                <div class="accordion-item">
-                                                                    <h2 class="accordion-header" id="flush-headingDiscount">
-                                                                        <button class="accordion-button bg-transparent shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseDiscount" aria-expanded="true" aria-controls="flush-collapseDiscount">
-                                                                            <span class="text-muted text-uppercase fs-12 fw-medium">Content</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
-                                                                        </button>
-                                                                    </h2>
-                                                                    <div id="flush-collapseDiscount" class="accordion-collapse collapse" aria-labelledby="flush-headingDiscount">
-                                                                        <div class="accordion-body text-body pt-1">
-                                                                            <div class="gap-2 mt-3 filter-check">
-                                                                                <div>
-                                                                                    <button class="btn btn-red mb-15 w-100">Select Schedule Contents</button>  
-                                                                                </div>                                                                                  
-                                                                            </div>
-                                                                            <div class="mb-25">
-                                                                                <div class="gap-2 mt-3 filter-check">                                            
-                                                                                    <label for="">Main Schedule</label>
-                                                                                    <p>Select what you'd like to show in the main view of the schedule.</p>
-                                                                                    <div>
-                                                                                        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-                                                                                        <label for="vehicle1">Staff </label><br>
-                                                                                        <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
-                                                                                        <label for="vehicle2">Class type </label><br>
-                                                                                        <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
-                                                                                        <label for="vehicle3">Class level </label><br> 
-                                                                                    </div>                                               
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div class="mb-25">
-                                                                                <div class="gap-2 mt-3 filter-check">                                            
-                                                                                    <label for="">Date Range</label>
-                                                                                    <div>
-                                                                                        <input type="radio" id="html" name="fav_language" value="HTML">
-                                                                                        <label for="html">Week </label><br>
-                                                                                        <input type="radio" id="css" name="fav_language" value="CSS">
-                                                                                        <label for="css">Day</label><br>
-                                                                                    </div>                                               
-                                                                                </div>
-                                                                            </div>
-
+                                            <div id="booking" class="lrcontent">
+                                                    <div class="row">
+                                                        <div class="col-xl-3 col-lg-4">
+                                                            <form action="{{route('business.schedule_details')}}" method="POST" enctype="multipart/form-data">
+                                                                @csrf
+                                                            <div class="card">
+                                                                <div class="card-header">
+                                                                    <div class="d-flex ">
+                                                                        <div class="flex-grow-1">
+                                                                            <h5 class="fs-16">Widget Settings</h5>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <!-- end accordion-item -->                            
-                                                                <div class="accordion-item">
-                                                                    <h2 class="accordion-header" id="flush-headingRating">
-                                                                        <button class="accordion-button bg-transparent shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseRating" aria-expanded="false" aria-controls="flush-collapseRating">
-                                                                            <span class="text-muted text-uppercase fs-12 fw-medium">Filters</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
-                                                                        </button>
-                                                                    </h2>
+                                                                <div class="accordion accordion-flush filter-accordion">
+                                                                    <div class="accordion-item">
+                                                                        <h2 class="accordion-header" id="flush-headingBrands">
+                                                                            <button class="accordion-button bg-transparent shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseBrands" aria-expanded="true" aria-controls="flush-collapseBrands">
+                                                                                <span class="text-muted text-uppercase fs-12 fw-medium">Style</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
+                                                                            </button>
+                                                                        </h2>
+                                                                      
+                                                                        <div id="flush-collapseBrands" class="accordion-collapse collapse show" aria-labelledby="flush-headingBrands">
+                                                                            <div class="accordion-body text-body pt-0">
+                                                                                <div class="mb-25">
+                                                                                    <div class="gap-2 mt-3 filter-check">
+                                                                                        <label class="font-15">Color Scheme</label>
+                                                                                    </div>
+                                                                                    <div class="gap-2 mt-3 filter-check">                                            
+                                                                                        <label for="">Button Text Color</label>
+                                                                                        <div class="col-lg-auto">
+                                                                                            <div class="d-flex flex-wrap gap-2">
+                                                                                                <div class="pickr">
+                                                                                                    <div class="nano-colorpicker" data-picker="5"></div>
+                                                                                                        <input type="hidden" id="selectedColor5" name="primary_color" value="{{$color5}}">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="gap-2 mt-3 filter-check" id="Btncolor">                                            
+                                                                                        <label for="">Button Color</label>
+                                                                                        <div class="col-lg-auto">
+                                                                                            <div class="d-flex flex-wrap gap-2">
+                                                                                                <div class="pickr">
+                                                                                                    <div class="nano-colorpicker" id="hcolour" data-picker="6"></div>
+                                                                                                    <input type="hidden" id="selectedColor6" name="secondary_color" value="{{$color6}}">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
 
-                                                                    <div id="flush-collapseRating" class="accordion-collapse collapse" aria-labelledby="flush-headingRating">
-                                                                        <div class="accordion-body text-body">
-                                                                            <div class="gap-2 filter-check">
-                                                                                <label for="">Select a maximum of 4</label>
-                                                                                <div>
-                                                                                    <input type="radio" id="html" name="fav_language" value="HTML">
-                                                                                    <label for="html">Class </label><br>
-                                                                                    <input type="radio" id="css" name="fav_language" value="CSS">
-                                                                                    <label for="css">Staff </label><br>
-                                                                                    <input type="radio" id="javascript" name="fav_language" value="JavaScript">
-                                                                                    <label for="javascript">Class Type</label> <br>
-                                                                                    <input type="radio" id="javascript1" name="fav_language" value="JavaScript1">
-                                                                                    <label for="javascript1">Class Level</label> 
+                                                                                    <div class="gap-2 mt-3 filter-check" id="Btncolor">                                            
+                                                                                        <label for="">Label Background Color</label>
+                                                                                        <div class="col-lg-auto">
+                                                                                            <div class="d-flex flex-wrap gap-2">
+                                                                                                <div class="pickr">
+                                                                                                    <div class="nano-colorpicker" data-picker="9"></div>
+                                                                                                    <input type="hidden" id="selectedColor9" name="label_color" value="{{$color10}}">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="gap-2 mt-3 filter-check">                                            
+                                                                                        <label for="">Label Text Color</label>
+                                                                                        <div class="col-lg-auto">
+                                                                                            <div class="d-flex flex-wrap gap-2">
+                                                                                                <div class="pickr">
+                                                                                                    <div class="nano-colorpicker" data-picker="10"></div>
+                                                                                                    <input type="hidden" id="selectedColor10" name="label_text_color" value="{{$color11}}">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <div class="gap-2 mt-3 filter-check">                                            
+                                                                                        <label for="">Date Text Color</label>
+                                                                                        <div class="col-lg-auto">
+                                                                                            <div class="d-flex flex-wrap gap-2">
+                                                                                                <div class="pickr">
+                                                                                                    <div class="nano-colorpicker" data-picker="11"></div>
+                                                                                                    <input type="hidden" id="selectedColor11" name="date_text_color" value="{{$color12}}">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="gap-2 mt-3 filter-check">                                            
+                                                                                        <label for="">Background</label>
+                                                                                        <div class="col-lg-auto">
+                                                                                            <div class="d-flex flex-wrap gap-2">
+                                                                                                <div class="pickr">
+                                                                                                    <div class="nano-colorpicker" data-picker="8"></div>
+                                                                                                    <input type="hidden" id="selectedColor8" name="backcolor" value="{{$color9}}">                                                                                          
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    {{-- <div class="gap-2 mt-3 filter-check">                                            
+                                                                                        <label for="">Secondary</label>
+                                                                                        <div class="col-lg-auto">
+                                                                                            <div class="d-flex flex-wrap gap-2">
+                                                                                                <div class="pickr">
+                                                                                                    <button type="button" class="pcr-button" role="button" aria-label="toggle color picker dialog" style="--pcr-color: rgba(244, 67, 54, 1);"></button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!-- <div class="pickesettings">
+                                                                                                <input type="text" autocomplete="off" spellcheck="false">
+                                                                                                <input type="color" value="#ea1515">
+                                                                                            </div> -->
+                                                                                        </div>
+                                                                                    </div> --}}
+                                                                                </div>            
+                                                                                <div class="mb-25">
+                                                                                    <div class="gap-2 mt-3 filter-check">                                            
+                                                                                        <label for="">Font</label>
+                                                                                        {{-- <select class="form-select" name="font">
+                                                                                            <option value="Arial" {{ isset($data) && $data->font == 'Arial' ? 'selected' : '' }}>Arial</option>
+                                                                                            <option value="Calibri"{{ isset($data) && $data->font == 'Calibri' ? 'selected' : '' }}>Calibri</option>
+                                                                                            <option value="Cambria" {{ isset($data) && $data->font == 'Cambria' ? 'selected' : '' }}>Cambria</option>
+                                                                                            <option value="Monospace" {{ isset($data) && $data->font == 'Monospace' ? 'selected' : '' }} >Monospace</option>
+                                                                                        </select> --}}
+                                                                                        <select class="form-select" name="font" id="fontSelector">
+                                                                                            <option value="lato-family"  {{ isset($data) && $data->font == 'lato-family' ? 'selected' : '' }}>Lato</option>
+                                                                                            <option value="oswald-family" {{ isset($data) && $data->font == 'oswald-family' ? 'selected' : '' }}>Oswald</option>
+                                                                                            <option value="space-grotesk-family" {{ isset($data) && $data->font == 'space-grotesk-family' ? 'selected' : '' }}>Space Grotesk</option>
+                                                                                            <option value="josefin-sans-family" {{ isset($data) && $data->font == 'josefin-sans-family' ? 'selected' : '' }}>Josefin Sans</option>
+                                                                                            <option value="signika-family" {{ isset($data) && $data->font == 'signika-family' ? 'selected' : '' }}>Signika</option>
+                                                                                            <option value="sofadi-one-family" {{ isset($data) && $data->font == 'sofadi-one-family' ? 'selected' : '' }}>Sofadi One</option>
+                                                                                            <option value="gowun-batang-family" {{ isset($data) && $data->font == 'gowun-batang-family' ? 'selected' : '' }}>Gowun Batang</option>
+                                                                                            <option value="kanit-family" {{ isset($data) && $data->font == 'kanit-family' ? 'selected' : '' }}>Kanit</option>
+                                                                                            <option value="playpen-family" {{ isset($data) && $data->font == 'playpen-family' ? 'selected' : '' }}>Playpen Sans</option>
+                                                                                            <option value="great-vibes-family" {{ isset($data) && $data->font == 'great-vibes-family' ? 'selected' : '' }}>Great Vibes</option>
+                                                                                            <option value="arsenal-family" {{ isset($data) && $data->font == 'arsenal-family' ? 'selected' : '' }}>Arsenal SC</option>
+                                                                                        </select>
+                                                                                    </div>
                                                                                 </div>  
+                                                                                <div class="mb-25">
+                                                                                    <div class="gap-2 mt-3 filter-check">                                            
+                                                                                        <label for="">Button Text</label>
+                                                                                        <select class="form-select" name="button_text" id="buttonTextSelect">
+                                                                                            <option value="Book Now" {{isset($data) && $data->button_text == 'Book Now' ? 'selected' : '' }}>Book Now</option>
+                                                                                            <option value="Reserve" {{isset($data) && $data->button_text == 'Reserve' ? 'selected' : '' }}>Reserve</option>
+                                                                                            <option value="Sign Up" {{isset($data) && $data->button_text == 'Sign Up' ? 'selected' : '' }}>Sign Up</option>
+                                                                                            <option value="Register" {{isset($data) && $data->button_text == 'Register' ? 'selected' : '' }}>Register</option>
+                                                                                            <option value="Schedule" {{isset($data) && $data->button_text == 'Schedule' ? 'selected' : '' }}>Schedule</option>
+                                                                                            "Enroll
+                                                                                            <option value="Enroll" {{isset($data) && $data->button_text == 'Enroll' ? 'selected' : '' }}>Enroll</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div> 
+                                                                                <div class="mb-25">
+                                                                                    <div class="gap-2 mt-3 filter-check">                                            
+                                                                                        <label for="">Button Style</label>
+                                                                                        <div>
+                                                                                            <input type="radio" id="html" name="style" value="text-only" {{ isset($data) && $data->button_style == 'text-only' ? 'checked' : '' }}>
+                                                                                            <label for="html">Text only</label><br>
+                                                                                            <input type="radio" id="css" name="style" value="outline-strokeme" {{ isset($data) && $data->button_style == 'outline-strokeme' ? 'checked' : '' }}>
+                                                                                            <label for="css">Outline</label><br>
+                                                                                            <input type="radio" id="javascript" name="style" value="font-solid" {{ isset($data) && $data->button_style == 'font-solid' ? 'checked' : '' }}>
+                                                                                            <label for="javascript">Solid</label> 
+                                                                                        </div>                                               
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>                                    
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- end accordion-item -->    
+                                                                    <div class="accordion-item">
+                                                                        <h2 class="accordion-header" id="flush-headingDiscount">
+                                                                            <button class="accordion-button bg-transparent shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseDiscount" aria-expanded="true" aria-controls="flush-collapseDiscount">
+                                                                                <span class="text-muted text-uppercase fs-12 fw-medium">Content</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
+                                                                            </button>
+                                                                        </h2>
+                                                                        <div id="flush-collapseDiscount" class="accordion-collapse collapse" aria-labelledby="flush-headingDiscount">
+                                                                            <div class="accordion-body text-body pt-1">
+                                                                                <div class="gap-2 mt-3 filter-check">
+                                                                                    <div>
+                                                                                        <button class="btn btn-red mb-15 w-100">Select Schedule Contents</button>  
+                                                                                    </div>                                                                                  
+                                                                                </div>
+                                                                                <div class="mb-25">
+                                                                                    <div class="gap-2 mt-3 filter-check">                                            
+                                                                                        <label for="">Main Schedule</label>
+                                                                                        <p>Select what you'd like to show in the main view of the schedule.</p>
+                                                                                        <div>
+                                                                                            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+                                                                                            <label for="vehicle1">Staff </label><br>
+                                                                                            <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+                                                                                            <label for="vehicle2">Class type </label><br>
+                                                                                            <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
+                                                                                            <label for="vehicle3">Class level </label><br> 
+                                                                                        </div>                                               
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="mb-25">
+                                                                                    <div class="gap-2 mt-3 filter-check">                                            
+                                                                                        <label for="">Date Range</label>
+                                                                                        <div>
+                                                                                            <input type="radio" id="html" name="fav_language" value="HTML">
+                                                                                            <label for="html">Week </label><br>
+                                                                                            <input type="radio" id="css" name="fav_language" value="CSS">
+                                                                                            <label for="css">Day</label><br>
+                                                                                        </div>                                               
+                                                                                    </div>
+                                                                                </div>
+
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </div> 
-                                                                <!-- end accordion-item -->
+                                                                    <!-- end accordion-item -->                            
+                                                                    <div class="accordion-item">
+                                                                        <h2 class="accordion-header" id="flush-headingRating">
+                                                                            <button class="accordion-button bg-transparent shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseRating" aria-expanded="false" aria-controls="flush-collapseRating">
+                                                                                <span class="text-muted text-uppercase fs-12 fw-medium">Filters</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
+                                                                            </button>
+                                                                        </h2>
 
-                                                                <div class="accordion-item">
-                                                                    <h2 class="accordion-header" id="flush-headingregion">
-                                                                        <button class="accordion-button bg-transparent shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseregion" aria-expanded="false" aria-controls="flush-collapseregion">
-                                                                            <span class="text-muted text-uppercase fs-12 fw-medium">Region</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
-                                                                        </button>
-                                                                    </h2>
-
-                                                                    <div id="flush-collapseregion" class="accordion-collapse collapse" aria-labelledby="flush-headingregion">
-                                                                        <div class="accordion-body text-body">
-                                                                            <div class="gap-2 filter-check">
-                                                                                <label for="">Language</label>
-                                                                                <select class="form-select mb-3" aria-label="Default select example">
-                                                                                    <option selected="">English </option>
-                                                                                    <option value="1">Hindi </option>
-                                                                                    <option value="2">Arabela </option>
-                                                                                    <option value="3">Egyptian Arabic </option>
-                                                                                    <option value="3">Auslan </option>
-                                                                                </select>
+                                                                        <div id="flush-collapseRating" class="accordion-collapse collapse" aria-labelledby="flush-headingRating">
+                                                                            <div class="accordion-body text-body">
+                                                                                <div class="gap-2 filter-check">
+                                                                                    <label for="">Select a maximum of 4</label>
+                                                                                    <div>
+                                                                                        <input type="radio" id="html" name="filter" value="class" {{ isset($data) && $data->filters == 'class' ? 'checked' : '' }}>
+                                                                                        <label for="html">Class </label><br>
+                                                                                        <input type="radio" id="css" name="filter" value="staff" {{ isset($data) && $data->filters == 'staff' ? 'checked' : '' }}>
+                                                                                        <label for="css">Staff </label><br>
+                                                                                        <input type="radio" id="javascript" name="filter" value="class_type" {{ isset($data) && $data->filters == 'class_type' ? 'checked' : '' }}>
+                                                                                        <label for="javascript">Class Type</label> <br>
+                                                                                        <input type="radio" id="javascript1" name="filter" value="class_level" {{ isset($data) && $data->filters == 'class_level' ? 'checked' : '' }}>
+                                                                                        <label for="javascript1">Class Level</label> 
+                                                                                    </div>  
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                </div> 
-                                                                <!-- end accordion-item -->
-                                                            </div>
-                                                            <div class="card-footer">
-                                                                <div class="d-flex mt-3 mb-3">
-                                                                    <div class="flex-grow-1">
-                                                                        <button href="#" class="btn btn-black w-100">Save and Deploy</button>
+                                                                    </div> 
+                                                                    <!-- end accordion-item -->
+
+                                                                    <div class="accordion-item">
+                                                                        <h2 class="accordion-header" id="flush-headingregion">
+                                                                            <button class="accordion-button bg-transparent shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseregion" aria-expanded="false" aria-controls="flush-collapseregion">
+                                                                                <span class="text-muted text-uppercase fs-12 fw-medium">Region</span> <span class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
+                                                                            </button>
+                                                                        </h2>
+
+                                                                        <div id="flush-collapseregion" class="accordion-collapse collapse" aria-labelledby="flush-headingregion">
+                                                                            <div class="accordion-body text-body">
+                                                                                <div class="gap-2 filter-check">
+                                                                                    <label for="">Language</label>
+                                                                                    <select class="form-select mb-3" aria-label="Default select example">
+                                                                                        <option selected="">English </option>
+                                                                                        <option value="1">Hindi </option>
+                                                                                        <option value="2">Arabela </option>
+                                                                                        <option value="3">Egyptian Arabic </option>
+                                                                                        <option value="3">Auslan </option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> 
+                                                                    <!-- end accordion-item -->
+                                                                </div>
+                                                                <div class="card-footer">
+                                                                    <div class="d-flex mt-3 mb-3">
+                                                                        <div class="flex-grow-1">
+                                                                            <button type="submit" class="btn btn-black w-100">Save and Deploy</button>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                        </form>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-xl-9 col-lg-8">
-                                                        <div class="card">
-                                                            <div class="card-header align-items-center d-flex">
-                                                                <h4 class="card-title mb-0 flex-grow-1">Preview</h4>
-                                                                <!--<div class="flex-shrink-0">
-                                                                    <div class="form-check form-switch form-switch-right form-switch-md">
-                                                                        <label for="dropdown-base-example" class="form-label text-muted">Preview Size</label>
-                                                                        <input class="form-check-input code-switcher" type="checkbox" id="dropdown-base-example">
+
+                                                        <div class="col-xl-9 col-lg-8">
+                                                            <div class="card" id="preview_color" style="background-color:{{$color9}}">
+                                                                <div class="card-header align-items-center d-flex">
+                                                                    <h4 class="card-title mb-0 flex-grow-1">Preview</h4>
+                                                                    <!--<div class="flex-shrink-0">
+                                                                        <div class="form-check form-switch form-switch-right form-switch-md">
+                                                                            <label for="dropdown-base-example" class="form-label text-muted">Preview Size</label>
+                                                                            <input class="form-check-input code-switcher" type="checkbox" id="dropdown-base-example">
+                                                                        </div>
+                                                                    </div>-->
+                                                                </div><!-- end card header -->
+
+                                                                <div>
+                                                                    <div class="live-preview" id="livepreview" >
+                                                                
+                                                                        <div class="row">
+                                                                            <div class="col-lg-3 col-md-3">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-12 service-pr-0">
+                                                                                        <div class="card-header bg-soft-grey">
+                                                                                            <label class="card-title mb-0 flex-grow-1">Services</label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-12">
+                                                                                        <div class="card-body">
+                                                                                            <select class="form-select" name="know_from">
+                                                                                                <option value="All Services" Selected>All Services</option>
+                                                                                                <option value="Classes">Classes</option>
+                                                                                                <option value="Private Lessons">Private Lessons</option>
+                                                                                                <option value="Events">Events</option>
+                                                                                                <option value="Experience">Experience</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>                                        
+                                                                            </div>
+                                                                            <div class="col-lg-3 col-md-3">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-12 fall-schedule">
+                                                                                        <div class="card-header bg-soft-grey">
+                                                                                            <label class="card-title mb-0 flex-grow-1">Great For</label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-12 fall-schedule">
+                                                                                        <div class="card-body">
+                                                                                            <select class="form-select" name="know_from">
+                                                                                                <option value="All" Selected>All</option>
+                                                                                                <option value="adults">Adults</option>
+                                                                                                <option value="kids">Kids</option>
+                                                                                                <option value="infants">Infants</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>                                        
+                                                                            </div>
+                                                                            <div class="col-lg-3 col-md-3">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-12 fall-schedule">
+                                                                                        <div class="card-header bg-soft-grey">
+                                                                                            <label class="card-title mb-0 flex-grow-1">Difficulty Level</label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-12 fall-schedule">
+                                                                                        <div class="card-body">
+                                                                                            <select class="form-select" name="know_from">
+                                                                                                <option value="All Levels" Selected>All Levels</option>
+                                                                                                <option value="Beginner">Beginner</option>
+                                                                                                <option value="Intermediate">Intermediate</option>
+                                                                                                <option value="Advance">Advance</option>
+                                                                                                <option value="Pro">Pro</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>                                        
+                                                                            </div>
+                                                                            <div class="col-lg-3 col-md-3">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-12 staff-pl-0">
+                                                                                        <div class="card-header bg-soft-grey">
+                                                                                            <label class="card-title mb-0 flex-grow-1">All Staff</label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-12 staff-pl-0">
+                                                                                        <div class="card-body">
+                                                                                            <select class="form-select" name="know_from">
+                                                                                                <option value="All Staff" Selected>All Staff</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div> 
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div>
+                                                                            <div class="card-header bg-soft-grey">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-6 col-6">
+                                                                                        <label class="card-title mb-0 flex-grow-1">Find Date</label>
+                                                                                    </div>
+                                                                                    <div class="col-lg-6 col-6">
+                                                                                        <div class="calendar-icon float-right">
+                                                                                            <input type="text" name="date" class="date datepicker" readonly placeholder="DD/MM/YYYY" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                
+                                                                                
+                                                                            </div>
+                                                                            <div class="card-body">
+                                                                                <div class="row">
+                                                                                    <div class="col-md-2 col-sm-2 col-xs-6 col-6">
+                                                                                        <div class="pairets schedule_color" style="{{ isset($color10) && !empty($color10) ? 'background-color:' . $color10 . ';' : '' }}">
+                                                                                            <!-- <div class="pairets-inviable"> -->
+                                                                                            <a href="#" class="calendar-btn" style="color:{{$color12 ?? '#fff'}}">Wed 14</a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                                            
+                                                                                    <div class="col-md-2 col-sm-2 col-xs-6 col-6">
+                                                                                        <div class="pairets-inviable">
+                                                                                            <!-- <div class="pairets-inviable"> -->
+                                                                                            <a href="#" class="calendar-btn" style="color:{{$color12 ?? '#fff'}}">Thu 15</a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                                            
+                                                                                    <div class="col-md-2 col-sm-2 col-xs-6 col-6">
+                                                                                        <div class="pairets-inviable">
+                                                                                            <!-- <div class="pairets-inviable"> -->
+                                                                                            <a href="#" class="calendar-btn" style="color:{{$color12 ?? '#fff'}}">Fri 16</a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                                            
+                                                                                    <div class="col-md-2 col-sm-2 col-xs-6 col-6">
+                                                                                        <div class="pairets-inviable">
+                                                                                            <!-- <div class="pairets-inviable"> -->
+                                                                                            <a href="#" class="calendar-btn" style="color:{{$color12 ?? '#fff'}}">Sat 17</a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                                            
+                                                                                    <div class="col-md-2 col-sm-2 col-xs-6 col-6">
+                                                                                        <div class="pairets-inviable">
+                                                                                            <!-- <div class="pairets-inviable"> -->
+                                                                                            <a href="#" class="calendar-btn" style="color:{{$color12 ?? '#fff'}}">Sun 18</a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                                            
+                                                                                    <div class="col-md-2 col-sm-2 col-xs-6 col-6">
+                                                                                        <div class="pairets-inviable">
+                                                                                            <!-- <div class="pairets-inviable"> -->
+                                                                                            <a href="#" class="calendar-btn" style="color:{{$color12 ?? '#fff'}}">Mon 19</a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            <!-- <div class="row justify-content-md-center">
+                                                                                    <div class="col-lg-12">
+                                                                                        <div class="mt-3">
+                                                                                            <input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y" data-deafult-date="24 01,2021" data-inline-date="true">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div> -->
+                                                                            </div>
+                                                                        </div>     
+                                                                        <div>
+                                                                            <div class="card-header bg-soft-grey">
+                                                                                <label class="card-title mb-0 flex-grow-1">Wednesday, February 14</label>
+                                                                            </div>
+                                                                            <div class="card-body card-body-schedule show-all">
+                                                                                <div class="row justify-content-md-center">
+                                                                                    <div class="col-lg-2 col-md-2 col-xs-12 col-sm-2 col-12">
+                                                                                        <div class="table-inner-data">
+                                                                                            <span class="mg-time"> 06:30 AM </span>
+                                                                                            <div class="bg-red-nen schedule_color" style="{{ isset($color10) && !empty($color10) ? 'background-color:' . $color10 . ';' : '' }}">
+                                                                                                <span class="timings" style="color:{{$color11}}"> 1 hour </span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-7 col-md-7 col-xs-12 col-sm-7 col-12">
+                                                                                        <div class="table-inner-data-sec">
+                                                                                            <img src="https://fitnessity-production.s3.amazonaws.com/activity/meka8JsFR68TpdRhatzxzZpTFPVUSvgEx1MGILm5.jpg" alt="Fitnessity">
+                                                                                            <div class="p-name font-change">
+                                                                                                <label>jumping 1</label>
+                                                                                                <div class="d-grid">
+                                                                                                    <p> Personal Training | Bungee Jumping | Spot Available - 1/1</p>
+                                                                                                    <p>Instructor: Darryl Phipps <span class="difficult-level">Difficulty Level: Pro </span></p>  
+                                                                                                </div>
+                                                                                                            
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-1 col-md-1 col-xs-3 col-sm-1 col-6">
+                                                                                        <div class="star-rest">
+                                                                                            <div class="activity-inner-data">
+                                                                                                <i class="fas fa-star schedule_ncolor" style="{{ isset($color10) && !empty($color10) ? 'color:' . $color10 . ';' : '' }}"></i>
+                                                                                                <span> 5 </span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-2 col-md-2 col-xs-6 col-sm-2 col-6">
+                                                                                        <div class="join-btn">
+                                                                                            <a class="btn book_now" id="book_now" href="#" style="background-color: {{ $color6 ?: '#ea1515' }}; border: 1px solid {{ $color6 ?: '#ea1515' }}; color: {{ $color5 ?: '#fff' }};">{{ isset($data) ? $data->button_text : 'Book Now' }}</a>                                                                                            
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="schedule-widget-sapre-tor"></div>
+                                                                            </div>
+
+                                                                            <div class="card-body card-body-schedule show-all">
+                                                                                <div class="row">
+                                                                                    <div class="col-md-12">
+                                                                                        <div class="border-list">
+                                                                                            <div class="row">
+                                                                                                <div class="col-lg-2 col-md-2 col-xs-12 col-sm-2  col-12">
+                                                                                                    <div class="table-inner-data">
+                                                                                                        <span class="mg-time"> 09:00 AM </span>
+                                                                                                        <div class="bg-red-nen schedule_color" style="{{ isset($color10) && !empty($color10) ? 'background-color:' . $color10 . ';' : '' }}">
+                                                                                                            <span  class="timings" style="color:{{$color11 ?? '#fff'}}"> 1 hour 15 minute </span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-lg-7 col-md-7 col-xs-12 col-sm-7  col-12">
+                                                                                                    <div class="table-inner-data-sec">
+                                                                                                        <img src="https://fitnessity-production.s3.amazonaws.com/activity/eisJPbu7UPhASgD4edJSOufZSXENkw3TkZV281HL.jpg" alt="Fitnessity">
+                                                                                                        <div class="p-name font-change">
+                                                                                                            <label>Summer Camp at Valor</label>
+                                                                                                            <div class="d-grid">
+                                                                                                                <p> Events | Day Camp | Spot Available - 200/200</p>
+                                                                                                                <p>Instructor: Darryl Phipps <span class="difficult-level">Difficulty Level: Beginner</span></p>   
+                                                                                                            </div>                                                                   
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-lg-1 col-md-1 col-xs-3 col-sm-1  col-6">
+                                                                                                    <div class="star-rest">
+                                                                                                        <div class="activity-inner-data">
+                                                                                                            <i class="fas fa-star schedule_ncolor" style="{{ isset($color10) && !empty($color10) ? 'color:' . $color10 . ';' : '' }}"></i>
+                                                                                                            <span> 0 </span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-lg-2 col-md-2 col-xs-6 col-sm-2  col-6">
+                                                                                                    <div class="join-btn">
+                                                                                                        <a class="btn book_now" href="#" id="book_now" style="background-color: {{ $color6 ?: '#ea1515' }}; border: 1px solid {{ $color6 ?: '#ea1515' }}; color: {{ $color5 ?: '#fff' }};">{{ isset($data) ? $data->button_text : 'Book Now' }}</a>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="schedule-widget-sapre-tor"></div>
+                                                                            </div>
+
+                                                                            <div class="card-body card-body-schedule show-all">
+                                                                                <div class="row">
+                                                                                    <div class="col-md-12">
+                                                                                        <div class="border-list">
+                                                                                            <div class="row">
+                                                                                                <div class="col-lg-2 col-md-2 col-xs-12 col-sm-2  col-12">
+                                                                                                    <div class="table-inner-data">
+                                                                                                        <span class="mg-time"> 09:15 AM </span>
+                                                                                                        <div class="bg-red-nen schedule_color" style="{{ isset($color10) && !empty($color10) ? 'background-color:' . $color10 . ';' : '' }}">
+                                                                                                            <span  class="timings" style="color:{{$color11 ?? '#fff'}}"> 1 hour </span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-lg-7 col-md-7 col-xs-12 col-sm-7  col-12">
+                                                                                                    <div class="table-inner-data-sec">
+                                                                                                        <img src="https://fitnessity-production.s3.amazonaws.com/activity/wvahqhcKOL6C8NQ1IBqh3vtfVOc3MOAM3aarjoLf.jpg" alt="Fitnessity">
+                                                                                                        <div class="p-name font-change">
+                                                                                                            <label>Bucephalus Riding and Polo Club1</label>
+                                                                                                            <div class="d-grid">
+                                                                                                                <p> Events | Horseback Riding | Spot Available - 10/10</p>
+                                                                                                                <p>Instructor: Darryl Phipps <span class="difficult-level">Difficulty Level: Advance</span></p>  
+                                                                                                            </div>                                                                                                                        
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-lg-1 col-md-1 col-xs-3 col-sm-1  col-6">
+                                                                                                    <div class="star-rest">
+                                                                                                        <div class="activity-inner-data">
+                                                                                                            <i class="fas fa-star schedule_ncolor" style="{{ isset($color10) && !empty($color10) ? 'color:' . $color10 . ';' : '' }}"></i>
+                                                                                                            <span> 0 </span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-lg-2 col-md-2 col-xs-6 col-sm-2  col-6">
+                                                                                                    <div class="join-btn">
+                                                                                                        <a class="btn book_now" href="#"  id="book_now" style="background-color: {{ $color6 ?: '#ea1515' }}; border: 1px solid {{ $color6 ?: '#ea1515' }}; color: {{ $color5 ?: '#fff' }};">{{ isset($data) ? $data->button_text : 'Book Now' }}</a>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="schedule-widget-sapre-tor"></div>
+                                                                            </div>
+                                                                        </div>                             
                                                                     </div>
-                                                                </div>-->
-                                                            </div><!-- end card header -->
-
-                                                            <div>
-                                                                <div class="live-preview">
-                                                                    <!--<div>
-                                                                        <div class="card-header bg-soft-grey">
-                                                                            <h4 class="card-title mb-0 flex-grow-1">Find Class</h4>
-                                                                        </div>
-                                                                        <div class="card-body">
-                                                                            <div class="row">
-                                                                                <div class="activities_options col-lg-2 col-md-3 col-sm-3 col-xs-6 col-6">
-                                                                                    <div class="sports-list">
-                                                                                        <a href="#">All Activities</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="activities_options col-lg-2 col-md-3 col-sm-3 col-xs-6 col-6">
-                                                                                    <div class="sports-list">
-                                                                                        <a href="#">Yoga</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="activities_options col-lg-2 col-md-3 col-sm-3 col-xs-6 col-6">
-                                                                                    <div class="sports-list">
-                                                                                        <a href="#">Pilates</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="activities_options col-lg-2 col-md-3 col-sm-3 col-xs-6 col-6">
-                                                                                    <div class="sports-list">
-                                                                                        <a href="#">Cardio</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="activities_options col-lg-2 col-md-3 col-sm-3 col-xs-6 col-6">
-                                                                                    <div class="sports-list">
-                                                                                        <a href="#">Cycling</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6 col-6 show_activities_options">
-                                                                                    <div class="sports-list">
-                                                                                        <a href="#">More<i class="fas fa-caret-down"></i></a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div> -->
-
-                                                                    <div class="row">
-                                                                        <div class="col-lg-3 col-md-3">
-                                                                            <div class="row">
-                                                                                <div class="col-lg-12 service-pr-0">
-                                                                                    <div class="card-header bg-soft-grey">
-                                                                                        <h4 class="card-title mb-0 flex-grow-1">Services</h4>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-12">
-                                                                                    <div class="card-body">
-                                                                                        <select class="form-select" name="know_from">
-                                                                                            <option value="All Services" Selected>All Services</option>
-                                                                                            <option value="Classes">Classes</option>
-                                                                                            <option value="Private Lessons">Private Lessons</option>
-                                                                                            <option value="Events">Events</option>
-                                                                                            <option value="Experience">Experience</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>                                        
-                                                                        </div>
-                                                                        <div class="col-lg-3 col-md-3">
-                                                                            <div class="row">
-                                                                                <div class="col-lg-12 fall-schedule">
-                                                                                    <div class="card-header bg-soft-grey">
-                                                                                        <h4 class="card-title mb-0 flex-grow-1">Great For</h4>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-12 fall-schedule">
-                                                                                    <div class="card-body">
-                                                                                        <select class="form-select" name="know_from">
-                                                                                            <option value="All" Selected>All</option>
-                                                                                            <option value="adults">Adults</option>
-                                                                                            <option value="kids">Kids</option>
-                                                                                            <option value="infants">Infants</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>                                        
-                                                                        </div>
-                                                                        <div class="col-lg-3 col-md-3">
-                                                                            <div class="row">
-                                                                                <div class="col-lg-12 fall-schedule">
-                                                                                    <div class="card-header bg-soft-grey">
-                                                                                        <h4 class="card-title mb-0 flex-grow-1">Difficulty Level</h4>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-12 fall-schedule">
-                                                                                    <div class="card-body">
-                                                                                        <select class="form-select" name="know_from">
-                                                                                            <option value="All Levels" Selected>All Levels</option>
-                                                                                            <option value="Beginner">Beginner</option>
-                                                                                            <option value="Intermediate">Intermediate</option>
-                                                                                            <option value="Advance">Advance</option>
-                                                                                            <option value="Pro">Pro</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>                                        
-                                                                        </div>
-                                                                        <div class="col-lg-3 col-md-3">
-                                                                            <div class="row">
-                                                                                <div class="col-lg-12 staff-pl-0">
-                                                                                    <div class="card-header bg-soft-grey">
-                                                                                        <h4 class="card-title mb-0 flex-grow-1">All Staff</h4>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-12 staff-pl-0">
-                                                                                    <div class="card-body">
-                                                                                        <select class="form-select" name="know_from">
-                                                                                            <option value="All Staff" Selected>All Staff</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div> 
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div>
-                                                                        <div class="card-header bg-soft-grey">
-                                                                            <div class="row">
-                                                                                <div class="col-lg-6 col-6">
-                                                                                    <h4 class="card-title mb-0 flex-grow-1">Find Date</h4>
-                                                                                </div>
-                                                                                <div class="col-lg-6 col-6">
-                                                                                    <div class="calendar-icon float-right">
-                                                                                        <input type="text" name="date" class="date datepicker" readonly placeholder="DD/MM/YYYY" />
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            
-                                                                            
-                                                                        </div>
-                                                                        <div class="card-body">
-                                                                            <div class="row">
-                                                                                <div class="col-md-2 col-sm-2 col-xs-6 col-6">
-                                                                                    <div class="pairets">
-                                                                                        <!-- <div class="pairets-inviable"> -->
-                                                                                        <a href="#" class="calendar-btn">Wed 14</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                                        
-                                                                                <div class="col-md-2 col-sm-2 col-xs-6 col-6">
-                                                                                    <div class="pairets-inviable">
-                                                                                        <!-- <div class="pairets-inviable"> -->
-                                                                                        <a href="#" class="calendar-btn">Thu 15</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                                        
-                                                                                <div class="col-md-2 col-sm-2 col-xs-6 col-6">
-                                                                                    <div class="pairets-inviable">
-                                                                                        <!-- <div class="pairets-inviable"> -->
-                                                                                        <a href="#" class="calendar-btn">Fri 16</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                                        
-                                                                                <div class="col-md-2 col-sm-2 col-xs-6 col-6">
-                                                                                    <div class="pairets-inviable">
-                                                                                        <!-- <div class="pairets-inviable"> -->
-                                                                                        <a href="#" class="calendar-btn">Sat 17</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                                        
-                                                                                <div class="col-md-2 col-sm-2 col-xs-6 col-6">
-                                                                                    <div class="pairets-inviable">
-                                                                                        <!-- <div class="pairets-inviable"> -->
-                                                                                        <a href="#" class="calendar-btn">Sun 18</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                                        
-                                                                                <div class="col-md-2 col-sm-2 col-xs-6 col-6">
-                                                                                    <div class="pairets-inviable">
-                                                                                        <!-- <div class="pairets-inviable"> -->
-                                                                                        <a href="#" class="calendar-btn">Mon 19</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        <!-- <div class="row justify-content-md-center">
-                                                                                <div class="col-lg-12">
-                                                                                    <div class="mt-3">
-                                                                                        <input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y" data-deafult-date="24 01,2021" data-inline-date="true">
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div> -->
-                                                                        </div>
-                                                                    </div>     
-                                                                    <div>
-                                                                        <div class="card-header bg-soft-grey">
-                                                                            <h4 class="card-title mb-0 flex-grow-1">Wednesday, February 14</h4>
-                                                                        </div>
-                                                                        <div class="card-body card-body-schedule show-all">
-                                                                            <div class="row justify-content-md-center">
-                                                                                <div class="col-lg-2 col-md-2 col-xs-12 col-sm-2 col-12">
-                                                                                    <div class="table-inner-data">
-                                                                                        <span class="mg-time"> 06:30 AM </span>
-                                                                                        <div class="time-min bg-red-fall">
-                                                                                            <span> 1 hour </span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-7 col-md-7 col-xs-12 col-sm-7 col-12">
-                                                                                    <div class="table-inner-data-sec">
-                                                                                        <img src="https://fitnessity-production.s3.amazonaws.com/activity/meka8JsFR68TpdRhatzxzZpTFPVUSvgEx1MGILm5.jpg" alt="Fitnessity">
-                                                                                        <div class="p-name">
-                                                                                            <h3>jumping 1</h3>
-                                                                                            <div class="d-grid">
-                                                                                                <p> Personal Training | Bungee Jumping | Spot Available - 1/1</p>
-                                                                                                <p>Instructor: Darryl Phipps <span class="difficult-level">Difficulty Level: Pro </span></p>  
-                                                                                            </div>
-                                                                                                        
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-1 col-md-1 col-xs-3 col-sm-1 col-6">
-                                                                                    <div class="star-rest">
-                                                                                        <div class="activity-inner-data">
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <span> 5 </span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-2 col-md-2 col-xs-6 col-sm-2 col-6">
-                                                                                    <div class="join-btn">
-                                                                                        <a class="btn btn-red" href="#">Book Now</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="schedule-widget-sapre-tor"></div>
-                                                                        </div>
-
-                                                                        <div class="card-body card-body-schedule show-all">
-                                                                            <div class="row">
-                                                                                <div class="col-md-12">
-                                                                                    <div class="border-list">
-                                                                                        <div class="row">
-                                                                                            <div class="col-lg-2 col-md-2 col-xs-12 col-sm-2  col-12">
-                                                                                                <div class="table-inner-data">
-                                                                                                    <span class="mg-time"> 09:00 AM </span>
-                                                                                                    <div class="time-min bg-red-fall">
-                                                                                                        <span> 1 hour 15 minute </span>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-7 col-md-7 col-xs-12 col-sm-7  col-12">
-                                                                                                <div class="table-inner-data-sec">
-                                                                                                    <img src="https://fitnessity-production.s3.amazonaws.com/activity/eisJPbu7UPhASgD4edJSOufZSXENkw3TkZV281HL.jpg" alt="Fitnessity">
-                                                                                                    <div class="p-name">
-                                                                                                        <h3>Summer Camp at Valor</h3>
-                                                                                                        <div class="d-grid">
-                                                                                                            <p> Events | Day Camp | Spot Available - 200/200</p>
-                                                                                                            <p>Instructor: Darryl Phipps <span class="difficult-level">Difficulty Level: Beginner</span></p>   
-                                                                                                        </div>                                                                   
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-1 col-md-1 col-xs-3 col-sm-1  col-6">
-                                                                                                <div class="star-rest">
-                                                                                                    <div class="activity-inner-data">
-                                                                                                        <i class="fas fa-star"></i>
-                                                                                                        <span> 0 </span>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-2 col-md-2 col-xs-6 col-sm-2  col-6">
-                                                                                                <div class="join-btn">
-                                                                                                    <a class="btn btn-red" href="#">Book Now</a>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="schedule-widget-sapre-tor"></div>
-                                                                        </div>
-
-                                                                        <div class="card-body card-body-schedule show-all">
-                                                                            <div class="row">
-                                                                                <div class="col-md-12">
-                                                                                    <div class="border-list">
-                                                                                        <div class="row">
-                                                                                            <div class="col-lg-2 col-md-2 col-xs-12 col-sm-2  col-12">
-                                                                                                <div class="table-inner-data">
-                                                                                                    <span class="mg-time"> 09:15 AM </span>
-                                                                                                    <div class="time-min bg-red-fall">
-                                                                                                        <span> 1 hour </span>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-7 col-md-7 col-xs-12 col-sm-7  col-12">
-                                                                                                <div class="table-inner-data-sec">
-                                                                                                    <img src="https://fitnessity-production.s3.amazonaws.com/activity/wvahqhcKOL6C8NQ1IBqh3vtfVOc3MOAM3aarjoLf.jpg" alt="Fitnessity">
-                                                                                                    <div class="p-name">
-                                                                                                        <h3>Bucephalus Riding and Polo Club1</h3>
-                                                                                                        <div class="d-grid">
-                                                                                                            <p> Events | Horseback Riding | Spot Available - 10/10</p>
-                                                                                                            <p>Instructor: Darryl Phipps <span class="difficult-level">Difficulty Level: Advance</span></p>  
-                                                                                                        </div>                                                                                                                        
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-1 col-md-1 col-xs-3 col-sm-1  col-6">
-                                                                                                <div class="star-rest">
-                                                                                                    <div class="activity-inner-data">
-                                                                                                        <i class="fas fa-star"></i>
-                                                                                                        <span> 0 </span>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-2 col-md-2 col-xs-6 col-sm-2  col-6">
-                                                                                                <div class="join-btn">
-                                                                                                    <a class="btn btn-red" href="#">Book Now</a>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="schedule-widget-sapre-tor"></div>
-                                                                        </div>
-                                                                    </div>                             
-                                                                </div>
-                                                            </div><!-- end card-body -->
-                                                        </div><!-- end card -->
-                                                    </div> <!-- end col -->
-                                                </div> <!-- end row-->
-                                            </div> --}}
+                                                                </div><!-- end card-body -->
+                                                            </div><!-- end card -->
+                                                        </div> <!-- end col -->
+                                                    </div> 
+                                                    <!-- end row-->
+                                            </div> 
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="card bg-soft-grey">
+                                <div class="card bg-soft-grey" id="copyCodeCard" style="display: none;">
                                     <div class="card-header align-items-center d-flex bg-soft-grey">
                                         <h4 class="card-title mb-0 flex-grow-1">Copy your code</h4>
                                     </div>
@@ -1576,8 +1626,8 @@
                                             <div class="col-lg-12">
                                                 <div class="copy-code">
                                                     <p>Paste the code into your webpage where you would like the link to appear. Changes made above automatically update your code.</p>
-                                                    <textarea class="form-control" id="des-info-description-input" rows="4" readonly>{!! $selectLink !!}</textarea>
-                                                    <button class="btn btn-red mt-15">Copy</button>
+                                                    <textarea class="form-control" id="des-info-description-input" rows="4" readonly>{!! $selectLink !!} </textarea>
+                                                    <button class="btn btn-red mt-15" id="copyButton">Copy</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -1817,7 +1867,7 @@
                         <div class="register_wrap" id="signup_normal">
                             <input type="hidden" id="showstep" value="">
                             <div class="logo-my">
-                                <a href="javascript:void(0)"> <img src="http://dev.fitnessity.co//public/images/logo-small.jpg"> </a>
+                                <a href="javascript:void(0)"> <img src="http://dev.fitnessity.co//public/images/omnebook.png"> </a>
                             </div>               
                             <form method="post" action="">
                                 <input type="hidden" name="_token" value="5QJLNEz2voSG1yd1mOKWRs91y0u50UhbqKLCiNJS">
@@ -1887,7 +1937,7 @@
                                 <input type="hidden" id="showstep" value="1">
                                 <!--1-->
                                                 <div class="logo-my">
-                                    <a href="javascript:void(0)"> <img src="http://dev.fitnessity.co//public/images/logo-small.jpg" alt="Fitnessity"> </a>
+                                    <a href="javascript:void(0)"> <img src="http://dev.fitnessity.co//public/images/omnebook.png" alt="Fitnessity"> </a>
                                 </div>
                                 <form id="frmregister" method="post" novalidate="novalidate">
                                     <div class="pop-title ftitle1">
@@ -2228,7 +2278,7 @@ valueInput.addEventListener("focus", () => colorInput.click(), false);
 syncColorFromPicker();
 </script>
 
-<script>
+<!-- <script>
 $(function() {
    $('.lrcontent').hide();
    $('#selectField').change(function() {
@@ -2236,7 +2286,7 @@ $(function() {
       $('#' + $(this).val()).show();
    });
 });
-</script>
+</script> -->
 <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
@@ -2254,19 +2304,26 @@ $(function() {
         }
     }
     window.addEventListener('resize', removeClassIfNecessary);
-    window.addEventListener('DOMContentLoaded', removeClassIfNecessary); // To handle initial load
+    window.addEventListener('DOMContentLoaded', removeClassIfNecessary);
 </script>
-
-
 
 <script>
     $(document).ready(function() {
+        const selectedStyle = document.querySelector('input[name="style"]:checked').value;
         const colors = 
         {
-            1: '{{ $color1 }}',
-            2: '{{ $color2 }}',
+            1:'{{$color1}}',
+            2:'{{$color2}}',
             3:'{{$color3}}',
             4:'{{$color4}}',
+            5:'{{$color5}}',
+            6:'{{$color6}}',
+            7:'{{$color8}}',
+            8:'{{$color9}}',
+            9:'{{$color10}}',
+            10:'{{$color11}}',
+            11:'{{$color12}}',
+
          };
         $('.nano-colorpicker').each(function() {
             const pickerElement = $(this)[0];
@@ -2317,7 +2374,6 @@ $(function() {
                     $('#login_submit').css({
                         'background-color': selectedColor,
                         'border-color': selectedColor
-
                     });
                 }
                 else if (pickerIndex == 3) {
@@ -2327,53 +2383,337 @@ $(function() {
                     $('#register_skip').css({
                         'color': selectedColor,
                     });
+                    $('#personal').css({
+                        'color':selectedColor,
+                    });
+                    $('#address').css({
+                        'color':selectedColor,
+                    });
+                    $('#family_mem').css({
+                        'color':selectedColor,
+                    });
+                    $('#about').css({
+                        'color':selectedColor,
+                    });
+                    $('#accounts_pass').css({
+                        'color':selectedColor,
+                    });
+                    $('#agree_terms').css({
+                        'color':selectedColor,
+                    });
+                    $('#clearButton').css({
+                        'color':selectedColor,
+                    });
+                    $('#add_family').css({
+                        'color':selectedColor,
+                    });
+                    
+                    
                 }
                 else if (pickerIndex == 4) {
-                    $('#register_submit','#register_skip').css({
+                    $('#register_submit').css({
+                        'background-color': selectedColor,
+                        'border-color': selectedColor
+                    });
+                    $('#register_skip').css({
+                        'background-color': selectedColor,
+                        'border-color': selectedColor
+                    });
+                    $('#add_family').css({
+                        'background-color': selectedColor,
+                        'border-color': selectedColor
+                    });
+                    $('#clearButton').css({
+                        'background-color': selectedColor,
+                        'border-color': selectedColor
+                    });
+                    
+                }
+                else if (pickerIndex == 5) {
+                    $('.book_now').css({
+                        'color': selectedColor,
+                    });
+                }
+                else if (pickerIndex == 6) {
+                    $('.book_now').css({
                         'background-color': selectedColor,
                         'border-color': selectedColor
                     });
                 }
-                pickr.hide(); // Optional: hide the color picker after selection
+                else if(pickerIndex==7)
+                {
+                    $('#preview_reg_color').css({
+                        'background-color': selectedColor,
+                    });
+                }
+                else if (pickerIndex == 8) {
+                    $('#preview_color').css({
+                        'background-color': selectedColor,
+                    });
+                }
+                else if (pickerIndex == 9) {
+                    $('.schedule_color').css({
+                        'background-color': selectedColor,
+                    });
+                    $('.schedule_ncolor').css({
+                        'color': selectedColor,
+                    });
+                }
+                else if (pickerIndex == 10) {
+                    $('.schedule_color').css({
+                        'color': selectedColor,
+                    });
+                    // $('.calendar-btn').css({
+                    //     'color': selectedColor,
+                    // });
+                    $('.timings').css({
+                        'color': selectedColor,
+                    });
+                }
+                else if (pickerIndex == 11) {
+                    $('.calendar-btn').css({
+                        'color': selectedColor,
+                    });
+                }
+                pickr.hide(); 
             });
         });
     });
 </script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var selectField = document.getElementById("selectField");
-        selectField.selectedIndex = 0; 
-    });
-</script>
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const selectField = document.getElementById('selectField');
-    const textArea = document.getElementById('des-info-description-input');
-    const loginContent = `{!! $login !!}`;
-    const registerContent = `{!! $register !!}`;
-    const selectContent=`{!! $selectLink !!}`;
-    selectField.addEventListener('change', function() {
-        let selectedValue = selectField.value;
-        let contentToDisplay;
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var selectField = document.getElementById("selectField");
+            selectField.selectedIndex = 0; 
+        });
+    </script>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectField = document.getElementById('selectField');
+            const textArea = document.getElementById('des-info-description-input');
+            const loginContent = `{!! $login !!}`;
+            const registerContent = `{!! $register !!}`;
+            const scheduleContent='{!! $schedule !!}';
+            const selectContent=`{!! $selectLink !!}`;
+            selectField.addEventListener('change', function() {
+                let selectedValue = selectField.value;
+                let contentToDisplay;
+                if (selectedValue === 'login') {
+                    contentToDisplay = loginContent;
+                    contentToDisplay += `<script src="https://dev.fitnessity.co/public/js/websiteintegration/login-widget.js"><\/script>`;
+                } else if (selectedValue === 'register') {
+                    contentToDisplay = registerContent;
+                    contentToDisplay += `<script src="https://dev.fitnessity.co/public/js/websiteintegration/register-widget.js"><\/script>`;
+                } 
+                else if(selectedValue === 'booking')
+                {
+                    contentToDisplay = scheduleContent;
+                    contentToDisplay += `<script src="https://dev.fitnessity.co/public/js/websiteintegration/schedule-widget.js"><\/script>`;
+                }
+                else {
+                    contentToDisplay = selectContent;
+                }
+                textArea.value = contentToDisplay;
+            });
+        });
+    </script>
+    <script>
+        document.getElementById('copyButton').addEventListener('click', function() {
+            var textarea = document.getElementById('des-info-description-input');
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);  
+            navigator.clipboard.writeText(textarea.value)
+        });
+    </script>
 
-        if (selectedValue === 'login') {
-            contentToDisplay = loginContent;
-        } else if (selectedValue === 'register') {
-            contentToDisplay = registerContent;
-        } else {
-            contentToDisplay = selectContent;
-        }
-        textArea.value = contentToDisplay;
-    });
-});
+    <script>
+        $(document).ready(function() {
+        $('.delete-btn').on('click', function() {
+            var recordId = $(this).data('id'); 
+                var button = $(this);
+                if (confirm('Are you sure you want to delete this item?')) {
+                    $.ajax({
+                        url: '{{route("business.delete_img")}}',
+                        type: 'get',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            'id':recordId,
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                button.closest('li').remove();
+                            } else {
+                                console.log('Failed to delete item');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+            });
+        });
 
-function copyToClipboard() {
-    const textArea = document.getElementById('des-info-description-input');
-    textArea.select();
-    document.execCommand('copy');
-}
+    </script>
 
-</script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const selectField = document.getElementById('selectField');
+                const sessionMessage = "{{ session('message') }}";
+                const copyCodeCard = document.getElementById('copyCodeCard');
+                const loginContent = `{!! $login !!}`;
+                const registerContent = `{!! $register !!}`;
+                const scheduleContent='{!! $schedule !!}';
+                const selectContent=`{!! $selectLink !!}`;
+                const textArea = document.getElementById('des-info-description-input');
+
+                function handleSelectChange() {
+                    const val = $("#selectField option:selected").text();
+                    
+                    $('#login, #register, #booking').attr('style', 'display: none !important');
+                    
+                    if (val === 'Login') {
+                        $('#login').attr('style', 'display: block !important');
+                    } else if (val === 'Register') {
+                        $('#register').attr('style', 'display: block !important');
+                    } else if (val === 'Booking Schedule') {
+                        $('#booking').attr('style', 'display: block !important');
+                    }
+                    
+                    if (selectField.value === 'login' || selectField.value === 'register' || selectField.value === 'booking') {
+                        copyCodeCard.style.display = 'block';
+                    } else {
+                        copyCodeCard.style.display = 'none';
+                    }
+
+
+                    if (selectField.value=== 'login') {
+                        contentToDisplay = loginContent;
+                        contentToDisplay += `<script src="https://dev.fitnessity.co/public/js/websiteintegration/login-widget.js"><\/script>`;
+                    } else if (selectField.value === 'register') {
+                        contentToDisplay = registerContent;
+                        contentToDisplay += `<script src="https://dev.fitnessity.co/public/js/websiteintegration/register-widget.js"><\/script>`;
+                    } 
+                    else if(selectField.value === 'booking')
+                    {
+                        contentToDisplay = scheduleContent;
+                        contentToDisplay += `<script src="https://dev.fitnessity.co/public/js/websiteintegration/schedule-widget.js"><\/script>`;
+                    }
+                    else {
+                        contentToDisplay = '';
+                    }
+                    textArea.value = contentToDisplay;
+
+                }
+        
+                if (sessionMessage === 'login' || sessionMessage === 'register' || sessionMessage === 'booking') {
+                    selectField.value = sessionMessage;
+                    handleSelectChange();
+                } else {
+                    selectField.selectedIndex = 0;
+                    copyCodeCard.style.display = 'none';  // Hide by default if no session message
+                }        
+
+
+
+                selectField.addEventListener('change', handleSelectChange);
+            });
+        </script>
+        
+         <script>
+            $(document).ready(function() {
+                $('#selectField').change(function() {
+                    var selectedValue = $(this).val();  
+            
+                    $('.lrcontent').hide();
+            
+                    if (selectedValue !== "Select...") {
+                        $('#' + selectedValue).show();
+                    }
+                });
+            });
+        </script>
+        <script>
+            document.getElementById('fontSelector').addEventListener('change', function() {
+                var previewElement = document.querySelector('#livepreview');
+                previewElement.classList.remove('lato-family', 'oswald-family', 'space-grotesk-family', 'josefin-sans-family', 'signika-family','sofadi-one-family','gowun-batang-family','kanit-family','playpen-family','great-vibes-family','arsenal-family');
+                previewElement.classList.add(this.value);
+            });
+            document.getElementById('fontSelector').dispatchEvent(new Event('change'));
+        </script>
+
+        <script>
+            const buttons = document.querySelectorAll('.book_now');
+            const styleRadios = document.querySelectorAll('input[name="style"]');
+            const colorPickerInput = document.querySelector('#Btncolor'); 
+            function updateButtonStyle() {
+                const solidColor = document.querySelector('#selectedColor6').value;
+                const selectedStyle = document.querySelector('input[name="style"]:checked').value;
+                buttons.forEach(button => {
+                    button.classList.remove('outline-strokeme', 'font-solid', 'text-only');
+                    button.style.background = ''; 
+
+                    if (selectedStyle === 'outline-strokeme') {
+                        button.classList.add('outline-strokeme');
+                        button.style.background = 'none'; 
+                        button.style.border = '2px solid ' + solidColor; 
+                        colorPickerInput.style.display = 'block';
+                    } else if (selectedStyle === 'font-solid') {
+                        button.classList.add('font-solid');
+                        button.style.background = solidColor; 
+                        button.style.border = '2px solid ' + solidColor;  
+                        colorPickerInput.style.display = 'block';
+                    } else if (selectedStyle === 'text-only') {
+                        button.classList.add('text-only');
+                        button.style.background = 'none';
+                        button.style.border = 'none';  
+                        colorPickerInput.style.display = 'none';
+                    }
+                });
+            }
+        
+            styleRadios.forEach(radio => {
+                radio.addEventListener('change', updateButtonStyle);
+            });
+            updateButtonStyle();
+   
+        </script>
+        <script>
+            document.getElementById('buttonTextSelect').addEventListener('change', function() {
+                var selectedText = this.value;
+                var buttons = document.querySelectorAll('.book_now');
+                
+                buttons.forEach(function(button) {
+                    button.textContent = selectedText;
+                });
+            });
+        </script>
+    <!-- JavaScript to handle button style change -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.getElementsByClassName('book_now');
+            const color6 = document.getElementById('selectedColor6').value || '#ea1515'; 
+            function updateButtonStyle() {
+                const selectedStyle = document.querySelector('input[name="style"]:checked').value;
+                if (selectedStyle === 'outline-strokeme') {
+                    button.classList.add('outline-strokeme');
+                    button.style.backgroundColor = 'transparent'; 
+                    button.style.borderColor = color6; 
+                } else {
+                    button.classList.remove('outline-strokeme');
+                    button.style.backgroundColor = color6; 
+                    button.style.borderColor = color6; 
+                }
+            }
+
+            document.querySelectorAll('input[name="style"]').forEach(radio => {
+                radio.addEventListener('change', updateButtonStyle);
+            });
+            updateButtonStyle();
+        });
+    </script>
 @endpush
 @endsection
+
+
