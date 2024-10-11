@@ -323,7 +323,7 @@ class SelfCheckInController extends Controller {
             'payment_method_types' => ['card'],
           ]
         );
-
+      
         $cardInfo = $customer->stripePaymentMethods()->get();
         return view('checkin.autopay_payment', compact('intent','cardInfo'));
     }
@@ -667,13 +667,14 @@ class SelfCheckInController extends Controller {
     // ends
     public function bookingHtml(Request $request){
         $business = Auth::user()->current_company;
+        // dd($business);
         $companyId = $business->id; 
         $customerId =  session()->get('self_checkin_customer_id');
+        // \DB::enableQueryLog(); // Enable query log
         $services = $business->business_services()->where('is_active' ,1)->whereHas('schedulers', function ($query) {
             $query->where('end_activity_date', '>', now())->orWhereNull('end_activity_date');
         })->get();
-        // \DB::enableQueryLog(); // Enable query log
-
+       // Show results of log
         $services = $business->business_services()
         ->where('is_active', 1)
         ->whereHas('schedulers', function ($query) {
@@ -683,7 +684,10 @@ class SelfCheckInController extends Controller {
             $query->where('stype', 1)->orWhere('serviceid', 0);
         })
         ->get();
+        // dd($business);
+        // dd(\DB::getQueryLog());
         $userId = Auth::id();
+        // dd($customerId);
        
         $PriceAgesDetail = BusinessPriceDetailsAges::where('userid', $userId )->where('cid', $business->id)->where('serviceid', 0)->get();
         return view('checkin.booking_html_modal', compact('companyId','services','customerId','PriceAgesDetail'));
@@ -753,7 +757,12 @@ class SelfCheckInController extends Controller {
             'payment_method_types' => ['card'],
           ]
         );
-        $cardInfo = $customer->stripePaymentMethods()->get();      
+        $user=Auth::user();
+        // $cardInfo = $customer->stripePaymentMethods()->get();     
+        // \DB::enableQueryLog();
+        $cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id',  $customer->user_id)->get(); 
+        // dd(\DB::getQueryLog()); // Show results of log
+        // dd($cardInfo);
         $request->businessId = $customer->business_id;      
         return view('checkin.membership_payment', compact('intent','cardInfo' ,'cartCount' ,'discount' ,'taxDisplay' ,'total_amount' ,'subTotal'));
     }
@@ -912,6 +921,7 @@ class SelfCheckInController extends Controller {
 
     // ends
     public function memberhsipPay(Request $request){
+        // dd('22');
         $loggedinUser = Customer::find($request->customer_id);
 
         $cartService = new CartService();
@@ -924,13 +934,12 @@ class SelfCheckInController extends Controller {
         }else{
             $stripe_customer_id = $loggedinUser->create_stripe_customer_id();
         }
-
         $totalprice =  $priceWithDiscount = 0;
         $totalprice = $request->grand_total;
 
         if($request->has('cardinfo')){
             $onFilePaymentMethodId = $request->cardinfo;
-
+            // $stripe->paymentMethods->attach($onFilePaymentMethodId, ['customer' => $stripe_customer_id]);
             try {
                 $onFilePaymentIntent = $stripe->paymentIntents->create([
                     'amount' =>  round($totalprice *100),
@@ -975,13 +984,15 @@ class SelfCheckInController extends Controller {
                     $transactionstatus = Transaction::create($transactiondata);
                 }
             }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
-                return "Your card is not connected with your account. Please add your card again.";
+                // return "Your card is not connected with your account. Please add your card again.";
+                return "Error: " . $e->getError()->message;
     
             }catch( \Exception $e) {
                 $errormsg = $e->getError()->message;
                 return $errormsg;
             }
-        }else{
+        }
+        else{
             $newCardPaymentMethodId = $request->new_card_payment_method_id;
             try {
                 $newCardPaymentIntent = $stripe->paymentIntents->create([
@@ -1045,8 +1056,9 @@ class SelfCheckInController extends Controller {
             $businessServices = BusinessServices::find($item['code']);
             $user = $businessServices->user;
             $price_detail = $cartService->getPriceDetail($item['priceid']);
-
+            // dd($item);
             $participateLoop =  $cartService->participateLoop($item,$businessServices->cid);
+            // dd($participateLoop);
             foreach($participateLoop as $d){
                 $participateAry = $qtyAry = $qtyPrice = [];
                 foreach(['adult', 'child', 'infant'] as $role){
@@ -1181,15 +1193,33 @@ class SelfCheckInController extends Controller {
                     }
                 }
 
-                BookingCheckinDetails::create([
-                    'business_activity_scheduler_id' => @$activityScheduler->id,
-                    'instructor_id' => @$activityScheduler->instructure_ids,
-                    'customer_id' => $d['id'],
-                    'booking_detail_id' => $booking_detail->id,
-                    'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),
-                    'use_session_amount' => 0,
-                    'source_type' => 'marketplace',
-                ]);
+                // BookingCheckinDetails::create([
+                //     'business_activity_scheduler_id' => @$activityScheduler->id,
+                //     'instructor_id' => @$activityScheduler->instructure_ids,
+                //     'customer_id' => $d['id'],
+                //     'booking_detail_id' => $booking_detail->id,
+                //     'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),
+                //     'use_session_amount' => 0,
+                //     'source_type' => 'marketplace',
+                // ]);
+                try {
+                    $checkinDetails = BookingCheckinDetails::create([
+                        'business_activity_scheduler_id' => @$activityScheduler->id,
+                        'instructor_id' => @$activityScheduler->instructure_ids,
+                        'customer_id' => $d['id'],
+                        'booking_detail_id' => $booking_detail->id,
+                        'checkin_date' => date('Y-m-d', strtotime($item['sesdate'])),
+                        'use_session_amount' => 0,
+                        'source_type' => 'marketplace',
+                    ]);
+                
+                    // You can use dd here if you want to check the inserted record
+                    // dd($checkinDetails);
+                
+                } catch (\Exception $e) {
+                    // dd the error message in case of an exception
+                    dd('Error:', $e->getMessage());
+                }
 
                 $getreceipemailtbody = $this->booking_repo->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
                 $MailCustomer = Customer::find($d['id']);
@@ -1253,4 +1283,12 @@ class SelfCheckInController extends Controller {
     //     $users = User::where('email', $email)->get();
     //     return $users;
     // }
+    public function getParticipateData(Request $request){
+    	$cusId = $request->cus_id ?? '';
+    	$family = getFamilyMember($cusId,$request->cid);
+    	$priceid = $request->priceid;  $type = $request->type; 
+    	$customer = ( $cusId ) ? Customer::find($cusId) : '';
+		// dd($cusId);
+		return view('checkin.participate_data' ,compact('priceid','type','family','customer'));
+    }
 }

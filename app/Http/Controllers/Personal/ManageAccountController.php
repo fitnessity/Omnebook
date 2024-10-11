@@ -8,6 +8,8 @@ use Auth,Redirect,Storage,Hash;
 use App\{UserFamilyDetail,Customer,CompanyInformation,BusinessServices};
 use Str;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log; 
+use DB;
 class ManageAccountController extends Controller
 {
     /**
@@ -83,84 +85,13 @@ class ManageAccountController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Responsall();exit;
      */
-    // public function store(Request $request)
-    // {
-    //     $user = $this->user;
-    //     $company_ids = $user->customers()->distinct('business_id')->pluck('business_id')->toArray();
-        
-    //     $message = "There is issue while adding member.Please try again.";
-    //     $profile_pic = $request->hasFile('profile_pic') ? $request->file('profile_pic')->store('customer') : '';
-    //     UserFamilyDetail::create([
-    //         'user_id' => $user->id,
-    //         'first_name' => $request->fname,
-    //         'last_name' => $request->lname,
-    //         'email' => $request->email,
-    //         'mobile' => $request->mobile,
-    //         'emergency_contact' => $request->emergency_contact,
-    //         'relationship' => $request->relationship,
-    //         'gender' => $request->gender,
-    //         'profile_pic' => $profile_pic,
-    //         'birthday' =>   $request->birthdate,
-    //         'emergency_contact_name' => $request->emergency_name,
-    //     ]);
-
-    //     $chkProviderOrNot = CompanyInformation::where('user_id' , $user->id)->get(); 
-    //     if($chkProviderOrNot->isNotEmpty()){
-    //         foreach($chkProviderOrNot as $key=>$c){
-    //             $businessCustomer = $c->customers()->where('user_id', $user->id)->first();
-    //             if($businessCustomer == ''){
-    //                 $random_password = Str::random(8);
-    //                 $password = Hash::make($random_password);
-    //                 $businessCustomer = createBusinessCustomer($user,$password,$c->id); //If a customer is not available for a specific business, we should first create a customer. This is necessary because the customer's ID is saved as a parent ID for a family member.
-    //             }
-    //         }
-    //     }
-
-    //     $company = CompanyInformation::whereIn('id' ,$company_ids)->get();
-
-    //     foreach($company as $key=>$c){
-    //         $password = '';
-    //         if($key == 0){
-    //             $random_password = Str::random(8);
-    //             $password = Hash::make($random_password);
-    //         }
-            
-    //         $customer = Customer::where(['business_id'=> $businessCustomer->business_id, 'fname' =>  $request->fname,'lname' => $request->lname,'parent_cus_id' => $businessCustomer->id])->first();
-    //         if($customer == ''){
-    //             $createCustomer = Customer::create([
-    //                 'business_id' => $c->id,
-    //                 'fname' => $request->fname,
-    //                 'lname' => $request->lname,
-    //                 'email' => $request->email,
-    //                 'phone_number' => $request->mobile,
-    //                 'emergency_contact' => $request->emergency_contact,
-    //                 'relationship' => $request->relationship,
-    //                 'profile_pic' => $profile_pic,
-    //                 'gender' => $request->gender,
-    //                 'birthdate' =>  $request->birthdate,
-    //                 'parent_cus_id' => $businessCustomer->id,
-    //             ]); 
-    //             $createCustomer->create_stripe_customer_id();
-    //             $chk = 1;
-    //         }else{
-    //             $message = 'Member already added as customer..';
-    //         }
-    //     }
-        
-    //     return redirect()->back()->with(['message'=>$message]);
-    // }
-
     public function store(Request $request)
     {
         $user = $this->user;
         $company_ids = $user->customers()->distinct('business_id')->pluck('business_id')->toArray();
-        // dd($company_ids);
+        
         $message = "There is issue while adding member.Please try again.";
         $profile_pic = $request->hasFile('profile_pic') ? $request->file('profile_pic')->store('customer') : '';
-
-        // Convert birthdate format to YYYY-MM-DD
-        $birthdate = \Carbon\Carbon::createFromFormat('m-d-Y', $request->birthdate)->format('Y-m-d');
-
         UserFamilyDetail::create([
             'user_id' => $user->id,
             'first_name' => $request->fname,
@@ -171,7 +102,7 @@ class ManageAccountController extends Controller
             'relationship' => $request->relationship,
             'gender' => $request->gender,
             'profile_pic' => $profile_pic,
-            'birthday' => $birthdate,
+            'birthday' =>   $request->birthdate,
             'emergency_contact_name' => $request->emergency_name,
         ]);
 
@@ -182,7 +113,7 @@ class ManageAccountController extends Controller
                 if($businessCustomer == ''){
                     $random_password = Str::random(8);
                     $password = Hash::make($random_password);
-                    $businessCustomer = createBusinessCustomer($user,$password,$c->id); //If a customer is not available for a specific business, we should first create a customer. This is necessary because the customer's ID is saved as a parent ID for a family member.
+                    $businessCustomer = createBusinessCustomer($user,$password,$c->id); 
                 }
             }
         }
@@ -195,10 +126,9 @@ class ManageAccountController extends Controller
                 $random_password = Str::random(8);
                 $password = Hash::make($random_password);
             }
-            
+
             $customer = Customer::where(['business_id'=> $businessCustomer->business_id, 'fname' =>  $request->fname,'lname' => $request->lname,'parent_cus_id' => $businessCustomer->id])->first();
-            // dd($customer);
-            if($customer == '' || is_null($customer)){
+            if($customer == ''){
                 $createCustomer = Customer::create([
                     'business_id' => $c->id,
                     'fname' => $request->fname,
@@ -209,19 +139,22 @@ class ManageAccountController extends Controller
                     'relationship' => $request->relationship,
                     'profile_pic' => $profile_pic,
                     'gender' => $request->gender,
-                    'birthdate' =>  $birthdate,
+                    'birthdate' =>  $request->birthdate,
                     'parent_cus_id' => $businessCustomer->id,
                 ]); 
                 $createCustomer->create_stripe_customer_id();
+
                 $chk = 1;
-                // dd($createCustomer);
             }else{
                 $message = 'Member already added as customer..';
             }
         }
-        
+
         return redirect()->back()->with(['message'=>$message]);
     }
+
+   
+    
 
 
     public function store_fu(Request $request)

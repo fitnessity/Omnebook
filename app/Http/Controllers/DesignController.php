@@ -297,4 +297,64 @@ class DesignController extends Controller {
     public function email_blast_step1(Request $request){
         return view('design.email_blast_step1');
     }
+    public function email_blast_step2(Request $request){
+        return view('design.email_blast_step2');
+    }
+    public function email_blast_blanktemp(Request $request){
+        return view('design.email_blast_blanktemp');
+    }
+    public function email_blast_temp2(Request $request){
+        return view('design.email_blast_temp2');
+    }
+    public function email_blast_temp3(Request $request){
+        return view('design.email_blast_temp3');
+    }
+    public function email_blast_temp4(Request $request){
+        return view('design.email_blast_temp4');
+    }
+    public function email_blast_schedule(Request $request){
+        return view('design.email_blast_schedule');
+    }
+    public function email_blast_temp5(Request $request){
+        return view('design.email_blast_temp5');
+    }
+    public function email_blast_temp6(Request $request){
+        return view('design.email_blast_temp6');
+    }
+    public function email_blast_temp7(Request $request){
+        return view('design.email_blast_temp7');
+    }
+    public function email_blast_temp8(Request $request){
+        return view('design.email_blast_temp8');
+    }
+    public function email_blast_temp9(Request $request){
+        return view('design.email_blast_temp9');
+    }
+    public function email_blast_temp10(Request $request){
+        return view('design.email_blast_temp10');
+    }
+    public function email_blast_temp11(Request $request){
+        return view('design.email_blast_temp11');
+    }
+    public function email_blast_temp12(Request $request){
+        return view('design.email_blast_temp12');
+    }
+    public function email_blast_temp13(Request $request){
+        return view('design.email_blast_temp13');
+    }
+    public function email_blast_temp14(Request $request){
+        return view('design.email_blast_temp14');
+    }
+    public function email_blast_temp15(Request $request){
+        return view('design.email_blast_temp15');
+    }
+    public function email_blast_temp16(Request $request){
+        return view('design.email_blast_temp16');
+    }
+    public function email_blast_temp17(Request $request){
+        return view('design.email_blast_temp17');
+    }
+    public function online_profile_post(Request $request){
+        return view('design.online_profile_post');
+    }
 }

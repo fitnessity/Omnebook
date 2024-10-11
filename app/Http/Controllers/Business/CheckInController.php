@@ -21,6 +21,7 @@ class CheckInController extends Controller
     public function store(Request $request){
     	// print_r($request->all());exit;
         // dd($request->all());
+        // \DB::enableQueryLog();
         $data = BusinessCheckinSettings::where('business_id', $request->business_id)->first();
 
         $input = [];
@@ -56,12 +57,13 @@ class CheckInController extends Controller
         $input['alert_screen_color'] = $request->alert_screen_color;
         $input['membership_option'] = $request->membership_option ?? 1;
         //print_r($input);exit;
+        
     	if($data){
     		$data->update($input);
     	}else{
-    		
 			BusinessCheckinSettings::create($input);
     	}
+        // dd(\DB::getQueryLog()); 
 
     	return redirect()->back();
     }

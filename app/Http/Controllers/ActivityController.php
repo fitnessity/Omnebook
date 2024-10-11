@@ -793,13 +793,15 @@ class ActivityController extends Controller {
 			$events_activity = $this->filterActivities($events_activity)->limit(10)->get();
 			$serviceLocation = Miscellaneous::serviceLocation();
 			$getstarteddata =  ActivtyGetStartedFast::orderby('id','asc')->get();
+		
 			if($searchDatauserProfile != ''){
 	            return Redirect::to('/userprofile/'.$searchDatauserProfile->username);
 	        }else if($searchDatabusiness !=''){
 	            return Redirect::to('businessprofile/'.$searchDatabusiness->dba_business_name.'/'.$searchDatabusiness->id);
 	        }else if($searchDataacivity !=''){
 	            return Redirect::to('/activity-details/'.$searchDataacivity->id);
-	        }else{
+	        }
+			else{
 				return view('activity.index',[
 					'allactivities'=>$allactivities,
 					'thismonthactivity'=>$thismonthactivity,
@@ -1055,6 +1057,10 @@ class ActivityController extends Controller {
 	    }
 	    $schedulers = $schedule != '' ? $schedule->get() : [];
 	    $firstSchedule = $schedule != '' ? $schedule->first() : '';
+		// dd($service);
+		if (!$service) {
+			return response()->json(['message' => 'Service not found'], 200);
+		}		
 	   	$rawcategory = $service->BusinessPriceDetailsAges()->whereNotNull('class_type')->has('BusinessActivityScheduler')->orderBy('id', 'ASC');
         $categories = $firstSchedule != '' ? $rawcategory->where('visibility_to_public' , 1)->get() : [];
         $firstCategory = $firstSchedule != '' ?  $rawcategory->when($categoryId, function ($query) use ($categoryId) {
@@ -1116,6 +1122,7 @@ class ActivityController extends Controller {
     	$family = getFamilyMember($cusId,$request->cid);
     	$priceid = $request->priceid;  $type = $request->type; 
     	$customer = ( $cusId ) ? Customer::find($cusId) : '';
+		// dd($cusId);
 		return view('activity.participate_data' ,compact('priceid','type','family','customer'));
     }
     public function getAddOnData(Request $request){

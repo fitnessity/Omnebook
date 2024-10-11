@@ -27,8 +27,9 @@ class OrderController extends PersonalBaseController
 
     public function index(Request $request)
     {
-        
+        // dd($request->all());
         $user = Auth::user();
+        // dd($user);
         $business = $user->company()->where('id',request()->business_id)->first();
         if(!request()->business_id){
             return redirect()->route('personal.manage-account.index');
@@ -133,7 +134,7 @@ class OrderController extends PersonalBaseController
 
     public function searchActivity(Request $request){
         $serviceType = $request->serviceType;
-        
+        // dd($request->customerId);
         if(!$request->customerId){
             $customer = Auth::user()->customers()->where('business_id' ,$request->businessId)->first();
             $customerID = @$customer->id;
@@ -141,7 +142,6 @@ class OrderController extends PersonalBaseController
             $customer = Customer::find($request->customerId);
             $customerID = $request->customerId;
         }
-
         $orderDetails = [];
         $tabName = $request->type;
         if($customerID){
@@ -193,4 +193,5 @@ class OrderController extends PersonalBaseController
             }
         }
     }
+  
 }

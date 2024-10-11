@@ -329,12 +329,13 @@ class RegistrationController extends Controller
     // }
     public function postRegistrationCustomer(Request $request) {
         set_time_limit(-1);
-  
         $postArr = $request->all();
         // dd($postArr);
         // dd($request->familycnt);
         $user = Auth::user();
+        // DB::enableQueryLog();
         $company = $user->businesses->find(Auth::user()->cid);
+        // dd(\DB::getQueryLog()); 
         $rules = [
             'firstname' => 'required',
             'lastname' => 'required',
@@ -642,7 +643,7 @@ class RegistrationController extends Controller
 
     public function saveaddressCustomer(Request $request)
     {
-        dd('33');
+        // dd('33');
         $customers = Customer::where('id',$request->cust_id)->first();
         $customers->address=@$request->address;
         $customers->country=@$request->country;

@@ -104,6 +104,7 @@ class ProfileController extends Controller
             }else{
                 $user = Customer::find(request()->customer_id);
                 return view('personal.profile.customer_profile',compact('user'));
+                // return view('personal.profile.user_family_profile',compact('user'));
             }
         }else{
             $user = $this->user; 
@@ -360,13 +361,17 @@ class ProfileController extends Controller
     }
 
     public function provider(Request $request){
-        $company_information = [];$continue = 0;
+        // \DB::enableQueryLog(); 
+        $company_information = [];
+        $continue = 0;
         if($request->customer_id){
             if($request->type == 'user'){
                 $familyMember =  $this->user->user_family_details()->where('id',request()->customer_id)->first();
                 $user = User::where(['firstname'=> @$familyMember->first_name, 'lastname'=>@$familyMember->last_name, 'email'=>@$familyMember->email])->first();
                 $continue = 1;
                 $id = @$user->id;
+
+
             }else{
                 $customerDetail  = Customer::find($request->customer_id);
                 $user = $customerDetail->user;
@@ -391,10 +396,11 @@ class ProfileController extends Controller
                 }
             }
         }
-
         /*$url = url()->current();
         $separator = (parse_url($url, PHP_URL_QUERY) == null) ? '?' : '&';*/
+        // dd(\DB::getQueryLog());
         $business = array_values(array_filter(array_unique($company_information, SORT_REGULAR)));
+        // dd($business);
         return view('personal.provider.index',compact('business','id'));
     }
 
@@ -507,6 +513,7 @@ class ProfileController extends Controller
         $cardInfo = [];
         $intent = null;
         $user = $this->user;
+        // dd($user);
         $customers = $user->customers()->pluck('id')->toArray();
         $customer_ids = implode(',',$customers);
 
@@ -582,14 +589,13 @@ class ProfileController extends Controller
 
     public function paymentHistory(Request $request){
         $user = $this->user;
+        // dd($user);
         if(!request()->business_id){
             return redirect()->route('personal.manage-account.index');
         }
         $customers = $user->customers()->where('business_id',request()->business_id)->first();
         $customer_ids = @$customers->id;
-
         $business_id = request()->business_id;
-
         $status = Transaction::select('transaction.*')->where('item_type', 'UserBookingStatus')
               ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
               ->join('user_booking_details as ubd', function($join) use ($business_id,$customer_ids) {
@@ -601,7 +607,6 @@ class ProfileController extends Controller
 
         $recurring = Transaction::select('transaction.*')->Where('item_type', 'Recurring')
                     ->join('recurring as re', 're.id', '=', 'transaction.item_id')->where('re.business_id', '=', $business_id)->where('re.user_id', $customer_ids)->get();
-
 
         //$mergedArray = array_merge($status, $recurring);
         $statusArray = $recurringArray  = []; 
@@ -650,8 +655,7 @@ class ProfileController extends Controller
             $perPage,
             $currentPage
         );
-
-        //print_r($transactionDetail);exit;
+        // print_r($transactionDetail);exit;
         $transactionDetail->setPath(url()->current());
         return view('personal.profile.payment_history', compact('transactionDetail')); 
     }

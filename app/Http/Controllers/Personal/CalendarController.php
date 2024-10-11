@@ -123,7 +123,7 @@ class CalendarController extends Controller
 
             return response()->json($ajaxArray);
         }
-
+        
         return view('personal.calendar.index', compact('fullary','familyDetails','companies') );
     }
 

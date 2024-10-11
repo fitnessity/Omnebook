@@ -29,6 +29,7 @@ class PaymentController extends Controller {
         $this->arr = [];        
     }
     public function createCheckoutSession(Request $request) {
+        // dd('333');
         $loggedinUser = Auth::user();
         $customer='';
         $cartService = new CartService();
@@ -38,7 +39,10 @@ class PaymentController extends Controller {
                 'user_id' => $loggedinUser->id, 'status' => 'active', 'currency_code' => 'usd', 'amount' => $request->grand_total,
                 'order_type' => 'simpleorder', 'bookedtime' => Carbon::now()->format('Y-m-d'),
             );
+            \DB::enableQueryLog(); // Enable query log
+
             $userBookingStatus = UserBookingStatus::create($orderdata);
+
             $transactiondata = array( 
                 'user_type' => 'user',
                 'user_id' => $loggedinUser->id,
@@ -54,6 +58,7 @@ class PaymentController extends Controller {
                 'refund_amount' =>0,
                 'payload' =>'',
             );
+
             $transactionstatus = Transaction::create($transactiondata);
             $lastid = $userBookingStatus->id; 
             foreach($cartService->items() as $item){
@@ -297,10 +302,8 @@ class PaymentController extends Controller {
                 }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {;
                     $errormsg = "Your card is not connected with your account. Please add your card again.";
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
-                }catch( \Exception $e) {
-                    $errormsg = $e->getError()->message;
-                    return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }
+
             }else{
                 $newCardPaymentMethodId = $request->new_card_payment_method_id;
                 try {
@@ -566,6 +569,8 @@ class PaymentController extends Controller {
         if ($request->session()->has('cart_item')) {
             $cart_item = $request->session()->get('cart_item');
         }
+        // dd($cart_item);
+        // dd($request->all());
         if(in_array($request->act, array_keys($cart_item["cart_item"]))) {
             foreach($cart_item["cart_item"] as $k => $v) {
                 if($request->act == $k) {

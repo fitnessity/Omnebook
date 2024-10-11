@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Storage;
 use App\{CompanyInformation,User,BusinessServicesMap,BusinessServices,BusinessPriceDetailsAges,BusinessPriceDetails,Miscellaneous,Sports,BusinessStaff,AddOnService,BusinessClassPriceDetails,BusinessActivityScheduler,BusinessServicesFaq};
 use Auth,Str;
 use Illuminate\Support\Facades\Session;
-
+use DB;
 class ServiceController extends BusinessBaseController
 {
     /**
@@ -36,12 +36,12 @@ class ServiceController extends BusinessBaseController
      */
     public function create(Request $request)
     {
+        // dd('23');
         $fitnessity_fee = $recurring_fee = 0;
         $fitnessity_fee = Auth::user()->fitnessity_fee;
         $recurring_fee = Auth::user()->recurring_fee;
         $company = $request->current_company;
         $companyId =  $company->id;
-
         $serviceId = $request->serviceId != '' ? $request->serviceId : '0';
         $businessData = [
             'cid' =>  $companyId,
@@ -85,7 +85,9 @@ class ServiceController extends BusinessBaseController
         $displayRecPrice = $request->displayRecPrice;
         $displayRecCategory = $request->displayRecCategory;
         $displayType = $request->displayType;
-        
+        // dd($categoryData);
+
+        // dd($classes);
         return view('business.services.create', compact('serviceType','sportsData','staffData','service','profile_pic','companyId','serviceId','proofVerification','vaccinefVerification','covidVerification','fitnessity_fee','recurring_fee','categoryData','displayRecPrice','displayRecCategory','displayType','classes','faqData','staffDataHTml'));
     }
     /**
@@ -99,6 +101,7 @@ class ServiceController extends BusinessBaseController
         //ini_set('memory_limit', '-1');
         //print_r($request->all()); //exit();
         // dd($request->step); 
+        // DB::enableQueryLog(); 
         $profilePicture = $dayImage = $safe_varification ="";
 
         $user = Auth::user();
@@ -108,7 +111,6 @@ class ServiceController extends BusinessBaseController
         $thisService = $companyInfo->service()->where('id', $serviceId)->first(); 
 
         if($request->step == '1'){
-
             if($thisService != ''  && $thisService->profile_pic != ''){
                 $img = rtrim($thisService->profile_pic,',');
                 $profilePicture .= $img.',';
@@ -148,13 +150,14 @@ class ServiceController extends BusinessBaseController
             ];
         }
 
+        // dd(\DB::getQueryLog()); 
         if($request->step == '2'){
             $instant = $request->has('instantbooking') ? 1 : 0;
             $requestbooking = $request->has('requestbooking') ? 1 : 0;
             $serviceTypes =     $request->serviceTypes != ''  ? implode(',' , $request->serviceTypes) :  '';
             $serviceLocation = $request->serviceLocation != ''  ? implode(',' ,$request->serviceLocation ) :  '';
-            $programFor =      $request->programFor != ''  ? implode(',' , $request->programFor  ) :  '';
-            $ageRange =        $request->ageRange != ''  ? implode(',' ,$request->ageRange ) :  '';
+            $programFor = $request->programFor != ''  ? implode(',' , $request->programFor  ) :  '';
+            $ageRange =  $request->ageRange != ''  ? implode(',' ,$request->ageRange ) :  '';
             $serviceFocus = $request->serviceFocus != ''  ? implode(',' , $request->serviceFocus ) :  '';
             $teachingStyle =   $request->teachingStyle != ''  ? implode(',' , $request->teachingStyle ) :  '';
             $difficultLevel =   $request->difficultLevel != ''  ? implode(',' , $request->difficultLevel ) :  '';
@@ -232,30 +235,62 @@ class ServiceController extends BusinessBaseController
             //print_r($serviceData);exit;
         }
 
-        if($request->step == '4'){
-            $faqCount = count($request->faq_title);
-            if($faqCount > 0) {
-                $idaryFaq = $idaryFaq1 = array();
-                $idaryFaq= $thisService->businessServicesFaq()->pluck('id')->toArray();
-                for($i=0; $i < $faqCount; $i++) {
-                    $idaryFaq1[] =  $request->faq_id_db[$i] ?? '';
+        // if($request->step == '4'){
+        //     $faqCount = count($request->faq_title);
+        //     if($faqCount > 0) {
+        //         $idaryFaq = $idaryFaq1 = array();
+        //         $idaryFaq= $thisService->businessServicesFaq()->pluck('id')->toArray();
+        //         for($i=0; $i < $faqCount; $i++) {
+        //             $idaryFaq1[] =  $request->faq_id_db[$i] ?? '';
 
+        //             $faqs = [
+        //                 "faq_title" => $request->faq_title[$i] ?? '',
+        //                 "faq_answer" => $request->faq_answer[$i] ?? '',
+        //                 "business_id" => $user->cid,
+        //                 "user_id" =>  $user->id,
+        //                 "service_id" => $serviceId,
+        //             ];
+                    
+        //             BusinessServicesFaq::updateOrCreate(['id' => $request->faq_id_db[$i]], $faqs);
+        //         }
+
+        //         $differenceArrayFaq = array_diff($idaryFaq, $idaryFaq1);
+        //         BusinessServicesFaq::whereIn('id', $differenceArrayFaq)->delete();
+        //         return redirect()->route('business.services.create',['serviceType'=>$request->serviceType, 'serviceId'=> $serviceId]);
+        //     }
+        // }
+        if ($request->step == '4') {
+            // Default to empty array if not set
+            $faqTitles = $request->faq_title ?? [];
+            $faqCount = count($faqTitles);
+        
+            if ($faqCount > 0) {
+                $idaryFaq = [];
+                $idaryFaq1 = [];
+        
+                $idaryFaq = $thisService->businessServicesFaq()->pluck('id')->toArray();
+        
+                for ($i = 0; $i < $faqCount; $i++) {
+                    $idaryFaq1[] = $request->faq_id_db[$i] ?? '';
+        
                     $faqs = [
-                        "faq_title" => $request->faq_title[$i] ?? '',
+                        "faq_title" => $faqTitles[$i] ?? '',
                         "faq_answer" => $request->faq_answer[$i] ?? '',
                         "business_id" => $user->cid,
-                        "user_id" =>  $user->id,
+                        "user_id" => $user->id,
                         "service_id" => $serviceId,
                     ];
                     
                     BusinessServicesFaq::updateOrCreate(['id' => $request->faq_id_db[$i]], $faqs);
                 }
-
+        
                 $differenceArrayFaq = array_diff($idaryFaq, $idaryFaq1);
                 BusinessServicesFaq::whereIn('id', $differenceArrayFaq)->delete();
-                return redirect()->route('business.services.create',['serviceType'=>$request->serviceType, 'serviceId'=> $serviceId]);
+        
+                return redirect()->route('business.services.create', ['serviceType' => $request->serviceType, 'serviceId' => $serviceId]);
             }
         }
+        
 
         if($request->step != '5'){
             // dd($serviceData);
@@ -266,12 +301,16 @@ class ServiceController extends BusinessBaseController
                 $service = BusinessServices::create($serviceData);
                 $serviceId = $service->id;
             }
-
+            // dd(\DB::getQueryLog()); 
             return redirect()->route('business.services.create',['serviceType'=>$request->serviceType, 'serviceId'=> $serviceId]);
         }
 
 
         if($request->step == '5'){
+            // dd($request->all());
+            // DB::enableQueryLog();
+            // dd($activity);
+            // dd(\DB::getQueryLog());
             $catCount = count($request->category_title);
             if($catCount > 0) {
                 $idary_cat = $idary_cat1 = $idary_price = $idary_price1 = $idary_addOn = $idary_addOn1 = array();
@@ -308,6 +347,7 @@ class ServiceController extends BusinessBaseController
                             $isRecurringChild = $request->input('is_recurring_child_' . $i . $y);
                             $isRecurringInfant = $request->input('is_recurring_infant_' . $i . $y);
                             $displaySection = $this->getDisplaySection($request, $i, $y);
+                            
                             $businessPrice = [
                                 "category_id" => $cat_new_id,
                                 "dispaly_section" => $displaySection,
@@ -386,7 +426,6 @@ class ServiceController extends BusinessBaseController
                             }
                         }
                     }
-
                     $addOnCnt = $request->input('addOnServiceCount'.$i);
                     if($addOnCnt >= 0){
                         for($z=0; $z <= $addOnCnt; $z++) {
@@ -407,7 +446,7 @@ class ServiceController extends BusinessBaseController
                         }
                     }
                 }
-
+             
                 $differenceArray_cat1 = array_diff($idary_cat, $idary_cat1);
                 BusinessPriceDetailsAges::whereIn('id', $differenceArray_cat1)->delete();
                 
@@ -416,11 +455,36 @@ class ServiceController extends BusinessBaseController
 
                 $differenceArray_AOS1 = array_diff($idary_addOn, $idary_addOn1);
                 AddOnService::whereIn('id',$differenceArray_AOS1)->delete();
+
+                if($differenceArray_price1!=='')
+                {
+
+                    $data= BusinessPriceDetails::whereIn('id',$differenceArray_price1)->get();
+                    
+                    if(!$data->isEmpty()) 
+
+                    {
+                        // dd($data);
+                        $activity = BusinessActivityScheduler::where('serviceid', $request->serviceId)
+                        ->whereIn('category_id', $request->cat_id_db)
+                        ->whereNull('deleted_at')
+                        ->whereIn('category_id', $data->category_id)
+                        ->delete();                      
+                    }
+                }
+                
+                $activity = BusinessActivityScheduler::where('serviceid', $request->serviceId)
+                ->whereIn('category_id', $request->cat_id_db)
+                ->whereNull('deleted_at')
+                ->whereIn('category_id', $differenceArray_cat1)
+                ->delete();
+
             }
 
             $companyservice = $companyInfo->service->sortByDesc('created_at');
             $popupserviceid = '';
             $companyname = $companyInfo->name;
+            // dd(\DB::getQueryLog()); 
 
             if($request->submitType == 'recurring'){
                 return redirect()->route('business.services.create',['serviceType'=>$request->serviceType, 'serviceId'=> $serviceId ,'displayRecPrice' => $request->displayRecPrice ,'displayType' =>$request->displayType,'displayRecCategory' =>$request->displayRecCategory]);
@@ -581,7 +645,7 @@ class ServiceController extends BusinessBaseController
 
         BusinessPriceDetailsAges::create([
             "category_title" => $request->category_title ,
-            "desc" => $request->desc,
+            // "desc" => $request->desc,
             "cid" => $request->cid,
             "userid" =>  Auth::user()->id,
             "serviceid" => $request->serviceid,
@@ -658,7 +722,7 @@ class ServiceController extends BusinessBaseController
     }
 
     public function getSchedule($business_id, Request $request){
-        $businessActivity = BusinessActivityScheduler::where('cid', $business_id)->where('category_id',$request->id)->get();
+        $businessActivity = BusinessActivityScheduler::where('cid', $business_id)->where('category_id',$request->id)->whereNull('deleted_at')->get();    
         return view('business.services.schedule_break_down_model', compact('businessActivity'));
     }
 

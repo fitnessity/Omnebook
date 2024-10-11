@@ -68,6 +68,7 @@ class SchedulerController extends BusinessBaseController
 
      public function store(Request $request){
           //print_r($request->all());exit;
+          // dd($request->all());
           $shift_start = $request->duration_cnt;
           if($shift_start >= 0) {
                $idary = BusinessActivityScheduler::where('cid', $request->cId)->where('userid', Auth::user()->id)->where('serviceid',  $request->serviceId)->where('category_id',$request->categoryId)->pluck('id')->toArray();

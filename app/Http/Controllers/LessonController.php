@@ -2247,6 +2247,7 @@ class LessonController extends Controller {
       return $actbox;
     }
     public function addToCart(Request $request) {
+        // dd($request->all());
         if(@$request->flushsession == 1){ $request->session()->forget('cart_item'); }
         $cart_item = $request->session()->has('cart_item') ? $request->session()->get('cart_item') : [];
         $tax = $request->has('value_tax') != '' ? $request->value_tax : 0;
@@ -2361,6 +2362,7 @@ class LessonController extends Controller {
                 }
             }
         }
+        // dd($cart_item);
         if (isset($cart_item)) { $request->session()->put('cart_item', $cart_item); }
         else { $request->session()->forget('cart_item');}
         if($request->chk == 'activity_purchase'){

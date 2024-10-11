@@ -183,11 +183,11 @@ class OrderController extends BusinessBaseController
      */
     public function store(Request $request)
     {
-        //print_r($request->all());exit;
+        // dd($request->all());
+        // exit;
         $bookidarray = [];
         $company = $request->current_company;
         $customer = $company->customers()->findOrFail($request->user_id);
-        //echo $customer;exit;
         $user = Auth::User();
         $fitnessity_recurring_fee = $user->recurring_fee / 100;
         $isCash = ($request->cash_amt > 0);
@@ -198,7 +198,14 @@ class OrderController extends BusinessBaseController
         $transactions = [];
 
         $checkoutRegisterCartService = new CheckoutRegisterCartService();
-        //print_r($checkoutRegisterCartService->items());
+
+        // new
+            $data = session()->get('cart_item_for_checkout');
+            $cartItems = $data['cart_item'];
+            $dynamicKey = array_key_first($cartItems);         
+            $discount = $cartItems[$dynamicKey]['discount']??0;
+        // end
+   
         if($isComp){
             $transactions[] = [
                 'channel' =>'comp',
@@ -209,7 +216,8 @@ class OrderController extends BusinessBaseController
                 'status' =>'complete',
                 'refund_amount' => 0,
             ];
-        }else{
+        }
+        else{
             if($isCardOnFile){
                 $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
                 $onFileTotal = $request->cc_amt;
@@ -326,6 +334,7 @@ class OrderController extends BusinessBaseController
             }
         }
 
+        // dd($transactions);
         $userBookingStatus = UserBookingStatus::create([
             'user_id' => Auth::user()->id,
             //'customer_id' =>  $checkoutRegisterCartService->items()[0]['participate_from_checkout_regi']['id'] ,
@@ -412,8 +421,9 @@ class OrderController extends BusinessBaseController
                 $re_i = 0;
                 $date = new Carbon;
                 $stripeId = $stripeChargedAmount = $paymentMethod= '';
-
-                $amount = $checkoutRegisterCartService->getMembershipTotalItem($item) - $checkoutRegisterCartService->getDisItem($item) ;
+                // dd($checkoutRegisterCartService->getDisItem($item));
+                // $amount = $checkoutRegisterCartService->getMembershipTotalItem($item) - $checkoutRegisterCartService->getDisItem($item);
+                $amount = $checkoutRegisterCartService->getMembershipTotalItem($item);
                 // dd($amount);
                 $tax_recurring = $item['tax_activity'];
 
@@ -507,14 +517,14 @@ class OrderController extends BusinessBaseController
                                 $payment_number = NULL;
                                 $payment_on = NULL;
                             } 
-
                             $recurring = array(
                                 "booking_detail_id" => $booking_detail->id,
                                 "user_id" => $customer->id,
                                 "user_type" => 'customer',
                                 "business_id" => $booking_detail->business_id ,
                                 "payment_date" => $paymentDate,
-                                "amount" => $amount,
+                                // "amount" => $amount,
+                                "amount" => ($num == 1 && $status == 'Completed' && $payment_on != NULL) ? $amount -  $checkoutRegisterCartService->getDisItem($item) :$amount, 
                                 'charged_amount'=> $stripeChargedAmount,
                                 'payment_method'=> $paymentMethod,
                                 'stripe_payment_id'=> $stripeId,
@@ -716,6 +726,7 @@ class OrderController extends BusinessBaseController
 
     public function addToCartForCheckout(Request $request){
         // print_r($request->all()); exit;
+        // dd($request->all());
         $customerId = $request->pc_regi_id;
         $cart_item = $request->session()->has('cart_item_for_checkout') ? $request->session()->get('cart_item_for_checkout') : [];
         $tax = $request->has('value_tax') != '' ? $request->value_tax : 0;

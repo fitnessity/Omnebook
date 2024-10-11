@@ -59,46 +59,80 @@ class CompanyController extends Controller
                 Storage::delete($request->oldProfile);
             }                
             
-            do {
-                $uniqueCode = random_int(100000, 999999);
-            } while (CompanyInformation::where('unique_code', $uniqueCode)->exists());
-
-
-            $company = [
-                "user_id" => Auth::user()->id,
-                "first_name" => $request->firstName,
-                "last_name" => $request->lastName,
-                "email" => $request->email,
-                "contact_number" => $request->contact,
-                "logo" => $companyImage,
-                "company_name" => $request->companyName,
-                "address" => $request->address,
-                "state" => $request->state,
-                "country" => $request->country,
-                "zip_code" => $request->zipCode,
-                "city" => $request->city,
-                "business_user_tag" => $request->businessUserName,
-                "about_company" => $request->aboutCompany,
-                "short_description" => $request->shortDescription,
-                "embed_video" => $request->embedVideo,
-                "latitude" => $request->lat,
-                "longitude" => $request->lon,
-                'dba_business_name' => $request->dbaBusinessName,
-                'additional_address' => $request->additionalAddress,
-                'neighborhood' => $request->neighborhood,
-                'business_phone' => $request->businessPhone,
-                'business_email' => $request->businessEmail,
-                'business_website' => $request->website,
-                'business_type' => $request->businessType,
-                'born' => $request->born,
-                'about_host' => $request->about_host,
-                'years_of_hosting' => $request->years_of_hosting,
-                'years_of_experience' => $request->years_of_experience,
-                "owner_pic" => $ownerImage,
-                "unique_code"=>$uniqueCode,
-            ];
+            if($companyId == ''){
+                do {
+                    $uniqueCode = random_int(100000, 999999);
+                } while (CompanyInformation::where('unique_code', $uniqueCode)->exists());
+                $company = [
+                    "user_id" => Auth::user()->id,
+                    "first_name" => $request->firstName,
+                    "last_name" => $request->lastName,
+                    "email" => $request->email,
+                    "contact_number" => $request->contact,
+                    "logo" => $companyImage,
+                    "company_name" => $request->companyName,
+                    "address" => $request->address,
+                    "state" => $request->state,
+                    "country" => $request->country,
+                    "zip_code" => $request->zipCode,
+                    "city" => $request->city,
+                    "business_user_tag" => $request->businessUserName,
+                    "about_company" => $request->aboutCompany,
+                    "short_description" => $request->shortDescription,
+                    "embed_video" => $request->embedVideo,
+                    "latitude" => $request->lat,
+                    "longitude" => $request->lon,
+                    'dba_business_name' => $request->dbaBusinessName,
+                    'additional_address' => $request->additionalAddress,
+                    'neighborhood' => $request->neighborhood,
+                    'business_phone' => $request->businessPhone,
+                    'business_email' => $request->businessEmail,
+                    'business_website' => $request->website,
+                    'business_type' => $request->businessType,
+                    'born' => $request->born,
+                    'about_host' => $request->about_host,
+                    'years_of_hosting' => $request->years_of_hosting,
+                    'years_of_experience' => $request->years_of_experience,
+                    "owner_pic" => $ownerImage,
+                    "unique_code"=>$uniqueCode,
+                ];
+            }  
+            
 
             if($companyId != ''){
+                $company = [
+                    "user_id" => Auth::user()->id,
+                    "first_name" => $request->firstName,
+                    "last_name" => $request->lastName,
+                    "email" => $request->email,
+                    "contact_number" => $request->contact,
+                    "logo" => $companyImage,
+                    "company_name" => $request->companyName,
+                    "address" => $request->address,
+                    "state" => $request->state,
+                    "country" => $request->country,
+                    "zip_code" => $request->zipCode,
+                    "city" => $request->city,
+                    "business_user_tag" => $request->businessUserName,
+                    "about_company" => $request->aboutCompany,
+                    "short_description" => $request->shortDescription,
+                    "embed_video" => $request->embedVideo,
+                    "latitude" => $request->lat,
+                    "longitude" => $request->lon,
+                    'dba_business_name' => $request->dbaBusinessName,
+                    'additional_address' => $request->additionalAddress,
+                    'neighborhood' => $request->neighborhood,
+                    'business_phone' => $request->businessPhone,
+                    'business_email' => $request->businessEmail,
+                    'business_website' => $request->website,
+                    'business_type' => $request->businessType,
+                    'born' => $request->born,
+                    'about_host' => $request->about_host,
+                    'years_of_hosting' => $request->years_of_hosting,
+                    'years_of_experience' => $request->years_of_experience,
+                    "owner_pic" => $ownerImage,
+                ];
+    
                 $companyDetail = CompanyInformation::where('id',$companyId)->update($company);
             }else{
                 $companyDetail  =  CompanyInformation::create($company);

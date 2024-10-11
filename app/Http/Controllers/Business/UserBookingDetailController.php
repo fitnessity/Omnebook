@@ -44,6 +44,7 @@ class UserBookingDetailController extends Controller
     public function update(Request $request, $business_id)
     {
         //print_r($request->all());
+        // dd($request->all());
         $company = $request->current_company->findOrFail($business_id);
         $customer = $company->customers()->findOrFail($request->customer_id);
         //$booking_status = $customer->bookingStatus()->findOrFail($request->booking_id);
