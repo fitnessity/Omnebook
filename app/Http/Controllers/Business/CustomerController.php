@@ -11,6 +11,7 @@ use App\StripePaymentMethod;
 use Illuminate\Support\Facades\Storage;
 use App\{ExcelUploadTracker};
 use Excel;
+use Session;
 use App\Imports\{CustomerImport,ImportMembership,customerAtendanceImport};
 use App\Jobs\{ProcessAttendanceExcelData,ProcessCustomerExcelData,ProcessMembershipExcelData};
 
@@ -119,12 +120,10 @@ class CustomerController extends Controller
 
 
     public function refresh_payment_methods(Request $request){
-        
         $customer = Customer::findOrFail($request->customer_id);
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $payment_methods = $stripe->paymentMethods->all(['customer' => $customer->stripe_customer_id, 'type' => 'card']);
         $fingerprints = [];
-        //print_r($payment_methods);
         foreach($payment_methods as $payment_method){
             $fingerprint = $payment_method['card']['fingerprint'];
             if (in_array($fingerprint, $fingerprints, true)) {
@@ -134,25 +133,26 @@ class CustomerController extends Controller
                 }
             } else {
                 $fingerprints[] = $fingerprint;
-                $stripePaymentMethod = StripePaymentMethod::firstOrNew([
-                    'payment_id' => $payment_method['id'],
-                    'user_type' => 'Customer',
-                    'user_id' => $customer->id,
-                ]);
-
-                $stripePaymentMethod->pay_type = $payment_method['type'];
-                $stripePaymentMethod->brand = $payment_method['card']['brand'];
-                $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
-                $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
-                $stripePaymentMethod->last4 = $payment_method['card']['last4'];
-                $stripePaymentMethod->save();
+                $card = StripePaymentMethod::where(['payment_id'=>$payment_method['id']])->first();
+                if(!$card){
+                    $stripePaymentMethod = new StripePaymentMethod;
+                    $stripePaymentMethod->payment_id = $payment_method['id'];
+                    $stripePaymentMethod->user_type = 'Customer';
+                    $stripePaymentMethod->user_id = $customer->id;
+                    $stripePaymentMethod->pay_type = $payment_method['type'];
+                    $stripePaymentMethod->brand = $payment_method['card']['brand'];
+                    $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
+                    $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
+                    $stripePaymentMethod->last4 = $payment_method['card']['last4'];
+                    $stripePaymentMethod->save();
+                }
             }
         }
-        // echo $request->return_url;exit;
         if($request->return_url){
+            Session::put(['cardSuccessMsg' => 1]);
             return redirect($request->return_url);
         }else{
-            return redirect()->route('business_customer_show',['business_id' => $customer->business_id , 'id' =>$request->customer_id ]);
+            return redirect()->route('business_customer_create',['business_id' => $customer->business_id]);
         }
     }
 
@@ -186,7 +186,7 @@ class CustomerController extends Controller
             }
 
 
-            $current_company->update(['customer_uploading' => 1]);
+            //$current_company->update(['customer_uploading' => 1]);
             
             
             $timestamp = now()->timestamp;

@@ -19,8 +19,8 @@
         <p>Your booking is confirmed. Check your account for further details.</p>
         <p>Looking to find another active activity you love or to find a new one, get started by clicking below.</p>
         <a href="/activities" class="btn btn-web-btn">Book Another Activity</a>        
-        <a href="{{route('user-profile')}}" class="btn btn-web-btn">Go To My Profile</a>        
+        <a href="{{route('personal.manage-account.index')}}" class="btn btn-web-btn">Go To My Profile</a>        
     </div>
-</div>
+</div>  
 @include('layouts.footer')
 @endsection

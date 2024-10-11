@@ -26,7 +26,7 @@
 						<div class="owl-item" style="width: 300px;">
 							<div class="card-info instant-section-info">
 								<div class="img">
-								   <img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" alt="">
+								   <img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" alt="Fitnessity">
 								</div>
 								<h4>{{$getdatafast['title']}}</h4>
 								<p>{{$getdatafast['small_text']}}</p>
@@ -48,7 +48,7 @@
 			@foreach($getstarteddata as $getdatafast)
 				<div class="col-md-3 col-sm-3 col-xs-12">
 					<div class="instant-section-info d-none">
-						<img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" >
+						<img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" alt="Fitnessity">
 						<h4>{{$getdatafast['title']}}</h4>
 						<p>{{$getdatafast['small_text']}}</p>
 						@if($getdatafast['id'] == 1)
@@ -101,13 +101,9 @@
 												<div class="find-activity">
 													<div class="row y-middle">
 														<div class="col-xs-4 col-sm-4 padding-r0">
-															@if(Storage::disk('s3')->exists( $bookscheduler->business_service->first_profile_pic() ) && $bookscheduler->business_service->first_profile_pic() != '' )
-																<div class="item-inner">
-																	<img src="{{Storage::URL($bookscheduler->business_service->first_profile_pic())}}" class="productImg">
-																</div>
-															@else
-																<img src="{{url('/images/service-nofound.jpg')}}}">
-															@endif 
+															<div class="item-inner">
+																<img src="{{$bookscheduler->business_service->first_profile_pic()}}" class="productImg" alt="Fitnessity">
+															</div>
 														</div>
 														
 														<div class="col-xs-8 col-sm-8 activity-data">
@@ -147,14 +143,16 @@
 																	if($bookscheduler->company_information->dba_business_name == ''){
 																		$bookschedulercom_name = $bookscheduler->company_information->company_name;
 																	}
+																	$price_all = $bookscheduler->business_service->min_price();
 																@endphp
-																<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
 																<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+																<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
 																<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
 																<div class="dollar-person">
-																	<span><b>From ${{$bookscheduler->price_detail()}}</b>/Person</span>
+																	@if($price_all != '')
+																		<span>From {!!$price_all!!}/Person</span>
+																	@endif
 																</div>
-																
 															</div>
 
 															<div class="row">
@@ -189,13 +187,9 @@
 							<div class="find-activity d-none">
 								<div class="row">
 									<div class="col-md-4 col-sm-4">
-										@if(Storage::disk('s3')->exists( $bookscheduler->business_service->first_profile_pic() ) && $bookscheduler->business_service->first_profile_pic() != '' )
-											<div class="item-inner">
-												<img src="{{Storage::URL($bookscheduler->business_service->first_profile_pic())}}" class="productImg">
-											</div>
-										@else
-											<img src="{{url('/images/service-nofound.jpg')}}}">
-										@endif 
+										<div class="item-inner">
+											<img src="{{$bookscheduler->business_service->first_profile_pic()}}" class="productImg" alt="Fitnessity">
+										</div>
 									</div>
 									<div class="col-md-8 col-sm-8 activity-data">
 										<div class="row">
@@ -231,16 +225,21 @@
 												if($bookscheduler->company_information->dba_business_name == ''){
 													$bookschedulercom_name = $bookscheduler->company_information->company_name;
 												}
+												$price_all = $bookscheduler->business_service->min_price();
 											@endphp
-											<span><a  href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}"target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
 											<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+
+											<span><a  href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}"target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
+											
 											<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
 											<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
 										</div>
 										<div class="row">
 											<div class="col-md-6 col-sm-6 col-xs-6 activites-price-details">
 											<div class="dollar-person">
-												<span>From ${{$bookscheduler->price_detail()}}/Person</span>
+												@if($price_all != '')
+													<span>From {!!$price_all!!}/Person</span>
+												@endif
 											</div>
 											</div>
 											<div class="col-md-6 col-sm-6 col-xs-6 activites-price-details-left">
@@ -285,7 +284,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
-				<div class="nav-sliders-activites">
+				<div class="nav-sliders-activites activity-z-index">
 					<label>{{count($thismonthactivity)}} Results </label>
 					<a href="{{route('activities_index',['filtervalue'=> 'thismonth'])}}" >Show all</a>
 				</div>
@@ -318,11 +317,11 @@
 					                  $pic_image = explode(',',$service['profile_pic']);
 											$bookscheduler = App\BusinessActivityScheduler::where('serviceid', $service['id'])->orderBy('id', 'ASC')->first();
 											$time = @$bookscheduler != '' ? @$bookscheduler->get_duration() : '';
-											$price_all = $service->min_price();
+											$price_all = (@$bookscheduler->business_service !='')  ? $bookscheduler->business_service->min_price() : 0;
 		                    	?>
 								
 									<div class="item">
-										<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
+										<div class="selectProduct" data-id="{{ @$service['id'] }}" data-title="{{ @$service['program_name'] }}" data-name="{{ @$service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
 										
 											<div class="kickboxing-block">
 												@if(Auth::check())
@@ -337,10 +336,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -349,7 +348,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -386,10 +385,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -398,7 +397,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -451,12 +450,8 @@
 														$redlink = str_replace(" ","-",$companyname);
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
-														<span><a 
-							                                href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank">{{ $service['program_name'] }}</a>
-							                         	</span>
+														<span><a href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank"  class="companyalink">{{$companyname}}</a></span>
 														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}</p>
 													</div>
 													<hr>
@@ -488,7 +483,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
-				<div class="nav-sliders-activites">
+				<div class="nav-sliders-activites activity-z-index ">
 					<label>{{count($mostpopularactivity)}} Results </label>
 					<a href="{{route('activities_index',['filtervalue'=> 'most_popular'])}}">Show All </a>
 				</div>
@@ -536,10 +531,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -548,7 +543,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -585,10 +580,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -597,7 +592,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -650,13 +645,9 @@
 														$redlink = str_replace(" ","-",$companyname);
 													@endphp
 													<div class="activity-information activites-height">
-
-														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank" class="companyalink">{{$companyname}}</a></span>
-														<span><a 
-							                                href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank">{{ $service['program_name'] }}</a>
-							                         	</span>
+														<span><a href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank" class="companyalink">{{$companyname}}</a></span>
+														
 														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}</p>
 													</div>
 													<hr>
@@ -693,7 +684,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
-				<div class="nav-sliders-activites">
+				<div class="nav-sliders-activites activity-z-index ">
 					<label>{{count($Trainers_coachesacitvity)}} Results </label>
 					<a href="{{route('activities_index',['filtervalue'=> 'trainers_coaches'])}}">Show All </a>
 				</div>
@@ -741,19 +732,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}">
+																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity"> 
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -790,14 +781,14 @@
 																			@foreach($pic_image as $img)
 																				@if(Storage::disk('s3')->exists($img) && $img != '' )
 																					<div class="item-inner">
-																						<img src="{{Storage::URL($img)}}" class="productImg">
+																						<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																					</div>
 																				@endif
 																			@endforeach
 																		@else
 																			@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																				<div class="item-inner">
-																					<img src="{{Storage::URL($pic_image)}}">
+																					<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity">
 																				</div>
 																			@endif
 																		@endif
@@ -851,12 +842,9 @@
 														$redlink = str_replace(" ","-",$companyname);
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
-														<span><a 
-							                                href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank">{{ $service['program_name'] }}</a>
-							                         	</span>
+														<span><a href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank"  class="companyalink">{{$companyname}}</a></span>
+														
 														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}</p>
 													</div>
 													<hr>
@@ -889,7 +877,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
-				<div class="nav-sliders-activites">
+				<div class="nav-sliders-activites activity-z-index ">
 					<label>{{count($Ways_To_Workout)}} Results </label>
 					<a href="{{route('activities_index',['filtervalue'=> 'ways_to_workout'])}}">Show All </a>
 				</div>
@@ -937,11 +925,11 @@
 																@if(is_array($pic_image))
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
-																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																			<div class="item-inner"> 
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -950,7 +938,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -987,10 +975,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -999,7 +987,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" >
 																	@endif
 																@endif
 															</div>
@@ -1052,12 +1040,9 @@
 														$redlink = str_replace(" ","-",$companyname);
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
-														<span><a 
-							                                href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank">{{ $service['program_name'] }}</a>
-							                         	</span>
+														<span><a href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank"  class="companyalink">{{$companyname}}</a></span>
+														
 														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}</p>
 													</div>
 													<hr>
@@ -1090,7 +1075,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
-				<div class="nav-sliders-activites">
+				<div class="nav-sliders-activites activity-z-index ">
 					<label>{{count($Fun_Activities)}} Results </label>
 					<a href="{{route('activities_index',['filtervalue'=> 'active_wth_fun_things_to_do'])}}">Show All </a>
 				</div>
@@ -1140,19 +1125,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}">
+																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -1190,10 +1175,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -1202,7 +1187,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -1256,8 +1241,9 @@
 														$redlink = str_replace(" ","-",$companyname);
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}"  target="_blank"  class="companyalink">{{$companyname}}</a></span>
 														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}"  target="_blank"  class="companyalink">{{$companyname}}</a></span>
+														
 														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}</p>
 													</div>
 													<hr>
@@ -1289,7 +1275,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
-				<div class="nav-sliders-activites">
+				<div class="nav-sliders-activites activity-z-index ">
 					<label>{{count($events_activity)}} Results </label>
 					<a href="{{route('activities_index',['filtervalue'=> 'events_in_your_area'])}}">Show All </a>
 				</div>
@@ -1338,10 +1324,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
@@ -1350,7 +1336,7 @@
 																			<img src="{{Storage::URL($pic_image)}}">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -1387,19 +1373,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}">
+																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -1452,12 +1438,9 @@
 														$redlink = str_replace(" ","-",$companyname);
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
-														<span><a 
-							                                href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank">{{ $service['program_name'] }}</a>
-							                         	</span>
+														<span><a href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank"  class="companyalink">{{$companyname}}</a></span>
+														
 														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}</p>
 													</div>
 													<hr>
@@ -1490,7 +1473,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
-				<div class="nav-sliders-activites">
+				<div class="nav-sliders-activites activity-z-index ">
 					<label>{{count($allactivities) }} Results </label>
 					<a href="{{route('activities_index',['filtervalue'=> 'all'])}}">Show All </a>
 				</div>
@@ -1539,19 +1522,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}">
+																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -1589,19 +1572,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}">
+																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 																	@endif
 																@endif
 															</div>
@@ -1654,12 +1637,10 @@
 														$redlink = str_replace(" ","-",$companyname);
 													@endphp
 													<div class="activity-information activites-height">
-														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank"  class="companyalink">{{$companyname}}</a></span>
-														<span><a 
-							                                href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" 
-							                                    target="_blank">{{ $service['program_name'] }}</a>
-							                         	</span>
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
+														
+														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank"  class="companyalink">{{$companyname}}</a></span>
+														
 														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}</p>
 													</div>
 													<hr>
@@ -1859,8 +1840,8 @@
 
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
-<script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
-<script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
+<!-- <script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
+<script src="{{ url('public/js/jquery-ui.min.js') }}"></script> -->
 <script type="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>

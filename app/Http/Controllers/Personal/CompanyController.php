@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Personal;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\{CompanyInformation,BusinessExperience,BusinessTerms,BusinessService};
+use App\{CompanyInformation,BusinessExperience,BusinessTerms,BusinessService,SGMailService};
 use Auth;
 use Storage;
 
@@ -86,6 +86,8 @@ class CompanyController extends Controller
             }else{
                 $companyDetail  =  CompanyInformation::create($company);
                 Auth::user()->update(['cid'=>$companyDetail->id]);
+                SGMailService::welcomeMailOfNewBusinessToCustomer(['cid'=> $companyDetail->id,'email' =>Auth::user()->email]);
+                
                 $companyId = $companyDetail->id;
             }
             

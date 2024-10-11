@@ -1,7 +1,7 @@
 <div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="addOnService{{$i}}{{$j}}">
     <div class="accordion-item shadow">
         <h2 class="accordion-header" id="acc_nestingaddOn{{$i}}{{$j}}">
-            <button class="accordion-custom-btn accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingpriceaddOn{{$i}}{{$j}}" aria-expanded="true" aria-controls="accor_nestingpriceaddOn{{$i}}{{$j}}">
+            <button class="accordion-custom-btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingpriceaddOn{{$i}}{{$j}}" aria-expanded="true" aria-controls="accor_nestingpriceaddOn{{$i}}{{$j}}">
                 <div class="container-fluid nopadding">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-8">

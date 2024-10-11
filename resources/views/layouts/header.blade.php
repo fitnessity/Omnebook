@@ -407,43 +407,49 @@ $total_quantity = 0;
                                                     	<span class="pc-micon"><i class="fa fa-user"></i></span>
                                                         <a href="{{route('profile-viewProfile')}}" style="color: white;">View Personal Profile</a>
                                                     </li>
-                                                   <?php /*?> <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fa fa-user"></i></span>
-                                                      	<a href="{{route('profile-viewbusinessProfile')}}" style="color: white;">Business Profile</a>
-                                                    </li><?php */?>
-                                                    <!--<li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-cog"></i></span><a href="{{route('user-profile')}}" style="color: white;">Manage Personal Profile</a>
-                                                    </li> -->
-													<!-- <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-calendar-alt"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/personal-profile/calendar" style="color: white;">Calender</a>
-                                                    </li> -->
-													<li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-users"></i></span><a href="{{route('family-member.index')}}" style="color: white;">Account Information</a>
-                                                    </li>
-													<!-- <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
-															<a href="{{ Config::get('constants.SITE_URL') }}/booking-request" style="color: white;">Inbox</a>
-                                                    </li> -->
+                                                 	
+                                                 	<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt=""></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
+													</li>
 
-                                                   <!--  <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-file-alt"></i></span>
-															<a href="{{ route('personal.orders.index')}}" style="color: white;">Booking Info</a>
-                                                    </li> -->
-													<!-- <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-user-plus"></i></span><a href="#" style="color: white;">Invite Friends</a>
-                                                    </li> -->
-													
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt=""></span><a href="{{route('personal.manage-account.index')}}" style="color: white;">Manage Accounts</a>
+													</li>
+
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt=""></span><a href="{{ url('/personal/calendar')}}" style="color: white;">Calendar</a>
+													</li>
+
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt=""></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
+													</li>
+
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt=""></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
+													</li>
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt=""></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
+													</li>
+													<li class="pc-link">
+														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt=""></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
+													</li>
+																	
 													<li><div class="border-sidebar"></div></li>
 													<li class="lp-per-pro"> <span>Business Center </span></li>
-													<li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fas fa-clipboard-list"></i></span>
-                                                        <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">Create A Business</a>
+													<li class="pc-link"><span class="pc-micon"><i class="fas fa-clipboard-list"></i></span><a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business" style="color: white;">Create A Business</a>
                                                     </li>
+
+                                                    @if(count(Auth::user()->company) > 0)
                                                     <li class="pc-link">
-                                                    	<span class="pc-micon"><i class="fa fa-tasks"></i></span>
-                                                    	<!-- <a href="{{route('manageCompany')}}" style="color: white;">Manage My Business</a> -->
-                                                    	<a @if(count(Auth::user()->company) > 0) href="{{route('business_dashboard')}}"  @else href="{{route('staff_login')}}" @endif style="color: white;">Staff Login</a>
-                                                    </li>
+														<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('business_dashboard')}}"  style="color: white;">Manage My Business</a>
+													</li>
+													
+														@if(!Session('StaffLogin'))
+															<li class="pc-link">
+																<span class="pc-micon"><i class="fa fa-tasks"></i></span><a href="{{route('staff_login')}}"  style="color: white;">Staff Login</a>
+															</li>
+														@endif
+													@endif
 													<li><div class="border-sidebar"></div></li>
 													<li class="lp-per-pro"> <span>Support </span> </li>
 													<li class="pc-link">
@@ -466,7 +472,7 @@ $total_quantity = 0;
 												</ul>
 											</div>
 											<p class="pri-1"> <a href="{{ Config::get('constants.SITE_URL') }}/privacy-policy" style="color: white;"> Privacy </a> - <a href="{{ Config::get('constants.SITE_URL') }}/terms-condition" style="color: white;">Terms </a></p>
-											<p class="pri-2">Fitnessity, Inc 2021</p>
+											<p class="pri-2">Fitnessity, Inc {{date('Y')}}</p>
 										</div>
 									</div>
 								</nav>

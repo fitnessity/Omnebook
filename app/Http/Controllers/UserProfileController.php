@@ -8,7 +8,7 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\{PlanRepository,ProfessionalRepository,BookingRepository,UserRepository};
-use App\{Fit_background_check_faq,Fit_vetted_business_faq,MailService,Evident,Evidents,Sports,ProfileSave,InstantForms,Languages,UserFavourite,UserFollow,UserFollower,Review,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,BusinessActivityScheduler,ProfileFollow,ProfileFav,InquiryBox,ProfileView,PostLike,PostReport,PostComment,PostCommentLike,PagePost,PagePostSave,Notification,BusinessServicesFavorite,UserBookingStatus,UserBookingDetail,ProfilePostViews,BusinessPostViews,StripePaymentMethod,BusinessClaim,Miscellaneous,User,UserEmploymentHistory,UserEducation,UserCertification,UserService,UserSecurityQuestion,UserMembership,UserProfessionalDetail,UserSkillAward,UserFamilyDetail,UserCustomerDetail,BusinessPriceDetailsAges,AddrStates,AddrCities,ProfilePost,Event,Transaction,Customer,SGMailService};
+use App\{Fit_background_check_faq,Fit_vetted_business_faq,MailService,Evident,Evidents,Sports,ProfileSave,InstantForms,Languages,UserFavourite,UserFollow,UserFollower,Review,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,BusinessActivityScheduler,ProfileFollow,ProfileFav,InquiryBox,ProfileView,PostLike,PostReport,PostComment,PostCommentLike,PagePost,PagePostSave,Notification,BusinessServicesFavorite,UserBookingStatus,UserBookingDetail,ProfilePostViews,BusinessPostViews,StripePaymentMethod,BusinessClaim,Miscellaneous,User,UserEmploymentHistory,UserEducation,UserCertification,UserService,UserSecurityQuestion,UserMembership,UserProfessionalDetail,UserSkillAward,UserFamilyDetail,UserCustomerDetail,BusinessPriceDetailsAges,AddrStates,AddrCities,ProfilePost,Event,Transaction,Customer,SGMailService,CustomersDocuments};
 use App\Repositories\SportsRepository;
 use App\Mail\BusinessVerifyMail;
 use Twilio\Rest\Client;
@@ -3114,7 +3114,7 @@ class UserProfileController extends Controller {
         //DB::update('update users_follow set follow_id = "0" where  user_id = "' . $remove_id . '"');
     }
 
-    public function Punfollow_company(Request $request) {
+    public function unfollow_company(Request $request) {
 
         $unfollow_id = $request->fid;
         $loggedId = Auth::user()->id;
@@ -3134,7 +3134,7 @@ class UserProfileController extends Controller {
         return Response::json($response);
     }
 
-    public function Pfollow_back(Request $request) {
+    public function follow_back(Request $request) {
         if( !empty($request->id) ){ $follow_id = $request->id; } else{ $follow_id =0; }
         $user_id = $request->userid;
 
@@ -7410,7 +7410,6 @@ class UserProfileController extends Controller {
         ];
 
 
-
         $message = [
 
             'frm_servicesport.required' => 'Sport is required',
@@ -7755,7 +7754,6 @@ class UserProfileController extends Controller {
         }
 
 
-
         $businessType = Miscellaneous::businessType();
 
         $programType = Miscellaneous::programType();
@@ -7786,8 +7784,6 @@ class UserProfileController extends Controller {
 
         $timeSlots = Miscellaneous::getTimeSlot();
 
-
-
         return view('profiles.create_service', [
 
             'service' => $service,
@@ -7815,9 +7811,6 @@ class UserProfileController extends Controller {
     }
 
     public function getmyservices(Request $request) {
-
-
-
         $login_id = Auth::user();
 
         $sports = $this->sports->getAlphabetsWiseSportsNames();
@@ -7943,12 +7936,6 @@ class UserProfileController extends Controller {
                 )
         ]);
 
-
-
-
-
-
-
         $s = Evident::curl_verify(json_encode($verifydata));
 
         $s = json_decode($s, JSON_OBJECT_AS_ARRAY);
@@ -8006,398 +7993,8 @@ class UserProfileController extends Controller {
                 break;
         }
     }
-
-    public function favorite(Request $request) {
-        
-        $user = User::where('id', Auth::user()->id)->first();
-        $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        //$FavDetail = BusinessServicesFavorite::where('user_id', Auth::user()->id)->get();
-        $FavDetail = BusinessServicesFavorite::select("business_services.id", "business_services.program_name", 
-        "business_services.profile_pic", "business_services.sport_activity", "business_services_favorite.service_id", 
-        "business_services_favorite.user_id")
-                ->join("business_services", "business_services_favorite.service_id", "=", "business_services.id")
-                ->where("business_services_favorite.user_id", Auth::user()->id)
-                ->get();
-        
-        
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        
-        return view('personal-profile.favorite', [
-            'UserProfileDetail' => $UserProfileDetail, 
-            'FavDetail' => $FavDetail,
-            'cart' => $cart
-        ]);
-        
-        /*$user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
-        $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        $UserProfileDetail['gender'] = $user->gender;
-        $UserProfileDetail['username'] = $user->username;
-        $UserProfileDetail['phone_number'] = $user->phone_number;
-        $UserProfileDetail['address'] = $user->address;
-        $UserProfileDetail['quick_intro'] = $user->quick_intro;
-        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        $UserProfileDetail['email'] = $user->email;
-
-        $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
-
-        $follow = UserFavourite::select("company_informations.company_name", "company_informations.first_name", "company_informations.last_name", "company_informations.id", "company_informations.logo", "company_informations.address", "company_informations.contact_number", "users_favourite.favourite_user_id", "users_favourite.user_id", "company_informations.user_id")
-                ->join("company_informations", "users_favourite.favourite_user_id", "=", "company_informations.id")
-                ->where("users_favourite.user_id", Auth::user()->id)
-                ->get();
-
-
-        $FavDetail = $follow;
-        
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        
-        return view('personal-profile.favorite', [
-            'UserProfileDetail' => $UserProfileDetail, 
-            'FavDetail' => $FavDetail,
-            'cart' => $cart
-        ]);*/
-    }
-
-    public function followers(Request $request) {
-        $user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
-        $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        $UserProfileDetail['gender'] = $user->gender;
-        $UserProfileDetail['username'] = $user->username;
-        $UserProfileDetail['phone_number'] = $user->phone_number;
-        $UserProfileDetail['address'] = $user->address;
-        $UserProfileDetail['quick_intro'] = $user->quick_intro;
-        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        $UserProfileDetail['email'] = $user->email;
-
-        $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-            ;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-            ;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
-
-        /*$fdata = UserFollow::select("user_id", "follow_id", "follower_id")
-                ->where("user_id", "!=", Auth::user()->id)
-                ->orwhere("follow_id", "=", 4)
-                ->where("follow_id", "=", 1)
-                ->get();*/
-
-        $fdata = UserFollow::select("user_id", "follow_id", "follower_id")
-                ->where("follower_id", "=", Auth::user()->id)
-                ->get();
-        
-        $testdata = '';
-        if(isset($fdata)) {
-        foreach ($fdata as $data) {
-            $query = CompanyInformation::select("first_name", "last_name", "logo", "user_id", "id")
-                    ->where("user_id", $data['user_id'])
-                    ->first();
-            $queryUser = User::select("firstname", "lastname", "profile_pic", "id")
-                    ->where("id", $data['user_id'])
-                    ->first();
-            $isfollow = UserFollow::select("user_id", "follow_id", "follower_id")
-                ->where("follower_id", "=", @$queryUser['id'])
-                ->get();
-            $id = $user_id = $logo = $fname = $lname = "";
-            if( !empty($queryUser) ) {
-                $id = isset($query["id"]) ? $query["id"] : "";
-                $user_id = isset($data["user_id"]) ? $data["user_id"] : "";
-                $logo = isset($queryUser["profile_pic"]) ? $queryUser["profile_pic"] : "";
-                $fname = isset($queryUser["firstname"]) ? $queryUser["firstname"] : "";
-                $lname = isset($queryUser["lastname"]) ? $queryUser["lastname"] : "";
-                
-                $queryUserfollowersdata = UserFollow::select("user_id", "follow_id", "follower_id")->where("follower_id", "=", $queryUser["id"])->get();
-                $queryUserfollowingdata = UserFollow::select("user_id", "follow_id", "follower_id")->where("user_id", "=",$queryUser["id"])->get();
-                $testdata .='
-                <div class="followers-block">
-                    <div class="followers-content">
-						<div class="col-md-1 col-xs-4 nopadding">';
-                            if(File::exists(public_path("/uploads/profile_pic/thumb/".$logo )))
-                                $testdata .= '<div class="admin-img">
-                                    <img src="/public/uploads/profile_pic/thumb/'.$logo.'" alt="Fitnessity">';
-                            else
-                            {
-                                $testdata .= '<div class="admin-img-text">';
-                                $pf=substr($queryUser["firstname"], 0, 1).substr($queryUser["lastname"], 0, 1);
-                                $testdata .= '<p>'.$pf.'</p>';
-                            }
-							$testdata .= '</div>
-						</div>
-						<div class="col-md-7 col-xs-7">
-							<div class="followers-right-content mt-15">
-								<h5> '.$fname.' '.$lname.' </h5>
-								<ul>
-									  <li><span>Follower </span> '.$queryUserfollowersdata->count().' </li>
-									  <li><span>Member Since</span> '.date('F Y',strtotime($user->created_at)).'</li>
-									  <li><span>Following </span> '.$queryUserfollowingdata->count().' </li>
-								   
-								</ul>
-							</div> 
-						</div>
-						<div class="col-md-2 col-xs-6 mt-35">';
-							if ($isfollow->count()>0) {
-								$testdata .='Following';
-							} else {
-								$testdata .='<a class="followback" id="'.$id.'" data-user="'.$user_id.'">Follow</a> ';
-							}
-
-						$testdata .=' </div>
-						<div class="col-md-2 col-xs-6">
-							<div class="followers-button">
-								<a class="following-btn follow-btn remove-btn" id="'.$user_id.'">Remove</a>
-							</div>
-						</div>
-					</div>
-				</div>';
-            }
-        }
-        }
-        
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        
-        return view('personal-profile.followers', [
-            'UserProfileDetail' => $UserProfileDetail, 
-            'testdata' => $testdata,
-            'cart' => $cart
-        ]);
-    }
-
-    public function following(Request $request) {
-
-        $user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
-        $UserProfileDetail['firstname'] = $user->firstname;
-        $UserProfileDetail['lastname'] = $user->lastname;
-        $UserProfileDetail['gender'] = $user->gender;
-        $UserProfileDetail['username'] = $user->username;
-        $UserProfileDetail['phone_number'] = $user->phone_number;
-        $UserProfileDetail['address'] = $user->address;
-        $UserProfileDetail['quick_intro'] = $user->quick_intro;
-        $UserProfileDetail['birthdate'] = date('m d,Y', strtotime($user->birthdate));
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        $UserProfileDetail['email'] = $user->email;
-        $UserProfileDetail['cover_photo'] = $user->cover_photo;
-        
-
-        /*$follow = UserFollow::select("company_informations.company_name", "company_informations.first_name", "company_informations.last_name", "company_informations.id", "company_informations.logo")
-                ->join("company_informations", "users_follow.follow_id", "=", "company_informations.id")
-                ->where("users_follow.user_id", "=", Auth::user()->id)
-                ->get();*/
-        $follow = UserFollow::select("user_id", "follow_id", "follower_id")
-                ->where("user_id", "=", Auth::user()->id)
-                ->get();
-        $FollowDetail = $follow;
-        
-        /*$cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }*/
-
-        return view('personal-profile.following', [
-            'UserProfileDetail' => $UserProfileDetail, 
-            'FollowDetail' => $FollowDetail,
-           // 'cart' => $cart
-        ]);
-    }
     
-    public function creditCardInfo(Request $request){
-        $cardInfo = [];
-        $intent = null;
-        $user = User::where('id', Auth::user()->id)->first();
-        $customers = $user->customers()->pluck('id')->toArray();
-        $customer_ids = implode(',',$customers);
 
-        $query = StripePaymentMethod::where('user_type', 'user')
-            ->where('user_id', Auth::user()->id);
-
-        if ($customer_ids) {
-            $query->orWhere(function($subquery) use ($customer_ids) {
-                $subquery->where('user_type', 'customer')
-                    ->whereIn('user_id', explode(',', $customer_ids));
-            });
-        }
-
-        $cardInfo = $query->orderBy('created_at', 'desc')->get();
-
-        $UserProfileDetail['firstname'] =  $user->firstname;
-       
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-
-        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        if($user->stripe_customer_id != ''){
-            $intent = $stripe->setupIntents->create([
-                'payment_method_types' => ['card'],
-                'customer' => $user->stripe_customer_id,
-            ]);
-        }
-
-        return view('personal-profile.credit-cards', [
-            'UserProfileDetail' => $UserProfileDetail, 
-            'cardInfo' => $cardInfo,
-            'cart' => $cart,
-            'intent' => $intent 
-        ]);
-    }
-    
-    public function cardsSave(Request $request) {
-       
-        $user = User::where('id', Auth::user()->id)->first();
-        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-        $payment_methods = $stripe->paymentMethods->all(['customer' => $user->stripe_customer_id, 'type' => 'card']);
-        $fingerprints = [];
-        foreach($payment_methods as $payment_method){
-            $fingerprint = $payment_method['card']['fingerprint'];
-            if (in_array($fingerprint, $fingerprints, true)) {
-                $deletePaymentMethod = StripePaymentMethod::where('payment_id', $payment_method['id'])->first();
-                if($deletePaymentMethod != ''){
-                    $deletePaymentMethod->delete();
-                }
-            } else {
-                $fingerprints[] = $fingerprint;
-                $stripePaymentMethod = StripePaymentMethod::firstOrNew([
-                    'payment_id' => $payment_method['id'],
-                    'user_type' => 'User',
-                    'user_id' => $user->id,
-                ]);
-
-                $stripePaymentMethod->pay_type = $payment_method['type'];
-                $stripePaymentMethod->brand = $payment_method['card']['brand'];
-                $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
-                $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
-                $stripePaymentMethod->last4 = $payment_method['card']['last4'];
-                $stripePaymentMethod->save();
-
-                $customer = Customer::where(['fname' =>$user->firstname,'lname' =>$user->lastname, 'email' => $user->email])->get();
-
-                if ($stripePaymentMethod->wasRecentlyCreated && !empty($customer) ) {
-                  
-                    foreach($customer as $cus){
-                        $spmForCus = StripePaymentMethod::create([
-                            'payment_id' => $payment_method['id'],
-                            'user_type' => 'Customer',
-                            'user_id' => $cus->id,
-                            'pay_type' => $payment_method['type'],
-                            'brand' => $payment_method['card']['brand'],
-                            'exp_month' => $payment_method['card']['exp_month'],
-                            'exp_year' => $payment_method['card']['exp_year'],
-                            'last4' => $payment_method['card']['last4'],
-                        ]);
-                    }
-                }
-            }
-        }
-
-        if($request->chkRedirection == 1){
-            $user->show_step = 7;
-            $user->save();
-            return redirect('/registration/?showstep=1'); 
-        }else{
-            return redirect()->route('creditCardInfo'); 
-        }
-        
-    }
-
-    public function cardDelete(Request $request) {
-        $user = User::where('id', Auth::user()->id)->first();
-        $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $request->stripe_payment_method)->firstOrFail();
-
-        $stripePaymentMethod->delete();
-    }
-
-    public function paymentHistory(Request $request){
-        $user = User::where('id', Auth::user()->id)->first();
-        $customers = $user->customers()->pluck('id')->toArray();
-        $customer_ids = implode(',',$customers);
-
-        $query2 = Transaction::where('transaction.user_type', 'user')
-            ->where('transaction.user_id', Auth::user()->id);
-
-        if ($customer_ids) {
-            $query2->orWhere(function($subquery) use ($customer_ids) {
-                $subquery->where('transaction.user_type', 'customer')
-                    ->whereIn('transaction.user_id', explode(',', $customer_ids));
-            });
-        }
-
-        $query2 = $query2->join("user_booking_status as ubs", "transaction.item_id", "=", "ubs.id")->Join("user_booking_details as usd", "ubs.id", "=", "usd.booking_id");
-        $transactionDetail = $query2->orderby('transaction.created_at' ,'DESC')->whereNotNull('usd.id')->paginate(10); 
-
-        //print_r($transactionDetail);exit;
-        $UserProfileDetail['firstname'] =  $user->firstname;
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        return view('personal-profile.payment-history', [
-            'UserProfileDetail' => $UserProfileDetail, 
-            'transactionDetail' => $transactionDetail, 
-            'cart' => $cart
-        ]);
-    }
-
-    public function card_purchase_history(Request $request){
-        // /print_r($request->all());exit;
-        $cardDetail = StripePaymentMethod::findOrFail($request->pid);
-        $user = Auth::user();
-        $transactionDetail = $user->Transaction()->where('stripe_payment_method_id',$cardDetail->payment_id)->get();
-        $html = '';
-        foreach($transactionDetail as $history){
-            $html .= '<tr>
-                <td>'.date('m/d/Y',strtotime($history->created_at)).'</td>
-                <td>'.$history->item_description()['itemDescription'].'</td>
-                <td>'.$history->item_type_terms().'</td>
-                <td>'.$history->getPmtMethod().'</td>
-                <td>$'.$history->amount.'</td>
-                <td>'.$history->item_description()['qty'].'</td>
-            </tr>';
-        }
-        return $html;
-    }
 
     public function review(Request $request) {
 
@@ -8558,7 +8155,6 @@ class UserProfileController extends Controller {
 
     public function addinstantHire(Request $request) {
 
-
         $activity = $request->sport;
         $qoutes = $request->qoutes;
         $activity_for = '';
@@ -8647,7 +8243,6 @@ class UserProfileController extends Controller {
         );
 
         $save = InstantForms::create($savedata);
-        // return redirect('/')->with('message', 'Your Data Saved Successfully!');
         return view('home.instant_success');
     }
 
@@ -8671,30 +8266,12 @@ class UserProfileController extends Controller {
             $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'gallery'.DIRECTORY_SEPARATOR. $loggedinUser->id .DIRECTORY_SEPARATOR ."thumb".DIRECTORY_SEPARATOR, $name);
          }
 
-        /*$imageName = '';
-        if ($request->hasFile('coverphoto')) {
-
-            $file_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'cover-photo' . DIRECTORY_SEPARATOR;
-            $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'cover-photo' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
-            $image_upload = Miscellaneous::saveFileAndThumbnail($request->file('coverphoto'), $file_upload_path, 1, $thumb_upload_path, '247', '266');
-            $imageName = $image_upload['filename'];
-             if($user->cover_photo != ''){
-              @unlink(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'cover-photo'.DIRECTORY_SEPARATOR.$user->cover_photo);
-              @unlink(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'cover-photo'.DIRECTORY_SEPARATOR.'thumb'.DIRECTORY_SEPARATOR.$user->cover_photo);
-              } 
-        }*/
-
-          $affected = DB::table('users_add_attachment')->insert(['user_id' => Auth::user()->id, 'attachment_name' => $name, 'attachment_status' => '1' ,'cover_photo' =>'1']);
-
-       /* $cat = User::find($loggedinUser['id']);
-        $cat->cover_photo = $imageName;*/
-        /*$affected = $cat->update();*/
+       
+        $affected = DB::table('users_add_attachment')->insert(['user_id' => Auth::user()->id, 'attachment_name' => $name, 'attachment_status' => '1' ,'cover_photo' =>'1']);
 
         if ($affected) {
-           /* return redirect('/profile/viewProfile?cover=1');*/
             return Redirect::back()->with('success', 'Cover photo updated successfully.');
         } else {
-           /* return redirect('/profile/viewProfile?cover=0');*/
             return Redirect::back()->with('error', 'Problem in updating cover photo.');
         }
             
@@ -8757,16 +8334,6 @@ class UserProfileController extends Controller {
         return Redirect::back()->with('success', 'Family Member Deleted Successfully..');
     }
 
-    public function payment_history(Request $request){
-        if($request->type == 'user'){
-            $purchase_history = Auth::user()->Transaction()->orderby('id', 'desc')->get();
-        }else{
-            $customer = Customer::find($request->id);
-            $purchase_history = @$customer != '' ?  @$customer->Transaction()->orderby('id', 'desc')->get() : [];
-        }
-        //print_r($purchase_history);exit;
-        return view('personal-profile.payment-history-modal',['purchase_history'=>$purchase_history ,'id'=>$request->id]);
-    }
 
     public function spotify() 
     {
@@ -8908,7 +8475,7 @@ class UserProfileController extends Controller {
             $client->messages->create($recipients, [ "body" => "Your verification code is: " .$message, 'from' => $twilio_number]);
             $msg = 'Success';
         }catch(\Exception $e) {
-            $msg = 'Fail';
+            $msg =  $e;
         }
         return $msg;
     }
@@ -8935,7 +8502,7 @@ class UserProfileController extends Controller {
                 $detail_data_com = [];
                 $detail_data_com['company_data'] = CompanyInformation::where('id',$request->cid)->first();
                 $allDetail  = json_decode(json_encode($detail_data_com), true); ;
-                MailService::sendEmailafterclaimed($allDetail);
+                SGMailService::welcomeMailOfNewBusinessToCustomer(['cid'=> $request->cid,'email' => $user->email]);
                 $msg = 'Match';
             }else{
                 $msg = 'Not Match';
@@ -8980,120 +8547,13 @@ class UserProfileController extends Controller {
 
         return view('home.business-claim-reminder',compact('cname','cid','address'));
     } 
-	public function createmanageStaff(Request $request){
-		return view('profiles.createstaff');
-	}
-	public function staff_scheduled_activities(){
-		return view('profiles.staff-scheduled-activities');
-	}
-	public function manageproduct(){
-		return view('profiles.manageproduct');
-	}
-	public function addproduct(){
-		return view('profiles.addproduct');
-	}
-	public function manage_activity(){
-		return view('profiles.ManageActivity');
-	}
+
+	
 	public function financial_dashboard(){
 		return view('profiles.financial-dashboard');
 	}
 
-   
-    public function view_customer (){
-        return view('profiles.view-customer');
-    }
-    public function pricedetails (){
-        return view('profiles.pricedetails');
-    }
-
-    public function businesspricedetails ($catid){
-        $catdata =  BusinessPriceDetailsAges::where('id',$catid)->first();
-        $business_activity = BusinessActivityScheduler::where('cid', $catdata['cid'])->where('serviceid', $catdata['serviceid'])->where('category_id',$catid)->get();
-        $business_activity = isset($business_activity) ? $business_activity : [];
-        return view('profiles.createnewbusinesspricedetails',compact('catid','catdata','business_activity'));
-    }
-
-    /*public function addbusinessschedule (Request $request){
-        // print_r($request->all());
-        //   exit;
-        $shift_start = $request->duration_cnt;
-        // echo $shift_start; exit;
-        if($shift_start >= 0) {
-           // BusinessActivityScheduler::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('serviceid',  $request->serviceid)->where('category_id',$request->catid)->delete();
-            $alldata = BusinessActivityScheduler::where('cid', $request->cid)->where('userid', Auth::user()->id)->where('serviceid',  $request->serviceid)->where('category_id',$request->catid)->get();
-            
-            $idary = array();
-            $idary1 = array();
-            foreach( $alldata as $data_all){
-                $idary[] =  $data_all['id'];
-            }
-            $date = '';
-            $getdate = explode('/',$request->starting);
-            $date .= $getdate[2].'-'.$getdate[0].'-'.$getdate[1];
-            for($i=0; $i <= $shift_start; $i++) { 
-                if($request->id[$i] != ''){
-                    $idary1[] = $request->id[$i];
-                }
-                
-                if($request->shift_start[$i] != '' && $request->shift_end[$i] != '' && $request->set_duration[$i] != '') {
-
-                    if($request->until == 'days'){
-                        $daynum = '+'.$request->scheduled.' days';
-                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
-                    }else if($request->until == 'month'){
-                        $daynum = '+'.$request->scheduled.' month';
-                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
-                    }else if($request->until == 'years'){
-                        $daynum = '+'.$request->scheduled.' years';
-                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
-                    }else{
-                        $daynum = '+'.$request->scheduled.' week';
-                        $expdate  = date('Y-m-d', strtotime($request->starting. $daynum ));
-                    }
-
-                    $activitySchedulerData = [
-                        "cid" => $request->cid,
-                        "category_id" => $request->catid,
-                        "userid" =>Auth::user()->id,
-                        "serviceid" =>$request->serviceid,
-                        "activity_meets" => $request->frm_class_meets,
-                        "starting" => $date,
-                        "activity_days" => isset($request->activity_days[$i]) ? $request->activity_days[$i] : '',
-                        "shift_start" => isset($request->shift_start[$i]) ? $request->shift_start[$i] : '',
-                        "shift_end" => isset($request->shift_end[$i]) ? $request->shift_end[$i] : '',
-                        "set_duration" => isset($request->set_duration[$i]) ? $request->set_duration[$i] : '',
-                        "spots_available" => isset($request->sport_avail[$i]) ? $request->sport_avail[$i] : '',
-                        "scheduled_day_or_week" => $request->until, 
-                        "scheduled_day_or_week_num" => $request->scheduled,
-                        "end_activity_date" => $expdate,
-                        "is_active" => 1,
-                        "schedule_until" => '',
-                        "sales_tax" => '',
-                        "sales_tax_percent" => '',
-                        "dues_tax" => '',
-                        "dues_tax_percent" => ''
-                    ];
-                    if($request->id[$i] != ''){
-                        // echo $request->id[$i];
-                        BusinessActivityScheduler::where('id', $request->id[$i])->update($activitySchedulerData);
-                    }else{
-                        BusinessActivityScheduler::create($activitySchedulerData);
-                    }
-                    
-                }
-            }
-        
-            $differenceArray1 = array_diff($idary, $idary1);
-            foreach($differenceArray1 as $deletdata){
-                BusinessActivityScheduler::where('id',$deletdata)->delete();
-            }
-        }
-        // exit;
-        return redirect()->route('businesspricedetails', [$request->catid]);
-        // return Redirect::route('businesspricedetails')->with('catid', $request->catid);
-        // return()->route('businesspricedetails',['catid' => $request->catid]);
-    }*/
+  
     public function modelboxsuccess(Request $request){
         /*print_r($request->all());*/
         for($x=0;$x=$request->i;$x++){

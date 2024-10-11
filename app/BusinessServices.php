@@ -1,10 +1,10 @@
 <?php
-
 namespace App;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Storage;
 
 class BusinessServices extends Model
 {
@@ -33,6 +33,8 @@ class BusinessServices extends Model
         'program_name',
         'program_desc',
         'profile_pic',
+        'cover_photo',
+        'video',
         'instant_booking',
         'request_booking',
         'frm_min_participate',
@@ -113,9 +115,16 @@ class BusinessServices extends Model
         'cancelbefore',
         'cancelbeforeint',
         'know_before_you_go',
+        'can_book_after_activity_starts',
+        'aftertime',
+        'aftertimeint',
+        'cancellation_policy',
     ];
 
-     public static function boot(){
+
+    protected $appends = ['days_title_arry','days_desc_arry','days_img_arry' ,'id_proof' ,'id_vaccine' ,'id_covid' ,'included_items_ary','not_included_items_ary','all_over_review'];
+
+    public static function boot(){
         parent::boot();
 
         static::deleting(function($service) {
@@ -138,11 +147,79 @@ class BusinessServices extends Model
             $service->favourites->each(function($favourite) {
                 $favourite->delete();
             });
+
+            $service->UserBookingDetails->each(function($detail) {
+                $detail->terminated_at = date('Y-m-d');
+                $detail->terminate_reason = 'We would like to inform you that this activity has been closed by company.';
+                $detail->terminate_comment = 'If you have any questions or need additional assistance, please don\'t hesitate to reach out to our support team.';
+                $detail->status = 'terminate';
+                $detail->update();
+            });
         });
+    }
+
+
+    public function getAllOverReviewAttribute(){
+        $reCnt = 0;
+        $reCnt += getBusinessServiecReviewSum($this->id,'cleanliness');
+        $reCnt += getBusinessServiecReviewSum($this->id,'accuracy');
+        $reCnt += getBusinessServiecReviewSum($this->id,'checkin');
+        $reCnt += getBusinessServiecReviewSum($this->id,'communication');
+        $reCnt += getBusinessServiecReviewSum($this->id,'customer_service');
+        $reCnt += getBusinessServiecReviewSum($this->id,'location');
+        $reCnt += getBusinessServiecReviewSum($this->id,'value');
+        
+        if($reCnt > 0){
+             return round($reCnt / ($this->reviews()->count() * 7),2);
+        }
+        return 0;
+    }
+
+    public function getDaysTitleArryAttribute(){
+        if ($this->days_plan_title === null || $this->days_plan_title === '' || $this->days_plan_title === '[null]') {
+            return [];
+        }
+    
+        return json_decode($this->days_plan_title, true);
+    } 
+
+    public function getDaysDescArryAttribute(){
+        return $this->days_plan_desc != ''  || $this->days_plan_desc != '[null]'  ? json_decode($this->days_plan_desc, true) : [];
+    }
+
+    public function getDaysImgArryAttribute(){
+        return $this->days_plan_img != ''  ? explode(",",$this->days_plan_img) : [];
+    }
+
+    public function getIncludedItemsAryAttribute(){
+        return $this->included_items != ''  ? explode(",",$this->included_items) : [];
+    } 
+
+    public function getNotIncludedItemsAryAttribute(){
+        return $this->notincluded_items != ''  ? explode(",",$this->notincluded_items) : [];
+    } 
+
+    public function getIdProofAttribute(){
+        $reqSafety = explode(',',$this->req_safety);
+        return empty($reqSafety) ? 0 : (in_array("id_proof", $reqSafety) ? 1 : 0);
+    }
+
+    public function getIdVaccineAttribute(){
+        $reqSafety = explode(',',$this->req_safety);
+        return empty($reqSafety) ? 0 : (in_array("id_vaccine", $reqSafety) ? 1 : 0);
+    }
+
+    public function getIdCovidAttribute(){
+        $reqSafety = explode(',',$this->req_safety);
+        return empty($reqSafety) ? 0 : (in_array("id_covid", $reqSafety) ? 1 : 0);
     }
     
     public function BusinessStaff(){
         return $this->belongsTo(BusinessStaff::class, 'instructor_id');
+    }
+
+    public function businessServicesFaq(){
+        return $this->hasMany(BusinessServicesFaq::class, 'service_id');
     }
 
     public function businesscompanydetail() {
@@ -157,7 +234,7 @@ class BusinessServices extends Model
     {
         return $this->belongsTo(User::class, 'userid');
     }
-
+    
     public function company_information(){
         return $this->belongsTo(CompanyInformation::class, 'cid');
     }
@@ -184,7 +261,7 @@ class BusinessServices extends Model
     }
 
     public function UserBookingDetails(){
-        return $this->hasMany(UserBookingDetails::class, 'sport');
+        return $this->hasMany(UserBookingDetail::class, 'sport');
     }
 
     public function reviews_score()
@@ -201,52 +278,67 @@ class BusinessServices extends Model
 
     public function first_profile_pic(){
         $pictures = explode(',',$this->profile_pic);
-        return $pictures[0];
+        return Storage::disk('s3')->exists( $pictures[0]) ? Storage::URL( $pictures[0]) : '/public/images/service-nofound.jpg';
     }
 
     public function min_price(){
         $pricearr =$discountPriceArr= [];
+        $priceVal = '';
         $priceAllArray = $this->price_details;
         if(!empty($priceAllArray)){
             foreach ($priceAllArray as $key => $value) {
                 $price = 0;
-                if(date('l') == 'Saturday' || date('l') == 'Sunday'){
-                    if($value->adult_weekend_price_diff != ''){
-                        $price = $value->adult_weekend_price_diff;
-                        $discount = $value->adult_discount;
-                    }else if($value->child_weekend_price_diff != ''){
-                        $price = $value->child_weekend_price_diff;
-                        $discount = $value->child_discount;
-                    }else{
-                        $price = $value->infant_weekend_price_diff;
-                        $discount = $value->infant_discount;
-                    }
+    
+                if($value->adult_weekend_price_diff != ''){
+                    $priceWEnd = $value->adult_weekend_price_diff;
+                    $discountWEnd = $value->adult_discount;
+                }else if($value->child_weekend_price_diff != ''){
+                    $priceWEnd = $value->child_weekend_price_diff;
+                    $discountWEnd = $value->child_discount;
                 }else{
-                    if($value->adult_cus_weekly_price != ''){
-                        $price = $value->adult_cus_weekly_price;
-                        $discount = $value->adult_discount;
-                    }else if($value->child_cus_weekly_price != ''){
-                        $price = $value->child_cus_weekly_price;
-                        $discount = $value->child_discount;
-                    }else{
-                        $price = $value->infant_cus_weekly_price;
-                        $discount = $value->infant_discount;
-                    }
+                    $priceWEnd = $value->infant_weekend_price_diff;
+                    $discountWEnd = $value->infant_discount;
+                }
+              
+                if($value->adult_cus_weekly_price != ''){
+                    $priceWDay = $value->adult_cus_weekly_price;
+                    $discountWDay = $value->adult_discount;
+                }else if($value->child_cus_weekly_price != ''){
+                    $priceWDay = $value->child_cus_weekly_price;
+                    $discountWDay = $value->child_discount;
+                }else{
+                    $priceWDay = $value->infant_cus_weekly_price;
+                    $discountWDay = $value->infant_discount;
                 }
 
-                $pricearr[] = $price != '' ? $price : 0;
-                $discountPriceArr[] = ($price != '' &&  $discount != '') ? $price - ($price * $discount/100) : 0 ; 
+                if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+                    $price = $priceWEnd ?: $priceWDay ?: 0;
+                    $discountVal = $discountWEnd ?: $discountWDay ?: 0;
+                }else{
+                    $price = $priceWDay ?: $priceWEnd ?: 0;
+                    $discountVal = $discountWDay ?: $discountWEnd ?: 0;
+                }
+
+                if($price != 0){
+                    $pricearr[] =  $price;
+                } 
+
+                $dis = ($price != 0 && $discountVal != 0) ? $price - ($price * $discountVal / 100) : ($discountVal == 0 ? $price : 0);
+
+                if($dis != 0){
+                    $discountPriceArr[] =  $dis;
+                }
             }
         }
+        
         $priceAll = !empty($pricearr) ? min($pricearr) : '';
         $discountPrice = !empty($discountPriceArr) ? min($discountPriceArr) : '';
-
         if($priceAll != $discountPrice){
-            $price = ' <strike> $'.$priceAll.'</strike> $'.$discountPrice;
-        }else{
-            $price = ' $'.$priceAll;
+            $priceVal = ' <strike> $'.$priceAll.'</strike> $'.$discountPrice;
+        }else if($priceAll != 0){
+            $priceVal = ' $'.$priceAll;
         }
-        return $price;
+        return $priceVal ?? '';
     }
 
     public function profile_pictures(){
@@ -308,6 +400,12 @@ class BusinessServices extends Model
             $chkDetailCnt += BookingCheckinDetails::where('booking_detail_id', $usd->id)->where('checkin_date',">=", date('Y-m-d', strtotime("this week")))->where('checkin_date',"<=", date('Y-m-d', strtotime("saturday 0 week")))->count();
         }
         return  $chkDetailCnt;
+    }
+
+    // In BusinessService.php model
+    public function priceDetailsAges()
+    {
+        return $this->hasMany(BusinessPriceDetailsAges::class, 'serviceid', 'id');
     }
 
 

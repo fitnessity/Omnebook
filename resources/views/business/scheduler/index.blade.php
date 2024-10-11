@@ -1,10 +1,7 @@
 @inject('request', 'Illuminate\Http\Request')
 @extends('layouts.business.header')
-
 @section('content')
-
 	@include('layouts.business.business_topbar')
-
    <div class="main-content">
 		<div class="page-content">
          <div class="container-fluid">
@@ -60,18 +57,22 @@
 											<div class="row">
 												<div class="col-md-12">
 													<div class="text-right">
-														<button type="button" class="btn btn-red" data-behavior="ajax_html_modal" data-url="{{route('business.schedulers.cancel_all', ['schedulerId' => rtrim($scheduleIds, ','), 'date' => $filterDate->format('m/d/Y'), 'return_url' => url()->full()])}}">Cancel All Activity Of Today</button>
+														<button type="button" class="btn btn-red mmb-10" data-behavior="ajax_html_modal" data-url="{{route('business.schedulers.cancel_all', ['schedulerId' => rtrim($scheduleIds, ','), 'date' => $filterDate->format('m/d/Y'), 'return_url' => url()->full()])}}">Cancel All Activity Of Today</button>
 													
 														<button type="button" class="btn btn-red" data-behavior="ajax_html_modal" data-url="{{route('business.schedulers.cancel_all_by_date', ['activity_type'=>request()->activity_type, 'return_url' => url()->full()])}}">Cancel Multiple Days</button>
 													</div>
 												</div>
 											</div>
 											
-											@php $total_reservations = 0; @endphp
+											@php $total_reservations = 0;$schedule_count=0; @endphp
+											
 											@foreach ($schedules as $i=>$schedule)
+										    @if (!empty($schedule->businessPriceDetailsAges_Cat->category_title))
 												@php 
-													$total_reservations += $schedule->spots_reserved($filterDate);
+													// $total_reservations += $schedule->spots_reserved($filterDate);
+													$total_reservations += $schedule->spots_reserved_cat($filterDate);
 													$schedule_end = strtotime($filterDate->format('Y/m/d').' '.$schedule['shift_end']);
+													$insName = $schedule->getInstructure($filterDate->format('Y-m-d'))
 											 	@endphp
 												<div class="mini-stats-wid d-flex align-items-center mt-3 scheduler-box">
 													<div class="flex-shrink-0 right-spretar">
@@ -86,8 +87,13 @@
 														</a>
 													</div>
 													<div class="flex-grow-auto ms-3">
-														<h3 class="fs-15 mb-1"> @if($schedule->business_service()->exists())  {{$schedule->businessPriceDetailsAges->category_title}} @endif </h3>
-														<p class="mb-1"> @if($schedule->business_service()->exists()) {{$schedule->business_service->program_name}} @endif @if($schedule->businessPriceDetailsAges()->exists()) @endif  </p> 
+														<h3 class="fs-15 mb-1"> @if($schedule->business_service()->exists())
+															 {{-- {{@$schedule->businessPriceDetailsAges->category_title}} --}}
+															 {{@$schedule->businessPriceDetailsAges_Cat->category_title}}
+															 @endif
+														</h3>
+														<p class="mb-1"> {{$insName != '' ? 'with '.$insName : ''}} 
+															<!-- @if($schedule->business_service()->exists()){{$schedule->business_service->program_name}} @endif @if($schedule->businessPriceDetailsAges()->exists()) @endif -->  </p> 
 														
 														<p class="text-muted mb-0">with {{$schedule->company_information->public_company_name}} @if($schedule->business_service()->exists()) {{$schedule->business_service->activity_location}} @endif </p>
 													</div>
@@ -179,12 +185,17 @@
 														</div>
 													</div>
 												</div>
+												@php 
+												$schedule_count++;
+												@endphp
+											@endif
 											@endforeach
 
 											<div class="row">
 												<div class="col-md-6 col-xs-12 col-sm-6">
 													<div class="activities-details mt-10">
-														<label>Total Activities Today: </label> <span id="sccount"> {{count($schedules)}}   </span>
+														{{-- <label>Total Activities Today: </label> <span id="sccount"> {{count($schedules)}}   </span> --}}
+														<label>Total Activities Today: </label> <span id="sccount"> {{$schedule_count}}   </span>
 														<label>Total Reservations Today:</label> <span id="rescount">{{$total_reservations}}   </span> 
 														<label>Next Date:</label>
 														{{$filterDate->addDay()->format('m/d/Y')}}
@@ -194,8 +205,7 @@
 													<div class="pre-next-btns pre-nxt-btn-space mt-10">
 														<a class="btn-previous btn-sp btn-black" href="{{route('business.schedulers.index', array_merge(request()->query(), ['date' => $filterDate->subDay()->format('m/d/Y')]))}}" disabled="" id="btn-pre">
 															<i class="fas fa-caret-left preday-arrow"></i>Previous Day
-														</a>
-														
+														</a>														
 														<a class="btn-previous btn-red" id="btn-next" href="{{route('business.schedulers.index', array_merge(request()->query(), ['date' => $filterDate->addDay()->format('m/d/Y')]))}}">Next Day <i class="fas fa-caret-right nextday-arrow"></i></a>
 													</div>
 												</div>

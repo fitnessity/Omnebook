@@ -25,9 +25,14 @@ class Products extends Model
         return $profile_pic;
     }
 
-    public function getSoldProducts(){
+
+    public function soldProducts($sDate = null , $eDate = null){
         $totalQty = 0;
-        $details = UserBookingDetail::whereRaw("FIND_IN_SET(?, productIds)", [$this->id])->get();
+        $details = UserBookingDetail::whereRaw("FIND_IN_SET(?, productIds)", [$this->id]);
+        if($sDate && $eDate){
+            $details->whereDate('created_at', '>=', $sDate)->whereDate('created_at', '<=', $eDate);
+        }
+        $details = $details->get();
         foreach ($details as  $value) {
             $products = explode(',', $value->productIds);
             $qtyList = explode(',', $value->productQtys);
@@ -38,9 +43,87 @@ class Products extends Model
             }
         } 
 
-        $reminingQty = $this->quantity - $totalQty;
-        $reminingQty =  $reminingQty > 0 ? $reminingQty : 0;
+        return $totalQty;
+    }
 
+    public function getSoldProducts($sDate = null , $eDate = null){
+        if($sDate != '' && $eDate != ''){
+            $soldQty = $this->soldProducts($sDate, $eDate);
+        }else{
+            $soldQty = $this->soldProducts();
+        }
+
+        $reminingQty = $this->quantity - $soldQty;
+        $reminingQty =  $reminingQty > 0 ? $reminingQty : 0;
         return $reminingQty;  
+    }
+
+    public function getMembership($sDate,$eDate){
+        return UserBookingDetail::whereRaw("FIND_IN_SET(?, productIds)", [$this->id])->whereDate('user_booking_details.created_at','>=',$sDate)->whereDate('user_booking_details.created_at','<=',$eDate);
+    }
+
+    public function getProductPrice($sDate,$eDate){
+        $prices = [];
+        foreach ($this->getMembership($sDate,$eDate)->get() as $m) {
+            $ids = $m->productIds;
+            $qtys = explode(',', $m->productQtys);
+            $types = explode(',', $m->productTypes);
+            $position = array_search($this->id, explode(',', $ids));
+            if($types[$position] == 'rent'){
+                if (!in_array( ucfirst($types[$position]). ': $' .$this->rental_price,$prices)) {
+                    $prices[] = ucfirst($types[$position]) . ': $' .$this->rental_price;
+                }
+            }else {
+                if (!in_array( ucfirst($types[$position]). ': $' .$this->sale_price,$prices)) {
+                    $prices[] = ucfirst($types[$position]) . ': $' .$this->sale_price;
+                }
+            }
+        }
+
+        return implode(', ', $prices) ?: '$0';
+    }
+
+    public function getProductQty($sDate,$eDate){
+        $qty ='';
+        $sumQuantities = [ 'sale' => 0, 'rent' => 0];
+        foreach ($this->getMembership($sDate,$eDate)->get() as $m) {
+            $ids = $m->productIds;
+            $qtys = explode(',', $m->productQtys);
+            $types = explode(',', $m->productTypes);
+            $position = array_search($this->id, explode(',', $ids));
+            if($types[$position] == 'rent'){
+                $sumQuantities['rent'] += (int)$qtys[$position];
+            }else{
+                $sumQuantities['sale'] += (int)$qtys[$position];
+            }
+        }
+
+        foreach ($sumQuantities as $type => $sum) {
+            if($sum > 0){
+                if(!empty($qty)) {
+                    $qty .= ', ';
+                }
+                $qty .= ucfirst($type) . ': ' . $sum;
+            }
+        }
+
+        return $qty ?? 0;
+    }
+    
+    public function getProductRevenue($sDate,$eDate){
+        $price = 0;
+        foreach ($this->getMembership($sDate,$eDate)->get() as $m) {
+            $ids = $m->productIds;
+            $qtys = explode(',', $m->productQtys);
+            $types = explode(',', $m->productTypes);
+            $position = array_search($this->id, explode(',', $ids));
+            if($types[$position] == 'rent'){
+                $price += $qtys[$position] * $this->rental_price;
+            }else {
+                $price += $qtys[$position] * $this->sale_price;
+            }
+        }
+
+        return $price;
     }
 }

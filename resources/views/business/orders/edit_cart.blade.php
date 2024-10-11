@@ -180,7 +180,17 @@
                                              <input type="hidden" name="duestax" id="duestaxajax" value="{{$duestaxajax}}">
                                              <input type="hidden" name="salestax" id="salestaxajax" value="{{$salestaxajax}}">
                                         </div>
+
                                         <div class="col-md-4 col-sm-4 col-xs-12">
+                                             <div class="select0service">
+                                                  <label>Date This Activaties?</label>
+                                                  <div class="date-activity-scheduler date-activity-check">
+                                                       <input type="text"  name="actfildate"  id="contractajax" placeholder="Search By Date" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input active" value="{{date('m/d/Y',strtotime($cart['sesdate']))}}" onchange="changedate('ajax');">
+                                                  </div>
+                                             </div>
+                                        </div>
+
+                                        <div class="col-md-4 col-sm-4 col-xs-12 durationDivAjax {{$durationDivAjax}}">
                                              <div class="select0service">
                                                   <label>Duration</label>
                                                   <div class="row">
@@ -201,14 +211,7 @@
                                                   </div>
                                              </div>
                                         </div>
-                                        <div class="col-md-4 col-sm-4 col-xs-12">
-                                             <div class="select0service">
-                                                  <label>Date This Activaties?</label>
-                                                  <div class="date-activity-scheduler date-activity-check">
-                                                       <input type="text"  name="actfildate"  id="contractajax" placeholder="Search By Date" class="form-control border-0 dash-filter-picker flatpickr-range flatpiker-with-border flatpickr-input active" value="{{date('m/d/Y',strtotime($cart['sesdate']))}}" onchange="changedate('ajax');">
-                                                  </div>
-                                             </div>
-                                        </div>
+                                        
                                    </div>
                               </div>
                          </div>

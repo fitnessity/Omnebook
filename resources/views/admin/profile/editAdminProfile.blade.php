@@ -116,7 +116,7 @@
 
                     <label>Gender</label> <span class="color-red">*</span>
 
-                     {!! Form::select('gender', ['' => 'Select Gender'] +$gender, $UserProfileDetail['gender'], ['class' => 'form-control', 'id' => 'frm_gender', 'name' => 'gender']) !!}
+                     {!! Form::select('gender', ['' => 'Select Gender'] + $gender, $UserProfileDetail['gender'], ['class' => 'form-control', 'id' => 'frm_gender', 'name' => 'gender']) !!}
 
                   </div>
 
@@ -134,7 +134,7 @@
 
                     <label for="state">State</label> <span class="color-red">*</span>
 
-                    {!! Form::select('state', ['' => 'Select State'] +$states,$UserProfileDetail['state'],array('id'=>'frm_state', 'class' => 'form-control', 'name' => 'state'));!!}
+                    {!! Form::select('state', ['' => 'Select State'] + $states->toArray(),$UserProfileDetail['state'],array('id'=>'frm_state', 'class' => 'form-control', 'name' => 'state'));!!}
 
                   </div>
 
@@ -142,7 +142,7 @@
 
                     <label for="city">City</label> <span class="color-red">*</span>
 
-                    {!! Form::select('city', ['' => 'Select city'] +$cities,$UserProfileDetail['city'],array('id'=>'frm_city', 'class' => 'form-control', 'name' => 'city'));!!} 
+                    {!! Form::select('city', ['' => 'Select city'] + $cities->toArray(),$UserProfileDetail['city'],array('id'=>'frm_city', 'class' => 'form-control', 'name' => 'city'));!!} 
 
                   </div>
 
@@ -152,7 +152,7 @@
 
                     <input type="hidden" name="country" id="frm_country">
 
-                     {!! Form::select('country_dd', ['' => 'Select Country'] +$countries,$UserProfileDetail['country'],array('id'=>'frm_country_dd', 'class' => 'form-control', 'name' => 'country', 'disabled' => 'disabled'));!!} 
+                     {!! Form::select('country_dd', ['' => 'Select Country'] + $countries->toArray(),$UserProfileDetail['country'],array('id'=>'frm_country_dd', 'class' => 'form-control', 'name' => 'country', 'disabled' => 'disabled'));!!} 
 
                   </div>
 
