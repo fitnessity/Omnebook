@@ -64,7 +64,7 @@
                                                 <a class="dropdown-item" href="{{route('personal.orders.index', array_merge(request()->query(), ['serviceType'=>'classes']))}}">Classes </a>
                                                 <a class="dropdown-item" href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=>'events']))}}">Events </a>
                                                 <a class="dropdown-item" href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=>'experience']))}}">Experiences </a> --}}
-                                                <a class="dropdown-item" href="#" data-service-type="">All</a>
+                                                <a class="dropdown-item" href="#" data-service-type="null">All</a>
                                                 <a class="dropdown-item" href="#" data-service-type="individual">Personal Trainer</a>
                                                 <a class="dropdown-item" href="#" data-service-type="classes">Classes</a>
                                                 <a class="dropdown-item" href="#" data-service-type="events">Events</a>
