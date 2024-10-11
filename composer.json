@@ -25,6 +25,7 @@
         "sentry/sentry-laravel": "^3.1",
         "stripe/stripe-php": "^7.100",
         "twilio/sdk": "^6.9",
+        "tymon/jwt-auth": "^1.0",
         "yajra/laravel-datatables-oracle": "^9.21"
     },
     "require-dev": {

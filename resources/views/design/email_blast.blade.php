@@ -44,7 +44,8 @@
                                         <div class="col-lg-7">
                                             <div class="text-right">
                                                 <div class="d-inline-block mt-15 mb-15">
-                                                    <button type="button" class="btn btn-black mr-15 mr-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                    <!-- <button type="button" class="btn btn-black mr-15 mr-5" data-bs-toggle="modal" data-bs-target="#exampleModal"> -->
+                                                    <button type="button" class="btn btn-black mr-15 mr-5">
                                                         Filters
                                                     </button>
                                                 </div>

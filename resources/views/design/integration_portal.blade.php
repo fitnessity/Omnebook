@@ -7,6 +7,15 @@
         <!-- ========================= Main ==================== -->
         @include('business.engage-clients.engage_clients_sidebar')
 
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Signika:wght@300..700&display=swap');
+
+</style>
+
 <div id="page-content-wrapper">
     <div class="container-fluid">
         <a href="#menu-toggle" class="btn btn-black mb-15" id="menu-toggle"><i class="fas fa-bars"></i></a>
@@ -984,10 +993,11 @@
                                                                                 <div class="gap-2 mt-3 filter-check">                                            
                                                                                     <label for="">Font</label>
                                                                                     <select class="form-select" name="know_from">
-                                                                                        <option Selected>Arial</option>
-                                                                                        <option>Calibri</option>
-                                                                                        <option>Cambria</option>
-                                                                                        <option>Monospace</option>
+                                                                                        <option Selected>Lato</option>
+                                                                                        <option>Oswald</option>
+                                                                                        <option>Space Grotesk</option>
+                                                                                        <option>Josefin Sans</option>
+                                                                                        <option>Signika</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>  

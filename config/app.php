@@ -179,6 +179,10 @@ return [
         App\Providers\RouteServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+
+
+
     ],
 
     /*

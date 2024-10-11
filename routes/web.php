@@ -24,10 +24,12 @@ Route::get('/clear-cache', function () {
     return 'Cache cleared successfully.';
 });
 
-route::get('/iframe',function(){
-    return view('iframe');
+route::get('/tester',function(){
+    return view('test');
 });
 Route::get('/test','HomeController@Test')->name('test');
+
+// Route::get('/login/{uniquecode}','Business\WebsiteIntegrationConroller@Loginuserbook')->name('login');
 
 Route::get('/invitation/accept','HomeController@invitation_accept')->name('invitation_accept');
 Route::any('/welcome_provider/','OnBoardedController@welcome')->name('onboard_process.welcome');
@@ -43,9 +45,11 @@ Route::any('/getCardFormPlan','MembershipPlanController@getCardForm')->name('cho
 Route::any('/checkPromoCode','MembershipPlanController@checkPromoCode')->name('choose-plan.checkPromoCode');
 Route::any('/getCardData','MembershipPlanController@getCardData')->name('choose-plan.getCardData');
 Route::get('/add-client','CustomerController@client')->name('client');
-Route::get('/login_integration','Business\WebsiteIntegrationConroller@Loginindex')->name('login_integration');//added_13_08
-Route::get('/loginuser/{uniquecode}','Business\WebsiteIntegrationConroller@Loginuser')->name('loginuser');//added_16_08
-Route::any('/customer_dashboard', 'Business\WebsiteIntegrationConroller@customerdashboard')->name('customer_dashboard');//added_20_08
+// Route::get('/login_integration','Business\WebsiteIntegrationConroller@Loginindex')->name('login_integration');//added_13_08
+// Route::get('/loginuser/{uniquecode}','Business\WebsiteIntegrationConroller@Loginuser')->name('loginuser');//added_16_08
+// Route::get('/loginuser','Business\WebsiteIntegrationConroller@Loginuser')->name('loginuser');//added_16_08
+
+// Route::any('/customer_dashboard', 'Business\WebsiteIntegrationConroller@customerdashboard')->name('customer_dashboard');//added_20_08
 
 Route::post('/get-checkin-code', 'CustomerController@getCheckinCode')->name('get_checkin_code');
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
@@ -166,7 +170,8 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('/login_details','WebsiteIntegrationConroller@update')->name('login_details');//added by me 01_8
     Route::post('/register_details','WebsiteIntegrationConroller@update_register')->name('register_details'); //added by me 02_8
     Route::get('/login_integration','WebsiteIntegrationConroller@Loginindex')->name('login_integration'); //added by me 01_8
-    
+    Route::post('/schedule_details','WebsiteIntegrationConroller@update_bookingschedule')->name('schedule_details');  //added by me 28_8
+    Route::get('/delete_img', 'WebsiteIntegrationConroller@deleteImage')->name('delete_img');
     Route::post('/store-list','EngageClientsController@storeList')->name('store_list'); 
     Route::post('/update_list','EngageClientsController@updateList')->name('update_list'); 
     Route::get('/delete_list','EngageClientsController@deleteList')->name('delete_list'); 
@@ -174,6 +179,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('/load-client-datatable','EngageClientsController@loadClientDatatable')->name('load_client_datatable'); 
     Route::post('/store-client-custom-list','EngageClientsController@storeClientCustomList')->name('store_client_custom_list'); 
 });
+
 Route::post('/sendgrid/webhook', 'WebhookController@handleWebhook');
 Route::get('/check-in-welcome', 'SelfCheckInController@index')->name('check-in-welcome');
 Route::get('/clear-session-and-welcome',  'SelfCheckInController@clearSessionAndRedirect')->name('clear-session-and-welcome');
@@ -198,6 +204,8 @@ Route::post('/memberhsip-pay', 'SelfCheckInController@memberhsipPay')->name('che
 Route::post('/chk-chckin-code', 'SelfCheckInController@chkCheckinCode')->name('checkin.chk-chckin-code');
 Route::post('/chk-chckin-code_exit', 'SelfCheckInController@chkCheckinCodeExit')->name('checkin.chk-chckin-code_exit');
 Route::post('/chk-chckin-code_staffexit', 'SelfCheckInController@chkChekouStaffExit')->name('checkin.chk-chckin-code_staffexit');
+Route::post('/check_participate', 'SelfCheckInController@getParticipateData')->name('check_participate');
+
 Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware('auth')->group(function () {
     Route::resource('orders', 'OrderController')->only(['index','show']);
     Route::post('/orders/search-activity', 'OrderController@searchActivity')->name('orders.searchActivity');
@@ -870,8 +878,8 @@ Route::post('/reviews/delete-review', 'ReviewController@reviewDelete')->name('re
 Route::get('/feedback/jsModalfeedback', 'FeedbackController@jsModalfeedback');
 Route::post('/feedback/saveFeedback', 'FeedbackController@saveFeedback');
 Route::get('feedback', 'FeedbackController@feedback')->name('feedback');
-Route::get('terms-condition', 'PageController@GetTermsPage');
-Route::get('privacy-policy', 'PageController@GetPrivacyPage');
+Route::get('terms-condition', 'PageController@GetTermsPage')->name('terms-condition');
+Route::get('privacy-policy', 'PageController@GetPrivacyPage')->name('privacy-policy');
 Route::get('/about-us', 'PageController@GetPageAboutUs');
 Route::get('/how-it-works-customer', 'PageController@GetPageHowItWorksCustomer');
 Route::get('/how-it-works-business', 'PageController@GetPageHowItWorksBusiness');
@@ -1099,5 +1107,25 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/alerts_details','DesignController@alerts_details')->name('alerts_details');
     Route::get('/email_blast','DesignController@email_blast')->name('email_blast');
     Route::get('/email_blast_step1','DesignController@email_blast_step1')->name('email_blast_step1');
+    Route::get('/email_blast_step2','DesignController@email_blast_step2')->name('email_blast_step2');
+    Route::get('/email_blast_blanktemp','DesignController@email_blast_blanktemp')->name('email_blast_blanktemp');
+    Route::get('/email_blast_temp2','DesignController@email_blast_temp2')->name('email_blast_temp2');
+    Route::get('/email_blast_temp3','DesignController@email_blast_temp3')->name('email_blast_temp3');
+    Route::get('/email_blast_temp4','DesignController@email_blast_temp4')->name('email_blast_temp4');
+    Route::get('/email_blast_schedule','DesignController@email_blast_schedule')->name('email_blast_schedule');
+    Route::get('/email_blast_temp5','DesignController@email_blast_temp5')->name('email_blast_temp5');
+    Route::get('/email_blast_temp6','DesignController@email_blast_temp6')->name('email_blast_temp6');
+    Route::get('/email_blast_temp7','DesignController@email_blast_temp7')->name('email_blast_temp7');
+    Route::get('/email_blast_temp8','DesignController@email_blast_temp8')->name('email_blast_temp8');
+    Route::get('/email_blast_temp9','DesignController@email_blast_temp9')->name('email_blast_temp9');
+    Route::get('/email_blast_temp10','DesignController@email_blast_temp10')->name('email_blast_temp10');
+    Route::get('/email_blast_temp11','DesignController@email_blast_temp11')->name('email_blast_temp11');
+    Route::get('/email_blast_temp12','DesignController@email_blast_temp12')->name('email_blast_temp12');
+    Route::get('/email_blast_temp13','DesignController@email_blast_temp13')->name('email_blast_temp13');
+    Route::get('/email_blast_temp14','DesignController@email_blast_temp14')->name('email_blast_temp14');
+    Route::get('/email_blast_temp15','DesignController@email_blast_temp15')->name('email_blast_temp15');
+    Route::get('/email_blast_temp16','DesignController@email_blast_temp16')->name('email_blast_temp16');
+    Route::get('/email_blast_temp17','DesignController@email_blast_temp17')->name('email_blast_temp17');
+    Route::get('/online_profile_post','DesignController@online_profile_post')->name('online_profile_post');
 });
 ?>

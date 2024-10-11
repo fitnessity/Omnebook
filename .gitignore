@@ -6,6 +6,8 @@
 /public/uploads
 /public/ExcelUpload
 /braintree
+/resources/views/design/
+/public/uploads/
 /storage/*.key
 /vendor
 /.idea
