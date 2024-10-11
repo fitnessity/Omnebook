@@ -11,7 +11,7 @@ use Auth,Response,Redirect,Validator,Input,Image,File,DB,DateTime,Config,Storage
 use Carbon\Carbon;
 use Illuminate\Support\Facades\{Gate,Log};
 
-use App\{PageAttachment,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,BusinessActivityScheduler,PageLike,Notification,Sports,BusinessReview,BusinessPostViews,UserFollow,UserBookingStatus,UserBookingDetail,MailService,User,UserService,UserProfessionalDetail,PagePost,PagePostComments,PagePostCommentsLike,PagePostLikes,PagePostSave,CompanyInformation,Miscellaneous,BusinessServiceReview,Transaction,CustomerPlanDetails};
+use App\{PageAttachment,BusinessCompanyDetail,BusinessExperience,BusinessInformation,BusinessService,BusinessTerms,BusinessVerified,BusinessServices,BusinessServicesMap,BusinessPriceDetails,BusinessSubscriptionPlan,BusinessActivityScheduler,PageLike,Notification,Sports,BusinessReview,BusinessPostViews,UserFollow,UserBookingStatus,UserBookingDetail,MailService,User,UserService,UserProfessionalDetail,PagePost,PagePostComments,PagePostCommentsLike,PagePostLikes,PagePostSave,CompanyInformation,Miscellaneous,BusinessServiceReview,Transaction,CustomerPlanDetails,Customer,BusinessStaff,CompanyRevenueGoalTracker};
 
 class BusinessController extends Controller
 {
@@ -23,9 +23,13 @@ class BusinessController extends Controller
 
     public function dashboard(Request $request ,$dates= null, $id= null){
 
-        $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales =  $in_person =$online = $customerCount = $remainingRecPercentage = $completedRecPercentage = $previousTotalSales = $totalsalePercentage =  $customerCountPercentage = $bookingCountPercentage = $totalRecurringPmt = $compltedpmtcnt = $remainigpmtcnt =$recurringAmount = $completeRecurringAmount = $reminingRecurringAmount = $left_days = 0;
+        if(count(Auth::user()->company) == 0){
+            return redirect('/personal/manage-account');
+        }
 
-        $ptdata1= $expiringMembership = $activitySchedule = $topBookedPriceId=$todayBooking =  $services = $topBookedCategories = $notificationAry = $transaction = $businessServices = $usDetail = [];
+        $bookingCount = $ptdata=  $evdata = $clsdata = $expdata = $prdata =$totalSales =  $in_person =$online = $customerCount = $remainingRecPercentage =$failedRecPercentage = $completedRecPercentage = $previousTotalSales = $totalsalePercentage =  $customerCountPercentage = $bookingCountPercentage = $totalRecurringPmt = $compltedpmtcnt = $remainigpmtcnt =$recurringAmount = $completeRecurringAmount = $reminingRecurringAmount = $failedRecurringAmount = $left_days = $currentMonthRevenue = $dayOfMonth = $revenuePerDay = $revenueShouldbeOnDay = $revenueAchivedPercentage = $reserveMembersCount = $reserveMembersCountPercentage = $revenuePerDayNeeded = 0;
+
+        $ptdata1= $expiringMembership = $activitySchedule  = $businessServices =  $revenueDataAry = $revenueDataMonthAry= []; $revenueData  = $categoryMonthData= '';
 
         if($id != ''){
             User::where('id',Auth::user()->id)->update(['cid'=> $id]);
@@ -46,7 +50,9 @@ class BusinessController extends Controller
         $endDateCalendar = array_key_exists(1,$date) ? $date[1] : Carbon::now()->lastOfMonth()->format('Y-m-d');
         
         $startDateMonth = Carbon::parse($startDate)->format('m'); 
+        $startDateYear = Carbon::parse($startDate)->format('Y'); 
         $endDateMonth =  Carbon::parse($endDate)->format('m');
+        $endDateYear =  Carbon::parse($endDate)->format('Y');
 
         $business = Auth::user()->current_company;
         $business_id =  @$business->id;
@@ -56,15 +62,38 @@ class BusinessController extends Controller
         $endOfWeek = Carbon::now()->endOfWeek();
         
         if(@$business != ''){
-            $services = $business->service()->orderby('created_at')->take(5)->get();
+            $customers= @$business->customers()->whereYear('created_at', '>=', $startDateYear)->whereMonth('created_at', '>=', $startDateMonth)->whereYear('created_at', '<=', $endDateYear)->whereMonth('created_at', '<=', $endDateMonth)->get();
 
-            $customerCount = @$business->customers()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->count();
-            $priviousCustomerCount = @$business->customers()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->count();
-            $bookingCount = $business->UserBookingDetails()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->count();
-            $priviousBookingCount = $business->UserBookingDetails()->whereMonth('created_at', '>=', $startDateMonth)->whereMonth('created_at', '<=', $endDateMonth)->count();
-            $todayBooking = @$business->UserBookingDetails()->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate)->get();
+            $customerCount = $customers->filter(function ($customer) {
+                return $customer->is_active() == 'Prospect'; 
+            })->count();
+
+            $reserveMembersCount = $customers->filter(function ($customer) {
+                return $customer->is_active() == 'Active'; 
+            })->count();
+
+            $bookingCount = $business->UserBookingDetails()->where('order_type' ,'Membership')->whereYear('created_at', '>=', $startDateYear)->whereMonth('created_at', '>=', $startDateMonth)->whereYear('created_at', '<=', $endDateYear)->whereMonth('created_at', '<=', $endDateMonth)->count();
+
+            $startSubDate = Carbon::createFromDate($startDateYear, $startDateMonth, 1)->subMonth();
+            $endSubDate = Carbon::createFromDate($endDateYear, $endDateMonth, 1)->subMonth()->endOfMonth();
+
+            $priviousBookingCount = $business->UserBookingDetails()->where('order_type' ,'Membership')->whereDate('created_at', '>=', $startSubDate)->whereDate('created_at', '<=', $endSubDate)->count();
+
+            $customersPrevious= @$business->customers()->whereDate('created_at', '>=', $startSubDate)->whereMonth('created_at', '<=', $endSubDate)->get();
+
+            $priviousCustomerCount = $customersPrevious->filter(function ($customer) {
+                return $customer->is_active() == 'Prospect'; 
+            })->count();
+
             
+            $previousReserveMembersCount = $customersPrevious->filter(function ($customer) {
+                return $customer->is_active() == 'Active'; 
+            })->count();
+           
             $customerCountPercentage =  $priviousCustomerCount != 0 ? number_format(($customerCount - $priviousCustomerCount)*100/$priviousCustomerCount,2,'.','') : 0;
+
+            $reserveMembersCountPercentage =  $previousReserveMembersCount != 0 ? number_format(($reserveMembersCount - $previousReserveMembersCount)*100/$previousReserveMembersCount,2,'.','') : 0;
+           
             $bookingCountPercentage = $priviousBookingCount != 0 ? number_format(($bookingCount - $priviousBookingCount)*100/$priviousBookingCount,2,'.',''): 0; 
 
             $booking = @$business->UserBookingDetails();
@@ -74,28 +103,32 @@ class BusinessController extends Controller
               ->where('kind','!=' ,'comp')
               ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
               ->join('user_booking_details as ubd', function($join) use ($business_id) {
-                  $join->on('ubd.booking_id', '=', 'ubs.id')
+                  $join->on('ubd.booking_id', '=', 'ubs.id')->where('ubd.order_type', 'Membership')
                       ->where('ubd.business_id', '=', $business_id);
               })->whereDate('transaction.created_at', '>=', $startDate)->whereDate('transaction.created_at', '<=', $endDate)->sum('transaction.amount');
+
             $previousTotalSales = Transaction::select('transaction.*')
               ->where('item_type', 'UserBookingStatus')
               ->where('kind','!=' ,'comp')
               ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
               ->join('user_booking_details as ubd', function($join) use ($business_id) {
-                  $join->on('ubd.booking_id', '=', 'ubs.id')
+                  $join->on('ubd.booking_id', '=', 'ubs.id')->where('ubd.order_type', 'Membership')
                       ->where('ubd.business_id', '=', $business_id);
-              })->whereDate('transaction.created_at','=',Carbon::now()->subMonth()->format('Y-m-d'))->sum('transaction.amount');
+              })->whereDate('transaction.created_at','>=',Carbon::parse($startDate)->subMonth()->format('Y-m-d'))->whereDate('transaction.created_at', '<=', Carbon::parse($endDate)->subMonth()->format('Y-m-d'))->sum('transaction.amount');
+
             $totalSalesforRecurring = Transaction::select('transaction.*')
                 ->where('item_type', 'Recurring')
                 ->join('recurring as rec', 'rec.id', '=', 'transaction.item_id')
                 ->where('rec.business_id', '=', $business_id)
                 ->whereDate('transaction.created_at', '>=', $startDate)
                 ->whereDate('transaction.created_at', '<=', $endDate)->sum('transaction.amount');
+
             $previousTotalSalesforRecurring = Transaction::select('transaction.*')
                 ->where('item_type', 'Recurring')
                 ->join('recurring as rec', 'rec.id', '=', 'transaction.item_id')
                 ->where('rec.business_id', '=', $business_id)
-                ->whereDate('transaction.created_at', '=', Carbon::now()->subMonth()->format('Y-m-d'))->sum('transaction.amount');
+                ->whereDate('transaction.created_at', '>=', Carbon::parse($startDate)->subMonth()->format('Y-m-d'))
+                ->whereDate('transaction.created_at', '<=', Carbon::parse($endDate)->subMonth()->format('Y-m-d'))->sum('transaction.amount');
 
             $totalSales += $totalSalesforRecurring;
             $previousTotalSales += $previousTotalSalesforRecurring;
@@ -110,12 +143,9 @@ class BusinessController extends Controller
                             $expdata += $chkindata->UserBookingDetail->business_services()->where('service_type' ,'experience')->count();
                         }
                     }*/
-                    if($b->business_price_detail != ''){
-                        $topBookedPriceId[] = $b->business_price_detail->id;
-                    }
                     
-                    /*$in_person += $b->userBookingStatus->Transaction()->where(['user_type' =>'Customer'])->count();
-                    $online +=  $b->userBookingStatus->Transaction()->where(['user_type' =>'user'])->count();*/
+                    $in_person += $b->userBookingStatus->Transaction()->where(['user_type' =>'Customer'])->count();
+                    $online +=  $b->userBookingStatus->Transaction()->where(['user_type' =>'user'])->count();
                 }
             }
 
@@ -124,143 +154,263 @@ class BusinessController extends Controller
     
             $expiringMembership = $booking->whereDate('expired_at', '>=', $startDate)->whereDate('expired_at', '<=', $endDate)->get();
 
-            $activitySchedule = @$business->business_activity_schedulers()->whereDate('end_activity_date','>=', $startDate)->whereDate('end_activity_date','<=', $endDate)->limit(3)->get();
+            $activitySchedule = @$business->business_activity_schedulers()->whereDate('end_activity_date','>=', $startDate)->limit(4)->get();
+            /*->whereDate('end_activity_date','<=', $endDate)*/
 
             $businessServices = $business->business_services()->whereDate('created_at', '>=', $startOfWeek)
                     ->whereDate('created_at', '<=', $endOfWeek)
                     ->get();
 
-            $usDetail = $business->UserBookingDetails()->whereDate('created_at', '>=', $startOfWeek)
-                    ->whereDate('created_at', '<=', $endOfWeek)
-                   ->orderby('created_at','desc')->get();
-
-            $recurringAmount = DB::table('recurring')
-                ->where('business_id',$business_id)
-                ->whereNotIn('id', function($query) {
-                    $query->select(DB::raw('MAX(id)'))
-                        ->from('recurring as sub')
-                        ->groupBy('booking_detail_id');
-                })->whereDate('payment_date', '>=', $startDate)->whereDate('payment_date', '<=', $endDate)->select(DB::raw('sum(amount+tax) AS total_sales'))->get();
-
+            //$recurringAmount = DB::table('recurring')->where('business_id',$business_id)->whereNull('payment_number')->whereDate('payment_date', '>=', $startDate)->whereDate('payment_date', '<=', $endDate)->select(DB::raw('sum(amount+tax) AS total_sales'))->get();
 
             $completeRecurringAmount = DB::table('recurring')
-                ->where('business_id',$business_id)
-                ->whereNotIn('id', function($query) {
-                    $query->select(DB::raw('MAX(id)'))
-                        ->from('recurring as sub')
-                        ->groupBy('booking_detail_id');
-                })->whereDate('payment_date', '>=', $startDate)->whereDate('payment_date', '<=', $endDate)->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'Completed')->get();
+                ->where('business_id',$business_id)->whereNull('payment_number')->whereDate('payment_on', '>=', $startDate)->whereDate('payment_on', '<=', $endDate)
+                ->select(DB::raw('sum(amount+tax) AS total_sales'))
+                ->where('status' ,'Completed')->get();
 
-            $reminingRecurringAmount = DB::table('recurring')
-                ->where('business_id',$business_id)
-                ->whereNotIn('id', function($query) {
-                    $query->select(DB::raw('MAX(id)'))
-                        ->from('recurring as sub')
-                        ->groupBy('booking_detail_id');
-                })->whereDate('payment_date', '>=', $startDate)->whereDate('payment_date', '<=', $endDate)->select(DB::raw('sum(amount+tax) AS total_sales'))->where('status' ,'!=','Completed')->get();
+            $recurringData = DB::table('recurring')->where('business_id',$business_id)->whereNull('payment_number')->whereDate('payment_date', '>=', $startDate)->whereDate('payment_date', '<=', $endDate)->select(DB::raw('sum(amount+tax) AS total_sales'));
+            $reminingRecurringAmount = $recurringData->where('status' ,'!=','Scheduled')->get();
+
+            $failedRecurringAmount = $recurringData->whereIn('status' ,['failed','Retry'])->get();
 
             $completeRecurringAmount = $completeRecurringAmount[0]->total_sales ?? 0;
             $reminingRecurringAmount = $reminingRecurringAmount[0]->total_sales ?? 0;
-            $recurringAmount = $recurringAmount[0]->total_sales ?? 0;
-
+            $failedRecurringAmount = $failedRecurringAmount[0]->total_sales ?? 0;
+           // $recurringAmount = $recurringAmount[0]->total_sales ?? 0;
+            $recurringAmount = $completeRecurringAmount + $reminingRecurringAmount + $failedRecurringAmount;
             $completedRecPercentage = $recurringAmount != 0 ? ( $completeRecurringAmount / $recurringAmount)*100 : 0 ;
-            $remainingRecPercentage = $recurringAmount != 0 ? ( $reminingRecurringAmount / $recurringAmount) *100 : 0   ;
             $completedRecPercentage = number_format($completedRecPercentage,2,'.','');
-            $remainingRecPercentage = number_format($remainingRecPercentage,2,'.','');
-            $recurringAmount = number_format($recurringAmount,2,'.','');
-            $reminingRecurringAmount = number_format($reminingRecurringAmount,2,'.','');
             $completeRecurringAmount = number_format($completeRecurringAmount,2,'.','');
-                  
-        }
+
+            $remainingRecPercentage = $recurringAmount != 0 ? ( $reminingRecurringAmount / $recurringAmount) *100 : 0   ;
+            $remainingRecPercentage = number_format($remainingRecPercentage,2,'.','');
+            $reminingRecurringAmount = number_format($reminingRecurringAmount,2,'.','');
+
+            $failedRecPercentage = $recurringAmount != 0 ? ( $failedRecurringAmount / $recurringAmount) *100 : 0   ;
+            $failedRecPercentage = number_format($failedRecPercentage,2,'.','');
+            $failedRecurringAmount = number_format($failedRecurringAmount,2,'.','');
+            
+            $recurringAmount = number_format($recurringAmount,2,'.','');
+
+            $revenueData = CompanyRevenueGoalTracker::where(['year' =>date('Y') ,'business_id' => $business_id])->first();
+            $revenueDataPrivious = CompanyRevenueGoalTracker::where(['year' =>date('Y') - 1 ,'business_id' => $business_id])->first();
+
+            $currentYear = date('Y');
+            $previousYear =  date('Y') - 1;
+
+            $months = range(1, 12);
+            $monthYearArray = array_map(function($month) use ($currentYear) {
+                return $currentYear . '-' . str_pad($month, 2, '0', STR_PAD_LEFT);
+            }, $months);
+
+            $premonthYearArray = array_map(function($month) use ($previousYear) {
+                return $previousYear . '-' . str_pad($month, 2, '0', STR_PAD_LEFT);
+            }, $months);
+
         
-        $topBookedPriceId = array_values(array_unique($topBookedPriceId));
-        $priceDetails = BusinessPriceDetails::whereIn('id', $topBookedPriceId)->get();
-        foreach ($priceDetails as $priceDetail) {
-            $sum = 0;
-            $UserBookingDetails = $priceDetail->UserBookingDetail;
-            foreach ($UserBookingDetails as $ubd) {
-                $sum += $ubd->subtotal + $ubd->tax + $ubd->tip - $ubd->discount + $ubd->fitnessity_fee;
+            foreach($premonthYearArray as $m){
+                
+                $totalSalesMonthly = Transaction::selectRaw('SUM(transaction.amount) as total_sales, DATE_FORMAT(transaction.created_at, "%Y-%m") as month_year')
+                    ->where('item_type', 'UserBookingStatus')
+                    ->where('kind', '!=', 'comp')
+                    ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+                    ->join('user_booking_details as ubd', function ($join) use ($business_id) {
+                        $join->on('ubd.booking_id', '=', 'ubs.id')
+                            ->where('ubd.order_type', 'Membership')
+                            ->where('ubd.business_id', '=', $business_id);
+                    })
+                    ->whereDate('transaction.created_at','>=', $m. '-01')
+                    ->whereDate('transaction.created_at','<=', $m. '-31')
+                    ->sum('transaction.amount');
+
+                $totalSalesforRecurringMonthly = Transaction::selectRaw('SUM(transaction.amount) as total_sales, DATE_FORMAT(transaction.created_at, "%Y-%m") as month_year')
+                    ->where('item_type', 'Recurring')
+                    ->join('recurring as rec', 'rec.id', '=', 'transaction.item_id')
+                    ->where('rec.business_id', '=', $business_id)
+                    ->whereDate('transaction.created_at','>=', $m. '-01')
+                    ->whereDate('transaction.created_at','<=', $m. '-31')
+                    ->sum('transaction.amount');
+                $tot = $totalSalesMonthly + $totalSalesforRecurringMonthly;
+                
+                $arrayPreYear[] = number_format($tot,2,'.','') ?? 0;
             }
 
-            if ($sum != 0) {
-                $topBooked['booked'] = count($UserBookingDetails);
-                $topBooked['name'] = $priceDetail->business_price_details_ages->category_title;
-                $topBooked['paid'] = $sum;
-                $topBookedCategories[] = $topBooked;
+            $arrayPreYear = array_map('floatval', $arrayPreYear);
+
+
+            foreach($monthYearArray as $m){
+                
+                $totalSalesMonthly = Transaction::selectRaw('SUM(transaction.amount) as total_sales, DATE_FORMAT(transaction.created_at, "%Y-%m") as month_year')
+                    ->where('item_type', 'UserBookingStatus')
+                    ->where('kind', '!=', 'comp')
+                    ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+                    ->join('user_booking_details as ubd', function ($join) use ($business_id) {
+                        $join->on('ubd.booking_id', '=', 'ubs.id')
+                            ->where('ubd.order_type', 'Membership')
+                            ->where('ubd.business_id', '=', $business_id);
+                    })
+                    ->whereDate('transaction.created_at','>=', $m. '-01')
+                    ->whereDate('transaction.created_at','<=', $m. '-31')
+                    ->sum('transaction.amount');
+
+                $totalSalesforRecurringMonthly = Transaction::selectRaw('SUM(transaction.amount) as total_sales, DATE_FORMAT(transaction.created_at, "%Y-%m") as month_year')
+                    ->where('item_type', 'Recurring')
+                    ->join('recurring as rec', 'rec.id', '=', 'transaction.item_id')
+                    ->where('rec.business_id', '=', $business_id)
+                    ->whereDate('transaction.created_at','>=', $m. '-01')
+                    ->whereDate('transaction.created_at','<=', $m. '-31')
+                    ->sum('transaction.amount');
+                $tot = $totalSalesMonthly + $totalSalesforRecurringMonthly;
+                
+                $array3Year[] = number_format($tot,2,'.','') ?? 0;
             }
-        }
 
-        $key_values = array_column($topBookedCategories, 'paid'); 
-        array_multisort($key_values, SORT_DESC, $topBookedCategories);
+            $array3Year = array_map('floatval', $array3Year);
 
-        $pagepostIds = PagePost::where(['page_id'=>$business_id,'user_id' =>Auth::user()->id])->pluck('id');   
+        
+            $revenueDataAry = [
 
-        $comments = PagePostComments::whereIn('post_id',$pagepostIds)
-                    ->where('user_id','!=',Auth::user()->id)
-                    ->whereDate('created_at', '>=', $startOfWeek)
-                    ->whereDate('created_at', '<=', $endOfWeek)
-                    ->get();
+                $arrayPreYear,
 
-        $postlikes = PagePostLikes::whereIn('post_id',$pagepostIds)
-                    ->where('user_id','!=',Auth::user()->id)
-                    ->whereDate('created_at', '>=', $startOfWeek)
-                    ->whereDate('created_at', '<=', $endOfWeek)
-                    ->get();
+                [$revenueData->jan_goal ?? 0 ,$revenueData->feb_goal ?? 0, $revenueData->mar_goal ?? 0, $revenueData->apr_goal ?? 0, $revenueData->may_goal ?? 0, $revenueData->jun_goal ?? 0, $revenueData->jul_goal ?? 0, $revenueData->aug_goal ?? 0, $revenueData->sep_goal ?? 0, $revenueData->oct_goal ?? 0, $revenueData->nov_goal ?? 0, $revenueData->dec_goal ?? 0 ], 
 
-        $commentslikes = PagePostCommentsLike::whereIn('post_id',$pagepostIds)
-                    ->where('user_id','!=',Auth::user()->id)
-                    ->whereDate('created_at', '>=', $startOfWeek)
-                    ->whereDate('created_at', '<=', $endOfWeek)
-                    ->get();
-
-        $formatNotification = function ($userData, $action, $type, $text) {
-            $image = Storage::disk('s3')->exists(@$userData->profile_pic) ? Storage::url(@$userData->profile_pic) : '';
-            $date = new DateTime($action->created_at);
-
-            return [
-                "title" => @$userData->full_name . $text,
-                "image" => $image,
-                "type"  => $type,
-                "text"  => $type === 'comment' ? $action->comment : '',
-                "date"  => $date->format('d M, Y'),
-                "fl"    => @$userData->first_letter,
+                $array3Year, 
             ];
-        };
 
-        foreach ($comments as $com) {
-            $notificationAry[] = $formatNotification($com->user, $com, 'comment',' commented on your post.');
-        }
+            $currentMnth = strtolower( date('M')).'_goal';
+            $currentMonthRevenue = @$revenueData->$currentMnth;
+            $dayOfMonth = date('j');
+            $countOfDaysInMonth = Carbon::now()->daysInMonth;
+            $revenuePerDay =  $currentMonthRevenue != 0 ?  number_format(($currentMonthRevenue / $countOfDaysInMonth),2,'.',''): 0;
 
-        foreach ($postlikes as $pl) {
-            $notificationAry[] = $formatNotification($pl->user, $pl, 'like',' liked your post.');
-        }
+            $revenuePerDayNeeded =  $currentMonthRevenue != 0 ?  number_format((($currentMonthRevenue - $totalSales) / ($countOfDaysInMonth -  $dayOfMonth + 1)),2,'.',''): 0;
+            $revenueShouldbeOnDay = $dayOfMonth != 0 ? number_format(($revenuePerDay * $dayOfMonth),2,'.','') :0;
+     
+            $revenueAchivedPercentage = $currentMonthRevenue != 0 ?  number_format(100 - (($currentMonthRevenue - $totalSales)/$currentMonthRevenue) * 100,2,'.','') :0;
+            $category = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            $categoryData = json_encode($category);
 
-        foreach ($commentslikes as $cl) {
-            $notificationAry[] = $formatNotification($cl->user, $cl, 'like',' liked your post comment.');
-        }
 
-        foreach ($businessServices as $bs) {
-            $notificationAry[] = $formatNotification($bs->user, $bs, 'service',' added new activity "'.$bs->program_name.'".');
-        }
+            $lastYearCurrentMonth = @$revenueDataPrivious->$currentMnth;
+            $lastYearRevenuePerDay =  $currentMonthRevenue != 0 ?  number_format(($lastYearCurrentMonth / $countOfDaysInMonth),2,'.',''): 0;
 
-        foreach ($transaction as $tr) {
-            if($tr->user_type == 'user'){
-                $userData =  $tr->User;
-            }else{
-                $userData = $tr->Customer;
+            $startDateR = Carbon::now()->startOfMonth();
+            $endDateR  = Carbon::now()->endOfMonth();
+            $loopDate = $startDateR->copy();
+            $totalRe = 0;
+            while($loopDate->lte($endDateR)) {
+                $categoryMonth[] = $loopDate->format('m/d/Y');
+            
+                $totalSalesMonthly = Transaction::selectRaw('SUM(transaction.amount) as total_sales, DATE_FORMAT(transaction.created_at, "%Y-%m") as month_year')
+                    ->where('item_type', 'UserBookingStatus')
+                    ->where('kind', '!=', 'comp')
+                    ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+                    ->join('user_booking_details as ubd', function ($join) use ($business_id) {
+                        $join->on('ubd.booking_id', '=', 'ubs.id')
+                            ->where('ubd.order_type', 'Membership')
+                            ->where('ubd.business_id', '=', $business_id);
+                    })
+                    ->whereDate('transaction.created_at', $loopDate->format('Y-m-d'))
+                    ->sum('transaction.amount');
+
+                $totalSalesforRecurringMonthly = Transaction::selectRaw('SUM(transaction.amount) as total_sales, DATE_FORMAT(transaction.created_at, "%Y-%m") as month_year')
+                    ->where('item_type', 'Recurring')
+                    ->join('recurring as rec', 'rec.id', '=', 'transaction.item_id')
+                    ->where('rec.business_id', '=', $business_id)
+                    ->whereDate('transaction.created_at', $loopDate->format('Y-m-d'))
+                    ->sum('transaction.amount');
+                $tot = $totalSalesMonthly + $totalSalesforRecurringMonthly;
+                $tot =  number_format($tot,2,'.','')  ?? 0;
+
+                $totalRe += $tot ;
+                $array3[] = $tot ;
+
+                if($loopDate->format('Y-m-d') <= date('Y-m-d')){
+                   
+                    if ($loopDate->day == 1) {
+                        $array1[] = $revenuePerDay;
+                    }else{
+                        $cR = number_format( ( ($currentMonthRevenue - $totalRe) / ($countOfDaysInMonth - $loopDate->day +1) ),2,'.','') ?? 0; 
+                        $array1[] = $cR;
+                    }
+                }else{
+                    $array1[] = $revenuePerDayNeeded;
+                }
+                $loopDate->addDay(); 
             }
-            $notificationAry[] = $formatNotification($userData, $tr, 'transaction',' made a payment of $'.$tr->amount);
+
+            $startDateRP = Carbon::now()->startOfMonth()->subYear();
+            $endDateRP  = Carbon::now()->endOfMonth()->subYear();
+            $loopDateP = $startDateRP->copy();
+            while($loopDateP->lte($endDateRP)) {
+                $loopDateP->addDay();
+                $totalSalesMonthlyP = Transaction::selectRaw('SUM(transaction.amount) as total_sales, DATE_FORMAT(transaction.created_at, "%Y-%m") as month_year')
+                    ->where('item_type', 'UserBookingStatus')
+                    ->where('kind', '!=', 'comp')
+                    ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+                    ->join('user_booking_details as ubd', function ($join) use ($business_id) {
+                        $join->on('ubd.booking_id', '=', 'ubs.id')
+                            ->where('ubd.order_type', 'Membership')
+                            ->where('ubd.business_id', '=', $business_id);
+                    })
+                    ->whereDate('transaction.created_at', $loopDateP->format('Y-m-d'))
+                    ->sum('transaction.amount');
+
+                $totalSalesforRecurringMonthlyP = Transaction::selectRaw('SUM(transaction.amount) as total_sales, DATE_FORMAT(transaction.created_at, "%Y-%m") as month_year')
+                    ->where('item_type', 'Recurring')
+                    ->join('recurring as rec', 'rec.id', '=', 'transaction.item_id')
+                    ->where('rec.business_id', '=', $business_id)
+                    ->whereDate('transaction.created_at', $loopDateP->format('Y-m-d'))
+                    ->sum('transaction.amount');
+                $totP = $totalSalesMonthlyP + $totalSalesforRecurringMonthlyP;
+                
+                $array2[] = number_format($totP,2,'.','')  ?? 0;
+            }
+
+
+            $revenueDataMonthAry = [ array_map('floatval', $array2) ,array_map('floatval', $array1),  array_map('floatval', $array3)];
+            $categoryMonthData = json_encode($categoryMonth);
+        }
+               
+        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingRecPercentage','failedRecPercentage','completedRecPercentage','totalsalePercentage','bookingCountPercentage','customerCountPercentage','startDate','endDate','startDateCalendar','endDateCalendar','completeRecurringAmount','reminingRecurringAmount','failedRecurringAmount','recurringAmount','left_days','activePlan','revenueData','revenueDataAry','revenuePerDay','revenueShouldbeOnDay','revenueAchivedPercentage','categoryData','categoryMonthData','revenueDataMonthAry','currentMonthRevenue' ,'reserveMembersCount','reserveMembersCountPercentage','revenuePerDayNeeded'));
+    }
+
+    public function getRevenueAjax(Request $request){
+        //print_r($request->all());exit;
+        $revenueData = CompanyRevenueGoalTracker::where(['year' =>date('Y') ,'business_id' => Auth::User()->cid])->first();
+        $revenueDataPrivious = CompanyRevenueGoalTracker::where(['year' =>date('Y') - 1 ,'business_id' =>Auth::User()->cid])->first();
+
+        if($request->type == 'Y'){
+            $revenueDataAry = [
+                [$revenueDataPrivious->jan_goal ?? 0,$revenueDataPrivious->feb_goal ?? 0,$revenueDataPrivious->mar_goal ?? 0,$revenueDataPrivious->apr_goal ?? 0,$revenueDataPrivious->may_goal ?? 0,$revenueDataPrivious->jun_goal ?? 0,$revenueDataPrivious->jul_goal ?? 0,$revenueDataPrivious->aug_goal ?? 0,$revenueDataPrivious->sep_goal ?? 0,$revenueDataPrivious->oct_goal ?? 0,$revenueDataPrivious->nov_goal ?? 0,$revenueDataPrivious->dec_goal  ?? 0],
+
+                [$revenueData->jan_goal ?? 0 ,$revenueData->feb_goal ?? 0, $revenueData->mar_goal ?? 0, $revenueData->apr_goal ?? 0, $revenueData->may_goal ?? 0, $revenueData->jun_goal ?? 0, $revenueData->jul_goal ?? 0, $revenueData->aug_goal ?? 0, $revenueData->sep_goal ?? 0, $revenueData->oct_goal ?? 0, $revenueData->nov_goal ?? 0, $revenueData->dec_goal ?? 0 ], 
+            ];
+
+            $category = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        }else{
+            $currentMnth = strtolower( date('M')).'_goal';
+            $revenueDataAry = [
+                [$revenueDataPrivious->$currentMnth ?? 0],
+
+                [$revenueData->$currentMnth ?? 0], 
+            ];
         }
 
-        foreach($usDetail as $usd){
-            if($usd->userBookingStatus != ''){
-                $transaction[] = $usd->userBookingStatus->Transaction()->orderby('created_at','desc')->first();
-            }
-        }   
+        $graphData = json_encode($revenueDataAry);
+        $categoryData = json_encode($category);
+        return View('business.revenue_graph',compact('graphData','categoryData')); 
+    }
 
-        /*print_r($notificationAry);*/
-       
-        return view('business.dashboard',compact('customerCount','bookingCount','in_person' ,'online','expiringMembership','activitySchedule','ptdata','evdata','clsdata','expdata','prdata','totalSales','business_id','totalRecurringPmt','compltedpmtcnt','remainigpmtcnt','dba_business_name','remainingRecPercentage','completedRecPercentage','totalsalePercentage','bookingCountPercentage','customerCountPercentage','todayBooking','services','startDate','endDate','topBookedCategories','notificationAry' ,'startDateCalendar','endDateCalendar','completeRecurringAmount','reminingRecurringAmount','recurringAmount','left_days','activePlan'));
+    public function setRevenueGoal(Request $request){
+        $input =  $request->except(['_token' ,'id','url']);
+        CompanyRevenueGoalTracker::updateOrCreate(['id' => $request->id], $input);
+        return redirect($request->url);
+    }
+
+    public function notification_delete(Request $request){
+        $idsArray = explode(',', $request->id);
+        Notification::whereIn('id',$idsArray)->delete();
     }
 
     public function getBookingList(Request $request){
@@ -354,24 +504,29 @@ class BusinessController extends Controller
     }
 	
     public function getscheduleactivity(Request $request){
+
+        if($request->type == 'Personal Training'){
+            $request->type = 'individual';
+        }
+            
         $business = Auth::user()->current_company;
+
         if($request->date == ''){
             $date = date('Y-m-d');
         }else{
             $date =  date('Y-m-d' ,strtotime($request->date));
         }
+        
+        //$activitySchedule = $business->business_activity_schedulers()->whereDate('end_activity_date','>=',$date)->get();
         $activitySchedule = $business->business_activity_schedulers()->whereDate('end_activity_date','>=',$date)->get();
+
         $html = '';
         $inc = 0;
         if(!empty($activitySchedule) && count($activitySchedule)>0){
             foreach($activitySchedule as $as){
-                $chk  =  0;
-                if($as->business_service->service_type == strtolower($request->type)){
-                    $chk = 1;
-                }else if($request->type == 'Show All Activites'){
-                    $chk = 1;
-                }
-                if($chk == 1 && $inc < 3){
+            
+                $chk = ($as->business_service->service_type == strtolower($request->type) || $request->type == 'Show All Activities') ? 1 : 0;
+                if($chk == 1 && $inc < 4){
                     $SpotsLeftdis = 0;
                     $bs = new  \App\Repositories\BookingRepository;
                     $bookedspot = $bs->gettotalbooking($as->id,date('Y-m-d')); 
@@ -398,6 +553,58 @@ class BusinessController extends Controller
             }
         }
         return $html;
+    }
+
+    public function getClientModelData(Request $request){
+        if(!$request->cDate){
+            $request->cDate = date('Y-m-d');
+        }
+        $type = $request->type;
+        $business = CompanyInformation::find($request->business_id);
+        $currentDate = Carbon::now(); 
+        switch ($type) {
+            case 'date':
+                $cDate = $request->cDate;
+                break;
+
+            case 'week':
+                $cDate = $currentDate->startOfWeek()->format('Y-m-d');
+                break;
+
+            case 'month':
+                $cDate = $currentDate->format('Y-m');
+                break;
+        }
+
+        $customers = [];
+       
+        $cDate = $request->cDate;
+        /* echo $cDate ;*//*exit;*/
+        $customers = $business->customers()->where(function ($query) use ($cDate, $type) {
+                $query->when($type == 'week', function ($q) use ($cDate) {
+                    $weekStart = Carbon::parse($cDate)->startOfWeek();
+                    $weekEnd = Carbon::parse($cDate)->endOfWeek();
+                    $q->whereBetween('created_at', [$weekStart, $weekEnd]);
+                })
+                ->when($type == 'month', function ($q) use ($cDate) {
+                    $timestamp = strtotime($cDate);
+                     $year = date('Y', $timestamp);
+                     $month = date('n', $timestamp);
+                    $q->whereMonth('created_at', $month )->whereYear('created_at', $year);
+                })
+                ->when($type === 'date', function ($q) use ($cDate) {
+                    $q->whereDate('created_at', $cDate);
+                });
+                $query->orderBy('created_at', 'desc');
+            })->orderBy('created_at', 'desc')->get();
+
+        //print_r($customers);exit;
+       
+        $data = $customers->filter(function ($customer) {
+            return $customer->is_active() != 'Active'; 
+        })->all();
+    
+        return view('business.view_new_client_modal', compact('data', 'cDate' ,'type'));
     }
 
 	public function pagePost(Request $request) {
@@ -1077,8 +1284,8 @@ class BusinessController extends Controller
             if(isset($company['company_images']) && $company['company_images'] != null) {
             	$company['company_images'] = json_decode($company['company_images']);
             }
-            $max_price = UserService::where('company_id', $company['id'])->max('price');
-            $min_price = UserService::where('company_id', $company['id'])->min('price');
+            $max_price = UserService::where('company_id', @$company['id'])->max('price');
+            $min_price = UserService::where('company_id', @$company['id'])->min('price');
 
             $user_professional_detail = UserProfessionalDetail::where('company_id', $page_id)->first();
 			
@@ -1158,7 +1365,7 @@ class BusinessController extends Controller
         $companyData = $serviceData = $servicePrice = $businessSpec = $services = $max_price = $min_price = [];
         $company['company_images'] = [];
 		
-		if(!empty($company)) {
+		if($company) {
             $userId = $company->user_id;
         
             $business_details = BusinessCompanyDetail::where('cid', $page_id)->get();
@@ -1305,7 +1512,7 @@ class BusinessController extends Controller
 				'user_id' => $pageid,
 				'sender_id' => $userid,
 				'type' => '1',
-				'notification_type' => '1',
+				//'notification_type' => '1',
 				'status' => 0,
 			]);
 			$response = array( 'type' => 'success' );

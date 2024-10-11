@@ -73,7 +73,9 @@
 
             <h5>How Would You Would Like to Verify Ownership of {{$data->dba_business_name}}</h5>
             @if($user && !$activePlan) 
-                <h3 class="fs-16 font-red">You have no active plan. Please <a href="{{route('choose-plan.index')}}" >buy plan.</a></h3>
+                <!-- <h3 class="fs-16 font-red">You have no active plan. Please <a href="{{route('choose-plan.index')}}" >buy plan.</a></h3>   -->
+
+                <h3 class="fs-16 font-red">You have no active plan. Please buy plan.</h3>
             @endif
             <div id="error-email" style="display: none">
                 <h5 class="Alertred">Your Email Is Not Match With Our Data. You Can't Claim This Business..</h5>

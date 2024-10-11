@@ -7,8 +7,8 @@
       <div class="user-panel">
         <div class="pull-left image">
           <?php
-          if(Auth::user()->profile_pic != '' && file_exists(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR.'thumb150'.DIRECTORY_SEPARATOR.Auth::user()->profile_pic)) {
-            echo '<img src="'.Config::get('constants.USER_IMAGE_THUMB150').Auth::user()->profile_pic.'" class="img-circle" />';
+          if(auth()->guard('admin')->user()->profile_pic != '' && file_exists(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR.'thumb150'.DIRECTORY_SEPARATOR.auth()->guard('admin')->user()->profile_pic)) {
+            echo '<img src="'.Config::get('constants.USER_IMAGE_THUMB150').auth()->guard('admin')->user()->profile_pic.'" class="img-circle" />';
           }
           else {
             echo '<img src="'.Config::get('constants.FRONT_IMAGE').'user.png" class="img-circle" />';
@@ -16,7 +16,7 @@
           ?>          
         </div>
         <div class="pull-left info">
-          <p>{{Auth::user()->firstname}} {{Auth::user()->lastname}}</p>
+          <p>{{auth()->guard('admin')->user()->firstname}} {{auth()->guard('admin')->user()->lastname}}</p>
           <!-- <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
         </div>
       </div>
@@ -53,6 +53,12 @@
         <li class="{{ $request->segment(2) == 'slider' ? 'active' : '' }}">
           <a href="/admin/slider">
             <i class="fa fa-sliders"></i> <span>Manage Slider</span>  
+          </a>
+        </li> 
+
+        <li class="{{ $request->segment(2) == 'activity-slider' ? 'active' : '' }}">
+          <a href="/admin/activity-slider">
+            <i class="fa fa-sliders"></i> <span>Manage Activity Slider</span>  
           </a>
         </li>
         <li class="{{ $request->segment(2) == 'business_post' ? 'active' : '' }}">
@@ -110,7 +116,7 @@
         </li>
 
         <li class="{{ ($request->segment(2) == 'users' || $request->segment(2) == 'users') ? 'active' : '' }}">
-          <a href="/admin/users">
+          <a href="/admin/users"  target="_blank">
            <!--  <i class="fa fa-users"></i> <span>Manage Customers</span> --> 
            <i class="fa fa-users"></i> <span>Manage Users</span>   
           </a>
@@ -143,6 +149,12 @@
         <li class="{{ $request->segment(2) == 'features' ? 'active' : '' }}">
           <a href="/admin/features">
             <i class="fa fa-list-alt"></i> <span>Manage Features</span>  
+          </a>
+        </li>
+
+        <li class="{{ $request->segment(2) == 'on-board-questions' ? 'active' : '' }}">
+          <a href="/admin/on-board-questions">
+            <i class="fa fa-list-alt"></i> <span>On Board FAQ's</span>  
           </a>
         </li>
 

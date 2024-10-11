@@ -4,9 +4,10 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\{UserBookingDetail,Recurring,Transaction,BookingCheckinDetails,CustomerPlanDetails};
+use App\{UserBookingDetail,Recurring,Transaction,BookingCheckinDetails,CustomerPlanDetails,StripePaymentMethod,Announcement};
 use DB;
 use Carbon\Carbon;
+use Stripe\Exception\InvalidRequestException;
 
 class Kernel extends ConsoleKernel
 {
@@ -28,26 +29,28 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         //$schedule->command('stripe:cron')->everyMinute();
-
         $schedule->call(function () {
+            // var_dump('run transfer');
             $user_booking_details = UserBookingDetail::whereRaw("transfer_provider_status is NULL or transfer_provider_status !='paid'");
             foreach($user_booking_details->get() as $user_booking_detail){
                 try {
                     $user_booking_detail->transfer_to_provider();
                 }catch (Exception $e) {
                     $errormsg = $e->getError()->message;
+                    var_dump('run transfer error');
                     var_dump($errormsg);
                 }
             }
-        })->everyTenMinutes();
+        })->daily();
 
         $schedule->call(function () {
-            $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->where('attempt' ,'<' ,3)->where('status','!=','Completed')->orderBy('created_at','desc')->get();
-            //print_r($recurringDetails);exit();
+            $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->where('attempt' ,'<' ,3)->orderBy('created_at','desc')->get();
+            
+            /*print_r($recurringDetails);exit();*/
             foreach($recurringDetails as $recurringDetail){
                 $recurringDetail->createRecurringPayment();
             }
-        })->everyMinute();
+        })->daily();
 
         $schedule->call(function () {
             $userBookingDetails = UserBookingDetail::whereDate("expired_at", ">=" ,date('Y-m-d'))->get();
@@ -75,13 +78,17 @@ class Kernel extends ConsoleKernel
         })->daily();
 
         $schedule->call(function () {
+            var_dump('run capture');
             $transactions = Transaction::where(['status' => 'requires_capture'])->get();
             foreach($transactions as $transaction){
                 try {
                     $transaction->capture();
-                }catch (Exception $e) {
-                    $errormsg = $e->getError()->message;
-                    var_dump($errormsg);
+                }catch (InvalidRequestException $e) {
+                    // Handle Stripe's InvalidRequestException
+                    var_dump(response()->json(['error' => 'Invalid request: ' . $e->getMessage()], 400));
+                } catch (\Exception $e) {
+                    // Handle other exceptions
+                    var_dump(response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500));
                 }
             }
         })->daily();
@@ -109,6 +116,39 @@ class Kernel extends ConsoleKernel
                 $d->autoPayment();
             }
         })->daily();
+
+
+        $schedule->call(function (){
+            $expiredCreditCards = StripePaymentMethod::where(function ($query) {
+                $query->where('exp_year', '<', Carbon::now()->year)->where('mail_status',0)
+                    ->orWhere(function ($query) {
+                        $query->where('exp_year', '=', Carbon::now()->year)
+                            ->where('exp_month', '<', Carbon::now()->month)->where('mail_status',0);
+                    });
+            })->get();
+            foreach($expiredCreditCards as $ecc){
+                $ecc->checkExpiredCard();
+            }
+        })->daily();
+
+        $schedule->call(function (){
+            $expiringCreditCards = StripePaymentMethod::where('exp_year', '=', Carbon::now()->year)->where('exp_month', '=', Carbon::now()->month)->get();
+            //print_r($expiringCreditCards);exit;
+            foreach($expiringCreditCards as $ecc){
+                $ecc->checkExpiringCard();
+            }
+        })->daily();
+
+        /*$schedule->call(function (){
+            $current_time = now()->format('H:i');
+            $current_date = now()->format('Y-m-d');
+            $announcements = Announcement::where('delivery_method_email' ,1)->whereDate('announcement_date' , '=' , $current_date)->whereRaw("announcement_time = '$current_time'")->get();
+           // print_r($announcements);exit;
+            foreach($announcements as $a){
+                $a->sendAnnouncementMail();
+            }
+        })->everyMinute();*/
+
     }
 
     protected function scheduleTimezone()

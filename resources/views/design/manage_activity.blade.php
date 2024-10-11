@@ -806,7 +806,8 @@
 																					</div>
 																				</div>
 																				<div class="col-lg-3 col-md-3 col-sm-6">	
-																					 <input type="submit" class="btn btn-red width-100" name="btnactive" id="btnactive" value="Make Service Inactive">
+																					 <input type="submit" class="btn btn-red mb-10 width-100" name="btnactive" id="btnactive" value="Make Service Inactive">
+																					 <button type="submit" class="btn btn-red mb-10 width-100" name="share" id="share" value="Share"> Share </button>
 																				</div>
 																			</div>
 																		</div>

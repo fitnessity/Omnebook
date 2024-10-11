@@ -4,7 +4,7 @@
 @section('content')
 
 	@include('layouts.business.business_topbar')
-	 <div class="main-content">
+	<div class="main-content">
 		<div class="page-content">
             <div class="container-fluid">
                 <div class="row">
@@ -25,9 +25,7 @@
 												<div class="accordion custom-accordionwithicon accordion-border-box" id="accordionnesting">
 													<div class="accordion-item shadow">
 														<h2 class="accordion-header" id="accordionnestingExample1">
-															<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse1" aria-expanded="true" aria-controls="accor_nestingExamplecollapse1">
-																Add
-															</button>
+															<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingExamplecollapse1" aria-expanded="true" aria-controls="accor_nestingExamplecollapse1">Add</button>
 														</h2>
 														<div id="accor_nestingExamplecollapse1" class="accordion-collapse collapse show" aria-labelledby="accordionnestingExample1" data-bs-parent="#accordionnesting">
 															<div class="accordion-body">
@@ -111,7 +109,7 @@
 																									<div class="col-lg-4 col-md-6 col-sm-6">
 																										<div class="form-group mb-15">
 																											<div class="input-group">
-																												<input type="text" value="{{date('m/d/Y',strtotime($family->birthdate))}}" name="birthdate[{{$fam_cnt}}]" id="birthdate[{{$fam_cnt}}]" class="form-control border-0 dash-filter-picker width-flatpiker flatpiker-with-border flatpickr-input active" placeholder="Birthdate">
+																												<input type="text" value="@if($family->birthdate) {{date('m/d/Y',strtotime($family->birthdate))}} @endif" name="birthdate[{{$fam_cnt}}]" id="birthdate" class="form-control border-0 dash-filter-picker width-flatpiker flatpiker-with-border flatpickr-input active flatpickr-date{{$fam_cnt}}" data-dynamic-id ="{{$fam_cnt}}" placeholder="Birthdate">
 																											</div>
 																										</div>
 																									</div>
@@ -126,6 +124,12 @@
 																										<div class="form-group mb-15">
 																											<input type="text" name="emergency_contact[{{$fam_cnt}}]" id="emergency_contact{{$fam_cnt}}" value="{{$family->emergency_contact}}"  data-behaviour="text-phone" placeholder="Emergency Contact Number" class="form-control" maxlength="14" value="" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
 																											<input type="hidden" name="removed_family[{{$fam_cnt}}]" id="removed_family{{$fam_cnt}}" value="{{$family->id}}">
+																										</div>
+																									</div>
+																									<div class="col-lg-4 col-md-6 col-sm-6">
+																										<div class="form-group check-box-info">
+																											<input class="check-box-primary-account check-box{{$fam_cnt}}" type="checkbox" id="primaryAccountHolder" name="primaryAccountHolder[{{$fam_cnt}}]" value="1"@if($resultDate->format('Y-m-d') <= $family->birthdate) disabled @elseif($family->primary_account == 1) checked @endif>
+																											<label for="primaryAccountHolder"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="You are paying for yourself and all added family members.">(i)</span></label>
 																										</div>
 																									</div>
 																								</div>
@@ -209,7 +213,7 @@
 																								<div class="col-lg-4 col-md-6 col-sm-6">
 																									<div class="form-group mb-15">
 																										<div class="input-group">
-																											<input type="text" value="" name="birthdate[0]" id="birthdate[0]" class="form-control border-0 dash-filter-picker width-flatpiker flatpiker-with-border flatpickr-input active" placeholder="Birthdate">
+																											<input type="text" value="" data-dynamic-id ="0" name="birthdate[0]" id="birthdate" class="form-control border-0 dash-filter-picker width-flatpiker flatpiker-with-border flatpickr-input active flatpickr-date0" placeholder="Birthdate">
 																										</div>
 																									</div>
 																								</div>
@@ -224,6 +228,13 @@
 																									<div class="form-group mb-15">
 																										<input type="text" name="emergency_contact[0]" id="emergency_contact0" data-behaviour="text-phone" placeholder="Emergency Contact Number" class="form-control" maxlength="14" value="" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
 																										<input type="hidden" name="removed_family[0]" id="removed_family0" value="">
+																									</div>
+																								</div>
+
+																								<div class="col-lg-4 col-md-6 col-sm-6">
+																									<div class="form-group check-box-info">
+																										<input class="check-box-primary-account check-box0" type="checkbox" id="primaryAccountHolder" name="primaryAccountHolder[0]" value="1">
+																										<label for="primaryAccountHolder"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="You are paying for yourself and all added family members.">(i)</span></label>
 																									</div>
 																								</div>
 																							</div>
@@ -270,12 +281,40 @@
 
 <script type="text/javascript">
 
-	$(document).on('focus','.flatpickr-input',function(e){
-		flatpickr(".flatpickr-input",{
-	    	dateFormat: "m/d/Y",
-	    	maxDate: "01/01/2050",
-		});
+	$(document).ready(function() {
+
+		$(document).on('focus','.flatpickr-input',function(e){
+	        //jQuery.noConflict();
+	        var id = $(this).attr('data-dynamic-id');
+	        flatpickr('.flatpickr-date'+id,{
+	            dateFormat: "m/d/Y",
+		    	maxDate: "today",
+	        });
+	        var date = $('.flatpickr-date'+id).val();
+	        var age = calculateAge(date);
+	        if (age < 18) {
+                $('.check-box'+id).prop('disabled', true);
+                if ($('.check-box'+id).is(':checked')) {
+                    $('.check-box'+id).prop('checked', false);
+                }
+            } else {
+               $('.check-box'+id).prop('disabled', false);
+            }
+
+	    });
 	});
+
+	function calculateAge(dateStr) {
+        var birthDate = new Date(dateStr);
+        var currentDate = new Date();
+        var age = currentDate.getFullYear() - birthDate.getFullYear();
+        var monthDiff = currentDate.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
 
 	function deleteMember(id) {
 		if(id == undefined){
@@ -301,7 +340,7 @@
 		cnt++;
 		var data = '';
 		$('#family_count').val(cnt);
-		data +='<div class="accordion-item shadow"> <h2 class="accordion-header" id="accordionnesting2Example'+cnt+'"> <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting2Examplecollapse'+cnt+'" aria-expanded="true" aria-controls="accor_nesting2Examplecollapse'+cnt+'"> <div class="container-fluid nopadding"> <div class="row"> <div class="col-lg-6 col-md-6 col-8">Add Family or Friends</div> <div class="col-lg-6 col-md-6 col-4"> <div class="multiple-options"> <div class="setting-icon"> <i class="ri-more-fill"></i> <ul> <li><a href="#" onclick="deleteMember()"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li> </ul> </div> </div> </div> </div> </div> </button> </h2> <div id="accor_nesting2Examplecollapse'+cnt+'" class="accordion-collapse collapse show" aria-labelledby="accordionnesting2Example'+cnt+'" data-bs-parent="#accordionnesting2"> <div class="accordion-body"> <div class="container-fluid nopadding"> <div class="row"> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <input type="hidden" name="cus_id[' + cnt + ']" id="cus_id[' + cnt + ']" value=""> <input type="text" name="fname[' + cnt + ']" id="fname[' + cnt + ']" placeholder="First Name" class="form-control" required="required" value="" > </div> </div> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <input type="text" name="lname[' + cnt + ']" id="lname[' + cnt + ']" placeholder="Last Name" class="form-control" required="required" value="" > </div> </div> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <select name="gender[' + cnt + ']" id="gender[' + cnt + ']" class="form-control" required="required" > <option value="" hidden="">Select Gender</option> <option value="Male">Male</option> <option value="Female">Female</option> </select> </div> </div> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <input type="email" name="email[' + cnt + ']" id="email[' + cnt + ']" value="" placeholder="Email" class="form-control" required="required"> </div> </div> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <select name="relationship[' + cnt + ']" id="relationship[' + cnt + ']" class="form-select" required="required"> <option value="" hidden="">Select Relationship</option> <option value="Brother">Brother</option> <option value="Sister">Sister</option> <option value="Father">Father</option> <option value="Mother">Mother</option> <option value="Wife">Wife</option> <option value="Husband">Husband</option> <option value="Son">Son</option> <option value="Daughter">Daughter</option> <option value="Friend">Friend</option> </select> </div> </div> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <div class="input-group"> <input type="text" value="" name="birthdate[' + cnt + ']" id="birthdate[' + cnt + ']" class="form-control border-0 dash-filter-picker width-flatpiker flatpiker-with-border flatpickr-input active" placeholder="Birthdate"> </div> </div> </div> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <input type="text" name="mobile[' + cnt + ']" value="" id="mobile'+cnt+'" data-behaviour="text-phone" placeholder="Mobile" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57"> </div> </div> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <input type="text" name="emergency_contact[' + cnt + ']" id="emergency_contact'+cnt+'" data-behaviour="text-phone" placeholder="Emergency Contact Number" class="form-control" maxlength="14" value="" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <input type="hidden" name="removed_family[' + cnt + ']" id="removed_family'+cnt+'" value=""> </div> </div> </div> </div> </div> </div> </div>';
+		data +='<div class="accordion-item shadow"> <h2 class="accordion-header" id="accordionnesting2Example'+cnt+'"> <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nesting2Examplecollapse'+cnt+'" aria-expanded="true" aria-controls="accor_nesting2Examplecollapse'+cnt+'"> <div class="container-fluid nopadding"> <div class="row"> <div class="col-lg-6 col-md-6 col-8">Add Family or Friends</div> <div class="col-lg-6 col-md-6 col-4"> <div class="multiple-options"> <div class="setting-icon"> <i class="ri-more-fill"></i> <ul> <li><a href="#" onclick="deleteMember()"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li> </ul> </div> </div> </div> </div> </div> </button> </h2> <div id="accor_nesting2Examplecollapse'+cnt+'" class="accordion-collapse collapse show" aria-labelledby="accordionnesting2Example'+cnt+'" data-bs-parent="#accordionnesting2"> <div class="accordion-body"> <div class="container-fluid nopadding"> <div class="row"> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <input type="hidden" name="cus_id[' + cnt + ']" id="cus_id[' + cnt + ']" value=""> <input type="text" name="fname[' + cnt + ']" id="fname[' + cnt + ']" placeholder="First Name" class="form-control" required="required" value="" > </div> </div> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <input type="text" name="lname[' + cnt + ']" id="lname[' + cnt + ']" placeholder="Last Name" class="form-control" required="required" value="" > </div> </div> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <select name="gender[' + cnt + ']" id="gender[' + cnt + ']" class="form-control" required="required" > <option value="" hidden="">Select Gender</option> <option value="Male">Male</option> <option value="Female">Female</option> </select> </div> </div> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <input type="email" name="email[' + cnt + ']" id="email[' + cnt + ']" value="" placeholder="Email" class="form-control" required="required"> </div> </div> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <select name="relationship[' + cnt + ']" id="relationship[' + cnt + ']" class="form-select" required="required"> <option value="" hidden="">Select Relationship</option> <option value="Brother">Brother</option> <option value="Sister">Sister</option> <option value="Father">Father</option> <option value="Mother">Mother</option> <option value="Wife">Wife</option> <option value="Husband">Husband</option> <option value="Son">Son</option> <option value="Daughter">Daughter</option> <option value="Friend">Friend</option> </select> </div> </div> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <div class="input-group"> <input type="text" value="" name="birthdate[' + cnt + ']" id="birthdate" data-dynamic-id ="'+cnt+'" class="form-control border-0 dash-filter-picker width-flatpiker flatpiker-with-border flatpickr-input active flatpickr-date'+cnt+'" placeholder="Birthdate"> </div> </div> </div> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <input type="text" name="mobile[' + cnt + ']" value="" id="mobile'+cnt+'" data-behaviour="text-phone" placeholder="Mobile" class="form-control" maxlength="14" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57"> </div> </div> <div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group mb-15"> <input type="text" name="emergency_contact[' + cnt + ']" id="emergency_contact'+cnt+'" data-behaviour="text-phone" placeholder="Emergency Contact Number" class="form-control" maxlength="14" value="" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <input type="hidden" name="removed_family[' + cnt + ']" id="removed_family'+cnt+'" value=""> </div> </div><div class="col-lg-4 col-md-6 col-sm-6"> <div class="form-group check-box-info"><input class="check-box-primary-account check-box'+cnt+'" type="checkbox" id="primaryAccountHolder" name="primaryAccountHolder[' + cnt + ']" value="1"> <label for="primaryAccountHolder"> Primary Account <span class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="You are paying for yourself and all added family members.">(i)</span></label></div> </div> </div> </div> </div> </div></div>';
 		$('#accordionnesting2').append(data);
 	});
 

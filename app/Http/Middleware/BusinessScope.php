@@ -2,9 +2,7 @@
 
 namespace App\Http\Middleware;
 use Illuminate\Support\Facades\URL;
-use Closure;
-use Auth;
-
+use Closure,Auth;
 class BusinessScope
 {
     /**
@@ -25,6 +23,7 @@ class BusinessScope
             $request->server->set('QUERY_STRING', parse_url($newUrl, PHP_URL_QUERY));
             return redirect($newUrl);
         }
+
         $request->current_company = Auth::user()->businesses()->findOrFail($request->business_id);
         
         URL::defaults(['business_id' => $request->current_company->id]);

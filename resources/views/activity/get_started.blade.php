@@ -38,7 +38,7 @@
 @if($activity_get_start_fast)
 	<section class="instant-hire" >
 		<div class="instant-banner">
-			<img src="{{url('/public/uploads/discover/thumb/'.@$activity_get_start_fast->image) }}">
+			<img src="{{url('/public/uploads/discover/thumb/'.@$activity_get_start_fast->image) }}" alt="Fitnessity">
 			<h4>{{@$activity_get_start_fast->title}}</h4>
 		</div>
 	</section>

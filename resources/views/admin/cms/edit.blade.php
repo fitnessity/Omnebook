@@ -8,7 +8,7 @@
        
 		<div class="panel panel-default">
         	<div class="panel-heading">
-          		Edit {{$detail->content_title}}
+          		Edit 
         	</div>
         	<div class="panel-body">
           		<div class="row">
@@ -37,16 +37,17 @@
 				<div class="row">
 					<div class="col-md-12 form-group{{ $errors->has('video') ? ' has-error' : '' }}">
 						@if($detail['video'])
-							<video width="220" height="150"  controls>
+							<!-- <video width="220" height="150"  controls>
 								<source src="{{ asset('public/'.$detail->video) }}" type="video/mp4">
-							</video>
+							</video> -->
+							<img src="{{ asset('public/'.$detail->video) }}" height="100px" width="100px">
                 			<br>
-               				{!! Form::label('video', 'Video', ['class' => 'control-label']) !!}
+               				{!! Form::label('video', 'Sider Image', ['class' => 'control-label']) !!}
             			@else
-               				{!! Form::label('video', 'Upload Video', ['class' => 'control-label']) !!} 
+               				{!! Form::label('video', 'Upload Sider Image', ['class' => 'control-label']) !!} 
             			@endif
 						<input type="hidden" name="video-name" id="video-name"  value="{{$detail->video}}">
-						<input type="file" name="video" id="video" class="form-control" accept="video/*">
+						<input type="file" name="video" id="video" class="form-control" >
 						@if($errors->has('video'))
 							<p class="help-block">
 								{{ $errors->first('video') }}

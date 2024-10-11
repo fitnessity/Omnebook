@@ -4,8 +4,8 @@ namespace App;
 
 
 
-use App\{User,SGMailService};
-use Auth;
+use App\{User,SGMailService,BusinessStaff};
+use Auth,Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -28,7 +28,7 @@ class UserBookingDetail extends Model
     protected $table = 'user_booking_details';
     public $timestamps = false;
     protected $fillable = [
-        'booking_id', 'sport','business_id', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment', 'subtotal', 'fitnessity_fee', 'tax', 'tip', 'discount','user_type','user_id', 'repeateTimeType','everyWeeks','monthDays','enddate','activity_days','booking_from','booking_from_id','order_from','calendar_booking_time','addOnservice_total','addOnservice_ids','addOnservice_qty','service_fee' ,'productIds','productQtys','productSize','productColor','productTypes','productTotalPrices','order_type'];
+        'booking_id', 'sport','business_id', 'booking_detail','zipcode','quote_by_text','quote_by_email','note','schedule','act_schedule_id','priceid','category_id', 'price','qty', 'bookedtime','payment_number','participate','provider_amount','transfer_provider_status', 'provider_transaction_id','provider_transaction_id','extra_fees', 'pay_session', 'expired_at','expired_duration','contract_date','status','refund_date','refund_amount','refund_method' ,'refund_reason','suspend_reason','suspend_started','suspend_ended','suspend_fee','suspend_comment','terminate_reason','terminated_at','terminate_fee','terminate_comment', 'subtotal', 'fitnessity_fee', 'tax', 'tip', 'discount','user_type','user_id', 'repeateTimeType','everyWeeks','monthDays','enddate','activity_days','booking_from','booking_from_id','order_from','calendar_booking_time','addOnservice_total','addOnservice_ids','addOnservice_qty','service_fee' ,'productIds','productQtys','productSize','productColor','productTypes','productTotalPrices','order_type','membership_for','membershipTotalPrices','membershipTotalTax','productTotalTax','suspend_by','terminate_by','refund_by'];
      
 
     /**
@@ -36,6 +36,87 @@ class UserBookingDetail extends Model
      * Get the user that owns the education.
 
      */
+
+    protected $appends = ['last_attended','refunded_person','terminated_person','suspended_person'];
+
+    public static function boot(){
+        parent::boot();
+
+        self::creating(function($model){
+            $type = '';
+            if($model->qty){
+               $item = json_decode($model->qty,true);
+               foreach(['adult', 'child', 'infant'] as $key){
+                    if(@$item[$key] != 0){
+                        if(!empty($type)) {
+                            $type .= ', ';
+                        }
+                        $type .= ucfirst($key);
+                    }
+                }
+                $model->membership_for = $type;
+            }
+        });
+    }
+
+    public function getLastAttendedAttribute(){
+        $checkIn = $this->BookingCheckinDetails()->latest()->first();
+        return ($checkIn != '') ? date('m/d/Y',strtotime(@$checkIn->checkin_date)) : 'N/A';
+    }
+
+    public function getRefundedPersonAttribute(){
+        if($this->refund_by){
+            $parts = explode("~~", $this->refund_by);
+            if(!empty($parts) && @$parts[0] == 'user'){
+                $user = User::find($parts[1]);
+                return @$user->full_name;
+            }else{
+                $user = BusinessStaff::find($parts[1]);
+                return @$user->full_name;
+            }
+        }else{
+            if(Auth::check()){
+                return Auth::user()->full_name;
+            }
+            return '';
+        }
+    }
+
+    public function getTerminatedPersonAttribute(){
+        if($this->terminate_by){
+            $parts = explode("~~", $this->terminate_by);
+            if(!empty($parts) && @$parts[0] == 'user'){
+                $user = User::find($parts[1]);
+                return @$user->full_name;
+            }else{
+                $user = BusinessStaff::find($parts[1]);
+                return @$user->full_name;
+            }
+        }else{
+            if(Auth::check()){
+                return Auth::user()->full_name;
+            }
+            return '';
+        }
+    }
+
+    public function getSuspendedPersonAttribute(){
+        if($this->suspend_by){
+            $parts = explode("~~", $this->suspend_by);
+            if(!empty($parts) && @$parts[0] == 'user'){
+                $user = User::find($parts[1]);
+                return @$user->full_name;
+            }else{
+                $user = BusinessStaff::find($parts[1]);
+                return @$user->full_name;
+            }
+        }else{
+            if(Auth::check()){
+                return Auth::user()->full_name;
+            }
+            return '';
+        }
+    }
 
     public function getBookingCheckinDetails(){
        $data = BookingCheckinDetails::where('booking_detail_id',$this->id)->whereMonth('checked_at', date('m'))->first();
@@ -79,19 +160,24 @@ class UserBookingDetail extends Model
         return $this->belongsTo(CompanyInformation::class, 'business_id');
     }
 
-    public function business_price_detail(){
-
-        return $this->belongsTo(BusinessPriceDetails::class, 'priceid');
-
+    public function businessPriceDetailsAges(){
+        return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id');
     }
+
+     public function businessPriceDetailsAgesTrashed(){
+        return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id')->withTrashed();
+    }
+
+    public function business_price_detail(){
+        return $this->belongsTo(BusinessPriceDetails::class, 'priceid');
+    }
+
     public function business_price_detail_with_trashed(){
         return $this->belongsTo(BusinessPriceDetails::class, 'priceid')->withTrashed();
     }
 
     public function business_activity_scheduler(){
-
         return $this->belongsTo(BusinessActivityScheduler::class, 'act_schedule_id');
-
     }
 
     public static function getbyid($book_id){
@@ -104,6 +190,14 @@ class UserBookingDetail extends Model
 
     public function provider_get_total(){
         return $this->total() - $this->platform_total();
+    }
+
+    public function getActivityPic(){
+        if(Storage::disk('s3')->exists($this->business_services_with_trashed->first_profile_pic())) {
+            return Storage::url($this->business_services_with_trashed->first_profile_pic()); 
+        }else {
+            return env('APP_URL').'/images/service-nofound.jpg';
+        } 
     }
 
     public function userBookingDetailQty(){
@@ -122,7 +216,7 @@ class UserBookingDetail extends Model
         $qty = json_decode($this->qty);
 
         foreach(['adult', 'child', 'infant'] as $key){
-            $total += ($price->$key * $qty->$key);
+            $total += (@$price->$key * @$qty->$key);
         }
 
         return $total;
@@ -266,51 +360,60 @@ class UserBookingDetail extends Model
         }
     }
 
+    public function baseSessionCountQuery(){
+        return BookingCheckinDetails::where(['booking_detail_id'=> $this->id]);
+    }
+
+    public function getWithoutAttendBookedSession(){
+        return $this->baseSessionCountQuery()->whereNull('checked_at')->count('use_session_amount');
+    }
+
+    public function getUsedSession(){
+        return $this->baseSessionCountQuery()->whereNotNull('checked_at')->count('use_session_amount');
+    }
+
     public function getRemainingSessionAfterAttend(){
         $pay_session = $this->pay_session;
-        $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->whereNotNull('checked_at')->count('use_session_amount');
-        $remaining = $pay_session - $checkindetailscnt;
-        return $remaining;
+        return $pay_session - max($this->getUsedSession(),0);
     }
 
     public function getremainingsession(){
         $pay_session = $this->pay_session;
-        //$checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->whereNotNull('checked_at')->count();
-        $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->sum('use_session_amount');
-        // $checkindetailscnt = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])
+        //$checkindetailscnt = $this->baseSessionCountQuery()->whereNotNull('checked_at')->count();
+        //$checkindetailscnt = $this->baseSessionCountQuery()->sum('use_session_amount');
+        // $checkindetailscnt = $this->baseSessionCountQuery()
         //             ->where('checkin_date' ,'!=',NULL)
         //             ->whereNotNull('checked_at')
         //             ->orWhere(function($query) {
         //                 $query->whereNull('checked_at')
         //                       ->whereDate('checkin_date', '>=', now())->where(['booking_detail_id'=> $this->id]);
         //             })->count();
-                    
-        $remaining = $pay_session - $checkindetailscnt;
-        return $remaining;
+        
+        $checkindetailscnt = $this->baseSessionCountQuery()->whereNotNull('checkin_date')->count();
+        return max($pay_session - $checkindetailscnt,0);
     }
 
     public function getReserveData($feildName)
     {
         $reserve_data = BookingCheckinDetails::where(['booking_detail_id'=> $this->id])->orderBy('checkin_date','desc')->first();
-        $reserve_date = $reserve_time = $check_in_time ="—";
         if($reserve_data != ''){
             $start = date('h:i A', strtotime(@$reserve_data->scheduler->shift_start));
             $end = date('h:i A', strtotime(@$reserve_data->scheduler->shift_end));
             if($reserve_data->checkin_date != '')
-                $reserve_date = date('m-d-Y',strtotime($reserve_data->checkin_date));
+                $reserve_date = date('m/d/Y',strtotime($reserve_data->checkin_date));
             if($reserve_data->checked_at != '')
-                $check_in_time = date('m-d-Y',strtotime($reserve_data->checked_at));
+                $check_in_time = date('m/d/Y',strtotime($reserve_data->checked_at));
             $reserve_time = $start .' to '.$end;
         }
 
         if($feildName == 'reserve_date'){
-            return $reserve_date;
+            return $reserve_date ?? "N/A";
         }
         if($feildName == 'check_in_time'){
-            return $check_in_time;
+            return $check_in_time ?? "N/A";
         }
         if($feildName == 'reserve_time'){
-            return $reserve_time;
+            return $reserve_time ?? "N/A";
         }
         
     }
@@ -391,7 +494,7 @@ class UserBookingDetail extends Model
         if($customer){
             $company = $this->company_information;
             $business_price_detail =  $this->business_price_detail;
-            $business_price_details_ages =  @$business_price_detail->business_price_details_ages_with_trashed;
+            $business_price_details_ages =  $this->businessPriceDetailsAgesTrashed;
             $business_services = $this->business_services;
             $email_detail = array(
                 "email" =>$customer->email, 
@@ -402,7 +505,7 @@ class UserBookingDetail extends Model
                 "ProgramName"=> @$business_services->program_name,
                 "CategoryName"=> @$business_price_details_ages->category_title,
                 "PriceOptionName"=> @$business_price_detail->price_title,
-                "ExpirationDate"=> date('m-d-Y' ,strtotime($this->expired_at)),
+                "ExpirationDate"=> date('m/d/Y' ,strtotime($this->expired_at)),
                 "ProviderPhoneNumber"=> $company->business_phone,
                 "ProviderEmail"=> $company->business_email,
                 "ProviderAddress"=> $company->company_address(),
@@ -426,7 +529,7 @@ class UserBookingDetail extends Model
         if($customer){
             $company = $this->company_information;
             $business_price_detail =  $this->business_price_detail;
-            $business_price_details_ages =  $business_price_detail->business_price_details_ages;
+            $business_price_details_ages =  $this->businessPriceDetailsAgesTrashed;
             $email_detail_provider = array(
                 "email" =>$company->business_email, 
                 "CustomerName" => $customer->full_name, 
@@ -434,7 +537,7 @@ class UserBookingDetail extends Model
                 "ProgramName"=> $this->business_services->program_name,
                 "CategoryName"=> $business_price_details_ages->category_title,
                 "PriceOptionName"=> @$business_price_detail->price_title,
-                "ExpirationDate"=> date('m-d-Y' ,strtotime($this->expired_at)),
+                "ExpirationDate"=> date('m/d/Y' ,strtotime($this->expired_at)),
             );
 
             $email_detail_customer = array(
@@ -446,7 +549,7 @@ class UserBookingDetail extends Model
                 "ProgramName"=> $this->business_services->program_name,
                 "CategoryName"=> $business_price_details_ages->category_title,
                 "PriceOptionName"=> @$business_price_detail->price_title,
-                "ExpirationDate"=> date('m-d-Y' ,strtotime($this->expired_at)),
+                "ExpirationDate"=> date('m/d/Y' ,strtotime($this->expired_at)),
                 "ProviderPhoneNumber"=> $company->business_phone,
                 "ProviderEmail"=> $company->business_email,
                 "ProviderAddress"=> $company->company_address(),

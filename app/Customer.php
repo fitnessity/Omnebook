@@ -20,9 +20,12 @@ class Customer extends Authenticatable
         parent::boot();
 
         self::creating(function($model){
-            $fitnessity_user = User::where('email', $model->email)->first();
+            $fitnessity_user = User::where('email', $model->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($model->fname), strtolower($model->fname)])->first();
             if($fitnessity_user){
                 $model->user_id = $fitnessity_user->id;
+                $model->password = $fitnessity_user->password;
+            }else{
+                $model->createUser();
             }
         });
 
@@ -30,21 +33,44 @@ class Customer extends Authenticatable
             if(!$model->stripe_customer_id){
                 //$model->create_stripe_customer_id();
             }
+
+            if(!$model->password){
+                $model->createPassword();
+            }
         });
 
         self::updated(function($model){
             if(!$model->stripe_customer_id){
                 $model->create_stripe_customer_id();
             }
+
+            if(!$model->password){
+                $model->createPassword();
+            }
+
         });
 
         self::updating(function($model){
-            
-            $fitnessity_user = User::where(['email' => $model->email,'firstname' => $model->fname ,'lastname' => $model->lname])->first();
+            $fitnessity_user = User::where('email', $model->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($model->fname), strtolower($model->lname)])->first();
             if($fitnessity_user){
                 $model->user_id = $fitnessity_user->id;
+                $model->password = $fitnessity_user->password;
+            }else{
+                $model->createUser();
             }
+
+            if(!$model->password){
+                $model->createPassword();
+            }
+
         });
+
+        /*self::retrieved(function($model){
+            $fitnessity_user = User::where('email', $model->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($model->fname), strtolower($model->lname)])->first();
+            if(!$model->user_id){
+                $model->createUserIfNeeded();
+            }
+        });*/
         
     }
 
@@ -57,7 +83,7 @@ class Customer extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'business_id','fname','lname', 'email','birthdate', 'phone_number','relationship','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id','card_stripe_id','card_token_id','stripe_customer_id','terms_covid','terms_liability','terms_contract', 'user_id','emergency_contact','emergency_relation','emergency_email','emergency_name','primary_account'
+        'business_id','fname','lname', 'email','birthdate', 'phone_number','relationship','profile_pic','password','username','gender','address','city','state','country','zipcode','status','notes','parent_cus_id','card_stripe_id','card_token_id','stripe_customer_id','terms_covid','terms_liability','terms_contract', 'user_id','emergency_contact','emergency_relation','emergency_email','emergency_name','primary_account','terms_sign_path','contract_sign_path','liability_sign_path','covid_sign_path','refund_sign_path',
     ];
 
     /**
@@ -79,17 +105,90 @@ class Customer extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['age', 'profile_pic_url', 'full_name', 'first_letter'];
+    protected $appends = ['age', 'profile_pic_url', 'full_name', 'first_letter' ,'company_name','last_attend_date','member_id','customer_type' ,'total_spend'];
 
+
+    public function createUser(){
+        $user = User::where('email', $this->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($this->fname), strtolower($this->lname)])->first();
+        if(!$this->user_id){
+            if($user){
+                $this->user_id = $user->id;
+            }else{
+                $user = New User();
+                $user->role = 'customer';
+                $user->firstname =  $this->fname;
+                $user->lastname =  $this->lname;
+                $user->username = $this->fname.$this->lname;
+                $user->email = $this->email;
+                $user->gender = $this->gender;
+                $user->primary_account = 0;
+                $user->country = 'United Status';
+                $user->phone_number = $this->mobile;
+                $user->birthdate =  $this->birthdate != '' ? date('Y-m-d', strtotime($this->birthdate)) : null;
+                $user->stripe_customer_id =  $this->stripe_customer_id;
+                $user->password =  $this->password;
+                $user->save(); 
+                $this->user_id = $user->id;
+            }
+        }
+    }
+
+    public function createPassword(){
+        $password = Str::random(8);
+        $user = User::where('email', $this->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($this->fname), strtolower($this->lname)])->first();
+        if(!$this->password){
+            if($user){
+                if($user->password){
+                    $this->password =  $user->password;
+                }else{
+                    $this->password = \Hash::make($password);
+                    $user->update(['password'=> \Hash::make($password),'buddy_key' => $password]);
+                }
+            }else{
+                $this->createUser();
+            }
+        }else{
+            if($user && !$user->password){
+                $user->update(['password'=> $this->password]);
+            }
+        }
+    }
 
     public function stripePaymentMethods(){
-        return StripePaymentMethod::where('user_type', 'Customer')->where('user_id', $this->id);
+
+        if($this->request_status == 1){
+            $ids = Customer::where('user_id',$this->user_id)->pluck('id')->toArray();
+
+            /*return StripePaymentMethod::whereRaw('((user_type = "User" and user_id = ?) or (user_type = "Customer" and user_id IN (?)))', [$this->user_id, $ids ]);*/
+
+            return StripePaymentMethod::where(function ($query) use ($ids) {
+                $query->where(function ($subquery) {
+                    $subquery->where('user_type', 'User')
+                        ->where('user_id', $this->user_id);
+                })->orWhere(function ($subquery) use ($ids) {
+                    $subquery->where('user_type', 'Customer')
+                        ->whereIn('user_id', $ids);
+                });
+            });
+
+        }else{
+            return StripePaymentMethod::whereRaw('((user_type = "User" and user_id = ?) or (user_type = "Customer" and user_id = ?))', [$this->user_id, $this->id]);
+        }
     }
+
     public function getProfilePicUrlAttribute()
     {
-        if($this->profile_pic){
-            return Storage::url($this->profile_pic);
+        $profile_pic = '';
+        if(Storage::disk('s3')->exists($this->profile_pic)){
+            $profile_pic = Storage::url($this->profile_pic);
         }
+        return $profile_pic;
+    }
+
+    public function getLastAttendDateAttribute()
+    {
+        $lastAttend = $this->BookingCheckinDetails()->whereNotNull('checked_at')->orderby('checkin_date','desc')->first();
+        return @$lastAttend->checkin_date ?? "N/A";
     }
 
     public function getAgeAttribute()
@@ -101,8 +200,43 @@ class Customer extends Authenticatable
         }
     }
 
+    public function getTotalSpendAttribute(){
+        return $this->total_spend();
+    }
+
+    public function getMemberIdAttribute()
+    {
+        if($this->user){
+            return $this->user->unique_user_id;
+        }else{
+            return 'N/A';
+        }
+    }
+
+    public function getCustomerTypeAttribute()
+    {
+        if($this->age){
+            if($this->age >= 18){
+                return 'Adult';  
+            }else if($this->age >= 3 && $this->age < 18){
+                return 'Child';
+            }else if($this->age < 3){
+                 return 'Infant';
+            }
+        }else{
+            if($this->birthdate != null){
+                return 'Infant';
+            }
+            return 'N/A';
+        }
+    }
+
     public function getFullNameAttribute(){
-        return $this->fname . ' ' . $this->lname;
+        return ucfirst($this->fname) . ' ' . ucfirst($this->lname);
+    }
+
+    public function getCompanyNameAttribute(){
+        return $this->company_information->company_name ?? 'N/A';
     }
 
     public function getFirstLetterAttribute(){
@@ -110,6 +244,35 @@ class Customer extends Authenticatable
         $lname = $this->lname != '' ? $this->lname[0] : '';
         return $fname . '' . $lname;
     }
+
+    public function createUserIfNeeded()
+    {
+    
+        if (!$this->user_id) {
+            $user = User::where('email', $this->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($this->fname), strtolower($this->lname)])->first();
+            if($user){
+                $this->user_id = $user->id;
+            }else{
+                $user = New User();
+                $user->role = 'customer';
+                $user->firstname =  $this->fname;
+                $user->lastname =  $this->lname;
+                $user->username = $this->fname.$this->lname;
+                $user->email = $this->email;
+                $user->gender = $this->gender;
+                $user->primary_account = 0;
+                $user->country = 'United Status';
+                $user->phone_number = $this->mobile;
+                $user->birthdate =  $this->birthdate != '' ? date('Y-m-d', strtotime($this->birthdate)) : null;
+                $user->stripe_customer_id =  $this->stripe_customer_id;
+                $user->password =  $this->password;
+                $user->save(); 
+                $this->user_id = $user->id;
+            }
+            $this->update();
+        }
+    }
+
 
     public function company_information()
     {
@@ -157,16 +320,16 @@ class Customer extends Authenticatable
     {
         $familes = [];
         if($this->parent_cus_id){
-            $parent = Customer::where('id',$this->parent_cus_id)->first();
+            $parent = Customer::where(['id' => $this->parent_cus_id ,'business_id' => $this->business_id])->first();
             if ($parent != '') {
-                $familes = Customer::where('parent_cus_id', $parent->id)->where('id', '<>', $this->id)->get();
-                $familes = $familes->merge(Customer::where('id',$this->parent_cus_id)->where('id', '<>', $this->id)->get());
-                $familes = $familes->merge(Customer::where('parent_cus_id',$this->id)->get());
+                $familes = Customer::where(['parent_cus_id'=> $parent->id, 'business_id' => $this->business_id])->where('id', '<>', $this->id)->get();
+                $familes = $familes->merge(Customer::where(['id'=>$this->parent_cus_id ,'business_id' => $this->business_id])->where('id', '<>', $this->id)->get());
+                $familes = $familes->merge(Customer::where(['parent_cus_id'=> $this->id, 'business_id' => $this->business_id])->get());
             }
             
             return $familes;
         }else{
-            return Customer::where('parent_cus_id',$this->id)->get();
+            return Customer::where(['parent_cus_id'=> $this->id, 'business_id' => $this->business_id])->get();
         }
     }
 
@@ -195,35 +358,26 @@ class Customer extends Authenticatable
     }
 
     public function full_address(){
-        $location = '';
-        $address = '';
+        $location = $address = '';
         if($this->address != ''){
-            $address .= $this->address.', ';
+            $location .= $this->address.', ';
         }
         if($this->city != ''){
-            $address .= $this->city.', ';
+            $location .= $this->city.', ';
         }
         if($this->state != ''){
-            $address .= $this->state.' '.$this->zipcode.', ';
-            $location .= $this->state.', ';
+            $location .= $this->state.' '.$this->zipcode.', ';
         }
         if($this->country != ''){
-            $address .= $this->country;
             $location .= $this->country;
         }
 
-        if($address == ''){
-            $address = '—';
-        }else if($address == 'US'){
-            $address = 'United States';
-        }
-
         if($location == ''){
-           $location = '—'; 
+           $location = 'N/A';
         }else if($location == 'US'){
             $location = 'United States';
         }
-        return $address;
+        return $location;
     }
 
     public function getlastbooking(){
@@ -246,14 +400,51 @@ class Customer extends Authenticatable
         return $result->count();
     }
 
-    public function active_memberships($sport = null){
+    public function active_memberships($sport = null,$expireDate= null){
+        $expireDate = $expireDate ??  Carbon::now()->format('Y-m-d');
+        $used_user_booking_detail_ids = $this->BookingCheckinDetails()->whereRaw('booking_detail_id is not null')->where('after_use_session_amount', '<=' , 0)->pluck('booking_detail_id')->toArray();
 
-        $used_user_booking_detail_ids = $this->BookingCheckinDetails()->whereRaw('booking_detail_id is not null')->where('after_use_session_amount', 0)->pluck('booking_detail_id')->toArray();
-
-        $results = $this->bookingDetail()->where('order_type','membership')->where('status', 'active')->whereRaw('(user_booking_details.expired_at > ? or user_booking_details.expired_at is null)', Carbon::now()->format('Y-m-d'))
+        $results = $this->bookingDetail()->where('order_type','membership')->where('status', 'active')->whereRaw('(user_booking_details.expired_at > ? or user_booking_details.expired_at is null)', $expireDate)
                                          ->whereNotIn('user_booking_details.id', $used_user_booking_detail_ids);
  
         return $results; 
+    }
+
+    public function customerAtRisk(){
+        $activeMemberships = $this->active_memberships();
+        $checkinData = BookingCheckinDetails::join('user_booking_details', 'booking_checkin_details.booking_detail_id', '=', 'user_booking_details.id')
+        ->whereIn('booking_checkin_details.booking_detail_id', $activeMemberships->pluck('id'))
+        ->where('booking_checkin_details.checked_at', '>=', Carbon::parse(date('Y-m-d'))->subDays(14))
+        ->exists();
+
+        if ($activeMemberships->get()->isNotEmpty() && !$checkinData) {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    public function bigSpender(){
+        $transaction = $this->total_spend();
+        return $transaction >= 2000 ? 1 : 0;
+    }
+
+    public function suspended(){
+        return $this->bookingDetail()->where('status' ,'suspend')->get();
+    }
+
+    public function suspendedOrNot(){
+        $membership = $this->suspended()->count();
+        return $membership > 0 ? 1 : 0;
+    }
+
+    public function owedDetail(){
+        return $this->recurringDetail()->where('payment_number',NULL)->whereIn('status',['Retry','Failed'])->join('booking_checkin_details as cid','cid.booking_detail_id' ,'=','recurring.booking_detail_id')->whereNotNull('cid.checked_at');
+    }
+
+    public function owedOrnot(){
+        $detail = $this->owedDetail()->count();
+        return $detail > 0 ? 1 : 0;
     }
 
     public function expired_soon(){
@@ -269,21 +460,28 @@ class Customer extends Authenticatable
 
     function create_stripe_customer_id(){
 	   if( !empty($this->email) && $this->email != 'N/A' && $this->email != '-' &&  $this->stripe_customer_id == ''){
-            $FndCustomer = Customer::where(['fname' => $this->fname, 'lname' => $this->lname,'email' => $this->email])->whereNotNull('stripe_customer_id')->where('id', '!=', $this->id)->first();
+            $FndCustomer =  Customer::whereRaw('LOWER(fname) = ? AND LOWER(lname) = ?', [strtolower($this->fname), strtolower($this->lname)])->where(['email' => $this->email])->whereNotNull('stripe_customer_id')->where('id', '!=', $this->id)->first();
             if($FndCustomer == ''){
-                try {
-                    \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-                    $customer = \Stripe\Customer::create([
-                        'name' => $this->fname . ' '. $this->lname,
-                        'email'=> $this->email,
-                    ]);
-                    $this->stripe_customer_id = $customer->id;
+                $user = User::where('email', $this->email)->whereRaw('LOWER(firstname) = ? AND LOWER(lastname) = ?', [strtolower($this->fname), strtolower($this->lname)])->first();
+                if($user){
+                    $this->stripe_customer_id = $user->stripe_customer_id;
                     $this->save();
-            
-                    return $customer->id;
-                    
-                } catch (Exception $e) {
-                    return '';
+                    return $this->id;
+                }else{
+                    try {
+                        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+                        $customer = \Stripe\Customer::create([
+                            'name' => $this->fname . ' '. $this->lname,
+                            'email'=> $this->email,
+                        ]);
+                        $this->stripe_customer_id = $customer->id;
+                        $this->save();
+                
+                        return $customer->id;
+                        
+                    }catch(Exception | \Stripe\Exception\InvalidRequestException $e){
+                        return "";
+                    }
                 }
             }else{
                 $this->stripe_customer_id = $FndCustomer->stripe_customer_id;
@@ -330,18 +528,25 @@ class Customer extends Authenticatable
             return $item->id;
         });
 
-        return BookingCheckinDetails::whereIn('booking_detail_id', $booking_detail_ids)->orderBy('checkin_date', 'desc');
+        return BookingCheckinDetails::whereIn('booking_detail_id', $booking_detail_ids)->whereNotNull('checkin_date')->orderBy('checkin_date', 'desc');
     }
 
     public function visits_count(){
-        return $this->visits()->where('checked_at',"!=",NULL)->count();
+        return $this->visits()->whereNotNull('checked_at')->whereNotNull('checkin_date')->count();
     }
 
     public function get_last_seen(){
         $checkin = $this->visits()->where('checked_at',"!=",NULL)->orderby('checkin_date','desc')->first();
         if($checkin){
-            return $checkin->checkin_date;
+            return date('m/d/Y', strtotime($checkin->checkin_date));
         }
+    }
+
+    public function lastDays(){
+        $date1 = Carbon::parse($this->get_last_seen());
+        $date2 = Carbon::now();
+
+        return $date1->diffInDays($date2);
     }
 
     public function get_current_membership(){
@@ -355,37 +560,41 @@ class Customer extends Authenticatable
         $payment_method = $this->StripePaymentMethods()->get()->last();
 
         if($payment_method){
+
             $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-
-            $paymentIntent = $stripe->paymentIntents->create([
-                'amount' =>  round($amount *100),
-                'currency' => 'usd',
-                'customer' => $this->stripe_customer_id,
-                'payment_method' => $payment_method->payment_id,
-                'off_session' => true,
-                'confirm' => true,
-                'metadata' => []
-            ]);
-
-            if($paymentIntent->status == 'succeeded'){
-
-                $this->Transaction()->create([
-                    'user_type' => 'Customer',
-                    'user_id' => $this->id,
-                    'item_type'=> 'Customer',
-                    'item_id'=> $this->id,
-                    'channel'=> 'stripe',
-                    'kind'=> $kind,
-                    'transaction_id'=> $paymentIntent->id,
-                    'stripe_payment_method_id'=> $payment_method->payment_id,
-                    'amount'=> $amount,
-                    'qty'=> 1,
-                    'status'=> 'complete',
-                    'payload'=> json_encode($paymentIntent)
+            try{
+                $paymentIntent = $stripe->paymentIntents->create([
+                    'amount' =>  round($amount *100),
+                    'currency' => 'usd',
+                    'customer' => $this->stripe_customer_id,
+                    'payment_method' => $payment_method->payment_id,
+                    'off_session' => true,
+                    'confirm' => true,
+                    'metadata' => []
                 ]);
-                return true;
-            }else{
-                return false;
+
+                if($paymentIntent->status == 'succeeded'){
+
+                    $this->Transaction()->create([
+                        'user_type' => 'Customer',
+                        'user_id' => $this->id,
+                        'item_type'=> 'Customer',
+                        'item_id'=> $this->id,
+                        'channel'=> 'stripe',
+                        'kind'=> $kind,
+                        'transaction_id'=> $paymentIntent->id,
+                        'stripe_payment_method_id'=> $payment_method->payment_id,
+                        'amount'=> $amount,
+                        'qty'=> 1,
+                        'status'=> 'complete',
+                        'payload'=> json_encode($paymentIntent)
+                    ]);
+                    return true;
+                }else{
+                    return false;
+                }
+            }catch(Exception | \Stripe\Exception\InvalidRequestException $e){
+               return false;
             }
 
         }else{
@@ -393,12 +602,23 @@ class Customer extends Authenticatable
         }
     }
 
-    public function is_active(){
-        $checkindetail = BookingCheckinDetails::where('customer_id', $this->id)->whereDate("checkin_date",">=", Carbon::now()->subMonths(3))->orderby('checkin_date','desc')->first();
-        if( $checkindetail != ''){
-            return true;
+    public function is_active($startDate = null, $endDate = null){
+        if(!$startDate){
+            $startDate = Carbon::now()->subMonths(3);
+        }
+
+        $checkindetail = BookingCheckinDetails::where('customer_id', $this->id)->orderby('checkin_date','desc');
+        $chk = $checkindetail->get();
+        if($chk->isNotEmpty()){
+            $detail = $checkindetail->whereDate("checkin_date",">=",$startDate);
+            if($endDate){
+                $detail = $checkindetail->whereDate("checkin_date","<=",$endDate);
+            }
+
+            $detail = $detail->where('checkin_date' ,'!=' , NULL)->first();
+            return $detail != '' ? 'Active' : 'InActive';
         }else{
-            return false;
+           return $this->created_at >= Carbon::now()->subMonths(3) ? 'Prospect' : 'InActive';
         }
     }
 
@@ -457,6 +677,17 @@ class Customer extends Authenticatable
     public function getCheckInId($bookingId,$date){
         $checkInDetail = $this->BookingCheckinDetails()->where('booking_detail_id',$bookingId)->whereDate('checkin_date' ,$date)->first();
         return @$checkInDetail->id;
+    }
+
+    public function get_Inactive($type,$startDate, $endDate){
+        $checkindetail = BookingCheckinDetails::where('customer_id', $this->id)->orderby('checkin_date','desc');
+        $chk = $checkindetail->get();
+        if($chk->isNotEmpty()){
+            $detail = $checkindetail->whereDate("checkin_date",">=",Carbon::parse($startDate)->subMonths(3))->whereDate("checkin_date","<=",Carbon::parse($endDate)->subMonths(3))->first();
+            return $detail != '' ? 1 : 0;
+        }else{
+           return $this->created_at >= Carbon::parse($startDate)->subMonths(3) ? 1 : 0;
+        }
     }
     
 }

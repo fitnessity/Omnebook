@@ -498,11 +498,12 @@ class HomeController extends Controller
     public function sendGrantAccessMail(Request $request){
     	$user = User::where('id',$request->id)->first();
     	$company = CompanyInformation::findOrFail($request->business_id);
-    	$customer = Customer::where('user_id' , $user->id)->first();
-    	if($customer != ''){
+    	$customer = Customer::where([ 'business_id'=>$company->id, 'fname'=>$user->firstname, 'lname'=>$user->lastname ,'email'=> $user->email, 'user_id' => $user->id])->first();
+    	if($customer){
+    		$customer->update(['profile_pic'=> $user->profile_pic,'request_status'=> 1]);
     		$familyMember = UserFamilyDetail::where(['user_id' => $user->id])->get();
             foreach($familyMember as $member){
-                $chk = Customer::where(['fname' =>$member->first_name ,'lname' =>$member->last_name])->first();
+                $chk = Customer::where(['fname' =>$member->first_name ,'lname' =>$member->last_name, 'business_id'=>$company->id])->first();
                 if($chk == ''){
                     Customer::create([
                         'business_id' => $request->business_id,
@@ -517,14 +518,15 @@ class HomeController extends Controller
                         'gender' => $member->gender,
                         'user_id' => NULL, //this is null bcz of user is not created at 
                         'parent_cus_id'=> $customer->id ,
-                        'relationship' =>$member->relationship
+                        'relationship' =>$member->relationship,
+                        'request_status' =>1
                     ]);
                 }
             }
 
-            $cardData = StripePaymentMethod::where(['user_id' => $user->id , 'user_type' => 'User' ])->get();
+            //$cardData = StripePaymentMethod::where(['user_id' => $user->id , 'user_type' => 'User' ])->get();
 
-            foreach($cardData as $data){
+            /*foreach($cardData as $data){
                 $stripData = StripePaymentMethod::where(['user_id' =>$customer->id ,'payment_id'=> $data->payment_id ,'exp_year' => $data->exp_year ,'last4' =>$data->last4])->first();
                 if($stripData == ''){
                     StripePaymentMethod::create([
@@ -538,10 +540,9 @@ class HomeController extends Controller
                         'last4'=> $data->last4,
                     ]);
                 }
-                
-            }
+            }*/
 
-            $paymentHistory = Transaction::where('user_type', 'User')
+            /*$paymentHistory = Transaction::where('user_type', 'User')
             ->where('user_id', $user->id)
             ->orWhere(function($subquery) use ($customer) {
                 $subquery->where('user_type', 'Customer')
@@ -567,8 +568,7 @@ class HomeController extends Controller
                         'payload'=> $data->payload
                     ]);
                 }
-                
-            }
+            }*/
     		return "already";
     	}else{
     		$data = array(
@@ -581,4 +581,11 @@ class HomeController extends Controller
     		return $status;
     	}
     }
+
+    public function login_as(Request $request){
+        $user = User::find($request->id);
+        Auth::guard('web')->login($user, true);
+        return redirect('/');
+    }
+
 }

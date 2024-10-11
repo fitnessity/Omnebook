@@ -345,6 +345,11 @@
                     <div class="col-sm-10 toppadding7"> @if($customerDetails['gender'] != "") {{ $customerDetails['gender'] }} @else - @endif</div>
                   </div>
                   <div class="form-group">
+                    <label for="inputEmail" class="col-sm-2 control-label">User ID :</label>
+                    <div class="col-sm-10 toppadding7">{{ $customerDetails['unique_user_id'] }}</div>
+                  </div>
+
+                  <div class="form-group">
                     <label for="inputEmail" class="col-sm-2 control-label">Email :</label>
                     <div class="col-sm-10 toppadding7"> @if($customerDetails['email'] != "") {{ $customerDetails['email'] }} @else - @endif</div>
                   </div>

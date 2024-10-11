@@ -55,7 +55,7 @@
 												</div>
 											</div>  
 											<form method="GET">
-												<input type="hidden" name="filterOptions" id="filterOptionsvalue" value="">
+												<input type="hidden" name="filterOptions" id="filterOptionsvalue" value="{{@$filterOptions}}">
 												<div class="row d-flex align-items-center">
 													<div class="col-lg-3 col-md-4 col-sm-4">
 														<label> Start Date </label>
@@ -88,7 +88,7 @@
 												</div>
 												<div class="row justify-content-md-center">
 													<div class="col-lg-6">
-														<a class="btn btn-black w-100 mb-25" data-behavior="on_change_submit" id="generateReport"> Generate Reports </a>
+														<button type="button" class="btn btn-black w-100 mb-25" data-behavior="on_change_submit" id="generate_btn"> Generate Reports </button>
 													</div>
 												</div>
 											</form>
@@ -109,7 +109,7 @@
 											<div class="row justify-content-md-center">
 												<div class="col-lg-6">
 													<div class="form-group mb-10">
-														<select class="form-select" id="filterOptions" required="" data-behavior="on_change_submit">
+														<select class="form-select" id="filterOptions" required="" data-behavior="on_change_dropdown">
 															<option value="">Show All</option>
 															<option value="category" {{@$filterOptions == 'category' ? 'selected' : ''}}>Sales By Category</option>
 															<option value="source" {{@$filterOptions == 'source' ? 'selected' : ''}}>Sales by Source (Online vs In-Person)</option>
@@ -138,7 +138,7 @@
 															<option value="pdf">Export to PDF</option>
 														</select>
 													</div>
-													<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();">Go!</button>
+													<button type="button" class="btn btn-black w-100 mb-25" onclick="exportData();"id="go_btn"> Go!</button>
 												</div>
 											</div>
 										</div>
@@ -161,7 +161,7 @@
 					        $cardDetails2 = clone $cardReportubs; // Create a fresh copy of the query
 					        $cardDetails2 = $cardDetails2->whereDate('transaction.created_at','=', $date->format('Y-m-d'));
 
-					        $cardDetails = $cardDetails1->get()->merge($cardDetails2->get());
+					        $cardDetails = $cardDetails1->get()->concat($cardDetails2->get());
 					       
 					        $cashData = clone $cashReport; // Create a fresh copy of the query
 					        $cashData = $cashData->whereDate('transaction.created_at','=', $date->format('Y-m-d'))->get();
@@ -1628,16 +1628,19 @@
 	  
 	    $(document).on('click', '[data-behavior~=on_change_submit]', function(e){
 			e.preventDefault()
+			$('#generate_btn').html('Loading..');
+			$("#generate_btn").prop("disabled", true);
 			$(this).parents('form').submit();
 		});
 
-		$(document).on('change', '[data-behavior~=on_change_submit]', function(e){
+		$(document).on('change', '[data-behavior~=on_change_dropdown]', function(e){
 			$('#filterOptionsvalue').val(this.value);
-			$('#generateReport').click();
+			$('#generate_btn').click();
 		});
 
 		function exportData(){
-	
+			$('#go_btn').html('Loading..'); 
+			$("#go_btn").prop("disabled", true);
 			let startDate = '<?= $filterStartDate ? $filterStartDate->format("Y-m-d") : ''; ?>' || $('#startDate').val();
 			let endDate = '<?= $filterEndDate ? $filterEndDate->format("Y-m-d") : ''; ?>' ||  $('#endDate').val();
 			var type = $('#exportOptions').val();
@@ -1660,6 +1663,9 @@
 			    document.body.appendChild(link);
 			    link.click();
 			    document.body.removeChild(link);
+
+			    $('#go_btn').html('Go!'); 
+				$("#go_btn").prop("disabled", false);
 			}else if(type == 'print'){
 				$('.accordion-button').removeClass('collapsed');
 				$('.accordion-collapse').addClass('show');
@@ -1675,6 +1681,9 @@
 				print();
 
 				$('.table').addClass('table-nowrap');
+
+				$('#go_btn').html('Go!'); 
+				$("#go_btn").prop("disabled", false);
 			}
 		}
 

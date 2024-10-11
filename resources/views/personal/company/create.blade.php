@@ -81,7 +81,7 @@
 																		<div class="col-lg-6 col-md-6">
 																			<div class="form-group mt-10">
 																				<label for="pwd">Business Address <span id="star">*</span></label>
-																				<input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="address" placeholder="Address" value="{{@$company->address}}" required="">
+																				<input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="addressBusiness" placeholder="Address" value="{{@$company->address}}" required="" oninput="initMapCall('addressBusiness', 'cityBusiness', 'stateBusiness', 'countryBusiness', 'zipCodeBusiness', 'latitude', 'longitude')"> 
 																			</div>
 																		</div>
 																		 <div id="map" style="display: none;"></div>
@@ -94,24 +94,24 @@
 																		<div class="col-lg-6 col-md-6">
 																			<div class="form-group mt-10">
 																				<label for="City">City <span id="star">*</span></label>
-																				<input type="text" class="form-control" name="city" id="city" size="30" placeholder="City" maxlength="50" value="{{@$company->city}}" required="">
+																				<input type="text" class="form-control" name="city" id="cityBusiness" size="30" placeholder="City" maxlength="50" value="{{@$company->city}}" required="">
 																			</div>
 																		</div>
 																		<div class="col-lg-6 col-md-6">
 																			<div class="form-group mt-10">
 																				<label for="State">State <span id="star">*</span></label>
-																				<input type="text" class="form-control" name="state" id="state" size="30" placeholder="State" maxlength="50" value="{{@$company->state}}" required="">
+																				<input type="text" class="form-control" name="state" id="stateBusiness" size="30" placeholder="State" maxlength="50" value="{{@$company->state}}" required="">
 																			</div>
 																		</div>
 																		<div class="col-lg-6 col-md-6">
 																			<div class="form-group mt-10">
 																				<label for="zip">Zip Code <span id="star">*</span></label>
-																				<input type="text" class="form-control" name="zipCode" id="zipCode" size="30" placeholder="Zip Code" value="{{@$company->zip_code}}" maxlength="20" required="">
+																				<input type="text" class="form-control" name="zipCode" id="zipCodeBusiness" size="30" placeholder="Zip Code" value="{{@$company->zip_code}}" maxlength="20" required="">
 																			</div>
 																		</div>
-																		<input type="hidden" name="lon" id="lon" value="{{@$company->longitude}}">
-							        									<input type="hidden" name="lat" id="lat" value="{{@$company->latitude}}">
-							        									<input type="hidden" name="country" id="country" value="{{@$company->country}}">
+																		<input type="hidden" name="lon" id="longitude" value="{{@$company->longitude}}">
+							        									<input type="hidden" name="lat" id="latitude" value="{{@$company->latitude}}">
+							        									<input type="hidden" name="country" id="countryBusiness" value="{{@$company->country}}">
 																		<div class="col-lg-6 col-md-6">
 																			<div class="form-group mt-10">
 																				<label for="location">Neighborhood/Location/Area</label>
@@ -1711,105 +1711,6 @@
          }    
       });    
 	</script>
-
-	<!-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw&callback=initMap" async defer></script> -->
-	
-	<script type="text/javascript">
-    	function initMap() {
-        	var map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: -33.8688, lng: 151.2195},
-            zoom: 13
-        	});
-
-        	var input = document.getElementById('address');
-        	map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-        	var autocomplete = new google.maps.places.Autocomplete(input);
-        	autocomplete.bindTo('bounds', map);
-        	var infowindow = new google.maps.InfoWindow();
-        	var marker = new google.maps.Marker({
-            map: map,
-            anchorPoint: new google.maps.Point(0, -29)
-        	});
-
-        	autocomplete.addListener('place_changed', function() {
-            infowindow.close();
-            marker.setVisible(false);
-            var place = autocomplete.getPlace();
-            if (!place.geometry) {
-                window.alert("Autocomplete's returned place contains no geometry");
-                return;
-            }
-
-            // If the place has a geometry, then present it on a map.
-            if (place.geometry.viewport) {
-                map.fitBounds(place.geometry.viewport);
-            } else {
-                map.setCenter(place.geometry.location);
-                map.setZoom(17);
-            }
-
-            marker.setIcon(({
-                url: place.icon,
-                size: new google.maps.Size(71, 71),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(17, 34),
-                scaledSize: new google.maps.Size(35, 35)
-            }));
-
-            marker.setPosition(place.geometry.location);
-            marker.setVisible(true);
-            var address = '';
-            var badd = '';
-            var sublocality_level_1 = '';
-            if (place.address_components) {
-                address = [
-                  (place.address_components[0] && place.address_components[0].short_name || ''),
-                  (place.address_components[1] && place.address_components[1].short_name || ''),
-                  (place.address_components[2] && place.address_components[2].short_name || '')
-                ].join(' ');
-            }
-
-            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-            infowindow.open(map, marker);
-
-            // Location details
-            for (var i = 0; i < place.address_components.length; i++) {
-                if(place.address_components[i].types[0] == 'postal_code'){
-                  $('#zipCode').val(place.address_components[i].long_name);
-                }
-
-                if(place.address_components[i].types[0] == 'locality'){
-                    $('#city').val(place.address_components[i].long_name);
-                }
-
-                if(place.address_components[i].types[0] == 'sublocality_level_1'){
-                    sublocality_level_1 = place.address_components[i].long_name;
-                }
-
-                if(place.address_components[i].types[0] == 'street_number'){
-                   badd = place.address_components[i].long_name ;
-                }
-
-                if(place.address_components[i].types[0] == 'route'){
-                   badd += ' '+place.address_components[i].long_name ;
-                } 
-
-                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
-                  $('#state').val(place.address_components[i].long_name);
-                }
-            }
-
-            if(badd == ''){
-              $('#address').val(sublocality_level_1);
-            }else{
-              $('#address').val(badd);
-            }
-
-            $('#lat').val(place.geometry.location.lat());
-            $('#lon').val(place.geometry.location.lng());
-         });
-      }
- 	</script>
 
  	<script>
  		$(document).ready(function(){

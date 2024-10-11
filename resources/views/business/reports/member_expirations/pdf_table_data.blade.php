@@ -4,7 +4,7 @@
 			<th>No</th>
 			<th>Name</th>
 			<th>Membership Type</th>
-			<th>Started on</th>
+			<th>Started On</th>
 			<th>Expires On</th>
 		</tr>
 		@php $counter = 1; @endphp

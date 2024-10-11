@@ -5,6 +5,7 @@ namespace App;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Storage;
 
 class UserFamilyDetail extends Model
 {
@@ -22,7 +23,7 @@ class UserFamilyDetail extends Model
        'user_id', 'first_name', 'last_name','email', 'mobile','emergency_contact','emergency_contact_name','relationship','gender','birthday','profile_pic'
     ];
 
-    protected $appends = ['full_name','age', 'first_letter'];
+    protected $appends = ['full_name','age', 'first_letter','profile_pic_url'];
 
     public function getAgeAttribute()
     {
@@ -31,6 +32,16 @@ class UserFamilyDetail extends Model
         }else{
             return null;
         }
+    }
+
+    public function getProfilePicUrlAttribute()
+    {
+        $profile_pic = '';
+        if(Storage::disk('s3')->exists($this->profile_pic)){
+            $profile_pic = Storage::url($this->profile_pic);
+        }
+
+        return $profile_pic;
     }
     
     public function getFullNameAttribute(){
