@@ -739,6 +739,9 @@ footer {
 #back-top a:hover span {
     background-color: #f53b49;
 }
+.footer-link a:focus {
+    color: #fefefe;
+}
 
 /*.footer-link-button-say .btn-info:focus { color: #fff; background-color: transparent; border-color: #f53b49 !important; }*/
 

@@ -1322,14 +1322,14 @@ html {
 
 .help-desk button {
     display: inline-block;
-    background: #3e4148;
+    background: #1c256c;
     color: #fff;
     padding: 10px 12px 11px;
     border: none;
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
     transition: 0.5s;
-    border: 1px solid #3e4148;
+    border: 1px solid #1c256c;
     cursor: pointer
 }
 
@@ -1382,12 +1382,12 @@ html {
     width: 112px;
     border-radius: 50%;
     color: #fff;
-    background: #3e4148;
+    background: #1c256c;
     text-align: center;
     display: inline-block;
     font-size: 60px;
     margin-top: -70px;
-    border: 2px solid #3e4148;
+    border: 2px solid #1c256c;
     transition: 0.5s
 }
 
@@ -17084,7 +17084,7 @@ input:checked + .slider:before {
 }
 
 .congratulation-block .btn-web-btn {
-    background: #ff002a !important;
+    background: #98002e !important;
     border-radius: 6px !important;
     padding: 10px 20px;
     display: inline-block;
@@ -17093,7 +17093,7 @@ input:checked + .slider:before {
 }
 
 .order-summaryblock .btn-web-btn {
-    background: #ff002a !important;
+    background: #98002e !important;
     border-radius: 6px !important;
     padding: 10px 50px;
     display: inline-block;
@@ -17104,7 +17104,7 @@ input:checked + .slider:before {
 }
 
 .buttonblock .btn-web-btn {
-    background: #ff002a !important;
+    background: #98002e !important;
     border-radius: 6px !important;
     padding: 6px 20px;
     display: inline-block;
@@ -17975,8 +17975,8 @@ input#zipcode {
 }
 
 .btn-web-btn:hover {
-    color: #eb1c24 !important;
-    border-color: #eb1c24 !important;
+    color: #98002e !important;
+    border-color: #98002e !important;
     background-color: #fff !important;
 }
 
