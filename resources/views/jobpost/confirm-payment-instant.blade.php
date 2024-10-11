@@ -1,9 +1,13 @@
-@extends('layouts.header')
+@extends('layouts.business.header')
 @section('content')
 @include('layouts.userHeader')
+<link href="{{ url('/public/css/frontend/general.css')}}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
 <link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/w3.css">
-<style>.payment-section{margin-top:-200px}</style>
+<style>
+    .payment-section{margin-top:-200px}
+    .experienceBody ul, li { list-style: none !important;}
+</style>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
 <script src="{{ url('public/js/owl.carousel.js') }}"></script>
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
@@ -22,5 +26,5 @@
         <a href="{{route('personal.manage-account.index')}}" class="btn btn-web-btn">Go To My Profile</a>        
     </div>
 </div>  
-@include('layouts.footer')
+@include('layouts.business.footer')
 @endsection

@@ -134,7 +134,7 @@
 
                 <div class="card sidebar-alert bg-light border-0 text-center mx-4 mb-0 mt-3">
                     <div class="card-body">
-                        <img src="" alt="Fitnessity">
+                        {{-- <img src="" alt="Fitnessity"> --}}
                         <div class="mt-4">
                             <h5>Refer Another Provider</h5>
                             <p class="text-muted lh-base"> Get a Free Month membership for each provider you refer and they claim or create a business account with Fitnessity</p>

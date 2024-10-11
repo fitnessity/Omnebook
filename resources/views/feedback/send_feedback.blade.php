@@ -134,7 +134,7 @@ textarea {
 								<textarea placeholder="Say something About Fitnessity" name="comment" id="comment" rows="5"></textarea>
 								<textarea placeholder="Any suggestions for us ?" name="suggestion" id="suggestion" rows="5"></textarea>
 								@if ($errors->has('suggestion'))
-									<span class="help-block" style="color:red">
+									<span class="help-block" style="color:red; font-size: 15px; display: block;">
 										<strong>{{ $errors->first('suggestion') }}</strong>
 									</span>
 							   	@endif

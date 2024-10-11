@@ -63,7 +63,7 @@
 	</div>
     <div class="cat-container">
         <div class="row">
-            <div class="col-lg-5 col-md-3 col-sm-12 col-xs-12">
+            <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
             <?php $footer_fitnessity = App\Cms::where('status', '1')
                     ->where('content_alias', 'footer_content')->get(); ?>
             @foreach($footer_fitnessity as $footercon)
@@ -81,7 +81,7 @@
                 </div>
             @endforeach
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <div class="col-lg-2 col-md-4 col-sm-12 col-xs-12">
                 <div class="footer-link footer-widget-title">
                     <a class="foot-title" href="{{ url('') }}">FITNESSITY</a><br/>
                     <?php /*?><a href="{{ Config::get('constants.SITE_URL') }}/about-us">About Us</a>
@@ -96,7 +96,7 @@
                     <a id="btn_feedback" href="{{ Config::get('constants.SITE_URL') }}/feedback">Send Us Feedback</a>  
                 </div>
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <div class="col-lg-2 col-md-4 col-sm-12 col-xs-12">
                 <div class="footer-link footer-widget-title">
                     <a class="foot-title" href="#">BUSINESS</a><br/>
                     <a href="{{ Config::get('constants.SITE_URL') }}/claim-your-business">Claim your Business</a>
@@ -104,7 +104,7 @@
                 </div> 
                 
             </div>
-            <div class="col-lg-3 col-md-2 col-sm-12 col-xs-12">
+            <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
                 <div class="footer-link footer-widget-title">
                     <a  class="foot-title" href="{{route('help')}}">Contacts</a><br/>
                 </div>
@@ -290,8 +290,7 @@
 </div>
 
 
-
-  
+ 
     <script src="{{url('/public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
 
 
@@ -315,9 +314,9 @@
  
 
     <script src="{{url('/public/dashboard-design/js/form-file-upload.init.js')}}"></script> 
-
-    <script src="{{url('/public/dashboard-design/js/password-addon.init.js')}}"></script> 
-
+    @if (!in_array(Route::currentRouteName(), ['registration', 'userlogin', 'staff_login']))
+        <script src="{{url('/public/dashboard-design/js/password-addon.init.js')}}"></script>   
+    @endif
     <script src="{{url('/public/dashboard-design/js/dragula.min.js')}}"></script> 
     <script src="{{url('/public/dashboard-design/js/dom-autoscroller.min.js')}}"></script> 
     

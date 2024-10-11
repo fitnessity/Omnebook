@@ -332,7 +332,20 @@ $total_quantity = 0;
 						</div>
 					
 						<div class="top-area">
-                   
+							<!-- {{Route::currentRouteName()}} -->
+							@if (in_array(Route::currentRouteName(), ['activities_index', 'businessClaim', 'userlogin', 'staff_login', 'registration', 'contact-us', 'help', 'feedback', 'get_started_activities_experiences', 'profile-viewProfile', 'userprofile', 'activities_next_8_hours', 'privacy-policy', 'terms-condition', 'show_businessprofile']))
+							
+
+							<div class="top-search">
+								<!-- <form method="get" action="/instant-hire"> -->
+								<form method="get" action="/activities/">
+									<input type="text" name="label" id="site_search" placeholder="Search by activity, business, person, username" autocomplete="off" value="">
+									<div id="suggesstion-box"></div>
+									<button id="serchbtn" ><i class="fa fa-search"></i></button>
+								</form>
+							</div>
+							@endif
+				
 					
 						<div class="header-right">
                         	  <?php /* @if(Session('StaffLogin'))
@@ -358,17 +371,27 @@ $total_quantity = 0;
 									    }
 									} 
 									$total_quantity = count($newcart["cart_item"]);?>
-							<a class="btn-cart" href="{{route('carts_index')}}">
-								<img src="{{asset('images/shoping-cart-header-black.png')}}" alt="cart"><span id="cart-item">
-								<!-- <img src="https://d2bgo0bc1t29nh.cloudfront.net/public/images/shoping-cart-header-black.png" alt="cart"><span id="cart-item"> -->
-									 {{$total_quantity}}</span>
-                            </a>
+								<a class="btn-cart" href="{{route('carts_index')}}">
+									<img src="{{asset('images/shoping-cart-header-black.png')}}" alt="cart"><span id="cart-item">
+									<!-- <img src="https://d2bgo0bc1t29nh.cloudfront.net/public/images/shoping-cart-header-black.png" alt="cart"><span id="cart-item"> -->
+										{{$total_quantity}}</span>
+								</a>
 							</div>
 							
-                        	@if(Auth::check())
+							@php
+							     if(session('StaffLogin') != '') {
+								    $staff = App\BusinessStaff::find(session('StaffLogin'));
+									$name = ucwords(@$staff->full_name);
+								 }
+							@endphp
+							@if(Auth::check())
 						 	<div class="userblock mobile-none">
                         		<div class="login_links" onclick="openNav()">
-                                	<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon-black.png') }}" alt="Fitnessity" >
+									@if(session('StaffLogin') != '') 
+									<img src="{{ Storage::disk('s3')->exists($staff->profile_pic) ? Storage::URL($staff->profile_pic) : url('/images/user-icon-black.png') }}" alt="Fitnessity" >
+                                	@else
+									<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon-black.png') }}" alt="Fitnessity" >
+									@endif
                                 </div>
 								<nav class="pc-sidebar">
 									<div class="navbar-wrapper">
@@ -377,18 +400,34 @@ $total_quantity = 0;
 												<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeNav()"></a>
 												<ul class="pc-navbar">
 													<li style="text-align: center;"> 
+														@if(session('StaffLogin') != '') 
+														<img src="{{ Storage::disk('s3')->exists($staff->profile_pic) ? Storage::URL($staff->profile_pic) : url('/images/user-icon-black.png') }}" alt="Fitnessity"  class="sidemenupic">
+														@else
 														<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" alt="Fitnessity" class="sidemenupic" >
+														@endif
 													</li>
-													<li class="pc-caption"><span> Welcome</span></li>
+													<li class="pc-caption"><span> Welcome olne</span></li>
                                                     <li class="pc-caption-1">
-                                                        <span> {{ Auth::user()->firstname }} </span>
+                                                        <span> 
+															@if(session('StaffLogin') != '')
+															{{$name}} 
+															@else
+															{{ Auth::user()->firstname }} 
+															@endif
+														</span>
                                                     </li>
                                                     <li class="lp-tag">
-                                                        <span><?php echo "@"; ?>{{ Auth::user()->username }} </span>
+                                                        <span><?php echo "@"; ?>
+															@if(session('StaffLogin') != '')
+															{{$staff->first_name}}
+															@else
+															{{ Auth::user()->username }} 
+															@endif
+														</span>
                                                     </li>
                                                     <li class="lp-per-pro"> <span> Personal Profile </span> </li>
                                                     <li class="border-1">
-                                                     <button class="btn-lp" type="button"><a style="color: white;" href="{{url('/activities')}}">Book An Activity </a> </button> 
+                                                     <button class="btn-lp" type="button"><a style="color: white;" href="{{url('/activities')}}">Book An Activity</a> </button> 
                                                     </li>
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-user"></i></span>
