@@ -158,7 +158,7 @@
                                                                                 <label class="mt-10">Phone <span id="star">*</span></label>
                                                                                 <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone" class="form-control">
                                                                             </div>
-                                                                            {{-- <div class="col-md-4 col-lg-3">
+                                                                            <!-- {{-- <div class="col-md-4 col-lg-3">
                                                                                 <label class="mt-10">Check in Code </label>
                                                                                 <input type="text" name="check_in" id="check_in" size="30" maxlength="4" autocomplete="off" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control">
                                                                                 <div class="font-red" id="check_in_error"></div>
@@ -170,7 +170,7 @@
                                                                             <div class="col-md-4 col-lg-3 mt-10">
                                                                                 <label class="mt-10">Confirm Password <span id="star">*</span></label>
                                                                                 <input type="text" name="confirmpassword" id="confirmpassword" class="form-control">
-                                                                            </div> --}}
+                                                                            </div> --}} -->
                                                                             <div class="col-md-4 col-lg-3">
                                                                                 <label class="mt-10">Gender<span id="star">*</span></label>
                                                                                 <select class="form-control" name="gender">
@@ -182,7 +182,10 @@
 
                                                                             <div class="col-md-4 col-lg-3">
                                                                                 <label class="mt-10">Check in Code </label>
-                                                                                <input type="text" name="check_in" id="check_in" size="30" maxlength="4" autocomplete="off" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control">
+                                                                                <!-- <input type="text" name="check_in" id="check_in" size="30" maxlength="4" autocomplete="off" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control"> -->
+                                                                                <input type="text" name="check_in" id="check_in" size="30" maxlength="4"
+                                                                                autocomplete="off" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                                                class="form-control">
                                                                                 <div class="font-red" id="check_in_error"></div>
                                                                                 
                                                                             </div>
@@ -193,6 +196,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+                                                                        <div class="add-client-sapre-tor"></div>
                                                                         <!-- {{-- <div class="container-fuild">
                                                                             <div class="row">
                                                                                 <div class="col-lg-12">
@@ -219,29 +223,44 @@
                                                                             <div class="col-md-12 col-lg-12"><h4 class="font-red ">Address</h4></div>
                                                                             <div class="col-md-4 col-lg-3 mt-10">
                                                                                 <label>Address </label>
-                                                                                <input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="addressCustomer" value=""  oninput="initMapCall('addressCustomer', 'cityCustomer', 'stateCustomer', 'countryCustomer', 'zipcodeCustomer', 'latitudeCustomer', 'longitudeCustomer')"> 
+                                                                                <!-- <input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="addressCustomer" value=""  oninput="initMapCall('addressCustomer', 'cityCustomer', 'stateCustomer', 'countryCustomer', 'zipcodeCustomer', 'latitudeCustomer', 'longitudeCustomer')">  -->
+                                                                                <input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="addressCustomer" value="" oninput="initMapCall('addressCustomer', 'cityCustomer', 'stateCustomer', 'countryCustomer', 'zipcodeCustomer', 'latitudeCustomer', 'longitudeCustomer')">
+
                                                                             </div>
                                                                             <div id="map" style="display: none;"></div>
                                                                             <div class="col-md-4 col-lg-3 mt-10">
                                                                                 <label for="City">City</label>
-                                                                                <input type="text" class="form-control" name="city" id="cityCustomer" size="30" maxlength="50" value="" >
+                                                                                <!-- <input type="text" class="form-control" name="city" id="cityCustomer" size="30" maxlength="50" value="" > -->
+                                                                                <input type="text" class="form-control" name="city" id="cityCustomer"
+                                                                                size="30" maxlength="50" value="" required=""
+                                                                                aria-required="true">
                                                                             </div>
                                                                             <input type="hidden" name="lon" id="longitudeCustomer" value="">
                                                                             <input type="hidden" name="lat" id="latitudeCustomer" value="">
 
                                                                             <div class="col-md-4 col-lg-3 mt-10">
                                                                                 <label for="state">State</label>
-                                                                                <input type="text" class="form-control" name="state" id="stateCustomer" size="30" maxlength="50" value="" >
+                                                                                <!-- <input type="text" class="form-control" name="state" id="stateCustomer" size="30" maxlength="50" value="" > -->
+                                                                                <input type="text" class="form-control" name="state" id="stateCustomer"
+                                                                                size="30" maxlength="50" value="" required=""
+                                                                                aria-required="true">
                                                                             </div>
                                                                             <div class="col-md-4 col-lg-3 mt-10">
                                                                                 <label for="country">Country </label>
-                                                                                <input type="text" class="form-control" name="country" id="countryCustomer" size="30" maxlength="50" value="" >
+                                                                                <!-- <input type="text" class="form-control" name="country" id="countryCustomer" size="30" maxlength="50" value="" > -->
+                                                                                    <input type="text" class="form-control" name="country" id="countryCustomer"
+                                                                                    size="30" maxlength="50" value="" required=""
+                                                                                    aria-required="true">
                                                                             </div> 
 
                                                                             <div class="col-md-4 col-lg-3 mt-10">
                                                                                 <label for="zipcode">Zip Code </label>
-                                                                                <input type="text" class="form-control" name="zipcode" id="zipcodeCustomer" size="30" maxlength="50" value="" >
+                                                                                <!-- <input type="text" class="form-control" name="zipcode" id="zipcodeCustomer" size="30" maxlength="50" value="" > -->
+                                                                                <input type="text" class="form-control" name="zipcode" id="zipcodeCustomer"
+                                                                                size="30" maxlength="50" value="" required=""
+                                                                                aria-required="true">
                                                                             </div>
+
                                                                         </div>
                                                                     </div>
                                                                 
@@ -252,8 +271,9 @@
                                                                             <div class="error mb-10" id="familyerrormessage"></div>
                                                                             <input type="hidden" name="familycnt" id="familycnt" value="0">
                                                                             <div id="familymaindiv">
-                                                                                <div class="new-client mb-10" id="familydiv0" data-i="0" data-text="1" >
-                                                                                    <div class="accordion" id="default-accordion-example">
+                                                                                <!-- <div class="new-client mb-10" id="familydiv0" data-i="0" data-text="1" > -->
+                                                                                 <div class="new-client mb-10" id="familydiv0" data-i="0" data-text="1">    
+                                                                                <div class="accordion" id="default-accordion-example">
                                                                                         <div class="accordion-item shadow">
                                                                                             <h2 class="accordion-header" id="heading0">
                                                                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0" aria-expanded="true" aria-controls="collapse0">
@@ -261,7 +281,7 @@
                                                                                                         <div class="row"> 
                                                                                                             <div class="col-lg-6 col-md-6 col-8"> Family Member #1 </div> 
                                                                                                             <div class="col-lg-6 col-md-6 col-4"> 
-                                                                                                                <div class="multiple-options"  id="deletediv0"> 
+                                                                                                                <div class="multiple-options" id="deletediv0"> 
                                                                                                                 </div> 
                                                                                                             </div> 
                                                                                                         </div>
@@ -612,6 +632,8 @@
                                                                             <button class="btn btn-red mr-5" type="submit" id="submitStripe">Add on file</button>
                                                                             <button type="button" class="btn btn-red" id="skip_next">Skip</button>
                                                                         </div>
+                                                                        <input type="hidden" name="buttonType" id="buttonType"
+                                                                        value="">
                                                                     </form>
                                                                 </div>
                                                             </div>
@@ -844,7 +866,8 @@
     });
 
         function assignfliptpicker(val)
-        { alert('call');
+        { 
+            // alert('call');
             flatpickr('.'+val, {
                 altInput: true,
                 altFormat: "m/d/Y",
@@ -1091,7 +1114,6 @@
             $('#familymaindiv').append(modifiedData);
             $("#check_in_error_family"+new_cnt).html('');
             $('#deletediv'+new_cnt).html('<div class="setting-icon"> <i class="ri-more-fill"></i> <ul> <li><a onclick="deletediv('+new_cnt+')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li></ul></div>');
-
             $('.relationship').each(function(e) {
                 $(this).removeClass("font-red");
             });
@@ -1101,7 +1123,6 @@
             $('.gender').each(function(e) {
                 $(this).removeClass("font-red");
             });
-
             $(".required").each(function() {
                 $(this).removeClass("font-red");
             });
@@ -1123,8 +1144,6 @@
             });
            
         });
-
-
 
         $(document).on('click', '[data-behavior~=termsModelOpen]', function(e){
             e.preventDefault()
@@ -1252,7 +1271,8 @@ jQuery(function ($) {
                        
                         if (response.type === 'success') {
                             if ($('#buttonType').val() == 'skip') {
-                                window.location.href = 'check-in-welcome';
+                                // window.location.href = 'check-in-welcome';
+                                window.location.href = '/dashboard';
                             }
                             else {
                                  $.ajax({
@@ -1277,7 +1297,7 @@ jQuery(function ($) {
                                             $('#clientRegistration_form').hide();
                                             $('#paymentform').show();
                                             if (response.clientSecret) {
-                                                console.log(response.clientSecret);
+                                                // console.log(response.clientSecret);
                                                 $('#client_secret').val(response.clientSecret);            
                                                 $('#payment-form1').attr('data-secret', response.clientSecret)
                                                 if (response.customer_id !== '') {
@@ -1286,6 +1306,7 @@ jQuery(function ($) {
                                             }
                                             if (response.successMsg) {
                                                 $("#systemMessage").html(response.successMsg).removeClass('alert-danger').addClass('alert-success');
+                                                window.location.href = '/dashboard';
                                             }
                                         } else {
                                             $('#loading-img').addClass('d-none');
@@ -1347,8 +1368,6 @@ jQuery(function ($) {
                     .appendTo( ul );
         };
     });
-
-  
 </script>
 
 @if(isset($currentCompany))
@@ -1423,7 +1442,7 @@ jQuery(function ($) {
         });
 
         $(document).on('click', '#skip_next', function () {
-            window.location.href = 'check-in-welcome';
+            window.location.href = '/dashboard';
         });
     </script>
 @endif
@@ -1474,8 +1493,8 @@ $currentCompany = $user->current_company;
         });
 
         $(document).on('click', '#skip_next', function () {
+            window.location.href = '/dashboard';
             $('#customerModal').modal('hide');
-            window.location.href = 'check-in-welcome';
         });
     }
 </script>

@@ -191,9 +191,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 															<div class="card-header align-items-center d-flex">
 																<h4 class="card-title mb-0 flex-grow-1 font-red">Your Upcoming Classes</h4>
 															</div><!-- end card header -->
-
 															<div class="mt-10 ml-10 fs-14" id="error-message"></div>	
-
 															<div class="card-body">
 																<div class="live-preview">
 																	<div class="table-responsive">
@@ -1181,12 +1179,13 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 
 																													<div class="col-md-4 col-sm-5 col-xs-12">
 																														<div class="classes-time">
+																															
 																															<button class="post-btn {{$class}} activity-scheduler" onclick="openPopUp({{$scary->id}} , {{$cList->BusinessServices->id}} ,'{{$cList->BusinessServices->program_name}}','{{$timeOfActivity}}',{{$grayBtnChk}},'{{$scary->category_id}}');"  {{ ( $SpotsLeftdis == 0 || $grayBtnChk == 4 || $canceldata != '' )?  "disabled" : ''}}  >{{$timeOfActivity}} <br>{{$duration}}</button>
 																															<label>{{ $SpotsLeftdis == 0 ? 
 																																"Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</label>
 
 																															@if($canceldata != '')<label class="font-red">Cancelled</label>@endif
-
+																															
 																															@if($scary->chkReservedToday($filter_date->format('Y-m-d')))<label class="font-green">Already Reserved</label>@endif
 
 																															<label>{{ $insName }}</label>
@@ -2852,7 +2851,15 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 
 </script>
 
-
+<script>
+	function getInsModal(scid){
+			$('.hiddenALinkforIns').html('');
+			var url= "/getInsData/?scheduleId="+scid;
+				$('.hiddenALinkforIns').html('<a data-behavior="ajax_html_modal" data-url="'+url+'" id="hiddenALinkforIns"></a>');
+				$('#hiddenALinkforIns')[0].click();
+		}
+	
+	</script>
 {{-- ends --}}
 
 @endsection

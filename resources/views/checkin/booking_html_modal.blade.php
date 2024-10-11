@@ -12,9 +12,9 @@
 				@foreach($services as $s)
 			    	<option value="{{$s->id}}">{{$s->program_name}}</option>
 			    @endforeach
-				@foreach($PriceAgesDetail as $m)
+				{{-- @foreach($PriceAgesDetail as $m)
 				<option value="{{$m->id}}">{{$m->category_title}}</option>
-				@endforeach
+				@endforeach --}}
 			</select>
 		</div>
 	</div>
@@ -175,7 +175,7 @@
 	function participateCnt(type){
 		$.ajax({
             type: "POST",
-            url: '{{route("get-participate-data")}}',
+            url: '{{route("check_participate")}}',
             data: {
             	'_token' : '{{csrf_token()}}',
             	'cid' : '{{$companyId}}',
@@ -285,11 +285,21 @@
 				type: 'checkin_portal'
 			},
 			success: function (response) {
-				if(response != ''){
+				// if(response != ''){
+				// 	$('#updatefilterforcart').html(response.html);
+				// 	$('#sesdate'+sid).val(actdate);
+				// 	$('.date-title').html(response.date);
+				// }else{
+				// 	$('#updatefilterforcart').html('');
+				// }
+				if(response.message && response.message === 'Service not found') {
+					$('#updatefilterforcart').html('');
+					// $('#message').html('<p class="font-red text-center">Service not found. Please select a valid service.</p>');
+				} else if(response.html) {
 					$('#updatefilterforcart').html(response.html);
 					$('#sesdate'+sid).val(actdate);
 					$('.date-title').html(response.date);
-				}else{
+				} else {
 					$('#updatefilterforcart').html('');
 				}
 			}
