@@ -1,4 +1,4 @@
-@extends('layouts.header')
+@extends('layouts.business.header')
 <style>
 .help-desk input {
     color: black;

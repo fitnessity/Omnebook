@@ -4,7 +4,7 @@
 @include('layouts.profile.business_topbar')
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<link rel="shortcut icon" href="{{ url('public/img/favicon.png') }}">
+<!-- <link rel="shortcut icon" href="{{ url('public/img/favicon.png') }}"> -->
 <link rel="stylesheet" type="text/css" href="{{ url('public/css/profile.css') }}">
 <script src="{{ url('public/dashboard-design/js/jquery-2.1.4.js')}}"></script>
 <style>
@@ -113,6 +113,7 @@
 @include('layouts.business.footer')
 @include('layouts.business.scripts')
 
+<script src="{{ asset('/js/fullcalendar/fullcalendar.min.js') }}"></script>
 <script>
 
     function initializeCalendar(fullaryData) {

@@ -25,6 +25,7 @@ p{ display: none !important; }
 .help-desk input { color: black; }
 .help-desk input { width: 70%; }
 .ellipsis *{  line-height: 1.5em; height: 3em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 100%; }
+.btn-lp{font-size: 12px;}
 
 </style>
 

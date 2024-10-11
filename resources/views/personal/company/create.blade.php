@@ -1389,7 +1389,7 @@
 																					<input type="checkbox" value="1" class="chkdy" id="termcondfaq" name="termcondfaq" autocomplete="off" {{ (@$terms->termcondfaq==1) ? 'checked' : '' }}> Terms, Conditions, FAQ
 																				</label>
 																				<div id="termcondfaqdiv" style="display:{{ (@$terms->termcondfaq==1) ? 'block' : 'none' }}">
-																					<textarea name="termcondfaqtext" id="ckeditor-classic" >{{@$terms->termcondfaqtext}}</textarea>
+																					<textarea name="termcondfaqtext" id="ckeditor-classic">{{@$terms->termcondfaqtext}}</textarea>
 																				</div>
 
 																				<!-- <div class="textsam" id="termcondfaqdiv"style="display:{{ (@$terms->termcondfaq==1) ? 'block' : 'none' }}">
@@ -1488,6 +1488,16 @@
     
 @include('layouts.business.footer')
 @include('layouts.business.scripts')
+
+<script src="{{url('/public/dashboard-design/js/ckeditor/ckeditor.js')}}"></script>
+
+	<script type="text/javascript">
+        CKEDITOR.replace("ckeditor-classic");
+		CKEDITOR.replace("ckeditor-classic2");
+		CKEDITOR.replace("ckeditor-classic3");
+		CKEDITOR.replace("ckeditor-classic4");
+		CKEDITOR.replace("ckeditor-classic5");
+    </script>
 	<script>
 		$(document).ready(function(){ 
 			$('#aboutcLeft').text(200-parseInt($("#about_host").val().length));

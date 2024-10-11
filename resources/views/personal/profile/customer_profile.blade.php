@@ -191,8 +191,10 @@
                 </div><!--end row-->
             </div><!-- container-fluid -->
 		</div><!-- End Page-content -->
-    </div><!-- end main content-->
-</div><!-- END layout-wrapper -->
+    </div>
+    <!-- end main content-->
+</div>
+<!-- END layout-wrapper -->
 
 
 @include('layouts.business.footer')

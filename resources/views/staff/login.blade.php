@@ -11,12 +11,12 @@
             <div class="register_wrap" id="signup_normal">
                 <input type="hidden" id="showstep" value="">
                 <div class="logo-my">
-                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/logo-small.jpg')}}" alt="Fitnessity"> </a>
+                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/omnebook.png')}}" alt="Fitnessity"> </a>
                 </div>               
                 <form method="post" action="{{route('dologin')}}" >
                     {{ csrf_field() }}
                     <div class="pop-title ftitle1 staff-login">
-                        <h3 id="firsth">Welcome to fitnessity</h3>
+                        <h3 id="firsth">Welcome to Omnebook</h3>
 						<h3 id="secondh"> for business</h3>
                     </div>
                     <br/> 
@@ -54,7 +54,7 @@
 
                     <button class="btn signup-new" id='login_submit' type="submit">Log in </button>
                     <div class="small-logo">
-						<img src="{{ asset('public/images/fit-logo.png')}}" alt="Fitnessity"> 
+						<img src="{{ asset('public/dashboard-design/images/powered-by-OMNEBOOK.png')}}" alt="Fitnessity"> 
 					</div>
                 </form>
             </div>

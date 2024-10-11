@@ -236,10 +236,11 @@
 										<div class="col-12">
 											<div class="float-end mt-20">
 												@if($tabName !='past')
-
-													<a class="btn btn-red" @if(@$reserveUrl) href="{{route('check-in-portal',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => request()->customer_id ,'activetab' => 'schedule'] )}}" @else href="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => ((request()->customer_id) ? $bs['user_id'] : '')] )}}" @endif >Schedule</a>
+													<a class="btn btn-red" target="_blank" @if(@$reserveUrl) href="{{route('check-in-portal',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => request()->customer_id ,'activetab' => 'schedule'] )}}" @else href="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => ((request()->customer_id) ? $bs['user_id'] : '')] )}}" @endif >Schedule</a>
 												@endif
+												@if(Route::currentRouteName() != 'check-in-portal')
 												<a class="btn btn-black" href="{{env('APP_URL')}}/businessprofile/{{strtolower(str_replace(' ', '', $bs->company_information->public_company_name))}}/{{$bs->company_information->id}}" target="_blank">View Provider</a>
+												@endif
 											</div>
 										</div>
 									</div>

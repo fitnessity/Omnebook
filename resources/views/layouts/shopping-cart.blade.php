@@ -133,7 +133,7 @@
 												</div>
 												<div class="row">
 													<div class="col-sm-auto col-6" id="imgdiv">
-														<div class="avatar-lg-custom bg-light rounded p-1 mmb-10 mb-10">
+														<div class="avatar-lg-custom-two bg-light rounded p-1 mmb-10 mb-10">
 															<img src="{{$profilePic}}" alt="Fitnessity" class="img-fluid d-block">
 														</div>
 													</div>
@@ -802,7 +802,7 @@
 <!-- end modal -->
 
 <div class="modal fade in newparticipant" tabindex="-1" aria-modal="true" role="dialog" data-bs-focus="false">
-	<div class="modal-dialog modal-dialog-centered mw-70" >
+	<div class="modal-dialog modal-dialog-centered mw-70 modal-xl" >
 		<div class="modal-content">
 			<div class="modal-header p-3">
 				<h5 class="modal-title" id="exampleModalLabel">Add Family or Friends</h5>
@@ -890,7 +890,7 @@
 				</div>
 				<div class="modal-footer">
 					<div class="hstack gap-2 justify-content-end">
-						<button type="submit" id="btn_family" class="btn-cart-checkout fs-12">Submit</button>
+						<button type="submit" id="btn_family" class="btn btn-cart-checkout fs-12">Submit</button>
 					</div>
 				</div>
 			</form>
