@@ -78,6 +78,8 @@ class Kernel extends HttpKernel
         'basicAuth' => \App\Http\Middleware\BasicAuth::class,
         'business_scope' => \App\Http\Middleware\BusinessScope::class,
         'admin' => \App\Http\Middleware\RedirectIfNotAdmin::class,
+        'jwt.auth' => \App\Http\Middleware\JWTAuthMiddleware::class,
+
     ];
 
     /**

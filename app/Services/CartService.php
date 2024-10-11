@@ -239,6 +239,7 @@ class CartService
         return $newArray; 
     }
 
+
     public function getSubTotal($priceId,$role,$price,$addOnServicePrice)
     {
         $subTotal = 0;

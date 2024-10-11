@@ -62,9 +62,12 @@ class BusinessPriceDetailsAges extends Model
     }
     public function BusinessActivityScheduler()
     {
-        return $this->hasMany(BusinessActivityScheduler::class ,'category_id')->orderBy('shift_start');
+        return $this->hasMany(BusinessActivityScheduler::class ,'category_id') ->whereNull('deleted_at')->orderBy('shift_start');
     }
-
+    public function BusinessClassNPriceDetails()
+    {
+        return $this->hasMany(BusinessClassPriceDetails::class ,'class_id')->whereNull('deleted_at');
+    }
     public function BusinessActivitySchedulerWithThresould()
     {
         return $this->hasMany(BusinessActivityScheduler::class ,'category_id')->withTrashed()->orderBy('shift_start');
@@ -76,11 +79,11 @@ class BusinessPriceDetailsAges extends Model
     }
 
     public function BusinessPriceDetails(){
-        return $this->hasMany(BusinessPriceDetails::class, 'category_id');
+        return $this->hasMany(BusinessPriceDetails::class, 'category_id')->whereNull('deleted_at');
     }
     
     public function BusinessPriceDetailsData(){
-        return $this->hasMany(BusinessPriceDetails::class, 'category_id');
+        return $this->hasMany(BusinessPriceDetails::class, 'category_id')->whereNull('deleted_at');
     }
     
 
@@ -89,7 +92,7 @@ class BusinessPriceDetailsAges extends Model
     }
 
     public function businessClassPriceDetails(){
-        return $this->hasMany(BusinessClassPriceDetails::class, 'class_id');
+        return $this->hasMany(BusinessClassPriceDetails::class, 'class_id')->whereNull('deleted_at');
     }
 
 
@@ -104,4 +107,45 @@ class BusinessPriceDetailsAges extends Model
             'price_id' // Local key on BusinessClassPriceDetails table...
         );
     }
+
+    public function class_detail() {
+        $class = BusinessClassPriceDetails::where('class_id', $this->id)->whereNull('deleted_at')->first();    
+        if (!$class) {
+            return 0; 
+        }
+    
+        $price_detail = BusinessPriceDetails::where('serviceid', $this->serviceid)
+                            ->where('id', $class->price_id)
+                            ->where('cid', $this->cid)->whereNull('deleted_at')->first();
+            if ($price_detail) {
+            if (date('l') == 'Saturday' || date('l') == 'Sunday') {
+                if (intval($price_detail['adult_weekend_price_diff']) > 0)
+                    return $price_detail['adult_weekend_price_diff'];
+                if (intval($price_detail['child_cus_weekend_price']) > 0)
+                    return $price_detail['child_cus_weekend_price'];
+                if (intval($price_detail['infant_cus_weekend_price']) > 0)
+                    return $price_detail['infant_cus_weekend_price'];
+            } else {
+                if (intval($price_detail['adult_cus_weekly_price']) > 0)
+                    return $price_detail['adult_cus_weekly_price'];
+                if (intval($price_detail['child_cus_weekly_price']) > 0)
+                    return $price_detail['child_cus_weekly_price'];
+                if (intval($price_detail['infant_cus_weekly_price']) > 0)
+                    return $price_detail['infant_cus_weekly_price'];
+            }
+        } 
+    }
+    public function getClassNames()
+    {
+        $instructorIds = explode(',', $this->id);
+        $instructors = BusinessPriceDetailsAges::whereIn('id', $instructorIds)
+            ->get()
+            ->map(function($instructor) {
+                return $instructor->class_type;
+            })
+            ->toArray();
+            
+        return implode(', ', $instructors);
+    }
+
 }

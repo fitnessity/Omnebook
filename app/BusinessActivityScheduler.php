@@ -188,7 +188,13 @@ class BusinessActivityScheduler extends Model
 
 
     public function chkReservedToday($date){
-        return BookingCheckinDetails::where('business_activity_scheduler_id', $this->id)->whereDate('checkin_date', $date)->count();
+        
+        $check=BusinessActivityScheduler::where('userid',$this->id)->first();
+        if($check)
+        {
+            return BookingCheckinDetails::where('business_activity_scheduler_id', $this->id)->whereDate('checkin_date', $date)->count();
+        }
+        return 0;
     }
     
     public function price_detail() {
@@ -214,6 +220,59 @@ class BusinessActivityScheduler extends Model
         }           
     }
 
+    // public function class_detail() {
+
+    //     $class= BusinessClassPriceDetails::where('class_id', $this->category_id)->first();
+    //     $price_detail = BusinessPriceDetails::where('serviceid', $this->serviceid)
+    //                         ->where('category_id', $class->class_id)
+    //                         ->where('cid', $this->cid)->first();           
+    //     if($price_detail){
+    //         if(date('l') == 'Saturday' || date('l') == 'Sunday'){
+    //             if(intval($price_detail['adult_weekend_price_diff']) > 0)
+    //                 return $price_detail['adult_weekend_price_diff'];
+    //             if(intval($price_detail['child_cus_weekend_price']) > 0)
+    //                 return $price_detail['child_cus_weekend_price'];
+    //             if(intval($price_detail['infant_cus_weekend_price']) > 0)
+    //                 return $price_detail['infant_cus_weekend_price'];
+    //         }else{
+    //             if(intval($price_detail['adult_cus_weekly_price']) > 0)
+    //                 return $price_detail['adult_cus_weekly_price'];
+    //             if(intval($price_detail['child_cus_weekly_price']) > 0)
+    //                 return $price_detail['child_cus_weekly_price'];
+    //             if(intval($price_detail['infant_cus_weekly_price']) > 0)
+    //                 return $price_detail['infant_cus_weekly_price'];
+    //         }
+    //     }           
+    // }
+
+    public function class_detail() {
+        $class = BusinessClassPriceDetails::where('class_id', $this->category_id)->whereNull('deleted_at')->first();    
+        if (!$class) {
+            return 0; 
+        }
+    
+        $price_detail = BusinessPriceDetails::where('serviceid', $this->serviceid)
+                            ->where('id', $class->price_id)
+                            ->where('cid', $this->cid)->whereNull('deleted_at')->first();
+            if ($price_detail) {
+            if (date('l') == 'Saturday' || date('l') == 'Sunday') {
+                if (intval($price_detail['adult_weekend_price_diff']) > 0)
+                    return $price_detail['adult_weekend_price_diff'];
+                if (intval($price_detail['child_cus_weekend_price']) > 0)
+                    return $price_detail['child_cus_weekend_price'];
+                if (intval($price_detail['infant_cus_weekend_price']) > 0)
+                    return $price_detail['infant_cus_weekend_price'];
+            } else {
+                if (intval($price_detail['adult_cus_weekly_price']) > 0)
+                    return $price_detail['adult_cus_weekly_price'];
+                if (intval($price_detail['child_cus_weekly_price']) > 0)
+                    return $price_detail['child_cus_weekly_price'];
+                if (intval($price_detail['infant_cus_weekly_price']) > 0)
+                    return $price_detail['infant_cus_weekly_price'];
+            }
+        } 
+    }
+    
     public static function alldayschedule($datetime,$chkval){
         if($chkval != ''){
             return BusinessActivityScheduler::with([ 'company_information'])
@@ -320,5 +379,37 @@ class BusinessActivityScheduler extends Model
         return $staffData;
     }
 
+    public function business_price_details_ages()
+    {
+        return $this->belongsTo(BusinessPriceDetailsAges::class, 'category_id', 'id');
+    }
+
+    
+    public function getInstructorNames()
+    {
+        $instructorIds = explode(',', $this->instructure_ids);
+        $instructors = BusinessStaff::whereIn('id', $instructorIds)
+            ->get()
+            ->map(function($instructor) {
+                return $instructor->first_name . ' ' . $instructor->last_name;
+            })
+            ->toArray();
+            
+        return implode(', ', $instructors);
+    }
+
+  
+    public function getClassNames()
+    {
+        $instructorIds = explode(',', $this->category_id);
+        $instructors = BusinessPriceDetailsAges::whereIn('id', $instructorIds)
+            ->get()
+            ->map(function($instructor) {
+                return $instructor->class_type;
+            })
+            ->toArray();
+            
+        return implode(', ', $instructors);
+    }
 
 }

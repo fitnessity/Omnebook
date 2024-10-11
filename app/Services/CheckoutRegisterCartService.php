@@ -22,11 +22,12 @@ class CheckoutRegisterCartService
     public function total($user)
     {
         // var_dump($this->items());
-        $taxTotal = 0;
+        $taxTotal = 0; 
         foreach($this->items() as $item){
             $addOnServiceTotal = $item['addOnServicesTotalPrice'] ?? 0;
             $productTotal = $item['productTotalPrices'] ?? 0;
-            $pretaxTotal = $item['totalprice'] + $item['tip']  - $item['discount'] + $addOnServiceTotal + $productTotal;
+                $pretaxTotal = $item['totalprice'] + $item['tip']  - $item['discount'] + $addOnServiceTotal + $productTotal;
+            
             $taxTotal += $item["tax"];
         }
         $service_fee = ($pretaxTotal * $user->recurring_fee) / 100;

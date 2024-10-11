@@ -281,14 +281,26 @@ class BusinessServices extends Model
     //     $pictures = explode(',',$this->profile_pic);
     //     return Storage::disk('s3')->exists( $pictures[0]) ? Storage::URL( $pictures[0]) : '/public/images/service-nofound.jpg';
     // }
-    public function first_profile_pic(){
-        $pictures = explode(',',$this->profile_pic);
-        // return Storage::disk('s3')->exists( $pictures[0]) ? Storage::URL( $pictures[0]) : '/public/images/service-nofound.jpg';
-        $picture_url = 'https://d2r3bve520mp70.cloudfront.net/' . $pictures[0];
-        return $picture_url;
+    // public function first_profile_pic(){
+    //     $pictures = explode(',',$this->profile_pic);
+    //     // return Storage::disk('s3')->exists( $pictures[0]) ? Storage::URL( $pictures[0]) : '/public/images/service-nofound.jpg';
+    //     // $picture_url = 'https://d2r3bve520mp70.cloudfront.net/' . $pictures[0];
+    //     return $picture_url;
 
+    // }
+    public function first_profile_pic()
+    {
+        if (!empty($this->profile_pic)) {
+            $pictures = explode(',', $this->profile_pic);
+            $firstPicture = $pictures[0];
+            if (Storage::disk('s3')->exists($firstPicture)) {
+                return Storage::disk('s3')->url($firstPicture);
+            }
+        }        
+        return null;
     }
-    
+
+
 
     public function getConverPhotoUrl()
     {  

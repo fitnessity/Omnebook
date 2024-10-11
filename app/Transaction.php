@@ -282,4 +282,5 @@ class Transaction extends Model
         }
 
     }
+    
 }
