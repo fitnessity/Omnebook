@@ -60,11 +60,12 @@ header .logo img {
 }
 #suggesstion-box{ 
 	background-color: #ffffff; 
+    cursor: pointer;
 }
 
 .top-search button {
 	background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-	color: #f91942;
+	color: #98002e;
 	font-size: 15px;
 	position: absolute;
 	left: 6px;
@@ -100,12 +101,16 @@ header .header-right {
 	margin-right: 15px;
 	font-size: 14px;
 	padding: 9px 12px;
-	color: #000 !important;
+	color: #1c256c !important;
 }
-
+.btn-list-business.business-sp:hover{
+    color: #fff !important;
+  background: #1c256c;
+  border: 1px solid #1c256c !important;
+}
 .btn-list-business{
-	border: 1px solid #000 !important;
-	color: #000;
+	border: 1px solid #1c256c !important;
+	color: #1c256c;
 	text-transform: uppercase;
 	border-radius: 10px !important;
 	background-color: transparent;
@@ -116,7 +121,7 @@ a.btn-style-two {
 	border-radius: 10px !important;
 	background-color: transparent;
 	padding: 9px 12px;
-	background-color: #f91942 !important;
+	background-color: #98002e !important;
 	font-size: 14px;
 }
 .btn-cart {
@@ -127,7 +132,7 @@ a.btn-style-two {
     /*padding: 0 12px !important;*/
 }
 .btn-cart > span {
-    background: #eb1c24;
+    background: #98002e;
     width: 22px;
     height: 22px;
     line-height: 22px;
@@ -242,13 +247,13 @@ nav { float: left; }
 }
 
 .btn-lp{
-	background: #f91942;
+	background: #98002e;
 	color: white;
 	padding: 7px 25px 7px 25px;
 	border-radius: 7px;
 	margin-top: 0px;
 	margin-bottom: 15px;
-	border: 1px solid #f91942;
+	border: 1px solid #98002e;
 }
 
 .pc-navbar .btn-lp:hover{
@@ -353,12 +358,12 @@ button.header-right-menu {
     background: #cb3e2d
 }
 .btn-list-business:hover {
-  color: #fff;
+  color: #fff !important;
   background: #000;
   border: 1px solid #000 !important;
 }
 .btn-style-two:hover {
-  color: #fff;
+  color: #fff !important;
 }
 .userblock .login_links a {
   color: #000 !important;
@@ -399,6 +404,7 @@ margin-bottom: 20px
 .cat-container {
     max-width: 1500px;
     width: 100%;
+    margin: 0 auto;
 }
 footer .footer-logo input,
 footer .footer-logo button {
@@ -409,7 +415,7 @@ footer {
     float: left;
     width: 100%;
     padding: 50px 50px 50px;
-	/* z-index: 7777; */
+	/* z-index: 999; */
 	position: relative;
 }
 
@@ -539,7 +545,7 @@ footer {
 }
 
 .footer-link a:hover {
-    color: #fff !important;
+    color: #98002e !important;
 }
 
 .footer-bottom-block {
@@ -732,6 +738,9 @@ footer {
 
 #back-top a:hover span {
     background-color: #f53b49;
+}
+.footer-link a:focus {
+    color: #fefefe;
 }
 
 /*.footer-link-button-say .btn-info:focus { color: #fff; background-color: transparent; border-color: #f53b49 !important; }*/
