@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\MailService;
 use App\BusinessClaim;
 use App\CompanyInformation;
-use DB;
+use DB,Carbon\Carbon;
 use App\User;
 use App\Repositories\UserRepository;
 use App\Repositories\ReviewRepository;
@@ -31,10 +31,7 @@ class LoginController extends Controller {
             'onboardCid' => $onboardCid
         ]);
     }
-	/*public function leftpanel()
-	{
-		echo "hii";
-	}*/
+	
     public function postLogin(Request $request) {
         $postArr = $request->input();
     	//dd($postArr);
@@ -54,79 +51,66 @@ class LoginController extends Controller {
             );
             return view('home.login',compact('response'));
             /*   return Response::json($response);*/
-        } else {            
-            if (Auth::attempt(['email' => $postArr['email'], 'password' => $postArr['password'], 'activated' => 1])) {
-                session_start();
-                /* $cart = [];
-                if ($request->session()->has('cart_item')) {
-                    $cart = $request->session()->get('cart_item');
-                }*/
-				$user = Auth::user();
-				User::whereId($user->id)->update(['last_login' => date('Y-m-d H:i:s'),'last_ip'=>$request->ip()]);
-                $_SESSION["myses"] = $request->user();
-               // $request->session()->flash('alert-success', 'Welcome '.$postArr['email']);
-                $claim = 'not set';
-                $claim_cid = $claim_status = $claim_cname = $claim_welcome = $claim_company = $checkoutsession  = $schedule =$onboard = '';
-                if(session()->has('claim_business_page')) {
-                	$claim = 'set';
-                    $claim_cid = session()->get('claim_cid');
-                    $data = CompanyInformation::where('id',$claim_cid)->first();
-                 
-                    if($data != ''){
-                        $claim_cname = $data->company_name;
+        } else {      
+            $currentDate = Carbon::now();
+            $resultDate = $currentDate->subYears(18)->format('Y-m-d');      
+            if (Auth::attempt(['email' => $postArr['email'], 'password' => $postArr['password'], 'activated' =>1 ,'primary_account' => 1 ])) {
+                $user = Auth::user();
+                $userBirthdate = Carbon::parse($user->birthdate);
+                $resultDate = Carbon::parse($resultDate);
+                if ($userBirthdate <= $resultDate) {
+                    session_start();
+    				User::whereId($user->id)->update(['last_login' => date('Y-m-d H:i:s'),'last_ip'=>$request->ip()]);
+                    $_SESSION["myses"] = $request->user();
+                    $claim = 'not set';
+                    $claim_cid = $claim_status = $claim_cname = $claim_welcome = $checkoutsession  = $schedule =$onboard = '';
+                    if(session()->has('claim_business_page')) {
+                    	$claim = 'set';
+                        $claim_cid = session()->get('claim_cid');
+                        $data = CompanyInformation::where('id',$claim_cid)->first();
+                     
+                        if($data != ''){
+                            $claim_cname = $data->company_name;
+                        }
+                        $claim_status = session()->get('claim_status');
                     }
-                    $claim_status = session()->get('claim_status');
-                }
-                if(session()->has('business_welcome')) {
-                    $claim_welcome = session()->get('business_welcome');
-                }
-                if(session()->has('manage_company')) {
-                    $claim_company = session()->get('manage_company');
-                }
+                    if(session()->has('business_welcome')) {
+                        $claim_welcome = session()->get('business_welcome');
+                    }
+                    if(session()->has('checkoutsession')) {
+                        $checkoutsession = session()->get('checkoutsession');
+                    }
 
-                if(session()->has('checkoutsession')) {
-                    $checkoutsession = session()->get('checkoutsession');
-                }
+                    if(session()->has('schedule')) {
+                        $schedule = session()->get('schedule');
+                    }
+                    if(session()->has('redirectToOnboard')){
+                        $onboard = session()->get('redirectToOnboard');
+                    }
 
-                if(session()->has('schedule')) {
-                    $schedule = session()->get('schedule');
-                }
-                if(session()->has('redirectToOnboard')){
-                    $onboard = session()->get('redirectToOnboard');
-                }
-               /* $response = array(
-                    'type' => 'success',
-                    'msg' => 'You are logged in successfully',
-                    'redirecturl' => '/',
-                    'claim' => $claim,
-                    'claim_cid' => $claim_cid,
-                    'claim_status' => $claim_status,
-                    'claim_cname' => $claim_cname,
-                    'claim_welcome' => $claim_welcome,
-                    'claim_company' => $claim_company,
-                    'd'=>$request->user()
-                );*/
+                    if($onboard != ''){
+                        return redirect($onboard);
+                    }
 
-                if($onboard != ''){
-                    return redirect($onboard);
-                }
-
-                if($request->redirect){
-                    return redirect($request->redirect);
-                }
-                if($claim  == 'set'){
-                    return redirect('/claim/reminder/'.$claim_cname."/".$claim_cid); 
-                }else if($claim_welcome != ''){
-                    return redirect('/business-welcome');
-                }else if($claim_company != ''){
-                    return redirect('/manage/company');
-                }else if($checkoutsession != ''){
-                    return redirect('/carts');
-                }else if($schedule != ''){
-                    return redirect('/business_activity_schedulers/'.$schedule);
+                    if($request->redirect){
+                        return redirect($request->redirect);
+                    }
+                    if($claim  == 'set'){
+                        return redirect('/claim/reminder/'.$claim_cname."/".$claim_cid); 
+                    }else if($checkoutsession != ''){
+                        return redirect('/carts');
+                    }else if($schedule != ''){
+                        return redirect('/business_activity_schedulers/'.$schedule);
+                    }else{
+                        return redirect()->route('homepage');
+                    }
                 }else{
-                    //return redirect()->route('profile-viewProfile');
-                    return redirect()->route('homepage');
+                    Auth::logout();
+                    $response = array(
+                        'type' => 'not_exists',
+                        'msg' => 'Only Above 18 is allowed to Login.',
+                    );
+                    return view('home.login',compact('response'));
                 }
                /* return Response::json($response);*/
             } else {
@@ -134,9 +118,7 @@ class LoginController extends Controller {
                     'type' => 'not_exists',
                     'msg' => 'User details not verified in our database.',
                 );
-                  return view('home.login',compact('response'));
-                //$request->session()->flash('error', 'User details not matched.');
-                /*return Response::json($response);*/
+                return view('home.login',compact('response'));
             }
         }
     }

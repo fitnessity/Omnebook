@@ -489,10 +489,10 @@ if(!empty($cart["cart_item"])) {
 														@foreach($pic_image as $img)
 															@if(Storage::disk('s3')->exists($img) && $img != '' )
 																<div class="item-inner">
-																	<img src="{{Storage::URL($img)}}" class="productImg">
+																	<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																</div>
 															@else
-																<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 															@endif
 														@endforeach
 													@else
@@ -501,7 +501,7 @@ if(!empty($cart["cart_item"])) {
 																<img src="{{Storage::URL($pic_image)}}">
 															</div>
 														@else
-															<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+															<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 														@endif
 													@endif
 												</div>
@@ -539,19 +539,19 @@ if(!empty($cart["cart_item"])) {
 														@foreach($pic_image as $img)
 															@if(Storage::disk('s3')->exists($img) && $img != '' )
 																<div class="item-inner">
-																	<img src="{{Storage::URL($img)}}" class="productImg">
+																	<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity">
 																</div>
 															@else
-																<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+																<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 															@endif
 														@endforeach
 													@else
 														@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 															<div class="item-inner">
-																<img src="{{Storage::URL($pic_image)}}">
+																<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity">
 															</div>
 														@else
-															<img src="{{url('/images/service-nofound.jpg')}}" class="productImg">
+															<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity">
 														@endif
 													@endif
 												</div>

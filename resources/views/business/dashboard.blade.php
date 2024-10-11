@@ -17,7 +17,7 @@
     <script src="{{asset('/public/dashboard-design/js/layout.js')}}"></script>
     <!-- Bootstrap Css -->
     <link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('/public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" />
+    <!-- <link href="{{asset('/public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" /> -->
 	
     <!-- Style Css-->
     <link href="{{asset('/public/dashboard-design/css/style.css')}}" rel="stylesheet" type="text/css" />
@@ -50,29 +50,46 @@
                     <div class="row">
                         <div class="col">
                             <div class="h-100">
-                                <div class="row mb-3 pb-1">
-                                    @if(Auth::user()->currentPlan()->amount == 0 || Auth::user()->chkDaysLeft() < 14)
-                                      
-    									<div class="col-6">
+                                <div class="row mb-3 pb-1 justify-content-md-center">
+                                    @if((Auth::user()->currentPlan() && Auth::user()->currentPlan()->amount == 0 )|| Auth::user()->chkDaysLeft() < 14)
+    									<div class="col-xxl-6 col-lg-7 col-md-12 col-12">
                                             @if(Auth::user()->freeTrial() == 'free')
     										<div class="remaining-days mb-15">
     											<div class="row y-middle" style="margin-top:5px;margin-bottom: 5px;">
-    												<div class="col-lg-2 col-md-2 col-3">
-    													<center>
-    														<div class="avatar-xs flex-shrink-0">
-    															<span class="avatar-title bg-primary rounded-circle fs-15">{{Auth::user()->chkDaysLeft()}}</span>
-    														</div>
-    														<div class="days-left">
-    															<p>Days Left</p>
-    														</div>
-    													</center>
-    												</div>
-    												<div class="col-lg-10 col-md-10 col-9">	
-    													<p class="fs-13">
-                                                            You have {{Auth::user()->chkDaysLeft()}}  left in your @if($activePlan) plan. @else free trial. @endif To keep experiences all the features after the trial period, evert payment details and select a plan now to begin after your @if($activePlan) plan @else trial. @endif is over.
-    													</p>
-    												</div>
-    											</div>
+
+                                                    @if(Auth::user()->chkDaysLeft() == 0)
+        												<div class="col-lg-9 col-md-9 col-12">	
+        													<p class="fs-13">
+                                                                You are currently on free plan. Please upgrade your account to fully use your software.
+        													</p>
+        												</div>
+														<div class="col-lg-3 col-md-3 col-12">
+															<a href="{{route('choose-plan.index')}}" class="btn btn-success ml-15 float-right"><b> Upgrade </b></a>
+														</div>
+        											</div>
+                                                    @else
+                                                        <div class="col-lg-2 col-md-2 col-3">
+                                                            <center>
+                                                                <div class="avatar-xs flex-shrink-0">
+                                                                    <span class="avatar-title bg-primary rounded-circle fs-15">{{Auth::user()->chkDaysLeft()}}</span>
+                                                                </div>
+                                                                <div class="days-left">
+                                                                    <p>Days Left</p>
+                                                                </div>
+                                                            </center>
+                                                        </div>
+                                                        <div class="col-lg-10 col-md-10 col-9"> 
+                                                            <p class="fs-13">
+                                                                @if(Auth::user()->chkDaysLeft() == 0)
+                                                                    You are currently on free plan. Please upgrade your account to fully use your software.<a href="{{route('choose-plan.index')}}" class="text-reset text-decoration-underline"><b>Upgrade</b></a>
+                                                                @else
+                                                                    You have {{Auth::user()->chkDaysLeft()}}  left in your @if($activePlan) plan. @else free trial. @endif To keep experiences all the features after the trial period, evert payment details and select a plan now to begin after your @if($activePlan) plan @else trial @endif is over.
+                                                                @endif
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+
     										</div>
                                             @endif
     									</div>
@@ -139,10 +156,10 @@
                                                         </div>
                                                         <!-- <div class="col-auto">
                                                             <button type="button" class="btn btn-soft-success shadow-none"><i class="ri-add-circle-line align-middle me-1"></i> Add Product</button>
-                                                        </div> -->
+                                                        </div> 
                                                         <div class="col-auto">
                                                             <button type="button" class="btn btn-soft-info btn-icon waves-effect waves-light layout-rightside-btn shadow-none"><i class="ri-pulse-line"></i></button>
-                                                        </div>
+                                                        </div>-->
                                                     </div>
                                                 </form>
                                             </div>
@@ -224,7 +241,7 @@
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center">
                                                     <div class="white-box flex-grow-1 overflow-hidden">
-                                                        <p class="fw-medium text-muted text-truncate mb-0">Customers | Month</p>
+                                                        <p class="fw-medium text-muted text-truncate mb-0">New Client | Month</p>
                                                     </div>
                                                     <div class="increase flex-shrink-0">
                                                         @if($customerCountPercentage < 0)
@@ -243,6 +260,39 @@
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-warning rounded fs-3">
+                                                            <i class="bx bx-user-circle"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div><!-- end card body -->
+                                        </div><!-- end card -->
+                                    </div><!-- end col -->
+
+                                    <div class="col-xl-3 col-md-6">
+                                        <!-- card -->
+                                        <div class="card card-animate">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="white-box flex-grow-1 overflow-hidden">
+                                                        <p class="fw-medium text-muted text-truncate mb-0">Reservations | Month</p>
+                                                    </div>
+                                                    <div class="increase flex-shrink-0">
+                                                        @if($reserveMembersCountPercentage < 0)
+                                                            <h5 class="text-danger fs-14 mb-0">
+                                                            <i class="ri-arrow-right-down-line fs-13 align-middle"></i> {{$reserveMembersCountPercentage}} % </h5> <p>Decrease</p>
+                                                        @else
+                                                            <h5 class="text-success fs-14 mb-0">
+                                                            <i class="ri-arrow-right-up-line fs-13 align-middle"></i> + {{$reserveMembersCountPercentage}} % </h5> <p>Increase</p>
+                                                        @endif 
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-end justify-content-between mt-4">
+                                                    <div>
+                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$reserveMembersCount}}">{{$reserveMembersCount}}</span></h4>
+                                                        <a href="{{route('business_customer_index')}}" target="_blank" class="text-decoration-underline">View Customers</a>
+                                                    </div>
+                                                    <div class="avatar-sm flex-shrink-0">
+                                                        <span class="avatar-title text-bg-primary rounded fs-3">
                                                             <i class="bx bx-user-circle"></i>
                                                         </span>
                                                     </div>
@@ -289,15 +339,9 @@
                                                 <h4 class="card-title mb-0 flex-grow-1">Revenue Goal Tracker </h4>
 												 <h4 class="card-title mb-0 flex-grow-1">Current Month: {{date('M')}} of {{date('Y')}} </h4>
                                                 <div>
-													 <button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
-                                                        1M
-                                                    </button>
-													<button type="button" class="btn btn-soft-primary btn-sm shadow-none">
-                                                        1Y
-                                                    </button>
-                                                    <button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
-                                                        ALL
-                                                    </button>
+													<button type="button" class="btn btn-soft-secondary btn-sm shadow-none" onclick="getRevenueGoal('M')"> 1M</button>
+													<button type="button" class="btn btn-soft-primary btn-sm shadow-none" onclick="getRevenueGoal('Y')"> 1Y </button>
+                                                    <!-- <button type="button" class="btn btn-soft-secondary btn-sm shadow-none">ALL </button> -->
                                                 </div>
                                             </div><!-- end card header -->
 
@@ -305,7 +349,9 @@
                                                 <div class="row g-0 text-center">
                                                     <div class="col-6 col-sm-3">
                                                         <div class="p-3 border border-dashed border-start-0">
-															<h5 class="mb-1">$<span class="counter-value" data-target="30000">0</span></h5>
+															<h5 class="mb-1" id="revenue_year_span">$<span class="counter-value" data-target="{{@$revenueData->yearly_total_goal}}" >{{@$revenueData->yearly_total_goal ?? 0}}</span></h5>
+
+                                                            <h5 class="mb-1 d-none" id="revenue_month_span">$<span class="counter-value" data-target="{{@$currentMonthRevenue ?? 0}}">{{@$currentMonthRevenue ?? 0}}</span></h5>
                                                             <p class="text-muted mb-0 revenue">Revenue Needed To Goal</p>
                                                         </div>
                                                     </div>
@@ -316,21 +362,21 @@
 															<div class="flex-shrink-0">
 																<div id="total_jobs" data-colors='["--vz-success"]' class="apex-charts" dir="ltr"></div>
 															</div>
-                                                            <!-- <h5 class="mb-1">$<span class="counter-value" data-target="30000">0</span></h5> -->
+                                                           <!--  <h4 class="fs-15 fw-semibold ff-secondary mb-3">$<span class="counter-value" data-target="{{$revenueAchivedPercentage}}">{{$revenueAchivedPercentage}}</span></h4> -->
                                                             <p class="text-muted mb-0 revenue">% of Revenue Acheived</p>
                                                         </div>
                                                     </div>
                                                     <!--end col-->
                                                     <div class="col-6 col-sm-3">
                                                         <div class="p-3 border border-dashed border-start-0">
-                                                            <h5 class="mb-1">$<span class="counter-value" data-target="2500">0</span></h5>
+                                                            <h5 class="mb-1">$<span class="counter-value" data-target="{{$revenuePerDayNeeded}}">{{$revenuePerDayNeeded}}</span></h5>
                                                             <p class="text-muted mb-0 revenue">Revenue Needed Per Day</p>
                                                         </div>
                                                     </div>
                                                     <!--end col-->
                                                     <div class="col-6 col-sm-3">
                                                         <div class="p-3 border border-dashed border-start-0 border-end-0">
-                                                            <h5 class="mb-1">$<span class="counter-value" data-target="16400">0</span></h5>
+                                                            <h5 class="mb-1">$<span class="counter-value" data-target="{{$revenueShouldbeOnDay}}">{{$revenueShouldbeOnDay}}</span></h5>
                                                             <p class="text-muted mb-0 revenue">Revenue You Should Be At Today</p>
                                                         </div>
                                                     </div>
@@ -339,9 +385,14 @@
                                             </div><!-- end card header -->
 
                                             <div class="card-body p-0 pb-2">
-                                                <div class="w-100">
-                                                    <div id="projects-overview-chart" data-colors='["--vz-primary", "--vz-warning", "--vz-success"]' class="apex-charts" dir="ltr"></div>
+                                                 
+                                                <div class="w-100" id="graphDivY">
+                                                    @include('business.revenue_graph',['graphData' =>$revenueDataAry, 'categoryData' => $categoryData,'graph_name' => 'projects-overview-chart_year'])
                                                 </div>
+                                                <div class="w-100" id="graphDivM">
+                                                    @include('business.revenue_graph',['graphData' =>$revenueDataMonthAry, 'categoryData' => $categoryMonthData ,'graph_name' => 'projects-overview-chart_month'])
+                                                </div>
+
 												<div class="text-center">
 													<a class="text-decoration-underline" href="#" data-bs-toggle="modal" data-bs-target=".monthly-financial">Manage Goals</a>
 												</div>
@@ -610,270 +661,6 @@
 							</div> <!-- end .h-100-->
                         </div> <!-- end col -->
 
-                        <div class="col-auto layout-rightside-col">
-                            <div class="overlay"></div>
-                            <div class="layout-rightside">
-                                <div class="card h-100 rounded-0">
-                                    <div class="card-body p-0">
-                                            <div class="p-3">
-                                                <h6 class="text-muted mb-0 text-uppercase fw-semibold">Recent Activity</h6>
-                                            </div>
-                                            <div data-simplebar style="max-height: 410px;" class="p-3 pt-0">
-                                                <div class="acitivity-timeline acitivity-main">
-                                                    @foreach($todayBooking as $tb)
-                                                    <div class="acitivity-item d-flex">
-                                                        <div class="flex-shrink-0 avatar-xs acitivity-avatar">
-                                                            <div class="avatar-title bg-soft-success text-success rounded-circle shadow">
-                                                                <i class="ri-shopping-cart-2-line"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="flex-grow-1 ms-3">
-                                                            <h6 class="mb-1 lh-base">{{$tb->booking->order_id}}</h6>
-                                                            <p class="text-muted mb-1"><b>Activity : </b>{{@$tb->business_services->program_name}} </p>
-                                                            <p class="text-muted mb-1"><b>Price : </b> ${{@$tb->subtotal + $tb->getperoderprice() }}</p>
-                                                            <small class="mb-0 text-muted">{{date('H:i A' ,strtotime($tb->created_at))}} Today</small>
-                                                        </div>
-                                                    </div>
-                                                    @endforeach
-
-                                                    @foreach($notificationAry as $nd)
-                                                        <div class="acitivity-item d-flex">
-                                                            <div class="flex-shrink-0">
-                                                                @if( $nd['image'] != '')
-                                                                    <img src="{{$nd['image']}}" alt="" class="avatar-xs rounded-circle acitivity-avatar shadow" />
-                                                                @else
-                                                                    <div class="avatar-xsmall">
-                                                                       <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$nd['fl']}}</span>
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-                                                            <div class="flex-grow-1 ms-3 mb-10">
-                                                                <h6 class="mb-1 lh-base">{{$nd['title']}}</h6>
-                                                                <p class="text-muted mb-2 fst-italic">@if($nd['type'] == 'comment') "{{$nd['text']}}" @else {!!$nd['text'] !!} @endif</p>
-                                                                <small class="mb-0 text-muted">{{$nd['date']}}</small>
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-
-                                                    @if(count($notificationAry) == 0 && count($todayBooking) == 0)
-                                                       <p class="text-center mb-3">Not Available</p>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        <div class="p-3 mt-2">
-                                            <h6 class="text-muted mb-3 text-uppercase fw-semibold">Top Booked Memberships
-                                            </h6>
-                                            @if(count($topBookedCategories) > 0)
-                                                <div class="row mb-10">
-                                                    <div class="col-md-6 col-6">
-														<span class="font-weight-600 color-grey"> Category Name</span>
-													</div>
-                                                    <div class="col-md-6 col-6">
-                                                        <div class="row">
-                                                            <div class="col-md-5 col-5">
-																<span class="font-weight-600 color-grey">Paid</span>
-															</div>
-                                                            <div class="col-md-7 col-7">
-																<span class="font-weight-600 color-grey">Booked</span>
-															</div>
-                                                        </div>
-                                                    </div> 
-                                                </div>
-
-                                                <div class="row">
-                                                    @foreach(@$topBookedCategories as $i=> $tbc)
-                                                        @if($i< 10)
-                                                        <div class="col-md-6 col-6">
-                                                            <span class="text-muted">{{$i+1}}. {{$tbc['name']}} </span>
-                                                        </div>
-                                                        <div class="col-md-6 col-6">
-                                                            <div class="row">
-                                                                <div class="col-md-6 col-6">
-                                                                    <span class="text-muted">${{$tbc['paid']}}</span>
-                                                                </div>
-                                                                <div class="col-md-6 col-6">
-                                                                    <span class="text-muted">{{$tbc['booked']}}</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @endif
-                                                    @endforeach
-                                                </div>
-                                            @else
-                                                <span>No Categories Available </span>
-                                            @endif
-                                        </div>
-
-                                        <!--<div class="p-3">
-                                            <h6 class="text-muted mb-3 text-uppercase fw-semibold">Products Reviews</h6>
-                                           
-                                            <div class="swiper vertical-swiper" style="height: 250px;">
-                                                <div class="swiper-wrapper">
-                                                    <div class="swiper-slide">
-                                                        <div class="card border border-dashed shadow-none">
-                                                            <div class="card-body">
-                                                                <div class="d-flex">
-                                                                    <div class="flex-shrink-0 avatar-sm">
-                                                                        <div class="avatar-title bg-light rounded shadow">
-                                                                            <img src="" alt="" height="30">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="flex-grow-1 ms-3">
-                                                                        <div>
-                                                                            <p class="text-muted mb-1 fst-italic text-truncate-two-lines"> " Great product and looks great, lots of features. "</p>
-                                                                            <div class="fs-11 align-middle text-warning">
-                                                                                <i class="ri-star-fill"></i>
-                                                                                <i class="ri-star-fill"></i>
-                                                                                <i class="ri-star-fill"></i>
-                                                                                <i class="ri-star-fill"></i>
-                                                                                <i class="ri-star-fill"></i>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="text-end mb-0 text-muted">
-                                                                            - by <cite title="Source Title">Force Medicines</cite>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="swiper-slide">
-                                                        <div class="card border border-dashed shadow-none">
-                                                            <div class="card-body">
-                                                                <div class="d-flex">
-                                                                    <div class="flex-shrink-0">
-                                                                        <img src="" alt="" class="avatar-sm rounded shadow">
-                                                                    </div>
-                                                                    <div class="flex-grow-1 ms-3">
-                                                                        <div>
-                                                                            <p class="text-muted mb-1 fst-italic text-truncate-two-lines"> " Amazing template, very easy to understand and manipulate. "</p>
-                                                                            <div class="fs-11 align-middle text-warning">
-                                                                                <i class="ri-star-fill"></i>
-                                                                                <i class="ri-star-fill"></i>
-                                                                                <i class="ri-star-fill"></i>
-                                                                                <i class="ri-star-fill"></i>
-                                                                                <i class="ri-star-half-fill"></i>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="text-end mb-0 text-muted">
-                                                                            - by <cite title="Source Title">Henry Baird</cite>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="swiper-slide">
-                                                        <div class="card border border-dashed shadow-none">
-                                                            <div class="card-body">
-                                                                <div class="d-flex">
-                                                                    <div class="flex-shrink-0 avatar-sm">
-                                                                        <div class="avatar-title bg-light rounded shadow">
-                                                                            <img src="" alt="" height="30">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="flex-grow-1 ms-3">
-                                                                        <div>
-                                                                            <p class="text-muted mb-1 fst-italic text-truncate-two-lines"> "Very beautiful product and Very helpful customer service."</p>
-                                                                            <div class="fs-11 align-middle text-warning">
-                                                                                <i class="ri-star-fill"></i>
-                                                                                <i class="ri-star-fill"></i>
-                                                                                <i class="ri-star-fill"></i>
-                                                                                <i class="ri-star-line"></i>
-                                                                                <i class="ri-star-line"></i>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="text-end mb-0 text-muted">
-                                                                            - by <cite title="Source Title">Zoetic Fashion</cite>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="swiper-slide">
-                                                        <div class="card border border-dashed shadow-none">
-                                                            <div class="card-body">
-                                                                <div class="d-flex">
-                                                                    <div class="flex-shrink-0">
-                                                                        <img src="" alt="" class="avatar-sm rounded shadow">
-                                                                    </div>
-                                                                    <div class="flex-grow-1 ms-3">
-                                                                        <div>
-                                                                            <p class="text-muted mb-1 fst-italic text-truncate-two-lines">" The product is very beautiful. I like it. "</p>
-                                                                            <div class="fs-11 align-middle text-warning">
-                                                                                <i class="ri-star-fill"></i>
-                                                                                <i class="ri-star-fill"></i>
-                                                                                <i class="ri-star-fill"></i>
-                                                                                <i class="ri-star-half-fill"></i>
-                                                                                <i class="ri-star-line"></i>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="text-end mb-0 text-muted">
-                                                                            - by <cite title="Source Title">Nancy Martino</cite>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>-->
-
-                                        <div class="p-3">
-                                            <h6 class="text-muted mb-3 text-uppercase fw-semibold">Recent activity reviews</h6>
-                                            
-                                            @foreach($services as $service)
-                                                @php  
-                                                    $rating =0;
-                                                    $reviews_count = App\BusinessServiceReview::where('service_id', $service->id)->count();
-                                                    $reviews_sum = App\BusinessServiceReview::where('service_id', $service->id)->sum('rating'); 
-                                                    $rating = $reviews_count != 0 ? round($reviews_sum/$reviews_count,2) : 0;
-                                                @endphp
-                                                <h6 class="text-muted mb-3 fw-semibold mt-5">{{$service->program_name}} activity reviews</h6>
-                                                <div class="bg-light px-3 py-2 rounded-2 mb-2">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-grow-1">
-                                                            <div class="fs-16 align-middle text-warning">
-                                                                @for($i= 1;$i<=$rating;$i++)
-                                                                    @if($i>5)
-                                                                        @break(0);
-                                                                    @endif
-                                                                    <i class="ri-star-fill"></i>
-                                                                @endfor
-
-                                                                @if(5-$rating > 0)
-                                                                    @for($i= 1;$i<=5-$rating;$i++)
-                                                                        @if($rating - $i == 0.5)
-                                                                            <i class="ri-star-half-fill"></i>
-                                                                        @endif
-                                                                    @endfor
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                        <div class="flex-shrink-0">
-                                                            <h6 class="mb-0">{{$rating}} out of 5</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-
-                                        <div class="card sidebar-alert bg-light border-0 text-center mx-4 mb-0 mt-3">
-                                            <div class="card-body">
-                                                <img src="" alt="">
-                                                <div class="mt-4">
-                                                    <h5>Refer Another Provider</h5>
-                                                    <p class="text-muted lh-base"> Get a Free Month membership for each provider you refer and they claim or create a business account with Fitnessity</p>
-                                                    <button type="button" class="btn btn-red">Invite Now</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> <!-- end card-->
-                            </div> <!-- end .rightbar-->
-                        </div> <!-- end col -->
                     </div>
                 </div><!-- container-fluid -->
             </div><!-- End Page-content -->
@@ -885,106 +672,113 @@
             </div>
         </div>
     </div> 
-<div class="modal fade monthly-financial" tabindex="-1" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered modal-80">
-		<div class="modal-content">
-			<div class="modal-header p-3">
-				<h5 class="modal-title" id="exampleModalLabel">Set & Track Your Monthly Financials Goals for {Year}</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
-			</div>
-			<form action="http://dev.fitnessity.co/business/68/staff" method="post">
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-lg-3 col-md-3 col-sm-3">
-							<div class="track-goal form-group mb-10">
-								<label>January</label>
-								<input type="text" class="form-control" name="jan" required="">
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-3 col-sm-3">
-							<div class="track-goal form-group mb-10">
-								<label>February</label>
-								<input type="text" class="form-control" name="fab" required="">
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-3 col-sm-3">
-							<div class="track-goal form-group mb-10">
-								<label>March</label>
-								<input type="text" class="form-control" name="march" required="">
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-3 col-sm-3">
-							<div class="track-goal form-group mb-10">
-								<label>April</label>
-								<input type="text" class="form-control" name="april" required="">
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-3 col-sm-3">
-							<div class="track-goal form-group mb-10">
-								<label>May</label>
-								<input type="text" class="form-control" name="may" required="">
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-3 col-sm-3">
-							<div class="track-goal form-group mb-10">
-								<label>June</label>
-								<input type="text" class="form-control" name="june" required="">
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-3 col-sm-3">
-							<div class="track-goal form-group mb-10">
-								<label>July</label>
-								<input type="text" class="form-control" name="july" required="">
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-3 col-sm-3">
-							<div class="track-goal form-group mb-10">
-								<label>August</label>
-								<input type="text" class="form-control" name="august" required="">
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-3 col-sm-3">
-							<div class="track-goal form-group mb-10">
-								<label>September</label>
-								<input type="text" class="form-control" name="september" required="">
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-3 col-sm-3">
-							<div class="track-goal form-group mb-10">
-								<label>October</label>
-								<input type="text" class="form-control" name="october" required="">
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-3 col-sm-3">
-							<div class="track-goal form-group mb-10">
-								<label>November</label>
-								<input type="text" class="form-control" name="november" required="">
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-3 col-sm-3">
-							<div class="track-goal form-group mb-10">
-								<label>December</label>
-								<input type="text" class="form-control" name="december" required="">
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-3 col-sm-3">
-							<div class="yearly-total form-group mb-10">
-								<label class="font-red text-decoration">Yearly Total</label>
-								<input type="text" class="form-control" name="yearly-total" required="" readonly>
-							</div>
-						</div>
 
-					</div>
-				</div>
-				<div class="modal-footer">
-					<div class="hstack gap-2 justify-content-end">
-						<button type="submit" class="btn btn-red">Submit</button>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
+    <div class="modal fade monthly-financial" tabindex="-1" aria-hidden="true">
+    	<div class="modal-dialog modal-dialog-centered modal-80">
+    		<div class="modal-content">
+    			<div class="modal-header p-3">
+    				<h5 class="modal-title" id="exampleModalLabel">Set & Track Your Monthly Financials Goals for {{date('Y')}}</h5>
+    				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+    			</div>
+    			<form action="{{route('set_revenue_goal')}}" method="post">
+                    @csrf
+                    <input type="hidden" name="id" value="{{@$revenueData->id}}">
+                    <input type="hidden" name="business_id" value="{{$business_id}}">
+                    <input type="hidden" name="year" value="{{date('Y')}}">
+                    <input type="hidden" name="url" value="{{request()->fullUrl()}}">
+    				<div class="modal-body">
+    					<div class="row">
+    						<div class="col-lg-3 col-md-3 col-sm-3">
+    							<div class="track-goal form-group mb-10">
+    								<label>January</label>
+    								<input type="text" class="form-control" name="jan_goal" id="jan_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->jan_goal}}">
+    							</div>
+    						</div>
+    						<div class="col-lg-3 col-md-3 col-sm-3">
+    							<div class="track-goal form-group mb-10">
+    								<label>February</label>
+    								<input type="text" class="form-control" name="feb_goal" id="feb_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->feb_goal}}">
+    							</div>
+    						</div>
+    						<div class="col-lg-3 col-md-3 col-sm-3">
+    							<div class="track-goal form-group mb-10">
+    								<label>March</label>
+    								<input type="text" class="form-control" name="mar_goal" id="mar_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->mar_goal ?? 0}}">
+    							</div>
+    						</div>
+    						<div class="col-lg-3 col-md-3 col-sm-3">
+    							<div class="track-goal form-group mb-10">
+    								<label>April</label>
+    								<input type="text" class="form-control" name="apr_goal" id="apr_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->apr_goal ?? 0}}">
+    							</div>
+    						</div>
+    						<div class="col-lg-3 col-md-3 col-sm-3">
+    							<div class="track-goal form-group mb-10">
+    								<label>May</label>
+    								<input type="text" class="form-control" name="may_goal" id="may_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->may_goal ?? 0}}">
+    							</div>
+    						</div>
+    						<div class="col-lg-3 col-md-3 col-sm-3">
+    							<div class="track-goal form-group mb-10">
+    								<label>June</label>
+    								<input type="text" class="form-control" name="jun_goal" id="jun_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->jun_goal ?? 0}}">
+    							</div>
+    						</div>
+    						<div class="col-lg-3 col-md-3 col-sm-3">
+    							<div class="track-goal form-group mb-10">
+    								<label>July</label>
+    								<input type="text" class="form-control" name="jul_goal" id="jul_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->jul_goal ?? 0}}">
+    							</div>
+    						</div>
+    						<div class="col-lg-3 col-md-3 col-sm-3">
+    							<div class="track-goal form-group mb-10">
+    								<label>August</label>
+    								<input type="text" class="form-control" name="aug_goal" id="aug_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->aug_goal ?? 0}}">
+    							</div>
+    						</div>
+    						<div class="col-lg-3 col-md-3 col-sm-3">
+    							<div class="track-goal form-group mb-10">
+    								<label>September</label>
+    								<input type="text" class="form-control" name="sep_goal" id="sep_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->sep_goal ?? 0}}">
+    							</div>
+    						</div>
+    						<div class="col-lg-3 col-md-3 col-sm-3">
+    							<div class="track-goal form-group mb-10">
+    								<label>October</label>
+    								<input type="text" class="form-control" name="oct_goal" id="oct_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->oct_goal ?? 0}}">
+    							</div>
+    						</div>
+    						<div class="col-lg-3 col-md-3 col-sm-3">
+    							<div class="track-goal form-group mb-10">
+    								<label>November</label>
+    								<input type="text" class="form-control" name="nov_goal" id="nov_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->nov_goal ?? 0}}">
+    							</div>
+    						</div>
+    						<div class="col-lg-3 col-md-3 col-sm-3">
+    							<div class="track-goal form-group mb-10">
+    								<label>December</label>
+    								<input type="text" class="form-control" name="dec_goal" id="dec_goal" required="" onkeyup="revenueTotal();" value="{{@$revenueData->dec_goal ?? 0}}">
+    							</div>
+    						</div>
+    						<div class="col-lg-3 col-md-3 col-sm-3">
+    							<div class="yearly-total form-group mb-10">
+    								<label class="font-red text-decoration">Yearly Total</label>
+    								<input type="text" class="form-control" name="yearly_total_goal" id="yearly_total_goal" required="" readonly value="{{@$revenueData->yearly_total_goal ?? 0}}">
+    							</div>
+    						</div>
+
+    					</div>
+    				</div>
+    				<div class="modal-footer">
+    					<div class="hstack gap-2 justify-content-end">
+    						<button type="submit" class="btn btn-red">Submit</button>
+    					</div>
+    				</div>
+    			</form>
+    		</div>
+    	</div>
+    </div>
+
 	@include('layouts.business.footer')
 
 	<script type="text/javascript">
@@ -997,6 +791,7 @@
 		       	activityschedule(type,dateStr);
 		    },
 	     });
+
         date1 = '{{$startDateCalendar}}';
         date2 = '{{$endDateCalendar}}';
 		flatpickr(".flatpickr-range", {
@@ -1004,12 +799,27 @@
 	        mode:  "range",
             altFormat: "m-d-Y",
 	        dateFormat: "Y-m-d",
-	        maxDate: "01-01-2050",
+	        maxDate: "2050-01-01",
             defaultDate: [date1, date2],
             onChange: function(selectedDates, dateStr, instance) {
-                window.location.href= '/dashboard/'+dateStr;
+                url = '/dashboard/'+dateStr;
+                setTimeout(function() {
+                    window.location.href = url;
+                }, 1000);
             },
 	   });
+
+
+        function revenueTotal(){
+            var totalCount = 0;
+
+            $('#jan_goal, #feb_goal, #mar_goal, #apr_goal, #may_goal, #jun_goal, #jul_goal, #aug_goal, #sep_goal, #oct_goal, #nov_goal, #dec_goal').each(function() {
+                totalCount += parseInt($(this).val()) || 0;
+            });
+
+            $('#yearly_total_goal').val(totalCount);
+
+        }
 
         function getbookingmodel(){
             $.ajax({
@@ -1052,18 +862,21 @@
 		  	activityschedule(type,'');
 		});
 
+        var  category =["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 		$( document ).ready(function() {
+            $('#graphDivY').addClass('d-none');
 		    draw_chart_donut_revenue({{$in_person}}, {{$online}},'');
 		    draw_chart_donut_category({{$ptdata}},{{$clsdata}},{{$expdata}},{{$evdata}},{{$prdata}},'');
 		    <?php 
 		    	$comp_color = $completedRecPercentage <= 20 ? '#FA4443':'#3577f1';
 		    	$rem_color = $remainingRecPercentage <= 20 ? '#FA4443':'#3577f1';
+                $revenue_color = $revenueAchivedPercentage <= 20 ? '#FA4443':'#3577f1';
 		    ?>
 
-		    draw_chart_radial_bar({{$completedRecPercentage}},'new_jobs_chart' ,'{{$comp_color}}');
-		    draw_chart_radial_bar({{$remainingRecPercentage}},'rejected_chart','{{$rem_color}}');
-            category =["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-		    draw_chart_combo('','' , category);
+		    draw_chart_radial_bar('{{$completedRecPercentage}}','new_jobs_chart' ,'{{$comp_color}}','105', "70%" ,'16px');
+		    draw_chart_radial_bar('{{$remainingRecPercentage}}','rejected_chart','{{$rem_color}}','105', "70%",'16px');
+            draw_chart_radial_bar('{{$revenueAchivedPercentage}}','total_jobs','{{$revenue_color}}','70', "70%",'10px');
+            
 		});
 
 		function getExpiringMembership(days,sDate,eDate){
@@ -1112,20 +925,36 @@
 			});
 		}
 
-		/*function getRevenueGoal(val)
+		function getRevenueGoal(type)
 		{
-			$.ajax({
-				url:"",
+            if(type == 'Y'){
+                $('#graphDivY').removeClass('d-none');
+                $('#graphDivM').addClass('d-none');
+                $('#revenue_year_span').removeClass('d-none');
+                $('#revenue_month_span').addClass('d-none');
+            }else{
+                $('#graphDivM').removeClass('d-none');
+                $('#graphDivY').addClass('d-none');
+                $('#revenue_year_span').addClass('d-none');
+                $('#revenue_month_span').removeClass('d-none');
+            }
+
+			/*$.ajax({
+				url:"getRevenueAjax",
 				method:"GET",
 				data:{
-					val: val,
 					type: type
 				},
 				success:function(data)
-				{draw_chart_combo();
+				{
+                    if(type == 'Y'){
+                        $('#graphDivY').removeClass('d-none');
+                    }else{
+                        $('#graphDivY').addClass('d-none');
+                    }
 				}
-			});
-		}*/
+			});*/
+		}
 
 		function draw_chart_donut_revenue(in_person,online, type) {
 			var options = {
@@ -1195,12 +1024,12 @@
 	        (chart = new ApexCharts(document.querySelector("#updating_donut_chart"), options)).render();
 		}
 
-		function draw_chart_radial_bar(data,name ,color) {
+		function draw_chart_radial_bar(data,name ,color,width,size,fontSize) {
 			var options = {
 	          	series: [data],
 			    chart: {
 			        type: "radialBar",
-			        width: 105,
+			        width: width,
 			        sparkline: {
 			            enabled: !0
 			        }
@@ -1213,7 +1042,7 @@
 			        radialBar: {
 			            hollow: {
 			                margin: 0,
-			                size: "70%"
+			                size: size
 			            },
 			            track: {
 			                margin: 1
@@ -1225,7 +1054,7 @@
 			                },
 			                value: {
 			                    show: !0,
-			                    fontSize: "16px",
+			                    fontSize: fontSize,
 			                    fontWeight: 600,
 			                    offsetY: 8
 			                }
@@ -1237,118 +1066,102 @@
 	        (chart = new ApexCharts(document.querySelector("#"+name), options)).render();
 		}
 
-		function draw_chart_combo(data,type,category){
-			var options = {
-		        series: [{
-	            	name: "Revenue Last Year",
+	</script>
+
+        
+
+
+<script>
+    
+
+    $( document ).ready(function() {
+        category = <?php echo $categoryData; ?>;
+        category1 = <?php echo $categoryMonthData; ?>;
+        draw_chart_combo(@json($revenueDataAry) , category ,'projects-overview-chart_year');
+        draw_chart_combo(@json($revenueDataMonthAry) , category1 ,'projects-overview-chart_month');
+    });
+
+
+    function draw_chart_combo(data,category,chartName){
+        var options = {
+            series: [{
+                    name: "Revenue Last Year",
                     type: "bar",
-                    data: [1, 65, 46, 68, 49, 61, 42, 44, 78, 52, 63, 67]
+                    data: data[0]
                 }, {
                     name: "Revenue Goal",
                     type: "bar",
-                    data: [ 1, 7, 17, 21, 1, 40, 11, 5, 9, 7, 52, 63]
+                    data: data[1]
                 }, {
                     name: "Revenue So Far",
                     type: "bar",
-                    data: [1, 49, 7, 61, 11, 11, 5, 9, 7, 4, 65, 35]
+                    data: data[2]
                 }],
-                chart: {
-                    height: 374,
-                    type: "line",
-                    toolbar: {
-                        show: !1
+            chart: {
+                height: 374,
+                type: "line",
+                toolbar: {
+                    show: !1
+                }
+            },
+            stroke: {
+                curve: "smooth",
+                dashArray: [0, 3, 0],
+                width: [0, 0, 0]
+            },
+            xaxis: {
+                categories: category,
+                axisTicks: {
+                    show: !1
+                },
+                axisBorder: {
+                    show: !1
+                }
+            },
+            legend: {
+                show: !0,
+                horizontalAlign: "center",
+                offsetX: 0,
+                offsetY: -5,
+                markers: {
+                    width: 9,
+                    height: 9,
+                    radius: 6
+                },
+                itemMargin: {
+                    horizontal: 10,
+                    vertical: 0
+                }
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: "30%",
+                    barHeight: "70%"
+                }
+            },
+            tooltip: {
+                shared: !0,
+                y: [{
+                    formatter: function(e) {
+                        return void 0 !== e ? "$" + e.toFixed(2) : e
                     }
-                },
-                stroke: {
-                    curve: "smooth",
-                    dashArray: [0, 3, 0],
-                    width: [0, 0, 0]
-                },
-                xaxis: {
-                    categories: category,
-                    axisTicks: {
-                        show: !1
-                    },
-                    axisBorder: {
-                        show: !1
+                }, {
+                    formatter: function(e) {
+                        return void 0 !== e ? "$" + e.toFixed(2)  : e
                     }
-                },
-                legend: {
-                    show: !0,
-                    horizontalAlign: "center",
-                    offsetX: 0,
-                    offsetY: -5,
-                    markers: {
-                        width: 9,
-                        height: 9,
-                        radius: 6
-                    },
-                    itemMargin: {
-                        horizontal: 10,
-                        vertical: 0
+                }, {
+                    formatter: function(e) {
+                        return void 0 !== e ? "$" + e.toFixed(2) : e
                     }
-                },
-                plotOptions: {
-                    bar: {
-                        columnWidth: "30%",
-                        barHeight: "70%"
-                    }
-                },
-                tooltip: {
-                    shared: !0,
-                    y: [{
-                        formatter: function(e) {
-                            return void 0 !== e ? "$" + e.toFixed(2) : e
-                        }
-                    }, {
-                        formatter: function(e) {
-                            return void 0 !== e ? "$" + e.toFixed(2)  : e
-                        }
-                    }, {
-                        formatter: function(e) {
-                            return void 0 !== e ? "$" + e.toFixed(2) : e
-                        }
-                    }]
-                },
+                }]
+            },
         };
-        	(chart = new ApexCharts(document.querySelector("#projects-overview-chart"), options)).render();
-		}
 
-        var radialBar = ( options = {
-	        series: [80],
-	        chart: {
-		      	width: 70,
-		        type: 'radialBar',
-		        sparkline: {
-		            enabled: !0
-		        }
-        	},
-        	dataLabels: {
-		       enabled: !1
-		    },
-		    plotOptions: {
-		        radialBar: {
-		            hollow: {
-		                margin: 0,
-		                size: "60%"
-		            },
-		            track: {
-		                margin: 1
-		            },
-		            dataLabels: {
-		                show: !0,
-		                name: {
-		                    show: !1
-		                },
-		                value: {
-		                    show: !0,
-		                    fontSize: "10px",
-		                    fontWeight: 800,
-		                    offsetY: 5
-		                }
-		            }
-		        }
-   		 	},
-        },(chart = new ApexCharts(document.querySelector("#total_jobs"), options)).render())
-	</script>
+        var chart = new ApexCharts(document.querySelector("#" + chartName), options);
+        chart.render();
+        
+    }
+
+</script>
+
 @endsection

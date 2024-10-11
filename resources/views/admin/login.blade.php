@@ -2,7 +2,7 @@
 @section('content')
 <div class="login-box">
   <div class="login-logo">
-  <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>logo.png" height="100%" width="100%" />
+  <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>omnebook-admin.jpg" height="100%" width="100%" />
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
@@ -97,7 +97,7 @@ function LoginUser() {
             $('#login_submit').prop('disabled', false);
             $('#frmlogin').css("opacity", "1");
           },
-          success: function (response) {               
+          success: function (response) {        
             showSystemMessages('#systemMessage', response.type, response.msg);
             if (response.type == 'success')
             {

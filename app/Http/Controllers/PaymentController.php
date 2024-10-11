@@ -125,6 +125,7 @@ class PaymentController extends Controller {
                         'price' => json_encode($qtyPrice),
                         'qty' => json_encode($qtyAry),
                         'priceid' => $item['priceid'],
+                        'category_id' => $item['categoryid'],
                         'pay_session' => $price_detail->pay_session,
                         'act_schedule_id' => $activityScheduler->id,
                         'expired_at' => $expiredate,
@@ -135,6 +136,9 @@ class PaymentController extends Controller {
                         'tax' =>  0,
                         'fitnessity_fee' => 0,
                         'service_fee' => 0,
+                        'membershipTotalPrices' => $cartService->getMembershipTotal($item['priceid'],$d['type'],$d['price']) ,
+                        'membershipTotalTax' =>$cartService->getMembershipTax($item['priceid'],$d['type'],$d['price']),
+                        'productTotalTax' => 0 ,
                         'tip' => 0,
                         'participate' => '['.json_encode($participateAry).']',
                         'transfer_provider_status' =>'unpaid',
@@ -149,25 +153,30 @@ class PaymentController extends Controller {
 
                     $price_detail = $cartService->getPriceDetail($item['priceid']);
                     $re_i = 0;
-                    $date = new Carbon;
+                    $date = Carbon::now();
                     $stripe_id = $stripe_charged_amount = $payment_method= '';
                     $amount = $re_i = $reCharge = ''; 
+
+                    $amount = $cartService->getMembershipTotal($item['priceid'],$d['type'],$d['price']);
+                    $tax_recurring = $cartService->getMembershipTax($item['priceid'],$d['type'],$d['price']);
+
                     if($d['type'] == 'adult'){
-                        $amount = 1 * $price_detail->recurring_first_pmt_adult;
+                        //$amount = 1 * $price_detail->recurring_first_pmt_adult;
                         $re_i = $price_detail->recurring_nuberofautopays_adult; 
                         $reCharge  = $price_detail->recurring_customer_chage_by_adult;
                     }else if($d['type'] == 'child'){
-                        $amount =  1 * $price_detail->recurring_first_pmt_child;
+                        //$amount =  1 * $price_detail->recurring_first_pmt_child;
                         $re_i = $price_detail->recurring_nuberofautopays_child; 
                         $reCharge  = $price_detail->recurring_customer_chage_by_child;
                     }else if($d['type'] == 'infant'){
-                        $amount =  1 * $price_detail->recurring_first_pmt_infant;
+                        //$amount =  1 * $price_detail->recurring_first_pmt_infant;
                         $re_i = $price_detail->recurring_nuberofautopays_infant;
                         $reCharge  = $price_detail->recurring_customer_chage_by_infant;
                     }
 
                     if($re_i != '' && $re_i != 0 && $amount != ''){
-                        $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
+                       // $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
+                        //$tax_recurring = number_format( ($amount * $fees->site_tax)/100 ,2);
                         for ($num = $re_i; $num >0 ; $num--) { 
                             $payment_method = $transactionstatus->stripe_payment_method_id;
                             if($num==1){
@@ -175,6 +184,8 @@ class PaymentController extends Controller {
                                 $stripe_charged_amount = number_format($transactionstatus->amount,2);
                                 $paymentDate = $date->format('Y-m-d');
                                 $status = 'Completed';
+                                $payment_number = '1';
+                                $payment_on = date('Y-m-d');
                             }else{
                                 $Chk = explode(" ",$reCharge);
                                 $timeChk = @$Chk[1];
@@ -183,12 +194,24 @@ class PaymentController extends Controller {
 
                                 if($timeChk == 'Month'){
                                     $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
+                                    $additionalPaymentDate = Carbon::parse($paymentDate)->addMonths($afterHowmanytime)->format('Y-m-d');
                                 }else if($timeChk == 'Week'){
                                     $paymentDate = (Carbon::now()->addWeeks($addTime))->format('Y-m-d');
+                                    $additionalPaymentDate = Carbon::parse($paymentDate)->addWeeks($afterHowmanytime)->format('Y-m-d');
                                 }else if($timeChk == 'Year'){
                                     $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
+                                    $additionalPaymentDate = Carbon::parse($paymentDate)->addYears($afterHowmanytime)->format('Y-m-d');
                                 }
+
+                                if($num == $re_i && $additionalPaymentDate){
+                                    $booking_detail->expired_at = $additionalPaymentDate;
+                                    $booking_detail->expired_duration = ($re_i * $afterHowmanytime).' '.$timeChk.'s';
+                                    $booking_detail->save();
+                                }
+
                                 $status = 'Scheduled';
+                                $payment_number = NULL;
+                                $payment_on = NULL;
                             } 
 
                             $recurring = array(
@@ -203,6 +226,8 @@ class PaymentController extends Controller {
                                 'stripe_payment_id'=> $stripe_id,
                                 "tax" => $tax_recurring ,
                                 "status" => $status,
+                                "payment_number" => $payment_number,
+                                "payment_on" => $payment_on,
                             );
                             Recurring::create($recurring);
                         }
@@ -315,8 +340,10 @@ class PaymentController extends Controller {
 
                         $transactionstatus = Transaction::create($transactiondata);
                     }
-                }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
-                    //$errormsg = $e->getError()->message;
+                }catch(\Stripe\Exception\CardException  $e) {
+                    $errormsg = $e->getError()->message;
+                    return redirect('/carts')->with('stripeErrorMsg', $errormsg);
+                }catch(\Stripe\Exception\InvalidRequestException $e) {
                     $errormsg = "Your card is not connected with your account. Please add your card again.";
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }catch( \Exception $e) {
@@ -368,8 +395,10 @@ class PaymentController extends Controller {
 
                         $transactionstatus = Transaction::create($transactiondata);
                     }
-                }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
-                    //$errormsg = $e->getError()->message;
+                }catch(\Stripe\Exception\CardException  $e) {
+                    $errormsg = $e->getError()->message;
+                    return redirect('/carts')->with('stripeErrorMsg', $errormsg);
+                }catch(\Stripe\Exception\InvalidRequestException $e) {
                     $errormsg = "Your card is not connected with your account. Please add your card again.";
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }catch( \Exception $e) {
@@ -382,7 +411,6 @@ class PaymentController extends Controller {
             $tax = $bspdata->site_tax;
 
             foreach($cartService->items() as $item){
-
                 $activityScheduler = BusinessActivityScheduler::find($item['actscheduleid']);
                 $businessServices = BusinessServices::find($item['code']);
                 $user = $businessServices->user;
@@ -442,6 +470,7 @@ class PaymentController extends Controller {
                         'price' => json_encode($qtyPrice),
                         'qty' => json_encode($qtyAry),
                         'priceid' => $item['priceid'],
+                        'category_id' => $item['categoryid'],
                         'pay_session' => $price_detail->pay_session,
                         'act_schedule_id' => $activityScheduler->id,
                         'expired_at' => $expiredate,
@@ -452,6 +481,9 @@ class PaymentController extends Controller {
                         'tax' =>  $cartService->getTax($priceWithDiscount),
                         'fitnessity_fee' => $cartService->getFitnessFee($priceWithDiscount, $user),
                         'service_fee' => $cartService->getServiceFee($priceWithDiscount),
+                        'membershipTotalPrices' => $cartService->getMembershipTotal($item['priceid'],$d['type'],$d['price']) ,
+                        'membershipTotalTax' =>$cartService->getMembershipTax($item['priceid'],$d['type'],$d['price']),
+                        'productTotalTax' => 0 ,
                         'tip' => 0,
                         'participate' =>'['.json_encode($participateAry).']',
                         'transfer_provider_status' =>'unpaid',
@@ -467,25 +499,30 @@ class PaymentController extends Controller {
                     $price_detail = $cartService->getPriceDetail($item['priceid']);
 
                     $re_i = 0;
-                    $date = new Carbon;
+                    $date = Carbon::now();
                     $stripe_id = $stripe_charged_amount = $payment_method= '';
                     $amount = $re_i = $reCharge = ''; 
+
+                    $amount = $cartService->getMembershipTotal($item['priceid'],$d['type'],$d['price']) ;
+                    $tax_recurring = $cartService->getMembershipTax($item['priceid'],$d['type'],$d['price']);
+
                     if($d['type'] == 'adult'){
-                        $amount = 1 * $price_detail->recurring_first_pmt_adult;
+                        /*$amount = 1 * $price_detail->recurring_first_pmt_adult;*/
                         $re_i = $price_detail->recurring_nuberofautopays_adult; 
                         $reCharge  = $price_detail->recurring_customer_chage_by_adult;
                     }else if($d['type'] == 'child'){
-                        $amount =  1 * $price_detail->recurring_first_pmt_child;
+                        /*$amount =  1 * $price_detail->recurring_first_pmt_child;*/
                         $re_i = $price_detail->recurring_nuberofautopays_child; 
                         $reCharge  = $price_detail->recurring_customer_chage_by_child;
                     }else if($d['type'] == 'infant'){
-                        $amount =  1 * $price_detail->recurring_first_pmt_infant;
+                        /*$amount =  1 * $price_detail->recurring_first_pmt_infant;*/
                         $re_i = $price_detail->recurring_nuberofautopays_infant;
                         $reCharge  = $price_detail->recurring_customer_chage_by_infant;
                     }
 
                     if($re_i != '' && $re_i != 0 && $amount != ''){
-                        $tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
+                        //$tax_recurring = number_format((($amount * $fees->service_fee)/100)  + (($amount * $fees->site_tax)/100),2);
+                       // $tax_recurring = number_format( ($amount * $fees->site_tax)/100 ,2);
                         for ($num = $re_i; $num >0 ; $num--) { 
                             $payment_method = $transactionstatus->stripe_payment_method_id;
                             if($num==1){
@@ -493,20 +530,34 @@ class PaymentController extends Controller {
                                 $stripe_charged_amount = number_format($transactionstatus->amount,2);
                                 $paymentDate = $date->format('Y-m-d');
                                 $status = 'Completed';
+                                 $payment_number = '1';
+                                 $payment_on = date('Y-m-d');
                             }else{
                                 $Chk = explode(" ",$reCharge);
                                 $timeChk = @$Chk[1];
                                 $afterHowmanytime = @$Chk[0];
                                 $addTime  = $afterHowmanytime * ($num - 1);
 
-                                if($timeChk == 'Month'){
+                                 if($timeChk == 'Month'){
                                     $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
+                                    $additionalPaymentDate = Carbon::parse($paymentDate)->addMonths($afterHowmanytime)->format('Y-m-d');
                                 }else if($timeChk == 'Week'){
                                     $paymentDate = (Carbon::now()->addWeeks($addTime))->format('Y-m-d');
+                                    $additionalPaymentDate = Carbon::parse($paymentDate)->addWeeks($afterHowmanytime)->format('Y-m-d');
                                 }else if($timeChk == 'Year'){
                                     $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
+                                    $additionalPaymentDate = Carbon::parse($paymentDate)->addYears($afterHowmanytime)->format('Y-m-d');
                                 }
+
+                                if($num == $re_i && $additionalPaymentDate){
+                                    $booking_detail->expired_at = $additionalPaymentDate;
+                                    $booking_detail->expired_duration = ($re_i * $afterHowmanytime).' '.$timeChk.'s';
+                                    $booking_detail->save();
+                                }
+
                                 $status = 'Scheduled';
+                                $payment_number = NULL;
+                                $payment_on = NULL;
                             } 
 
                             $recurring = array(
@@ -520,6 +571,8 @@ class PaymentController extends Controller {
                                 'payment_method'=> $payment_method,
                                 'stripe_payment_id'=> $stripe_id,
                                 "tax" => $tax_recurring ,
+                                "payment_number" => $payment_number,
+                                "payment_on" => $payment_on,
                                 "status" => $status,
                             );
                             Recurring::create($recurring);
@@ -652,7 +705,7 @@ class PaymentController extends Controller {
 
                 $user->update(['default_card'=>$payment_method['card']['last4']]);
                 
-                $customer = Customer::where(['fname' =>$user->firstname,'lname' =>$user->lastname, 'email' => $user->email])->get();
+                /*$customer = Customer::where(['fname' =>$user->firstname,'lname' =>$user->lastname, 'email' => $user->email])->get();
 
                 if ($stripePaymentMethod->wasRecentlyCreated && !empty($customer) ) {
                   
@@ -669,7 +722,7 @@ class PaymentController extends Controller {
                         ]);
 
                     }
-                }
+                }*/
             }
         }
         if($request->return_url)

@@ -9,11 +9,18 @@
 	.manage-customer-modal-title h3{}
 	.desktop-none-booking{display: none;}
 	.dots {  overflow-x: visible !important;}
+	.desktop-none-client{display: none;}
+	.client-contact-list-modal{max-width: 70%;}
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1900px){
 	.desktop-none-booking{display: none;}
 	.dots {  overflow-x: visible !important;}
+	.self-check-sp { margin-bottom: 40px; }
+	.home-banner-title{  padding: 150px 0 150px;}
+	.desktop-none-client{display: none;}
+	.notification-close{right: 28px;}
+	.card-check-in {padding: 100px 100px;  }
 }
 
 @media screen and (min-width: 768px) and (max-width: 992px){
@@ -25,13 +32,14 @@
 	.mb-55{margin-bottom: 55px;}
 	.dropBoximg{ min-width: 100% !important;}
 	.search-width { width: 100%;}
-	.dash-sidebar-menu{margin-top: 110px;}
+	.dash-sidebar-menu{margin-top: 20px;}
 	.set-price{margin-bottom: 10px !important;}
 	.equal-earn {  margin-top: 25px;}
 	.checkbox-selection label{display: inline;}
 	.addanother a{width: 100%; display: grid;}
 	.modal-80 {  max-width: 95%;}
 	.modal-70 {  max-width: 95%;}
+	.modal-40 {  max-width: 95%;}
 	.overlay-activity-label{width: auto !important;}
 	.scheduled-activity-info{margin-top: 7px !important;}
 	.manage-customer-from form input{width: 85%;}
@@ -101,9 +109,31 @@
 	.up-down-sp {  padding: 20px 30px 20px 30px;}
 	.classes-list{padding: 5px 0px;}
 	.links-set a{font-size: 14px;}
-	.setoflinkes{display: block;}
+	/* .setoflinkes{width: 100%;} */
 	.custom-table-header{height: 75px;}
 	.badge-soft-red{font-size: 9px;}
+	.w-ipad{width: 225px;}
+	.bg-cover{background-size: cover;}
+	.pro-background-overlay-banner{background-image: linear-gradient(102deg, #fff 18%, transparent 37%);}
+	.home-banner-title{ padding: 150px 0 150px; }
+	/* .staff-pl-0 { padding-left: 12px;  } */
+	/* .service-pr-0 {	padding-right: 10px; } */
+	.show-all {	margin-top: 0;  }
+	.show-all .join-btn{margin-top: 0; padding: 0px !important;}
+	.star-rest .activity-inner-data{padding: 0 0;}
+	.fit-widget-container-banner label{font-size: 45px; line-height: 64px;}
+	.i-none{display: none !important;}
+	.confirmed-slider .owl-nav .owl-next{right: -55px !important; width: 20px; height: 20px; font-size: 18px;}
+	.confirmed-slider .owl-nav .owl-prev{left: -55px !important; width: 20px; height: 20px; font-size: 18px;}
+	.mil-5 { margin-left: 5px;  }
+	.com-sidepanel{top: 67px;}
+	.ipad-none{display: none;}
+	.notification-close{right: 35px;} 
+	#sidebar-wrapper{left: 322px; top: 136px;}
+	#page-content-wrapper{padding: 0px;}
+	.clinet-page-content{padding: calc(40px + 6.5rem) calc(1.5rem * .5) 60px calc(1.5rem * .5);}
+	.imt-25{margin-top: 25px;}
+	.finish-modal-80 {	max-width: 97%;  }
 }
 
 @media screen and (min-width: 700px) and (max-width: 768px){
@@ -174,11 +204,15 @@
 	.cash-tend {  margin-left: 0px;}
 	.chat-leftsidebar {  height: calc(70vh - 70px - 60px - 8px) !important;}
 	.chat-conversation { height: calc(70vh - 275px) !important;}
-	
+	.zfold-none{	display: none;  }
+	.sidebar-progress-bar{display: block;}
+	.com-sidepanel{top: 104px;}
+	#page-topbar { top: 104px;  }
+	.com-cancle{color: #000 !important;}
 }
 
 @media screen and (min-width: 560px) and (max-width: 699px){ 
-	.price-selection label{width: 94% !important;}
+	.price-selection label{width: 96% !important;}
 	.btn-previous{padding: 5px 6px;}
 	.modal-content{margin-left: 15px; margin-right: 15px;}
 	.customer-modal-width{max-width: 98%;}
@@ -208,6 +242,15 @@
 	.searchbox .form-control.padding-lrtb { padding: 10px 0 10px;}
 	.searchbox .form-control.padding-lrtb-one {padding: 10px 0px 10px 0px;}
 	.searchbox {  padding: 10px 15px;}
+	.width-345 { max-width: 345px;}
+	.desktop-none-customer {display: block !important;  }
+	.navbar-menu{ z-index: 2000 !important;	overflow: scroll;  position: fixed; top: 0;}
+	.w-fold{width: 250px;}
+	.show-all {	margin-top: 0;  }
+	.show-all .join-btn{margin-top: 0; padding: 0px !important;}
+	.star-rest .activity-inner-data{padding: 0 0;}
+	.ipad-none{display: none;}
+	.photo-upload label {height: 155px !important; }
 }
 
 @media screen and (max-width: 699px){ 
@@ -281,6 +324,7 @@
 	.customer-modal-width { max-width: 100%;}
 	.mfloat-left{float: left !important;}
 	.modal-50 {  max-width: 100%;}
+	.modal-40 {  max-width: 100%;}
 	.side-border-right {  border-right: 0; padding-right: 0;}
 	.membership-save { width: 100%; margin-top: 20px;}
 	.mt-150 {  margin-top: 30px;}
@@ -345,12 +389,80 @@
 	.classes-list{padding: 5px 0px;}
 	.links-set a{font-size: 14px;}
 	.setoflinkes{display: block;}
+	.width-345 { max-width: 100%;}
+	.desktop-none-customer {display: block !important;  }
+	.width-40 {	max-width: 100%; }
+	.navbar-menu{ z-index: 2000 !important;	overflow: scroll;  position: fixed; top: 0;}
+	.w-250 {width: 180px;  }
+	.space-set{width: 100% !important;}
+	.w-50px {width: 120px; }
+	.modal-belt{width: 50px;}
+	.home-banner-title{  padding: 150px 0 150px;}
+	.searchbox .form-control.padding-lrtb-one{  padding: 20px 0px 20px 0px; }
+	.searchbox .btn{padding: 15px 15px;}
+	.bg-cover{background-size: cover;}
+	.staff-pl-0 { padding-left: 12px;  }
+	.service-pr-0 {	padding-right: 10px; }
+	.show-all .table-inner-data-sec .p-name { width: 77% !important; } 
+	.fit-widget-container-banner label{font-size: 45px; line-height: 64px;}
+	.confirmed-slider .owl-nav .owl-prev{left: -15px; font-size: 20px; width: 20px; height: 20px; }
+	.confirmed-slider .owl-nav .owl-next{right: -15px; font-size: 20px; width: 20px; height: 20px;}
+	.wel-date-time {text-align: center; margin-top: 35px;}
+	.self-check-sp {padding: 82px 5px !important;  }
+	.qr-code{text-align: center;}
+	.card-check-in {padding: 170px 10px;}
+	.fall-schedule {padding-right: 10px; padding-left: 10px;  }
+	.self-welcome-logo{ text-align: center;}
+	.welcome-title label {font-size: 45px; }
+	.welcome-title span { font-size: 45px; line-height: 55px;}  
+	.com-sidepanel{top: 103px;}
+	.com-cancle{color: #000 !important;}
+	.sidebar-progress-bar{	display: block;	  }
+	.notification-close{right: 35px;}
+	#signatureCanvas{width: 100%;}
+	.accordion-body{ padding: 6px;}
+	.mcard-body-sp{padding: 15px 5px;}
+	.mp-5{padding: 5px;}
+	.mp-6{padding: 6px;}
+	.customer-details-img{display: block; margin-left: auto; margin-right: auto; width: 50%; }
+	.m-customer-detials{text-align: center;}
+	.m-d-grid{display: grid;}
+	.blog-sidepanel{top: 104px;}
+	.side-footer-set{bottom: 80px;}
+	.mb-165 { margin-bottom: 275px;	}
+	.suggested-set{bottom: 180px;}
+	.create-customer-box{padding: 15px 10px;}
+	#dropzone-preview li div .pt-1{word-wrap: anywhere;} 
+	.personal-sidebar .simplebar-mask{position: absolute; top: 0px;}
+	#sidebar-wrapper{left: 250px; top: 173px; height: 13%;}
+	.clinet-page-content{padding: calc(78px + 6.5rem) calc(1.5rem * .5) 60px calc(1.5rem * .5);}
+	#client_wrapper.toggled #page-content-wrapper {	position: relative;	margin-right: -250px;	  }
+	#page-content-wrapper{position: relative; padding: 0;}
+	#sidebar-wrapper{overflow-y: scroll;}
+	#client_wrapper.toggled #sidebar-wrapper {	width: 195px;  }
+	#client_wrapper.toggled {padding-left: 190px; }
+	.navbar-nav.sidebar-nav .nav-link i{display: none;}
+	.sidebar-nav{position: relative; width: 100%;}
+	.customer-list-table td{text-align: left;}
+	.engage-client-img img{width: 100%;}
+	.tab-right-border {	border-bottom: 1px solid #f3f3f9; 	border-right: none;  }
+	.finish-modal-80 {	max-width: 100%;  }
+	.mb-mv-25{padding: 25px; padding-bottom: 70px;}
+	.mr-5{margin-right: 5px;}
 }
+
+
 
 @media screen and (min-width: 351px) and (max-width: 370px){
 	.btn-previous {  width: 100% !important;  display: inline-block !important;}
 	.btn-grp button {padding: 15px 11px;}
 	header .header-right .header-bottom-sp{margin-bottom: 6px;}
+	table.dataTable.nowrap th, table.dataTable.nowrap td{white-space: unset !important;}
+	.ph-provider {  margin-right: 0;}
+	.space-set{width: 100% !important;}
+	.w-50px {width: 100px; }
+	.powerby img{  width: 225px;}
+	
 }
 
 @media screen and (min-width: 280px) and (max-width: 350px){
@@ -358,7 +470,8 @@
 	.add-category-btn{font-size: 13px; padding: 7px 8px; line-height: 27px;}
 	.card-350-body{padding-left: 7px !important; padding-right: 7px !important;}
 	.btn-previous {  width: 100% !important;  display: inline-block !important;}
-}
+	.ph-provider {  margin-right: 0;}
+} 
 
 @media screen and (max-width: 280px){
 	.flip-view{display: block !important; }
@@ -373,6 +486,7 @@
 	.modal-80 {  max-width: 100%;}
 	.add-category-btn{padding: 6px 9px; line-height: 31px; font-size: 13px;}
 	.card-350-body{padding-left: 3px; padding-right: 3px;}
+	.ph-provider {  margin-right: 0;}
 }
 
 @media screen and (min-width: 625px) and (max-width: 675px){

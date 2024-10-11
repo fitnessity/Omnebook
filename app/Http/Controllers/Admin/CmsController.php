@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Repositories\CmsRepository;
-use App\User;
+use App\{User,Admin};
 use App\Cms;
 use Auth;
 use Redirect;
@@ -16,6 +16,7 @@ use DB;
 use Validator;
 use Image;
 use File;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CmsController extends Controller
 {   
@@ -30,9 +31,9 @@ class CmsController extends Controller
     public function listCmsModules()
     {   
 
-        $loggedinAdmin = Auth::user();
+        $loggedinAdmin = auth()->guard('admin')->user();
 
-        if($loggedinAdmin->role == "admin"){
+        if($loggedinAdmin){
             
             $cmsModulesList = Cms::where('status','1')->get();
 
@@ -50,9 +51,9 @@ class CmsController extends Controller
     public function viewCmsModule($id)
     {
 
-        $loggedinAdmin =Auth::user();
+        $loggedinAdmin =auth()->guard('admin')->user();
         
-        if($loggedinAdmin->role == "admin"){
+        if($loggedinAdmin){
             
             $module_details = Cms::where('id',$id)->get();
             
@@ -72,9 +73,9 @@ class CmsController extends Controller
 
     public function postCmsModule(Request $request,$id)
     {   
-        $loggedinAdmin =Auth::user();
+        $loggedinAdmin = auth()->guard('admin')->user();
         
-        if($loggedinAdmin->role == "admin"){
+        if($loggedinAdmin){
             $input = $request->all();
             $validator = $this->cmsValidator($input);
         } else {
@@ -171,13 +172,18 @@ class CmsController extends Controller
         return Validator::make($data, [            
             'edit_title' => 'required|max:255',
             'edit_content' => 'required',
-            'banner_image' => 'image|mimes:jpeg,jpg,bmp,png|max:1024',
-            'Video' => 'video|mimes:mp4|max:1024',
+            /*'banner_image' => 'image|mimes:jpeg,jpg,bmp,png|max:1024',
+            'Video' => 'video|mimes:mp4|max:1024',*/
         ],
         [
             'edit_title.required' => 'Provide a content title',
             'edit_content.required' => 'Provide a content',
         ]);
+    }
+
+    protected function throwValidationException(Request $request, $validator)
+    {
+        throw new HttpResponseException(response()->json(['error' => $validator->errors()], 422));
     }
 }
 

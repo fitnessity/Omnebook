@@ -209,7 +209,7 @@
 			                                                                           <input type="hidden" name="instructure[{{ $i }}]" value="">
 			                                                                           <select name="instructure[{{$i}}][]" id="instructure{{$i}}" multiple >
 			                                                                              @foreach($staffData as $data)
-                                                                                          <option value="{{$data->id}}" @if(@$service->instructor_id == $data->id) selected @endif> {{$data->first_name}} {{$data->last_name}} </option>
+                                                                                          <option value="{{$data->id}}"> {{$data->first_name}} {{$data->last_name}} </option>
                                                                                        @endforeach
 			                                                                           </select>
 			                                                                           
@@ -322,16 +322,12 @@
 			                                                                        <div class="priceselect sp-select mt-10">
 			                                                                           <label>Choose Instructure</label>
 			                                                                           <input type="hidden" name="instructure[0]" value="">
-			                                                                           <select name="instructure[]" id="instructure0" multiple >
+			                                                                           <select name="instructure[0][]" id="instructure0" multiple >
 			                                                                              @foreach($staffData as $data)
                                                                                           <option value="{{$data->id}}" @if(@$service->instructor_id == $data->id) selected @endif> {{$data->first_name}} {{$data->last_name}} </option>
                                                                                        @endforeach
 			                                                                           </select>
-			                                                                           <script id="slimSelectScript0">
-																													new SlimSelect({
-																												      select: '#instructure0'
-																												   });
-																												</script>
+			                                                                           
 			                                                                        </div>
 			                                                                     </div>
 
@@ -404,8 +400,9 @@
 														</div>
 													</div>
 												</div>
+
 												<div class="btn-ano-time mt-20 float-right">
-													<a href="{{route('business.services.index')}}" class="btn btn-red" >Finish</a>
+													<a href="@if($category->class_type) {{route('business.services.create',['serviceType'=> $category->BusinessServices->service_type,'serviceId'=>$category->serviceid])}}#stepFour @else {{route('business.services.index')}} @endif" class="btn btn-red" >Finish</a>
 												</div> 		
 											</div>
 										</div><!-- end card-body -->
@@ -431,13 +428,13 @@
 		   }]
 	   });
 	</script>
-<div id="slimselectdiv">
-	<script id="slimSelectScript0">
-		new SlimSelect({
-	      select: '#instructure0'
-	   });
-	</script>
-</div>
+	<div id="slimselectdiv">
+		<script id="slimSelectScript0">
+			new SlimSelect({
+		      select: '#instructure0'
+		   });
+		</script>
+	</div>
 <script>
 
 	$("body").on("click", ".daycircle", function(){
@@ -551,6 +548,7 @@
      	add_time = htmlData.replace(/instructure\d+/,"instructure"+cnt);
      	add_time = add_time.replaceAll(/instructure\[\d+\]/g,"instructure["+cnt+"]");
      	add_time = add_time.replace(/slimSelectScript\d+/,"slimSelectScript"+cnt);
+     	add_time = add_time.replaceAll(/instructure\[\d+\]\[]/g,"instructure["+cnt+"][]");
      	$("#activity_scheduler_body").append(add_time);
      	$('#slimSelectScript'+cnt).html('');
 		let newScript = document.createElement('script');

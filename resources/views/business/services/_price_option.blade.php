@@ -29,13 +29,13 @@
     }
     
 ?>
-<div class="accordion nesting2-accordion custom-accordionwithicon accordion-border-box mt-3" id="priceoption{{$i}}{{$j}}">
+<div class="accordion priceoption nesting2-accordion custom-accordionwithicon accordion-border-box mt-3 priceoption_accord" id="priceoption{{$i}}{{$j}}">
     <div class="accordion-item shadow">
         <h2 class="accordion-header" id="acc_nesting{{$i}}{{$j}}">
-            <button class="accordion-custom-btn accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingprice{{$i}}{{$j}}" aria-expanded="true" aria-controls="accor_nestingprice{{$i}}{{$j}}">
+            <button class="accordion-custom-btn accordion-button @if($displayRecPrice != @$price->id) collapsed @endif " type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingprice{{$i}}{{$j}}" aria-expanded="true" aria-controls="accor_nestingprice{{$i}}{{$j}}">
                 <div class="container-fluid nopadding">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-8">
+                        <div class="col-lg-6 col-md-6 col-8" id="priceTitle{{$i}}{{$j}}">
                             Price Option {{@$price->price_title != '' ? " : ".@$price->price_title :'' }}
                         </div>
                         <div class="col-lg-6 col-md-6 col-4">
@@ -56,7 +56,7 @@
                 </div>
             </button>
         </h2>
-        <div id="accor_nestingprice{{$i}}{{$j}}" class="accordion-collapse collapse" aria-labelledby="acc_nesting{{$i}}{{$j}}" data-bs-parent="#priceoption{{$i}}{{$j}}">
+        <div id="accor_nestingprice{{$i}}{{$j}}" class="accordion-collapse collapse @if($displayRecPrice == @$price->id) show @endif" aria-labelledby="acc_nesting{{$i}}{{$j}}" data-bs-parent="#priceoption{{$i}}{{$j}}">
             <div class="accordion-body">
                 <input type="hidden" name="price_id_db_{{$i}}{{$j}}" id="price_id_db{{$i}}{{$j}}" value="{{@$price->id}}" />
                 <div class="row">
@@ -91,47 +91,51 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-12">
-                        <p class="info-txt-price">You can set your prices to be the same or different based on age, the weekday or the weekend. To add prices for children or infants, click on the box.</p>
+                    <div class="col-lg-12 mt-15">
+                        <span class="fs-15 font-red">Set Your Price</span>
+                        <p class="info-txt-price mb-10">You can set your prices to be the same or different based on age, the weekday or the weekend. To add prices for children or infants, click on the box.</p>
                     </div>
-                    <div class="col-md-12">
-                        <div class="mt-15 price-selection">
-                            <input type="radio" id="freeprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="freeprice" {{@$price->dispaly_section == 'freeprice' ? 'checked' : ''}}>
-                            <label class="recurring-pmt">Free</label>
-                                            
-                            <input type="radio" id="weekdayprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekdayprice" {{@$price->dispaly_section == 'weekdayprice' ? 'checked' : ''}}>
-                            <label class="recurring-pmt">Everyday Price</label>
-                                            
-                            <input type="radio" id="weekendprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekendprice"  {{(@$price->dispaly_section == 'weekendprice' || @$price->dispaly_section == '' )? 'checked' : ''}} >
-                            <label class="recurring-pmt">Weekend Price</label>
+
+                    <div class="col-md-12 service-back-box">
+                        <div>
+                            <div class="mt-15 price-selection">
+                                <input type="radio" id="freeprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="freeprice" {{@$price->dispaly_section == 'freeprice' ? 'checked' : ''}}>
+                                <label class="recurring-pmt">Free</label>
+                                                
+                                <input type="radio" id="weekdayprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekdayprice" {{(@$price->dispaly_section == 'weekdayprice' || @$price->dispaly_section == '' ) ? 'checked' : ''}}>
+                                <label class="recurring-pmt">Everyday Price</label>
+                                                
+                                <input type="radio" id="weekendprice{{$i}}{{$j}}" name="sectiondisplay{{$i}}{{$j}}" onclick="showdiv({{$i}},{{$j}});" value="weekendprice"  {{(@$price->dispaly_section == 'weekendprice') ? 'checked' : ''}} >
+                                <label class="recurring-pmt">Weekend Price</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-12 displaysectiondiv{{$i}}{{$j}} {{@$price->dispaly_section == 'freeprice' ? 'd-none' : ''}}" >
-                        <div class="choose-age price-selection">
-                            <p>Select who this price option is for. (choose all that apply)</p>
-                            <input type="checkbox" id="all{{$i}}{{$j}}" name="all{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="all" >
-                            <label class="recurring-pmt">All</label>
-                            
-                            <input type="checkbox" id="adult{{$i}}{{$j}}" name="adult{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="adult" {{(@$price->adult_cus_weekly_price != '' || @$price == '') ? 'checked': ''}}>
-                            <label class="recurring-pmt">Adults (12 and up)</label>
-                                            
-                            <input type="checkbox" id="child{{$i}}{{$j}}" name="child{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="child" {{@$price->child_cus_weekly_price != '' ? 'checked': ''}}>
-                            <label class="recurring-pmt">Children (2 to 12)</label>
-                                            
-                            <input type="checkbox" id="infant{{$i}}{{$j}}" name="infant{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="infant" {{@$price->infant_cus_weekly_price != '' ? 'checked': ''}}>
-                            <label class="recurring-pmt">Infants ( 2 and Under)</label>
+                        <div class="displaysectiondiv{{$i}}{{$j}} {{@$price->dispaly_section == 'freeprice' ? 'd-none' : ''}}" >
+                            <div class="choose-age price-selection">
+                                <p>Select who this price option is for. (choose all that apply)</p>
+                                <input type="checkbox" id="all{{$i}}{{$j}}" name="all{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="all"  {{(@$price->adult_cus_weekly_price != '' && @$price->child_cus_weekly_price != '' && @$price->infant_cus_weekly_price != '') ? 'checked': '' }}>
+                                <label class="recurring-pmt">All</label>
+                                
+                                <input type="checkbox" id="adult{{$i}}{{$j}}" name="adult{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="adult" {{(@$price->adult_cus_weekly_price != '') ? 'checked': ''}}>
+                                <label class="recurring-pmt">Adults (12 and up)</label>
+                                                
+                                <input type="checkbox" id="child{{$i}}{{$j}}" name="child{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="child" {{@$price->child_cus_weekly_price != '' ? 'checked': ''}}>
+                                <label class="recurring-pmt">Children (2 to 12)</label>
+                                                
+                                <input type="checkbox" id="infant{{$i}}{{$j}}" name="infant{{$i}}{{$j}}" onclick="priceOptionFor({{$i}},{{$j}},this.value);" value="infant" {{@$price->infant_cus_weekly_price != '' ? 'checked': ''}}>
+                                <label class="recurring-pmt">Infants ( 2 and Under)</label>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="accordion nesting4-accordion custom-accordionwithicon accordion-border-box mt-3 displaysectiondiv{{$i}}{{$j}} {{(@$price->adult_cus_weekly_price != '' || @$price == '') ? '': 'd-none'}}" id="accor_nestingadult{{$i}}{{$j}}">
+                <div class="accordion nesting4-accordion custom-accordionwithicon accordion-border-box mt-3 displaysectiondiv{{$i}}{{$j}} {{(@$price->adult_cus_weekly_price != '') ? '': 'd-none'}}" id="accor_nestingadult{{$i}}{{$j}}">
                     <div class="accordion-item shadow">
                         <h2 class="accordion-header" id="accordionnesting4Example2">
-                            <button class="accordion-custom-btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_adult{{$i}}{{$j}}" aria-expanded="false" aria-controls="accor_adult{{$i}}{{$j}}">
+                            <button class="accordion-custom-btn accordion-button collapsed font-red" type="button" data-bs-toggle="collapse" data-bs-target="#accor_adult{{$i}}{{$j}}" aria-expanded="false" aria-controls="accor_adult{{$i}}{{$j}}">
                                 Prices Options for Adults
                             </button>
                         </h2>
-                        <div id="accor_adult{{$i}}{{$j}}" class="accordion-collapse collapse" aria-labelledby="accor_nestingadult{{$i}}{{$j}}" data-bs-parent="#accor_nestingadult{{$i}}{{$j}}">
+                        <div id="accor_adult{{$i}}{{$j}}" class="accordion-collapse @if($displayType == 'adult') show @else collapse @endif" aria-labelledby="accor_nestingadult{{$i}}{{$j}}" data-bs-parent="#accor_nestingadult{{$i}}{{$j}}">
                             <div class="accordion-body">
                                 <div class="container nopadding">
                                     <div class="row">
@@ -143,9 +147,10 @@
                                         </div>
                                         <div class="weekly-customer">
                                             <div class="cus-week-price sp-select">
-                                                <label>Weekday Price</label>
+                                                <label>Everyday Price</label>
                                                 <p> (Monday - Sunday)</p>
-                                                <input name="adult_cus_weekly_price_{{$i}}{{$j}}" id="adult_cus_weekly_price{{$i}}{{$j}}" value="{{@$price->adult_cus_weekly_price}}" onkeyup="changeWDayPrice({{$i}},{{$j}},'adult');" type="text" class="form-control "onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$"></div> 
+                                                    <input name="adult_cus_weekly_price_{{$i}}{{$j}}" id="adult_cus_weekly_price{{$i}}{{$j}}" value="{{@$price->adult_cus_weekly_price}}" onkeyup="changeWDayPrice({{$i}},{{$j}},'adult');" type="text" class="form-control" onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$">
+                                            </div> 
                                         </div>
                                         <div class="weekend-price Weekend{{$i}}{{$j}} @if(@$price->dispaly_section == 'weekdayprice') d-none @endif">
                                             <div class="cus-week-price sp-select">
@@ -160,49 +165,12 @@
                                                 <input class="form-control" type="text" name="adult_discount_{{$i}}{{$j}}" id="adult_discount{{$i}}{{$j}}" value="{{@$price->adult_discount}}" onkeyup="changeDiscount({{$i}},{{$j}},'adult');" value="" onkeypress="return event.charCode >= 46 && event.charCode <= 57">
                                             </div>
                                         </div>
-                                        <div class="single-dash">
-                                            <div class="desh sp-select">
-                                                <label>-</label>
-                                            </div>
-                                        </div>
-                                        <div class="fit-fees">
-                                            <div class="fees sp-select">
-                                                <label>Introduction Fee 
-													<span type="button" class="tool-tip" data-bs-toggle="tooltip" data-bs-placement="top" title="Lorem Ipsum is simply dummy text of the printing and typesetting industry.">
-														<i class="fas fa-info"></i>
-													</span>
-													<p> {{$fitnessity_fee}}% Amount</p>
-												</label>
-                                                <label>Recurring Fee  
-													<span type="button" class="tool-tip" data-bs-toggle="tooltip" data-bs-placement="top" title="Lorem Ipsum is simply dummy text of the printing and typesetting industry.">
-														<i class="fas fa-info"></i>
-													</span>
-													<p> {{$recurring_fee}}% Amount</p>
-												</label>
-                                            </div>
-                                        </div>
-                                        <div class="single-equal">
-                                            <div class="equal sp-select">
-                                                <label>=</label>
-                                            </div>
-                                        </div>
-                                        <div class="estimated-earn">
-                                            <div class="cus-week-price earn sp-select">
-                                                <label>Weekday Estimated Earnings </label>
-                                                <input class="form-control" type="text" name="adult_estearn_{{$i}}{{$j}}" id="adult_estearn{{$i}}{{$j}}" value="{{@$price->adult_estearn}}"  onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$" value="">
-                                            </div>
-                                        </div>
-                                        <div class="estimated-earn Weekend{{$i}}{{$j}} @if(@$price->dispaly_section == 'weekdayprice') d-none @endif">
-                                            <div class="cus-week-price earn sp-select">
-                                                <label>Weekend Estimated Earnings </label>
-                                                <input class="form-control" type="text" name="weekend_adult_estearn_{{$i}}{{$j}}" id="weekend_adult_estearn{{$i}}{{$j}}" value="{{@$price->weekend_adult_estearn}}" onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$" value="">
-                                            </div>
-                                        </div>
+                                        
                                         <div class="col-md-12">
                                             <div class="mb-15 mt-15 checkbox-selection">
                                                 <input data-count="0"  type="checkbox" id="is_recurring_adult{{$i}}{{$j}}" name="is_recurring_adult_{{$i}}{{$j}}" @if(@$price->is_recurring_adult == '1') Checked value="1" @else value="0"" @endif onclick="openmodelbox({{$i}},{{$j}},'adult');" >
                                                 <button id="btn_recurring_adult{{$i}}{{$j}}" name="btn_recurring_adult_{{$i}}{{$j}}[]" type="button" data-count="0" class="btn btn-primary recurrint_id d-none" data-bs-toggle="modal" data-bs-target=".edit-adult{{$i}}{{$j}}" onclick="recurrint_id({{$i}},{{$j}},'adult');">Launch demo modal</button>
-                                                <label for="adults1" id="recurringtxtadult{{$i}}{{$j}}">Is This A Recurring Payment? Set the payment terms for Adults @if(@$price->is_recurring_adult == '1') {{$adultTxt}} <a href="" data-bs-toggle="modal" data-bs-target=".edit-adult{{$i}}{{$j}}" class="">Edit</a> ) <div class="delete-recurring" onclick="deleteRecurring('{{$i}}','{{$j}}','adult')"><i class="fas fa-trash-alt"></i></div> @endif </label>
+                                                <label for="adults1" id="recurringtxtadult{{$i}}{{$j}}">Is This A Recurring Payment? Set the payment terms for Adults @if(@$price->is_recurring_adult == '1') {{$adultTxt}} <a href="" data-bs-toggle="modal" data-bs-target=".edit-adult{{$i}}{{$j}}" class="">Edit</a>) <div class="delete-recurring" onclick="deleteRecurring('{{$i}}','{{$j}}','adult')"><i class="fas fa-trash-alt"></i></div> @endif </label>
                                             </div>
                                         </div>
                                     </div>
@@ -212,14 +180,14 @@
                     </div>
                 </div>
 
-                <div class="accordion nesting4-accordion custom-accordionwithicon accordion-border-box mt-3 displaysectiondiv{{$i}}{{$j}} {{@$price->child_cus_weekly_price != ''  ? '': 'd-none'}}" id="accor_nestingchild{{$i}}{{$j}}" >
+                <div class="accordion nesting4-accordion custom-accordionwithicon accordion-border-box mt-3 displaysectiondiv{{$i}}{{$j}} {{@$price->child_cus_weekly_price != ''  ? '': 'd-none'}}" id="accor_nestingchild{{$i}}{{$j}}">
                     <div class="accordion-item shadow">
                         <h2 class="accordion-header" id="accordionnesting4Example2">
-                            <button class="accordion-custom-btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_child{{$i}}{{$j}}" aria-expanded="false" aria-controls="accor_child{{$i}}{{$j}}">
+                            <button class="accordion-custom-btn accordion-button collapsed font-red" type="button" data-bs-toggle="collapse" data-bs-target="#accor_child{{$i}}{{$j}}" aria-expanded="false" aria-controls="accor_child{{$i}}{{$j}}">
                                 Prices Options for Children
                             </button>
                         </h2>
-                        <div id="accor_child{{$i}}{{$j}}" class="accordion-collapse collapse" aria-labelledby="accor_nestingchild{{$i}}{{$j}}" data-bs-parent="#accor_nestingchild{{$i}}{{$j}}">
+                        <div id="accor_child{{$i}}{{$j}}" class="accordion-collapse @if($displayType == 'child') show @else collapse @endif" aria-labelledby="accor_nestingchild{{$i}}{{$j}}" data-bs-parent="#accor_nestingchild{{$i}}{{$j}}">
                             <div class="accordion-body">
                                 <div class="container nopadding">
                                     <div class="row">
@@ -231,7 +199,7 @@
                                         </div>
                                         <div class="weekly-customer">
                                             <div class="cus-week-price sp-select">
-                                                <label>Weekday Price</label>
+                                                <label>Everyday Price</label>
                                                 <p> (Monday - Sunday)</p>
                                                 <input  name="child_cus_weekly_price_{{$i}}{{$j}}" id="child_cus_weekly_price{{$i}}{{$j}}" value="{{@$price->child_cus_weekly_price}}" onkeyup="changeWDayPrice({{$i}},{{$j}} ,'child');" type="text" class="form-control "onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$"></div> 
                                         </div>
@@ -247,46 +215,6 @@
                                                 <label>Any Discount? </label>
                                                 <p> (Recommended 10% to 15%)</p>
                                                 <input class="form-control" type="text" name="child_discount_{{$i}}{{$j}}" id="child_discount{{$i}}{{$j}}" value="{{@$price->child_discount}}" onkeyup="changeDiscount({{$i}},{{$j}},'child');"  onkeypress="return event.charCode >= 46 && event.charCode <= 57">
-                                            </div>
-                                        </div>
-                                        <div class="single-dash">
-                                            <div class="desh sp-select">
-                                                <label>-</label>
-                                            </div>
-                                        </div>
-                                        <div class="fit-fees">
-                                            <div class="fees sp-select">
-                                                <label>Introduction Fee 
-													<span type="button" class="tool-tip" data-bs-toggle="tooltip" data-bs-placement="top" title="Lorem Ipsum is simply dummy text of the printing and typesetting industry.">
-														<i class="fas fa-info"></i>
-													</span>
-													<p> {{$fitnessity_fee}}% Amount</p>
-												</label>
-                                                <label>Recurring Fee 
-													<span type="button" class="tool-tip" data-bs-toggle="tooltip" data-bs-placement="top" title="Lorem Ipsum is simply dummy text of the printing and typesetting industry.">
-														<i class="fas fa-info"></i>
-													</span>
-													<p> {{$recurring_fee}}% Amount</p>
-												</label>
-                                                
-                                                
-                                            </div>
-                                        </div>
-                                        <div class="single-equal">
-                                            <div class="equal sp-select">
-                                                <label>=</label>
-                                            </div>
-                                        </div>
-                                        <div class="estimated-earn">
-                                            <div class="cus-week-price earn sp-select">
-                                                <label>Weekday Estimated Earnings </label>
-                                                <input class="form-control" type="text" name="child_estearn_{{$i}}{{$j}}" id="child_estearn{{$i}}{{$j}}" value="{{@$price->child_estearn}}" onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$" >
-                                            </div>
-                                        </div>
-                                        <div class="estimated-earn Weekend{{$i}}{{$j}} @if(@$price->dispaly_section == 'weekdayprice') d-none @endif">
-                                            <div class="cus-week-price earn sp-select">
-                                                <label>Weekend Estimated Earnings </label>
-                                                <input class="form-control" type="text" name="weekend_child_estearn_{{$i}}{{$j}}" id="weekend_child_estearn{{$i}}{{$j}}" value="{{@$price->weekend_child_estearn}}" onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$" >
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -307,11 +235,11 @@
                 <div class="accordion nesting4-accordion custom-accordionwithicon accordion-border-box mt-3 displaysectiondiv{{$i}}{{$j}} {{@$price->infant_cus_weekly_price != ''  ? '': 'd-none'}}" id="accor_nestinginfant{{$i}}{{$j}}">
                     <div class="accordion-item shadow">
                         <h2 class="accordion-header" id="accordionnesting4Example2">
-                            <button class="accordion-custom-btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_infant{{$i}}{{$j}}" aria-expanded="false" aria-controls="accor_infant{{$i}}{{$j}}">
+                            <button class="accordion-custom-btn accordion-button collapsed font-red" type="button" data-bs-toggle="collapse" data-bs-target="#accor_infant{{$i}}{{$j}}" aria-expanded="false" aria-controls="accor_infant{{$i}}{{$j}}">
                                 Prices Options for Infants
                             </button>
                         </h2>
-                        <div id="accor_infant{{$i}}{{$j}}" class="accordion-collapse collapse" aria-labelledby="accor_nestinginfant{{$i}}{{$j}}" data-bs-parent="#accor_nestinginfant{{$i}}{{$j}}">
+                        <div id="accor_infant{{$i}}{{$j}}" class="accordion-collapse @if($displayType == 'infant') show @else collapse @endif" aria-labelledby="accor_nestinginfant{{$i}}{{$j}}" data-bs-parent="#accor_nestinginfant{{$i}}{{$j}}">
                             <div class="accordion-body">
                                 <div class="container nopadding">
                                     <div class="row">
@@ -323,7 +251,7 @@
                                         </div>
                                         <div class="weekly-customer">
                                             <div class="cus-week-price sp-select">
-                                                <label>Weekday Price</label>
+                                                <label>Everyday Price</label>
                                                 <p> (Monday - Sunday)</p>
                                                 <input  name="infant_cus_weekly_price_{{$i}}{{$j}}" id="infant_cus_weekly_price{{$i}}{{$j}}" value="{{@$price->infant_cus_weekly_price}}" onkeyup="changeWDayPrice({{$i}},{{$j}},'infant');" type="text" class="form-control" onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$">
                                             </div>
@@ -342,45 +270,8 @@
                                                 <input class="form-control" type="text" name="infant_discount_{{$i}}{{$j}}" id="infant_discount{{$i}}{{$j}}" onkeyup="changeDiscount({{$i}},{{$j}},'infant');" value="{{@$price->infant_discount}}"onkeypress="return event.charCode >= 46 && event.charCode <= 57">
                                             </div>
                                         </div>
-                                        <div class="single-dash">
-                                            <div class="desh sp-select">
-                                                <label>-</label>
-                                            </div>
-                                        </div>
-                                        <div class="fit-fees">
-                                            <div class="fees sp-select">
-                                                <label>Introduction Fee 
-													<span type="button" class="tool-tip" data-bs-toggle="tooltip" data-bs-placement="top" title="Lorem Ipsum is simply dummy text of the printing and typesetting industry.">
-														<i class="fas fa-info"></i>
-													</span>
-													<p> {{$fitnessity_fee}}% Amount</p>
-												</label>
-                                                <label>Recurring Fee 
-													<span type="button" class="tool-tip" data-bs-toggle="tooltip" data-bs-placement="top" title="Lorem Ipsum is simply dummy text of the printing and typesetting industry.">
-														<i class="fas fa-info"></i>
-													</span>
-													<p> {{$recurring_fee}}% Amount</p>
-												</label>
-                                                
-                                            </div>
-                                        </div>
-                                        <div class="single-equal">
-                                            <div class="equal sp-select">
-                                                <label>=</label>
-                                            </div>
-                                        </div>
-                                        <div class="estimated-earn">
-                                            <div class="cus-week-price earn sp-select">
-                                                <label>Weekday Estimated Earnings </label>
-                                                <input class="form-control" type="text" name="infant_estearn_{{$i}}{{$j}}" id="infant_estearn{{$i}}{{$j}}" value="{{@$price->infant_estearn}}" onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$" >
-                                            </div>
-                                        </div>
-                                        <div class="estimated-earn Weekend{{$i}}{{$j}} @if(@$price->dispaly_section == 'weekdayprice') d-none @endif">
-                                            <div class="cus-week-price earn sp-select">
-                                                <label>Weekend Estimated Earnings </label>
-                                                <input class="form-control" type="text" name="weekend_infant_estearn_{{$i}}{{$j}}" id="weekend_infant_estearn{{$i}}{{$j}}" value="{{@$price->weekend_infant_estearn}}" onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$">
-                                            </div>
-                                        </div>
+                                        
+
                                         <div class="col-md-12">
                                             <div class="mb-15 mt-15 checkbox-selection">
                                                 <input data-count="0"  type="checkbox" id="is_recurring_infant{{$i}}{{$j}}" name="is_recurring_infant_{{$i}}{{$j}}" @if(@$price->is_recurring_infant == '1') Checked value="1" @else value="0"  @endif  onclick="openmodelbox({{$i}},{{$j}},'infant');" >
@@ -397,7 +288,7 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="serviceprice mt-10">
+                        <div class="serviceprice mt-20">
                             <h3>When Does This Price Setting Expire</h3>
                         </div>
                     </div>
@@ -418,24 +309,11 @@
                             </select>
                         </div>
                     </div>
-                    <!-- <div class="col-lg-1 col-md-2 col-xs-12">
-                        <div class="set-num after">
-                            <label>After</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-5 col-md-10 col-xs-12">
-                        <div class="after-select">
-                            <select name="pay_after_{{$i}}{{$j}}" id="pay_after{{$i}}{{$j}}" class="pay_after form-control valid">
-                                <option value="1" {{@$price->pay_after =='1' ?'selected':'' }}>Starts to expire the day of purchase</option>
-                                <option value="2" {{@$price->pay_after =='2' ?'selected':'' }}>Starts to expire when the customer first participates in the activity</option>
-                            </select>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
 
-        <div class="modal fade edit-adult{{$i}}{{$j}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal fade modaldiv_new edit-adult{{$i}}{{$j}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-70">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -479,7 +357,7 @@
                                             </div>
                                             <div class="contract mb-10">
                                                 <label>  Total duration of contract: </label>
-                                                <p id="total_duration_adult{{$i}}{{$j}}"> {{@$price->recurring_nuberofautopays_adult == '' ?  "0 Week" : @$price->recurring_nuberofautopays_adult}} {{@$recurringStrAdult[1]}}  </p>
+                                                <p id="total_duration_adult{{$i}}{{$j}}"> {{@$price->recurring_nuberofautopays_adult == '' ?  "0 Week" : @$price->recurring_nuberofautopays_adult * ( @$recurringStrAdult[0] == '' ? 0 : @$recurringStrAdult[0] )}} {{@$recurringStrAdult[1]}}  </p>
                                             </div>
                                         </div>
                                     </div>
@@ -581,13 +459,13 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-red" data-bs-dismiss="modal">Submit</button>
+                        <button type="button" class="btn btn-primary btn-red"  @if(@$price) onclick="SubmitForm('{{@$price->id}}','adult','{{@$price->category_id}}');" @else data-bs-dismiss="modal" @endif>Submit</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="modal fade edit-child{{$i}}{{$j}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal fade modaldiv_new edit-child{{$i}}{{$j}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-70">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -629,7 +507,7 @@
                                             </div>
                                             <div class="contract mb-10">
                                                 <label>  Total duration of contract: </label>
-                                                <p id="total_duration_child{{$i}}{{$j}}"> {{@$price->recurring_nuberofautopays_child == '' ?  "0 Week" : @$price->recurring_nuberofautopays_child}} {{@$price->customer_charged_time_child}}  </p>
+                                                <p id="total_duration_child{{$i}}{{$j}}"> {{@$price->recurring_nuberofautopays_child == '' ?  "0 Week" : @$price->recurring_nuberofautopays_child *  ( @$recurringStrChild[0] == '' ? 0 : @$recurringStrChild[0] )}}   {{@$recurringStrChild[1]}}  </p>
                                             </div>
                                         </div>
                                     </div>
@@ -731,13 +609,13 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-red" data-bs-dismiss="modal">Submit</button>
+                        <button type="button" class="btn btn-primary btn-red" @if(@$price) onclick="SubmitForm('{{@$price->id}}','child','{{@$price->category_id}}');" @else data-bs-dismiss="modal" @endif>Submit</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="modal fade edit-infant{{$i}}{{$j}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal fade modaldiv_new edit-infant{{$i}}{{$j}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-70">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -779,7 +657,7 @@
                                             </div>
                                             <div class="contract mb-10">
                                                 <label>  Total duration of contract: </label>
-                                                <p id="total_duration_infant{{$i}}{{$j}}"> {{@$price->recurring_nuberofautopays_infant == '' ?  "0 Week" : @$price->recurring_nuberofautopays_infant}} {{@$recurringStrAdult[1]}}  </p>
+                                                <p id="total_duration_infant{{$i}}{{$j}}"> {{@$price->recurring_nuberofautopays_infant == '' ?  "0 Week" : @$price->recurring_nuberofautopays_infant *  ( @$recurringStrInfant[0] == '' ? 0 : @$recurringStrInfant[0] )}} {{@$recurringStrInfant[1]}}  </p>
                                             </div>
                                         </div>
                                     </div>
@@ -881,7 +759,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-red" data-bs-dismiss="modal">Submit</button>
+                        <button type="button" class="btn btn-primary btn-red" @if(@$price) onclick="SubmitForm('{{@$price->id}}','infant','{{@$price->category_id}}');" @else data-bs-dismiss="modal" @endif>Submit</button>
                     </div>
                 </div>
             </div>

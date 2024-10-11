@@ -41,13 +41,20 @@
 															<a href="{{route('business.credit_card_report.index')}}">Credit Card Expirations</a>
 														</div>
 														<div class="report-links">
-															<a href="#">Recurring Payments Details</a>
+															<a href="{{route('business.recurring_payments.index')}}">Recurring Payments Details</a>
 														</div>
 														<div class="report-links">
-															<a href="#">Tax Reports</a>
+															<a href="{{route('business.money_owed.index')}}">Money Owed Details</a>
 														</div>
+														<!-- <div class="report-links">
+															<a href="#">Tax Reports</a>
+														</div> -->
+														<div class="report-links">
+															<a href="{{route('business.refund.index')}}">Refund Details</a>
+														</div>
+
 														<div class="report-links remove-border">
-															<a href="#">Refund Details</a>
+															<a href="{{route('business.membership_revenue')}}">Memberships & Revenue Breakdown</a>
 														</div>
 													</div>
 												</div>												
@@ -64,13 +71,13 @@
 												<div class="card card-body box-border">
 													<div class="d-grid align-items-center">
 														<div class="report-links">
-															<a href="#">Bookings Today</a>
+															<a href="{{route('business.todays_booking.index')}}">Bookings Today</a>
 														</div>
 														<div class="report-links">
-															<a href="#">Bookings By Category</a>
+															<a href="{{route('business.booking_category')}}">Bookings By Category</a>
 														</div>
 														<div class="report-links remove-border">
-															<a href="#">Bookings History</a>
+															<a href="{{route('business.booking_history')}}">Bookings History</a>
 														</div>
 													</div>
 												</div>												
@@ -87,23 +94,27 @@
 												<div class="card card-body box-border">
 													<div class="d-grid align-items-center">
 														<div class="report-links">
-															<a href="#">Inactive Clients</a>
+															<a href="{{route('business.client.index')}}">Inactive Clients</a>
 														</div>
-														<div class="report-links">
+														<!-- <div class="report-links">
 															<a href="#">Attendance</a>
+														</div> -->
+														<div class="report-links">
+															<a href="{{route('business.client.birthday')}}">Client Birthday List</a>
 														</div>
 														<div class="report-links">
-															<a href="#">Client Birthday List</a>
+															<a href="{{route('business.client.new_client')}}">New Clients</a>
+														</div>
+
+														<div class="report-links">
+															<a href="{{route('business.client.contact_list')}}">Contact List</a>
 														</div>
 														<div class="report-links">
-															<a href="#">New Clients</a>
+															<a href="{{route('business.client.cancellation_noshow')}}">Cancellations & No Shows</a>
 														</div>
-														<div class="report-links">
-															<a href="#">Cancellations & No Shows</a>
-														</div>
-														<div class="report-links remove-border">
+														<!-- <div class="report-links remove-border">
 															<a href="#">Referral Details</a>
-														</div>
+														</div> -->
 													</div>
 												</div>												
 											</div>
@@ -112,32 +123,29 @@
 										<div class="row">
 											<div class="col-12 col-lg-4 col-md-4">
 												<div class="reports-title">
-													<label>Memberships </label>
+													<label>Memberships</label>
 												</div>
 											</div>
 											<div class="col-12 col-lg-6 col-md-8">
 												<div class="card card-body box-border">
 													<div class="d-grid align-items-center">
 														<div class="report-links">
-															<a href="#">Active Memberships</a>
+															<a href="{{route('business.active-membership.index')}}">Active Memberships</a>
 														</div>
 														<div class="report-links">
-															<a href="#">Active Memberships Not Being Used</a>
-														</div>
-														<!-- <div class="report-links">
-															<a href="">Total Memberships</a>
-														</div> -->
-														<div class="report-links">
-															<a href="#">Memberships Paused</a>
+															<a href="{{route('business.activity-not-used')}}">Active Memberships Not Being Used</a>
 														</div>
 														<div class="report-links">
-															<a href="#">Memberships Terminated</a>
+															<a href="{{route('business.membership-paused')}}">Memberships Paused</a>
+														</div>
+														<div class="report-links">
+															<a href="{{route('business.membership-terminated')}}">Memberships Terminated</a>
 														</div>
 														<div class="report-links">
 															<a href="{{route('business.member_expirations.index')}}">Expired Memberships</a>
 														</div>
 														<div class="report-links remove-border">
-															<a href="#">Membership Options by Popularity</a>
+															<a href="{{route('business.membership-popular')}}">Membership Options by Popularity</a>
 														</div>
 													</div>
 												</div>												
@@ -171,7 +179,7 @@
 												<div class="card card-body box-border">
 													<div class="d-grid align-items-center">
 														<div class="report-links remove-border">
-															<a href="#">Online Reviews</a>
+															<a href="{{route('business.online-review.index')}}">Online Reviews</a>
 														</div>
 													</div>
 												</div>												

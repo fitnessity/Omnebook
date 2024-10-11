@@ -55,7 +55,7 @@ class ProcessCustomerExcelData implements ShouldQueue
             if (empty($header)) {
                 $header = $row;
             } else {
-                if($this->company->customers()->where(['email'=> $row[12]])->exists()){
+                if($this->company->customers()->whereRaw('LOWER(lname) = ? AND LOWER(fname) = ? AND email = ?', [strtolower($row[0]), strtolower($row[1]), $row[12]])->exists()){
                     $skip .= implode(",", $row)."\n";
                 }else{
                     $createdata = new Customer;

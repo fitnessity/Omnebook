@@ -13,10 +13,20 @@
                <div class="row">
                   <div class="col">
                      <div class="h-100">
-                        <div class="row mb-3">
-							<div class="col-12">
+                        <div class="row mb-3 y-middle">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-12">
 								<div class="page-heading">
 									<label>Manage Customers</label>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+								<div class="multiple-options">
+									<div class="setting-icon">
+										<i class="ri-more-fill fs-26"></i>
+										<ul id="catUl0">
+											<li><a href="#" data-bs-toggle="modal" data-bs-target="#merge_customer"><i class="fas fa-plus text-muted"></i>Merge Clients</a></li>
+										</ul>
+									</div>
 								</div>
 							</div>
                             <!--end col-->
@@ -67,9 +77,9 @@
 																					<!--end col-->
 																					<div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 col-lg-auto order-last order-lg-0">
 																						<div class="flex-shrink-0 float-end mfloat-left small0width">
-																							<a href="#" data-bs-toggle="modal" data-bs-target=".editprofile" class="btn btn-black small0width">
+																							<!--<a href="#" data-bs-toggle="modal" data-bs-target=".editprofile" class="btn btn-black small0width">
 																								<i class="ri-edit-box-line align-bottom"></i> Edit Profile
-																							</a>
+																							</a> -->
 																							<div class="modal fade editprofile" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 																								<div class="modal-dialog modal-dialog-centered modal-50">
 																									<div class="modal-content">
@@ -1562,6 +1572,51 @@
         </div><!-- End Page-content -->
      </div><!-- end main content-->
 </div><!-- END layout-wrapper -->
+
+<!-- Modal -->
+<div class="modal fade" id="merge_customer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  	<div class="modal-dialog modal-dialog-centered modal-40">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Merge Customer</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form class="app-search d-md-block">
+                    <div class="position-relative mb-25">
+                        <input type="text" class="form-control" placeholder="Enter customer name or email" autocomplete="off" id="search-options" value="">
+                        <span class="mdi mdi-magnify search-widget-icon"></span>
+                        <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-close-options"></span>
+                    </div>
+                    <!--<div class="dropdown-menu dropdown-menu-lg" id="search-dropdown">
+                    
+                        <div class="text-center pt-3 pb-1">
+                            <a href="pages-search-results.html" class="btn btn-primary btn-sm">View All Results <i class="ri-arrow-right-line ms-1"></i></a>
+                        </div>
+                    </div> -->
+                </form>
+				<p>Select a customer below to merge this customer to. <span class="font-red">Note:</span> This cannot be undone once merged. All bookings and payments will transfer over to the selected customer below.  </p>
+				<a href="">
+					<div class="row y-middle">
+						<div class="col-sm-auto col-auto">
+							<div class="flex-shrink-0 avatar-sm ">
+								<span class="marge-customer-f-text avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">A</span>
+							</div>
+						</div>
+						<div class="col-lg-9 col-auto">
+							<h6 class="mb-1">Darryl Phipps</h6>
+							<p class="text-muted mb-0"> <strong>Email: </strong> darrylphipps@gmail.com </p>
+						</div>
+					</div>
+				</a>				
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-red">Merge Customers</button>
+			</div>
+		</div>
+  	</div>
+</div>
+
 
 <div class="modal fade view-visit" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-70">

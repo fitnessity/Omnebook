@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\URL;
 use Auth;
 use Illuminate\Http\Request;
-use App\{User,CompanyInformation,CustomerPlanDetails,Transaction,StripePaymentMethod,Plan};
+use App\{User,CompanyInformation,CustomerPlanDetails,Transaction,StripePaymentMethod,Plan,OnboardQuestions,SGMailService};
 use App\Repositories\FeaturesRepository;
 use Str;
 use DateTime;
@@ -62,7 +62,11 @@ class OnBoardedController extends Controller {
         $plans = Plan::get();
         $features = $this->features->getAllFeatures();
         $freePlan = Plan::where(['price_per_month'=>0 , 'price_per_year' => 0])->first();
-        return view('on-boarded.index',compact('show','cid','companyDetail','user','id','show','plans','features','freePlan'));
+        $faqs = OnboardQuestions::get();
+        if (session()->has('redirectToOnboard')) {
+            session()->forget('redirectToOnboard');
+        }
+        return view('on-boarded.index',compact('show','cid','companyDetail','user','id','show','plans','features','freePlan','faqs'));
     }
 
     public function store(Request $request){
@@ -70,11 +74,11 @@ class OnBoardedController extends Controller {
 
         $userDt = User::find($request->id);
         $companyDt = CompanyInformation::find($request->cid);
-
         if($request->step == 1){
 
             $show_step = 2;
-            if(Auth::check() || @$companyDt->id == ''){
+            $companyChk = CompanyInformation::where(['id'=>$request->cid , 'user_id' => @$userDt->id])->first();
+            if(Auth::check() || $companyChk || @$companyDt->id == ''){
                 $show_step = 3;
             }
         
@@ -153,6 +157,11 @@ class OnBoardedController extends Controller {
             @$userDt->update(['show_step'=>4]);
 
             $companyDetail  =  CompanyInformation::updateOrCreate(['id' => $request->cid],$company);
+
+            if ($companyDetail->wasRecentlyCreated) {
+                SGMailService::welcomeMailOfNewBusinessToCustomer(['cid'=> $companyDetail->id,'email' => @$userDt->email]);
+            }
+
             $data = [
                 'cid' => $companyDetail->id,
                 'id' => $companyDetail->user_id,
@@ -173,13 +182,13 @@ class OnBoardedController extends Controller {
         if($user){
             $user->update(['show_step' =>1]);
             $activePlan = $user->CustomerPlanDetails()->where('amount','!=',0)->whereDate('expire_date','>=',date('Y-m-d'))->whereDate('starting_date','<=',date('Y-m-d'))->latest()->first();
+            $company = $user->company;
         }
-
+        //$company = $user->company;
         $activePlan = @$activePlan ?? '';
         session()->put('redirectToOnboard', URL::full());
         return view('on-boarded.welcome_provider',compact('cid','activePlan','user'));
     }
-
     public function stripeDashboard(Request $request){
         $stripe_client = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $company = CompanyInformation::where('id', $request->cid)->first();

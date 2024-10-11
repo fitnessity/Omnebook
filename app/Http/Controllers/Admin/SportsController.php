@@ -41,9 +41,9 @@ class SportsController extends Controller
 
     public function index()
     {   
-        $loggedinAdmin = Auth::user();
+        $loggedinAdmin = auth()->guard('admin')->user();
         
-        if($loggedinAdmin->role == "admin"){
+        if($loggedinAdmin){
             
             $sportsList = $this->sports->getAllSports();
             $sportCatsObj = $this->sports_cats->getAllSportsCategories();
@@ -131,8 +131,8 @@ class SportsController extends Controller
 
     public function store(Request $request)
     {     
-        $loggedinAdmin = Auth::user();
-        if($loggedinAdmin->role == "admin"){
+        $loggedinAdmin = auth()->guard('admin')->user();
+        if($loggedinAdmin){
             $arr = $request->all();
 
             if(@$arr['parent_sport_id'] > 0){
@@ -244,8 +244,8 @@ class SportsController extends Controller
 
      public function getEdit($id)
     {
-        $loggedinAdmin = Auth::user();
-        if($loggedinAdmin->role == "admin"){
+        $loggedinAdmin = auth()->guard('admin')->user();
+        if($loggedinAdmin){
             
             $sport_details = $this->sports->getSportDetail($id);
             $parent_sports = $this->sports->getParentSportsList($id);
@@ -268,8 +268,8 @@ class SportsController extends Controller
 
     public function postEdit(Request $request)
     { 
-        $loggedinAdmin = Auth::user();
-        if($loggedinAdmin->role == "admin"){
+        $loggedinAdmin = auth()->guard('admin')->user();
+        if($loggedinAdmin){
             
             $input = $request->all();
             if(@$input['parent_sport_id'] > 0){
