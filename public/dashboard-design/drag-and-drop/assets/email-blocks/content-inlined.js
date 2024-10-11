@@ -19,7 +19,8 @@ var _snippets_path = _path();
 
 var data_basic = {
 	'snippets': [
-
+		
+		
 
 		{
 			'thumbnail': 'preview/001.png',
@@ -1150,6 +1151,554 @@ var data_basic = {
 
 		},
 
+		// only img
+		{
+			'thumbnail': 'preview/127.png',
+			'category': '14',
+			'html':
+
+				'<div>' +
+				'<table align="center" class="float-center" style="Margin: 0 auto; background: transparent; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-4 columns first" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; text-align: left; width: 167.33333px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th>' +
+				'<center style="width: 100%;"><img src="/dashboard-design/drag-and-drop/assets/email-blocks/images/127.jpg" align="center" class="float-center" style="-ms-interpolation-mode: bicubic; Margin: 0 auto; clear: both; display: block; float: none; margin: 0 auto; max-width: 100%; outline: none; text-align: center; text-decoration: none; width: 100%;"></center>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</div>'
+		},
+
+		// only img
+		{
+			'thumbnail': 'preview/131.png',
+			'category': '14',
+			'html':
+
+				'<div>' +
+				'<table align="center" class="float-center" style="Margin: 0 auto; background: transparent; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-4 columns first" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; text-align: left; width: 167.33333px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th>' +
+				'<center style="width: 100%;"><img src="/dashboard-design/drag-and-drop/assets/email-blocks/images/131.jpg" align="center" class="float-center" style="-ms-interpolation-mode: bicubic; Margin: 0 auto; clear: both; display: block; float: none; margin: 0 auto; max-width: 100%; outline: none; text-align: center; text-decoration: none; width: 100%;"></center>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</div>'
+		},
+
+		// only img
+		{
+			'thumbnail': 'preview/134.png',
+			'category': '14',
+			'html':
+
+				'<div>' +
+				'<table align="center" class="float-center" style="Margin: 0 auto; background: transparent; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-4 columns first" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; text-align: left; width: 167.33333px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th>' +
+				'<center style="width: 100%;"><img src="/dashboard-design/drag-and-drop/assets/email-blocks/images/134.jpg" align="center" class="float-center" style="-ms-interpolation-mode: bicubic; Margin: 0 auto; clear: both; display: block; float: none; margin: 0 auto; max-width: 80%; outline: none; text-align: center; text-decoration: none; width: 80%;"></center>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</div>'
+		},
+		
+		{
+			'thumbnail': 'preview/123.png',
+			'category': '14',
+			'html':
+
+				'<div>' +
+				'<table align="center" class="container float-center" style="Margin: 0 auto; background: transparent; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 640px;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table class="row" style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-4 columns first" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; padding-left: 26px; padding-right: 13px; text-align: left; width: 167.33333px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th style="Margin: 0; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0; padding: 0; text-align: left;">' +
+				'<center data-parsed="" style="min-width: 502px; width: 100%;"><img src="/dashboard-design/drag-and-drop/assets/email-blocks/images/image.png" align="middle" class="float-center" style="-ms-interpolation-mode: bicubic; Margin: 0 auto; clear: both; display: block; float: none; height: 80px; margin: 0 auto; max-width: 100%; outline: none; text-align: center; text-decoration: none; width: 240px;"></center>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</div>'
+		},
+
+		{
+			'thumbnail': 'preview/text.png',
+			'category': '14',
+			'html':
+
+				'<div>' +
+				'<table align="center" class="container float-center" style="Margin: 0 auto; background: transparent; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 640px;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table class="row" style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-12 columns first last" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; padding-left: 26px; padding-right: 26px; text-align: left; width: 554px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th style="Margin: 0; color: #fff; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0; padding: 0; text-align: left;">' +
+				'<h3 class="text-center" style="Margin: 0; Margin-bottom: 10px; color: #fff; font-family: Inter,sans-serif; font-size: 26px; font-weight: bold; line-height: 1.7; margin: 12px 0; margin-bottom: 10px; padding: 0; text-align: center; word-wrap: normal; letter-spacing: 2px;"> Black Friday </h3>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</div>'
+		},
+
+		{
+			'thumbnail': 'preview/133.png',
+			'category': '14',
+			'html':
+
+				'<div>' +
+				'<table align="center" class="container float-center" style="Margin: 0 auto; background: transparent; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 640px;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table class="row" style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-12 columns first last" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; padding-left: 26px; padding-right: 26px; text-align: left; width: 554px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th style="Margin: 0; color: #fff; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0; padding: 0; text-align: left;">' +
+				'<h3 class="text-center" style="Margin: 0; Margin-bottom: 10px; color: #fff; font-family: Inter,sans-serif; font-size: 26px; font-weight: bold; line-height: 1.7; margin: 12px 0; margin-bottom: 10px; padding: 0; text-align: center; word-wrap: normal; text-transform: uppercase; letter-spacing: 9px;"> Annual Holiday Sale </h3>' +
+				'<p class="text-center" style="Margin: 0; Margin-bottom: 10px; font-family: Inter,sans-serif; font-weight: normal; margin: 0; margin-bottom: 10px; padding: 0; text-align: center; line-height: 1.4; color: #fff;">Check out the deals on some of our favorites. These specials wont last for long so check them out while you can! </p>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+
+				'<table align="center" class="container float-center" style="Margin: 0 auto; background: transparent; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 640px;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table class="" style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-12 columns first last" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; padding-left: 26px; padding-right: 26px; text-align: left; width: 554px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th style="Margin: 0; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0; padding: 0; text-align: left;">' +
+				'<center data-parsed="" style="min-width: 502px; width: 100%;">' +
+				'<table class="button small float-center" style="Margin: 0 0 16px 0; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 0 16px 0; padding: 0; text-align: center; vertical-align: top; width: auto;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; background: #c40056; border: 1px solid #c40056; border-collapse: collapse !important; color: #fff; font-family: Lato, sans-serif; font-size: 12px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 5px 10px 5px 10px; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<a href="#" align="center" title="" style="Margin: 0; border: 0 solid #c40056; border-radius: 3px; color: #fff; display: inline-block; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: bold; line-height: 1.7; margin: 0; padding: 5px 10px 5px 10px; text-align: left; text-decoration: none; text-transform: uppercase; letter-spacing: 3px;">Shop Now</a>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'<td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0 !important; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-wrap: break-word;"></td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</center>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</div>'
+		},
+
+		{
+			'thumbnail': 'preview/132.png',
+			'category': '14',
+			'html':
+
+				'<div>' +
+				'<table align="center" class="container float-center" style="Margin: 0 auto; background: transparent; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 640px;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table class="row" style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-12 columns first last" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; padding-left: 26px; padding-right: 26px; text-align: left; width: 554px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th style="Margin: 0; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0; padding: 0; text-align: left;">' +
+				'<h3 class="text-center" style="Margin: 0; Margin-bottom: 10px; color: inherit; font-family: Inter,sans-serif; font-size: 25px; font-weight: bold; line-height: 1.7; margin: 12px 0; margin-bottom: 10px; padding: 0; text-align: center; word-wrap: normal; text-transform: uppercase; "> Holiday Sale </h3>' +
+				'<p class="text-center" style="Margin: 0; Margin-bottom: 10px; font-family: Inter,sans-serif; font-weight: normal; margin: 0; margin-bottom: 10px; padding: 0; text-align: center; line-height: 1.4; color: #7e7e7e;">This holiday season, make sure to get everyone on your list something special. Take a look at some of our favourites </p>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+
+				'<table align="center" class="container float-center" style="Margin: 0 auto; background: transparent; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 640px;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table class="" style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-12 columns first last" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; padding-left: 26px; padding-right: 26px; text-align: left; width: 554px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th style="Margin: 0; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0; padding: 0; text-align: left;">' +
+				'<center data-parsed="" style="min-width: 502px; width: 100%;">' +
+				'<table class="button small float-center" style="Margin: 0 0 16px 0; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 0 16px 0; padding: 0; text-align: center; vertical-align: top; width: auto;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; background: #d70000; border: 1px solid #d70000; border-collapse: collapse !important; color: #fff; font-family: Lato, sans-serif; font-size: 12px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 5px 10px 5px 10px; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<a href="#" align="center" title="" style="Margin: 0; border: 0 solid #d70000; border-radius: 3px; color: #fff; display: inline-block; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: bold; line-height: 1.7; margin: 0; padding: 5px 10px 5px 10px; text-align: left; text-decoration: none; text-transform: uppercase; letter-spacing: 3px;">Shop Now</a>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'<td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0 !important; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-wrap: break-word;"></td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</center>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</div>'
+		},
+
+		{
+			'thumbnail': 'preview/128.png',
+			'category': '14',
+			'html':
+
+				'<div>' +
+				'<table align="center" class="container float-center" style="Margin: 0 auto; background: transparent; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 640px;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table class="row" style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-12 columns first last" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; padding-left: 26px; padding-right: 26px; text-align: left; width: 554px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th style="Margin: 0; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0; padding: 0; text-align: left;">' +
+				'<h3 class="text-center" style="Margin: 0; Margin-bottom: 10px; color: inherit; font-family: Inter,sans-serif; font-size: 25px; font-weight: bold; line-height: 1.7; margin: 12px 0; margin-bottom: 10px; padding: 0; text-align: center; word-wrap: normal; text-transform: uppercase; "> this is just the beginning. </h3>' +
+				'<p class="text-center" style="Margin: 0; Margin-bottom: 10px; font-family: Inter,sans-serif; font-weight: normal; margin: 0; margin-bottom: 10px; padding: 0; text-align: center; line-height: 1.4; color: #7e7e7e;">Offers available for a limited time only are a great way to draw people in, create a sense of urgency, and get them to convert.</p>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+
+				'<table align="center" class="container float-center" style="Margin: 0 auto; background: transparent; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 640px;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table class="row" style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-12 columns first last" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; padding-left: 26px; padding-right: 26px; text-align: left; width: 554px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th style="Margin: 0; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0; padding: 0; text-align: left;">' +
+				'<center data-parsed="" style="min-width: 502px; width: 100%;">' +
+				'<table class="button small float-center" style="Margin: 0 0 16px 0; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 0 16px 0; padding: 0; text-align: center; vertical-align: top; width: auto;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; background: #212529; border: 1px solid #212529; border-collapse: collapse !important; color: #fff; font-family: Lato, sans-serif; font-size: 12px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 5px 10px 5px 10px; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<a href="#" align="center" title="" style="Margin: 0; border: 0 solid #212529; border-radius: 3px; color: #fff; display: inline-block; font-family: Helvetica, Arial, sans-serif; font-size: 10px; font-weight: bold; line-height: 1.7; margin: 0; padding: 5px 10px 5px 10px; text-align: left; text-decoration: none; text-transform: uppercase; letter-spacing: 2px;">see all offers</a>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'<td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0 !important; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-wrap: break-word;"></td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</center>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</div>'
+		},
+
+		{
+			'thumbnail': 'preview/126.png',
+			'category': '14',
+			'html':
+
+				'<div>' +
+				'<table align="center" class="container float-center" style="Margin: 0 auto; background: transparent; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 640px;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table class="row" style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-12 columns first last" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; padding-left: 26px; padding-right: 26px; text-align: left; width: 554px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th style="Margin: 0; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0; padding: 0; text-align: left;">' +
+				'<h3 class="text-center" style="Margin: 0; Margin-bottom: 10px; color: inherit; font-family: Inter,sans-serif; font-size: 23px; font-weight: bold; line-height: 1.7; margin: 12px 0; margin-bottom: 10px; padding: 0; text-align: center; word-wrap: normal; letter-spacing: 5px; text-transform: uppercase; "> Big Savings.</h3>' +
+				'<p class="text-center" style="Margin: 0; Margin-bottom: 10px; color: #0a0a0a; font-family: Inter,sans-serif; font-size: 28px; font-weight: bold; line-height: 1.7; margin: 0; margin-bottom: 10px; padding: 0; text-align: center; letter-spacing: 5px; text-transform: uppercase;">unlimited fashion.</p>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+
+				'<table align="center" class="container float-center" style="Margin: 0 auto; background: transparent; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 640px;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table class="row" style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-12 columns first last" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; padding-left: 26px; padding-right: 26px; text-align: left; width: 554px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th style="Margin: 0; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0; padding: 0; text-align: left;">' +
+				'<center data-parsed="" style="min-width: 502px; width: 100%;">' +
+				'<table class="button small float-center" style="Margin: 0 0 16px 0; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 0 16px 0; padding: 0; text-align: center; vertical-align: top; width: auto;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; background: #fff; border: 1px solid #212529; border-collapse: collapse !important; color: #212529; font-family: Lato, sans-serif; font-size: 12px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 5px 10px 5px 10px; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<a href="#" align="center" title="" style="Margin: 0; border: 0 solid #212529; border-radius: 3px; color: #212529; display: inline-block; font-family: Helvetica, Arial, sans-serif; font-size: 17px; font-weight: bold; line-height: 1.7; margin: 0; padding: 5px 10px 5px 10px; text-align: left; text-decoration: none; text-transform: uppercase; letter-spacing: 2px;">unlimited fashion</a>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'<td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0 !important; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-wrap: break-word;"></td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</center>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</div>'
+		},
+
+		{
+			'thumbnail': 'preview/129.png',
+			'category': '14',
+			'html':
+
+				'<div>' +
+				'<table align="center" class="float-center" style="Margin: 0 auto; background: #212529; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 100%; margin-top: 15px;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-12 columns first last" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; padding-left: 26px; padding-right: 26px; text-align: left; width: 554px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th style="Margin: 0; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0; padding: 0; text-align: left;">' +
+				'<h3 class="text-center" style="Margin: 0; Margin-bottom: 10px; color: #fff; font-family: Inter,sans-serif; font-size: 23px; font-weight: bold; line-height: 1.7; margin: 12px 0; margin-bottom: 10px; padding: 0; text-align: center; word-wrap: normal; text-decoration: underline;"> Follow us</h3>' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th style="Margin: 0; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; display: table;">' +
+				'<center data-parsed="" style="width: 45px; display: inline-block; min-width: 45px;"><img src="/dashboard-design/drag-and-drop/assets/email-blocks/images/130.png" align="center" class="float-center" style="-ms-interpolation-mode: bicubic; Margin: 0 auto; clear: both; display: block; float: none; margin: 0 auto; max-width: 100%; outline: none; text-align: center; text-decoration: none; width: 25px;"></center>' +
+				'<center data-parsed="" style="width: 45px; display: inline-block; min-width: 45px;"><img src="/dashboard-design/drag-and-drop/assets/email-blocks/images/130.png" align="center" class="float-center" style="-ms-interpolation-mode: bicubic; Margin: 0 auto; clear: both; display: block; float: none; margin: 0 auto; max-width: 100%; outline: none; text-align: center; text-decoration: none; width: 25px;"></center>' +
+				'<center data-parsed="" style="width: 45px; display: inline-block; min-width: 45px;"><img src="/dashboard-design/drag-and-drop/assets/email-blocks/images/130.png" align="center" class="float-center" style="-ms-interpolation-mode: bicubic; Margin: 0 auto; clear: both; display: block; float: none; margin: 0 auto; max-width: 100%; outline: none; text-align: center; text-decoration: none; width: 25px;"></center>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: center; vertical-align: top; width: 100%; margin-top: 15px;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: center; vertical-align: top;">' +
+				'<td style="Margin: 0; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0; padding: 0; text-align: left; display: inline-block;">' +
+				'<h3 class="text-center" style="Margin: 0; Margin-bottom: 10px; color: #fff; font-family: Inter,sans-serif; font-size: 14px; font-weight: normal; line-height: 1.7; margin: 12px 0; margin-bottom: 10px; padding: 0; text-align: center; word-wrap: normal; display: inline; text-transform: uppercase;"> Contact Us </h3>' +
+				'<h3 class="text-center" style="Margin: 0; Margin-bottom: 10px; color: #fff; font-family: Inter,sans-serif; font-size: 14px; font-weight: normal; line-height: 1.7; margin: 12px 0; margin-bottom: 10px; padding: 0; text-align: center; word-wrap: normal; display: inline list-item; text-transform: uppercase;"> Privacy Policy </h3>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</div>'
+		},
+		
 		{
 			'thumbnail': 'preview/029.png',
 			'category': '14',
@@ -1387,6 +1936,60 @@ var data_basic = {
 				'</div>'
 
 		},
+		
+		{
+			'thumbnail': 'preview/btn.png',
+			'category': '14',
+			'html':
+
+				'<div>' +
+				'<table align="center" class="container float-center" style="Margin: 0 auto; background: transparent; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 640px;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table class="" style="border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th class="small-12 large-12 columns first last" style="Margin: 0 auto; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0 auto; padding: 0; padding-bottom: 16px; padding-left: 26px; padding-right: 26px; text-align: left; width: 554px;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<th style="Margin: 0; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.7; margin: 0; padding: 0; text-align: left;">' +
+				'<center data-parsed="" style="min-width: 502px; width: 100%;">' +
+				'<table class="button small float-center" style="Margin: 0 0 16px 0; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 0 16px 0; padding: 0; text-align: center; vertical-align: top; width: auto;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">' +
+				'<tbody>' +
+				'<tr style="padding: 0; text-align: left; vertical-align: top;">' +
+				'<td style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; background: #000; border: 1px solid #000; border-collapse: collapse !important; color: #fff; font-family: Lato, sans-serif; font-size: 12px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 5px 10px 5px 10px; text-align: left; vertical-align: top; word-wrap: break-word;">' +
+				'<a href="#" align="center" title="" style="Margin: 0; border: 0 solid #fff; border-radius: 3px; color: #fff; display: inline-block; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: bold; line-height: 1.7; margin: 0; padding: 5px 10px 5px 10px; text-align: left; text-decoration: none; text-transform: uppercase; letter-spacing: 3px;">Button</a>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'<td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0; border-collapse: collapse !important; color: #0a0a0a; font-family: Lato, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.7; margin: 0; padding: 0 !important; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-wrap: break-word;"></td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</center>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</th>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</td>' +
+				'</tr>' +
+				'</tbody>' +
+				'</table>' +
+				'</div>'
+
+		},
 
 		{
 			'thumbnail': 'preview/031.png',
@@ -1447,6 +2050,7 @@ var data_basic = {
 				'</div>'
 
 		},
+
 
 		{
 			'thumbnail': 'preview/032.png',
@@ -6593,6 +7197,9 @@ var data_basic = {
 				'</div>'
 
 		}
+
+		
+		
 
 
 

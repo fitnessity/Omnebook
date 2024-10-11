@@ -140,6 +140,12 @@
 	.imt-25{margin-top: 25px;}
 	.finish-modal-80 {	max-width: 97%;  }
 	#sidebar-wrapper{margin-left: -70px;}
+	:is([data-layout="vertical"], [data-layout="semibox"])[data-sidebar-size="sm"] .main-content #client_wrapper #sidebar-wrapper {
+		margin-left: -250px;
+	}
+	.blast-email{display: block;}
+	.e-two-left{ margin-left: 0px; }
+	.set-on-bottom { margin-top: 20px; }
 
 }
 
@@ -457,7 +463,17 @@
 	.mb-mv-25{padding: 25px; padding-bottom: 70px;}
 	.mr-5{margin-right: 5px;}
 	.pairets{padding: 10px 7px;}
-}
+	.blast-email{display: block;}
+	.blast-email input {display: inline;}
+	.blast-email label {display: inline;}
+	.e-two-left{ margin-left: 0px; }
+	.on-valor-txt{float: left; margin-bottom: 0px;}
+	.von-address p{margin-bottom: 0px; float: left;}
+	.on-valor-txt.badge-on-valor{float: right; margin-bottom: 15px;}
+	.set-on-bottom {margin-top: 25px; }
+	.post-on-img img{margin-top: 6px;}
+	.hiddenCB label{padding: 8px 11px;}
+} 
 
 
 
@@ -470,8 +486,7 @@
 	.space-set{width: 100% !important;}
 	.w-50px {width: 100px; }
 	.powerby img{  width: 225px;}
-	.show-all .table-inner-data-sec .p-name { width: 68% !important; }
-	
+	.show-all .table-inner-data-sec .p-name { width: 68% !important; }	
 }
 
 @media screen and (min-width: 280px) and (max-width: 350px){
