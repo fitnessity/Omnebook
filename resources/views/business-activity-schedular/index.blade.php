@@ -157,7 +157,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																						</div>
 																						--}}
 																						<div class="col-md-12 col-xs-12 ">
-																							<label>Activity Name: </label> <span> {{$cList->BusinessServices->program_name}}</span>
+																							<label>Activity Name: </label> <span> {{$cList->BusinessServices->program_name}} </span>
 																						</div>
 																						<div class="col-md-12 col-xs-12">
 																							<div class="text-left line-height-1">
@@ -231,6 +231,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																							<div class="col-md-4 col-sm-5 col-xs-12">
 																								<div class="classes-time">
 																									<button class="post-btn {{$class}} activity-scheduler" onclick="openPopUp({{$scary->id}} , {{$cList->BusinessServices->id}} ,'{{$cList->BusinessServices->program_name}}','{{$timeOfActivity}}',{{$grayBtnChk}},'{{$scary->category_id}}');"  {{ $SpotsLeftdis == 0 ?  "disabled" : ''}}  {{ $canceldata != '' ?  "disabled" : ''}} >{{$timeOfActivity}} <br>{{$duration}}</button>
+																									
 																									<label>{{ $SpotsLeftdis == 0 ? 
 																										"Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</label>
 

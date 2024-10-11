@@ -20,12 +20,12 @@ if(!empty(@$response)){
                 <div class="register_wrap" id="signup_normal">
                     <input type="hidden" id="showstep" value="">
                     <div class="logo-my">
-                        <a href="javascript:void(0)"> <img src="{{ asset('public/images/logo-small.jpg')}}" alt="Fitnessity"> </a>
+                        <a href="javascript:void(0)"> <img src="{{ asset('/public/images/omnebook.png')}}" alt="Fitnessity"> </a>
                     </div>               
                     <form method="post" action="{{route('auth/userlogin')}}">
                         {{ csrf_field() }}
-                        <div class="pop-title ftitle1">
-                            <h3>Welcome to <br> fitnessity</h3>
+                        <div class="pop-title ftitle1"> 
+                            <h3>Welcome to <br> Omnebook</h3>
                         </div>
                         <br/> 
 
@@ -88,7 +88,7 @@ if(!empty(@$response)){
         
     </div>
 </section>
-@include('layouts.business.footer')
+@include('layouts.footer')
 <script>
     $(document).ready(function() {
 

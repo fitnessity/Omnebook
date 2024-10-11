@@ -12,6 +12,9 @@
     .Zebra_DatePicker_Icon_Wrapper{
         padding: 0 !important;
     }
+    #frmregister .error {
+        margin-left: 0;
+    }
 
 </style>
 <section class="register ptb-65" style="background-image: url({{ asset('public/images/register-bg.jpg')}})">
@@ -22,11 +25,11 @@
                 <!--{{$show_step}}-->
                 @if($show_step == 1)
                 <div class="logo-my">
-                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/logo-small.jpg')}}" alt="Fitnessity"> </a>
+                    <a href="javascript:void(0)"> <img src="{{ asset('/public/images/omnebook.png')}}" alt="Fitnessity"> </a>
                 </div>
                 <form id="frmregister" method="post">
                     <div class="pop-title ftitle1">
-                        <h3>Welcome to fitnessity</h3>
+                        <h3>Welcome to Omnebook</h3> 
                     </div>
                     <div id='systemMessage'></div>
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
@@ -819,7 +822,7 @@
                     $("#systemMessage").html('');
                 },             
                 success: function (response) {                    
-                    $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');  
+                    $("#systemMessage").html(response.msg).addClass('alert-class alert-danger fs-14');  
                 }
             });
     });

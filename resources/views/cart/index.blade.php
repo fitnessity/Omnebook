@@ -1,7 +1,6 @@
 @inject('request', 'Illuminate\Http\Request')
 
-@extends('layouts.header')
-
+@extends('layouts.business.header')
 @section('content')
 
 <link rel="stylesheet" href="{{url('/public/css/compare/style.css')}}">
@@ -26,5 +25,5 @@
     </div>
     
 </div>
-@include('layouts.footer')
+@include('layouts.business.footer')
 @endsection

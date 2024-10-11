@@ -30,7 +30,7 @@
             <div class="content-page">
                 <div class="container-fluid">
                     <div class="page-title-box">
-                        <h4 class="page-title">Schedule</h4>
+                        <h4 class="page-title">Schedule </h4>
                     </div>
                     <div class="edit_profile_section padding-1 white-bg border-radius1">
                         <div id='calendar'>
