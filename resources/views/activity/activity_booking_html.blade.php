@@ -192,6 +192,12 @@
 
                 <div class="row" id="participantDiv">
                 </div>
+                @else
+                    <label class="mb-10 fw-600">Step: 6 </label> <span class=""> Select Who's Participating</span>
+                    <div class="border-bottom-grey mb-15"></div>
+                    <div class="row" id="participantDiv">
+                        <p class="text-center font-red mb-15">Login to select who's participating now or select in the cart.</p>
+                    </div>
                 @endif
 
                 <label class="mb-10 fw-600">Step: 7 </label> <span class=""> Select Add-On Service (Optional)</span>
@@ -353,7 +359,9 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group mb-10">
                                         @php 
-                                            $company_data=Auth::user()->current_company 
+                                             if (Auth::check()) {
+                                            $company_data=Auth::user()->current_company;
+                                             }
                                         @endphp
                                         @if(!empty($company_data))
                                             <input type="hidden" name="business_id" value="{{$company_data->id}}">
@@ -457,11 +465,9 @@
         var adultCount = $('#adultCount').val();
         var childCount = $('#childCount').val();
         var infantCount = $('#infantCount').val();
-
         var aosId = $('#addOnServicesId').val();
         var aosQty = $('#addOnServicesQty').val();
         var aosPrice = $('#addOnServicesTotalPrice').val();
-      
         // my code start
         var participantValues = [];
         $('.familypart').each(function() {
@@ -499,3 +505,4 @@
         // ends
     }
 </script>
+

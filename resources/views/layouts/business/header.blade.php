@@ -320,7 +320,7 @@ $total_quantity = 0;
 						<div class="menu_nav">
                 
 						<div class="logo-header">
-						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/fitnessity_logo1_black.png') }}"> </a>
+						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/omnebook.png') }}"> </a>
 						</div>
 					
 						<div class="top-area">
