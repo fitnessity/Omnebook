@@ -166,7 +166,7 @@
     padding:3px 5px;
     margin:3px 5px 3px 0;
     color:#fff;
-    background-color:#f53b49;
+    background-color:#98002e;
     border-radius:4px;
     animation-name:scaleIn;
     animation-duration:.2s;
@@ -262,7 +262,7 @@
     vertical-align:middle
 }
 .ss-main .ss-content .ss-search input:focus{
-    box-shadow:0 0 5px #f53b49
+    box-shadow:0 0 5px #98002e
 }
 .ss-main .ss-content .ss-search .ss-addable{
     display:inline-flex;
@@ -299,7 +299,7 @@
 }
 .ss-main .ss-content .ss-list .ss-optgroup-label-selectable:hover{
     color:#fff;
-    background-color:#f53b49
+    background-color:#98002e
 }
 .ss-main .ss-content .ss-list .ss-option{
     padding:6px 10px;
@@ -311,7 +311,7 @@
 }
 .ss-main .ss-content .ss-list .ss-option.ss-highlighted,.ss-main .ss-content .ss-list .ss-option:hover{
     color:#fff;
-    background-color:#f53b49
+    background-color:#98002e
 }
 .ss-main .ss-content .ss-list .ss-option.ss-disabled{
     cursor:default;

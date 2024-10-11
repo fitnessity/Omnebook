@@ -152,7 +152,7 @@
     font-size: 16px;
     font-weight: 600;
     color: #ffffff;
-    border-bottom: 2px solid #ea1515;
+    border-bottom: 2px solid #98002e;
     margin-bottom: 15px;
 }*/
 
@@ -183,7 +183,7 @@
 #sidebar-menu > ul > li > a:hover {
     color: #ffffff;
     text-decoration: none;
-    background: #ea1515;
+    background: #98002e;
 }
 
 #sidebar-menu > ul > li > a > span {
@@ -199,7 +199,7 @@
 
 #sidebar-menu > ul > li.active > a {
     color: #ffffff !important;
-    background-color: #ea1515;
+    background-color: #98002e;
 }
 
 .submenu li a {
@@ -392,7 +392,7 @@
 .page-wrapper .form-control:focus {
     color: #495057;
     background-color: #fff;
-    border-color: #ea1515;
+    border-color: #98002e;
     outline: 0;
     box-shadow: none;
 }
@@ -402,7 +402,7 @@
 }
 
 .edit-links {
-    color: #ea1515;
+    color: #98002e;
     text-transform: uppercase;
     font-size: 9px;
     font-weight: 700;
@@ -662,7 +662,7 @@
     overflow: hidden;
     border: 5px solid #ddd;
     vertical-align: middle;
-	background-color: #ea1515;
+	background-color: #98002e;
 }
 .followers-block .followers-content .admin-img-text p{ font-size:32px; text-align: center; padding: 16% 0px; color: #fff;
     font-weight: bold; text-transform: uppercase; }
@@ -956,7 +956,7 @@
 .bookings-block .nav-tabs .nav-item.show .nav-link,
 .bookings-block .nav-tabs .nav-link.active,
 .bookings-block .nav-tabs .nav-link:hover {
-    color: #ea1515 !important;
+    color: #98002e !important;
     background-color: #fff;
     text-decoration: 3px underline;
     border: 0px !important;
@@ -1137,7 +1137,7 @@
 	text-align: center;
 }
 .btn-booking-red{
-	background: #ea1515 !important;
+	background: #98002e !important;
     color: #fff !important;
 }
 .boxes_arts .foterboxes .threebtn_fboxes a {
@@ -1231,7 +1231,7 @@
 }
 
 #calendar .fc-right .fc-button-group .fc-button {
-    background: #ea1515;
+    background: #98002e;
     color: #fff;
     padding: 0 2em;
     height: 33px;
@@ -1267,7 +1267,7 @@
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
 }
-#calendar .fc-left .fc-button-group .fc-prev-button, #calendar .fc-left .fc-button-group .fc-next-button{ background: #ea1515; color: #fff; }
+#calendar .fc-left .fc-button-group .fc-prev-button, #calendar .fc-left .fc-button-group .fc-next-button{ background: #98002e; color: #fff; }
 #calendar .fc-left .fc-today-button{ background: #2d2d2d; color: #fff;  }
 
 .fc-state-default.fc-corner-right {
@@ -1339,7 +1339,7 @@
     font-size: .85em;
     line-height: 1.3;
     border-radius: 3px;
-    border: 1px solid #ea1515;
+    border: 1px solid #98002e;
     background-color: #ffe0e0 !important;
     color: #000000;
 }
@@ -1350,8 +1350,8 @@
 }
 
 .calendar_modal .modal-footer .btn.btn-primary.submit-btn.save-event {
-    background-color: #ea1515;
-    border-color: #ea1515;
+    background-color: #98002e;
+    border-color: #98002e;
 }
 
 .calendar_modal .modal-footer .btn.btn-primary.submit-btn.save-event:hover {
@@ -1474,7 +1474,7 @@
     overflow: hidden;
     overflow: hidden;
     text-transform: capitalize;
-    background-color: #ea1515;
+    background-color: #98002e;
     font-family: 'Montserrat', sans-serif;
     cursor: pointer;
 	border: none;
@@ -1625,11 +1625,11 @@ a {
 .booking-info-menu{ background: #2d2d2d; color:#fff; padding: 15px; }
 .booking-info-menu ul li{ display: inline-block; padding: 0px 15px; }
 .booking-info-menu ul li a{ color:#fff; font-size: 16px; font-weight: bold; }
-.booking-info-menu ul li a.active{ color:#ea1515; background: transparent; border: none !important; }
-.booking-info-menu ul li a:hover { color:#ea1515; }
+.booking-info-menu ul li a.active{ color:#98002e; background: transparent; border: none !important; }
+.booking-info-menu ul li a:hover { color:#98002e; }
 .booking-info-tab{ float: right; }
 .booking-info-tab .nav-item{ color:#fff; padding: 0px 15px; font-size: 16px; font-weight: bold; }
-.booking-info-tab .nav-item.active{ color:#ea1515; background: transparent; border: none !important; }
+.booking-info-tab .nav-item.active{ color:#98002e; background: transparent; border: none !important; }
 .booking-info-tab .nav-tabs{ border: none !important; }
 .book-info-sear { margin-bottom: 50px; }
 .book-info-sear .form-control { 
@@ -1748,7 +1748,7 @@ a {
 	font-size: 15px;
 }
 .add-family-frnd .cards-content .familyfrnd-info a:hover{
-	color: #ea1515;
+	color: #98002e;
 }
 .booking-history h3{
 	text-align: center;
@@ -1811,7 +1811,7 @@ a {
 	top: 11px;
 }
 .booking-activity-view a:hover{
-	color: #ea1515;
+	color: #98002e;
 }
 .booking-activity-view .view-schedule{
 	position: absolute;
@@ -1924,7 +1924,7 @@ a {
 .dot-settings .settings-options .more-settings-optns i{
 	position: relative;
 	z-index: 2;
-	color: #ea1515;
+	color: #98002e;
 }
 .dot-settings .settings-options .more-settings-optns > ul {
   background: #fff none repeat scroll 0 0;
@@ -2012,7 +2012,7 @@ a {
 	max-width: 150px;
 	height: 150px;
 	width: 150px;
-	border: 1px solid #ea1515;
+	border: 1px solid #98002e;
 	border-radius: 100%;
 	margin-left: 15px;
 	margin-right: 15px;
@@ -2027,7 +2027,7 @@ a {
 	color: #000;
 }
 .plus-add-family i{
-	color: #ea1515;
+	color: #98002e;
 	font-size: 35px;
 }
 .photo-select.product-edit img{
@@ -2038,7 +2038,7 @@ a {
     border-collapse: collapse;
 }
 .purchase-history table thead {
-    background: #ea1515;
+    background: #98002e;
     color: #fff;
 }
 .purchase-history table tbody tr td {
@@ -2055,7 +2055,7 @@ a {
 	border-radius: 100%;
 	overflow: hidden;
 	vertical-align: middle;
-	background-color: #ea1515;
+	background-color: #98002e;
 }
 .no-img-text p{
 	font-size: 80px;
@@ -2075,7 +2075,7 @@ a {
 .modal-title {
     font-weight: 600;
     font-size: 20px;
-    color: #ea1515;
+    color: #98002e;
 }
 .bg-sidebar {
     background: #2d2d2d;
@@ -2140,12 +2140,12 @@ a {
 }
 
 .btn-red {
-    background-color: #ea1515;
+    background-color: #98002e;
     border: none;
     color: #fff;
 }
 .reviewerro {
-    color: #ea1515;
+    color: #98002e;
     display: none;
 }
 
