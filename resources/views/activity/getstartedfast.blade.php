@@ -1,5 +1,5 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
 @section('content')
 <?php
 	use Illuminate\Support\Str;
@@ -7,16 +7,13 @@
 ?>
 
 
-
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
 <link href="{{url('/public/css/compare/style.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{url('/public/css/compare/w3.css')}}" rel="stylesheet" type="text/css" />
 <link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" type="text/css" rel="stylesheet" />
 
-
 <script src="{{url('/public/js/compare/Compare.js')}}"></script>
 <script src="{{url('/public/js/compare/jquery-1.9.1.min.js')}}"></script>
-
-
 
 <script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
 <script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
@@ -24,6 +21,12 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<style>
+	.instant-hire-activites {
+	margin-top: 60px;
+	}
+</style>
 
 @if(@$getstarteddata != '')
 <section class="instant-hire" >
@@ -395,7 +398,7 @@
 						</div>
 						<div class="col-md-4">
 							<div class="btn-txt">
-								<a href="#" class="showall-btn" data-toggle="modal" data-target="#addbusiness">Add A Business</a>
+								<a href="#" class="showall-btn" data-bs-toggle="modal" data-bs-target="#addbusiness">Add A Business</a>
 							</div>
 						</div>
 					</div>
@@ -418,7 +421,7 @@
             </div>
         </div>
         <div class=" titleMargin w3-container comparePan">
-            <button type="button" class="btn btn-primary notActive cmprBtn addtcmpr-btn" data-toggle="modal" data-target="#myModal">Compare</button>
+            <button type="button" class="btn btn-primary notActive cmprBtn addtcmpr-btn" data-bs-toggle="modal" data-bs-target="#myModal">Compare</button>
         </div>
     </div>
 </div>
@@ -429,11 +432,12 @@
     <div class="modal-dialog modal-lg business">
         <div class="modal-content">
 			<div class="modal-header" style="text-align: right;"> 
-			  	<div class="closebtn">
-					<button type="button" class="close close-btn-design" data-dismiss="modal" aria-label="Close">
+			  	<!-- <div class="closebtn">
+					<button type="button" class="close close-btn-design" data-bs-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
-				</div>
+				</div> -->
+        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 
             <!-- Modal body -->
@@ -460,10 +464,11 @@
 
 <!-- The Modal -->
 <div class="modal fade compare-model" id="myModal">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
 			<div class="modal-header" style="text-align: right;">
-			  <button class="clear_compare_list" type="button" style="color: white; border-color: red; background-color: red; margin-top: -5px;" data-dismiss="modal">×</button>
+			  <!-- <button class="clear_compare_list" type="button" style="color: white; border-color: red; background-color: red; margin-top: -5px;" data-bs-dismiss="modal">×</button> -->
+			  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 
             <!-- Modal body -->
@@ -510,7 +515,8 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header" style="text-align: right;">
-            	<button class="clear_compare_list" type="button" style="color: white; border-color: red; background-color: red; margin-top: -5px;" id="closeActreview" >×</button>
+            	<!-- <button class="clear_compare_list" type="button" style="color: white; border-color: red; background-color: red; margin-top: -5px;" id="closeActreview" >×</button> -->
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body" style="padding: 0px;">
@@ -559,7 +565,7 @@
     </div>
 <!-- end modal -->
 
-@include('layouts.footer')
+@include('layouts.business.footer')
 	
 <script type="text/javascript">
 	$(document).ready(function () {

@@ -22,6 +22,8 @@
                             <div class="h-100">
                                 <div class="row mb-3 pb-1 justify-content-md-center">
                                     @if((Auth::user()->currentPlan() && Auth::user()->currentPlan()->amount == 0 )|| Auth::user()->chkDaysLeft() < 14)
+                                   
+                                    @if(session('StaffLogin') == '')       
     									<div class="col-xxl-6 col-lg-7 col-md-12 col-12">
                                             @if(Auth::user()->freeTrial() == 'free')
     										<div class="remaining-days mb-15">
@@ -30,6 +32,7 @@
                                                     @if(Auth::user()->chkDaysLeft() == 0)
         												<div class="col-lg-9 col-md-9 col-12">	
         													<p class="fs-13">
+                                                                                                                            
                                                                 You are currently on free plan. Please upgrade your account to fully use your software.
         													</p>
         												</div>
@@ -63,7 +66,7 @@
     										</div>
                                             @endif
     									</div>
-                                        
+                                    @endif     
                                         @if(Auth::user()->planDateDiffrence() >= 14)
     									<div class="col-6">
                                             <div class="card">

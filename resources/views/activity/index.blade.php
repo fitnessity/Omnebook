@@ -586,10 +586,10 @@
 										<div class="selectProduct" data-id="{{ $service['id'] }}" data-title="{{ $service['program_name'] }}" data-name="{{ $service['program_name'] }}" data-companyname="{{ $companyname }}" data-email="" data-address="{{ $companyaddress }}" data-img="{{ $profilePic }}" data-price="{{ $pay_price }}" data-token="{{ csrf_token() }}"> 
 											<div class="kickboxing-block">
 												@if(Auth::check())
-													@php
+												@php
 			                                	$loggedId = Auth::user()->id;
 			                                	$favData = App\BusinessServicesFavorite::where('user_id',$loggedId)->where('service_id',$service['id'])->first();                   
-                             				@endphp
+                             					@endphp
                              				<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
 														<div class="inner-owl-slider-hire">
 															<div id="owl-demo-learn_pop{{$service['id']}}" class="owl-carousel owl-theme">

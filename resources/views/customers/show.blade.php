@@ -480,6 +480,18 @@
 																																</div>
 																															</div>
 																															
+																															
+																														
+																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																<div class="line-break">
+																																	<label>DATE BOOKED:	</label>
+																																</div>
+																															</div>
+																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																<div class="float-end line-break text-right">
+																																	<span>{{date('m/d/Y',strtotime(@$booking_detail->created_at))}}</span>
+																																</div>
+																															</div>
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="line-break">
 																																	<label>ACTIVATION START DATE:</label>
@@ -501,18 +513,6 @@
 																																	<span>@if($booking_detail->expired_at)  {{date('m/d/Y',strtotime(@$booking_detail->expired_at))}} @else N/A @endif</span>
 																																</div>
 																															</div>
-																														
-																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
-																																<div class="line-break">
-																																	<label>DATE BOOKED:	</label>
-																																</div>
-																															</div>
-																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
-																																<div class="float-end line-break text-right">
-																																	<span>{{date('m/d/Y',strtotime(@$booking_detail->created_at))}}</span>
-																																</div>
-																															</div>
-																															
 																															@if (@$booking_detail->business_services_with_trashed)
 																															<div class="col-lg-6 col-md-6 col-sm-6 col-6">
 																																<div class="line-break">

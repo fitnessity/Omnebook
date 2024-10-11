@@ -1170,6 +1170,13 @@
         });
     });
     
+    // new code
+        function getType(type){
+            $('#buttonType').val(type);
+            $('#clientRegistration').submit();
+        }
+    // end
+
         $(document).ready(function() {
             $("#clientRegistration").submit(function() {
                 $("#termserror").html('');
@@ -1272,7 +1279,6 @@
                             '#ed1b24');
                     },
                     success: function(response) {
-                        alert(response.type);
                         if (response.type === 'success') {
                             if ($('#buttonType').val() == 'skip') {
                                 $('#customerModal').modal('hide');

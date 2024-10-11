@@ -47,6 +47,8 @@
                                                             <div class="create-customer-box">
                                                                 <div class="row">
                                                                     <div class="col-md-12 col-lg-12"><h4 class="font-red ">Personal Info</h4></div>
+                                                                    <h6>Adult, Parent/Guardian 18+</h6>
+
                                                                     <div class="col-md-4 col-lg-3">
                                                                         <label class="mt-10 ">First Name<span id="star">*</span></label>
                                                                         <input type="text" name="firstname" id="firstname" size="30" maxlength="80" class="form-control">
@@ -104,7 +106,7 @@
                                                                     <div class="col-md-12 col-lg-12"><h4 class="font-red ">Address</h4></div>
                                                                     <div class="col-md-4 col-lg-3 mt-10">
                                                                         <label>Address </label>
-                                                                        <input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="addressCustomer" value=""  oninput="initMapCall('addressCustomer', 'cityCustomer', 'stateCustomer', 'countryCustomer', 'zipcodeCustomer', 'latitudeCustomer', 'longitudeCustomer')"> 
+                                                                        <input type="text" class="form-control pac-target-input" autocomplete="off" name="address" id="addressCustomer" value="" oninput="initMapCall('addressCustomer', 'cityCustomer', 'stateCustomer', 'countryCustomer', 'zipcodeCustomer', 'latitudeCustomer', 'longitudeCustomer')"> 
                                                                     </div>
                                                                     <div id="map" style="display: none;"></div>
                                                                     <div class="col-md-4 col-lg-3 mt-10">
@@ -168,7 +170,7 @@
                                                                                                 </div>
                                                                                                 <div class="col-md-4 col-lg-3">
                                                                                                     <label class="mt-10">Birthday</label>
-                                                                                                    <input type="text" class="form-control" name="birthdate[]" id="birthdate" >
+                                                                                                    <input type="text" class="form-control add-client-birthdate" name="birthdate[]" id="birthdate0">
                                                                                                 </div>
                                                                                                 <div class="col-md-4 col-lg-3">
                                                                                                     <label class="mt-10">Gender</label>
@@ -666,7 +668,27 @@
             });
         });
     </script>
-
+  <script type="text/javascript">
+    $(document ).ready(function() {
+        flatpickr('#birthdate0', {
+           // altInput: true,
+           // altFormat: "m/d/Y",
+            dateFormat: "m/d/Y",
+            maxDate: "today",
+            onChange: function(selectedDates, dateStr, instance) {
+                var age = calculateAge(dateStr);
+                if (age < 18) {
+                    $('.check-box-primary-account:first').prop('disabled', true);
+                    if ($('.check-box-primary-account:first').is(':checked')) {
+                        $('.check-box-primary-account:first').prop('checked', false);
+                    }
+                } else {
+                    $('.check-box-primary-account:first').prop('disabled', false);
+                }
+            }
+        });
+    });
+    </script>
     <script>
         flatpickr('.add-client-birthdate',{
             altInput: true,
@@ -685,6 +707,8 @@
                 }
             }
         });
+
+        
 
         $(document).on('focus', '#birthdate', function(e){
             //jQuery.noConflict();
@@ -832,6 +856,7 @@
             var re = data.replaceAll("heading"+old_cnt,"heading"+new_cnt);
             re = re.replaceAll("collapse"+old_cnt,"collapse"+new_cnt);
             re = re.replaceAll("birthday_date"+old_cnt,"birthday_date"+new_cnt);
+            re = re.replaceAll("birthdate"+old_cnt,"birthdate"+new_cnt);
             re = re.replaceAll("deletediv"+old_cnt,"deletediv"+new_cnt);
             re = re.replaceAll("Family Member #"+dataTxt,"Family Member #"+txtcount);
             re = re.replaceAll("primaryAcCheck"+old_cnt,"primaryAcCheck"+new_cnt);
@@ -861,6 +886,21 @@
                 $(this).removeClass("font-red");
             });
             $('#familycnt').val(cnt);
+            var varnm='#birthdate'+new_cnt;
+            flatpickr(varnm, {
+                    dateFormat: "m/d/Y", maxDate: "today",
+                    onChange: function(selectedDates, dateStr, instance) {
+                        var age = calculateAge(dateStr);
+                        if (age < 18) {
+                            $('.check-box-primary-account:first').prop('disabled', true);
+                            if ($('.check-box-primary-account:first').is(':checked')) {
+                                $('.check-box-primary-account:first').prop('checked', false);
+                            }
+                        } else {
+                            $('.check-box-primary-account:first').prop('disabled', false);
+                        }
+                    }
+                });
         });
 
         $(document).on('click', '[data-behavior~=termsModelOpen]', function(e){

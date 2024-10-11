@@ -303,7 +303,7 @@
 																		<div class="set-price">
 																			<i class="fas fa-dollar-sign"></i>
 																		</div>
-																		<input type="text" class="form-control valid" id="price" placeholder="0.00" class="manualprice" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
+																		<input type="text" class="form-control valid" name="price" id="price" placeholder="0.00" class="manualprice" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
 																	</div>
 																</div>
 																<div class="col-lg-3 col-md-2 col-sm-3 col-xs-12">

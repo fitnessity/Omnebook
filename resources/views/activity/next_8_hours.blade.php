@@ -3,7 +3,6 @@
 <link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
 <link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 @section('content')
-
 <section class="show-all">
 	<div class="container-fluid">
 		<div class="row">

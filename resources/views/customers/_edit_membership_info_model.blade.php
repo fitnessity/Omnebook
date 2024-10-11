@@ -301,7 +301,7 @@
 									<label>Membership Activation Date</label>
 									<div class="date-activity-check">
 										<div class="input-group">
-											<input type="text" id="activation_select" name="contract_date" data-orginal-date="{{date('m/d/Y',strtotime($booking_detail->contract_date))}}" class="form-control border-0 dash-filter-picker width-flatpiker flatpiker-with-border flatpickr-input active flatpickr" value="{{date('m/d/Y',strtotime($booking_detail->contract_date))}}" readonly>
+											<input type="text" id="activation_select" name="contract_date" data-orginal-date="{{date('m/d/Y',strtotime($booking_detail->contract_date))}}" class="form-control border-0 dash-filter-picker width-flatpiker flatpiker-with-border flatpickr-input active flatpickr" value="{{date('m/d/Y',strtotime($booking_detail->contract_date))}}">
 										</div>
 									</div>
 								</div>
@@ -312,7 +312,7 @@
 									<label>Membership Expiration</label>
 								</div>
 								<div class="input-group">
-									<input type="text" class="form-control border-0 dash-filter-picker width-flatpiker flatpiker-with-border flatpickr-input active flatpickr" id="expiration_select" name="expired_at" data-orginal-date="{{date('m/d/Y',strtotime($booking_detail->expired_at))}}" readonly="readonly"  autocomplete="off" value="{{date('m/d/Y',strtotime($booking_detail->expired_at))}}">
+									<input type="text" class="form-control border-0 dash-filter-picker width-flatpiker flatpiker-with-border flatpickr-input active flatpickr" id="expiration_select" name="expired_at" data-orginal-date="{{date('m/d/Y',strtotime($booking_detail->expired_at))}}" autocomplete="off" value="{{date('m/d/Y',strtotime($booking_detail->expired_at))}}">
 								</div>
 								<button type="button" class="btn btn-red membership-save float-end" id="" data-behavior="update_order_details" data-booking-detail-id = "{{$booking_detail->id}}" data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Save </button>
 							</div>
@@ -558,6 +558,7 @@
 </div>
 
 
+<script src="{{asset('/dashboard-design/js/flatpickr.min.js')}}"></script>
 <script type="text/javascript">
 
 	$("#expiration_select").change(function () { 
@@ -615,3 +616,5 @@
     });
 
 </script>
+
+

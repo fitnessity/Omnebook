@@ -28,7 +28,7 @@
 										</a>
 									</div>
 									<!-- <span>From   <strike> $510</strike> $459/Person</span> -->
-									<span>From  <strike> {!!$price_all!!}</strike></span>
+									<span>From  {!!$price_all!!}</span>
 								</div>
 							</div>
 							

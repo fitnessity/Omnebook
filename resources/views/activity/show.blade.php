@@ -608,10 +608,10 @@ input:disabled{
 		  			{{-- @endif --}}
 
 
-					  @if($service->businessServicesFaq()->count() > 0)
+					@if($service->businessServicesFaq()->count() > 0)
 					  <div class="separator-border-bottom">
 						  <h3 class="subtitle details-sp"> Frequently asked questions </h3>
-						  <div class="live-preview mb-25">
+						   <div class="live-preview mb-25">
 							  <div class="accordion accordion-border-box" id="Frdefault-accordion-example">
 								  @foreach($service->businessServicesFaq as $i => $faq)
 									  <div class="accordion-item shadow">
@@ -628,7 +628,7 @@ input:disabled{
 									  </div>
 								  @endforeach
 							  </div>
-						  </div>
+						   </div>
 					  </div>
 				  @endif
 				  
@@ -2154,7 +2154,7 @@ input:disabled{
 		}else if(type == 'schedule'){
 			scheduleId = val;
 		}
-		
+		// alert('233');
 		var _token = $("input[name='_token']").val();
 		$.ajax({
 			url: "{{route('act_detail_filter_for_cart')}}",

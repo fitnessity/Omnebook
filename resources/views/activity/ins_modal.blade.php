@@ -73,7 +73,7 @@
 			<img src="{{$ins->profile_pic_url}}"  class="mb-15 object-fit object-position" alt="Fitnessity" alt="avatar" width="200" height="200">
 			@else
 				<div class="instructor-img-cart-modal mb-15">
-					<div class="mini-stat-icon-modal avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">
+					<div class="mini-stat-icon-modal avatar-felx avatar-xl rounded-circle text-success bg-soft-red fs-4 uppercase">
 						<span> ap </span>
 					</div>
 				</div>

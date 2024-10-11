@@ -61,6 +61,23 @@
                         <i class="fas fa-cogs fs-15"></i> <span class="fs-15" data-key="t-widgets">Website Integration</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('business.website_integration')}}">
+                        <i class="fas fa-user-alt fs-15"></i> <span class="fs-15" data-key="t-widgets">Online Profile & Post</span>
+                    </a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarOnline" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarOnline">
+                        <i class="fas fa-inbox fs-15"></i> <span class="fs-15" data-key="t-dashboards">Online Profile & Post</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarOnline">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="http://dev.fitnessity.co/design/chat_inbox" class="nav-link" data-key="t-analytics"> Stats</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li> -->
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->

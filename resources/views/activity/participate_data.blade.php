@@ -38,7 +38,7 @@
 				  counter: selectedOption.data('cnt'),
 				  type: selectedOption.data('type')
 			};
-
+			console.log(data);
 		$.post('{{ route("form_participate") }}', data).done(function() {
 			$(".participaingdiv" + data.act).load(" .participaingdiv" + data.act + ">*");
 			});
