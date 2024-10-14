@@ -1,11 +1,14 @@
 
     <script src="{{url('/public/dashboard-design/js/layout.js')}}"></script>
+
+	<link href="{{url('/public/dashboard-design/css/responsive.css')}}" rel="stylesheet" type="text/css" /> 
+
+	<script src="{{url('/public/dashboard-design/js/ckeditor/ckeditor.js')}}"></script>
+	<!-- <link href="{{url('/public/dashboard-design/css/responsive.css')}}" rel="stylesheet" type="text/css" /> -->
 	<link href="{{url('/public/dashboard-design/css/responsive.css')}}" rel="stylesheet" type="text/css" />
 
-   <script src="{{url('/public/dashboard-design/js/ckeditor/ckeditor.js')}}"></script>
-	
-
 	<!-- dropzone css -->
+	<!-- <link href="{{url('/public/dashboard-design/css/dropzone.css')}}" rel="stylesheet" type="text/css" /> -->
 	<link href="{{url('/public/dashboard-design/css/dropzone.css')}}" rel="stylesheet" type="text/css" />
 	
 	<!-- glightbox css -->
@@ -22,6 +25,7 @@
 	<link rel="stylesheet" href="{{url('/public/dashboard-design/filepond/filepond-plugin-image-preview.min.css')}}" type="text/css" />
 
 	<link rel="stylesheet" href="{{url('/public/dashboard-design/css/dragula.min.css')}}" type="text/css" />
+
 
  <!-- Begin page -->
    <div id="layout-wrapper printnone">
@@ -313,7 +317,7 @@
 																				<a href="">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a>
 																			</div>
 																			<div class="mb-15">
-																				<!-- <img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga classes.jpg" class="blog-card-img-top" alt="card img"> -->
+																				<!-- <img src="http://dev.fitnessity.co/public/uploads/discover/thumb/1649648481-yoga-classes.jpg" class="blog-card-img-top" alt="card img"> -->
 																			</div>
 																			
 																			<p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
@@ -923,18 +927,15 @@
 								<i class='bx bx-bell fs-22'></i>
 								<span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">{{$totalNotifications}}<span class="visually-hidden">unread messages</span></span>
 							</button>
-
 							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
-
 								<div class="dropdown-head bg-primary bg-pattern rounded-top">
 									<div class="p-3">
 										<div class="row align-items-center">
 											<div class="col">
-												<h6 class="m-0 fs-16 fw-semibold text-white"> Notifications </h6>
+												<h6 class="m-0 fs-16 fw-semibold text-white"> Notifications {{$customerFilesNotifyCount}} </h6>
 											</div>
 										</div>
 									</div>
-									
 									<div class="px-2 pt-2">
 										<ul class="nav nav-tabs dropdown-tabs nav-tabs-custom" data-dropdown-tabs="true" id="notificationItemsTab" role="tablist">
 											<li class="nav-item waves-effect waves-light">
@@ -953,23 +954,37 @@
 										</ul>
 									</div>
 								</div>
-
 								<div class="tab-content position-relative" id="notificationItemsTabContent">
 									<div class="tab-pane fade show active py-2 ps-2 alerts-scroll" id="all-noti-tab" role="tabpanel">
 										<div class="pe-2">
 											@php
 												$notifications = getCustomerFilesNotifiy();
 											@endphp
-										
 												@if($notifications->isNotEmpty())
 														@foreach($notifications as $notification)
 															<div class="text-reset notification-item d-block dropdown-item position-relative">
-															<div class="d-flex">
-															<p class="notification-text-set"> Your file  {{ basename($notification->file) }}  is processed successfully. </p>
-																Your file abc  is processed successfully.
-																<a href="{{ route('business_customer_index', ['business_id' => $notification->business_id]) }}">View Customer</a>
-																
-															</div>
+																<div class="d-flex">
+																	<img src="{{ asset($notification->profile_pic) }}" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+
+																	{{-- start --}}
+
+																	<div class="flex-1">
+																		<div class="">
+																			<div class="row y-middle">
+																				<div class="col-md-7 col-12">	
+																					<h6 class="mt-0 mb-1 fs-13 fw-semibold">{{$notification->user_name}}</h6>
+																				</div>
+																				<div class="col-md-2 col-2">
+																					<a href="{{ route('business_customer_index', ['business_id' => $notification->business_id]) }}">View Customer</a>																				</div>
+																				</div>
+																				<div class="col-12">
+																					<p class="notification-text-set"> Your file  {{ basename($notification->file) }}  is processed successfully. </p>
+																				</div>
+																		</div>
+																	</div>
+
+																	{{-- end --}}
+																</div>
 															</div>
 														@endforeach
 												@endif

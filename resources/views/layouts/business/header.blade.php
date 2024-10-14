@@ -4,75 +4,91 @@ $total_quantity = 0;
 ?>
 
 <!DOCTYPE html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
     <head>
-        <title>Omnebook</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta content="charset=utf-8">
+        <title>Fitnessity</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta content="Fitnessity: Because Fitness=Necessity" name="description" />
+		<meta content="" name="author" />
+
+        <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta content="charset=utf-8"> -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <meta name="description" content=" Omnebook: Because Fitness=Necessity ">
+        <meta name="description" content=" Fitnessity: Because Fitness=Necessity ">
         <meta itemprop="name" content="">
-        <meta itemprop="description" content=" Omnebook: Because Fitness=Necessity ">
+        <meta itemprop="description" content=" Fitnessity: Because Fitness=Necessity ">
         <meta itemprop="image" content="">
         <meta name="twitter:card" content="product">
         <meta name="twitter:title" content="">
-        <meta name="twitter:description" content=" Omnebook: Because Fitness=Necessity ">
+        <meta name="twitter:description" content=" Fitnessity: Because Fitness=Necessity ">
         <meta name="twitter:image" content="">
         <meta property="og:url" content="">
         <meta property="og:type" content="">
         <meta property="og:title" content="">
-        <meta property="og:description" content=" Omnebook: Because Fitness=Necessity ">
+        <meta property="og:description" content=" Fitnessity: Because Fitness=Necessity ">
         <meta property="og:image" content="">
-        <meta property="og:site_name" content="Omnebook">
+        <meta property="og:site_name" content="Fitnessity">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-        <link rel="shortcut icon" href="{{ url('/public/images/email/favicon.png') }}"> 
+        <link rel="shortcut icon" href="{{ url('/public/images/email/favicon.png') }}">
         <link rel="icon" href="{{ url('/public/images/email/favicon.png') }}">
-        <link rel='stylesheet' type='text/css' href="{{url('public/css/font_family.css')}}">
-        <link rel='stylesheet' type='text/css' href="{{url('public/css/font_family_roboto.css')}}">
-        <link rel='stylesheet' type='text/css' href="{{url('/public/css/font-awesome.css')}}"> 
-    
-		<link href="{{url('/public/css/all.css')}}" rel="stylesheet" type="text/css" />
-		<link href="{{url('/public/css/owl.css')}}" rel="stylesheet" type="text/css" />
-		@if(Route::current()->getName() == 'design.home' ) 
-			<link href="{{url('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-		@endif
-		
-		@if(Route::current()->getName() != 'design.dashboard' && Route::current()->getName() != 'design.createNewBusinessProfile' && Route::current()->getName() != 'design.home') 
+        <!-- <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,900'>
+        <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'> -->
 
-			<link rel='stylesheet' type='text/css' href="{{url('/public/css/bootstrap.css')}}"> 
+		<!-- Bootstrap Css -->
+		<link href="{{ url('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    	<link href="{{ url('/public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" />
 
-			<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
-		 
-			 <link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/custom.css')}}">
-			 
-			@endif
-		<script src="{{url('public/js/jquery2.1.3.js')}}"></script> 
-		<link rel='stylesheet' type='text/css' href="{{url('/public/css/bootstrap-select.min.css')}}">
+		 <!-- Style Css-->
+		 <link href="{{ url('/public/dashboard-design/css/style.css')}}" rel="stylesheet" type="text/css" />
+
+		<!-- Custom Css-->
+		<link href="{{ url('/public/dashboard-design/css/custom.css')}}" rel="stylesheet" type="text/css" />
+
+        <link rel='stylesheet' type='text/css' href="{{ url('/public/css/font_family.css')}}">
+        <link rel='stylesheet' type='text/css' href="{{ url('/public/css/font_family_roboto.css')}}">
+		<!-- fullcalendar css >-->
+		<link rel="stylesheet" type="text/css" href="{{ url('/public/css/metismenu.min.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{ url('/public/css/fullcalendar/fullcalendar.min.css')}}"> 
+		<link href="{{url('/public/dashboard-design/css/glightbox.min.css')}}" rel="stylesheet" type="text/css" />
+		<!-- icon -->
+		<link href="{{ url('/public/dashboard-design/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
+
+		<link href="{{ url('/public/css/slimselect.min.css')}}" rel="stylesheet" type="text/css" />
+		<link href="{{ url('/public/css/select.css')}}" rel="stylesheet" type="text/css" />
+		<script src="{{ url('/public/dashboard-design/js/plugins.js')}}"></script>
+
+        <link rel="stylesheet" type="text/css" href="{{url('/public/css/all.css')}}">
+        <link rel='stylesheet' type='text/css' href="{{url('/public/css/owl.css')}}">
+	
+        <link rel='stylesheet' type='text/css' href="{{url('/public/css/bootstrap-select.min.css')}}">
 		<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/header-footer.css')}}">
         
-		<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/header-footer.css')}}">
-		<link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
-		<link rel="stylesheet" href="/public/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-		<script src="{{env('APP_URL')}}/public/js/jquery2.1.3.js"></script>
+        <link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
+		<!-- <link rel="stylesheet" href="{{url('/public/css/AdminLTE/plugins/datatables/dataTables.bootstrap.css')}}"> -->
+		<!--datatable css-->
+		<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+		<!--datatable responsive css-->
+		<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+		<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+		
+		<!-- font glyphicon -->
+		<link href="{{url('/public/css/glyphicon.css')}}" rel="stylesheet" type="text/css" />
 
-		<script type="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
+        <!-- <script src="https://d2bgo0bc1t29nh.cloudfront.net/public/dashboard-design/js/jquery-3.6.4.min.js"></script>
+        <script src="https://d2bgo0bc1t29nh.cloudfront.net/public/js/slimselect.min.js"></script> -->
+		<!-- <script src="{{env('APP_URL')}}/public/js/ratings.js"></script> -->
+		<script src="{{url('/public/dashboard-design/js/jquery-3.6.4.min.js')}}"></script>
+        <script src="{{url('/public/js/slimselect.min.js')}}"></script>
+	
+  		<!-- <script type="text/javascript"
+        src="https://maps.google.com/maps/api/js?key={{ env('AUTO_COMPLETE_ADDRESS_GOOGLE_KEY') }}" ></script> -->
+  
 
-		<!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
-	<!-- 	<script src="https://d2bgo0bc1t29nh.cloudfront.net//public/js/ratings.js"></script> -->
-
-		<link rel='stylesheet' type='text/css' href="{{url('/public/dashboard-design/css/style.css')}}">
-		<script src="{{url('/public/dashboard-design/js/plugins.js')}}"></script>
-
-		@if(Route::current()->getName() == 'design.shopping_cart' || Route::current()->getName() == 'carts_index') 
-			<link rel='stylesheet' type='text/css' href="{{url('/public/dashboard-design/css/custom.css')}}">
-			<link rel='stylesheet' type='text/css' href="{{url('/public/dashboard-design/css/responsive.css')}}">
-			<link rel='stylesheet' type='text/css' href="{{url('/public/dashboard-design/css/bootstrap.min.css')}}">
-			{{-- <script src="https://d2bgo0bc1t29nh.cloudfront.net/dashboard-design/js/bootstrap.bundle.min.js"></script> --}}
-			<script src="{{url('public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
-
-		@endif
-        <style>
-		/*
+		<!-- <script src="https://maps.googleapis.com/maps/api/js?loading=async&v=weekly&libraries=marker&key=AIzaSyBHm1RdzTbNsr9qm-AEfdreOWihD-oHN9A" async></script> -->
+        <style>/*
             .btn-style-one {
                 position: relative;
                 display: inline-block;
@@ -310,12 +326,26 @@ $total_quantity = 0;
 					<div class="col-lg-12">
 						<div class="menu_nav">
                 
-						<div class="logo-header">
-						<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="{{ asset('/public/images/omnebook.png') }}"> </a>
+						<div class="logo-header"> 
+							<a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"><img src="/public/images/omnebook.png" alt="logo"></a>
+						<!-- <a href="{{ Config::get('constants.SITE_URL') }}/" class="logo"> <img src="https://d2bgo0bc1t29nh.cloudfront.net/public/images/fitnessity_logo1_black.png"> </a> -->
 						</div>
 					
 						<div class="top-area">
-                   
+							<!-- {{Route::currentRouteName()}} -->
+							@if (in_array(Route::currentRouteName(), ['activities_index', 'businessClaim', 'userlogin', 'staff_login', 'registration', 'contact-us', 'help', 'feedback', 'get_started_activities_experiences', 'profile-viewProfile', 'userprofile', 'activities_next_8_hours', 'privacy-policy', 'terms-condition', 'show_businessprofile']))
+							
+
+							<div class="top-search">
+								<!-- <form method="get" action="/instant-hire"> -->
+								<form method="get" action="/activities/">
+									<input type="text" name="label" id="site_search" placeholder="Search by activity, business, person, username" autocomplete="off" value="">
+									<div id="suggesstion-box"></div>
+									<button id="serchbtn" ><i class="fa fa-search"></i></button>
+								</form>
+							</div>
+							@endif
+				
 					
 						<div class="header-right">
                         	  <?php /* @if(Session('StaffLogin'))
@@ -341,16 +371,27 @@ $total_quantity = 0;
 									    }
 									} 
 									$total_quantity = count($newcart["cart_item"]);?>
-							<a class="btn-cart" href="{{route('carts_index')}}">
-								<img src="{{ url('/public/images/shoping-cart-header-black.png') }}" alt="cart"><span id="cart-item">
-									 {{$total_quantity}}</span>
-                            </a>
+								<a class="btn-cart" href="{{route('carts_index')}}">
+									<img src="{{asset('images/shoping-cart-header-black.png')}}" alt="cart"><span id="cart-item">
+									<!-- <img src="https://d2bgo0bc1t29nh.cloudfront.net/public/images/shoping-cart-header-black.png" alt="cart"><span id="cart-item"> -->
+										{{$total_quantity}}</span>
+								</a>
 							</div>
 							
-                        	@if(Auth::check())
+							@php
+							     if(session('StaffLogin') != '') {
+								    $staff = App\BusinessStaff::find(session('StaffLogin'));
+									$name = ucwords(@$staff->full_name);
+								 }
+							@endphp
+							@if(Auth::check())
 						 	<div class="userblock mobile-none">
                         		<div class="login_links" onclick="openNav()">
-                                	<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon-black.png') }}" alt="Omnebook" >
+									@if(session('StaffLogin') != '') 
+									<img src="{{ Storage::disk('s3')->exists($staff->profile_pic) ? Storage::URL($staff->profile_pic) : url('/images/user-icon-black.png') }}" alt="Fitnessity" >
+                                	@else
+									<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon-black.png') }}" alt="Fitnessity" >
+									@endif
                                 </div>
 								<nav class="pc-sidebar">
 									<div class="navbar-wrapper">
@@ -359,18 +400,34 @@ $total_quantity = 0;
 												<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeNav()"></a>
 												<ul class="pc-navbar">
 													<li style="text-align: center;"> 
-														<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" alt="Omnebook" class="sidemenupic" >
+														@if(session('StaffLogin') != '') 
+														<img src="{{ Storage::disk('s3')->exists($staff->profile_pic) ? Storage::URL($staff->profile_pic) : url('/images/user-icon-black.png') }}" alt="Fitnessity"  class="sidemenupic">
+														@else
+														<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" alt="Fitnessity" class="sidemenupic" >
+														@endif
 													</li>
-													<li class="pc-caption"><span> Welcome</span></li>
+													<li class="pc-caption"><span> Welcome olne</span></li>
                                                     <li class="pc-caption-1">
-                                                        <span> {{ Auth::user()->firstname }} </span>
+                                                        <span> 
+															@if(session('StaffLogin') != '')
+															{{$name}} 
+															@else
+															{{ Auth::user()->firstname }} 
+															@endif
+														</span>
                                                     </li>
                                                     <li class="lp-tag">
-                                                        <span><?php echo "@"; ?>{{ Auth::user()->username }} </span>
+                                                        <span><?php echo "@"; ?>
+															@if(session('StaffLogin') != '')
+															{{$staff->first_name}}
+															@else
+															{{ Auth::user()->username }} 
+															@endif
+														</span>
                                                     </li>
                                                     <li class="lp-per-pro"> <span> Personal Profile </span> </li>
                                                     <li class="border-1">
-                                                     <button class="btn-lp" type="button"><a style="color: white;" href="{{url('/activities')}}">Book An Activity </a> </button> 
+                                                     <button class="btn-lp" type="button"><a style="color: white;" href="{{url('/activities')}}">Book An Activity</a> </button> 
                                                     </li>
                                                     <li class="pc-link">
                                                     	<span class="pc-micon"><i class="fa fa-user"></i></span>
@@ -378,29 +435,29 @@ $total_quantity = 0;
                                                     </li>
 
                                                     <li class="pc-link">
-														<span class="pc-micon"><img src="{{url('/public/img/edit-2.png')}}" alt="Omnebook"></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt="Fitnessity"></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{url('/public/img/menu-icon5.svg')}}" alt="Omnebook"></span><a href="{{route('personal.manage-account.index')}}" style="color: white;">Manage Accounts</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt="Fitnessity"></span><a href="{{route('personal.manage-account.index')}}" style="color: white;">Manage Accounts</a>
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt="Omnebook"></span><a href="{{ url('/personal/calendar')}}" style="color: white;">Calendar</a>
+														<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt="Fitnessity"></span><a href="{{ url('/personal/calendar')}}" style="color: white;">Calendar</a>
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{url('/public/img/credit-card.png')}}" alt="Omnebook"></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt="Fitnessity"></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt="Omnebook"></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt="Fitnessity"></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
 													</li>
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{url('/public/img/follower.png')}}" alt="Omnebook"></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
 													</li>
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{url('/public/img/follower.png')}}" alt="Omnebook"></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
 													</li>
                                                 
 													<!-- <li class="pc-link">
@@ -443,7 +500,7 @@ $total_quantity = 0;
 												</ul>
 											</div>
 											<p class="pri-1"> <a href="{{ Config::get('constants.SITE_URL') }}/privacy-policy" style="color: white;"> Privacy </a> - <a href="{{ Config::get('constants.SITE_URL') }}/terms-condition" style="color: white;">Terms </a></p>
-											<p class="pri-2">Omnebook, Inc {{date('Y')}}</p>
+											<p class="pri-2">Fitnessity, Inc {{date('Y')}}</p>
 										</div>
 									</div>
 								</nav>
@@ -452,7 +509,7 @@ $total_quantity = 0;
 							<!-- old nav -->
                          	<div class="userblock">
                         		<div class="login_links">
-									<img class="sign-in-header" src="{{ url('/public/images/login-header-black.png') }}" alt="cart">
+									<img class="sign-in-header" src="{{ asset('/public/images/login-header-black.png') }}" alt="cart">
 									<a href="{{ Config::get('constants.SITE_URL') }}/userlogin">Sign in or </a> 
 									<a href="{{ Config::get('constants.SITE_URL') }}/registration"> Register </a>
 								</div>
@@ -681,8 +738,10 @@ function closeNav() {
 
 </script>
 
-<link href='{{asset("/public/css/frontend/jquery-ui.css")}}'  rel='stylesheet'>
-<script src='{{asset("/public/dashboard-design/js/jquery-ui.min.js")}}'></script>
+<!-- <link href='https://d2bgo0bc1t29nh.cloudfront.net/public/css/frontend/jquery-ui.css'  rel='stylesheet'>
+<script src='https://d2bgo0bc1t29nh.cloudfront.net/public/dashboard-design/js/jquery-ui.min.js'></script> -->
+<link href="{{url('public/css/frontend/jquery-ui.css')}}"  rel='stylesheet'>
+<script src="{{url('public/dashboard-design/js/jquery-ui.min.js')}}"></script>
 <script type="text/javascript">
 $(document).ready(function () { 
 	$( ".birthdate" ).datepicker();
