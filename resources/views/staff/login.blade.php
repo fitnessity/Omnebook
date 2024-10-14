@@ -43,11 +43,11 @@
 					</div>
 					<div class="row">
 						<div class="col-md-6"></div> 
-						<div class="col-md-6">
+						<!-- <div class="col-md-6">
 							<div class="staff-pass remembermediv">
 								<a class="forgot-pass">Forgot Password?</a>
 							</div>
-						</div>
+						</div> -->
 					</div>
 
                     <button class="btn signup-new" id='login_submit' type="submit">Log in </button>

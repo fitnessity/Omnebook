@@ -44,7 +44,7 @@ class MembershipExpirationsController extends BusinessBaseController
             }
             $membership = $booking->whereDate('expired_at', '=',$enddate);
         }else{
-            if($edate != ''){
+            if($edate != '' && $edate != date('Y-m-d')){
                 $enddate = $edate;
             }else{
                 $enddate = date('Y-m-d', strtotime("+".$days." days"));
@@ -52,7 +52,7 @@ class MembershipExpirationsController extends BusinessBaseController
             $membership = $booking->whereDate('expired_at', '<=',$enddate);
     	}
     	
-        if($sDate != ''){
+        if($sDate != '' && $sDate != date('Y-m-01')){
             $membership = $membership->whereDate('expired_at', '>=', $sDate);
         }elseif($days != 'all'){
             $membership = $membership->whereDate('expired_at', '>=', date('Y-m-d'));
@@ -130,7 +130,6 @@ class MembershipExpirationsController extends BusinessBaseController
             $pdf = PDF::loadView('business.reports.member_expirations.pdf_view', $data);
             return $pdf->download('Membership.pdf');
         }
-    
     }
 
     private function filterMemberships($collection) {

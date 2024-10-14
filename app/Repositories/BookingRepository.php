@@ -88,9 +88,9 @@ class BookingRepository
             }
            
             if(@$book_details['bookedtime'] == '' ){
-                $sc_date = date("m-d-Y", strtotime($book_details['expired_at']));
+                $sc_date = date("m/d/Y", strtotime($book_details['expired_at']));
             }else{
-                $sc_date = date("m-d-Y", strtotime($book_details['bookedtime']));
+                $sc_date = date("m/d/Y", strtotime($book_details['bookedtime']));
             }
 
             $sc_date = str_replace('-', '/', $sc_date);  
@@ -132,7 +132,9 @@ class BookingRepository
     } 
 
     public function otherTab($serviceType,$business_id,$customer){
-        $checkInDetail = BookingCheckinDetails::where('customer_id',@$customer->id)->orWhere('booked_by_customer_id',@$customer->id)->get();
+        $checkInDetail = BookingCheckinDetails::where('customer_id',@$customer->id)
+        //->orWhere('booked_by_customer_id',@$customer->id)
+        ->get();
         return $checkInDetail;
     }
 
@@ -184,23 +186,30 @@ class BookingRepository
                 $full_ary[] =  $chkD;
             }
         }
-        //print_r($full_ary);
+
         foreach($full_ary as $chkInDetail) { 
+            $bookingId = $chkInDetail->booking_detail_id;
             if($serviceType== null || $serviceType == 'all'){
-                $userBookinDetail = UserBookingDetail::where('id',$chkInDetail->booking_detail_id);
+                $userBookinDetail = UserBookingDetail::where('id',$bookingId);
                 if($chkVal == 'past'){
-                    $userBookinDetail = $userBookinDetail->whereRaw('(expired_at < now())');
+                    $userBookinDetail = $userBookinDetail->where(function ($query) use($bookingId) {
+                            $query->where('status', 'active')
+                                ->where('expired_at', '<', now())->where('id',$bookingId);
+                        })->orWhere('status', 'terminate')->where('id',$bookingId);
                 }
             }else{
-                $userBookinDetail =  UserBookingDetail::join('business_services as bs', 'user_booking_details.sport', '=', 'bs.id')->where('bs.service_type',$serviceType)->where('user_booking_details.id',$chkInDetail->booking_detail_id)->select('user_booking_details.*','bs.id as activity_id','bs.service_type');
+                $userBookinDetail =  UserBookingDetail::where('user_booking_details.user_id' ,'!=' , '')->join('business_services as bs', 'user_booking_details.sport', '=', 'bs.id')->where('bs.service_type',$serviceType)->where('user_booking_details.id',$bookingId)->select('user_booking_details.*','bs.id as activity_id','bs.service_type');
                 if($chkVal == 'past'){
-                    $userBookinDetail = $userBookinDetail->whereRaw('(user_booking_details.expired_at < now())');
+                    $userBookinDetail = $userBookinDetail->where(function ($query) use($bookingId) {
+                            $query->where('user_booking_details.status', 'active')
+                                ->where('user_booking_details.expired_at', '<', now())->where('user_booking_details.id',$bookingId);
+                        })->orWhere('user_booking_details.status', 'terminate')->where('user_booking_details.id',$bookingId);
                 }
             }
-            
-            $userBookinDetail = $userBookinDetail->first();
-            if(!empty($userBookinDetail) ){
-                $bookingDetail [] = $userBookinDetail;
+
+            $detail = $userBookinDetail->first();
+            if(!empty($detail) ){
+                $bookingDetail [] = $detail;
             }
         }
 
@@ -256,18 +265,18 @@ class BookingRepository
             if($reserve_date != ''){
                 $start = date('h:ia', strtotime(@$reserve_date->scheduler->shift_start));
                 $end = date('h:ia', strtotime(@$reserve_date->scheduler->shift_end));
-                $re_date = date('m-d-Y',strtotime($reserve_date->checkin_date));
-                $check_in_time = date('m-d-Y',strtotime($reserve_date->checked_at));
+                $re_date = date('m/d/Y',strtotime($reserve_date->checkin_date));
+                $check_in_time = date('m/d/Y',strtotime($reserve_date->checked_at));
                 $re_time = $start .' to '.$end;
             }
 
             $one_array = array (
                     "pro_pic" => $pro_pic,
                     "orderid" => $book_details["id"],
-                    "date_booked" => date('m-d-Y',strtotime($book_details['created_at'])),
+                    "date_booked" => date('m/d/Y',strtotime($book_details['created_at'])),
                     "orderdetailid" => $book_details['user_booking_detail']['id'],
                     "confirm_id" => $book_details["order_id"],
-                    "expired_at" => date('m-d-Y',strtotime($book_details['user_booking_detail']["expired_at"])),
+                    "expired_at" => date('m/d/Y',strtotime($book_details['user_booking_detail']["expired_at"])),
                     "reserve_date" => $re_date,
                     "reserve_time" => $re_time,
                     "check_in_time" => $check_in_time,
@@ -487,14 +496,14 @@ class BookingRepository
         $discount = $booking_details->getextrafees('discount');
         $expiretime = $booking_details->getexpiretime($booking_details->expired_duration,$booking_details->contract_date);
         if($expiretime != ''){
-            $expiretime =  date('m-d-Y',strtotime($expiretime));
+            $expiretime =  date('m/d/Y',strtotime($expiretime));
         }else{
             $expiretime =  'N/A';
         }
 
         $contract_date ='N/A';
         if($booking_details->contract_date != NULL || $booking_details->contract_date != ''){
-           $contract_date = date('m-d-Y',strtotime($booking_details->contract_date));
+           $contract_date = date('m/d/Y',strtotime($booking_details->contract_date));
         }
 
         if($booking_status->user_type == 'user'){
@@ -507,7 +516,7 @@ class BookingRepository
 
         $bookingUrl = '';
         if($booking_status->order_type  == 'checkout_register'){
-            if($expiretime > date('m-d-Y') && $expiretime != 'N/A'){
+            if($expiretime > date('m/d/Y') && $expiretime != 'N/A'){
                 $tab = '';
             }else{
                 $tab = 'past';
@@ -543,7 +552,7 @@ class BookingRepository
             "activity_Type" => @$business_services->sport_activity,  
             "service_Type" => @$business_services->service_type,  
             "membership_Duration" => $booking_details->expired_duration,  
-            "purchase_Date" => date('m-d-Y',strtotime($booking_details->created_at)),  
+            "purchase_Date" => date('m/d/Y',strtotime($booking_details->created_at)),  
             "membership_Activation_Date" =>  $contract_date,   
             "membership_Expiration" => $expiretime,  
             "price" => $price,  
@@ -1120,7 +1129,7 @@ class BookingRepository
         return $return;
     }
     
-    public function getbusinessbookingsdata($sid,$date,$type){
+    public function getbusinessbookingsdata($sid,$date,$type,$categoryId){
         $currentDate = Carbon::now(); 
         switch ($type) {
             case 'date':
@@ -1139,10 +1148,8 @@ class BookingRepository
         $userBookingDetail = [];
         $checkInDetail = BookingCheckinDetails::where(function ($query) use ($date, $type, $sid) {
                 $query->when($type === 'week', function ($q) use ($date) {
-
                     $weekStart = Carbon::parse($date)->startOfWeek();
                     $weekEnd = Carbon::parse($date)->endOfWeek();
-
                     $q->whereBetween('checkin_date', [$weekStart, $weekEnd]);
                 })
                 ->when($type === 'month', function ($q) use ($date) {
@@ -1157,12 +1164,6 @@ class BookingRepository
             ->where('bd.sport',$sid)
             ->select('booking_checkin_details.*', 'bd.id as bdid', 'bd.sport')->orderBy('bd.bookedtime', 'desc')
             ->get();
-
-        /*foreach($checkInDetail as $detail){
-            if($detail->UserBookingDetail != ''){
-               $userBookingDetail [] = $detail->UserBookingDetail;
-            }
-        }*/
 
         return $checkInDetail;
     }

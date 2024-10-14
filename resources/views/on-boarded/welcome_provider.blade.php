@@ -118,8 +118,8 @@
 			<div class="row">
 				<div class="col-12">
 					<div class="text-right">
-						<button  onclick="redirectToOnboardProcess('{{ route('onboard_process.index', ['cid' => $cid, 'displaystep' => 1]) }}')" class="btn btn-red" @if($user && !$activePlan) disabled @endif>Get Started</button>
-						@if($user && !$activePlan) 
+						<button  onclick="redirectToOnboardProcess('{{ route('onboard_process.index', ['cid' => $cid, 'displaystep' => 1]) }}')" class="btn btn-red" @if($user && !$activePlan && count($company) > 1) disabled @endif>Get Started</button>
+						@if($user && !$activePlan && count($company) > 1) 
 							<h3 class="fs-16 font-red">You have no active plan. Please <a href="{{route('choose-plan.index')}}" class="text-decoration-underline" >buy plan</a>.</h3>
 						@endif
 					</div> 

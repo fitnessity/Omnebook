@@ -465,11 +465,9 @@
         var adultCount = $('#adultCount').val();
         var childCount = $('#childCount').val();
         var infantCount = $('#infantCount').val();
-
         var aosId = $('#addOnServicesId').val();
         var aosQty = $('#addOnServicesQty').val();
         var aosPrice = $('#addOnServicesTotalPrice').val();
-        // alert(adultCount);
         // my code start
         var participantValues = [];
         $('.familypart').each(function() {
@@ -507,10 +505,4 @@
         // ends
     }
 </script>
-<script>
-function checklogin()
-{
-    alert('32');
-}
 
-</script>

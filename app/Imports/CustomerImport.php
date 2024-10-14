@@ -18,10 +18,11 @@ class CustomerImport implements ToModel,ToCollection, WithStartRow, WithChunkRea
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    /*public function  __construct($business_id)
+
+    public function  __construct($business_id)
     {
-        $this->business_id= $business_id;
-    }*/
+        $this->business_id = $business_id;
+    }
     
     public function startRow(): int
     {
@@ -59,17 +60,20 @@ class CustomerImport implements ToModel,ToCollection, WithStartRow, WithChunkRea
     }
 
     public function model(array $row){
-        return new Customer([
-            'lname' => $row[0],
-            'fname' => $row[1],
-            'address' => $row[4],
-            'city' => $row[5],
-            'state' => $row[6],
-            'zipcode' => $row[7],
-            'country' => $row[8],
-            'email' => $row[12],
-            'phone_number' => $row[9],
-        ]);
+
+       if(Customer::whereRaw('LOWER(lname) = ? AND LOWER(fname) = ? AND email = ? business_id = ?', [strtolower($row[0]), strtolower($row[1]), $row[12] ,$this->business_id])->first() == '') {
+            return new Customer([
+                'lname' => $row[0],
+                'fname' => $row[1],
+                'address' => $row[4],
+                'city' => $row[5],
+                'state' => $row[6],
+                'zipcode' => $row[7],
+                'country' => $row[8],
+                'email' => $row[12],
+                'phone_number' => $row[9],
+            ]);
+        }
     }
 
     public function chunkSize(): int

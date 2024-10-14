@@ -121,7 +121,7 @@
                                                                 <div class="border rounded">
                                                                     <div class="d-flex p-2">
                                                                         <div class="flex-shrink-0 me-3">
-                                                                            <div class="avatar-sm bg-light rounded">
+                                                                            <div class="avatar-sm bg-light rounded product-display">
                                                                                 <img class="img-fluid rounded d-block" src="{{Storage::URL($img)}}" alt="Product-Image"  />
                                                                             </div>
                                                                         </div>
@@ -463,7 +463,13 @@
         													
         													<div class="col-lg-4">
                                                                 <div class="mb-3">
-                                                                    <label  for="meta-keywords-input">Category (Select all that apply) </label>
+                                                                    <div class="col-lg-12 col-md-12 col-12">
+                                                                        <label  for="meta-keywords-input">Category (Select all that apply) </label>
+                                                                        <label  for="meta-keywords-input">Sizes (Select all that apply) </label>
+                                                                    </div>
+                                                                    <div class="col-lg-12 col-md-12 col-12">
+                                                                        <a data-url="{{route('business.products.addVariantModal',['name'=>'Category'])}}" class="float-end text-right" data-behavior="ajax_html_modal" data-modal-width="modal-20"> Add new Category</a>
+                                                                    </div>
         															<div class="priceselect">
         																<div class="product-vendor" id="individualstype">
         																	<select id="category" name="category[]" multiple>

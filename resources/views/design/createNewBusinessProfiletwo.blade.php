@@ -29,8 +29,6 @@
 	<link rel="stylesheet" type="text/css" href="{{asset('/public/js/select/select.css')}}" />
 	<!-- icon -->
 	<link rel="stylesheet" type="text/css" href="{{asset('/public/dashboard-design/css/icons.min.css')}}" />
-
-
 </head>
 @section('content')
 
@@ -130,7 +128,6 @@
 					</div>
 
 					<div class="d-flex align-items-center">
-
 						<div class="dropdown d-md-none topbar-head-dropdown header-item">
 							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<i class="bx bx-search fs-22"></i>
@@ -2059,7 +2056,7 @@
 									<div class="col-md-12">
 										<div class="card">
 											<div class="card-header align-items-center d-flex">
-												<h4 class="card-title mb-0 flex-grow-1 nesting-steps-title">Step 4: Schedule Class</h4>
+												<h4 class="card-title mb-0 flex-grow-1 nesting-steps-title">Step 4: Schedule Classes</h4>
 											</div><!-- end card header -->
 
 											<div class="card-body">
@@ -2088,14 +2085,14 @@
 																				<div class="row">
 																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
 																						<div class="fs-14">
-																							<span>MMA Class</span>
+																							<span>Adult Program Options</span>
 																						</div>
 																					</div>
 																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
 																						<div class="fs-14 float-right links-set setoflinkes">
 																							<a href="#">2 Scheduled </a>
 																							<label class="mr-5 ml-5"> | </label>
-																							<a href="#">+ Scheduled </a>
+																							<a href="#">+ Schedule </a>
 																							<label class="mr-5 ml-5"> | </label>
 																							<div class="userblock0">
 																								<div class="login_links" onclick="openNavv()">
@@ -2181,7 +2178,7 @@
 																						<div class="fs-14 float-right links-set">
 																							<a href="#">4 Scheduled </a>
 																							<label> | </label>
-																							<a href="#">+ Scheduled </a>
+																							<a href="#">+ Schedule </a>
 																						</div>
 																					</div>
 																				</div>
@@ -2198,7 +2195,7 @@
 																						<div class="fs-14 float-right links-set">
 																							<a href="#">Not Scheduled </a>
 																							<label> | </label>
-																							<a href="#">+ Scheduled </a>
+																							<a href="#">+ Schedule </a>
 																						</div>
 																					</div>
 																				</div>
@@ -2215,7 +2212,7 @@
 																						<div class="fs-14 float-right links-set">
 																							<a href="#">5 Scheduled </a>
 																							<label> | </label>
-																							<a href="#">+ Scheduled </a>
+																							<a href="#">+ Schedule </a>
 																						</div>
 																					</div>
 																				</div>
@@ -2232,7 +2229,7 @@
 																						<div class="fs-14 float-right links-set">
 																							<a href="#">Not Scheduled </a>
 																							<label> | </label>
-																							<a href="#">+ Scheduled </a>
+																							<a href="#">+ Schedule </a>
 																						</div>
 																					</div>
 																				</div>
@@ -2249,7 +2246,7 @@
 																						<div class="fs-14 float-right links-set">
 																							<a href="#">2 Scheduled </a>
 																							<label> | </label>
-																							<a href="#">+ Scheduled </a>
+																							<a href="#">+ Schedule </a>
 																						</div>
 																					</div>
 																				</div>
@@ -2266,7 +2263,7 @@
 																						<div class="fs-14 float-right links-set">
 																							<a href="#">Not Scheduled </a>
 																							<label> | </label>
-																							<a href="#">+ Scheduled </a>
+																							<a href="#">+ Schedule </a>
 																						</div>
 																					</div>
 																				</div>
@@ -2283,7 +2280,7 @@
 																						<div class="fs-14 float-right links-set">
 																							<a href="#">Not Scheduled </a>
 																							<label> | </label>
-																							<a href="#">+ Scheduled </a>
+																							<a href="#">+ Schedule </a>
 																						</div>
 																					</div>
 																				</div>
@@ -2300,7 +2297,534 @@
 																						<div class="fs-14 float-right links-set">
 																							<a href="#">Not Scheduled </a>
 																							<label> | </label>
-																							<a href="#">+ Scheduled </a>
+																							<a href="#">+ Schedule </a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																		</div>
+																	
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div><!-- end card-body -->
+										</div><!-- end card -->
+									</div>
+									<!--end col-->
+								</div>
+								<!--end row-->
+								
+								<div class="row">
+									<div class="col-md-12">
+										<div class="card">
+											<div class="card-header align-items-center d-flex">
+												<h4 class="card-title mb-0 flex-grow-1 nesting-steps-title">Step 5: Schedule Event</h4>
+											</div><!-- end card header -->
+
+											<div class="card-body">
+												<div class="mb-10 fs-15"><a class="mr-5">Share <i class="fas fa-share-alt"></i></a></div>
+												<div class="live-preview">
+													<div class="accordion" id="stepFive">
+														<div class="accordion-item shadow">
+															<h2 class="accordion-header" id="stepheadingFive">
+																<button class="accordion-custom-btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+																	Adult Program Options
+																</button>
+															</h2>
+															<div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="stepheadingFive" data-bs-parent="#stepFive">
+																<div class="accordion-body">
+																	<div class="row">
+																		<div class="col-lg-12 col-md-12">
+																			<div class="row y-middle card-header">	
+																				<div class="col-lg-12 col-md-12 col-12">
+																					<label class="fs-17"> Events</label>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>Adult Program Options</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set setoflinkes">
+																							<a href="#">2 Scheduled </a>
+																							<label class="mr-5 ml-5"> | </label>
+																							<a href="#">+ Schedule </a>
+																							<label class="mr-5 ml-5"> | </label>
+																							<div class="userblock0">
+																								<div class="login_links" onclick="openNavv()">
+																									<a href="#" >+ Price Options </a>
+																								</div>
+																								<nav class="serviceclass">
+																									<div class="navbar-wrapper">
+																										<div id="Sidepanelone" class="service-sidepanel">
+																											<div class="navbar-content-side sc ">
+																												<div class="side-cross">
+																													<div class="row">
+																														<div class="col-lg-10 col-md-10 col-10">
+																															<label>Choose the price options your clients can choose to book with this classes</label>
+																												
+																														</div>
+																														<div class="col-lg-2 col-md-2 col-2">
+																															<a href="javascript:void(0)" class="cancel fa fa-times " onclick="closeNavv()"></a>
+																														</div>
+																													</div>
+																												</div>
+																												<ul class="schedule-class-navbar">																													
+																													<li class="pc-caption mb-10">
+																														<input type="checkbox" id="all" name="all" value="Bike">
+																														<label for="all">  Select All</label>
+																													</li>
+																													<li class="pc-caption">
+																														<input type="checkbox" id="price1" name="price1" value="Bike">
+																														<label for="price1">  price option 1 </label>
+																													</li>																											
+																												</ul>
+																												<div class="side-dropdown">
+																													<div class="form">
+																														<input class="mr-5" type="checkbox" id="cat" name="cat" value="Bike">
+																														<label for="cat" class="drop-header">Kickboxing  </label>
+																														<button class="button-1"> <i class="fas fa-chevron-down fa-sm"></i></button>
+																													</div>
+																													<ul class="dropdownList">
+																														<li>
+																															<input type="checkbox" id="price1" name="price1" value="Bike">
+																															<label for="price1">6 Months Membership (Recurring) $99 </label>
+																														</li>
+																														<li>
+																															<input type="checkbox" id="price2" name="price2" value="Bike">
+																															<label for="price2"> 6 Months Membership (PIF) $1250</label>
+																														</li>
+																														<li>
+																															<input type="checkbox" id="price2" name="price2" value="Bike">
+																															<label for="price2">1 Year Membership (Recurring) $150</label>
+																														</li>
+																														<li>
+																															<input type="checkbox" id="price2" name="price2" value="Bike">
+																															<label for="price2">1 Year Membership (PIF) $1950 </label>
+																														</li>
+																													</ul>
+																												</div>
+																												<ul class="schedule-class-navbar">		
+																													<li class="pc-caption">
+																														<div class="d-relative">
+																															<div class="sche-submit">
+																																<button type="button" class="btn-red select-event"> Submit </button>
+																															</div>
+																														</div>																														
+																													</li>																													
+																												</ul>
+																												
+																											</div>
+																										</div>
+																									</div>
+																								</nav>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>Kickboxing (All Levels)</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">4 Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule </a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>Kickboxing Level 2</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">Not Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule </a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>Kickboxing Mixed Level</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">5 Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule</a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>March Graduation</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">Not Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule </a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>Max-Out Cardio Kickboxing</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">2 Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule </a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>Self Defense Seminar</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">Not Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule </a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>Stretch & Myofascial</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">Not Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule </a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>VMA Belt Class</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">Not Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule </a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																		</div>
+																	
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div><!-- end card-body -->
+										</div><!-- end card -->
+									</div>
+									<!--end col-->
+								</div>
+								<!--end row-->
+								
+								<div class="row">
+									<div class="col-md-12">
+										<div class="card">
+											<div class="card-header align-items-center d-flex">
+												<h4 class="card-title mb-0 flex-grow-1 nesting-steps-title">Step 6: Schedule Adventures & Tours</h4>
+											</div><!-- end card header -->
+
+											<div class="card-body">
+												<div class="live-preview">
+													<div class="accordion" id="stepSix">
+														<div class="accordion-item shadow">
+															<h2 class="accordion-header" id="stepheadingSix">
+																<button class="accordion-custom-btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+																	Adult Program Options
+																</button> 
+															</h2>
+															<div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="stepheadingSix" data-bs-parent="#stepSix">
+																<div class="accordion-body">
+																	<div class="row">
+																		<div class="col-lg-12 col-md-12">
+																			<div class="row y-middle card-header">	
+																				<div class="col-lg-12 col-md-12 col-12">
+																					<label class="fs-17">Adventures & Tours</label>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>Adult Program Options</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set setoflinkes">
+																							<a href="#">2 Scheduled </a>
+																							<label class="mr-5 ml-5"> | </label>
+																							<a href="#">+ Schedule </a>
+																							<label class="mr-5 ml-5"> | </label>
+																							<div class="userblock0">
+																								<div class="login_links" onclick="openNavv()">
+																									<a href="#" >+ Price Options </a>
+																								</div>
+																								<nav class="serviceclass">
+																									<div class="navbar-wrapper">
+																										<div id="Sidepanelone" class="service-sidepanel">
+																											<div class="navbar-content-side sc ">
+																												<div class="side-cross">
+																													<div class="row">
+																														<div class="col-lg-10 col-md-10 col-10">
+																															<label>Choose the price options your clients can choose to book with this classes</label>
+																												
+																														</div>
+																														<div class="col-lg-2 col-md-2 col-2">
+																															<a href="javascript:void(0)" class="cancel fa fa-times " onclick="closeNavv()"></a>
+																														</div>
+																													</div>
+																												</div>
+																												<ul class="schedule-class-navbar">																													
+																													<li class="pc-caption mb-10">
+																														<input type="checkbox" id="all" name="all" value="Bike">
+																														<label for="all">  Select All</label>
+																													</li>
+																													<li class="pc-caption">
+																														<input type="checkbox" id="price1" name="price1" value="Bike">
+																														<label for="price1">  price option 1 </label>
+																													</li>																											
+																												</ul>
+																												<div class="side-dropdown">
+																													<div class="form">
+																														<input class="mr-5" type="checkbox" id="cat" name="cat" value="Bike">
+																														<label for="cat" class="drop-header">Kickboxing  </label>
+																														<button class="button-1"> <i class="fas fa-chevron-down fa-sm"></i></button>
+																													</div>
+																													<ul class="dropdownList">
+																														<li>
+																															<input type="checkbox" id="price1" name="price1" value="Bike">
+																															<label for="price1">6 Months Membership (Recurring) $99 </label>
+																														</li>
+																														<li>
+																															<input type="checkbox" id="price2" name="price2" value="Bike">
+																															<label for="price2"> 6 Months Membership (PIF) $1250</label>
+																														</li>
+																														<li>
+																															<input type="checkbox" id="price2" name="price2" value="Bike">
+																															<label for="price2">1 Year Membership (Recurring) $150</label>
+																														</li>
+																														<li>
+																															<input type="checkbox" id="price2" name="price2" value="Bike">
+																															<label for="price2">1 Year Membership (PIF) $1950 </label>
+																														</li>
+																													</ul>
+																												</div>
+																												<ul class="schedule-class-navbar">		
+																													<li class="pc-caption">
+																														<div class="d-relative">
+																															<div class="sche-submit">
+																																<button type="button" class="btn-red select-event"> Submit </button>
+																															</div>
+																														</div>																														
+																													</li>																													
+																												</ul>
+																												
+																											</div>
+																										</div>
+																									</div>
+																								</nav>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>Kickboxing (All Levels)</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">4 Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule </a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>Kickboxing Level 2</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">Not Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule </a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>Kickboxing Mixed Level</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">5 Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule</a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>March Graduation</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">Not Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule </a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>Max-Out Cardio Kickboxing</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">2 Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule </a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>Self Defense Seminar</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">Not Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule </a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>Stretch & Myofascial</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">Not Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule </a>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			
+																			<div class="classes-list">
+																				<div class="row">
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14">
+																							<span>VMA Belt Class</span>
+																						</div>
+																					</div>
+																					<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+																						<div class="fs-14 float-right links-set">
+																							<a href="#">Not Scheduled </a>
+																							<label> | </label>
+																							<a href="#">+ Schedule </a>
 																						</div>
 																					</div>
 																				</div>

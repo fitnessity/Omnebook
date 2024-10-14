@@ -77,7 +77,7 @@
                                                             }else {
                                                                $act_img = url('/public/images/service-nofound.jpg');
                                                             }
-                                                        }else{
+                                                        }else{  
                                                             $act_img = url('/public/images/service-nofound.jpg');
                                                         }
                                                         ?>
@@ -195,7 +195,7 @@
         var _token = $('meta[name="csrf-token"]'). attr('content');
         $.ajax({
             type: 'POST',
-            url: '{{route("service_fav")}}',
+            url: '{{route("personal.service_fav")}}',
             data: {
                 _token: _token,
                 ser_id: ser_id

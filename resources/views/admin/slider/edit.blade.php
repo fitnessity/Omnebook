@@ -88,15 +88,16 @@
           </div>
 
           <div class="row">
-            <div class="col-xs-12 form-group {{ $errors->has('price') ? ' has-error' : '' }} ">
-                {!! Form::label('price', 'Price', ['class' => 'control-label']) !!} 
-                {!! Form::text('price', $sliders->price, ['id' => 'price','class' => 'form-control', 'placeholder' => '']) !!}
+            <div class="col-xs-12 form-group {{ $errors->has('link') ? ' has-error' : '' }} ">
+                {!! Form::label('link', 'Link', ['class' => 'control-label']) !!} 
+                {!! Form::text('link', $sliders->link, ['id' => 'link', 'class' => 'form-control', 'placeholder' => '']) !!}
+                
                 <p class="help-block"></p>
-                    @if($errors->has('price'))
-                        <p class="help-block">
-                            {{ $errors->first('price') }}
-                        </p>
-                    @endif
+                @if($errors->has('link'))
+                    <p class="help-block">
+                        {{ $errors->first('link') }}
+                    </p>
+                @endif
             </div>
           </div>
 

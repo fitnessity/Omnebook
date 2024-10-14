@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Http\Request;
-use App\{User,CompanyInformation,CustomerPlanDetails,Transaction,StripePaymentMethod,Plan,PromoCodes};
+use App\{User,CompanyInformation,CustomerPlanDetails,Transaction,StripePaymentMethod,Plan,PromoCodes,OnboardQuestions};
 use App\Repositories\FeaturesRepository;
 use Str;
 use DateTime;
 use Carbon\Carbon;
-
+use Session;
 class MembershipPlanController extends Controller {
 
 
@@ -23,8 +23,12 @@ class MembershipPlanController extends Controller {
     public function index(Request $request) { 
         $plans = Plan::get();
         $currentPlan = Auth::user()->currentPlan();
+        $faqs = OnboardQuestions::get();
         $features = $this->features->getAllFeatures();
-        return view('membership-plan.index',compact('plans','features','currentPlan'));
+        if (session()->has('redirectToOnboard')) {
+            session()->forget('redirectToOnboard');
+        }
+        return view('membership-plan.index',compact('plans','features','currentPlan','faqs'));
     }
 
     public function store(Request $request){

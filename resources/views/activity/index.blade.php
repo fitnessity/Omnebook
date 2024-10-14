@@ -293,6 +293,7 @@
 													<span>From {!!$price_all!!}/Person</span>
 												@endif -->
 											<!-- </div> -->
+
 											</div>
 											<div class="col-md-12 col-sm-12 col-xs-12 activites-price-details-left">
 												<div class="activity-time-main text-center <?php echo ($bookscheduler->is_start_in_one_hour($current_date)) ? 'activity-time-main-red' : ''?>">
@@ -398,6 +399,7 @@
 																			</div>
 																		@else
 																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+
 																		@endif
 																	@endforeach
 																@else
@@ -1560,6 +1562,7 @@
 																			</div>
 																		@else
 																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+
 																		@endif
 																	@endforeach
 																@else
@@ -1569,6 +1572,7 @@
 																		</div>
 																	@else
 																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+
 																	@endif
 																@endif
 															</div>
@@ -2043,11 +2047,11 @@
 <!-- end modal -->
 
 <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
+
 <!-- <script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script> -->
 <!-- <script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
 <script src="{{ url('public/js/jquery-ui.min.js') }}"></script> -->
 <!-- <script type="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
 
 @include('layouts.business.footer')

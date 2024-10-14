@@ -41,7 +41,7 @@ class CartService
         $cart['cart_item'] = [];
         foreach($this->_cart['cart_item'] as $key=>$c)
         {   
-            if($c['chk'] == '') {
+            if($c['chk'] == '' || $c['chk'] == 'checkin') {
                 $cart['cart_item'][] = $c;
             }
         }
@@ -248,7 +248,17 @@ class CartService
         $serviceFee = $this->getServiceFee($priceWithDiscount);
         $subTotal = $price + $tax + $serviceFee - $discount + $addOnServicePrice;
         $subTotal = $subTotal < 0 ?  0 : $subTotal;
-        return $subTotal;
+        return number_format( $subTotal, 2);
+    }
+
+    public function getMembershipTotal($priceId,$role,$price){
+        $discount = $this->getDiscount($priceId,$role,$price);
+        return  number_format(  $price - $discount, 2);
+    }
+
+    public function getMembershipTax($priceId,$role,$price){
+        $discount = $this->getDiscount($priceId,$role,$price);
+        return number_format( $this->getTax($price - $discount) , 2);
     }
 
     public function getDiscount($priceId,$role,$price){
@@ -261,20 +271,20 @@ class CartService
         }if($role == 'infant'){
             $dis = $priceDetail->infant_discount;
         }
-        $discount = ($price * $dis)/100;
+        $discount = number_format(($price * $dis)/100 ,2);
         return $discount;
     }
 
     public function getTax($price){
         $bspdata = $this->planData();
         $tax = @$bspdata->site_tax !='' ? @$bspdata->site_tax : 0;
-        return  ($price * $tax)/100;
+        return  number_format( ($price * $tax)/100,2);
     }
 
     public function getServiceFee($price){
         $bspdata = $this->planData();
         $service_fee = @$bspdata->service_fee !='' ? @$bspdata->service_fee : 0;
-        return  ($price * $service_fee)/100;
+        return  number_format(  ($price * $service_fee)/100 ,2);
     }
 
     public function getFitnessFee($price, $user){

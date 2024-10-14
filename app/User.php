@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Storage;
 use App\StripePaymentMethod;
 use Auth;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -20,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',  'password','new_password_key','is_deleted','isguestuser','fitnessity_fee','recurring_fee','firstname','lastname','birthdate','cid','bstep','serviceid','servicetype','stripe_connect_id','stripe_customer_id','username','gender','email','phone_number','profile_pic','address','city','state','country','zipcode','activated','show_step','dobstatus','buddy_key','primary_account','default_card','quick_intro', 'favorit_activity' ,'business_info'
+        'name',  'password','new_password_key','is_deleted','isguestuser','fitnessity_fee','recurring_fee','firstname','lastname','birthdate','cid','bstep','serviceid','servicetype','stripe_connect_id','stripe_customer_id','username','gender','email','phone_number','profile_pic','address','city','state','country','zipcode','activated','show_step','dobstatus','buddy_key','primary_account','default_card','quick_intro', 'favorit_activity' ,'business_info','cover_photo','website','twitter','insta','facebook','unique_user_id','unique_code'
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -51,6 +52,15 @@ class User extends Authenticatable
             if(!$model->stripe_customer_id){
                 $model->create_stripe_customer_id();
             }
+            if(!$model->unique_code){
+                $model->create_unique_code();
+            }
+        });
+
+        self::creating(function($model){
+            if(!$model->unique_user_id){
+                $model->create_unique_id();
+            }
         });
 
         self::updated(function($model){
@@ -59,6 +69,39 @@ class User extends Authenticatable
             }
         });
     }
+
+
+    public function create_unique_id(){
+        $lastUser = User::whereNotNull('unique_user_id')->orderBy('id','desc')->first();
+        if(!$lastUser){
+            $uniqueId = 100000000;
+        }else{
+            $uniqueId = $lastUser->unique_user_id + 1;
+        }
+
+        $this->unique_user_id = $uniqueId;
+    }
+
+    public function create_unique_code(){
+        $uniqueCode = $this->generateUniqueCode();
+        while ($this->isCodeExists($uniqueCode)) {
+            $uniqueCode = $this->generateUniqueCode();
+        }
+        $this->unique_code = $uniqueCode;
+    }
+
+
+    private function generateUniqueCode()
+    {
+        return str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
+    }
+
+    private function isCodeExists($code)
+    {
+        return DB::table('users')->where('unique_code', $code)->exists();
+    }
+
+
 
     public function getAgeAttribute()
     {
@@ -90,6 +133,15 @@ class User extends Authenticatable
         }
 
         return $profile_pic;
+    }
+
+    public function getCoverPic(){
+       $cover_photo = '';
+        if(Storage::disk('s3')->exists($this->cover_photo)){
+            $cover_photo = Storage::url($this->cover_photo);
+        }
+
+        return $cover_photo;
     }
 
     public function getaddress(){
@@ -140,23 +192,28 @@ class User extends Authenticatable
 
     function getNetworkCountAttribute() {
         return UserNetwork::where('status','accepted')
-                         ->where(function($q) {
-                                $q->where('user_id', $this->id)
-                                  ->orWhere('friend_id', $this->id);
-                            })
-                         ->count();
+                 ->where(function($q) {
+                        $q->where('user_id', $this->id)
+                          ->orWhere('friend_id', $this->id);
+                    })
+                 ->count();
     }
 
     function create_stripe_customer_id(){
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
-        $customer = \Stripe\Customer::create([
-            'name' => $this->firstname . ' '. $this->lastname,
-            'email'=> $this->email,
-        ]);
-        $this->stripe_customer_id = $customer->id;
-        $this->save();
+        try{
+             $customer = \Stripe\Customer::create([
+                'name' => $this->firstname . ' '. $this->lastname,
+                'email'=> $this->email,
+            ]);
+            $this->stripe_customer_id = $customer->id;
+            $this->save();
 
-        return $customer->id;
+            return $customer->id;
+        }catch(Exception | \Stripe\Exception\InvalidRequestException $e){
+            return "";
+        }
+       
     }
 
     public function get_stripe_card_info(){
@@ -211,6 +268,18 @@ class User extends Authenticatable
     public function CustomersDocuments()
     {
         return $this->hasMany(CustomersDocuments::class,'user_id');
+    
+
+    }
+
+    public function BusinessServices()
+    {
+        return $this->hasMany(BusinessServices::class,'userid');
+    } 
+
+    public function Products()
+    {
+        return $this->hasMany(Products::class,'user_id');
     }
 
     public function AddOnService()
@@ -348,6 +417,7 @@ class User extends Authenticatable
         return $this->hasMany(UserFollower::class, 'follower_id', 'id');
     }
 
+  
     public function getcustage(){
         if($this->birthdate != null){
             return Carbon::parse($this->birthdate)->age;
@@ -404,7 +474,7 @@ class User extends Authenticatable
     public function freeTrial(){
         $data = $this->currentPlan();
         if(@$data->amount == 0){
-            if(Auth::user()->planDateDiffrence() < 14){
+            if(Auth::user()->planDateDiffrence() <= 15){
                 return 'free';
             }
         }

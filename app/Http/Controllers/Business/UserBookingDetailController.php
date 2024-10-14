@@ -5,12 +5,31 @@ namespace App\Http\Controllers\Business;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
+use Session;
 use App\{UserBookingDetail,UserBookingStatus, Transaction};
 
 class UserBookingDetailController extends Controller
 {
-    //
+    //  
 	
+    protected $loggedId;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (Session::has('StaffLogin')) {
+                $this->loggedId = 'staff~~'.Session::get('StaffLogin');
+            } elseif (Auth::check()) {
+                $this->loggedId = 'user~~'.Auth::user()->id;
+            } else {
+                $this->loggedId = null;
+            }
+
+            return $next($request);
+        });
+    }
+
+
 	public function index()
     {
     }
@@ -63,10 +82,9 @@ class UserBookingDetailController extends Controller
  
     public function refund(Request $request, $business_id, $booking_id){
 
+       
         $company = $request->current_company->findOrFail($business_id);
-
         $customer = $company->customers()->findOrFail($request->customer_id);
-
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
 
         if($booking_detail->can_refund()){
@@ -75,11 +93,9 @@ class UserBookingDetailController extends Controller
                 $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
 
                 if($transaction->can_refund()){
-                    
                     if(!$transaction->refund($request->refund_amount ? $request->refund_amount : Null)){
                         return response()->json(['message' => 'refund failed.'], 400);
                     }
-
                 }else{
                     return response()->json(['message' => 'not pay by credit card ot transction can not found'], 400);
                 }
@@ -92,6 +108,7 @@ class UserBookingDetailController extends Controller
                 "refund_method" => $request->refund_method,
                 "refund_date" => date('Y-m-d',strtotime($request->refund_date)),
                 "refund_reason" => $request->refund_reason,
+                "refund_by" => $this->loggedId,
             ];
             // $booking_detail->refund();
             $booking_detail->update($result);
@@ -121,11 +138,12 @@ class UserBookingDetailController extends Controller
     } 
 
     public function suspend(Request $request, $business_id){
+
         $company = $request->current_company->findOrFail($business_id);
         $customer = $company->customers()->findOrFail($request->customer_id);
 
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
-
+        
         if($booking_detail->can_suspend()){
             if($request->suspension_fee > 0){
                 if($customer->charge($request->suspension_fee, 'terminate')){
@@ -134,7 +152,8 @@ class UserBookingDetailController extends Controller
                                             'suspend_started' => date('Y-m-d',strtotime($request->suspensionstartdate)),
                                             'suspend_ended' =>date('Y-m-d',strtotime($request->suspensionenddate)) ,
                                             'suspend_fee' => $request->suspension_fee,
-                                            'suspend_comment' =>$request->suspension_comment]);
+                                            'suspend_comment' =>$request->suspension_comment,
+                                            'suspend_by' => $this->loggedId]);
                 }else{
                     return response()->json(['message' => 'charge user failed.'], 400);
                 }
@@ -159,7 +178,8 @@ class UserBookingDetailController extends Controller
                                             'terminate_reason' => $request->terminate_reason,
                                             'terminated_at' => date('Y-m-d',strtotime($request->terminated_at)),
                                             'terminate_fee' => $request->terminate_fee,
-                                            'terminate_comment' =>$request->terminate_comment]);
+                                            'terminate_comment' =>$request->terminate_comment,
+                                            'terminate_by' => $this->loggedId]);
                 }else{
                     return response()->json(['message' => 'charge user failed.'], 400);
                 }

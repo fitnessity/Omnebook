@@ -31,7 +31,7 @@
 			<div class="col-md-4 col-sm-4 col-6">
 				<div class="gry-box d-grid side-box mb-3">
 					<label>Spots</label>
-					<span>{{$business_activity_scheduler->spots_left($filter_date)}}/{{$business_activity_scheduler->spots_available}} </span>
+					<span>{{$business_activity_scheduler->spots_left($filter_date)}}/{{$business_activity_scheduler->spots_available}}  </span>
 				</div>
 			</div>
 		</div>
@@ -46,12 +46,7 @@
             </select>
 
 			<script type="text/javascript">
-				const instructure  = '{{ @$instructor_id }}';
-				const insIds  = instructure ? instructure.split(',') : [];
-				const s  = new SlimSelect({
-				   select: '#instructure'
-				});
-				s.set(insIds);
+					initializeSlimSelect();
 			</script>
 		</div>
 	</div>
@@ -61,8 +56,6 @@
 				<div class="client-search">
 					<div class="position-relative">
 						<input type="text" id="search_postorder_client" name="fname" placeholder="Search for client" autocomplete="off" value="" class="form-control" data-customer-id = "">
-                      
-						<!-- <input type="text" class="form-control ui-autocomplete-input" placeholder="Search for client" autocomplete="off" id="search_postorder_client" value=""> -->
 						<span class="mdi mdi-magnify search-widget-icon"></span>
 						<span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-close-options"></span>
 					</div>
@@ -75,13 +68,13 @@
 		</div>
 	</div>
 	@if(session()->has('success'))
-	    <div class="font-green mb-10 fs-16">
+	    <div class="font-green mb-10 fs-16 error-msg">
 	        {{ session()->get('success') }}
 	    </div>
 	@endif
 
 	@if(session()->has('error'))
-	    <div class="font-red mb-10 fs-16">
+	    <div class="font-red mb-10 fs-16 error-msg">
 	        {{ session()->get('error') }}
 	    </div>
 	@endif
@@ -104,9 +97,22 @@
 						@php 
 							$firstCheckInDetail = '';
 							$rowRelation = $cus->BookingCheckinDetails();
-							// $firstCheckInDetail = $chkCusId != $cus->id ||  $chkInId == '' ? $rowRelation->whereDate('checkin_date', $filter_date->format('Y-m-d'))->where('business_activity_scheduler_id', $business_activity_scheduler->id)->first() : $rowRelation->where('id',$chkInId)->first();
 							$firstCheckInDetail = $rowRelation->whereDate('checkin_date', $filter_date->format('Y-m-d'))->where('business_activity_scheduler_id', $business_activity_scheduler->id)->first();
-							$checkInIds = '';
+
+							$checkInIds = $activeMembership ='';
+							$activeMembershipCustomer = $cus->active_memberships()->get();
+
+							// if the customer has only 1 session remaining or the membership is only for 1 session then we have to display that activity also after check-in. because if that type of activity is checked-in then it's became an expired activity.
+
+							$todayCheckInDetails = App\UserBookingDetail::join('booking_checkin_details as bcd' ,'bcd.booking_detail_id' ,'=','user_booking_details.id')->where('bcd.customer_id',$cus->id)->whereDate('bcd.checkin_date',$filter_date->format('Y-m-d'))->select('user_booking_details.*')->get();
+
+							//print_r($todayCheckInDetails);
+							if($filter_date->format('Y-m-d') <= date('Y-m-d')){
+								$activeMembership = $activeMembershipCustomer->merge($todayCheckInDetails)->unique('id');
+							}else{
+								$activeMembership = $activeMembershipCustomer;
+							}
+
      					@endphp
 						<tr>
 							<td>{{$i+1}}</td>
@@ -125,10 +131,10 @@
 								</div>
 							</td>
 							<td>
-								@if($cus->active_memberships()->get()->isNotEmpty())
-									<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" data-cus-id="{{$cus->id}}">
+								@if(is_object($activeMembership) && $activeMembership->isNotEmpty())
+									<select class="form-select valid price-info mmt-10 width-105" data-behavior="change_price_title" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}" data-cus-id="{{$cus->id}}" data-loop-id="{{$i}}">
 										<option value="" @if(!@$firstCheckInDetail->order_detail) selected @endif>Choose option</option>
-										@foreach($cus->active_memberships()->get() as $bookingDetail)
+										@foreach($activeMembership as $bookingDetail)
 											@php 
 												$cCheckin = $bookingDetail->BookingCheckinDetails->where('checkin_date', $filter_date->format('Y-m-d'))->first();
 												if($cCheckin){
@@ -143,19 +149,21 @@
 								@else
 									<p class="font-red">No Membership</p>
 								@endif
+
+								<div class="mt-10 membership-section{{$i}} text-center font-red"></div>
 							</td>
 							<td class="modal-check-width">
 								<div class="check-cancel width-105">
-									@if(@$firstCheckInDetail->order_detail && $cus->active_memberships()->get()->isNotEmpty()) 
+									@if(@$firstCheckInDetail->order_detail && is_object($activeMembership) && $activeMembership->isNotEmpty()) 
 										@php  
 											$datetime = new DateTime(@$firstCheckInDetail->checkin_date.' '.$business_activity_scheduler->shift_start);
 											$formattedDatetime = $datetime->format('Y-m-d H:i:s');
 										@endphp
-										<input type="checkbox" name="check_in" value="1" data-behavior="checkin"data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}"data-booking-detail-id="{{@$firstCheckInDetail->booking_detail_id}}"  data-booking-detail-date="{{$formattedDatetime}}" @if(@$firstCheckInDetail->checked_at != '' ) checked @endif   data-cus-id="{{$cus->id}}"> 
+										<input type="checkbox" name="check_in" value="1" data-behavior="checkin" data-booking-checkin-detail-id="{{@$firstCheckInDetail->id}}"data-booking-detail-id="{{@$firstCheckInDetail->booking_detail_id}}"  data-booking-detail-date="{{$formattedDatetime}}" @if(@$firstCheckInDetail->checked_at != '' ) checked @endif   data-cus-id="{{$cus->id}}"> 
 									@endif 
 									<label for="checkin" class="mb-0 mmt-10">Check In</label><br>
 
-									@if(@$firstCheckInDetail->order_detail && $cus->active_memberships()->get()->isNotEmpty())
+									@if(@$firstCheckInDetail->order_detail && is_object($activeMembership) && $activeMembership->isNotEmpty())
 					                    <input type="checkbox"  onclick="call()" name="late_cancel" value="0" data-behavior="ajax_html_modal" data-url="{{route('business.scheduler_checkin_details.latecencel_modal', ['id' => @$firstCheckInDetail->id, 'scheduler_id' => $business_activity_scheduler->id])}}"  data-modal-width = "500px" data-booking-detail-id="{{@$firstCheckInDetail->order_detail->id}}"
 					                        @if(@$firstCheckInDetail->no_show_action) checked @endif >
 					                @endif 
@@ -163,11 +171,11 @@
 								</div>
 							</td>
 							<td>
-								<div>
-									<p class="mb-0">{{ @$firstCheckInDetail->order_detail !='' ? @$firstCheckInDetail->order_detail->getremainingsession()."/".@$firstCheckInDetail->order_detail->pay_session : "N/A"}}</p>
+								<div class="remaining-session">
+									<p class="mb-0">{{ @$firstCheckInDetail->order_detail !='' ? @$firstCheckInDetail->order_detail->getRemainingSessionAfterAttend()."/".@$firstCheckInDetail->order_detail->pay_session : "N/A"}}</p>
 								</div>
 							</td>
-							<td>{{@$firstCheckInDetail->order_detail != '' ? Carbon\Carbon::parse(@$firstCheckInDetail->order_detail->expired_at)->format('m/d/Y') : "N/A"}}</td>
+							<td class="session-exp">{{@$firstCheckInDetail->order_detail != '' ? Carbon\Carbon::parse(@$firstCheckInDetail->order_detail->expired_at)->format('m/d/Y') : "N/A"}}</td>
 							<td>{!! $cus->chkSignedTerms() !!} {!!$cus->chkBirthday() !!} {!! $cus->findExpiredCC() !!} {!! $cus->chkRecurringPayment(@$firstCheckInDetail->booking_detail_id) !!}</td>
 							<td>
 								<div class="multiple-options">
@@ -205,6 +213,16 @@
 </div>
 
 <script type="text/javascript">
+	var ins;
+	function initializeSlimSelect() {
+        const instructure  = '{{ @$instructor_id }}';
+        const insIds  = instructure ? instructure.split(',') : [];
+        ins  = new SlimSelect({
+            select: '#instructure'
+        });
+        ins.set(insIds);
+    }
+
 	$(document).ready(function () {
         var business_id = '{{request()->current_company->id}}';
         var url = "{{ url('/business/business_id/customers') }}";
@@ -278,6 +296,7 @@
 	});
 
 	$('[data-behavior~=checkin]').change(function(e){
+		$('.error-msg').html('');
         checkbox = this
      	if(!$(this).data('booking-detail-id')){
             this.checked = false;
@@ -289,6 +308,7 @@
      	
      	var date = $(this).data('booking-detail-date');
      	var chkInID =$(this).data('booking-checkin-detail-id');
+     	var booking_detail_id =$(this).data('booking-detail-id');
      	var cus_id =$(this).data('cus-id');
      	var chk = $(this).is(':checked') ? 1 : 0;
      	$.ajax({
@@ -297,6 +317,7 @@
             data:{
                 _token: '{{csrf_token()}}', 
                 checked_at: $(this).is(':checked') ? date : null,
+                booking_detail_id: booking_detail_id,
             },
             success:function(response) {
             	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date}}',chkInID,cus_id,chk,'',response);
@@ -311,6 +332,9 @@
     });
 
     $('[data-behavior~=change_price_title]').change(function(e){
+    	$('.error-msg').html('');
+    	var loopId = $(this).data('loop-id');
+    	$('.membership-section'+loopId).html('');
     	var t = $(this)
         $.ajax({
             url: "/business/{{request()->current_company->id}}/schedulers/{{$business_activity_scheduler->id}}/checkin_details/" + $(this).data('booking-checkin-detail-id'),
@@ -320,10 +344,17 @@
                 booking_detail_id: $(this).val()
             },
             success:function(response) {
-        	    var cus_id =t.data('cus-id');
-            	var selectedOption = t.find('option:selected');
-            	var chkInID = selectedOption.attr('checkInId');
-            	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date->format("Y-m-d")}}',chkInID,cus_id,'','','');
+            	if(isNaN(response)){
+            		$('.membership-section'+loopId).html(response);
+            		$('.modal-check-width').html('<div class="check-cancel width-105"><label for="checkin" class="mb-0 mmt-10">Check In</label><br><label for="cancel" class="mb-0 mmt-10"> Late Cancel</label><br></div>');
+            		$('.remaining-session').html('<div><p class="mb-0">N/A</p></div>');
+					$('.session-exp').html('N/A');
+            	}else{
+	        	    var cus_id = t.data('cus-id');
+	            	var selectedOption = t.find('option:selected');
+	            	var chkInID = selectedOption.attr('checkInId');
+	            	getCheckInDetails('{{$business_activity_scheduler->id}}','{{$filter_date->format("Y-m-d")}}',chkInID,cus_id,'','','');
+            	}
             },
        	});
     });
@@ -332,10 +363,11 @@
     	$('.checkinDetails').modal('hide');
     }
 
-    var ins = new SlimSelect({
+    /*var ins = new SlimSelect({
       	select: '#instructure'
-   	});
+   	});*/
 
+    initializeSlimSelect();
    	$('#instructure').on('change', function() {
     	var selectedValues = ins.selected();
     	date = "{{$filter_date->format('Y-m-d')}}";

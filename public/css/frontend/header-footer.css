@@ -108,6 +108,11 @@ header .header-right {
   background: #1c256c;
   border: 1px solid #1c256c !important;
 }
+.btn-list-business.business-sp:hover{
+    color: #fff !important;
+  background: #000;
+  border: 1px solid #000 !important;
+}
 .btn-list-business{
 	border: 1px solid #1c256c !important;
 	color: #1c256c;

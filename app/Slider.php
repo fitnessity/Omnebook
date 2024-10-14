@@ -26,7 +26,7 @@ class Slider extends Model
         'title',
         'heading',
         'stext',
-        'price'
+        'link'
     ];
 
      
