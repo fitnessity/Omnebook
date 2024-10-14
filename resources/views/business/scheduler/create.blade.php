@@ -418,6 +418,7 @@
 </div>
     
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 <script>
 		flatpickr(".flatpickr", {
 	      dateFormat: "m/d/Y",

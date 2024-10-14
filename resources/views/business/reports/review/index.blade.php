@@ -183,6 +183,7 @@
 </div><!-- END layout-wrapper -->
     
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 	
 
 @php $downloadUrl = route("business.online-review.export"); @endphp
