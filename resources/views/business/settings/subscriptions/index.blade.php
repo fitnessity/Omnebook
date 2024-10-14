@@ -22,7 +22,7 @@
 								</div>
 								<div class="col-6">
 									<div class="page-heading">
-										<label>Fitnessity Subscriptions</label>
+										<label>Omnebook Subscriptions</label>
 									</div>
 								</div><!--end col-->
 							</div> <!--end row-->
@@ -166,7 +166,8 @@
 </div>
 	
 @include('layouts.business.footer')
-	
+@include('layouts.business.scripts')
+
 <script type="text/javascript">
 	function  getData(val) {
 		$.ajax({
