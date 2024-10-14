@@ -1,35 +1,5 @@
 @inject('request', 'Illuminate\Http\Request')
 @extends('layouts.business.header')
-
-<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
-<head>
-
-    <meta charset="utf-8" />
-    <title>Fitnessity </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
-
-
-    <!-- Layout config Js-->
-    <script src="{{asset('/public/dashboard-design/js/layout.js')}}"></script>
-    <!-- Bootstrap Css -->
-    <link href="{{asset('/public/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    <!-- <link href="{{asset('/public/dashboard-design/css/simplebar.min.css')}}" rel="stylesheet" type="text/css" /> -->
-	
-    <!-- Style Css-->
-    <link href="{{asset('/public/dashboard-design/css/style.css')}}" rel="stylesheet" type="text/css" />
-	
-	<!-- Custom Css-->
-    <link href="{{asset('/public/dashboard-design/css/custom.css')}}" rel="stylesheet" type="text/css" />
-	<link href="{{asset('/public/dashboard-design/css/responsive.css')}}" rel="stylesheet" type="text/css" />
-	
-	<!-- icon -->
-	<link rel="stylesheet" type="text/css" href="{{asset('/public/dashboard-design/css/icons.min.css')}}" />
-
-</head>
 	
 @section('content')
 
@@ -119,7 +89,7 @@
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <div class="px-3">
-                                                                <img src="{{url('dashboard-design/images/user-illustarator-2.png')}}" class="img-fluid" alt="">
+                                                                <img src="{{url('dashboard-design/images/user-illustarator-2.png')}}" class="img-fluid" alt="OmneBook" loading="lazy">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -402,7 +372,7 @@
 										<div class="col-md-12">
 											<div class="card padding-15">
 												<div class="row">
-													<div class="col-lg-4 col-md-6">
+													<div class="col-xxl-3 col-lg-6 col-md-6 col-12">
 														<div class="border-0 align-items-center text-center mb-15">
 															<h4 class="payment-tracker flex-grow-1">Recurring Payments Tracker</h4>
 															<h4 class="payment-tracker">
@@ -416,7 +386,7 @@
 															<p class="mb-0">Scheduled Payments </p>
 														</div>
 													</div>
-													<div class="col-lg-4 col-md-6">
+                                                    <div class="col-xxl-3 col-lg-6 col-md-6 col-12">
 														<div class="border-0 align-items-center">
 															<div class="card card-animate overflow-hidden set-data mb-15">
 																<div class="position-absolute start-0" style="z-index: 0;">
@@ -444,7 +414,7 @@
 															</div>
 														</div>
 													</div>
-													<div class="col-lg-4 col-md-6">
+													<div class="col-xxl-3 col-lg-6 col-md-6 col-12">
 														<div class="border-0 align-items-center">
 															<div class="card card-animate overflow-hidden set-data mb-15">
 																<div class="position-absolute start-0" style="z-index: 0;">
@@ -490,9 +460,9 @@
 														<input type="text" class="form-control flatpickr-schedule"   data-deafult-date="today" data-inline-date="true" data-min-date="{{date('d M, Y')}}">
 													</div>
 													<div class="dropdown-activity mt-4 mb-3">
-														<a class="alinkdrop dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Show All Activites</a>
+														<a class="alinkdrop dropdown-toggle cal-drop" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Show All Activities</a>
 														<ul class="dropdown-menu activityschedule" aria-labelledby="dropdownMenuButton1">
-															<li><a class="dropdown-item">Show All Activites</a></li>
+															<li><a class="dropdown-item">Show All Activities</a></li>
 															<li><a class="dropdown-item">Personal Training</a></li>
 															<li><a class="dropdown-item">Classes</a></li>
 															<li><a class="dropdown-item">Events</a></li>

@@ -381,7 +381,7 @@
 													<div class="row">
 														<div class="col-lg-6 col-md-6">
 															<div class="mb-3">
-																<label class="form-label">Legal Business Name <span class="font-red">*</span></label>
+																<label class="form-label">Legal Business Names <span class="font-red">*</span></label>
 																<input type="text" class="form-control" id="companyName" name="companyName" required value="{{@$companyDetail->company_name}}">
 																<div class="invalid-feedback">Please enter an business name</div>
 															</div>
@@ -1216,4 +1216,5 @@
 </script>
 
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 @endsection

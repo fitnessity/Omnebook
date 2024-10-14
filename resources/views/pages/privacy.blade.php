@@ -1,8 +1,9 @@
-@extends('layouts.header')
-
+@extends('layouts.business.header')
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 @section('content')
 
-  <section class="inner-banner" style="background-image:url('/public/uploads/cms/{{ $banner_image }}')">
+  <section class="inner-banner pmt-105" style="background-image:url('/public/uploads/cms/{{ $banner_image }}')">
       <div class="container">
             <h1>{{ $pageTitle }}</h1>
       </div>
@@ -26,5 +27,5 @@
     </div>
 
   </section>
-  @include('layouts.footer')
+  @include('layouts.business.footer')
 @endsection

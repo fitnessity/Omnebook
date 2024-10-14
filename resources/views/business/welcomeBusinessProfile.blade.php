@@ -45,11 +45,11 @@
                     <input type="hidden" name="serviceid" value="0">
                     <section class="row">
                         <div class="col-md-12 text-center">
-                            <div class="tab-hed">Welcome To <span style="color: red;">Fitnessity For Business</span></div>
+                            <div class="tab-hed">Welcome To <span style="color: red;">OmneBook For Business</span></div>
                         </div>
                         <div class="col-md-12 text-center">
 
-                            <p class="tab-para1"><img src="/public/images/fitnessity_logo.png"> <span style="font-size: 33px;">+</span> <img width=300 src="/public/images/stripe.jpg"></p>
+                            <p class="tab-para1"><img src="/public/images/fitnessity_logo.png" loading="lazy"> <span style="font-size: 33px;">+</span> <img width=300 src="/public/images/stripe.jpg"></p>
 
                             <p class="tab-para1"><b>Your Stripe Payment Verification Process Is</b></p>
                                                         
@@ -138,7 +138,7 @@
                     <input type="hidden" name="gostripe" value="1">
                     <section class="row">
                         <div class="col-md-12 text-center">
-                            <div class="tab-hed">Welcome To <span style="color: red;">Fitnessity For Business</span></div>
+                            <div class="tab-hed">Welcome To <span style="color: red;">OmneBook For Business</span></div>
                         </div>
                         <div class="col-md-12 text-center">
                             <div class="tab-para">INTRODUCE YOURSELF, YOUR BUSINESS, SERVICES & PRODUCTS TO THE WORLD! </div>
@@ -147,7 +147,7 @@
 You can offer your services online, at your place of business, or on the go. Start by adding your business information, images, videos, services, and prices and <br/><br/>Once you're done setting up, you're ready to start
 receiving bookings from customers looking for the activities and services you offer.</p>
 
-                            <p class="tab-para1"><b>How to Start Your Onboarding Process with Fitnessity</b></p>
+                            <p class="tab-para1"><b>How to Start Your Onboarding Process with OmneBook</b></p>
                             <p class="tab-para1"><b>Step 1.</b> Get started by setting up your account with stripe and tell us how you want to get paid.</p>
                                                         
                             <p class="tab-para1" style="color: red;"><b>*Things to know*</b></p>
@@ -157,13 +157,13 @@ receiving bookings from customers looking for the activities and services you of
                         </div>
                         <div class="col-md-12" style="margin-left:25%">
                         	<ul>
-                                	<li>Fitnessity partners with stripe to handle all merchant transactions and payouts to providers like you.</li>
+                                	<li>OmneBook partners with stripe to handle all merchant transactions and payouts to providers like you.</li>
                                     <li>After you are done with the stripe process, it can take up to 5 minutes to get verified with stripe.</li>
                                	</ul>
                         </div>
 
                         <div class="col-md-12 text-center">
-                            <p class="tab-para1"><br/><b>Step 2.</b> Once you are verified and done with stripe, you will continue your onboarding process with Fitnessity and gain access to start tell us more about what you do.</p>
+                            <p class="tab-para1"><br/><b>Step 2.</b> Once you are verified and done with stripe, you will continue your onboarding process with OmneBook and gain access to start tell us more about what you do.</p>
                         </div>
                         <div class="col-md-12">
                             <br/><br/><br/>

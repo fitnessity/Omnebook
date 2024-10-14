@@ -1555,7 +1555,7 @@ input:disabled{
 @endphp
 @include('layouts.business.footer')
 
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}&sensor=false"></script>
+{{-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}&sensor=false"></script> --}}
 
 <!-- New JS -->
 <script>
