@@ -6,30 +6,30 @@ $total_quantity = 0;
 <!DOCTYPE html>
 <html class="no-js" lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
     <head>
-        <title>Fitnessity</title>
+        <title>Omnebook</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta content="Fitnessity: Because Fitness=Necessity" name="description" />
+		<meta content="Omnebook: Because Fitness=Necessity" name="description" />
 		<meta content="" name="author" />
 
         <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta content="charset=utf-8"> -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <meta name="description" content=" Fitnessity: Because Fitness=Necessity ">
+        <meta name="description" content=" Omnebook: Because Fitness=Necessity ">
         <meta itemprop="name" content="">
-        <meta itemprop="description" content=" Fitnessity: Because Fitness=Necessity ">
+        <meta itemprop="description" content=" Omnebook: Because Fitness=Necessity ">
         <meta itemprop="image" content="">
         <meta name="twitter:card" content="product">
         <meta name="twitter:title" content="">
-        <meta name="twitter:description" content=" Fitnessity: Because Fitness=Necessity ">
+        <meta name="twitter:description" content=" Omnebook: Because Fitness=Necessity ">
         <meta name="twitter:image" content="">
         <meta property="og:url" content="">
         <meta property="og:type" content="">
         <meta property="og:title" content="">
-        <meta property="og:description" content=" Fitnessity: Because Fitness=Necessity ">
+        <meta property="og:description" content=" Omnebook: Because Fitness=Necessity ">
         <meta property="og:image" content="">
-        <meta property="og:site_name" content="Fitnessity">
+        <meta property="og:site_name" content="Omnebook">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
         <link rel="shortcut icon" href="{{ url('/public/images/email/favicon.png') }}">
         <link rel="icon" href="{{ url('/public/images/email/favicon.png') }}">
@@ -388,9 +388,9 @@ $total_quantity = 0;
 						 	<div class="userblock mobile-none">
                         		<div class="login_links" onclick="openNav()">
 									@if(session('StaffLogin') != '') 
-									<img src="{{ Storage::disk('s3')->exists($staff->profile_pic) ? Storage::URL($staff->profile_pic) : url('/images/user-icon-black.png') }}" alt="Fitnessity" >
+									<img src="{{ Storage::disk('s3')->exists($staff->profile_pic) ? Storage::URL($staff->profile_pic) : url('/images/user-icon-black.png') }}" alt="Omnebook" >
                                 	@else
-									<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon-black.png') }}" alt="Fitnessity" >
+									<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon-black.png') }}" alt="Omnebook" >
 									@endif
                                 </div>
 								<nav class="pc-sidebar">
@@ -401,9 +401,9 @@ $total_quantity = 0;
 												<ul class="pc-navbar">
 													<li style="text-align: center;"> 
 														@if(session('StaffLogin') != '') 
-														<img src="{{ Storage::disk('s3')->exists($staff->profile_pic) ? Storage::URL($staff->profile_pic) : url('/images/user-icon-black.png') }}" alt="Fitnessity"  class="sidemenupic">
+														<img src="{{ Storage::disk('s3')->exists($staff->profile_pic) ? Storage::URL($staff->profile_pic) : url('/images/user-icon-black.png') }}" alt="Omnebook"  class="sidemenupic">
 														@else
-														<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" alt="Fitnessity" class="sidemenupic" >
+														<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" alt="Omnebook" class="sidemenupic" >
 														@endif
 													</li>
 													<li class="pc-caption"><span> Welcome olne</span></li>
@@ -435,29 +435,29 @@ $total_quantity = 0;
                                                     </li>
 
                                                     <li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt="Fitnessity"></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt="Omnebook"></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt="Fitnessity"></span><a href="{{route('personal.manage-account.index')}}" style="color: white;">Manage Accounts</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt="Omnebook"></span><a href="{{route('personal.manage-account.index')}}" style="color: white;">Manage Accounts</a>
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt="Fitnessity"></span><a href="{{ url('/personal/calendar')}}" style="color: white;">Calendar</a>
+														<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt="Omnebook"></span><a href="{{ url('/personal/calendar')}}" style="color: white;">Calendar</a>
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt="Fitnessity"></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt="Omnebook"></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
 													</li>
 
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt="Fitnessity"></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt="Omnebook"></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
 													</li>
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Omnebook"></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
 													</li>
 													<li class="pc-link">
-														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity"></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
+														<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Omnebook"></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
 													</li>
                                                 
 													<!-- <li class="pc-link">
@@ -500,7 +500,7 @@ $total_quantity = 0;
 												</ul>
 											</div>
 											<p class="pri-1"> <a href="{{ Config::get('constants.SITE_URL') }}/privacy-policy" style="color: white;"> Privacy </a> - <a href="{{ Config::get('constants.SITE_URL') }}/terms-condition" style="color: white;">Terms </a></p>
-											<p class="pri-2">Fitnessity, Inc {{date('Y')}}</p>
+											<p class="pri-2">Omnebook, Inc {{date('Y')}}</p>
 										</div>
 									</div>
 								</nav>
