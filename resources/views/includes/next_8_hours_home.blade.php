@@ -31,7 +31,7 @@
                         <div class="row y-middle">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-4">
                                 {{-- <img src="{{ Storage::url($bookscheduler->business_service->first_profile_pic())}}"> --}}
-                                <img src="{{ Storage::url($bookscheduler->business_service->first_profile_pic())}}">
+                                <img src="{{ $bookscheduler->business_service->first_profile_pic()}}" alt="fitness">
                             </div>
                             <div class="col-lg-8 col-md-8 col-sm-8 col-8 activity-data">
                                 <div class="row">
