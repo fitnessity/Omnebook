@@ -1,5 +1,5 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
 
 <head>
     <title> Fitnessity </title>
@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="<?php echo Config::get('constants.FRONT_CSS'); ?>all.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo Config::get('constants.FRONT_CSS'); ?>stylenew.css">
+    <link href="https://dev.fitnessity.co/public/css/frontend/general.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{url('/public/css/all.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url('/public/css/stylenew.css')}}">
    <!--  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
     <link rel="stylesheet" type="text/css" href="{{ url('public/css/pixelarity.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url('public/css/profile.css') }}">
@@ -21,6 +22,7 @@
     <?php /*?><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><?php */?>
 	<link rel="stylesheet" type="text/css" href="{{ url('public/css/frontend/businessprofile.css') }}">
     <link rel="stylesheet" href="{{ url('public/css/frontend/jquery.fancybox.min.css') }}">
+	<link href="https://dev.fitnessity.co/public/css/frontend/custom.css" rel="stylesheet" type="text/css" />
 </head>
 @section('content')
 <?php
@@ -45,6 +47,7 @@
 	.viewdisplay{ display: inline-block !important; }
 	.colorshade{ color: #FF1493 !important; }
 	.colorshade p{ font-weight: 800 !important; }
+	body {	background: #fff;font-size: 14px;}
 </style>
 <?php
 $compinfo = CompanyInformation::where('id',request()->id)->first();
@@ -1495,7 +1498,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
     </div>
 </div>
 
-@include('layouts.footer')
+@include('layouts.business.footer')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
@@ -1516,7 +1519,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <script src="{{ url('public/js/date-range-picker.js') }}"></script>
 <script src="{{ url('public/js/webcam.min.js') }}"></script>
 <script src="{{ url('public/js/jquery.fancybox.min.js') }}"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>ratings.js"></script>
+<script src="{{url('/public/js/ratings.js')}}"></script>
 <script>
 function submit_busi_rating(cid)
 {

@@ -1,5 +1,5 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
 
 <head>
     <title> Fitnessity </title>
@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" type="text/css" href="<?php echo Config::get('constants.FRONT_CSS'); ?>stylenew.css">
+    <link rel="stylesheet" type="text/css" href="{{url('/public/css/stylenew.css')}}">
     <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
     <link rel="stylesheet" type="text/css" href="{{ url('public/css/pixelarity.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url('public/css/profile.css') }}">
@@ -72,6 +72,9 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 <style>
 .removepost {
   height: auto !important;
+}
+body{
+    background: #fff;
 }
 </style>
 
@@ -802,23 +805,23 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 								<div class="row flex-column-reverse flex-md-row">
 									<div class="col-sm-12 col-md-12 col-lg-9">
 										<ul class="nav nav-tabs" role="tablist">
-											<li class="active">
-												<a class="nav-link" data-toggle="tab" href="#tabs-1" role="tab">Timeline</a>
+                                        <li class="nav-item">
+												<a class="nav-link  active" data-bs-toggle="tab" href="#tabs-1" role="tab">Timeline</a>
 											</li>
-                                            <li>
-                                            	<a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">About</a>
+                                            <li class="nav-item">
+                                            	<a class="nav-link" data-bs-toggle="tab" href="#tabs-2" role="tab">About</a>
 											</li>
-                                            <li>
-                                            	<a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Photos</a>
+                                            <li class="nav-item">
+                                            	<a class="nav-link" data-bs-toggle="tab" href="#tabs-3" role="tab">Photos</a>
 											</li>
-                                            <li>
-                                            	<a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">Videos</a>
+                                            <li class="nav-item">
+                                            	<a class="nav-link" data-bs-toggle="tab" href="#tabs-4" role="tab">Videos</a>
 											</li>
-                                            <li>
-                                            	<a class="nav-link" data-toggle="tab" href="#tabs-5" role="tab">Saved</a>
+                                            <li class="nav-item">
+                                            	<a class="nav-link" data-bs-toggle="tab" href="#tabs-5" role="tab">Saved</a>
 											</li>
                                             <!--<li>
-                                            	<a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Tagged</a>
+                                            	<a class="nav-link" data-bs-toggle="tab" href="#tabs-6" role="tab">Tagged</a>
 											</li>-->
 										</ul>
 									</div>
@@ -2414,7 +2417,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 				<!--</div>--> <!-- comment by nnn -->
 			</section>
 
-@include('layouts.footer')
+            @include('layouts.business.footer')
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>

@@ -1,7 +1,8 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 @section('content')
-
 
 <section class="register ptb-65" style="background-image: url({{ asset('public/images/register-bg.jpg')}})">
     <div class="container">
@@ -9,12 +10,12 @@
             <div class="register_wrap" id="signup_normal">
                 <input type="hidden" id="showstep" value="">
                 <div class="logo-my">
-                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/logo-small.jpg')}}"> </a>
+                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/omnebook.png')}}" alt="img"> </a>
                 </div>               
                 <form method="post" action="{{route('dologin')}}" >
                     {{ csrf_field() }}
                     <div class="pop-title ftitle1 staff-login">
-                        <h3 id="firsth">Welcome to fitnessity</h3>
+                        <h3 id="firsth">Welcome to Omnebook</h3>
 						<h3 id="secondh"> for business</h3>
                     </div>
                     <br/> 
@@ -23,7 +24,7 @@
 					</div>
 
                     @if(session('errorMsg'))
-                        <div id='systemMessage' class="alert alert-class alert-danger">
+                        <div id='systemMessage' class="alert alert-class alert-danger  fs-14">
                             {{ session('errorMsg') }}
                         </div>
                     @endif
@@ -32,14 +33,14 @@
                     <input type="search" name="searchCompany" id="searchCompany" class="myemail" size="30" autocomplete="off" placeholder="Seach Company Name" maxlength="80" required>
 
                     <input type="email" name="email" id="email" class="myemail" size="30" autocomplete="off" placeholder="e-MAIL" maxlength="80" required>
-                    <span class="text-danger cls-error" id="erremail"></span>        
+                    <span class="text-danger cls-error  fs-14" id="erremail"></span>        
 					<div class="position-relative auth-pass-inputgroup">
 						<input class="password-input" type="password" name="password" id="password" size="30" placeholder="Password" required>
 
 						<button class="btn-link position-absolute password-addon" type="button" id="toggle-password">
 							<i class="fas fa-eye"></i>
 						</button>
-						<span class="text-danger cls-error" id="errpass"></span>   
+						<span class="text-danger cls-error  fs-14" id="errpass"></span>   
 					</div>
 					<div class="row">
 						<div class="col-md-6"></div> 
@@ -52,7 +53,7 @@
 
                     <button class="btn signup-new" id='login_submit' type="submit">Log in </button>
                     <div class="small-logo">
-						<img src="{{ asset('public/images/fit-logo.png')}}">
+                        <img src="{{ asset('public/dashboard-design/images/powered-by-OMNEBOOK.png')}}" alt="Fitnessity"> 
 					</div>
                 </form>
             </div>
@@ -60,7 +61,7 @@
     </div>
 </section>
 
-@include('layouts.footer')                          
+@include('layouts.business.footer')                       
 <script>
     $(document).ready(function () {
 

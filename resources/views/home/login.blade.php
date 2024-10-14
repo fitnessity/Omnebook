@@ -1,5 +1,7 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 
@@ -11,18 +13,19 @@ if(!empty(@$response)){
     $msg = $response['msg'];
 }
 ?>
-<section class="register ptb-65" style="background-image: url({{ asset('public/images/register-bg.jpg')}})">
+<section class="register" style="background-image: url({{ asset('public/images/register-bg.jpg')}})">
     <div class="container">
+        <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-7 col-xs-12">
             <div class="register_wrap" id="signup_normal">
                 <input type="hidden" id="showstep" value="">
                 <div class="logo-my">
-                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/logo-small.jpg')}}"> </a>
+                    <a href="javascript:void(0)"> <img src="{{ asset('/public/images/omnebook.png')}}" alt="Omnebook"> </a>
                 </div>               
                 <form method="post" action="{{route('auth/userlogin')}}">
                     {{ csrf_field() }}
                     <div class="pop-title ftitle1">
-                        <h3>Welcome to fitnessity</h3>
+                        <h3>Welcome to <br> Omnebook</h3>
                     </div>
                     <br/> 
 
@@ -34,11 +37,11 @@ if(!empty(@$response)){
                     @endif
 
                     @if($msg != '')
-                        <div id='systemMessage' class="alert-class alert-danger">{{ $msg }}</div>
+                        <div id='systemMessage' class="alert-class alert-danger  fs-14">{{ $msg }}</div>
                     @endif
                     <input type="hidden" name="redirect" value="{{$request->redirect}}">
                     <input type="email" name="email" id="email" class="myemail" size="30" autocomplete="off" placeholder="e-MAIL" maxlength="80" autocomplete="off">
-                    <span class="text-danger cls-error" id="erremail"></span> 
+                    <span class="text-danger cls-error  fs-14" id="erremail"></span> 
 					<div class="position-relative auth-pass-inputgroup">
 						<input class="password-input" type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
 						<button class="btn-link position-absolute password-addon toggle-password" type="button" id="password-addon" >
@@ -80,6 +83,7 @@ if(!empty(@$response)){
                     </p>
                 </form>
             </div>
+        </div>
         </div>
     </div>
 </section>

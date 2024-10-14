@@ -1,5 +1,7 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 @section('content')
 <style>
     .register_wrap form{padding: 0 50px;}
@@ -9,6 +11,9 @@
     .sign-step_5 .form-group{width:355px;}
     .Zebra_DatePicker_Icon_Wrapper{
         padding: 0 !important;
+    }
+    #frmregister .error {
+        margin-left: 0;
     }
 
 </style>
@@ -20,11 +25,11 @@
                 <!--{{$show_step}}-->
                 @if($show_step == 1)
                 <div class="logo-my">
-                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/logo-small.jpg')}}"> </a>
+                    <a href="javascript:void(0)"> <img src="{{ asset('/public/images/omnebook.png')}}" alt="Omnebook"> </a>
                 </div>
                 <form id="frmregister" method="post">
                     <div class="pop-title ftitle1">
-                        <h3>Welcome to fitnessity</h3>
+                        <h3>Welcome to Omnebook</h3>
                     </div>
                     <div id='systemMessage'></div>
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
@@ -58,7 +63,7 @@
 
                     <div class="terms-wrap">
                         <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-                        <label for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
+                        <label for="b_trm1">I agree to Omnebook <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
                     </div>
                     <div id='termserror'></div><br>
                     <button type="button" style="margin:0px;" class="signup-new" id="register_submit" onclick="$('#frmregister').submit();">Create Account</button>
@@ -95,7 +100,7 @@
                                     {{substr(Auth::user()->firstname,0,1)}}
                                 </div>
                                 <div class="reg-email-step2">{{Auth::user()->email}}</div>
-                                <h2>Welcome to Fitnessity</h2>
+                                <h2>Welcome to Omnebook</h2>
                                 <div class="reg-title-step2"><input type="text" name="" id="" value="@<?=Auth::user()->username?>" readonly=""></div>
                                 <p>Your answer to the next few question will help us find the right ideas for you</p>
                                 <div class="signup-step-btn">
@@ -162,12 +167,12 @@
                                     <li><i class="fa fa-check"></i><span>Your Identification</span></li>
                                 </ul>
                                 <ul class="nav nav-tabs nav-stacked">
-                                    <li class="active"><a data-toggle="tab" href="#add_personel_info"><span class="stp-numbr">3</span> <span>Add Personal Information</span></a></li>
-                                    <li><a data-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
+                                    <li ><a class="active" data-bs-toggle="tab" href="#add_personel_info"><span class="stp-numbr">3</span> <span>Add Personal Information</span></a></li>
+                                    <li><a data-bs-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
                                 </ul>
                                 
                                 <div class="tab-content">
-                                    <div id="add_personel_info" class="tab-pane fade in active">
+                                    <div id="add_personel_info" class="tab-pane fade show active">
                                         <div class='error' id='systemMessage'></div>
                                         <div class="form-group">
                                             <input type="text" name="address_sign" id="address_sign" placeholder="Address" class="form-control b_address" oninput="initialize1(this)">
@@ -223,12 +228,12 @@
                                 </ul>
                                 <ul class="nav nav-tabs nav-stacked">
                                    
-                                    <li><a data-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
+                                    <li><a data-bs-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
                                 </ul>
                                 
                                 <div class="tab-content">
                                     <div class='error' id='systemMessage'></div>
-                                    <div id="adding_photo" class="tab-pane fade in active">
+                                    <div id="adding_photo" class="tab-pane fade show active">
                                         <div class="upload-wrp-content">
                                             <p><b>Put a face to the name </b>and improve your adds to networking success.</p>
                                             <p>People prefer to network with members who has a profile photo, but if don't have one ready to upload, you can add it later.</p>
@@ -276,7 +281,7 @@
                                     <li><i class="fa fa-check"></i><span>Adding Photo</span></li>
                                 </ul>
                                 <ul class="nav nav-tabs nav-stacked">
-                                    <li><a data-toggle="tab" href="#adding_photo"><span class="stp-numbr">5</span> <span>Adding Your Card Details</span></a></li>
+                                    <li><a data-bs-toggle="tab" href="#adding_photo"><span class="stp-numbr">5</span> <span>Adding Your Card Details</span></a></li>
                                 </ul>
                                 
                                 <div class="tab-content">
@@ -332,10 +337,10 @@
                                                     <div class="panel panel-default">
                                                         <div class="panel-heading">
                                                             <h4 class="panel-title">
-                                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse0">Family Member #1</a>
+                                                             <a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapse0">Family Member #1</a>
                                                             </h4>
                                                         </div>
-                                                        <div id="collapse0" class="panel-collapse collapse in">
+                                                        <div id="collapse0" class="panel-collapse collapse show">
                                                             <div class="panel-body">
                                                                   <div class="form-group">
                                                                 <input type="text" name="first_name[]" id="first_name" class="form-control first_name required" placeholder="First Name">
@@ -347,7 +352,7 @@
                                                             </div>
                                                             <div>
                                                                 <div class="birthday_date-position">
-                                                                    <input type="text" name="birthday[]" id="birthday" class="form-control birthday  Flatpicker required" placeholder="Birthday"/>
+                                                                    <input type="text" name="birthday[]" id="birthday" class="form-control birthday  Flatpicker required flatpicker_birth" placeholder="Birthday"/>
                                                                     <span class="error" id="err_birthday_date"></span>
                                                                 </div>
                                                             </div>
@@ -409,7 +414,7 @@
 
 </section>
 
-@include('layouts.footer')
+@include('layouts.business.footer')
 
 
 @if(Auth::check() && Auth::user()->show_step == 6)
@@ -439,7 +444,7 @@
         //Elements` instance that was used to create the Payment Element
             elements,
             confirmParams: {
-                return_url: '{{route("cards-save",["chkRedirection" => 1])}}',
+                return_url: '{{route("personal.cards-save",["chkRedirection" => 1])}}',
             }
         });
 
@@ -469,7 +474,10 @@
 @endif
 
 <script>
-
+ flatpickr(".flatpicker_birth", {
+        dateFormat: "m/d/Y",
+        maxDate: "01/01/2050",
+    });
     flatpickr(".flatpicker_birthdate1", {
         dateFormat: "m/d/Y",
         maxDate: "01/01/2050",
@@ -535,7 +543,7 @@
             },
             beforeSend: function () {
                 $('.step2_next').prop('disabled', true).css('background','#999999');
-                $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
+                $('#systemMessage').html('Please wait while we processed you with Omnebook.');
             },
             complete: function () {
                 $('.step2_next').prop('disabled', false).css('background','#ed1b24');
@@ -575,7 +583,7 @@
                     },                
                     beforeSend: function () {
                         $('.step3_next').prop('disabled', true).css('background','#999999');
-                        $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
+                        $('#systemMessage').html('Please wait while we processed you with Omnebook.');
                     },
                     complete: function () {
                         $('.step3_next').prop('disabled', false).css('background','#ed1b24');
@@ -631,7 +639,7 @@
                 },
                 beforeSend: function () {
                     $('.step4_next').prop('disabled', true).css('background','#999999');
-                    $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
+                    $('#systemMessage').html('Please wait while we processed you with Omnebook.');
                 },
                 complete: function () {
                     $('.step4_next').prop('disabled', false).css('background','#ed1b24');
@@ -812,7 +820,7 @@
                     $("#systemMessage").html('');
                 },             
                 success: function (response) {                    
-                    $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');  
+                    $("#systemMessage").html(response.msg).addClass('alert-class alert-danger fs-14');  
                 }
             });
     });
@@ -904,8 +912,8 @@
                         beforeSend: function () {
                             
                             $('#register_submit').prop('disabled', true).css('background','#999999');
-                            showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
-                            $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+                            showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Omnebook.');
+                            $("#systemMessage").html('Please wait while we register you with Omnebook.').addClass('alert-class alert-danger');
                         },
                         complete: function () {
                         

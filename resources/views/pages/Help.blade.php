@@ -1,6 +1,8 @@
-@extends('layouts.header')
+@extends('layouts.business.header')
 
-<style>
+    <link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+    <link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
+	<style>
 .latest-know-list i {
 	margin-right: 0px !important;
 }
@@ -22,6 +24,7 @@ p{ display: none !important; }
 .help-desk input { color: black; }
 .help-desk input { width: 70%; }
 .ellipsis *{  line-height: 1.5em; height: 3em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 100%; }
+.btn-lp{font-size: 12px;}
 
 </style>
 
@@ -52,7 +55,7 @@ p{ display: none !important; }
 				<div class="contact-three-box">
 					<span><i class="fas fa-lightbulb" aria-hidden="true"></i></span>
 					<h4>KNOWLEDGE BASE</h4>
-					<h5 style="color: #777;padding: 0 30px;">
+					<h5 class="fs-13" style="color: #777;padding: 0 30px;">
                     The fastest way to get support is finding the answer through Knowledge Base system.</h5>
 
 				</div>
@@ -61,7 +64,7 @@ p{ display: none !important; }
 				<div class="contact-three-box">
 					<span><i class="fas fa-comments" aria-hidden="true"></i></span>
 					<h4>SUPPORT FORUM</h4>
-					<h5 style="color: #777;padding: 0 30px;">You can also easy to find out the answer over existing topics on the support forum.</h5>
+					<h5 class="fs-13" style="color: #777;padding: 0 30px;">You can also easy to find out the answer over existing topics on the support forum.</h5>
 
 				</div>
 			</div>
@@ -69,10 +72,11 @@ p{ display: none !important; }
 				<div class="contact-three-box">
 					<span><i class="fa fa-bullhorn" aria-hidden="true"></i></span>
 					<h4>NEWS 24X7</h4>
-					<h5 style="color: #777;padding: 0 30px;">Latest news are presented here in the news section area.</h5>
+					<h5 class="fs-13" style="color: #777;padding: 0 30px;">Latest news are presented here in the news section area.</h5>
 				</div>
 			</div>
 		</div>
+		<div class="row">
 		@foreach($lists as $list)
 			<div class="col-md-4">
 				<div class="latest-recent">
@@ -108,7 +112,7 @@ p{ display: none !important; }
 				</div>
 			</div>
 		@endforeach
-		
+		</div>
         <?php /*?><div class="col-md-6">
             <div class="latest-recent">
                 <div class="latest-knowledge">
@@ -195,7 +199,7 @@ p{ display: none !important; }
 	</div> <!-- container -->
 </div>
   
-@include('layouts.footer')
+@include('layouts.business.footer')
 @push('footer-scripts')
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
