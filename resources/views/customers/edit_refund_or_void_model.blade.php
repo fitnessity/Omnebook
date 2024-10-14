@@ -360,6 +360,7 @@
 	</div>
 </div>
 
+<script src={{url('/public/dashboard-design/js/flatpickr.min.js')}}></script>
 <script type="text/javascript">
 
 	$(".flatpickr-input").flatpickr({ 
@@ -406,7 +407,7 @@
             },
             success:function(response) {
 
-                location.reload()
+                // location.reload()
             },
         });
     });

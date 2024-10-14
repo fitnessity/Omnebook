@@ -301,6 +301,10 @@ class Customer extends Authenticatable
     {
         return $this->hasMany(Transaction::class,'user_id')->where('user_type','customer');
     }
+    public function CheckTransaction()
+    {
+        return $this->hasMany(Transaction::class,'user_id')->where('user_type','user');
+    }
 
     public function BookingCheckinDetails()
     {

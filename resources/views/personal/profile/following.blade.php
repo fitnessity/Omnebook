@@ -26,7 +26,7 @@
 								<div class="mini-stats-wid mt-3 scheduler-box">
 									<div class="row  d-flex align-items-center">
 										<div class="col-lg-1 col-md-2 col-sm-2 col-3">
-											<div class="flex-shrink-0 avatar-sm customer-avatar">
+											<div class="flex-shrink-0 avatar-sm">
 												@if($data->getUser()->getPic())
 													<img class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4" src="{{$data->getUser()->getPic()}}" alt="">
 												@else

@@ -87,12 +87,14 @@ class UserBookingDetailController extends Controller
         $company = $request->current_company->findOrFail($business_id);
         $customer = $company->customers()->findOrFail($request->customer_id);
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
-
+        // dd($booking_detail);
         if($booking_detail->can_refund()){
             
             if($request->refund_method == 'credit'){
+                \DB::enableQueryLog();
                 $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
-
+                dd(\DB::getQueryLog());
+                // dd($transaction);
                 if($transaction->can_refund()){
                     if(!$transaction->refund($request->refund_amount ? $request->refund_amount : Null)){
                         return response()->json(['message' => 'refund failed.'], 400);

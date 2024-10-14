@@ -66,7 +66,7 @@
                                         <a href="{{route('show_businessprofile', ['user_name' => $bookscheduler->company_information->public_company_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a>
                                     </span>
                                     <p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
-                                    <a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
+                                    {{-- <a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a> --}}
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-6 activites-price-details">
