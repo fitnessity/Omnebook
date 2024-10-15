@@ -326,8 +326,8 @@
  <script src="{{url('/public/js/owl.js')}}"></script>    
 <!-- <script src="<?php echo Config::get('constants.FRONT_JS'); ?>owl.js"></script> -->
 <script src="{{ url('public/js/jquery.flexslider.js') }}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc"></script>
-<!--  <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}"></script> -->
+{{-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc"></script> --}}
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}"></script> 
 
 
 <script src="{{ url('public/js/general.js') }}"></script>
