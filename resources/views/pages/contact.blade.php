@@ -1,8 +1,9 @@
 @extends('layouts.business.header')
 <link rel='stylesheet' type='text/css' href="https://d2bgo0bc1t29nh.cloudfront.net/css/frontend/general.css">
 @section('content')
-<img src="http://www.fitnessity.co/public/images/cont-banner.jpg">
-<section class="main-slider contact-banner">
+
+
+<section class="main-slider contact-banner inner-banner pmt-105" style="background-image:url('/public/images/cont-banner.jpg')">
     <div class="container">
         <h1>CONTACT US</h1>
     </div>
