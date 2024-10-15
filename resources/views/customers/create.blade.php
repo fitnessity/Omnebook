@@ -35,7 +35,7 @@
                                                     <a class="nav-link active" data-bs-toggle="tab" href="#add" role="tab" aria-selected="false"> Manually Add Client </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-bs-toggle="tab" href="#search" role="tab" aria-selected="false">Search Fitnessity</a>
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#search" role="tab" aria-selected="false">Search OmneBook</a>
                                                 </li>
                                             </ul>
                                             <!-- Tab panes -->
@@ -357,7 +357,7 @@
                                                                 <div class="col-md-12 col-lg-12 text-center">
                                                                     <div class="wrap-sp">
                                                                         <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-                                                                        <label for="b_trm1" class="text-center">I agree to Fitnessity Terms of Service and Privacy Policy</label>
+                                                                        <label for="b_trm1" class="text-center">I agree to OmneBook Terms of Service and Privacy Policy</label>
                                                                     </div>
                                                                     <div id="termserror" class="font-red fs-15 text-center mb-10"></div>
                                                                     <div id="systemMessage" class="mb-10 fs-15 mb-10"></div>
@@ -401,8 +401,8 @@
                                                 <div class="tab-pane" id="search" role="tabpanel">
                                                     <div class="text-center font-black">
                                                         <h3 >Onboard A New Client Fast</h3>
-                                                        <h4>Search for your clients on Fitnessity</h4>
-                                                        <p>“Your client could already have an account on Fitnessity.<br>If so, get access and sync their information fast.”</p>
+                                                        <h4>Search for your clients on OmneBook</h4>
+                                                        <p>“Your client could already have an account on OmneBook.<br>If so, get access and sync their information fast.”</p>
                                                     </div>
                                                     <div class="row check-txt-center claimyour-business">
                                                         <div class="col-md-10 col-xs-10 col-8 frm-claim">
@@ -432,7 +432,7 @@
     </div>
 </div>
 @include('layouts.business.footer')
-
+@include('layouts.business.scripts')
 @if(request()->customer_id)
     <script type="text/javascript">
         var customer_id = '{{request()->customer_id}}';
@@ -776,7 +776,7 @@
                 $("#clients_name").val( ui.item.firstname + ' ' +  ui.item.lastname);
                 $('#clients_name').data('customer-id', ui.item.id);
                 $('.request-access').css('display','block');
-                $('.request-access').html('<p>To import the name, contact information, family members and credit card information for '+ ui.item.firstname + ' ' +  ui.item.lastname +', they must authorize you access.</p><label>Steps </label><div class="request-step"><p>1. Click the Request Access button below. </p><p>2. Fitnessity will send an email to the customer to authorize you access.</p><p>3. Once authorization has been granted, the sync button will turn green, and you can sync the information immediately.</p><button type="button" style="margin-bottom: 10px;" class="signup-new request_access_btn" id="request_access_btn">Request Access</button></div><div class="error text-center errclass"></div>');
+                $('.request-access').html('<p>To import the name, contact information, family members and credit card information for '+ ui.item.firstname + ' ' +  ui.item.lastname +', they must authorize you access.</p><label>Steps </label><div class="request-step"><p>1. Click the Request Access button below. </p><p>2. OmneBook will send an email to the customer to authorize you access.</p><p>3. Once authorization has been granted, the sync button will turn green, and you can sync the information immediately.</p><button type="button" style="margin-bottom: 10px;" class="signup-new request_access_btn" id="request_access_btn">Request Access</button></div><div class="error text-center errclass"></div>');
                  return false;
             },
         }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {

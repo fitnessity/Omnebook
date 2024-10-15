@@ -21,7 +21,7 @@
                                                     <a class="nav-link active" data-bs-toggle="tab" href="#add" role="tab" aria-selected="false"> Manually Add Client </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-bs-toggle="tab" href="#search" role="tab" aria-selected="false">Search Fitnessity</a>
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#search" role="tab" aria-selected="false">Search Omnebook</a>
                                                 </li>
                                             </ul>
                                             <!-- Tab panes -->
@@ -284,7 +284,7 @@
                                                             <div class="col-md-12 col-lg-12 text-center">
                                                                 <div class="wrap-sp">
                                                                     <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-                                                                    <label for="b_trm1" class="text-center">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
+                                                                    <label for="b_trm1" class="text-center">I agree to Omnebook <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
                                                                 </div>
                                                                 <div id="termserror" class="error"></div>
                                                             </div>
@@ -297,8 +297,8 @@
                                                 <div class="tab-pane" id="search" role="tabpanel">
                                                     <div class="text-center font-black">
                                                         <h3 >Onboard A New Client Fast</h3>
-                                                        <h4>Search for your clients on Fitnessity</h4>
-                                                        <p>“Your client could already have an account on Fitnessity.<br>If so, get access and sync their information fast.”</p>
+                                                        <h4>Search for your clients on Omnebook</h4>
+                                                        <p>“Your client could already have an account on Omnebook.<br>If so, get access and sync their information fast.”</p>
                                                     </div>
                                                     <div class="row check-txt-center claimyour-business">
                                                         <div class="col-md-10 col-xs-10 col-8 frm-claim">
@@ -322,6 +322,7 @@
     </div>
 </div>
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 <script type="text/javascript">
 
     const canvas = document.getElementById('signatureCanvas');

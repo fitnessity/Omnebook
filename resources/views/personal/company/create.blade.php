@@ -1430,6 +1430,7 @@
 </div>
     
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 	<script>
 		$(document).ready(function(){ 
 			$('#companyDescLeft').text(150-parseInt($("#shortDescription").val().length));

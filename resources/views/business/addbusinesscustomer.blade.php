@@ -241,7 +241,7 @@
 							<div class="reviewerro fs-14" id="re_detailerro"> </div>
 	                    </div>
 						<div class="row">
-							<div class="col-md-5">
+							<div class="col-auto">
 								<div class="photo-select-review">
 									<img src="{{ url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah" id="showimg"  loading="lazy">
 									<input type="file" name="rimg[]" id="files" class="text-center" multiple="multiple" />

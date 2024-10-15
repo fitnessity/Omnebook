@@ -1,5 +1,5 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+@extends('layouts.business.header')
 @section('content')
 <?php
 	use App\UserFavourite;
@@ -20,7 +20,7 @@
 <link rel="stylesheet" type="text/css" href="/AdminLTE/plugins/bootstrap-slider/slider.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.css" rel="stylesheet">
-<link rel="stylesheet" href="/js/select/select.css" />
+<link rel="stylesheet" href="{{url('public/js/select/select.css')}}" />
  <?php		
 	 $program_type = '';
 	 $service_type = '';
@@ -44,12 +44,14 @@
 			print_r($activity_type);exit();
 		}
 ?>
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+<link href="{{url('/public/css/compare/style.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{url('/public/css/compare/w3.css')}}" rel="stylesheet" type="text/css" />
 
-<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
-<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/w3.css">
 <link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" type="text/css" rel="stylesheet" />
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
+<script src="{{url('/public/js/compare/Compare.js')}}"></script>
+<script src="{{url('/public/js/compare/jquery-1.9.1.min.js')}}"></script>
 <script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script>
 <script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
 
@@ -796,8 +798,8 @@
 		</div>
 	</div>
 </section>
-@include('layouts.footer')
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
+@include('layouts.business.footer')
+<script src="{{url('/public/js/compare/jquery-1.9.1.min.js')}}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ Config::get('constants.MAP_KEY') }}&sensor=false"></script>
 
 <script>

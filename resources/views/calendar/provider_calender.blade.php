@@ -4,9 +4,9 @@
 @include('layouts.business.business_topbar')
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<link rel="shortcut icon" href="{{ url('public/img/favicon.png') }}">
+<!-- <link rel="shortcut icon" href="{{ url('public/img/favicon.png') }}"> -->
 <link rel="stylesheet" type="text/css" href="{{ url('public/css/profile.css') }}">
-<script src="{{ url('public/js/moment.min.js') }}"></script>
+
 
 <style>
     body .fc {
@@ -404,9 +404,10 @@
 </div>
 
 @include('layouts.business.footer')
-
+@include('layouts.business.scripts')
 @include('calendar.schedule_client_modal')
-
+<script src="{{ url('public/js/moment.min.js') }}"></script>
+<script src="{{ asset('/js/fullcalendar/fullcalendar.min.js') }}"></script>
 <script>
 	$(document).ready(function () {
 		var SITEURL = "{{ url('/') }}";

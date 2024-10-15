@@ -1,4 +1,7 @@
-@extends('layouts.header')
+@extends('layouts.business.header')
+
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/custom.css')}}">
 @section('content')
 
 <style>
@@ -26,11 +29,11 @@
     <div class="firststp-claim">
         <div class="container">
             <div class="row">
-                <div class="col-md-6 col-md-offset-1">
+                <div class="col-lg-6 col-md-12 col-12 col-md-offset-1">
                     <div class="frm-claim">
                         <!--<img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>businessclaim.png">-->
                         <h1>Let’s look up your business</h1>
-                        <p>Your business may already be on Fitnessity. Type in your business name. It will come up automtically if it's listed already. if not, you can add it now.</p>
+                        <p>Your business may already be on Omnebook. Type in your business name. It will come up automtically if it's listed already. if not, you can add it now.</p>
                         <div class="formfield-block">
                             <input id="business_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Your Business Name Here" />
                             <div id="option-box">
@@ -39,7 +42,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-5">
+                <div class="col-lg-5 col-md-12 col-12">
                     <div class="claim-rightblock">
                         <h2>Why Should I Claim?</h2>
                         <p><i class="fa fa-check"></i> Respond to reviews from customers</p>
@@ -75,7 +78,7 @@
     </div>
 </div>
  -->
-@include('layouts.footer')
+ @include('layouts.business.footer')
 
 <script>
 	function redirect_to_detail()

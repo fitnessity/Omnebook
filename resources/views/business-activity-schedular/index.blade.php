@@ -311,6 +311,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 </div>
 
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 
 <script>
 	flatpickr(".flatpickr-range", {

@@ -196,6 +196,7 @@
 
 
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 <script type="text/javascript">
     $('#profile-img-file-input').change(function() {
         // Trigger form submission when an image is selected

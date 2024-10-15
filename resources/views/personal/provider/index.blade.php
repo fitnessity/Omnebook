@@ -43,7 +43,7 @@
 																	<span> Active Memberships: {{$bs->active_memberships_count_by_user_id(@$customerId)}}</span>
 																	<span> Completed Memberships: {{$bs->completed_memberships_count_by_user_id(@$customerId)}}</span>
 																	<span> Expiring Memberships: {{$bs->expired_soon_memberships_count_by_user_id(@$customerId)}}</span>
-																	<span> Attenance: {{$bs->visits_count_by_user_id(@$customerId)}} </span>
+																	<span> Attendance: {{$bs->visits_count_by_user_id(@$customerId)}} </span>
 																	<span> Notes & Alerts: {{$bs->notes_count_by_user_id(@$customerId)}} </span>
 																</div>
 															</div>
@@ -87,6 +87,7 @@
 </div>
 	
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 
 <script type="text/javascript">
 	function  getInfo(company) {
