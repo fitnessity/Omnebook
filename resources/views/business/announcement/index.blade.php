@@ -136,6 +136,7 @@
 </div>
 
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 
 	<script>
 		new DataTable('#announcement_list', {
