@@ -67,7 +67,7 @@
                             <div class="taxonomy-item taxonomy-card">
                                 <a class="taxonomy-link hover-effect" href="{{env('APP_URL')}}{{@$sldr['link']}}">
                                     <div class="taxonomy-title">{{@$sldr['title']}} </div>
-                                    <img class="img-responsive" src="{{asset('uploads/slider/thumb/'.@$sldr['image'])}}">
+                                    <img class="img-responsive" src="{{asset('uploads/slider/thumb/'.@$sldr['image'])}}" alt="Omnebook" loading="lazy">
                                 </a>
                             </div>
                         </div>
@@ -106,7 +106,7 @@
                             <div class="taxonomy-item taxonomy-item-v2">
                                 <div class="taxonomy-item-image">
                                     <a class="taxonomy-link hover-effect" href="/activities/?city={{$city}}">
-                                        <img class="img-responsive" src="{{asset('uploads/slider/thumb/1646834734-ACTIVITES BACKGROUND.jpg')}}">
+                                        <img class="img-responsive" src="{{asset('uploads/slider/thumb/1646834734-ACTIVITES BACKGROUND.jpg')}}" alt="Omnebook" loading="lazy">
                                     </a>    
                                 </div>
                                 <div class="taxonomy-item-content">
@@ -150,12 +150,12 @@
 
                     <div class="col-lg-8 hpl-50">
                         <div class="amazonaws mb-10">
-                            <img src="{{ asset('public/uploads/cms/'.$whyFitnessity->banner_image) }}" >
+                            <img src="{{ asset('public/uploads/cms/'.$whyFitnessity->banner_image) }}" alt="Omnebook" loading="lazy">
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="info-imgs">
-                            <img src="{{ asset('public/'.$whyFitnessity->video) }}">
+                            <img src="{{ asset('public/'.$whyFitnessity->video) }}" alt="Omnebook" loading="lazy">
                         </div>
                     </div>
                     <div class="col-lg-8 hpl-50">
@@ -199,7 +199,7 @@
                             <div class="fit-project-item mb-30">
                                 <a href="{{$slider->link}}">
                                     <div class="project-img">
-                                        <img src="{{asset('/public/uploads/slider/thumb/'.$slider->image)}}" alt="images">
+                                        <img src="{{asset('/public/uploads/slider/thumb/'.$slider->image)}}" alt="Omnebook" loading="lazy" >
                                         <div class="discover-title">
                                             <h2>{{$slider->title}}</h2>
                                         </div>

@@ -1,4 +1,7 @@
-@extends('layouts.header')
+@extends('layouts.business.header')
+
+    <link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+    <link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 @section('content')
 
 <style>
@@ -62,13 +65,13 @@
 <div class="claiming-section claimyour-business" style="background-image: url(../img/claim-a-business-design.jpg);">
 
     <div class="container">
-
-        <div class="col-md-6 claiming-business-block">
+        <div class="row">
+        <div class="col-lg-6 col-md-12 col-12 claiming-business-block">
 
             <h3>CLAIMING YOUR BUSINESS LISTING</h3>
 
             <p>
-                Let's get started! By continuing, you agree to Fitnessity's <a href="{{url('/terms-condition')}}"> Terms of Service</a> and Fitnessity's <a href="{{url('/privacy-policy')}}">Privacy Policy</a>. You are claiming as <b>{{Auth::user()->email}}</b>.You represent that you are the owner/representative to claim this account on behalf of this business. 
+                Let's get started! By continuing, you agree to Omnebook's <a href="{{url('/terms-condition')}}"> Terms of Service</a> and Omnebook's <a href="{{url('/privacy-policy')}}">Privacy Policy</a>. You are claiming as <b>{{Auth::user()->email}}</b>.You represent that you are the owner/representative to claim this account on behalf of this business. 
             </p>
 
             <h5>How Would You Would Like to Verify Ownership of {{$data->dba_business_name}}</h5>
@@ -84,7 +87,7 @@
             @if($email != '')
             <div class="claiming-boxn">
                 <h4><i class="fa fa-envelope" aria-hidden="true"></i> EMAIL ME</h4>
-                <p>Fitnessity will send a verification email to the email address below. Please check your email to verify.</p>
+                <p>Omnebook will send a verification email to the email address below. Please check your email to verify.</p>
                 <form id="varify_email_for_claim">
                     @csrf
                     <div class="form-group">
@@ -103,7 +106,7 @@
             @if($phone_number != '')
             <div class="claiming-boxn twon">
                 <h4><i class="fa fa-mobile" aria-hidden="true"></i> TEXT ME</h4>
-                <p>Fitnessity will send a 4-digit verification code via SMS, You'll submit this code on the next screen.</p>
+                <p>Omnebook will send a 4-digit verification code via SMS, You'll submit this code on the next screen.</p>
                 <form id="varify_phone_for_claim">
                     <div class="form-group">
                         <span>Send text to: +1 {{$phone_number}}</span>
@@ -120,7 +123,7 @@
             <div id="error-call" style="display: none"><h5 class="Alertred">We Can't Call On Your Phone Number..</h5></div>
             <div class="claiming-boxn twon">
                 <h4><i class="fas fa-phone-alt" aria-hidden="true"></i> CALL ME</h4>
-                <p>Fitnessity will call you and with a verification code will be displayed on the next screen. Submit this code using your phone.</p>
+                <p>Omnebook will call you and with a verification code will be displayed on the next screen. Submit this code using your phone.</p>
                 <form id="varify_call_for_claim">
                     @csrf
                     <div class="form-group">
@@ -133,20 +136,21 @@
             @endif
         </div>
 
-        <div class="col-md-6 claiming-business-block-right">
+        <div class="col-lg-6 col-md-12 col-12 claiming-business-block-right">
 
             <p>
                 Claim your business or create a new profile today for free! Update your profile so we can showcase what you do to everyone looking for your services.
             </p>
 
-            <img src="{{ url('public/img/claim-your-business-detail.jpg') }}">
+            <img src="{{ url('public/img/claim-your-business-detail.jpg') }}" alt="Omnebook">
 
+        </div>
         </div>
 
     </div>
 
 </div>
-@include('layouts.footer')
+@include('layouts.business.footer')
 
 <script>
     $(document).ready(function () {
@@ -255,11 +259,11 @@
                         if (response.search_data2.length != 0 && response.search_data.length != 0) {
                             response.search_data2.forEach(function (value, key) {
                                 var mysrc = "{{Config::get('constants.USER_IMAGE_THUMB')}}"
-                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'claimed\');"><div class="col-sm-12 row"><div class="col-sm-2"><img src="' + mysrc + '/' + value.logo + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
+                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'claimed\');"><div class="col-sm-12 row"><div class="col-sm-2"><img src="' + mysrc + '/' + value.logo + '" style="width:30px;height:30px;" alt="Omnebook /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
                                 if (key + 1 == response.search_data2.length) {
                                     response.search_data.forEach(function (value, key) {
                                         var mysrc = "{{Config::get('constants.FRONT_IMAGE')}}"
-                                        str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'unclaimed\');"><div class="col-sm-12 row"><div  class="col-sm-2"><img src="' + mysrc + '/business_large_square.png' + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
+                                        str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'unclaimed\');"><div class="col-sm-12 row"><div  class="col-sm-2"><img src="' + mysrc + '/business_large_square.png' + '" style="width:30px;height:30px;" alt="Omnebook /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
                                         if (key + 1 == response.search_data.length) {
                                             $('#option-box').empty();
                                             $('#option-box').append(str);
@@ -271,7 +275,7 @@
                         } else {
                             response.search_data2.forEach(function (value, key) {
                                 var mysrc = "{{Config::get('constants.USER_IMAGE_THUMB')}}"
-                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'claimed\');"><div class="col-sm-12 row"><div class="col-sm-2"><img src="' + mysrc + '/' + value.logo + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
+                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'claimed\');"><div class="col-sm-12 row"><div class="col-sm-2"><img src="' + mysrc + '/' + value.logo + '" style="width:30px;height:30px;" alt="Omnebook/></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
                                 if (key + 1 == response.search_data2.length) {
                                     $('#option-box').empty();
                                     $('#option-box').append(str);
@@ -280,7 +284,7 @@
                             })
                             response.search_data.forEach(function (value, key) {
                                 var mysrc = "{{Config::get('constants.FRONT_IMAGE')}}"
-                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'unclaimed\');"><div class="col-sm-12 row"><div  class="col-sm-2"><img src="' + mysrc + '/business_large_square.png' + '" style="width:30px;height:30px;" /></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
+                                str = str + '<div class="option" style="padding-left:10px;" onclick="setValueInput(\'' + value.business_name + ' ' + value.location + '\',' + value.id + ',\'unclaimed\');"><div class="col-sm-12 row"><div  class="col-sm-2"><img src="' + mysrc + '/business_large_square.png' + '" style="width:30px;height:30px;" alt="Omnebook/></div><div>' + value.business_name + '&nbsp;' + value.location + '</div></div></div>';
                                 if (key + 1 == response.search_data.length) {
                                     $('#option-box').empty();
                                     $('#option-box').append(str);
