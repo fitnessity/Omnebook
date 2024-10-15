@@ -2343,6 +2343,7 @@
 </script>
 
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 
 <script>
 	$(window).on('load', function() {

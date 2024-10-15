@@ -317,6 +317,7 @@
 <!-- end modal -->
 
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.js"></script>
 <script>
 
