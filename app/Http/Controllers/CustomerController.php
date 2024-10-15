@@ -453,17 +453,40 @@ class CustomerController extends Controller {
         return Excel::download(new ExportCustomer($request->id,$request->chk), 'customer.xlsx');
     }
 
-    public function sendemailtocutomer(Request $request){
-        $customer = Customer::findOrFail($request->cid);
-        if(@$customer->password != ''){
-            $password = '';
-        }else{
-            $password = Str::random(8);
-            $customer->update(['password' => Hash::make($password)]);
+    // public function sendemailtocutomer(Request $request){
+    //     $customer = Customer::findOrFail($request->cid);
+    //     if(@$customer->password != ''){
+    //         $password = '';
+    //     }else{
+    //         $password = Str::random(8);
+    //         $customer->update(['password' => Hash::make($password)]);
+    //     }
+    //     $status =  SGMailService::sendWelcomeMailToCustomer($request->cid,$request->bid,$password);
+    //    return  $status;
+    // }
+
+    public function sendemailtocutomer(Request $request)
+    {
+        try {
+            $customer = Customer::findOrFail($request->cid);
+            if (!empty($customer->password)) {
+                $password = ''; 
+            } else {
+                $password = Str::random(8);
+                $customer->update(['password' => Hash::make($password)]);
+            }
+            $status = SGMailService::sendWelcomeMailToCustomer($request->cid, $request->bid, $password);
+            if ($status == 'success') {
+                return response()->json(['message' => 'Email Successfully Sent'], 200);
+            } else {
+                throw new \Exception("Can't Mail on this Address. Please Check Email..");
+            }
+        } catch (\Exception $e) {
+            Log::info('Email sending failed: ' . $e->getMessage());
+            return response()->json(['message' => 'Email sending failed: ' . $e->getMessage()], 500);
         }
-        $status =  SGMailService::sendWelcomeMailToCustomer($request->cid,$request->bid,$password);
-       return  $status;
     }
+
 
     public function importmembership(Request $request){
         $user = Auth::user();
