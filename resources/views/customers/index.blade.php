@@ -339,7 +339,7 @@
 </div>
 
 @include('layouts.business.footer')					
-
+@include('layouts.business.scripts')
 	<script>
 		var profile_pic_var = '';
 		var ext = '';

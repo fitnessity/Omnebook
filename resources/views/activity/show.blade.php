@@ -28,16 +28,16 @@ input:disabled{
 	}
 
 ?>
-<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
-<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/style.css">
-<link rel="stylesheet" href="<?php echo Config::get('constants.FRONT_CSS'); ?>compare/w3.css">
-<link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" type="text/css" rel="stylesheet" />
-<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/Compare.js"></script>
-<script src="<?php echo Config::get('constants.FRONT_JS'); ?>compare/jquery-1.9.1.min.js"></script>
+<link rel='stylesheet' type='text/css' href="{{url('public/css/frontend/general.css')}}">
+<link href="{{url('public/css/compare/style.css')}}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{{url('public/css/compare/w3.css')}}" type="text/css" >
+<!-- <link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" type="text/css" rel="stylesheet" /> -->
+<link rel='stylesheet' type='text/css' href="{{url('public/css/responsive.css')}}">
+<script src="{{url('public/js/compare/Compare.js')}}"></script>
+<script src="{{url('public/js/compare/jquery-1.9.1.min.js')}}"></script>
 <!-- <script src="{{ url('public/js/jquery-ui.multidatespicker.js') }}"></script> -->
 <script src="{{ url('public/js/jquery-ui.min.js') }}"></script>
-<script src="{{env('APP_URL')}}/public/js/ratings.js"></script>
+<script src="{{env('/public/js/ratings.js')}}"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
