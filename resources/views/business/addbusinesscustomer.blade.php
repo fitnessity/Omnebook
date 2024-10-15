@@ -1,5 +1,6 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.header')
+{{-- @extends('layouts.header') --}}
+@extends('layouts.business.header')
 @section('content')
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.css" rel="stylesheet">
@@ -315,8 +316,7 @@
 </div>
 <!-- end modal -->
 
-@include('layouts.footer')
-
+@include('layouts.business.footer')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.js"></script>
 <script>
 
@@ -687,7 +687,9 @@
 
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap" async defer></script>
+{{-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap" async defer></script> --}}
+{{-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}"></script>  --}}
+
 
 
 @endsection
