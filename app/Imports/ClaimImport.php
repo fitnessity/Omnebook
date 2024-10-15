@@ -70,7 +70,8 @@ class ClaimImport implements ToModel, WithStartRow
                     $gaddress = $address.', '.$state;
             
                     $gaddress = str_replace(' ', '+', $gaddress);
-                    $gkey='AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw';
+                    // $gkey='AIzaSyCr7-ilmvSu8SzRjUfKJVbvaQZYiuntduw';
+                    $gkey = env('MAP_KEY'); 
                     $url = "https://maps.googleapis.com/maps/api/geocode/json?address=$gaddress&key=$gkey";
                     $geocode = file_get_contents($url);
                     $json = json_decode($geocode);
