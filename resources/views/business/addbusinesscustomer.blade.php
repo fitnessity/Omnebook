@@ -1,17 +1,34 @@
 @inject('request', 'Illuminate\Http\Request')
-{{-- @extends('layouts.header') --}}
 @extends('layouts.business.header')
+	<link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>frontend/general.css">
+    <link rel='stylesheet' type='text/css' href="{{env('APP_URL')}}<?php echo Config::get('constants.FRONT_CSS'); ?>responsive.css">
 @section('content')
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.css" rel="stylesheet">
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.18.10/slimselect.min.css" rel="stylesheet"> -->
 
-
-<section style="margin-top:70px; margin-bottom: 70px;">
+<style>
+	body{background: #fff;}
+	label{font-size: 14px;}
+	.form-group {
+		margin-bottom: 15px;
+	}
+	.form-control{
+		font-size: 14px;
+	}
+	.form-group p{font-size: 14px;}
+	input{font-size: 14px;}
+	.ss-main .ss-content .ss-list .ss-option{font-size: 14px;}
+	.ss-main .ss-content .ss-search input{font-size: 14px;}
+	.ss-main .ss-single-selected .placeholder{background: none; font-size: 14px;}
+	.map-info p{font-size: 14px;}
+	.rvw-overall-rate span{font-size: 14px;}
+</style>
+<section style="margin-top:99px; margin-bottom: 70px;">
 	<div class="container-fluid bannar-set">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="business-banner">
-					<img src="{{url('/public/images/newimage/addbusiness-customer.jpg')}}" alt="">
+					<img src="{{url('/public/images/newimage/addbusiness-customer.jpg')}}" alt="Omnebook" loading="lazy">
 				</div>
 			</div>
 		</div>
@@ -21,8 +38,8 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="business-info">
-					<h3>ADD A BUSINESS TO FITNESSITY AS A CUSTOMER</h3>
-					<p>Thank you for telling us about a new business to list on Fitnessity. Your contributions introduces others to another great business and to make our community stronger. To get started, tell us a little bit yourself and about the business.</p>
+					<h3>ADD A BUSINESS TO OMNEBOOK AS A CUSTOMER</h3>
+					<p>Thank you for telling us about a new business to list on Omnebook. Your contributions introduces others to another great business and to make our community stronger. To get started, tell us a little bit yourself and about the business.</p>
 				</div>
 			</div>
 			<div class="col-md-12">
@@ -42,16 +59,16 @@
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>What’s your full name?</label>
+							<label class="fs-14">What’s your full name?</label>
 							<input type="text" class="form-control" name="business_added_by_cust_name" id="business_added_by_cust_name">
-							<div class="reviewerro" id="business_added_by_cust_nameerro"> </div>
+							<div class="reviewerro fs-14" id="business_added_by_cust_nameerro"> </div>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>What’s your email?</label>
+							<label class="fs-14">What’s your email?</label>
 							<input type="text" class="form-control" name="email" id="email"> 
-							<div class="reviewerro" id="emailerro"> </div>
+							<div class="reviewerro fs-14" id="emailerro"> </div>
 						</div>
 					</div>
 				</div>
@@ -61,9 +78,9 @@
 				<div class="col-md-12">
 					<h3 class="business-inner-title">Tell Us About The Business</h3>
 				</div>
-				<div class="col-md-6">
+				<div class="col-lg-6 col-md-12 col-sm-12">
 					<div class="form-group">
-						<label for="position">What type of business is this?</label>
+						<label for="position" class="fs-14">What type of business is this?</label>
 						<p>(Choose Only One)</p>
 						<div class="special-offer offer-sp">
 							<div class="multiples">
@@ -76,39 +93,39 @@
 					</div>
 					
 					<div class="form-group">
-						<label>Business Name</label>
+						<label class="fs-14">Business Name</label>
 						<input type="text" class="form-control" name="Companyname" id="b_companyname" placeholder="Enter Business Name" onkeyup="addbusname();">
-						<div class="reviewerro" id="b_companynameerro"> </div>
+						<div class="reviewerro fs-14" id="b_companynameerro"> </div>
 					</div>
 					<div class="form-group">
-						<label>Business Owners Name (optional)</label>
+						<label class="fs-14">Business Owners Name (optional)</label>
 						<input type="text" class="form-control" name="Firstnameb" id="b_firstname" placeholder="Enter Business Owners Name" onkeyup="addownname();">
 					</div>
 					<div class="form-group">
-						<label>Business Address</label>
+						<label class="fs-14">Business Address</label>
 						<input type="text" class="form-control" autocomplete="nope" name="Address" id="b_address" placeholder="Address" value="">
-						<div class="reviewerro" id="b_addresserro"> </div>
+						<div class="reviewerro fs-14" id="b_addresserro"> </div>
 					</div>
 
 					<div id="map" style="display: none;"></div>
 
 					<div class="form-group">
-						<label>Additional address info. (optional)</label>
+						<label class="fs-14">Additional address info. (optional)</label>
 						<input type="text" class="form-control" autocomplete="nope" name="additional_address" id="b_additional_address" placeholder="Suite number, plaza, square" value="">
 					</div>
 
 					<div class="form-group">
-						<label>City/Town</label>
+						<label class="fs-14">City/Town</label>
 						<input type="text" class="form-control" name="City" id="b_city" size="30" placeholder="City" maxlength="50" value="">
 					</div>
 
 					<div class="form-group">
-						<label>State/Province/Region</label>
+						<label class="fs-14">State/Province/Region</label>
 						<input type="text" class="form-control" name="State" id="b_state" size="30" placeholder="State" maxlength="50" value="">
 					</div>
 
 					<div class="form-group">
-						<label>Zipcode/Postal Code</label>
+						<label class="fs-14">Zipcode/Postal Code</label>
 						<input type="text" class="form-control" name="ZipCode" id="b_zipcode" size="30" placeholder="Zip Code" value="" maxlength="20">
 					</div>
 
@@ -116,7 +133,7 @@
 					<input type="hidden" name="lat" id="lat" value="">
 
 					<div class="form-group">
-						<label for="position">Country</label>
+						<label for="position" class="fs-14">Country</label>
 						<div class="special-offer offer-sp">
 							<div class="multiples">
 								<input type="text" class="form-control" name="Country" id="b_country" size="30" placeholder="Country" value="" maxlength="20">
@@ -124,23 +141,23 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label>Neighborhood (optional)</label>
+						<label class="fs-14">Neighborhood (optional)</label>
 						<input type="text" class="form-control" name="neighborhood" id="b_neighborhood" size="30" placeholder='Neighborhood' value="" maxlength="50">
 					</div>
 
 					<div class="form-group">
-						<label>Phone Number</label>
+						<label class="fs-14">Phone Number</label>
 						<input type="text" class="form-control" name="business_phone" id="b_business_phone" placeholder="Business Phone" value="" maxlength="16" onkeyup="addphonenumber();">
-						<div class="reviewerro" id="b_business_phoneerro"> </div>
+						<div class="reviewerro fs-14" id="b_business_phoneerro"> </div>
 					</div>
 					<div class="form-group">
-						<label>Website Address (optional)</label>
+						<label class="fs-14">Website Address (optional)</label>
 						<input type="text" class="form-control" name="business_website" id="business_website" placeholder="Website Name" value="" onkeyup="addwebsite();;">
 					</div>
 					<div class="form-group">
-						<label>Email </label>
+						<label class="fs-14">Email </label>
 						<input type="email" class="form-control myemail" name="business_email" id="b_business_email" autocomplete="off" placeholder="Email Address" size="30" maxlength="80" value="" onkeyup="addemail();">
-						<div class="reviewerro" id="b_business_emailerro"> </div>
+						<div class="reviewerro fs-14" id="b_business_emailerro"> </div>
 					</div>
 					<!-- <div class="form-group">
 						<label>Other Activites Offered (optional)</label>
@@ -151,7 +168,7 @@
 					</div> -->
 					
 				</div>
-				<div class="col-md-6">
+				<div class="col-lg-6 col-md-12 col-sm-12">
 					<!-- <div class="form-group">
 						<label for="position">What activity does this business offer?</label>
 						<p>Pick just one. The business owner will add more later.</p>
@@ -165,7 +182,7 @@
 						</div>
 					</div> -->
 					<div class="widget mx-sp mapscroll">
-						<h4 class="widget-title">Business Info</h4>	
+						<h4 class="widget-title fs-14">Business Info</h4>	
 						<div class="business maparea modal-map-business kickboxing_map" style="margin-left:0px; margin-bottom: 15px;">
 							<div class="mysrchmap" style="height: 100%;min-height: 300px;">
 								<div id="map_canvas" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
@@ -216,18 +233,18 @@
 						<div class="form-group">
 	                        <label for="title">Title your review  <span id="star">*</span></label>
 							<input type="text" class="form-control" name="re_title" id="re_title" placeholder="">
-							<div class="reviewerro" id="re_titleerro"> </div>
+							<div class="reviewerro fs-14" id="re_titleerro"> </div>
 	                    </div>
 						<div class="form-group">
 	                        <label for="email">Your review <span id="star">*</span></label>
 							<textarea class="form-control" rows="4" placeholder="Tell us about your experience" name="re_detail" id="re_detail" maxlength="150"></textarea>
-							<div class="reviewerro" id="re_detailerro"> </div>
+							<div class="reviewerro fs-14" id="re_detailerro"> </div>
 	                    </div>
 						<div class="row">
 							<div class="col-md-5">
 								<div class="photo-select-review">
-									<img src="{{ url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah" id="showimg">
-									<input type="file" name="rimg[]" id="files" class="" multiple="multiple" />
+									<img src="{{ url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah" id="showimg"  loading="lazy">
+									<input type="file" name="rimg[]" id="files" class="text-center" multiple="multiple" />
 									<!-- <label for="files">Upload Image</label> -->
 								</div>
 							</div>
@@ -241,10 +258,10 @@
 					<div class="form-group">
 	                    <label for="email">Business Description (Optional)</label>
 	                    <textarea class="form-control" rows="10" placeholder="Tell Us Somthing About Company in short..." name="Shortdescription" id="short_description" maxlength="1000" onchange="adddesc();"></textarea>
-	                    <div class="text-right"><span id="company_desc_left">1000</span> Characters Left</div>
-	                    <span class="reviewerro" id="short_descriptionerro"></span>
+	                    <div class="text-right fs-14"><span id="company_desc_left">1000</span> Characters Left</div>
+	                    <span class="reviewerro fs-14" id="short_descriptionerro"></span>
 	                </div>
-					<button type="button" class="showall-btn btn-display"  id="submitButton">Submit</button> 
+					<button type="button" class="showall-btn btn-display fs-14"  id="submitButton">Submit</button> 
 					<!-- <button type="button" class="showall-btn btn-display"  data-toggle="modal" data-target="#successmodelbox">Add</button>  -->
 				</div>
 			</div>
@@ -260,7 +277,7 @@
             <div class="modal-body">
 				<div class="row contentPop"> 
 					<div class="col-lg-12">
-					   <h4 class="modal-title" style="color: #000; line-height: inherit; font-weight: 600;">Successfully Added Business to Fitnessity</h4>
+					   <h4 class="modal-title" style="color: #000; line-height: inherit; font-weight: 600;">Successfully Added Business to Omnebook</h4>
 					   <p style="color: #000; line-height: inherit; font-weight: 500; margin-bottom: 10px;" >This business will be reviewed by the Quality Control Team before going live</p>
 					</div>
                     <div class="col-lg-12" id="modelbody_successmodelbox">
