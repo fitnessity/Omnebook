@@ -134,7 +134,7 @@
 												<div class="row">
 													<div class="col-sm-auto col-6" id="imgdiv">
 														<div class="avatar-lg-custom-two bg-light rounded p-1 mmb-10 mb-10">
-															<img src="{{$profilePic}}" alt="Fitnessity" class="img-fluid d-block">
+															<img src="{{$profilePic}}" alt="Omnebook" class="img-fluid d-block">
 														</div>
 													</div>
 													<div class="col-sm" id="bookdiv">
@@ -533,7 +533,7 @@
 																		<div class="col-md-2 mb-10">
 																			<div class="instructor-img">
 																				@if($ins->profile_pic_url)
-																				<img src="{{$ins->profile_pic_url}}" class="instructor-img-cart" alt="Fitnessity">
+																				<img src="{{$ins->profile_pic_url}}" class="instructor-img-cart" alt="Omnebook">
 																				@else
 																					<div class="mini-stats-wid ">
 																						<div class="avatar-md mr-15">
@@ -617,7 +617,7 @@
 														<div class="terms-wrap">
 															<input type="checkbox" id="terms_condition" name="terms_condition" value="">
 															<p class="cart-terms fs-13"> The provider(s) require that you agree to some terms and conditions before booking this activity. 
-															<br> <br> By checking this box, you {{$username}} agree on {{ date('m/d/Y')}} to the terms the provider(s) require upon booking. You agree that you are 18+ to book this activity. You also agree to the Fitnessity privacy policy & terms of agreement. </p>
+															<br> <br> By checking this box, you {{$username}} agree on {{ date('m/d/Y')}} to the terms the provider(s) require upon booking. You agree that you are 18+ to book this activity. You also agree to the Omnebook privacy policy & terms of agreement. </p>
 														</div>
 													</div>
 												</div>
@@ -768,7 +768,7 @@
 												<div class="terms-wrap">
 												<input type="checkbox" id="terms_condition" name="terms_condition" value="">
 												<p class="cart-terms fs-13"> The provider(s) require that you agree to some terms and conditions before booking this activity. 
-												<br> <br> By checking this box, you {{$username}} agree on {{ date('m/d/Y')}} to the terms the provider(s) require upon booking. You agree that you are 18+ to book this activity. You also agree to the Fitnessity privacy policy & terms of agreement. </p>
+												<br> <br> By checking this box, you {{$username}} agree on {{ date('m/d/Y')}} to the terms the provider(s) require upon booking. You agree that you are 18+ to book this activity. You also agree to the Omnebook privacy policy & terms of agreement. </p>
 												</div>
 											</div>
 										</div>
@@ -815,7 +815,7 @@
 						<div class="col-lg-4 col-md-4 col-sm-6">
 							<div class="photo-select product-edit user-dash-img mb-10">
 								<input type="hidden" name="old_pic" value="">
-								<img src="{{'/images/service-nofound.jpg'}}" class="pro_card_img blah" id="showimg" alt="Fitnessity">
+								<img src="{{'/images/service-nofound.jpg'}}" class="pro_card_img blah" id="showimg" alt="Omnebook">
 									<input type="file" id="profile_pic" name="profile_pic" class="text-center fs-12">
 							</div>
 						</div>
