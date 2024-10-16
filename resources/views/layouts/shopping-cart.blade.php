@@ -133,8 +133,8 @@
 												</div>
 												<div class="row">
 													<div class="col-sm-auto col-6" id="imgdiv">
-														<div class="avatar-lg-custom-two bg-light rounded p-1 mmb-10 mb-10">
-															<img src="{{$profilePic}}" alt="Omnebook" class="img-fluid d-block">
+														<div class=" bg-light rounded p-1 mmb-10 mb-10">
+															<img src="{{$profilePic}}" alt="Omnebook" class="img-fluid d-block avatar-lg-custom-two">
 														</div>
 													</div>
 													<div class="col-sm" id="bookdiv">
