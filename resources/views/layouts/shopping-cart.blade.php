@@ -134,7 +134,7 @@
 												<div class="row">
 													<div class="col-sm-auto col-6" id="imgdiv">
 														<div class=" bg-light rounded p-1 mmb-10 mb-10">
-															<img src="{{$profilePic}}" alt="Omnebook" class="img-fluid d-block avatar-lg-custom-two">
+															<img src="{{$profilePic}}" alt="Omnebook" class="img-fluid d-block avatar-lg-custom-two object-fit-contain">
 														</div>
 													</div>
 													<div class="col-sm" id="bookdiv">
