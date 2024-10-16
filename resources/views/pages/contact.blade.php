@@ -1,13 +1,17 @@
 @extends('layouts.business.header')
 <link rel='stylesheet' type='text/css' href="https://d2bgo0bc1t29nh.cloudfront.net/css/frontend/general.css">
 @section('content')
-<img src="http://www.fitnessity.co/public/images/cont-banner.jpg">
-<section class="main-slider contact-banner">
+{{-- <img src="http://www.fitnessity.co/public/images/cont-banner.jpg"> --}}
+{{-- <section class="main-slider contact-banner">
     <div class="container">
         <h1>CONTACT US</h1>
     </div>
+</section> --}}
+<section class="inner-banner" style="background-image:url('https://www.omnebook.com/public/images/cont-banner.jpg')">
+    <div class="container">
+        <h1>CONTACT US</h1>
+        </div>
 </section>
-
 <section class="breadcrumbs">
     <div class="container">
         <ul>
