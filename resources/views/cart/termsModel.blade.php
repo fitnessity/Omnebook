@@ -5,5 +5,5 @@
 
 <!-- Modal body -->
 <div class="modal-body">
-<h2>{!!$termsDesc!!}</h2>
+<h5>{!!$termsDesc!!}</h5>
 </div>
