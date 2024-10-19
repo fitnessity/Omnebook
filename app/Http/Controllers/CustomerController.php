@@ -479,7 +479,8 @@ class CustomerController extends Controller {
             if ($status == 'success') {
                 return response()->json(['message' => 'Email Successfully Sent'], 200);
             } else {
-                throw new \Exception("Can't Mail on this Address. Please Check Email..");
+                throw new \Exception("Can't Mail on this Address. Please Check Email..".$status);
+                dd($status);
                 Log::info('Email status: ' . $status);
                 Log::info("Failed to send email to customer ID: {$request->cid}. Status: {$status}");
             }
