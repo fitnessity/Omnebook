@@ -465,31 +465,6 @@ class CustomerController extends Controller {
     //    return  $status;
     // }
 
-    // public function sendemailtocutomer(Request $request)
-    // {
-    //     try {
-    //         $customer = Customer::findOrFail($request->cid);
-    //         if (!empty($customer->password)) {
-    //             $password = ''; 
-    //         } else {
-    //             $password = Str::random(8);
-    //             $customer->update(['password' => Hash::make($password)]);
-    //         }
-    //         $status = SGMailService::sendWelcomeMailToCustomer($request->cid, $request->bid, $password);
-    //         if ($status == 'success') {
-    //             return response()->json(['message' => 'Email Successfully Sent'], 200);
-    //         } else {
-    //             dd($status);
-    //             Log::info('Email status: ' . $status);
-    //             Log::info("Failed to send email to customer ID: {$request->cid}. Status: {$status}");
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::info('Email sending failed: ' . $e->getMessage());
-    //         return response()->json(['message' => 'Email sending failed: ' . $e->getMessage()], 500);
-    //     }
-    // }
-
-
     public function sendemailtocutomer(Request $request)
     {
         try {
@@ -501,12 +476,36 @@ class CustomerController extends Controller {
                 $customer->update(['password' => Hash::make($password)]);
             }
             $status = SGMailService::sendWelcomeMailToCustomer($request->cid, $request->bid, $password);
-            dd($status);
+            if ($status == 'success') {
+                // return response()->json(['message' => 'Email Successfully Sent'], 200);
+                return $status;
+            } else {
+                throw new \Exception("Can't Mail on this Address. Please Check Email..");
+            }
         } catch (\Exception $e) {
             Log::info('Email sending failed: ' . $e->getMessage());
             return response()->json(['message' => 'Email sending failed: ' . $e->getMessage()], 500);
         }
     }
+
+
+    // public function sendemailtocutomer(Request $request)
+    // {
+    //     try {
+    //         $customer = Customer::findOrFail($request->cid);
+    //         if (!empty($customer->password)) {
+    //             $password = ''; 
+    //         } else {
+    //             $password = Str::random(8);
+    //             $customer->update(['password' => Hash::make($password)]);
+    //         }
+    //         $status = SGMailService::sendWelcomeMailToCustomer($request->cid, $request->bid, $password);
+    //         dd($status);
+    //     } catch (\Exception $e) {
+    //         Log::info('Email sending failed: ' . $e->getMessage());
+    //         return response()->json(['message' => 'Email sending failed: ' . $e->getMessage()], 500);
+    //     }
+    // }
 
 
     public function importmembership(Request $request){
