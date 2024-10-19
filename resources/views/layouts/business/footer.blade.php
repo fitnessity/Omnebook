@@ -459,9 +459,6 @@ function closeMobileNav() {
 				if(response == 'success'){
                     //$('.reviewerro').html('Email Successfully Sent..');
                   alert('Email Successfully Sent..');
-                }else{
-                    //$('.reviewerro').html("Can't Mail on this Address. Plese Check your Email..");
-                  alert("Can't Mail on this Address. Plese Check Email..");
                 }
 			}
 		});
