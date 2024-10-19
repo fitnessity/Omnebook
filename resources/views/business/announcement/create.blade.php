@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="{{ url('public/dashboard-design/css/tempusdominus-bootstrap-4.css') }}"> 
 <script src="{{asset('/public/dashboard-design/js/tempusdominus-bootstrap-4.min.js')}}"></script>
 
-<h5 class="modal-title text-center" id="staticBackdropLabel">Add Announcement</h5>
+<h5 class="modal-title text-center" id="staticBackdropLabel">Add Announcements</h5>
 <form action="{{route('business.announcement.store')}}" method="POST" class="needs-validation" >
 	@csrf
 	<div class="row y-middle">

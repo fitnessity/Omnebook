@@ -313,12 +313,20 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-lg-6  col-md-6 col-sm-6">
+
+								<div class="col-lg-6 col-md-6 col-sm-6">
 									<div class="refund-details mb-10"> 
-										<label>Suspension Fee: </label>
-										<input class="form-control" type="text" id="suspension_fee" name="suspension_fee" placeholder="$" value="{{$booking_detail->suspend_fee}}">
+										<div class="form-check form-switch mb-3">
+											<label class="form-check-label" for="SwitchCheck1">Stop Recurring Payments During Freeze</label>
+											<input class="form-check-input" type="checkbox" name="stop_recurring" role="switch" id="toggler" value="checked" checked>
+										</div>
+										<div class="" id="suspension_fees">
+											<label>Suspension Fee: </label>
+											<input class="form-control" type="text" id="suspension_fee" name="suspension_fee" placeholder="$" value="{{$booking_detail->suspend_fee}}">
+										</div>
 									</div>
 								</div>
+								
 								<div class="col-lg-6 col-sm-6 col-md-6">
 									<div class="refundcomment">
 										<label>Leave a comment:</label>
@@ -326,7 +334,7 @@
 									</div>
 								</div>
 								<div class="col-lg-12 col-xs-12">
-									<button type="button" class="btn btn-red float-end" id=""  data-behavior="suspend_order_detail" data-booking-detail-id = "{{$booking_detail->id}}"  data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Suspend/Freeze</button>
+									<button type="button" class="btn btn-red float-end" id="" data-behavior="suspend_order_detail" data-booking-detail-id = "{{$booking_detail->id}}"  data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Suspend/Freeze</button>
 								</div>
 							</div>
 							<!--<div class="row">
@@ -401,7 +409,19 @@
 	</div>
 </div>
 
-
+<script>
+	const toggle = document.getElementById('toggler');
+	const suspensionFeeInput = document.getElementById('suspension_fees');
+	toggle.addEventListener('change', () => {	
+		var product_id = toggle.value; 
+		var status = toggle.checked ? "yes" : "no"; 
+		if (status === "yes") {
+            suspensionFeeInput.style.display = 'block';  
+        } else {
+            suspensionFeeInput.style.display = 'none';  
+        }
+	});
+</script>
 <script type="text/javascript">
 
 	$(".flatpickr-input").flatpickr({ 
@@ -409,6 +429,7 @@
         maxDate:'01/01/2050'
     });
 
+	
 	$("[data-behavior~=suspend_order_detail]").click(function(e){
 	    $.ajax({
 			url: "/business/{{$business_id}}/booking_details/" + $(this).data('booking-id') + '/suspend',
@@ -419,6 +440,7 @@
 	            suspension_reason: $('#suspension_reason').val(),
 	            suspensionstartdate: $('#suspensionstartdate').val(),
 	            suspensionenddate: $('#suspensionenddate').val(),
+				stop_recurring: $('#toggler').is(":checked") ? 1 : 0 ,// Send checkbox value (1 for checked, 0 for unchecked)
 	            suspension_fee: $('#suspension_fee').val(),
 	            suspension_comment: $('#suspension_comment').val(),
 	            customer_id:  $(this).data('customer-id'),

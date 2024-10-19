@@ -95,9 +95,9 @@
                 
                 <li class="nav-item">
                     @if(!Session('StaffLogin'))
-                        <a class="nav-link menu-link @if(Route::current()->getName()=='personal.company.create') active @endif" href="{{route('personal.company.create',['company' => $companyId])}}" >
+                        <!-- <a class="nav-link menu-link @if(Route::current()->getName()=='personal.company.create') active @endif" href="{{route('personal.company.create',['company' => $companyId])}}" >
                                 <img src="{{asset('/public/img/company-set-up.png')}}" alt="Fitnessity"> <span data-key="t-apps">Company Set Up</span>
-                        </a>
+                        </a> -->
                     @else
                         <a class="nav-link menu-link @if(Route::current()->getName()=='business.staff.show') active @endif" href="{{route('business.staff.show',['company' => $companyId,'staff'=>Session('StaffLogin')])}}" >
                                 <img src="{{asset('/public/img/company-set-up.png')}}" alt="Fitnessity"> <span data-key="t-apps">Staff Personal Detail</span></a>
@@ -122,7 +122,7 @@
                                 </li> 
                             @endif
                             <li class="nav-item">
-                                <a href="{{route('business.schedulers.index')}}" class="nav-link @if(Route::current()->getName()=='business.schedulers.index') active @endif" data-key="t-signin"> Manage Scheduler 
+                                <a href="{{route('business.schedulers.index')}}" class="nav-link @if(Route::current()->getName()=='business.schedulers.index') active @endif" data-key="t-signin"> Booking Scheduler 
                                 </a>
                             </li>
                             

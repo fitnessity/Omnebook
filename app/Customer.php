@@ -299,11 +299,14 @@ class Customer extends Authenticatable
 
     public function Transaction()
     {
-        return $this->hasMany(Transaction::class,'user_id')->where('user_type','customer');
+        // return $this->hasMany(Transaction::class,'user_id')->where('user_type','customer');
+        return $this->hasMany(Transaction::class, 'user_id')->whereIn('user_type', ['customer', 'user']);
+
     }
     public function CheckTransaction()
     {
-        return $this->hasMany(Transaction::class,'user_id')->where('user_type','user');
+        return $this->hasMany(Transaction::class,'user_id')->where('user_id', $user_id)
+        ->where('user_type','user');
     }
 
     public function BookingCheckinDetails()
@@ -443,12 +446,23 @@ class Customer extends Authenticatable
     public function active_memberships($sport = null,$expireDate= null){
         $expireDate = $expireDate ??  Carbon::now()->format('Y-m-d');
         $used_user_booking_detail_ids = $this->BookingCheckinDetails()->whereRaw('booking_detail_id is not null')->where('after_use_session_amount', '<=' , 0)->pluck('booking_detail_id')->toArray();
+        $results = $this->bookingDetail()->where('order_type','membership')->where('status', 'active')->whereNotNull('priceid')->whereRaw('(user_booking_details.expired_at > ? or user_booking_details.expired_at is null)', $expireDate)
+                                            ->whereNotIn('user_booking_details.id', $used_user_booking_detail_ids);
 
-        $results = $this->bookingDetail()->where('order_type','membership')->where('status', 'active')->whereRaw('(user_booking_details.expired_at > ? or user_booking_details.expired_at is null)', $expireDate)
-                                         ->whereNotIn('user_booking_details.id', $used_user_booking_detail_ids);
- 
         return $results; 
     }
+
+
+    public function suspended_memberships($sport = null,$expireDate= null){
+        $expireDate = $expireDate ??  Carbon::now()->format('Y-m-d');
+        $used_user_booking_detail_ids = $this->BookingCheckinDetails()->whereRaw('booking_detail_id is not null')->where('after_use_session_amount', '<=' , 0)->pluck('booking_detail_id')->toArray();
+
+        $results = $this->bookingDetail()->where('order_type','membership')->where('status', 'suspend')->whereRaw('(user_booking_details.expired_at > ? or user_booking_details.expired_at is null)', $expireDate)
+                                         ->whereNotIn('user_booking_details.id', $used_user_booking_detail_ids);
+
+        return $results; 
+    }
+
 
     public function customerAtRisk(){
         $activeMemberships = $this->active_memberships();

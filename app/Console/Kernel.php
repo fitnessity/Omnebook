@@ -8,6 +8,7 @@ use App\{UserBookingDetail,Recurring,Transaction,BookingCheckinDetails,CustomerP
 use DB;
 use Carbon\Carbon;
 use Stripe\Exception\InvalidRequestException;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -28,7 +29,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //$schedule->command('stripe:cron')->everyMinute();
+        // $schedule->command('stripe:cron')->everyMinute();
 
         $schedule->call(function () {
              var_dump('run transfer');
@@ -147,7 +148,11 @@ class Kernel extends ConsoleKernel
             $announcements = Announcement::whereDate('announcement_date' , '=' , $current_date)->whereRaw("announcement_time = '$current_time'")->get();
            // print_r($announcements);exit;
             foreach($announcements as $a){
-                $a->sendAnnouncementMail();
+                $a->sendAnnouncementMail();                
+                // Log::info('Processing announcement ID: ' . $a->id);
+                // $a->status = 'inactive';
+                // $a->save();        
+                // Log::info('Updated announcement ID ' . $a->id . ' to inactive.');
             }
         })->everyMinute();
 

@@ -34,18 +34,22 @@ class PaymentController extends Controller {
         $customer='';
         $cartService = new CartService();
         $fees = BusinessSubscriptionPlan::where('id',1)->first();
+        $userid=Customer::where('user_id',$loggedinUser->id)->first();
+
         if($request->grand_total == 0){
             $orderdata = array(
                 'user_id' => $loggedinUser->id, 'status' => 'active', 'currency_code' => 'usd', 'amount' => $request->grand_total,
                 'order_type' => 'simpleorder', 'bookedtime' => Carbon::now()->format('Y-m-d'),
             );
-            \DB::enableQueryLog(); // Enable query log
-
+            // \DB::enableQueryLog(); // Enable query log
+            // $userid=Customer::where('user_id',$loggedinUser->id)->first();
+            // dd($userid);
             $userBookingStatus = UserBookingStatus::create($orderdata);
 
             $transactiondata = array( 
                 'user_type' => 'user',
-                'user_id' => $loggedinUser->id,
+                // 'user_id' => $loggedinUser->id,
+                'user_id'=>$userid->id,
                 'item_type' =>'UserBookingStatus',
                 'item_id' => $userBookingStatus->id,
                 'channel' =>'',
@@ -284,7 +288,8 @@ class PaymentController extends Controller {
                         $userBookingStatus = UserBookingStatus::create($orderdata);
                         $transactiondata = array( 
                             'user_type' => 'user',
-                            'user_id' => $loggedinUser->id,
+                            // 'user_id' => $loggedinUser->id,
+                            'user_id'=>$userid->id,
                             'item_type' =>'UserBookingStatus',
                             'item_id' => $userBookingStatus->id,
                             'channel' =>'stripe',
@@ -325,7 +330,9 @@ class PaymentController extends Controller {
                         $userBookingStatus = UserBookingStatus::create($orderdata);
                         $transactiondata = array( 
                             'user_type' => 'user',
-                            'user_id' => $loggedinUser->id,
+                            // 'user_id' => $loggedinUser->id,
+                            'user_id'=>$userid->id,
+
                             'item_type' =>'UserBookingStatus',
                             'item_id' => $userBookingStatus->id,
                             'channel' =>'stripe',

@@ -84,16 +84,17 @@ class UserBookingDetailController extends Controller
     public function refund(Request $request, $business_id, $booking_id){
 
        
-        $company = $request->current_company->findOrFail($business_id);
+        $company = $request->current_company->findOrFail($business_id);        
         $customer = $company->customers()->findOrFail($request->customer_id);
+
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
-        // dd($booking_detail);
+
         if($booking_detail->can_refund()){
             
             if($request->refund_method == 'credit'){
-                \DB::enableQueryLog();
+                // \DB::enableQueryLog();
                 $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
-                dd(\DB::getQueryLog());
+                // dd(\DB::getQueryLog());
                 // dd($transaction);
                 if($transaction->can_refund()){
                     if(!$transaction->refund($request->refund_amount ? $request->refund_amount : Null)){
@@ -113,6 +114,7 @@ class UserBookingDetailController extends Controller
                 "refund_reason" => $request->refund_reason,
                 "refund_by" => $this->loggedId,
             ];
+            // dd($result);
             // $booking_detail->refund();
             $booking_detail->update($result);
         }else{
@@ -142,24 +144,37 @@ class UserBookingDetailController extends Controller
 
     public function suspend(Request $request, $business_id){
 
+        // dd($request->all());
         $company = $request->current_company->findOrFail($business_id);
         $customer = $company->customers()->findOrFail($request->customer_id);
 
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
-        
+
         if($booking_detail->can_suspend()){
-            if($request->suspension_fee > 0){
+            if($request->stop_recurring == 1){
+                // dd('44');
                 if($customer->charge($request->suspension_fee, 'terminate')){
                     $booking_detail->update(["status" => 'suspend' ,
+                                            'stop_reccuring'=>$request->stop_recurring,
                                             'suspend_reason' => $request->suspension_reason,
                                             'suspend_started' => date('Y-m-d',strtotime($request->suspensionstartdate)),
                                             'suspend_ended' =>date('Y-m-d',strtotime($request->suspensionenddate)) ,
                                             'suspend_fee' => $request->suspension_fee,
                                             'suspend_comment' =>$request->suspension_comment,
                                             'suspend_by' => $this->loggedId]);
-                }else{
+                }
+                else{
                     return response()->json(['message' => 'charge user failed.'], 400);
                 }
+            }
+            else{
+                // dd('22');
+                $booking_detail->update(["status" => 'suspend',
+                'suspend_reason' => $request->suspension_reason,
+                'suspend_started' => date('Y-m-d',strtotime($request->suspensionstartdate)),
+                'suspend_ended' =>date('Y-m-d',strtotime($request->suspensionenddate)) ,
+                'suspend_comment' =>$request->suspension_comment,
+                'suspend_by' => $this->loggedId]);
             }
         }else{
             return response()->json(['message' => 'is not acive membership, can not suspend.'], 400);
@@ -206,5 +221,23 @@ class UserBookingDetailController extends Controller
         }else{
             return response()->json(['message' => 'transction not found or already complete, can only refund'], 400);
         }
+    }
+    public function cancelFreeze(Request $request)
+    {
+        $decryptedId = decrypt($request->input('booking_id'));
+        $booking_detail = UserBookingDetail::where('id',$decryptedId)->first();
+        $booking_detail->update([
+            'status' => 'active',
+            'stop_reccuring'=>Null,
+            'suspend_reason' => Null,
+            'suspend_started' => Null,
+            'suspend_ended' =>Null,
+            'suspend_comment' =>Null,
+            'suspend_by' => NULL,
+            'suspend_fee'=>Null,
+        ]);
+
+        return response()->json(['message' => 'Freeze cancelled successfully']);
+
     }
 }

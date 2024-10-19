@@ -296,7 +296,13 @@ class CustomerController extends Controller {
         $customerdata = $company->customers->find($id);
         if(!$customerdata){ return redirect()->route('business_customer_index'); }
         $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
+        // DB::enableQueryLog();
         $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->orderBy('created_at','desc')->get() : [];
+
+
+        $suspended_memberships = $customerdata != '' ? $customerdata->suspended_memberships()->orderBy('created_at','desc')->get() : [];
+
+        // dd(\DB::getQueryLog()); 
         $purchase_history = @$customerdata != '' ?  @$customerdata->purchase_history()->orderBy('created_at','desc')->get() : [];
         $complete_booking_details = @$customerdata != '' ? $customerdata->complete_booking_details()->get() : [];
         $strpecarderror = '';
@@ -323,6 +329,7 @@ class CustomerController extends Controller {
             'visits' => $visits,
             'purchase_history' => $purchase_history,
             'active_memberships' => $active_memberships,
+            'suspended_memberships'=>$suspended_memberships,
             'complete_booking_details' => $complete_booking_details,
             'auto_pay_payment_msg' =>$auto_pay_payment_msg,
             'documents' =>$documents,
@@ -731,7 +738,7 @@ class CustomerController extends Controller {
                     User::where(['email' => @$oldParent->email, 'id' => @$oldParent->user_id])->update(['primary_account' => 0]);
                 }
             }
-            User::where(['email' => $cust['email'] , 'id' => $cust['user_id']])->update(['primary_account' => $data['primary_account'] ,'profile_pic'=> $data['profile_pic'] ?? $cust->profile_pic ]);
+            User::where(['email' => $cust['email'] , 'id' => $cust['user_id']])->update(['primary_account' => $data['primary_account'] ,'birthdate'=>$data['birthdate'],'profile_pic'=> $data['profile_pic'] ?? $cust->profile_pic ]);
             $cust->update($data);
         }elseif($request->chk == 'update_terms'){
             $data = $request->all();

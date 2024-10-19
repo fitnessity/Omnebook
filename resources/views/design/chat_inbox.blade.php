@@ -452,7 +452,37 @@
                                                     </div>
                                                 </div>-->
                                                 <ul class="list-unstyled chat-conversation-list" id="users-conversation">
-													<li class="chat-list left" id="1">                        <div class="conversation-list"><div class="chat-avatar"><img src="https://fitnessity-production.s3.amazonaws.com/customer/IUwmNesKNJtrlzkSgjex1bzQoXhtvteofsrr44qQ.jpg" alt=""></div><div class="user-chat-content"><div class="ctext-wrap"><div class="ctext-wrap-content" id="1"><p class="mb-0 ctext-content">Good morning 😊</p></div><div class="dropdown align-self-start message-box-drop">                <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                    <i class="ri-more-2-fill"></i>                </a>                <div class="dropdown-menu" style="">                    <a class="dropdown-item reply-message" href="#"><i class="ri-reply-line me-2 text-muted align-bottom"></i>Reply</a>                    <a class="dropdown-item" href="#"><i class="ri-share-line me-2 text-muted align-bottom"></i>Forward</a>                    <a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>                    <a class="dropdown-item" href="#"><i class="ri-bookmark-line me-2 text-muted align-bottom"></i>Bookmark</a>                    <a class="dropdown-item delete-item" href="#"><i class="ri-delete-bin-5-line me-2 text-muted align-bottom"></i>Delete</a>                </div>            </div></div><div class="conversation-name"><span class="d-none name">Lisa Parker</span><small class="text-muted time">09:07 am</small> <span class="text-success check-message-icon"><i class="bx bx-check-double"></i></span></div></div>                </div>            </li>
+													<li class="chat-list left" id="1">                        
+														<div class="conversation-list">
+															<div class="chat-avatar">
+																<img src="https://fitnessity-production.s3.amazonaws.com/customer/IUwmNesKNJtrlzkSgjex1bzQoXhtvteofsrr44qQ.jpg" alt="">
+															</div>
+															<div class="user-chat-content">
+																<div class="ctext-wrap">
+																	<div class="ctext-wrap-content" id="1">
+																		<p class="mb-0 ctext-content">Good morning 😊</p>
+																	</div>
+																	<div class="dropdown align-self-start message-box-drop">                
+																		<a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                    
+																			<i class="ri-more-2-fill"></i>                
+																		</a>                
+																		<div class="dropdown-menu" style="">                    
+																			<a class="dropdown-item reply-message" href="#"><i class="ri-reply-line me-2 text-muted align-bottom"></i>Reply</a>                    
+																			<a class="dropdown-item" href="#"><i class="ri-share-line me-2 text-muted align-bottom"></i>Forward</a>                    
+																			<a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>                    <a class="dropdown-item" href="#"><i class="ri-bookmark-line me-2 text-muted align-bottom"></i>Bookmark</a>                    
+																			<a class="dropdown-item delete-item" href="#"><i class="ri-delete-bin-5-line me-2 text-muted align-bottom"></i>Delete</a>                
+																		</div>            
+																	</div>
+																</div>
+																<div class="conversation-name">
+																	<span class="name">Lisa Parker</span><small class="text-muted time">09:07 am</small> <span class="text-success check-message-icon"><i class="bx bx-check-double"></i></span>
+																	<div>
+																		<a class="text-muted time"  data-bs-toggle="offcanvas" data-bs-target="#Booking_Request_staff_modal" aria-controls="Booking_Request_staff_modal">Booking Request</a> 
+																	</div>
+																</div>
+															</div>                
+														</div>            
+													</li>
                                                     
                                                 </ul>
                                                 <!-- end chat-conversation-list -->
@@ -875,7 +905,7 @@
 				<div class="">
 					<div class="card-body">
 						<!-- Nav tabs -->
-						<ul class="nav nav-tabs mb-3" role="tablist">
+						<ul class="staff-details-text nav nav-tabs mb-3" role="tablist">
 							<li class="nav-item">
 								<a class="nav-link active" data-bs-toggle="tab" href="#Schedule_Staff" role="tab" aria-selected="false">
 									Schedule
@@ -883,7 +913,7 @@
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" data-bs-toggle="tab" href="#Booking_Request_Staff" role="tab" aria-selected="false">
-									Booking Request
+									Booking Request 
 								</a>
 							</li>
 							<li class="nav-item">
@@ -923,7 +953,7 @@
 											<p class="text-muted mb-0 color-black">02:15 AM</p>
 										</div>
 									</div><!-- end -->
-																																								<div class="mini-stats-wid d-flex align-items-center mt-3">
+									<div class="mini-stats-wid d-flex align-items-center mt-3">
 										<div class="flex-shrink-0 avatar-sm">
 											<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-success fs-4 multiple-activites">
 												1/1 
@@ -2474,6 +2504,7 @@
 
 
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 
 @endsection
 

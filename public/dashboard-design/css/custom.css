@@ -3045,11 +3045,12 @@ div#termsdiv{order: 4;}
   border-collapse: collapse;
 }
 .chat-conversation {
-  height: calc(155vh - 299px);
+  /* height: calc(11vh - auto); */
+  height: calc(130vh - 299px);
 }
 .chat-leftsidebar{
-	/* height: calc(130vh - 70px - 60px - 8px); */
-	height: auto;
+	height: calc(130vh - 70px - 60px - 8px);
+	/* height: auto; */
 }
 .user-chat {
 	background-color: var(--vz-body-bg) !important;
@@ -7753,7 +7754,7 @@ color: #000;
 
 
 .contact-custom-dropdwon .checkbox-dropdown {
-  width: 200px;
+  width: 300px;
   border: 1px solid #d2d8dd;
   padding: .5rem .9rem;
   position: relative;
@@ -9080,4 +9081,21 @@ height: 400px;
 .nav-border-top-success .nav-link.active {
   color: #98002e;
   border-top-color: #98002e;
+}
+.bg-light-grey{
+  background: #f3f3f3;
+}
+.comp-rows label{
+  margin-bottom: 0px;
+}
+.completed-member-text{
+  padding: 5px 0px;
+}
+.create-text a{
+ color: #98002e;
+}
+.staff-details-text .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+  color: #fff;
+  background-color: #98002e;
+  border-color: var(--vz-nav-tabs-link-active-border-color);
 }

@@ -27,6 +27,17 @@ Route::get('/clear-cache', function () {
 route::get('/tester',function(){
     return view('test');
 });
+
+Route::group(['domain' => '.fitnessity.co'], function() {
+    Route::get('/testfor', function() {
+        return view('test');
+    });
+});
+
+
+
+
+
 Route::get('/test','HomeController@Test')->name('test');
 
 // Route::get('/login/{uniquecode}','Business\WebsiteIntegrationConroller@Loginuserbook')->name('login');
@@ -87,6 +98,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('booking_details/{id}/refund', 'UserBookingDetailController@refund')->name('refund');
     Route::post('booking_details/{id}/terminate', 'UserBookingDetailController@terminate')->name('terminate');
     Route::post('booking_details/{id}/suspend', 'UserBookingDetailController@suspend')->name('suspend');
+    Route::post('cancel_freeze','UserBookingDetailController@cancelFreeze')->name('cancel_freeze');
     Route::get('customers/card_editing_form', 'CustomerController@card_editing_form')->name('customers.card_editing_form');
     Route::get('customers/import', 'CustomerController@importcustomer')->name('customers.import');
     Route::any('customers/refresh_payment_methods', 'CustomerController@refresh_payment_methods')->name('customers.refresh_payment_methods');

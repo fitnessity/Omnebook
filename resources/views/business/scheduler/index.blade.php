@@ -11,7 +11,7 @@
                      <div class="row mb-3">
 								<div class="col-6">
 									<div class="page-heading">
-										<label>Activity Scheduler </label>
+										<label>Booking Scheduler </label>
 									</div>
 								</div>
 							</div>

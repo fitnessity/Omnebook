@@ -5,7 +5,7 @@
 		<div class="row">	
 			<div class="col-lg-6 col-md-6">
 				<div class="modal-sub-title">
-					<h4>Edit info for{{$booking_detail->business_services_with_trashed->program_name}}</h4>
+					<h4>Edit info for {{$booking_detail->business_services_with_trashed->program_name}}</h4>
 				</div>
 			</div>
 			<div class="col-lg-6 col-md-6">
@@ -251,6 +251,7 @@
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-6">
 								<div class="remaining-number">
 									<span>${{$booking_detail->total() + $booking_detail->getperoderprice()}}</span>
+									{{-- <span>${{$booking_detail->sub_total}}</span> --}}
 								</div>
 							</div>
 						</div>
