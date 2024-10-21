@@ -953,7 +953,7 @@
 </div>
 
 <div class="modal fade" id="requestbooking" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-dialog modal-md" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="row">
@@ -981,6 +981,7 @@
 							<li></li>
 							<li></li>
 							<li></li>
+							<li></li>
 						</ul>
 						<!-- fieldsets -->
 						<fieldset>
@@ -997,7 +998,7 @@
 							<div class="paddingTop-35">
 								<h2 class="fs-title mb-25">Request A Date</h2>	
 								<p class="mb-10">Select a day to check availability </p>
-								<input type="text" class="form-control flatpickr" data-provider="flatpickr" data-date-format="d M, Y" data-deafult-date="today" data-inline-date="true">
+								<input type="text" placeholder="Select Date" class="form-control flatpickr" data-provider="flatpickr" data-date-format="d M, Y" data-deafult-date="today" data-inline-date="true">
 							</div>
 							<input type="button" name="previous" class="previous action-button" value="Back" />
 							<input type="button" name="next" class="next action-button" value="Next" />
@@ -1069,71 +1070,256 @@
 						</fieldset>
 						
 						<fieldset>
-							<h2 class="fs-title">How soon would you like to start?</h2>
-							<div class="radio-block">
-								<div class="radio-content">
-									<input id="radio14" type="radio" name="radio4" checked>
-									<label for="radio14"><span></span> Best choice</label>
-								</div><br>
-								<div class="radio-content">
-									<input id="radio15" type="radio" name="radio" />
-									<label for="radio15"><span></span> Second choice</label>
-								</div><br>
-								<div class="radio-content">
-									<input id="radio16" type="radio" name="radio" />
-									<label for="radio16"><span></span> Third choice</label>
-								</div><br>
+							<h2 class="fs-title mb-25">How soon would you like to start?</h2>
+							<div class="req-book-x radio-buttons">
+								<label class="custom-radio">
+									<input type="radio" name="radio" checked>
+									<span class="radio-btn">
+										<div class="hobbies-icon">
+										<h3 class="">As soon as possible</h3>
+										</div>
+									</span>
+								</label>
+								<label class="custom-radio">
+									<input type="radio" name="radio" >
+									<span class="radio-btn">
+										<div class="hobbies-icon">
+										<h3 class="">Within a few weeks</h3>
+										</div>
+									</span>
+								</label>
+								<label class="custom-radio">
+									<input type="radio" name="radio" >
+									<span class="radio-btn">
+										<div class="hobbies-icon">
+										<h3 class="">Within a month</h3>
+										</div>
+									</span>
+								</label>
+								<label class="custom-radio">
+									<input type="radio" name="radio" >
+									<span class="radio-btn">
+										<div class="hobbies-icon">
+										<h3 class="">Other</h3>
+										</div>
+									</span>
+								</label>
 							</div>
 							<input type="button" name="previous" class="previous action-button" value="Previous" />
 							<input type="button" name="next" class="next action-button" value="Next" />
 						</fieldset>
 					
-						
-						<!-- 
+						<fieldset>
+							<h2 class="fs-title mb-10">Select number of participants</h2>
+							<p class="mb-25">Select how many people will be booking. Up to 10 guests can be added.</p>
+							<div class="row y-middle mb-15">
+								<div class="col-lg-5 col-5">
+									<div class="text-left">
+										<label>Adults</label>
+									</div>
+								</div>
+								<div class="col-lg-7 col-7">
+									<div class="participant-add">
+										<div class="qtyButtons">
+											<div class="qty count-members mt-5">
+												<span class="minus bg-darkbtn adultminusone"><i class="fa fa-minus"></i></span>
+												<input type="text" class="count" name="adultcntone" id="adultcntone" min="0" value="0" readonly="">
+												<span class="plus bg-darkbtn adultplusone"><i class="fa fa-plus"></i></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row y-middle mb-15">
+								<div class="col-lg-5 col-5">
+									<div class="text-left">
+										<label>Children</label>
+									</div>
+								</div>
+								<div class="col-lg-7 col-7">
+									<div class="participant-add">
+										<div class="qtyButtons">
+											<div class="qty count-members mt-5">
+												<span class="minus bg-darkbtn childminusone"><i class="fa fa-minus"></i></span>
+												<input type="text" class="count" name="childcntone" id="childcntone" min="0" value="0" readonly="">
+												<span class="plus bg-darkbtn childplusone"><i class="fa fa-plus"></i></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row y-middle mb-15">
+								<div class="col-lg-5 col-5">
+									<div class="text-left">
+										<label>Infants</label>
+										<p>Under 2</p>
+									</div>
+								</div>
+								<div class="col-lg-7 col-7">
+									<div class="participant-add">
+										<div class="qtyButtons">
+											<div class="qty count-members mt-5">
+												<span class="minus bg-darkbtn infantsminusone"><i class="fa fa-minus"></i></span>
+												<input type="text" class="count" name="infantscntone" id="infantscntone" min="0" value="0" readonly="">
+												<span class="plus bg-darkbtn infantsplusone"><i class="fa fa-plus"></i></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<input type="button" name="previous" class="previous action-button" value="Previous" />
+							<input type="button" name="next" class="next action-button" value="Next" />
+						</fieldset>
 
 						<fieldset>
-							<h2 class="fs-title">Question 5</h2>
+							<h2 class="fs-title mb-25">What is your gender?</h2>
 							<div class="radio-block">
 								<div class="radio-content">
-									<input id="radio14" type="radio" name="radio4" checked>
-									<label for="radio14"><span></span> Best choice</label>
-								</div><br>
-								<div class="radio-content">
-									<input id="radio15" type="radio" name="radio" />
-									<label for="radio15"><span></span> Second choice</label>
-								</div><br>
-								<div class="radio-content">
-									<input id="radio16" type="radio" name="radio" />
-									<label for="radio16"><span></span> Third choice</label>
-								</div><br>
-							</div>
-							<input type="button" name="previous" class="previous action-button" value="Previous" />
-							<input type="button" name="next" class="next action-button" value="Next" />
-						</fieldset>
-					
-						<fieldset>
-							<h2 class="fs-title">Question 6</h2>
-							<div class="radio-block">
-								<div class="radio-content">
-									<input id="radio17" type="radio" name="radio5" checked>
-									<label for="radio17"><span></span> Best choice</label>
+									<input id="radio17" type="radio" name="radio" checked>
+									<label for="radio17"><span></span>Female</label>
 								</div><br>
 								<div class="radio-content">
 									<input id="radio18" type="radio" name="radio" />
-									<label for="radio18"><span></span> Second choice</label>
+									<label for="radio18"><span></span>Male</label>
 								</div><br>
 								<div class="radio-content">
 									<input id="radio19" type="radio" name="radio" />
-									<label for="radio19"><span></span> Third choice</label>
-								</div><br>
-								<div class="radio-content">
-									<input id="radio20" type="radio" name="radio" />
-									<label for="radio20"><span></span> Fourth choice</label>
-								</div><br>
+									<label for="radio19"><span></span>Other (e.g. couple, group)</label>
+								</div>
+							</div>
+							<input type="button" name="previous" class="previous action-button" value="Previous" />
+							<input type="button" name="next" class="next action-button" value="Next" />
+						</fieldset>
+						
+						<fieldset>
+							<h2 class="fs-title mb-25">Registration </h2>
+							<div>
+								<div class="mb-3 book0req-register">
+									<label for="firstnameInput" class="form-label">Name</label>
+									<input type="text" class="form-control" name="name" id="name" value="" required="">
+								</div>
+								<div class="mb-3 book0req-register">
+									<label for="location" class="form-label">Location</label>
+									<input type="text" class="form-control" name="location" id="location" value="" required="">
+								</div>
+								<div class="mb-3 book0req-register">
+									<label for="Zip" class="form-label"> Zip</label>
+									<input type="text" class="form-control" name="Zip" id="Zip" value="" required="">
+								</div>
+								<div class="mb-3 book0req-register">
+									<label for="state" class="form-label"> State</label>
+									<input type="text" class="form-control" name="state" id="state" value="" required="">
+								</div>
+								<div class="mb-3 book0req-register">
+									<label for="country" class="form-label"> Country</label>
+									<input type="text" class="form-control" name="country" id="country" value="" required="">
+								</div>
+							</div>
+							<input type="button" name="previous" class="previous action-button" value="Previous" />
+							<input type="button" name="next" class="next action-button" value="Next" />
+						</fieldset>
+						
+						<fieldset>
+							<h2 class="fs-title mb-25">Request Booking Summary</h2>
+							<div class="border-bottom-grey mb-10">
+								<div class="row">
+									<div class="col-lg-5">
+										<div class="text-left req-book-summary">
+											<label>Customer</label>
+										</div>
+									</div>
+									<div class="col-lg-7">
+										<div class="text-right req-book-summary">
+											<span>Ankita</span>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+							<div class="border-bottom-grey mb-10">
+								<div class="row">
+									<div class="col-lg-5">
+										<div class="text-left req-book-summary">
+											<label>Location</label>
+										</div>
+									</div>
+									<div class="col-lg-7">
+										<div class="text-right req-book-summary">
+											<span>USA</span>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+							<div class="border-bottom-grey mb-10">
+								<div class="row">
+									<div class="col-lg-5">
+										<div class="text-left req-book-summary">
+											<label>Date </label>
+										</div>
+									</div>
+									<div class="col-lg-7">
+										<div class="text-right req-book-summary">
+											<span>21-10-2024</span>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+							<div class="border-bottom-grey mb-10">
+								<div class="row">
+									<div class="col-lg-5">
+										<div class="text-left req-book-summary">
+											<label>Time  </label>
+										</div>
+									</div>
+									<div class="col-lg-7">
+										<div class="text-right req-book-summary">
+											<span>Morning (9am-noon)</span>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+							<div class="border-bottom-grey mb-10">
+								<div class="row">
+									<div class="col-lg-5">
+										<div class="text-left req-book-summary">
+											<label>Number of Guests </label>
+										</div>
+									</div>
+									<div class="col-lg-7">
+										<div class="text-right req-book-summary">
+											<span>3</span>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="mb-3 text-left d-grid">
+										<label for="firstnameInput" class="form-label">Write a message to </label>
+										<p>Please make a note of any medical issues or personal injuries.</p>
+										<textarea class="form-control about_user" id="about_user" name="about_user" placeholder="Enter your description" rows="3" maxlength="1000"></textarea>
+									</div>
+								</div>
+							</div>
+							<input type="button" name="previous" class="previous action-button" value="Previous" />
+							<input type="button" name="next" class="next action-button" value="Next" />
+						</fieldset>
+
+						<fieldset>
+							<h2 class="fs-title mb-25">What is your gender?</h2>
+							<div class="text-center mb-25 mt-25">
+								<h3> Request was sent successfully</h3>
 							</div>
 							<input type="button" name="previous" class="previous action-button" value="Previous" />
 							<input type="submit" name="submit" class="submit action-button" value="Submit" />
-						</fieldset> -->
+						</fieldset>
 					</form>
 				</div>
 			</div>
@@ -1299,5 +1485,73 @@ $(document).ready(function () {
 
 </script>
 
+<script>
+	$('#adultcntone').prop('readonly', true);
+		$(document).on('click','.adultplusone',function(){
+		    $('#adultcntone').val(parseInt($('#adultcntone').val()) + 1 );
+		    $('#adultCountone').val(parseInt($('#adultcntone').val()));
+		    $('#totalcntone').val(parseInt($('#totalcntone').val() + 1));
+		    calculateTotal();
+				participateCnt('adult');
+			});
+
+    	$(document).on('click','.adultminusone',function(){
+			$('#adultcntone').val(parseInt($('#adultcntone').val()) - 1 );
+			if ($('#adultcntone').val() <= 0) {
+				$('#adultcntone').val(0);
+			}
+			$('#totalcntone').val(parseInt($('#totalcntone').val() - 1));
+			if ($('#totalcntone').val() <= 0) {
+				$('#totalcntone').val(0);
+			}
+			$('#adultCountone').val(parseInt($('#adultcntone').val()));
+			calculateTotal();
+				removeParticipateCnt('adult');
+			});
+
+	$('#childcntone').prop('readonly', true);
+		$(document).on('click','.childplusone',function(){
+			$('#childcntone').val(parseInt($('#childcntone').val()) + 1 );
+			$('#totalcntone').val(parseInt($('#totalcntone').val() + 1));
+			$('#childCountone').val(parseInt($('#childcntone').val()));
+			calculateTotal();
+				participateCnt('child');
+			});
+    	$(document).on('click','.childminusone',function(){
+			$('#childcntone').val(parseInt($('#childcntone').val()) - 1 );
+			$('#totalcntone').val(parseInt($('#totalcntone').val() - 1));
+			if ($('#childcntone').val() <= 0) {
+				$('#childcntone').val(0);
+			}
+			if ($('#totalcntone').val() <= 0) {
+				$('#totalcntone').val(0);
+			}
+			$('#childCountone').val(parseInt($('#childcntone').val()));
+			calculateTotal();
+				removeParticipateCnt('child');
+			}); 
+
+	$('#infantscntone').prop('readonly', true);
+		$(document).on('click','.infantsplusone',function(){
+			$('#infantscntone').val(parseInt($('#infantscntone').val()) + 1 );
+			$('#totalcntone').val(parseInt($('#totalcntone').val() + 1));
+			$('#childCountone').val(parseInt($('#infantscntone').val()));
+			calculateTotal();
+				participateCnt('infants');
+			});
+    	$(document).on('click','.infantsminusone',function(){
+			$('#infantscntone').val(parseInt($('#infantscntone').val()) - 1 );
+			$('#totalcntone').val(parseInt($('#totalcntone').val() - 1));
+			if ($('#infantscntone').val() <= 0) {
+				$('#infantscntone').val(0);
+			}
+			if ($('#totalcntone').val() <= 0) {
+				$('#totalcntone').val(0);
+			}
+			$('#infantsCountone').val(parseInt($('#infantscntone').val()));
+			calculateTotal();
+				removeParticipateCnt('infants');
+			}); 
+</script>
 
 @endsection

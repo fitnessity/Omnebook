@@ -39,13 +39,14 @@ class ManageAccountController extends Controller
         $UserFamilyDetails = $familyDetails = [];
         $customer = @$user->customers;
         // dd($customer);
+        // DB::enableQueryLog();
         if($customer){
             foreach($customer as $cs){
                 foreach ($cs->get_families() as $fm){
                     $familyDetails [] = $fm;
                 }  
             }
-
+            // dd(\DB::getQueryLog()); 
             $groupedFamilyDetails = collect($familyDetails)->groupBy(function ($item) {
                 return $item->fname . ' ' . $item->lname;
             });
@@ -66,6 +67,7 @@ class ManageAccountController extends Controller
             }
         }
 
+        // dd($UserFamilyDetails);
         return view('personal.manage_account.index',compact('user','UserFamilyDetails'));
     }
 

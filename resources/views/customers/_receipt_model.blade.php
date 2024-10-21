@@ -2,6 +2,7 @@
 
 @php
     use App\UserBookingDetail;
+    use Carbon\Carbon;
     $totalTax  = $totDis = $totTip = $grandTotal=0;
     $idArry = ''; 
 @endphp
@@ -140,6 +141,14 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
                             <span>{{ ($orderDetail->order_type == 'Membership') ? $orderDetail->decodeparticipate() : 'N/A' }} </span>
+                                @php
+                                 $user = App\Customer::where('id',$orderDetail->user_id)->first();
+                                 $name = @$user->fname.' '.@$user->lname .' ( age '. Carbon::parse(@$user->birthdate)->age .' ) ' ;                                 
+                                @endphp
+                                @if(empty($orderDetail->decodeparticipate()))
+                                <span>{{$name}}</span>
+                                @endif
+
                         </div>
                     </div>
                     

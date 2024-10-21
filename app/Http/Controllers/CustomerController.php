@@ -294,16 +294,28 @@ class CustomerController extends Controller {
         $company = $user->businesses()->findOrFail($business_id);
         $terms = $company->business_terms->first();
         $customerdata = $company->customers->find($id);
+
+        // dd($customerdata);
         if(!$customerdata){ return redirect()->route('business_customer_index'); }
         $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
         // DB::enableQueryLog();
         $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->orderBy('created_at','desc')->get() : [];
-
-
         $suspended_memberships = $customerdata != '' ? $customerdata->suspended_memberships()->orderBy('created_at','desc')->get() : [];
-
-        // dd(\DB::getQueryLog()); 
+        // \DB::enableQueryLog();
         $purchase_history = @$customerdata != '' ?  @$customerdata->purchase_history()->orderBy('created_at','desc')->get() : [];
+        
+        // new
+        $familyMembers = $company->customers()->where('parent_cus_id', $id)->get();
+
+         $familyPurchaseHistory = [];
+            foreach ($familyMembers as $family) {
+                $familyPurchases = $family->purchase_history()->orderBy('created_at', 'desc')->get();
+                $familyPurchaseHistory[$family->fname . ' ' . $family->lname] = $familyPurchases;
+            }
+        //  dd($purchase_history);
+        // end
+        // dd($familyPurchaseHistory);
+        // dd(\DB::getQueryLog()); 
         $complete_booking_details = @$customerdata != '' ? $customerdata->complete_booking_details()->get() : [];
         $strpecarderror = '';
         if (session()->has('strpecarderror')) {
@@ -337,6 +349,7 @@ class CustomerController extends Controller {
             'lastBooking' =>$lastBooking,
             'cardSuccessMsg' =>$cardSuccessMsg,
             'resultDate' =>$this->resultDate,
+            'familyPurchaseHistory'=>$familyPurchaseHistory
         ]);
     }
     public function searchcustomersaction(Request $request) {

@@ -62,7 +62,7 @@ class OrderController extends PersonalBaseController
         $tabval = $request->tab; 
         // dd($currentBooking);
         // dd(\DB::getQueryLog()); 
-
+        // dd('3');
         return view('personal.orders.index', compact('bookingDetails','currentBooking','tabval','customer','name','business'));
     }
 

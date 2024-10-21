@@ -24766,7 +24766,7 @@ padding-left: 0px;
 	color: #98002e;
 	text-transform: uppercase;
 	font-size: 9px;
-	width: 12%;
+	width: 11%;
 	float: left;
 	position: relative;
 }
@@ -24834,7 +24834,7 @@ padding-left: 0px;
 .step-forms input[type="radio"] + label {
   color:black;
   cursor:pointer;
-  font-size: 17px;
+  font-size: 15px;
 	font-weight: normal;
 }
 
@@ -25761,6 +25761,7 @@ padding-left: 0px;
 }
 .req-book-x .custom-radio{
     width: 100%;
+    margin-bottom: 15px;
 }
 .req-book-x .radio-btn > i {
   color: #ffffff;
@@ -25799,11 +25800,121 @@ padding-left: 0px;
 
 .req-book-x .custom-radio input:checked + .radio-btn 
 {
-  border: 2px solid #FFDAE9;
+  border: 2px solid #cacaca;
 }
 
 .req-book-x .custom-radio input:checked + .radio-btn > i 
 {
   opacity: 1;
   transform: translateX(-50%) scale(1);
+}
+
+.participant-add .qtyButtons {
+    height: auto;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding: 0px 0;
+    transition: .3s;
+    border-radius: 0 0 4px 4px;
+    margin-top: 0;
+  }
+  .participant-add .qtyButtons .qty.count-members {
+    width: 100%;
+  }
+  .participant-add .qtyButtons .qty .minus {
+    position: relative;
+  }
+  .participant-add .qtyButtons .qty .plus {
+    position: relative;
+  }
+  .participant-add .select span {
+    font-size: 15px;
+    display: inline-block;
+    font-weight: 600;
+  }
+  .participant-add .count-members .minus.bg-darkbtn.adultminusone i {
+    font-size: 13px;
+    top: 8px;
+    left: 9px;
+    position: absolute;
+  }
+  .participant-add .count-members .plus.bg-darkbtn.adultplusone i {
+    font-size: 13px;
+    top: 8px;
+    left: 9px;
+    position: absolute;
+  }
+  .participant-add .qty .count {
+    color: #000;
+    display: inline-block;
+    vertical-align: top;
+    line-height: 10px;
+    padding: 4px 0 !important;
+    width: 35px !important;
+    font-size: 18px !important;
+    text-align: center;
+    margin-bottom: 0px !important;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .text-left{
+    text-align: left;
+  }
+
+  .participant-add .qtyButtons .qty .minus {
+    position: relative;
+  }
+  .participant-add .qtyButtons .qty .plus {
+    position: relative;
+  }
+  .participant-add .count-members .minus.bg-darkbtn.childminusone i {
+    font-size: 13px;
+    top: 8px;
+    left: 9px;
+    position: absolute;
+  }
+  .participant-add .count-members .plus.bg-darkbtn.childplusone i {
+    font-size: 13px;
+    top: 8px;
+    left: 9px;
+    position: absolute;
+  }
+
+  
+  .participant-add .qtyButtons .qty .minus {
+    position: relative;
+  }
+  .participant-add .qtyButtons .qty .plus {
+    position: relative;
+  }
+  .participant-add .count-members .minus.bg-darkbtn.infantsminusone i {
+    font-size: 13px;
+    top: 8px;
+    left: 9px;
+    position: absolute;
+  }
+  .participant-add .count-members .plus.bg-darkbtn.infantsplusone i {
+    font-size: 13px;
+    top: 8px;
+    left: 9px;
+    position: absolute;
+  }
+.participant-add{
+    float: right;
+}
+.book0req-register label{
+    float: left;
+}
+.border-bottom-grey{
+	border-bottom: 1px solid #01010129;
+}
+.fs-15{
+    font-size: 15px;
+}
+.req-book-summary label{
+    font-size: 15px;
+}
+.req-book-summary span{
+    font-size: 15px;
 }

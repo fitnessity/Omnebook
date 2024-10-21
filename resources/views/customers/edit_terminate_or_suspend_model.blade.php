@@ -281,6 +281,7 @@
 					<!-- Tab panes -->
 					<div class="tab-content  text-muted">
 						<div class="tab-pane active" id="Suspend_Freeze" role="tabpanel">
+							{{$booking_detail->can_suspend()}}
 							@if($booking_detail->can_suspend())
 							<div class="radio-text">
 								<form action="">
