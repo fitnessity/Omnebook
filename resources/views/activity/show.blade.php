@@ -78,12 +78,14 @@ input:disabled{
 									<img src="{{Storage::URL($service->cover_photo)}}" alt="image">
 								</a>
 							@endif
-
-		                    @foreach(@$pro_pic1 as $img) 
-	                    		@if(!empty($img) && Storage::disk('s3')->exists($img))
-	                    	 		@php $newary [] = $img; @endphp
-	                    	 	@endif
-	                    	@endforeach
+							
+							@if(!empty($pro_pic1) && is_array($pro_pic1))
+								@foreach(@$pro_pic1 as $img) 
+									@if(!empty($img) && Storage::disk('s3')->exists($img))
+										@php $newary [] = $img; @endphp
+									@endif
+								@endforeach
+							@endif
 
 		                    @foreach(@$pro_pic1 as $i => $img)
 								<a href="{{Storage::URL($img)}}" data-elementor-open-lightbox="no" class="item-gallery @if(!$service->cover_photo && $i==0) firstfancyimg @endif @if( (!$service->cover_photo && $i > 4) || ($service->cover_photo && $i > 3)) hide @endif"  data-fancybox="gallery">
