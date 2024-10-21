@@ -2343,7 +2343,7 @@
 	.show-all .header-bg-show .time-base {  float: none;}
 	.show-all .table-inner-data .mg-time {  font-size: 15px;}
 	.instant-hire{margin-top: 162px !important;}
-	.instant-section-info p{margin-top: 3px;}
+	.instant-section-info p{margin-top: 15px;}
 	.choose-sport-hire {  display: block !important;}
 	.activity-width{width: 100% !important;}
 	.special-offer{margin-bottom: 8px !important; float: none;}
@@ -2600,6 +2600,7 @@
 	.formfield-block { padding-right: 0px !important; margin-bottom: 15px;}
 	.help-desk{padding-top: 40%;}
     .instant-hire .title h3{width: 83%;}
+    .modal-filter-btn{margin-top: 15px;}
 }
 
 @media(max-width: 575px) {
