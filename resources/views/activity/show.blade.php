@@ -87,12 +87,13 @@ input:disabled{
 								@endforeach
 							@endif
 
+							@if(!empty($pro_pic1) && is_array($pro_pic1))
 		                    @foreach(@$pro_pic1 as $i => $img)
 								<a href="{{Storage::URL($img)}}" data-elementor-open-lightbox="no" class="item-gallery @if(!$service->cover_photo && $i==0) firstfancyimg @endif @if( (!$service->cover_photo && $i > 4) || ($service->cover_photo && $i > 3)) hide @endif"  data-fancybox="gallery">
 									<img src="{{Storage::URL($img)}}" alt="image">
 								</a>
 							 @endforeach
-
+							@endif
 	             		</div>
 	        			<div class="shares dropdown">
 	            			<div class="btn-group">
