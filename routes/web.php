@@ -16,6 +16,7 @@ use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\Business\WebsiteIntegrationConroller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Mail;
 
 Route::get('/clear-cache', function () {
     Artisan::call('cache:clear');
@@ -35,7 +36,14 @@ Route::group(['domain' => '.fitnessity.co'], function() {
 });
 
 
+Route::get('/send-test-email', function() {
+    Mail::raw('This is a test email.', function ($message) {
+        $message->to('premvadhavana@gmail.com')
+                ->subject('Test Email from SendGrid');
+    });
 
+    return 'Test email sent!';
+});
 
 
 Route::get('/test','HomeController@Test')->name('test');
