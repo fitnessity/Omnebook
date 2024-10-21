@@ -16,6 +16,7 @@ use App\Http\Controllers\Products\ProductController;
 
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Log;
 
 //to clear catch
 use Illuminate\Support\Facades\Artisan;
@@ -27,14 +28,20 @@ use Illuminate\Support\Facades\Mail;
 
 
 Route::get('/send-test-email', function() {
-    Mail::raw('This is a test email.', function ($message) {
-        $message->to('premvadhavana@gmail.com')
-                ->subject('Test Email from SendGrid');
-    });
-
-    return 'Test email sent!';
+    try {
+        Mail::raw('This is a test email.', function ($message) {
+            $message->to('premvadhavana@gmail.com')
+                    ->subject('Test Email from SendGrid');
+        });
+        return 'Test email sent!';
+    } catch (\Exception $e) {
+        // Log the error for debugging purposes
+        Log::error('Email sending failed: ' . $e->getMessage());
+        
+        // Return a user-friendly error message
+        return 'There was an error sending the email. Please try again later.';
+    }
 });
-
 Route::get('/clear-cache', function () {
     // Clear all cache
     Artisan::call('cache:clear');
