@@ -96,7 +96,7 @@ class Transaction extends Model
                             $activityName = @$bd->business_services_with_trashed->program_name;
                             $categoryName = @$bd->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
                             $priceOption = @$bd->business_price_detail_with_trashed->price_title;
-                            $itemDescription .= ($key+1).'. '.$activityName.' ('.$categoryName.') ,'.$priceOption.'<br>';
+                            $itemDescription .= ($key+1).'. '.$activityName.' ('.$categoryName.'),'.' '.$priceOption.'<br>';
                             $itemPrice .= $bd->total() != '' ? '$'.$bd->total().'<br>' : '$0<br>';
                             $itemSubTotal .= $bd->subtotal != ''  ? '$'. $bd->subtotal.'<br>' : '$0<br>';
                             $itemDis .= $bd->discount != '0.00' ? '$'.$bd->discount.'<br>' : '$0<br>';
@@ -127,7 +127,7 @@ class Transaction extends Model
                     $activityName = $bookingData->business_services_with_trashed->program_name;
                     $categoryName = $bookingData->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
                     $priceOption = $bookingData->business_price_detail_with_trashed->price_title;
-                    $itemDescription = $activityName.' ('.$categoryName.') ,'.$priceOption;
+                    $itemDescription = $activityName.' ('.$categoryName.') ,'.' '.$priceOption;
                     $itemPrice .= $this->Recurring->amount != '' ? '$'.$this->Recurring->amount .'<br>' : '$0<br>';
                     $itemSubTotal .=  $this->Recurring->amount != '' ? '$'.($this->Recurring->amount + $this->Recurring->tax) .'<br>' : '$0<br>';
                     
