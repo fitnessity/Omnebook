@@ -170,7 +170,7 @@ class CartController extends Controller {
 
 			<div class="row">
 				<div class="col-lg-6">
-					<div class="gift-comments">
+					<div class="gift-comments mb-15 mt-15">
 						<label class="">Leave a comment for them</label>
 						<textarea class="form-control" rows="4" name="comment" id="comment" maxlength="150" required>'.@$getdata->comment.'</textarea>
 						<label>From:</label>
@@ -178,10 +178,10 @@ class CartController extends Controller {
 					</div>
 				</div>
 				<div class="col-lg-6">
-					<div class="gift-comments email multiple-email" id="emaildiv">';
+					<div class="gift-comments email multiple-email mt-15" id="emaildiv">';
 						if(!empty($email_array)){
 							foreach($email_array as $email){
-								$html .='<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="'.$email.'" required>';
+								$html .='<input type="email" class="form-control myemail mb-10" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="'.$email.'" required>';
 							}
 						}else{
 							$html .='<input type="email" class="form-control myemail" name="Emailb[]" id="b_email" autocomplete="off" placeholder="Enter Recipient Email" size="30" maxlength="80" value="" required>';
@@ -204,7 +204,7 @@ class CartController extends Controller {
 					</div>
 				</div>
 				<div class="col-lg-12 text-right">
-					<button class="post-btn-red fs-13" type="submit" id="submit">Save</button>
+					<button class="btn btn-red fs-13" type="submit" id="submit">Save</button>
 				</div>
 			</div>
     	</form>';
