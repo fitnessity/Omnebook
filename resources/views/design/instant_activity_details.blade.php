@@ -1002,8 +1002,75 @@
 							<input type="button" name="previous" class="previous action-button" value="Back" />
 							<input type="button" name="next" class="next action-button" value="Next" />
 						</fieldset>
-						
+
 						<fieldset>
+							<h2 class="fs-title mb-25">Do You Have Any Time Preference</h2>
+							<div class="">
+								<div class="req-book-x radio-buttons">
+									<label class="custom-radio">
+										<input type="radio" name="radio" checked>
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Any time</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Early morning (before 9am)</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Morning (9am-noon)</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Early afternoon (noon-3pm)</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Late afternoon (3-6pm)</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Evening (after 6pm)</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Other</h3>
+											</div>
+										</span>
+									</label>									
+								</div>
+							</div>
+							
+							<input type="button" name="previous" class="previous action-button" value="Previous" />
+							<input type="button" name="next" class="next action-button" value="Next" />
+						</fieldset>
+						
+						<!-- <fieldset>
 							<h2 class="fs-title mb-25">Do You Have Any Time Preference</h2>
 							<div class="custom-check-bocx mb-25">
 								<div class="custom-check-questions">
@@ -1038,7 +1105,7 @@
 							
 							<input type="button" name="previous" class="previous action-button" value="Previous" />
 							<input type="button" name="next" class="next action-button" value="Next" />
-						</fieldset>
+						</fieldset> -->
 						
 						<!-- <fieldset>
 							<h2 class="fs-title">Question 4</h2>

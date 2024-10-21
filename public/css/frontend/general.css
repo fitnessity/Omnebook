@@ -25789,3 +25789,78 @@ padding-left: 0px;
 .custom-check-bocx{
     border: 1px solid #e5e5e5;
 }
+
+
+.req-book-x .radio-buttons 
+{
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.req-book-x .custom-radio input 
+{
+  display: none;
+}
+
+.req-book-x .radio-btn 
+{
+  width: 100%;
+  height: 50px;
+  border: 3px solid transparent;
+  display: inline-block;
+  border-radius: 10px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 0 20px #c3c3c367;
+  cursor: pointer;
+  padding: 13px;
+}
+.req-book-x .custom-radio{
+    width: 100%;
+}
+.req-book-x .radio-btn > i {
+  color: #ffffff;
+  background-color: #FFDAE9;
+  font-size: 20px;
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%) scale(2);
+  border-radius: 50px;
+  padding: 3px;
+  transition: 0.5s;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.req-book-x .radio-btn .hobbies-icon 
+{
+  width: 100%;
+  height: 50px;
+}
+
+.req-book-x .radio-btn .hobbies-icon i 
+{
+  color: #FFDAE9;
+  line-height: 80px;
+  font-size: 60px;
+}
+
+.req-book-x .radio-btn .hobbies-icon h3 
+{
+    color: #0f0f0f;
+    font-size: 15px;
+    font-weight: 300;
+}
+
+.req-book-x .custom-radio input:checked + .radio-btn 
+{
+  border: 2px solid #FFDAE9;
+}
+
+.req-book-x .custom-radio input:checked + .radio-btn > i 
+{
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
