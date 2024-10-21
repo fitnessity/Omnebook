@@ -19,11 +19,21 @@ use Illuminate\Support\Facades\DB;
 
 //to clear catch
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Mail;
 
 /*Route::fallback(function () {
     return redirect('/');
 });*/
 
+
+Route::get('/send-test-email', function() {
+    Mail::raw('This is a test email.', function ($message) {
+        $message->to('premvadhavana@gmail.com')
+                ->subject('Test Email from SendGrid');
+    });
+
+    return 'Test email sent!';
+});
 
 Route::get('/clear-cache', function () {
     // Clear all cache
