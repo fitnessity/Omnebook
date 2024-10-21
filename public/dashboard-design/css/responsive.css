@@ -11,7 +11,7 @@
 	.dots {  overflow-x: visible !important;}
 	.desktop-none-client{display: none;}
 	.client-contact-list-modal{max-width: 70%;}
-	#_cbhtml #divSnippetHandle{position: fixed;}
+	#_cbhtml #divSnippetHandle{position: fixed;} 
 
 }
 
