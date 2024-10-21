@@ -35,11 +35,8 @@ Route::get('/send-test-email', function() {
         });
         return 'Test email sent!';
     } catch (\Exception $e) {
-        // Log the error for debugging purposes
-        Log::error('Email sending failed: ' . $e->getMessage());
-        
-        // Return a user-friendly error message
-        return 'There was an error sending the email. Please try again later.';
+        Log::info('Email sending failed: ' . $e->getMessage());        
+        return 'There was an error sending the email. Please try again later'. $e->getMessage();
     }
 });
 Route::get('/clear-cache', function () {
