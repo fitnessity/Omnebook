@@ -344,7 +344,15 @@ class CustomerController extends Controller {
         $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->orderBy('created_at','desc')->get() : [];
         $purchase_history = @$customerdata != '' ?  @$customerdata->purchase_history()->get() : [];
 
-       
+        // new
+        $familyMembers = $company->customers()->where('parent_cus_id', $id)->get();
+
+         $familyPurchaseHistory = [];
+            foreach ($familyMembers as $family) {
+                $familyPurchases = $family->purchase_history()->orderBy('created_at', 'desc')->get();
+                $familyPurchaseHistory[$family->fname . ' ' . $family->lname] = $familyPurchases;
+            }
+        // end
         $complete_booking_details = @$customerdata != '' ? $customerdata->complete_booking_details()->get() : [];
         $strpecarderror = '';
         if (session()->has('strpecarderror')) {
@@ -383,6 +391,8 @@ class CustomerController extends Controller {
             'lastBooking' =>$lastBooking,
             'cardSuccessMsg' =>$cardSuccessMsg,
             'resultDate' =>$this->resultDate,
+            'familyPurchaseHistory'=>$familyPurchaseHistory
+
         ]);
     }
 
