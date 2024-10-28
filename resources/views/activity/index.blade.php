@@ -96,32 +96,79 @@
 						<div class="col-md-12 desktop-none">
 							<div class="find-activity-owl owl-carousel owl-theme">
 								@foreach ($bookschedulers as $bookscheduler) 
-								<div class="owl-item" style="width: 300px;">
-									<div class="card-info">
-                                    	<div class="">
-                                            <div class="row">
-                                                <div class="col-xs-12 col-sm-12">
-                                                    <div class="find-activity">
-                                                   		<div class="container">
-                                                            <div class="row y-middle">
-                                                                <div class="col-xs-12 col-sm-12 col-12 like-heart">
-                                                                    <div class="item-inner">
-                                                                        <!-- {{-- <img src="{{$bookscheduler->business_service->first_profile_pic()}}" class="productImg" alt="Fitnessity"> --}} -->
-																		<img src="{{$bookscheduler->business_service->getConverPhotoUrl()}}" class="productImg" alt="Fitnessity" loading="lazy">
-                                                                    </div>
-                                                                    <div class="wegites-like">
-																		@auth
-																			<div class="serv_fav1"  ser_id="{{$bookscheduler->business_service->id}}" data-id="serfavstarts">
-																				<a class="fav-fun-2" id="serfavstarts{{$bookscheduler->business_service->id}}">
-																					<!-- <i class="far fa-heart"></i> -->
-																					<i class="<?php echo ($bookscheduler->business_service->is_liked_by(Auth::id())) ? 'fas' : 'far' ?> fa-heart"></i>
-																				</a>
+								@if ($bookscheduler->hasVisiblePublicPriceDetails())
+									<div class="owl-item" style="width: 300px;">
+										<div class="card-info">
+											<div class="">
+												<div class="row">
+													<div class="col-xs-12 col-sm-12">
+														<div class="find-activity">
+															<div class="container">
+																<div class="row y-middle">
+																	<div class="col-xs-12 col-sm-12 col-12 like-heart">
+																		<div class="item-inner">
+																			<!-- {{-- <img src="{{$bookscheduler->business_service->first_profile_pic()}}" class="productImg" alt="Fitnessity"> --}} -->
+																			<img src="{{$bookscheduler->business_service->getConverPhotoUrl()}}" class="productImg" alt="Fitnessity" loading="lazy">
+																		</div>
+																		<div class="wegites-like">
+																			@auth
+																				<div class="serv_fav1"  ser_id="{{$bookscheduler->business_service->id}}" data-id="serfavstarts">
+																					<a class="fav-fun-2" id="serfavstarts{{$bookscheduler->business_service->id}}">
+																						<!-- <i class="far fa-heart"></i> -->
+																						<i class="<?php echo ($bookscheduler->business_service->is_liked_by(Auth::id())) ? 'fas' : 'far' ?> fa-heart"></i>
+																					</a>
+																				</div>
+																				@endauth
+																					@guest
+																					<a class="fav-fun-2" href="{{ route('userlogin')}}" ><i class="far fa-heart"></i></a>
+																					@endguest
+																				<!-- <span>From   <strike> $510</strike> $459/Person</span> -->
+																				@php 
+																					$bookschedulercom_name = $bookscheduler->company_information->dba_business_name;
+																					if($bookscheduler->company_information->dba_business_name == ''){
+																						$bookschedulercom_name = $bookscheduler->company_information->company_name;
+																					}
+																					$price_all = $bookscheduler->business_service->min_price();
+																				@endphp
+																				@if($price_all != '')
+																						<span>From {!!$price_all!!}/Person</span>
+																					@endif
 																			</div>
-																			@endauth
+																	</div>
+																	
+																	<div class="col-xs-12 col-sm-12 col-12 activity-data">
+																	<div class="container">
+																		<div class="row">
+																		<?php /*?> <div class="col-xs-12 text-right">
+																				@auth
+																					<div class="serv_fav1" ser_id="{{$bookscheduler->business_service->id}}" data-id="serfavstarts">
+																						<a class="fav-fun-2" id="serfavstarts{{$bookscheduler->business_service->id}}">
+																							<i class="<?php echo ($bookscheduler->business_service->is_liked_by(Auth::id())) ? 'fas' : 'far' ?> fa-heart"></i>
+																					</div>
+																				@endauth
 																				@guest
-																				<a class="fav-fun-2" href="{{ route('userlogin')}}" ><i class="far fa-heart"></i></a>
+																					<a class="fav-fun-2" href="{{ route('userlogin')}}" ><i class="f
+																						ar fa-heart"></i></a>
 																				@endguest
-																			<!-- <span>From   <strike> $510</strike> $459/Person</span> -->
+																			</div><?php */?>
+																			<div class="col-xs-6 col-6">
+																				<div class="activity-inner-data">
+																					<i class="fas fa-star"></i>
+																					<span> {{$bookscheduler->business_service->reviews_score()}} ({{$bookscheduler->business_service->reviews->count()}})</span>
+																				</div>
+			
+																				<div class="activity-hours">
+																					<span>{{$bookscheduler->get_duration_hours()}}</span>
+																				</div>
+																			</div>
+																			<div class="col-xs-6 col-6">
+																				<div class="activity-city float-right">
+																					<span style="white-space: nowrap;">{{$bookscheduler->company_information->city}}</span>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																		<div class="activity-information">
 																			@php 
 																				$bookschedulercom_name = $bookscheduler->company_information->dba_business_name;
 																				if($bookscheduler->company_information->dba_business_name == ''){
@@ -129,188 +176,145 @@
 																				}
 																				$price_all = $bookscheduler->business_service->min_price();
 																			@endphp
-																			@if($price_all != '')
+																			<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
+																			<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
+																			<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
+																			<div class="dollar-person">
+																				<!-- {{-- @if($price_all != '')
 																					<span>From {!!$price_all!!}/Person</span>
-																				@endif
+																				@endif --}} -->
+																			</div>
 																		</div>
-                                                                </div>
-                                                                
-                                                                <div class="col-xs-12 col-sm-12 col-12 activity-data">
-                                                                <div class="container">
-                                                                    <div class="row">
-                                                                       <?php /*?> <div class="col-xs-12 text-right">
-                                                                            @auth
-                                                                                <div class="serv_fav1" ser_id="{{$bookscheduler->business_service->id}}" data-id="serfavstarts">
-                                                                                    <a class="fav-fun-2" id="serfavstarts{{$bookscheduler->business_service->id}}">
-                                                                                        <i class="<?php echo ($bookscheduler->business_service->is_liked_by(Auth::id())) ? 'fas' : 'far' ?> fa-heart"></i>
-                                                                                </div>
-                                                                            @endauth
-                                                                            @guest
-                                                                                <a class="fav-fun-2" href="{{ route('userlogin')}}" ><i class="f
-                                                                                    ar fa-heart"></i></a>
-                                                                            @endguest
-                                                                        </div><?php */?>
-                                                                        <div class="col-xs-6 col-6">
-                                                                            <div class="activity-inner-data">
-                                                                                <i class="fas fa-star"></i>
-                                                                                <span> {{$bookscheduler->business_service->reviews_score()}} ({{$bookscheduler->business_service->reviews->count()}})</span>
-                                                                            </div>
-        
-                                                                            <div class="activity-hours">
-                                                                                <span>{{$bookscheduler->get_duration_hours()}}</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-xs-6 col-6">
-                                                                            <div class="activity-city float-right">
-                                                                                <span style="white-space: nowrap;">{{$bookscheduler->company_information->city}}</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-        														</div>
-                                                                    <div class="activity-information">
-                                                                        @php 
-                                                                            $bookschedulercom_name = $bookscheduler->company_information->dba_business_name;
-                                                                            if($bookscheduler->company_information->dba_business_name == ''){
-                                                                                $bookschedulercom_name = $bookscheduler->company_information->company_name;
-                                                                            }
-                                                                            $price_all = $bookscheduler->business_service->min_price();
-                                                                        @endphp
-                                                                        <span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
-                                                                        <span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
-                                                                        <p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
-                                                                        <div class="dollar-person">
-                                                                            <!-- {{-- @if($price_all != '')
-                                                                                <span>From {!!$price_all!!}/Person</span>
-                                                                            @endif --}} -->
-                                                                        </div>
-                                                                    </div>
-        
-                                                                    <div class="row">
-                                                                        <div class="col-xs-12 text-center">
-                                                                            <a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
-                                                                        </div>
-                                                                        <div class="col-xs-12">
-                                                                            <div class="activity-time-main <?php echo ($bookscheduler->is_start_in_one_hour($current_date)) ? 'activity-time-main-red' : ''?>">
-                                                                                <span>Starts in 
-                                                                                @if ($bookscheduler->time_left($current_date)->h)
-                                                                                    {{$bookscheduler->time_left($current_date)->h}} {{Str::plural('hr', $bookscheduler->time_left($current_date)->h)}}
-                                                                                @endif
-                                                                                @if ($bookscheduler->time_left($current_date)->i)
-                                                                                    {{$bookscheduler->time_left($current_date)->i}} {{Str::plural('min', $bookscheduler->time_left($current_date)->i)}}
-                                                                                @endif</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+			
+																		<div class="row">
+																			<div class="col-xs-12 text-center">
+																				<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}"> Book Now</a>
+																			</div>
+																			<div class="col-xs-12">
+																				<div class="activity-time-main <?php echo ($bookscheduler->is_start_in_one_hour($current_date)) ? 'activity-time-main-red' : ''?>">
+																					<span>Starts in 
+																					@if ($bookscheduler->time_left($current_date)->h)
+																						{{$bookscheduler->time_left($current_date)->h}} {{Str::plural('hr', $bookscheduler->time_left($current_date)->h)}}
+																					@endif
+																					@if ($bookscheduler->time_left($current_date)->i)
+																						{{$bookscheduler->time_left($current_date)->i}} {{Str::plural('min', $bookscheduler->time_left($current_date)->i)}}
+																					@endif</span>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
-								</div>
+								@endif
 								@endforeach
 							</div>
 						</div>
 
 					@foreach ($bookschedulers as $bookscheduler)
-						<div class="col-lg-3 col-md-4 col-sm-6 mobile-none ipad-none">
-							<div class="find-activity">
-								<div class="">
-									<div class="col-lg-12 col-md-4 col-sm-4">
-										<div class="p-relative like-heart">
-											<div class="item-inner">
-												<!-- {{-- <img src="{{$bookscheduler->business_service->first_profile_pic()}}" class="productImg" alt="Fitnessity"> --}} -->
-												<img src="{{$bookscheduler->business_service->getConverPhotoUrl()}}" class="productImg" alt="Fitnessity" loading="lazy">
-												<!-- {{-- <input type="text" value="{{$bookscheduler->business_service->getConverPhotoUrl()}}"> --}} -->
+						@if ($bookscheduler->hasVisiblePublicPriceDetails())
+							<div class="col-lg-3 col-md-4 col-sm-6 mobile-none ipad-none">
+								<div class="find-activity">
+									<div class="">
+										<div class="col-lg-12 col-md-4 col-sm-4">
+											<div class="p-relative like-heart">
+												<div class="item-inner">
+													<!-- {{-- <img src="{{$bookscheduler->business_service->first_profile_pic()}}" class="productImg" alt="Fitnessity"> --}} -->
+													<img src="{{$bookscheduler->business_service->getConverPhotoUrl()}}" class="productImg" alt="Fitnessity" loading="lazy">
+													<!-- {{-- <input type="text" value="{{$bookscheduler->business_service->getConverPhotoUrl()}}"> --}} -->
+												</div>
+												<div class="wegites-like">
+													@auth
+															<div class="serv_fav1"  ser_id="{{$bookscheduler->business_service->id}}" data-id="serfavstarts">
+																<a class="fav-fun-2" id="serfavstarts{{$bookscheduler->business_service->id}}">
+																	<!-- <i class="far fa-heart"></i> -->
+																		<i class="<?php echo ($bookscheduler->business_service->is_liked_by(Auth::id())) ? 'fas' : 'far' ?> fa-heart"></i>
+																</a>
+															</div>
+													@endauth
+													@guest
+															<a class="fav-fun-2" href="{{ route('userlogin')}}" ><i class="far fa-heart"></i></a>
+													@endguest
+													<!-- <span>From   <strike> $510</strike> $459/Person</span> -->
+													@php 
+														$bookschedulercom_name = $bookscheduler->company_information->dba_business_name;
+														if($bookscheduler->company_information->dba_business_name == ''){
+															$bookschedulercom_name = $bookscheduler->company_information->company_name;
+														}
+														$price_all = $bookscheduler->business_service->min_price();
+													@endphp
+													@if($price_all != '')
+														<span>From {!!$price_all!!}/Person</span>
+													@endif
 											</div>
-											<div class="wegites-like">
-												@auth
-														<div class="serv_fav1"  ser_id="{{$bookscheduler->business_service->id}}" data-id="serfavstarts">
-															 <a class="fav-fun-2" id="serfavstarts{{$bookscheduler->business_service->id}}">
-																  <!-- <i class="far fa-heart"></i> -->
-																	<i class="<?php echo ($bookscheduler->business_service->is_liked_by(Auth::id())) ? 'fas' : 'far' ?> fa-heart"></i>
-															</a>
-														</div>
-												@endauth
-												@guest
-														<a class="fav-fun-2" href="{{ route('userlogin')}}" ><i class="far fa-heart"></i></a>
-												@endguest
-												<!-- <span>From   <strike> $510</strike> $459/Person</span> -->
+											</div>
+										</div>
+										<div class="col-lg-12 col-md-8 col-sm-8 activity-data">
+											<div class="row">
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<div class="activity-inner-data">
+														<i class="fas fa-star"></i>
+														<span> {{$bookscheduler->business_service->reviews_score()}} ({{$bookscheduler->business_service->reviews->count()}}) </span>
+													</div>
+
+													<div class="activity-hours">
+														<span>{{$bookscheduler->get_duration_hours()}}</span>
+													</div>
+												</div>
+												<div class="col-md-6 col-sm-6 col-xs-6">
+													<div class="activity-city">
+														<span style="white-space: nowrap;">{{$bookscheduler->company_information->city}}</span>
+														
+													</div>
+												</div>
+											</div>
+											<div class="activity-information ">
 												@php 
-													 $bookschedulercom_name = $bookscheduler->company_information->dba_business_name;
-													 if($bookscheduler->company_information->dba_business_name == ''){
-														 $bookschedulercom_name = $bookscheduler->company_information->company_name;
-													 }
-													 $price_all = $bookscheduler->business_service->min_price();
-												 @endphp
-												@if($price_all != '')
-													<span>From {!!$price_all!!}/Person</span>
-												@endif
-										</div>
-										</div>
-									</div>
-									<div class="col-lg-12 col-md-8 col-sm-8 activity-data">
-										<div class="row">
-											<div class="col-md-6 col-sm-6 col-xs-6">
-												<div class="activity-inner-data">
-													<i class="fas fa-star"></i>
-													<span> {{$bookscheduler->business_service->reviews_score()}} ({{$bookscheduler->business_service->reviews->count()}}) </span>
-												</div>
+													$bookschedulercom_name = $bookscheduler->company_information->dba_business_name;
+													if($bookscheduler->company_information->dba_business_name == ''){
+														$bookschedulercom_name = $bookscheduler->company_information->company_name;
+													}
+													$price_all = $bookscheduler->business_service->min_price();
+												@endphp
+												<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
 
-												<div class="activity-hours">
-													<span>{{$bookscheduler->get_duration_hours()}}</span>
+												<span><a  href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}"target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
+												
+												<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
+												<div class="mt-15"><a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a></div>
+												
+											</div>
+											<div class="row">
+												<div class="col-md-6 col-sm-6 col-xs-6 activites-price-details">
+												<!-- <div class="dollar-person"> -->
+													<!-- @if($price_all != '')
+														<span>From {!!$price_all!!}/Person</span>
+													@endif -->
+												<!-- </div> -->
 												</div>
-											</div>
-											<div class="col-md-6 col-sm-6 col-xs-6">
-												<div class="activity-city">
-													<span style="white-space: nowrap;">{{$bookscheduler->company_information->city}}</span>
-													
-												</div>
-											</div>
-										</div>
-										<div class="activity-information ">
-											@php 
-												$bookschedulercom_name = $bookscheduler->company_information->dba_business_name;
-												if($bookscheduler->company_information->dba_business_name == ''){
-													$bookschedulercom_name = $bookscheduler->company_information->company_name;
-												}
-												$price_all = $bookscheduler->business_service->min_price();
-											@endphp
-											<span><a href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}" target="_blank">{{$bookscheduler->business_service->program_name}}</a></span>
-
-											<span><a  href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}"target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
-											
-											<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
-											<div class="mt-15"><a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a></div>
-											
-										</div>
-										<div class="row">
-											<div class="col-md-6 col-sm-6 col-xs-6 activites-price-details">
-											<!-- <div class="dollar-person"> -->
-												<!-- @if($price_all != '')
-													<span>From {!!$price_all!!}/Person</span>
-												@endif -->
-											<!-- </div> -->
-											</div>
-											<div class="col-md-12 col-sm-12 col-xs-12 activites-price-details-left">
-												<div class="activity-time-main text-center <?php echo ($bookscheduler->is_start_in_one_hour($current_date)) ? 'activity-time-main-red' : ''?>">
-													<span>Starts in 
-														@if ($bookscheduler->time_left($current_date)->h)
-															{{$bookscheduler->time_left($current_date)->h}} {{Str::plural('hr', $bookscheduler->time_left($current_date)->h)}}
-														@endif
-														@if ($bookscheduler->time_left($current_date)->i)
-															{{$bookscheduler->time_left($current_date)->i}} {{Str::plural('min', $bookscheduler->time_left($current_date)->i)}}
-														@endif
-													</span>
+												<div class="col-md-12 col-sm-12 col-xs-12 activites-price-details-left">
+													<div class="activity-time-main text-center <?php echo ($bookscheduler->is_start_in_one_hour($current_date)) ? 'activity-time-main-red' : ''?>">
+														<span>Starts in 
+															@if ($bookscheduler->time_left($current_date)->h)
+																{{$bookscheduler->time_left($current_date)->h}} {{Str::plural('hr', $bookscheduler->time_left($current_date)->h)}}
+															@endif
+															@if ($bookscheduler->time_left($current_date)->i)
+																{{$bookscheduler->time_left($current_date)->i}} {{Str::plural('min', $bookscheduler->time_left($current_date)->i)}}
+															@endif
+														</span>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+						@endif
 					@endforeach
 				</div>
 			</div>
@@ -558,14 +562,16 @@
 										$companycity = $pay_price  = "";
 						            if (isset($mostpopularactivity)) {
 						               foreach ($mostpopularactivity as $loop => $service) {
+										if ($service->isPubliclyVisible())
+										{
 						                  $company = $price = $businessSp = [];
 												$serviceid = $service['id'];
 				                        $company = $service->company_information;
 		                               if($company != '') {
-	                                    $companyaddress = $company->address;
-	                                    $companyname = $company->dba_business_name != '' ? $company->dba_business_name : $company->company_name;
-													$companycity = $company->city;
-	                                 }
+											$companyaddress = $company->address;
+											$companyname = $company->dba_business_name != '' ? $company->dba_business_name : $company->company_name;
+											$companycity = $company->city;
+	                                   }
 			                            
 	                                //  $profilePic =  Storage::disk('s3')->exists($service->first_profile_pic()) ? Storage::URL($service->first_profile_pic()) : url('/images/service-nofound.jpg'); 
 									$profilePic = $service->first_profile_pic();
@@ -736,7 +742,7 @@
 														<span><a href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank">{{ $service['program_name'] }}</a></span>
 														<span><a  href="{{ route('businessprofiletimeline',['user_name'=>$redlink ,'id'=>$service['cid']])}}" target="_blank" class="companyalink">{{$companyname}}</a></span>
 														
-														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }} {{$service->id}} </p>
+														<p>{{ $service->formal_service_types() }}  | {{ $service['sport_activity'] }}  </p>
 													</div>
 													<hr>
 													<div class="all-details">
@@ -753,7 +759,8 @@
 									</div>
 									<?php
 		                    		}
-			                		} ?>
+			                		}
+								 } ?>
 		                	    </div>
 							</div>
 						</div>
@@ -785,19 +792,19 @@
 							<div class="owl-slider kickboxing-slider-activites">
 								<div id="find-trainers" class="owl-carousel">
 									<?php
-						            $companyid =  $companyname  =  $serviceid = $companyaddress= "";
+						           	 $companyid =  $companyname  =  $serviceid = $companyaddress= "";
 										$companycity = $pay_price  = "";
 						            if (isset($Trainers_coachesacitvity)) {
 						               foreach ($Trainers_coachesacitvity as $loop => $service) {
-						                  $company = $price = $businessSp = [];
-												$serviceid = $service['id'];
+										if ($service->isPubliclyVisible()){
+						                $company = $price = $businessSp = [];
+										$serviceid = $service['id'];
 				                        $company = $service->company_information;
-		                              if($company != '') {
-	                                    $companyaddress = $company->address;
-	                                    $companyname = $company->dba_business_name != '' ? $company->dba_business_name : $company->company_name;
-													$companycity = $company->city;
-				                        }
-						                            
+										if($company != '') {
+											$companyaddress = $company->address;
+											$companyname = $company->dba_business_name != '' ? $company->dba_business_name : $company->company_name;
+														$companycity = $company->city;
+											}														
 				                        // $profilePic =  Storage::disk('s3')->exists($service->first_profile_pic()) ? Storage::URL($service->first_profile_pic()) : url('/images/service-nofound.jpg');  
 										$profilePic = $service->first_profile_pic();
 										if ($profilePic == '') {
@@ -967,8 +974,9 @@
 										</div>
 									</div>
 									<?php
-										}
-									}
+											}
+										}		
+									}						
 									?>
 								</div>
 							</div>
@@ -1004,6 +1012,7 @@
 										$companycity = $pay_price  = "";
 						            if (isset($Ways_To_Workout)) {
 						               foreach ($Ways_To_Workout as $loop => $service) {
+										if ($service->isPubliclyVisible()){
 						                  $company = $price = $businessSp = [];
 												$serviceid = $service['id'];
 				                        $company = $service->company_information;
@@ -1012,6 +1021,12 @@
 	                                    $companyname = $company->dba_business_name != '' ? $company->dba_business_name : $company->company_name;
 													$companycity = $company->city;
 	                                 }
+									 
+									 $scheduler = App\BusinessActivityScheduler::where('serviceid', $service->serviceid)->first();
+										if ($scheduler) {
+										$priceDetailAge = App\BusinessPriceDetailsAges::where('id', $scheduler->category_id)->first();
+											if ($priceDetailAge && $priceDetailAge->visibility_to_public!= 0 && $priceDetailAge->class_type==null) {
+								
 			                            
 	                                //  $profilePic =  Storage::disk('s3')->exists($service->first_profile_pic()) ? Storage::URL($service->first_profile_pic()) : url('/images/service-nofound.jpg');  
 									$profilePic = $service->first_profile_pic();
@@ -1099,49 +1114,49 @@
                                                         </a>
                                                     </div>
 													@endif 
-                             			@else
-                                			<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
-														<div class="inner-owl-slider-hire">
-															<div id="owl-demo-learn_classes{{$service['id']}}" class="owl-carousel owl-theme">
-																@if(is_array($pic_image))
-																	@foreach($pic_image as $img)
-																		@if(Storage::disk('s3')->exists($img) && $img != '' )
-																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
-																			</div>
-																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
-																		@endif
-																	@endforeach
-																@else
-																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
-																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}" loading="lazy">
+													@else
+														<div class="kickboxing-topimg-content" ser_id="{{$service['id']}}" >
+																	<div class="inner-owl-slider-hire">
+																		<div id="owl-demo-learn_classes{{$service['id']}}" class="owl-carousel owl-theme">
+																			@if(is_array($pic_image))
+																				@foreach($pic_image as $img)
+																					@if(Storage::disk('s3')->exists($img) && $img != '' )
+																						<div class="item-inner">
+																							<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
+																						</div>
+																					@else
+																						<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																					@endif
+																				@endforeach
+																			@else
+																				@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
+																					<div class="item-inner">
+																						<img src="{{Storage::URL($pic_image)}}" loading="lazy">
+																					</div>
+																				@else
+																					<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																				@endif
+																			@endif
 																		</div>
-																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
-																	@endif
-																@endif
-															</div>
+																	</div>
+																	<script type="text/javascript">
+																		$(document).ready(function() {
+																			$("#owl-demo-learn_classes{{$service['id']}}").owlCarousel({
+																			navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+																			items : 1, 
+																			loop:true,
+																			nav:true,
+																			dots: false,
+																			});
+																		});
+																	</script>
+															<a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
+															@if($price_all != '')	
+															<span>From {!!$price_all!!}/Person</span>
+															@endif
 														</div>
-														<script type="text/javascript">
-															$(document).ready(function() {
-															  	$("#owl-demo-learn_classes{{$service['id']}}").owlCarousel({
-																   navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-																   items : 1, 
-																   loop:true,
-																   nav:true,
-																   dots: false,
-															  	});
-															});
-														</script>
-				                                <a class="fav-fun-2" href="{{ Config::get('constants.SITE_URL') }}/userlogin" ><i class="far fa-heart"></i></a>
-				                                @if($price_all != '')	
-				                                <span>From {!!$price_all!!}/Person</span>
-				                                @endif
-				                            </div>
-                             			@endif
-                             			@php
+													@endif
+												@php
 													$reviews_count = App\BusinessServiceReview::where('service_id', $service['id'])->count();
 													$reviews_sum = App\BusinessServiceReview::where('service_id', $service['id'])->sum('rating');
 													
@@ -1188,8 +1203,11 @@
 									</div>
 									<?php
 										}
+											}
+										}
+									 }
 									}
-									?>
+								?>
 								</div>
 							</div>
 						</div>
@@ -1224,6 +1242,8 @@
 										$companycity = $pay_price  = "";
 						            if (isset($Fun_Activities)) {
 						               foreach ($Fun_Activities as $loop => $service) {
+										if ($service->isPubliclyVisible()){
+
 						                  $company = $price = $businessSp = [];
 												$serviceid = $service['id'];
 				                        $company = $service->company_information;
@@ -1415,6 +1435,7 @@
 									</div>
 									<?php
 			                    		}
+									 }
 			                		} ?>
 								</div>
 							</div>
@@ -1450,6 +1471,8 @@
 										$companycity = $pay_price  = "";
 						            if (isset($events_activity)) {
 						               foreach ($events_activity as $loop => $service) {
+										if ($service->isPubliclyVisible())
+										{
 						                  $company = $price = $businessSp = [];
 												$serviceid = $service['id'];
 				                        $company = $service->company_information;
@@ -1637,7 +1660,9 @@
 									</div>
 									<?php
 		                    		}
-			                		} ?>
+			                		} 
+								}
+									?>
 		                	    </div>
 							</div>
 						</div>
@@ -1652,7 +1677,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
-					<h3>See All Activities	</h3>
+					<h3>See All Activities 	</h3>
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
@@ -1674,6 +1699,8 @@
 					               if (isset($allactivities) && count($allactivities) > 0) {
 					                  $profilePic1 = $pic_image = '';
 					                  foreach ($allactivities as $loop => $service) {
+										if ($service->isPubliclyVisible()){
+
 					                     $company = $price = $businessSp = [];
 												$serviceid = $service['id'];
 				                        $company = $service->company_information;
@@ -1863,6 +1890,7 @@
 									
 								<?php
 		                    		}
+								}
 		                		} ?>
 								</div>
 							</div>

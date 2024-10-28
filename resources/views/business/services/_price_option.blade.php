@@ -60,6 +60,26 @@
             <div class="accordion-body">
                 <input type="hidden" name="price_id_db_{{$i}}{{$j}}" id="price_id_db{{$i}}{{$j}}" value="{{@$price->id}}" />
                 <div class="row">
+                    <div class="col-lg-12">
+                        <div class="flex-shrink-0 float-right mb-15">
+                            <div class="form-check form-switch form-switch-right form-switch-md">
+                                <label for="default-base-showcode" class="form-label text-muted visibilitytext{{$i}}{{$j}}"  data-label-id="visibilitytext{{$i}}{{$j}}">@if(@$price->visibility_to_public) Show Online @else Hide Online @endif </label>
+                                <input class="custom-switch form-check-input visibility0 visibility-checkbox" type="checkbox" name="visibility_to_public_price{{$i}}{{$j}}[]" value="V{{$i}}{{$j}}"  data-label-id="visibilitytext{{$i}}{{$j}}" @if(@$price->visibility_to_public) checked @endif>
+                            </div>                           
+                            <script>
+                                $(".visibility-checkbox").change(function() {   
+                                    var labelId = $(this).data("label-id");                                    
+                                    var $label = $('label[data-label-id="' + labelId + '"]');                            
+                                    if (this.checked) {
+                                        $label.html("Show Online");
+                                    } else {
+                                        $label.html("Hide Online");
+                                    }
+                                });
+                            </script>
+                            
+                        </div>
+                    </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="set-price mb-0">
                             <label>Price Title</label>

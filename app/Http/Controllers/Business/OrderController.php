@@ -73,7 +73,13 @@ class OrderController extends BusinessBaseController
             $user_type = 'customer';
             $customer = $customerdata = $request->current_company->customers->find($request->cus_id);
             // dd($request->cus_id);
-            @$customer->create_stripe_customer_id();
+            if($customer)
+            {
+                $customer->create_stripe_customer_id();
+            }
+            else{
+                return redirect()->back();
+            }
             if($customer->parent_cus_id && $request->redirected != 1){
                 return redirect(route('business.orders.create', ['cus_id' => $customer->parent_cus_id, 'participate_id' => $request->cus_id, 'redirected' => true]));
             }
@@ -326,7 +332,6 @@ class OrderController extends BusinessBaseController
                     'kind' => 'check',
                     'transaction_id' => "CK_" . Carbon::now()->format('YmdHmsv'),
                     'amount' => $request->cash_amt,
-
                     'qty' =>'1',
                     'status' =>'complete',
                     'refund_amount' => 0,
@@ -383,7 +388,7 @@ class OrderController extends BusinessBaseController
                 'price' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['price']),
                 'qty' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['qty']),
                 'priceid' => $item['priceid'],
-                'category_id' => $item['categoryid'],
+                'category_id' => $item['categoryid'] ?? 0,
                 'pay_session' => $item['p_session'] ?? @$price_detail->pay_session,
                 'expired_at' => @$item['orderType'] == 'Membership'  ? $expired_at : NULL,
                 'contract_date' => @$item['orderType'] == 'Membership' ? $contractDate : NULL,
@@ -509,7 +514,7 @@ class OrderController extends BusinessBaseController
                                         // Handle the error if either $re_i or $afterHowmanytime is not numeric
                                         // For example, log an error or throw an exception
                                         // Optionally, set a default value or handle the error gracefully
-                                            dd($afterHowmanytime);
+                                            // dd($afterHowmanytime);
                                     }
                                 }
 

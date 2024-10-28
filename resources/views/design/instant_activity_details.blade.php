@@ -2,7 +2,35 @@
 @extends('layouts.header')
 @section('content')
 
-
+<style>
+	/* .flatpickr-months{
+		background-color: #000;
+	}
+	.flatpickr-weekdays{
+		background-color: #000;
+	}
+	span.flatpickr-weekday{
+		background: #000;
+	}
+	.flatpickr-day.endRange, .flatpickr-day.endRange.inRange, .flatpickr-day.endRange.nextMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.endRange:focus, .flatpickr-day.endRange:hover, .flatpickr-day.selected, .flatpickr-day.selected.inRange, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.selected:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange, .flatpickr-day.startRange.inRange, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.startRange:focus, .flatpickr-day.startRange:hover{background: #000; border-color: #000;}
+	.flatpickr-day.today {
+		border-color: #000;
+		background-color: #46464614;
+		color: #000
+	} */
+	.modal-open .modal {
+		padding-right: 0 !important;
+		padding-left: 0 !important;
+	}
+	.modal-dialog-centered{
+		min-height: calc(100% - 0.5rem * 2);
+		display: flex;
+		align-items: center;
+	}
+	.modal-content {
+		border-radius: 5px;
+	}
+</style>
 <div class="container-fluid p-0 inner-top-activity">
 	<div class="row">
 		<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
@@ -870,7 +898,7 @@
 								<div class="text-center mt-10">
 									<div id="cartadd">
 										<div id="addcartdiv">
-											<button type="button" class="btn btn-red" data-toggle="modal" data-target="#requestbooking">Request To Book</button>
+											<button type="button" class="btn btn-red" data-toggle="modal" data-target="#mainModal">Request To Book</button>
 										</div>
 									</div>
 								</div>
@@ -952,16 +980,43 @@
   </div>
 </div>
 
-<div class="modal fade" id="requestbooking" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-md" role="document">
+
+<div class="modal fade req-time" id="mainModal" tabindex="-1" role="dialog" aria-labelledby="mainModalLabel">
+	<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="row">
-					<div class="col-md-10 col-xs-10 col-sm-10">
-						<h5 class="modal-title">Request To Book</h5>
+					<div class="col-md-12 col-xs-2 col-sm-2">
+						<button type="button" class="btn-close-custom" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+						</button>
 					</div>
-					<div class="col-md-2 col-xs-2 col-sm-2">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="mt-80 mb-80 req-availability">
+							<h2 class="fs-title mb-10">Request Availability</h2>		
+							<p>Check availability for dates and times</p>
+							<div class="">
+								<button class="btn btn-req-red w-100" id="openNestedModal1">Request Availability</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade req-time" id="nestedModal1" role="dialog" aria-labelledby="nestedModal1Label">
+	<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="row">
+					<div class="col-md-12 col-xs-12 col-sm-12">
+						<button type="button" class="btn-close-custom" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">×</span>
 						</button>
 					</div>
@@ -980,363 +1035,458 @@
 							<li></li>
 							<li></li>
 							<li></li>
-							<li></li>
-							<li></li>
 						</ul>
 						<!-- fieldsets -->
-						<fieldset>
-							<div class="paddingTop-35">
-								<h2 class="fs-title mb-25">Request availability</h2>		
-								<div class="">
-									<button class="btn btn-red">Request a date and time</button>
-								</div>
-							</div>
-							<input type="button" name="next" class="next action-button" value="Next" />
-						</fieldset>
 					
 						<fieldset>
-							<div class="paddingTop-35">
-								<h2 class="fs-title mb-25">Request A Date</h2>	
+							<div class="mt-25 mb-30 fs-title-p">
+								<h2 class="fs-title mb-15">Request A Date</h2>	
 								<p class="mb-10">Select a day to check availability </p>
-								<input type="text" placeholder="Select Date" class="form-control flatpickr" data-provider="flatpickr" data-date-format="d M, Y" data-deafult-date="today" data-inline-date="true">
-							</div>
-							<input type="button" name="previous" class="previous action-button" value="Back" />
-							<input type="button" name="next" class="next action-button" value="Next" />
-						</fieldset>
-
-						<fieldset>
-							<h2 class="fs-title mb-25">Do You Have Any Time Preference</h2>
-							<div class="req-book-x radio-buttons">
-								<label class="custom-radio">
-									<input type="radio" name="radio" checked>
-									<span class="radio-btn">
-										<div class="hobbies-icon">
-										<h3 class="">Any time</h3>
-										</div>
-									</span>
-								</label>
-								<label class="custom-radio">
-									<input type="radio" name="radio" >
-									<span class="radio-btn">
-										<div class="hobbies-icon">
-										<h3 class="">Early morning (before 9am)</h3>
-										</div>
-									</span>
-								</label>
-								<label class="custom-radio">
-									<input type="radio" name="radio" >
-									<span class="radio-btn">
-										<div class="hobbies-icon">
-										<h3 class="">Morning (9am-noon)</h3>
-										</div>
-									</span>
-								</label>
-								<label class="custom-radio">
-									<input type="radio" name="radio" >
-									<span class="radio-btn">
-										<div class="hobbies-icon">
-										<h3 class="">Early afternoon (noon-3pm)</h3>
-										</div>
-									</span>
-								</label>
-								<label class="custom-radio">
-									<input type="radio" name="radio" >
-									<span class="radio-btn">
-										<div class="hobbies-icon">
-										<h3 class="">Late afternoon (3-6pm)</h3>
-										</div>
-									</span>
-								</label>
-								<label class="custom-radio">
-									<input type="radio" name="radio" >
-									<span class="radio-btn">
-										<div class="hobbies-icon">
-										<h3 class="">Evening (after 6pm)</h3>
-										</div>
-									</span>
-								</label>
-								<label class="custom-radio">
-									<input type="radio" name="radio" >
-									<span class="radio-btn">
-										<div class="hobbies-icon">
-										<h3 class="">Other</h3>
-										</div>
-									</span>
-								</label>									
+								<input type="text" placeholder="Select Date" class="form-control flatpickr" data-provider="flatpickr" data-date-format="d M, Y" data-deafult-date="today" data-inline="true">
 							</div>
 							
-							<input type="button" name="previous" class="previous action-button" value="Previous" />
+							<!-- <input type="button" name="previous" class="previous action-button-back" value="Back" /> -->
+							<input type="button" name="next" class="next action-button" value="Next" />
+							<!-- <div class="row y-middle">
+								<div class="col-lg-6">
+									<input type="button" name="previous" class="previous action-button action-button-back" value="Back" />
+								</div>
+								<div class="col-lg-6">
+									<input type="button" name="next" class="next action-button" value="Next" />
+								</div>
+							</div> -->
+						</fieldset>
+
+						<fieldset>
+							<div class="mt-25 mb-25">
+								<h2 class="fs-title mb-25">Do You Have Any Time Preference</h2>
+								<div class="req-book-x radio-buttons">
+									<label class="custom-radio">
+										<input type="radio" name="radio" checked>
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Any time</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Early morning (before 9am)</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Morning (9am-noon)</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Early afternoon (noon-3pm)</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Late afternoon (3-6pm)</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Evening (after 6pm)</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Other</h3>
+											</div>
+										</span>
+									</label>									
+								</div>
+							</div>
+							
+							<input type="button" name="previous" class="previous action-button-back" value="Back" />
 							<input type="button" name="next" class="next action-button" value="Next" />
 						</fieldset>
 						
 						<fieldset>
-							<h2 class="fs-title mb-25">How soon would you like to start?</h2>
-							<div class="req-book-x radio-buttons">
-								<label class="custom-radio">
-									<input type="radio" name="radio" checked>
-									<span class="radio-btn">
-										<div class="hobbies-icon">
-										<h3 class="">As soon as possible</h3>
-										</div>
-									</span>
-								</label>
-								<label class="custom-radio">
-									<input type="radio" name="radio" >
-									<span class="radio-btn">
-										<div class="hobbies-icon">
-										<h3 class="">Within a few weeks</h3>
-										</div>
-									</span>
-								</label>
-								<label class="custom-radio">
-									<input type="radio" name="radio" >
-									<span class="radio-btn">
-										<div class="hobbies-icon">
-										<h3 class="">Within a month</h3>
-										</div>
-									</span>
-								</label>
-								<label class="custom-radio">
-									<input type="radio" name="radio" >
-									<span class="radio-btn">
-										<div class="hobbies-icon">
-										<h3 class="">Other</h3>
-										</div>
-									</span>
-								</label>
+							<div class="mt-25 mb-25">
+								<h2 class="fs-title mb-25">How soon would you like to start?</h2>
+								<div class="req-book-x radio-buttons">
+									<label class="custom-radio">
+										<input type="radio" name="radio" checked>
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">As soon as possible</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Within a few weeks</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Within a month</h3>
+											</div>
+										</span>
+									</label>
+									<label class="custom-radio">
+										<input type="radio" name="radio" >
+										<span class="radio-btn">
+											<div class="hobbies-icon">
+											<h3 class="">Other</h3>
+											</div>
+										</span>
+									</label>
+								</div>
 							</div>
-							<input type="button" name="previous" class="previous action-button" value="Previous" />
+							<input type="button" name="previous" class="previous action-button-back" value="Back" />
 							<input type="button" name="next" class="next action-button" value="Next" />
 						</fieldset>
 					
 						<fieldset>
-							<h2 class="fs-title mb-10">Select number of participants</h2>
-							<p class="mb-25">Select how many people will be booking. Up to 10 guests can be added.</p>
-							<div class="row y-middle mb-15">
-								<div class="col-lg-5 col-5">
-									<div class="text-left">
-										<label>Adults</label>
+							<div class="mt-25 mb-25 fs-title-p"> 
+								<h2 class="fs-title mb-10">Select number of participants</h2>
+								<p class="mb-25">Select how many people will be booking. Up to 10 guests can be added.</p>
+								<div class="row y-middle mb-15">
+									<div class="col-lg-5 col-5">
+										<div class="text-left">
+											<label>Adults</label>
+										</div>
 									</div>
-								</div>
-								<div class="col-lg-7 col-7">
-									<div class="participant-add">
-										<div class="qtyButtons">
-											<div class="qty count-members mt-5">
-												<span class="minus bg-darkbtn adultminusone"><i class="fa fa-minus"></i></span>
-												<input type="text" class="count" name="adultcntone" id="adultcntone" min="0" value="0" readonly="">
-												<span class="plus bg-darkbtn adultplusone"><i class="fa fa-plus"></i></span>
+									<div class="col-lg-7 col-7">
+										<div class="participant-add">
+											<div class="qtyButtons">
+												<div class="qty count-members mt-5">
+													<span class="minus bg-darkbtn adultminusone"><i class="fa fa-minus"></i></span>
+													<input type="text" class="count" name="adultcntone" id="adultcntone" min="0" value="0" readonly="">
+													<span class="plus bg-darkbtn adultplusone"><i class="fa fa-plus"></i></span>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
 
-							<div class="row y-middle mb-15">
-								<div class="col-lg-5 col-5">
-									<div class="text-left">
-										<label>Children</label>
+								<div class="row y-middle mb-15">
+									<div class="col-lg-5 col-5">
+										<div class="text-left">
+											<label>Children</label>
+										</div>
 									</div>
-								</div>
-								<div class="col-lg-7 col-7">
-									<div class="participant-add">
-										<div class="qtyButtons">
-											<div class="qty count-members mt-5">
-												<span class="minus bg-darkbtn childminusone"><i class="fa fa-minus"></i></span>
-												<input type="text" class="count" name="childcntone" id="childcntone" min="0" value="0" readonly="">
-												<span class="plus bg-darkbtn childplusone"><i class="fa fa-plus"></i></span>
+									<div class="col-lg-7 col-7">
+										<div class="participant-add">
+											<div class="qtyButtons">
+												<div class="qty count-members mt-5">
+													<span class="minus bg-darkbtn childminusone"><i class="fa fa-minus"></i></span>
+													<input type="text" class="count" name="childcntone" id="childcntone" min="0" value="0" readonly="">
+													<span class="plus bg-darkbtn childplusone"><i class="fa fa-plus"></i></span>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-							</div>
-
-							<div class="row y-middle mb-15">
-								<div class="col-lg-5 col-5">
-									<div class="text-left">
-										<label>Infants</label>
-										<p>Under 2</p>
-									</div>
-								</div>
-								<div class="col-lg-7 col-7">
-									<div class="participant-add">
-										<div class="qtyButtons">
-											<div class="qty count-members mt-5">
-												<span class="minus bg-darkbtn infantsminusone"><i class="fa fa-minus"></i></span>
-												<input type="text" class="count" name="infantscntone" id="infantscntone" min="0" value="0" readonly="">
-												<span class="plus bg-darkbtn infantsplusone"><i class="fa fa-plus"></i></span>
-											</div>
+									<div class="col-lg-12">
+										<div class="form-group mt-10">
+											<select class="form-select" name="businessType" required="">
+												<option value="individual">Child Age</option>
+												<option value="business">1</option>
+												<option value="business">2</option>
+												<option value="business">3</option>
+												<option value="business">4</option>
+												<option value="business">5</option>
+												<option value="business">6</option>
+												<option value="business">7</option>
+												<option value="business">8</option>
+												<option value="business">9</option>
+												<option value="business">10</option>
+											</select>
 										</div>
 									</div>
 								</div>
-							</div>
 
-							<input type="button" name="previous" class="previous action-button" value="Previous" />
+								<div class="row y-middle mb-15">
+									<div class="col-lg-5 col-5">
+										<div class="text-left">
+											<label>Infants</label>
+											<p>Under 2</p>
+										</div>
+									</div>
+									<div class="col-lg-7 col-7">
+										<div class="participant-add">
+											<div class="qtyButtons">
+												<div class="qty count-members mt-5">
+													<span class="minus bg-darkbtn infantsminusone"><i class="fa fa-minus"></i></span>
+													<input type="text" class="count" name="infantscntone" id="infantscntone" min="0" value="0" readonly="">
+													<span class="plus bg-darkbtn infantsplusone"><i class="fa fa-plus"></i></span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-12">
+										<div class="form-group mt-10">
+											<select class="form-select" name="businessType" required="">
+												<option value="individual">Infants Age</option>
+												<option value="business">1</option>
+												<option value="business">2</option>
+												<option value="business">3</option>
+												<option value="business">4</option>
+												<option value="business">5</option>
+												<option value="business">6</option>
+												<option value="business">7</option>
+												<option value="business">8</option>
+												<option value="business">9</option>
+												<option value="business">10</option>
+											</select>
+										</div>
+									</div
+								</div>
+							</div>
+							<input type="button" name="previous" class="previous action-button-back" value="Back" />
 							<input type="button" name="next" class="next action-button" value="Next" />
 						</fieldset>
 
 						<fieldset>
-							<h2 class="fs-title mb-25">What is your gender?</h2>
-							<div class="radio-block">
-								<div class="radio-content">
-									<input id="radio17" type="radio" name="radio" checked>
-									<label for="radio17"><span></span>Female</label>
-								</div><br>
-								<div class="radio-content">
-									<input id="radio18" type="radio" name="radio" />
-									<label for="radio18"><span></span>Male</label>
-								</div><br>
-								<div class="radio-content">
-									<input id="radio19" type="radio" name="radio" />
-									<label for="radio19"><span></span>Other (e.g. couple, group)</label>
+							<div class="mt-25 mb-25">
+								<h2 class="fs-title mb-25">What is your gender?</h2>
+								<div class="radio-block">
+									<div class="radio-content">
+										<input id="radio17" type="radio" name="radio" checked>
+										<label for="radio17"><span></span>Female</label>
+									</div>
+									<div class="radio-content">
+										<input id="radio18" type="radio" name="radio" />
+										<label for="radio18"><span></span>Male</label>
+									</div>
+									<div class="radio-content">
+										<input id="radio19" type="radio" name="radio" />
+										<label for="radio19"><span></span>Other (e.g. couple, group)</label>
+									</div>
 								</div>
 							</div>
-							<input type="button" name="previous" class="previous action-button" value="Previous" />
+							<input type="button" name="previous" class="previous action-button-back" value="Back" />
 							<input type="button" name="next" class="next action-button" value="Next" />
 						</fieldset>
 						
 						<fieldset>
-							<h2 class="fs-title mb-25">Registration </h2>
-							<div>
-								<div class="mb-3 book0req-register">
-									<label for="firstnameInput" class="form-label">Name</label>
-									<input type="text" class="form-control" name="name" id="name" value="" required="">
-								</div>
-								<div class="mb-3 book0req-register">
-									<label for="location" class="form-label">Location</label>
-									<input type="text" class="form-control" name="location" id="location" value="" required="">
-								</div>
-								<div class="mb-3 book0req-register">
-									<label for="Zip" class="form-label"> Zip</label>
-									<input type="text" class="form-control" name="Zip" id="Zip" value="" required="">
-								</div>
-								<div class="mb-3 book0req-register">
-									<label for="state" class="form-label"> State</label>
-									<input type="text" class="form-control" name="state" id="state" value="" required="">
-								</div>
-								<div class="mb-3 book0req-register">
-									<label for="country" class="form-label"> Country</label>
-									<input type="text" class="form-control" name="country" id="country" value="" required="">
+							<div class="mt-25 mb-25 fs-title-p">
+								<h2 class="fs-title mb-10">Registration </h2>
+								<p class="mb-15">Please complete in order to make sure you are 18+</p>
+								<div>
+									<div class="mb-15 book0req-register">
+										<label for="firstnameInput" class="form-label">Name</label>
+										<input type="text" class="form-control" name="name" id="name" value="" required="">
+									</div>
+									<div class="mb-15 book0req-register">
+										<label for="location" class="form-label">Location</label>
+										<input type="text" class="form-control" name="location" id="location" value="" required="">
+									</div>
+									<div class="mb-15 book0req-register">
+										<label for="Zip" class="form-label"> Zip</label>
+										<input type="text" class="form-control" name="Zip" id="Zip" value="" required="">
+									</div>
+									<div class="mb-15 book0req-register">
+										<label for="state" class="form-label"> State</label>
+										<input type="text" class="form-control" name="state" id="state" value="" required="">
+									</div>
+									<div class="mb-15 book0req-register">
+										<label for="country" class="form-label"> Country</label>
+										<input type="text" class="form-control" name="country" id="country" value="" required="">
+									</div>
 								</div>
 							</div>
-							<input type="button" name="previous" class="previous action-button" value="Previous" />
+							
+							<input type="button" name="previous" class="previous action-button-back" value="Back" />
 							<input type="button" name="next" class="next action-button" value="Next" />
 						</fieldset>
 						
 						<fieldset>
-							<h2 class="fs-title mb-25">Request Booking Summary</h2>
-							<div class="border-bottom-grey mb-10">
+							<div class="mt-25 mb-25">
+								<h2 class="fs-title mb-25">Request Booking Summary</h2>
+								<div class="border-bottom-grey mb-10">
+									<div class="row">
+										<div class="col-lg-5">
+											<div class="text-left req-book-summary">
+												<label>Customer</label>
+											</div>
+										</div>
+										<div class="col-lg-7">
+											<div class="text-right req-book-summary">
+												<span>Ankita</span>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								<div class="border-bottom-grey mb-10">
+									<div class="row">
+										<div class="col-lg-5">
+											<div class="text-left req-book-summary">
+												<label>Location</label>
+											</div>
+										</div>
+										<div class="col-lg-7">
+											<div class="text-right req-book-summary">
+												<span>USA</span>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								<div class="border-bottom-grey mb-10">
+									<div class="row">
+										<div class="col-lg-5">
+											<div class="text-left req-book-summary">
+												<label>Date </label>
+											</div>
+										</div>
+										<div class="col-lg-7">
+											<div class="text-right req-book-summary">
+												<span>21-10-2024</span>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								<div class="border-bottom-grey mb-10">
+									<div class="row">
+										<div class="col-lg-5">
+											<div class="text-left req-book-summary">
+												<label>Time  </label>
+											</div>
+										</div>
+										<div class="col-lg-7">
+											<div class="text-right req-book-summary">
+												<span>Morning (9am-noon)</span>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								<div class="border-bottom-grey mb-10">
+									<div class="row">
+										<div class="col-lg-5">
+											<div class="text-left req-book-summary">
+												<label>Number of Guests </label>
+											</div>
+										</div>
+										<div class="col-lg-7">
+											<div class="text-right req-book-summary">
+												<span>3</span>
+											</div>
+											
+										</div>
+									</div>
+								</div>
 								<div class="row">
-									<div class="col-lg-5">
-										<div class="text-left req-book-summary">
-											<label>Customer</label>
+									<div class="col-lg-12">
+										<div class="mb-3 text-left d-grid">
+											<label for="firstnameInput" class="form-label">Write a message to </label>
+											<p class="mb-10">Please make a note of any medical issues or personal injuries.</p>
+											<textarea class="form-control about_user" id="about_user" name="about_user" placeholder="Enter your description" rows="3" maxlength="1000"></textarea>
 										</div>
-									</div>
-									<div class="col-lg-7">
-										<div class="text-right req-book-summary">
-											<span>Ankita</span>
-										</div>
-										
 									</div>
 								</div>
 							</div>
-							<div class="border-bottom-grey mb-10">
-								<div class="row">
-									<div class="col-lg-5">
-										<div class="text-left req-book-summary">
-											<label>Location</label>
-										</div>
-									</div>
-									<div class="col-lg-7">
-										<div class="text-right req-book-summary">
-											<span>USA</span>
-										</div>
-										
-									</div>
-								</div>
-							</div>
-							<div class="border-bottom-grey mb-10">
-								<div class="row">
-									<div class="col-lg-5">
-										<div class="text-left req-book-summary">
-											<label>Date </label>
-										</div>
-									</div>
-									<div class="col-lg-7">
-										<div class="text-right req-book-summary">
-											<span>21-10-2024</span>
-										</div>
-										
-									</div>
-								</div>
-							</div>
-							<div class="border-bottom-grey mb-10">
-								<div class="row">
-									<div class="col-lg-5">
-										<div class="text-left req-book-summary">
-											<label>Time  </label>
-										</div>
-									</div>
-									<div class="col-lg-7">
-										<div class="text-right req-book-summary">
-											<span>Morning (9am-noon)</span>
-										</div>
-										
-									</div>
-								</div>
-							</div>
-							<div class="border-bottom-grey mb-10">
-								<div class="row">
-									<div class="col-lg-5">
-										<div class="text-left req-book-summary">
-											<label>Number of Guests </label>
-										</div>
-									</div>
-									<div class="col-lg-7">
-										<div class="text-right req-book-summary">
-											<span>3</span>
-										</div>
-										
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-12">
-									<div class="mb-3 text-left d-grid">
-										<label for="firstnameInput" class="form-label">Write a message to </label>
-										<p>Please make a note of any medical issues or personal injuries.</p>
-										<textarea class="form-control about_user" id="about_user" name="about_user" placeholder="Enter your description" rows="3" maxlength="1000"></textarea>
-									</div>
-								</div>
-							</div>
-							<input type="button" name="previous" class="previous action-button" value="Previous" />
-							<input type="button" name="next" class="next action-button" value="Next" />
+							
+							<input type="button" name="previous" class="previous action-button-back" value="Back" />
+							<button class="btn action-button" id="openNestedModal2">Submit</button>
+							<!-- <input type="submit" name="submit" class="submit action-button" value="Submit" /> -->
 						</fieldset>
 
-						<fieldset>
-							<h2 class="fs-title mb-25">What is your gender?</h2>
-							<div class="text-center mb-25 mt-25">
-								<h3> Request was sent successfully</h3>
-							</div>
-							<input type="button" name="previous" class="previous action-button" value="Previous" />
-							<input type="submit" name="submit" class="submit action-button" value="Submit" />
-						</fieldset>
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-@include('layouts.footer')
 
+<div class="modal fade req-time" id="nestedModal2" tabindex="-1" role="dialog" aria-labelledby="nestedModal2Label">
+	<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="row">
+					<div class="col-md-12 col-xs-12 col-sm-12">
+						<button type="button" class="btn-close-custom" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="mt-25 mb-25">
+					<div class="text-center mb-40 mt-30 request-sucess">
+						<h3> Request was sent successfully</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> 
+</div>
+
+@include('layouts.footer')
 <script src="/public/dashboard-design/js/flatpickr.min.js"></script>
 <script>
-	flatpickr(".flatpickr", {
-		altInput:true,
-        dateFormat: "Y-m-d",
-        altFormat: "m/d/Y",
-    });
+    $(document).ready(function() {
+        // Open Nested Modal 1
+        $('#openNestedModal1').click(function() {
+            $('#mainModal').modal('hide'); // Hide the main modal
+            $('#nestedModal1').modal('show'); // Show nested modal 1
+        });
 
+        // Open Nested Modal 2
+        $('#openNestedModal2').click(function() {
+            $('#nestedModal1').modal('hide'); // Hide nested modal 1
+            $('#nestedModal2').modal('show'); // Show nested modal 2
+        });
+
+        // Close both modals from Nested Modal 1
+        $('#closeBothModals1').click(function() {
+            $('#nestedModal1').modal('hide'); // Hide nested modal 1
+            $('#mainModal').modal('hide'); // Hide main modal
+        });
+
+        // Close both modals from Nested Modal 2
+        $('#closeBothModals2').click(function() {
+            $('#nestedModal2').modal('hide'); // Hide nested modal 2
+            $('#mainModal').modal('hide'); // Hide main modal
+        });
+    });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const flatpickrInput = document.querySelector('.flatpickr');
+    flatpickrInput.style.display = 'none';
+
+    flatpickr(flatpickrInput, {
+        inline: true,
+        defaultDate: "today",
+        dateFormat: "d M, Y"
+    });
+});
+</script>
+
 <script>
 //jQuery time
 var current_fs, next_fs, previous_fs; //fieldsets

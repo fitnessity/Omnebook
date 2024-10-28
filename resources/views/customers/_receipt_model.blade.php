@@ -26,9 +26,10 @@
                 </div>
             </div>
             <div class="powered-img">
-                <label>Powered By</label>
+                {{-- <label>Powered By</label> --}}
                 <div class="booking-modal-logo">
-                    <img src="{{url('/public/images/fitnessity_logo1.png')}}">
+                    <img src="{{url('/public/dashboard-design/images/powered-by-OMNEBOOK-white1.png')}}">
+                    {{-- <img src="https://dev.fitnessity.co//public/dashboard-design/images/powered-by-OMNEBOOK.png" alt="Fitnessity"> --}}
                 </div>
             </div>
         </div>
@@ -129,7 +130,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $orderDetail->getparticipate() ?? N/A}}</span>
+                            <span>{!! $orderDetail->getparticipate() ?? N/A !!}</span>
                         </div>
                     </div>
                     
@@ -140,7 +141,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ ($orderDetail->order_type == 'Membership') ? $orderDetail->decodeparticipate() : 'N/A' }} </span>
+                            <span>{!! ($orderDetail->order_type == 'Membership') ? $orderDetail->decodeparticipate() : 'N/A' !!} </span>
                                 @php
                                  $user = App\Customer::where('id',$orderDetail->user_id)->first();
                                  $name = @$user->fname.' '.@$user->lname .' ( age '. Carbon::parse(@$user->birthdate)->age .' ) ' ;                                 
@@ -346,6 +347,24 @@
                 </div>
             </div>  
         </div>
+        @if($orderDetail->status=='refund')
+        <div class="main-separator mb-10">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class=" text-left">
+                        <label class="font-red">REFUNDED AMOUNT</label>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class="float-end line-break text-right">
+                        <span class="font-red">${{@$orderDetail->refund_amount}}</span>
+                    </div>
+                </div>
+            </div>  
+        </div>
+        @endif
+
     </div>
 </div>
 

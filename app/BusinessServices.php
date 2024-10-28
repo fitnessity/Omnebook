@@ -259,7 +259,12 @@ class BusinessServices extends Model
 
     public function schedulers(){
         return $this->hasMany(BusinessActivityScheduler::class, 'serviceid');
+    }    
+
+    public function public_check() {
+        return $this->hasMany(BusinessPriceDetailsAges::class, 'serviceid');
     }
+
 
     public function UserBookingDetails(){
         return $this->hasMany(UserBookingDetail::class, 'sport');
@@ -468,5 +473,16 @@ class BusinessServices extends Model
         return $this->hasMany(BusinessPriceDetailsAges::class, 'serviceid', 'id');
     }
 
+    public function businessPriceDetailAge()
+    {
+        return $this->hasMany(BusinessPriceDetailsAges::class, 'serviceid', 'id');
+    }
+
+    public function isPubliclyVisible()
+    {
+        // return $this->businessPriceDetailAge && $this->businessPriceDetailAge->visibility_to_public == 1;
+        return $this->businessPriceDetailsAges()->where('visibility_to_public', 1)->exists();
+
+    }
 
 }

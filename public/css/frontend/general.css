@@ -24715,7 +24715,7 @@ padding-left: 0px;
 	display: none;
 }
 /*inputs*/
-.step-forms #msform input, #msform textarea {
+/* .step-forms #msform input, #msform textarea {
 	padding: 15px;
 	border: 1px solid #ccc;
 	border-radius: 3px;
@@ -24724,7 +24724,7 @@ padding-left: 0px;
 	box-sizing: border-box;
 	color: #2C3E50;
 	font-size: 13px;
-}
+} */
 /*buttons*/
 .step-forms #msform .action-button {
 	width: 100px;
@@ -24735,18 +24735,24 @@ padding-left: 0px;
 	border-radius: 1px;
 	cursor: pointer;
 	padding: 10px 5px;
-	margin: 10px 5px;
+	/* margin: 10px 5px; */
 	border-radius: 5px;
+    float: right;
 }
 .step-forms #msform .action-button:hover, #msform .action-button:focus {
 	background-color: #000;
 }
 /*headings*/
 .step-forms .fs-title {
-	font-size: 19px;
+	font-size: 17px;
 	color: #000;
 	margin-bottom: 10px;
 	font-weight: 500;
+    text-align: left;
+    line-height: 21px;
+}
+.fs-title-p p{
+    text-align: left;
 }
 .step-forms .fs-subtitle {
 	font-weight: normal;
@@ -24756,7 +24762,7 @@ padding-left: 0px;
 }
 /*progressbar*/
 .step-forms #progressbar {
-	margin-bottom: 30px;
+	margin-bottom: 10px;
 	overflow: hidden;
 	/*CSS counters to number the steps*/
 	counter-reset: step;
@@ -24766,7 +24772,7 @@ padding-left: 0px;
 	color: #98002e;
 	text-transform: uppercase;
 	font-size: 9px;
-	width: 11%;
+	width: 14%;
 	float: left;
 	position: relative;
 }
@@ -24856,12 +24862,12 @@ padding-left: 0px;
 } 
 
 .step-forms input[type="radio"]:checked + label span {
-  background: #98002e;
+  background: #000;
   box-shadow: 0px 0px 0px 3px white inset;
 }
 
 .step-forms input[type="radio"]:checked + label{
-  color: #98002e; 
+  color: #000; 
 }
 .not-claimed{
 	height: 665px;
@@ -25749,19 +25755,19 @@ padding-left: 0px;
 .req-book-x .radio-btn 
 {
   width: 100%;
-  height: 50px;
-  border: 3px solid transparent;
+  height: 40px;
   display: inline-block;
   border-radius: 10px;
   position: relative;
   text-align: center;
-  box-shadow: 0 0 20px #c3c3c367;
   cursor: pointer;
-  padding: 13px;
+  padding: 7px;
+  border: 1px solid #ececec;
+  background: #f7f7f7;
 }
 .req-book-x .custom-radio{
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 .req-book-x .radio-btn > i {
   color: #ffffff;
@@ -25801,6 +25807,10 @@ padding-left: 0px;
 .req-book-x .custom-radio input:checked + .radio-btn 
 {
   border: 2px solid #cacaca;
+  background: #98002e;
+}
+.req-book-x .custom-radio input:checked + .radio-btn .hobbies-icon h3{
+    color: #fff;
 }
 
 .req-book-x .custom-radio input:checked + .radio-btn > i 
@@ -25917,4 +25927,77 @@ padding-left: 0px;
 }
 .req-book-summary span{
     font-size: 15px;
+}
+.req-availability h2{
+    font-size: 19px;
+    font-weight: bold;
+}
+.req-availability p{
+    margin-bottom: 20px;
+}
+.btn-req-red{
+    background: #98002e;
+    border: 1px solid #d5d5d5;
+    padding: 12px;
+    color: #fff;
+}
+.btn-close-custom{
+    border: 1px solid #000;
+    padding: 5px;
+    border-radius: 50%;
+    width: 33px;
+    height: 33px;
+    color: #000;
+    opacity: 1;
+    float: left;
+    background-color: #fff;
+} 
+.req-time .modal-dialog .modal-content .modal-header{
+    padding: 15px !important;
+    border-bottom: none !important;
+}
+
+.action-button-back{
+    float: left;
+    background: none;
+    color: #98002e;
+    padding: 0;
+    width: 37px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 15px;
+}
+.request-sucess h3{
+    font-size: 20px;
+    font-weight: bold;
+}
+.mb-40{
+    margin-bottom: 40px;
+}
+.mt-80{margin-top:  80px;}
+.mb-80{margin-bottom: 80px;}
+.form-select{
+    display: block;
+    width: 100%;
+    padding: .5rem 2.7rem .5rem .9rem;
+    -moz-padding-start: calc(.9rem - 3px);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--vz-body-color);
+    background-color: var(--vz-input-bg);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right .9rem center;
+    background-size: 16px 12px;
+    border: 1px solid var(--vz-input-border);
+    border-radius: .25rem;
+    -webkit-transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }

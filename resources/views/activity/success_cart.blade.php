@@ -460,6 +460,8 @@ if(!empty($cart["cart_item"])) {
 								$companycity = $companycountry = $pay_price  = "";
 									$servicetype = [];
 									foreach ($discovermore as $loop => $service) {
+										if ($service->isPubliclyVisible()){
+
 										$company = $price = $businessSp = [];
 										$serviceid = $service['id'];
 										$sport_activity = $service['sport_activity'];
@@ -628,7 +630,7 @@ if(!empty($cart["cart_item"])) {
 										</div>
 									</div>
 								</div>
-									<?php } ?>
+									<?php } }?>
 						</div>
 					</div>
 				

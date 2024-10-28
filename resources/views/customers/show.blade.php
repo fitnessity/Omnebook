@@ -1,6 +1,11 @@
 @inject('request', 'Illuminate\Http\Request')
 @extends('layouts.business.header')
-
+{{-- @php 
+    ini_set('memory_limit', '2056M');
+	ini_set('max_execution_time', 4800);
+	ini_set('memory_limit', '-1');
+        
+@endphp --}}
 @section('content')
 <style>
 	
@@ -598,9 +603,8 @@
 																																{{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}}
 																																
 																																@if($booking_detail->status == 'refund')
-																																	  | <span class="font-red">  Status: Refunded on {{date('m/d/Y',strtotime($booking_detail->refund_date))}} by {{$booking_detail->refunded_person}}	</span>
+																																	  | <span class="font-red">  Status: Refunded on {{date('m/d/Y',strtotime($booking_detail->refund_date))}} by {{$booking_detail->refunded_person}}</span>
 																																@endif
-
 																																@if($booking_detail->status == 'terminate')
 																																	| <span class="font-red">  Status: Terminated on {{date('m/d/Y',strtotime($booking_detail->terminated_at))}}  by {{$booking_detail->terminated_person}}		</span>
 																																@endif
@@ -652,10 +656,17 @@
 																																			<label> {{@$booking_detail->business_services_with_trashed->program_name}}</label>	
 																																		</div>
 																																	</div>
+																																	<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+																																		<div class="inner-accordion-titles float-end text-right line-break">
+																																			<span>Remaining {{@$booking_detail->getRemainingSessionAfterAttend()}}/{{@$booking_detail->pay_session}}</span> 
+																																			<a class="mailRecipt" data-behavior="send_receipt" data-url="{{route('receiptmodel',['orderId'=> @$booking_detail->booking_id ,'customer'=>$customerdata->id ])}}" data-item-type="no" data-modal-width="modal-70" >
+																																				<i class="far fa-file-alt" aria-hidden="true"></i></a>
+																																		</div>
+																																	</div>
 																																</div>
 																															</div>
 																														</div>
-																													
+
 																														<div class="container-fluid nopadding">
 																															<div class="row">
 																																<div class="col-lg-12">
@@ -1196,7 +1207,7 @@
 																									</tr>
 																								</thead>
 																								<tbody>
-																									@foreach($purchase_history as $history) 
+																									@foreach($purchase_history as $history)
 																										@if($history->item_description(request()->business_id)['itemDescription'] != '' )
 																										<tr>
 																											<td>@if($history->created_at) {{date('m/d/Y',strtotime($history->created_at))}} @else N/A @endif </td>
@@ -1218,35 +1229,46 @@
 																										@endif
 																									@endforeach
 
-																									@foreach($familyPurchaseHistory as $familyName => $purchases)
-																									@foreach($purchases as $history)
-																										@if($history->item_description(request()->business_id)['itemDescription'] != '')
-																												<tr>
-																													<td>@if($history->created_at) {{ date('m/d/Y', strtotime($history->created_at)) }} @else N/A @endif</td>
-																													<td>{!! $history->item_description(request()->business_id)['itemDescription'] !!}
-																													<small class="font-red">For:{{ $familyName }}</small>
-																													</td>
-																													<td>{{ $history->item_type_terms() }}</td>
-																													<td>{{ $history->getPmtMethod() }}</td>
-																													<td>${{ $history->amount }}</td>
-																													<td>{{ $history->item_description(request()->business_id)['qty'] }}
-																													</td>
-																													<td>
-																														@if(($history->can_void() && $history->item_type == "UserBookingStatus") || $history->can_refund())
-																															<a href="#" data-behavior="ajax_html_modal" data-url="{{ route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id]) }}" data-modal-width="modal-100">Void</a>
-																														@else
-																															{{ $history->status }}
-																														@endif
-																													</td>
-																													<td>
-																														<a class="mailRecipt" data-behavior="send_receipt" data-url="{{ route('receiptmodel', ['orderId' => $history->item_id, 'customer' => $customerdata->id]) }}" data-item-type="{{ $history->item_type_terms() }}" data-modal-width="modal-70">
-																															<i class="far fa-file-alt" aria-hidden="true"></i>
-																														</a>
-																													</td>
-																												</tr>
-																											@endif
-																										@endforeach											
-																								@endforeach
+																									@foreach($familyPurchaseHistory as $familyName => $purchaseGroups)
+																										@foreach($purchaseGroups as $purchases)
+																											@foreach($purchases as $prehistory)		
+																												@php
+																												$history=App\Transaction::where('id',$prehistory['id'])->first();
+																												$itemDescription = $history->item_description(request()->business_id);
+																												@endphp
+																												@if($itemDescription && isset($itemDescription['itemDescription']) && $itemDescription['itemDescription'] != '')
+																													<tr>
+																														<td>@if($history->created_at) {{ date('m/d/Y', strtotime($history->created_at)) }} @else N/A @endif</td>
+																														<td>
+																															{!! $itemDescription['itemDescription'] !!}
+																															<small class="font-red">For: {{ $familyName }}</small>
+																														</td>
+																														<td>{{ $history->item_type_terms() }}</td>
+																														<td>{{ $history->getPmtMethod() }}</td>
+																														<td>${{ $history->amount }}</td>
+																														<td>{{ $itemDescription['qty'] }}</td>
+																														<td>
+																															@if(($history->can_void() && $history->item_type == "UserBookingStatus") || $history->can_refund())
+																																<a href="#" data-behavior="ajax_html_modal" 
+																																data-url="{{ route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id]) }}" 
+																																data-modal-width="modal-100">Void</a>
+																															@else
+																																{{ $history->status }}
+																															@endif
+																														</td>
+																														<td>
+																															<a class="mailRecipt" data-behavior="send_receipt" 
+																															data-url="{{ route('receiptmodel', ['orderId' => $history->item_id, 'customer' => $customerdata->id]) }}" 
+																															data-item-type="{{ $history->item_type_terms() }}" 
+																															data-modal-width="modal-70">
+																																<i class="far fa-file-alt" aria-hidden="true"></i>
+																															</a>
+																														</td>
+																													</tr>
+																												@endif 
+																											@endforeach
+																										@endforeach
+																									@endforeach
 																								</tbody>
 																							</table>
 																						</div>

@@ -17,7 +17,7 @@
     $businessImage = $company != '' ? @$company->getCompanyImage() : '';
 ?>
 
-<div class="app-menu navbar-menu" >
+<div class="app-menu navbar-menu navbar-menu-white" >
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
@@ -39,7 +39,20 @@
             </div>
 			<div class="live-preview text-center">
 				<div class="dropdown mt-70">
-					<button class="btn btn-switch-business dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">{{$businessName}}</button>
+                    
+                        
+                        <button class="btn btn-switch-business btn-switch-business-white dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">
+                            @if($businessImage)
+                                    <img src="{{$businessImage}}" alt="Fitnessity" class="avatar-xs rounded-circle me-2 shadow">
+                                @else
+                                    <div class="avatar-xs me-2 one-latter">
+                                        <span class="avatar-title rounded-circle bg-danger-red text-white">{{@$company->cname_first_letter}}</span>
+                                    </div>
+                                @endif
+                            {{$businessName}}
+                        </button>
+                  
+					
 					<ul class="dropdown-menu dropdown-menu-dark switch-account-dropdown" aria-labelledby="dropdownMenuButton21">
                         @if($companyId)
 						<li>
@@ -57,7 +70,7 @@
 						</li>
                         @endif
 						<li>
-							<a class="dropdown-item active" href="{{url('/family-member')}}"><i class="fa fa-user"></i> {{Auth::user()->full_name}} <br><span class="account-switchh"> Personal Account </span> </a>
+							<a class="dropdown-item" href="{{url('/family-member')}}"><i class="fa fa-user"></i> {{Auth::user()->full_name}} <br><span class="account-switchh"> Personal Account </span> </a>
 						</li>
 						<li> <hr class="dropdown-divider"></li>
 						@forelse(@$companyList as $list)
@@ -81,11 +94,20 @@
 							<a class="dropdown-item" href="{{route('personal.company.create')}}" ><i class="fas fa-plus"></i> New Business Account </a>
 						</li>
 						<li> <hr class="dropdown-divider"></li>
+                        <li>
+							<a class="dropdown-item" href="https://dev.fitnessity.co/business/521/settings" ><i class="fas fa-cog"></i>Settings</a>
+						</li>
+						<li> <hr class="dropdown-divider"></li>
+                        <li>
+							<a class="dropdown-item" href="https://dev.fitnessity.co/choose-plan" ><i class="fas fa-dollar-sign"></i>Subscription</a>
+						</li>
+						<li> <hr class="dropdown-divider"></li>
 						<li><a class="dropdown-item" href="{{ Config::get('constants.SITE_URL') }}/userlogout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
 					</ul>
 				</div>
 			</div> 
-            <ul class="navbar-nav dash-sidebar-menu" id="navbar-nav">
+            <ul class="navbar-nav dash-sidebar-menu navbar-nav-white" id="navbar-nav">
+                <li class="menu-title account-activation-side"><span data-key="t-menu"><i class="fas fa-exclamation-circle mr-15"></i>Account activation <label class="fs-8 mb-0">7 Days Left</label></span></li>
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName()=='business_dashboard') active @endif" href="{{route('business_dashboard')}}" aria-controls="sidebarDashboards">

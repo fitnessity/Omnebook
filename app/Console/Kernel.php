@@ -81,15 +81,22 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
             var_dump('run capture');
+            Log::info('Running capture process'); // Log when the capture process starts
             $transactions = Transaction::where(['status' => 'requires_capture'])->get();
             foreach($transactions as $transaction){
                 try {
+                    Log::info('Transaction captured successfully', ['transaction_id' => $transaction->id]); // Log success
+
                     $transaction->capture();
                 }catch (InvalidRequestException $e) {
                     // Handle Stripe's InvalidRequestException
+                    Log::info('Transaction failed', $e->getMessage); // Log success
+
                     var_dump(response()->json(['error' => 'Invalid request: ' . $e->getMessage()], 400));
                 } catch (\Exception $e) {
                     // Handle other exceptions
+                    Log::info('Transaction failed error ', $e->getMessage); // Log success
+
                     var_dump(response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500));
                 }
             }
@@ -119,6 +126,8 @@ class Kernel extends ConsoleKernel
             }
         })->daily();
 
+
+        
 
         $schedule->call(function (){
             $expiredCreditCards = StripePaymentMethod::where(function ($query) {
@@ -156,6 +165,33 @@ class Kernel extends ConsoleKernel
             }
         })->everyMinute();
 
+        // new code start
+
+        $schedule->call(function () {
+            $today = Carbon::now()->format('Y-m-d');
+            // $suspendedBookings = UserBookingDetail::where('status', 'suspend')
+            // ->where('suspend_ended', $today)
+            // ->get();
+            $suspendedBookings = UserBookingDetail::where('status', 'suspend')
+            ->where(function ($query) use ($today) {
+                $query->where('suspend_ended', $today)
+                      ->orWhere('suspend_ended', '<', $today);
+            })
+            ->get();
+            foreach ($suspendedBookings as $booking) {
+                $booking->status = 'active';
+                $booking->stop_reccuring = 'Null';
+                $booking->suspend_reason = 'Null';
+                $booking->suspend_started = 'Null';
+                $booking->suspend_ended = 'Null';
+                $booking->suspend_comment = 'Null';
+                $booking->suspend_by = 'Null';
+                $booking->suspend_fee = 'Null';                
+                $booking->save();
+            }
+        })->daily();
+
+        // ends
     }
 
     protected function scheduleTimezone()

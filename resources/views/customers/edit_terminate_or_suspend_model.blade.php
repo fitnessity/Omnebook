@@ -281,11 +281,10 @@
 					<!-- Tab panes -->
 					<div class="tab-content  text-muted">
 						<div class="tab-pane active" id="Suspend_Freeze" role="tabpanel">
-							{{$booking_detail->can_suspend()}}
 							@if($booking_detail->can_suspend())
 							<div class="radio-text">
 								<form action="">
-									<input type="radio" id="suspend" name="fav_language" value="suspend" @if($booking_detail->status == 'suspend') checked @endif>
+									{{-- <input type="radio" id="suspend" name="fav_language" value="suspend" @if($booking_detail->status == 'suspend') checked @endif> --}}
 									<label for="void">Suspend/Freeze (Seeting a membership or contract suspension will freeze this membership for a duration of time.)</label>
 								</form>
 							</div>
@@ -355,8 +354,8 @@
 							@if($booking_detail->can_terminate())
 							<div class="radio-text">
 								<form action="">
-									<input type="radio" id="termination" name="fav_language" value="termination" @if($booking_detail->status == 'cancel') checked @endif>
-									<label for="void">Terminate/Cancel (Terminate/Cancel this membership)	  </label>
+									{{-- <input type="radio" id="termination" name="fav_language" value="termination" @if($booking_detail->status == 'cancel') checked @endif> --}}
+									<label for="void">Terminate/Cancel (Terminate/Cancel this membership)</label>
 								</form>
 							</div>
 							<div class="refund-details refund-method mb-10"> 

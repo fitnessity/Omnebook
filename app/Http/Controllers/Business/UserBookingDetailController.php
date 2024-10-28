@@ -82,29 +82,45 @@ class UserBookingDetailController extends Controller
     }
  
     public function refund(Request $request, $business_id, $booking_id){
-
-       
+        // dd($request->all());
         $company = $request->current_company->findOrFail($business_id);        
         $customer = $company->customers()->findOrFail($request->customer_id);
 
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
+            if($booking_detail->can_refund()){
+                if($request->refund_method == 'credit'){
+                    // $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
+                    $transaction=Transaction::whereIn('user_type', ['customer', 'user'])->where('item_id',$booking_id)->whereIn('user_id',[$customer->id,$customer->user_id])->first();
+                    if($transaction && $transaction->can_refund()){
+                        if(!$transaction->refund($request->refund_amount ? $request->refund_amount : Null)){
+                            return response()->json(['message' => 'refund failed.'], 400);
+                        }
+                            if($request->return_method=='credit')
+                            {
+                                    try
+                                    {
+                                        \Stripe\Stripe::setApiKey(env('SECRET_KEY'));    
+                                        $refund = \Stripe\Refund::create([
+                                            'charge' => $transaction->transaction_id, 
+                                            'amount' => intval($request->refund_amount * 100), 
+                                        ]);
 
-        if($booking_detail->can_refund()){
-            
-            if($request->refund_method == 'credit'){
-                // \DB::enableQueryLog();
-                $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
-                // dd(\DB::getQueryLog());
-                // dd($transaction);
-                if($transaction->can_refund()){
-                    if(!$transaction->refund($request->refund_amount ? $request->refund_amount : Null)){
-                        return response()->json(['message' => 'refund failed.'], 400);
-                    }
-                }else{
+                                        if (!$refund->status || $refund->status !== 'succeeded') 
+                                        {
+                                            return response()->json(['message' => 'Refund failed.'], 400);
+                                        }
+                                    } 
+                                    catch (\Exception $e) 
+                                    {
+                                        return response()->json(['message' => 'Refund failed: ' . $e->getMessage()], 400);
+                                    }
+                            }
+                        }
+                }
+                else{
                     return response()->json(['message' => 'not pay by credit card ot transction can not found'], 400);
                 }
-            }
-
+            // dd('44');
             $result = [
                 'status' => 'refund',
                 'expired_at' => date('Y-m-d',strtotime($request->refund_date)),
@@ -116,8 +132,9 @@ class UserBookingDetailController extends Controller
             ];
             // dd($result);
             // $booking_detail->refund();
-            $booking_detail->update($result);
-        }else{
+            $booking_detail->update($result);//com
+        }
+        else{
             return response()->json(['message' => 'membership can not found'], 400);
         }
         // $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();

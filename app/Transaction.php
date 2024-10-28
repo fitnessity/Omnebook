@@ -3,6 +3,7 @@
 namespace App;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Transaction extends Model
 {
@@ -264,23 +265,56 @@ class Transaction extends Model
 
     }
 
-    public function capture(){
+    // public function capture(){
         
-        $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->item_id)->first();
+    //     $transaction = Transaction::where('channel', 'stripe')->where('item_type', 'UserBookingStatus')->where('item_id', $this->item_id)->first();
 
-        if($transaction && $transaction->status == 'requires_capture'){
-            $stripe = new \Stripe\StripeClient(
-                config('constants.STRIPE_KEY')
-            );
-            $capturePaymentIntent = $stripe->paymentIntents->capture($transaction->transaction_id, []);
-            if($capturePaymentIntent['status']=='succeeded'){
-                $transaction->update(["status" => 'complete']);
-                $booking_status = UserBookingStatus::where('id', $this->item_id)->orderby('created_at','desc')->first();
-                $booking_status->UserBookingDetail()->update(["status" => 'active']);
-            }
+    //     if($transaction && $transaction->status == 'requires_capture'){
+    //         $stripe = new \Stripe\StripeClient(
+    //             config('constants.STRIPE_KEY')
+    //         );
+    //         $capturePaymentIntent = $stripe->paymentIntents->capture($transaction->transaction_id, []);
+    //         if($capturePaymentIntent['status']=='succeeded'){
+    //             $transaction->update(["status" => 'complete']);
+    //             $booking_status = UserBookingStatus::where('id', $this->item_id)->orderby('created_at','desc')->first();
+    //             $booking_status->UserBookingDetail()->update(["status" => 'active']);
+    //         }
             
-        }
+    //     }
 
+    // }
+
+    public function capture()
+    {
+        try {
+            $transaction = Transaction::where('channel', 'stripe')
+                ->where('item_type', 'UserBookingStatus')
+                ->where('item_id', $this->item_id)
+                ->first();
+
+            if ($transaction && $transaction->status == 'requires_capture') {
+                $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));                
+                $capturePaymentIntent = $stripe->paymentIntents->capture($transaction->transaction_id, []);
+                if ($capturePaymentIntent['status'] == 'succeeded') {
+                    $transaction->update(['status' => 'complete']);
+                    $booking_status = UserBookingStatus::where('id', $this->item_id)->orderby('created_at', 'desc')->first();
+                    if ($booking_status) {
+                        $booking_status->UserBookingDetail()->update(['status' => 'active']);
+                    }
+                }
+            }
+        } catch (\Stripe\Exception\InvalidRequestException $e) {
+            Log::info('Stripe Invalid Request Exception', [
+                'error' => 'Invalid request: ' . $e->getMessage(),
+                'item_id' => $this->item_id,
+            ]);
+        } catch (\Exception $e) {
+            Log::info('An error occurred during payment capture', [
+                'error' => 'An error occurred: ' . $e->getMessage(),
+                'item_id' => $this->item_id,
+            ]);
+        }
     }
+
     
 }

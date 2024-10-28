@@ -412,4 +412,14 @@ class BusinessActivityScheduler extends Model
         return implode(', ', $instructors);
     }
 
+    public function businessPriceDetailAge()
+    {
+        return $this->hasMany(BusinessPriceDetailsAges::class, 'id', 'category_id');
+    }
+
+    public function hasVisiblePublicPriceDetails()
+    {
+        return $this->businessPriceDetailsAges()->where('visibility_to_public', 1)->exists();
+    }
+
 }

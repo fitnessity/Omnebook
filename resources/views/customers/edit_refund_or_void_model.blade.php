@@ -277,7 +277,8 @@
 						<div class="title-sp-customer">
 							<h4 class="edit-booking-title">Edit Section </h4>
 							<p class="text-center">Use this section to edit the membership details you need below</p>
-						</div>						
+						</div>					
+						{{-- {{$booking_detail->booking_id}---}}
 						@if($booking_detail->can_refund())
 							<div class="radio-text">
 								<form action="">
@@ -307,19 +308,20 @@
 										<input class="form-control" type="text" id="refund_amount" name="refund_amount" placeholder="20" value="{{$booking_detail->refund_amount}}">
 										<h4>(Refund amount can’t be greater than the total amount paid)</h4>
 									</div>
+									<div id="messageDiv" style="color: red; display: none;"></div>	
 								</div>
 							</div>
 							<div class="refund-details refund-method"> 
 								<label>Refund Method: </label>
 								<select class="form-control mb-10 form-select" id="refund_method" name="refund_method">
-									<option value="credit" selected>Credit Card ({{$booking_detail->booking->getPaymentDetail()}})</option>
+									<option value="credit" selected>Issue refund back to Card ({{$booking_detail->booking->getPaymentDetail()}})</option>
 									<option value="cash">Cash</option>
 									<option value="other">Other</option>
 								</select>
 							</div>
 							<div class="refund-details text-center">
 								<textarea class="form-control" rows="2" name="refund_reason" id="refund_reason" placeholder="Leave a note for the reason of the refund" maxlength="500">{{$booking_detail->refund_reason}}</textarea>
-								<button type="button" class="btn btn-red mt-10 float-end" id="" data-behavior="refund_order_detail" data-booking-detail-id = "{{$booking_detail->id}}" data-booking-id = "{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Issue The Refund</button>
+								<button type="button" class="btn btn-red mt-10 float-end" id="" data-behavior="refund_order_detail" data-booking-amount="{{ $booking_detail->booking->amount }}"  data-booking-detail-id = "{{$booking_detail->id}}" data-booking-id="{{$booking_detail->booking_id}}" data-customer-id = "{{$customer_id}}">Issue The Refund</button>
 							</div>
 						@endif
 						</div>
@@ -390,6 +392,17 @@
     });
 
 	$("[data-behavior~=refund_order_detail]").click(function(e){
+		var refundAmount = $('#refund_amount').val();
+		var bookingAmount = $(this).data('booking-amount');
+		var messageDiv = $('#messageDiv'); 
+
+		if (refundAmount != bookingAmount) {
+			messageDiv.text('The refund amount should be equal to the booking amount.');
+			messageDiv.show(); 
+			return false; 
+   		 }
+			messageDiv.hide(); 
+
         $.ajax({
             url: "/business/{{$business_id}}/booking_details/" + $(this).data('booking-id') + '/refund',
             type: "POST",
@@ -407,8 +420,7 @@
             	alert(errorMessage.message);
             },
             success:function(response) {
-
-                // location.reload()
+                location.reload()
             },
         });
     });

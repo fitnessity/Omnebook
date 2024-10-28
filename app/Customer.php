@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use DB;
 use Auth;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Str;
 
@@ -286,6 +287,8 @@ class Customer extends Authenticatable
 
     public function bookingDetail(){
         return $this->hasMany(UserBookingDetail::class,'user_id');
+        // return $this->hasMany(UserBookingDetail::class,'user_id')->where('status', '!=', 'refund');
+
     }
 
     public function recurringDetail(){
@@ -447,7 +450,14 @@ class Customer extends Authenticatable
         $expireDate = $expireDate ??  Carbon::now()->format('Y-m-d');
         $used_user_booking_detail_ids = $this->BookingCheckinDetails()->whereRaw('booking_detail_id is not null')->where('after_use_session_amount', '<=' , 0)->pluck('booking_detail_id')->toArray();
         $results = $this->bookingDetail()->where('order_type','membership')->where('status', 'active')->whereNotNull('priceid')->whereRaw('(user_booking_details.expired_at > ? or user_booking_details.expired_at is null)', $expireDate)
-                                            ->whereNotIn('user_booking_details.id', $used_user_booking_detail_ids);
+                                            ->whereNotIn('user_booking_details.id', $used_user_booking_detail_ids)
+                                            ->whereExists(function ($query) {
+                                                $query->select(DB::raw(1))
+                                                      ->from('transaction')
+                                                      ->whereColumn('user_booking_details.booking_id', 'transaction.item_id')
+                                                      ->where('transaction.status', '!=', 'requires_capture');
+                                            });
+                                    
 
         return $results; 
     }
@@ -567,6 +577,22 @@ class Customer extends Authenticatable
     public function purchase_history(){
         return $this->transaction()->where('user_type','customer')->whereIn('status',['complete', 'requires_capture', 'refund_complete']);
     }
+        // public function family_purchase_history($id,$bookingid){
+        //     // return $this->transaction()->where('user_type','customer')->whereIn('status',['complete', 'requires_capture', 'refund_complete']);
+        // $data = Transaction::where('user_id',$id)->where('item_id',$bookingid)->whereIn('user_type', ['customer', 'user'])->whereIn('status',['complete', 'requires_capture', 'refund_complete']);
+        //     if(!empty($data)){
+        //         return $data;
+        //     }
+        //     return '';
+        // }
+        public function family_purchase_history($id, $bookingid)
+        {
+            return Transaction::where('user_id', $id)
+                ->where('item_id', $bookingid)
+                ->whereIn('user_type', ['customer', 'user'])
+                ->whereIn('status', ['complete', 'requires_capture', 'refund_complete']);
+        }
+
 
     public function total_spend(){
         $purchase_history = $this->transaction()->where('user_type','customer')->where('status','complete')->get();

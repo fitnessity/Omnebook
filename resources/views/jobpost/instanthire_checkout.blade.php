@@ -27,6 +27,8 @@
                         if(isset($serviceData)) {
                         $divId=1;
                         foreach($serviceData as $key => $service) {
+                            if ($service->isPubliclyVisible()){
+
                         $company = $price = $businessSp = [];
                         if(isset($companyData)) {
                             if(isset($companyData[$service['cid']]) && !empty($companyData[$service['cid']])) {
@@ -196,7 +198,7 @@
                                 </div>
                             </div>
                         </div>
-                        <?php }} ?>
+                        <?php }}} ?>
                         </div>
                         <a class="left carousel-control" href="#carousel-reviews" role="button" data-slide="prev">
                             <span class="glyphicon glyphicon-chevron-left"></span>

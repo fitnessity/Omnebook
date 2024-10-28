@@ -185,7 +185,8 @@ input:disabled{
 				<div class="col-lg-8 col-xs-12">
 					<div class="separator-border-bottom">
 						<h3 class="subtitle details-sp pb-0"> Description </h3>
-						<p class="mb-30">{{ @$service['program_desc']  ?? 'N/A'}}</p>
+						<p class="mb-30"> {!! $service['program_desc'] ?? 'N/A' !!}</p>
+
 					</div>
 
 					@if($service->service_type == 'experience' && count($service->days_title_arry) > 0)
@@ -319,7 +320,9 @@ input:disabled{
 									<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#default-accordion-example">
 										<div class="accordion-body">
 											{{-- Although you probably won’t get into any legal trouble if you do it just once, why risk it? If you made your subscribers a promise, you should honor that. If not, you run the risk of a drastic increase in opt outs, which will only hurt you in the long run. --}}
-											<p class="break-word">{!! @$service->know_before_you_go !!} </p>
+											<p class="break-word">
+												 {!! $service->know_before_you_go ?? 'N/A' !!}
+											</p>
 										</div>
 									</div>
 								</div>
@@ -634,7 +637,7 @@ input:disabled{
 				  
 				</div>	
 					
-		        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+		        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
 	            	<h3 class="subtitle details-sp mb-20 mtxt-cnter text-center" id="check_availability"> Check Availability </h3>
 	            	<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -1610,7 +1613,7 @@ input:disabled{
   	<div class="container">
 		<div class="col-xs-12">
 	    	<p class="navbar-text navbar-right desktop-none" style="text-align:center;">
-	    	<a href="#check_availability" class="showall-btn sticky-book-now" href="http://lvh.me:8080/activities/get_started/events">Book Now</a>
+	    	<a id="fixedButton" href="#check_availability" class="showall-btn sticky-book-now" href="http://lvh.me:8080/activities/get_started/events">Book Now</a>
 	    	</p>
 		</div>
   	</div>
@@ -1624,6 +1627,21 @@ input:disabled{
 {{-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}&sensor=false"></script> --}}
 @include('layouts.business.footer')
 
+<script>
+	$(document).ready(function() {
+		// Hide button when clicking on input
+		$('#actfildate_forcart').on('focus', function() {
+			$('#fixedButton').hide();
+		});
+
+		// Show button when clicking outside input
+		$(document).on('click', function(event) {
+			if (!$(event.target).closest('#actfildate_forcart').length) {
+				$('#fixedButton').show();
+			}
+		});
+	});
+</script>
 
 <!-- New JS -->
 <script>

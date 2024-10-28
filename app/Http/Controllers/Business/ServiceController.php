@@ -308,9 +308,6 @@ class ServiceController extends BusinessBaseController
 
         if($request->step == '5'){
             // dd($request->all());
-            // DB::enableQueryLog();
-            // dd($activity);
-            // dd(\DB::getQueryLog());
             $catCount = count($request->category_title);
             if($catCount > 0) {
                 $idary_cat = $idary_cat1 = $idary_price = $idary_price1 = $idary_addOn = $idary_addOn1 = array();
@@ -321,6 +318,7 @@ class ServiceController extends BusinessBaseController
 
                 $idary_price = $user->BusinessPriceDetails()->where(['cid'=> $companyid,'serviceid' => $serviceId])->pluck('id')->toArray();
 
+                // dd($cartcount);
                 for($i=0; $i < $catCount; $i++) {
                     $idary_cat1[] =  $request->cat_id_db[$i] ?? '';
                     $businessages= [
@@ -334,14 +332,22 @@ class ServiceController extends BusinessBaseController
                         "stype" => 1,
                     ];
 
+                    // dd($up);
+
                     $createOrUpdate = BusinessPriceDetailsAges::updateOrCreate(['id' => $request->cat_id_db[$i]], $businessages);
+
                     
                     //print_r($createOrUpdate);
                     $cat_new_id = $createOrUpdate->id; 
                     $priceCnt = $request->input('priceCount'.$i);
+                    // dd($priceCnt);
                     if($priceCnt >= 0){
                         for($y=0; $y <= $priceCnt; $y++) {
+                            // dd($request->all());
+                            $visibilityKey = 'visibility_to_public_price' . $i . $y;
+                            $isVisible = $request->has($visibilityKey) ? 1 : 0;
 
+                            // dd($request->visibility_to_public_price.$i.$y);
                             $idary_price1[] = $request->input('price_id_db_' . $i . $y) ?? '';
                             $isRecurringAdult = $request->input('is_recurring_adult_' . $i . $y);
                             $isRecurringChild = $request->input('is_recurring_child_' . $i . $y);
@@ -355,6 +361,7 @@ class ServiceController extends BusinessBaseController
                                 "cid" => $user->cid,
                                 "userid" => $user->id,
                                 "serviceid" => $serviceId,
+                                "visibility_to_public" => $isVisible,
                                 "is_recurring_adult"=>  (@$request->input('adult'.$i.$y) )?  $isRecurringAdult : 0,
                                 "recurring_price_adult" =>  (@$request->input('adult'.$i.$y)) ?  $this->getRecurringValue($isRecurringAdult, $request, 'recurring_price_adult_', $i, $y) : '',
                                 "recurring_run_auto_pay_adult" =>  (@$request->input('adult'.$i.$y)) ?  $this->getRecurringValue($isRecurringAdult, $request, 'run_auto_pay_adult_', $i, $y) : '',
@@ -421,11 +428,14 @@ class ServiceController extends BusinessBaseController
                                 "infant_discount" => ($displaySection != 'freeprice' && @$request->input('infant'.$i.$y) ) ? $request->input('infant_discount_'.$i.$y) :'',
                             ];
                             
+                            // print_r($businessPrice);
                             if($request->input('price_title_'.$i.$y) != ''){
                                 $createOrUpdate = BusinessPriceDetails::updateOrCreate(['id' => $request->input('price_id_db_' . $i . $y)], $businessPrice);
                             }
+                            
                         }
                     }
+                    // dd($businessPrice);
                     $addOnCnt = $request->input('addOnServiceCount'.$i);
                     if($addOnCnt >= 0){
                         for($z=0; $z <= $addOnCnt; $z++) {

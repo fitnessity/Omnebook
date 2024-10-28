@@ -1441,9 +1441,9 @@ body{
     padding:12px 20px;
     display:inline-block
 }
-.menu-title i{
+/* .menu-title i{
     display:none
-}
+} */
 .vertical-overlay{
     position:fixed;
     top:0;

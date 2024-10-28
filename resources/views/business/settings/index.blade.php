@@ -1628,6 +1628,26 @@ function timeSlotOptionforservice($lbl, $val) {
 																</div>												
 															</div>
 														</div>
+
+														<div class="row">
+															<div class="col-12 col-lg-4 col-md-4">
+																<div class="reports-title">
+																	<label>Side Panel Color</label>
+																</div>
+															</div>
+															<div class="col-12 col-lg-6 col-md-8">
+																<div class="card card-body box-border">
+																	<div class="d-grid align-items-center">
+																		<form action="">
+																			<input type="radio" id="black" name="fav_language" value="black" checked>
+																			<label for="black" class="mr-15">Black</label>
+																			<input type="radio" id="white" name="fav_language" value="white">
+																			<label for="white">White</label>
+																		</form>
+																	</div>
+																</div>												
+															</div>
+														</div>
 														
 													</div>
 												</div>

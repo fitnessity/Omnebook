@@ -1609,9 +1609,9 @@
 	        if(cc_new_card_amt > 0) {
 	            var $form  = $(".validation"),
 	                inputVal = ['input[type=email]', 'input[type=password]',
-	                                 'input[type=text]', 'input[type=file]',
-	                                 'textarea'].join(', '),
-	                $inputs       = $form.find('.required').find(inputVal),
+	                            'input[type=text]', 'input[type=file]',
+	                            'textarea'].join(', '),
+	                $inputs = $form.find('.required').find(inputVal),
 	                $errorStatus = $form.find('div.error'),
 	                valid         = true;
 	                $errorStatus.addClass('hide');
@@ -2258,7 +2258,7 @@
 <script type="text/javascript">
 
 	function saveparticipateajax(chk){
-		 $('.durationDivAjax').removeClass('d-none');
+		$('.durationDivAjax').removeClass('d-none');
 		var aducnt = parseInt ($('#adultcntajax').val()) || 0;
 		var childcnt = parseInt ($('#childcntajax').val()) || 0;
 		var infcnt = parseInt ($('#infantcntajax').val()) || 0;

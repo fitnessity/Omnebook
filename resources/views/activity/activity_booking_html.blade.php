@@ -2,12 +2,14 @@
     <div class="">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <label class="mb-10 fw-600">Step: 2 </label> <span class="">Select Schedule</span>
+                <label class="mb-10 fw-600">Step: 2 </label> <span class="">Select Activity</span>
                 <select id="selcatpr" name="selcatpr" class="price-select-control"
                     onchange="updatedetail('{{ $companyId }}','{{ $serviceId }}','category',this.value)">
                     @foreach ($categories as $sc)
+                        @if($sc->visibility_to_public==1)
                         <option value="{{ $sc->id }}" @if ($categoryId == $sc->id) selected @endif>
                             {{ $sc->category_title }}</option>
+                        @endif
                     @endforeach
                 </select>
                 <div class="border-bottom-grey mb-15"></div>
