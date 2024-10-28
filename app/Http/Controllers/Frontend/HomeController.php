@@ -260,7 +260,8 @@ class HomeController extends Controller {
                 if ($userObj) {                    
                     //send notification email to user
                     // MailService::sendEmailReminder($userObj->id);
-                    MailService::sendEmailSignupVerification($userObj->id);
+                    
+                    // MailService::sendEmailSignupVerification($userObj->id);//28-10-24
 
                     $url = "/";
                     if (isset($userObj->confirmation_code) && !empty($userObj->confirmation_code)) {
