@@ -1997,11 +1997,12 @@
 	<div class="modal-dialog modal-dialog-centered modal-30">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title note-title" id="myModalLabel">Select The Type Of Note</h5>
+				<h5 class="modal-title note-title" id="myModalLabel">Select The Type Of Note</h5><br>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			
 			<div class="modal-body" id="noteHtml">		
+				<h4 id="loadingMessage" style="display: none;">Loading...</h4>
 			</div>
 		</div>
 	</div>
@@ -2300,11 +2301,15 @@
 	}
 
 	function getNote(id){
+		$('#loadingMessage').show();
+		// $('#noteHtml').html(''); 
 		$.ajax({
          	type: 'GET',
          	url: '/business/'+'{{request()->business_id}}'+'/customer/'+'{{$customerdata->id}}'+'/getNote/'+id,
          	success: function (data) {
+				 $('#loadingMessage').hide(); // Hide the loading message after data is loaded
             	$('#noteHtml').html(data);
+
 	            if(id){
 	            	$('.note-title').html('Edit Note');
 	            }else{
