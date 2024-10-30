@@ -379,7 +379,7 @@ class OrderController extends BusinessBaseController
                 'price' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['price']),
                 'qty' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['qty']),
                 'priceid' => $item['priceid'],
-                'category_id' => $item['categoryid'],
+                'category_id' => $item['categoryid'] ?? 0,
                 'pay_session' => $item['p_session'] ?? @$price_detail->pay_session,
                 'expired_at' => @$item['orderType'] == 'Membership'  ? $expired_at : NULL,
                 'contract_date' => @$item['orderType'] == 'Membership' ? $contractDate : NULL,
@@ -418,8 +418,10 @@ class OrderController extends BusinessBaseController
                 $date = new Carbon;
                 $stripeId = $stripeChargedAmount = $paymentMethod= '';
 
-                $amount = $checkoutRegisterCartService->getMembershipTotalItem($item) - $checkoutRegisterCartService->getDisItem($item) ;
+                // $amount = $checkoutRegisterCartService->getMembershipTotalItem($item) - $checkoutRegisterCartService->getDisItem($item) ;
                 // dd($amount);
+                $amount = $checkoutRegisterCartService->getMembershipTotalItem($item);
+
                 $tax_recurring = $item['tax_activity'];
 
                 if($key == 'adult'){
@@ -504,7 +506,7 @@ class OrderController extends BusinessBaseController
                                         // Handle the error if either $re_i or $afterHowmanytime is not numeric
                                         // For example, log an error or throw an exception
                                         // Optionally, set a default value or handle the error gracefully
-                                            dd($afterHowmanytime);
+                                            // dd($afterHowmanytime);
                                     }
                                 }
 
@@ -519,7 +521,8 @@ class OrderController extends BusinessBaseController
                                 "user_type" => 'customer',
                                 "business_id" => $booking_detail->business_id ,
                                 "payment_date" => $paymentDate,
-                                "amount" => $amount,
+                                // "amount" => $amount,
+                                "amount" => ($num == 1 && $status == 'Completed' && $payment_on != NULL) ? $amount -  $checkoutRegisterCartService->getDisItem($item) :$amount, 
                                 'charged_amount'=> $stripeChargedAmount,
                                 'payment_method'=> $paymentMethod,
                                 'stripe_payment_id'=> $stripeId,

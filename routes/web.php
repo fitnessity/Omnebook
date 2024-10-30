@@ -470,6 +470,8 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/customer/{cid}/getNote/{id?}','CustomerController@getNote')->name('getNote');
 
         Route::post('/customers/add-notes','CustomerController@addNotes')->name('add_notes'); 
+        Route::post('/customers/add-remainder-notes','CustomerController@addRemainderNotes')->name('add_remainder_notes'); 
+
         Route::get('/removenote/{id}','CustomerController@removenote')->name('removenote');
         Route::post('/updateNote/','CustomerController@updateNote')->name('updateNote');
 
