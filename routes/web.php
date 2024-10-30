@@ -47,6 +47,8 @@ Route::get('/send-test-email', function() {
 
 
 Route::get('/test','HomeController@Test')->name('test');
+// web.php
+Route::get('/send-welcome-email', 'Business\CustomerController@sendWelcomeEmail');
 
 // Route::get('/login/{uniquecode}','Business\WebsiteIntegrationConroller@Loginuserbook')->name('login');
 
@@ -71,7 +73,11 @@ Route::get('/add-client','CustomerController@client')->name('client');
 // Route::any('/customer_dashboard', 'Business\WebsiteIntegrationConroller@customerdashboard')->name('customer_dashboard');//added_20_08
 
 Route::post('/get-checkin-code', 'CustomerController@getCheckinCode')->name('get_checkin_code');
+Route::post('/customer_create', 'Business\CustomerController@CustomerCreate')->name('customer_create');
+
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
+    // customer_create
+    
     Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
     Route::get('schedulers/cancel_all', 'SchedulerController@cancel_all')->name('schedulers.cancel_all');
     Route::post('cancel-all-activity', 'SchedulerController@cancel_all_store')->name('cancel_all_store');
@@ -339,6 +345,8 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/requestSign/{id}', 'CustomerController@requestSign')->name('requestSign');
         Route::get('/customer/{cid}/getNote/{id?}','CustomerController@getNote')->name('getNote');
         Route::post('/customers/add-notes','CustomerController@addNotes')->name('add_notes'); 
+        Route::post('/customers/add-remainder-notes','CustomerController@addRemainderNotes')->name('add_remainder_notes'); 
+
         Route::get('/removenote/{id}','CustomerController@removenote')->name('removenote');
         Route::post('/updateNote/','CustomerController@updateNote')->name('updateNote');
         Route::get('/visit_membership_modal','CustomerController@visit_membership_modal')->name('visit_membership_modal');

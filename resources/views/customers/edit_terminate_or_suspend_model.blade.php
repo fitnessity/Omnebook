@@ -314,11 +314,15 @@
 									</div>
 								</div>
 
+								@php
+								$check_recurring=App\Recurring::where('booking_detail_id',$booking_detail->id)->first();	
+								@endphp
+								@if($check_recurring)
 								<div class="col-lg-6 col-md-6 col-sm-6">
 									<div class="refund-details mb-10"> 
 										<div class="form-check form-switch mb-3">
 											<label class="form-check-label" for="SwitchCheck1">Stop Recurring Payments During Freeze</label>
-											<input class="form-check-input" type="checkbox" name="stop_recurring" role="switch" id="toggler" value="checked" checked>
+											<input class="form-check-input" type="checkbox" name="stop_recurring" role="switch" id="toggler" value="checked" checked onclick="CheckFunction()">
 										</div>
 										<div class="" id="suspension_fees">
 											<label>Suspension Fee: </label>
@@ -326,6 +330,7 @@
 										</div>
 									</div>
 								</div>
+								@endif
 								
 								<div class="col-lg-6 col-sm-6 col-md-6">
 									<div class="refundcomment">
@@ -410,18 +415,22 @@
 </div>
 
 <script>
-	const toggle = document.getElementById('toggler');
-	const suspensionFeeInput = document.getElementById('suspension_fees');
-	toggle.addEventListener('change', () => {	
-		var product_id = toggle.value; 
-		var status = toggle.checked ? "yes" : "no"; 
-		if (status === "yes") {
-            suspensionFeeInput.style.display = 'block';  
-        } else {
-            suspensionFeeInput.style.display = 'none';  
-        }
-	});
-</script>
+	function CheckFunction()
+	{
+		const toggle = document.getElementById('toggler');
+		const suspensionFeeInput = document.getElementById('suspension_fees');
+		toggle.addEventListener('change', () => {	
+			var product_id = toggle.value; 
+			var status = toggle.checked ? "yes" : "no"; 
+			if (status === "yes") {
+				suspensionFeeInput.style.display = 'block';  
+			} else {
+				suspensionFeeInput.style.display = 'none';  
+			}
+		});
+	}
+</script> 
+
 <script type="text/javascript">
 
 	$(".flatpickr-input").flatpickr({ 

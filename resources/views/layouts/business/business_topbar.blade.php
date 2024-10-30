@@ -47,14 +47,23 @@
 								<input type="text" class="form-control" placeholder="Search for client" autocomplete="off" id="serchclient_navbar"  name="fname" value="{{Request::get('fname')}}">
 							</div>
 						</form>
+						<div class="app-search-client">
+						<a class=" header-bottom-sp" data-bs-toggle="modal" data-bs-target="#CustomerModal">Quick Add </a><label>|</label><a href="{{route('business_customer_create' ,['business_id'=> Auth::user()->cid])}}" class="mobile-none zfold-none" >Add Client</a>
+						</div>
 						<div class="app-search">
-							<a href="{{route('business_customer_create' ,['business_id'=> Auth::user()->cid])}}" class="add-client mobile-none zfold-none" >Add New Client</a>
+							<!-- <a href="{{route('business_customer_create' ,['business_id'=> Auth::user()->cid])}}" class="add-client mobile-none zfold-none" >Add New Client</a>
+							<a class="btn btn-list-business business-sp header-bottom-sp" data-bs-toggle="modal" data-bs-target="#CustomerModal">
+								Quick Add
+							</a> -->
 							<!-- <a href="#" class="add-client mobile-none"  data-bs-toggle="modal" data-bs-target=".new-client-steps">Add New Client</a> -->
 						</div>
+
+					
 					</div>
 
 					<div class="d-flex align-items-center">
-
+						
+						
 						<div class="provider-sidebar-scroll">
 							<div class="ms-1 header-item d-none d-sm-flex">
 								<button type="button" class="btn btn-red zfold-none ipad-none" onClick="openNaav()"> Complete Setup <i class="fas fa-angle-right ml-20 mil-5"></i>
@@ -1002,7 +1011,8 @@
 																if (isset($n->CustomerNotes->customer->full_name)) {
 																	$fullName = $n->CustomerNotes->customer->full_name;
 																}
-																$text = $n->CustomerNotes->title;
+																$text = $n->CustomerNotes->title ?? null; 
+
 															}else if($n->table == 'CustomersDocuments'){
 																if (isset($n->CustomersDocuments->customer->profile_pic_url)) {
 																	$profilePic = $n->CustomersDocuments->Customer->profile_pic_url;

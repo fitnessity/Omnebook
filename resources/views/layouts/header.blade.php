@@ -367,6 +367,10 @@ $total_quantity = 0;
 							<a href="{{route('businessClaim')}}" class="btn btn-list-business business-sp header-bottom-sp">List My Business</a>
 							<div class="button"><span></span></div>
 
+							<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+								Customers
+							</button>
+
 							<a value="Book an Activity" class="btn business-sp btn-style-two" href="{{route('activities_index')}}">Book An Activity</a>
 							<div  class="cartitmclass mobile-none">
 								<?php 
@@ -564,7 +568,9 @@ $total_quantity = 0;
 				<div class="modal-content" id="password_modal_content"></div>
 			</div>
 		</div>
-        
+
+
+		
     </body>
 </html>
 

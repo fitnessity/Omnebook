@@ -748,7 +748,7 @@
 
     <script src="{{url('/public/dashboard-design/js/ecommerce-product-create.init.js')}}"></script>
     <!-- <script src="{{url('/public/dashboard-design/ckeditor/ckeditor.js')}}"></script> -->
-    <script src="https://cdn.ckeditor.com/ckeditor5/35.3.2/super-build/ckeditor.js"></script>
+    <script src="{{asset('/public/dashboard-design/ckeditor/ckeditor5.js')}}"></script>
     <script>
             CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
                toolbar: {

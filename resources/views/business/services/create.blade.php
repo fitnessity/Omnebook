@@ -42,9 +42,10 @@
                                                                 <input type="hidden" name="serviceType" id="serviceType" value="{{$serviceType}}">
                                                                 <div class="accordion-body">
                                                                     <div class="row">
-                                                                        <div class="col-md-6">
+                                                                        <div class="col-lg-6">
                                                                             <div class="steps-title">
                                                                                 <div class="mb-3">
+                                                                                    <label>Choose Sport/Activity</label>
                                                                                     <select class="form-select" name="sports" id="sports" data-choices data-choices-search-false required>
                                                                                         <option value="">Choose a Sport/Activity</option>
                                                                                         @foreach(@$sportsData as $Sports)
@@ -62,6 +63,8 @@
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
+                                                                        </div>
+                                                                        <div class="col-lg-6">
                                                                             <div class="steps-title">
                                                                                 <div class="mb-3">
                                                                                     <label for="choices-publish-status-input" class="form-label">Program Title</label>
@@ -70,33 +73,47 @@
                                                                                     <div id="error_msg" class="text-danger"></div>
                                                                                 </div>
                                                                             </div>
+                                                                        </div>
+                                                                        <div class="col-lg-6">
                                                                             <div class="steps-title">
                                                                                 <div class="mb-3">
                                                                                     <label for="choices-publish-status-input" class="form-label">Program Description</label>
                                                                                     <div id="contracttermdiv" style="display:block">
-                                                                                        <textarea name="programDesc" id="ckeditor-classic" placeholder="Enter program description">{{@$service->program_desc}}
-                                                                                        </textarea>
+                                                                                        <textarea id="editor" name="programDesc" placeholder="Enter program description">{{@$service->program_desc}}</textarea> 
+                                                                                        <!-- <textarea name="programDesc" id="ckeditor-classic" placeholder="Enter program description">{{@$service->program_desc}}
+                                                                                        </textarea> -->
                                                                                     </div>
                                                                                     <!-- <textarea name="programDesc" id="programDesc" class="form-control" rows="8" maxlength="500" required placeholder="Enter program description" >{{@$service->program_desc}}</textarea> -->
                                                                                     <span class="error" id="errProgramDescLeft"></span>
                                                                                     <div class="float-right"><span id="programDescLeft">500</span> Characters Left</div>
                                                                                 </div>
                                                                             </div>
+                                                                        </div>
+                                                                        <div class="col-lg-6">
                                                                             <div class="steps-title">
                                                                                 <div class="mb-3">
                                                                                     <label for="choices-publish-status-input" class="form-label">Give your customers THINGS TO KNOW and information on how and what to prepare before they book</label> 
                                                                                     <div id="contracttermdiv" style="display:block">
-                                                                                        <textarea name="thingsToKnow" id="ckeditor-classic2" placeholder="Tell your customers how they should conduct themselves when attending your place of business or participating in your activity. Set out a few guidelines to help things go smoothly.">{{@$service->know_before_you_go}}</textarea>
+                                                                                        <textarea id="editor2" name="thingsToKnow" placeholder="Tell your customers how they should conduct themselves when attending your place of business or participating in your activity. Set out a few guidelines to help things go smoothly.">{{@$service->know_before_you_go}}</textarea>
+                                                                                        <!-- <textarea name="thingsToKnow" id="ckeditor-classic2" placeholder="Tell your customers how they should conduct themselves when attending your place of business or participating in your activity. Set out a few guidelines to help things go smoothly.">{{@$service->know_before_you_go}}</textarea> -->
                                                                                     </div>
                                                                                     <!-- <textarea class="form-control" name="thingsToKnow" id="thingsToKnow" required rows="8" maxlength="2000" placeholder="Tell your customers how they should conduct themselves when attending your place of business or participating in your activity. Set out a few guidelines to help things go smoothly.">{{@$service->know_before_you_go}}</textarea>-->
                                                                                     <span class="error" id="errThingsToKnow"></span> 
                                                                                     <div class="float-right"><span id="thingsToKnowLeft">2000</span> Characters Left</div>
                                                                                 </div>
                                                                             </div>
-
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-lg-4">
+                                                                            <div class="service-price d-grid">
+                                                                                <label>Photos</label>
+                                                                                <label>Add Cover Photo For Your Program</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-8">
                                                                             <div class="steps-title mt-30">
                                                                                 <div class="add-photos">
-                                                                                    <h3>Add Cover Photo For Your Program</h3>
                                                                                     <div id="dropBox1" class="dropBoximg">
                                                                                         <p>Drag & Drop Images Here...</p>
                                                                                         <input type="file" id="coverUpload" name="coverUpload" multiple="" accept="image/*" onchange="filesManager1(this.files)">
@@ -127,8 +144,7 @@
                                                                                     <div class="error-message mt-10 font-red text-center" id="coverImageError"></div>
                                                                                 </div>
                                                                             </div>
-                                                                          
-                                                                           <!--  <div class="steps-title">
+                                                                              <!--  <div class="steps-title">
                                                                                 <div class="mb-3">
                                                                                     <label for="choices-publish-status-input" class="form-label">Where were you Born? </label>
                                                                                     <input type="text" class="form-control" name="embedVideo" id="embedVideo" placeholder="" value="" maxlength="150">
@@ -142,9 +158,17 @@
                                                                                 </div>
                                                                             </div> -->
                                                                         </div>
-                                                                        <div class="col-md-6">
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-lg-4">
+                                                                            <div class="service-price d-grid">
+                                                                                <label>Add Photos For Your Program</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                        <div class="col-lg-8">
                                                                             <div class="add-photos">
-                                                                                <h3>Add Photos For Your Program</h3>
+                                                                                <h3></h3>
                                                                                 <ul>
                                                                                     <li>Photos uploaded should show details and people in action</li>
                                                                                     <li>Photos should be high resolution and not pixelated.</li>
@@ -187,7 +211,7 @@
                                                                                                                 <i class="fa fa-ellipsis-h"></i>
                                                                                                                 <ul>
                                                                                                                     <li>
-                                                                                                                       <a imgname="{{$profile_pic}}" class="editpopup" href="javascript:void(0);" serviceid="{{$service->id}}"><i class="fa fa-pencil-square-o"></i>Edit Post</a>
+                                                                                                                        <a imgname="{{$profile_pic}}" class="editpopup" href="javascript:void(0);" serviceid="{{$service->id}}"><i class="fa fa-pencil-square-o"></i>Edit Post</a>
                                                                                                                     </li>
                                                                                                                     <li><a href="javascript:void(0);" class="delImage" serviceid="{{$service->id}}" imgname="{{$profile_pic}}" valofi="0"><i class="fa fa-trash"></i>Delete Post</a></li>
                                                                                                                 </ul>
@@ -1700,6 +1724,240 @@
 @endif
 @include('layouts.business.footer')
 @include('layouts.business.scripts')
+
+<script src="https://cdn.ckeditor.com/ckeditor5/35.3.2/super-build/ckeditor.js"></script>
+<script>
+    CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
+        toolbar: {
+            items: [
+                'exportPDF','exportWord', '|',
+                'findAndReplace', 'selectAll', '|',
+                'heading', '|',
+                'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
+                'bulletedList', 'numberedList', 'todoList', '|',
+                'outdent', 'indent', '|',
+                'undo', 'redo',
+                '-',
+                'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+                'alignment', '|',
+                'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
+                'specialCharacters', 'horizontalLine', 'pageBreak', '|',
+                'textPartLanguage', '|',
+                'sourceEditing'
+            ],
+            shouldNotGroupWhenFull: true
+        },
+        list: {
+            properties: {
+                styles: true,
+                startIndex: true,
+                reversed: true
+            }
+        },
+        heading: {
+            options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+                { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+            ]
+        },
+        placeholder: '',
+        fontFamily: {
+            options: [
+                'default',
+                'Arial, Helvetica, sans-serif',
+                'Courier New, Courier, monospace',
+                'Georgia, serif',
+                'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                'Tahoma, Geneva, sans-serif',
+                'Times New Roman, Times, serif',
+                'Trebuchet MS, Helvetica, sans-serif',
+                'Verdana, Geneva, sans-serif'
+            ],
+            supportAllValues: true
+        },
+        fontSize: {
+            options: [ 10, 12, 14, 'default', 18, 20, 22 ],
+            supportAllValues: true
+        },
+        htmlSupport: {
+            allow: [
+                {
+                    name: /.*/,
+                    attributes: true,
+                    classes: true,
+                    styles: true
+                }
+            ]
+        },
+        htmlEmbed: {
+            showPreviews: true
+        },
+        link: {
+            decorators: {
+                addTargetToExternalLinks: true,
+                defaultProtocol: 'https://',
+                toggleDownloadable: {
+                    mode: 'manual',
+                    label: 'Downloadable',
+                    attributes: {
+                        download: 'file'
+                    }
+                }
+            }
+        },
+        mention: {
+            feeds: [
+                {
+                    marker: '@',
+                    feed: [
+                        '@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
+                        '@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
+                        '@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
+                        '@sugar', '@sweet', '@topping', '@wafer'
+                    ],
+                    minimumCharacters: 1
+                }
+            ]
+        },
+        removePlugins: [
+            'CKBox',
+            'CKFinder',
+            'EasyImage',
+            'RealTimeCollaborativeComments',
+            'RealTimeCollaborativeTrackChanges',
+            'RealTimeCollaborativeRevisionHistory',
+            'PresenceList',
+            'Comments',
+            'TrackChanges',
+            'TrackChangesData',
+            'RevisionHistory',
+            'Pagination',
+            'WProofreader',
+            'MathType'
+        ]
+    });
+</script>
+<script>
+    CKEDITOR.ClassicEditor.create(document.getElementById("editor2"), {
+        toolbar: {
+            items: [
+                'exportPDF','exportWord', '|',
+                'findAndReplace', 'selectAll', '|',
+                'heading', '|',
+                'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
+                'bulletedList', 'numberedList', 'todoList', '|',
+                'outdent', 'indent', '|',
+                'undo', 'redo',
+                '-',
+                'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+                'alignment', '|',
+                'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
+                'specialCharacters', 'horizontalLine', 'pageBreak', '|',
+                'textPartLanguage', '|',
+                'sourceEditing'
+            ],
+            shouldNotGroupWhenFull: true
+        },
+        list: {
+            properties: {
+                styles: true,
+                startIndex: true,
+                reversed: true
+            }
+        },
+        heading: {
+            options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+                { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+            ]
+        },
+        placeholder: '',
+        fontFamily: {
+            options: [
+                'default',
+                'Arial, Helvetica, sans-serif',
+                'Courier New, Courier, monospace',
+                'Georgia, serif',
+                'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                'Tahoma, Geneva, sans-serif',
+                'Times New Roman, Times, serif',
+                'Trebuchet MS, Helvetica, sans-serif',
+                'Verdana, Geneva, sans-serif'
+            ],
+            supportAllValues: true
+        },
+        fontSize: {
+            options: [ 10, 12, 14, 'default', 18, 20, 22 ],
+            supportAllValues: true
+        },
+        htmlSupport: {
+            allow: [
+                {
+                    name: /.*/,
+                    attributes: true,
+                    classes: true,
+                    styles: true
+                }
+            ]
+        },
+        htmlEmbed: {
+            showPreviews: true
+        },
+        link: {
+            decorators: {
+                addTargetToExternalLinks: true,
+                defaultProtocol: 'https://',
+                toggleDownloadable: {
+                    mode: 'manual',
+                    label: 'Downloadable',
+                    attributes: {
+                        download: 'file'
+                    }
+                }
+            }
+        },
+        mention: {
+            feeds: [
+                {
+                    marker: '@',
+                    feed: [
+                        '@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
+                        '@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
+                        '@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
+                        '@sugar', '@sweet', '@topping', '@wafer'
+                    ],
+                    minimumCharacters: 1
+                }
+            ]
+        },
+        removePlugins: [
+            'CKBox',
+            'CKFinder',
+            'EasyImage',
+            'RealTimeCollaborativeComments',
+            'RealTimeCollaborativeTrackChanges',
+            'RealTimeCollaborativeRevisionHistory',
+            'PresenceList',
+            'Comments',
+            'TrackChanges',
+            'TrackChangesData',
+            'RevisionHistory',
+            'Pagination',
+            'WProofreader',
+            'MathType'
+        ]
+    });
+</script>
 <script type="text/javascript">
         CKEDITOR.replace("ckeditor-classic");
 		CKEDITOR.replace("ckeditor-classic2");

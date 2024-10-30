@@ -361,10 +361,20 @@
 																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('visit_membership_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
 																																			</i>Edit Booking </a>
 																																		</li>
+																																		<?php 
+																																		            if($booking_detail->can_refund()){
+																																						$transaction=App\Transaction::whereIn('user_type', ['customer', 'user'])->where('item_id',$booking_detail->booking_id)->whereIn('user_id',[$customerdata->id,$customerdata->user_id])->first();
+																																						if($transaction && $transaction->can_refund())
+																																							{
+																																		?>
 																																		<li>
 																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
 																																			</i>Refund or Void</a>
 																																		</li>
+																																		<?php					
+																																				}
+																																			}
+																																		?>
 																																		<li>
 																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('terminate_or_suspend_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
 																																			</i>Suspend or Terminate</a>
@@ -1478,7 +1488,8 @@
 																								<div class="setting-icon">
 																									<i class="ri-more-fill"></i>
 																									  <ul>
-																											<li><a onclick="getNote('');"><i class="fas fa-plus text-muted"></i>Add</a></li>
+																									  	<li><a  onclick="getNote('');" data-bs-toggle="modal" data-bs-target="#notes"><i class="fas fa-plus text-muted"></i>Add Notes</a></li>
+																											<!-- <li><a onclick="getNote('');"><i class="fas fa-plus text-muted"></i>Add Notes</a></li> -->
 																										</ul>
 																								</div>
 																							</div>
@@ -1508,7 +1519,7 @@
 																										<div class="setting-icon">
 																											<i class="ri-more-fill"></i>
 																											  <ul>
-																													<li><a onclick="getNote({{$n->id}})"><i class="fas fa-plus text-muted"></i>Edit</a></li>
+																													<li><a onclick="getNote({{$n->id}})"  data-bs-toggle="modal" data-bs-target="#notes"><i class="fas fa-plus text-muted"></i>Edit</a></li>
 																													<li><a onclick="deleteNote({{$n->id}})"><i class="fas fa-plus text-muted"></i>Delete</a></li>
 																												</ul>
 																										</div>
@@ -1982,11 +1993,11 @@
 	</div>
 </div>
 
-<div class="modal fade notes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
+<div class="modal fade notes" id="notes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
 	<div class="modal-dialog modal-dialog-centered modal-30">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title note-title" id="myModalLabel">Add Note</h5>
+				<h5 class="modal-title note-title" id="myModalLabel">Select The Type Of Note</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			
@@ -2116,6 +2127,7 @@
 
 @include('layouts.business.footer')
 @include('layouts.business.scripts')
+
 <script src="{{url('public/dashboard-design/js/flatpickr.min.js')}}"></script>
 <script type="text/javascript">
 	$('#submit-code').on('click', function(e) {

@@ -178,6 +178,7 @@ class HomeController extends Controller {
 
     public function postRegistration(Request $request) {
         // dd('33');
+        // dd($request->all());
         $postArr = $request->all();
         $rules = [
             'firstname' => 'required',
@@ -200,7 +201,6 @@ class HomeController extends Controller {
             );
             return Response::json($response);
         } else {
-            //check for unique email id
             if (!$this->users->validateUser($postArr['email'])) {
                 $response = array(
                     'type' => 'danger',
@@ -208,14 +208,12 @@ class HomeController extends Controller {
                 );
                 return Response::json($response);
             };
-            //check for unique user name
             if (!$this->users->validateUser($postArr['username'])) {
                 $response = array(
                     'type' => 'danger',
                     'msg' => 'User name already exists. Please select different Name',
                 );
                 return Response::json($response);
-                //print_r("usefdhfidjhgidfhuighdfb");die;
             };
 
             if (count($postArr) > 0) {

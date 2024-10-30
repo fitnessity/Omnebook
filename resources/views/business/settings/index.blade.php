@@ -36,6 +36,326 @@ function timeSlotOptionforservice($lbl, $val) {
             	<div class="row">
                		<div class="col">
                   		<div class="h-100">
+
+							<div class="row">
+								<div class="col">
+									<div class="h-100">
+										<div class="row mb-3">
+											<div class="col-6">
+												<div class="page-heading">
+													<label>Settings</label>
+												</div>
+											</div> <!--end col-->
+										</div>	
+										<div class="row">
+											<div class="col-12">
+												<div class="card">
+													<div class="card-body">
+														<div class="row">
+															<div class="col-12 col-lg-4 col-md-4">
+																<div class="reports-title">
+																	<label>Business Details Settings</label>
+																</div>
+															</div>
+															<div class="col-12 col-lg-6 col-md-8">
+																<div class="card card-body box-border">
+																	<div class="d-grid align-items-center">
+																		<div class="report-links">
+																			<a href="javascript:;">Company Details</a>
+																		</div>
+																		<div class="report-links">
+																			<a href="javascript:;">Company Specifics</a>
+																		</div>
+																		<div class="report-links">
+																			<a href="{{route('business.tax.index')}}">Taxes</a>
+																		</div>
+																		<div class="report-links remove-border">
+																			<a href="javascript:;">Blocked Days Off</a>
+																		</div>
+																	</div>
+																</div>												
+															</div>
+														</div>
+														
+														<div class="row">
+															<div class="col-12 col-lg-4 col-md-4">
+																<div class="reports-title">
+																	<label>Customer Settings </label>
+																</div>
+															</div>
+															<div class="col-12 col-lg-6 col-md-8">
+																<div class="card card-body box-border">
+																	<div class="d-grid align-items-center">
+																		<div class="report-links">
+																			<a href="javascript:;">New Customer</a>
+																		</div>
+																		<div class="report-links">
+																			<a href="javascript:;">Gender Options</a>
+																		</div>
+																		<div class="report-links">
+																			<a href="javascript:;">Allow Pronouns Display</a>
+																		</div>
+																		<div class="report-links remove-border">
+																			<a href="javascript:;">Referrals</a>
+																		</div>
+																	</div>
+																</div>												
+															</div>
+														</div>
+																								
+														<div class="row">
+															<div class="col-12 col-lg-4 col-md-4">
+																<div class="reports-title d-grid">
+																	<label>Documents</label>
+																	<span class="fs-14">Terms & Agreements</span>
+																</div>
+															</div>
+															<div class="col-12 col-lg-6 col-md-8">
+																<div class="card card-body box-border">
+																	<div class="d-grid align-items-center">
+																		<div class="report-links">
+																			<a href="javascript:;">Cancellation Policy </a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>
+																			</div>
+																		</div>
+																		<div class="report-links">
+																			<a href="javascript:;">Know Before You Go </a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>
+																			</div>
+																		</div>
+																		<div class="report-links">
+																			<a href="javascript:;">Safety and Cleaning Procedures </a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>
+																			</div>
+																		</div>
+																		<div class="report-links">
+																			<a href="javascript:;">Terms, Conditions, FAQ</a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>
+																			</div>
+																		</div>
+																		<div class="report-links">
+																			<a href="javascript:;">Contract Terms </a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>
+																			</div>
+																		</div>
+																		<div class="report-links">
+																			<a href="javascript:;">Covid – 19 Protocols </a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>
+																			</div>
+																		</div>
+																		<div class="report-links">
+																			<a href="javascript:;">Refund Policy</a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>
+																			</div>
+																		</div>
+																		<div class="report-links">
+																			<a href="javascript:;">Liability Wavier</a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>
+																			</div>
+																		</div>
+																		<div class="report-links">
+																			<a href="javascript:;">Contract Agreement</a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>
+																			</div>
+																		</div>
+																		<div class="report-links">
+																			<a href="javascript:;">Cleaning Protocols</a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>
+																			</div>
+																		</div>
+																		<div class="report-links">
+																			<a href="javascript:;">Product Return Policy</a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>
+																			</div>
+																		</div>
+																		<div class="report-links create-text remove-border">
+																			<a href="" class="text-red" data-bs-target="#termsadd" data-bs-toggle="modal">Create Document</a>
+																			<!-- <div class="f-right">
+																				<ul class="list-inline hstack gap-2 mb-0">
+																					<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Add" data-bs-original-title="Add">
+																						<a class="text-primary d-inline-block" data-bs-target="#termsadd" data-bs-toggle="modal">
+																							<i class="ri-add-fill fs-18"></i>
+																						</a>
+																					</li>
+																					<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																						<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+																							<i class="ri-pencil-fill fs-16"></i>
+																						</a>
+																					</li>
+																					<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																						<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
+																							<i class="ri-delete-bin-5-fill fs-16"></i>
+																						</a>
+																					</li>
+																				</ul>
+																			</div> -->
+																		</div>
+																	</div>
+																</div>												
+															</div>
+														</div>
+														
+														
+														<div class="row">
+															<div class="col-12 col-lg-4 col-md-4">
+																<div class="reports-title">
+																	<label>Subscriptions & Payments</label>
+																</div>
+															</div>
+															<div class="col-12 col-lg-6 col-md-8">
+																<div class="card card-body box-border">
+																	<div class="d-grid align-items-center">
+																		<div class="report-links">
+																			<a href="{{route('business.subscription.index')}}">Manage Account</a>
+																		</div>
+																		<!-- <div class="report-links">
+																			<a href="#">Manage Card On File</a>
+																		</div>
+																		<div class="report-links remove-border">
+																			<a href="#">Payment History</a>
+																		</div> -->
+																	</div>
+																</div>												
+															</div>
+														</div>
+
+														<div class="row">
+															<div class="col-12 col-lg-4 col-md-4">
+																<div class="reports-title">
+																	<label>Side Panel Color</label>
+																</div>
+															</div>
+															<div class="col-12 col-lg-6 col-md-8">
+																<div class="card card-body box-border">
+																	<div class="d-grid align-items-center">
+																		<form action="">
+																			<input type="radio" id="black" name="fav_language" value="black" checked>
+																			<label for="black" class="mr-15">Black</label>
+																			<input type="radio" id="white" name="fav_language" value="white">
+																			<label for="white">White</label>
+																		</form>
+																	</div>
+																</div>												
+															</div>
+														</div>
+														
+													</div>
+												</div>
+											</div>
+										</div>
+									</div> <!-- end .h-100-->
+								</div> <!-- end col -->
+							</div>
                      		<div class="row mb-3">
 								<div class="col-12">
 									<div class="page-heading">
@@ -1337,325 +1657,7 @@ function timeSlotOptionforservice($lbl, $val) {
 
 							</div>
 
-							<div class="row">
-								<div class="col">
-									<div class="h-100">
-										<div class="row mb-3">
-											<div class="col-6">
-												<div class="page-heading">
-													<label>Settings</label>
-												</div>
-											</div> <!--end col-->
-										</div>	
-										<div class="row">
-											<div class="col-12">
-												<div class="card">
-													<div class="card-body">
-														<div class="row">
-															<div class="col-12 col-lg-4 col-md-4">
-																<div class="reports-title">
-																	<label>Business Details Settings</label>
-																</div>
-															</div>
-															<div class="col-12 col-lg-6 col-md-8">
-																<div class="card card-body box-border">
-																	<div class="d-grid align-items-center">
-																		<div class="report-links">
-																			<a href="javascript:;">Company Details</a>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Company Specifics</a>
-																		</div>
-																		<div class="report-links">
-																			<a href="{{route('business.tax.index')}}">Taxes</a>
-																		</div>
-																		<div class="report-links remove-border">
-																			<a href="javascript:;">Blocked Days Off</a>
-																		</div>
-																	</div>
-																</div>												
-															</div>
-														</div>
-														
-														<div class="row">
-															<div class="col-12 col-lg-4 col-md-4">
-																<div class="reports-title">
-																	<label>Customer Settings </label>
-																</div>
-															</div>
-															<div class="col-12 col-lg-6 col-md-8">
-																<div class="card card-body box-border">
-																	<div class="d-grid align-items-center">
-																		<div class="report-links">
-																			<a href="javascript:;">New Customer</a>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Gender Options</a>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Allow Pronouns Display</a>
-																		</div>
-																		<div class="report-links remove-border">
-																			<a href="javascript:;">Referrals</a>
-																		</div>
-																	</div>
-																</div>												
-															</div>
-														</div>
-																								
-														<div class="row">
-															<div class="col-12 col-lg-4 col-md-4">
-																<div class="reports-title d-grid">
-																	<label>Documents</label>
-																	<span class="fs-14">Terms & Agreements</span>
-																</div>
-															</div>
-															<div class="col-12 col-lg-6 col-md-8">
-																<div class="card card-body box-border">
-																	<div class="d-grid align-items-center">
-																		<div class="report-links">
-																			<a href="javascript:;">Cancellation Policy </a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Know Before You Go </a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Safety and Cleaning Procedures </a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Terms, Conditions, FAQ</a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Contract Terms </a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Covid – 19 Protocols </a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Refund Policy</a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Liability Wavier</a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Contract Agreement</a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Cleaning Protocols</a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Product Return Policy</a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links create-text remove-border">
-																			<a href="" class="text-red" data-bs-target="#termsadd" data-bs-toggle="modal">Create Document</a>
-																			<!-- <div class="f-right">
-																				<ul class="list-inline hstack gap-2 mb-0">
-																					<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Add" data-bs-original-title="Add">
-																						<a class="text-primary d-inline-block" data-bs-target="#termsadd" data-bs-toggle="modal">
-																							<i class="ri-add-fill fs-18"></i>
-																						</a>
-																					</li>
-																					<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																						<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																							<i class="ri-pencil-fill fs-16"></i>
-																						</a>
-																					</li>
-																					<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																						<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																							<i class="ri-delete-bin-5-fill fs-16"></i>
-																						</a>
-																					</li>
-																				</ul>
-																			</div> -->
-																		</div>
-																	</div>
-																</div>												
-															</div>
-														</div>
-														
-														
-														<div class="row">
-															<div class="col-12 col-lg-4 col-md-4">
-																<div class="reports-title">
-																	<label>Subscriptions & Payments</label>
-																</div>
-															</div>
-															<div class="col-12 col-lg-6 col-md-8">
-																<div class="card card-body box-border">
-																	<div class="d-grid align-items-center">
-																		<div class="report-links">
-																			<a href="{{route('business.subscription.index')}}">Manage Account</a>
-																		</div>
-																		<!-- <div class="report-links">
-																			<a href="#">Manage Card On File</a>
-																		</div>
-																		<div class="report-links remove-border">
-																			<a href="#">Payment History</a>
-																		</div> -->
-																	</div>
-																</div>												
-															</div>
-														</div>
-
-														<div class="row">
-															<div class="col-12 col-lg-4 col-md-4">
-																<div class="reports-title">
-																	<label>Side Panel Color</label>
-																</div>
-															</div>
-															<div class="col-12 col-lg-6 col-md-8">
-																<div class="card card-body box-border">
-																	<div class="d-grid align-items-center">
-																		<form action="">
-																			<input type="radio" id="black" name="fav_language" value="black" checked>
-																			<label for="black" class="mr-15">Black</label>
-																			<input type="radio" id="white" name="fav_language" value="white">
-																			<label for="white">White</label>
-																		</form>
-																	</div>
-																</div>												
-															</div>
-														</div>
-														
-													</div>
-												</div>
-											</div>
-										</div>
-									</div> <!-- end .h-100-->
-								</div> <!-- end col -->
-							</div>
+							
 
 						</div> 
                		</div>

@@ -2768,6 +2768,7 @@ padding: 0px 0px 3px 2px !important; */
 .btn-grp{
   vertical-align:middle;
   display:inline-block;
+  width: 93%;
 }
 .btn-grp button{
    float:left;
@@ -2779,6 +2780,7 @@ padding: 0px 0px 3px 2px !important; */
    cursor:pointer;
    background: #fff;
 	color: var(--vz-black-font-color);
+  width: 14%;
 }
 .btn-grp button:first-child{
   border-left: 1px solid var(--vz-input-border);
@@ -3018,8 +3020,15 @@ padding: 0px 0px 3px 2px !important; */
 	font-size: 16px;
 }
 .add-more-date a{
-	float: right;
-	color: #98002e;
+	/* float: right;
+	color: #98002e; */
+  text-align: center;
+}
+.add-more-date{
+  background: #e4e3e3;
+  text-align: center;
+  border-radius: 5px;
+  padding: 6px;
 }
 .empty-cart h4{
 	padding: 55px 0;
@@ -9147,4 +9156,37 @@ height: 400px;
 
 .fs-8{
   font-size: 8px;
+}
+.service-price label{
+  color: #000;
+  font-size: 16px;
+}
+.app-search-client{
+  background: #ebebeb;
+  margin-left: 15px;
+  display: block;
+  text-align: center;
+  padding: 7px 21px;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 14px;
+}
+.app-search-client label{
+  color: #000;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-bottom: 0;
+}
+.add-note-reminder .nav-pills .nav-link.active, .nav-pills .show > .nav-link{
+  background-color: #98002e;
+  color: #fff;
+}
+
+.add-note-reminder .nav-pills .nav-link{
+  border: 1px solid #98002e;
+  color: #000;
+}
+
+.add-note-reminder .nav-justified .nav-item, .nav-justified > .nav-link{
+  margin-right: 7px;
 }
