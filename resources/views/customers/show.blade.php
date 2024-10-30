@@ -1639,6 +1639,7 @@
 			</div>
 			
 			<div class="modal-body" id="noteHtml">		
+				<h4 id="loadingMessage" style="display: none;">Loading...</h4>
 			</div>
 		</div>
 	</div>
@@ -1874,10 +1875,13 @@
 	}
 
 	function getNote(id){
+		$('#loadingMessage').show();
+
 		$.ajax({
          	type: 'GET',
          	url: '/business/'+'{{request()->business_id}}'+'/customer/'+'{{$customerdata->id}}'+'/getNote/'+id,
          	success: function (data) {
+				$('#loadingMessage').hide();
             	$('#noteHtml').html(data);
 	            if(id){
 	            	$('.note-title').html('Edit Note');
