@@ -60,8 +60,20 @@ class CustomerController extends Controller {
                 ->where(function ($q) use ($searchValues) {
                     $serch1 = @$searchValues[0] != '' ? @$searchValues[0] : '';
                     $serch2 = @$searchValues[1] != '' ? @$searchValues[1] : '';
+                    $serch3 = @$searchValues[2] !='' ? @$searchValues[2] : '';
+
                     $q->orderBy('fname');
-                    if($serch1 != '' && $serch2 != ''){
+                    if (count($searchValues) === 3) {
+                        $q->where(function($q) use ($searchValues) {
+                            $q->where('fname', 'like', "%{$searchValues[0]} {$searchValues[1]}%")
+                              ->where('lname', 'like', "%{$searchValues[2]}%");
+                        })
+                        ->orWhere(function($q) use ($searchValues) {
+                            $q->where('fname', 'like', "%{$searchValues[0]}%")
+                              ->where('lname', 'like', "%{$searchValues[1]} {$searchValues[2]}%");
+                        });
+                    } 
+                    elseif($serch1 != '' && $serch2 != ''){
                         $q->where(function($q) use ($serch1, $serch2) {
                             $q->where('fname', 'like', "%{$serch1}%")
                               ->where('lname', 'like', "%{$serch2}%");
@@ -1260,27 +1272,93 @@ class CustomerController extends Controller {
 
     public function removenote($business_id, $id){
         $note = CustomerNotes::find($id);
+        $notification = Notification::where('table_id',$id)->first();
         @$note->delete();
+        $notification->delete();
+
     }
 
+    // public function addNotes(Request $request, $business_id){
+    //     $note = CustomerNotes::updateOrCreate(
+    //         ['id' =>  $request->id],
+    //         [
+    //             'user_id' => Auth::user()->id, 
+    //             'business_id' => $business_id,
+    //             'customer_id' => $request->cid,
+    //             'title' => $request->title,
+    //             'note' => $request->notes,
+    //             'due_date' => $request->due_date,
+    //             'time' => $request->time,
+    //             'display_chk' => $request->displayChk ?? 0,
+    //             'status' => 1,
+    //         ]
+    //     );
+
+    //     $data = ['user_id' => $note->user_id , 'customer_id' => $note->customer_id , 'display_date' => $note->due_date , 'table_id' => $note->id , 'table' => 'CustomerNotes',  'display_time' => $note->time, 'business_id' => $note->business_id,'type' => 'business','status'=>'Alert'];
+
+    //     if($note->display_chk == 1){
+    //         $data['type'] = 'personal';
+    //         Notification::updateOrCreate([
+    //             'display_date' => $note->due_date,
+    //             'table_id' => $note->id,
+    //             'table' => 'CustomerNotes',
+    //             'type' => 'personal',
+    //             'business_id' => $note->business_id,
+    //         ],$data);
+    //     }
+
+    //     $data['type'] = 'business';
+    //     Notification::updateOrCreate([
+    //             'display_date' => $note->due_date,
+    //             'table_id' => $note->id,
+    //             'table' => 'CustomerNotes',
+    //             'type' => 'business',
+    //             'business_id' => $note->business_id,
+    //         ],$data);
+        
+    //     if($note){
+    //         $word = $request->id ? 'updated' : 'Added';
+    //         return response()->json(['status'=>200,'message'=>'Note '.$word.' Successfully.']);
+    //     }else{
+    //         return response()->json(['status'=>500,'message'=>'Something Went Wrong.']);
+    //     }
+    // }
     public function addNotes(Request $request, $business_id){
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'notes' => 'required|string',
+            // 'due_date' => 'nullable|date',
+            // 'time' => 'nullable|string',
+        ]);
+    
+        // Check if validation fails
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'errors' => $validator->errors()]);
+        }
+        // dd($request->all());
+        // dd(Auth::user()->id);
+        $cid=Customer::where('user_id',Auth::user()->id)->where('business_id',$business_id)->first();
+        // dd($cid);
+        $timeString = isset($request->time) ? implode(',', $request->time) : null;
+
         $note = CustomerNotes::updateOrCreate(
-            ['id' =>  $request->id],
+            ['id' =>  $request->notes_id],
             [
                 'user_id' => Auth::user()->id, 
                 'business_id' => $business_id,
-                'customer_id' => $request->cid,
+                'type'=>'add_notes',
+                // 'customer_id' => $request->cid,
+                'customer_id' => $cid->id,
                 'title' => $request->title,
                 'note' => $request->notes,
                 'due_date' => $request->due_date,
-                'time' => $request->time,
+                // 'time' => $request->time,
+                'time'=>$timeString,
                 'display_chk' => $request->displayChk ?? 0,
                 'status' => 1,
             ]
         );
-
         $data = ['user_id' => $note->user_id , 'customer_id' => $note->customer_id , 'display_date' => $note->due_date , 'table_id' => $note->id , 'table' => 'CustomerNotes',  'display_time' => $note->time, 'business_id' => $note->business_id,'type' => 'business','status'=>'Alert'];
-
         if($note->display_chk == 1){
             $data['type'] = 'personal';
             Notification::updateOrCreate([
@@ -1291,7 +1369,6 @@ class CustomerController extends Controller {
                 'business_id' => $note->business_id,
             ],$data);
         }
-
         $data['type'] = 'business';
         Notification::updateOrCreate([
                 'display_date' => $note->due_date,
@@ -1300,11 +1377,76 @@ class CustomerController extends Controller {
                 'type' => 'business',
                 'business_id' => $note->business_id,
             ],$data);
-        
         if($note){
-            $word = $request->id ? 'updated' : 'Added';
+            $word = $request->notes_id ? 'updated' : 'Added';
             return response()->json(['status'=>200,'message'=>'Note '.$word.' Successfully.']);
+
         }else{
+
+            return response()->json(['status'=>500,'message'=>'Something Went Wrong.']);
+        }
+    }
+
+    public function addRemainderNotes(Request $request, $business_id){
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'notes' => 'required|string',
+            // 'due_date' => 'nullable|date',
+            // 'time' => 'nullable|string',
+        ]);
+    
+        // Check if validation fails
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'errors' => $validator->errors()]);
+        }
+        // dd($request->all());
+        // dd(Auth::user()->id);
+        $cid=Customer::where('user_id',Auth::user()->id)->where('business_id',$business_id)->first();
+        // dd($cid);
+        $timeString = isset($request->time) ? implode(',', $request->time) : null;
+
+        $note = CustomerNotes::updateOrCreate(
+            ['id' =>  $request->notes_id],
+            [
+                'user_id' => Auth::user()->id, 
+                'business_id' => $business_id,
+                'type'=>'add_remainder',
+                // 'customer_id' => $request->cid,
+                'customer_id' => $cid->id,
+                'title' => $request->title,
+                'note' => $request->notes,
+                'due_date' => $request->due_date,
+                // 'time' => $request->time,
+                'time'=>$timeString,
+                'display_chk' => $request->displayChk ?? 0,
+                'status' => 1,
+            ]
+        );
+        $data = ['user_id' => $note->user_id , 'customer_id' => $note->customer_id , 'display_date' => $note->due_date , 'table_id' => $note->id , 'table' => 'CustomerNotes',  'display_time' => $note->time, 'business_id' => $note->business_id,'type' => 'business','status'=>'Alert'];
+        if($note->display_chk == 1){
+            $data['type'] = 'personal';
+            Notification::updateOrCreate([
+                'display_date' => $note->due_date,
+                'table_id' => $note->id,
+                'table' => 'CustomerNotes',
+                'type' => 'personal',
+                'business_id' => $note->business_id,
+            ],$data);
+        }
+        $data['type'] = 'business';
+        Notification::updateOrCreate([
+                'display_date' => $note->due_date,
+                'table_id' => $note->id,
+                'table' => 'CustomerNotes',
+                'type' => 'business',
+                'business_id' => $note->business_id,
+            ],$data);
+        if($note){
+            $word = $request->notes_id ? 'updated' : 'Added';
+            return response()->json(['status'=>200,'message'=>'Note '.$word.' Successfully.']);
+
+        }else{
+
             return response()->json(['status'=>500,'message'=>'Something Went Wrong.']);
         }
     }

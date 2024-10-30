@@ -1123,7 +1123,9 @@
 																								<div class="setting-icon">
 																									<i class="ri-more-fill"></i>
 																									  <ul>
-																											<li><a onclick="getNote('');"><i class="fas fa-plus text-muted"></i>Add</a></li>
+																											{{-- <li><a onclick="getNote('');"><i class="fas fa-plus text-muted"></i>Add</a></li> --}}
+																											<li><a  onclick="getNote('');" data-bs-toggle="modal" data-bs-target="#notes"><i class="fas fa-plus text-muted"></i>Add Notes</a></li>
+
 																										</ul>
 																								</div>
 																							</div>
@@ -1153,7 +1155,8 @@
 																										<div class="setting-icon">
 																											<i class="ri-more-fill"></i>
 																											  <ul>
-																													<li><a onclick="getNote({{$n->id}})"><i class="fas fa-plus text-muted"></i>Edit</a></li>
+																												<li><a onclick="getNote({{$n->id}})"  data-bs-toggle="modal" data-bs-target="#notes"><i class="fas fa-plus text-muted"></i>Edit</a></li>
+																													{{-- <li><a onclick="getNote({{$n->id}})"><i class="fas fa-plus text-muted"></i>Edit</a></li> --}}
 																													<li><a onclick="deleteNote({{$n->id}})"><i class="fas fa-plus text-muted"></i>Delete</a></li>
 																												</ul>
 																										</div>
@@ -1627,11 +1630,11 @@
 	</div>
 </div>
 
-<div class="modal fade notes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
+<div class="modal fade notes" id="notes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-bs-focus="false">
 	<div class="modal-dialog modal-dialog-centered modal-30">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title note-title" id="myModalLabel">Add Note</h5>
+				<h5 class="modal-title note-title" id="myModalLabel">Select The Type Of Note</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			
