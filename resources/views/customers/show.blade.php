@@ -1125,7 +1125,6 @@
 																									  <ul>
 																											{{-- <li><a onclick="getNote('');"><i class="fas fa-plus text-muted"></i>Add</a></li> --}}
 																											<li><a  onclick="getNote('');" data-bs-toggle="modal" data-bs-target="#notes"><i class="fas fa-plus text-muted"></i>Add Notes</a></li>
-
 																										</ul>
 																								</div>
 																							</div>
@@ -1137,8 +1136,7 @@
 																			<div class="accordion-body">
 																				<div class="container-fluid nopadding">
 																					<div class="row">	
-																						@forelse($notes as $n)
-																							
+																						@forelse($notes as $n)																							
 																							<div class="row">
 																								<div class="col-md-10">
 																									<div class="row">
