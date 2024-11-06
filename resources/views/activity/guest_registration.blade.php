@@ -1,7 +1,8 @@
 <div class="row"> 
     <div class="col-lg-6 col-xs-12 register-modal">
+		<div class="register_wrap">
 		<div class="logo-my">
-			<a href="#"> <img src="{{url('/public/images/logo-small.jpg')}}" alt="Fitnessity"> </a>
+			<a href="#"> <img src="{{url('/public/images/omnebook.png')}}" alt="Fitnessity"> </a>
 		</div>
 		<div class="manage-customer-from">
 			<div id="divstep1" style="display: block;">
@@ -201,7 +202,7 @@
 						</div>
 					</div>
 				</form>
-
+				</div>
 			</div>
 		</div>
 	</div>
