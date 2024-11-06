@@ -888,8 +888,9 @@ header{ position: fixed !important; }
   color: #98002e;
 }
 .alert-msgs {
-  width: 70%;
+  width: 100%;
   margin: 20px auto;
+  font-size: 13px;
 }
 .manage-customer-from form input {
 	color: #050505;
@@ -900,14 +901,14 @@ header{ position: fixed !important; }
 	display: block;
 	float: none;
 	margin: 20px auto;
-	width: 70%;
+	/* width: 70%; */
 	font-style: italic;
 	padding: .5rem .9rem;
 	border: 1px solid #d5d9de;
 	font-size: 14px;
 }
 .manage-customer-from form select {
-	color: #050505;
+	/* color: #050505;
 	font-size: 16px;
 	outline: none;
 	border-radius: .25rem;
@@ -919,7 +920,19 @@ header{ position: fixed !important; }
 	font-style: italic;
 	padding: .5rem .9rem;
 	border: 1px solid #d5d9de;
-	font-size: 14px;
+	font-size: 14px; */
+  outline: none;
+  display: block;
+  float: none;
+  font-style: italic;
+  font-size: 16px;
+  background: none;
+  padding: 11px;
+  color: #04344d;
+  border: 2px solid #04344d;
+  border-radius: 16px;
+  min-height: 45px;
+  margin: 20px auto;
 }
 .wrap-sp {
   margin-top: 9px;
@@ -9189,4 +9202,7 @@ height: 400px;
 
 .add-note-reminder .nav-justified .nav-item, .nav-justified > .nav-link{
   margin-right: 7px;
+}
+.mb-80{
+  margin-bottom: 80px;
 }

@@ -425,7 +425,8 @@ if(!empty($cart["cart_item"])) {
 								@if(Auth::user())
 									<a type="submit" href="{{route('carts_index')}}" class="btn btn-red mt-10 fs-12" >View Cart & Checkout</a>
 								@else
-									<a type="submit" class="btn btn-red mt-10" data-toggle="modal" data-target="#cartcheckout">View Cart & Checkout</a>
+									{{-- <a type="submit" class="btn btn-red mt-10" data-toggle="modal" data-target="#cartcheckout">View Cart & Checkout</a> --}}
+									<a class="btn btn-red mt-10 fs-12" data-bs-toggle="modal" data-bs-target="#cartcheckout">View Cart & Checkout</a>
 								@endif
 							</div>
 						</div>
@@ -744,7 +745,8 @@ if(!empty($cart["cart_item"])) {
             type: 'GET',
             success: function (response) {
             	$('.register-bg').html(response);
-            	$('#registermodal').modal({ show: true, focus: false});
+				$('#registermodal').modal('show');
+            	// $('#registermodal').modal({ show: true, focus: false});
             }
         });
 	}
