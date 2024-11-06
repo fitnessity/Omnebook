@@ -678,7 +678,7 @@ if(!empty($cart["cart_item"])) {
 
 <!-- The Modal Registraion-->
 <div class="modal fade compare-model" id="registermodal"  tabindex="-1" data-bs-focus="false">
-    <div class="modal-dialog registermodal">
+    <div class="modal-dialog registermodal modal-xl">
         <div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
