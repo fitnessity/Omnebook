@@ -667,7 +667,7 @@ if(!empty($cart["cart_item"])) {
 					</div>
 					<div class="col-lg-12 btns-modal">
 						<a href="{{route('addcheckoutsession')}}" class="addbusiness-btn-modal cart-btn-width">Log in</a>
-						<a onclick="openRegistrationModal();" class="addbusiness-btn-modal" >Continue as Guest</a>
+						<a onclick="openRegistrationModal();" class="addbusiness-btn-modal" data-bs-dismiss="modal">Continue as Guest</a>
 					</div>
 				 </div>
             </div>
