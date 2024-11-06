@@ -205,4 +205,125 @@ class CustomerController extends Controller
 
 
     }
+
+    public function CustomerCreate(Request $request) {
+        set_time_limit(-1);
+        $postArr = $request->all();
+        $user = Auth::user();
+        $company = $user->businesses->find(Auth::user()->cid);
+       
+            if (!$this->customers->findUniquefeildPerBusiness($company->id, 'email',$postArr['email'])) {
+                $response = array(
+                    'type' => 'danger',
+                    'msg' => 'Email already exists. Please select different Email',
+                );
+                return Response::json($response);
+            }; 
+
+            if (!$this->customers->findUniquefeildPerBusiness($company->id, 'phone_number',$postArr['contact'])) {
+                $response = array(
+                    'type' => 'danger',
+                    'msg' => 'Phone Number already exists. Please Enter different Phone Number',
+                );
+                return Response::json($response);
+            };
+            
+            if (count($postArr) > 0) {
+                \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+                $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+
+                $last_name = ($postArr['firstname']) ? $postArr['lastname'] : '';
+                $cus_name = $postArr['firstname'].' '.$last_name;
+                $customer = \Stripe\Customer::create( 
+                    [ 'name' => $cus_name,
+                        'email'=> $postArr['email'] 
+                    ]);
+                $stripe_customer_id = $customer->id;  
+
+              
+                    $random_password = Str::random(8);    
+                $customerObj = New Customer();
+                $customerObj->business_id = $company->id;
+                $customerObj->fname = $postArr['firstname'];
+                $customerObj->lname = $postArr['lastname'] ?? '';
+                $customerObj->password = Hash::make($random_password);
+                $customerObj->email = $postArr['email'];
+                $customerObj->status = 0;
+                $customerObj->phone_number = $postArr['contact'];
+                $customerObj->stripe_customer_id = $stripe_customer_id;
+                $customerObj->request_status = 1;
+                $fitnessity_user = User::where(['firstname'=> $postArr['firstname'],'lastname'=>$postArr['lastname'] ,'email' => $postArr['email']])->first();
+                $chkGenerate = 0;
+                $checkInCode = generateUniqueCode();
+                $chkGenerate = 1;
+                if($fitnessity_user){
+                    $ids = $fitnessity_user->orders()->get()->map(function($item){
+                        return $item->id;
+                    });
+
+                    $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
+                        $query->select('id')->from('business_services')->where('cid', $company->id);
+                    })->whereIn('booking_id', $ids)->exists();
+
+                    if($result){
+                        $customerObj->user_id = $fitnessity_user->id;
+                    }
+                    $customerObj->save();
+                    $fitnessity_user->update(['unique_code' =>$checkInCode ]);
+
+                }else{
+                    $userObj = New User();
+                    $userObj->role = 'customer';
+                    $userObj->firstname = $postArr['firstname'];
+                    $userObj->lastname = $postArr['lastname'] ?? '';
+                    $userObj->username = $postArr['firstname'].$postArr['lastname'];
+                    $userObj->password = $customerObj->password;
+                    $userObj->buddy_key = $random_password;
+                    $userObj->email = $postArr['email'];
+                    $userObj->phone_number = $postArr['contact'];
+                    $userObj->stripe_customer_id = $stripe_customer_id;
+                    $userObj->unique_code = $checkInCode;
+                    $userObj->save(); 
+                    $customerObj->user_id = $userObj->id;
+                }
+    
+                $customerObj->save();
+                if ($customerObj) {    
+                    $parentId = NULL;
+                    $currentCustomer = $customerObj;                    
+                    session()->put('success-register', '1');
+                    try {
+                    $status = SGMailService::sendWelcomeMailToCustomer($customerObj->id,Auth::user()->cid,$random_password); 
+                    $response = array(
+                        'id'=>$customerObj->id,
+                        'type' => 'success',
+                        'msg' => 'Registration done successfully.',
+                    );
+                } catch (\Exception $e) {
+                    $response = array(
+                        'id'=>$customerObj->id,
+                        'type' => 'danger',
+                        'msg' => 'Registration not done successfully.'. $e->getMessage(),
+                    );
+                }
+                    return Response::json($response);
+                }
+                 else {
+                    $response = array(
+                        'type' => 'danger',
+                        'msg' => 'Some error occured while registering. Please try again later.',
+                    );
+                    return Response::json($response);
+                }
+
+
+            } else {
+                $response = array(
+                    'type' => 'danger',
+                    'msg' => 'Invalid email or password',
+                );
+                return Response::json($response);
+            }
+        
+    }
 }

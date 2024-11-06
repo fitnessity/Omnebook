@@ -550,8 +550,121 @@ $total_quantity = 0;
 			</div>
 		</div>
         
+		<!-- {{-- customers start --}} -->
+		<div class="modal fade" id="CustomerModal" tabindex="-1" aria-labelledby="CustomerModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="CustomerModalLabel">Create a New Customer</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+					<form id="customerForm" method="post">	
+							@csrf
+							<div class="mb-3">
+								<label for="firstName" class="form-label">First Name</label>
+								<input type="text" class="form-control" id="firstName" name="firstname">
+								<span class="text-danger error-message" id="firstnameError"></span>
+
+							</div>
+							<div class="mb-3">
+								<label for="lastName" class="form-label">Last Name</label>
+								<input type="text" class="form-control" id="lastName" name="lastname">
+								<span class="text-danger error-message" id="lastNameError"></span>
+
+							</div>
+							<div class="mb-3">
+								<label for="email" class="form-label">Email</label>
+								<input type="email" class="form-control" id="emailid" name="email">
+								<span class="text-danger error-message" id="emailError"></span>
+							</div>
+							<div class="mb-3">
+								<label for="phone" class="form-label">Phone Number</label>
+								<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone" class="form-control">
+								<span class="text-danger error-message" id="contactError"></span>
+							</div>
+							<div id="responseMessage" class="alert" style="display: none;"></div>
+
+							<div class="float-right">
+								<button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Cancel</button>
+								<button type="submit" form="customerForm" class="btn btn-primary">Create</button>
+							</div>
+							
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	<!-- {{-- customers end --}} -->
+
     </body>
 </html>
+<script>
+    $(document).ready(function () {
+        $('#customerForm').on('submit', function (e) {
+            e.preventDefault(); 
+            let isValid = true;
+
+            $('.error-message').text('');
+
+            const firstName = $('#firstName').val().trim();
+            if (firstName === '') {
+                $('#firstnameError').text('First name is required.');
+                isValid = false;
+            }
+
+            const lastName = $('#lastName').val().trim();
+            if (lastName === '') {
+                $('#lastNameError').text('Last name is required.');
+                isValid = false;
+            }
+
+            const email = $('#emailid').val();
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === '') {
+                $('#emailError').text('Email is required.');
+                isValid = false;
+            } else if (!emailPattern.test(email)) {
+                $('#emailError').text('Please enter a valid email address.');
+                isValid = false;
+            }
+
+            const contact = $('#contact').val().trim();
+            const phonePattern = /^[0-9]{10,14}$/;
+            if (contact === '') {
+                $('#contactError').text('Phone number is required.');
+                isValid = false;
+            } 
+
+            if (isValid) {
+				$.ajax({
+						url: "{{ route('customer_create') }}",
+						type: 'POST',
+						data: $(this).serialize(),
+						headers: {
+							'X-CSRF-TOKEN': '{{ csrf_token() }}'
+						},
+						success: function(data) {
+							const messageDiv = $('#responseMessage');
+							messageDiv.removeClass('alert-success alert-danger alert-warning');
+							if (data.type === "success") {
+								messageDiv.removeClass('alert-danger').addClass('alert-success').text(data.msg).show();
+								// $('#CustomerModal').modal('hide'); 
+								$('#customerForm')[0].reset(); 
+							} 
+							else if (data.type === "danger") {
+								messageDiv.addClass('alert alert-danger').text(data.msg).show();	
+							}
+							else {
+									messageDiv.addClass('alert alert-warning').text("An unexpected response was received.").show();
+								}
+						},
+					});
+            }
+        });
+    });
+</script>
+
 <script>
 	
 $(document).ready(function () {

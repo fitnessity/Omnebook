@@ -24,13 +24,13 @@
 
 					<div class="position-relative auth-pass-inputgroup">	
 						<input type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
-                        <button class="btn-link position-absolute password-addon-guest-regi toggle-password" type="button" data-tp = "password">
+                        <button class="btn-link position-absolute password-addon toggle-password" type="button" data-tp = "password">
                             <i class="fas fa-eye"></i>
 						</button>
 					</div>
 					<div class="position-relative auth-pass-inputgroup">
 						<input class="password-input" type="password" name="confirm_password" id="confirm_password" size="30" placeholder="Confirm Password" autocomplete="off">
-						<button class="btn-link position-absolute password-addon-guest-regi toggle-password" type="button" data-tp = "confirm_password">
+						<button class="btn-link position-absolute password-addon toggle-password" type="button" data-tp = "confirm_password">
                             <i class="fas fa-eye"></i>
                         </button>
 					</div>
@@ -74,12 +74,12 @@
 								</ul>
 								<ul class="nav nav-tabs nav-stacked">
 								   
-									<li><a data-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
+									<li class="nav-item"><a data-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
 								</ul>
 								
 								<div class="tab-content">
 								   
-									<div id="adding_photo" class="tab-pane fade in active">
+									<div id="adding_photo" class="tab-pane fade show active">
 										<div class="upload-wrp-content">
 											<p><b>Put a face to the name </b>and improve your adds to networking success.</p>
 											<p>People prefer to network with members who has a profile photo, but if don't have one ready to upload, you can add it later.</p>
@@ -88,7 +88,7 @@
 											<div class="upload-img">
 												<input type="file" name="file_upload_profile" id="file_upload_profile" onchange="readURL(this);">
 												<div class="upload-img-msg">
-													<p>Touble uploading profile photo?</p>
+													<p class="fs-12">Touble uploading profile photo?</p>
 												</div>
 											</div>
 										</div>
@@ -131,10 +131,10 @@
 												<div class="panel panel-default">
 													 <div class="panel-heading">
 													   <h4 class="panel-title">
-														 <a data-toggle="collapse" data-parent="#accordion" href="#collapse0" aria-expanded="true" class="">Family Member #1</a>
+														 <a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapse0">Family Member #1</a>
 													   </h4>
 													 </div>
-													<div id="collapse0" class="panel-collapse collapse in" aria-expanded="true" style="">
+													<div id="collapse0" class="panel-collapse collapse show">
 														 <div class="panel-body">
 															  <div class="form-group">
 															<input type="text" name="first_name[]" id="first_name" class="form-control first_name required" placeholder="First Name">
@@ -201,6 +201,7 @@
 						</div>
 					</div>
 				</form>
+
 			</div>
 		</div>
 	</div>

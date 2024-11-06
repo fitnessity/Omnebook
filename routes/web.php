@@ -123,6 +123,7 @@ Route::any('/getCardData','MembershipPlanController@getCardData')->name('choose-
 Route::get('/add-client','CustomerController@client')->name('client');
 Route::post('/get-checkin-code', 'CustomerController@getCheckinCode')->name('get_checkin_code');
 
+Route::post('/customer_create', 'Business\CustomerController@CustomerCreate')->name('customer_create');
 
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
 

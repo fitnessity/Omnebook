@@ -47,8 +47,12 @@
 								<input type="text" class="form-control" placeholder="Search for client" autocomplete="off" id="serchclient_navbar"  name="fname" value="{{Request::get('fname')}}">
 							</div>
 						</form>
+						<div class="app-search-client">
+							<a class=" header-bottom-sp" data-bs-toggle="modal" data-bs-target="#CustomerModal">Quick Add </a><label>|</label><a href="{{route('business_customer_create' ,['business_id'=> Auth::user()->cid])}}" class="mobile-none zfold-none" >Add Client</a>
+							</div>
 						<div class="app-search">
-							<a href="{{route('business_customer_create' ,['business_id'=> Auth::user()->cid])}}" class="add-client mobile-none zfold-none" >Add New Client</a>
+							
+							{{-- <a href="{{route('business_customer_create' ,['business_id'=> Auth::user()->cid])}}" class="add-client mobile-none zfold-none" >Add New Client</a> --}}
 							<!-- <a href="#" class="add-client mobile-none"  data-bs-toggle="modal" data-bs-target=".new-client-steps">Add New Client</a> -->
 						</div>
 					</div>
