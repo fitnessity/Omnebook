@@ -648,13 +648,16 @@ if(!empty($cart["cart_item"])) {
 <div class="modal fade compare-model" id="cartcheckout">
     <div class="modal-dialog cartcheckout">
         <div class="modal-content">
-			<div class="modal-header" style="text-align: right;"> 
+			<div class="modal-header">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<!-- <div class="modal-header" style="text-align: right;"> 
 			  	<div class="closebtn">
 					<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
 				</div>
-			</div>
+			</div> -->
 
             <!-- Modal body -->
             <div class="modal-body body-space">
@@ -677,13 +680,16 @@ if(!empty($cart["cart_item"])) {
 <div class="modal fade compare-model" id="registermodal"  tabindex="-1" data-bs-focus="false">
     <div class="modal-dialog registermodal">
         <div class="modal-content">
-			<div class="modal-header" style="text-align: right;"> 
+			<div class="modal-header">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<!-- <div class="modal-header" style="text-align: right;"> 
 			  	<div class="closebtn">
 					<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
 				</div>
-			</div>
+			</div> -->
 
             <!-- Modal body -->
             <div class="modal-body body-space register-bg">
