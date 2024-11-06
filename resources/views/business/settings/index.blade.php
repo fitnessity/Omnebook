@@ -102,7 +102,16 @@ function timeSlotOptionforservice($lbl, $val) {
 																</div>												
 															</div>
 														</div>
-																								
+																							
+														@if (session('success'))
+															<div class="alert alert-success" id="success-alert">
+																{{ session('success') }}
+															</div>
+														@endif
+														<div id="success-message" class="alert alert-success" style="display: none;">
+															<span id="message-content"></span>
+														</div>
+
 														<div class="row">
 															<div class="col-12 col-lg-4 col-md-4">
 																<div class="reports-title d-grid">
@@ -112,172 +121,25 @@ function timeSlotOptionforservice($lbl, $val) {
 															</div>
 															<div class="col-12 col-lg-6 col-md-8">
 																<div class="card card-body box-border">
-																	<div class="d-grid align-items-center">
+																	<div class="d-grid align-items-center">																		
+																		@foreach($terms as $term)
 																		<div class="report-links">
-																			<a href="javascript:;">Cancellation Policy </a>
+																			<a href="javascript:;">{{$term->title}} </a>
 																			<div class="f-right">
 																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+																					<a data-bs-target="#editterm" data-termid="{{ encrypt($term->id) }}" data-title="{{ $term->title }}" data-description="{{ $term->description }}" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
 																						<i class="ri-pencil-fill fs-16"></i>
 																					</a>
 																				</li>
 																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
+																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm" data-termsid="{{ encrypt($term->id) }}">
 																						<i class="ri-delete-bin-5-fill fs-16"></i>
 																					</a>
 																				</li>
 																			</div>
 																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Know Before You Go </a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Safety and Cleaning Procedures </a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Terms, Conditions, FAQ</a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Contract Terms </a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Covid – 19 Protocols </a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Refund Policy</a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Liability Wavier</a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Contract Agreement</a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Cleaning Protocols</a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
-																		<div class="report-links">
-																			<a href="javascript:;">Product Return Policy</a>
-																			<div class="f-right">
-																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-																					<a data-bs-target="#editterm" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-																						<i class="ri-pencil-fill fs-16"></i>
-																					</a>
-																				</li>
-																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteterm">
-																						<i class="ri-delete-bin-5-fill fs-16"></i>
-																					</a>
-																				</li>
-																			</div>
-																		</div>
+																		@endforeach
+																		
 																		<div class="report-links create-text remove-border">
 																			<a href="" class="text-red" data-bs-target="#termsadd" data-bs-toggle="modal">Create Document</a>
 																			<!-- <div class="f-right">
@@ -1676,25 +1538,32 @@ function timeSlotOptionforservice($lbl, $val) {
 				<h5 class="modal-title" id="exampleModalLabel">Create Document</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="mb-3">
-							<label>Title</label>
-							<input type="text" class="form-control" id="category_title" name="category_title" required="">
+			<form id="createDocumentForm" action="{{route('personal.company_terms')}}" method="POST">
+				@csrf
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="mb-3">
+								<label>Title</label>
+								<input type="text" class="form-control" id="category_title" name="category_title">
+								<div id="title-error" style="color: red; display: none;"></div>
+
+							</div>
 						</div>
-					</div>
-					<div class="col-lg-12">
-						<label>Description</label>
-						<div id="contracttermdiv" style="display:block">
-							<textarea name="contracttermstext" id="ckeditor-classic"></textarea>
+						<div class="col-lg-12">
+							<label>Description</label>
+							<div id="contracttermdiv" style="display:block">
+								<textarea name="contracttermstext" id="ckeditor-classic"></textarea>
+								<div id="description-error" style="color: red; display: none;"></div> 
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-red">Submit</button>
-			</div>
+				<div class="modal-footer">
+					{{-- <button type="submit" class="btn btn-red">Submit</button> --}}
+					<button type="button" onclick="validateForm()" class="btn btn-red">Submit</button> 
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
@@ -1708,25 +1577,31 @@ function timeSlotOptionforservice($lbl, $val) {
 				<h5 class="modal-title" id="exampleModalLabel">Edit</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="mb-3">
-							<label>Title</label>
-							<input type="text" class="form-control" id="category_title" name="category_title" required="">
+			<form id="createDocumentFormUpdate" action="{{route('personal.company_terms_update')}}" method="POST">
+				@csrf
+				<div class="modal-body">
+					<div class="row">
+						<input type="hidden" id="term-id" name="term_id">
+						<div class="col-lg-12">
+							<div class="mb-3">
+								<label>Title</label>
+								<input type="text" class="form-control" id="categorytitle" name="category_title">
+								<div id="titleerror" style="color: red; display: none;"></div>
+							</div>
 						</div>
-					</div>
-					<div class="col-lg-12">
-						<label>Description</label>
-						<div id="contracttermdiv" style="display:block">
-							<textarea name="contracttermstext" id="ckeditor-classic2"></textarea>
+						<div class="col-lg-12">
+							<label>Description</label>
+							<div id="contracttermdiv" style="display:block">
+								<textarea name="contracttermstext" id="ckeditorclassic2"></textarea>
+								<div id="descriptionerror" style="color: red; display: none;"></div> 
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-red">Submit</button>
-			</div>
+				<div class="modal-footer">
+					<button type="button" onclick="validateFormupdate()" class="btn btn-red">Submit</button> 
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
@@ -1748,8 +1623,8 @@ function timeSlotOptionforservice($lbl, $val) {
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-red">Yes</button>
-				<button type="button" class="btn btn-black">No</button>
+				<button type="button" class="btn btn-red" id="confirm-delete">Yes</button>
+				<button type="button" class="btn btn-black ">No</button>
 			</div>
 		</div>
 	</div>
@@ -1759,7 +1634,7 @@ function timeSlotOptionforservice($lbl, $val) {
 
 	<script type="text/javascript">
         CKEDITOR.replace("ckeditor-classic");
-		CKEDITOR.replace("ckeditor-classic2");
+		CKEDITOR.replace("ckeditorclassic2");
     </script>
 
 
@@ -2090,5 +1965,139 @@ function timeSlotOptionforservice($lbl, $val) {
 		});
  	</script>
 
+	<script>
+		function validateForm() {
+			let title = document.getElementById("category_title").value;
+			let description = CKEDITOR.instances["ckeditor-classic"].getData(); 
+			let titleError = document.getElementById("title-error");
+			let descriptionError = document.getElementById("description-error");
+		
+			// Reset error messages
+			titleError.style.display = "none";
+			titleError.innerHTML = "";
+			descriptionError.style.display = "none";
+			descriptionError.innerHTML = "";
+		
+			let isValid = true;
+		
+			if (title === "") {
+				titleError.style.display = "block";
+				titleError.innerHTML = "The Title field is required.";
+				isValid = false;
+			}
+		
+			if (description === "") {
+				descriptionError.style.display = "block";
+				descriptionError.innerHTML = "The Description field is required.";
+				isValid = false;
+			}
+		
+			if (isValid) {
+				document.getElementById("createDocumentForm").submit();
+			}
+		}
+	</script>
 
+
+	<script>
+		function validateFormupdate() {
+			let title = document.getElementById("categorytitle").value;
+			let description = CKEDITOR.instances["ckeditorclassic2"].getData(); 
+			let titleError = document.getElementById("titleerror");
+			let descriptionError = document.getElementById("descriptionerror");
+		
+			// Reset error messages
+			titleError.style.display = "none";
+			titleError.innerHTML = "";
+			descriptionError.style.display = "none";
+			descriptionError.innerHTML = "";
+		
+			let isValid = true;
+		
+			if (title === "") {
+				titleError.style.display = "block";
+				titleError.innerHTML = "The Title field is required.";
+				isValid = false;
+			}
+		
+			if (description === "") {
+				descriptionError.style.display = "block";
+				descriptionError.innerHTML = "The Description field is required.";
+				isValid = false;
+			}
+		
+			if (isValid) {
+				document.getElementById("createDocumentFormUpdate").submit();
+			}
+		}
+	</script>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			setTimeout(function() {
+				const successAlert = document.getElementById('success-alert');
+				if (successAlert) {
+					successAlert.style.display = 'none';
+				}
+			}, 5000);
+		});
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const editButtons = document.querySelectorAll('.edit-item-btn');
+			editButtons.forEach(button => {
+				button.addEventListener('click', function() {
+					const encryptedId = this.getAttribute('data-termid'); // Encrypted ID
+					const title = this.getAttribute('data-title');
+					const description = this.getAttribute('data-description');
+					document.getElementById('categorytitle').value = title;
+					CKEDITOR.instances['ckeditorclassic2'].setData(description);
+					document.getElementById('term-id').value = encryptedId;
+
+				});
+			});
+		});
+	</script>
+
+	<script>
+		$(document).ready(function () {
+			var itemId = null;
+			$('.remove-item-btn').on('click', function () {
+				itemId = $(this).data('termsid');  
+			});
+			$('#confirm-delete').on('click', function () {
+				if (itemId) {
+					var url = '{{ route('personal.company_terms_delete', ':id') }}'.replace(':id', itemId);
+					$.ajax({
+						url: url, 
+						type: 'POST',
+						data: {
+								_method: 'POST',  
+								id: itemId,  
+								_token: '{{ csrf_token() }}'  
+							},
+						success: function (response) {
+							if (response.success) {
+								$('#deleteterm').modal('hide');
+								$('#message-content').text(response.success); 
+								$('#success-message').fadeIn(); 
+								setTimeout(function() {
+									$('#success-message').fadeOut(); 
+									window.location.reload();
+								}, 3000);
+							} else {
+								alert('Error deleting item');
+							}
+							$('#deleteterm').modal('hide'); 
+						},
+						error: function () {
+							alert('An error occurred while deleting the item');
+							$('#deleteterm').modal('hide');
+						}
+					});
+				}
+			});
+		});
+	</script>
+	
 @endsection

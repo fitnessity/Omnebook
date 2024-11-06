@@ -535,6 +535,7 @@
 							setTimeout(function() {
 								$('#noteMessage').text(''); // Clear the success message
 								$('#notes').modal('hide');  // Close the modal
+								window.location.reload();
 							}, 3000); 
 						} else {
 							// Show validation errors
@@ -553,47 +554,4 @@
 			});
 		});
 	</script>
-	<script>
-		$(document).ready(function() {
-			$('#addremainderNoteForm').on('submit', function(event) {
-				event.preventDefault(); // Prevent the default form submission
 	
-				let formData = $(this).serialize(); // Serialize form data
-				$.ajax({
-					url: "{{ route('add_remainder_notes') }}", // Your route for handling the form
-					method: 'POST',
-					data: formData,
-					success: function(data) {
-						// Clear previous error messages
-						$('#error-title').text('');
-						$('#error-notes').text('');
-						$('#error-due_date').text('');
-						$('#error-time').text('');
-	
-						// Check if the request was successful
-						if (data.status === 200) {
-							console.log(data);
-							// $('#notes').modal('hide');
-							// $('#noteMessage').text(data.message).removeClass('text-danger').addClass('text-success');
-							$('#noteMessageRemainder').text(data.message).removeClass('text-danger').addClass('text-success');
-
-							setTimeout(function() {
-							$('#noteMessageRemainder').text(''); 
-								$('#notes').modal('hide'); 
-							}, 3000); 
-						} else {
-							if (data.errors) {
-								for (let key in data.errors) {
-									$('#error-' + key).text(data.errors[key][0]); 
-								}
-							}
-						}
-					},
-					error: function(xhr) {
-						// Handle general AJAX errors here
-						console.error(xhr.responseText);
-					}
-				});
-			});
-		});
-	</script>

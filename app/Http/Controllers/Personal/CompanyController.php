@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-use App\{CompanyInformation,BusinessExperience,BusinessTerms,BusinessService,SGMailService,AddressCountry};
+use App\{CompanyInformation,BusinessExperience,BusinessTerms,BusinessService,SGMailService,AddressCountry,TermsCondition};
 use Auth;
 use Storage;
+use Illuminate\Support\Facades\Crypt;
 
 class CompanyController extends Controller
 {
@@ -340,5 +340,42 @@ class CompanyController extends Controller
             $service->delete();
         });
         $company->delete();
+    }
+    public function TermsConditions(Request $request)
+    {
+        // dd($request->all());
+        $termsCondition = new TermsCondition();
+        $termsCondition->title = $request->category_title;
+        $termsCondition->description = $request->contracttermstext;
+        $termsCondition->cid = Auth::user()->cid;
+        $termsCondition->user_id = auth()->id();    
+        $termsCondition->save();
+    
+        return redirect()->back()->with('success', 'Terms and conditions have been saved successfully.');
+    
+    }
+
+    public function TermsConditionsUpdate(Request $request)
+    {
+        // dd($request->all());
+        $termId = Crypt::decrypt($request->input('term_id'));
+        $term = TermsCondition::findOrFail($termId);
+        $term->title = $request->input('category_title');
+        $term->description = $request->input('contracttermstext');
+        $term->save();
+        return redirect()->back()->with('success', 'Term updated successfully.');
+
+    }
+    public function TermsConditionsDelete(Request $request,$id)
+    {
+        // dd($request->all());
+        $termId = Crypt::decrypt($request->input('id'));
+            try {
+                $item = TermsCondition::findOrFail($termId); 
+                $item->delete();
+                return response()->json(['success' => 'Terms and conditions have been Deleted successfully.' ]);
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'error' => 'Item not found or deletion failed'], 400);
+            }
     }
 }

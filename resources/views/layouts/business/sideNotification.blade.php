@@ -5,7 +5,7 @@
             <div class="card-body p-0">
                 <div class="p-3 p-relative">
                     <h6 class="text-muted mb-0 text-uppercase fw-semibold">Recent Activity</h6>
-                    <a href="javascript:void(0)" class="fa fa-times notification-close" onclick="$('.layout-rightside-col').removeClass('d-block');"></a>
+                        <a href="javascript:void(0)" class="fa fa-times notification-close" onclick="$('.layout-rightside-col').removeClass('d-block');"></a>
                 </div>
                 <div class="p-3 pt-0 recent-activity-scroll">
                     <div class="acitivity-timeline acitivity-main">

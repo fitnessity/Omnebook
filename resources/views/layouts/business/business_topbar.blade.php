@@ -1161,18 +1161,18 @@
 								</div>
 							</div>
 						</div>
-
+						@if (in_array(Route::currentRouteName(), ['business_dashboard']))
 						<div class="ms-1 header-item d-sm-flex">
 							<button type="button" class="btn btn-soft-info btn-icon waves-effect waves-light layout-rightside-btn shadow-none"><i class="ri-pulse-line"></i></button>
-						
 						</div>
+						@endif
 					</div>
 				</div>
 			</div>
 		</div>
-
-		{!! sidebarUpdatesNotification() !!}
-
+		@if (in_array(Route::currentRouteName(), ['business_dashboard']))
+			{!! sidebarUpdatesNotification() !!}
+		@endif	
 		<!-- removeNotificationModal -->
 		<div id="removeNotificationModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
 		    <div class="modal-dialog modal-dialog-centered">
@@ -1378,3 +1378,5 @@ window.onload = function(){
 		window.open(url, "_blank");
 	}
 </script>
+
+

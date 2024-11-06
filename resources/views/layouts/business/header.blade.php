@@ -584,17 +584,6 @@ $total_quantity = 0;
 									<input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone" class="form-control">
 									<span class="text-danger error-message" id="contactError"></span>
 								</div>
-								{{-- <div class="mb-3">
-									<label for="password" class="form-label">Password</label>
-									<input type="password" class="form-control" id="password" name="password">
-									<span class="text-danger error-message" id="passwordError"></span>
-
-								</div>
-								<div class="mb-3">
-									<label for="confirmPassword" class="form-label">Confirm Password</label>
-									<input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
-									<span class="text-danger error-message" id="confirmPasswordError"></span>
-								</div> --}}
 								<div id="responseMessage" class="alert" style="display: none;"></div>
 
 								<div class="float-right">
@@ -698,10 +687,10 @@ $total_quantity = 0;
 									messageDiv.addClass('alert alert-warning').text("An unexpected response was received.").show();
 								}
 						},
-						error: function(xhr, status, error) {
-							console.error('Error:', error);
-							alert("An unexpected error occurred.");
-						}
+						// error: function(xhr, status, error) {
+						// 	console.error('Error:', error);
+						// 	alert("An unexpected error occurred.");
+						// }
 					});
             }
         });

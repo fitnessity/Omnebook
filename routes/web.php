@@ -240,6 +240,10 @@ Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware
     Route::resource('schedulers', 'SchedulerController')->only(['index','create','update','destroy','store']);  
     Route::any('all_activity_schedule', 'SchedulerController@allActivitySchedule')->name('allActivitySchedule');
     Route::resource('company', 'CompanyController')->only(['index','create','edit', 'update', 'destroy', 'store']);
+    Route::post('/company_terms', 'CompanyController@TermsConditions')->name('company_terms');//added  6_11_24
+    Route::post('/company_terms_update', 'CompanyController@TermsConditionsUpdate')->name('company_terms_update');//added  6_11_24
+    Route::post('/company_terms_delete/{id}',  'CompanyController@TermsConditionsDelete')->name('company_terms_delete');//added  6_11_24
+
     Route::resource('profile', 'ProfileController')->only(['index','create','edit', 'update', 'destroy', 'store']);
     Route::get('check-in-portal', 'CheckInController@index')->name('check-in-portal');
     Route::get('check-in', 'CheckInController@checkIn')->name('check-in');

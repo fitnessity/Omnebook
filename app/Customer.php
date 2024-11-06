@@ -446,23 +446,50 @@ class Customer extends Authenticatable
         return $result->count();
     }
 
-    public function active_memberships($sport = null,$expireDate= null){
-        $expireDate = $expireDate ??  Carbon::now()->format('Y-m-d');
-        $used_user_booking_detail_ids = $this->BookingCheckinDetails()->whereRaw('booking_detail_id is not null')->where('after_use_session_amount', '<=' , 0)->pluck('booking_detail_id')->toArray();
-        $results = $this->bookingDetail()->where('order_type','membership')->where('status', 'active')->whereNotNull('priceid')->whereRaw('(user_booking_details.expired_at > ? or user_booking_details.expired_at is null)', $expireDate)
-                                            ->whereNotIn('user_booking_details.id', $used_user_booking_detail_ids)
-                                            ->whereExists(function ($query) {
-                                                $query->select(DB::raw(1))
-                                                      ->from('transaction')
-                                                      ->whereColumn('user_booking_details.booking_id', 'transaction.item_id')
-                                                      ->where('transaction.status', '!=', 'requires_capture');
-                                            });
+    // public function active_memberships($sport = null,$expireDate= null){
+    //     $expireDate = $expireDate ??  Carbon::now()->format('Y-m-d');
+    //     $used_user_booking_detail_ids = $this->BookingCheckinDetails()->whereRaw('booking_detail_id is not null')->where('after_use_session_amount', '<=' , 0)->pluck('booking_detail_id')->toArray();
+    //     $results = $this->bookingDetail()->where('order_type','membership')->where('status', 'active')->whereNotNull('priceid')->whereRaw('(user_booking_details.expired_at > ? or user_booking_details.expired_at is null)', $expireDate)
+    //                                         ->whereNotIn('user_booking_details.id', $used_user_booking_detail_ids)
+    //                                         ->whereExists(function ($query) {
+    //                                             $query->select(DB::raw(1))
+    //                                                   ->from('transaction')
+    //                                                   ->whereColumn('user_booking_details.booking_id', 'transaction.item_id')
+    //                                                   ->where('transaction.status', '!=', 'requires_capture');
+    //                                         });
                                     
 
-        return $results; 
+    //     return $results; 
+    // }
+
+    public function active_memberships($sport = null, $expireDate = null)
+    {
+        $expireDate = $expireDate ?? Carbon::now()->format('Y-m-d');
+        
+        // Get used booking detail IDs with fewer database calls
+        $usedUserBookingDetailIds = $this->BookingCheckinDetails()
+                                          ->whereNotNull('booking_detail_id')
+                                          ->where('after_use_session_amount', '<=', 0)
+                                          ->pluck('booking_detail_id')
+                                          ->toArray();
+    
+        // Return the query instead of a collection
+        return $this->bookingDetail()
+                    ->select('user_booking_details.*') // Select only necessary columns
+                    ->where('user_booking_details.order_type', 'membership')
+                    ->where('user_booking_details.status', 'active')
+                    ->whereNotNull('user_booking_details.priceid')
+                    ->where(function($query) use ($expireDate) {
+                        $query->where('user_booking_details.expired_at', '>', $expireDate)
+                              ->orWhereNull('user_booking_details.expired_at');
+                    })
+                    ->whereNotIn('user_booking_details.id', $usedUserBookingDetailIds)
+                    ->join('transaction', function ($join) {
+                        $join->on('user_booking_details.booking_id', '=', 'transaction.item_id')
+                             ->where('transaction.status', '!=', 'requires_capture');
+                    });
     }
-
-
+    
     public function suspended_memberships($sport = null,$expireDate= null){
         $expireDate = $expireDate ??  Carbon::now()->format('Y-m-d');
         $used_user_booking_detail_ids = $this->BookingCheckinDetails()->whereRaw('booking_detail_id is not null')->where('after_use_session_amount', '<=' , 0)->pluck('booking_detail_id')->toArray();

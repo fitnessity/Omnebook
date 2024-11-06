@@ -3,6 +3,7 @@
 <link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
 <link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 <link rel="stylesheet" type='text/css' href="{{url('/public/css/compare/style.css')}}">
+
 @section('content')
 <style>
     .register_wrap form{padding: 0 50px;}
@@ -424,9 +425,10 @@ if(!empty($cart["cart_item"])) {
 							<div class="btn-cart-info instant-detail-booknow">
 								@if(Auth::user())
 									<a type="submit" href="{{route('carts_index')}}" class="btn btn-red mt-10 fs-12" >View Cart & Checkout</a>
-								@else
-									<a type="submit" class="btn btn-red mt-10" data-toggle="modal" data-target="#cartcheckout">View Cart & Checkout</a>
+									@else
+									<a class="btn btn-red mt-10 fs-12" data-bs-toggle="modal" data-bs-target="#cartcheckout">View Cart & Checkout</a>
 								@endif
+								
 							</div>
 						</div>
 					</div>
@@ -645,17 +647,21 @@ if(!empty($cart["cart_item"])) {
 	</div>
 </div>
 
+
 <!-- The Modal Checkout-->
 <div class="modal fade compare-model" id="cartcheckout">
     <div class="modal-dialog cartcheckout">
         <div class="modal-content">
-			<div class="modal-header" style="text-align: right;"> 
+			<div class="modal-header">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<!-- <div class="modal-header" style="text-align: right;"> 
 			  	<div class="closebtn">
 					<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
 				</div>
-			</div>
+			</div> -->
 
             <!-- Modal body -->
             <div class="modal-body body-space">
@@ -665,7 +671,7 @@ if(!empty($cart["cart_item"])) {
 					</div>
 					<div class="col-lg-12 btns-modal">
 						<a href="{{route('addcheckoutsession')}}" class="addbusiness-btn-modal cart-btn-width">Log in</a>
-						<a onclick="openRegistrationModal();" class="addbusiness-btn-modal" >Continue as Guest</a>
+						<a onclick="openRegistrationModal();" class="addbusiness-btn-modal" data-bs-dismiss="modal">Continue as Guest</a>
 					</div>
 				 </div>
             </div>
@@ -674,21 +680,24 @@ if(!empty($cart["cart_item"])) {
 </div>
 <!-- end modal -->
 
+
 <!-- The Modal Registraion-->
 <div class="modal fade compare-model" id="registermodal"  tabindex="-1" data-bs-focus="false">
-    <div class="modal-dialog registermodal">
+    <div class="modal-dialog registermodal modal-xl">
         <div class="modal-content">
-			<div class="modal-header" style="text-align: right;"> 
+			<div class="modal-header">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<!-- <div class="modal-header" style="text-align: right;"> 
 			  	<div class="closebtn">
 					<button type="button" class="close close-btn-design manage-customer-close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
 				</div>
-			</div>
+			</div> -->
 
             <!-- Modal body -->
             <div class="modal-body body-space register-bg">
-				
             </div>
         </div>
     </div>
@@ -697,6 +706,7 @@ if(!empty($cart["cart_item"])) {
 <!-- end modal -->
 
 @include('layouts.business.footer')
+
 <script type="text/javascript">
 	flatpickr(".flatpicker_registration", {
 		dateFormat: 'm/d/Y',
@@ -740,12 +750,15 @@ if(!empty($cart["cart_item"])) {
   	});
 
   	function openRegistrationModal(){
+	// alert('22');
 		$.ajax({
             url: '{{route('openGuestRegistration')}}',
             type: 'GET',
             success: function (response) {
-            	$('.register-bg').html(response);
-            	$('#registermodal').modal({ show: true, focus: false});
+				$('.register-bg').html(response);
+            	// $('#registermodal').modal({ show: true, focus: false});
+				$('#registermodal').modal('show'); // Simplify by using only `show`
+
             }
         });
 	}

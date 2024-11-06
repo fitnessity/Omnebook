@@ -111,7 +111,7 @@
 				</div>
                 <!-- Modal body -->
                 <div class="modal-body body-tbm">
-                    <div class="modal-box-selection" data-bs-toggle="modal" data-bs-target="#bookclienttraining">
+                    <div class="modal-box-selection" onClick="openNaavbookclienttraining()" data-bs-dismiss="modal">
                         <div class="row"> 
                             <div class="col-md-3 col-3">
                                 <div class="schedule-client">
@@ -127,7 +127,7 @@
                         </div>
                     </div>
 					
-                    <div  class="modal-box-selection" onClick="openNaavmeetings()">
+                    <div  class="modal-box-selection" onClick="openNaavmeetings()" data-bs-dismiss="modal">
                         <div class="row"> 
                             <div class="col-md-3 col-3">
                                 <div class="schedule-client">
@@ -142,7 +142,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-box-selection" onClick="openNaavblockoff()" >
+                    <div class="modal-box-selection" onClick="openNaavblockoff()" data-bs-dismiss="modal">
                         <div class="row"> 
                             <div class="col-md-3 col-3">
                                 <div class="schedule-client">
@@ -162,6 +162,8 @@
         </div>
     </div>
 <!-- end modal -->
+
+
 
 <nav class="com-sidebar">
     <div class="navbar-wrapper">
@@ -276,6 +278,7 @@
         </div>
     </div>
 </nav>
+
 <nav class="com-sidebar">
     <div class="navbar-wrapper">
         <div id="schedule_meetings" class="com-sidepanel">
@@ -647,6 +650,7 @@
 
 <script src="{{ url('public/js/moment.min.js') }}"></script>
 <script src="{{ asset('/js/fullcalendar/fullcalendar.min.js') }}"></script>
+
 
 <script>
 function openNaavblockoff() {

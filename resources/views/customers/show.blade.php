@@ -40,7 +40,6 @@
 									</div>
 								</div>
 							</div>
-
 							@if(session('success'))
 							    <div class="alert alert-success">
 							        {{ session('success') }}
@@ -56,7 +55,8 @@
 									<div class="card">
 										<div class="card-header align-items-center d-flex">
 											<h4 class="card-title mb-0 flex-grow-1">{{@$customerdata->full_name}}'s Account </h4>
-										</div><!-- end card header -->
+										</div>
+										<!-- end card header -->
 										<div class="card-body">
 											<div class="live-preview">
 												<div class="accordion custom-accordionwithicon accordion-border-box" id="accordionnesting">
@@ -958,10 +958,6 @@
 																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('void_or_refund_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
 																																			</i>Refund or Void</a>
 																																		</li>
-																																		{{-- <li>
-																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('terminate_or_suspend_modal', ['business_id' => request()->business_id, 'id' => $customerdata->id,'booking_detail_id' => @$booking_detail->id , 'booking_id' => @$booking_detail->booking_id])}}" data-modal-width="modal-50"> <i class="fas fa-plus text-muted">
-																																			</i>Suspend or Terminate</a>
-																																		</li> --}}
 																																		<li>
 																																			<a class="edit-booking-customer" data-behavior="ajax_html_modal" data-url="{{route('business.recurring.index', ['business_id' => request()->business_id, 'customer_id' => $customerdata->id, 'booking_detail_id' => @$booking_detail->id ,'type'=>'schedule'])}}" data-modal-width="modal-50" data-reload="1"><i class="fas fa-plus text-muted">
 																																			</i>Autopay Schedule</a>
@@ -2700,5 +2696,4 @@
         });
     	}
 	</script>
-
 @endsection

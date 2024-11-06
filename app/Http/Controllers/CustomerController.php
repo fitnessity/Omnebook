@@ -321,6 +321,8 @@ class CustomerController extends Controller {
         $suspended_memberships = $customerdata != '' ? $customerdata->suspended_memberships()->orderBy('created_at','desc')->get() : [];
         $purchase_history = @$customerdata != '' ?  @$customerdata->purchase_history()->orderBy('created_at','desc')->get() : [];
         
+        // $active_memberships=[];
+        // $suspended_memberships=[];
         $booking_detail = UserBookingDetail::where('business_id', $business_id)
         ->where('user_id', '!=', $customerdata->id)
         ->whereNotNull('user_id')  
