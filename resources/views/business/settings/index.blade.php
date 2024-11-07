@@ -195,15 +195,18 @@ function timeSlotOptionforservice($lbl, $val) {
 															<div class="col-12 col-lg-4 col-md-4">
 																<div class="reports-title">
 																	<label>Side Panel Color</label>
+																	<div id="success-message-panel" style="display: none; background-color: #d4edda; color: #155724; padding: 10px; margin-top: 10px; border: 1px solid #c3e6cb; border-radius: 5px;"></div>
 																</div>
 															</div>
 															<div class="col-12 col-lg-6 col-md-8">
 																<div class="card card-body box-border">
 																	<div class="d-grid align-items-center">
-																		<form action="">
-																			<input type="radio" id="black" name="fav_language" value="black" checked>
+																		<form>
+																			{{-- <input type="radio" id="black" name="fav_language" value="black" checked> --}}
+																			<input type="radio" id="black" name="fav_language" value="black" 
+																			{{ isset($sidecolor) && $sidecolor->side_panel_color == 1 ? 'checked' : '' }} onchange="updateSidePanelColor('black', {{ $sidecolor->id }})">																		
 																			<label for="black" class="mr-15">Black</label>
-																			<input type="radio" id="white" name="fav_language" value="white">
+																			<input type="radio" id="white" name="fav_language" value="white" {{ isset($sidecolor) && $sidecolor->side_panel_color == 0 ? 'checked' : '' }}  onchange="updateSidePanelColor('white', {{ $sidecolor->id }})">
 																			<label for="white">White</label>
 																		</form>
 																	</div>
@@ -463,7 +466,7 @@ function timeSlotOptionforservice($lbl, $val) {
 
 
 																		<div class="col-md-12 col-12">
-																			<button type="submit" class="btn-red-primary btn-red float-right mt-15">Save </button>
+																			<button type="submit" class="btn-red-primary btn-red float-right mt-15">Save</button>
 																		</div>
 																	</div>
 																</form>
@@ -1631,22 +1634,250 @@ function timeSlotOptionforservice($lbl, $val) {
 </div>
 @include('layouts.business.footer')
 @include('layouts.business.scripts')
+<script src="{{asset('/public/dashboard-design/ckeditor/ckeditor5.js')}}"></script>
+<script>
+	CKEDITOR.ClassicEditor.create(document.getElementById("ckeditor-classic"), {
+	toolbar: {
+		items: [
+			'exportPDF','exportWord', '|',
+			'findAndReplace', 'selectAll', '|',
+			'heading', '|',
+			'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
+			'bulletedList', 'numberedList', 'todoList', '|',
+			'outdent', 'indent', '|',
+			'undo', 'redo',
+			'-',
+			'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+			'alignment', '|',
+			'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
+			'specialCharacters', 'horizontalLine', 'pageBreak', '|',
+			'textPartLanguage', '|',
+			'sourceEditing'
+		],
+		shouldNotGroupWhenFull: true
+	},
+	list: {
+		properties: {
+			styles: true,
+			startIndex: true,
+			reversed: true
+		}
+	},
+	heading: {
+		options: [
+			{ model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+			{ model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+			{ model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+			{ model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+			{ model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+			{ model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+			{ model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+		]
+	},
+	placeholder: '',
+	fontFamily: {
+		options: [
+			'default',
+			'Arial, Helvetica, sans-serif',
+			'Courier New, Courier, monospace',
+			'Georgia, serif',
+			'Lucida Sans Unicode, Lucida Grande, sans-serif',
+			'Tahoma, Geneva, sans-serif',
+			'Times New Roman, Times, serif',
+			'Trebuchet MS, Helvetica, sans-serif',
+			'Verdana, Geneva, sans-serif'
+		],
+		supportAllValues: true
+	},
+	fontSize: {
+		options: [ 10, 12, 14, 'default', 18, 20, 22 ],
+		supportAllValues: true
+	},
+	htmlSupport: {
+		allow: [
+			{
+				name: /.*/,
+				attributes: true,
+				classes: true,
+				styles: true
+			}
+		]
+	},
+	htmlEmbed: {
+		showPreviews: true
+	},
+	link: {
+		decorators: {
+			addTargetToExternalLinks: true,
+			defaultProtocol: 'https://',
+			toggleDownloadable: {
+				mode: 'manual',
+				label: 'Downloadable',
+				attributes: {
+					download: 'file'
+				}
+			}
+		}
+	},
+	mention: {
+		feeds: [
+			{
+				marker: '@',
+				feed: [
+					'@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
+					'@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
+					'@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
+					'@sugar', '@sweet', '@topping', '@wafer'
+				],
+				minimumCharacters: 1
+			}
+		]
+	},
+	removePlugins: [
+		'CKBox',
+		'CKFinder',
+		'EasyImage',
+		'RealTimeCollaborativeComments',
+		'RealTimeCollaborativeTrackChanges',
+		'RealTimeCollaborativeRevisionHistory',
+		'PresenceList',
+		'Comments',
+		'TrackChanges',
+		'TrackChangesData',
+		'RevisionHistory',
+		'Pagination',
+		'WProofreader',
+		'MathType'
+	]
+});
+</script>
 
-	<script type="text/javascript">
+<script>
+	CKEDITOR.ClassicEditor.create(document.getElementById("ckeditorclassic2"), {
+	toolbar: {
+		items: [
+			'exportPDF','exportWord', '|',
+			'findAndReplace', 'selectAll', '|',
+			'heading', '|',
+			'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
+			'bulletedList', 'numberedList', 'todoList', '|',
+			'outdent', 'indent', '|',
+			'undo', 'redo',
+			'-',
+			'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+			'alignment', '|',
+			'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
+			'specialCharacters', 'horizontalLine', 'pageBreak', '|',
+			'textPartLanguage', '|',
+			'sourceEditing'
+		],
+		shouldNotGroupWhenFull: true
+	},
+	list: {
+		properties: {
+			styles: true,
+			startIndex: true,
+			reversed: true
+		}
+	},
+	heading: {
+		options: [
+			{ model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+			{ model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+			{ model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+			{ model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+			{ model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+			{ model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+			{ model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+		]
+	},
+	placeholder: '',
+	fontFamily: {
+		options: [
+			'default',
+			'Arial, Helvetica, sans-serif',
+			'Courier New, Courier, monospace',
+			'Georgia, serif',
+			'Lucida Sans Unicode, Lucida Grande, sans-serif',
+			'Tahoma, Geneva, sans-serif',
+			'Times New Roman, Times, serif',
+			'Trebuchet MS, Helvetica, sans-serif',
+			'Verdana, Geneva, sans-serif'
+		],
+		supportAllValues: true
+	},
+	fontSize: {
+		options: [ 10, 12, 14, 'default', 18, 20, 22 ],
+		supportAllValues: true
+	},
+	htmlSupport: {
+		allow: [
+			{
+				name: /.*/,
+				attributes: true,
+				classes: true,
+				styles: true
+			}
+		]
+	},
+	htmlEmbed: {
+		showPreviews: true
+	},
+	link: {
+		decorators: {
+			addTargetToExternalLinks: true,
+			defaultProtocol: 'https://',
+			toggleDownloadable: {
+				mode: 'manual',
+				label: 'Downloadable',
+				attributes: {
+					download: 'file'
+				}
+			}
+		}
+	},
+	mention: {
+		feeds: [
+			{
+				marker: '@',
+				feed: [
+					'@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
+					'@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
+					'@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
+					'@sugar', '@sweet', '@topping', '@wafer'
+				],
+				minimumCharacters: 1
+			}
+		]
+	},
+	removePlugins: [
+		'CKBox',
+		'CKFinder',
+		'EasyImage',
+		'RealTimeCollaborativeComments',
+		'RealTimeCollaborativeTrackChanges',
+		'RealTimeCollaborativeRevisionHistory',
+		'PresenceList',
+		'Comments',
+		'TrackChanges',
+		'TrackChangesData',
+		'RevisionHistory',
+		'Pagination',
+		'WProofreader',
+		'MathType'
+	]
+});
+</script>
+
+	<!-- <script type="text/javascript">
         CKEDITOR.replace("ckeditor-classic");
 		CKEDITOR.replace("ckeditorclassic2");
-    </script>
+    </script> -->
 
 
-<script src="{{url('/public/dashboard-design/js/ckeditor/ckeditor.js')}}"></script>
+<!-- <script src="{{url('/public/dashboard-design/js/ckeditor/ckeditor.js')}}"></script> -->
 
-	<script type="text/javascript">
-        CKEDITOR.replace("ckeditor-classic");
-		CKEDITOR.replace("ckeditor-classic2");
-		CKEDITOR.replace("ckeditor-classic3");
-		CKEDITOR.replace("ckeditor-classic4");
-		CKEDITOR.replace("ckeditor-classic5");
-    </script>
+
 	<script>
 		$(document).ready(function(){ 
 			$('#aboutcLeft').text(200-parseInt($("#about_host").val().length));
@@ -1937,7 +2168,7 @@ function timeSlotOptionforservice($lbl, $val) {
       });    
 	</script>
 
- 	<script>
+ 	{{-- <script>
  		$(document).ready(function(){
  			ClassicEditor.create(document.querySelector("#ckeditor-classic2")).then(function(e) {
 				e.ui.view.editable.element.style.height = "200px"
@@ -1963,7 +2194,7 @@ function timeSlotOptionforservice($lbl, $val) {
 				console.error(e)
 			});
 		});
- 	</script>
+ 	</script> --}}
 
 	<script>
 		function validateForm() {
@@ -2099,5 +2330,73 @@ function timeSlotOptionforservice($lbl, $val) {
 			});
 		});
 	</script>
-	
+
+{{-- <script>
+	function updateSidePanelColor(color) {
+		$.ajax({
+			url: "{{ route('your.update.color.route') }}", // Replace with your route
+			type: "POST",
+			data: {
+				_token: "{{ csrf_token() }}",  // CSRF token
+				side_panel_color: color
+			},
+			success: function(response) {
+				// Handle success response if necessary
+				alert("Side panel color updated successfully!");
+			},
+			error: function(xhr, status, error) {
+				// Handle error if necessary
+				alert("An error occurred while updating the color.");
+			}
+		});
+	}
+</script> --}}
+<script>
+	// function updateSidePanelColor(color, businessId) {
+	// 	$.ajax({
+	// 		url: "/business/" + businessId + "/settings_store",  
+	// 		type: "POST",
+	// 		data: {
+	// 			_token: "{{ csrf_token() }}",  
+	// 			side_panel_color: color  
+	// 		},
+	// 		success: function(response) {
+	// 			alert("Side panel color updated successfully!");
+	// 		},
+	// 		error: function(xhr, status, error) {
+	// 			alert("An error occurred while updating the color.");
+	// 		}
+	// 	});
+	// }
+	function updateSidePanelColor(color, businessId) {
+    $.ajax({
+        url: "/business/" + businessId + "/settings_store",  // Dynamic URL with business ID
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",  // CSRF token
+            side_panel_color: color  // Color selected (black or white)
+        },
+        success: function(response) {
+            // Display the success message in the div
+            $('#success-message').text(response.message).show();
+
+            // Set a timeout to hide the message after 3 seconds
+            setTimeout(function() {
+                $('#success-message-panel').fadeOut();
+            }, 3000);
+			window.location.reload();
+        },
+        error: function(xhr, status, error) {
+            if (xhr.status === 422) {
+                var errors = xhr.responseJSON.errors;
+                // alert("Validation error: " + errors.side_panel_color[0]);
+            } 
+			// else {
+            //     alert("An error occurred while updating the color.");
+            // }
+        }
+    });
+}
+
+</script>
 @endsection

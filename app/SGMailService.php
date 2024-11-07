@@ -131,7 +131,43 @@ class SGMailService{
 		    "ContactUs" => env('APP_URL').'contact-us',
 		    "Activity" => env('APP_URL').'activities',
 		];
-		return SGMailService::MailDetail($customer->email,$substitutions,'d-70af5c145eca4a4f878ec680469036b7' );
+		// return SGMailService::MailDetail($customer->email,$substitutions,'d-70af5c145eca4a4f878ec680469036b7' );
+		return SGMailService::MailDetail($customer->email,$substitutions,'d-d42244ec709c4d91b23393393b2e05ef' );
+
+	}
+
+	public static function sendMailToCustomer($id,$business_id,$password){
+		$customer = Customer::findOrFail($id);
+		$businessdata = CompanyInformation::findOrFail($business_id);
+
+		$businessimg = $businessdata->logo;
+		if( $businessimg == ''){
+           	$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
+        }else{
+        	$ImageUrl = Storage::URL($businessimg);
+        }
+
+		$substitutions = [
+			"ProviderName" => $businessdata->public_company_name,  
+			"CustomerName" => @$customer->full_name,  
+			"CustomerEmail" => $customer->email,  
+			"TempPassword" => $password,  
+			"CompanyName" => $businessdata->public_company_name,  
+		    "ContactPerson" => $businessdata->first_name.' '.$businessdata->last_name,  
+		    "Address" => $businessdata->company_address(),   
+		    "PhoneNumber" => $businessdata->business_phone,   
+		    "Email" => $businessdata->business_email,  
+		    "Website" => $businessdata->business_website,
+		    "companyImage" => $ImageUrl,
+		    "PersonalProfile" => env('APP_URL').'userprofile/'.$businessdata->users->username,
+		    "SiteUrl" => env('APP_URL'),
+		    "AddInfo" => env('APP_URL').'addcustomerbusiness',
+		    "ContactUs" => env('APP_URL').'contact-us',
+		    "Activity" => env('APP_URL').'activities',
+		];
+		// return SGMailService::MailDetail($customer->email,$substitutions,'d-70af5c145eca4a4f878ec680469036b7' );
+		return SGMailService::MailDetail($customer->email,$substitutions,'d-c9be11dacac24b2cb223fa368f797da5');
+
 	}
 
 	public static function requestAccessMail($customer){

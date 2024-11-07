@@ -18,7 +18,8 @@
                                 </div>
                             </div>
 
-                            @if($success == 1)
+                            <!-- if($success == 1) -->
+                            @if(session('success-register') == 1)
                             <div class="row mb-3">
                                 <div class="page-heading">
                                     <span class="font-green fs-16">Customer Successfully Registered. @if($successMsg) {!! $successMsg !!} @endif </span>

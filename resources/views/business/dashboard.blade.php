@@ -92,7 +92,7 @@
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <div class="px-3">
-                                                                <img src="{{url('dashboard-design/images/user-illustarator-2.png')}}" class="img-fluid" alt="fitnessity" loading="lazy">
+                                                                <img src="{{url('dashboard-design/images/user-illustarator-2.png')}}" class="img-fluid" alt="omnebook" loading="lazy">
                                                             </div>
                                                         </div>
                                                     </div>

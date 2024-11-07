@@ -17,8 +17,12 @@
     $businessImage = $company != '' ? @$company->getCompanyImage() : '';
 ?>
 
-<div class="app-menu navbar-menu navbar-menu-white" >
-    <!-- LOGO -->
+ {{-- <div class="app-menu navbar-menu navbar-menu-white"> --}}
+    <div class="app-menu 
+    {{ $company->side_panel_color == 1 ? 'navbar-menu' : '' }}
+    {{ $company->side_panel_color == 0 ? 'navbar-menu-white' : '' }}">
+
+        <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
         <!-- <a href="#" class="logo logo-dark">
@@ -41,7 +45,7 @@
 				<div class="dropdown mt-70">
                     
                         
-                        <button class="btn btn-switch-business btn-switch-business-white dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn {{ $company->side_panel_color == 1 ? 'btn-switch-business' : '' }} {{ $company->side_panel_color == 0 ? 'btn-switch-business-white ' : '' }} dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">
                             @if($businessImage)
                                     <img src="{{$businessImage}}" alt="Fitnessity" class="avatar-xs rounded-circle me-2 shadow">
                                 @else

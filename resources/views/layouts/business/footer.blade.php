@@ -83,7 +83,7 @@
             </div>
             <div class="col-lg-2 col-md-4 col-sm-12 col-xs-12">
                 <div class="footer-link footer-widget-title">
-                    <a class="foot-title" href="{{ url('') }}">FITNESSITY</a><br/>
+                    <a class="foot-title" href="{{ url('') }}">Omnebook</a><br/>
                     <?php /*?><a href="{{ Config::get('constants.SITE_URL') }}/about-us">About Us</a>
                     <a href="{{ Config::get('constants.SITE_URL') }}/be-a-part">Be A Part</a>
                     <a href="{{ Config::get('constants.SITE_URL') }}/discover">Discover</a>
@@ -116,14 +116,14 @@
                 </div>
                 <div class="footer-bottom-left social-footer">
                     <ul>
-                        <li><a href="https://twitter.com/Fitnessitynyc" target="_blank" ><img src="{{asset('public/img/twitter.png')}}" width="30px" height="30px" height="30px" alt="Fitnessity" loading="lazy"/></a>&nbsp;&nbsp;</li>
-                        <li><a href="https://www.instagram.com/fitnessityofficial/?hl=en" target="_blank"><img src="{{asset('public/img/instagram.png')}}" width="30px" height="30px" alt="Fitnessity" loading="lazy"/></a>&nbsp;&nbsp;</li>
-                        <li><a href="https://www.facebook.com/fitnessityofficial" target="_blank"><img src="{{asset('public/img/facebook.png')}}" width="30" height="30px" alt="Fitnessity" loading="lazy"/></a>&nbsp;&nbsp;</li>
+                        <li><a href="https://twitter.com/Fitnessitynyc" target="_blank" ><img src="{{asset('public/img/twitter.png')}}" width="30px" height="30px" height="30px" alt="omnebook" loading="lazy"/></a>&nbsp;&nbsp;</li>
+                        <li><a href="https://www.instagram.com/fitnessityofficial/?hl=en" target="_blank"><img src="{{asset('public/img/instagram.png')}}" width="30px" height="30px" alt="omnebook" loading="lazy"/></a>&nbsp;&nbsp;</li>
+                        <li><a href="https://www.facebook.com/fitnessityofficial" target="_blank"><img src="{{asset('public/img/facebook.png')}}" width="30" height="30px" alt="omnebook" loading="lazy"/></a>&nbsp;&nbsp;</li>
                     </ul>
                 </div>
             </div>
         </div>
-        <p class="copyright">© <?php echo date('Y'); ?> Fitnessity</p>
+        <p class="copyright">© <?php echo date('Y'); ?> Omnebook</p>
     </div>
 </footer>
 <p id="back-top" title="Back To Top">
@@ -181,7 +181,7 @@
 								<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeMobileNav()"></a>
 								<ul class="pc-navbar">
 									<li style="text-align: center;"> 
-										<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" alt="Fitnessity"  class="sidemenupic" loading="lazy">
+										<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" alt="omnebook"  class="sidemenupic" loading="lazy">
 									</li>
 									<li class="pc-caption"><span> Welcome</span></li>
 									<li class="pc-caption-1">
@@ -195,34 +195,34 @@
 										<button class="btn-lp" type="button"><a style="color: white;" href="{{url('/activities')}}">Book An Activity </a> </button> 
 									</li>
 									<li class="pc-link">
-									   <span class="pc-micon"><img src="{{asset('/public/img/social-profile.png')}}" alt="Fitnessity" loading="lazy"></span><a href="{{route('profile-viewProfile')}}" style="color: white;" loading="lazy"> View Personal Profile</a>
+									   <span class="pc-micon"><img src="{{asset('/public/img/social-profile.png')}}" alt="omnebook" loading="lazy"></span><a href="{{route('profile-viewProfile')}}" style="color: white;" loading="lazy"> View Personal Profile</a>
 									</li>
 
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt="Fitnessity" loading="lazy"></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/edit-2.png')}}" alt="omnebook" loading="lazy"></span><a href="{{url('/personal/profile')}}" style="color: white;">Edit Profile & Password</a>
 									</li>
 
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt="Fitnessity" loading="lazy"></span><a href="{{route('personal.manage-account.index')}}" style="color: white;"> Manage Accounts</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/menu-icon5.svg')}}" alt="omnebook" loading="lazy"></span><a href="{{route('personal.manage-account.index')}}" style="color: white;"> Manage Accounts</a>
 									</li>
 								
 									<li class="pc-link"> 
-										<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt="Fitnessity" loading="lazy"></span>
+										<span class="pc-micon"><img src="{{ url('public/img/menu-icon3.svg') }}" alt="omnebook" loading="lazy"></span>
 										<a href="{{ url('/personal/calendar')}}" style="color: white;">Calendar</a>
 									</li>
 
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt="Fitnessity" loading="lazy"></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/credit-card.png')}}" alt="omnebook" loading="lazy"></span><a href="{{route('personal.credit-cards')}}" style="color: white;">Credit Card</a>
 									</li>
 
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt="Fitnessity" loading="lazy"></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/favorite.png')}}" alt="omnebook" loading="lazy"></span><a href="{{route('personal.favourite')}}" style="color: white;">Favorite</a>
 									</li>
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity" loading="lazy"></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="omnebook" loading="lazy"></span><a href="{{route('personal.followers')}}" style="color: white;">Followers</a>
 									</li>
 									<li class="pc-link">
-										<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="Fitnessity" loading="lazy"></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
+										<span class="pc-micon"><img src="{{asset('/public/img/follower.png')}}" alt="omnebook" loading="lazy"></span><a href="{{route('personal.following')}}" style="color: white;">Following</a>
 									</li>
 									
 									<!-- <li class="pc-link">
@@ -270,7 +270,7 @@
 								</ul>
 							</div>
 							<p class="pri-1"> <a href="{{ Config::get('constants.SITE_URL') }}/privacy-policy" style="color: white;"> Privacy </a> - <a href="{{ Config::get('constants.SITE_URL') }}/terms-condition" style="color: white;">Terms </a></p>
-							<p class="pri-2">Fitnessity, Inc {{date('Y')}}</p>
+							<p class="pri-2">Omnebook, Inc {{date('Y')}}</p>
 						</div>
 					</div>
 				</nav>

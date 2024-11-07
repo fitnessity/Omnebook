@@ -3,7 +3,7 @@
     <div class="col-lg-6 col-xs-12 register-modal">
 		<div class="register_wrap">
 			<div class="logo-my">
-				<a href="#"> <img src="{{url('/public/images/omnebook.png')}}" alt="Fitnessity"> </a>
+				<a href="#"> <img src="{{url('/public/images/omnebook.png')}}" alt="omnebook"> </a>
 			</div>
 			
 			<div class="manage-customer-from">
@@ -48,7 +48,7 @@
 							<div class="col-md-12">
 								<div class="terms-wrap wrap-sp">
 									<input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-									<label class="modalregister-private" for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
+									<label class="modalregister-private" for="b_trm1">I agree to Omnebook <a href="/terms-condition" target="_blank" class="font-red">Terms of Service</a> and <a href="/privacy-policy" class="font-red" target="_blank">Privacy Policy</a></label>
 								</div>
 								<div id='termserror'></div><br>
 								<button type="button" style="margin-bottom: 10px;" class="signup-new" id="register_submit" onclick="$('#frmregister').submit();">Continue</button><br>
@@ -294,8 +294,8 @@
 	                    data: formData,
 	                    beforeSend: function () {
 	                        $('#register_submit').prop('disabled', true).css('background','#999999');
-	                        showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
-	                        $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+	                        showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Omnebook.');
+	                        $("#systemMessage").html('Please wait while we register you with Omnebook.').addClass('alert-class alert-danger');
 	                    },
 	                    complete: function () {
 	                        $('#register_submit').prop('disabled', false).css('background','#ed1b24');

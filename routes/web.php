@@ -174,6 +174,8 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::get('active-membership/export','ActiveMembershipController@export')->name('active-membership.export');
     Route::resource('reports', 'ReportsController')->only(['index']);
     Route::resource('settings', 'SettingsController')->only(['index']);
+    Route::post('settings_store', 'SettingsController@update_sidepanel')->name('settings_store');
+
     Route::resource('tax','TaxController')->only(['index','store']);
     Route::resource('subscription','SubcriptionController')->only(['index','store']);
     Route::post('/subscription/update-card','SubcriptionController@update_card')->name('subscription.update-card');

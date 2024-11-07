@@ -474,6 +474,9 @@ class CustomerController extends Controller
                     session()->put('success-register', '1');
                     try {
                     $status = SGMailService::sendWelcomeMailToCustomer($customerObj->id,Auth::user()->cid,$random_password); 
+                    $status_check = SGMailService::sendMailToCustomer($customerObj->id,Auth::user()->cid,$random_password); 
+                    
+                    // $checkstatus=;
                     $response = array(
                         'id'=>$customerObj->id,
                         'type' => 'success',

@@ -1315,7 +1315,7 @@ body{
     color:var(--vz-vertical-menu-sub-item-color-dark)
 }
 :is([data-layout=vertical],[data-layout=semibox])[data-sidebar=dark] .navbar-nav .nav-sm .nav-link:before{
-    background-color:var(--vz-vertical-menu-sub-item-color-dark)!important
+    background-color:var(--vz-vertical-menu-sub-item-color-dark)
 }
 :is([data-layout=vertical],[data-layout=semibox])[data-sidebar=dark] .navbar-nav .nav-sm .nav-link:hover{
     color:var(--vz-vertical-menu-item-hover-color-dark)

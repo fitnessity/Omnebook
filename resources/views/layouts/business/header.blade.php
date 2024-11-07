@@ -587,8 +587,8 @@ $total_quantity = 0;
 								<div id="responseMessage" class="alert" style="display: none;"></div>
 
 								<div class="float-right">
-									<button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Cancel</button>
-									<button type="submit" form="customerForm" class="btn btn-primary">Create</button>
+									<button type="button" class="btn btn-black " data-bs-dismiss="modal">Cancel</button>
+									<button type="submit" form="customerForm" class="btn btn-red">Create</button>
 								</div>
 								
 							</form>
@@ -679,6 +679,9 @@ $total_quantity = 0;
 								messageDiv.removeClass('alert-danger').addClass('alert-success').text(data.msg).show();
 								// $('#CustomerModal').modal('hide'); 
 								$('#customerForm')[0].reset(); 
+								setTimeout(function() {
+									messageDiv.fadeOut();  
+								}, 3000); 
 							} 
 							else if (data.type === "danger") {
 								messageDiv.addClass('alert alert-danger').text(data.msg).show();	

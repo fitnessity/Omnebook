@@ -25,7 +25,7 @@
                 <!--{{$show_step}}-->
                 @if($show_step == 1)
                 <div class="logo-my">
-                    <a href="javascript:void(0)"> <img src="{{ asset('/public/images/omnebook.png')}}" alt="Fitnessity"> </a>
+                    <a href="javascript:void(0)"> <img src="{{ asset('/public/images/omnebook.png')}}" alt="omnebook"> </a>
                 </div>
                 <form id="frmregister" method="post">
                     <div class="pop-title ftitle1">
@@ -62,7 +62,7 @@
 
                     <div class="terms-wrap">
                         <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-                        <label for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
+                        <label for="b_trm1">I agree to Omnebook <a href="/terms-condition" class="font-red" target="_blank">Terms of Service</a> and <a href="/privacy-policy" class="font-red" target="_blank">Privacy Policy</a></label>
                     </div>
                     <div id='termserror'></div><br>
                     <button type="button" style="margin:0px;" class="signup-new" id="register_submit" onclick="$('#frmregister').submit();">Create Account</button>
@@ -99,7 +99,7 @@
                                     {{substr(Auth::user()->firstname,0,1)}}
                                 </div>
                                 <div class="reg-email-step2">{{Auth::user()->email}}</div>
-                                <h2>Welcome to Fitnessity</h2>
+                                <h2>Welcome to Omnebook</h2>
                                 <div class="reg-title-step2"><input type="text" name="" id="" value="@<?=Auth::user()->username?>" readonly=""></div>
                                 <p>Your answer to the next few question will help us find the right ideas for you</p>
                                 <div class="signup-step-btn">
@@ -544,7 +544,7 @@
             },
             beforeSend: function () {
                 $('.step2_next').prop('disabled', true).css('background','#999999');
-                $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
+                $('#systemMessage').html('Please wait while we processed you with Omnebook.');
             },
             complete: function () {
                 $('.step2_next').prop('disabled', false).css('background','#ed1b24');
@@ -584,7 +584,7 @@
                     },                
                     beforeSend: function () {
                         $('.step3_next').prop('disabled', true).css('background','#999999');
-                        $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
+                        $('#systemMessage').html('Please wait while we processed you with Omnebook.');
                     },
                     complete: function () {
                         $('.step3_next').prop('disabled', false).css('background','#ed1b24');
@@ -640,7 +640,7 @@
                 },
                 beforeSend: function () {
                     $('.step4_next').prop('disabled', true).css('background','#999999');
-                    $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
+                    $('#systemMessage').html('Please wait while we processed you with Omnebook.');
                 },
                 complete: function () {
                     $('.step4_next').prop('disabled', false).css('background','#ed1b24');
@@ -913,8 +913,8 @@
                         beforeSend: function () {
                             
                             $('#register_submit').prop('disabled', true).css('background','#999999');
-                            showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
-                            $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+                            showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Omnebook.');
+                            $("#systemMessage").html('Please wait while we register you with Omnebook.').addClass('alert-class alert-danger');
                         },
                         complete: function () {
                         
