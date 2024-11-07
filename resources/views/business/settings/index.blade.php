@@ -130,6 +130,30 @@
 													</div>												
 												</div>
 											</div>
+
+
+											<div class="row">
+												<div class="col-12 col-lg-4 col-md-4">
+													<div class="reports-title">
+														<label>Side Panel Color</label>
+														<div id="success-message-panel" style="display: none; background-color: #d4edda; color: #155724; padding: 10px; margin-top: 10px; border: 1px solid #c3e6cb; border-radius: 5px;"></div>
+													</div>
+												</div>
+												<div class="col-12 col-lg-6 col-md-8">
+													<div class="card card-body box-border">
+														<div class="d-grid align-items-center">
+															<form>
+																{{-- <input type="radio" id="black" name="fav_language" value="black" checked> --}}
+																<input type="radio" id="black" name="fav_language" value="black" 
+																{{ isset($sidecolor) && $sidecolor->side_panel_color == 1 ? 'checked' : '' }} onchange="updateSidePanelColor('black', {{ $sidecolor->id }})">																		
+																<label for="black" class="mr-15">Black</label>
+																<input type="radio" id="white" name="fav_language" value="white" {{ isset($sidecolor) && $sidecolor->side_panel_color == 0 ? 'checked' : '' }}  onchange="updateSidePanelColor('white', {{ $sidecolor->id }})">
+																<label for="white">White</label>
+															</form>
+														</div>
+													</div>												
+												</div>
+											</div>
 											
 										</div>
 									</div>
@@ -145,6 +169,30 @@
 	
 @include('layouts.business.footer')
 @include('layouts.business.scripts')
+<script>
+	function updateSidePanelColor(color, businessId) {
+		$.ajax({
+			url: "/business/" + businessId + "/settings_store",  
+			type: "POST",
+			data: {
+				_token: "{{ csrf_token() }}", 
+				side_panel_color: color 
+			},
+			success: function(response) {
+				$('#success-message').text(response.message).show();
 
+				setTimeout(function() {
+					$('#success-message-panel').fadeOut();
+				}, 3000);
+				window.location.reload();
+			},
+			error: function(xhr, status, error) {
+				if (xhr.status === 422) {
+					var errors = xhr.responseJSON.errors;
+				} 
+			}
+		});
+	}
+</script>
 
 @endsection

@@ -15,7 +15,10 @@
     $businessImage = $company != '' ? @$company->getCompanyImage() : '';
 ?>
 
-<div class="app-menu navbar-menu" >
+<!-- <div class="app-menu navbar-menu" > -->
+<div class="app-menu 
+    {{ $company->side_panel_color == 1 ? 'navbar-menu' : '' }}
+    {{ $company->side_panel_color == 0 ? 'navbar-menu-white' : '' }}">
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
@@ -37,7 +40,16 @@
             </div>
 			<div class="live-preview text-center">
 				<div class="dropdown mt-70">
-					<button class="btn btn-switch-business dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">{{$businessName}}</button>
+					<button class="btn {{ $company->side_panel_color == 1 ? 'btn-switch-business' : '' }} {{ $company->side_panel_color == 0 ? 'btn-switch-business-white ' : '' }} dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">{{$businessName}}
+                    @if($businessImage)
+                            <img src="{{$businessImage}}" alt="Fitnessity" class="avatar-xs rounded-circle me-2 shadow">
+                                @else
+                                    <div class="avatar-xs me-2 one-latter">
+                                        <span class="avatar-title rounded-circle bg-danger-red text-white">{{@$company->cname_first_letter}}</span>
+                                    </div>
+                                @endif
+                            {{$businessName}}
+                    </button>
 					<ul class="dropdown-menu dropdown-menu-dark switch-account-dropdown" aria-labelledby="dropdownMenuButton21">
                         @if($companyId)
 						<li>
@@ -83,7 +95,7 @@
 					</ul>
 				</div>
 			</div> 
-            <ul class="navbar-nav dash-sidebar-menu" id="navbar-nav">
+            <ul class="navbar-nav dash-sidebar-menu navbar-nav-white" id="navbar-nav">
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName()=='business_dashboard') active @endif" href="{{route('business_dashboard')}}" aria-controls="sidebarDashboards">
@@ -120,7 +132,7 @@
                                 </li> 
                             @endif
                             <li class="nav-item">
-                                <a href="{{route('business.schedulers.index')}}" class="nav-link @if(Route::current()->getName()=='business.schedulers.index') active @endif" data-key="t-signin"> Manage Scheduler 
+                                <a href="{{route('business.schedulers.index')}}" class="nav-link @if(Route::current()->getName()=='business.schedulers.index') active @endif" data-key="t-signin"> Booking Scheduler 
                                 </a>
                             </li>
                             
