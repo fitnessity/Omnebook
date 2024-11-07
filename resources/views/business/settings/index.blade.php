@@ -136,7 +136,7 @@
 												<div class="col-12 col-lg-4 col-md-4">
 													<div class="reports-title">
 														<label>Side Panel Color</label>
-														<div id="success-message-panel" style="display: none; background-color: #d4edda; color: #155724; padding: 10px; margin-top: 10px; border: 1px solid #c3e6cb; border-radius: 5px;"></div>
+														<div id="succes-messsage-panel" style="display: none; background-color: #d4edda; color: #155724; padding: 10px; margin-top: 10px; border: 1px solid #c3e6cb; border-radius: 5px;"></div>
 													</div>
 												</div>
 												<div class="col-12 col-lg-6 col-md-8">
@@ -179,10 +179,10 @@
 				side_panel_color: color 
 			},
 			success: function(response) {
-				$('#success-message').text(response.message).show();
+				$('#succes-messsage-panel').text(response.message).show();
 
 				setTimeout(function() {
-					$('#success-message-panel').fadeOut();
+					$('#succes-messsage-panel').fadeOut();
 				}, 3000);
 				window.location.reload();
 			},
