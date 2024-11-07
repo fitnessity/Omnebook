@@ -132,11 +132,11 @@
 											</div>
 
 
+											<div id="succes-messsage-panel" style="display: none; background-color: #d4edda; color: #155724; padding: 10px; margin-top: 10px; border: 1px solid #c3e6cb; border-radius: 5px;"></div>
 											<div class="row">
 												<div class="col-12 col-lg-4 col-md-4">
 													<div class="reports-title">
 														<label>Side Panel Color</label>
-														<div id="succes-messsage-panel" style="display: none; background-color: #d4edda; color: #155724; padding: 10px; margin-top: 10px; border: 1px solid #c3e6cb; border-radius: 5px;"></div>
 													</div>
 												</div>
 												<div class="col-12 col-lg-6 col-md-8">
