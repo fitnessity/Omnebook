@@ -40,7 +40,7 @@
             </div>
 			<div class="live-preview text-center">
 				<div class="dropdown mt-70">
-					<button class="btn {{ $company->side_panel_color == 1 ? 'btn-switch-business' : '' }} {{ $company->side_panel_color == 0 ? 'btn-switch-business-white ' : '' }} dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">{{$businessName}}
+					<button class="btn {{ $company->side_panel_color == 1 ? 'btn-switch-business' : '' }} {{ $company->side_panel_color == 0 ? 'btn-switch-business-white ' : '' }} dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">
                     @if($businessImage)
                             <img src="{{$businessImage}}" alt="Fitnessity" class="avatar-xs rounded-circle me-2 shadow">
                                 @else
