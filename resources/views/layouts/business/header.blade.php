@@ -586,8 +586,8 @@ $total_quantity = 0;
 							<div id="responseMessage" class="alert" style="display: none;"></div>
 
 							<div class="float-right">
-								<button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Cancel</button>
-								<button type="submit" form="customerForm" class="btn btn-primary">Create</button>
+								<button type="button" class="btn btn-black " data-bs-dismiss="modal">Cancel</button>
+								<button type="submit" form="customerForm" class="btn btn-red">Create</button>
 							</div>
 							
 						</form>
