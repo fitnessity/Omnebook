@@ -18,37 +18,35 @@
                                         <input type="hidden" name="user_id" value="{{ $user_id }}">
                                     
                                         <div class="row">
-                                            <div class="form-control">
-                                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                                                    <label class="form-label">Password  <span class="font-red">*</span></label>
-                                                </div>
-                                                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 {{ $errors->has('password') ? ' has-error' : '' }}">
-                                                    <input class="form-control mb-20" type="password" name="password" placeholder="Enter Password"/>
-                                                    <!-- <span class="req-line"></span> -->
-                                                    @if($errors->has('password'))
-                                                        <p class="help-block">
-                                                            {{ $errors->first('password') }}
-                                                        </p>
-                                                    @endif
-                                                </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                <label class="form-label">Password  <span class="font-red">*</span></label>
+                                            </div>
+                                            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 {{ $errors->has('password') ? ' has-error' : '' }}">
+                                                <input class="form-control mb-20" type="password" name="password" placeholder="Enter Password"/>
+                                                <!-- <span class="req-line"></span> -->
+                                                @if($errors->has('password'))
+                                                    <p class="help-block">
+                                                        {{ $errors->first('password') }}
+                                                    </p>
+                                                @endif
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="form-control">
-                                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                                                    <label class="form-label">Confirm Password  <span class="font-red">*</span></label>
-                                                </div>
-                                                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 {{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                                                    <input class="form-control mb-20" type="password" name="password_confirmation" placeholder="Re-Enter Password"/>
-                                                    <!-- <span class="req-line"></span> -->
-                                                    @if($errors->has('password_confirmation'))
-                                                        <p class="help-block">
-                                                            {{ $errors->first('password_confirmation') }}
-                                                        </p>
-                                                    @endif
-                                                </div>
+                                           
+                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                <label class="form-label">Confirm Password  <span class="font-red">*</span></label>
                                             </div>
+                                            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 {{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+                                                <input class="form-control mb-20" type="password" name="password_confirmation" placeholder="Re-Enter Password"/>
+                                                <!-- <span class="req-line"></span> -->
+                                                @if($errors->has('password_confirmation'))
+                                                    <p class="help-block">
+                                                        {{ $errors->first('password_confirmation') }}
+                                                    </p>
+                                                @endif
+                                            </div>
+                                            
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
