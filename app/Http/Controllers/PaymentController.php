@@ -637,8 +637,11 @@ class PaymentController extends Controller {
             "email" => $email,  
             "Url" => env('APP_URL').'/personal/orders?business_id='.$businessServices->cid, 
             "BusinessName"=> @$cartService->getCompany($businessServices->cid)->dba_business_name,
+            "logo"=> @$cartService->getCompany($businessServices->cid)->logo,
             "BookedPerson"=> Auth::user()->full_name,
             "ParticipantsName"=> @$cartService->getParticipateByComa( json_encode($participateAry)),
+            "Age"=> @$cartService->getParticipateAge( json_encode($participateAry)),
+
             "date"=> Carbon::parse($item['sesdate'])->format('m/d/Y'),
             "time"=> $activityScheduler->activity_time(),
             "duration"=> $activityScheduler->get_clean_duration(),

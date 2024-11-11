@@ -17,8 +17,8 @@
 
 <!-- <div class="app-menu navbar-menu" > -->
 <div class="app-menu 
-    {{ $company->side_panel_color == 1 ? 'navbar-menu' : '' }}
-    {{ $company->side_panel_color == 0 ? 'navbar-menu-white' : '' }}">
+    {{ $company->side_panel_color == 1 ? 'navbar-menu navbar-menu-black' : '' }}
+    {{ $company->side_panel_color == 0 ? 'navbar-menu navbar-menu-white' : '' }}">
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
@@ -67,7 +67,7 @@
 						</li>
                         @endif
 						<li>
-							<a class="dropdown-item active" href="{{url('/family-member')}}"><i class="fa fa-user"></i> {{Auth::user()->full_name}} <br><span class="account-switchh"> Personal Account </span> </a>
+							<a class="dropdown-item" href="{{url('/family-member')}}"><i class="fa fa-user"></i> {{Auth::user()->full_name}} <br><span class="account-switchh"> Personal Account </span> </a>
 						</li>
 						<li> <hr class="dropdown-divider"></li>
 						@forelse(@$companyList as $list)
@@ -96,6 +96,9 @@
 				</div>
 			</div> 
             <ul class="navbar-nav dash-sidebar-menu navbar-nav-white" id="navbar-nav">
+                <li class="menu-title account-activation-side
+                {{ $company->side_panel_color == 1 ? 'account-activation-side-white' : '' }}
+                {{ $company->side_panel_color == 0 ? 'account-activation-side-black' : '' }}"></li>
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName()=='business_dashboard') active @endif" href="{{route('business_dashboard')}}" aria-controls="sidebarDashboards">
