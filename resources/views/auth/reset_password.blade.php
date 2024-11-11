@@ -67,6 +67,6 @@
     </div>
   </div>
 </div>
-
+</div>
 @include('layouts.business.footer')
 @endsection
