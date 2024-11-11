@@ -7,7 +7,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="reset-passthru">
-					<div id='systemMessage_frgtpwd' class="text-center"></div>
+					<div id='systemMessage_frgtpwd' class="text-center fs-12"></div>
 					<form  id="frmfrgtpwd" method="post">
 						<input type="text" name="frgtpwd_email" id="frgtpwd_email" placeholder="Email" >
 							<button class="btn signup-new" id="forgot_submit" type="button">Send Email </button>
