@@ -140,7 +140,7 @@ function timeSlotOptionforservice($lbl, $val) {
 																		</div>
 																		@endforeach
 																		{{-- new code start --}}
-																		{{-- @if(isset($bussiness_terms) && ($bussiness_terms->cancellation_delete==0)) --}}
+																		@if(!isset($bussiness_terms) || (isset($bussiness_terms) && $bussiness_terms->cancellation_delete == 0))
 																		<div class="report-links">
 																			<a href="javascript:;">Cancelations</a>
 																			<div class="f-right">
@@ -150,17 +150,18 @@ function timeSlotOptionforservice($lbl, $val) {
 																						<i class="ri-pencil-fill fs-16"></i>
 																					</a>
 																				</li>	
-																				@if(isset($bussiness_terms) && ($bussiness_terms->cancellation_delete==0))
-																		
+																				@if(isset($bussiness_terms) && ($bussiness_terms->cancellation_delete==0))																		
 																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-default-btn" data-bs-toggle="modal" data-bs-target="#deletedefaultterm"  data-term="cancelation" data-termsid="{{ encrypt($term->id) }}">
+																					<a class="text-danger d-inline-block remove-item-default-btn" data-bs-toggle="modal" data-bs-target="#deletedefaultterm"  data-term="cancelation" data-termsid="{{ encrypt($bussiness_terms->id) }}">
 																						<i class="ri-delete-bin-5-fill fs-16"></i>
 																					</a>
 																				</li>																			
 																				@endif
 																			</div>
 																		</div>
-																		@if(isset($bussiness_terms) && ($bussiness_terms->liability_delete==0))
+																		@endif
+																		@if(!isset($bussiness_terms) || (isset($bussiness_terms) && $bussiness_terms->liability_delete == 0))
+
 																		<div class="report-links">
 																			<a href="javascript:;">Liability Waiver</a>
 																			<div class="f-right">
@@ -169,15 +170,18 @@ function timeSlotOptionforservice($lbl, $val) {
 																						<i class="ri-pencil-fill fs-16"></i>
 																					</a>
 																				</li>	
+																				@if(isset($bussiness_terms) && ($bussiness_terms->liability_delete==0))
 																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-default-btn" data-bs-toggle="modal" data-bs-target="#deletedefaultterm"  data-term="Liability" data-termsid="{{ encrypt($term->id) }}">
+																					<a class="text-danger d-inline-block remove-item-default-btn" data-bs-toggle="modal" data-bs-target="#deletedefaultterm"  data-term="Liability" data-termsid="{{ encrypt($bussiness_terms->id) }}">
 																						<i class="ri-delete-bin-5-fill fs-16"></i>
 																					</a>
 																				</li>																	
+																				@endif
 																			</div>
 																		</div>
 																		@endif
-																		@if(isset($bussiness_terms) && ($bussiness_terms->refund_delete==0))
+																		@if(!isset($bussiness_terms) || (isset($bussiness_terms) && $bussiness_terms->refund_delete == 0))
+
 																		<div class="report-links">
 																			<a href="javascript:;">Refund</a>
 																			<div class="f-right">
@@ -186,15 +190,19 @@ function timeSlotOptionforservice($lbl, $val) {
 																						<i class="ri-pencil-fill fs-16"></i>
 																					</a>
 																				</li>	
+																				@if(isset($bussiness_terms) && ($bussiness_terms->refund_delete==0))
+
 																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-default-btn" data-bs-toggle="modal" data-bs-target="#deletedefaultterm" data-term="Refund" data-termsid="{{ encrypt($term->id) }}">
+																					<a class="text-danger d-inline-block remove-item-default-btn" data-bs-toggle="modal" data-bs-target="#deletedefaultterm" data-term="Refund" data-termsid="{{ encrypt($bussiness_terms->id) }}">
 																						<i class="ri-delete-bin-5-fill fs-16"></i>
 																					</a>
 																				</li>																		
+																				@endif
 																			</div>
 																		</div>
 																		@endif
-																		@if(isset($bussiness_terms) && ($bussiness_terms->terms_delete==0))
+																		@if(!isset($bussiness_terms) || (isset($bussiness_terms) && $bussiness_terms->terms_delete == 0))
+
 																		<div class="report-links">
 																			<a href="javascript:;"> Terms & Conditions & FAQ</a>
 																			<div class="f-right">
@@ -203,12 +211,15 @@ function timeSlotOptionforservice($lbl, $val) {
 																						<i class="ri-pencil-fill fs-16"></i>
 																					</a>
 																				</li>
+																				@if(isset($bussiness_terms) && ($bussiness_terms->terms_delete==0))
+
 																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
-																					<a class="text-danger d-inline-block remove-item-default-btn" data-bs-toggle="modal" data-bs-target="#deletedefaultterm" data-term="terms_condition" data-termsid="{{ encrypt($term->id) }}">
+																					<a class="text-danger d-inline-block remove-item-default-btn" data-bs-toggle="modal" data-bs-target="#deletedefaultterm" data-term="terms_condition" data-termsid="{{ encrypt($bussiness_terms->id) }}">
 																						<i class="ri-delete-bin-5-fill fs-16"></i>
 																					</a>
 																				</li>																		
 																			
+																				@endif
 																			</div>
 																		</div>
 																		@endif

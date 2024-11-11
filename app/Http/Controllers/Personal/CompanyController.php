@@ -386,10 +386,15 @@ class CompanyController extends Controller
         if ($request->input('term_id') != null) {
             $termId = Crypt::decrypt($request->input('term_id'));
             $terms =  BusinessTerms::find($termId);
-
+            // dd('if');
         }
         else{
+            // dd('else');
             $terms = new BusinessTerms();
+            $cid=Auth::user()->cid;
+            $userid=Auth::user()->id;
+            $terms->cid=$cid;
+            $terms->userid=$userid;
         }
         if ($request->has('terms') && $request->has('contracttermstext')) {
             $contractText = $request->input('contracttermstext');
