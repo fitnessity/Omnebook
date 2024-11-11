@@ -509,6 +509,10 @@ class UserBookingDetail extends Model
                 "ProviderPhoneNumber"=> $company->business_phone,
                 "ProviderEmail"=> $company->business_email,
                 "ProviderAddress"=> $company->company_address(),
+                "logo"=>$company->logo,
+                "companyname"=>$company->company_name,
+                "SessionsLeft"=>$this->getRemainingSessionAfterAttend(),
+                
                 "for" =>$type
             );
             if($type == 'membership'){

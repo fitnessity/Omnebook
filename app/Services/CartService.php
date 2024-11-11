@@ -3,6 +3,7 @@
 
 namespace App\Services;
 use App\{BusinessPriceDetails,BusinessSubscriptionPlan,CompanyInformation,UserFamilyDetail,User,Customer};
+use Carbon\Carbon;
 
 class CartService
 {
@@ -188,7 +189,28 @@ class CartService
         }*/
         return $names;
     }
-
+    public function getParticipateAge($participateData) {
+        $participate = json_decode($participateData, true);
+        $age = '';
+        
+        if (!empty($participate)) {
+            if (@$participate['from'] == 'customer') {
+                $data = Customer::where('id', @$participate['id'])->first();
+            } else {
+                $data = User::where('id', @$participate['id'])->first();
+            }
+    
+            if ($data != '' && !empty($data->birthdate)) {
+                $birthdate = new \Carbon\Carbon($data->birthdate);
+                $ageInYears = $birthdate->age; 
+                $age .= $ageInYears . ' years, ';
+            }
+    
+            $age = rtrim($age, ' ,');
+        }
+        
+        return $age;
+    }
     public function participateLoop($item ,$businessID){
         $newArray = [];
         foreach($item['participate'] as $key => $p){

@@ -16,8 +16,19 @@ class SGMailService{
 		);
 		if(!empty($substitutions)){
 			$email->addDynamicTemplateDatas($substitutions);
+			if(isset($substitutions['announcementId'])){
+				$announcementId = strval($substitutions['announcementId']);
+		 		$email->addCustomArg('announcementId', $announcementId);
+		 	}
+
+		 	if(isset($substitutions['customerId'])){
+		 		$customerId = strval($substitutions['customerId']);
+		 		$email->addCustomArg('customerId', $customerId);
+		 	}
 		}
 		$email->setTemplateId($templateId);
+		$email->setOpenTracking(true);
+		$email->setClickTracking(true, true);
 		
 		$sendgrid = new \SendGrid(getenv('MAIL_PASSWORD'));
 		try {
@@ -61,7 +72,8 @@ class SGMailService{
 		    "discount" => $emailDetail['getreceipemailtbody']['discount'],  
 		    "total" => $emailDetail['getreceipemailtbody']['total'],
 		    "bookingUrl" => $emailDetail['getreceipemailtbody']['bookingUrl'],
-		    "companyImage" => @$emailDetail['getreceipemailtbody']['companyImage'],
+		    // "companyImage" => @$emailDetail['getreceipemailtbody']['companyImage'],
+			"HostLogo" => @$emailDetail['getreceipemailtbody']['companyImage'],
 		    "message" => $notes,
 		];
 
@@ -70,6 +82,7 @@ class SGMailService{
 
 	public static function sendWelcomeMail($email_name){
 		return SGMailService::MailDetail($email_name,$substitutions = [],'d-d42244ec709c4d91b23393393b2e05ef');
+		// return SGMailService::MailDetail($email_name,$substitutions = [],'d-d42244ec709c4d91b23393393b2e05ef');
 	}
 
 	public static function sendWelcomeMailToCustomer($id,$business_id,$password){
@@ -86,8 +99,10 @@ class SGMailService{
 		$substitutions = [
 			"ProviderName" => $businessdata->public_company_name,  
 			"CustomerName" => @$customer->full_name,  
-			"CustomerEmail" => $customer->email,  
-			"TempPassword" => $password,  
+			// "CustomerEmail" => $customer->email,  
+			"CustomerRegisterEmail" => $customer->email,
+			// "TempPassword" => $password,  
+			"CustomerPassword" => $password,  
 			"CompanyName" => $businessdata->public_company_name,  
 		    "ContactPerson" => $businessdata->first_name.' '.$businessdata->last_name,  
 		    "Address" => $businessdata->company_address(),   
@@ -101,18 +116,61 @@ class SGMailService{
 		    "ContactUs" => env('APP_URL').'contact-us',
 		    "Activity" => env('APP_URL').'activities',
 		];
-		return SGMailService::MailDetail($customer->email,$substitutions,'d-70af5c145eca4a4f878ec680469036b7');
+		// return SGMailService::MailDetail($customer->email,$substitutions,'d-70af5c145eca4a4f878ec680469036b7');
+		return SGMailService::MailDetail($customer->email,$substitutions,'d-d42244ec709c4d91b23393393b2e05ef');
+
 	}
 
+public static function sendMailToCustomer($id,$business_id,$password){
+		$customer = Customer::findOrFail($id);
+		$businessdata = CompanyInformation::findOrFail($business_id);
+
+		$businessimg = $businessdata->logo;
+		if( $businessimg == ''){
+           	$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
+        }else{
+        	$ImageUrl = Storage::URL($businessimg);
+        }
+
+		$substitutions = [
+			"ProviderName" => $businessdata->public_company_name,  
+			"CustomerName" => @$customer->full_name,  
+			// "CustomerEmail" => $customer->email,  
+			"CustomerRegisterEmail" => $customer->email,
+			// "TempPassword" => $password,  
+			"CustomerPassword" => $password,  
+			"HostBusinessName" => $businessdata->public_company_name,  
+			// "CompanyName" => $businessdata->public_company_name,  
+		    "ContactPerson" => $businessdata->first_name.' '.$businessdata->last_name,  
+		    "Address" => $businessdata->company_address(),   
+		    "PhoneNumber" => $businessdata->business_phone,   
+		    "Email" => $businessdata->business_email,  
+		    "Website" => $businessdata->business_website,
+		    // "companyImage" => $ImageUrl,
+			"HostLogo" => $ImageUrl,
+		    "PersonalProfile" => env('APP_URL').'userprofile/'.$businessdata->users->username,
+		    "SiteUrl" => env('APP_URL'),
+		    "AddInfo" => env('APP_URL').'addcustomerbusiness',
+		    "ContactUs" => env('APP_URL').'contact-us',
+		    "Activity" => env('APP_URL').'activities',
+		];
+		// Log::info('Substitution Values:', $substitutions);
+
+		// return SGMailService::MailDetail($customer->email,$substitutions,'d-70af5c145eca4a4f878ec680469036b7' );
+		return SGMailService::MailDetail($customer->email,$substitutions,'d-c9be11dacac24b2cb223fa368f797da5');
+
+	}
 	public static function requestAccessMail($customer){
 		
 		$substitutions = [
-			"ProviderName" => $customer['pName'],  
+			// "ProviderName" => $customer['pName'],  
+			"HostName" => $customer['pName'],    
 			"CustomerName" => $customer['cName'],  
 			"Url" => $customer['url'],
 		];
 
 		return SGMailService::MailDetail($customer['email'],$substitutions,'d-6530330f52e8409ca171d446fbc8c248');
+		// return SGMailService::MailDetail($customer['email'],$substitutions,'d-6530330f52e8409ca171d446fbc8c248');
 	}
 
 	public static function sendresetemail($emailDetail){
@@ -139,17 +197,30 @@ class SGMailService{
 			"ActivitiyType"=> $emailDetail['ActivitiyType'],
 			"ProgramName"=> $emailDetail['ProgramName'],
 			"CategoryName"=> $emailDetail['CategoryName'],
+			"age"=>$emailDetail['Age'],
+
 		];
 
 		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-7a39c17eac4a45f5b2bbf030c5c82f4f');
 	}
 
 	public static function confirmationMailForCustomer($emailDetail){
+		if( $emailDetail['logo'] == ''){
+			$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
+		}else{
+			$ImageUrl = Storage::URL($emailDetail['logo']);
+		}
 		$substitutions = [
 			"CustomerName" => $emailDetail['CustomerName'], 
 			"Url" => $emailDetail['Url'], 
-			"BusinessName"=> $emailDetail['BusinessName'],
+			// "BusinessName"=> $emailDetail['BusinessName'],
+			"HostBusinessName"=> $emailDetail['BusinessName'],
+			"Hostname"=> $emailDetail['BusinessName'],
+			"HostLogo"=> $ImageUrl,
+			
 			"BookedBy"=> $emailDetail['BookedPerson'],
+			"age"=>$emailDetail['Age'],
+
 			"Participants"=> $emailDetail['ParticipantsName'],
 			"date"=> $emailDetail['date'],
 			"time"=> $emailDetail['time'],
@@ -159,7 +230,8 @@ class SGMailService{
 			"CategoryName"=> $emailDetail['CategoryName'],
 			"CompanyName" => $emailDetail['CompanyName'], 
 			"RepName" => $emailDetail['RepName'], 
-			"CompanyAddress" => $emailDetail['CompanyAddress'], 
+			// "CompanyAddress" => $emailDetail['CompanyAddress'],
+			"companyAddress" => $emailDetail['CompanyAddress'],  
 			"phone" => $emailDetail['phone'], 
 			"email" => $emailDetail['email'], 
 			"website" => $emailDetail['website'], 
@@ -168,24 +240,38 @@ class SGMailService{
 			"CancellationText" => $emailDetail['CancellationText'], 
 			"RefundText" => $emailDetail['RefundText'], 
 		];
-
-		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-0afb04e69fe14a93abfacd6022818247');
+		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-cc2d69363c2f48918e72e73f4f693f20');
+		// return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-0afb04e69fe14a93abfacd6022818247');
 	}
 
 	public static function sendReminderOfSessionExpireToCustomer($emailDetail){
-
+		if( $emailDetail['logo'] == ''){
+			$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
+		}else{
+			$ImageUrl = Storage::URL($emailDetail['logo']);
+		}
 		$substitutions = [
+			"HostLogo"=> $ImageUrl,
+
 			"CustomerName" => $emailDetail['CustomerName'], 
-            "ProviderName"=> $emailDetail['ProviderName'],
+            // "ProviderName"=> $emailDetail['ProviderName'],
+			"HostName"=> $emailDetail['ProviderName'],
             "CategoryName"=> $emailDetail['CategoryName'],
             "PriceOptionName"=> $emailDetail['PriceOptionName'],
 			"ReNewUrl" => $emailDetail['ReNewUrl'],
 			"ProfileUrl" => $emailDetail['ProfileUrl'],
 			"CompleteDate" => $emailDetail['CompleteDate'],
 			"ExpirationDate" => $emailDetail['ExpirationDate'],
-			"ProviderPhoneNumber" => $emailDetail['ProviderPhoneNumber'],
-			"ProviderEmail" => $emailDetail['ProviderEmail'],
-			"ProviderAddress" => $emailDetail['ProviderAddress'],
+			// "ProviderPhoneNumber" => $emailDetail['ProviderPhoneNumber'],
+			"HostPhoneNumber" => $emailDetail['ProviderPhoneNumber'],
+
+			// "ProviderEmail" => $emailDetail['ProviderEmail'],
+			"HostEmail" => $emailDetail['ProviderEmail'],
+
+			// "ProviderAddress" => $emailDetail['ProviderAddress'],
+			"HostAddress" => $emailDetail['ProviderAddress'],
+			"HostCompany"=>$emailDetail['companyname'],
+
 		];
 
 		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-3500159ca821409e8f8e68c4cd39e2ab');		
@@ -203,22 +289,37 @@ class SGMailService{
 	}
 
 	public static function sendReminderOfSessionOrMembershipAboutToExpireToCustomer($emailDetail){
+		if( $emailDetail['logo'] == ''){
+			$ImageUrl = env('APP_URL').'/images/service-nofound.jpg';
+		}else{
+			$ImageUrl = Storage::URL($emailDetail['logo']);
+		}
 		$substitutions = [
+			"HostLogo"=> $ImageUrl,
+
 			"CustomerName" => $emailDetail['CustomerName'], 
-            "ProviderName"=> $emailDetail['ProviderName'],
+            // "ProviderName"=> $emailDetail['ProviderName'],
+			"HostName"=> $emailDetail['ProviderName'],
+
             "ProgramName"=> $emailDetail['ProgramName'],
             "CategoryName"=> $emailDetail['CategoryName'],
             "PriceOptionName"=> $emailDetail['PriceOptionName'],
 			"ReNewUrl" => $emailDetail['ReNewUrl'],
 			"ProfileUrl" => $emailDetail['ProfileUrl'],
 			"ExpirationDate" => $emailDetail['ExpirationDate'],
-			"ProviderPhoneNumber" => $emailDetail['ProviderPhoneNumber'],
+			// "ProviderPhoneNumber" => $emailDetail['ProviderPhoneNumber'],
+			"HostPhoneNumber" => $emailDetail['ProviderPhoneNumber'],
+
 			"ProviderEmail" => $emailDetail['ProviderEmail'],
-			"ProviderAddress" => $emailDetail['ProviderAddress'],
+			// "ProviderAddress" => $emailDetail['ProviderAddress'],
+			"HostAddress" => $emailDetail['ProviderAddress'],
+			"ProviderCompany" => $emailDetail['companyname'],
 		];
 
 		if($emailDetail['for'] == 'membership'){
-			$TemplateId = "d-40dc2e0d871b4a21b18e4b7e715c1ecb";
+			// $TemplateId = "d-40dc2e0d871b4a21b18e4b7e715c1ecb";
+			$TemplateId = "d-6d9997e971df4e1e94a4b4bc229d3244";
+
 		}else{
 			$TemplateId = "d-9fd81ddcd60b4ebea9406c5d523bed8a";
 		}
@@ -260,11 +361,15 @@ class SGMailService{
 	public static function sendTermsMail($emailDetail){
 		$substitutions = [
 			"companyImage" => $emailDetail['companyImage'], 
-            "companyName"=> $emailDetail['companyName'],
+            // "companyName"=> $emailDetail['companyName'],
+			"CompanyName"=> $emailDetail['companyName'],
+
             "companyAddress"=> $emailDetail['companyAddress'],
             "companyEmail"=> $emailDetail['companyEmail'],
             "companyPhone"=> $emailDetail['companyPhone'],
-			"termsName" => $emailDetail['termsName'],
+			// "termsName" => $emailDetail['termsName'],
+			"TermsName" => $emailDetail['termsName'],
+
 			"termsText" => $emailDetail['termsText'],
 		];
 
@@ -483,7 +588,9 @@ class SGMailService{
 		$substitutions = [
 			'CompanyImage'  =>$ImageUrl,
 			'CustomerName'  => $emailDetail['userdata']->full_name,
-			'ProviderName'  => $emailDetail['companydata']->full_name,
+			// 'ProviderName'  => $emailDetail['companydata']->full_name,
+			'HostName'  => $emailDetail['companydata']->full_name,
+
 			'card'  => $emailDetail['card'],
 			'date'  => $emailDetail['date'],
 			'brand'  => $emailDetail['brand'],
@@ -495,7 +602,9 @@ class SGMailService{
 
 	public static function leaveAReview($emailDetail){
 		$substitutions = [
-			'ProviderName'  => $emailDetail['companyName'],
+			// 'ProviderName'  => $emailDetail['companyName'],
+			'HostName'  => $emailDetail['companyName'],
+
 			'ReviewUrl'  =>env('APP_URL').'businessprofile/'.strtolower(str_replace(' ', '', $emailDetail['companyName'])).'/'.$emailDetail['cid'],
 			'ActivityUrl'  =>env('APP_URL').'activities',
 		];
