@@ -139,7 +139,80 @@ function timeSlotOptionforservice($lbl, $val) {
 																			</div>
 																		</div>
 																		@endforeach
+																		{{-- new code start --}}
+																		{{-- @if(isset($bussiness_terms) && ($bussiness_terms->cancellation_delete==0)) --}}
+																		<div class="report-links">
+																			<a href="javascript:;">Cancelations</a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editdefult" data-bs-toggle="modal" data-term="cancelation" @isset($bussiness_terms->id) data-termid="{{encrypt($bussiness_terms->id) }}" data-description="{{ $bussiness_terms->cancelation }}" @endisset
+																					class="text-primary d-inline-block edit-item-btn" id="edit_default_terms">
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>	
+																				@if(isset($bussiness_terms) && ($bussiness_terms->cancellation_delete==0))
 																		
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-default-btn" data-bs-toggle="modal" data-bs-target="#deletedefaultterm"  data-term="cancelation" data-termsid="{{ encrypt($term->id) }}">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>																			
+																				@endif
+																			</div>
+																		</div>
+																		@if(isset($bussiness_terms) && ($bussiness_terms->liability_delete==0))
+																		<div class="report-links">
+																			<a href="javascript:;">Liability Waiver</a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editdefult" data-bs-toggle="modal" data-term="Liability" @isset($bussiness_terms->id) data-termid="{{encrypt($bussiness_terms->id) }}"  data-description="{{ $bussiness_terms->liabilitytext }}" @endisset class="text-primary d-inline-block edit-item-btn" id="edit_default_terms">
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>	
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-default-btn" data-bs-toggle="modal" data-bs-target="#deletedefaultterm"  data-term="Liability" data-termsid="{{ encrypt($term->id) }}">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>																	
+																			</div>
+																		</div>
+																		@endif
+																		@if(isset($bussiness_terms) && ($bussiness_terms->refund_delete==0))
+																		<div class="report-links">
+																			<a href="javascript:;">Refund</a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editdefult" data-bs-toggle="modal" data-term="Refund" class="text-primary d-inline-block edit-item-btn" id="edit_default_terms" @isset($bussiness_terms->id) data-termid="{{encrypt($bussiness_terms->id) }}" data-description="{{ $bussiness_terms->refundpolicytext }}" @endisset>
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>	
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-default-btn" data-bs-toggle="modal" data-bs-target="#deletedefaultterm" data-term="Refund" data-termsid="{{ encrypt($term->id) }}">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>																		
+																			</div>
+																		</div>
+																		@endif
+																		@if(isset($bussiness_terms) && ($bussiness_terms->terms_delete==0))
+																		<div class="report-links">
+																			<a href="javascript:;"> Terms & Conditions & FAQ</a>
+																			<div class="f-right">
+																				<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+																					<a data-bs-target="#editdefult" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn" id="edit_default_terms"  data-term="terms_condition" @isset($bussiness_terms->id) data-termid="{{encrypt($bussiness_terms->id) }}" data-description="{{ $bussiness_terms->termcondfaqtext }}" @endisset>
+																						<i class="ri-pencil-fill fs-16"></i>
+																					</a>
+																				</li>
+																				<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+																					<a class="text-danger d-inline-block remove-item-default-btn" data-bs-toggle="modal" data-bs-target="#deletedefaultterm" data-term="terms_condition" data-termsid="{{ encrypt($term->id) }}">
+																						<i class="ri-delete-bin-5-fill fs-16"></i>
+																					</a>
+																				</li>																		
+																			
+																			</div>
+																		</div>
+																		@endif
+																		{{-- new code end --}}
 																		<div class="report-links create-text remove-border">
 																			<a href="" class="text-red" data-bs-target="#termsadd" data-bs-toggle="modal">Create Document</a>
 																			<!-- <div class="f-right">
@@ -1531,7 +1604,37 @@ function timeSlotOptionforservice($lbl, $val) {
       	</div>
    	</div>
 	
-	
+<!-- Modal -->
+<div class="modal fade" id="editdefult" tabindex="-1" aria-labelledby="editdefult" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="editdefult">Edit</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form id="createDocumentDefaultForm" action="{{route('personal.company_default_terms')}}" method="POST">
+				@csrf
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-12">
+							<input type="hidden" id="terms-id" name="term_id">
+							<input type="hidden" id="terms" name="terms">
+
+							<label>Description</label>
+							<div id="contracttermdiv" style="display:block">
+								<textarea name="contracttermstext" id="ckeditorclassic3"></textarea>
+								<div id="description-error_default" style="color: red; display: none;"></div> 
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" onclick="validateDefaultForm()" class="btn btn-red">Submit</button> 
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="termsadd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1632,242 +1735,152 @@ function timeSlotOptionforservice($lbl, $val) {
 		</div>
 	</div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="deletedefaultterm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="mb-3 text-center">
+							<label class="fs-20 ">Are you sure you want to delete ?</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-red" id="confirm-default">Yes</button>
+				<button type="button" class="btn btn-black ">No</button>
+			</div>
+		</div>
+	</div>
+</div>
 @include('layouts.business.footer')
 @include('layouts.business.scripts')
-<script src="{{asset('/public/dashboard-design/ckeditor/ckeditor5.js')}}"></script>
-<script>
-	CKEDITOR.ClassicEditor.create(document.getElementById("ckeditor-classic"), {
-	toolbar: {
-		items: [
-			'exportPDF','exportWord', '|',
-			'findAndReplace', 'selectAll', '|',
-			'heading', '|',
-			'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
-			'bulletedList', 'numberedList', 'todoList', '|',
-			'outdent', 'indent', '|',
-			'undo', 'redo',
-			'-',
-			'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
-			'alignment', '|',
-			'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
-			'specialCharacters', 'horizontalLine', 'pageBreak', '|',
-			'textPartLanguage', '|',
-			'sourceEditing'
-		],
-		shouldNotGroupWhenFull: true
-	},
-	list: {
-		properties: {
-			styles: true,
-			startIndex: true,
-			reversed: true
-		}
-	},
-	heading: {
-		options: [
-			{ model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-			{ model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-			{ model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-			{ model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-			{ model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-			{ model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-			{ model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-		]
-	},
-	placeholder: '',
-	fontFamily: {
-		options: [
-			'default',
-			'Arial, Helvetica, sans-serif',
-			'Courier New, Courier, monospace',
-			'Georgia, serif',
-			'Lucida Sans Unicode, Lucida Grande, sans-serif',
-			'Tahoma, Geneva, sans-serif',
-			'Times New Roman, Times, serif',
-			'Trebuchet MS, Helvetica, sans-serif',
-			'Verdana, Geneva, sans-serif'
-		],
-		supportAllValues: true
-	},
-	fontSize: {
-		options: [ 10, 12, 14, 'default', 18, 20, 22 ],
-		supportAllValues: true
-	},
-	htmlSupport: {
-		allow: [
-			{
-				name: /.*/,
-				attributes: true,
-				classes: true,
-				styles: true
+	<script src="{{asset('/public/dashboard-design/ckeditor/ckeditor5.js')}}"></script>
+	<script>
+		CKEDITOR.ClassicEditor.create(document.getElementById("ckeditor-classic"), {
+		toolbar: {
+			items: [
+				'exportPDF','exportWord', '|',
+				'findAndReplace', 'selectAll', '|',
+				'heading', '|',
+				'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
+				'bulletedList', 'numberedList', 'todoList', '|',
+				'outdent', 'indent', '|',
+				'undo', 'redo',
+				'-',
+				'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+				'alignment', '|',
+				'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
+				'specialCharacters', 'horizontalLine', 'pageBreak', '|',
+				'textPartLanguage', '|',
+				'sourceEditing'
+			],
+			shouldNotGroupWhenFull: true
+		},
+		list: {
+			properties: {
+				styles: true,
+				startIndex: true,
+				reversed: true
 			}
-		]
-	},
-	htmlEmbed: {
-		showPreviews: true
-	},
-	link: {
-		decorators: {
-			addTargetToExternalLinks: true,
-			defaultProtocol: 'https://',
-			toggleDownloadable: {
-				mode: 'manual',
-				label: 'Downloadable',
-				attributes: {
-					download: 'file'
+		},
+		heading: {
+			options: [
+				{ model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+				{ model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+				{ model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+				{ model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+				{ model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+				{ model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+				{ model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+			]
+		},
+		placeholder: '',
+		fontFamily: {
+			options: [
+				'default',
+				'Arial, Helvetica, sans-serif',
+				'Courier New, Courier, monospace',
+				'Georgia, serif',
+				'Lucida Sans Unicode, Lucida Grande, sans-serif',
+				'Tahoma, Geneva, sans-serif',
+				'Times New Roman, Times, serif',
+				'Trebuchet MS, Helvetica, sans-serif',
+				'Verdana, Geneva, sans-serif'
+			],
+			supportAllValues: true
+		},
+		fontSize: {
+			options: [ 10, 12, 14, 'default', 18, 20, 22 ],
+			supportAllValues: true
+		},
+		htmlSupport: {
+			allow: [
+				{
+					name: /.*/,
+					attributes: true,
+					classes: true,
+					styles: true
+				}
+			]
+		},
+		htmlEmbed: {
+			showPreviews: true
+		},
+		link: {
+			decorators: {
+				addTargetToExternalLinks: true,
+				defaultProtocol: 'https://',
+				toggleDownloadable: {
+					mode: 'manual',
+					label: 'Downloadable',
+					attributes: {
+						download: 'file'
+					}
 				}
 			}
-		}
-	},
-	mention: {
-		feeds: [
-			{
-				marker: '@',
-				feed: [
-					'@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
-					'@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
-					'@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
-					'@sugar', '@sweet', '@topping', '@wafer'
-				],
-				minimumCharacters: 1
-			}
+		},
+		mention: {
+			feeds: [
+				{
+					marker: '@',
+					feed: [
+						'@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
+						'@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
+						'@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
+						'@sugar', '@sweet', '@topping', '@wafer'
+					],
+					minimumCharacters: 1
+				}
+			]
+		},
+		removePlugins: [
+			'CKBox',
+			'CKFinder',
+			'EasyImage',
+			'RealTimeCollaborativeComments',
+			'RealTimeCollaborativeTrackChanges',
+			'RealTimeCollaborativeRevisionHistory',
+			'PresenceList',
+			'Comments',
+			'TrackChanges',
+			'TrackChangesData',
+			'RevisionHistory',
+			'Pagination',
+			'WProofreader',
+			'MathType'
 		]
-	},
-	removePlugins: [
-		'CKBox',
-		'CKFinder',
-		'EasyImage',
-		'RealTimeCollaborativeComments',
-		'RealTimeCollaborativeTrackChanges',
-		'RealTimeCollaborativeRevisionHistory',
-		'PresenceList',
-		'Comments',
-		'TrackChanges',
-		'TrackChangesData',
-		'RevisionHistory',
-		'Pagination',
-		'WProofreader',
-		'MathType'
-	]
-});
-</script>
+	});
+	</script>
 
-<script>
-	CKEDITOR.ClassicEditor.create(document.getElementById("ckeditorclassic2"), {
-	toolbar: {
-		items: [
-			'exportPDF','exportWord', '|',
-			'findAndReplace', 'selectAll', '|',
-			'heading', '|',
-			'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
-			'bulletedList', 'numberedList', 'todoList', '|',
-			'outdent', 'indent', '|',
-			'undo', 'redo',
-			'-',
-			'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
-			'alignment', '|',
-			'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
-			'specialCharacters', 'horizontalLine', 'pageBreak', '|',
-			'textPartLanguage', '|',
-			'sourceEditing'
-		],
-		shouldNotGroupWhenFull: true
-	},
-	list: {
-		properties: {
-			styles: true,
-			startIndex: true,
-			reversed: true
-		}
-	},
-	heading: {
-		options: [
-			{ model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-			{ model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-			{ model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-			{ model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-			{ model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-			{ model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-			{ model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-		]
-	},
-	placeholder: '',
-	fontFamily: {
-		options: [
-			'default',
-			'Arial, Helvetica, sans-serif',
-			'Courier New, Courier, monospace',
-			'Georgia, serif',
-			'Lucida Sans Unicode, Lucida Grande, sans-serif',
-			'Tahoma, Geneva, sans-serif',
-			'Times New Roman, Times, serif',
-			'Trebuchet MS, Helvetica, sans-serif',
-			'Verdana, Geneva, sans-serif'
-		],
-		supportAllValues: true
-	},
-	fontSize: {
-		options: [ 10, 12, 14, 'default', 18, 20, 22 ],
-		supportAllValues: true
-	},
-	htmlSupport: {
-		allow: [
-			{
-				name: /.*/,
-				attributes: true,
-				classes: true,
-				styles: true
-			}
-		]
-	},
-	htmlEmbed: {
-		showPreviews: true
-	},
-	link: {
-		decorators: {
-			addTargetToExternalLinks: true,
-			defaultProtocol: 'https://',
-			toggleDownloadable: {
-				mode: 'manual',
-				label: 'Downloadable',
-				attributes: {
-					download: 'file'
-				}
-			}
-		}
-	},
-	mention: {
-		feeds: [
-			{
-				marker: '@',
-				feed: [
-					'@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
-					'@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
-					'@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
-					'@sugar', '@sweet', '@topping', '@wafer'
-				],
-				minimumCharacters: 1
-			}
-		]
-	},
-	removePlugins: [
-		'CKBox',
-		'CKFinder',
-		'EasyImage',
-		'RealTimeCollaborativeComments',
-		'RealTimeCollaborativeTrackChanges',
-		'RealTimeCollaborativeRevisionHistory',
-		'PresenceList',
-		'Comments',
-		'TrackChanges',
-		'TrackChangesData',
-		'RevisionHistory',
-		'Pagination',
-		'WProofreader',
-		'MathType'
-	]
-});
-</script>
+	
 
 	<!-- <script type="text/javascript">
         CKEDITOR.replace("ckeditor-classic");
@@ -2233,7 +2246,7 @@ function timeSlotOptionforservice($lbl, $val) {
 	<script>
 		function validateFormupdate() {
 			let title = document.getElementById("categorytitle").value;
-			let description = CKEDITOR.instances["ckeditorclassic2"].getData(); 
+			let description = ckeditorInstance ? ckeditorInstance.getData() : ""; 
 			let titleError = document.getElementById("titleerror");
 			let descriptionError = document.getElementById("descriptionerror");
 		
@@ -2263,6 +2276,27 @@ function timeSlotOptionforservice($lbl, $val) {
 		}
 	</script>
 
+<script>
+	function validateDefaultForm() {
+		let description = ckeditorInstance_n ? ckeditorInstance_n.getData() : ""; 
+		let descriptionError = document.getElementById("description-error_default");	
+		descriptionError.style.display = "none";
+		descriptionError.innerHTML = "";
+	
+		let isValid = true;
+		
+		if (description === "") {
+			descriptionError.style.display = "block";
+			descriptionError.innerHTML = "The Description field is required.";
+			isValid = false;
+		}
+	
+		if (isValid) {
+			document.getElementById("createDocumentDefaultForm").submit();
+		}
+	}
+</script>
+
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			setTimeout(function() {
@@ -2273,7 +2307,7 @@ function timeSlotOptionforservice($lbl, $val) {
 			}, 5000);
 		});
 	</script>
-	<script>
+	{{-- <script>
 		document.addEventListener('DOMContentLoaded', function() {
 			const editButtons = document.querySelectorAll('.edit-item-btn');
 			editButtons.forEach(button => {
@@ -2282,13 +2316,287 @@ function timeSlotOptionforservice($lbl, $val) {
 					const title = this.getAttribute('data-title');
 					const description = this.getAttribute('data-description');
 					document.getElementById('categorytitle').value = title;
-					CKEDITOR.instances['ckeditorclassic2'].setData(description);
+					// CKEDITOR.instances['ckeditorclassic2'].setData(description);
 					document.getElementById('term-id').value = encryptedId;
 
 				});
 			});
 		});
+	</script> --}}
+
+
+	<script>
+		let ckeditorInstance;	
+		document.addEventListener('DOMContentLoaded', function() {
+			CKEDITOR.ClassicEditor.create(document.getElementById("ckeditorclassic2"), {
+				toolbar: {
+					items: [
+						'exportPDF', 'exportWord', '|',
+						'findAndReplace', 'selectAll', '|',
+						'heading', '|',
+						'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
+						'bulletedList', 'numberedList', 'todoList', '|',
+						'outdent', 'indent', '|',
+						'undo', 'redo', '-',
+						'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+						'alignment', '|',
+						'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
+						'specialCharacters', 'horizontalLine', 'pageBreak', '|',
+						'textPartLanguage', '|',
+						'sourceEditing'
+					],
+					shouldNotGroupWhenFull: true
+				},
+				list: {
+					properties: {
+						styles: true,
+						startIndex: true,
+						reversed: true
+					}
+				},
+				heading: {
+					options: [
+						{ model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+						{ model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+						{ model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+						{ model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+						{ model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+						{ model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+						{ model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+					]
+				},
+				placeholder: '',
+				fontFamily: {
+					options: [
+						'default',
+						'Arial, Helvetica, sans-serif',
+						'Courier New, Courier, monospace',
+						'Georgia, serif',
+						'Lucida Sans Unicode, Lucida Grande, sans-serif',
+						'Tahoma, Geneva, sans-serif',
+						'Times New Roman, Times, serif',
+						'Trebuchet MS, Helvetica, sans-serif',
+						'Verdana, Geneva, sans-serif'
+					],
+					supportAllValues: true
+				},
+				fontSize: {
+					options: [10, 12, 14, 'default', 18, 20, 22],
+					supportAllValues: true
+				},
+				htmlSupport: {
+					allow: [
+						{
+							name: /.*/,
+							attributes: true,
+							classes: true,
+							styles: true
+						}
+					]
+				},
+				htmlEmbed: {
+					showPreviews: true
+				},
+				link: {
+					decorators: {
+						addTargetToExternalLinks: true,
+						defaultProtocol: 'https://',
+						toggleDownloadable: {
+							mode: 'manual',
+							label: 'Downloadable',
+							attributes: {
+								download: 'file'
+							}
+						}
+					}
+				},
+				mention: {
+					feeds: [
+						{
+							marker: '@',
+							feed: [
+								'@apple', '@bears', '@brownie', '@cake', '@candy', '@canes', '@chocolate',
+								'@cookie', '@cotton', '@cream', '@cupcake', '@danish', '@donut', '@dragée',
+								'@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o', '@liquorice',
+								'@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame',
+								'@snaps', '@soufflé', '@sugar', '@sweet', '@topping', '@wafer'
+							],
+							minimumCharacters: 1
+						}
+					]
+				},
+				removePlugins: [
+					'CKBox', 'CKFinder', 'EasyImage', 'RealTimeCollaborativeComments',
+					'RealTimeCollaborativeTrackChanges', 'RealTimeCollaborativeRevisionHistory',
+					'PresenceList', 'Comments', 'TrackChanges', 'TrackChangesData',
+					'RevisionHistory', 'Pagination', 'WProofreader', 'MathType'
+				]
+			}).then(editor => {
+				ckeditorInstance = editor;
+			}).catch(error => {
+				console.error('Error initializing CKEditor:', error);
+			});
+	
+			const editButtons = document.querySelectorAll('.edit-item-btn');
+			editButtons.forEach(button => {
+				button.addEventListener('click', function() {
+					const encryptedId = this.getAttribute('data-termid');
+					const title = this.getAttribute('data-title');
+					const description = this.getAttribute('data-description');
+	
+					document.getElementById('categorytitle').value = title;
+					document.getElementById('term-id').value = encryptedId;
+	
+					if (ckeditorInstance) {
+						
+						ckeditorInstance.setData(description);
+					} else {
+						console.error('CKEditor instance is not initialized.');
+					}
+				});
+			});
+		});
 	</script>
+
+
+
+<script>
+	let ckeditorInstance_n;	
+	document.addEventListener('DOMContentLoaded', function() {
+		CKEDITOR.ClassicEditor.create(document.getElementById("ckeditorclassic3"), {
+			toolbar: {
+				items: [
+					'exportPDF', 'exportWord', '|',
+					'findAndReplace', 'selectAll', '|',
+					'heading', '|',
+					'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
+					'bulletedList', 'numberedList', 'todoList', '|',
+					'outdent', 'indent', '|',
+					'undo', 'redo', '-',
+					'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+					'alignment', '|',
+					'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
+					'specialCharacters', 'horizontalLine', 'pageBreak', '|',
+					'textPartLanguage', '|',
+					'sourceEditing'
+				],
+				shouldNotGroupWhenFull: true
+			},
+			list: {
+				properties: {
+					styles: true,
+					startIndex: true,
+					reversed: true
+				}
+			},
+			heading: {
+				options: [
+					{ model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+					{ model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+					{ model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+					{ model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+					{ model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+					{ model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+					{ model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+				]
+			},
+			placeholder: '',
+			fontFamily: {
+				options: [
+					'default',
+					'Arial, Helvetica, sans-serif',
+					'Courier New, Courier, monospace',
+					'Georgia, serif',
+					'Lucida Sans Unicode, Lucida Grande, sans-serif',
+					'Tahoma, Geneva, sans-serif',
+					'Times New Roman, Times, serif',
+					'Trebuchet MS, Helvetica, sans-serif',
+					'Verdana, Geneva, sans-serif'
+				],
+				supportAllValues: true
+			},
+			fontSize: {
+				options: [10, 12, 14, 'default', 18, 20, 22],
+				supportAllValues: true
+			},
+			htmlSupport: {
+				allow: [
+					{
+						name: /.*/,
+						attributes: true,
+						classes: true,
+						styles: true
+					}
+				]
+			},
+			htmlEmbed: {
+				showPreviews: true
+			},
+			link: {
+				decorators: {
+					addTargetToExternalLinks: true,
+					defaultProtocol: 'https://',
+					toggleDownloadable: {
+						mode: 'manual',
+						label: 'Downloadable',
+						attributes: {
+							download: 'file'
+						}
+					}
+				}
+			},
+			mention: {
+				feeds: [
+					{
+						marker: '@',
+						feed: [
+							'@apple', '@bears', '@brownie', '@cake', '@candy', '@canes', '@chocolate',
+							'@cookie', '@cotton', '@cream', '@cupcake', '@danish', '@donut', '@dragée',
+							'@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o', '@liquorice',
+							'@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame',
+							'@snaps', '@soufflé', '@sugar', '@sweet', '@topping', '@wafer'
+						],
+						minimumCharacters: 1
+					}
+				]
+			},
+			removePlugins: [
+				'CKBox', 'CKFinder', 'EasyImage', 'RealTimeCollaborativeComments',
+				'RealTimeCollaborativeTrackChanges', 'RealTimeCollaborativeRevisionHistory',
+				'PresenceList', 'Comments', 'TrackChanges', 'TrackChangesData',
+				'RevisionHistory', 'Pagination', 'WProofreader', 'MathType'
+			]
+		}).then(editor => {
+			ckeditorInstance_n = editor;
+		}).catch(error => {
+			console.error('Error initializing CKEditor:', error);
+		});
+
+		const editButtons = document.querySelectorAll('#edit_default_terms');
+		editButtons.forEach(button => {
+			button.addEventListener('click', function() {
+				const encryptedId = this.getAttribute('data-termid');
+				const terms=this.getAttribute('data-term');
+				const title = this.getAttribute('data-title');
+				const description = this.getAttribute('data-description');
+				document.getElementById('categorytitle').value = title;
+				document.getElementById('terms-id').value = encryptedId;
+				document.getElementById('terms').value = terms;
+
+				if (ckeditorInstance_n) {
+					if (description) {
+						ckeditorInstance_n.setData(description); 
+					} else {
+						ckeditorInstance_n.setData('');
+					}
+					// ckeditorInstance.setData(description);
+				} else {
+					console.error('CKEditor instance is not initialized.');
+				}
+			});
+		});
+	});
+</script>
 
 	<script>
 		$(document).ready(function () {
@@ -2330,6 +2638,54 @@ function timeSlotOptionforservice($lbl, $val) {
 			});
 		});
 	</script>
+
+	{{-- confirm-default-delete --}}
+
+
+	<script>
+		$(document).ready(function () {
+			var itemId = null;
+			var term=null;
+			$('.remove-item-default-btn').on('click', function () {
+				itemId = $(this).data('termsid');  
+				term=$(this).data('term');
+			});
+			$('#confirm-default').on('click', function () {
+				if (itemId) {
+					// alert(term);
+					var url = '{{ route('personal.company_terms_delete_default', ':id') }}'.replace(':id', itemId);
+					$.ajax({
+						url: url, 
+						type: 'POST',
+						data: {
+								_method: 'POST',  
+								id: itemId,  
+								term:term,
+								_token: '{{ csrf_token() }}'  
+							},
+						success: function (response) {
+							if (response.success) {
+								$('#deletedefaultterm').modal('hide');
+								$('#message-content').text(response.success); 
+								$('#success-message').fadeIn(); 
+								setTimeout(function() {
+									$('#success-message').fadeOut(); 
+									window.location.reload();
+								}, 3000);
+							} 
+							
+							$('#deletedefaultterm').modal('hide'); 
+						},
+						error: function () {
+							$('#deletedefaultterm').modal('hide');
+							$('#message-content').text(response.error); 
+						}
+					});
+				}
+			});
+		});
+	</script>
+
 
 {{-- <script>
 	function updateSidePanelColor(color) {

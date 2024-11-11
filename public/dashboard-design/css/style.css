@@ -717,6 +717,7 @@ body{
 .page-content{
     padding:calc(70px + 6.5rem) calc(1.5rem * .5) 60px calc(1.5rem * .5)
 }
+
 .navbar-menu{
     width:250px;
     /*z-index:7;*/
@@ -1264,10 +1265,10 @@ body{
 :is([data-layout=vertical],[data-layout=semibox])[data-sidebar-size=md] .navbar-menu .menu-title span{
     text-decoration:underline
 }
-:is([data-layout=vertical],[data-layout=semibox])[data-sidebar=dark] .navbar-menu{
+/* :is([data-layout=vertical],[data-layout=semibox])[data-sidebar=dark] .navbar-menu{
     background:var(--vz-vertical-menu-bg-dark);
-    border-right:1px solid var(--vz-vertical-menu-bg-dark)
-}
+    border-right:1px solid var(--vz-vertical-menu-bg-dark)/
+} */
 :is([data-layout=vertical],[data-layout=semibox])[data-sidebar=dark] .navbar-menu .hamburger-icon span{
     background-color:var(--vz-vertical-menu-item-color-dark)
 }

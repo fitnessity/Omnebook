@@ -245,6 +245,8 @@ Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware
     Route::post('/company_terms', 'CompanyController@TermsConditions')->name('company_terms');//added  6_11_24
     Route::post('/company_terms_update', 'CompanyController@TermsConditionsUpdate')->name('company_terms_update');//added  6_11_24
     Route::post('/company_terms_delete/{id}',  'CompanyController@TermsConditionsDelete')->name('company_terms_delete');//added  6_11_24
+    Route::post('/company_default_terms', 'CompanyController@DefaultTermsConditions')->name('company_default_terms');//added  6_11_24
+    Route::post('/company_terms_delete_default/{id}',  'CompanyController@TermsConditionsDefaultDelete')->name('company_terms_delete_default');//added  6_11_24
 
     Route::resource('profile', 'ProfileController')->only(['index','create','edit', 'update', 'destroy', 'store']);
     Route::get('check-in-portal', 'CheckInController@index')->name('check-in-portal');
@@ -342,6 +344,13 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/customers','CustomerController@index')->name('business_customer_index');
         Route::delete('/customers/delete/{id}','CustomerController@delete')->name('business_customer_delete');
         Route::get('/customers/{id}','CustomerController@show')->name('business_customer_show');
+        Route::get('/customers_active_membership','CustomerController@active_membership')->name('customers_active_membership');//added-9-11
+        Route::get('/customers_compeleted_membership','CustomerController@completed_membership')->name('customers_compeleted_membership');//added-9-11
+        Route::get('/customers_suspended_membership','CustomerController@suspended_membership')->name('customers_suspended_membership');//added-9-11
+        Route::get('/customers_purchase_history','CustomerController@purchase_history')->name('customers_purchase_history');//added-9-11
+        Route::get('/customers_connected_family','CustomerController@connected_family')->name('customers_connected_family');//added-9-11
+        Route::get('/customers_attendance_history','CustomerController@attendance_history')->name('customers_attendance_history');//added-9-11
+
         Route::get('/customers/{id}/visit_modal','CustomerController@visit_modal')->name('visit_modal');
         Route::get('/customers/{id}/visit_autopaymodel','CustomerController@visit_autopaymodel')->name('visit_autopaymodel');
         Route::get('/create-customer/','CustomerController@create')->name('business_customer_create');

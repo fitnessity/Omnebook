@@ -47,7 +47,7 @@
 								<input type="text" class="form-control" placeholder="Search for client" autocomplete="off" id="serchclient_navbar"  name="fname" value="{{Request::get('fname')}}">
 							</div>
 						</form>
-						<div class="app-search-client">
+						<div class="app-search-client mobile-none zfold-none">
 						<a class=" header-bottom-sp" data-bs-toggle="modal" data-bs-target="#CustomerModal">Quick Add </a><label>|</label><a href="{{route('business_customer_create' ,['business_id'=> Auth::user()->cid])}}" class="mobile-none zfold-none" >Add Client</a>
 						</div>
 						<div class="app-search">
@@ -1298,8 +1298,13 @@
 
 <script>
 function openNaav() {
-	document.getElementById("completesetup").style.width = "500px";
+	var windowWidth = window.innerWidth;
+	var newWidth = windowWidth <= 768 ? "100%" : "500px";  // Set to 100% for mobile, 500px for desktop
+	document.getElementById("completesetup").style.width = newWidth;
 }
+// function openNaav() {
+// 	document.getElementById("completesetup").style.width = "500px";
+// }
 
 function closeNaav() {
 	document.getElementById("completesetup").style.width = "0";
@@ -1308,7 +1313,10 @@ function closeNaav() {
 
 <script>
 function openNavxop() {
-	document.getElementById("newthings").style.width = "500px";
+	var windowWidth = window.innerWidth;
+	var newthingsWidth = windowWidth <= 768 ? "100%" : "500px";  // Set to 100% for mobile, 500px for desktop
+	document.getElementById("newthings").style.width = newthingsWidth;
+	// document.getElementById("newthings").style.width = "500px";
 }
 
 function closeNavxop() {

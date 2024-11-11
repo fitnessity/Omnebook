@@ -19,8 +19,8 @@
 
  {{-- <div class="app-menu navbar-menu navbar-menu-white"> --}}
     <div class="app-menu 
-    {{ $company->side_panel_color == 1 ? 'navbar-menu' : '' }}
-    {{ $company->side_panel_color == 0 ? 'navbar-menu-white' : '' }}">
+    {{ $company->side_panel_color == 1 ? 'navbar-menu navbar-menu-black' : '' }}
+    {{ $company->side_panel_color == 0 ? 'navbar-menu navbar-menu-white' : '' }}">
 
         <!-- LOGO -->
     <div class="navbar-brand-box">
@@ -111,7 +111,9 @@
 				</div>
 			</div> 
             <ul class="navbar-nav dash-sidebar-menu navbar-nav-white" id="navbar-nav">
-                <li class="menu-title account-activation-side"><span data-key="t-menu"><i class="fas fa-exclamation-circle mr-15"></i>Account activation <label class="fs-8 mb-0">7 Days Left</label></span></li>
+                <li class="menu-title account-activation-side
+                {{ $company->side_panel_color == 1 ? 'account-activation-side-white' : '' }}
+                {{ $company->side_panel_color == 0 ? 'account-activation-side-black' : '' }}"><span data-key="t-menu"><i class="fas fa-exclamation-circle mr-15"></i>Account activation <label class="fs-8 mb-0">7 Days Left</label></span></li>
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName()=='business_dashboard') active @endif" href="{{route('business_dashboard')}}" aria-controls="sidebarDashboards">

@@ -309,7 +309,7 @@ class CustomerController extends Controller {
         ini_set('memory_limit', '2056M');
 		ini_set('max_execution_time', 4800);
 		ini_set('memory_limit', '-1');
-    
+        // dd($id);
         $user = Auth::user();
         $company = $user->businesses()->findOrFail($business_id);
         $terms = $company->business_terms->first();
@@ -1190,5 +1190,169 @@ class CustomerController extends Controller {
             else{ return generateUniqueCode(); }
         }
     }
+
+    public function shows(Request $request, $business_id, $id){
+        ini_set('memory_limit', '2056M');
+		ini_set('max_execution_time', 4800);
+		ini_set('memory_limit', '-1');
     
+        $user = Auth::user();
+        $company = $user->businesses()->findOrFail($business_id);
+        $terms = $company->business_terms->first();
+        $customerdata = $company->customers->find($id);
+        
+        if(!$customerdata){ return redirect()->route('business_customer_index'); }
+        $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
+        $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->orderBy('created_at','desc')->get() : [];
+        $suspended_memberships = $customerdata != '' ? $customerdata->suspended_memberships()->orderBy('created_at','desc')->get() : [];
+        $purchase_history = @$customerdata != '' ?  @$customerdata->purchase_history()->orderBy('created_at','desc')->get() : [];
+        
+        // $active_memberships=[];
+        // $suspended_memberships=[];
+        $booking_detail = UserBookingDetail::where('business_id', $business_id)
+        ->where('user_id', '!=', $customerdata->id)
+        ->whereNotNull('user_id')  
+        ->whereNull('deleted_at')  
+        ->get();
+        $id = $customerdata->id;           
+        $familyPurchaseHistory = [];         
+        foreach ($booking_detail as $booking) {  
+            $familyMember = Customer::where('business_id', $company->id)
+                ->where('id', $booking->user_id)
+                ->first();             
+            if ($familyMember)
+            {                     
+                $familyPurchases = $familyMember->family_purchase_history($id, $booking->booking_id)->get()->toArray();    
+                if (!empty($familyPurchases)) {
+                    $familyPurchaseHistory[$familyMember->fname . ' ' . $familyMember->lname] []= $familyPurchases; 
+                }  
+           }       
+        }
+        $complete_booking_details = @$customerdata != '' ? $customerdata->complete_booking_details()->get() : [];
+        $strpecarderror = '';
+        if (session()->has('strpecarderror')) {
+            $strpecarderror = Session::get('strpecarderror');
+        }
+        $auto_pay_payment_msg = '';
+        if($request->session()->has('recurringPayment')){
+            $auto_pay_payment_msg =  $request->session()->get('recurringPayment');
+            $request->session()->forget('recurringPayment');
+        }
+        $documents = CustomersDocuments::where(['customer_id'=>$id])->get();
+        $lastBooking = $customerdata->bookingDetail()->orderby('created_at','desc')->first();
+        $notes = CustomerNotes::where(['customer_id'=>$id])->get();
+        $cardSuccessMsg =0;
+        if(Session::has('cardSuccessMsg')){
+            $cardSuccessMsg = 1; Session::forget('cardSuccessMsg');
+        }
+        return view('customers.show', [
+            'customerdata'=>$customerdata,
+            'strpecarderror'=>$strpecarderror,
+            'terms'=> $terms,
+            'visits' => $visits,
+            'purchase_history' => $purchase_history,
+            'active_memberships' => $active_memberships,
+            'suspended_memberships'=>$suspended_memberships,
+            'complete_booking_details' => $complete_booking_details,
+            'auto_pay_payment_msg' =>$auto_pay_payment_msg,
+            'documents' =>$documents,
+            'notes' =>$notes,
+            'lastBooking' =>$lastBooking,
+            'cardSuccessMsg' =>$cardSuccessMsg,
+            'resultDate' =>$this->resultDate,
+            'id'=>$id,
+            'company'=>$company,
+            'familyPurchaseHistory'=>$familyPurchaseHistory
+        ]);
+    }
+    public function active_membership($business_id, Request $request)
+    {
+        $user = Auth::user();
+        $company = $user->businesses()->findOrFail($business_id);
+        $terms = $company->business_terms->first();
+        $customerdata = $company->customers->find($request->customer_id);
+        if(!$customerdata){ return redirect()->back(); }
+        $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
+            $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->orderBy('created_at','desc')->get() : [];
+            $html = view('customers.active_membership_list', compact('active_memberships', 'customerdata'))->render();
+            return response()->json(['html' => $html]);
+    }
+    
+    public function completed_membership($business_id, Request $request)
+    {
+        $user = Auth::user();
+        $company = $user->businesses()->findOrFail($business_id);
+        $terms = $company->business_terms->first();
+        $customerdata = $company->customers->find($request->customer_id);
+            if(!$customerdata){ return redirect()->back(); }
+            // $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
+            // $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->orderBy('created_at','desc')->get() : [];
+            $complete_booking_details = @$customerdata != '' ? $customerdata->complete_booking_details()->get() : [];
+
+            $html = view('customers.completed_membership_list', compact('complete_booking_details', 'customerdata'))->render();
+            return response()->json(['html' => $html]);
+    }
+
+    public function suspended_membership($business_id, Request $request)
+    {
+        $user = Auth::user();
+        $company = $user->businesses()->findOrFail($business_id);
+        $terms = $company->business_terms->first();
+        $customerdata = $company->customers->find($request->customer_id);
+        if(!$customerdata){ return redirect()->back(); }
+           $suspended_memberships = $customerdata != '' ? $customerdata->suspended_memberships()->orderBy('created_at','desc')->get() : [];
+            $html = view('customers.suspended_membership', compact('suspended_memberships', 'customerdata'))->render();
+            return response()->json(['html' => $html]);
+    }
+
+    public function purchase_history($business_id, Request $request)
+    {
+            $user = Auth::user();
+            $company = $user->businesses()->findOrFail($business_id);
+            $terms = $company->business_terms->first();
+            $customerdata = $company->customers->find($request->customer_id);
+            if(!$customerdata){ return redirect()->back(); }
+            $purchase_history = @$customerdata != '' ?  @$customerdata->purchase_history()->orderBy('created_at','desc')->get() : [];
+            $booking_detail = UserBookingDetail::where('business_id', $business_id)
+            ->where('user_id', '!=', $customerdata->id)
+            ->whereNotNull('user_id')  
+            ->whereNull('deleted_at')  
+            ->get();
+            $familyPurchaseHistory = [];         
+            foreach ($booking_detail as $booking) {  
+                $familyMember = Customer::where('business_id', $company->id)
+                    ->where('id', $booking->user_id)
+                    ->first();             
+                if ($familyMember)
+                {                     
+                    $familyPurchases = $familyMember->family_purchase_history($request->customer_id, $booking->booking_id)->get()->toArray();    
+                    if (!empty($familyPurchases)) {
+                        $familyPurchaseHistory[$familyMember->fname . ' ' . $familyMember->lname] []= $familyPurchases; 
+                    }  
+               }       
+            }
+            $html = view('customers.purchase_history', compact('purchase_history', 'customerdata','familyPurchaseHistory'))->render();
+            return response()->json(['html' => $html]);
+    }
+    public function connected_family($business_id, Request $request)
+    {
+            $user = Auth::user();
+            $company = $user->businesses()->findOrFail($business_id);
+            $terms = $company->business_terms->first();
+            $customerdata = $company->customers->find($request->customer_id);
+            if(!$customerdata){ return redirect()->back(); }
+            $html = view('customers.connected_family', compact('customerdata'))->render();
+            return response()->json(['html' => $html]);
+    }
+    public function attendance_history($business_id, Request $request)
+    {
+            $user = Auth::user();
+            $company = $user->businesses()->findOrFail($business_id);
+            $terms = $company->business_terms->first();
+            $customerdata = $company->customers->find($request->customer_id);
+            $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
+            if(!$customerdata){ return redirect()->back(); }
+            $html = view('customers.attendance_history', compact('visits','customerdata'))->render();
+            return response()->json(['html' => $html]);
+    }
 }

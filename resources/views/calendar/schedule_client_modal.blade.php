@@ -44,10 +44,10 @@
                 <div class="border-bottom-grey mt-10 mb-10"></div>	
                 <div class="container"> 
                     <div class="row">
-                        <div class="col-lg-12 col-md-6 mmb-10">
+                        <div class="col-lg-12 col-md-12 mmb-10">
                         <div class="calendar-title-modal"> <label class="font-red">Step 1: </label> <label>Select or Add a New Client</label> </div>
                             <div class="row">
-                                <div class="col-lg-12">
+                                <div class="col-lg-12 col-md-12 col-12">
                                     <label>Search for customer</label>
                                     <div class="search-customer mb-10">
                                         <input type="text" id="serchclient" name="fname" class=""   placeholder="Search for client who is making a purchase?" autocomplete="off" >
@@ -55,7 +55,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-12 mb-10">
+                                <div class="col-lg-12 col-md-12 col-12 mb-10">
                                     <label>Staff Member</label>
                                     <select name="staff_list" id="staff_list" class="form-select valid" onchange="loaddropdown('staff',this,this.value);">
                                         <option value="">Select Member</option>
@@ -68,7 +68,7 @@
                                     </select>
                                 </div>
 
-                                <div class="col-lg-12">
+                                <div class="col-lg-12 col-md-12 col-12">
                                     <label class="form-label">Notes</label>
                                     <textarea class="form-control mb-15" id="booking-notes" placeholder="Enter your note" rows="3"></textarea>
                                 </div>
@@ -1166,7 +1166,10 @@
 
 <script>
 function openNaavbookclienttraining() {
-	document.getElementById("book_clienttraining").style.width = "500px";
+    var windowWidth = window.innerWidth;
+	var newthingsWidth = windowWidth <= 768 ? "100%" : "500px";  // Set to 100% for mobile, 500px for desktop
+	document.getElementById("book_clienttraining").style.width = newthingsWidth;
+	// document.getElementById("book_clienttraining").style.width = "500px";
 }
 
 function closeNaavbookclienttraining() {

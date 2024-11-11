@@ -1259,7 +1259,7 @@
 												<option value="business">10</option>
 											</select>
 										</div>
-									</div
+									</div>
 								</div>
 							</div>
 							<input type="button" name="previous" class="previous action-button-back" value="Back" />
@@ -1410,7 +1410,7 @@
 							</div>
 							
 							<input type="button" name="previous" class="previous action-button-back" value="Back" />
-							<button class="btn action-button" id="openNestedModal2">Submit</button>
+							<button type="button" name="submit" class="submit btn action-button" id="openNestedModal2">Submit</button>
 							<!-- <input type="submit" name="submit" class="submit action-button" value="Submit" /> -->
 						</fieldset>
 

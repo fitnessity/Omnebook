@@ -36,6 +36,11 @@ class BusinessTerms extends Model
         'liability',
         'liabilitytext',
         'covid',
-        'covidtext'
+        'covidtext',
+        'cancellation_delete',
+        'liability_delete',
+        'refund_delete',
+        'terms_delete'
+
     ];
 }

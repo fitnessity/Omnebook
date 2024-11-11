@@ -88,7 +88,7 @@ if(!empty(@$response)){
         
     </div>
 </section>
-@include('layouts.footer')
+@include('layouts.business.footer')
 <script>
     $(document).ready(function() {
 

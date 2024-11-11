@@ -378,4 +378,76 @@ class CompanyController extends Controller
                 return response()->json(['success' => false, 'error' => 'Item not found or deletion failed'], 400);
             }
     }
+
+   
+    public function DefaultTermsConditions(Request $request)
+    {
+        // dd($request->all());
+        if ($request->input('term_id') != null) {
+            $termId = Crypt::decrypt($request->input('term_id'));
+            $terms =  BusinessTerms::find($termId);
+
+        }
+        else{
+            $terms = new BusinessTerms();
+        }
+        if ($request->has('terms') && $request->has('contracttermstext')) {
+            $contractText = $request->input('contracttermstext');
+            switch ($request->input('terms')) {
+                case "terms_condition":
+                    $terms->termcondfaqtext = $contractText;
+                    break;
+                case "Refund":
+                    $terms->refundpolicytext = $contractText;
+                    break;
+                case "Liability":
+                    $terms->liabilitytext = $contractText;
+                    break;
+                case "cancelation":
+                    $terms->cancelation = $contractText;
+                    break;
+                default:
+                    return redirect()->back()->withErrors(['error' => 'Invalid term type specified.']);
+            }
+            $terms->save();
+            return redirect()->back()->with('success', 'Terms and conditions updated successfully.');
+        }
+        return redirect()->back()->withErrors(['error' => 'Invalid request data.']);
+    }
+
+    public function TermsConditionsDefaultDelete(Request $request,$id)
+    {
+        $termId = Crypt::decrypt($request->input('id'));
+        $termsdoc=BusinessTerms::findOrFail($termId);
+        if($termsdoc)
+        {
+            switch ($request->input('term')) {
+                case "terms_condition":
+                    $termsdoc->terms_delete=1;
+                    break;
+                case "Refund":
+                    $termsdoc->refund_delete=1;
+                    break;
+                case "Liability":
+                    $termsdoc->liability_delete=1;
+                    break;
+                case "cancelation":
+                    $termsdoc->cancellation_delete=1;
+                    break;
+                default:
+                    return response()->json(['success' => false, 'error' => 'Invalid term type specified'], 400);
+            }
+            $termsdoc->save();
+            return response()->json(['success' => 'Terms and conditions have been Deleted successfully.' ]);
+        }
+      
+        return response()->json(['success' => false, 'error' => 'Invalid request data'], 400);
+
+
+    }
+
+ 
+    
+
+
 }

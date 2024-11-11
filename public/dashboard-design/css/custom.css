@@ -9164,17 +9164,17 @@ height: 400px;
 .btn-switch-business-white{
   /* color: #000;
   border: 1px solid #000; */
-  border-radius: 8px;
+  border-radius: 0px;
   margin-bottom: 5px;
   padding: 8px 0px;
   box-shadow: none;
+  width: 100%;
 }
 .navbar-nav.navbar-nav-white .nav-link {
   color: #8a8a8a;
 }
 .navbar-menu-white {
   width: 250px;
-  z-index: 7;
   background: #fff;
   border-right: 1px solid #fff;
   bottom: 0;
@@ -9285,8 +9285,165 @@ height: 400px;
   margin-right: -2px;
   z-index: 1;
 }
-
+:is([data-layout="vertical"], [data-layout="semibox"])[data-sidebar-size="sm"] .btn-switch-business-white{
+  display: none;
+}
+.account-activation-side-white{
+  border: 1px solid #fff;
+}
 /* white side bar */
+
+
+/* black side bar */
+.navbar-menu-black{
+  background: #151529;
+  border-right: 1px solid #151529;
+}
+
+.navbar-nav.navbar-nav-black > .nav-item .nav-link.active {
+  color: #000;
+}
+/* .navbar-menu-black .navbar-nav .nav-link img{
+  filter: brightness(2%);
+} */
+.navbar-nav.navbar-nav-black .nav-link:hover{
+  color: #000;
+}
+.btn-switch-business-black{
+  color: #fff;
+  /* border: 1px solid #000; */
+  border-radius: 0;
+  margin-bottom: 5px;
+  padding: 8px 0px;
+  box-shadow: none;
+  width: 100%;
+}
+.navbar-nav.navbar-nav-black .nav-link {
+  color: #8a8a8a;
+}
+.navbar-menu-black {
+  width: 250px;
+  background: #151529;
+  border-right: 1px solid #151529;
+  bottom: 0;
+  margin-top: 0;
+  position: fixed;
+  top: 0;
+  -webkit-box-shadow: 0 2px 4px rgba(15,34,58,.12);
+  box-shadow: 0 2px 4px rgba(15,34,58,.12);
+  padding: 0 0 calc(70px + 25px) 0;
+  -webkit-transition: all .1s ease-out;
+  transition: all .1s ease-out;
+  padding: 0;
+  position: absolute;
+}
+.navbar-menu-black .navbar-nav .nav-link img {
+  display: inline-block;
+  width: 18px;
+  font-size: 18px;
+  line-height: inherit;
+  margin-right: 10px;
+}
+.navbar-menu-black .navbar-nav .nav-link i {
+  display: inline-block;
+  min-width: 1.75rem;
+  font-size: 18px;
+  line-height: inherit;
+  color: #fff;
+}
+.navbar-menu-black .navbar-nav .nav-link{
+  color: #888b9d;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: .625rem 1.5rem;
+  font-size: .925rem;
+  font-family: Inter,sans-serif;
+}
+.navbar-menu-black .container-fluid {
+  padding: 0;
+}
+.navbar-menu-black .navbar-nav .nav-sm {
+  padding-left: 1.75rem;
+}
+.navbar-menu-black .navbar-nav .nav-sm .nav-link {
+  padding: .55rem 1.5rem !important;
+  color: var(--vz-vertical-menu-sub-item-color);
+  white-space: none;
+  position: relative;
+  font-size: .8125rem;
+  font-family: Inter,sans-serif;
+}
+.navbar-menu-black .navbar-nav .nav-sm .nav-link::before {
+  content: "";
+  width: 6px;
+  height: 1.5px;
+  background-color: var(--vz-vertical-menu-sub-item-color);
+  position: absolute;
+  left: 2px;
+  top: 16.5px;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  opacity: .5;
+}
+.navbar-menu-black .navbar-nav .nav-sm .nav-link::before {
+  background-color: #fff !important;
+}
+.navbar-menu-black .navbar-nav .nav-link[data-bs-toggle="collapse"]::after {
+  display: block;
+  content: "\f0142";
+  font-family: "Material Design Icons";
+  margin-left: auto;
+  -webkit-transition: -webkit-transform .2s;
+  transition: -webkit-transform .2s;
+  transition: transform .2s;
+  transition: transform .2s,-webkit-transform .2s;
+  font-size: 1.05rem;
+  position: absolute;
+  right: 18px;
+  color: #000;
+}
+.navbar-menu-black .navbar-nav .nav-link[data-bs-toggle="collapse"][aria-expanded="true"]::after {
+  color: inherit;
+}
+.navbar-menu-black .navbar-nav .nav-link[data-bs-toggle="collapse"][aria-expanded="true"]::after {
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+  color: #000;
+}
+.navbar-menu-black .navbar-nav .nav-link[data-bs-toggle="collapse"]::after {
+  display: block;
+  content: "\f0142";
+  font-family: "Material Design Icons";
+  margin-left: auto;
+  -webkit-transition: -webkit-transform .2s;
+  transition: -webkit-transform .2s;
+  transition: transform .2s;
+  transition: transform .2s,-webkit-transform .2s;
+  font-size: 1.05rem;
+  position: absolute;
+  right: 18px;
+  color: #000;
+}
+.navbar-menu-black .navbar-nav .nav-link .badge {
+  margin-left: auto;
+  margin-right: -2px;
+  z-index: 1;
+}
+.navbar-nav.navbar-nav-black .nav-link:hover{
+  color: #000;
+}
+.btn-switch-business-black:hover {
+  background: #f3f3f9;
+  border-radius: 0;
+}
+.account-activation-side-black{
+  border: 1px solid #000;
+}
+/* black side bar */
 
 .fs-8{
   font-size: 8px;
@@ -9326,4 +9483,14 @@ height: 400px;
 }
 .mb-80{
   margin-bottom: 80px;
+}
+.reset-pass-tb{
+  margin-top: 170px;
+  margin-bottom: 110px;
+}
+.rest-password-title h1{
+  font-weight: 700;
+  font-size: 23px !important;
+  text-transform: uppercase;
+  margin-bottom: 25px;
 }

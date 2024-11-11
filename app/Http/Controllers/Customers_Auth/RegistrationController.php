@@ -534,6 +534,8 @@ class RegistrationController extends Controller
 
                                 if ($customerFamily) {      
                                     SGMailService::sendWelcomeMailToCustomer($customerFamily->id,$company->id,'');
+                                    SGMailService::sendMailToCustomer($customerFamily->id,$company->id,''); 
+
                                 }
 
                                 $is_user = User::where(['firstname'=> $request->fname[$i],'lastname'=> $request->lname[$i],'email' => $request->emailid[$i]])->first();
@@ -607,6 +609,8 @@ class RegistrationController extends Controller
                     }
 
                     $status = SGMailService::sendWelcomeMailToCustomer($customerObj->id,Auth::user()->cid,$random_password); 
+                    $checkstatus=SGMailService::sendMailToCustomer($customerObj->id,Auth::user()->cid,$random_password); 
+
                     $response = array(
                         'id'=>$customerObj->id,
                         'type' => 'success',

@@ -654,7 +654,10 @@
 
 <script>
 function openNaavblockoff() {
-	document.getElementById("completeblockoff").style.width = "500px";
+    var windowWidth = window.innerWidth;
+	var newthingsWidth = windowWidth <= 768 ? "100%" : "500px";  // Set to 100% for mobile, 500px for desktop
+	document.getElementById("completeblockoff").style.width = newthingsWidth;
+	// document.getElementById("completeblockoff").style.width = "500px";
 }
 
 function closeNaavblockoff() {
@@ -664,7 +667,10 @@ function closeNaavblockoff() {
 
 <script>
 function openNaavmeetings() {
-	document.getElementById("schedule_meetings").style.width = "500px";
+    var windowWidth = window.innerWidth;
+	var newthingsWidth = windowWidth <= 768 ? "100%" : "500px";  // Set to 100% for mobile, 500px for desktop
+	document.getElementById("schedule_meetings").style.width = newthingsWidth;
+	// document.getElementById("schedule_meetings").style.width = "500px";
 }
 
 function closeNaavmeetings() {

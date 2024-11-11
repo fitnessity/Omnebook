@@ -258,8 +258,9 @@ class SchedulerCheckinDetailController extends BusinessBaseController
                         "ExpirationDate"=> date('m-d-Y' ,strtotime($userbookingdetail->expired_at)),
                         "ProviderPhoneNumber"=> $company->business_phone,
                         "ProviderEmail"=> $company->business_email,
+                        "image"=>$company->logo,
+                        "companyname"=>$company->company_name,
                         "ProviderAddress"=> $company->company_address());
-
                     $email_detail_provider = array(
                         "email" => $company->business_email, 
                         "CustomerName" => $customer->full_name, 

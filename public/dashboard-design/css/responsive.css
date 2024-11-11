@@ -131,7 +131,7 @@
 	.confirmed-slider .owl-nav .owl-next{right: -55px !important; width: 20px; height: 20px; font-size: 18px;}
 	.confirmed-slider .owl-nav .owl-prev{left: -55px !important; width: 20px; height: 20px; font-size: 18px;}
 	.mil-5 { margin-left: 5px;  }
-	.com-sidepanel{top: 67px;}
+	.com-sidepanel{top: 135px;}
 	.ipad-none{display: none;}
 	.notification-close{right: 35px;} 
 	#sidebar-wrapper{left: 322px; top: 136px;}
@@ -267,7 +267,7 @@
 }
 
 @media screen and (max-width: 699px){ 
-	#page-topbar{top: 102px;}
+	#page-topbar{top: 109px;}
 	.mobile-none{display:none;}
 	.page-content { padding: calc(100px + 6.5rem) calc(1.5rem * .5) 60px calc(1.5rem * .5);}
 	.mb-15{ margin-bottom: 15px;}
@@ -473,6 +473,7 @@
 	.set-on-bottom {margin-top: 25px; }
 	.post-on-img img{margin-top: 6px;}
 	.hiddenCB label{padding: 8px 11px;}
+	header .header-right .header-bottom-sp {margin-bottom: 0px;  }
 } 
 
 

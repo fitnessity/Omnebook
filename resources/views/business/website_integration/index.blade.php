@@ -2241,6 +2241,7 @@
 
 
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 
 @push('scripts')
     <script>

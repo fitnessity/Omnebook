@@ -95,6 +95,7 @@
    function S() {
       "vertical" != document.documentElement.getAttribute("data-layout") && "semibox" != document.documentElement.getAttribute("data-layout") || (document.getElementById("two-column-menu").innerHTML = "", document.querySelector(".navbar-menu") && (document.querySelector(".navbar-menu").innerHTML = u), document.getElementById("scrollbar").setAttribute("data-simplebar", ""), document.getElementById("navbar-nav").setAttribute("data-simplebar", ""), document.getElementById("scrollbar").classList.add("h-100")), "twocolumn" == document.documentElement.getAttribute("data-layout") && (document.getElementById("scrollbar").removeAttribute("data-simplebar"), document.getElementById("scrollbar").classList.remove("h-100")), "horizontal" == document.documentElement.getAttribute("data-layout") && B()
    }
+ 
 
    function I() {
       feather.replace();
@@ -104,6 +105,7 @@
          e.addEventListener("click", w.bind(this), !1), e.addEventListener("mouseover", w.bind(this), !1)
       })
    }
+   
 
    function w(e) {
       if (e.target && e.target.matches("a.nav-link span"))
@@ -545,3 +547,5 @@ function topFunction() {
 mybutton && (window.onscroll = function () {
    scrollFunction()
 });
+
+

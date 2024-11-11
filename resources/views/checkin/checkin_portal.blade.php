@@ -119,7 +119,17 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 														                           	</thead>
 														                          	<tbody>
 														                            	<tr>
-														                                	<th scope="row"><a href="#" class="fw-medium">{{$p->UserBookingDetail->business_services_with_trashed->program_name}}</a></th>
+																							{{-- @if($p->UserBookingDetail && $p->UserBookingDetail->business_services_with_trashed)
+																								<th scope="row">
+																									<a href="#" class="fw-medium">
+																										{{ $p->UserBookingDetail->business_services_with_trashed->program_name }}
+																									</a>
+																								</th>
+																							@else
+																								<th scope="row">N/A</th>
+																							@endif --}}
+
+																							{{-- <th scope="row"><a href="#" class="fw-medium">{{$p->UserBookingDetail->business_services_with_trashed->program_name}}</a></th> --}}
 														                                 	<td>Failed</td>
 														                                  	<td>Failed</td>
 														                                  	<td>{{date('m/d/Y' , strtotime($p->payment_date))}}</td>
