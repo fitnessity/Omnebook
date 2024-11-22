@@ -1877,7 +1877,9 @@
 		var customerId = '{{request()->cus_id}}';
 		// alert(customerId);
 		$('#qty').html('');
-
+		var inputVal = $('#adultprice').val();
+		var aduprice = inputVal ? parseFloat(inputVal) || 0 : 0;
+		alert(aduprice);
 		
 		var totalprice = 0, totalprice = 0, totalpriceadult =0;totalpricechild = 0; totalpriceinfant = 0;
 		var aduprice = parseFloat($('#adultprice').val()) || 0;
@@ -2047,7 +2049,7 @@
 				}
 				if(chk == 'priceopt'){
 					var data1 = data.split('~~');
-					console.log(data1);
+					// console.log(data1);
 					//$('#membership_opt_list').html(data1[0]);
 					$('#mp_name').html(data1[0]);
 					var part = data1[1].split('^^');
