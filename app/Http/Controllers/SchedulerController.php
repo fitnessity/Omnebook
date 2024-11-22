@@ -409,7 +409,7 @@ class SchedulerController extends Controller
            
                if ($age >= 3 && $age <= 17) {
                    $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
-                       ->where('is_recurring_child', '1')->distinct('category_id')
+                       ->where('is_recurring_child', '1')
                        ->get();
               
                     if ($pricelist->isEmpty()) {
@@ -417,20 +417,19 @@ class SchedulerController extends Controller
                     } else 
                          {
                               $output = '<option value="">Select Category</option>';
+                              $uniqueTitles = []; // Array to store unique titles
 
                               foreach ($pricelist as $price) {
                                    $category_id = $price->category_id;
-                                   // $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
-                                   // ->where('serviceid', $request->sid)
-                                   // ->where('id', $category_id)
-                                   // ->get();
                                    $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
                                    ->where('serviceid', $request->sid)
-                                   ->whereIn('id', $pricelist->pluck('category_id'))
+                                   ->where('id', $category_id)
                                    ->get();
                          
                                    foreach ($catelist as $cl) {
+                                        if (!in_array($cl->category_title, $uniqueTitles)) {
                                         $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                                        }
                                    }
                               }
                          }
@@ -445,20 +444,19 @@ class SchedulerController extends Controller
                          $output .= '<option value="">No price added</option>';
                     } else {
                          $output = '<option value="">Select Category</option>';
+                         $uniqueTitles = []; // Array to store unique titles
 
                          foreach ($pricelist as $price) {
                          $category_id = $price->category_id;
-                         // $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
-                         //      ->where('serviceid', $request->sid)
-                         //      ->where('id', $category_id)
-                         //      ->get();
                          $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
-                         ->where('serviceid', $request->sid)
-                         ->whereIn('id', $pricelist->pluck('category_id'))
-                         ->get();
+                              ->where('serviceid', $request->sid)
+                              ->where('id', $category_id)
+                              ->get();
                     
                          foreach ($catelist as $cl) {
+                              if (!in_array($cl->category_title, $uniqueTitles)) {
                               $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                              }
                          }
                          }
                     }
@@ -474,20 +472,20 @@ class SchedulerController extends Controller
                          $output .= '<option value="">No price added</option>';
                      } else {
                          $output = '<option value="">Select Category</option>';
+                         $uniqueTitles = []; // Array to store unique titles
 
                          foreach ($pricelist as $price) {
                              $category_id = $price->category_id;
-                         //     $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
-                         //         ->where('serviceid', $request->sid)
-                         //         ->where('id', $category_id)
-                         //         ->get();
-                         $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
-                         ->where('serviceid', $request->sid)
-                         ->whereIn('id', $pricelist->pluck('category_id'))
-                         ->get();
+                             $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
+                                 ->where('serviceid', $request->sid)
+                                 ->where('id', $category_id)
+                                 ->get();
                      
                              foreach ($catelist as $cl) {
+                              if (!in_array($cl->category_title, $uniqueTitles)) {
+
                                  $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                              }
                              }
                          }
                      }
