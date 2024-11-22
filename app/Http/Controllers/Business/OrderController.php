@@ -73,7 +73,14 @@ class OrderController extends BusinessBaseController
             $user_type = 'customer';
             $customer = $customerdata = $request->current_company->customers->find($request->cus_id);
             // dd($request->cus_id);
-            @$customer->create_stripe_customer_id();
+            // @$customer->create_stripe_customer_id();
+            if($customer)
+            {
+                $customer->create_stripe_customer_id();
+            }
+            else{
+                return redirect()->back();
+            }
             if($customer->parent_cus_id && $request->redirected != 1){
                 return redirect(route('business.orders.create', ['cus_id' => $customer->parent_cus_id, 'participate_id' => $request->cus_id, 'redirected' => true]));
             }
@@ -669,8 +676,67 @@ class OrderController extends BusinessBaseController
             $cart = $cart_item["cart_item"][$request->customerId.'~~'.$request->priceid.'^~'.$request->productIds.''.$request->orderType];
             $cartselectedpriceid = BusinessPriceDetails::where('id',$cart['priceid'])->first();
             $cartselectedcategory = BusinessPriceDetailsAges::where('id',$cart['categoryid'])->first();
-            $program_list = BusinessServices::where(['is_active'=>1,'userid'=>Auth::user()->id])->get();
-            $catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$cart['code'])->get(); 
+            // $program_list = BusinessServices::where(['is_active'=>1,'userid'=>Auth::user()->id])->get();
+            $program_list = BusinessServices::where(['is_active' => 1, 'userid' => Auth::user()->id, 'cid' => Auth::user()->cid])
+            ->whereHas('schedulers', function ($query) {
+                $query->where('end_activity_date', '>', now())
+                    ->orWhereNull('end_activity_date');
+            })
+            ->whereHas('priceDetailsAges', function ($query) {
+                $query->where('stype', 1);
+            })
+            ->get();
+
+            // new start
+            $customer = Customer::where('user_id',Auth::user()->id)->first();
+            $birthdate = Carbon::parse($customer->birthdate);
+            $age = $birthdate->age; 
+            // dd($age);       
+            if ($age >= 3 && $age <= 17) {
+                $pricelist_check = BusinessPriceDetails::where('serviceid',$cart['code'])
+                    ->where('is_recurring_child', '1')
+                    ->get();
+                foreach ($pricelist_check as $price) {
+                    $category_id = $price->category_id;
+                    $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
+                        ->where('serviceid', $cart['code'])
+                        ->where('id', $category_id)
+                        ->get();
+        
+                }
+            }           
+
+            else if ($age <= 2) {
+                $pricelist_check = BusinessPriceDetails::where('serviceid', $cart['code'])
+                    ->where('is_recurring_infant', '1')
+                    ->get();
+                foreach ($pricelist_check as $price) {
+                    $category_id = $price->category_id;
+                    $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
+                        ->where('serviceid', $cart['code'])
+                        ->where('id', $category_id)
+                        ->get();
+        
+                }
+            }
+        
+          else if($age >= 18) {
+                $pricelist_check = BusinessPriceDetails::where('serviceid', $cart['code'])
+                    ->where('is_recurring_adult', '1')
+                    ->get();
+                    $catelist = collect(); 
+                foreach ($pricelist_check as $price) {
+                    $category_id = $price->category_id;
+                    $catelist_data = BusinessPriceDetailsAges::select('id', 'category_title')
+                        ->where('serviceid', $cart['code'])
+                        ->where('id', $category_id)
+                        ->get();
+                        // dd($catelist_data);
+                        $catelist = $catelist->merge($catelist_data); 
+                    }
+            }
+            // end
+            // $catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$cart['code'])->get(); 
             $pricelist = BusinessPriceDetails::select('id','price_title')->where('category_id',@$cart['categoryid'])->get();
             $membershiplist = BusinessPriceDetails::select('id','membership_type')->where('id',$cart['priceid'])->get();
             $company = $request->current_company;

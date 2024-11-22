@@ -113,8 +113,10 @@ Route::post('/storePlan','OnBoardedController@storePlan')->name('onboard_process
 Route::any('/getCardForm','OnBoardedController@getCardForm')->name('onboard_process.getCardForm');
 Route::any('/doLoginProcess','OnBoardedController@doLoginProcess')->name('doLoginProcess');
 Route::any('/storeCards','OnBoardedController@storeCards')->name('storeCards');
-
-Route::resource('choose-plan', 'MembershipPlanController')->only(['index', 'create','store','update','destroy']);
+Route::resource('choose-plan', 'MembershipPlanController')
+    ->only(['index', 'create', 'store', 'update', 'destroy'])
+    ->middleware('auth');
+// Route::resource('choose-plan', 'MembershipPlanController')->only(['index', 'create','store','update','destroy']);
 Route::any('/getCardFormPlan','MembershipPlanController@getCardForm')->name('choose-plan.getCardForm');
 Route::any('/checkPromoCode','MembershipPlanController@checkPromoCode')->name('choose-plan.checkPromoCode');
 Route::any('/getCardData','MembershipPlanController@getCardData')->name('choose-plan.getCardData');
@@ -321,6 +323,12 @@ Route::name('personal.')->prefix('/personal')->namespace('Personal')->middleware
     Route::resource('schedulers', 'SchedulerController')->only(['index','create','update','destroy','store']);  
     Route::any('all_activity_schedule', 'SchedulerController@allActivitySchedule')->name('allActivitySchedule');
     Route::resource('company', 'CompanyController')->only(['index','create','edit', 'update', 'destroy', 'store']);
+    Route::post('/company_terms', 'CompanyController@TermsConditions')->name('company_terms');//added  6_11_24
+    Route::post('/company_terms_update', 'CompanyController@TermsConditionsUpdate')->name('company_terms_update');//added  6_11_24
+    Route::post('/company_terms_delete/{id}',  'CompanyController@TermsConditionsDelete')->name('company_terms_delete');//added  6_11_24
+    Route::post('/company_default_terms', 'CompanyController@DefaultTermsConditions')->name('company_default_terms');//added  6_11_24
+    Route::post('/company_terms_delete_default/{id}',  'CompanyController@TermsConditionsDefaultDelete')->name('company_terms_delete_default');//added  6_11_24
+
     Route::resource('profile', 'ProfileController')->only(['index','create','edit', 'update', 'destroy', 'store']);
 
     Route::get('check-in-portal', 'CheckInController@index')->name('check-in-portal');
@@ -464,6 +472,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/customers/{id}/visit_modal','CustomerController@visit_modal')->name('visit_modal');
         Route::get('/customers/{id}/visit_autopaymodel','CustomerController@visit_autopaymodel')->name('visit_autopaymodel');
         Route::get('/create-customer/','CustomerController@create')->name('business_customer_create');
+        Route::get('/create-customers/','CustomerController@create_model')->name('business_customer_create_model');
         Route::post('/change-checkin-code/','CustomerController@changeCode')->name('change-checkin-code');
 
         Route::post('/customers/upload_docs','CustomerController@uploadDocument')->name('upload_docs');
