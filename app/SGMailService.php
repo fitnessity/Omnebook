@@ -9,7 +9,7 @@ class SGMailService{
 
 	public static function MailDetail($sendemail,$substitutions,$templateId){
 		$email = new Mail();
-		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
+		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "OmneBook Support");
 		
 		$email->addTo(
 		    $sendemail,
