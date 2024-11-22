@@ -1878,26 +1878,23 @@
 		// alert(customerId);
 		$('#qty').html('');
 		var adultinputVal = $('#adultprice').val();
-		var aduprice = $('#adultprice').val(); ? parseFloat(adultinputVal) || 0 : 0;
+		var aduprice =  adultinputVal ? parseFloat(adultinputVal) || 0 : 0;
 
 		
 		var childinputVal = $('#childprice').val();
-		var childprice = $('#childprice').val(); ? parseFloat(childinputVal) || 0 : 0;
+		var childprice = childinputVal ? parseFloat(childinputVal) || 0 : 0;
 	
 		var infantinputVal = $('#infantprice').val();
-		var infantprice = $('#infantprice').val(); ? parseFloat(infantinputVal) || 0 : 0;
+		var infantprice = infantinputVal ? parseFloat(infantinputVal) || 0 : 0;
 	
 
 		// alert(aduprice);
 		// var adultPrice = document.getElementById('adultprice').value;
-		// alert(adultPrice);
-
-		
+		// alert(adultPrice);		
 		var totalprice = 0, totalprice = 0, totalpriceadult =0;totalpricechild = 0; totalpriceinfant = 0;
 		// var aduprice = parseFloat($('#adultprice').val()) || 0;
 		// var childprice = parseFloat($('#childprice').val()) || 0;
 		// var infantprice = parseFloat($('#infantprice').val()) || 0;
-
 
 			var adult = '', child = '', infant = '';
 		
