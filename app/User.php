@@ -41,7 +41,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['about_me','network_count','about_business', 'full_name','age','first_letter'];
+    protected $appends = ['about_me','network_count','about_business', 'full_name','age','first_letter','profile_pic_url'];
 
     public $timestamps = false;
     
@@ -124,6 +124,15 @@ class User extends Authenticatable
         }else{
             return 'F';
         }
+    }
+    public function getProfilePicUrlAttribute()
+    {
+        $profile_pic = '';
+        if (Storage::disk('s3')->exists($this->profile_pic)) {
+            $profile_pic = Storage::url($this->profile_pic);
+        }
+
+        return $profile_pic; 
     }
 
     public function getPic(){

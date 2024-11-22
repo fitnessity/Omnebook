@@ -5,15 +5,31 @@ use App\Http\Controllers\Business\BusinessBaseController;
 use Illuminate\Http\Request;
 use Auth;
 use DateTime;
-use App\CompanyInformation;
+use App\TermsCondition;
 
+use App\CompanyInformation;
+use App\BusinessTerms;
+use App\BusinessExperience;
+use App\BusinessService;
 
 class SettingsController extends BusinessBaseController
 {
+    // public function index(Request $request ,$business_id)
+    // {
+    //     $sidecolor=CompanyInformation::where('id',Auth::user()->cid)->first();
+    // 	return view('business.settings.index',compact('sidecolor'));
+    // }
     public function index(Request $request ,$business_id)
     {
+        $company = CompanyInformation::where('id',Auth::user()->cid)->first();
+
         $sidecolor=CompanyInformation::where('id',Auth::user()->cid)->first();
-    	return view('business.settings.index',compact('sidecolor'));
+        $terms=TermsCondition::where('cid', Auth::user()->cid)->get();
+        $experience = BusinessExperience::where('cid',Auth::user()->cid)->first();
+        $bussiness_terms=BusinessTerms::where('cid',Auth::user()->cid)->first();
+        $service = BusinessService::where('cid',Auth::user()->cid)->first();
+
+     	return view('business.settings.index',compact('terms','sidecolor','bussiness_terms','experience','company','service'));
     }
     public function update_sidepanel(Request $request,$business_id)
     {

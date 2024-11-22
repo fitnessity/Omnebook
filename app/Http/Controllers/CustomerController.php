@@ -169,7 +169,11 @@ class CustomerController extends Controller {
         }
 
         if ($request->ajax()) {
-            return response()->json($customers);
+            // return response()->json($customers);
+            return response()->json([
+                'customers' => $customers,
+                'customerCount' => $customerCount,
+            ]);
         }
 
         //$activeMembersCount = $inActiveMembersCount = $prospectMembersCount = $atRiskMembersCount = $bigSpenderCount = $suspendCount = $owdCount =0;

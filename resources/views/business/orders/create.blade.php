@@ -225,10 +225,10 @@
 
 															<div class="row">
 																<div class="col-md-4 col-sm-4 col-xs-12">
-																	<div class="select0service mb-10">
+																	<!-- <div class="select0service mb-10">
 																		<label>Participant Quantity</label>
 																		<button type="button" data-bs-toggle="modal" data-bs-target="#addpartcipate" class="btn btn-red width-100 search-add-client"> Select </button>
-																	</div>
+																	</div> -->
 																	<!-- <div class="accordion cart-accordion" id="default-accordion-example">
 																		<div class="accordion-item">
 																			<h2 class="accordion-header" id="headingOne">
@@ -303,7 +303,8 @@
 																		<div class="set-price">
 																			<i class="fas fa-dollar-sign"></i>
 																		</div>
-																		<input type="text" class="form-control valid" id="price" placeholder="0.00" class="manualprice" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
+																		<input type="text" class="form-control valid" name="price" id="price_check" placeholder="0.00" class="manualprice" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
+																		<!-- <input type="text" class="form-control valid" id="price_check" placeholder="0.00" class="manualprice" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))"> -->
 																	</div>
 																</div>
 																<div class="col-lg-3 col-md-2 col-sm-3 col-xs-12">
@@ -549,7 +550,8 @@
 																	<div class="col-md-6 col-sm-6 col-xs-6 col-6"> 
 																		<div class="tax-check">
 																			<label>Tax </label>
-																			<input type="checkbox" id="tax" name="tax" value="1">
+																			<input type="checkbox" class="tax_check" id="tax" name="tax" value="1">
+																			<!-- <input type="checkbox" id="tax" name="tax" value="1"> -->
 																			<label for="tax"> No Tax</label><br>
 																		</div>
 																	</div>
@@ -1258,7 +1260,7 @@
         maxDate: "01/01/2050",
 	});
 </script>
-
+<!-- 
 <script>
 	var business_id = '{{$companyId}}';
 	$(document).ready(function () {
@@ -1292,8 +1294,76 @@
 	                .appendTo( ul );
 	    };
   	});
-</script>
+</script> -->
+<script>
+    var business_id = '{{$companyId}}';
+    $(document).ready(function () {
+        var url = "{{ url('/business/business_id/customers') }}";
+        url = url.replace('business_id', business_id);
 
+        // Debugging: Log the URL
+        console.log("Autocomplete URL:", url);
+
+        $("#serchclient").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    dataType: "json",
+                    data: {
+                        term: request.term, // Pass the search term
+                    },
+                    success: function (data) {
+                        console.log("Response Data:", data); // Debugging: Log the response
+                        
+                        // Process and send customer data to the autocomplete widget
+                        response($.map(data.customers, function (item) {
+                            return {
+                                label: item.fname + " " + item.lname,
+                                value: item.fname + " " + item.lname,
+                                id: item.id,
+                                fname: item.fname,
+                                lname: item.lname,
+                                email: item.email,
+                                phone_number: item.phone_number,
+                                age: item.age,
+                                profile_pic_url: item.profile_pic_url
+                            };
+                        }));
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching data:", error); // Log any errors
+                    }
+                });
+            },
+            focus: function (event, ui) {
+                return false; // Prevents default focus behavior
+            },
+            select: function (event, ui) {
+                console.log("Selected Item:", ui.item); // Debugging: Log the selected item
+                window.location.href = '/business/' + business_id + '/orders/create?cus_id=' + ui.item.id;
+            }
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            console.log("Rendering Item:", item); // Debugging: Log each item being rendered
+
+            let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0) + '</p></div></div>';
+
+            if (item.profile_pic_url) {
+                profile_img = '<img class="searchbox-img" src="' + item.profile_pic_url + '" style="">';
+            }
+
+            var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-md-3 nopadding text-center">' + profile_img + '</div><div class="col-md-9 div-controller">' +
+                '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' + item.lname + (item.age ? ' (' + item.age + ' Years Old)' : '') + '</label></p>' +
+                '<p class="pstyle liaddress">' + item.email + '</p>' +
+                '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
+
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append(inner_html)
+                .appendTo(ul);
+        };
+    });
+</script>
 <script>
 	$(document).ready(function () {	
 		var uniqueAids = {};
@@ -1611,7 +1681,7 @@
 	                inputVal = ['input[type=email]', 'input[type=password]',
 	                                 'input[type=text]', 'input[type=file]',
 	                                 'textarea'].join(', '),
-	                $inputs       = $form.find('.required').find(inputVal),
+	                $inputs = $form.find('.required').find(inputVal),
 	                $errorStatus = $form.find('div.error'),
 	                valid         = true;
 	                $errorStatus.addClass('hide');
@@ -1725,30 +1795,133 @@
 
 <script type="text/javascript">
 
-	function saveparticipate(){
-		$('.durationDiv').removeClass('d-none');
+	// function saveparticipate(){
+	// 	$('.durationDiv').removeClass('d-none');
+	// 	var customerId = '{{request()->cus_id}}';
+	// 	$('#qty').html('');
+
+	// 	var aducnt = parseInt($('#adultcnt').val()) || 0;
+	// 	var childcnt = parseInt($('#childcnt').val())	 || 0;
+	// 	var infcnt = parseInt($('#infantcnt').val()) || 0;
+
+	// 	if(aducnt + childcnt + infcnt == 0){
+	// 		$('#addToOrder').prop('disabled', true);
+	// 		alert("Please select participate.");
+	// 	}else if(aducnt + childcnt + infcnt > 1){
+	// 		$('#addToOrder').prop('disabled', true);
+	// 		alert("You can select only 1 participate.");
+	// 	}else{
+
+	// 		var adult = '', child = '', infant = '';
+	// 		var totalprice = 0, totalprice = 0, totalpriceadult =0;totalpricechild = 0; totalpriceinfant = 0;
+
+	// 		var aduprice = parseFloat($('#adultprice').val()) || 0;
+	//         var childprice = parseFloat($('#childprice').val()) || 0;
+	//         var infantprice = parseFloat($('#infantprice').val()) || 0;
+
+	//         if (aducnt === 1 && $('#isRecurringAdult').val() == 1) {
+	// 		    $('.durationDiv').addClass('d-none');
+	// 		} else if (childcnt === 1 && $('#isRecurringChild').val() == 1) {
+	// 		    $('.durationDiv').addClass('d-none');
+	// 		} else if (infcnt === 1 && $('#isRecurringInfant').val() == 1) {
+	// 		    $('.durationDiv').addClass('d-none');
+	// 		}
+
+	// 		var pay_session = $('#session_val').val();
+		
+	// 		if(aduprice !== 0){
+	// 			totalpriceadult = aducnt * aduprice;
+	// 			if(aducnt != 0){
+	// 				adult = '<span>Adults x '+aducnt+'</span><br>';
+	// 			}
+	// 			$('#adupricequantity').val(aducnt);
+	// 		}
+
+	// 		if(childprice !== 0){
+	// 			totalpricechild = childcnt * childprice;
+	// 			if(childcnt != 0){
+	// 				child = '<span>Kids x  '+childcnt+'</span><br>';
+	// 			}
+	// 			$('#childpricequantity').val(childcnt);
+	// 		}
+	// 		if(infantprice !== 0){
+	// 			totalpriceinfant = infcnt * infantprice;
+	// 			if(infcnt != 0){
+	// 				infant = '<span>Infants x  '+infcnt+'</span>';
+	// 			}
+	// 			$('#infantpricequantity').val(infcnt);
+	// 		}
+		
+	// 		$('#cartaduprice').val(aduprice);
+	// 		$('#cartinfantprice').val(infantprice);
+	// 		$('#cartchildprice').val(childprice);
+
+	// 		totalprice = totalpriceadult + totalpricechild + totalpriceinfant ;
+		
+	// 		$('#price').val(totalprice);
+	// 		$('#p_session').val(pay_session);
+	// 		$('#session_span').html(pay_session);
+	// 		$('#pay_session').val(pay_session);
+	// 		$('#qty').html(adult+' '+child+' '+infant);
+	// 		$('.participateclosebtn').click();
+	// 		gettotal('','')
+	// 		$("#addpartcipate").modal('hide').removeClass('show');
+	// 		if(customerId){
+	// 			$('#addToOrder').prop('disabled', false);
+	// 		}
+			
+	// 	}
+	// }
+	function saveparticipate(age){
+		// $('.durationDiv').removeClass('d-none');
 		var customerId = '{{request()->cus_id}}';
+		// alert(customerId);
 		$('#qty').html('');
 
-		var aducnt = parseInt($('#adultcnt').val()) || 0;
-		var childcnt = parseInt($('#childcnt').val())	 || 0;
-		var infcnt = parseInt($('#infantcnt').val()) || 0;
+		
+		var totalprice = 0, totalprice = 0, totalpriceadult =0;totalpricechild = 0; totalpriceinfant = 0;
+		var aduprice = parseFloat($('#adultprice').val()) || 0;
+		var childprice = parseFloat($('#childprice').val()) || 0;
+		var infantprice = parseFloat($('#infantprice').val()) || 0;
 
-		if(aducnt + childcnt + infcnt == 0){
-			$('#addToOrder').prop('disabled', true);
-			alert("Please select participate.");
-		}else if(aducnt + childcnt + infcnt > 1){
-			$('#addToOrder').prop('disabled', true);
-			alert("You can select only 1 participate.");
-		}else{
 
 			var adult = '', child = '', infant = '';
-			var totalprice = 0, totalprice = 0, totalpriceadult =0;totalpricechild = 0; totalpriceinfant = 0;
+		
+			if (age >= 3 && age <= 17) {
+				var childcnt=1;
+				if(childprice !== 0){
+				totalpricechild = childcnt * childprice;
+				if(childcnt != 0){
+					child = '<span>Kids x  '+childcnt+'</span><br>';
+				}
+				$('#childpricequantity').val(childcnt);
+			}
+			}
+			else if (age <= 2) {
+				var infcnt=1;
+				if(infantprice !== 0){
+				totalpriceinfant = infcnt * infantprice;
+				if(infcnt != 0){
+					infant = '<span>Infants x  '+infcnt+'</span>';
+				}
+				$('#infantpricequantity').val(infcnt);
+				}
+		
+			}
+			else if(age >= 18) {
+				 var aducnt=1;
+				 if(aduprice !== 0)
+				 {
+					totalpriceadult = aducnt * aduprice;
+					if(aducnt != 0){
+						adult = '<span>Adults x '+aducnt+'</span><br>';
+					}
+					$('#adupricequantity').val(aducnt);
+				}
 
-			var aduprice = parseFloat($('#adultprice').val()) || 0;
-	        var childprice = parseFloat($('#childprice').val()) || 0;
-	        var infantprice = parseFloat($('#infantprice').val()) || 0;
+			}
 
+		
 	        if (aducnt === 1 && $('#isRecurringAdult').val() == 1) {
 			    $('.durationDiv').addClass('d-none');
 			} else if (childcnt === 1 && $('#isRecurringChild').val() == 1) {
@@ -1759,36 +1932,16 @@
 
 			var pay_session = $('#session_val').val();
 		
-			if(aduprice !== 0){
-				totalpriceadult = aducnt * aduprice;
-				if(aducnt != 0){
-					adult = '<span>Adults x '+aducnt+'</span><br>';
-				}
-				$('#adupricequantity').val(aducnt);
-			}
-
-			if(childprice !== 0){
-				totalpricechild = childcnt * childprice;
-				if(childcnt != 0){
-					child = '<span>Kids x  '+childcnt+'</span><br>';
-				}
-				$('#childpricequantity').val(childcnt);
-			}
-			if(infantprice !== 0){
-				totalpriceinfant = infcnt * infantprice;
-				if(infcnt != 0){
-					infant = '<span>Infants x  '+infcnt+'</span>';
-				}
-				$('#infantpricequantity').val(infcnt);
-			}
-		
+					
 			$('#cartaduprice').val(aduprice);
 			$('#cartinfantprice').val(infantprice);
 			$('#cartchildprice').val(childprice);
 
-			totalprice = totalpriceadult + totalpricechild + totalpriceinfant ;
-		
-			$('#price').val(totalprice);
+			totalprice = totalpriceadult + totalpricechild + totalpriceinfant;
+			// alert(totalprice);
+			// alert(totalpricechild);
+			// alert('1');
+			$('#price_check').val(totalprice);
 			$('#p_session').val(pay_session);
 			$('#session_span').html(pay_session);
 			$('#pay_session').val(pay_session);
@@ -1796,12 +1949,17 @@
 			$('.participateclosebtn').click();
 			gettotal('','')
 			$("#addpartcipate").modal('hide').removeClass('show');
+			// alert(customerId);
+			// start
+
+					
+			// end
 			if(customerId){
+			// alert('2');
 				$('#addToOrder').prop('disabled', false);
 			}
 			
 		}
-	}
 
 	function changevalue(){
 		$('#duration').html($('#duration_int').val() +' '+ $('#duration_dropdown').val());
@@ -1858,7 +2016,8 @@
 			$('#pc_regi_id').val(data[0]);
 			$('#pc_user_tp').val(data1[0]);
 		}
-		
+		var selectedText = val.options[val.selectedIndex].innerHTML;
+
 		$.ajax({
 			url: '{{route("getdropdowndata")}}',
 			type: 'get',
@@ -1867,6 +2026,8 @@
 				'chk':chk,
 				'type':'simple',
 				'user_type':'{{$user_type}}',
+				'userid': $('#pc_regi_id').val()  // Pass the selected participant's user ID
+
 			},
 			success:function(data){
 				if(chk == 'program'){
@@ -1894,6 +2055,9 @@
 					$('#duration_dropdown').val(second[1]);
 					$('#duration').html(second[0]+ ' ' +second[1]);
 					$('#actscheduleid').val(second[0]+ ' ' +second[1]);
+					var age = $('#age').val();  // This gets the value of age
+					saveparticipate(age);
+
 				}
 				
 				if(chk != 'participat' && chk != 'mpopt' && chk != 'duration'){
@@ -1912,7 +2076,9 @@
 		//alert('hii');
 		var dis_val = tip_val = sub_tot = sub_tot_tip = sub_tot_dis = tax =salestax= duestax= 0;
 
-		var price = parseFloat($('#price').val()) || 0; 
+		// var price = parseFloat($('#price').val()) || 0; 
+		var price = parseFloat($('#price_check').val()) || 0; 
+
 		var productTotalPrices = parseFloat($('#productTotalPrices').val()) || 0; 
 		var dis = $('#dis_amt_drop').val() || '';
 	 	var tip = $('#tip_amt_drop').val() || '';
@@ -1937,7 +2103,9 @@
 		 	}
 	 	}
 
-	 	if($('#price').val() != ''){
+	 	// if($('#price').val() != ''){
+			if($('#price_check').val() != ''){
+
 
 	 		if(dis != undefined){
 		 		if($('#dis_amt').val() != ''){
@@ -2068,7 +2236,9 @@
 	 	}
 	}
 
-	document.getElementById("price").onkeyup = function() {
+	// document.getElementById("price").onkeyup = function() {
+		document.getElementById("price_check").onkeyup = function() {
+
 		var price = parseFloat($(this).val());
 		var chkadu = chkchild = chkinfant = 0;
 		var qty = uniqueprice = 0;
@@ -2189,9 +2359,13 @@
     	$('#session_span').html($(this).val());
     });
 
-	$("#tax").click(function () {
+	// $("#tax").click(function () {
+    //     gettotal('','');
+    // });
+	$(".tax_check").click(function () {
         gettotal('','');
     });
+
 
     function searchclick(cid){
     	//var url = '{{env("APP_URL")}}';
@@ -2200,6 +2374,11 @@
     	// var url = url+'/activity_purchase/0/'+cid;
 	 	window.location.href = url;
 	}
+</script>
+<script>
+		$(".tax_check").click(function () {
+        gettotal('','');
+    });
 </script>
 
 <script type="text/javascript">
@@ -2352,6 +2531,12 @@
  			$(".bookingreceipt").modal('show');
 		}
 	});
+</script>
+<script>
+    window.onload = function() {
+        document.getElementById('program_list').value = '';
+		document.getElementById('price_check').value='';
+    }
 </script>
 
 @endsection

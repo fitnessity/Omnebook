@@ -98,7 +98,7 @@
             <ul class="navbar-nav dash-sidebar-menu navbar-nav-white" id="navbar-nav">
                 <li class="menu-title account-activation-side
                 {{ $company->side_panel_color == 1 ? 'account-activation-side-white' : '' }}
-                {{ $company->side_panel_color == 0 ? 'account-activation-side-black' : '' }}"></li>
+                {{ $company->side_panel_color == 0 ? 'account-activation-side-black' : '' }}"><span data-key="t-menu"><i class="fas fa-exclamation-circle mr-15"></i>Account activation <label class="fs-8 mb-0">{{Auth::user()->chkDaysLeft()}} Days Left</label></span></li>
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName()=='business_dashboard') active @endif" href="{{route('business_dashboard')}}" aria-controls="sidebarDashboards">
@@ -108,9 +108,9 @@
                 
                 <li class="nav-item">
                     @if(!Session('StaffLogin'))
-                        <a class="nav-link menu-link @if(Route::current()->getName()=='personal.company.create') active @endif" href="{{route('personal.company.create',['company' => $companyId])}}" >
+                        <!-- <a class="nav-link menu-link @if(Route::current()->getName()=='personal.company.create') active @endif" href="{{route('personal.company.create',['company' => $companyId])}}" >
                                 <img src="{{asset('/public/img/company-set-up.png')}}" alt="Fitnessity"> <span data-key="t-apps">Company Set Up</span>
-                        </a>
+                        </a> -->
                     @else
                         <a class="nav-link menu-link @if(Route::current()->getName()=='business.staff.show') active @endif" href="{{route('business.staff.show',['company' => $companyId,'staff'=>Session('StaffLogin')])}}" >
                                 <img src="{{asset('/public/img/company-set-up.png')}}" alt="Fitnessity"> <span data-key="t-apps">Staff Personal Detail</span></a>
@@ -185,7 +185,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName() == 'business.engage_client.index' ) tab-active @endif" href="{{route('business.engage_client.index')}}" >
-                        <i class=" ri-user-follow-fill"></i> <span data-key="t-landing">Engage Clients </span>
+                        <i class=" ri-user-follow-fill"></i> <span data-key="t-landing">Marketing </span>
                     </a>
                 </li>
 

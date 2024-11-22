@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Personal;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\{CompanyInformation,BusinessExperience,BusinessTerms,BusinessService,SGMailService};
+use App\{CompanyInformation,BusinessExperience,BusinessTerms,BusinessService,SGMailService,AddressCountry,TermsCondition};
 use Auth;
 use Storage;
+use Illuminate\Support\Facades\Crypt;
+
 
 class CompanyController extends Controller
 {
@@ -33,7 +35,9 @@ class CompanyController extends Controller
         $experience = BusinessExperience::where('cid',@$companyId)->first();
         $service = BusinessService::where('cid',@$companyId)->first();
         $terms = BusinessTerms::where('cid',@$companyId)->first();
-        return view('personal.company.create',compact('company','experience','service','terms'));
+        $countries = AddressCountry::all();
+
+        return view('personal.company.create',compact('company','experience','service','terms','countries'));
     }
 
     /**
@@ -289,5 +293,114 @@ class CompanyController extends Controller
             $service->delete();
         });
         $company->delete();
+    }
+     public function TermsConditions(Request $request)
+    {
+        // dd($request->all());
+        $termsCondition = new TermsCondition();
+        $termsCondition->title = $request->category_title;
+        $termsCondition->description = $request->contracttermstext;
+        $termsCondition->cid = Auth::user()->cid;
+        $termsCondition->user_id = auth()->id();    
+        $termsCondition->save();
+    
+        return redirect()->back()->with('success', 'Terms and conditions have been saved successfully.');
+    
+    }
+
+    public function TermsConditionsUpdate(Request $request)
+    {
+        // dd($request->all());
+        $termId = Crypt::decrypt($request->input('term_id'));
+        $term = TermsCondition::findOrFail($termId);
+        $term->title = $request->input('category_title');
+        $term->description = $request->input('contracttermstext');
+        $term->save();
+        return redirect()->back()->with('success', 'Term updated successfully.');
+
+    }
+    public function TermsConditionsDelete(Request $request,$id)
+    {
+        // dd($request->all());
+        $termId = Crypt::decrypt($request->input('id'));
+            try {
+                $item = TermsCondition::findOrFail($termId); 
+                $item->delete();
+                return response()->json(['success' => 'Terms and conditions have been Deleted successfully.' ]);
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'error' => 'Item not found or deletion failed'], 400);
+            }
+    }
+
+   
+    public function DefaultTermsConditions(Request $request)
+    {
+        // dd($request->all());
+        if ($request->input('term_id') != null) {
+            $termId = Crypt::decrypt($request->input('term_id'));
+            $terms =  BusinessTerms::find($termId);
+            // dd('if');
+        }
+        else{
+            // dd('else');
+            $terms = new BusinessTerms();
+            $cid=Auth::user()->cid;
+            $userid=Auth::user()->id;
+            $terms->cid=$cid;
+            $terms->userid=$userid;
+        }
+        if ($request->has('terms') && $request->has('contracttermstext')) {
+            $contractText = $request->input('contracttermstext');
+            switch ($request->input('terms')) {
+                case "terms_condition":
+                    $terms->termcondfaqtext = $contractText;
+                    break;
+                case "Refund":
+                    $terms->refundpolicytext = $contractText;
+                    break;
+                case "Liability":
+                    $terms->liabilitytext = $contractText;
+                    break;
+                case "cancelation":
+                    $terms->cancelation = $contractText;
+                    break;
+                default:
+                    return redirect()->back()->withErrors(['error' => 'Invalid term type specified.']);
+            }
+            $terms->save();
+            return redirect()->back()->with('success', 'Terms and conditions updated successfully.');
+        }
+        return redirect()->back()->withErrors(['error' => 'Invalid request data.']);
+    }
+
+    public function TermsConditionsDefaultDelete(Request $request,$id)
+    {
+        $termId = Crypt::decrypt($request->input('id'));
+        $termsdoc=BusinessTerms::findOrFail($termId);
+        if($termsdoc)
+        {
+            switch ($request->input('term')) {
+                case "terms_condition":
+                    $termsdoc->terms_delete=1;
+                    break;
+                case "Refund":
+                    $termsdoc->refund_delete=1;
+                    break;
+                case "Liability":
+                    $termsdoc->liability_delete=1;
+                    break;
+                case "cancelation":
+                    $termsdoc->cancellation_delete=1;
+                    break;
+                default:
+                    return response()->json(['success' => false, 'error' => 'Invalid term type specified'], 400);
+            }
+            $termsdoc->save();
+            return response()->json(['success' => 'Terms and conditions have been Deleted successfully.' ]);
+        }
+      
+        return response()->json(['success' => false, 'error' => 'Invalid request data'], 400);
+
+
     }
 }
