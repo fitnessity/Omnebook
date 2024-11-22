@@ -1895,7 +1895,7 @@
 		// var aduprice = parseFloat($('#adultprice').val()) || 0;
 		// var childprice = parseFloat($('#childprice').val()) || 0;
 		// var infantprice = parseFloat($('#infantprice').val()) || 0;
-
+		alert(age);
 		alert(aduprice);
 			var adult = '', child = '', infant = '';
 		
@@ -1921,10 +1921,12 @@
 		
 			}
 			else if(age >= 18) {
+				alert('223');
 				 var aducnt=1;
 				 if(aduprice !== 0)
 				 {
 					totalpriceadult = aducnt * aduprice;
+					alert(totalpriceadult);
 					if(aducnt != 0){
 						adult = '<span>Adults x '+aducnt+'</span><br>';
 					}
