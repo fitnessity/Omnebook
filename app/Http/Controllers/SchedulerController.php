@@ -420,9 +420,13 @@ class SchedulerController extends Controller
 
                               foreach ($pricelist as $price) {
                                    $category_id = $price->category_id;
+                                   // $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
+                                   // ->where('serviceid', $request->sid)
+                                   // ->where('id', $category_id)
+                                   // ->get();
                                    $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
                                    ->where('serviceid', $request->sid)
-                                   ->where('id', $category_id)
+                                   ->whereIn('id', $pricelist->pluck('category_id'))
                                    ->get();
                          
                                    foreach ($catelist as $cl) {
@@ -444,10 +448,14 @@ class SchedulerController extends Controller
 
                          foreach ($pricelist as $price) {
                          $category_id = $price->category_id;
+                         // $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
+                         //      ->where('serviceid', $request->sid)
+                         //      ->where('id', $category_id)
+                         //      ->get();
                          $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
-                              ->where('serviceid', $request->sid)
-                              ->where('id', $category_id)
-                              ->get();
+                         ->where('serviceid', $request->sid)
+                         ->whereIn('id', $pricelist->pluck('category_id'))
+                         ->get();
                     
                          foreach ($catelist as $cl) {
                               $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
@@ -458,7 +466,7 @@ class SchedulerController extends Controller
            
              else if($age >= 18) {
                    $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
-                       ->where('is_recurring_adult', '1')->distinct('category_id')
+                       ->where('is_recurring_adult', '1')
                        ->get();
                        
 
@@ -469,10 +477,14 @@ class SchedulerController extends Controller
 
                          foreach ($pricelist as $price) {
                              $category_id = $price->category_id;
-                             $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
-                                 ->where('serviceid', $request->sid)
-                                 ->where('id', $category_id)
-                                 ->get();
+                         //     $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
+                         //         ->where('serviceid', $request->sid)
+                         //         ->where('id', $category_id)
+                         //         ->get();
+                         $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
+                         ->where('serviceid', $request->sid)
+                         ->whereIn('id', $pricelist->pluck('category_id'))
+                         ->get();
                      
                              foreach ($catelist as $cl) {
                                  $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
