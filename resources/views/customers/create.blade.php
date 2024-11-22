@@ -431,9 +431,8 @@
                                                         <p>“Your client could already have an account on OmneBook.<br>If so, get access and sync their information fast.”</p>
                                                     </div>
                                                     <div class="row check-txt-center claimyour-business">
-                                                        <div class="col-md-10 col-xs-10 col-8 frm-claim">
-                                                            <input id="clients_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Search by typing your clients name" autocomplete="off" data-customer-id="">
-                                                            
+                                                        <div class="col-lg-6 col-md-10 col-xs-10 col-8 frm-claim">
+                                                            <input id="clients_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Search by typing your clients name" autocomplete="off" data-customer-id="">                                                            
                                                             <div class="request-access" style="display:none">
                                                             </div>
                                                         </div>
@@ -924,38 +923,76 @@
 
 <script type="text/javascript">
     
+    // $(document).ready(function () {
+    //     var url = "{{ url('/searchuser') }}";
+    //     $( "#clients_name" ).autocomplete({
+    //         source: url,
+    //         focus: function( event, ui ) {
+    //              return false;
+    //         },
+    //         select: function( event, ui ) {
+    //             $("#clients_name").val( ui.item.firstname + ' ' +  ui.item.lastname);
+    //             $('#clients_name').data('customer-id', ui.item.id);
+    //             $('.request-access').css('display','block');
+    //             $('.request-access').html('<p>To import the name, contact information, family members and credit card information for '+ ui.item.firstname + ' ' +  ui.item.lastname +', they must authorize you access.</p><label>Steps </label><div class="request-step"><p>1. Click the Request Access button below. </p><p>2. OmneBook will send an email to the customer to authorize you access.</p><p>3. Once authorization has been granted, the sync button will turn green, and you can sync the information immediately.</p><button type="button" style="margin-bottom: 10px;" class="signup-new request_access_btn" id="request_access_btn">Request Access</button></div><div class="error text-center errclass"></div>');
+    //              return false;
+    //         },
+    //     }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+    //          let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.firstname.charAt(0).toUpperCase() + '</p></div></div> ';
+
+    //         if(item.profile_pic_url){
+    //             profile_img = '<img class="searchbox-img" src="' + (item.profile_pic ? item.profile_pic : '') + '" style="">';            
+    //         }
+
+    //         var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-md-3 nopadding text-center">' + profile_img + '</div><div class="col-md-9 div-controller">' + 
+    //                   '<p class="pstyle"><label class="liaddress">' + item.firstname + ' ' +  item.lastname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
+    //                   '<p class="pstyle liaddress">' + item.email +'</p>' + 
+    //                   '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
+           
+    //         return $( "<li></li>" )
+    //                 .data( "item.autocomplete", item )
+    //                 .append(inner_html)
+    //                 .appendTo( ul );
+    //     };
+    // });
     $(document).ready(function () {
         var url = "{{ url('/searchuser') }}";
-        $( "#clients_name" ).autocomplete({
+        $("#clients_name").autocomplete({
             source: url,
-            focus: function( event, ui ) {
-                 return false;
+            focus: function (event, ui) {
+                return false;
             },
-            select: function( event, ui ) {
-                $("#clients_name").val( ui.item.firstname + ' ' +  ui.item.lastname);
+            select: function (event, ui) {
+                $("#clients_name").val(ui.item.firstname + ' ' + ui.item.lastname);
                 $('#clients_name').data('customer-id', ui.item.id);
-                $('.request-access').css('display','block');
-                $('.request-access').html('<p>To import the name, contact information, family members and credit card information for '+ ui.item.firstname + ' ' +  ui.item.lastname +', they must authorize you access.</p><label>Steps </label><div class="request-step"><p>1. Click the Request Access button below. </p><p>2. OmneBook will send an email to the customer to authorize you access.</p><p>3. Once authorization has been granted, the sync button will turn green, and you can sync the information immediately.</p><button type="button" style="margin-bottom: 10px;" class="signup-new request_access_btn" id="request_access_btn">Request Access</button></div><div class="error text-center errclass"></div>');
-                 return false;
+                $('.request-access').css('display', 'block');
+                $('.request-access').html('<p>To import the name, contact information, family members and credit card information for ' +
+                    ui.item.firstname + ' ' + ui.item.lastname + ', they must authorize you access.</p><label>Steps </label><div class="request-step"><p>1. Click the Request Access button below. </p><p>2. OmneBook will send an email to the customer to authorize you access.</p><p>3. Once authorization has been granted, the sync button will turn green, and you can sync the information immediately.</p><button type="button" style="margin-bottom: 10px;" class="signup-new request_access_btn" id="request_access_btn">Request Access</button></div><div class="error text-center errclass"></div>');
+                return false;
             },
-        }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-             let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.firstname.charAt(0).toUpperCase() + '</p></div></div> ';
-
-            if(item.profile_pic_url){
-                profile_img = '<img class="searchbox-img" src="' + (item.profile_pic ? item.profile_pic : '') + '" style="">';            
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            // console.log(item.profile_pic);
+            let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.firstname.charAt(0).toUpperCase() + '</p></div></div>';
+            if (item.profile_pic_url) {
+                profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';
             }
 
-            var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-md-3 nopadding text-center">' + profile_img + '</div><div class="col-md-9 div-controller">' + 
-                      '<p class="pstyle"><label class="liaddress">' + item.firstname + ' ' +  item.lastname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
-                      '<p class="pstyle liaddress">' + item.email +'</p>' + 
-                      '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
-           
-            return $( "<li></li>" )
-                    .data( "item.autocomplete", item )
-                    .append(inner_html)
-                    .appendTo( ul );
+            let email = item.email ? '<p class="pstyle liaddress">' + item.email + '</p>' : '';
+            let phone_number = item.phone_number ? '<p class="pstyle liaddress">' + item.phone_number + '</p>' : '';
+
+            var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-2 col-md-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-10 col-md-9 div-controller nopadding ">' +
+                '<p class="pstyle"><label class="liaddress">' + item.firstname + ' ' + item.lastname + (item.age ? ' (' + item.age + ' Years Old)' : '') + '</label></p>' +
+                email +
+                phone_number +
+                '</div></div>';
+
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append(inner_html)
+                .appendTo(ul);
         };
     });
+
 
     $(document).on("click",'.request_access_btn',function(e){
         $.ajax({

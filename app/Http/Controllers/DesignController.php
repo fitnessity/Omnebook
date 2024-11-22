@@ -357,4 +357,10 @@ class DesignController extends Controller {
     public function online_profile_post(Request $request){
         return view('design.online_profile_post');
     }
+    public function manage_services(Request $request){
+        return view('design.manage_services');
+    }
+    public function manage_services_sidebar(Request $request){
+        return view('design.manage_services_sidebar');
+    }
 }

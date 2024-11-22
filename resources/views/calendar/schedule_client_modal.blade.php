@@ -156,11 +156,11 @@
                                         {{timeSlotOption('to','')}}
                                     </div>
                                     
-                                    <div class="col-md-12">
+                                    <!-- <div class="col-md-12">
                                         <div class="add-more-date mt-15">
                                             <a href="#"> + Add More </a>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="program-selection mb-10 d-inline-grid">
@@ -575,7 +575,7 @@
                             <input type="hidden" name="booking_from_id" id="booking_from_id" value="{{Auth::user()->id}}">
                             <input type="hidden" name="booking_from" id="booking_from" value="Provider">
                             <input type="hidden" name="calendar_booking_time" id="calendar_booking_time" value="">
-                            <button type="button" class="btn btn-black mb-00 pay-btn" id="doPayment" disabled="" onclick="addToCart();">Payment</button>
+                            <!-- <button type="button" class="btn btn-black mb-00 pay-btn" id="doPayment" disabled="" onclick="addToCart();">Payment</button> -->
                         </form>
                     </div>
                 </div>
@@ -1130,7 +1130,7 @@
                         <input type="hidden" name="booking_from_id" id="booking_from_id" value="{{Auth::user()->id}}">
                         <input type="hidden" name="booking_from" id="booking_from" value="Provider">
                         <input type="hidden" name="calendar_booking_time" id="calendar_booking_time" value="">
-                        <button type="button" class="btn btn-black mb-00 pay-btn" id="doPayment" disabled="" onclick="addToCart();">Payment</button>
+                        {{-- <button type="button" class="btn btn-black mb-00 pay-btn" id="doPayment" disabled="" onclick="addToCart();">Payment</button> --}}
                     </form>
                 </div>
             </div>
@@ -1213,10 +1213,15 @@ function closeNaavbookclienttraining() {
                 profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
             }
 
-            var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-md-3 nopadding text-center">' + profile_img + '</div><div class="col-md-9 div-controller">' + 
+            var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-md-9 col-9 div-controller">' + 
                       '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
-                      '<p class="pstyle liaddress">' + item.email +'</p>' + 
-                      '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
+                      '<p class="pstyle liaddress">' + item.email +'</p>' ;
+                      if (item.phone_number) {
+                            inner_html += '<p class="pstyle liaddress">' + item.phone_number + '</p>';
+                        }
+                        inner_html += '</div></div>';
+
+                    //   '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
            
             return $( "<li></li>" )
                     .data( "item.autocomplete", item )
@@ -1476,7 +1481,7 @@ function closeNaavbookclienttraining() {
     }
 
     function chkAllocatedTime(val){
-        alert(val);
+        // alert(val);
          $.ajax({
             url: '{{route("calendar.chkStaffAssignedOrder")}}',
             type: 'get',

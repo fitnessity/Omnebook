@@ -31,8 +31,7 @@
 
                                                     @if(Auth::user()->chkDaysLeft() == 0)
         												<div class="col-lg-9 col-md-9 col-12">	
-        													<p class="fs-13">
-                                                                                                                            
+        													<p class="fs-13">                                                                                                                            
                                                                 You are currently on free plan. Please upgrade your account to fully use your software.
         													</p>
         												</div>

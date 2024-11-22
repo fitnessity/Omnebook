@@ -7,14 +7,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>Login</title>
-    <link rel='stylesheet' type='text/css' href="{{ url('/public/css/frontend/general.css') }}">
-    <link rel='stylesheet' type='text/css' href="{{ url('/public/css/responsive.css') }}">
-
-    <link href="{{ asset('/dashboard-design/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    
+    <link href="{{ url('/dashboard-design/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel='stylesheet' type='text/css' href="{{ asset('/css/bootstrap-select.min.css') }}">
     <link href="{{ url('/public/dashboard-design/css/style.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{ url('/public/dashboard-design/css/custom.css') }}" rel="stylesheet" type="text/css" />
+    {{-- <link rel='stylesheet' type='text/css' href="{{ url('/public/css/frontend/general.css') }}"> --}}
+    <link rel='stylesheet' type='text/css' href="{{ url('/public/css/responsive.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url('/public/css/all.css')}}">
+    <script src="{{url('public/dashboard-design/js/jquery-3.6.4.min.js')}}"></script>
+ 
 </head>
 <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 0px; overflow: hidden;margin:0px;}
@@ -111,7 +113,7 @@
                                 <input class="password-input" type="password" name="password" id="password" size="30" placeholder="Password" autocomplete="off">
                                 <button class="btn-link position-absolute password-addon toggle-password" type="button" id="password-addon" style="width:10%"><i class="fas fa-eye"></i></button>
                             </div>
-                            <span class="text-danger cls-error" id="errpass"></span>
+                            <span class="text-danger cls-error fs-14" id="errpass"></span>
                             {{-- <div class="remembermediv terms-wrap">
                                 <input type="checkbox" id="remember" name="remember" checked
                                     class="remembercheckbox" />
@@ -147,6 +149,7 @@
                                 <p class="already">Don't have an account?
                                     <a href="#" id="signUpLink">SIGN UP</a>
                                 </p>
+                            
                                 <div class="poweredby-ul">
                                     <img src="https://dev.fitnessity.co//public/dashboard-design/images/powered-by-OMNEBOOK.png" alt="" >
                                 </div>
@@ -157,19 +160,35 @@
         </div>
     </section>
     <!-- Modal structure -->
-        <div class="modal fade registerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Register</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Register</h5>
                         <button type="button" class="btn-close" onclick="window.location.reload()"></button>
                     </div>
                     <div class="modal-body register_page"></div>
                 </div>
               </div>
+        </div> --}}
+    {{--end modal --}}
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Register</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="register_page">
+                </div>
+                
+            </div>
         </div>
-    <!-- {{--end modal --}} -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    </div>
+    <script src="{{ url('/public/dashboard-design/js/bootstrap.bundle.min.js') }}"></script>
     <script>
             $('.toggle-password').on('click', function() {
                 var passwordField = $('#password');
@@ -207,162 +226,78 @@
                 }
             });
     </script>
-    <script>
+   
+
+        <script>
             var companyInfo = @json($companyinfo->id);
             var code = {{$code->id ?? 'null'}};
+        
             $('#myForm').submit(function(event) {
                 event.preventDefault();
                 var form = document.getElementById('myForm');
                 var formData = new FormData(form);
                 formData.append('company_info', companyInfo);
+        
                 $.ajax({
-                    url:'https://dev.fitnessity.co/api/auth/user',
+                    url: '/sub_auth_user',
                     method: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
                     success: function(response) {
-                        if(response.type=='success')
-                        {
-                            $('.register').css('display','none');
-                            localStorage.setItem('customer',response.customer);
-                            storeToken(response.token);
-                            dashboard(response.token,code);
-                        }               
-                        if(response.type=='not_exists')
-                        {
-                            $('.register').css('display','block');
-                            $('#systemMessage').removeClass('alert-danger alert-success').addClass(response.type == 'not_exists' ? 'alert-danger' : 'alert-success').text(response.msg).show();                              
-                        } 
-                        if(response.type=='register')
-                        {
-                            $('.register').css('display','block');
-                            $('#systemMessage').removeClass('alert-danger alert-success').addClass(response.type == 'register' ? 'alert-danger' : 'alert-success').text(response.msg).show();                              
-                        }      
+                        if (response.type === 'success') {
+                            if (response.redirect) {
+                                window.location.href = response.redirect;
+                            }
+                        }
+                        if (response.type === 'not_exists' || response.type === 'danger') {
+                                $('.register').css('display', 'block');
+                                $('#systemMessage').removeClass('alert-danger alert-success')
+                                                .addClass('alert-danger')
+                                                .text(response.msg)
+                                                .show();
+                            }
                     },
                     error: function(xhr, status, error) {
-                        alert('Your form was not sent successfully.');
-                        console.error(error);
-                    }
+                                console.log('Full response:', xhr);
+                                console.log('Status:', status);
+                                console.log('Error:', error);
+                                
+                                var errorMsg = 'An error occurred: ';
+                                if (xhr.responseJSON && xhr.responseJSON.msg) {
+                                    errorMsg += xhr.responseJSON.msg;  
+                                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                                    errorMsg += xhr.responseJSON.message;  
+                                } else if (xhr.responseText) {
+                                    errorMsg += xhr.responseText;  
+                                } else {
+                                    errorMsg += error || 'Unknown error occurred.';
+                                }
+                            }
+
+
                 });
             });
-    </script>
-
+        </script>
         <script>
-            let dashboardExecuted = false;
-            let retryCount = 0;//
-            const maxRetries = 1; // Set a limit on how many times it retries
-            const retryDelay = 1000; // 1-
-            function dashboard(token,code)
-            { 
-                // if (localStorage.getItem('dashboardExecuted') === 'true') return;
-                var customer = localStorage.getItem('customer');
-                    const url = `https://dev.fitnessity.co/api/customer_dashboard?token=${encodeURIComponent(token)}&code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
-                    tryPostMessage(url);
-                    localStorage.setItem('dashboardExecuted', 'true');
-            }        
-            function tryPostMessage(url) 
-            {
-                try {
-                    window.parent.postMessage({ type: 'changeSrc', src: url }, '*');
-                } catch (error) {
-                    if (retryCount < maxRetries) {
-                        retryCount++;
-                        console.warn(`Retrying to postMessage... Attempt ${retryCount}`);
-                        setTimeout(() => tryPostMessage(url), retryDelay); 
-                    } else {
-                        console.error("Failed to postMessage after multiple attempts. Please check the iframe.");
-                    }
+            $('#signUpLink').on('click', function(e) {
+            e.preventDefault();
+            var code = @json($code->unique_code);
+
+            $.ajax({
+                url: '/register-page',  
+                method: 'GET',
+                data: { unique_code: code },
+                success: function(response) {
+                    $('#register_page').html(response);
+                    var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                    myModal.show(); 
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching register page:", error);
                 }
-            }
-            
-            function storeToken(token) {
-                localStorage.setItem('authToken', token);
-                localStorage.setItem('loggedin', true);
-                var companyInfo = @json($companyinfo->id);
-                localStorage.setItem('bussiness_id',companyInfo);
-            }
-            document.addEventListener('DOMContentLoaded', function() {
-            window.addEventListener("load", (event) => {
-                var tokenc = localStorage.getItem('authToken');
-                var status =  localStorage.getItem('loggedin');
-                var code = {{$code->id ?? 'null'}};  
-                // if (status !== null && status !== undefined && tokenc!==null){
-                //     localStorage.setItem('dashboardExecuted', 'false');
-                //     if (localStorage.getItem('dashboardExecuted') === 'true') return;
-                //     else{
-                //             // alert('233');
-                //             document.getElementById('registerSection').style.display = 'none';
-                //              dashboard(tokenc,code);        
-                //        }
-                // }
-                
-                // new start
-
-                if (status !== null && status !== undefined && tokenc !== null) {
-                localStorage.setItem('dashboardExecuted', 'false');                
-                if (localStorage.getItem('dashboardExecuted') === 'true') return;
-                document.getElementById('registerSection').style.display = 'none';
-                // Make an AJAX request to verify the token
-                fetch('/api/check-token', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${tokenc}`
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.valid) {
-                        document.getElementById('registerSection').style.display = 'none';
-                        dashboard(tokenc, code);
-                    } else {
-                        document.getElementById('registerSection').style.display = 'block';
-
-                    }
-                })
-                .catch(error => {
-                    console.error('Error verifying token:', error);
-                });
-            }
-
-
-                // end
-
             });
         });
-        // $(document).ready(function() {
-        //     var tokenc = localStorage.getItem('authToken');
-        //     var status =  localStorage.getItem('loggedin');
-        //     var code = {{$code->id ?? 'null'}};
-        //     if (status !== null && status !== undefined && tokenc!==null){
-        //          dashboard(tokenc,code);         
-        //     }
-        //     else{
-        //         localStorage.removeItem('loggedin');
-        //         dashboardExecuted = false;
-        //     }
-        // });
-
-    </script>
-      <script src="https://dev.fitnessity.co/public/dashboard-design/js/bootstrap.bundle.min.js"></script>
-      <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script>
-            $('#signUpLink').on('click', function(e) {
-                e.preventDefault();
-                var code = @json($code->unique_code);
-                var htmlContent = '<div id="your-register-widget-container" data-unique-code="' + code + '"></div>';            
-                $('.register_page').html(htmlContent);            
-                $.getScript("https://dev.fitnessity.co/public/js/websiteintegration/register-widget.js")
-                    .done(function(script, textStatus) {
-                        console.log("Script loaded successfully.");
-                        $('.registerModal').modal('show');
-                    })
-                    .fail(function(jqxhr, settings, exception) {
-                        console.log("Script loading failed.");
-                    });
-            });
-    </script>
-
+        </script>
 </body>
 </html>

@@ -116,6 +116,13 @@
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
+                                                            <!-- <div id="success_message" style="color: green;"></div> -->
+                                                            <div class="col-12">
+                                                                <div class="text-center mb-25">
+                                                                    <div class="messageDiv"></div>
+                                                                </div>
+                                                                
+                                                            </div>
                                                             <div class="row">
                                                                 <div class="col-lg-3 col-md-3 col-sm-6">
                                                                     <div class="manage-txt mb-15">
@@ -219,26 +226,37 @@
             });
         } 
 
-        $(document).on('click', '#btndelete', function(event) {
-            let text = "Are you sure to delete this activity?";
-            if (confirm(text) == true) {
-                var sid = $(this).attr('data-id');
-                var companyid = '{{$request->current_company->id}}';
-                $.ajax({ 
-                    url:"/business/"+companyid+"/services/"+sid,
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    type:"delete",
-                    data: { 
-                        _token: '{{csrf_token()}}', 
-                    },
-                    // success: function(html){
-                    //    location.reload();
-                    // }
-                });
-            }
-        });
+            $(document).on('click', '#btndelete', function(event) {
+                let text = "Are you sure to delete this activity?";
+                if (confirm(text) == true) {
+                    var sid = $(this).attr('data-id');
+                    var companyid = '{{$request->current_company->id}}';
+                    $.ajax({ 
+                        url:"/business/"+companyid+"/services/"+sid,
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        type:"delete",
+                        data: { 
+                            _token: '{{csrf_token()}}', 
+                        },                
+                        success: function(response) {
+                        console.log('AJAX request successful:', response);
+                        if (response.success) {
+                            $('.messageDiv').addClass('btn btn-success');
+                            $('.messageDiv').html(response.message);
+                            setTimeout(function() {
+                                $('.messageDiv').fadeOut(400, function() {
+                                    $('.modal').modal('hide'); 
+                                    location.reload();
+                                });
+                            }, 3000);
+                        }
+                    }
+
+                    });
+                }
+            });
 
         $(document).on('click', '#btnactive', function(event) {
             var sid = $(this).attr('data-id');

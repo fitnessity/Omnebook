@@ -19,7 +19,7 @@
 									</div>
 								</div>
 								<div class="onboared text-center">
-									<h3>It's easy to get started on Fitnessity</h3>
+									<h3>It's easy to get started on Omnebook</h3>
 								</div>
 							</div>
 							<div class="col-7">

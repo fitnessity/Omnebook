@@ -222,6 +222,7 @@
 	check();
 
 	function getCardModal(id,price){
+		// alert('33');
 		var type = '';
 		if ($("#plan_time").is(":checked")) {
 			type = 'year';

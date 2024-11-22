@@ -66,13 +66,13 @@
                                              </select>
                                         </div>
 
-                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                        {{-- <div class="col-md-3 col-sm-3 col-xs-12">
                                              <div class="select0service">
                                                   <div class="date-activity-scheduler date-activity-check paynowset">
                                                        <button type="button" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#addpartcipateajax">Participant Quantity </button>
                                                   </div>
                                              </div>
-                                        </div>
+                                        </div> --}}
 
                                         <div class="col-md-2 col-sm-2 col-xs-12">
                                              <div class="select0service">
@@ -299,6 +299,7 @@
                url: '{{route("getdropdowndata")}}',
                type: 'get',
                data:  {
+                    'userid': '{{ @$cart["participate_from_checkout_regi"]["id"] }}',
                     'sid':id,
                     'chk':chk,
                     'type':'ajax',

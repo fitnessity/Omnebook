@@ -21,7 +21,6 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-
     ];
 
     /**
@@ -79,6 +78,8 @@ class Kernel extends HttpKernel
         'business_scope' => \App\Http\Middleware\BusinessScope::class,
         'admin' => \App\Http\Middleware\RedirectIfNotAdmin::class,
         'jwt.auth' => \App\Http\Middleware\JWTAuthMiddleware::class,
+        'subdomain.auth' => \App\Http\Middleware\CheckSubdomainAuth::class,
+
 
     ];
 

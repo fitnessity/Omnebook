@@ -48,8 +48,8 @@ class PaymentController extends Controller {
 
             $transactiondata = array( 
                 'user_type' => 'user',
-                // 'user_id' => $loggedinUser->id,
-                'user_id'=>$userid->id,
+                'user_id' => $loggedinUser->id,
+                // 'user_id'=>$userid->id,
                 'item_type' =>'UserBookingStatus',
                 'item_id' => $userBookingStatus->id,
                 'channel' =>'',
@@ -268,16 +268,35 @@ class PaymentController extends Controller {
             $totalprice = $request->grand_total;
             if($request->has('cardinfo')){
                 $onFilePaymentMethodId = $request->cardinfo;
+                // dd($paymentMethod);
                 try {
+                    $paymentMethod = $stripe->paymentMethods->retrieve($onFilePaymentMethodId);
                     $onFilePaymentIntent = $stripe->paymentIntents->create([
                         'amount' =>  round($totalprice *100),
                         'currency' => 'usd',
                         'customer' => $stripe_customer_id,
-                        'payment_method' => $onFilePaymentMethodId ,
+                        'payment_method' => $onFilePaymentMethodId,
                         'off_session' => true,
                         'confirm' => true,
                         'metadata' => [],
                     ]);
+
+                    // $onFilePaymentIntent = $stripe->charges->create([
+                    //     'amount' => round($totalprice * 100),
+                    //     'currency' => 'usd',
+                    //     'customer' => $stripe_customer_id,
+                    //     'payment_method' => $onFilePaymentMethodId,
+                    //     'source' => $onFilePaymentMethodId,
+                    //     'description' => 'Charge for user ' . Auth::user()->id,
+                    //     'confirm' => true,
+                    //     'off_session' => true,
+                    //     'metadata' => [
+                    //         'payment_method_id' => $onFilePaymentMethodId,
+                    //         'user_id' => Auth::user()->id,
+                    //         'booking_date' => Carbon::now()->format('Y-m-d')
+                    //     ]
+                    // ]);
+                    
                     if($onFilePaymentIntent['status']=='succeeded'){
                         $orderdata = array(
                             'user_id' => Auth::user()->id,
@@ -289,8 +308,8 @@ class PaymentController extends Controller {
                         $userBookingStatus = UserBookingStatus::create($orderdata);
                         $transactiondata = array( 
                             'user_type' => 'user',
-                            // 'user_id' => $loggedinUser->id,
-                            'user_id'=>$userid->id,
+                            'user_id' => $loggedinUser->id,
+                            // 'user_id'=>$userid->id,
                             'item_type' =>'UserBookingStatus',
                             'item_id' => $userBookingStatus->id,
                             'channel' =>'stripe',
@@ -306,58 +325,120 @@ class PaymentController extends Controller {
                         $transactionstatus = Transaction::create($transactiondata);
                     }
                 }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {;
-                    $errormsg = "Your card is not connected with your account. Please add your card again.";
+                    // $errormsg = "Your card is not connected with your account. Please add your card again.";
+                    $errormsg = "Error: " . $e->getMessage();
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }
 
             }else{
+                // $newCardPaymentMethodId = $request->new_card_payment_method_id;
+                // try {
+                //     $newCardPaymentIntent = $stripe->paymentIntents->create([
+                //         'amount' =>  round($totalprice *100), 'currency' => 'usd', 'customer' => $stripe_customer_id,
+                //         'payment_method' => $newCardPaymentMethodId,
+                //         'off_session' => true, 'confirm' => true,
+                //         'metadata' => [],
+                //     ]);
+                //     if($request->save_card != 1){
+                //         $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $newCardPaymentMethodId)->firstOrFail();
+                //         $stripePaymentMethod->delete();
+                //     }
+                //     if($newCardPaymentIntent['status'] == 'succeeded'){
+                //         $orderdata = array(
+                //             'user_id' => Auth::user()->id, 'status' => 'active', 'currency_code' => 'usd', 'amount' => $totalprice,
+                //             'bookedtime' => Carbon::now()->format('Y-m-d'),
+                //         ); 
+                //         $userBookingStatus = UserBookingStatus::create($orderdata);
+                //         $transactiondata = array( 
+                //             'user_type' => 'user',
+                //             'user_id' => $loggedinUser->id,
+                //             // 'user_id'=>$userid->id,
+
+                //             'item_type' =>'UserBookingStatus',
+                //             'item_id' => $userBookingStatus->id,
+                //             'channel' =>'stripe',
+                //             'kind' => 'card',
+                //             'transaction_id' => $newCardPaymentIntent["id"],
+                //             'stripe_payment_method_id' => $newCardPaymentMethodId,
+                //             'amount' => $totalprice,
+                //             'qty' =>'1',
+                //             'status' =>'complete',
+                //             'refund_amount' =>0,
+                //             'payload' =>json_encode($newCardPaymentIntent,true),
+                //         );
+                //         $transactionstatus = Transaction::create($transactiondata);
+                //     }
+                // }catch(\Stripe\Exception\CardException  $e) {
+                //     $errormsg = $e->getError()->message;
+                //     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
+                // }catch(\Stripe\Exception\InvalidRequestException $e) {
+                //     $errormsg = "Your card is not connected with your account. Please add your card again.";
+                //     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
+                // }catch( \Exception $e) {
+                //     $errormsg = $e->getError()->message;
+                //     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
+                // }
+
                 $newCardPaymentMethodId = $request->new_card_payment_method_id;
                 try {
-                    $newCardPaymentIntent = $stripe->paymentIntents->create([
-                        'amount' =>  round($totalprice *100), 'currency' => 'usd', 'customer' => $stripe_customer_id,
+                    // Create a charge using the direct charge method
+                    $charge = $stripe->charges->create([
+                        'amount' => round($totalprice * 100),  // Amount in cents
+                        'currency' => 'usd',
+                        'customer' => $stripe_customer_id,
                         'payment_method' => $newCardPaymentMethodId,
-                        'off_session' => true, 'confirm' => true,
+                        'off_session' => true,
+                        'confirm' => true,
                         'metadata' => [],
                     ]);
-                    if($request->save_card != 1){
+                    
+                    // Check if the card should be saved or not
+                    if ($request->save_card != 1) {
                         $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $newCardPaymentMethodId)->firstOrFail();
                         $stripePaymentMethod->delete();
                     }
-                    if($newCardPaymentIntent['status'] == 'succeeded'){
+
+                    // Check if the payment was successful
+                    if ($charge['status'] == 'succeeded') {
+                        // Create order data
                         $orderdata = array(
-                            'user_id' => Auth::user()->id, 'status' => 'active', 'currency_code' => 'usd', 'amount' => $totalprice,
+                            'user_id' => Auth::user()->id,
+                            'status' => 'active',
+                            'currency_code' => 'usd',
+                            'amount' => $totalprice,
                             'bookedtime' => Carbon::now()->format('Y-m-d'),
                         ); 
                         $userBookingStatus = UserBookingStatus::create($orderdata);
+
+                        // Create transaction record
                         $transactiondata = array( 
                             'user_type' => 'user',
-                            // 'user_id' => $loggedinUser->id,
-                            'user_id'=>$userid->id,
-
-                            'item_type' =>'UserBookingStatus',
+                            'user_id' => $loggedinUser->id,
+                            'item_type' => 'UserBookingStatus',
                             'item_id' => $userBookingStatus->id,
-                            'channel' =>'stripe',
+                            'channel' => 'stripe',
                             'kind' => 'card',
-                            'transaction_id' => $newCardPaymentIntent["id"],
+                            'transaction_id' => $charge["id"],
                             'stripe_payment_method_id' => $newCardPaymentMethodId,
                             'amount' => $totalprice,
-                            'qty' =>'1',
-                            'status' =>'complete',
-                            'refund_amount' =>0,
-                            'payload' =>json_encode($newCardPaymentIntent,true),
+                            'qty' => '1',
+                            'status' => 'complete',
+                            'refund_amount' => 0,
+                            'payload' => json_encode($charge, true),
                         );
                         $transactionstatus = Transaction::create($transactiondata);
                     }
-                }catch(\Stripe\Exception\CardException  $e) {
+                } catch (\Stripe\Exception\CardException $e) {
                     $errormsg = $e->getError()->message;
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
-                }catch(\Stripe\Exception\InvalidRequestException $e) {
+                } catch (\Stripe\Exception\InvalidRequestException $e) {
                     $errormsg = "Your card is not connected with your account. Please add your card again.";
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
-                }catch( \Exception $e) {
-                    $errormsg = $e->getError()->message;
+                } catch (\Exception $e) {
+                    $errormsg = $e->getMessage(); // Modify to capture general errors
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }
+
             }
             $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
             $tax = $bspdata->site_tax;

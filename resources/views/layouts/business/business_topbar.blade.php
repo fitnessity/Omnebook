@@ -44,7 +44,9 @@
 						<!-- App Search-->
 						<form class="app-search d-none d-md-block">
 							<div class="position-relative">
-								<input type="text" class="form-control" placeholder="Search for client" autocomplete="off" id="serchclient_navbar"  name="fname" value="{{Request::get('fname')}}">
+								<input type="text" class="form-control" placeholder="Search for client" autocomplete="off" id="serchclient_navbar" name="fname" value="{{Request::get('fname')}}">
+								<span class="mdi mdi-magnify search-widget-icon"></span>
+								<span class="search-count">0</span>
 							</div>
 						</form>
 						<div class="app-search-client mobile-none zfold-none">
@@ -82,7 +84,7 @@
 												<div class="row">
 													<div class="col-lg-8 col-8">
 														<div class="setup-title">
-															<label> Setup Guide</label>
+															<label>Onboard Setup Guide</label>
 														</div>
 													</div>
 													<div class="col-lg-4 col-4">
@@ -1228,65 +1230,129 @@
      		deleteNoteFromNotification(id);
 			}
 
-			$(document).ready(function () {
-		     	var business_id = '{{Auth::user()->cid}}';
-		     	var url = "{{ url('/business/business_id/customers') }}";
-		     	url = url.replace('business_id', business_id);
+		// 	$(document).ready(function () {
+		//      	var business_id = '{{Auth::user()->cid}}';
+		//      	var url = "{{ url('/business/business_id/customers') }}";
+		//      	url = url.replace('business_id', business_id);
 
-		     	$( "#serchclient_navbar" ).autocomplete({
-		         source: url,
-		         focus: function( event, ui ) {
-		              return false;
-		         },
-		         select: function( event, ui ) {
-		             window.location.href = "/business/"+business_id+"/customers/"+ui.item.id;
-		              return false;
-		         }
-		     	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-		         let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
+		//      	$( "#serchclient_navbar" ).autocomplete({
+		//          source: url,
+		//          focus: function( event, ui ) {
+		//               return false;
+		//          },
+		//          select: function( event, ui ) {
+		//              window.location.href = "/business/"+business_id+"/customers/"+ui.item.id;
+		//               return false;
+		//          }
+		//      	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+		//          let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
 
-		         if(item.profile_pic_url){
-		             profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
-		         }
+		//          if(item.profile_pic_url){
+		//              profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
+		//          }
 
-		         var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
-		                   '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
-		                   '<p class="pstyle liaddress">' + item.email +'</p>' + 
-		                   '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
+		//          var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
+		//                    '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
+		//                    '<p class="pstyle liaddress">' + item.email +'</p>' + 
+		//                    '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
 		        
-		         return $( "<li></li>" )
-		                 .data( "item.autocomplete", item )
-		                 .append(inner_html)
-		                 .appendTo( ul );
-		     	};
+		//          return $( "<li></li>" )
+		//                  .data( "item.autocomplete", item )
+		//                  .append(inner_html)
+		//                  .appendTo( ul );
+		//      	};
 
-		     	$( "#serchclient_navbar1" ).autocomplete({
-		         source: url,
-		         focus: function( event, ui ) {
-		              return false;
-		         },
-		         select: function( event, ui ) {
-		             window.location.href = "/business/"+business_id+"/customers/"+ui.item.id;
-		              return false;
-		         }
-		     	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-		         let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
+		//      	$( "#serchclient_navbar1" ).autocomplete({
+		//          source: url,
+		//          focus: function( event, ui ) {
+		//               return false;
+		//          },
+		//          select: function( event, ui ) {
+		//              window.location.href = "/business/"+business_id+"/customers/"+ui.item.id;
+		//               return false;
+		//          }
+		//      	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+		//          let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0).toUpperCase() + '</p></div></div> ';
 
-		         if(item.profile_pic_url){
-		             profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
-		         }
+		//          if(item.profile_pic_url){
+		//              profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
+		//          }
 
-		         var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
-		                   '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
-		                   '<p class="pstyle liaddress">' + item.email +'</p>' + 
-		                   '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
+		//          var inner_html = '<div class="row rowclass-controller"></div><div class="row"><div class="col-lg-3 col-md-3 col-3 nopadding text-center">' + profile_img + '</div><div class="col-lg-9 col-md-9 col-9 div-controller">' + 
+		//                    '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
+		//                    '<p class="pstyle liaddress">' + item.email +'</p>' + 
+		//                    '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
 		        
-		         return $( "<li></li>" )
-		                 .data( "item.autocomplete", item )
-		                 .append(inner_html)
-		                 .appendTo( ul );
-		     	};
-		   });
+		//          return $( "<li></li>" )
+		//                  .data( "item.autocomplete", item )
+		//                  .append(inner_html)
+		//                  .appendTo( ul );
+		//      	};
+		//    });
+
+		$(document).ready(function () {
+			var business_id = '{{ Auth::user()->cid }}';
+			var url = "{{ url('/business/business_id/customers') }}".replace('business_id', business_id);
+
+			// Initialize autocomplete for the given selector
+			function initializeAutocomplete(selector) {
+				$(selector).autocomplete({
+					source: function (request, response) {
+						$.ajax({
+							url: url,
+							method: 'GET',
+							data: { term: request.term },
+							success: function (data) {
+								$('.search-count').text(data.customerCount);
+								response(data.customers); // Pass customers to the autocomplete
+							},
+						});
+					},
+					focus: function (event, ui) {
+						return false; // Prevent default focus behavior
+					},
+					select: function (event, ui) {
+						window.location.href = "/business/" + business_id + "/customers/" + ui.item.id;
+						return false; // Prevent default selection behavior
+					},
+				}).data("ui-autocomplete")._renderItem = function (ul, item) {
+					let profile_img =
+						'<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' +
+						item.fname.charAt(0).toUpperCase() +
+						"</p></div></div>";
+
+					if (item.profile_pic_url) {
+						profile_img = '<img class="searchbox-img" src="' + item.profile_pic_url + '" style="">';
+					}
+
+					var inner_html =
+						'<div class="row rowclass-controller"></div>' +
+						'<div class="row">' +
+						'<div class="col-lg-3 col-md-3 col-3 nopadding text-center">' +
+						profile_img +
+						"</div>" +
+						'<div class="col-lg-9 col-md-9 col-9 div-controller">' +
+						'<p class="pstyle"><label class="liaddress">' +
+						item.fname +
+						" " +
+						item.lname +
+						(item.age ? " (" + item.age + " Years Old)" : "") +
+						"</label></p>" +
+						'<p class="pstyle liaddress">' +
+						item.email +
+						"</p>" +
+						'<p class="pstyle liaddress">' +
+						item.phone_number +
+						"</p></div></div>";
+
+					return $("<li></li>").data("item.autocomplete", item).append(inner_html).appendTo(ul);
+				};
+			}
+
+			// Apply autocomplete to both selectors
+			initializeAutocomplete("#serchclient_navbar");
+			initializeAutocomplete("#serchclient_navbar1");
+		});
 
 		</script>
 

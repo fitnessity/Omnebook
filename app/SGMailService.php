@@ -11,7 +11,7 @@ class SGMailService{
 
 	public static function MailDetail($sendemail,$substitutions,$templateId){
 		$email = new Mail();
-		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Fitnessity Support");
+		$email->setFrom(getenv('MAIL_FROM_ADDRESS'), "Omnebook Support");
 
 		$email->addTo(
 		    $sendemail,
@@ -101,8 +101,16 @@ class SGMailService{
 		return SGMailService::MailDetail($emailDetail['email'],$substitutions,'d-22008cb39c6a409791acb17f3064abd3');	
 	}
 
-	public static function sendWelcomeMail($email_name){
-		return SGMailService::MailDetail($email_name,$substitutions = [],'d-d42244ec709c4d91b23393393b2e05ef' );
+	public static function sendWelcomeMail($email_name,$password){
+		$substitutions = [
+			"CustomerRegisterEmail" => $email_name,
+			"CustomerPassword" => $password,  
+		    "SiteUrl" => env('APP_URL'),
+		    "AddInfo" => env('APP_URL').'addcustomerbusiness',
+		    "ContactUs" => env('APP_URL').'contact-us',
+		    "Activity" => env('APP_URL').'activities',
+		];
+		return SGMailService::MailDetail($email_name,$substitutions,'d-d42244ec709c4d91b23393393b2e05ef' );
 	}
 
 	public static function sendWelcomeMailToCustomer($id,$business_id,$password){
@@ -342,7 +350,8 @@ class SGMailService{
 		
 		$substitutions = [
 			"CustomerName" => $emailDetail['CustomerName'], 
-            "ProviderName"=> $emailDetail['ProviderName'],
+            // "ProviderName"=> $emailDetail['ProviderName'],
+			"HostName"=> $emailDetail['ProviderName'],
             "ProgramName"=> $emailDetail['ProgramName'],
             "CategoryName"=> $emailDetail['CategoryName'],
             "PriceOptionName"=> $emailDetail['PriceOptionName'],

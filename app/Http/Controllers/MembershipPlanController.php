@@ -16,7 +16,8 @@ class MembershipPlanController extends Controller {
     { $this->features = $features;}
     public function index(Request $request) { 
         $plans = Plan::get();
-        $currentPlan = Auth::user()->currentPlan();
+        // $currentPlan = Auth::user()->currentPlan();
+        $currentPlan = Auth::check() ? Auth::user()->currentPlan() : null;
         $faqs = OnboardQuestions::get();
         $features = $this->features->getAllFeatures();
         if (session()->has('redirectToOnboard')) {

@@ -650,7 +650,7 @@ input:disabled{
 						</div>
 					</div>
 					
-	            	<div class="mainboxborder mb-25">	
+	            	<div class="mainboxborder mb-25" id="check_n">	
 						<div class="container">
 							<div class="row">
 								<div class="col-md-12 col-sm-12 col-xs-12">
@@ -1627,7 +1627,7 @@ input:disabled{
 {{-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ env('MAP_KEY') }}&sensor=false"></script> --}}
 @include('layouts.business.footer')
 
-<script>
+{{-- <script>
 	$(document).ready(function() {
 		// Hide button when clicking on input
 		$('#actfildate_forcart').on('focus', function() {
@@ -1641,7 +1641,7 @@ input:disabled{
 			}
 		});
 	});
-</script>
+</script> --}}
 
 <!-- New JS -->
 <script>
@@ -2462,6 +2462,34 @@ input:disabled{
 	    }
 	});
 </script>
-
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+	  const checkAvailability = document.getElementById("check_n");
+	  const fixedButton = document.getElementById("fixedButton");
+	
+	  if (checkAvailability && fixedButton) {
+		const observer = new IntersectionObserver(
+		  (entries) => {
+			entries.forEach((entry) => {
+			  if (entry.target === checkAvailability) {				
+				if (entry.isIntersecting) {
+				  fixedButton.style.display = "none"; 
+				} else {
+				  fixedButton.style.display = "block"; 
+				}
+			  }
+			});
+		  },
+		  {
+			root: null, 
+			threshold: 0.1, 
+		  }
+		);
+		
+		observer.observe(checkAvailability); 
+	  }
+	});
+</script>
+	
 @endsection
 

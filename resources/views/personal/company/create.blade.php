@@ -277,7 +277,7 @@
 
 
 																		<div class="col-md-12 col-12">
-																			<button type="submit" class="btn-red-primary btn-red float-right mt-15">Save </button>
+																			<button type="submit" class="btn-red-primary btn-red float-right mt-15">Save</button>
 																		</div>
 																	</div>
 																</form>

@@ -189,7 +189,6 @@ class SchedulerController extends Controller
      }
 
      public function sendreceiptfromcheckout(Request $request){
-          //print_r($request->all());exit;
           $compare_chk=[];
           
           $odetail = explode("," , $request->orderdetalidary);
@@ -208,7 +207,6 @@ class SchedulerController extends Controller
                     $compare_chk  = $compare_chk + $newary;
                }
           }
-          //print_r($compare_chk);exit;
           foreach($compare_chk as $detail){
                $orderId = explode("," , $detail['oid']);
                foreach($orderId as $oid){
@@ -234,13 +232,91 @@ class SchedulerController extends Controller
                $inputSize = 'calendar-count';
           }
 
-          if($request->chk == 'program'){
-               $catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$request->sid)->get();
-               $output = '<option value="">Select Category</option>';
-               foreach($catelist as $cl){
-                    $output .= '<option value="'.$cl->id.'">'.$cl->category_title.'</option>';
+
+          if ($request->chk == 'program') {
+               $customer = Customer::where('id', $request->userid)->first();
+               $birthdate = Carbon::parse($customer->birthdate);
+               $age = $birthdate->age;
+           
+               // $output = '<option value="">Select Category</option>';
+           
+               if ($age >= 3 && $age <= 17) {
+                   $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
+                       ->where('is_recurring_child', '1')
+                       ->get();
+              
+                    if ($pricelist->isEmpty()) {
+                         $output .= '<option value="">No price added</option>';
+                    } else 
+                         {
+                              $output = '<option value="">Select Category</option>';
+
+                              foreach ($pricelist as $price) {
+                                   $category_id = $price->category_id;
+                                   $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
+                                   ->where('serviceid', $request->sid)
+                                   ->where('id', $category_id)
+                                   ->get();
+                         
+                                   foreach ($catelist as $cl) {
+                                        $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                                   }
+                              }
+                         }
+               }           
+
+               else if ($age <= 2) {
+                   $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
+                       ->where('is_recurring_infant', '1')
+                       ->get();
+               
+                    if ($pricelist->isEmpty()) {
+                         $output .= '<option value="">No price added</option>';
+                    } else {
+                         $output = '<option value="">Select Category</option>';
+
+                         foreach ($pricelist as $price) {
+                         $category_id = $price->category_id;
+                         $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
+                              ->where('serviceid', $request->sid)
+                              ->where('id', $category_id)
+                              ->get();
+                    
+                         foreach ($catelist as $cl) {
+                              $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                         }
+                         }
+                    }
                }
-          }else if($request->chk == 'category'){
+           
+             else if($age >= 18) {
+                   $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
+                       ->where('is_recurring_adult', '1')
+                       ->get();
+                       
+
+                    if ($pricelist->isEmpty()) {
+                         $output .= '<option value="">No price added</option>';
+                     } else {
+                         $output = '<option value="">Select Category</option>';
+
+                         foreach ($pricelist as $price) {
+                             $category_id = $price->category_id;
+                             $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
+                                 ->where('serviceid', $request->sid)
+                                 ->where('id', $category_id)
+                                 ->get();
+                     
+                             foreach ($catelist as $cl) {
+                                 $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                             }
+                         }
+                     }
+               }
+                      
+           }
+           
+          else if($request->chk == 'category'){
                $catedata = BusinessPriceDetailsAges::where('id',$request->sid)->first();
 
                if($catedata->class_type){
@@ -261,6 +337,11 @@ class SchedulerController extends Controller
                
                $html .= $catedata->dues_tax.'^^'.$catedata->sales_tax.'^!^'.$addOnData;
           }else if($request->chk == 'priceopt'){
+               // dd($request->all());
+               $customer = Customer::where('id', $request->userid)->first();
+               $birthdate = Carbon::parse($customer->birthdate);
+               $age = $birthdate->age;
+               
                $membershiplist = BusinessPriceDetails::where('id',$request->sid)->first();
 
                $output = $membershiplist->membership_type;
@@ -360,6 +441,7 @@ class SchedulerController extends Controller
                          <input type="hidden" name="infantprice" id="'.$infantid.'" value="'.$total_price_val_infant.'" >
                          <input type="hidden" name="isRecurringChild" id="'.$isRecurringChild.'" value="'.$isRecurringChildVal.'" >
                          <input type="hidden" name="isRecurringAdult" id="'.$isRecurringAdult.'" value="'.$isRecurringAdultVal.'" >
+                         <input type="hidden" name="isRecurringAdult" id="age" value="'.$age.'" >
                          <input type="hidden" name="isRecurringInfant" id="'.$isRecurringInfant.'" value="'.$isRecurringInfantVal.'" >^^'.$membershiplist['pay_setnum'].'!!'.$membershiplist['pay_setduration']; 
           }else if($request->chk == 'participat'){
                $data = explode('~~',$request->sid);

@@ -286,7 +286,7 @@ function timeSlotOptionforservice($lbl, $val) {
 																<div class="card card-body box-border">
 																	<div class="d-grid align-items-center">
 																		<form>
-																			{{-- <input type="radio" id="black" name="fav_language" value="black" checked> --}}
+																			<!-- {{-- <input type="radio" id="black" name="fav_language" value="black" checked> --}} -->
 																			<input type="radio" id="black" name="fav_language" value="black" 
 																			{{ isset($sidecolor) && $sidecolor->side_panel_color == 1 ? 'checked' : '' }} onchange="updateSidePanelColor('black', {{ $sidecolor->id }})">																		
 																			<label for="black" class="mr-15">Black</label>
@@ -319,6 +319,11 @@ function timeSlotOptionforservice($lbl, $val) {
 										<div class="card-header align-items-center d-flex">
 											<h4 class="card-title mb-0 flex-grow-1 nesting-steps-title">Business Details Setup</h4>
 										</div>
+										@if(session('Details'))
+												<div class="alert alert-success" id="Details">
+													{{ session('Details') }}
+												</div>
+										@endif
 										<div class="card-body">
 											<div class="live-preview">
 												<div class="accordion" id="default-accordion-example">
@@ -586,6 +591,11 @@ function timeSlotOptionforservice($lbl, $val) {
 										<div class="card-header align-items-center d-flex">
 											<h4 class="card-title mb-0 flex-grow-1 nesting-steps-title">Tells us About Your Experience</h4>
 										</div><!-- end card header -->
+											@if(session('Experiance'))
+												<div class="alert alert-success" id="Experiance">
+													{{ session('Experiance') }}
+												</div>
+											@endif
 										<form action="{{route('personal.company.store')}}" method="post" enctype="multipart/form-data">
 											@csrf
 											<input type="hidden" name="cid" value="{{@$company->id}}">
@@ -1152,7 +1162,11 @@ function timeSlotOptionforservice($lbl, $val) {
 										<div class="card-header align-items-center d-flex">
 											<h4 class="card-title mb-0 flex-grow-1">Company Specifics</h4>
 										</div>
-
+											@if(session('Specifics'))
+												<div class="alert alert-success" id="Specifics">
+													{{ session('Specifics') }}
+												</div>
+											@endif
 										<div class="card-body">
 											<div class="live-preview">
 												<div class="accordion" id="default-accordion-example">
@@ -1906,10 +1920,10 @@ function timeSlotOptionforservice($lbl, $val) {
 		$(document).ready(function(){ 
 			$('#aboutcLeft').text(200-parseInt($("#about_host").val().length));
 			$('#companyDescLeft').text(150-parseInt($("#shortDescription").val().length));
-       		$('#aboutCompanyLeft').text(1000-parseInt($("#aboutCompany").val().length));
-       		$('#house_rules_terms_left').text(1000-parseInt($("#house_rules_terms").val().length));
-        	$('#cancelation_policy_left').text(1000-parseInt($("#cancelation_policy").val().length));
-        	$('#safety_cleaning_left').text(1000-parseInt($("#safety_cleaning").val().length));
+			$('#aboutCompanyLeft').text(1000-parseInt($("#aboutCompany").val().length));
+			// $('#house_rules_terms_left').text(1000-parseInt($("#house_rules_terms").val().length));
+        	// $('#cancelation_policy_left').text(1000-parseInt($("#cancelation_policy").val().length));
+        	// $('#safety_cleaning_left').text(1000-parseInt($("#safety_cleaning").val().length));
         /*	$('#termcondfaqtext_left').text(1000-parseInt($("#termcondfaqtext").val().length));
         	$('#contracttermtext_left').text(2000-parseInt($("#contracttermtext").val().length));
         	$('#refundpolicy_left').text(1000-parseInt($("#refundpolicytext").val().length));
@@ -1934,21 +1948,21 @@ function timeSlotOptionforservice($lbl, $val) {
             	$('#aboutCompanyLeft').text(1000-parseInt(this.value.length));
         	});
 
-        	$("#house_rules_terms").on('input', function() {
-            	$('#house_rules_terms_left').text(1000-parseInt(this.value.length));
-	      	});
+        	// $("#house_rules_terms").on('input', function() {
+            // 	$('#house_rules_terms_left').text(1000-parseInt(this.value.length));
+	      	// });
 
-	      	$("#cancelation_policy").on('input', function() {
-	         	$('#cancelation_policy_left').text(1000-parseInt(this.value.length));
-        	});
+	      	// $("#cancelation_policy").on('input', function() {
+	        //  	$('#cancelation_policy_left').text(1000-parseInt(this.value.length));
+        	// });
 
-        	$("#safety_cleaning").on('input', function() {
-            	$('#safety_cleaning_left').text(1000-parseInt(this.value.length));
-        	});
+        	// $("#safety_cleaning").on('input', function() {
+            // 	$('#safety_cleaning_left').text(1000-parseInt(this.value.length));
+        	// });
 
-        	$("#termcondfaqtext").on('input', function() {
-            	$('#termcondfaqtext_left').text(1000-parseInt(this.value.length));
-        	}); 
+        	// $("#termcondfaqtext").on('input', function() {
+            // 	$('#termcondfaqtext_left').text(1000-parseInt(this.value.length));
+        	// }); 
         /*	$("#contracttermtext").on('input', function() {
             $('#contracttermtext_left').text(2000-parseInt(this.value.length));
         	});
@@ -1965,7 +1979,7 @@ function timeSlotOptionforservice($lbl, $val) {
             $('#covidstext_left').text(1000-parseInt(this.value.length));
         	});*/
 
-
+			// alert("7");
 	      var special_dates = '{{ @$service->special_days_off }}';  
 	      special_dates = special_dates.split(',');
 	      $.each(special_dates, function( index, value ) {
@@ -1976,6 +1990,7 @@ function timeSlotOptionforservice($lbl, $val) {
 
 			var langarr = [];
         	var languages = '{{ @$service->languages }}';
+			// alert('33');
         	languages = languages.split(',');
         	$.each(languages, function( index, value ) {
            	langarr.push(value);
@@ -1994,7 +2009,7 @@ function timeSlotOptionforservice($lbl, $val) {
         	const displaySelect1 = new SlimSelect({
             select: '#offers'
         	});
-         displaySelect1.set(busiarr);
+       		displaySelect1.set(busiarr);
 
 			$("body").on("click", ".add_employee", function(){
 				var cnt=$('#Emp_count').val();
@@ -2650,7 +2665,7 @@ function timeSlotOptionforservice($lbl, $val) {
 		});
 	</script>
 
-	{{-- confirm-default-delete --}}
+	<!-- {{-- confirm-default-delete --}} -->
 
 
 	<script>
@@ -2696,7 +2711,7 @@ function timeSlotOptionforservice($lbl, $val) {
 			});
 		});
 	</script>
-
+<!-- 
 
 {{-- <script>
 	function updateSidePanelColor(color) {
@@ -2717,7 +2732,7 @@ function timeSlotOptionforservice($lbl, $val) {
 			}
 		});
 	}
-</script> --}}
+</script> --}} -->
 <script>
 	// function updateSidePanelColor(color, businessId) {
 	// 	$.ajax({
@@ -2765,5 +2780,35 @@ function timeSlotOptionforservice($lbl, $val) {
     });
 }
 
+</script>
+<script>
+    window.setTimeout(function() {
+        let alert = document.getElementById('Specifics');
+        if (alert) {
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 500); 
+        }
+    }, 5000); 
+</script>
+<script>
+    window.setTimeout(function() {
+        let alert = document.getElementById('Details');
+        if (alert) {
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 500); 
+        }
+    }, 5000); 
+</script>
+<script>
+    window.setTimeout(function() {
+        let alert = document.getElementById('Experiance');
+        if (alert) {
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 500);
+        }
+    }, 5000);
 </script>
 @endsection

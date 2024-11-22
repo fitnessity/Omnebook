@@ -141,6 +141,8 @@ class CompanyController extends Controller
                 
                 $companyId = $companyDetail->id;
             }
+            return redirect()->back()->with('Details', 'Business Details Updated Successfully!');
+
             
         }else if($request->step == 2){
             $frm_organisation = $frm_posi = $frm_servi_start = $frm_service_end = $frm_ispresent = $frm_course = array();
@@ -212,6 +214,8 @@ class CompanyController extends Controller
             }else{
                 BusinessExperience::create($experience);
             }
+            return redirect()->back()->with('Experiance', 'Business Experience Updated Successfully!');
+
         }else if($request->step == 3){
             $service = [
               'cid' => $companyId,
@@ -243,6 +247,8 @@ class CompanyController extends Controller
             }else{
                 BusinessService::create($service);
             }
+            return redirect()->back()->with('Specifics', 'Specifics Updated Successfully!');
+
         }else if($request->step == 4){
 
             $termcondfaq = $request->has('termcondfaq') ? 1 : 0 ;
@@ -287,7 +293,9 @@ class CompanyController extends Controller
 
 
         if($request->step != 4){
-            return redirect()->route('personal.company.create',['company'=> $companyId]);
+            // return redirect()->route('personal.company.create',['company'=> $companyId]);
+            return redirect()->back();
+
         }else{
             return redirect()->route('personal.company.index');
         }

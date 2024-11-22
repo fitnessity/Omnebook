@@ -35,7 +35,7 @@
                     <div class="frm-claim">
                         <!--<img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>businessclaim.png">-->
                         <h1>Let’s look up your business</h1>
-                        <p>Your business may already be on Fitnessity. Type in your business name. It will come up automtically if it's listed already. if not, you can add it now.</p>
+                        <p>Your business may already be on Omnebook. Type in your business name. It will come up automtically if it's listed already. if not, you can add it now.</p>
                         <div class="formfield-block">
                             <input id="business_name" style="margin-top:10px;" type="text" class="form-control" placeholder="Your Business Name Here" />
                             <div id="option-box">

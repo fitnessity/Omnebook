@@ -497,6 +497,7 @@
 																<div class="col-md-6 col-xs-6 col-6">
 																	<div class="info-display info-align">
 																		<span>
+																			@if(!empty($schedule))
 																			@if(!empty($schedule->getInsdata())) 
 																				@foreach($schedule->getInsdata() as $key => $ins) 
 																					{{$ins->full_name}} 
@@ -507,8 +508,8 @@
 																				<a class="font-red" data-bs-toggle="modal" data-bs-target="#ins-details{{$it}}">View Instructure</a>
 																			@else
 																			 	"N/A" 
-																			@endif
-																			
+																			@endif	
+																			@endif																	
 																		</span>
 																	</div>
 																</div>
@@ -529,36 +530,39 @@
 														</div>
 														<div class="modal-body">
 															<div class="row y-middle">
-												            	@forelse($schedule->getInsdata() as $ins)
-																		<div class="col-md-2 mb-10">
-																			<div class="instructor-img">
-																				@if($ins->profile_pic_url)
-																				<img src="{{$ins->profile_pic_url}}" class="instructor-img-cart" alt="Fitnessity">
-																				@else
-																					<div class="mini-stats-wid ">
-																						<div class="avatar-md mr-15">
-																							<div class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">
-																								<span> ap </span>
+																@if(!empty($schedule))
+																	@forelse($schedule->getInsdata() as $ins)
+																			<div class="col-md-2 mb-10">
+																				<div class="instructor-img">
+																					@if($ins->profile_pic_url)
+																					<img src="{{$ins->profile_pic_url}}" class="instructor-img-cart" alt="Fitnessity">
+																					@else
+																						<div class="mini-stats-wid ">
+																							<div class="avatar-md mr-15">
+																								<div class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">
+																									<span> ap </span>
+																								</div>
 																							</div>
 																						</div>
-																					</div>
-																				@endif
+																					@endif
+																				</div>
 																			</div>
-																		</div>
-																		<div class="col-md-10 mb-10">
-																			<div class="instructor-inner-details">
-																				<span class="fs-14">{{@$ins->full_name}}</span>
+																			<div class="col-md-10 mb-10">
+																				<div class="instructor-inner-details">
+																					<span class="fs-14">{{@$ins->full_name}}</span>
+																				</div>
+																				<div><p class="fs-14">{{@$ins->bio}}</p></div>
 																			</div>
-																			<div><p class="fs-14">{{@$ins->bio}}</p></div>
-																		</div>
-												            	@empty
-												            	@endforelse
+																	@empty
+																	@endforelse
+																@endif
 												            </div>
 														</div>
 													</div>
 												</div>
 											</div>
 									@endforeach
+
 								</div>
 								<?php
 					    			$service_fee= ($item_price * $fees->service_fee)/100;

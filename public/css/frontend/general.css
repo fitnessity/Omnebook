@@ -17206,9 +17206,9 @@ input:checked + .slider:before {
 	margin-top:50px
 }
 
-.claiming-business-block {
+/* .claiming-business-block {
     padding-right: 15px;
-}
+} */
 
 .claiming-business-block h3 {
     font-weight: 700;
@@ -17232,6 +17232,8 @@ input:checked + .slider:before {
     margin-bottom: 30px;
     background: #fff;
     border-radius: 8px;
+    border: none;
+    box-shadow: none;
 }
 
 .claiming-boxn h4 {
@@ -17286,9 +17288,9 @@ input:checked + .slider:before {
     width: 70%;
 }
 
-.claiming-business-block-right {
+/* .claiming-business-block-right {
     padding-left: 15px;
-}
+} */
 
 .claiming-business-block-right img {
     width: 100%;

@@ -6,7 +6,7 @@
             <span class="plan-details">
                 <div class="row">
 					<div class="col-lg-12">
-                        <a data-behavior="delete_card" data-url="{{route('cardDelete', ['stripe_payment_method' => $card['payment_id']])}}" data-cardid="{{$card['id']}}" title="Delete Card" class="text-right float-end card-remove"><i class="fa fa-trash"></i> </a>
+                        <a data-behavior="delete_card" data-url="" data-cardid="{{$card['id']}}" title="Delete Card" class="text-right float-end card-remove"><i class="fa fa-trash"></i> </a>
 					</div>
                     <div class="col-md-12">
                         <div class="cart-name">

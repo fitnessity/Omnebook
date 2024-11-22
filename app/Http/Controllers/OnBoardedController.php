@@ -55,6 +55,7 @@ class OnBoardedController extends Controller {
         $userDt = User::find($request->id);
         $companyDt = CompanyInformation::find($request->cid);
         if($request->step == 1){
+            // dd('33');
             $show_step = 2;
             $companyChk = CompanyInformation::where(['id'=>$request->cid , 'user_id' => @$userDt->id])->first();
             if(Auth::check() || $companyChk || @$companyDt->id == ''){ $show_step = 3; }
@@ -244,6 +245,7 @@ class OnBoardedController extends Controller {
         $intent = $stripe->setupIntents->create(
           [ 'customer' => @$user->stripe_customer_id, 'payment_method_types' => ['card'], ]
         );
+        // dd('44');
         return view('on-boarded.card_form', compact('intent','user','company'));
     }
     public function storeCards(Request $request){
@@ -275,7 +277,11 @@ class OnBoardedController extends Controller {
         return redirect('/onboard_process?show=5&cid='.$request->cid);
     }
     public function doLoginProcess(Request $request){
+        // dd('444');
+        // dd(Auth::check());
+        // dd($request->all());
         $company = CompanyInformation::find($request->cid);
+        // $company = CompanyInformation::find($cid);
         if(!Auth::check()){
             Auth::loginUsingId($company->user_id);
         }
@@ -283,7 +289,9 @@ class OnBoardedController extends Controller {
             Auth::user()->update(['cid' => $request->cid]);
             return redirect()->route('business_dashboard');
         }else{
+            Auth::user()->update(['cid' => $request->cid]);
             return redirect()->route('business.service.select' ,['business_id' => $request->cid]);
+            // return redirect()->route('business.service.select' ,['business_id' => $cid]);
         }
     }
 }

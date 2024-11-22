@@ -63,3 +63,4 @@
     <script src="{{url('/public/dashboard-design/js/dragula.min.js')}}"></script> 
     <script src="{{url('/public/dashboard-design/js/dom-autoscroller.min.js')}}"></script>  -->
     
+  

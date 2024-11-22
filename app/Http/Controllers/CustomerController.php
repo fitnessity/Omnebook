@@ -142,10 +142,13 @@ class CustomerController extends Controller {
             }
         }
         if ($request->ajax()) {
-            // dd($customers);
+            // dd($customerCount);
             // dd(\DB::getQueryLog()); // Show results of log
-
-            return response()->json($customers);
+            return response()->json([
+                'customers' => $customers,
+                'customerCount' => $customerCount,
+            ]);
+            // return response()->json($customers);
         }
         return view('customers.index', compact(['company','customerCount','currentCount','validLetters','customersCollection']));
     }
@@ -429,12 +432,18 @@ class CustomerController extends Controller {
     public function sendemailtocutomer(Request $request){
         $customer = Customer::findOrFail($request->cid);
         if(@$customer->password != ''){
-            $password = '';
+            // $password = '';
+            $userid=$customer->user_id;
+            $users=User::where('id',$userid)->first();
+            $password=$users->buddy_key;
         }else{
             $password = Str::random(8);
             $customer->update(['password' => Hash::make($password)]);
         }
-        $status =  SGMailService::sendWelcomeMailToCustomer($request->cid,$request->bid,$password);
+        // dd($customer);
+        // $status =  SGMailService::sendWelcomeMailToCustomer($request->cid,$request->bid,$password);
+        // sendMailToCustomer
+        $status =  SGMailService::sendMailToCustomer($request->cid,$request->bid,$password);
        return  $status;
     }
     public function importmembership(Request $request)

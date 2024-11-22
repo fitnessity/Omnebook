@@ -295,7 +295,7 @@ class UserProfileController extends Controller {
                                         if(File::exists(public_path("/uploads/profile_pic/thumb/".$userData->profile_pic )))
                                         {
                                             $html .='<figure>
-                                                <img src="/public/uploads/profile_pic/thumb/'.$userData->profile_pic.'" alt="Fitnessity">
+                                                <img src="/public/uploads/profile_pic/thumb/'.$userData->profile_pic.'" alt="Omnebook">
                                             </figure>';
                                         }
                                         else

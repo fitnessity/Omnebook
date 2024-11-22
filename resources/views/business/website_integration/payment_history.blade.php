@@ -210,6 +210,7 @@
                                                                 <td>${{$history['amount']}}</td>
                                                                 <td>{{$history['qty']}}</td>
                                                                 <td>{!!$history['getBookingStatus']!!}</td>
+                                                                
                                                                 {{-- <td><a  class="mailRecipt" data-behavior="send_receipt"  data-url="{{route('receiptmodel',['orderId'=>$history['item_id'],'customer'=>$history['customer_id']])}}" data-item-type="{{$history['item_type_terms']}}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
                                                                 </td> --}}
                                                                 <td>
@@ -217,6 +218,11 @@
                                                                         <i class="far fa-file-alt" aria-hidden="true"></i>
                                                                     </a>
                                                                 </td>
+                                                                {{-- <td>
+                                                                    <a class="mailRecipt" data-behavior="send_receipt" data-id={{$history['item_id']}} data-cid={{$history['customer_id']}} data-item-type="{{ $history['item_type_terms'] }}" data-modal-width="modal-70">
+                                                                        <i class="far fa-file-alt" aria-hidden="true"></i>
+                                                                    </a>
+                                                                </td> --}}
                                                             </tr>
                                                         @empty 
                                                             <tr> <td colspan="8">Payment History Is Not Available</td></tr>

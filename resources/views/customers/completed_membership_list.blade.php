@@ -7,7 +7,6 @@
                     <div class="row mini-stats-wid d-flex align-items-center ">
                         <div class="col-lg-10 col-md-8 col-8">
                             {{@$booking_detail->business_services_with_trashed->program_name}} - {{@$booking_detail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title}}
-                            
                             @if($booking_detail->status == 'refund')
                                   | <span class="font-red">  Status: Refunded on {{date('m/d/Y',strtotime($booking_detail->refund_date))}} by {{$booking_detail->refunded_person}}</span>
                             @endif
@@ -59,7 +58,7 @@
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                                     <div class="inner-accordion-titles">
-                                        <label> {{@$booking_detail->business_services_with_trashed->program_name}}</label>	
+                                        <label> {{@$booking_detail->business_services_with_trashed->program_name}} </label>	
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-6">

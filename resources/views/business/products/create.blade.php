@@ -833,6 +833,9 @@
                         }
                     }
                 },
+                menuBar: {
+                    isVisible: true
+                },
                 mention: {
                     feeds: [
                         {

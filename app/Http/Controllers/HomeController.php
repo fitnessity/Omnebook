@@ -341,9 +341,9 @@ class HomeController extends Controller
             else
             {
                 $output .= '<li class="liimage"> <img style="width: 70px; height: 70px;" src ="'.asset('/public/img/shopicon.jpg').'">';
-                $output .= "Looks like there's no business with that name listed on Fitnessity You can add it for free by clicking <b>Create Business </b>from your personal profile dashboard or click on the button below.</li>";
+                $output .= "Looks like there's no business with that name listed on Omnebook You can add it for free by clicking <b>Create Business </b>from your personal profile dashboard or click on the button below.</li>";
             }
-            $output .= "</ul><div class='addbusiness-block'><p> Didn't find your business? Add it Fitnessity for Free</p><button type='button' onclick='redirect_to_detail()'>Add Business</button></div>";
+            $output .= "</ul><div class='addbusiness-block'><p> Didn't find your business? Add it Omnebook for Free</p><button type='button' onclick='redirect_to_detail()'>Add Business</button></div>";
             echo $output;
         }
     }
@@ -396,6 +396,7 @@ class HomeController extends Controller
             });
         }
         $user = $user->get();
+		// dd($user);
     	return response()->json($user);
     }
     public function sendGrantAccessMail(Request $request){

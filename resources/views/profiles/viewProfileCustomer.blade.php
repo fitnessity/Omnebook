@@ -164,7 +164,7 @@ body{
 						echo '<div class="profile-pic-text"><p>'.$pf.'</p></div>'; ?>
                     @endif
                     <a href="javascript:void(0);" class="edit-pic" data-toggle="modal" data-target="#editProfilePic" title="Click here to change picture">
-                        <div id="mycamera"  style="color:#fff;background-color:#000;height:30px;width:30px;border-radius:15px;position: absolute;right: 23px;bottom: 2px;">
+                        <div id="mycamera" class="profile-cam">
                             <span class="fa fa-camera"></span>
                         </div>
                     </a>

@@ -1,6 +1,6 @@
-@extends('layouts.header')
+@extends('layouts.business.header')
 @section('content')
-
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
 <style>
     #suggestions {
         -moz-box-sizing: border-box;
@@ -23,34 +23,33 @@
     }
 </style>
 <div class="claiming-section business-claimed" style="margin-top:50px">
-
     <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-12 col-12 claiming-business-block">
+                <div class="claiming-boxn">
+                
+                    <h3>Business has already been claimed.</h3>
+                    @if(Auth::check())
+                        <button class="btn btn-red" type="button" onclick="manageCompany()">Go to the Manage Page</button>
+                    @else
+                        <p>Someone has already completed the claiming process for this business.If this is your business,<a onclick="setsession();"> Log In</a></p>
+                    @endif
+                    <button class="btn btn-red ml-5" type="button" onclick="managehome()">Go to the Home Page</button>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12 col-12 claiming-business-block-right">
 
-        <div class="col-md-6 claiming-business-block">
-            <div class="claiming-boxn">
-               
-                <h3>Business has already been claimed.</h3>
-                @if(Auth::check())
-                    <button class="btn btn-red" type="button" onclick="manageCompany()">Go to the Manage Page</button>
-                @else
-                    <p>Someone has already completed the claiming process for this business.If this is your business,<a onclick="setsession();"> Log In</a></p>
-                @endif
-                <button class="btn btn-red" type="button" onclick="managehome()">Go to the Home Page</button>
+                <p>
+                    Claim your business or create a new profile today for free! Update your profile so we can showcase what you do to everyone looking for your services.
+                </p>
+
+                <img src="{{url('/public/img/claim-your-business-detail.jpg')}}" alt="Omnebook">
+
             </div>
         </div>
-		<div class="col-md-6 claiming-business-block-right">
-
-            <p>
-                Claim your business or create a new profile today for free! Update your profile so we can showcase what you do to everyone looking for your services.
-            </p>
-
-            <img src="{{url('/public/img/claim-your-business-detail.jpg')}}" alt="Fitnessity">
-
-        </div>
     </div>
-
 </div>
-@include('layouts.footer')
+@include('layouts.business.footer')
 <script type="text/javascript">
     function manageCompany(){
         window.location.href = "/manage/company";

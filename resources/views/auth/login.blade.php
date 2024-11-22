@@ -395,7 +395,7 @@ function LoginUser() {
                 window.location = response.redirecturl;
             }
               else{
-window.location = response.redirecturl;
+                window.location = response.redirecturl;
                 setTimeout( function(){
 
                  // location.reload();

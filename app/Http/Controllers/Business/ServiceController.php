@@ -600,14 +600,17 @@ class ServiceController extends BusinessBaseController
     public function destroy(Request $request,$business_id , $id)
     {
         // dd('33');
-        // \DB::enableQueryLog();
         $company = $request->current_company;
         $business_service = $company->service()->findOrFail($id);        
-        // dd(\DB::getQueryLog()); 
         $business_service->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Service deleted successfully'
+        ]);
     }
 
     public function select(Request $request, $business_id){
+        // dd('4');
         $company = $request->current_company;
         $companyService = $company->service()->orderBy('id', 'DESC')->get();
         return view('business.services.select',compact('business_id','companyService'));

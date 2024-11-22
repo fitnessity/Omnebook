@@ -11,8 +11,7 @@
     <link href="{{ url('/public/dashboard-design/css/style.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url('/public/dashboard-design/css/custom.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url('/public/dashboard-design/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
-    <!-- <link rel="stylesheet" type="text/css" href="{{ url('/public/css/all.css') }}"> -->
-    <script src="{{url('public/dashboard-design/js/jquery-3.6.4.min.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url('/public/css/all.css') }}">
 </head>
 <style>
     html {
@@ -53,7 +52,9 @@
     .register {
         padding-top: 80px;
     }
-   
+    .w-auto{
+        width: auto;
+    }
 </style>
     @php
     $logBgColor =
@@ -79,6 +80,7 @@
                             <h3 class="font-red">Create An Account</h3>
                         </div>
                         <form id="clientRegistration" method="post">
+                            @csrf
                             <div class="row">
                                 <div class="col-md-12 col-lg-12">
                                     <h4 class="font-red">Personal Info</h4>
@@ -309,7 +311,7 @@
                                 </div>
                                 <div class="">
                                     <div class="col-md-12 col-lg-12 text-right">
-                                        <button type="button" class="btn btn-red mt-10" id="add_family" style="background-color: {{ $logBgColor }}; color: {{ $logTextColor }};">Add New Family
+                                        <button type="button" class="btn btn-red mt-10 w-auto" id="add_family" style="background-color: {{ $logBgColor }}; color: {{ $logTextColor }};">Add New Family
                                             Member</button>
                                     </div>
                                 </div>
@@ -440,7 +442,7 @@
                                     {{-- <button type="button" class="btn btn-red register_submit" id="register_submit"
                                         style="background-color: {{ $logBgColor }}; color: {{ $logTextColor }};"
                                         onclick="getType('submit');">Add Credit Card</button> --}}
-                                    <button type="button" class="btn btn-red register_submit" id="register_skip"
+                                    <button type="button" class="btn btn-red register_submit w-auto" id="register_skip"
                                         style="background-color: {{ $logBgColor }}; color: {{ $logTextColor }}; border: 1px solid {{ $logBgColor }};";
 
                                         onclick="getType('skip');">Skip</button>
@@ -467,7 +469,7 @@
     
 
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDSB1-X7Uoh3CSfG-Sw7mTLl4vtkxY3Cxc"></script>
-
+<script src="{{url('public/dashboard-design/js/jquery-3.6.4.min.js')}}"></script>
 <script src="{{url('public/js/jquery-input-mask-phone-number.js')}}"></script>
 
     <script type="text/javascript">
@@ -639,11 +641,6 @@
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>  
-    <script src="{{ url('public/dashboard-design/js/jquery-3.6.4.min.js') }}"></script>
-    <script src="{{ url('/public/dashboard-design/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ url('/public/dashboard-design/js/flatpickr.min.js') }}"></script>
-
-
   <script type="text/javascript">
         $(document ).ready(function() {
             flatpickr('.add-client-birthdate', {
@@ -751,7 +748,7 @@
         $(document).on('blur', '#email', function(e) {
             var inputVal = $(this).val();
             $.ajax({
-                url: 'https://dev.fitnessity.co/api/get_checkin_code',
+                url: '/get_checkin_code',
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',
@@ -774,7 +771,7 @@
             var inputVal = $(this).val();
 
             $.ajax({
-                url: 'https://dev.fitnessity.co/api/get_checkin_code',
+                url: '/get_checkin_code',
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',
@@ -799,7 +796,7 @@
             if (type == 'code') {
                 $('#check_in_error_family' + id).html('');
                 $.ajax({
-                    url: 'https://dev.fitnessity.co/api/get_checkin_code',
+                    url: '/get_checkin_code',
                     type: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
@@ -820,7 +817,7 @@
                 });
             } else {
                 $.ajax({
-                    url: 'https://dev.fitnessity.co/api/get_checkin_code',
+                    url: '/get_checkin_code',
                     type: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
@@ -1012,9 +1009,9 @@
                     var companyInfo = @json($companyinfo->id);    
                     var formData = $("#clientRegistration").serialize();
                     formData += '&company_info=' + encodeURIComponent(companyInfo);
+                    
                     $.ajax({
-                        // url: '/customers/registration',
-                        url: 'https://dev.fitnessity.co/api/customers/registration',
+                        url: '/sub_registration',
                         type: 'POST',
                         dataType: 'json',
                         data: formData,
@@ -1031,29 +1028,59 @@
                             $('.register_submit').prop('disabled', false).css('background',
                                 '#ed1b24');
                         },
+                        // success: function(response) {
+                        //     if (response.type === 'success') {
+                        //         if ($('#buttonType').val() == 'skip') {
+                        //             $('.register').css('display','none');
+                        //             if(response.redirect=='/sub_customer_dashboard'){
+                        //                 setTimeout(function() {
+                        //                     window.location.href = '/sub_customer_dashboard';
+                        //                 }, 2000);   
+                        //             } 
+                                 
+                        //         else{
+                        //             $("#systemMessage").html(response.msg)
+                        //             .removeClass('alert-success')
+                        //             .addClass('alert-class alert-danger')
+                        //             .show();
+                                    
+                        //         }
+                        //         // else {
+                        //         //     setTimeout(function() {
+                        //         //         var currentURL = window.location.href;
+                        //         //         window.location.href = currentURL +
+                        //         //             "?step=2&customer_id=" + response.id;
+                        //         //     }, 2000);
+                        //         // }
+                        //     } else {
+                        //         $('#loading-img').addClass('d-none');
+                        //         $("#systemMessage").html(response.msg).addClass(
+                        //             'alert-class alert-danger');
+                        //         $('.register_submit').prop('disabled', false).css(
+                        //             'background', '#ed1b24');
+                        //     }
+                        // }
                         success: function(response) {
                             if (response.type === 'success') {
                                 if ($('#buttonType').val() == 'skip') {
-                                    console.log(response.token);
                                     $('.register').css('display','none');
-                                    localStorage.setItem('customer',response.id);
-                                    dashboard(response.token,response.bussiness_id);
+                                        setTimeout(function() {
+                                            window.location.href = '/sub_customer_dashboard';
+                                        }, 2000);   
+                                    
                                 } else {
-                                    setTimeout(function() {
-                                        var currentURL = window.location.href;
-                                        window.location.href = currentURL +
-                                            "?step=2&customer_id=" + response.id;
-                                    }, 2000);
+                                    $("#systemMessage").html(response.msg)
+                                        .removeClass('alert-success')
+                                        .addClass('alert-class alert-danger')
+                                        .show();
                                 }
                             } else {
                                 $('#loading-img').addClass('d-none');
-                                $("#systemMessage").html(response.msg).addClass(
-                                    'alert-class alert-danger');
-                                $('.register_submit').prop('disabled', false).css(
-                                    'background', '#ed1b24');
+                                $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+                                $('.register_submit').prop('disabled', false).css('background', '#ed1b24');
                             }
                         }
-                    });
+                   });
                 }
             });
         });

@@ -18,7 +18,6 @@ use App\Repositories\{UserRepository,ReviewRepository,SportsCategoriesRepository
 use App\{ActivitySlider,Slider,SportsCategories,Cms,Sports,Trainer,Online,BusinessClaim,UserBookingDetail,Person,Discover,Miscellaneous,Languages,Api,MailService,User,BusinessServices,CompanyInformation,BusinessPriceDetails,BusinessService,BusinessCompanyDetail,BusinessActivityScheduler,HomeTracker,SGMailService,Customer};
 use View;
 use DateTime;
-
 use Illuminate\Support\Facades\Crypt;
 
 class HomeController extends Controller {
@@ -267,7 +266,8 @@ class HomeController extends Controller {
                     //send notification email to user
                     // MailService::sendEmailReminder($userObj->id);
                     MailService::sendEmailSignupVerification($userObj->id);
-
+                    // sendWelcomeMailToCustomer
+                    
                     $url = "/";
                     if (isset($userObj->confirmation_code) && !empty($userObj->confirmation_code)) {
                         $url = '/register/confirm/' . $userObj->confirmation_code;
@@ -326,7 +326,7 @@ class HomeController extends Controller {
                 $user->show_step = 2;
                 if ($user->save()) {
                     // MailService::sendEmailVerifiedAcknowledgement($user->id);
-                    SGMailService::sendWelcomeMail($user->email);
+                    SGMailService::sendWelcomeMail($user->email,$user->buddy_key);
                     Auth::login($user);
                     Auth::loginUsingId($user->id, true);
                     $request->session()->flash('alert-success', 'Your email has been successfully verified!');

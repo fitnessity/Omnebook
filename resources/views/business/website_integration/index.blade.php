@@ -32,7 +32,7 @@
                         <ul class="nav nav-tabs mb-3" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link" data-bs-toggle="tab" href="#links" role="tab" aria-selected="false">
-                                    Links
+                                    Website Integration
                                 </a>
                             </li>
                         </ul>
@@ -104,7 +104,7 @@
                             <div class="tab-pane  active" id="links" role="tabpanel">
                                 <div class="card bg-soft-grey">
                                     <div class="card-header align-items-center d-flex bg-soft-grey">
-                                        <h4 class="card-title mb-0 flex-grow-1">Create your link</h4>
+                                        <h4 class="card-title mb-0 flex-grow-1">Website Widgets & Links</h4>
                                     </div>
                                     <div class="card-body">
                                         <div class="live-preview">
@@ -1631,6 +1631,15 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row p-2">
+                                            <div class="col-lg-12">
+                                                <div class="copy-code">
+                                                    <p>Paste the code into your webpage where you would like the link to appear. Changes made above automatically update your code.</p>
+                                                    <textarea class="form-control" id="des-info-description-input-sub" rows="4" readonly>{!! $selectLink !!} </textarea>
+                                                    <button class="btn btn-red mt-15" id="copyButton_sub">Copy</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                         
@@ -2489,7 +2498,7 @@ $(function() {
             selectField.selectedIndex = 0; 
         });
     </script>
-    <script type="text/javascript">
+    {{-- <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function() {
             const selectField = document.getElementById('selectField');
             const textArea = document.getElementById('des-info-description-input');
@@ -2518,6 +2527,34 @@ $(function() {
                 textArea.value = contentToDisplay;
             });
         });
+    </script> --}}
+
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectField = document.getElementById('selectField');
+            const textArea = document.getElementById('des-info-description-input-sub');
+            const loginContent = `{!! $login_sub !!}`;
+            const registerContent = `{!! $register_sub !!}`;
+            const scheduleContent='{!! $schedule_sub !!}';
+            const selectContent=`{!! $selectLink !!}`;
+            selectField.addEventListener('change', function() {
+                let selectedValue = selectField.value;
+                let contentToDisplay;
+                if (selectedValue === 'login') {
+                    contentToDisplay = loginContent;
+                } else if (selectedValue === 'register') {
+                    contentToDisplay = registerContent;
+                } 
+                else if(selectedValue === 'booking')
+                {
+                    contentToDisplay = scheduleContent;
+                }
+                else {
+                    contentToDisplay = selectContent;
+                }
+                textArea.value = contentToDisplay;
+            });
+        });
     </script>
     <script>
         document.getElementById('copyButton').addEventListener('click', function() {
@@ -2527,6 +2564,14 @@ $(function() {
             navigator.clipboard.writeText(textarea.value)
         });
     </script>
+ <script>
+    document.getElementById('copyButton_sub').addEventListener('click', function() {
+        var textarea = document.getElementById('des-info-description-input-sub');
+        textarea.select();
+        textarea.setSelectionRange(0, 99999);  
+        navigator.clipboard.writeText(textarea.value)
+    });
+</script>
 
     <script>
         $(document).ready(function() {

@@ -6,30 +6,30 @@ $total_quantity = 0;
 <!DOCTYPE html>
 <html class="no-js" lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
     <head>
-        <title>Fitnessity</title>
+        <title>OmneBook</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta content="Fitnessity: Because Fitness=Necessity" name="description" />
+		<meta content="OmneBook: Because OmneBook=Necessity" name="description" />
 		<meta content="" name="author" />
 
         <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta content="charset=utf-8"> -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <meta name="description" content=" Fitnessity: Because Fitness=Necessity ">
+        <meta name="description" content=" OmneBook: Because Fitness=Necessity ">
         <meta itemprop="name" content="">
-        <meta itemprop="description" content=" Fitnessity: Because Fitness=Necessity ">
+        <meta itemprop="description" content=" OmneBook: Because Fitness=Necessity ">
         <meta itemprop="image" content="">
         <meta name="twitter:card" content="product">
         <meta name="twitter:title" content="">
-        <meta name="twitter:description" content=" Fitnessity: Because Fitness=Necessity ">
+        <meta name="twitter:description" content=" OmneBook: Because Fitness=Necessity ">
         <meta name="twitter:image" content="">
         <meta property="og:url" content="">
         <meta property="og:type" content="">
         <meta property="og:title" content="">
-        <meta property="og:description" content=" Fitnessity: Because Fitness=Necessity ">
+        <meta property="og:description" content=" OmneBook: Because Fitness=Necessity ">
         <meta property="og:image" content="">
-        <meta property="og:site_name" content="Fitnessity">
+        <meta property="og:site_name" content="OmneBook">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
         <link rel="shortcut icon" href="{{ url('/public/images/email/favicon.png') }}">
         <link rel="icon" href="{{ url('/public/images/email/favicon.png') }}">
@@ -76,12 +76,17 @@ $total_quantity = 0;
 		<!-- font glyphicon -->
 		<link href="{{url('/public/css/glyphicon.css')}}" rel="stylesheet" type="text/css" />
 
+		<!-- Filepond css -->
+		<link href="{{url('/public/dashboard-design/filepond/filepond.min.css')}}" rel="stylesheet" type="text/css" />
+		<link href="{{url('/public/dashboard-design/filepond/filepond-plugin-image-preview.min.css')}}" rel="stylesheet" type="text/css" />
+
         <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
         <!-- <script src="https://d2bgo0bc1t29nh.cloudfront.net/public/dashboard-design/js/jquery-3.6.4.min.js"></script>
         <script src="https://d2bgo0bc1t29nh.cloudfront.net/public/js/slimselect.min.js"></script> -->
 		<!-- <script src="{{env('APP_URL')}}/public/js/ratings.js"></script> -->
 		<script src="{{url('/public/dashboard-design/js/jquery-3.6.4.min.js')}}"></script>
         <script src="{{url('/public/js/slimselect.min.js')}}"></script>
+		
 	
   		<!-- <script type="text/javascript"
         src="https://maps.google.com/maps/api/js?key={{ env('AUTO_COMPLETE_ADDRESS_GOOGLE_KEY') }}" ></script> -->
@@ -333,7 +338,7 @@ $total_quantity = 0;
 					
 						<div class="top-area">
 							<!-- {{Route::currentRouteName()}} -->
-							@if (in_array(Route::currentRouteName(), ['activities_index', 'businessClaim', 'userlogin', 'staff_login', 'registration', 'contact-us', 'help', 'feedback', 'get_started_activities_experiences', 'profile-viewProfile', 'userprofile', 'activities_next_8_hours', 'privacy-policy', 'terms-condition', 'show_businessprofile']))
+							@if (in_array(Route::currentRouteName(), ['activities_index', 'businessClaim', 'userlogin', 'staff_login', 'registration', 'contact-us', 'help', 'feedback', 'get_started_activities_experiences', 'profile-viewProfile', 'userprofile', 'activities_next_8_hours', 'privacy-policy', 'terms-condition', 'show_businessprofile', 'already_claim_business']))
 							
 
 							<div class="top-search">

@@ -110,7 +110,7 @@ html {
     border-radius: 15px;
     position: absolute;
     right: 0;
-    bottom: 0%;
+    top: 21px;
 }
 .banner>img {
     width: 100%;
@@ -819,5 +819,5 @@ span.qulity-star {
 #mycamera .fa.fa-camera{
 	position: relative; 
 	left: -7px; 
-	top: 7px;
+	top: 8px;
 }

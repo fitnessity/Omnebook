@@ -17,6 +17,9 @@ use App\Http\Controllers\Business\WebsiteIntegrationConroller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\SubDomainController;
+
+
 
 Route::get('/clear-cache', function () {
     Artisan::call('cache:clear');
@@ -24,27 +27,40 @@ Route::get('/clear-cache', function () {
     Artisan::call('config:clear');
     return 'Cache cleared successfully.';
 });
+// route::get('/tester',function(){
+//     return view('test');
+// });
 
-route::get('/tester',function(){
-    return view('test');
-});
+// Route::domain('host.fitnessity.co')->get('/', function () {
+//     return view('test');  
+// });
 
-Route::group(['domain' => '.fitnessity.co'], function() {
-    Route::get('/testfor', function() {
-        return view('test');
+Route::group(['domain' => 'host.fitnessity.co'], function() {
+    Route::middleware(['subdomain.auth'])->group(function () {
+        Route::get('/login/{unique_code}','SubDomainController@Loginindex')->name('/login');
+        Route::post('sub_auth_user', 'SubDomainController@UserLogin')->name('sub_auth.user');
+        Route::get('/register-page', 'SubDomainController@loadRegisterPage');
+        Route::get('/register/{unique_code}','SubDomainController@RegisterPage')->name('/register');
     });
+    Route::post('/get_checkin_code', 'SubDomainController@getCheckinCode')->name('get_checkin_code');
+    Route::post('/sub_registration', 'SubDomainController@postRegistrationCustomer')->name('sub_registration');
+
+    Route::post('/logout', 'SubDomainController@logout')->name('subdomain.logout');
+    Route::get('/schedule/{unique_code}','SubDomainController@next_8_hours')->name('/schedule');
+    Route::get('/sub_customer_dashboard', 'SubDomainController@customerdashboard')->name('sub_customer_dashboard');
 });
 
 
-Route::get('/send-test-email', function() {
-    Mail::raw('This is a test email.', function ($message) {
-        $message->to('premvadhavana@gmail.com')
-                ->subject('Test Email from SendGrid');
-    });
+// Route::get('/send-test-email', function() {
+//     Mail::raw('This is a test email.', function ($message) {
+//         $message->to('premvadhavana@gmail.com')
+//                 ->subject('Test Email from SendGrid');
+//     });
 
-    return 'Test email sent!';
-});
+//     return 'Test email sent!';
+// });
 
+Route::domain('dev.fitnessity.co')->group(function () {
 
 Route::get('/test','HomeController@Test')->name('test');
 // web.php
@@ -60,12 +76,20 @@ Route::post('/onboard_process/store','OnBoardedController@store')->name('onboard
 Route::post('/storePlan','OnBoardedController@storePlan')->name('onboard_process.storePlan');
 Route::any('/getCardForm','OnBoardedController@getCardForm')->name('onboard_process.getCardForm');
 Route::any('/doLoginProcess','OnBoardedController@doLoginProcess')->name('doLoginProcess');
+// Route::get('/do-login-process/{cid}/{redirect}', 'OnBoardedController@doLoginProcess')->name('doLoginProcess');
+
 Route::any('/storeCards','OnBoardedController@storeCards')->name('storeCards');
-Route::resource('choose-plan', 'MembershipPlanController')->only(['index', 'create','store','update','destroy']);
+// Route::resource('choose-plan', 'MembershipPlanController')->only(['index', 'create','store','update','destroy']);
+Route::resource('choose-plan', 'MembershipPlanController')
+    ->only(['index', 'create', 'store', 'update', 'destroy'])
+    ->middleware('auth');
+
 Route::any('/getCardFormPlan','MembershipPlanController@getCardForm')->name('choose-plan.getCardForm');
 Route::any('/checkPromoCode','MembershipPlanController@checkPromoCode')->name('choose-plan.checkPromoCode');
 Route::any('/getCardData','MembershipPlanController@getCardData')->name('choose-plan.getCardData');
 Route::get('/add-client','CustomerController@client')->name('client');
+Route::post('/card-delete', 'Personal/ProfileController@cardDelete')->name('cardDelete');
+
 // Route::get('/login_integration','Business\WebsiteIntegrationConroller@Loginindex')->name('login_integration');//added_13_08
 // Route::get('/loginuser/{uniquecode}','Business\WebsiteIntegrationConroller@Loginuser')->name('loginuser');//added_16_08
 // Route::get('/loginuser','Business\WebsiteIntegrationConroller@Loginuser')->name('loginuser');//added_16_08
@@ -1170,5 +1194,8 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/email_blast_temp16','DesignController@email_blast_temp16')->name('email_blast_temp16');
     Route::get('/email_blast_temp17','DesignController@email_blast_temp17')->name('email_blast_temp17');
     Route::get('/online_profile_post','DesignController@online_profile_post')->name('online_profile_post');
+    Route::get('/manage_services','DesignController@manage_services')->name('manage_services');
+    Route::get('/manage_services_sidebar','DesignController@manage_services_sidebar')->name('manage_services_sidebar');
+});
 });
 ?>

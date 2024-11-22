@@ -558,6 +558,8 @@
     .r-host-re-detail{text-align: center;}
     .activity-top-border{border-top: 1px solid #ccc;}
 	.activity-information.activites-height{height: 95px;}
+    .book-now-skicky {bottom: 60px; }
+    .desktop-none-customer {display: block !important; }
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1365px) {
@@ -1402,6 +1404,7 @@
     .ipad-none{display: none;}
 	.formfield-block { padding-right: 0px !important; margin-bottom: 15px;}
 	.help-desk{padding-top: 18%;}
+    .claiming-section{padding: 80px 0 0 !important;}
 }
 
 @media screen and (min-width:1025px) and (max-width:1199px) {
@@ -2485,7 +2488,7 @@
 	.show-all .table-inner-data-sec .p-name span{margin-left: 0px;}
 	.form-control.rs-birthdate{width: 295px;}
 	.page-content-wrapper .content-page .piccrop_block label img{height: 125px;}
-	.sticky-book-now{font-size: 20px; margin-bottom: 15px;}
+	.sticky-book-now{font-size: 15px; margin-bottom: 15px;}
 	.add-family-frnd{width: 100% !important; margin-bottom: 15px; margin-left: 0px !important;}
 	.schedulers-arrows .owl-nav .owl-next {  position: absolute;  top: 27px !important;  right: -13px !important;}
 	.schedulers-arrows .owl-nav .owl-prev { position: absolute;  top: 27px !important;  left: -13px !important;}
@@ -2596,7 +2599,7 @@
 	.reset-title{padding-left: 0px;}
 	.ipad-none{display: none;}
 	.pmt-105{margin-top: 105px;}
-	.claiming-section { padding: 130px 0 0 !important; }
+	.claiming-section { padding: 150px 0 0 !important; }
 	.formfield-block { padding-right: 0px !important; margin-bottom: 15px;}
 	.help-desk{padding-top: 40%;}
     .instant-hire .title h3{width: 83%;}
@@ -2875,6 +2878,8 @@
 	.booking-active {  left: 95px;}
 	.profile-section .nav > li > a { padding: 10px 6px;}
 	header .header-right .header-bottom-sp{margin-bottom: 6px;}
+    .claiming-boxn{padding: 20px 20px 20px 17px !important;}
+    .claiming-business-block h3{font-size: 29px !important;}
 }
 
 @media(max-width: 360px){

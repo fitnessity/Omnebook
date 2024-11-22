@@ -77,10 +77,14 @@ class WebsiteIntegrationConroller extends Controller
         $selectedState=@$data->default_state;
         $company_code = $currentCompany->unique_code;
         $selectLink = '<a href="#"></a>';    
+        $login_sub = '<a href="https://host.fitnessity.co/login/'. $company_code .'"></a>';
+        $register_sub = '<a href="https://host.fitnessity.co/register/' . $company_code .'"></a>';
+        $schedule_sub = '<a href="https://host.fitnessity.co/schedule/' . $company_code .'"></a>';
+        
         $login = '<div id="your-login-widget-container" data-unique-code="' . $company_code . '"></div>';
         $register='<div id="your-register-widget-container" data-unique-code="' . $company_code . '"></div>';
         $schedule='<div id="your-schedule-widget-container" data-unique-code="' . $company_code . '"></div>';
-        return view('business.website_integration.index',compact('data','color1','color2','logoUrl','color3','color4','color5','color6','color8','color9','color10','color11','color12','selectedState','login','register','selectLink','schedule'));
+        return view('business.website_integration.index',compact('data','color1','color2','logoUrl','color3','color4','color5','color6','color8','color9','color10','color11','color12','selectedState','login','register','selectLink','schedule','login_sub','register_sub','schedule_sub'));
     }
 
 
@@ -1724,10 +1728,6 @@ class WebsiteIntegrationConroller extends Controller
     
         return redirect()->back()->withErrors('Cart data is invalid');
     }
-    public function test()
-    {
-        dd('33');
-    }
 
     public function memberhsipPay(Request $request){
         $cartWidgetIds = json_decode($request->input('cartWidgetIds'), true);
@@ -2940,71 +2940,130 @@ class WebsiteIntegrationConroller extends Controller
     }
 
 
-    public function paymentHistory(Request $request) {
-        $user = User::where('id', $request->user)->first();
-        $business = CompanyInformation::find($request->businessId);
-        $customers = $user->customers()->where('business_id', $request->businessId)->first();
-        $customer_ids = @$customers->id;
-        $name = @$customers->full_name;
-        $business_id = $request->businessId;
+    // public function paymentHistory(Request $request) {
+    //     // dd($request->all());
+    //     $user = User::where('id', $request->user)->first();
+    //     $business = CompanyInformation::find($request->businessId);
+    //     $customers = $user->customers()->where('business_id', $request->businessId)->first();
+    //     $customer_ids = @$customers->id;
+    //     $name = @$customers->full_name;
+    //     $business_id = $request->businessId;
 
-        $status = Transaction::select('transaction.*')
-            ->where('item_type', 'UserBookingStatus')
-            ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
-            ->join('user_booking_details as ubd', function($join) use ($business_id, $customer_ids) {
-                $join->on('ubd.booking_id', '=', 'ubs.id')
-                    ->where('ubd.order_type', 'Membership')
-                    ->where('ubd.user_id', $customer_ids)
-                    ->where('ubd.business_id', '=', $business_id);
-            })->get();
+    //     $status = Transaction::select('transaction.*')
+    //         ->where('item_type', 'UserBookingStatus')
+    //         ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+    //         ->join('user_booking_details as ubd', function($join) use ($business_id, $customer_ids) {
+    //             $join->on('ubd.booking_id', '=', 'ubs.id')
+    //                 ->where('ubd.order_type', 'Membership')
+    //                 ->where('ubd.user_id', $customer_ids)
+    //                 ->where('ubd.business_id', '=', $business_id);
+    //         })->get();
     
-        $recurring = Transaction::select('transaction.*')
-            ->where('item_type', 'Recurring')
-            ->join('recurring as re', 're.id', '=', 'transaction.item_id')
-            ->where('re.business_id', '=', $business_id)
-            ->where('re.user_id', $customer_ids)
-            ->get();
+    //     $recurring = Transaction::select('transaction.*')
+    //         ->where('item_type', 'Recurring')
+    //         ->join('recurring as re', 're.id', '=', 'transaction.item_id')
+    //         ->where('re.business_id', '=', $business_id)
+    //         ->where('re.user_id', $customer_ids)
+    //         ->get();
             
-        $statusArray = [];
-        foreach ($status as $history) {
-            $statusArray[] = [
-                "created_at" => date('m/d/Y', strtotime($history->created_at)),
-                'itemDescription' => $history->item_description($business_id)['itemDescription'],
-                'item_type_terms' => $history->item_type_terms(),
-                'getPmtMethod' => $history->getPmtMethod(),
-                'amount' => $history->amount,
-                'qty' => $history->item_description($business_id)['qty'],
-                'getBookingStatus' => $history->getBookingStatus(),
-                'item_id' => $history->item_id,
-                'customer_id' => $history->customer_id,
-                'id' => $history->id,
-            ];
-        }
+    //     $statusArray = [];
+    //     foreach ($status as $history) {
+    //         $statusArray[] = [
+    //             "created_at" => date('m/d/Y', strtotime($history->created_at)),
+    //             'itemDescription' => $history->item_description($business_id)['itemDescription'],
+    //             'item_type_terms' => $history->item_type_terms(),
+    //             'getPmtMethod' => $history->getPmtMethod(),
+    //             'amount' => $history->amount,
+    //             'qty' => $history->item_description($business_id)['qty'],
+    //             'getBookingStatus' => $history->getBookingStatus(),
+    //             'item_id' => $history->item_id,
+    //             'customer_id' => $history->customer_id,
+    //             'id' => $history->id,
+    //         ];
+    //     }
 
-        $recurringArray = [];
-        foreach ($recurring as $history) {
-            $recurringArray[] = [
-                "created_at" => date('m/d/Y', strtotime($history->created_at)),
-                'itemDescription' => $history->item_description($business_id)['itemDescription'],
-                'item_type_terms' => $history->item_type_terms(),
-                'getPmtMethod' => $history->getPmtMethod(),
-                'amount' => $history->amount,
-                'qty' => $history->item_description($business_id)['qty'],
-                'getBookingStatus' => $history->getBookingStatus(),
-                'item_id' => $history->item_id,
-                'customer_id' => $history->customer_id,
-                'id' => $history->id,
-            ];
-        }
+    //     $recurringArray = [];
+    //     foreach ($recurring as $history) {
+    //         $recurringArray[] = [
+    //             "created_at" => date('m/d/Y', strtotime($history->created_at)),
+    //             'itemDescription' => $history->item_description($business_id)['itemDescription'],
+    //             'item_type_terms' => $history->item_type_terms(),
+    //             'getPmtMethod' => $history->getPmtMethod(),
+    //             'amount' => $history->amount,
+    //             'qty' => $history->item_description($business_id)['qty'],
+    //             'getBookingStatus' => $history->getBookingStatus(),
+    //             'item_id' => $history->item_id,
+    //             'customer_id' => $history->customer_id,
+    //             'id' => $history->id,
+    //         ];
+    //     }
     
-        $mergedArray = array_merge($statusArray, $recurringArray);
+    //     $mergedArray = array_merge($statusArray, $recurringArray);
     
-        usort($mergedArray, function ($a, $b) {
-            return strtotime($b['created_at']) - strtotime($a['created_at']);
-        });
+    //     usort($mergedArray, function ($a, $b) {
+    //         return strtotime($b['created_at']) - strtotime($a['created_at']);
+    //     });
     
-        return view('business.website_integration.payment_history', compact('mergedArray', 'name', 'business','user'));
+    //     return view('business.website_integration.payment_history', compact('mergedArray', 'name', 'business','user'));
+    // }
+
+    public function paymentHistory(Request $request)
+{
+    $user = User::find($request->user);
+    $business = CompanyInformation::find($request->businessId);
+    
+    if (!$user || !$business) {
+        // Handle the case where either the user or business is not found
+        return redirect()->back()->withErrors('User or Business not found.');
     }
+
+    $customers = $user->customers()->where('business_id', $request->businessId)->first();
+    $customer_ids = $customers->id ?? null;
+    $name = $customers->full_name ?? null;
+
+    if (!$customer_ids) {
+        // Handle no customer found case early and return empty view or error
+        return view('business.website_integration.payment_history', compact('name', 'business', 'user'))->with('mergedArray', []);
+    }
+
+    // Combine the queries using a union for better performance
+    $status = Transaction::select('transaction.*')
+        ->where('item_type', 'UserBookingStatus')
+        ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+        ->join('user_booking_details as ubd', function ($join) use ($customer_ids, $request) {
+            $join->on('ubd.booking_id', '=', 'ubs.id')
+                ->where('ubd.order_type', 'Membership')
+                ->where('ubd.user_id', $customer_ids)
+                ->where('ubd.business_id', $request->businessId);
+        });
+
+    $recurring = Transaction::select('transaction.*')
+        ->where('item_type', 'Recurring')
+        ->join('recurring as re', 're.id', '=', 'transaction.item_id')
+        ->where('re.business_id', $request->businessId)
+        ->where('re.user_id', $customer_ids);
+
+    // Merge queries with union
+    $transactions = $status->union($recurring)->orderBy('created_at', 'desc')->get();
+
+    $mergedArray = $transactions->map(function ($history) use ($request) {
+        return [
+            "created_at" => $history->created_at->format('m/d/Y'),
+            'itemDescription' => $history->item_description($request->businessId)['itemDescription'],
+            'item_type_terms' => $history->item_type_terms(),
+            'getPmtMethod' => $history->getPmtMethod(),
+            'amount' => $history->amount,
+            'qty' => $history->item_description($request->businessId)['qty'],
+            'getBookingStatus' => $history->getBookingStatus(),
+            'item_id' => $history->item_id,
+            'customer_id' => $history->customer_id,
+            'id' => $history->id,
+        ];
+    })->toArray();
+
+    return view('business.website_integration.payment_history', compact('mergedArray', 'name', 'business', 'user'));
+}
+
 
     public function receipt_model_api($orderId, $customer, $isFrom = null)
     {

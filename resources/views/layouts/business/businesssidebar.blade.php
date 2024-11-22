@@ -113,7 +113,7 @@
             <ul class="navbar-nav dash-sidebar-menu navbar-nav-white" id="navbar-nav">
                 <li class="menu-title account-activation-side
                 {{ $company->side_panel_color == 1 ? 'account-activation-side-white' : '' }}
-                {{ $company->side_panel_color == 0 ? 'account-activation-side-black' : '' }}"><span data-key="t-menu"><i class="fas fa-exclamation-circle mr-15"></i>Account activation <label class="fs-8 mb-0">7 Days Left</label></span></li>
+                {{ $company->side_panel_color == 0 ? 'account-activation-side-black' : '' }}"><span data-key="t-menu"><i class="fas fa-exclamation-circle mr-15"></i>Account activation <label class="fs-8 mb-0">{{Auth::user()->chkDaysLeft()}} Days Left</label></span></li>
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName()=='business_dashboard') active @endif" href="{{route('business_dashboard')}}" aria-controls="sidebarDashboards">
@@ -177,6 +177,11 @@
 							</li> -->
                         </ul>
                     </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="https://dev.fitnessity.co/design/manage_services" aria-controls="sidebarPages">
+                        <i class="ri-user-settings-fill"></i> <span data-key="t-pages"> Services </span>
+                    </a>
                 </li>
                 @if($companyId)
                 <li class="nav-item">
