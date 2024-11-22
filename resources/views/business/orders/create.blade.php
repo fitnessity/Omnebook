@@ -1949,7 +1949,7 @@
 			$('#cartchildprice').val(childprice);
 
 			totalprice = totalpriceadult + totalpricechild + totalpriceinfant;
-			// alert(totalprice);
+			alert(totalprice);
 			// alert(totalpricechild);
 			// alert('1');
 			// alert(totalprice);
