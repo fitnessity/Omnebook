@@ -1896,6 +1896,7 @@
 		// var childprice = parseFloat($('#childprice').val()) || 0;
 		// var infantprice = parseFloat($('#infantprice').val()) || 0;
 
+		alert(aduprice);
 			var adult = '', child = '', infant = '';
 		
 			if (age >= 3 && age <= 17) {
@@ -1949,6 +1950,7 @@
 			$('#cartchildprice').val(childprice);
 
 			totalprice = totalpriceadult + totalpricechild + totalpriceinfant;
+			alert(totalpriceadult);
 			alert(totalprice);
 			// alert(totalpricechild);
 			// alert('1');
