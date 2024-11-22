@@ -1938,9 +1938,10 @@
 			$('#cartchildprice').val(childprice);
 
 			totalprice = totalpriceadult + totalpricechild + totalpriceinfant;
+			alert(totalprice);
+			alert(totalpricechild);
+			alert('1');
 			// alert(totalprice);
-			// alert(totalpricechild);
-			// alert('1');
 			$('#price_check').val(totalprice);
 			$('#p_session').val(pay_session);
 			$('#session_span').html(pay_session);
