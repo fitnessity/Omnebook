@@ -1877,14 +1877,26 @@
 		var customerId = '{{request()->cus_id}}';
 		// alert(customerId);
 		$('#qty').html('');
-		var inputVal = $('#adultprice').val();
-		var aduprice = inputVal ? parseFloat(inputVal) || 0 : 0;
-		alert(aduprice);
+		var adultinputVal = $('#adultprice').val();
+		var aduprice = $('#adultprice').val(); ? parseFloat(adultinputVal) || 0 : 0;
+
+		
+		var childinputVal = $('#childprice').val();
+		var childprice = $('#childprice').val(); ? parseFloat(childinputVal) || 0 : 0;
+	
+		var infantinputVal = $('#infantprice').val();
+		var infantprice = $('#infantprice').val(); ? parseFloat(infantinputVal) || 0 : 0;
+	
+
+		// alert(aduprice);
+		// var adultPrice = document.getElementById('adultprice').value;
+		// alert(adultPrice);
+
 		
 		var totalprice = 0, totalprice = 0, totalpriceadult =0;totalpricechild = 0; totalpriceinfant = 0;
-		var aduprice = parseFloat($('#adultprice').val()) || 0;
-		var childprice = parseFloat($('#childprice').val()) || 0;
-		var infantprice = parseFloat($('#infantprice').val()) || 0;
+		// var aduprice = parseFloat($('#adultprice').val()) || 0;
+		// var childprice = parseFloat($('#childprice').val()) || 0;
+		// var infantprice = parseFloat($('#infantprice').val()) || 0;
 
 
 			var adult = '', child = '', infant = '';
@@ -1940,9 +1952,9 @@
 			$('#cartchildprice').val(childprice);
 
 			totalprice = totalpriceadult + totalpricechild + totalpriceinfant;
-			alert(totalprice);
-			alert(totalpricechild);
-			alert('1');
+			// alert(totalprice);
+			// alert(totalpricechild);
+			// alert('1');
 			// alert(totalprice);
 			$('#price_check').val(totalprice);
 			$('#p_session').val(pay_session);
