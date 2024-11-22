@@ -2047,6 +2047,7 @@
 				}
 				if(chk == 'priceopt'){
 					var data1 = data.split('~~');
+					console.log(data1);
 					//$('#membership_opt_list').html(data1[0]);
 					$('#mp_name').html(data1[0]);
 					var part = data1[1].split('^^');
