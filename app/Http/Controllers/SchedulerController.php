@@ -409,7 +409,7 @@ class SchedulerController extends Controller
            
                if ($age >= 3 && $age <= 17) {
                    $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
-                       ->where('is_recurring_child', '1')
+                       ->where('is_recurring_child', '1')->distinct('category_id')
                        ->get();
               
                     if ($pricelist->isEmpty()) {
@@ -434,7 +434,7 @@ class SchedulerController extends Controller
 
                else if ($age <= 2) {
                    $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
-                       ->where('is_recurring_infant', '1')
+                       ->where('is_recurring_infant', '1')->distinct('category_id')
                        ->get();
                
                     if ($pricelist->isEmpty()) {
@@ -458,7 +458,7 @@ class SchedulerController extends Controller
            
              else if($age >= 18) {
                    $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
-                       ->where('is_recurring_adult', '1')
+                       ->where('is_recurring_adult', '1')->distinct('category_id')
                        ->get();
                        
 
