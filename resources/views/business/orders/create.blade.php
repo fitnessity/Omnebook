@@ -1895,8 +1895,8 @@
 		// var aduprice = parseFloat($('#adultprice').val()) || 0;
 		// var childprice = parseFloat($('#childprice').val()) || 0;
 		// var infantprice = parseFloat($('#infantprice').val()) || 0;
-		alert(age);
-		alert(aduprice);
+		// alert(age);
+		// alert(aduprice);
 			var adult = '', child = '', infant = '';
 		
 			if (age >= 3 && age <= 17) {
@@ -1921,12 +1921,12 @@
 		
 			}
 			else if(age >= 18) {
-				alert('223');
+				// alert('223');
 				 var aducnt=1;
 				 if(aduprice !== 0)
 				 {
 					totalpriceadult = aducnt * aduprice;
-					alert(totalpriceadult);
+					// alert(totalpriceadult);
 					if(aducnt != 0){
 						adult = '<span>Adults x '+aducnt+'</span><br>';
 					}
@@ -1952,8 +1952,8 @@
 			$('#cartchildprice').val(childprice);
 
 			totalprice = totalpriceadult + totalpricechild + totalpriceinfant;
-			alert(totalpriceadult);
-			alert(totalprice);
+			// alert(totalpriceadult);
+			// alert(totalprice);
 			// alert(totalpricechild);
 			// alert('1');
 			// alert(totalprice);
