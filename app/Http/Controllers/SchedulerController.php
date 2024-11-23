@@ -417,7 +417,7 @@ class SchedulerController extends Controller
                     } else 
                          {
                               $output = '<option value="">Select Category</option>';
-                              $uniqueTitles = []; // Array to store unique titles
+                              $addedTitles = [];
 
                               foreach ($pricelist as $price) {
                                    $category_id = $price->category_id;
@@ -427,9 +427,13 @@ class SchedulerController extends Controller
                                    ->get();
                          
                                    foreach ($catelist as $cl) {
-                                        if (!in_array($cl->category_title, $uniqueTitles)) {
-                                        $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
-                                        }
+                                        // if (!in_array($cl->category_title, $uniqueTitles)) {
+                                        // $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                                        // }
+                                        if (!in_array($cl->category_title, $addedTitles)) {
+                                             $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                                             $addedTitles[] = $cl->category_title;
+                                         }
                                    }
                               }
                          }
@@ -437,14 +441,15 @@ class SchedulerController extends Controller
 
                else if ($age <= 2) {
                    $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
-                       ->where('is_recurring_infant', '1')->distinct('category_id')
+                       ->where('is_recurring_infant', '1')
                        ->get();
                
                     if ($pricelist->isEmpty()) {
                          $output .= '<option value="">No price added</option>';
                     } else {
                          $output = '<option value="">Select Category</option>';
-                         $uniqueTitles = []; // Array to store unique titles
+                         $addedTitles = [];
+                         // Array to store unique titles
 
                          foreach ($pricelist as $price) {
                          $category_id = $price->category_id;
@@ -454,9 +459,13 @@ class SchedulerController extends Controller
                               ->get();
                     
                          foreach ($catelist as $cl) {
-                              if (!in_array($cl->category_title, $uniqueTitles)) {
-                              $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
-                              }
+                              // if (!in_array($cl->category_title, $uniqueTitles)) {
+                              // $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                              // }
+                              if (!in_array($cl->category_title, $addedTitles)) {
+                                   $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                                   $addedTitles[] = $cl->category_title;
+                               }
                          }
                          }
                     }
@@ -472,7 +481,7 @@ class SchedulerController extends Controller
                          $output .= '<option value="">No price added</option>';
                      } else {
                          $output = '<option value="">Select Category</option>';
-                         $uniqueTitles = []; // Array to store unique titles
+                         $addedTitles = [];
 
                          foreach ($pricelist as $price) {
                              $category_id = $price->category_id;
@@ -482,10 +491,10 @@ class SchedulerController extends Controller
                                  ->get();
                      
                              foreach ($catelist as $cl) {
-                              if (!in_array($cl->category_title, $uniqueTitles)) {
-
-                                 $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
-                              }
+                              if (!in_array($cl->category_title, $addedTitles)) {
+                                   $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                                   $addedTitles[] = $cl->category_title;
+                               }
                              }
                          }
                      }
