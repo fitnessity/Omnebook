@@ -250,22 +250,24 @@ class SchedulerController extends Controller
                     } else 
                          {
                               $output = '<option value="">Select Category</option>';
-
+                              $addedTitles = [];
                               foreach ($pricelist as $price) {
                                    $category_id = $price->category_id;
                                    $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
                                    ->where('serviceid', $request->sid)
-                                   ->where('id', $category_id)
-                                   ->get();
+                                   ->where('id', $category_id)->distinct('category_title')->get();
                          
                                    foreach ($catelist as $cl) {
-                                        $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                                        if (!in_array($cl->category_title, $addedTitles)) {
+                                             $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                                             $addedTitles[] = $cl->category_title;
+                                         }
+                                        // $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
                                    }
                               }
                          }
                }           
-
-               else if ($age <= 2) {
+               else if ($age <= 2) {    
                    $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
                        ->where('is_recurring_infant', '1')
                        ->get();
@@ -274,17 +276,23 @@ class SchedulerController extends Controller
                          $output .= '<option value="">No price added</option>';
                     } else {
                          $output = '<option value="">Select Category</option>';
+                         $addedTitles = [];
 
                          foreach ($pricelist as $price) {
                          $category_id = $price->category_id;
                          $catelist = BusinessPriceDetailsAges::select('id', 'category_title')
                               ->where('serviceid', $request->sid)
-                              ->where('id', $category_id)
+                              ->where('id', $category_id)->distinct('category_title')
                               ->get();
                     
-                         foreach ($catelist as $cl) {
-                              $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
-                         }
+                              foreach ($catelist as $cl) 
+                              {
+                                   if (!in_array($cl->category_title, $addedTitles)) {
+                                        $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                                        $addedTitles[] = $cl->category_title;
+                                    }
+                                   // $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                              }
                          }
                     }
                }
@@ -299,6 +307,7 @@ class SchedulerController extends Controller
                          $output .= '<option value="">No price added</option>';
                      } else {
                          $output = '<option value="">Select Category</option>';
+                         $addedTitles = [];
 
                          foreach ($pricelist as $price) {
                              $category_id = $price->category_id;
@@ -306,9 +315,14 @@ class SchedulerController extends Controller
                                  ->where('serviceid', $request->sid)
                                  ->where('id', $category_id)
                                  ->get();
+
                      
                              foreach ($catelist as $cl) {
-                                 $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                              if (!in_array($cl->category_title, $addedTitles)) {
+                                   $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
+                                   $addedTitles[] = $cl->category_title;
+                               }
+                              //    $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
                              }
                          }
                      }
@@ -467,7 +481,8 @@ class SchedulerController extends Controller
                $age = Carbon::parse($date)->age;
                $output .=  $age < 18 ? $username .' ('.$age .' yrs) '.$relation .' (Paid For by '.$data1[1].')': $username .' ('.$age .' yrs)';   
           }    
-       
+          // dd($output);
+
           return ($html != '' ? $output.'~~'.$html : $output);
          
      }
