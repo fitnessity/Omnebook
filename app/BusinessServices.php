@@ -261,6 +261,11 @@ class BusinessServices extends Model
         return $this->hasMany(BusinessActivityScheduler::class, 'serviceid');
     }
 
+
+    public function schedulers_trash(){
+        return $this->hasMany(BusinessActivityScheduler::class, 'serviceid')->withTrashed();
+    }  
+
     public function UserBookingDetails(){
         return $this->hasMany(UserBookingDetail::class, 'sport');
     }

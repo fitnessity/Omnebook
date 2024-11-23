@@ -127,7 +127,7 @@ class OrderController extends BusinessBaseController
         //           ->orWhereNull('end_activity_date');
         // })->get();
         $program_list = BusinessServices::where(['is_active' => 1, 'userid' => Auth::user()->id, 'cid' => $companyId])
-        ->whereHas('schedulers', function ($query) {
+        ->whereHas('schedulers_trash', function ($query) {
             $query->where('end_activity_date', '>', now())
                 ->orWhereNull('end_activity_date');
         })
