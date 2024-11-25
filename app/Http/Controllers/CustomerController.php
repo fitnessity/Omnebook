@@ -96,7 +96,26 @@ class CustomerController extends Controller {
         }
 
         
-        $customers = $customers->get();
+        // $customers = $customers->get();
+        $customers_n = $customers->get();
+        $customers_n = $customers->get();
+                
+        // new start
+        $customers = collect(); 
+        foreach ($customers_n as $customer)
+        {
+            if ($customer->parent_cus_id!=null) {
+                $parentCustomer = Customer::find($customer->parent_cus_id);
+                if ($parentCustomer) {
+                    $customers->push($customer);
+                }
+            }
+            else{
+                $customers->push($customer);
+            }
+        }        
+        // end
+
         $customerCount = count($customers);
 
         set_time_limit(8000000); 
