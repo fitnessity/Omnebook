@@ -325,9 +325,9 @@ header{ position: fixed !important; }
   display: none;
 }
 
-#coverUpload {
+/* #coverUpload {
   display: none;
-}
+} */
 .btn-red-primary{
 	display: block;
 	text-align: center;
@@ -1834,6 +1834,7 @@ header{ position: fixed !important; }
   font-size: 13px !important;
   font-weight: 500;
   margin-bottom: 0px;
+  word-wrap: anywhere;
 }
 
 .ui-menu .ui-menu-item {
@@ -9877,4 +9878,8 @@ height: 400px;
   background: none;
   border: none;
   color: #fff;
+}
+
+:is([data-layout="vertical"], [data-layout="semibox"])[data-sidebar-size="sm"] .main-content #service_wrapper #service-sidebar-wrapper {
+  margin-left: -430px;
 }
