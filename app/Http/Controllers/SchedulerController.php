@@ -239,14 +239,24 @@ class SchedulerController extends Controller
                $age = $birthdate->age;
            
                // $output = '<option value="">Select Category</option>';
-           
-               if ($age >= 3 && $age <= 17) {
-                   $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
-                       ->where('is_recurring_child', '1')
-                       ->get();
-              
+               // dd($age);
+               if ($age >= 3 && $age <= 17) {            
+               $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
+                    ->where(function ($query) {
+                         $query->orWhere('is_recurring_child', '1')
+                              ->orWhere(function ($subQuery) {
+                                   $subQuery->whereNotNull('child_cus_weekly_price')
+                                             ->where('child_cus_weekly_price', '<>', '');
+                              })
+                              ->orWhere(function ($subQuery) {
+                                   $subQuery->whereNotNull('weekend_child_estearn')
+                                             ->where('weekend_child_estearn', '<>', '');
+                              });
+                    })
+                    ->get();
+
                     if ($pricelist->isEmpty()) {
-                         $output .= '<option value="">No price added</option>';
+                         $output .= '<option value="">No Category added</option>';
                     } else 
                          {
                               $output = '<option value="">Select Category</option>';
@@ -268,12 +278,21 @@ class SchedulerController extends Controller
                          }
                }           
                else if ($age <= 2) {    
-                   $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
-                       ->where('is_recurring_infant', '1')
-                       ->get();
-               
+                    $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
+                    ->where(function ($query) {
+                         $query->orWhere('is_recurring_infant', '1')
+                              ->orWhere(function ($subQuery) {
+                                   $subQuery->whereNotNull('infant_cus_weekly_price')
+                                             ->where('infant_cus_weekly_price', '<>', '');
+                              })
+                              ->orWhere(function ($subQuery) {
+                                   $subQuery->whereNotNull('weekend_infant_estearn')
+                                             ->where('weekend_infant_estearn', '<>', '');
+                              });
+                    })
+                    ->get();
                     if ($pricelist->isEmpty()) {
-                         $output .= '<option value="">No price added</option>';
+                         $output .= '<option value="">No Category added</option>';
                     } else {
                          $output = '<option value="">Select Category</option>';
                          $addedTitles = [];
@@ -297,14 +316,26 @@ class SchedulerController extends Controller
                     }
                }
            
-             else if($age >= 18) {
-                   $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
-                       ->where('is_recurring_adult', '1')
-                       ->get();
-                       
+             else if($age >= 18) 
+              {
+          
+                    $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
+                    ->where(function ($query) {
+                         $query->orWhere('is_recurring_adult', '1')
+                              ->orWhere(function ($subQuery) {
+                                   $subQuery->whereNotNull('adult_cus_weekly_price')
+                                             ->where('adult_cus_weekly_price', '<>', '');
+                              })
+                              ->orWhere(function ($subQuery) {
+                                   $subQuery->whereNotNull('weekend_adult_estearn')
+                                             ->where('weekend_adult_estearn', '<>', '');
+                              });
+                    })
+                    ->get();
 
-                    if ($pricelist->isEmpty()) {
-                         $output .= '<option value="">No price added</option>';
+                    if ($pricelist->isEmpty())
+                     {
+                         $output .= '<option value="">No Category added</option>';
                      } else {
                          $output = '<option value="">Select Category</option>';
                          $addedTitles = [];
@@ -324,12 +355,32 @@ class SchedulerController extends Controller
                                }
                               //    $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
                              }
+                             
                          }
                      }
                }
-                      
-           }
+
            
+
+               $excludedCategoryIds  = BusinessPriceDetails::where('serviceid', $request->sid)->pluck('category_id')->toArray();
+               $catelist = BusinessPriceDetailsAges::where('serviceid', $request->sid)
+               ->whereNotIn('id', $excludedCategoryIds)->whereNull('class_type')
+               ->distinct('category_title')
+               ->get();
+               
+               if (empty($output))  
+               {
+                    $output = '<option value="">Select Category</option>';
+               }
+               foreach ($catelist as $cat) {
+                   $output .= '<option value="' . $cat->id . '">' . $cat->category_title . '</option>';
+               }
+               
+              
+                
+                      
+             }
+             
           else if($request->chk == 'category'){
                $catedata = BusinessPriceDetailsAges::where('id',$request->sid)->first();
 
@@ -339,17 +390,25 @@ class SchedulerController extends Controller
                     $pricelist = BusinessPriceDetails::where('category_id',$request->sid)->get();
                }
 
-
-               
-               $output = '<option value="">Select Price Title</option>';
-               foreach($pricelist as $pl){
-                    $output .= '<option value="'.$pl->id.'">'.$pl->price_title.'</option>';
+               if ($pricelist->isEmpty()) {
+                    $output = '<option value="">No Prices Available</option>';
+               } else {
+                    $output = '<option value="">Select Price Title</option>';
+                    foreach ($pricelist as $pl) {
+                       $output .= '<option value="' . $pl->id . '">' . $pl->price_title . '</option>';
+                   }
                }
-
+               
+               // $output = '<option value="">Select Price Title</option>';
+               // foreach($pricelist as $pl){
+               //      $output .= '<option value="'.$pl->id.'">'.$pl->price_title.'</option>';
+               // }
+               
                $addOnServices = $catedata  != '' ?  $catedata->AddOnService: [];
                $addOnData = View::make('business.orders.add_on_service')->with(['addOnServices' =>$addOnServices,'ajax'=>'','idsArray'=>[] ,'qtysArray'=>[]])->render();
                
                $html .= $catedata->dues_tax.'^^'.$catedata->sales_tax.'^!^'.$addOnData;
+               
           }else if($request->chk == 'priceopt'){
                // dd($request->all());
                $customer = Customer::where('id', $request->userid)->first();

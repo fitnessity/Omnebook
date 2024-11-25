@@ -147,7 +147,7 @@
 
                                                                                                     
                                                                                                     <div class="box-body" id="gallery1">
-                                                                                                        {{-- <div id="gallery1"> --}}
+                                                                                                        <!-- {{-- <div id="gallery1"> --}} -->
                                                                                                             @if(@$service->cover_photo)
                                                                                                                 <div class="imagediv  imgno_cover_0" >
                                                                                                                     <div class="more-option">
@@ -163,16 +163,16 @@
                                                                                                                     <img src="{{Storage::Url(@$service->cover_photo)}}" loading="lazy">
                                                                                                                 </div>
                                                                                                             @endif
-                                                                                                        {{-- </div> --}}
+                                                                                                        <!-- {{-- </div> --}} -->
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            {{-- </form>  --}}
+                                                                            <!-- {{-- </form>  --}} -->
 
-                                                                            {{-- <div class="row">
+                                                                            <!-- {{-- <div class="row">
                                                                                 <div class="col-lg-12">
                                                                                     <div class="add-photos service-price d-grid">
                                                                                         <label class="mb-25">Add Photos <p>(We require at least 5 images. 1 Cover  & at least 4 additional)</p></label>
@@ -209,14 +209,14 @@
                                                                                                         </div>
                                                                                                     @endif
                                                                                                 </div>
-                                                                                            </div>
+                                                                                            </div> -->
                                                                                             <!-- <div class="text-center mt-10">
                                                                                                 <span id="b_embedvideo" class="font-red text-center">Required Dimensions for Your Cover Photo Is 500 X 630. </span>
                                                                                             </div> -->
                                                                                         
-                                                                                            <div class="error-message mt-10 font-red text-center" id="coverImageError"></div>
+                                                                                            <!-- <div class="error-message mt-10 font-red text-center" id="coverImageError"></div>
                                                                                         </div>
-                                                                                    </div>
+                                                                                    </div> -->
                                                                                     <!--  <div class="steps-title">
                                                                                         <div class="mb-3">
                                                                                             <label for="choices-publish-status-input" class="form-label">Where were you Born? </label>
@@ -230,8 +230,8 @@
                                                                                             <div class="float-right"><span id="programDescLeft">150</span> Characters Left</div>
                                                                                         </div>
                                                                                     </div> -->
-                                                                                </div>
-                                                                            </div> --}}
+                                                                                <!-- </div>
+                                                                            </div> --}} -->
                                                                             <div class="row">
                                                                                 <div class="col-lg-12">
                                                                                     <div class="service-price d-grid mt-25">
@@ -1832,7 +1832,7 @@
 @include('layouts.business.footer')
 @include('layouts.business.scripts')
 
-<script src="https://cdn.ckeditor.com/ckeditor5/35.3.2/super-build/ckeditor.js"></script>
+<script src="{{asset('/public/dashboard-design/ckeditor/ckeditor5.js')}}"></script>
 <script>
 
     CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
@@ -3918,5 +3918,5 @@ $('.remove-preview').on('click', function() {
 @push('scripts')
     <script src="{{asset('/public/dashboard-design/js/dropzone-min.js')}}"></script>
     <script src="{{asset('/public/dashboard-design/js/ecommerce-product-create.init.js')}}"></script>
-    <script src="{{url('/public/dashboard-design/js/ckeditor/ckeditor.js')}}"></script>
+    <!-- <script src="{{url('/public/dashboard-design/js/ckeditor/ckeditor.js')}}"></script> -->
 @endpush

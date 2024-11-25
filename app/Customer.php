@@ -832,6 +832,8 @@ class Customer extends Authenticatable
            return $this->created_at >= Carbon::parse($startDate)->subMonths(3) ? 1 : 0;
         }
     }
+  
+
     
 }
    

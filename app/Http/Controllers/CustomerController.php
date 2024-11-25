@@ -41,7 +41,7 @@ class CustomerController extends Controller {
         $user = Auth::user();
         // dd($business_id);
         // \DB::enableQueryLog(); // Enable query log
-
+        // dd($request->all());
         $company = $user->businesses()->findOrFail($business_id);
         $customers = $company->customers()->orderBy('fname');
         if($request->term){
@@ -82,10 +82,39 @@ class CustomerController extends Controller {
         if($request->customer_id){
             $customers = $customers->where('id',$request->customer_id);
         }
-        $customers = $customers->get(); $customerCount = count($customers); set_time_limit(8000000); ini_set('memory_limit', '-1'); ini_set('max_execution_time', 10000);
+        $customers_n = $customers->get();
+                
+        // new start
+        $customers = collect(); 
+        foreach ($customers_n as $customer)
+        {
+            if ($customer->parent_cus_id!=null) {
+                $parentCustomer = Customer::find($customer->parent_cus_id);
+                if ($parentCustomer) {
+                    $customers->push($customer);
+                }
+            }
+            else{
+                $customers->push($customer);
+            }
+        }        
+        // end
+
+        $customerCount = count($customers); 
+        set_time_limit(8000000); ini_set('memory_limit', '-1'); ini_set('max_execution_time', 10000);
         $customerStatusCounts = $customers->mapToGroups(function ($customer) {
             return [$customer->is_active() => $customer];
         });
+        
+        // dd($relatedCustomers);
+        // $customerCount = count($customers); 
+        // set_time_limit(8000000); ini_set('memory_limit', '-1'); ini_set('max_execution_time', 10000);
+        // $customerStatusCounts = $customers->mapToGroups(function ($customer) {
+        //     return [$customer->is_active() => $customer];
+        // });
+      
+        
+        
         $validLetters = [];
         $customersCollection = '';
         if(!$request->customer_type){
@@ -152,6 +181,9 @@ class CustomerController extends Controller {
         }
         return view('customers.index', compact(['company','customerCount','currentCount','validLetters','customersCollection']));
     }
+
+
+
     public function getCustomerCounts($business_id,Request $request)
     {
         $user = Auth::user(); $company = $user->businesses()->findOrFail($business_id); $customers = $company->customers()->get();

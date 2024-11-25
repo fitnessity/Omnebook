@@ -223,39 +223,166 @@
         ins.set(insIds);
     }
 
-	$(document).ready(function () {
-        var business_id = '{{request()->current_company->id}}';
-        var url = "{{ url('/business/business_id/customers') }}";
-        url = url.replace('business_id', business_id);
+	// $(document).ready(function () {
+    //     var business_id = '{{request()->current_company->id}}';
+    //     var url = "{{ url('/business/business_id/customers') }}";
+    //     url = url.replace('business_id', business_id);
 
-        $( "#search_postorder_client" ).autocomplete({
-            source: url,
-            focus: function( event, ui ) {
-                 return false;
-            },
-            select: function( event, ui ) {
-                $("#search_postorder_client").val( ui.item.fname + ' ' +  ui.item.lname);
-                $('#search_postorder_client').data('customer-id', ui.item.id)
-                 return false;
-            }
-        }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-            let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
+    //     $( "#search_postorder_client" ).autocomplete({
+    //         source: url,
+    //         focus: function( event, ui ) {
+    //              return false;
+    //         },
+    //         select: function( event, ui ) {
+    //             $("#search_postorder_client").val( ui.item.fname + ' ' +  ui.item.lname);
+    //             $('#search_postorder_client').data('customer-id', ui.item.id)
+    //              return false;
+    //         }
+    //     }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+    //         let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">A</p></div></div>';
 
-            if(item.profile_pic_url){
-                profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
-            }
+    //         if(item.profile_pic_url){
+    //             profile_img = '<img class="searchbox-img" src="' + (item.profile_pic_url ? item.profile_pic_url : '') + '" style="">';            
+    //         }
 
-            var inner_html = '<div class="row rowclass-controller"></div><div class="row"> <div class="col-md-3 nopadding text-center">' + profile_img + '</div><div class="col-md-9 div-controller">' + 
-                      '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
-                      '<p class="pstyle liaddress">' + item.email +'</p>' + 
-                      '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
+    //         var inner_html = '<div class="row rowclass-controller"></div><div class="row"> <div class="col-md-3 nopadding text-center">' + profile_img + '</div><div class="col-md-9 div-controller">' + 
+    //                   '<p class="pstyle"><label class="liaddress">' + item.fname + ' ' +  item.lname  + (item.age ? ' (' + item.age+ '  Years Old)' : '') + '</label></p>' +
+    //                   '<p class="pstyle liaddress">' + item.email +'</p>' + 
+    //                   '<p class="pstyle liaddress">' + item.phone_number + '</p></div></div>';
            
-            return $( "<li></li>" )
-                    .data( "item.autocomplete", item )
-                    .append(inner_html)
-                    .appendTo( ul );
-        };
-    });
+    //         return $( "<li></li>" )
+    //                 .data( "item.autocomplete", item )
+    //                 .append(inner_html)
+    //                 .appendTo( ul );
+    //     };
+    // });
+
+	// $(document).ready(function () {
+	// 		var business_id = '{{ request()->current_company->id }}';
+	// 		var url = "{{ url('/business/business_id/customers') }}".replace('business_id', business_id);
+	// 		$("#search_postorder_client").autocomplete({
+	// 			source: function (request, response) {
+	// 				$.ajax({
+	// 					url: url,
+	// 					method: 'GET',
+	// 					data: {
+	// 						term: request.term 
+	// 					},
+	// 					success: function (data) {
+	// 						response($.map(data.customers, function (item) {
+	// 							return {
+	// 								label: item.fname + ' ' + item.lname,
+	// 								value: item.fname + ' ' + item.lname,
+	// 								id: item.id,
+	// 								fname: item.fname,
+	// 								lname: item.lname,
+	// 								email: item.email,
+	// 								phone_number: item.phone_number,
+	// 								age: item.age,
+	// 								profile_pic_url: item.profile_pic_url
+	// 							};
+	// 						}));
+	// 					},
+	// 					error: function () {
+	// 						response([]);
+	// 					}
+	// 				});
+	// 			},
+	// 			focus: function () {
+	// 				return false; 
+	// 			},
+	// 			select: function (event, ui) {
+	// 				$("#search_postorder_client").val(ui.item.fname + ' ' + ui.item.lname);
+	// 				$("#search_postorder_client").data('customer-id', ui.item.id);
+	// 				return false;
+	// 			}
+	// 		}).data("ui-autocomplete")._renderItem = function (ul, item) {
+	// 			let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0) + '</p></div></div>';
+	// 			if (item.profile_pic_url) {
+	// 				profile_img = '<img class="searchbox-img" src="' + item.profile_pic_url + '" style="height: 50px; width: 50px; border-radius: 50%;">';
+	// 			}
+	// 			var inner_html = `
+	// 				<div class="row">
+	// 					<div class="col-md-3 nopadding text-center">${profile_img}</div>
+	// 					<div class="col-md-9 div-controller">
+	// 						<p class="pstyle"><label class="liaddress">${item.fname} ${item.lname}${item.age ? ' (' + item.age + ' Years Old)' : ''}</label></p>
+	// 						<p class="pstyle liaddress">${item.email}</p>
+	// 						<p class="pstyle liaddress">${item.phone_number}</p>
+	// 					</div>
+	// 				</div>`;
+	// 			return $("<li></li>")
+	// 				.data("item.autocomplete", item)
+	// 				.append(inner_html)
+	// 				.appendTo(ul);
+	// 		};
+	// });
+
+	$(document).ready(function () {
+    var business_id = '{{ request()->current_company->id }}';
+    var url = "{{ url('/business/business_id/customers') }}".replace('business_id', business_id);
+    $("#search_postorder_client").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: url,
+                method: 'GET',
+                data: {
+                    term: request.term 
+                },
+                success: function (data) {
+                    response($.map(data.customers, function (item) {
+                        return {
+                            label: item.fname + ' ' + item.lname,
+                            value: item.fname + ' ' + item.lname,
+                            id: item.id,
+                            fname: item.fname,
+                            lname: item.lname,
+                            email: item.email,
+                            phone_number: item.phone_number,
+                            age: item.age,
+                            profile_pic_url: item.profile_pic_url
+                        };
+                    }));
+                },
+                error: function () {
+                    response([]);
+                }
+            });
+        },
+        focus: function () {
+            return false; 
+        },
+        select: function (event, ui) {
+            $("#search_postorder_client").val(ui.item.fname + ' ' + ui.item.lname);
+            $("#search_postorder_client").data('customer-id', ui.item.id);
+            return false;
+        }
+    }).data("ui-autocomplete")._renderItem = function (ul, item) {
+        let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0) + '</p></div></div>';
+        if (item.profile_pic_url) {
+            profile_img = '<img class="searchbox-img" src="' + item.profile_pic_url + '" style="height: 50px; width: 50px; border-radius: 50%;">';
+        }
+        
+        // Conditionally show email and phone number if not null
+        let email_html = item.email ? `<p class="pstyle liaddress">${item.email}</p>` : '';
+        let phone_html = item.phone_number ? `<p class="pstyle liaddress">${item.phone_number}</p>` : '';
+
+        var inner_html = `
+            <div class="row">
+                <div class="col-md-3 nopadding text-center">${profile_img}</div>
+                <div class="col-md-9 div-controller">
+                    <p class="pstyle"><label class="liaddress">${item.fname} ${item.lname}${item.age ? ' (' + item.age + ' Years Old)' : ''}</label></p>
+                    ${email_html}
+                    ${phone_html}
+                </div>
+            </div>`;
+        return $("<li></li>")
+            .data("item.autocomplete", item)
+            .append(inner_html)
+            .appendTo(ul);
+    };
+});
+
+
 
 	$('[data-behavior~=delete_checkin_detail]').click(function(e){
 	    e.preventDefault()

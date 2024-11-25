@@ -784,7 +784,7 @@ class OrderController extends BusinessBaseController
                 'addOnData','business_id','durationDivAjax'));
 
             $view2 = view('business.orders.participate_modal', compact('aduprice','childprice','infantprice','aduqty','childqty','infantqty','p_session','isRecurringChild','isRecurringAdult','isRecurringInfant'));
-
+        
             return $view1.'~~~'.$view2;
         }
     }
