@@ -15,10 +15,18 @@ class RedirectToWWW
      */
     public function handle($request, Closure $next)
     {
-        if (strpos($request->getHost(), 'www.') !== 0) {
-            $newUrl = 'https://www.' . $request->getHost() . $request->getRequestUri();
-            return redirect()->to($newUrl, 301);
+        $desiredHost = 'www.omnebook.com';
+
+        if ($request->getHost() !== $desiredHost) {
+            // Construct the correct URL
+            $newUrl = $request->getScheme() . '://' . $desiredHost . $request->getRequestUri();
+            return redirect()->to($newUrl, 301); // Redirect with a 301 status
         }
+
+        // if (strpos($request->getHost(), 'www.') !== 0) {
+        //     $newUrl = 'https://www.' . $request->getHost() . $request->getRequestUri();
+        //     return redirect()->to($newUrl, 301);
+        // }
 
         return $next($request);
     }
