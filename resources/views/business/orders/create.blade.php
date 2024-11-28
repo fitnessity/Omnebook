@@ -303,7 +303,7 @@
 																		<div class="set-price">
 																			<i class="fas fa-dollar-sign"></i>
 																		</div>
-																		<input type="text" class="form-control valid" name="price" id="price_check" placeholder="0.00" class="manualprice" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
+																		<input type="text" class="form-control valid" name="price" id="price_check" placeholder="0.00" class="manualprice" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))" oninput="setPriceManual()">
 																		<!-- <input type="text" class="form-control valid" id="price_check" placeholder="0.00" class="manualprice" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))"> -->
 																	</div>
 																</div>
@@ -423,7 +423,7 @@
 															<input type="hidden" name="cartaduprice" id="cartaduprice" value="" class="product-quantity"/>
 															<input type="hidden" name="cartchildprice" id="cartchildprice" value="" class="product-quantity"/>
 															<input type="hidden" name="cartinfantprice" id="cartinfantprice" value="" class="product-quantity"/>
-
+															<input type="hidden" name="price_manual" id="price_manual" value="0" class="price"/>
 															<input type="hidden" name="priceid" value="" id="priceid">
 															<input type="hidden" name="actscheduleid" value="1 Day(s)" id="actscheduleid">
 															<input type="hidden" name="sesdate" value="{{date('Y-m-d')}}" id="sesdate">
@@ -1997,6 +1997,11 @@
 
 	function loaddropdown(chk,val,id){
 		var selectedText = val.options[val.selectedIndex].innerHTML;
+		const priceManualInput = document.getElementById('price_manual');
+		priceManualInput.value = '0';
+		const price_checkInput = document.getElementById('price_check');
+		price_checkInput.value = '';
+
 		if(chk == 'program'){
 			$('#pid').val(id);
 			$('#p_name').html(selectedText);
@@ -2062,7 +2067,7 @@
 				}
 				if(chk == 'priceopt'){
 					var data1 = data.split('~~');
-					console.log(data1);
+					// console.log(data1);
 					//$('#membership_opt_list').html(data1[0]);
 					$('#mp_name').html(data1[0]);
 					var part = data1[1].split('^^');
@@ -2555,5 +2560,12 @@
 		document.getElementById('price_check').value='';
     }
 </script>
+<script>
+	function setPriceManual() {
+		const priceManualInput = document.getElementById('price_manual');
+		priceManualInput.value = '1';
+		}
+	</script>
+	
 
 @endsection
