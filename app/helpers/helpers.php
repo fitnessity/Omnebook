@@ -676,7 +676,9 @@
 
                 if ($sum != 0) {
                     $topBooked['booked'] = count($UserBookingDetails);
-                    $topBooked['name'] = $priceDetail->business_price_details_ages->category_title;
+                    // $topBooked['name'] = $priceDetail->business_price_details_ages->category_title;
+                    $topBooked['name'] = $priceDetail->business_price_details_ages->category_title??'';
+
                     $topBooked['paid'] = $sum;
                     $topBookedCategories[] = $topBooked;
                 }
