@@ -826,7 +826,11 @@ class OrderController extends BusinessBaseController
                         ->where('id', $category_id)
                         ->get();
         
+                        $catelist = $catelist->merge($catelist_data); 
+
                 }
+                $catelist = $catelist->unique('id');
+
             }           
 
             else if ($age <= 2) {
@@ -839,8 +843,11 @@ class OrderController extends BusinessBaseController
                         ->where('serviceid', $cart['code'])
                         ->where('id', $category_id)
                         ->get();
-        
+                        $catelist = $catelist->merge($catelist_data); 
+
                 }
+                $catelist = $catelist->unique('id');
+
             }
         
           else if($age >= 18) {
@@ -857,11 +864,24 @@ class OrderController extends BusinessBaseController
                         // dd($catelist_data);
                         $catelist = $catelist->merge($catelist_data); 
                     }
+                    $catelist = $catelist->unique('id');
+
             }
+
+
+            $excludedCategoryIds  = BusinessPriceDetails::where('serviceid', $cart['code'])->whereNull('type_price')
+            ->pluck('category_id')->toArray();
+            $catelist_n = BusinessPriceDetailsAges::where('serviceid', $cart['code'])
+            ->whereNotIn('id', $excludedCategoryIds)->whereNull('class_type')
+            ->distinct('category_title')
+            ->get();
+
+            $catelist = $catelist->merge($catelist_n);
             // end
+            
     
             // $catelist = BusinessPriceDetailsAges::select('id','category_title')->where('serviceid',$cart['code'])->get(); 
-            $pricelist = BusinessPriceDetails::select('id','price_title')->where('category_id',@$cart['categoryid'])->get();
+            $pricelist = BusinessPriceDetails::select('id','price_title')->where('category_id',@$cart['categoryid'])->whereNull('type_price')->get();
             $membershiplist = BusinessPriceDetails::select('id','membership_type')->where('id',$cart['priceid'])->get();
             $company = $request->current_company;
             $aduqty = $infantqty = $childqty = 0;
