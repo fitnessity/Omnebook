@@ -67,8 +67,10 @@ class OrderController extends BusinessBaseController
     
         $intent = $customer = null;
         if($request->book_id){
-            var_dump('no this cases');
-            exit();
+            // var_dump('no this cases');
+            // exit();
+            return redirect()->back();
+
         }else if($request->cus_id != ''){
             $user_type = 'customer';
             $customer = $customerdata = $request->current_company->customers->find($request->cus_id);
@@ -128,8 +130,8 @@ class OrderController extends BusinessBaseController
         // })->get();
         $program_list = BusinessServices::where(['is_active' => 1, 'userid' => Auth::user()->id, 'cid' => $companyId])
         ->whereHas('schedulers_trash', function ($query) {
-            $query->where('end_activity_date', '>', now())
-                ->orWhereNull('end_activity_date');
+            // $query->where('end_activity_date', '>', now())
+            //     ->orWhereNull('end_activity_date');
         })
         ->whereHas('priceDetailsAges', function ($query) {
             $query->where('stype', 1);
@@ -216,7 +218,8 @@ class OrderController extends BusinessBaseController
                 'status' =>'complete',
                 'refund_amount' => 0,
             ];
-        }else{
+        }
+        else{
             if($isCardOnFile){
                 $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
                 $onFileTotal = $request->cc_amt;
@@ -364,6 +367,24 @@ class OrderController extends BusinessBaseController
             /*$contractDate = $now->format('Y-m-d');
             $now->modify('+'. $item['actscheduleid']);
             $expired_at = $now;*/
+            $BusinessPriceDetailsId = null; // Initialize the variable to null
+
+            if($item['price_manual']==1){
+                $BusinessPriceDetails = BusinessPriceDetails::create([
+                    'business_service_id'=> $item['code'],
+                    'userid'=>$user->id,
+                    'cid'=>$company->id,
+                    'serviceid'=> $item['code'],
+                    'category_id'=>$item['categoryid'] ?? 0,
+                    'manual_price'=>$item['totalprice'],
+                    'type_price'=>'manual',
+                    'pay_session'=>$item['p_session'],
+                    "fitnessity_fee"=> $user->fitnessity_fee,
+                    "visibility_to_public"=>'0',                
+                ]);
+                $BusinessPriceDetailsId = $BusinessPriceDetails->id;
+
+            }
             $date = new DateTime($item['sesdate']);
             $contractDate = $date->format('Y-m-d');
             if(@$item['orderType'] == 'Membership'){
@@ -379,19 +400,38 @@ class OrderController extends BusinessBaseController
             }
             $price_detail = $checkoutRegisterCartService->getPriceDetail($item['priceid']);
             // dd($price_detail);
+            $price = json_decode(json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['price'] ?? []), true);            
+            if (($price['adult'] ?? 0) == 0 && ($price['child'] ?? 0) == 0 && ($price['infant'] ?? 0) == 0) {
+                // $fprice = json_encode(['custom' => '1']);
+                $fprice = json_encode(['custom' => $item['totalprice']]);
+            } else {
+                $fprice = json_encode($price);
+            }
+
+            $qty = json_decode(json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['qty'] ?? []), true);
+            if (($qty['adult'] ?? 0) == 0 && ($qty['child'] ?? 0) == 0 && ($qty['infant'] ?? 0) == 0) {
+                $qty['custom'] = "1";
+            }
+            $finalQty = json_encode($qty);
             $booking_detail = UserBookingDetail::create([                 
                 'booking_id' => $userBookingStatus->id,
                 'sport' => $item['code'],
                 'business_id'=> Auth::user()->cid,
-                'price' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['price']),
-                'qty' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['qty']),
-                'priceid' => $item['priceid'],
+                // 'price' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['price']),
+                // 'qty' => json_encode($checkoutRegisterCartService->getQtyPriceByItem($item)['qty']),
+                // 'priceid' => $item['priceid'],
+                'price'=>$fprice,
+                'qty'=>$finalQty,
+                'priceid' => $BusinessPriceDetailsId ?? $item['priceid'], 
+
                 'category_id' => $item['categoryid'] ?? 0,
                 'pay_session' => $item['p_session'] ?? @$price_detail->pay_session,
                 'expired_at' => @$item['orderType'] == 'Membership'  ? $expired_at : NULL,
                 'contract_date' => @$item['orderType'] == 'Membership' ? $contractDate : NULL,
                 'expired_duration' => @$item['orderType'] == 'Membership' ? $item['actscheduleid'] : NULL,
-                'subtotal' => $checkoutRegisterCartService->getSubTotalByItem($item, $user),
+                // 'subtotal' => $checkoutRegisterCartService->getSubTotalByItem($item, $user),
+                'subtotal' => ($checkoutRegisterCartService->getSubTotalByItem($item, $user) + ($item['price_manual'] == 1 ? $item['totalprice'] : 0)) ?? 0,
+
                 'fitnessity_fee' => $checkoutRegisterCartService->getRecurringFeeByItem($item, $user),
                 'membershipTotalPrices' => $checkoutRegisterCartService->getMembershipTotalItem($item),
                 'membershipTotalTax' => $item['tax_activity'],
@@ -419,7 +459,10 @@ class OrderController extends BusinessBaseController
 
             $bookidarray [] = $booking_detail->id;
 
-            $qty_c = $checkoutRegisterCartService->getQtyPriceByItem($item)['qty'];
+            // $qty_c = $checkoutRegisterCartService->getQtyPriceByItem($item)['qty'];
+            $qty_c = $checkoutRegisterCartService->getQtyPriceByItem($item)['qty'] ?? null; //added new
+            if ($qty_c && array_sum($qty_c) > 0) { //added new
+           
             foreach($qty_c as $key=> $qty){
                 $re_i = 0;
                 $date = new Carbon;
@@ -546,7 +589,7 @@ class OrderController extends BusinessBaseController
                     }
                 }
             }
-
+        }
             if(@$item['orderType'] == 'Membership'){
                 $checkInDetail = BookingCheckinDetails::where(['customer_id'=>$cUid,'booking_detail_id' => NULL])->first();
                 if($checkInDetail){

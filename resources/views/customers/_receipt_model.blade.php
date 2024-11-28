@@ -2,6 +2,8 @@
 
 @php
     use App\UserBookingDetail;
+    use Carbon\Carbon;
+
     $totalTax  = $totDis = $totTip = $grandTotal=0;
     $idArry = ''; 
 @endphp
@@ -27,7 +29,9 @@
             <div class="powered-img">
                 <label>Powered By</label>
                 <div class="booking-modal-logo">
-                    <img src="{{url('/public/images/fitnessity_logo1.png')}}">
+                    {{-- <img src="{{url('/public/images/fitnessity_logo1.png')}}"> --}}
+                    <img src="{{url('/public/dashboard-design/images/powered-by-OMNEBOOK-white1.png')}}">
+
                 </div>
             </div>
         </div>
@@ -84,7 +88,8 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $orderDetail->business_price_detail_with_trashed ? $orderDetail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title : 'N/A'}}</span>
+                            {{-- <span>{{ $orderDetail->business_price_detail_with_trashed ? $orderDetail->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title : 'N/A'}}</span> --}}
+                            <span>{{@$orderDetail->businessPriceDetailsAgesTrashed->category_title ?? 'N/A'}} </span>
                         </div>
                     </div>
                     
@@ -128,7 +133,8 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $orderDetail->getparticipate() ?? N/A}}</span>
+                            {{-- <span>{{ $orderDetail->getparticipate() ?? N/A}}</span> --}}
+                            <span>{!! $orderDetail->getparticipate() ?? N/A !!}</span>
                         </div>
                     </div>
                     
@@ -139,7 +145,15 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ ($orderDetail->order_type == 'Membership') ? $orderDetail->decodeparticipate() : 'N/A' }} </span>
+                            {{-- <span>{{ ($orderDetail->order_type == 'Membership') ? $orderDetail->decodeparticipate() : 'N/A' }} </span> --}}
+                            <span>{!! ($orderDetail->order_type == 'Membership') ? $orderDetail->decodeparticipate() : 'N/A' !!} </span>
+                            @php
+                             $user = App\Customer::where('id',$orderDetail->user_id)->first();
+                             $name = @$user->fname.' '.@$user->lname .' ( age '. Carbon::parse(@$user->birthdate)->age .' ) ' ;                                 
+                            @endphp
+                            @if(empty($orderDetail->decodeparticipate()))
+                            <span>{{$name}}</span>
+                            @endif                        
                         </div>
                     </div>
                     
