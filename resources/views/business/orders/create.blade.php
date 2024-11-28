@@ -304,7 +304,7 @@
 																		<div class="set-price">
 																			<i class="fas fa-dollar-sign"></i>
 																		</div>
-																		<input type="text" class="form-control valid" name="price" id="price_check" placeholder="0.00" class="manualprice" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))">
+																		<input type="text" class="form-control valid" name="price" id="price_check" placeholder="0.00" class="manualprice" onkeypress="return ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57 ))"         oninput="setPriceManual()">
 																	</div>
 																</div>
 																<div class="col-lg-3 col-md-2 col-sm-3 col-xs-12">
@@ -423,7 +423,7 @@
 															<input type="hidden" name="cartaduprice" id="cartaduprice" value="" class="product-quantity"/>
 															<input type="hidden" name="cartchildprice" id="cartchildprice" value="" class="product-quantity"/>
 															<input type="hidden" name="cartinfantprice" id="cartinfantprice" value="" class="product-quantity"/>
-
+															<input type="hidden" name="price_manual" id="price_manual" value="0" class="price"/>
 															<input type="hidden" name="priceid" value="" id="priceid">
 															<input type="hidden" name="actscheduleid" value="1 Day(s)" id="actscheduleid">
 															<input type="hidden" name="sesdate" value="{{date('Y-m-d')}}" id="sesdate">
@@ -568,7 +568,8 @@
 																	</div>
 																</div>
 															</div>
-															<button type="submit" class="btn btn-red btn-search-checkout mb-00" id="addToOrder" disabled>Add To Order </button>
+															{{-- <button type="submit" class="btn btn-red btn-search-checkout mb-00" id="addToOrder" disabled>Add To Order </button> --}}
+															<button type="submit" class="btn btn-red btn-search-checkout mb-00" id="addToOrder">Add To Order </button>
 														</form>
 													</div>
 													
@@ -632,7 +633,15 @@
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<span>{{@$act->program_name ?? 'N/A'}} </span>
 																					</div>
-																					
+																					{{-- new start --}}
+																					{{-- <div class="col-md-6 col-sm-6 col-xs-6 col-6">
+																						<label>Price Added: </label>
+																					</div>
+																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
+																						<span>{{@$act->price_manual ?? 'N/A'}} </span>
+																					</div> --}}
+
+																					{{-- end --}}
 																					<div class="col-md-6 col-sm-6 col-xs-6 col-6">
 																						<label>Catagory: </label>
 																					</div>
@@ -1988,6 +1997,13 @@
 		// alert(val);
 		// alert(id);
 		var selectedText = val.options[val.selectedIndex].innerHTML;
+		const priceManualInput = document.getElementById('price_manual');
+		priceManualInput.value = '0';
+		const price_checkInput = document.getElementById('price_check');
+		price_checkInput.value = '';
+
+		// alert(price_checkInput);
+		// price_check
 		if(chk == 'program'){
 			$('#pid').val(id);
 			$('#p_name').html(selectedText);
@@ -2542,6 +2558,11 @@
 		document.getElementById('price_check').value='';
     }
 </script>
-
+<script>
+function setPriceManual() {
+    const priceManualInput = document.getElementById('price_manual');
+    priceManualInput.value = '1';
+	}
+</script>
 
 @endsection

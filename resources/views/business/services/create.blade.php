@@ -1278,7 +1278,7 @@
                                         <div class="p-3 bg-light rounded">
                                             <div class="row g-2">
                                                 <div class="col-lg-auto">
-                                                    <select class="form-control" data-choices data-choices-search-false name="choices-select-status" id="categoryList" onchange="serchCategory(this.value,'category');">
+                                                    <select class="form-select" data-choices data-choices-search-false name="choices-select-status" id="categoryList" onchange="serchCategory(this.value,'category');">
                                                         <option value="">Search by Category Name</option>
                                                         @if(!empty($categoryData))
                                                             @foreach($categoryData as $i=>$category)
@@ -1288,7 +1288,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-auto">
-                                                    <select class="form-control" data-choices data-choices-search-false name="choices-select-status" id="priceList" onchange="serchCategory(this.value,'price');">
+                                                    <select class="form-select" data-choices data-choices-search-false name="choices-select-status" id="priceList" onchange="serchCategory(this.value,'price');">
                                                         <option value="">Search by Price Option</option>
                                                         @if(!empty($categoryData))
                                                             @foreach($categoryData as $i=>$category)
@@ -1590,7 +1590,7 @@
                                                                                                 <label class="mr-5 ml-5"> | </label>
                                                                                                 <div class="userblock0">
                                                                                                     <div class="login_links" onclick="openNavv('{{$class->id}}')">
-                                                                                                        <a href="#" >+ Attach Prices </a>
+                                                                                                        <a href="javascript:void(0)" >+ Attach Prices </a>
                                                                                                     </div>
                                                                                                     <nav class="serviceclass">
                                                                                                         <div class="navbar-wrapper">

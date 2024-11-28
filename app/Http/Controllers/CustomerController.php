@@ -935,6 +935,7 @@ class CustomerController extends Controller {
             $bookingArray = UserBookingDetail::where('id',$orderId)->pluck('id')->toArray();
             $transactionType = 'Membership';
         }
+        // dd('33');
         return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $oid ,'type' =>$transactionType]);
     }
     public function getMoreRecords(Request $request)

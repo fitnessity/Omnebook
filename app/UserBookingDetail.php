@@ -215,12 +215,29 @@ class UserBookingDetail extends Model
         $price = json_decode($this->price);
         $qty = json_decode($this->qty);
 
-        foreach(['adult', 'child', 'infant'] as $key){
+        foreach(['adult', 'child', 'infant','custom'] as $key){
             $total += (@$price->$key * @$qty->$key);
         }
 
         return $total;
     }
+
+    // public function total()
+    // {
+    //     $total = 0.0;
+    //     $price = json_decode($this->price);
+    //     $qty = json_decode($this->qty);
+
+    //     foreach (['custom', 'child', 'infant', 'adult'] as $key) {
+    //         // Use isset() to handle missing properties
+    //         $priceValue = isset($price->$key) ? $price->$key : 0;
+    //         $qtyValue = isset($qty->$key) ? $qty->$key : 0;
+
+    //         $total += $priceValue * $qtyValue;
+    //     }
+
+    //     return $total;
+    // }
 
     public function platform_total(){
         $fitnessity_fee = BusinessSubscriptionPlan::where('id',1)->first()->fitnessity_fee;

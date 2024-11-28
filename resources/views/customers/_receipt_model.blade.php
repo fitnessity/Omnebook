@@ -249,7 +249,9 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
+                            {{-- <span>{{ json_decode($orderDetail->price)->custom ?? 'N/A' }}</span> --}}
                             <span>${{$orderDetail->total() + $orderDetail->productTotalPrices + $orderDetail->addOnservice_total}}</span>
+                        
                         </div>
                     </div>
                     @if (!$loop->last)

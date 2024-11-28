@@ -237,8 +237,8 @@ class SchedulerController extends Controller
                $customer = Customer::where('id', $request->userid)->first();
                $birthdate = Carbon::parse($customer->birthdate);
                $age = $birthdate->age;
-           
-               // $output = '<option value="">Select Category</option>';
+               // \DB::enableQueryLog(); // Enable query log
+               // // $output = '<option value="">Select Category</option>';
                // dd($age);
                if ($age >= 3 && $age <= 17) {            
                $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
@@ -255,10 +255,10 @@ class SchedulerController extends Controller
                     })
                     ->get();
 
-                    if ($pricelist->isEmpty()) {
-                         $output .= '<option value="">No Category added</option>';
-                    } else 
-                         {
+                    if (!$pricelist->isEmpty()) {
+                    //      $output .= '<option value="">No Category added</option>';
+                    // } else 
+                    //      {
                               $output = '<option value="">Select Category</option>';
                               $addedTitles = [];
                               foreach ($pricelist as $price) {
@@ -276,6 +276,9 @@ class SchedulerController extends Controller
                                    }
                               }
                          }
+                         else{
+                              $output = '<option value="">No Category added</option>';
+                          }
                }           
                else if ($age <= 2) {    
                     $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
@@ -291,9 +294,9 @@ class SchedulerController extends Controller
                               });
                     })
                     ->get();
-                    if ($pricelist->isEmpty()) {
-                         $output .= '<option value="">No Category added</option>';
-                    } else {
+                    if (!$pricelist->isEmpty()) {
+                    //      $output .= '<option value="">No Category added</option>';
+                    // } else {
                          $output = '<option value="">Select Category</option>';
                          $addedTitles = [];
 
@@ -314,6 +317,9 @@ class SchedulerController extends Controller
                               }
                          }
                     }
+                    else{
+                         $output = '<option value="">No Category added</option>';
+                     }
                }
            
              else if($age >= 18) 
@@ -333,10 +339,10 @@ class SchedulerController extends Controller
                     })
                     ->get();
 
-                    if ($pricelist->isEmpty())
+                    if (!$pricelist->isEmpty())
                      {
-                         $output .= '<option value="">No Category added</option>';
-                     } else {
+                    //      $output .= '<option value="">No Category added</option>';
+                    //  } else {
                          $output = '<option value="">Select Category</option>';
                          $addedTitles = [];
 
@@ -358,11 +364,16 @@ class SchedulerController extends Controller
                              
                          }
                      }
+                     else{
+                         $output = '<option value="">No Category added</option>';
+                     }
                }
 
            
-
-               $excludedCategoryIds  = BusinessPriceDetails::where('serviceid', $request->sid)->pluck('category_id')->toArray();
+               // \DB::enableQueryLog(); // Enable query log
+             
+               $excludedCategoryIds  = BusinessPriceDetails::where('serviceid', $request->sid)->whereNull('type_price')
+               ->pluck('category_id')->toArray();
                $catelist = BusinessPriceDetailsAges::where('serviceid', $request->sid)
                ->whereNotIn('id', $excludedCategoryIds)->whereNull('class_type')
                ->distinct('category_title')
@@ -376,8 +387,9 @@ class SchedulerController extends Controller
                    $output .= '<option value="' . $cat->id . '">' . $cat->category_title . '</option>';
                }
                
+               // dd(\DB::getQueryLog()); // Show results of log
               
-                
+               //  dd($excludedCategoryIds);
                       
              }
              
@@ -387,11 +399,11 @@ class SchedulerController extends Controller
                if($catedata->class_type){
                     $pricelist = $catedata->bPriceDetails()->get(); 
                }else{
-                    $pricelist = BusinessPriceDetails::where('category_id',$request->sid)->get();
+                    $pricelist = BusinessPriceDetails::where('category_id',$request->sid)->whereNull('type_price')->get();
                }
 
                if ($pricelist->isEmpty()) {
-                    $output = '<option value="">No Prices Available</option>';
+                    $output = '<option value="no_price">No Prices Available</option>';
                } else {
                     $output = '<option value="">Select Price Title</option>';
                     foreach ($pricelist as $pl) {

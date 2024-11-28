@@ -6672,7 +6672,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .service-back-box{
   background-color: #fff;
   margin-bottom: 20px;
-  padding: 10px;
+  /* padding: 10px; */
   border-radius: 5px;
 }
 .bg-cover
@@ -9882,4 +9882,12 @@ height: 400px;
 
 :is([data-layout="vertical"], [data-layout="semibox"])[data-sidebar-size="sm"] .main-content #service_wrapper #service-sidebar-wrapper {
   margin-left: -430px;
+}
+.price-options-aci{
+  font-size: 14px;
+  color: #000;
+}
+.price-options-aci p{
+  font-size: 13px;
+  color: #000;
 }
