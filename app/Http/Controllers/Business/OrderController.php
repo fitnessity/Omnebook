@@ -380,6 +380,7 @@ class OrderController extends BusinessBaseController
                     'type_price'=>'manual',
                     'pay_session'=>$item['p_session'],
                     "fitnessity_fee"=> $user->fitnessity_fee,
+                    
                 ]);
                 $BusinessPriceDetailsId = $BusinessPriceDetails->id;
 
