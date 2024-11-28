@@ -23,6 +23,7 @@ class CheckoutRegisterCartService
     {
         // var_dump($this->items());
         $taxTotal = 0; 
+        $pretaxTotal=0;
         foreach($this->items() as $item){
             $addOnServiceTotal = $item['addOnServicesTotalPrice'] ?? 0;
             $productTotal = $item['productTotalPrices'] ?? 0;
