@@ -353,8 +353,17 @@ class PaymentController extends Controller {
             }else{
                 $newCardPaymentMethodId = $request->new_card_payment_method_id;
                 try {
-                    $newCardPaymentIntent = $stripe->paymentIntents->create([
-                        'amount' =>  round($totalprice *100),
+                    // $newCardPaymentIntent = $stripe->paymentIntents->create([
+                    //     'amount' =>  round($totalprice *100),
+                    //     'currency' => 'usd',
+                    //     'customer' => $stripe_customer_id,
+                    //     'payment_method' => $newCardPaymentMethodId,
+                    //     'off_session' => true,
+                    //     'confirm' => true,
+                    //     'metadata' => [],
+                    // ]);
+                    $newCardPaymentMethodId = $stripe->charges->create([
+                        'amount' => round($totalprice * 100),  // Amount in cents
                         'currency' => 'usd',
                         'customer' => $stripe_customer_id,
                         'payment_method' => $newCardPaymentMethodId,
