@@ -410,30 +410,70 @@
         return $cardPriceOption;
     }
 
+    // function getGroupByCategoty($cdt)
+    // {
+    //     $cardCategoty = [];
+    //     if(!empty($cdt)){
+    //         foreach ($cdt as $key => $data){
+    //             if($data->item_type == 'UserBookingStatus'){
+    //                 $bDetails = $data->UserBookingStatus->UserBookingDetail;
+    //                 foreach ($bDetails as $key => $dt) 
+    //                 {
+    //                     $name = $dt->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
+    //                     $cardCategoty[$name][] = $data;
+    //                 }
+    //             }else{
+    //                 $bDetails = $data->Recurring->UserBookingDetail;
+    //                 if($bDetails != ''){
+    //                     $name = $bDetails->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
+    //                     $cardCategoty[$name][] = $data;
+    //                 }
+    //             }
+                
+    //         }
+    //     }
+
+    //     return $cardCategoty;
+    // }
+
     function getGroupByCategoty($cdt)
-    {
-        $cardCategoty = [];
-        if(!empty($cdt)){
-            foreach ($cdt as $key => $data){
-                if($data->item_type == 'UserBookingStatus'){
-                    $bDetails = $data->UserBookingStatus->UserBookingDetail;
-                    foreach ($bDetails as $key => $dt) 
-                    {
+{
+    $cardCategoty = [];
+    if (!empty($cdt)) {
+        foreach ($cdt as $key => $data) {
+            if ($data->item_type == 'UserBookingStatus') {
+                $bDetails = $data->UserBookingStatus->UserBookingDetail;
+                foreach ($bDetails as $key => $dt) {
+                    if ($dt->business_price_detail_with_trashed &&
+                        $dt->business_price_detail_with_trashed->business_price_details_ages_with_trashed) {
                         $name = $dt->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
-                        $cardCategoty[$name][] = $data;
-                    }
-                }else{
-                    $bDetails = $data->Recurring->UserBookingDetail;
-                    if($bDetails != ''){
-                        $name = $bDetails->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
+
+                        if (empty($name)) {
+                            $name = ''; 
+                        }
+
                         $cardCategoty[$name][] = $data;
                     }
                 }
+            } else {
+                // Check if 'Recurring' and 'UserBookingDetail' exist
+                $bDetails = $data->Recurring->UserBookingDetail;
+                if ($bDetails && $bDetails->business_price_detail_with_trashed && 
+                    $bDetails->business_price_detail_with_trashed->business_price_details_ages_with_trashed) {
+                    $name = $bDetails->business_price_detail_with_trashed->business_price_details_ages_with_trashed->category_title;
+
+                    if (empty($name)) {
+                        $name = ''; 
+                    }
+
+                    $cardCategoty[$name][] = $data;
+                }
             }
         }
-
-        return $cardCategoty;
     }
+
+    return $cardCategoty;
+}
 
     function getNotificationDashboard($type = null){
         $notifications = Notification::orderby('id','desc')->whereDate('display_date', '=', now())
