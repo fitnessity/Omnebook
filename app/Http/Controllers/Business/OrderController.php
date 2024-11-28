@@ -513,7 +513,9 @@ class OrderController extends BusinessBaseController
                 'expired_at' => @$item['orderType'] == 'Membership'  ? $expired_at : NULL,
                 'contract_date' => @$item['orderType'] == 'Membership' ? $contractDate : NULL,
                 'expired_duration' => @$item['orderType'] == 'Membership' ? $item['actscheduleid'] : NULL,
-                'subtotal' => ($checkoutRegisterCartService->getSubTotalByItem($item, $user) + $item['totalprice']) ?? 0,               
+                // 'subtotal' => ($checkoutRegisterCartService->getSubTotalByItem($item, $user) + $item['totalprice']) ?? 0,      
+                'subtotal' => ($checkoutRegisterCartService->getSubTotalByItem($item, $user) + ($item['price_manual'] == 1 ? $item['totalprice'] : 0)) ?? 0,
+         
                 'fitnessity_fee' => $checkoutRegisterCartService->getRecurringFeeByItem($item, $user),
                 'membershipTotalPrices' => $checkoutRegisterCartService->getMembershipTotalItem($item),
                 'membershipTotalTax' => $item['tax_activity'],
