@@ -37,13 +37,12 @@ class PaymentController extends Controller {
         $userid=Customer::where('user_id',$loggedinUser->id)->first();
 
         if($request->grand_total == 0){
+            // dd('7');
             $orderdata = array(
                 'user_id' => $loggedinUser->id, 'status' => 'active', 'currency_code' => 'usd', 'amount' => $request->grand_total,
                 'order_type' => 'simpleorder', 'bookedtime' => Carbon::now()->format('Y-m-d'),
             );
-            // \DB::enableQueryLog(); // Enable query log
-            // $userid=Customer::where('user_id',$loggedinUser->id)->first();
-            // dd($userid);
+
             $userBookingStatus = UserBookingStatus::create($orderdata);
 
             $transactiondata = array( 
@@ -257,6 +256,7 @@ class PaymentController extends Controller {
             session()->put('cart_item', $updatedCartitems);
             return view('jobpost.confirm-payment-instant');
         }else{
+            // dd('6');
             \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
             $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
             if($loggedinUser->stripe_customer_id != '') {
@@ -280,6 +280,25 @@ class PaymentController extends Controller {
                         'confirm' => true,
                         'metadata' => [],
                     ]);
+
+                    // $paymentMethod = $stripe->paymentMethods->retrieve($onFilePaymentMethodId);
+                    // if ($paymentMethod->customer !== $stripe_customer_id) {
+                    //     $stripe->paymentMethods->attach($onFilePaymentMethodId, [
+                    //         'customer' => $stripe_customer_id,
+                    //     ]);
+                    // }
+            
+                    // $onFilePaymentIntent = $stripe->charges->create([
+                    //     'amount' => round($totalprice * 100), 
+                    //     'currency' => 'usd',
+                    //     'customer' => $stripe_customer_id,
+                    //     'source' => $onFilePaymentMethodId,  
+                    //     'metadata' => [
+                    //         'order_id' => $orderId ?? 'N/A', 
+                    //     ],
+                    // ]);
+    
+
 
                     // $onFilePaymentIntent = $stripe->charges->create([
                     //     'amount' => round($totalprice * 100),
@@ -644,7 +663,7 @@ class PaymentController extends Controller {
             "logo"=> @$cartService->getCompany($businessServices->cid)->logo,
             "BookedPerson"=> Auth::user()->full_name,
             "ParticipantsName"=> @$cartService->getParticipateByComa( json_encode($participateAry)),
-            "Age"=> @$cartService->getParticipateAge( json_encode($participateAry)),
+            "Age"=> @$cartService->getParticipateAge(json_encode($participateAry)),
             "date"=> Carbon::parse($item['sesdate'])->format('m/d/Y'),
             "time"=> $activityScheduler->activity_time(),
             "duration"=> $activityScheduler->get_clean_duration(),

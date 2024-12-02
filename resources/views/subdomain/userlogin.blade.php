@@ -231,7 +231,8 @@
         <script>
             var companyInfo = @json($companyinfo->id);
             var code = {{$code->id ?? 'null'}};
-        
+            var csrfToken = '{{ csrf_token() }}'; 
+
             $('#myForm').submit(function(event) {
                 event.preventDefault();
                 var form = document.getElementById('myForm');
@@ -241,6 +242,10 @@
                 $.ajax({
                     url: '/sub_auth_user',
                     method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken 
+                    },
+
                     data: formData,
                     processData: false,
                     contentType: false,

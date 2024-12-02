@@ -2647,9 +2647,7 @@ class WebsiteIntegrationConroller extends Controller
     public function customerProfileUpdate(Request $request) {
         // dd('77');
         // dd($request->all());
-        // $user = Customer::find($request->id);
-        $user=Customer::where('id','380')->first();
-
+        $user = Customer::find($request->id);
         if (!$user) {
             return response()->json([
                 'status' => 'error',
@@ -3397,6 +3395,8 @@ class WebsiteIntegrationConroller extends Controller
             "BusinessName"=> @$cartService->getCompany($businessServices->cid)->dba_business_name,
             "BookedPerson"=> $user->full_name,
             "ParticipantsName"=> @$cartService->getParticipateByComa( json_encode($participateAry)),
+            "logo"=> @$cartService->getCompany($businessServices->cid)->logo,
+            "Age"=> @$cartService->getParticipateAge(json_encode($participateAry)),
             "date"=> Carbon::parse($item['sesdate'])->format('m/d/Y'),
             "time"=> $activityScheduler->activity_time(),
             "duration"=> $activityScheduler->get_clean_duration(),

@@ -308,7 +308,120 @@ class SubDomainController extends Controller
 
         return view('subdomain.dashboard',compact('customer','name','notesCnt','activeMembershipCnt','docCnt','docCntNew','announcemetCnt','attendanceCnt','announcemetCntNew','bookingCnt','bookingPct','classes','attendancePct','business','notesCntNew','activeMembershipCntNew'));
     }
+    public function membership(Request $request)
+    {
+        
+        $companyinfo = $request->input('companyinfo');
+        $users = $request->input('user');
+        $companyId = $companyinfo['id'];
+        $user_Id=$companyinfo['user_id'];
+        $customer =Customer::where('business_id',$companyId)->where('user_id',$user_Id)->first();
+        $business = CompanyInformation::where('id',$companyId)->first();
+        $customerId=$customer->id;
+        // dd($customer);
+        $services = $business->business_services()->where('is_active' ,1)->whereHas('schedulers', function ($query) {
+            $query->where('end_activity_date', '>', now())->orWhereNull('end_activity_date');
+        })->get();
+        $services = $business->business_services()
+        ->where('is_active', 1)
+        ->whereHas('schedulers', function ($query) {
+            $query->where('end_activity_date', '>', now())->orWhereNull('end_activity_date');
+        })
+        ->whereHas('priceDetailsAges', function ($query) {
+            $query->where('stype', 1)->orWhere('serviceid', 0);
+        })
+        ->get();
+        return view('subdomain.membership', compact('companyId', 'services', 'customerId','users'))->render();
+        // return view('business.website_integration', compact('companyId','services','customerId'));
 
+    }
+
+    public function act_detail_filter_for_cart(Request $request){
+        // dd($request->all());
+    	$schedule = $priceId  = $priceOption = '';
+    	$activityDate = $request->actdate;
+        $serviceId = $request->serviceid;
+        $companyId = $request->companyid;
+        $categoryId = $request->categoryId;
+        $priceId = $request->priceId;
+        $scheduleId = $request->scheduleId;
+        $businessService = BusinessService::where('cid' ,$companyId)->first();
+        $chkFound = strpos(@$businessService->special_days_off , date('m/d/Y',strtotime($activityDate))) !== false ?  "Found" : "Not" ;
+        $service = BusinessServices::where('id' ,$serviceId)->first();
+        // dd($service);
+        if($activityDate != ''){
+        	$schedule = BusinessActivityScheduler::where('serviceid',$serviceId)->where('cid',$companyId)->where('starting','<=',date('Y-m-d',strtotime($activityDate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($activityDate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($activityDate)).'",activity_days)');
+	    }
+        // dd($schedule);
+	    $schedulers = $schedule != '' ? $schedule->get() : [];
+	    $firstSchedule = $schedule != '' ? $schedule->first() : '';
+		// dd($service);
+		if (!$service) {
+			return response()->json(['message' => 'Service not found'], 200);
+		}		
+        // \DB::enableQueryLog(); // Enable query log
+	   	$rawcategory = $service->BusinessPriceDetailsAges()->whereNotNull('class_type')->has('BusinessActivityScheduler')->orderBy('id', 'ASC');
+        $categories = $firstSchedule != '' ? $rawcategory->where('visibility_to_public' , 1)->get() : [];
+        $firstCategory = $firstSchedule != '' ?  $rawcategory->when($categoryId, function ($query) use ($categoryId) {
+		    $query->where('id', $categoryId);
+		})->where('visibility_to_public' , 1)->first() : '';
+
+        // dd($categoryId);
+        //    dd(\DB::getQueryLog()); // Show results of log
+   		$categoryId = $categoryId ?? @$firstCategory->id;
+   		if(@$firstCategory->class_type){
+   			$prices = $firstCategory  != '' ? $firstCategory->bPriceDetails()->orderBy('id', 'ASC')->get() : []; 
+   		}else{
+        	$prices = $firstCategory  != '' ? $firstCategory->BusinessPriceDetails()->orderBy('id', 'ASC')->get() : []; 
+   		}
+        // dd($prices);
+        $addOnServices = $firstCategory  != '' ?  $firstCategory->AddOnService: [];
+        if (!$prices->isEmpty()) {
+        	$priceId = $priceId ?? $prices[0]['id'];
+            foreach ($prices as  $pr) {
+            	$select = $pr['id'] == $priceId ? 'selected' : '';
+                $priceOption .='<option value="'.$pr['id'].'" '.$select.'>'.$pr['price_title'].'</option>';
+            }
+        }
+        $BusinessActivityScheduler = BusinessActivityScheduler::where('serviceid',$serviceId)->where('category_id',@$firstCategory->id)->where('starting','<=',date('Y-m-d',strtotime($activityDate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($activityDate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($activityDate)).'",activity_days)');
+		$bschedule = $BusinessActivityScheduler->get();
+		$bschedulefirst = $scheduleId != '' ? $BusinessActivityScheduler->when($scheduleId, function ($query) use ($scheduleId) {
+		    $query->where('id', $scheduleId);
+		})->first() : '';
+		$scheduleId = $scheduleId ?? ''; $timeChk= 1;
+		if(date('Y-m-d',strtotime($activityDate)) == date('Y-m-d') ){
+            $start = new DateTime(@$bschedulefirst->shift_start);
+            $start_time = $start->format("Y-m-d H:i"); $current = new DateTime();
+            $current_time =  $current->format("Y-m-d H:i");
+            if($service->can_book_after_activity_starts == 'No' && $service->beforetime != ''  && $service->beforetimeint != '' ){
+            	$matchTime = $start->modify('-'.$service->beforetimeint.' '.$service->beforetime)->format("Y-m-d H:i");
+				$timeChk =  $current_time <  $matchTime ? 0 : 1;
+			}else if($service->can_book_after_activity_starts == 'Yes' && $service->aftertime != '' && $service->aftertimeint != ''){
+				$matchTime = $start->modify('+'.$service->aftertimeint.' '.$service->aftertime)->format("Y-m-d H:i");
+				$timeChk =  $current_time <  $matchTime ? 1 : 0;
+			}
+        }
+        $pricedata = BusinessPriceDetails::where('id', $priceId)->first(); $totalquantity =0;
+        $SpotsLeft = UserBookingDetail::where('act_schedule_id',@$bschedulefirst->id)->whereDate('bookedtime', '=', date('Y-m-d',strtotime($activityDate)))->get();
+        foreach($SpotsLeft as $data){
+            $totalquantity += $data->userBookingDetailQty();
+		}
+		$maxSports = @$bschedulefirst->spots_available != '' ? $bschedulefirst->spots_available - $totalquantity : 0;
+		$adult_price =  $pricedata != '' && $scheduleId != ''  ? $pricedata->getCurrentPrice('adult',$request->date) : 0;
+        $child_price =  $pricedata != '' && $scheduleId != '' ? $pricedata->getCurrentPrice('child',$request->date) : 0;  
+        $infant_price = $pricedata != '' && $scheduleId != '' ? $pricedata->getCurrentPrice('infant',$request->date) : 0;
+        $adultDiscountPrice=  $pricedata != '' && $scheduleId != '' ? $pricedata->getDiscoutPrice('adult',$request->date) : 0;
+        $childDiscountPrice=  $pricedata != '' && $scheduleId != '' ? $pricedata->getDiscoutPrice('child',$request->date) : 0;  
+        $infantDiscountPrice= $pricedata != '' && $scheduleId != '' ? $pricedata->getDiscoutPrice('infant',$request->date) : 0;
+        $paySession = @$pricedata->pay_session;
+        $date = new DateTime($activityDate);
+		$formattedDate = $date->format('l, F j, Y');
+        // dd($request->type);
+        $page = 'subdomain.booking_html';
+		// if(@$request->type == 'checkin_portal'){ $page = 'checkin.booking_html';}else{ $page = 'activity.activity_booking_html'; }
+    	$html = View::make($page)->with(['activityDate' => $activityDate, 'service' => $service ,'serviceId' => $serviceId , 'companyId' => $companyId ,'users'=>$request->users ,'chk_found'=>$chkFound ,'categories' => $categories, 'priceOption' =>$priceOption,'bschedule' =>$bschedule , 'timeChk' => $timeChk ,'maxSports' =>  $maxSports , 'adultPrice' => $adult_price , 'childPrice' => $child_price, 'infantPrice' => $infant_price , 'addOnServices' =>$addOnServices ,'priceId' =>$priceId ,'bschedulefirst' => $bschedulefirst ,'date' =>$date,'categoryId' =>$categoryId ,'scheduleId' =>$scheduleId , 'paySession' => $paySession ,'adultDiscountPrice' => $adultDiscountPrice,'childDiscountPrice' => $childDiscountPrice,'infantDiscountPrice' => $infantDiscountPrice])->render();
+ 		return response()->json(['html' => $html ,'date'=>$formattedDate]);
+    }
 
     public function logout(Request $request)
     {
@@ -320,6 +433,825 @@ class SubDomainController extends Controller
         return redirect()->route('/login', ['unique_code' => $code->unique_code]);
     }
 
+    public function getParticipateData(Request $request){
+    	$cusId = $request->cus_id ?? '';
+    	$family = getFamilyMember($cusId,$request->cid);
+    	$priceid = $request->priceid;  $type = $request->type; 
+    	$customer = ( $cusId ) ? Customer::find($cusId) : '';
+		return view('subdomain.participate_data' ,compact('priceid','type','family','customer'));
+    }
+
+    public function getInsData(Request $request){
+    	$scheduler = BusinessActivityScheduler::find($request->scheduleId);
+    	return view('subdomain.ins_modal',compact('scheduler'));
+    }
+
+    public function addToCart(Request $request)
+    {
+        // dd($request->all());
+
+        // Retrieve data from the request
+        $tax = $request->value_tax ?? 0;
+        $tip_amt_val = $request->tip_amt_val ?? 0;
+        $dis_amt_val = $request->dis_amt_val ?? 0;
+        $parti_from_chkout_regi = $request->has('pc_value') ? ['id' => $request->pc_regi_id, 'from' => $request->pc_user_tp, 'pc_name' => $request->pc_value] : [];
+        $categoryid = $request->categoryid ?? null;
+        $p_session = $request->pay_session ?? '';
+        $activity_days = $request->activity_days ?? null;
+        $notes = $request->notes ?? '';
+        $repeateTimeType = $request->repeateTimeType ?? '';
+        $everyWeeks = $request->everyWeeks ?? 0;
+        $monthDays = $request->monthDays ?? 0;
+        $enddate = $request->has('enddate') ? date('Y-m-d', strtotime($request->enddate)) : null;
+        $addOnServicesId = $request->addOnServicesId ?? null;
+        $addOnServicesQty = $request->addOnServicesQty ?? null;
+        $addOnServicesTotalPrice = $request->addOnServicesTotalPrice ?? 0;
+        $pid = $request->pid ?? 0;
+        $priceid = $request->priceid ?? 0;
+        $chk = $msg = '';
+
+        $price = $request->price ?? 0;
+        $pricetotal = $request->pricetotal ?? 0;
+        $actscheduleid = $request->actscheduleid ?? 0;
+        $sesdate = isset($request->sesdate) ? date('Y-m-d', strtotime($request->sesdate)) : 0;
+
+        // Retrieve business service based on pid
+        $result = DB::select('select * from business_services where id = ?', [$pid]);
+
+        $infantarray = $childarray = $adultarray = $totparticipate = [];
+        $tot_qty = 0;
+
+        if ($request->aduquantity != 0) {
+            $adultarray = ['quantity' => $request->aduquantity, 'price' => $request->cartaduprice];
+            $tot_qty += $request->aduquantity;
+        }
+        if ($request->childquantity != 0) {
+            $childarray = ['quantity' => $request->childquantity, 'price' => $request->cartchildprice];
+            $tot_qty += $request->childquantity;
+        }
+        if ($request->infantquantity != 0) {
+            $infantarray = ['quantity' => $request->infantquantity, 'price' => $request->cartinfantprice];
+            $tot_qty += $request->infantquantity;
+        }
+
+        if (isset($request->participateAry)) {
+            $totparticipate = $request->participateAry;
+        } else {
+            for ($i = 0; $i < $tot_qty; $i++) {
+                if ($request->user) {
+                    $totparticipate[] = ['id' => $request->user, 'from' => "user"];
+                } else {
+                    $totparticipate[] = ['id' => '', 'from' => "user"];
+                }
+            }
+        }
+        // dd($request->participateAry);
+        // dd($activity_days);
+        if (count($result) > 0) {
+            $cartWidgetIds = []; 
+            foreach ($result as $item) {
+                $pictures = explode(',', $item->profile_pic);
+                $p_image = @$pictures[0];
+    
+                // Save to CartWidget table
+                $cartWidget = CartWidget::create([
+                    'user_id'=>$request->user,
+                    'business_service_id'=>$request->serviceid,
+                    'type' => $item->service_type,
+                    'name' => $item->program_name,
+                    'code' => $item->id,
+                    'image' => $p_image,
+                    'adult' => json_encode($adultarray),
+                    'child' => json_encode($childarray),
+                    'infant' => json_encode($infantarray),
+                    'actscheduleid' => $actscheduleid,
+                    'session_date' => $sesdate,
+                    'total_price' => $pricetotal,
+                    'priceid' => $priceid,
+                    'participate' => json_encode($totparticipate),
+                    'tax' => $tax,
+                    'discount' => $dis_amt_val,
+                    'tip' => $tip_amt_val,
+                    'participate_from_checkout_regi' => json_encode($parti_from_chkout_regi),
+                    'chk' => $chk,
+                    'categoryid' => $categoryid,
+                    'p_session' => $p_session,
+                    'repeateTimeType' => $repeateTimeType,
+                    'everyWeeks' => $everyWeeks,
+                    'monthDays' => $monthDays,
+                    'enddate' => $enddate,
+                    'activity_days' => $activity_days,
+                    'addOnServicesId' => $addOnServicesId,
+                    'addOnServicesQty' => $addOnServicesQty,
+                    'addOnServicesTotalPrice' => $addOnServicesTotalPrice
+                ]);
+                $cartWidgetIds[] = $cartWidget->id;
+            }
+        }
+
+        if ($request->chk == 'activity_purchase') {
+            return redirect()->route('business.orders.create', ['business_id' => Auth::user()->cid, 'cus_id' => $request->pageid]);
+        } elseif ($request->chk == 'calendar_activity_purchase') {
+            return config('app.url') . '/business/' . Auth::user()->cid . '/paymentModal/' . $request->pageid;
+        } elseif ($request->chk == 'checkin') {
+            // return 'Membership added successfully.';
+                // Return success message along with all the CartWidget IDs
+            return response()->json([
+                'message' => 'Memberships added successfully.',
+                'cartWidgetIds' => $cartWidgetIds,
+            ]);
+        } else {
+            if ($msg == '') {
+                $msg = route('successcart_sub', ['priceid' => $priceid]);
+            }
+            return $msg;
+        }
+    }
+    public function successcart($priceid)
+    {   
+        $total_quantity=0; $cart_item = [];
+        if (session()->has('cart_item')) { $cart_item = session()->get('cart_item'); }
+        $pricedetails = BusinessPriceDetails::find($priceid);
+        $sdata = BusinessServices::where('id',$pricedetails->serviceid)->first();
+        $ser = BusinessService::where('cid', @$sdata->cid)->first();
+        $companyData = CompanyInformation::where('id',@$sdata->cid)->first();
+        $discovermore = BusinessServices::where('cid',@$sdata->cid)->where('id','!=',$sdata->id)->where('is_active', 1)->limit(4)->get();
+        return view('activity.success_cart',[
+            'priceid'=> $priceid, 'cart'=> $cart_item, 'companyData'=> $companyData, 'sdata'=> $sdata, 'discovermore'=> $discovermore, 'ser'=> $ser
+        ]);
+    }
+    public function getMembershipPayment(Request $request){
+        $cart = $request->input('cart_items'); 
+        $users=$request->users;
+        $customer_id= $request->customer_id;
+        $customer = Customer::where('id', $customer_id)->first(); 
+        if ($customer) {
+            $businessId = $customer->business_id; 
+        }
+        $cartWidgetIds = $request->cartWidgetIds;
+        if (is_array($cart) && isset($cart['selectedOptions'])) {
+            $item = $cart['selectedOptions'][0]; 
+            $serprice = BusinessPriceDetails::where('id', $cart['priceid'])->first();    
+            $cartCount = 1; $totalquantity =  $discount = 0;    
+            if (!empty($item['adult'])) {
+                $totalquantity += $item['adult']['quantity'];
+                $discount += $item['adult']['quantity'] * ($item['adult']['price'] * (int) @$serprice['adult_discount']) / 100;
+            }
+            if (!empty($item['child'])) {
+                $totalquantity += $item['child']['quantity'];
+                $discount += $item['child']['quantity'] * ($item['child']['price'] * (int) @$serprice['child_discount']) / 100;
+            }
+            if (!empty($item['infant'])) {
+                $totalquantity += $item['infant']['quantity'];
+                $discount += $item['infant']['quantity'] * ($item['infant']['price'] * (int) @$serprice['infant_discount']) / 100;
+            }    
+            $item_price = $request->totalPrice;
+            $fees = BusinessSubscriptionPlan::where('id', 1)->first(); 
+    
+            $service_fee = ($item_price * $fees->service_fee) / 100;
+            $tax = ($item_price * $fees->site_tax) / 100;
+            $total_amount = number_format(($item_price + $service_fee + $tax - $discount), 2, '.', '');
+            $subTotal = ($discount) ? number_format($item_price - $discount, 2) : number_format($item_price, 2);
+            $taxDisplay = number_format(($tax + $service_fee), 2);
+    
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            $customer = Customer::find($request->customer_id);
+            $customer->create_stripe_customer_id(); 
+            $intent = $stripe->setupIntents->create([
+                'customer' => @$customer->stripe_customer_id,
+                'payment_method_types' => ['card'],
+            ]);
+    
+
+    	    $cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id', $users)->get();
+
+            return view('subdomain.membership_payment', compact('intent','cardInfo', 'cartWidgetIds','cartCount' ,'discount' ,'taxDisplay' ,'users','total_amount' ,'subTotal','customer_id','businessId'));
+
+        }
+    
+        return redirect()->back()->withErrors('Cart data is invalid');
+    }
+    public function memberhsipPay(Request $request){
+        $cartWidgetIds = json_decode($request->input('cartWidgetIds'), true);
+        $loggedinUser = Customer::find($request->customer_id);
+        $cartService = new CartService();
+        $userid=$request->user_id;
+        $user=User::where('id',$userid)->first();
+        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+
+        if($loggedinUser->stripe_customer_id != '') {
+            $stripe_customer_id = $loggedinUser->stripe_customer_id;
+        }else{
+            $stripe_customer_id = $loggedinUser->create_stripe_customer_id();
+        }
+
+        $totalprice =  $priceWithDiscount = 0;
+        $totalprice = $request->grand_total;
+
+        if($request->has('cardinfo')){
+            $onFilePaymentMethodId = $request->cardinfo;
+            try {
+                $onFilePaymentIntent = $stripe->paymentIntents->create([
+                    'amount' =>  round($totalprice *100),
+                    'currency' => 'usd',
+                    'customer' => $stripe_customer_id,
+                    'payment_method' => $onFilePaymentMethodId ,
+                    'off_session' => true,
+                    'confirm' => true,
+                    'metadata' => [],
+                ]);
+
+                if($onFilePaymentIntent['status']=='succeeded'){
+
+                    $orderdata = array(
+                        'user_id' => $userid,
+                        'customer_id' => $request->customer_id,
+                        'user_type' => 'customer',
+                        'status' => 'active',
+                        'currency_code' => 'usd',
+                        'amount' => $totalprice,
+                        'bookedtime' => Carbon::now()->format('Y-m-d'),
+                    ); 
+
+                    $userBookingStatus = UserBookingStatus::create($orderdata);
+
+                    $transactiondata = array( 
+                        'user_type' => 'customer',
+                        'user_id' => $request->customer_id,
+                        'item_type' =>'UserBookingStatus',
+                        'item_id' => $userBookingStatus->id,
+                        'channel' =>'stripe',
+                        'kind' => 'card',
+                        'transaction_id' => $onFilePaymentIntent["id"],
+                        'stripe_payment_method_id' => $onFilePaymentMethodId,
+                        'amount' => $totalprice,
+                        'qty' =>'1',
+                        'status' =>'complete',
+                        'refund_amount' =>0,
+                        'payload' =>json_encode($onFilePaymentIntent,true),
+                    );
+
+                    $transactionstatus = Transaction::create($transactiondata);
+                }
+            }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
+                return "Error: " . $e->getError()->message;
+
+    
+            }catch(Exception $e) {
+                $errormsg = $e->getError()->message.$e->getLine();
+                return $errormsg;
+            }
+        }
+        else{
+            $newCardPaymentMethodId = $request->new_card_payment_method_id;
+            try {
+                $newCardPaymentIntent = $stripe->paymentIntents->create([
+                    'amount' =>  round($totalprice *100),
+                    'currency' => 'usd',
+                    'customer' => $stripe_customer_id,
+                    'payment_method' => $newCardPaymentMethodId,
+                    'off_session' => true,
+                    'confirm' => true,
+                    'metadata' => [],
+                ]);
+                if($request->save_card != 1){
+                    $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $newCardPaymentMethodId)->firstOrFail();
+                    $stripePaymentMethod->delete();
+                }
+
+                if($newCardPaymentIntent['status'] == 'succeeded'){
+                    $orderdata = array(
+                        'user_id' =>$userid,
+                        'customer_id' => $request->customer_id,
+                        'status' => 'active',
+                        'currency_code' => 'usd',
+                        'amount' => $totalprice,
+                        'user_type' => 'customer',
+                        'bookedtime' => Carbon::now()->format('Y-m-d'),
+                    ); 
+                    $userBookingStatus = UserBookingStatus::create($orderdata);
+
+                    $transactiondata = array( 
+                        'user_type' => 'customer',
+                        'user_id' => $loggedinUser->id,
+                        'item_type' =>'UserBookingStatus',
+                        'item_id' => $userBookingStatus->id,
+                        'channel' =>'stripe',
+                        'kind' => 'card',
+                        'transaction_id' => $newCardPaymentIntent["id"],
+                        'stripe_payment_method_id' => $newCardPaymentMethodId,
+                        'amount' => $totalprice,
+                        'qty' =>'1',
+                        'status' =>'complete',
+                        'refund_amount' =>0,
+                        'payload' =>json_encode($newCardPaymentIntent,true),
+                    );
+
+                    $transactionstatus = Transaction::create($transactiondata);
+                }
+            }catch(\Stripe\Exception\CardException  $e) {
+                return $e->getError()->message . $e->getLine();
+            }catch(\Stripe\Exception\InvalidRequestException $e) {
+                return "Your card is not connected with your account. Please add your card again.";
+            }catch( \Exception $e) {
+                return  $e->getError()->message . $e->getLine() ;
+            }
+        }
+
+        $bspdata = BusinessSubscriptionPlan::where('id',1)->first();
+        $tax = $bspdata->site_tax;
+        foreach($cartWidgetIds as $cart){
+            $item=CartWidget::where('id',$cart)->first();
+            $activityScheduler = BusinessActivityScheduler::find($item->actscheduleid) ;
+            $businessServices = BusinessServices::find($item->code);
+            $user = $businessServices->user;
+            $price_detail=BusinessPriceDetails::where('id',$item->priceid)->first();
+
+
+            // new start
+
+            $participateData = json_decode($item->participate, true);
+            $adultData = json_decode($item->adult, true);
+            $infantData = json_decode($item->infant, true);
+            $childData = json_decode($item->child, true);
+            foreach ($participateData as $key => $p) {
+                if (isset($infantData['quantity']) && $key < $infantData['quantity']) {
+                    $category = 'infant';
+                    $quantity = $infantData['quantity'];
+                    $price = $infantData['price'];
+                } elseif (isset($childData['quantity']) && $key < ($infantData['quantity'] + $childData['quantity'])) {
+                    $category = 'child';
+                    $quantity = $childData['quantity'];
+                    $price = $childData['price'];
+                } else {
+                    $category = 'adult';
+                    $quantity = $adultData['quantity'];
+                    $price = $adultData['price'];
+                } 
+                if ($p['from'] == 'user') {
+                    $findCustomer = Customer::where(['business_id' => $businessServices->cid, 'user_id' => $p['id']])->first();
+                    $userID = $findCustomer ? $findCustomer->id : null;
+                } elseif ($p['from'] == 'family') {
+                    $family = UserFamilyDetail::where('id', $p['id'])->first();
+                    $customer = Customer::where(['business_id' => $businessServices->cid, 'fname' => $family->first_name, 'lname' => $family->last_name, 'email' => $family->email])->first();
+                    if (!$customer) {
+                        $parentId = $family->user ? $family->user->id : null;
+                        $customer = Customer::create([
+                            'business_id' => $businessServices->cid,
+                            'fname' => $family->first_name,
+                            'lname' => $family->last_name,
+                            'email' => $family->email,
+                            'phone_number' => $family->mobile,
+                            'emergency_contact' => $family->emergency_contact,
+                            'relationship' => $family->relationship,
+                            'profile_pic' => $family->profile_pic,
+                            'user_id' => null,
+                            'parent_cus_id' => $parentId,
+                            'gender' => $family->gender,
+                            'birthdate' => $family->birthday,
+                        ]);
+                    }
+                    $userID = $customer->id ?? null;
+                } else {
+                    $userID = $p['id'];
+                }    
+             
+                $participant = [
+                    'id' => $userID,
+                    'from' => $p['from'],
+                    'type' => $category,
+                    'quantity' => $quantity,
+                    'price' => $price,
+                ];
+                $newArray[] = $participant;
+            }
+    
+            $participateLoop = $newArray; 
+        
+            foreach($participateLoop as $d){
+                $participateAry = $qtyAry = $qtyPrice = [];
+                foreach(['adult', 'child', 'infant'] as $role){
+                    if($d['type'] == $role){
+                        $qtyAry[$role] = 1;
+                        $qtyPrice[$role] = $d['price'];
+                    }else{
+                        $qtyAry[$role] = 0;
+                        $qtyPrice[$role] = 0;
+                    }
+                }
+                $participateAry['from'] ='customer';
+                $participateAry['id'] = $d['id'];
+
+                $discount = $cartService->getDiscount($item->priceid,$d['type'],$d['price']);
+                // dd($discount);
+                $addOnServicePrice = @$item->addOnServicesTotalPrice ?? 0 ;
+                $priceWithDiscount = $d['price'] - $discount + $addOnServicePrice;
+                // dd($price_detail);
+                $expiredate = $price_detail->getExpirationDate($item->session_date);
+
+                $expired_duration   = $price_detail->pay_setnum.' '.$price_detail->pay_setduration;
+
+                $booking_detail = UserBookingDetail::create([                 
+                    'booking_id' => $userBookingStatus->id,
+                    'user_id'=> $d['id'],
+                    'user_type'=> 'customer',
+                    'sport' => $item['code'],
+                    'bookedtime' => $item['sesdate'],
+                    'business_id'=> $businessServices->cid,
+                    'price' => json_encode($qtyPrice),
+                    'qty' => json_encode($qtyAry),
+                    'priceid' => $item['priceid'],
+                    'category_id' => $item['categoryid'],
+                    'pay_session' => $price_detail->pay_session,
+                    'act_schedule_id' => $activityScheduler->id,
+                    'expired_at' => $expiredate,
+                    'expired_duration' => $expired_duration,
+                    'contract_date' => $item['sesdate'],
+                    'subtotal' => $cartService->getSubTotal($item['priceid'],$d['type'],$d['price'], $addOnServicePrice),
+                    'discount' => $discount,
+                    'tax' =>  $cartService->getTax($priceWithDiscount),
+                    'fitnessity_fee' => $cartService->getFitnessFee($priceWithDiscount, $user),
+                    'service_fee' => $cartService->getServiceFee($priceWithDiscount),
+                    'membershipTotalPrices' => $cartService->getMembershipTotal($item['priceid'],$d['type'],$d['price']) ,
+                    'membershipTotalTax' =>$cartService->getMembershipTax($item['priceid'],$d['type'],$d['price']),
+                    'productTotalTax' => 0 ,
+                    'tip' => 0,
+                    'participate' =>'['.json_encode($participateAry).']',
+                    'transfer_provider_status' =>'unpaid',
+                    'payment_number' => '{}',
+                    'order_from' => "Check In Portal",
+                    'addOnservice_ids' =>@$item['addOnServicesId'],
+                    'addOnservice_qty' => @$item['addOnServicesQty'],
+                    'addOnservice_total' =>  $addOnServicePrice,
+                    'order_type' => 'Membership',
+                ]);
+
+                $price_detail = $cartService->getPriceDetail($item['priceid']);
+
+                $re_i = 0;
+                $date = Carbon::now();
+                $stripe_id = $stripe_charged_amount = $payment_method= '';
+                $amount = $re_i = $reCharge = ''; 
+
+                $amount = $cartService->getMembershipTotal($item['priceid'],$d['type'],$d['price']) ;
+                $tax_recurring = $cartService->getMembershipTax($item['priceid'],$d['type'],$d['price']);
+
+                if($d['type'] == 'adult'){
+                    $re_i = $price_detail->recurring_nuberofautopays_adult; 
+                    $reCharge  = $price_detail->recurring_customer_chage_by_adult;
+                }else if($d['type'] == 'child'){
+                    $re_i = $price_detail->recurring_nuberofautopays_child; 
+                    $reCharge  = $price_detail->recurring_customer_chage_by_child;
+                }else if($d['type'] == 'infant'){
+                    $re_i = $price_detail->recurring_nuberofautopays_infant;
+                    $reCharge  = $price_detail->recurring_customer_chage_by_infant;
+                }
+
+                if($re_i != '' && $re_i != 0 && $amount != ''){ 
+                    for ($num = $re_i; $num >0 ; $num--) { 
+                        $payment_method = $transactionstatus->stripe_payment_method_id;
+                        if($num==1){
+                            $stripe_id =  $transactionstatus->transaction_id;
+                            $stripe_charged_amount = number_format($transactionstatus->amount,2);
+                            $paymentDate = $date->format('Y-m-d');
+                            $status = 'Completed';
+                             $payment_number = '1';
+                             $payment_on = date('Y-m-d');
+                        }else{
+                            $Chk = explode(" ",$reCharge);
+                            $timeChk = @$Chk[1];
+                            $afterHowmanytime = @$Chk[0];
+                            $addTime  = $afterHowmanytime * ($num - 1);
+
+                             if($timeChk == 'Month'){
+                                $paymentDate = (Carbon::now()->addMonths($addTime))->format('Y-m-d');
+                                $additionalPaymentDate = Carbon::parse($paymentDate)->addMonths($afterHowmanytime)->format('Y-m-d');
+                            }else if($timeChk == 'Week'){
+                                $paymentDate = (Carbon::now()->addWeeks($addTime))->format('Y-m-d');
+                                $additionalPaymentDate = Carbon::parse($paymentDate)->addWeeks($afterHowmanytime)->format('Y-m-d');
+                            }else if($timeChk == 'Year'){
+                                $paymentDate = (Carbon::now()->addYears($addTime))->format('Y-m-d');
+                                $additionalPaymentDate = Carbon::parse($paymentDate)->addYears($afterHowmanytime)->format('Y-m-d');
+                            }
+
+                            if($num == $re_i && $additionalPaymentDate){
+                                $booking_detail->expired_at = $additionalPaymentDate;
+                                $booking_detail->expired_duration = ($re_i * $afterHowmanytime).' '.$timeChk.'s';
+                                $booking_detail->save();
+                            }
+
+                            $status = 'Scheduled';
+                            $payment_number = NULL;
+                            $payment_on = NULL;
+                        } 
+
+                        $recurring = array(
+                            "booking_detail_id" => $booking_detail->id,
+                            "user_id" =>  $d['id'],
+                            "user_type" => 'customer',
+                            "business_id" => $booking_detail->business_id ,
+                            "payment_date" => $paymentDate,
+                            "amount" => $amount,
+                            'charged_amount'=> $stripe_charged_amount,
+                            'payment_method'=> $payment_method,
+                            'stripe_payment_id'=> $stripe_id,
+                            "tax" => $tax_recurring ,
+                            "payment_number" => $payment_number,
+                            "payment_on" => $payment_on,
+                            "status" => $status,
+                        );
+                        Recurring::create($recurring);
+                    }
+                }
+
+                BookingCheckinDetails::create([
+                    'business_activity_scheduler_id' => @$activityScheduler->id,
+                    'instructor_id' => @$activityScheduler->instructure_ids,
+                    'customer_id' => $d['id'],
+                    'booking_detail_id' => $booking_detail->id,
+                    'checkin_date' => date('Y-m-d',strtotime($item->sesdate)),
+                    'use_session_amount' => 0,
+                    'source_type' => 'marketplace',
+                ]);
+
+                $getreceipemailtbody = $this->booking_repo->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
+                $MailCustomer = Customer::find($d['id']);
+                $email_detail = array(
+                    'getreceipemailtbody' => $getreceipemailtbody,
+                    'email' => @$MailCustomer->email);
+                SGMailService::sendBookingReceipt($email_detail);
+                
+                $email_detail2 = $this->generateEmailDetails(
+                    @$businessServices->company_information->business_email,
+                    $businessServices,
+                    $cartService,
+                    $participateAry,
+                    $item,
+                    $activityScheduler,
+                    $price_detail,
+                    $user
+                );
+
+                SGMailService::confirmationMail($email_detail2);
+                $company = @$cartService->getCompany($businessServices->cid);
+                $businessTerms = @$company->businessterms; 
+                $email_detail1 = array(
+                    "CustomerName" =>  @$MailCustomer->full_name, 
+                    "CompanyName" =>  @$company->company_name, 
+                    "RepName" =>  @$company->full_name, 
+                    "CompanyAddress" => @$company->company_address(),
+                    "Age"=> @$cartService->getParticipateAge(json_encode($participateAry)),
+                    "logo"=> @$cartService->getCompany($businessServices->cid)->logo, 
+                    "phone" => @$company->business_phone, 
+                    "email" => @$MailCustomer->email, 
+                    "website" => @$company->business_website, 
+                    "MapImage" => 'https://maps.googleapis.com/maps/api/staticmap?center='.@$company->latitude.','.@$company->longitude.'&zoom=15&size=600x300&maptype=roadmap&markers=color:red|'.@$company->latitude.','.@$company->longitude.'&key='.env('GOOGLE_MAP_KEY'),
+                    "thingsToKnow" => @$businessTerms->houserules, 
+                    "CancellationText" => @$businessTerms->cancelation, 
+                    "RefundText" => @$businessTerms->refundpolicytext);
+
+                SGMailService::confirmationMailForCustomer(array_merge($email_detail2,$email_detail1));
+            }
+        }
+
+        
+        return response()->json(['message' => 'success']);
+    }
+    public function generateEmailDetails($email, $businessServices, $cartService, $participateAry, $item, $activityScheduler, $price_detail){
+        return array(
+            "email" => $email,  
+            "Url" => env('APP_URL').'/personal/orders?business_id='.$businessServices->cid, 
+            "BusinessName"=> @$cartService->getCompany($businessServices->cid)->dba_business_name,
+            "BookedPerson"=> Auth::user()->full_name,
+            "ParticipantsName"=> @$cartService->getParticipateByComa( json_encode($participateAry)),
+            "date"=> Carbon::parse($item['sesdate'])->format('m/d/Y'),
+            "Age"=> @$cartService->getParticipateAge(json_encode($participateAry)),
+            "logo"=> @$cartService->getCompany($businessServices->cid)->logo,
+            "time"=> $activityScheduler->activity_time(),
+            "duration"=> $activityScheduler->get_clean_duration(),
+            "ActivitiyType"=> $businessServices->service_type,
+            "ProgramName"=> $businessServices->program_name,
+            "CategoryName"=> $price_detail->business_price_details_ages_with_trashed->category_title
+        );
+    }	
+    public function editProfile(Request $request ,$business_id, $user_id)
+    {
+        // dd($request->all());
+        if($request->business_id){
+            // dd($request->customer_id);
+            $business_id=$business_id;
+            $cus_id=$user_id;        
+            $business = CompanyInformation::find($business_id);    
+            $customer=Customer::where('user_id',$user_id)->where('business_id',$business_id)->first();
+            $userid=$customer->user_id;
+            $userdata=User::where('id',$userid)->first();
+            if($customer->primary_account===0)
+            {
+                $user=UserFamilyDetail::where('id',$userid)->first();
+                if($user)
+                {
+                    $name = @$user->full_name;
+                    return view('subdomain.user_family_profile',compact('user','business','name'));
+                }
+                else{
+                    $user=customer::where('user_id',$userid)->first();
+                    $name = @$customer->full_name;
+                    return view('subdomain.customersprofile',compact('user','business','name'));
+                }
+            }
+            else{
+                $user=User::where('id',$userid)->first();
+                $name = @$customer->full_name;
+                return view('subdomain.edit_profile',compact('user','business','name'));   
+            }
+        }
+    }
+
+    public function customerProfileUpdate(Request $request) {
+        // dd('77');
+        // dd($request->all());
+        $user = Customer::find($request->id);
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found.'
+            ], 404);
+        }
+        
+        $successMessage = '';
+        $errorMessage = '';
+        $status = false;
+    
+        if ($request->type == 'details') {
+            $validated = $request->validate([
+                'firstname' => 'required',
+                'lastname' => 'required',
+                'gender' => 'required',
+                'phone_number' => 'required'
+            ]);
+    
+            $status = $user->update([
+                'fname' => $request->firstname,
+                'lname' => $request->lastname,
+                'gender' => $request->gender,
+                'phone_number' => $request->phone_number,
+                'birthdate' => $request->birthdate,
+                'address' => $request->address,
+                'country' => $request->country,
+                'zipcode' => $request->zipcode,
+                'state' => $request->state,
+                'city' => $request->city,
+            ]);
+    
+            $successMessage = 'Profile updated successfully!';
+            $errorMessage = 'Problem updating profile.';
+        } else if ($request->type == 'photo') {
+            if ($request->hasFile('profile_pic')) {
+                $profilePic = $request->file('profile_pic')->store('customer');
+            } else {
+                $profilePic = $user->profile_pic;
+            }
+            $status = $user->update(['profile_pic' => $profilePic]);
+            $successMessage = 'Profile photo has been changed successfully.';
+            $errorMessage = 'Problem in uploading profile photo.';
+            // return Redirect::back();
+        }
+        if ($status) {
+            return response()->json([
+                'status' => 'success',
+                'message' => $successMessage
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => $errorMessage
+            ], 400);
+        }
+    }
+    
+    public function updateProfile(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $status = false;
+        $message = '';
+        $type = 'error';
+
+        if ($request->type == 'details') {
+            $this->validate($request, [
+                'firstname' => 'required',
+                'lastname' => 'required',
+                'gender' => 'required',
+                'phone_number' => 'required',
+                'address' => 'required',
+            ]);
+
+            $status = $user->update([
+                'firstname' => $request->firstname,
+                'lastname' => $request->lastname,
+                'gender' => $request->gender,
+                'phone_number' => $request->phone_number,
+                'dobstatus' => $request->dobstatus,
+                'address' => $request->address,
+                'country' => $request->country,
+                'zipcode' => $request->zipcode,
+                'state' => $request->state,
+                'city' => $request->city,
+                'birthdate' => date('Y-m-d', strtotime($request['birthdate'])),
+                'quick_intro' => $request->user_intro,
+                'favorit_activity' => $request->favorit_activity,
+                'business_info' => $request->about_user,
+            ]);
+
+            $message = $status ? 'Profile updated successfully!' : 'Problem in profile update.';
+        } else if ($request->type == 'password') {
+            $this->validate($request, [
+                'newPassword' => 'required',
+                'confirmPassword' => 'required',
+            ]);
+
+            $status = $user->update(['password' => Hash::make($request->newPassword), 'buddy_key' => $request->newPassword]);
+            $message = $status ? 'Password has been changed successfully.' : 'Problem changing password.';
+        } else if ($request->type == 'portfolio') {
+            $data = $request->except(['_token', 'id', 'type']);
+            $status = $user->update($data);
+        } else {
+            $profilePic = $coverPic = '';
+
+            if ($request->hasFile('profile_pic')) {
+                $profilePic = $request->file('profile_pic')->store('customer');
+            } else {
+                $profilePic = $user->profile_pic;
+            }
+
+            if ($request->hasFile('coverPic')) {
+                $coverPic = $request->file('coverPic')->store('customer');
+            } else {
+                $coverPic = $user->cover_photo;
+            }
+
+            $status = $user->update(['profile_pic' => $profilePic, 'cover_photo' => $coverPic]);
+            $user->customers()->update(['profile_pic' => $profilePic]);
+
+            $message = $status ? 'Profile photo has been changed successfully.' : 'Problem in uploading profile photo.';
+        }
+
+        $responseType = $status ? 'success' : 'error';
+
+        return response()->json(['status' => $responseType, 'message' => $message]);
+        // return redirect()->back();
+        // return Redirect::back()->with('success', $status);
+    }
+    public function userFamilyProfileUpdate(Request $request) {
+        $user = UserFamilyDetail::where('id', $request->id)->first();
+        $success = '';
+        $fail = '';
+   
+        // Handle details update
+        if ($request->type == 'details') {
+            $this->validate($request, [
+                'firstname' => 'required',
+                'lastname' => 'required',
+                'gender' => 'required',
+                'phone_number' => 'required',
+            ]);
+    
+            $status = $user->update([
+                'first_name' => $request->firstname,
+                'last_name' => $request->lastname,
+                'gender' => $request->gender,
+                'mobile' => $request->phone_number,
+                'birthday' => $request->birthday,
+                'emergency_contact' => $request->emergency_contact,
+                'relationship' => $request->relationship,
+            ]);
+    
+            $success = 'Profile updated successfully!';
+            $fail = 'There was a problem updating the profile details.';
+        }
+        // Handle profile picture update
+        else if ($request->type == 'photo') {
+            if ($request->hasFile('profile_pic')) {
+                // dd('22');
+                $profilePic = $request->file('profile_pic')->store('customer');
+                $status = $user->update(['profile_pic' => $profilePic]);
+                $status=true;
+            } else {
+                $status = false;
+            }
+    
+            $success = 'Profile photo has been updated successfully.';
+            $fail = 'There was a problem uploading the profile photo.';
+        }
+    
+        // Return response based on status
+        if ($status) {
+            return response()->json(['status' => 'success', 'message' => $success]);
+        } else {
+            return response()->json(['status' => 'error', 'message' => $fail]);
+        }
+    }
 
     // public function postRegistrationCustomer(Request $request) {
     //     set_time_limit(-1);

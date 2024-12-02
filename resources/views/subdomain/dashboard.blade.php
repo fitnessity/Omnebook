@@ -4,10 +4,16 @@
 @section('content')
 
 	{{-- new code end --}}
+	<div class="vertical-overlay"></div>
 	<div class="main-content">
 		<div class="page-content">
 			<div class="container-fluid">
 				<div class="row mb-3">
+					<div class="col-12">
+						<div class="text-right mb-3 mt-3">
+							<a class="btn btn-red" id="purchaseMembershipBtn">Purchase A Membership </a>
+						</div>
+					 </div>
 					<div class="col-12">
 						<div class="text-center">
 							<div class="">
@@ -171,68 +177,8 @@
 						</div><!-- end card -->
 					</div><!-- end col -->
 
-					<div class="col-xxl-8 col-lg-8">
-						<div class="card">
-							<div class="card-header align-items-center d-flex">
-								<h4 class="card-title mb-0 flex-grow-1">Important Alerts</h4>
-							</div><!-- end card-header -->
-
-							<div class="card-body">
-								<div class="dashed-border">
-									<div class="d-flex align-middle y-middle mb-5">
-										<div class="flex-shrink-0">
-											<i class="fa fa-user fs-18"></i>
-										</div>
-										<div class="flex-grow-0 ms-3">
-											<h6 class="mb-1 lh-base">Total Active Memberships <span class="font-red">({{$activeMembershipCnt}})({{$activeMembershipCntNew}} New)</span></h6>
-										</div>
-										<div class="flex-grow-1 ms-3 text-end">
-											<a class="btn btn-red" href="{{ url('/personal/orders') . '?' . http_build_query(['business_id' => request()->business_id, 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}">View</a>
-										</div>
-									</div><!-- end -->
-								</div>
-								<div class="dashed-border">
-									<div class="d-flex mt-4 y-middle mb-5">
-										<div class="flex-shrink-0">
-											<i class="fa fa-sticky-note fs-18"></i>
-										</div>
-										<div class="flex-grow-0 ms-3">
-											<h6 class="mb-1 lh-base"> Notes & Alerts <span class="font-red">({{$notesCnt}})({{$notesCntNew}} New)</span> </h6>
-										</div>
-										<div class="flex-grow-1 ms-3 text-end">
-											<a class="btn btn-red" href="{{ url('/personal/notes-alerts') . '?' . http_build_query([ 'business_id' => request()->business_id ,'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}">View</a>
-										</div>
-									</div><!-- end -->
-								</div>
-								<div class="dashed-border">
-									<div class="d-flex mt-4 y-middle mb-5">
-										<div class="flex-shrink-0">
-											<i class="fa fa-bullhorn fs-18"></i>
-										</div>
-										<div class="flex-grow-0 ms-3">
-											<h6 class="mb-1 lh-base">Announcements & News <span class="font-red">({{$announcemetCnt}})({{$announcemetCntNew}} New)</span></h6>
-										</div>
-										<div class="flex-grow-1 ms-3 text-end">
-											<a class="btn btn-red" href="{{route('personal.announcement-news' ,['business_id' => request()->business_id])}}">View</a>
-										</div>
-									</div><!-- end -->
-								</div>
-								<div class="dashed-border">
-									<div class="d-flex mt-4 y-middle mb-5">
-										<div class="flex-shrink-0">
-											<i class="fa fa-file fs-18"></i>
-										</div>
-										<div class="flex-grow-0 ms-3">
-											<h6 class="mb-1 lh-base">Documents & Terms Alerts <span class="font-red">({{$docCnt}})({{$docCntNew}} New)</span></h6>
-										</div>
-										<div class="flex-grow-1 ms-3 text-end">
-											<a class="btn btn-red" href="{{ url('/personal/documents-contract') . '?' . http_build_query(['business_id' => request()->business_id, 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}">View</a>
-										</div>
-									</div><!-- end -->
-								</div>
-							</div><!-- end card body -->
-						</div><!-- end card -->
-					</div><!-- end col -->
+			
+					<!-- end col -->
 					
 				</div>
 			</div><!-- container-fluid -->
@@ -243,7 +189,95 @@
 <!-- END layout-wrapper -->
 {{-- @include('layouts.business.footer')
 @include('layouts.business.scripts') --}}
+{{-- modals starts --}}
 
+<!-- Modal Structure -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+	<div class="modal-dialog ">
+		<div class="modal-content">
+			<div class="modal-header">
+				<!-- <h5 class="modal-title" id="bookingModalLabel">Booking Details</h5> -->
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<!-- Booking details will be loaded here -->
+				<h5>booking</h5>
+			</div>
+		</div>
+	</div>
+</div>
+{{-- end --}}
+
+<!-- Modal Structure -->
+<div class="modal fade" id="membershipModal" tabindex="-1" role="dialog" aria-labelledby="membershipModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-xl" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			{{-- <h5 class="modal-title" id="membershipModalLabel">Purchase Membership</h5> --}}
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+		</div>
+		<div class="modal-body" id="modalBodyContent">
+			<!-- Content will be loaded here via AJAX -->
+		</div>
+		<div class="modal-footer">
+			{{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- Modal Structure -->
+<div class="modal fade instructors" id="instructorModal" tabindex="-1" aria-labelledby="instructorModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+		{{-- <h5 class="modal-title" id="instructorModalLabel">Instructor Details</h5> --}}
+		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body">
+		<div id="instructorContent">
+			<!-- Content will be injected here -->
+		</div>
+		</div>
+		<div class="modal-footer">
+		<button type="button" class="btn btn-red" data-bs-dismiss="modal">Close</button>
+		</div>
+	</div>
+	</div>
+</div>
+{{-- modal ends --}}
+   {{-- membership modal starts --}}
+   <div class="modal fade membership-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title"></h5>
+				<button type="button" class="btn-close" onclick="window.location.reload()"></button>
+			</div>
+			<div class="modal-body membership-modal-content"></div>
+		</div>
+	  </div>
+</div>
+{{-- modals end --}}
+<!-- Flatpickr CSS -->
+{{-- <script type="text/javascript">
+	$(document).ready(function () { 
+		$( ".birthdate" ).datepicker();
+	});
+</script> --}}
+<script src="{{url('public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.js"></script>
+<script src="{{url('public/js/jquery-input-mask-phone-number.js')}}"></script>
+<script src="{{url('public/dashboard-design/js/feather.min.js')}}"></script>
+<script src="{{url('public/dashboard-design/js/waves.min.js')}}"></script>
+<script src="{{url('public/dashboard-design/js/app.js')}}"></script>
+<script>
+	$(document).ready(function() {
+		$("#actfildate_forcart").datepicker();
+	});
+</script>	
 <script type="text/javascript">
 
 	function checkin(id) {
@@ -270,6 +304,34 @@
             }
         });
 	}	
+</script>
+
+<script>
+		$('#purchaseMembershipBtn').on('click', function() {
+			var companyinfo = @json($business); 		
+			var user = {{ auth()->id() }};
+			var csrfToken = '{{ csrf_token() }}'; 
+			$.ajax({
+				url: '{{ route("membership") }}', 
+				method: 'POST',
+				headers: {
+                'X-CSRF-TOKEN': csrfToken 
+               },
+
+				data: {
+					companyinfo: companyinfo,
+					user:user,					
+				},
+				success: function(response) {
+					$('#modalBodyContent').html(response);
+					$('#membershipModal').modal('show');
+				},
+				error: function() {
+					$('#modalBodyContent').html('<p>There was an error loading the content. Please try again.</p>');
+					$('#membershipModal').modal('show');
+				}
+			});
+		});
 </script>
 
 @endsection

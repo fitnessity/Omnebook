@@ -68,7 +68,7 @@
 						
 						<div class="provider-sidebar-scroll">
 							<div class="ms-1 header-item d-none d-sm-flex">
-								<button type="button" class="btn btn-red zfold-none ipad-none" onClick="openNaav()"> Complete Setup <i class="fas fa-angle-right ml-20 mil-5"></i>
+								<button type="button" class="btn btn-com-set zfold-none ipad-none" onClick="openNaav()"> Complete Setup <i class="fas fa-angle-right ml-20 mil-5"></i>
 								</button>
 							</div>
 							<div class="ms-1 header-item d-sm-flex">

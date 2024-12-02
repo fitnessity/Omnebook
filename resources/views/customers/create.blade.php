@@ -163,11 +163,13 @@
                                                                                                     <label class="mt-10">First Name</label>
                                                                                                     <input type="text" name="fname[]" id="fname" class="form-control required fname0" >
                                                                                                     <span class="error" id="err_fname"></span>
+
                                                                                                 </div>
                                                                                                 <div class="col-md-4 col-lg-3">
                                                                                                     <label class="mt-10">Last Name</label>
                                                                                                     <input type="text" name="lname[]" id="lname" class="form-control required lname0" >
                                                                                                     <span class="error" id="err_lname"></span>
+
                                                                                                 </div>
                                                                                                 <div class="col-md-4 col-lg-3">
                                                                                                     <label class="mt-10">Birthday</label>
@@ -586,6 +588,7 @@
                         required: true,
                         equalTo: '#password'
                     },
+                    
                 },
                 messages: {
                     firstname: "Enter your Firstname",
@@ -605,6 +608,7 @@
                         required: 'Please confirm your password',
                         equalTo: 'Passwords do not match'
                     }
+
                 },
                 submitHandler: function (form) {
                     $("#termserror").html('');

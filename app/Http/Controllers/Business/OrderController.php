@@ -42,6 +42,7 @@ class OrderController extends BusinessBaseController
      */
     public function create(Request $request ,$business_id)
     {    
+        // dd('33');
         $cart_item = [];
         if($request->book_id === '0' || $request->cus_id == ''){
             if (Session::has('cart_item_for_checkout')) {
@@ -150,6 +151,7 @@ class OrderController extends BusinessBaseController
             $modeldata = $this->getmultipleodermodel($ordermodelary,$email);
             session()->forget('ordermodelary');
         }
+
 
         return view('business.orders.create', [
            'companyId' => $companyId,

@@ -364,7 +364,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="set-num">
                             <label>The Duration</label>
-                            <select name="pay_setduration_{{$i}}{{$j}}" id="pay_setduration{{$i}}{{$j}}" class="form-control valid">
+                            <select name="pay_setduration_{{$i}}{{$j}}" id="pay_setduration{{$i}}{{$j}}" class="form-select valid">
                                 <option {{@$price->pay_setduration =='Days' ?'selected':'' }}>Days</option>
                                 <option {{@$price->pay_setduration =='Weeks' ?'selected':'' }}>Weeks</option>
                                 <option {{@$price->pay_setduration =='Months' ?'selected':'' }}>Months</option>

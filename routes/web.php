@@ -42,12 +42,30 @@ Route::group(['domain' => 'host.fitnessity.co'], function() {
         Route::get('/register-page', 'SubDomainController@loadRegisterPage');
         Route::get('/register/{unique_code}','SubDomainController@RegisterPage')->name('/register');
     });
+
+    Route::post('/membership','SubDomainController@membership')->name('membership');
+
     Route::post('/get_checkin_code', 'SubDomainController@getCheckinCode')->name('get_checkin_code');
     Route::post('/sub_registration', 'SubDomainController@postRegistrationCustomer')->name('sub_registration');
+    Route::post('/act_detailfilterforcart', 'SubDomainController@act_detail_filter_for_cart')->name('act_detailfilterforcart');
 
-    Route::post('/logout', 'SubDomainController@logout')->name('subdomain.logout');
+    Route::post('/logout_sub', 'SubDomainController@logout')->name('subdomain.logout_sub');
     Route::get('/schedule/{unique_code}','SubDomainController@next_8_hours')->name('/schedule');
     Route::get('/sub_customer_dashboard', 'SubDomainController@customerdashboard')->name('sub_customer_dashboard');
+    Route::post('/get-participatedata', 'SubDomainController@getParticipateData')->name('get-participatedata');
+    Route::get('/getInstructureDataUrl', 'SubDomainController@getInsData')->name('getInstructureDataUrl');
+    Route::any('/addto_cart', 'SubDomainController@addToCart')->name('addto_cart');
+    Route::any('/success-cart-sub/{priceid}', 'SubDomainController@successcart')->name('successcart_sub');
+    Route::post('/get-membershippayment', 'SubDomainController@getMembershipPayment')->name('checkin.getMembership-Payment');
+    Route::post('/memberhsippay', 'SubDomainController@memberhsipPay')->name('checkin_memberhsip-pay');
+    Route::post('/profile_update_sub\{profile}', 'SubDomainController@updateProfile')->name('profile_update_sub');
+    Route::post('user_family_profile_update_sub', 'SubDomainController@userFamilyProfileUpdate')->name('user_family_profile_update_sub');
+    Route::post('/customer_profile_update_sub', 'SubDomainController@customerProfileUpdate')->name('customer_profile_update_sub');
+
+    // Route::get('/edit_profile', 'SubDomainController@edit_profile')->name('edit_profile');
+    Route::get('/edit-profile/{business_id}/{user_id}', 'SubDomainController@editProfile')->name('user.editProfile');
+
+
 });
 
 
@@ -118,6 +136,7 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('recurring', 'RecurringController')->only(['index', 'update','destroy', ]);
     Route::post('recurring/pay_recurring_item', 'RecurringController@pay_recurring_item')->name('recurring.pay_recurring_item');    
     Route::resource('orders', 'OrderController')->only(['create', 'store']);
+    Route::get('/orders_check', 'OrderController@create')->name('orders_check');//new added 29-11-24
     Route::resource('services', 'ServiceController')->only(['index','create','edit', 'update', 'destroy', 'store']);
     Route::get('services/get-schedule', 'ServiceController@getSchedule')->name('service.get-schedule');
     Route::get('services/get-schedule-data', 'ServiceController@getScheduleData')->name('service.get-schedule-data');
@@ -1196,6 +1215,8 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/online_profile_post','DesignController@online_profile_post')->name('online_profile_post');
     Route::get('/manage_services','DesignController@manage_services')->name('manage_services');
     Route::get('/manage_services_sidebar','DesignController@manage_services_sidebar')->name('manage_services_sidebar');
+    Route::get('/bookings_appointments','DesignController@bookings_appointments')->name('bookings_appointments');
+    Route::get('/bookings_appointments_sidebar','DesignController@bookings_appointments_sidebar')->name('bookings_appointments_sidebar');
 });
 });
 ?>

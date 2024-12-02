@@ -183,6 +183,11 @@
                         <i class="ri-user-settings-fill"></i> <span data-key="t-pages"> Services </span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="https://dev.fitnessity.co/design/bookings_appointments" aria-controls="sidebarPages">
+                        <i class="ri-bookmark-line"></i> <span data-key="t-pages">Booking & Appointments</span> 
+                    </a>
+                </li>
                 @if($companyId)
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName() == 'business_customer_index' || Route::current()->getName() == 'business_customer_show') tab-active @endif" href="{{route('business_customer_index')}}" aria-controls="sidebarPages">

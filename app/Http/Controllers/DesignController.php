@@ -363,4 +363,7 @@ class DesignController extends Controller {
     public function manage_services_sidebar(Request $request){
         return view('design.manage_services_sidebar');
     }
+    public function bookings_appointments(Request $request){
+        return view('design.bookings_appointments');
+    }
 }

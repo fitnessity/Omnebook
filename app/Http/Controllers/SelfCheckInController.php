@@ -1271,6 +1271,8 @@ class SelfCheckInController extends Controller {
             "BookedPerson"=> Auth::user()->full_name,
             "ParticipantsName"=> @$cartService->getParticipateByComa( json_encode($participateAry)),
             "date"=> Carbon::parse($item['sesdate'])->format('m/d/Y'),
+            "Age"=> @$cartService->getParticipateAge(json_encode($participateAry)),
+            "logo"=> @$cartService->getCompany($businessServices->cid)->logo,
             "time"=> $activityScheduler->activity_time(),
             "duration"=> $activityScheduler->get_clean_duration(),
             "ActivitiyType"=> $businessServices->service_type,

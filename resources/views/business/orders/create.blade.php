@@ -1341,19 +1341,22 @@
                         }));
                     },
                     error: function (xhr, status, error) {
-                        console.error("Error fetching data:", error); // Log any errors
+                        console.error("Error fetching data:", error);
                     }
                 });
             },
             focus: function (event, ui) {
-                return false; // Prevents default focus behavior
+                return false;
             },
             select: function (event, ui) {
-                console.log("Selected Item:", ui.item); // Debugging: Log the selected item
-                window.location.href = '/business/' + business_id + '/orders/create?cus_id=' + ui.item.id;
-            }
+                // console.log("Selected Item:", ui.item);
+				alert(window.location.href);
+                // window.location.href = '/business/' + business_id + '/orders/create?cus_id=' + ui.item.id;
+                window.location.href = '/business/' + business_id + '/orders_check?cus_id=' + ui.item.id;
+
+			}
         }).data("ui-autocomplete")._renderItem = function (ul, item) {
-            console.log("Rendering Item:", item); // Debugging: Log each item being rendered
+            console.log("Rendering Item:", item); 
 
             let profile_img = '<div class="collapse-img"><div class="company-list-text" style="height: 50px;width: 50px;"><p style="padding: 0;">' + item.fname.charAt(0) + '</p></div></div>';
 

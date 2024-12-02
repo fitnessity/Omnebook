@@ -79,11 +79,11 @@ class BusinessPriceDetailsAges extends Model
     }
 
     public function BusinessPriceDetails(){
-        return $this->hasMany(BusinessPriceDetails::class, 'category_id')->whereNull('deleted_at');
+        return $this->hasMany(BusinessPriceDetails::class, 'category_id')->whereNull('type_price')->whereNull('deleted_at');
     }
     
     public function BusinessPriceDetailsData(){
-        return $this->hasMany(BusinessPriceDetails::class, 'category_id')->whereNull('deleted_at');
+        return $this->hasMany(BusinessPriceDetails::class, 'category_id')->whereNull('type_price')->whereNull('deleted_at');
     }
     
 
