@@ -26,7 +26,7 @@ class MailService
        
         $user = User::findOrFail($id);
         Mail::send('emails.dummytestmail', ['user' => $user], function ($m) use ($user) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
             $m->to('contact@valormmanyc.com')->subject('Welcome!');
         });
 
@@ -41,7 +41,7 @@ class MailService
     {
        $user = User::findOrFail($id);
        Mail::send('emails.welcome', ['user' => $user], function ($m) use ($user) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
             $m->to($user->email, $user->firstname.' '.$user->lastname)->subject('Welcome!');
         });
     }
@@ -51,14 +51,14 @@ class MailService
         $user_name = $user->firstname.' '.$user->lastname;
         //send mail to user
         Mail::send('emails.report-feed', ['data' => $data, 'report_notes' =>$report_notes, 'reported_user_name' => $user_name, 'report_user_email'=>$user->email, 'is_post_reported'=>$is_post_reported, 'user' => $user], function ($m) use ($data, $user) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-            $m->to($user->email, $user->firstname.' '.$user->lastname)->subject('Fitnessity: Thank you for your feedback !');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
+            $m->to($user->email, $user->firstname.' '.$user->lastname)->subject('OmneBook: Thank you for your feedback !');
         });
         $admin = User::where('role', 'admin')->first();
         //send mail to admin
         Mail::send('emails.report-feed-admin', ['admin' => $admin, 'data' => $data, 'report_notes'=>$report_notes,'reported_user_name' => $user_name, 'report_user_email'=>$user->email, 'is_post_reported'=>$is_post_reported, 'id'=>$id], function ($m) use ($admin) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-            $m->to($admin['email'], $admin['name'])->subject('Fitnessity: Someone has reported a post');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
+            $m->to($admin['email'], $admin['name'])->subject('OmneBook: Someone has reported a post');
         });
     }
     public static function sendEmailBooking($booking_id)
@@ -104,8 +104,8 @@ class MailService
 
             Mail::send('emails.booking-request', ['user' => $u, 'booking'=> $booking, 'professional' => $professional, 'sportsList' => $sportsList], function ($m) use ($user, $booking, $professional,$u,$value) {
                 
-                $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-                $m->to($u->email, $u->first_name.' '.$u->last_name)->subject('Fitnessity: You have new booking request!');
+                $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
+                $m->to($u->email, $u->first_name.' '.$u->last_name)->subject('OmneBook: You have new booking request!');
                 //}
                 
             });
@@ -115,8 +115,8 @@ class MailService
             // send mail to professional if it is direct hire
 
             Mail::send('emails.booking-request-business', ['user' => $user, 'booking'=> $booking, 'professional' => $professional, 'sportsList' => $sportsList], function ($m) use ($user, $booking, $professional) {
-                $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-                $m->to($professional['email'], $professional['firstname'].' '.$professional['lastname'])->subject('Fitnessity: You have new booking request!');
+                $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
+                $m->to($professional['email'], $professional['firstname'].' '.$professional['lastname'])->subject('OmneBook: You have new booking request!');
 
             });
 
@@ -130,7 +130,7 @@ class MailService
 
             Mail::send('emails.booking-request-quick', ['user' => $user, 'booking'=> $booking,'sportsList' => $sportsList], function ($m) use ($user, $booking) {
 
-                $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+                $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
                 $m->to($user['email'], $user['firstname'])->subject('Instant Match Request Received');
 
             });
@@ -195,11 +195,11 @@ class MailService
                    $tomail = $p['email'];
                     Mail::send(['html' => 'emails.booking-request-business-quick'], ['user' => $user, 'booking'=> $booking, 'professional_email' => $tomail, 'sportsList' => $sportsList], function ($m) use ($user, $booking, $tomail) {
 
-                        $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+                        $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
     
-                        // $m->to($professional_email)->subject('Fitnessity: We have a new job request that matches to your skills!');
+                        // $m->to($professional_email)->subject('OmneBook: We have a new job request that matches to your skills!');
     
-                        $m->to($tomail)->subject('Fitnessity: Instant Match Booking Request from '. $user['firstname'] .' '. $user['lastname'] .' in '.$user['customer_detail']['cities']);
+                        $m->to($tomail)->subject('OmneBook: Instant Match Booking Request from '. $user['firstname'] .' '. $user['lastname'] .' in '.$user['customer_detail']['cities']);
                         
                     });
     
@@ -215,8 +215,8 @@ class MailService
     public static function sendEmailclaimvarification($details){
         // echo $details['email'];exit();
         Mail::send('emails.business-claim-varification', ['details' => $details], function ($m) use ($details) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-            $m->to($details['email'])->subject('Fitnessity: Verification code for claiming business');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
+            $m->to($details['email'])->subject('OmneBook: Verification code for claiming business');
         });
     }
 
@@ -231,14 +231,14 @@ class MailService
             $bususername = $bd1['businessuser']['first_name'].' '.$bd1['businessuser']['last_name'];
         }
         Mail::send('emails.booking-confirm', ['BookingDetail' => $BookingDetail,'sportsList' => $sportsList,'useremail'=>  $useremail,'username' => $username ,'bususeremail'=>  $bususeremail,'bususername' => $bususername], function ($m) use ($BookingDetail,$sportsList,$useremail,$username,$bususeremail,$bususername) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-            $m->to($useremail, $username)->subject('Fitnessity: Booking request is confirmed!');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
+            $m->to($useremail, $username)->subject('OmneBook: Booking request is confirmed!');
         });
 
         Mail::send('emails.booking-confirm-business', ['BookingDetail' => $BookingDetail,'sportsList' => $sportsList,'bususeremail'=>  $bususeremail,'bususername' => $bususername,'useremail'=>  $useremail,'username' => $username ], function ($m) use ($BookingDetail,$sportsList,$bususeremail,$bususername,$useremail,$username) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-            $m->to( $bususeremail,  $bususername)->subject('Fitnessity: YOU HAVE A NEW  BOOKING!');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
+            $m->to( $bususeremail,  $bususername)->subject('OmneBook: YOU HAVE A NEW  BOOKING!');
         });
     }
 
@@ -247,14 +247,14 @@ class MailService
 
         if($mail_type == 'cancel'){
             $send = "emails.activity-schedule-cancel";
-            $msg = 'Fitnessity: Activity Has Been Cancelled!';
+            $msg = 'OmneBook: Activity Has Been Cancelled!';
         }else{
             $send = "emails.activity-reschedule";
-            $msg = 'Fitnessity: Activity Has Been Rescheduled!';
+            $msg = 'OmneBook: Activity Has Been Rescheduled!';
         }
 
         Mail::send($send, ['userdata' => $userdata, 'businessdata' => $businessdata , 'companydata' => $companydata ,'time' =>$time ,'date' =>$date ,'usertype' =>$usertype,'msg'=>$msg], function ($m) use ($userdata,$businessdata,$companydata,$time,$date,$usertype,$msg) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
             $m->to($userdata->email)->subject($msg);
         });
 
@@ -270,14 +270,14 @@ class MailService
 
         if($mail_type == 'cancel'){
             $send = "emails.activity-schedule-cancel-instructor";
-            $msg = 'Fitnessity: Activity Has Been Cancelled!';
+            $msg = 'OmneBook: Activity Has Been Cancelled!';
         }else{
             $send = "emails.activity-reschedule-instructor";
-            $msg = 'Fitnessity: Activity Has Been Rescheduled!';
+            $msg = 'OmneBook: Activity Has Been Rescheduled!';
         }
 
         Mail::send($send, ['insdata' => $insdata, 'businessdata' => $businessdata , 'companydata' => $companydata ,'time' =>$time ,'date' =>$date ,'msg'=>$msg], function ($m) use ($insdata,$businessdata,$companydata,$time,$date,$msg) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
             $m->to($insdata->email)->subject($msg);
         });
 
@@ -294,22 +294,22 @@ class MailService
         $sportsList = $sportsRepo->getAllSportsNames(1);
         Mail::send('emails.booking-confirm', ['BookingDetail' => $BookingDetail,'sportsList' => $sportsList], function ($m) use ($BookingDetail) {
 
-            $m->from( env('MAIL_FROM_ADDRESS') , 'Fitnessity');
-            $m->to($BookingDetail['user']['email'], $BookingDetail['user']['firstname'].' '.$BookingDetail['user']['lastname'])->subject('Fitnessity: Booking request is confirmed!');
+            $m->from( env('MAIL_FROM_ADDRESS') , 'OmneBook');
+            $m->to($BookingDetail['user']['email'], $BookingDetail['user']['firstname'].' '.$BookingDetail['user']['lastname'])->subject('OmneBook: Booking request is confirmed!');
         });
 
         //send mail to professional
         Mail::send('emails.booking-confirm-business', ['BookingDetail' => $BookingDetail,'sportsList' => $sportsList], function ($m) use ($BookingDetail) {
 
-            $m->from( env('MAIL_FROM_ADDRESS') , 'Fitnessity');
-            $m->to($BookingDetail['businessuser']['business_email'], $BookingDetail['businessuser']['firstname'].' '.$BookingDetail['businessuser']['lastname'])->subject('Fitnessity: Booking request is confirmed!');
+            $m->from( env('MAIL_FROM_ADDRESS') , 'OmneBook');
+            $m->to($BookingDetail['businessuser']['business_email'], $BookingDetail['businessuser']['firstname'].' '.$BookingDetail['businessuser']['lastname'])->subject('OmneBook: Booking request is confirmed!');
 
         });
     }
 
     public static function sendEmailReceipt($email_detail){
         Mail::send('emails.email-order-receipt', ['email_detail' => $email_detail], function ($m) use ($email_detail) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
             $m->to($email_detail['email'],'')->subject('Booking Receipt');
         });
         if(Mail::failures()){
@@ -321,7 +321,7 @@ class MailService
 
     public static function sendEmailReceiptFromCheckoutRegister($email_detail){
         Mail::send('emails.checkout-register-customer-mail', ['email_detail' => $email_detail], function ($m) use ($email_detail) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
             $m->to($email_detail['email'],'')->subject('BOOKING CONFIRMATION');
         });
         if(Mail::failures()){
@@ -335,16 +335,16 @@ class MailService
         
         //send mail to Business email address
         Mail::send('emails.business-listed-message-business', ['AllDetail' => $AllDetail], function ($m) use ($AllDetail) {
-            $comname = 'Fitnessity: '.@$AllDetail["company_data"]["company_name"].' Congratulations! Your business is now live on Fitnessity';
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $comname = 'OmneBook: '.@$AllDetail["company_data"]["company_name"].' Congratulations! Your business is now live on OmneBook';
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
             $m->to($AllDetail['company_data']['business_email'],'')->subject($comname);
         });
 
         //send mail to customer email address
 
         Mail::send('emails.business-listed-message', ['AllDetail' => $AllDetail], function ($m) use ($AllDetail) {
-            $comname = 'Fitnessity: '.strtoupper(@$AllDetail["company_data"]["company_name"]).' IS NOW LIVE ON FITNESSITY';
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $comname = 'OmneBook: '.strtoupper(@$AllDetail["company_data"]["company_name"]).' IS NOW LIVE ON OmneBook';
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
             $m->to($AllDetail['company_data']['business_email'], $AllDetail['company_data']['first_name'])->subject($comname);
         });
     }
@@ -352,20 +352,20 @@ class MailService
 
     public static function sendEmailafterclaimed($AllDetail){
         Mail::send('emails.Welcome_email_for_business_afer_claim', ['AllDetail' => $AllDetail], function ($m) use ($AllDetail) {
-            $first_name = 'Fitnessity';
+            $first_name = 'OmneBook';
             if(@$AllDetail['company_data']['first_name'] != ''){
                 $first_name = @$AllDetail['company_data']['first_name'];
             }
-            $comname = 'Welcome to Fitnessity for Business';
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $comname = 'Welcome to OmneBook for Business';
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
             $m->to($AllDetail['company_data']['business_email'],  $first_name)->subject($comname);
         });
     }
 
     public static function sendEmailfromadmin($AllDetail){
         Mail::send('emails.business-unclaim-to-claim-success', ['AllDetail' => $AllDetail], function ($m) use ($AllDetail) {
-            $comname = 'Fitnessity: CONGRATULATIONS '.strtoupper(@$AllDetail["company_data"]["company_name"]).' YOU ARE NOW LIVE ON FITNESSITY';
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $comname = 'OmneBook: CONGRATULATIONS '.strtoupper(@$AllDetail["company_data"]["company_name"]).' YOU ARE NOW LIVE ON OmneBook';
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
             $m->to($AllDetail['company_data']['business_email'], $AllDetail['company_data']['first_name'])->subject($comname);
         });
         if(Mail::failures()){
@@ -379,20 +379,20 @@ class MailService
     public static function sendEmailFeedback($data)
     {
         //send mail to user
-        Mail::send('emails.fitnessity-feedback', ['data' => $data], function ($m) use ($data) {
+        Mail::send('emails.OmneBook-feedback', ['data' => $data], function ($m) use ($data) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-            $m->to($data['email'], $data['name'])->subject('Fitnessity: Thank you for your feedback !');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
+            $m->to($data['email'], $data['name'])->subject('OmneBook: Thank you for your feedback !');
 
         });
 
         $admin = User::where('role', 'admin')->first();
         //send mail to admin
 
-        Mail::send('emails.fitnessity-feedback-admin', ['admin' => $admin, 'data' => $data], function ($m) use ($admin) {
+        Mail::send('emails.OmneBook-feedback-admin', ['admin' => $admin, 'data' => $data], function ($m) use ($admin) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-            $m->to($admin['email'], $admin['name'])->subject('Fitnessity: New feedback');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
+            $m->to($admin['email'], $admin['name'])->subject('OmneBook: New feedback');
 
         });
 
@@ -407,7 +407,7 @@ class MailService
             $email[] = $newsletter->email;
         }
         Mail::send('emails.admin-newsletter', ['data' => $data], function ($m) use ($email,$subject) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
             $m->to($email)->subject($subject);
         });
     }
@@ -430,8 +430,8 @@ class MailService
 
                 function ($m) use ($bookingQuote, $booking_user, $quote_user, $UserBookingDetail) {
 
-                  $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-                  $m->to($booking_user['email'], $booking_user['firstname'].' '.$booking_user['lastname'])->subject('Fitnessity: Good News! A quote has been submitted to your request!');
+                  $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
+                  $m->to($booking_user['email'], $booking_user['firstname'].' '.$booking_user['lastname'])->subject('OmneBook: Good News! A quote has been submitted to your request!');
         });
         //send mail to professional
 
@@ -441,8 +441,8 @@ class MailService
 
                 function ($m) use ($bookingQuote, $booking_user, $quote_user, $UserBookingDetail) {
 
-                   $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-                   $m->to($quote_user['email'], $quote_user['firstname'].' '.$quote_user['lastname'])->subject('Fitnessity: Good News! Your quotes were posted successfully');
+                   $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
+                   $m->to($quote_user['email'], $quote_user['firstname'].' '.$quote_user['lastname'])->subject('OmneBook: Good News! Your quotes were posted successfully');
 
         });
        
@@ -467,11 +467,11 @@ class MailService
 
         Mail::send('emails.booking-awarded', ['user' => $user, 'booking'=> $booking, 'professional' => $professional, 'sportsList' => $sportsList], function ($m) use ($user, $booking, $professional) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
 
 
 
-            $m->to($user['email'], $user['firstname'].' '.$user['lastname'])->subject('Fitnessity: You have new booking request!');
+            $m->to($user['email'], $user['firstname'].' '.$user['lastname'])->subject('OmneBook: You have new booking request!');
 
         });
 
@@ -481,11 +481,11 @@ class MailService
 
         Mail::send('emails.booking-awarded-business', ['user' => $user, 'booking'=> $booking, 'professional' => $professional, 'sportsList' => $sportsList], function ($m) use ($user, $booking, $professional) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
 
 
 
-            $m->to($professional['email'], $professional['firstname'].' '.$professional['lastname'])->subject('Fitnessity: You have new booking request!');
+            $m->to($professional['email'], $professional['firstname'].' '.$professional['lastname'])->subject('OmneBook: You have new booking request!');
 
         });
 
@@ -505,11 +505,11 @@ class MailService
 
         Mail::send('emails.booking-reject', ['BookingDetail' => $BookingDetail,'sportsList' => $sportsList], function ($m) use ($BookingDetail) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
 
 
 
-            $m->to($BookingDetail['user']['email'], $BookingDetail['user']['firstname'].' '.$BookingDetail['user']['lastname'])->subject('Fitnessity: Booking request is rejected');
+            $m->to($BookingDetail['user']['email'], $BookingDetail['user']['firstname'].' '.$BookingDetail['user']['lastname'])->subject('OmneBook: Booking request is rejected');
 
         });
 
@@ -519,11 +519,11 @@ class MailService
 
         Mail::send('emails.booking-reject-business', ['BookingDetail' => $BookingDetail,'sportsList' => $sportsList], function ($m) use ($BookingDetail) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
 
 
 
-            $m->to($BookingDetail['businessuser']['business_email'], $BookingDetail['businessuser']['firstname'].' '.$BookingDetail['businessuser']['lastname'])->subject('Fitnessity: Booking request is rejected');
+            $m->to($BookingDetail['businessuser']['business_email'], $BookingDetail['businessuser']['firstname'].' '.$BookingDetail['businessuser']['lastname'])->subject('OmneBook: Booking request is rejected');
 
         });
 
@@ -539,11 +539,11 @@ class MailService
 
         Mail::send('emails.profile-for-review-admin', ['mailData' => $mail_data], function ($m) use ($mail_data) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
 
 
 
-            $m->to($mail_data['adminDetails']->email, $mail_data['adminDetails']->firstname.' '.$mail_data['adminDetails']->lastname)->subject('Fitnessity: User profile to review');
+            $m->to($mail_data['adminDetails']->email, $mail_data['adminDetails']->firstname.' '.$mail_data['adminDetails']->lastname)->subject('OmneBook: User profile to review');
 
         });
 
@@ -553,11 +553,11 @@ class MailService
 
         Mail::send('emails.profile-for-review-business', ['mailData' => $mail_data], function ($m) use ($mail_data) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
 
 
 
-            $m->to($mail_data['professionalDetails']->email, $mail_data['professionalDetails']->firstname.' '.$mail_data['professionalDetails']->lastname)->subject('Fitnessity: Your profile is under Fitnessity Review Process');
+            $m->to($mail_data['professionalDetails']->email, $mail_data['professionalDetails']->firstname.' '.$mail_data['professionalDetails']->lastname)->subject('OmneBook: Your profile is under OmneBook Review Process');
 
         });
 
@@ -573,11 +573,11 @@ class MailService
 
         Mail::send('emails.profile-approved-business', ['ProfessionalDetail' => $professional_detail], function ($m) use ($professional_detail) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
 
 
 
-            $m->to($professional_detail['email'], $professional_detail['firstname'].' '.$professional_detail['lastname'])->subject('Fitnessity: Your Profile is Approved !');
+            $m->to($professional_detail['email'], $professional_detail['firstname'].' '.$professional_detail['lastname'])->subject('OmneBook: Your Profile is Approved !');
 
         });
 
@@ -593,11 +593,11 @@ class MailService
 
         Mail::send('emails.profile-rejected-business', ['mailData' => $mail_data], function ($m) use ($mail_data) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
 
 
 
-            $m->to($mail_data['professionalDetail']['email'], $mail_data['professionalDetail']['firstname'].' '.$mail_data['professionalDetail']['lastname'])->subject('Fitnessity: Your profile is rejected for some reason');
+            $m->to($mail_data['professionalDetail']['email'], $mail_data['professionalDetail']['firstname'].' '.$mail_data['professionalDetail']['lastname'])->subject('OmneBook: Your profile is rejected for some reason');
 
         });
 
@@ -619,13 +619,13 @@ class MailService
 
 
 
-            // $m->to($emails)->subject(ucfirst($inviteeUser->firstname).' '.ucfirst($inviteeUser->lastname).' has invited you to join Fitnessity');
+            // $m->to($emails)->subject(ucfirst($inviteeUser->firstname).' '.ucfirst($inviteeUser->lastname).' has invited you to join OmneBook');
 
             $m->to($inviteeUser->email);
 
             $m->bcc($emails);
 
-            $m->subject(ucfirst($inviteeUser->firstname).' '.ucfirst($inviteeUser->lastname).' has invited you to join Fitnessity');
+            $m->subject(ucfirst($inviteeUser->firstname).' '.ucfirst($inviteeUser->lastname).' has invited you to join OmneBook');
 
         });
 
@@ -645,13 +645,13 @@ class MailService
 
         //         $m->from($mail_data['email'], $mail_data['name']);
 
-        //         $m->to($admin['email'], $admin['firstname'].' '.$admin['lastname'])->subject('Fitnessity: '.$mail_data['name'].' has contacted you');
+        //         $m->to($admin['email'], $admin['firstname'].' '.$admin['lastname'])->subject('OmneBook: '.$mail_data['name'].' has contacted you');
 
         // });
 
         Mail::send('emails.contact-us', ['name' => $mail_data['name'], 'email' => $mail_data['email'], 'post_message' => nl2br($mail_data['message'])], function ($m) use ($mail_data) {
                 $m->from(env('MAIL_FROM_ADDRESS'), $mail_data['name']);
-                $m->to(env('CONTACT_EMAIL'))->subject('Fitnessity: '.$mail_data['name'].' has contacted you');
+                $m->to(env('CONTACT_EMAIL'))->subject('OmneBook: '.$mail_data['name'].' has contacted you');
         });
     }
 
@@ -665,7 +665,7 @@ class MailService
 
         Mail::send('emails.signup-verification', ['user' => $user], function ($m) use ($user) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
 
 
 
@@ -683,11 +683,11 @@ class MailService
 
         Mail::send('emails.email-verified-acknowledgement', ['user' => $user], function ($m) use ($user) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
 
 
 
-            $m->to($user->email, $user->firstname.' '.$user->lastname)->subject('Welcome To Fitnessity');
+            $m->to($user->email, $user->firstname.' '.$user->lastname)->subject('Welcome To OmneBook');
 
         });
 
@@ -698,12 +698,12 @@ class MailService
         $user = Customer::findOrFail($id);
         $businessdata = CompanyInformation::findOrFail($business_id);
         Mail::send('emails.email-verified-acknowledgement-customer-from-provider', ['user' => $user,'businessdata'=>$businessdata], function ($m) use ($user,$businessdata) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-            $m->to($user->email, @$user->fname.' '.@$user->lname)->subject('Welcome To Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
+            $m->to($user->email, @$user->fname.' '.@$user->lname)->subject('Welcome To OmneBook');
         });
-        Mail::send('emails.email-verified-acknowledgement-customer-from-fitnessity', ['user' => $user,'businessdata'=>$businessdata], function ($m) use ($user,$businessdata) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
-            $m->to($user->email, @$user->fname.' '.@$user->lname)->subject('Welcome To Fitnessity');
+        Mail::send('emails.email-verified-acknowledgement-customer-from-OmneBook', ['user' => $user,'businessdata'=>$businessdata], function ($m) use ($user,$businessdata) {
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
+            $m->to($user->email, @$user->fname.' '.@$user->lname)->subject('Welcome To OmneBook');
         });
 
         if(Mail::failures()){
@@ -715,7 +715,7 @@ class MailService
 
     public static function sendEmailSportCategoryChange($mailObj){
         Mail::send('emails.alert-sport-change', ['mailObj' => $mailObj], function ($m) use ($mailObj) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
             $m->to($mailObj['email'], $mailObj['firstname'].' '.$mailObj['lastname'])->subject('New courses for '.$mailObj['main_sport']);
        });
 
@@ -723,7 +723,7 @@ class MailService
     public static function resendEmailVerificationCode($user)
     {
         Mail::send('emails.signup-verification', ['user' => $user], function ($m) use ($user) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
             $m->to($user->email, $user->firstname.' '.$user->lastname)->subject('Email Verification');
         });
     }
@@ -736,11 +736,11 @@ class MailService
 
         Mail::send('emails.emailmessage', ['mail_data' => $mail_data], function ($m) use ($mail_data) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
 
 
 
-            $m->to($mail_data['touser']['email'], $mail_data['touser']['firstname'].' '.$mail_data['touser']['lastname'])->subject('Fitnessity:  New messages from '.$mail_data['fromuser']['firstname']);
+            $m->to($mail_data['touser']['email'], $mail_data['touser']['firstname'].' '.$mail_data['touser']['lastname'])->subject('OmneBook:  New messages from '.$mail_data['fromuser']['firstname']);
 
         });
 
@@ -748,7 +748,7 @@ class MailService
 
     public static function sendSGEmailReceipt($email_detail){
         Mail::send('emails.email-order-receipt', ['email_detail' => $email_detail], function ($m) use ($email_detail) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'OmneBook');
             $m->to($email_detail['email'],'')->subject('Booking Receipt');
         });
         if(Mail::failures()){
