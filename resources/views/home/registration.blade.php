@@ -95,6 +95,12 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class='error' id='systemMessage'></div>
+                                @if(session()->has('alert-success'))
+                                <div class="alert alert-success mb-3 fs-12">
+                                    {{ session()->get('alert-success') }}
+                                </div>
+                                @endif
+                        
                                 <div class="prfle-wrap">
                                     <img src="" alt="">
                                     {{substr(Auth::user()->firstname,0,1)}}
@@ -167,7 +173,7 @@
                                     <li><i class="fa fa-check"></i><span>Your Identification</span></li>
                                 </ul>
                                 <ul class="nav nav-tabs nav-stacked">
-                                    <li ><a class="active" data-bs-toggle="tab" href="#add_personel_info"><span class="stp-numbr">3</span> <span>Add Personal Information</span></a></li>
+                                    <li><a class="active" data-bs-toggle="tab" href="#add_personel_info"><span class="stp-numbr">3</span> <span>Add Personal Information</span></a></li>
                                     <li><a data-bs-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
                                 </ul>
                                 

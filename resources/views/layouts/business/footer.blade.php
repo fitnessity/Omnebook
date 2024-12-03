@@ -52,11 +52,11 @@
 
 <!-- ends -->
 <footer id="footer" class="printnone  @if(  request()->is('*register_ep*') || request()->is('*check-in-welcome*') || request()->is('*quick-checkin*')|| request()->is('*check-in-portal*')) d-none @endif" >
-	@if(session()->has('alert-success'))
+	{{-- @if(session()->has('alert-success'))
     	<div class="alert alert-success">
         	{{ session()->get('alert-success') }}
         </div>
-	@endif
+	@endif --}}
     <div class="alert alert-success newslattermsg" style="display: none;">
 		<button type="button" class="close" data-dismiss="alert">×</button> 
 		<strong> Subscribe Succesfully !</strong>                          
