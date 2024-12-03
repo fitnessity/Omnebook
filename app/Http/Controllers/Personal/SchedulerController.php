@@ -153,6 +153,7 @@ class SchedulerController extends Controller
                     "CustomerName" => @$UserBookingDetails->Customer->full_name, 
                     "Url" => env('APP_URL').'/personal/orders?business_id='.Auth::user()->cid, 
                     "BusinessName"=> @$UserBookingDetails->company_information->dba_business_name,
+                    "Age" => $this->calculateAge(@$UserBookingDetails->Customer->birthdate), // Using the controller method
                     "BookedPerson"=> @$UserBookingDetails->Customer->full_name,
                     "ParticipantsName"=> @$UserBookingDetails->Customer->full_name,
                     "date"=> date('m/d/Y',strtotime($request->date)),
@@ -169,6 +170,18 @@ class SchedulerController extends Controller
         }else{
             return "fail";
         }   
+    }
+
+    private function calculateAge($birthdate)
+    {
+        if (!$birthdate) {
+            return null; // Return null if birthdate is not available
+        }
+    
+        $birthDateTime = new DateTime($birthdate);
+        $currentDateTime = new DateTime();
+    
+        return $currentDateTime->diff($birthDateTime)->y;
     }
 
     /**

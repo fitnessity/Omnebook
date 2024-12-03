@@ -234,12 +234,10 @@
                                                                                         <div class="row">
                                                                                             <div
                                                                                                 class="col-md-4 col-lg-3">
-                                                                                                <label
-                                                                                                    class="mt-10">First
-                                                                                                    Name</label>
+                                                                                                <label class="mt-10">First Name</label>
                                                                                                 <input type="text"
                                                                                                     name="fname[]"
-                                                                                                    id="fname"
+                                                                                                    id="fname" required
                                                                                                     class="form-control required fname0">
                                                                                                 <span class="error"
                                                                                                     id="err_fname"></span>
@@ -251,20 +249,14 @@
                                                                                                     Name</label>
                                                                                                 <input type="text"
                                                                                                     name="lname[]"
-                                                                                                    id="lname"
+                                                                                                    id="lname" required
                                                                                                     class="form-control required lname0">
                                                                                                 <span class="error"
                                                                                                     id="err_lname"></span>
                                                                                             </div>
-                                                                                            <div
-                                                                                                class="col-md-4 col-lg-3">
-                                                                                                <label
-                                                                                                    class="mt-10">Birthday</label>
-                                                                                                <input type="text"
-                                                                                                    class="form-control add-client-birthdate"
-                                                                                                    name="birthdate[]"
-                                                                                                    id="birthdate">
-
+                                                                                            <div class="col-md-4 col-lg-3">
+                                                                                                <label class="mt-10">Birthday</label>
+                                                                                                 <input type="text" class="form-control add-client-birthdate" name="birthdate[]" id="birthdate0" required>
                                                                                             </div>
                                                                                             <div
                                                                                                 class="col-md-4 col-lg-3">
@@ -295,7 +287,7 @@
                                                                                                     class="mt-10">Relationship</label>
                                                                                                 <select
                                                                                                     name="relationship[]"
-                                                                                                    id="relationship"
+                                                                                                    id="relationship" required
                                                                                                     class="form-select relationship required">
                                                                                                     <option
                                                                                                         value="">
@@ -328,8 +320,7 @@
                                                                                                         Daughter
                                                                                                     </option>
                                                                                                 </select>
-                                                                                                <span class="error"
-                                                                                                    id="err_relationship"></span>
+                                                                                                <span class="error" id="err_relationship"></span>
                                                                                             </div>
                                                                                             <div
                                                                                                 class="col-md-4 col-lg-3">
@@ -338,12 +329,11 @@
                                                                                                 <input maxlength="14"
                                                                                                     type="text"
                                                                                                     name="mphone[]"
-                                                                                                    id="mphone"
+                                                                                                    id="mphone" 
                                                                                                     class="form-control mobile_number"
                                                                                                     onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57"
-                                                                                                    data-behavior="text-phone">
-                                                                                                <span class="error"
-                                                                                                    id="err_mphone"></span>
+                                                                                                    data-behavior="text-phone" required>
+                                                                                                <span class="error" id="err_mphone"></span>
                                                                                             </div>
                                                                                             <div
                                                                                                 class="col-md-4 col-lg-3">
@@ -351,12 +341,20 @@
                                                                                                     class="mt-10">Email</label>
                                                                                                 <input type="email"
                                                                                                     name="emailid[]"
-                                                                                                    id="emailid"
+                                                                                                    id="emailid" 
                                                                                                     class="form-control email"
                                                                                                     required
                                                                                                     onblur="getCode(0,'email');">
                                                                                                 <span class="error"
                                                                                                     id="err_emailid"></span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="border-bottom-grey  mt-15 mb-15"></div>
+                                                                                        <div class="row">
+                                                                                            <div class="col-lg-12">
+                                                                                                <div class="additional-lab">
+                                                                                                    <label>Additional</label>
+                                                                                                </div>
                                                                                             </div>
                                                                                             <div
                                                                                                 class="col-md-4 col-lg-3">
@@ -440,7 +438,6 @@
                                                                                                 <span class="error"
                                                                                                     id="err_emergency_relation"></span>
                                                                                             </div>
-
                                                                                             <div
                                                                                                 class="col-md-4 col-lg-3">
                                                                                                 <label
@@ -459,7 +456,6 @@
                                                                                                     id="check_in_error_family0">
                                                                                                 </div>
                                                                                             </div>
-
                                                                                             <div
                                                                                                 class="col-md-4 col-lg-3">
                                                                                                 <div

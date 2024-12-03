@@ -94,7 +94,7 @@
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col">
-                                        <div class="h-100">
+                                      
                                             <div class="row mb-3">
                                                 <div class="col-12">
                                                     <div class="page-heading">
@@ -173,7 +173,7 @@
                                                                             </div> --}} -->
                                                                             <div class="col-md-4 col-lg-3">
                                                                                 <label class="mt-10">Gender<span id="star">*</span></label>
-                                                                                <select class="form-control" name="gender">
+                                                                                <select class="form-select" name="gender">
                                                                                     <option value="male">Male</option>
                                                                                     <option value="female">Female</option>
                                                                                     <option value="other">Other</option>
@@ -196,7 +196,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="add-client-sapre-tor"></div>
+                                                                        <!-- <div class="add-client-sapre-tor"></div> -->
                                                                         <!-- {{-- <div class="container-fuild">
                                                                             <div class="row">
                                                                                 <div class="col-lg-12">
@@ -273,7 +273,7 @@
                                                                             <div id="familymaindiv">
                                                                                 <!-- <div class="new-client mb-10" id="familydiv0" data-i="0" data-text="1" > -->
                                                                                  <div class="new-client mb-10" id="familydiv0" data-i="0" data-text="1">    
-                                                                                <div class="accordion" id="default-accordion-example">
+                                                                                    <div class="accordion" id="default-accordion-example">
                                                                                         <div class="accordion-item shadow">
                                                                                             <h2 class="accordion-header" id="heading0">
                                                                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0" aria-expanded="true" aria-controls="collapse0">
@@ -303,7 +303,7 @@
                                                                                                         </div>
                                                                                                         <div class="col-md-4 col-lg-3">
                                                                                                             <label class="mt-10">Birthday</label>
-                                                                                                            <input type="text" class="form-control birthday_date0" name="birthdate[]" id="birthdate0">
+                                                                                                            <input type="text" class="form-control birthday_date0" name="birthdate[]" id="birthdate0" required>
                                                                                                         </div>
                                                                                                         <div class="col-md-4 col-lg-3">
                                                                                                             <label class="mt-10">Gender</label>
@@ -331,13 +331,26 @@
                                                                                                         </div>
                                                                                                         <div class="col-md-4 col-lg-3">
                                                                                                             <label class="mt-10">Phone</label>
-                                                                                                            <input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone">
+                                                                                                            <input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone" required>
                                                                                                             <span class="error" id="err_mphone"></span>
                                                                                                         </div>
                                                                                                         <div class="col-md-4 col-lg-3">
                                                                                                             <label class="mt-10">Email</label>
                                                                                                             <input type="email" name="emailid[]" id="emailid" class="form-control email" required onblur="getCode(0,'email');">
                                                                                                             <span class="error" id="err_emailid"></span>
+                                                                                                        </div>
+                                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                                            <label class="mt-10">Check in Code </label>
+                                                                                                            <input type="text" name="check_in_code[]" id="check_in_code" size="30" maxlength="4" autocomplete="off" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control check_in_code0" onblur="getCode(0,'code');">
+                                                                                                            <div class="font-red" id="check_in_error_family0"></div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="border-bottom-grey  mt-15 mb-15"></div>
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-lg-12">
+                                                                                                            <div class="additional-lab">
+                                                                                                                <label>Additional</label>
+                                                                                                            </div>
                                                                                                         </div>
                                                                                                         <div class="col-md-4 col-lg-3">
                                                                                                             <label class="mt-10">Emergency Name</label>
@@ -370,11 +383,11 @@
                                                                                                             <span class="error" id="err_emergency_relation"></span>
                                                                                                         </div>
 
-                                                                                                        <div class="col-md-4 col-lg-3">
+                                                                                                        <!-- <div class="col-md-4 col-lg-3">
                                                                                                             <label class="mt-10">Check in Code </label>
                                                                                                             <input type="text" name="check_in_code[]" id="check_in_code" size="30" maxlength="4" autocomplete="off" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control check_in_code0" onblur="getCode(0,'code');">
                                                                                                             <div class="font-red" id="check_in_error_family0"></div>
-                                                                                                        </div>
+                                                                                                        </div> -->
 
                                                                                                         <div class="col-md-4 col-lg-3"> 
                                                                                                             <div class="form-group check-box-info">
@@ -508,7 +521,7 @@
                                                                             <div class="create-customer-box">
                                                                                 <div class="row"> 
                                                                                     <div class="col-md-12 col-lg-12">
-                                                                                        <h4 class="font-red">Agree to Terms, Waiver & Contract Signature</h4>
+                                                                                        <h4 class="font-red">Agree to OmneBook, Waiver & Contract Signature</h4>
                                                                                     </div>
 
                                                                                     <div class="col-md-12">
@@ -622,6 +635,7 @@
                                                                             </div>
                                                                         </div>
                                                                     @endif
+                                                                    <div class="" style="height: 50vh;">
                                                                     <form id="payment-form1" data-secret="">
                                                                         <div>
                                                                             <div id="payment-element1"></div>
@@ -635,6 +649,8 @@
                                                                         <input type="hidden" name="buttonType" id="buttonType"
                                                                         value="">
                                                                     </form>
+                                                                    </div>
+                                                                    
                                                                 </div>
                                                             </div>
                                                        
@@ -657,7 +673,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -1258,14 +1274,14 @@ jQuery(function ($) {
                     data: formData,
                     beforeSend: function () {
                         $("#termserror").html('');
-                        $('.register_submit').prop('disabled', true).css('background','#999999');
+                        $('.register_submit').prop('disabled', true).css('background','#98002e');
                         $('#systemMessage').addClass('font-red');
 
                         $('#loading-img').removeClass('d-none');
                         //$("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
                     },
                     complete: function () {
-                        $('.register_submit').prop('disabled', false).css('background','#ed1b24');
+                        $('.register_submit').prop('disabled', false).css('background','#98002e');
                     },
                     success: function (response) {
                        
@@ -1285,12 +1301,12 @@ jQuery(function ($) {
                                     },
                                     beforeSend: function () {
                                         $("#termserror").html('');
-                                        $('.register_submit').prop('disabled', true).css('background','#999999');
+                                        $('.register_submit').prop('disabled', true).css('background','#1c256c');
                                         $('#systemMessage').addClass('font-red');
                                         $('#loading-img').removeClass('d-none');
                                     },
                                     complete: function () {
-                                        $('.register_submit').prop('disabled', false).css('background','#ed1b24');
+                                        $('.register_submit').prop('disabled', false).css('background','#1c256c');
                                     },
                                     success: function (response) {
                                         if (response) {
@@ -1298,6 +1314,9 @@ jQuery(function ($) {
                                             $('#paymentform').show();
                                             if (response.clientSecret) {
                                                 // console.log(response.clientSecret);
+                                                $('.modal-dialog').removeClass('modal-xl').addClass('modal-md');
+                                                $('.modal .page-content').removeAttr('style').removeClass();
+
                                                 $('#client_secret').val(response.clientSecret);            
                                                 $('#payment-form1').attr('data-secret', response.clientSecret)
                                                 if (response.customer_id !== '') {

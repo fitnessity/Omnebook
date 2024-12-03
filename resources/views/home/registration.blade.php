@@ -94,6 +94,12 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class='error' id='systemMessage'></div>
+                                @if(session()->has('alert-success'))
+                                <div class="alert alert-success mb-3 fs-12">
+                                    {{ session()->get('alert-success') }}
+                                </div>
+                                @endif
+                        
                                 <div class="prfle-wrap">
                                     <img src="" alt="">
                                     {{substr(Auth::user()->firstname,0,1)}}

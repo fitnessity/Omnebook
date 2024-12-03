@@ -9938,3 +9938,168 @@ height: 400px;
   margin-top: -10px;
   display: block;
 }
+.additional-lab label{
+  font-size: 14px;
+  color: #000;
+}
+
+
+
+
+
+#bookppointments_wrapper{
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+#bookppointments_wrapper.toggled {
+  padding-left: 250px;
+}
+
+#bookppointments-sidebar-wrapper {
+  /* z-index: 1000; */
+  position: absolute;
+  left: 510px;
+  top: 145px;
+  width: 0;
+  height: 30%;
+  margin-left: -250px;
+  overflow-y: auto;
+  background: #545454;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+#bookppointments_wrapper.toggled #bookppointments-sidebar-wrapper {
+  width: 250px;
+  height: 460px;
+}
+
+#page-content-wrapper {
+  width: 100%;
+  position: absolute;
+  padding: 15px;
+}
+
+#bookppointments_wrapper.toggled #page-content-wrapper {
+  position: absolute;
+  margin-right: -250px;
+}
+
+/* Sidebar Styles */
+
+.ba-sidebar-nav {
+  position: absolute;
+  top: 0;
+  width: 250px;
+  margin: 0;
+  padding: 0px;
+  list-style: none;
+}
+
+.ba-sidebar-nav li {
+  text-indent: 0px;
+  line-height: 25px;
+  color: #fff !important;
+  padding: 0 15px;
+  border-bottom: 1px solid #6d6d6d;
+}
+
+.ba-sidebar-nav li a {
+  display: block;
+  text-decoration: none;
+  color: #fff !important;
+}
+
+/* .s-sidebar-nav li a:hover {
+  text-decoration: none;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+} */
+
+.ba-sidebar-nav li a:active, .ba-sidebar-nav li a:focus {
+  text-decoration: none;
+}
+
+.ba-sidebar-nav>.sidebar-brand {
+  height: 65px;
+  font-size: 18px;
+  line-height: 60px;
+}
+
+.ba-sidebar-nav>.sidebar-brand a {
+  color: #999999;
+}
+
+.ba-sidebar-nav>.sidebar-brand a:hover {
+  color: #fff;
+  background: none;
+}
+.navbar-nav.ba-sidebar-nav .nav-link[data-bs-toggle="collapse"]::after {
+  display: block;
+  content: "\f0142";
+  font-family: "Material Design Icons";
+  margin-left: auto;
+  -webkit-transition: -webkit-transform .2s;
+  transition: -webkit-transform .2s;
+  transition: transform .2s;
+  transition: transform .2s,-webkit-transform .2s;
+  font-size: 1.05rem;
+  position: absolute;
+  right: 18px;
+  top: 9px;
+}
+.navbar-nav.ba-sidebar-nav .nav-link[data-bs-toggle="collapse"][aria-expanded="true"]::after{
+  transform: rotate(90deg);
+}
+.navbar-nav.ba-sidebar-nav .nav-sm .nav-link::before {
+  content: "";
+  width: 6px;
+  height: 1.5px;
+  background-color: var(--vz-vertical-menu-sub-item-color);
+  position: absolute;
+  left: 2px;
+  top: 16.5px;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  opacity: .5;
+}
+
+:is([data-layout="vertical"], [data-layout="semibox"])[data-sidebar="dark"] .navbar-nav.ba-sidebar-nav .nav-sm .nav-link::before {
+  background-color: var(--vz-vertical-menu-sub-item-color-dark) !important;
+
+}
+.navbar-nav.ba-sidebar-nav .nav-sm {
+  padding-left: 1.75rem;
+}
+.navbar-nav.ba-sidebar-nav .nav-link i {
+  line-height: inherit;
+  margin-right: 10px;
+}
+
+@media(min-width:768px) {
+  #bookppointments_wrapper {
+    padding-left: 0;
+  }
+  #bookppointments_wrapper.toggled {
+    padding-left: 400x;
+  }
+  #bookppointments-sidebar-wrapper {
+    width: 0;
+  }
+  #bookppointments_wrapper.toggled #bookppointments-sidebar-wrapper {
+    width: 250px;
+  }
+  #page-content-wrapper {
+    padding: 20px;
+    position: relative;
+  }
+  #bookppointments_wrapper.toggled #page-content-wrapper {
+    position: relative;
+    margin-right: 0;
+  }
+}

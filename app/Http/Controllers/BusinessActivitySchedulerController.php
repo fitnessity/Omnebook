@@ -567,6 +567,7 @@ class BusinessActivitySchedulerController extends Controller
                         }
                     }
                     if($sendmail == 1){
+                        // dd('44');
                         $UserBookingDetails->update(["act_schedule_id"=>$ary['timeId'],'bookedtime'=>$ary['date']]);
                         $getreceipemailtbody = $this->booking_repo->getreceipemailtbody($UserBookingDetails->booking_id, $UserBookingDetails->id);
                         $email_detail = array(
@@ -580,6 +581,7 @@ class BusinessActivitySchedulerController extends Controller
                             "BusinessName"=> @$UserBookingDetails->company_information->dba_business_name,
                             "BookedPerson"=> @$UserBookingDetails->Customer->full_name,
                             "ParticipantsName"=> @$UserBookingDetails->Customer->full_name,
+                            "Age" => $this->calculateAge(@$UserBookingDetails->Customer->birthdate), // Using the controller method
                             "date"=> date('m/d/Y',strtotime($ary['date'])),
                             "time"=>  @$UserBookingDetails->business_activity_scheduler->activity_time(),
                             "duration"=> @$UserBookingDetails->business_activity_scheduler->get_clean_duration(),
@@ -597,6 +599,17 @@ class BusinessActivitySchedulerController extends Controller
         if(empty($sessionAry)){
             return "You booked schedule succesfully";
         }
+    }
+    private function calculateAge($birthdate)
+    {
+        if (!$birthdate) {
+            return null; // Return null if birthdate is not available
+        }
+    
+        $birthDateTime = new DateTime($birthdate);
+        $currentDateTime = new DateTime();
+    
+        return $currentDateTime->diff($birthDateTime)->y;
     }
     public function confirmation(){
         $data = [];

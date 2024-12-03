@@ -312,7 +312,7 @@
 			var user = {{ auth()->id() }};
 			var csrfToken = '{{ csrf_token() }}'; 
 			$.ajax({
-				url: '{{ route("membership") }}', 
+				url: '{{ route("membership_sub") }}', 
 				method: 'POST',
 				headers: {
                 'X-CSRF-TOKEN': csrfToken 

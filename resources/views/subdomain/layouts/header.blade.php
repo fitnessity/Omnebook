@@ -21,6 +21,24 @@
 
 	<link href="{{url('public/css/frontend/jquery-ui.css')}}"  rel='stylesheet'>
 	<script src="{{url('public/dashboard-design/js/jquery-ui.min.js')}}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.js"></script>
+	<script src="{{url('/public/dashboard-design/js/profile-setting.init.js')}}"></script>
+	<script src="https://js.stripe.com/v3/"></script>
+	
+    <script src="{{ url('public/js/JQueryValidate/jquery.validate.js') }}"></script>
+    <script src="{{ url('public/js/JQueryValidate/additional-methods.min.js') }}"></script>
+    <script src="{{ url('public/js/jquery-input-mask-phone-number.js') }}"></script>
+    <script src="{{ url('public/js/moment.js') }}"></script>
+  
+    <!-- init js -->
+
+		<script src="{{url('/public/dashboard-design/js/form-file-upload.init.js')}}"></script> 
+
+
+		<script src="{{ url('public/js/general.js') }}"></script>
+
+
 </head>
 <style>
 	.navbar-menu .navbar-nav .nav-link.active{
@@ -99,7 +117,7 @@
 						</a>					
 					</li>
 					<li class="nav-item">
-						<a class="nav-link menu-link" onclick="ManageAccount()" aria-controls="sidebarLanding">
+						<a class="nav-link menu-link" href="{{route('manage_account')}}" aria-controls="sidebarLanding">
 							<img src="{{asset('/public/img/menu-icon5.svg')}}" alt="OmneBook"> <span data-key="t-landing">Manage Accounts</span>
 						</a>
 					</li>			

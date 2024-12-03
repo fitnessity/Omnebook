@@ -43,7 +43,14 @@ Route::group(['domain' => 'host.fitnessity.co'], function() {
         Route::get('/register/{unique_code}','SubDomainController@RegisterPage')->name('/register');
     });
 
-    Route::post('/membership','SubDomainController@membership')->name('membership');
+    // Route::resource('manage-account', 'ManageAccountController')->only(['index','create','edit', 'update', 'destroy', 'store']);
+
+    Route::get('/manage_account','SubDomainController@manage_account')->name('manage_account');
+    Route::get('/manage_account_create','SubDomainController@create_manage')->name('manage_account_create');
+    Route::post('/store_family','SubDomainController@store_family')->name('store_family');
+    // store_family
+    
+    Route::post('/membership_sub','SubDomainController@membership')->name('membership_sub');
 
     Route::post('/get_checkin_code', 'SubDomainController@getCheckinCode')->name('get_checkin_code');
     Route::post('/sub_registration', 'SubDomainController@postRegistrationCustomer')->name('sub_registration');
@@ -1217,6 +1224,8 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/manage_services_sidebar','DesignController@manage_services_sidebar')->name('manage_services_sidebar');
     Route::get('/bookings_appointments','DesignController@bookings_appointments')->name('bookings_appointments');
     Route::get('/bookings_appointments_sidebar','DesignController@bookings_appointments_sidebar')->name('bookings_appointments_sidebar');
+    Route::get('/appointments_booking_history','DesignController@appointments_booking_history')->name('appointments_booking_history');
+
 });
 });
 ?>

@@ -173,7 +173,7 @@
                                                                                                 </div>
                                                                                                 <div class="col-md-4 col-lg-3">
                                                                                                     <label class="mt-10">Birthday</label>
-                                                                                                    <input type="text" class="form-control add-client-birthdate" name="birthdate[]" id="birthdate0">
+                                                                                                    <input type="text" class="form-control add-client-birthdate" name="birthdate[]" id="birthdate0" required>
                                                                                                 </div>
                                                                                                 <div class="col-md-4 col-lg-3">
                                                                                                     <label class="mt-10">Gender</label>
@@ -201,13 +201,26 @@
                                                                                                 </div>
                                                                                                 <div class="col-md-4 col-lg-3">
                                                                                                     <label class="mt-10">Phone</label>
-                                                                                                    <input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone">
+                                                                                                    <input maxlength="14" type="text" name="mphone[]" id="mphone" class="form-control mobile_number" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57" data-behavior="text-phone" required>
                                                                                                     <span class="error" id="err_mphone"></span>
                                                                                                 </div>
                                                                                                 <div class="col-md-4 col-lg-3">
                                                                                                     <label class="mt-10">Email</label>
                                                                                                     <input type="email" name="emailid[]" id="emailid" class="form-control email" required onblur="getCode(0,'email');">
                                                                                                     <span class="error" id="err_emailid"></span>
+                                                                                                </div>
+                                                                                                <div class="col-md-4 col-lg-3">
+                                                                                                  	<label class="mt-10">Check in Code </label>
+                                                                                                	<input type="text" name="check_in_code[]" id="check_in_code" size="30" maxlength="4" autocomplete="off" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control check_in_code0" onblur="getCode(0,'code');">
+                                                                                                	<div class="font-red" id="check_in_error_family0"></div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="border-bottom-grey  mt-15 mb-15"></div>
+                                                                                            <div class="row">
+                                                                                                <div class="col-lg-12">
+                                                                                                    <div class="additional-lab">
+                                                                                                        <label>Additional</label>
+                                                                                                    </div>
                                                                                                 </div>
                                                                                                 <div class="col-md-4 col-lg-3">
                                                                                                     <label class="mt-10">Emergency Name</label>
@@ -239,13 +252,6 @@
                                                                                                     </select>
                                                                                                     <span class="error" id="err_emergency_relation"></span>
                                                                                                 </div>
-
-                                                                                                <div class="col-md-4 col-lg-3">
-                                                                                                  	<label class="mt-10">Check in Code </label>
-                                                                                                	<input type="text" name="check_in_code[]" id="check_in_code" size="30" maxlength="4" autocomplete="off" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control check_in_code0" onblur="getCode(0,'code');">
-                                                                                                	<div class="font-red" id="check_in_error_family0"></div>
-                                                                                                </div>
-
                                                                                                 <div class="col-md-4 col-lg-3"> 
                                                                                                     <div class="form-group check-box-info">
                                                                                                         <input class="check-box-primary-account primaryAcCheck" type="checkbox" id="primaryAccount" name="primaryAccount" value="1" >
@@ -325,8 +331,8 @@
 
                                                             <div class="create-customer-box">
                                                                 <div class="row"> 
-                                                                    <div class="col-md-12 col-lg-12"><h4 class="font-red ">
-                                                                        Agree to Terms, Waiver & Contract Signature</h4>
+                                                                    <div class="col-md-12 col-lg-12">
+                                                                        <h4 class="font-red ">Agree to OmneBook, Waiver & Contract Signature</h4>
                                                                     </div>
 
                                                                     <div class="col-md-12">
