@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8" />
 
-    <title>Fitnessity</title>
+    <title>OmneBook</title>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -24,12 +24,12 @@
             <table width="100%" align="center">
                 <tr>
                     <td>
-                        <a href="http://www.fitnessity.co">
-                            <img src="{{ url('public/images/logo_new1.jpg') }}" width="200px">
+                        <a href="https://www.omnebook.com">
+                            <img src="{{ url('public/images/omnebook.png') }}" width="200px">
                         </a>
                     </td>
                     <td align="right">
-                        Login to <a href="http://www.fitnessity.co">fitnessity.co</a>
+                        Login to <a href="https://www.omnebook.com/userlogin">Omnebook.com</a>
                     </td>
                 </tr>
             </table>
@@ -42,7 +42,7 @@
                 </p>
                 <br/>
                 <a href="{{url('/verifyuser/'.$user->confirmation_code)}}" style="text-decoration: none; color:#ffffff; font-weight: bold">
-                <div style="text-align: center; padding:10px 5px; background: #ea1515; color:#ffffff; border-radius:50px; width:200px">
+                <div style="text-align: center; padding:10px 5px; background: #98002e; color:#ffffff; border-radius:50px; width:200px">
                 Verify Email
                 </div>>
                 </a>
@@ -60,7 +60,7 @@
         </header>
         
         <p class="MsoNormal" style="margin:0in;font-size:11pt;font-family:Calibri,sans-serif;text-align:center" align="center">
-        <span style="font-size:16pt;line-height:normal">Welcome to Fitnessity! Before we get started, please confirm your email address</span><span style="font-size:24.0pt"><u></u><span style="font-size:16pt;line-height:normal">&nbsp;</span><u></u></span></p>
+        <span style="font-size:16pt;line-height:normal">Welcome to OmneBook! Before we get started, please confirm your email address</span><span style="font-size:24.0pt"><u></u><span style="font-size:16pt;line-height:normal">&nbsp;</span><u></u></span></p>
         
         <a href="{{url('/verifyuser/'.$user->confirmation_code)}}">
         <p class="MsoNormal" style="margin: 0in; font-size: 11pt; font-family: Calibri, sans-serif; text-align: center;" align="center">
@@ -71,7 +71,9 @@
             <div style="max-width: 960px;margin: 0 auto;text-align: center;">
                 <h4 style="font-size: 18px;font-weight: 400;margin-bottom: .5rem;font-family: inherit;line-height: 1.2;margin-top: 0;">WHAT ACTIVITY EXCITES YOU TO STAY ACTIVE?</h4>
                 <p style="margin-bottom: 0;">
-                    Fitnessity (Fit-ness-ity), is a directory & marketplace connecting consumers to trainers, coaches, classes & active experiences with adventures & Tours. You can participate in activities at local businesses, onlie, or while traveling. Fitnessity is for people who believe that an active lifestyle is a necessity.
+
+                    Omnebook is a directory & marketplace connecting 
+                    consumers to trainers, coaches, classes & active experiences with adventures & Tours. You can participate in activities at local businesses, online, or while traveling. OmneBook is for people who believe that an active lifestyle is a necessity.
                 </p>
             </div>
         </section>
@@ -79,7 +81,7 @@
         <section style="padding: 40px 0;">
             <div style="max-width: 960px;margin: 0 auto;padding-left: 5rem;padding-right: 5rem;">
                 <div style="width: 100%; text-align: center;">
-                    <h3 style="border-bottom: 5px solid #d02f4c;display: inline-block;font-size: 28px;color: #000000;padding-bottom: 3px;margin-bottom: .5rem;font-family: inherit;line-height: 1.2;margin-top: 0;">Here's how to get started with Fitnessity</h3>
+                    <h3 style="border-bottom: 5px solid #d02f4c;display: inline-block;font-size: 28px;color: #000000;padding-bottom: 3px;margin-bottom: .5rem;font-family: inherit;line-height: 1.2;margin-top: 0;">Here's how to get started with OmneBook</h3>
                 </div>
                 <div style="display: flex;align-items: flex-start;margin-top: 2.5rem;">
                     <div style="width: 40%;">
@@ -112,7 +114,7 @@
                     <div style="width: 60%;padding-left: 45px;padding-right: 15px;">
                         <h4 style="font-weight: 700;font-size: 20px;margin-bottom: .5rem;font-family: inherit;line-height: 1.2;margin-top: 0;">Buy Equipment, Apparel, Gear, and More</h4>
                         <p style="font-size: 16px;">
-                            We make it easy to find the products you need for the activities you love. While booking activities, you may need gear and more. Find what you are looking for offered by service providers listed on Fitnessity.
+                            We make it easy to find the products you need for the activities you love. While booking activities, you may need gear and more. Find what you are looking for offered by service providers listed on OmneBook.
                         </p>
                         <a href="#" style="display: inline-block;background: #585858;color: #fff;font-size: 16px;padding: 5px 10px;border-radius: 8px;font-weight: 500;max-width: 140px;width: 100%;text-align: center;text-decoration: none;">Buy Products</a>
                     </div>
