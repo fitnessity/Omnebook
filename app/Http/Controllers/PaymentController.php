@@ -301,15 +301,22 @@ class PaymentController extends Controller {
                 $onFilePaymentMethodId = $request->cardinfo;
 
                 try {
+                    $paymentMethod = $stripe->paymentMethods->retrieve($onFilePaymentMethodId);
                     $onFilePaymentIntent = $stripe->paymentIntents->create([
                         'amount' =>  round($totalprice *100),
                         'currency' => 'usd',
                         'customer' => $stripe_customer_id,
                         'payment_method' => $onFilePaymentMethodId ,
-                        'off_session' => true,
+                        // 'off_session' => true,
+                        'setup_future_usage' => 'off_session', 
                         'confirm' => true,
                         'metadata' => [],
                     ]);
+                    if ($paymentMethod->customer !== $stripe_customer_id) {
+                        $stripe->paymentMethods->attach($onFilePaymentMethodId, [
+                            'customer' => $stripe_customer_id,
+                        ]);
+                    }
 
                     if($onFilePaymentIntent['status']=='succeeded'){
 
