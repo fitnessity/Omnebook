@@ -51,7 +51,16 @@
     //   adjustIframeHeight();
     //   window.addEventListener('resize', adjustIframeHeight);
 
-    
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'changeSrc') {
+                document.getElementById('registerframe').src = event.data.src;
+            }
+        });
+    });
+
     window.addEventListener('message', function(event) {
       if (event.origin === 'https://dev.fitnessity.co') {
           iframe.style.height = event.data.height + 'px';

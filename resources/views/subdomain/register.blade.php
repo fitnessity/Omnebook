@@ -375,7 +375,7 @@
                                             <div class="terms-head">
                                                 <div>
                                                     @if($businessTerms->termcondfaqtext != '')
-                                                        <a href="#" data-url="{{route('getTermsn',['id'=>$businessTerms->id , 'termsType' => 'termcondfaqtext' ,'termsHeader'=>'Terms, Conditions, FAQ'])}}"  class="font-13 color-red-a" data-behavior = 'termsModelOpen' >Terms, Conditions, FAQ</a> | @endif   
+                                                        <a href="#" data-url="{{route('getTermsn',['id'=>$businessTerms->id , 'termsType' => 'termcondfaqtext' ,'termsHeader'=>'Terms, Conditions, FAQ'])}}"  class="font-13 color-red-a" data-behavior = 'termsModelOpen' >Terms Conditions FAQ</a> | @endif   
                                                     @if($businessTerms->liabilitytext != '')
                                                         <a href="#" data-url="{{route('getTermsn',['id'=>$businessTerms->id , 'termsType' =>'liabilitytext','termsHeader'=>'Liability Waiver'])}}"  class="font-13 color-red-a" data-behavior = 'termsModelOpen' >Liability Waiver</a> | @endif 
 
@@ -429,10 +429,21 @@
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 text-center">
                                     <div class="wrap-sp">
-                                        <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input"
+                                        <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input me-2"
                                             value="1">
-                                        <label for="b_trm1" class="text-center">I agree to Fitnessity Terms of Service
-                                            and Privacy Policy</label>
+                                        {{-- <label for="b_trm1" class="text-center">I agree to OmneBook Terms of Service
+                                            and Privacy Policy</label> --}}
+                                            <label for="b_trm1" class="text-center mb-0">
+                                                I agree to OmneBook
+                                                <a href="https://www.omnebook.com/terms-condition" target="_blank" class="text-decoration-underline">
+                                                    Terms of Service
+                                                </a> 
+                                                and 
+                                                <a href="https://www.omnebook.com/privacy-policy" target="_blank" class="text-decoration-underline">
+                                                    Privacy Policy
+                                                </a>.
+                                            </label>
+                                            
                                     </div>
                                     <div id="termserror" class="font-red fs-15 text-center mb-10"></div>
                                     <div id="systemMessage" class="mb-10 fs-15 mb-10"></div>
@@ -445,7 +456,7 @@
                                     <button type="button" class="btn btn-red register_submit w-auto" id="register_skip"
                                         style="background-color: {{ $logBgColor }}; color: {{ $logTextColor }}; border: 1px solid {{ $logBgColor }};";
 
-                                        onclick="getType('skip');">Skip</button>
+                                        onclick="getType('skip');">Submit</button>
                                 </div>
                             </div>
                             <input type="hidden" name="buttonType" id="buttonType" value="">
@@ -1108,13 +1119,13 @@
         // }
 
 
-        function dashboard(token,code)
-        { 
-            // alert('11');
-            var customer = localStorage.getItem('customer');
-            const url = `https://dev.fitnessity.co/api/customer_dashboard?token=${encodeURIComponent(token)}&code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
-                window.parent.postMessage({ type: 'changeSrc', src: url }, '*');
-        }
+        // function dashboard(token,code)
+        // { 
+        //     // alert('11');
+        //     var customer = localStorage.getItem('customer');
+        //     const url = `https://dev.fitnessity.co/api/customer_dashboard?token=${encodeURIComponent(token)}&code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
+        //         window.parent.postMessage({ type: 'changeSrc', src: url }, '*');
+        // }
 
 
     </script>

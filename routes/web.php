@@ -35,30 +35,25 @@ Route::get('/clear-cache', function () {
 //     return view('test');  
 // });
 
-Route::group(['domain' => 'host.fitnessity.co'], function() {
+    Route::domain(env('SUB_DOMAIN'))->group(function () {
     Route::middleware(['subdomain.auth'])->group(function () {
         Route::get('/login/{unique_code}','SubDomainController@Loginindex')->name('/login');
         Route::post('sub_auth_user', 'SubDomainController@UserLogin')->name('sub_auth.user');
-        Route::get('/register-page', 'SubDomainController@loadRegisterPage');
         Route::get('/register/{unique_code}','SubDomainController@RegisterPage')->name('/register');
     });
-
-    // Route::resource('manage-account', 'ManageAccountController')->only(['index','create','edit', 'update', 'destroy', 'store']);
-
-    Route::get('/manage_account','SubDomainController@manage_account')->name('manage_account');
+    Route::get('sendreceiptfromcheckout_sub', 'SubDomainController@sendreceiptfromcheckout')->name('sendreceiptfromcheckout_sub');
+    Route::get('/credit-cards/{unique_code}', 'SubDomainController@creditCards')->name('credit-cards');
+    Route::get('/manage_account/{unique_code}','SubDomainController@manage_account')->name('manage_account');
     Route::get('/manage_account_create','SubDomainController@create_manage')->name('manage_account_create');
     Route::post('/store_family','SubDomainController@store_family')->name('store_family');
-    // store_family
-    
+    Route::get('/receiptmodel_sub/{orderId}/{customer}/{isfrom?}', 'SubDomainController@receiptmodel')->name('receiptmodel_sub');
     Route::post('/membership_sub','SubDomainController@membership')->name('membership_sub');
-
     Route::post('/get_checkin_code', 'SubDomainController@getCheckinCode')->name('get_checkin_code');
     Route::post('/sub_registration', 'SubDomainController@postRegistrationCustomer')->name('sub_registration');
     Route::post('/act_detailfilterforcart', 'SubDomainController@act_detail_filter_for_cart')->name('act_detailfilterforcart');
-
-    Route::post('/logout_sub', 'SubDomainController@logout')->name('subdomain.logout_sub');
+    Route::post('/logout_sub/{unique_code}', 'SubDomainController@logout')->name('subdomain.logout_sub');
     Route::get('/schedule/{unique_code}','SubDomainController@next_8_hours')->name('/schedule');
-    Route::get('/sub_customer_dashboard', 'SubDomainController@customerdashboard')->name('sub_customer_dashboard');
+    Route::get('/sub_customer_dashboard/{unique_code}', 'SubDomainController@customerdashboard')->name('sub_customer_dashboard');
     Route::post('/get-participatedata', 'SubDomainController@getParticipateData')->name('get-participatedata');
     Route::get('/getInstructureDataUrl', 'SubDomainController@getInsData')->name('getInstructureDataUrl');
     Route::any('/addto_cart', 'SubDomainController@addToCart')->name('addto_cart');
@@ -68,10 +63,33 @@ Route::group(['domain' => 'host.fitnessity.co'], function() {
     Route::post('/profile_update_sub\{profile}', 'SubDomainController@updateProfile')->name('profile_update_sub');
     Route::post('user_family_profile_update_sub', 'SubDomainController@userFamilyProfileUpdate')->name('user_family_profile_update_sub');
     Route::post('/customer_profile_update_sub', 'SubDomainController@customerProfileUpdate')->name('customer_profile_update_sub');
+    Route::get('/payment_history/{unique_code}', 'SubDomainController@paymentHistory')->name('payment_history');
+    Route::get('/edit-profile/{business_id}/{user_id}/{unique_code}', 'SubDomainController@editProfile')->name('user.editProfile');
+    Route::get('/cards-save', 'SubDomainController@cardsSave')->name('cards-save');
+    Route::post('/cardDelete_sub', 'SubDomainController@cardDelete')->name('cardDelete_sub');
+    Route::get('business_activity_schedulers/{business_id}/{unique_code}', 'SubDomainController@activity_scheduler_index')->name('business_activity_schedulers_sub');
+    Route::post('/setSessionOfSchedule', 'SubDomainController@setSessionOfSchedule')->name('setSessionOfSchedule_sub');
+    Route::get('/chksession/{did}/{date?}/{timeId?}/{chk?}', 'SubDomainController@chksession')->name('chksession_sub');
+    Route::post('/chkOrderAvailable', 'SubDomainController@chkOrderAvailable')->name('chkOrderAvailable_sub');
+    Route::post('schedulers_store', 'SubDomainController@store_scheduler')->name('schedulers_store');  
+    Route::post('schedulers_del', 'SubDomainController@destroy_scheduler')->name('schedulers_del');  
+    Route::get('/get_scheduler', 'SubDomainController@data')->name('get_scheduler');
 
-    // Route::get('/edit_profile', 'SubDomainController@edit_profile')->name('edit_profile');
-    Route::get('/edit-profile/{business_id}/{user_id}', 'SubDomainController@editProfile')->name('user.editProfile');
+    Route::post('/get-activity-dates-sub', 'SubDomainController@getActivityDates')->name('getActivityDates_sub');
+    Route::post('orders/viewbooking_sub', 'SubDomainController@viewbooking')->name('orders.viewbooking_sub');
+    // viewbooking_sub_get
+    Route::get('orders/viewbooking_sub_get', 'SubDomainController@viewbooking')->name('orders.viewbooking_sub_get');
+    
+    // Route::get('/business_activityschedulers_sub/{bussiness_id}/{business_service_id}/{stype}/{priceid}/{customer_id}', 'SubDomainController@schedule_index')->name('business_activityschedulers_sub');
+    Route::get('/business/{business_id}/activity-schedulers','SubDomainController@schedule_index')
+    ->name('business_activityschedulers_sub');
+    Route::post('/quickcheckin_sub', 'SubDomainController@checkin')->name('quickcheckin_sub');
+    Route::post('/orders_search-activity', 'SubDomainController@searchActivity')->name('orders_searchActivity_sub');
 
+// business_activityschedulers_sub
+    // schedule_index
+
+// schedulers_del
 
 });
 
@@ -85,7 +103,8 @@ Route::group(['domain' => 'host.fitnessity.co'], function() {
 //     return 'Test email sent!';
 // });
 
-Route::domain('dev.fitnessity.co')->group(function () {
+
+Route::domain(env('MAIN_DOMAIN'))->group(function () {
 
 Route::get('/test','HomeController@Test')->name('test');
 // web.php
@@ -102,6 +121,7 @@ Route::post('/storePlan','OnBoardedController@storePlan')->name('onboard_process
 Route::any('/getCardForm','OnBoardedController@getCardForm')->name('onboard_process.getCardForm');
 Route::any('/doLoginProcess','OnBoardedController@doLoginProcess')->name('doLoginProcess');
 // Route::get('/do-login-process/{cid}/{redirect}', 'OnBoardedController@doLoginProcess')->name('doLoginProcess');
+
 
 Route::any('/storeCards','OnBoardedController@storeCards')->name('storeCards');
 // Route::resource('choose-plan', 'MembershipPlanController')->only(['index', 'create','store','update','destroy']);
@@ -745,7 +765,7 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout');
 Route::post('auth/updateStep', 'Auth\AuthController@updateStep');
 Route::post('auth/savegender', 'Auth\AuthController@saveGender');
 Route::post('auth/saveaddress', 'Auth\AuthController@saveaddress');
-Route::post('auth/savephoto', 'Auth\AuthController@savephoto');
+Route::put('auth/savephoto', 'Auth\AuthController@savephoto');
 Route::get('verify/{confirmation_code}', 'Auth\AuthController@verifyUserAccount');
 Route::post('auth/register', 'Auth\AuthController@postRegister')->name('reg');
 Route::post('auth/resendverify', 'Auth\AuthController@resendVerifyCode');
@@ -954,7 +974,7 @@ Route::any('/instant-hire/confirm-payment', 'PaymentController@confirmpaymentins
 Route::get('refresh_payment_methods', 'PaymentController@refresh_payment_methods')->name('refresh_payment_methods');
 Route::post('create-checkout-session','PaymentController@createCheckoutSession')->name('create-checkout-session');
 Route::any('/addtocart', 'LessonController@addToCart')->name('addtocart');
-Route::any('/success-cart/{priceid}', 'LessonController@successcart')->name('successcart');
+Route::any('success-cart/{priceid}', 'LessonController@successcart')->name('successcart');
 Route::any('/removetocart', 'LessonController@removeToCart')->name('removetocart');
 Route::any('/emptycart', 'LessonController@emptyCart');
 Route::get('/viewBooking/{booking_id}', 'LessonController@viewBooking');
@@ -1225,7 +1245,9 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/bookings_appointments','DesignController@bookings_appointments')->name('bookings_appointments');
     Route::get('/bookings_appointments_sidebar','DesignController@bookings_appointments_sidebar')->name('bookings_appointments_sidebar');
     Route::get('/appointments_booking_history','DesignController@appointments_booking_history')->name('appointments_booking_history');
-
+    Route::get('/bookings_appointments_scheduler','DesignController@bookings_appointments_scheduler')->name('bookings_appointments_scheduler');
+    Route::get('/bookings_appointments_calendar','DesignController@bookings_appointments_calendar')->name('bookings_appointments_calendar');
+    Route::get('/bookings_appointments','DesignController@bookings_appointments')->name('bookings_appointments');
 });
 });
 ?>

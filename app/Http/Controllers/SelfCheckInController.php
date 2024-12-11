@@ -107,6 +107,7 @@ class SelfCheckInController extends Controller {
     }
 
 	public function portal(Request $request){
+        // dd('4');
         $request->customer_id = session()->get('self_checkin_customer_id');
         // dd($request->customer_id);
         if($request->customer_id){
@@ -244,7 +245,7 @@ class SelfCheckInController extends Controller {
 
 
             $announcement = $announcement->values()->all();
-
+            
             // dd($priceid);
             // dd($missedPayments);
             return view('checkin.checkin_portal',compact('customer','name','notesCnt','activeMembershipCnt','docCnt','docCntNew','announcemetCnt','announcemetCntNew','notesCntNew','activeMembershipCntNew','classes','missedPayments','bookingDetails','currentBooking','tabval','businessId','serviceType','days','filter_date','services','priceid','lastBooking','terms','documents','notes','expiredCards','alertCount','announcement','settings'));

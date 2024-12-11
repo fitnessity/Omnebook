@@ -274,7 +274,7 @@
 		
 	
 		$.ajax({
-			url: "{{route('act_detailfilterforcart')}}",
+			url: "{{route('fetch_act_detailfilterforcart')}}",
 			type: 'POST',
 			dataType: 'JSON',
 			data:{

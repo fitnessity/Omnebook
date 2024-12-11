@@ -89,7 +89,7 @@
 					</li> --}} -->
 					
 					<li class="nav-item">
-						<a class="nav-link menu-link active" href="#" aria-controls="sidebarDashboards" onclick="EditProfile();">
+						<a class="nav-link menu-link active" href="#" aria-controls="sidebarDashboards" href="#">
 							<img src="https://dev.fitnessity.co//public/img/edit-2.png" alt="Fitnessity"> <span data-key="t-dashboards">   Edit Profile &amp; Password </span>
 						</a>
 					</li>
@@ -311,8 +311,7 @@
 													</div>
                                                 </div> <!--end col-->
 
-                                                
-
+                                            
 												<div class="col-lg-8">
                                                     <div class="mb-3">
                                                         <label for="address" class="form-label">Address</label>
@@ -356,27 +355,33 @@
 
 												<div class="col-lg-8">
                                                     <div class="mb-3">
-                                                        <label for="favorit_activity" class="form-label">Favorite Activities </label>
-                                                        <input type="text" class="form-control" id="favorit_activity" name="favorit_activity" placeholder="Favorite Activities" value="{{$user->favorit_activity}}">
+                                                        {{-- <label for="favorit_activity" class="form-label">Favorite Activities </label> --}}
+														<label for="favorit_activity" class="form-label">List Your Favorite Experiences</label>
+                                                        <input type="text" class="form-control" id="favorit_activity" name="favorit_activity" placeholder="List Your Favorite Experiences" value="{{$user->favorit_activity}}">
                                                     </div>
-                                                </div><!--end col-->
+                                                </div>
+												<!--end col-->
 
-                                                <div class="col-lg-12">
-												    <div class="mb-3 pb-2">
-												        <label for="about_user" class="form-label">About</label>
-												        <textarea class="form-control about_user" id="about_user"  name="about_user" placeholder="Enter your description" rows="3" maxlength="1000">{{$user->business_info}}</textarea>
-												        <span class="float-right">
-												            <span id="count_user">0</span> words. Words left: <span id="word_left_about">1000</span>
-												        </span>
-												    </div>
-												</div>
+
 
 												<div class="col-lg-12">
 												    <div class="mb-3 pb-2">
-												        <label for="user_intro" class="form-label">Quick Intro</label>
+												        <label for="user_intro" class="form-label mb-0">Quick Intro</label>
+														<p>For your social profile, give a quick into about you</p>
 												        <textarea class="form-control user_intro" name="user_intro" id="user_intro" placeholder="Enter your description" rows="3" maxlength="200">{{$user->quick_intro}}</textarea>
 												        <span class="float-right">
 												            <span id="count_intro">0</span> words. Words left: <span id="word_left">200</span>
+												        </span>
+												    </div>
+												</div>
+												<div class="col-lg-12">
+												    <div class="mb-3 pb-2">
+												        <label for="about_user" class="form-label mb-0">About</label>
+														<p>For your social profile, tell others a little more about the experiences you enjoy.</p>
+
+												        <textarea class="form-control about_user" id="about_user"  name="about_user" placeholder="Enter your description" rows="3" maxlength="1000">{{$user->business_info}}</textarea>
+												        <span class="float-right">
+												            <span id="count_user">0</span> words. Words left: <span id="word_left_about">1000</span>
 												        </span>
 												    </div>
 												</div>
@@ -782,15 +787,17 @@
             window.parent.postMessage({ type: 'changeSrc', src: url }, '*');     
 		}
 	</script>
-	<script>
+	{{-- <script>
 		function EditProfile()
 		{
 			var customer = localStorage.getItem('customer');
 			var code = {{$business->id ?? 'null'}};
-			const url = `https://dev.fitnessity.co/api/edit_profile?code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
-            window.parent.postMessage({ type: 'changeSrc', src: url }, '*');   
+			// const url = `https://dev.fitnessity.co/api/edit_profile?code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
+			const url = `https://dev.fitnessity.co/api/edit_profile?code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent({{$user->id}})}`;
+
+			window.parent.postMessage({ type: 'changeSrc', src: url }, '*');   
 		}
-	</script>
+	</script> --}}
 	<script>
 		window.addEventListener('load', function() {
 			var val = '1';

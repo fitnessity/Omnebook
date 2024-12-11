@@ -153,7 +153,16 @@ class AuthController extends Controller
         /* $s = AddrStates::where('state_name',$request->state)->get();
         $c = AddrCities::where('city_name',$request->city)->get();
         $co =AddrCountries::where('country_name',$request->country_name)->get();*/
+    
+    
          $user = User::where('id',Auth::user()->id)->first();
+        //  new code start
+        if ($request->has('skip') && $request->skip) {
+            $user->show_step = $request->show_step;
+            $user->save();
+            return response()->json(['status' => 200, 'redirecturl' => '/']);
+        }
+        // end
          $user->show_step=$request->show_step;
          $user->address=$request->address;
          /*$user->country=@$co[0]->country_code;

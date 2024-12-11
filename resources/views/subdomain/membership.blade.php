@@ -331,7 +331,7 @@
 	        var sid = $(this).val();
             const csrfToken = $('meta[name="csrf-token"]').attr('content');
 	        $.ajax({
-	            url: '{{ route('getActivityDates') }}',
+	            url: '{{ route('getActivityDates_sub') }}',
 	            method: 'POST',
 	            data: {
 	                sid: sid,
@@ -508,6 +508,7 @@
 				        });
 					}
 				// end
+				// alert(users);
 				$.ajax({
 					type: "POST",
 					url: '{{route("addto_cart")}}',

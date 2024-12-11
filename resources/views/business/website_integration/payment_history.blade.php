@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 <head>
-	<title>Fitnessity</title>
+	<title>OmneBook</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta content="Fitnessity: Because Fitness=Necessity" name="description" />
+	<meta content="OmneBook: Because Fitness=Necessity" name="description" />
 	<meta content="" name="author" />
 	<meta name="csrf-token" content="{{ csrf_token() }}"> 
     <link href="{{ asset('/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
@@ -104,7 +104,7 @@
                     <div class="avatar-xsmall me-2">
                                 {{-- <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">N S</span> --}}
                                 @if(!$business->getCompanyImage())
-                                        <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$business->first_letter}}</span> 
+                                        <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$business->first_letter ?? $business->cname_first_letter}}</span> 
                                     @else
                                         <img src="{{$business->getCompanyImage()}}" alt="" class="avatar-xsmall rounded-circle">
                                 @endif
@@ -201,7 +201,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tbodydetail">
-                                                        @forelse($mergedArray as $history )
+                                                        {{-- @forelse($mergedArray as $history )
                                                             <tr>
                                                                 <td>{{$history['created_at']}}</td>
                                                                 <td>{!!$history['itemDescription']!!} </td>
@@ -209,24 +209,39 @@
                                                                 <td>{{$history['getPmtMethod']}}</td>
                                                                 <td>${{$history['amount']}}</td>
                                                                 <td>{{$history['qty']}}</td>
-                                                                <td>{!!$history['getBookingStatus']!!}</td>
+                                                                <td>{!!$history['getBookingStatus']!!}</td> --}}
                                                                 
                                                                 {{-- <td><a  class="mailRecipt" data-behavior="send_receipt"  data-url="{{route('receiptmodel',['orderId'=>$history['item_id'],'customer'=>$history['customer_id']])}}" data-item-type="{{$history['item_type_terms']}}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
                                                                 </td> --}}
-                                                                <td>
+                                                                {{-- <td>
                                                                     <a class="mailRecipt" data-behavior="send_receipt" data-url="{{ route('receipt_model', ['orderId' => $history['item_id'], 'customer' => $history['customer_id']]) }}" data-item-type="{{ $history['item_type_terms'] }}" data-modal-width="modal-70">
                                                                         <i class="far fa-file-alt" aria-hidden="true"></i>
                                                                     </a>
-                                                                </td>
+                                                                </td> --}}
                                                                 {{-- <td>
                                                                     <a class="mailRecipt" data-behavior="send_receipt" data-id={{$history['item_id']}} data-cid={{$history['customer_id']}} data-item-type="{{ $history['item_type_terms'] }}" data-modal-width="modal-70">
                                                                         <i class="far fa-file-alt" aria-hidden="true"></i>
                                                                     </a>
                                                                 </td> --}}
-                                                            </tr>
+                                                            {{-- </tr>
                                                         @empty 
                                                             <tr> <td colspan="8">Payment History Is Not Available</td></tr>
-                                                      @endforelse
+                                                      @endforelse --}}
+                                                      @forelse($transactionDetail as $history)
+                                                      <tr>
+                                                          <td>{{ date('m/d/Y', strtotime($history['created_at'])) }}</td>
+                                                          <td>{!! (new App\Transaction($history))->item_description($business->id)['itemDescription'] !!}</td> 
+                                                          <td>{{(new App\Transaction($history))->item_type_terms() }}</td> 
+                                                          <td>{{(new App\Transaction($history))->getPmtMethod() }}</td> 
+                                                          <td>${{$history['amount']}}</td>
+                                                          <td>{{$history['qty']}}</td>
+                                                          <td>{!! (new App\Transaction($history))->getBookingStatus() !!}</td> 
+                                                          <td><a class="mailRecipt" data-behavior="ajax_html_modal" data-url="{{ route('receipt_model', ['orderId' => $history['item_id'], 'customer' => $history['customer_id']]) }}" data-item-type="{{(new App\Transaction($history))->item_type_terms() }}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
+                                                          </td>
+                                                          </tr>
+                                                      @empty 
+                                                      <tr> <td colspan="8">Payment History Is Not Available</td></tr>
+                                                     @endforelse
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -336,7 +351,9 @@
 			var customer = localStorage.getItem('customer');
 			var code = {{$business->id ?? 'null'}};
 			// const url = `https://dev.fitnessity.co/api/edit_profile?customer_id=${encodeURIComponent(customer)}`;
-			const url = `https://dev.fitnessity.co/api/edit_profile?code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
+			// const url = `https://dev.fitnessity.co/api/edit_profile?code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
+            const url = `https://dev.fitnessity.co/api/edit_profile?code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent({{$user->id}})}`;
+
 
             window.parent.postMessage({ type: 'changeSrc', src: url }, '*');   
 		}

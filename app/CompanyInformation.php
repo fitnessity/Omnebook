@@ -65,6 +65,7 @@ class CompanyInformation extends Model {
         }
     }
 
+
     public function getPublicCompanyNameAttribute(){
         return  $company_name = $this->dba_business_name  != '' ? $this->dba_business_name :$this->company_name;
     }

@@ -4,9 +4,13 @@
 	<div class="mb-15">
 		<label class="mb-10">Step: 3 </label> <span>Select Category</span>
 		<select id="selcatpr" name="selcatpr" onchange="updatedetail('{{$companyId}}','{{$serviceId}}','category',this.value)" class="form-select" data-choices="" data-choices-search-false="">
-			@foreach($categories as  $sc) 
-                <option value="{{$sc->id}}" @if($categoryId == $sc->id) selected @endif>{{$sc->category_title}}</option>
-            @endforeach
+			@if(count($categories) > 0)
+				@foreach($categories as  $sc) 
+					<option value="{{$sc->id}}" @if($categoryId == $sc->id) selected @endif>{{$sc->category_title}}</option>
+				@endforeach
+			@else
+			<option value="" disabled selected>No Category Added</option>
+			@endif
 		</select>
 	</div>
 </div>
@@ -15,7 +19,11 @@
 	<div class="mb-15">
 		<label class="mb-10">Step: 4 </label> <span>Select Price Option</span>
 		<select  id="selprice" name="selprice"  class="form-select"  data-choices="" data-choices-search-false="" onchange="updatedetail('{{$companyId}}','{{$serviceId}}','price',this.value)">
-			{!!$priceOption!!}
+			@if(!empty($priceOption))
+				{!!$priceOption!!}
+			@else
+				<option value="" disabled selected>No Price Option Added</option>
+			@endif
 		</select>
 	</div>
 </div>

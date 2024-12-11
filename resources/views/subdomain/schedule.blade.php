@@ -30,12 +30,11 @@
         overflow-x: hidden;
     }
 
-    input {
+    /* input {
         display: block;
-        /* margin: 10px 0; */
         padding: 5px;
         width: 100%;
-    }
+    } */
 
     button {
         display: block;
@@ -325,7 +324,6 @@ $logTextColor =
                         @php
                          $spot_left = $bookscheduler->spots_left($filter_date);
                         @endphp
-                        {{-- @if ($bookscheduler->price_detail() > 0 || $bookscheduler->class_detail() > 0   && $spot_left > 0) --}}
                         @if ($bookscheduler->class_detail() > 0 && $spot_left > 0)
                            <div class="row">
                                 <div class="col-md-12">
@@ -347,7 +345,12 @@ $logTextColor =
                                                         <label>{{$bookscheduler->business_service->program_name}}</label>
                                                         <p> {{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}} | Spot Available - {{$bookscheduler->spots_left($filter_date)}}/{{$bookscheduler->spots_available}}
                                                         </p>     
-                                                        <p>Instructor: {{$bookscheduler->getInstructorNames()}} <span class="difficult-level">Difficulty Level:  {{$bookscheduler->getClassNames()}}</span></p>
+                                                        <p>Instructor: {{$bookscheduler->getInstructorNames()}} 
+                                                            {{-- <span class="difficult-level">Difficulty Level:  {{$bookscheduler->business_service->difficult_level}}</span> --}}
+                                                            <span class="difficult-level">
+                                                                Difficulty Level: {{ str_replace(',', ', ', $bookscheduler->business_service->difficult_level) }}
+                                                            </span>                                                            
+                                                        </p>
                                                         @if ($bookscheduler->is_start_in_one_hour($filter_date))
                                                             <span> Starting in {{$bookscheduler->time_left($filter_date)->format('%i minutes')}} </span>
                                                         @endif
@@ -403,10 +406,10 @@ $logTextColor =
             </div>
         </div>
     </section>
-    <section class="showall">
-        <div class="container">
+    {{-- <section class="showall"> --}}
+        <div class="showall">
         </div>
-    </section>
+    {{-- </section> --}}
     @php
     $backgroundImg =
         isset($companyinfo) && is_object($companyinfo)
@@ -585,24 +588,27 @@ $logTextColor =
     </script>
  <script>
     function filterBookings() {
+        // alert('33');
         var services = document.getElementById('servicesDropdown').value;
         var greatFor = document.getElementById('greatForDropdown').value;
         var difficultyLevel = document.getElementById('difficultyLevelDropdown').value;
         const companyinfo = @json($companyinfo);
+        const unique_code={{$unique_code}};
         const filterData = {
             services: services,
             great_for: greatFor,
             difficulty_level: difficultyLevel,
             date: new URLSearchParams(window.location.search).get('date') || '',
-            companyinfo: companyinfo 
+            companyinfo: companyinfo, 
+            unique_code:unique_code,
         };
         $.ajax({
-            url:'https://dev.fitnessity.co/api/get_data',
+            url:'get_scheduler',
             method: 'GET',
             data: filterData,
             success: function(response) {
                 document.getElementById("show_all").style.display = "none";
-                $('.showall .container').html(response);
+                $('.showall').html(response);
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
@@ -700,9 +706,10 @@ $(document).ready(function() {
             });
         });
     </script>
+
     <script>
         $(document).ready(function() {
-            var companyInfo = @json($companyinfo['id']);
+            var companyInfo = @json($code['id']);
             $('#myForm').submit(function(event) {
                 event.preventDefault();
                 var form = document.getElementById('myForm');
@@ -710,16 +717,26 @@ $(document).ready(function() {
                 // new code start
                 const input = document.getElementById("booking-id-input");
                 const bookingId = input.value;
+                const uniqueCode = @json($unique_code);
+                const schedule='1';
                 // alert(inputValue);
                 // end
-                formData.append('company_info', companyInfo);
+
+                formData.append('unique_code', uniqueCode);
+                formData.append('code', companyInfo);
                 formData.append('bookingid',bookingId);
+                formData.append('schedule',schedule);
+                
                 $.ajax({
-                    url:'https://dev.fitnessity.co/api/auth/user',
+                    // url:'https://dev.fitnessity.co/api/auth/user',
+                    url: '{{ route('sub_auth.user') }}', 
                     method: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  // Add CSRF token here
+                    },
                     success: function(response) {
                         console.log(response);
                         if(response.type=='success')
@@ -728,8 +745,7 @@ $(document).ready(function() {
                             {
                                 $('#exampleModal').modal('hide');
                                 $('#exampleModal input').val('');
-                                storeToken(response.token);
-                                membership();
+                                location.reload();
                             }
                             // else{
                             //     alert('0');
@@ -737,12 +753,10 @@ $(document).ready(function() {
                         }               
                         if(response.type=='not_exists')
                         {
-                            $('.register').css('display','block');
                             $('#systemMessage').removeClass('alert-danger alert-success').addClass(response.type == 'not_exists' ? 'alert-danger' : 'alert-success').text(response.msg).show();                              
                         } 
                         if(response.type=='register')
                         {
-                            $('.register').css('display','block');
                             $('#systemMessage').removeClass('alert-danger alert-success').addClass(response.type == 'register' ? 'alert-danger' : 'alert-success').text(response.msg).show();                              
                         }      
                     },
@@ -763,7 +777,7 @@ $(document).ready(function() {
             $("#actfildate_forcart").datepicker();
         });
     </script>
-   <script>
+   {{-- <script>
         function checkLogin(button) {
         var token = localStorage.getItem('authToken');
         var status =  localStorage.getItem('loggedin');
@@ -777,25 +791,41 @@ $(document).ready(function() {
                 $('#exampleModal').modal('show');
             }
         }
-    </script>
+    </script> --}}
+    <!-- Blade Template -->
     <script>
-         function storeToken(token) {
-            localStorage.setItem('authToken', token);
+        // document.addEventListener("DOMContentLoaded", function () {
+        // const isAuthenticated = @json(Auth::check()); 
+        function checkLogin(button) {
+            const isAuthenticated = @json(Auth::check()); 
+            if (isAuthenticated) 
+            {
+                button.removeAttribute('data-bs-target');
+                membership();
+            } 
+            else {
+                button.setAttribute('data-bs-target', '#exampleModal');
+                $('#exampleModal').modal('show');
+            }
         }
+        // });
     </script>
+  
     <script>
         function membership() {
-            const companyinfo = @json($companyinfo);
+            const companyinfo = @json($code);
+            var unique_code={{$unique_code}}
+            // alert(unique_code);
             $.ajax({
-                url: '{{ route("membership") }}', 
+                url: '{{ route("membership_sub") }}', 
                 type: 'POST',
                 data: {
                     companyinfo: companyinfo,
-                    _token: '{{ csrf_token() }}'
+                    _token: '{{ csrf_token() }}',
+                    unique_code:unique_code,
+
                 },
                 success: function(response) {
-                    var val = '1';
-                    localStorage.setItem('loggedin',val);
                     $('#anotherModal .modal-body').html(response);
                     $('#anotherModal').modal('show');
                 },

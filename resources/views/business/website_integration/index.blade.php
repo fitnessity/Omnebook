@@ -145,9 +145,8 @@
                                                                                           <div class="d-flex flex-wrap gap-2">
                                                                                               <div class="pickr">
                                                                                                   <div class="nano-colorpicker" data-picker="1"></div>
-                                                                                                  <input type="hidden" id="selectedColor1" name="text_color" value="{{$color1}}">
-
-                                                                                                  <!-- <button type="button" class="pcr-button" role="button" aria-label="toggle color picker dialog" style="--pcr-color: rgba(156, 39, 176, 1);"></button>  -->
+                                                                                                  <input type="hidden" id="selectedColor1" name="text_color" value="{{$color1 ?? '#ea1515'}}">
+                                                                                                   {{-- <button type="button" class="pcr-button" role="button" aria-label="toggle color picker dialog" style="--pcr-color: rgba(156, 39, 176, 1);"></button>  --}}
                                                                                               </div>
                                                                                           </div>
                                                                                       </div>
@@ -158,7 +157,7 @@
                                                                                           <div class="d-flex flex-wrap gap-2">
                                                                                               <div class="pickr">
                                                                                                   <div class="nano-colorpicker" data-picker="2"></div>
-                                                                                                  <input type="hidden" id="selectedColor2" name="background_color" value="{{$color2}}">
+                                                                                                  <input type="hidden" id="selectedColor2" name="background_color" value="{{$color2 ?? '#ea1515'}}">
 
                                                                                                   <!-- <button type="button" class="pcr-button" role="button" aria-label="toggle color picker dialog" style="--pcr-color: rgba(244, 67, 54, 1);"></button> -->
                                                                                               </div>
@@ -312,18 +311,18 @@
                                                                                         <label for="">Text Color</label>
                                                                                         <div class="pickr mb-15">
                                                                                             <div class="nano-colorpicker" data-picker="3"></div>
-                                                                                            <input type="hidden" id="selectedColor3" name="reg_text_color" value="{{$color5}}">
+                                                                                            <input type="hidden" id="selectedColor3" name="reg_text_color" value="{{$color5 ?? '#ea1515'}}">
                                                                                         </div>
                                                                                         <label for="">Button Background</label>
                                                                                         <div class="pickr mb-15">
                                                                                             <div class="nano-colorpicker" data-picker="4"></div>
-                                                                                            <input type="hidden" id="selectedColor4" name="reg_bg_color" value="{{$color4}}">
+                                                                                            <input type="hidden" id="selectedColor4" name="reg_bg_color" value="{{$color4 ?? ''}}">
                                                                                         </div>
 
                                                                                         <label for="">Background</label>
                                                                                         <div class="pickr mb-15">
                                                                                             <div class="nano-colorpicker" data-picker="7"></div>
-                                                                                            <input type="hidden" id="selectedColor7" name="backreg_color" value="{{$color8}}">
+                                                                                            <input type="hidden" id="selectedColor7" name="backreg_color" value="{{$color8 ?? ''}}">
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>                                    
@@ -466,7 +465,7 @@
                                                             </form>
                                                         </div>
                                                         <div class="col-xl-9 col-lg-8">
-                                                            <div class="card" id="preview_reg_color" style="background-color: {{ $color8 }}">
+                                                            <div class="card" id="preview_reg_color" style="background-color: {{ $color8 ?? '#ea1515'}}">
                                                                 <div class="card-header align-items-center d-flex">
                                                                     <h4 class="card-title mb-0 flex-grow-1">Preview</h4>
                                                                     <div class="flex-shrink-0">
@@ -1073,7 +1072,7 @@
                                                                                             <div class="d-flex flex-wrap gap-2">
                                                                                                 <div class="pickr">
                                                                                                     <div class="nano-colorpicker" data-picker="5"></div>
-                                                                                                        <input type="hidden" id="selectedColor5" name="primary_color" value="{{$color5}}">
+                                                                                                        <input type="hidden" id="selectedColor5" name="primary_color" value="{{$color5 ?? '#ea1515'}}" >
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -1084,7 +1083,7 @@
                                                                                             <div class="d-flex flex-wrap gap-2">
                                                                                                 <div class="pickr">
                                                                                                     <div class="nano-colorpicker" id="hcolour" data-picker="6"></div>
-                                                                                                    <input type="hidden" id="selectedColor6" name="secondary_color" value="{{$color6}}">
+                                                                                                    <input type="hidden" id="selectedColor6" name="secondary_color" value="{{$color6 ?? '#ea1515'}}">
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -1096,7 +1095,7 @@
                                                                                             <div class="d-flex flex-wrap gap-2">
                                                                                                 <div class="pickr">
                                                                                                     <div class="nano-colorpicker" data-picker="9"></div>
-                                                                                                    <input type="hidden" id="selectedColor9" name="label_color" value="{{$color10}}">
+                                                                                                    <input type="hidden" id="selectedColor9" name="label_color" value="{{$color10 ?? '#fff'}}">
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -1107,7 +1106,7 @@
                                                                                             <div class="d-flex flex-wrap gap-2">
                                                                                                 <div class="pickr">
                                                                                                     <div class="nano-colorpicker" data-picker="10"></div>
-                                                                                                    <input type="hidden" id="selectedColor10" name="label_text_color" value="{{$color11}}">
+                                                                                                    <input type="hidden" id="selectedColor10" name="label_text_color" value="{{$color11 ?? '#ea1515'}}">
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -1119,7 +1118,7 @@
                                                                                             <div class="d-flex flex-wrap gap-2">
                                                                                                 <div class="pickr">
                                                                                                     <div class="nano-colorpicker" data-picker="11"></div>
-                                                                                                    <input type="hidden" id="selectedColor11" name="date_text_color" value="{{$color12}}">
+                                                                                                    <input type="hidden" id="selectedColor11" name="date_text_color" value="{{$color12 ?? '#ea1515'}}">
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -1130,7 +1129,7 @@
                                                                                             <div class="d-flex flex-wrap gap-2">
                                                                                                 <div class="pickr">
                                                                                                     <div class="nano-colorpicker" data-picker="8"></div>
-                                                                                                    <input type="hidden" id="selectedColor8" name="backcolor" value="{{$color9}}">                                                                                          
+                                                                                                    <input type="hidden" id="selectedColor8" name="backcolor" value="{{$color9 ?? ''}}">                                                                                          
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -1312,7 +1311,7 @@
                                                         </div>
 
                                                         <div class="col-xl-9 col-lg-8">
-                                                            <div class="card" id="preview_color" style="background-color:{{$color9}}">
+                                                            <div class="card" id="preview_color" style="background-color:{{$color9 ?? '#ea1515'}}">
                                                                 <div class="card-header align-items-center d-flex">
                                                                     <h4 class="card-title mb-0 flex-grow-1">Preview</h4>
                                                                     <!--<div class="flex-shrink-0">
@@ -2318,177 +2317,182 @@ $(function() {
 </script>
 
 <script>
-    $(document).ready(function() {
-        const selectedStyle = document.querySelector('input[name="style"]:checked').value;
-        const colors = 
-        {
-            1:'{{$color1}}',
-            2:'{{$color2}}',
-            3:'{{$color3}}',
-            4:'{{$color4}}',
-            5:'{{$color5}}',
-            6:'{{$color6}}',
-            7:'{{$color8}}',
-            8:'{{$color9}}',
-            9:'{{$color10}}',
-            10:'{{$color11}}',
-            11:'{{$color12}}',
+            $(document).ready(function() {
+                const colors = {
+                    1: '{{ $color1 }}',
+                    2: '{{ $color2 }}',
+                    3: '{{ $color3 }}',
+                    4:'{{$color4}}',
+                    5:'{{$color5}}',
+                    6:'{{$color6}}',
+                    7:'{{$color8}}',
+                    8:'{{$color9}}',
+                    9:'{{$color10}}',
+                    10:'{{$color11}}',
+                    11:'{{$color12}}',
+                };
+                $('.nano-colorpicker').each(function() {
+                    const pickerElement = $(this)[0];
+                    const pickerIndex = $(this).data('picker');
+                    const inputSelector = '#selectedColor' + pickerIndex;
+                    const defaultColor = colors[pickerIndex] || '#ea1515';
 
-         };
-        $('.nano-colorpicker').each(function() {
-            const pickerElement = $(this)[0];
-            const pickerIndex = $(this).data('picker');
-            const inputSelector = '#selectedColor' + pickerIndex;
-            const defaultColor = colors[pickerIndex] || '#ea1515';
+                    const pickr = Pickr.create({
+                        el: pickerElement,
+                        theme: 'nano',
+                        default: defaultColor,
+                        swatches: [
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(233, 30, 99, 0.95)',
+                            'rgba(156, 39, 176, 0.9)',
+                            'rgba(103, 58, 183, 0.85)',
+                            'rgba(63, 81, 181, 0.8)',
+                            'rgba(33, 150, 243, 0.75)',
+                            'rgba(3, 169, 244, 0.7)'
+                        ],
+                        defaultRepresentation: 'HEXA',
+                        components: {
+                            preview: true,
+                            opacity: true,
+                            hue: true,
+                            interaction: {
+                                hex: false,
+                                rgba: false,
+                                hsva: false,
+                                input: true,
+                                clear: true,
+                                save: true
+                            }
+                        }
+                    });
 
-            const pickr = Pickr.create({
-                el: pickerElement,
-                theme: 'nano',
-                default: defaultColor,
-                swatches: [
-                    'rgba(244, 67, 54, 1)',
-                    'rgba(233, 30, 99, 0.95)',
-                    'rgba(156, 39, 176, 0.9)',
-                    'rgba(103, 58, 183, 0.85)',
-                    'rgba(63, 81, 181, 0.8)',
-                    'rgba(33, 150, 243, 0.75)',
-                    'rgba(3, 169, 244, 0.7)'
-                ],
-                defaultRepresentation: 'HEXA',
-                components: {
-                    preview: true,
-                    opacity: true,
-                    hue: true,
-                    interaction: {
-                        hex: false,
-                        rgba: false,
-                        hsva: false,
-                        input: true,
-                        clear: true,
-                        save: true
-                    }
-                }
+                    pickr.on('save', (color, instance) => {
+                        const selectedColor = color.toHEXA().toString();
+                        $(inputSelector).val(selectedColor);
+                        // $('#exitButton, #checkInButton').css({
+                        //     'background-color': selectedColor,
+                        //     'border-color': selectedColor
+                        // });
+                        if (pickerIndex == 1) {
+                            $('#login_submit').css({
+                            'color': selectedColor,
+                            });
+                            $('#sign_up').css({
+                                'color': selectedColor,
+                            });
+                        } else if (pickerIndex == 2) {
+                            // $('#passcodeExitButton, #quickCodeButton').css({
+                            //     'background-color': selectedColor,
+                            //     'border-color': selectedColor
+                            // });
+                            $('#login_submit').css({
+                                'background-color': selectedColor,
+                                'border-color': selectedColor
+                            });
+                        }
+                        else if (pickerIndex == 3) {
+                            $('#register_submit').css({
+                            'color': selectedColor,
+                            });
+                            $('#register_skip').css({
+                                'color': selectedColor,
+                            });
+                            $('#personal').css({
+                                'color':selectedColor,
+                            });
+                            $('#address').css({
+                                'color':selectedColor,
+                            });
+                            $('#family_mem').css({
+                                'color':selectedColor,
+                            });
+                            $('#about').css({
+                                'color':selectedColor,
+                            });
+                            $('#accounts_pass').css({
+                                'color':selectedColor,
+                            });
+                            $('#agree_terms').css({
+                                'color':selectedColor,
+                            });
+                            $('#clearButton').css({
+                                'color':selectedColor,
+                            });
+                            $('#add_family').css({
+                                'color':selectedColor,
+                            })
+                        }
+                        else if (pickerIndex == 4) {
+                            $('#register_submit').css({
+                                'background-color': selectedColor,
+                                'border-color': selectedColor
+                            });
+                            $('#register_skip').css({
+                                'background-color': selectedColor,
+                                'border-color': selectedColor
+                            });
+                            $('#add_family').css({
+                                'background-color': selectedColor,
+                                'border-color': selectedColor
+                            });
+                            $('#clearButton').css({
+                                'background-color': selectedColor,
+                                'border-color': selectedColor
+                            });
+                    
+                         }
+
+                         else if (pickerIndex == 5) {
+                            $('.book_now').css({
+                                'color': selectedColor,
+                            });
+                        }
+
+                        else if (pickerIndex == 6) {
+                            $('.book_now').css({
+                                'background-color': selectedColor,
+                                'border-color': selectedColor
+                            });
+                        }
+                        else if(pickerIndex==7)
+                        {
+                            $('#preview_reg_color').css({
+                                'background-color': selectedColor,
+                            });
+                        }
+                        else if (pickerIndex == 8) {
+                            $('#preview_color').css({
+                                'background-color': selectedColor,
+                            });
+                        }
+                        else if (pickerIndex == 9) {
+                            $('.schedule_color').css({
+                                'background-color': selectedColor,
+                            });
+                            $('.schedule_ncolor').css({
+                                'color': selectedColor,
+                            });
+                        }
+                        else if (pickerIndex == 10) {
+                            $('.schedule_color').css({
+                                'color': selectedColor,
+                            });
+                            // $('.calendar-btn').css({
+                            //     'color': selectedColor,
+                            // });
+                            $('.timings').css({
+                                'color': selectedColor,
+                            });
+                        }
+                        else if (pickerIndex == 11) {
+                            $('.calendar-btn').css({
+                                'color': selectedColor,
+                            });
+                        }
+                        pickr.hide(); // Optional: hide the color picker after selection
+                    });
+                });
             });
-
-            pickr.on('save', (color, instance) => {
-                const selectedColor = color.toHEXA().toString();
-                $(inputSelector).val(selectedColor);
-                if (pickerIndex == 1) {
-                    $('#login_submit').css({
-                        'color': selectedColor,
-                    });
-                    $('#sign_up').css({
-                        'color': selectedColor,
-                    });
-                } else if (pickerIndex == 2) {
-                    $('#login_submit').css({
-                        'background-color': selectedColor,
-                        'border-color': selectedColor
-                    });
-                }
-                else if (pickerIndex == 3) {
-                    $('#register_submit').css({
-                        'color': selectedColor,
-                    });
-                    $('#register_skip').css({
-                        'color': selectedColor,
-                    });
-                    $('#personal').css({
-                        'color':selectedColor,
-                    });
-                    $('#address').css({
-                        'color':selectedColor,
-                    });
-                    $('#family_mem').css({
-                        'color':selectedColor,
-                    });
-                    $('#about').css({
-                        'color':selectedColor,
-                    });
-                    $('#accounts_pass').css({
-                        'color':selectedColor,
-                    });
-                    $('#agree_terms').css({
-                        'color':selectedColor,
-                    });
-                    $('#clearButton').css({
-                        'color':selectedColor,
-                    });
-                    $('#add_family').css({
-                        'color':selectedColor,
-                    });
-                    
-                    
-                }
-                else if (pickerIndex == 4) {
-                    $('#register_submit').css({
-                        'background-color': selectedColor,
-                        'border-color': selectedColor
-                    });
-                    $('#register_skip').css({
-                        'background-color': selectedColor,
-                        'border-color': selectedColor
-                    });
-                    $('#add_family').css({
-                        'background-color': selectedColor,
-                        'border-color': selectedColor
-                    });
-                    $('#clearButton').css({
-                        'background-color': selectedColor,
-                        'border-color': selectedColor
-                    });
-                    
-                }
-                else if (pickerIndex == 5) {
-                    $('.book_now').css({
-                        'color': selectedColor,
-                    });
-                }
-                else if (pickerIndex == 6) {
-                    $('.book_now').css({
-                        'background-color': selectedColor,
-                        'border-color': selectedColor
-                    });
-                }
-                else if(pickerIndex==7)
-                {
-                    $('#preview_reg_color').css({
-                        'background-color': selectedColor,
-                    });
-                }
-                else if (pickerIndex == 8) {
-                    $('#preview_color').css({
-                        'background-color': selectedColor,
-                    });
-                }
-                else if (pickerIndex == 9) {
-                    $('.schedule_color').css({
-                        'background-color': selectedColor,
-                    });
-                    $('.schedule_ncolor').css({
-                        'color': selectedColor,
-                    });
-                }
-                else if (pickerIndex == 10) {
-                    $('.schedule_color').css({
-                        'color': selectedColor,
-                    });
-                    // $('.calendar-btn').css({
-                    //     'color': selectedColor,
-                    // });
-                    $('.timings').css({
-                        'color': selectedColor,
-                    });
-                }
-                else if (pickerIndex == 11) {
-                    $('.calendar-btn').css({
-                        'color': selectedColor,
-                    });
-                }
-                pickr.hide(); 
-            });
-        });
-    });
 </script>
 
     

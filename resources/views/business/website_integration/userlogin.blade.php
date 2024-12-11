@@ -207,14 +207,16 @@
                 }
             });
     </script>
-    <script>
-            var companyInfo = @json($companyinfo->id);
+        <script>
+            var companyInfo = @json($companyinfo->id ?? 'null');
             var code = {{$code->id ?? 'null'}};
             $('#myForm').submit(function(event) {
                 event.preventDefault();
                 var form = document.getElementById('myForm');
                 var formData = new FormData(form);
                 formData.append('company_info', companyInfo);
+                formData.append('code', code);
+
                 $.ajax({
                     url:'https://dev.fitnessity.co/api/auth/user',
                     method: 'POST',
@@ -246,13 +248,13 @@
                     }
                 });
             });
-    </script>
+        </script>   
 
         <script>
             let dashboardExecuted = false;
-            let retryCount = 0;//
-            const maxRetries = 1; // Set a limit on how many times it retries
-            const retryDelay = 1000; // 1-
+            let retryCount = 0;
+            const maxRetries = 1; 
+            const retryDelay = 1000; 
             function dashboard(token,code)
             { 
                 // if (localStorage.getItem('dashboardExecuted') === 'true') return;
@@ -279,7 +281,7 @@
             function storeToken(token) {
                 localStorage.setItem('authToken', token);
                 localStorage.setItem('loggedin', true);
-                var companyInfo = @json($companyinfo->id);
+                var companyInfo = @json($code->id ?? null);
                 localStorage.setItem('bussiness_id',companyInfo);
             }
             document.addEventListener('DOMContentLoaded', function() {
@@ -287,16 +289,7 @@
                 var tokenc = localStorage.getItem('authToken');
                 var status =  localStorage.getItem('loggedin');
                 var code = {{$code->id ?? 'null'}};  
-                // if (status !== null && status !== undefined && tokenc!==null){
-                //     localStorage.setItem('dashboardExecuted', 'false');
-                //     if (localStorage.getItem('dashboardExecuted') === 'true') return;
-                //     else{
-                //             // alert('233');
-                //             document.getElementById('registerSection').style.display = 'none';
-                //              dashboard(tokenc,code);        
-                //        }
-                // }
-                
+              
                 // new start
 
                 if (status !== null && status !== undefined && tokenc !== null) {
@@ -331,23 +324,12 @@
 
             });
         });
-        // $(document).ready(function() {
-        //     var tokenc = localStorage.getItem('authToken');
-        //     var status =  localStorage.getItem('loggedin');
-        //     var code = {{$code->id ?? 'null'}};
-        //     if (status !== null && status !== undefined && tokenc!==null){
-        //          dashboard(tokenc,code);         
-        //     }
-        //     else{
-        //         localStorage.removeItem('loggedin');
-        //         dashboardExecuted = false;
-        //     }
-        // });
+      
 
-    </script>
+     </script>
       <script src="https://dev.fitnessity.co/public/dashboard-design/js/bootstrap.bundle.min.js"></script>
       <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script>
+        <script>
             $('#signUpLink').on('click', function(e) {
                 e.preventDefault();
                 var code = @json($code->unique_code);
@@ -362,7 +344,7 @@
                         console.log("Script loading failed.");
                     });
             });
-    </script>
+        </script>
 
 </body>
 </html>

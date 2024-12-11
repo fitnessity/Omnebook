@@ -413,7 +413,7 @@ $total_quantity = 0;
 														<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" alt="Fitnessity" class="sidemenupic" >
 														@endif
 													</li>
-													<li class="pc-caption"><span> Welcome olne</span></li>
+													<li class="pc-caption"><span>Welcome</span></li>
                                                     <li class="pc-caption-1">
                                                         <span> 
 															@if(session('StaffLogin') != '')

@@ -23,6 +23,10 @@
                     </div>
                 </div>
             </div><!--end row-->
+
+
+            {{-- new --}}
+            
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
@@ -59,17 +63,11 @@
                                                 Filter Options
                                             </button>
                                             <div class="dropdown-menu" style="">
-                                                <!-- {{-- <a class="dropdown-item" href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=> null]))}}">All</a>
+                                                {{-- <a class="dropdown-item" href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=> null]))}}">All</a>
                                                 <a class="dropdown-item" href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=>'individual']))}}">Personal Trainer </a>
                                                 <a class="dropdown-item" href="{{route('personal.orders.index', array_merge(request()->query(), ['serviceType'=>'classes']))}}">Classes </a>
                                                 <a class="dropdown-item" href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=>'events']))}}">Events </a>
-                                                <a class="dropdown-item" href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=>'experience']))}}">Experiences </a> --}} -->
-
-                                                <!-- <a class="dropdown-item" href="#" data-service-type="null">All</a>
-                                                <a class="dropdown-item" href="#" data-service-type="individual">Personal Trainer</a>
-                                                <a class="dropdown-item" href="#" data-service-type="classes">Classes</a>
-                                                <a class="dropdown-item" href="#" data-service-type="events">Events</a>
-                                                <a class="dropdown-item" href="#" data-service-type="experience">Experiences</a> -->
+                                                <a class="dropdown-item" href="{{route('personal.orders.index',array_merge(request()->query(), ['serviceType'=>'experience']))}}">Experiences </a> --}}
 
 
                                                 <a class="dropdown-item ajax-link" href="#" data-servicetype="">All</a>
@@ -77,7 +75,13 @@
                                                 <a class="dropdown-item ajax-link" href="#" data-servicetype="classes">Classes</a>
                                                 <a class="dropdown-item ajax-link" href="#" data-servicetype="events">Events</a>
                                                 <a class="dropdown-item ajax-link" href="#" data-servicetype="experience">Experiences</a>
+                                                
 
+                                                {{-- <a class="dropdown-item" href="#" data-service-type="All">All</a>
+                                                <a class="dropdown-item" href="#" data-service-type="individual">Personal Trainer</a>
+                                                <a class="dropdown-item" href="#" data-service-type="classes">Classes</a>
+                                                <a class="dropdown-item" href="#" data-service-type="events">Events</a>
+                                                <a class="dropdown-item" href="#" data-service-type="experience">Experiences</a> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -133,14 +137,21 @@
                                     </div>
                                 </div>
 
+
+                                {{-- new start --}}
+
+
+                               
+                                {{-- end --}}
                                 <div class="tab-pane active" id="nav-current" role="tabpanel">
                                     <div class="">
                                         <div class="live-preview">
                                             <div class="accordion custom-accordionwithicon accordion-border-box tabdatacurrent" id="accordionnesting">
-                                                @include('business.website_integration.user_booking_detail', ['orderDetails' =>$currentBooking,'tabName' => 'current'])
+                                                @include('subdomain.user_booking_detail', ['orderDetails' =>$currentBooking,'tabName' => 'current'])
                                             </div>
                                         </div>
-                                    </div><!-- end card-body -->
+                                    </div>
+                                    <!-- end card-body -->
                                 </div>
                                 <div class="tab-pane" id="nav-today" role="tabpanel">
                                     <div class="">
@@ -154,10 +165,11 @@
                                                 }
                                             @endphp
                                             <div class="accordion custom-accordionwithicon accordion-border-box tabdatatoday" id="accordionnesting">
-                                                @include('business.website_integration.user_booking_detail', ['orderDetails' => @$todayBooking, 'tabName' => 'today','customer'=>$customer])
+                                                @include('subdomain.user_booking_detail', ['orderDetails' => @$todayBooking, 'tabName' => 'today','customer'=>$customer])
                                             </div>
                                         </div>
-                                    </div><!-- end card-body -->
+                                    </div>
+                                    <!-- end card-body -->
                                 </div>
                                 <div class="tab-pane" id="nav-upcoming" role="tabpanel">
                                     <div class="">
@@ -171,7 +183,7 @@
                                                 }
                                             @endphp
                                             <div class="accordion custom-accordionwithicon accordion-border-box tabdataupcoming" id="accordionnesting">
-                                                @include('business.website_integration.user_booking_detail', ['orderDetails' => @$upcomimgBooking, 'tabName' => 'upcoming','customer'=>$customer])
+                                                @include('subdomain.user_booking_detail', ['orderDetails' => @$upcomimgBooking, 'tabName' => 'upcoming','customer'=>$customer])
                                             </div>
                                         </div>
                                     </div><!-- end card-body -->
@@ -188,10 +200,11 @@
                                                 }
                                             @endphp
                                             <div class="accordion custom-accordionwithicon accordion-border-box tabdatapast" id="accordionnesting" >
-                                                @include('business.website_integration.user_booking_detail', ['orderDetails' => @$upcomimgBooking, 'tabName' => 'past','customer'=>$customer])
+                                                @include('subdomain.user_booking_detail', ['orderDetails' => @$upcomimgBooking, 'tabName' => 'past','customer'=>$customer])
                                             </div>
                                         </div>
-                                    </div><!-- end card-body -->
+                                    </div>
+                                    <!-- end card-body -->
                                 </div>
                             </div>
                         </div><!-- end card-body -->
@@ -258,7 +271,9 @@
 		
 		{{-- end --}}
 
-<!-- <script>
+  
+{{--   
+<script>
     $(document).on('click', '.dropdown-item', function (e) {
         e.preventDefault();    
         let serviceType = $(this).data('service-type');    
@@ -280,7 +295,7 @@
             }
         });
     });
-    </script> -->
+    </script> --}}
     <script>
         $(document).on('click', '.openreceiptmodel', function(e) {
             e.preventDefault();
@@ -310,14 +325,14 @@
 	}
     </script>
    <script>
-    // function searchActivity(){
+    // function serchByActivty(){
     //     var text = $('#activityName').val();
     //     var type = $('#serchType').val();
     //     var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
     //     $.ajax({
     //         type: "POST", 
-    //         url: '{{ route("orders_searchActivity") }}',
+    //         url: '{{ route("orders_searchActivity_sub") }}',
     //         data: {
     //             "_token": csrfToken,  
     //             "text": text,
@@ -334,30 +349,91 @@
     //     });
     // }
 </script>
+{{-- <script>
+    $(document).on('click', '.ajax-link', function(e) {
+        e.preventDefault(); 
+        var serviceType = $(this).data('servicetype');
+        var queryParams = @json(request()->query());
+        var business_id={{$business->id}};
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        queryParams.serviceType = serviceType;
+        queryParams._token = csrfToken;
+        queryParams.business_id = business_id;
+        // alert(business_id);
+
+        $.ajax({
+            url: "{{ route('orders.viewbooking_sub_get') }}",
+            type: 'GET',
+            data: queryParams,
+            success: function(response) {
+                // $('#modalContent').html(response);
+                // $('#modalId').modal('show');
+                $('#bookingModal .modal-body').html(response.html);
+                $('#bookingModal').modal('show');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+    });
+</script>
+ --}}
+ {{-- <script>
+    $(document).on('click', '.ajax-link', function(e) {
+        e.preventDefault(); 
+        var serviceType = $(this).data('servicetype');
+        var queryParams = @json(request()->query());
+        var business_id = {{ $business->id }};
+
+        // Add additional parameters
+        queryParams.serviceType = serviceType;
+        queryParams.business_id = business_id;
+
+        console.log(queryParams);
+        $.ajax({
+            url: "{{ route('orders.viewbooking_sub_get') }}",
+            type: 'GET',
+            data: queryParams, // Pass as data to serialize as query string
+            success: function(response) {
+                $('#bookingModal .modal-body').html(response.html);
+                $('#bookingModal').modal('show');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+    });
+</script> --}}
+
 
 <script>
     var selectedServiceType = "{{ request()->serviceType || '' }}";
+
     $(document).on('click', '.ajax-link', function(e) {
-    e.preventDefault();    
+    e.preventDefault();
     selectedServiceType = $(this).data('servicetype'); // Update the selected serviceType
 
+    // Get data attributes from the clicked element
     var serviceType = $(this).data('servicetype');
     var business_id = {{ $business->id }};
-    var user = JSON.parse(localStorage.getItem('user'));  // Parse the user object from localStorage
-    var user_id = user ? user.id : null;
+    // Create the data object
     var data = {
         serviceType: serviceType,
-        business_id: business_id, 
-        user_id: user_id 
-    };    
+        business_id: business_id  // Make sure business_id is defined globally
+    };
+    
+    // If you have URL query parameters to include
     var urlParams = new URLSearchParams(window.location.search);
     urlParams.forEach(function(value, key) {
         data[key] = value;
-    });    
-    // console.log('Request Data:', data);
+    });
+    
+    // Debug log to check data
+    console.log('Request Data:', data);
+    
     $.ajax({
-        url: "{{ route('orders.viewbooking_get') }}",
-        type: 'GET',    
+        url: "{{ route('orders.viewbooking_sub_get') }}", // Replace with your actual route URL
+        type: 'GET',
         data: data,
         success: function(response) {
             console.log('Response received:', response);
@@ -379,14 +455,14 @@
 });
 
 
-function searchActivity(){
+function serchByActivty(){
         var text = $('#activityName').val();
         var type = $('#serchType').val();
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
         $.ajax({
             type: "POST", 
-            url: '{{ route("orders_searchActivity") }}',
+            url: '{{ route("orders_searchActivity_sub") }}',
             data: {
                 "_token": csrfToken,  
                 "text": text,
@@ -404,3 +480,5 @@ function searchActivity(){
         });
     }
 </script>
+ {{-- @include('layouts.business.footer')
+@include('layouts.business.scripts') --}}

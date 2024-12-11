@@ -66,12 +66,13 @@
 				</div><!--end row-->
             </div><!-- container-fluid -->
         </div><!-- End Page-content -->
+		@include('layouts.business.footer')
+		@include('layouts.business.scripts')
      </div><!-- end main content-->
 </div><!-- END layout-wrapper -->
 
 	
-	@include('layouts.business.footer')
-	@include('layouts.business.scripts')
+
 <script>
 	flatpickr('.flatpickr-range',{
 		dateFormat: "m/d/Y",

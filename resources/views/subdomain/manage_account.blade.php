@@ -100,6 +100,7 @@ $(document).on('focus', '[data-behavior~=text-phone]', function(e){
 });
 	
 </script>
+
 <script>
 	$(document).on('click', '[data-behavior~=ajax_html_modal]', function(e){
 		$("#modal-dialog").removeClass();
@@ -131,8 +132,7 @@ $(document).on('focus', '[data-behavior~=text-phone]', function(e){
             }
         })
     });
-	</script>
-{{-- @include('layouts.business.footer') --}}
+</script>
 	
 
 @endsection

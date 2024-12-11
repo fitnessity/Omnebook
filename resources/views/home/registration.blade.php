@@ -81,7 +81,7 @@
                 @elseif(Auth::check() && Auth::user()->show_step == 2)
                 <form action="#">
                     <div class="sign-step_2">
-                        <div class="filledstep-bar">
+                        <!-- <div class="filledstep-bar">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <span class="filledstep"></span>
@@ -90,7 +90,7 @@
                                     <span class=""></span>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class='error' id='systemMessage'></div>
@@ -121,19 +121,17 @@
                         <div class="filledstep-bar">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <span class="filledstep"></span>
-                                    <span class="filledstep"></span>
-                                    <span></span>
-                                    <span></span>
+                                    <div class="register-profilephoto">
+                                        <label>Step 1 of 5 - </label> How do you Identify
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <h2>How do you Identify?</h2>
                                 <div class='error' id='systemMessage'></div>
                                 <div class="form-group">
-                                    <span class="error" id="err_gender"></span>
+                                    <span class="error mb-25" id="err_gender"></span>
                                     <div class="radio">
                                         <label for="male">Male<input type="radio" name="gender" id="male" value="male" class="" /><span class="checkmark"></span></label>
                                     </div>
@@ -158,23 +156,22 @@
                         <div class="filledstep-bar">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <span class="filledstep"></span>
-                                    <span class="filledstep"></span>
-                                    <span class="filledstep"></span>
-                                    <span></span>
+                                    <div class="register-profilephoto">
+                                        <label>Step 2 of 5 -</label> Add Your Address
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <ul class="">
+                                <!-- <ul class="">
                                     <li><i class="fa fa-check"></i><span>Registration Information</span></li>
                                     <li><i class="fa fa-check"></i><span>Your Identification</span></li>
                                 </ul>
                                 <ul class="nav nav-tabs nav-stacked">
                                     <li ><a class=" active" data-bs-toggle="tab" href="#add_personel_info"><span class="stp-numbr">3</span> <span>Add Personal Information</span></a></li>
                                     <li ><a data-bs-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
-                                </ul>
+                                </ul> -->
                                 
                                 <div class="tab-content">
                                     <div id="add_personel_info" class="tab-pane fade show active">
@@ -204,6 +201,7 @@
                                         </div>
                                         <div class="signup-step-btn">
                                             <button type="button" class="signbutton-next step4_next" id="step4_next">Next</button>
+                                            <button type="button" class="signbutton-next step4_next" id="step4_next_skip">Skip</button>
                                         </div>
                                     </div>
                                 </div>
@@ -217,35 +215,51 @@
                         <div class="filledstep-bar">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <span class="filledstep"></span>
-                                    <span class="filledstep"></span>
-                                    <span class="filledstep"></span>
-                                    <span></span>
+                                    <div class="register-profilephoto">
+                                        <label>Step 3 of 5 -</label> Add Profile Photo
+                                        
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <ul class="">
+                                <!-- <ul class="">
                                     <li><i class="fa fa-check"></i><span>Registration Information</span></li>
                                     <li><i class="fa fa-check"></i><span>Your Identification</span></li>
                                     <li><i class="fa fa-check"></i><span>Add Personal Information</span></li>
-                                </ul>
-                                <ul class="nav nav-tabs nav-stacked">
+                                </ul> -->
+                                <!-- <ul class="nav nav-tabs nav-stacked">
                                    
                                     <li><a data-bs-toggle="tab" href="#adding_photo"><span class="stp-numbr">4</span> <span>Adding Photo</span></a></li>
-                                </ul>
+                                </ul> -->
                                 
                                 <div class="tab-content">
                                     <div class='error' id='systemMessage'></div>
                                     <div id="adding_photo" class="tab-pane fade show active">
                                         <div class="upload-wrp-content">
-                                            <p><b>Put a face to the name </b>and improve your adds to networking success.</p>
+                                            <p><b>Put a face to the name </b>and boost your networking success. Don’t have a photo ready? You can add it later!</p>
                                             <p>People prefer to network with members who has a profile photo, but if don't have one ready to upload, you can add it later.</p>
                                         </div>
                                         <div class="">
-                                            <div class="upload-img">
-                                                <input type="file" name="file_upload_profile" id="file_upload_profile" onchange="readURL(this);">
+                                            <div class="text-center">
+                                                <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
+                                                    <img src="https://fitnessity-production.s3.amazonaws.com/customer/2CTmSCCKXZb6uc9phijr2izM9fO5aKnijry4qGQT.jpg" class="rounded-circle avatar-xl-rg img-thumbnail user-profile-image  shadow" alt="user-profile-image" onchange="readURL(this);>
+                                                                                    
+                                                    <form id="image-upload-form" action="https://dev.fitnessity.co/personal/profile/720" method="post" enctype="multipart/form-data">
+                                                        <input type="hidden" name="_method" value="PUT">		
+                                                        <input type="hidden" name="_token" value="LUX86hn8xLCSNxdvYqoM10U3xyjCaikNtYAOAQ0A">											
+                                                        <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                                                            <input id="profile-img-file-input" name="file_upload_profile" id="file_upload_profile" type="file" class="profile-img-file-input">
+                                                            <label for="profile-img-file-input" class="profile-photo-edit avatar-xs-rg-icon">
+                                                                <span class="avatar-title rounded-circle bg-light text-body shadow">
+                                                                    <i class="ri-camera-fill fs-14"></i>
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <!-- <input type="file" name="file_upload_profile" id="file_upload_profile" onchange="readURL(this);"> -->
                                                 <div class="upload-img-msg">
                                                     <!-- <p>Touble uploading profile photo?</p> -->
                                                 </div>
@@ -269,17 +283,16 @@
                         <div class="filledstep-bar">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <span class="filledstep"></span>
-                                    <span class="filledstep"></span>
-                                    <span class="filledstep"></span>
-                                    <span class="filledstep"></span>
-                                    <span></span>
+                                    <div class="register-profilephoto">
+                                        <label>Step 4 of 5 -</label> Add A Card On File 
+                                        <p class="fs-13"> For a faster checkout experience</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <ul class="">
+                                <!-- <ul class="">
                                     <li><i class="fa fa-check"></i><span>Registration Information</span></li>
                                     <li><i class="fa fa-check"></i><span>Your Identification</span></li>
                                     <li><i class="fa fa-check"></i><span>Add Personal Information</span></li>
@@ -287,7 +300,7 @@
                                 </ul>
                                 <ul class="nav nav-tabs nav-stacked">
                                     <li><a data-bs-toggle="tab" href="#adding_photo"><span class="stp-numbr">5</span> <span>Adding Your Card Details</span></a></li>
-                                </ul>
+                                </ul> -->
                                 
                                 <div class="tab-content">
                                     @if (session('stripeErrorMsg'))
@@ -321,16 +334,16 @@
                             <div class="filledstep-bar">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <span class="filledstep"></span>
-                                        <span class="filledstep"></span>
-                                        <span class="filledstep"></span>
-                                        <span class="filledstep"></span>
+                                        <div class="register-profilephoto">
+                                            <label>Step 5 of 5 -</label> Add Your Family Members
+                                            <p class="fs-13">Adding family streamlines your checkout process</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <h2>Activities are much more fun with family</h2>
+                                    <h2>Activities are better with families & friends</h2>
                                     <div class='error' id='systemMessage'></div>
                                     <h4 style="text-align: center; margin-bottom: 10px;"><b>Add Your Family Members Information</b></h4>
                                     <div class="error" id="familyerrormessage"></div>
@@ -379,10 +392,10 @@
                                                                 <input maxlength="14" type="text" name="mobile[]" id="mobile" class="form-control mobile_number" placeholder="Mobile Phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
                                                                 <span class="error" id="err_mphone"></span>
                                                             </div>
-                                                            <div class="form-group">
+                                                            <!-- <div class="form-group">
                                                                 <input maxlength="14" type="text" name="emergency_phone[]" id="emergency_phone" class="form-control emergency_phone " placeholder="Emergency Contact Number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-behavior="text-phone">
                                                                 <span class="error" id="err_emergency_phone" ></span>
-                                                            </div>
+                                                            </div> -->
                                                             <div class="form-group">
                                                                 <select name="gender[]" id="gender" class="form-control gender" required>
                                                                     <option value="">Select Gender</option>
@@ -549,11 +562,11 @@
                 'X-CSRF-TOKEN': $("#_token").val()
             },
             beforeSend: function () {
-                $('.step2_next').prop('disabled', true).css('background','#999999');
+                $('.step2_next').prop('disabled', true).css('background','#98002e');
                 $('#systemMessage').html('Please wait while we processed you with Omnebook.');
             },
             complete: function () {
-                $('.step2_next').prop('disabled', false).css('background','#ed1b24');
+                $('.step2_next').prop('disabled', false).css('background','#98002e');
             },
             success: function (response) {
                 window.location.href = "{{url('/registration/?showstep=1')}}"
@@ -589,11 +602,11 @@
                         'X-CSRF-TOKEN': $("#_token").val()
                     },                
                     beforeSend: function () {
-                        $('.step3_next').prop('disabled', true).css('background','#999999');
+                        $('.step3_next').prop('disabled', true).css('background','#98002e');
                         $('#systemMessage').html('Please wait while we processed you with Omnebook.');
                     },
                     complete: function () {
-                        $('.step3_next').prop('disabled', false).css('background','#ed1b24');
+                        $('.step3_next').prop('disabled', false).css('background','#98002e');
                     },
                     success: function (response) {
                         window.location.href = "{{url('/registration/?showstep=1')}}"
@@ -645,11 +658,11 @@
                     'X-CSRF-TOKEN': $("#_token").val()
                 },
                 beforeSend: function () {
-                    $('.step4_next').prop('disabled', true).css('background','#999999');
+                    $('.step4_next').prop('disabled', true).css('background','#98002e');
                     $('#systemMessage').html('Please wait while we processed you with Omnebook.');
                 },
                 complete: function () {
-                    $('.step4_next').prop('disabled', false).css('background','#ed1b24');
+                    $('.step4_next').prop('disabled', false).css('background','#98002e');
                 },
                 success: function (response) {
                     window.location.href = "{{url('/registration/?showstep=1')}}"
@@ -657,6 +670,34 @@
             });
         }
     });
+
+
+
+    // step4_next_skip
+    $(document).on('click', '#step4_next_skip', function () {
+        var posturl = '/auth/saveaddress'; 
+        var formdata = new FormData();
+        formdata.append('_token', '{{csrf_token()}}');
+        formdata.append('skip', true);
+        formdata.append('show_step', 5);
+
+        $.ajax({
+            url: posturl,
+            type: 'POST',
+            dataType: 'json',
+            data: formdata,
+            processData: false, // Required for FormData
+            contentType: false, // Required for FormData
+            success: function (response) {
+                if (response.status === 200) {
+                    // window.location.href = response.redirecturl;
+                    window.location.href = "{{url('/registration/?showstep=1')}}"
+                }
+            },
+        });
+    });
+
+
 
     /* Step 4 new */
     $(document).on('click', '.step44_next', function () {
@@ -713,11 +754,11 @@
                     'X-CSRF-TOKEN': $("#_token").val()
                 },
                 beforeSend: function () {
-                    $('#skip5_next').prop('disabled', true).css('background','#999999');
+                    $('#skip5_next').prop('disabled', true).css('background','#98002e');
                     $("#systemMessage").html('Please wait while we skipping the data.');
                 },
                 complete: function () {
-                    $('#skip5_next').prop('disabled', true).css('background','#999999');
+                    $('#skip5_next').prop('disabled', true).css('background','#98002e');
                 },
                 success: function (response) {
                     $("#systemMessage").html(response.msg);
@@ -725,7 +766,7 @@
                     if (response.type === 'success') {
                         window.location.href = response.redirecturl;
                     } else {
-                        $('#skip5_next').prop('disabled', false).css('background','#ed1b24');
+                        $('#skip5_next').prop('disabled', false).css('background','#98002e');
                     }
                 }
             });
@@ -746,6 +787,8 @@
         });
         if(counter > 0){
             $('#systemMessage').html("");
+            $('#first_name').css('border','2px solid #98002e');
+            $('#birthday').css('border','2px solid #98002e');
 
             $('#familyerrormessage').html("Looks like some of the fields aren't filled out correctly. They're highlighted in red.");
             return false;
@@ -768,12 +811,12 @@
                     'X-CSRF-TOKEN': $("#_token").val()
                 },
                 beforeSend: function () {
-                    $('#step5_next').prop('disabled', true).css('background','#999999');
+                    $('#step5_next').prop('disabled', true).css('background','#98002e');
                     //showSystemMessages('#systemMessage', 'info', 'Please wait while we submitting the data');
                     $("#systemMessage").html('Please wait while we submitting the data.')
                 },
                 complete: function () {
-                    $('#step5_next').prop('disabled', true).css('background','#999999');
+                    $('#step5_next').prop('disabled', true).css('background','#98002e');
                 },
                 success: function (response) {
                     $("#systemMessage").html(response.msg);
@@ -781,7 +824,7 @@
                     if (response.type === 'success') {
                         window.location.href = response.redirecturl;
                     } else {
-                        $('#step5_next').prop('disabled', false).css('background','#ed1b24');
+                        $('#step5_next').prop('disabled', false).css('background','#98002e');
                     }
                 }
             });
@@ -902,7 +945,7 @@
             },
             submitHandler: function (form) {
                 if (!jQuery("#b_trm1").is(":checked")) {
-                    $("#termserror").html('Please Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger');
+                    $("#termserror").html('Please Agree Terms of Service and Privacy Policy.').addClass('alert-class alert-danger fs-14');
                     return false;
                 }
                 var valchk = getAge();
@@ -918,28 +961,28 @@
                         data: formData,
                         beforeSend: function () {
                             
-                            $('#register_submit').prop('disabled', true).css('background','#999999');
+                            $('#register_submit').prop('disabled', true).css('background','#98002e');
                             showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Omnebook.');
-                            $("#systemMessage").html('Please wait while we register you with Omnebook.').addClass('alert-class alert-danger');
+                            $("#systemMessage").html('Please wait while we register you with Omnebook.').addClass('alert-class alert-danger fs-14');
                         },
                         complete: function () {
                         
-                            $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                            $('#register_submit').prop('disabled', false).css('background','#98002e');
                         },
                         success: function (response) {
                             //alert(response.msg);
                             
-                            $("#systemMessage").html(response.msg).addClass('alert-class alert-danger');
+                            $("#systemMessage").html(response.msg).addClass('alert-class alert-danger fs-14');
                             showSystemMessages('#systemMessage', response.type, response.msg);
                             if (response.type === 'success') {
                                 window.location.href = response.redirecturl;
                             } else {
-                                $('#register_submit').prop('disabled', false).css('background','#ed1b24');
+                                $('#register_submit').prop('disabled', false).css('background','#98002e');
                             }
                         }
                     });  
                 }else{
-                    $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger');
+                    $("#systemMessage").html('You must be at least 13 years old.').addClass('alert-class alert-danger fs-14');
                 }
             }
         });

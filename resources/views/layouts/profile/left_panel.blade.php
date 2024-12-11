@@ -38,7 +38,7 @@
                             </div>
                         @else
                             <div class="avatar-xsmall me-2">
-                                <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$business->first_letter}}</span>
+                                <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$business->first_letter ?? $business->cname_first_letter}}</span>
                             </div>
                         @endif
 

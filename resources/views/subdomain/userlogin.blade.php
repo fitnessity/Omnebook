@@ -44,8 +44,8 @@
     }
     .register_wrap .logo-my {
         text-align: center;
-        margin-bottom: 45px;
-        margin-top: 35px;
+        margin-bottom: 15px;
+        margin-top: 25px;
     }
     .register_wrap form{padding: 0 50px;}
 </style>
@@ -105,6 +105,7 @@
 
                                 <div id='systemMessage' class="alert-class alert-danger fs-14 font-red">
                                 </div>                            
+                            <input type="hidden" name="code" value="{{ encrypt($code->id) }}">
                             <input type="hidden" name="redirect" value="{{ $request->redirect }}">
                             <input type="email" name="email" id="email" class="myemail" size="30"
                                 autocomplete="off" placeholder="e-MAIL" maxlength="80" autocomplete="off">
@@ -229,7 +230,7 @@
    
 
         <script>
-            var companyInfo = @json($companyinfo->id);
+            var companyInfo = @json($companyinfo->id ?? Null);
             var code = {{$code->id ?? 'null'}};
             var csrfToken = '{{ csrf_token() }}'; 
 

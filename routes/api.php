@@ -34,7 +34,7 @@ Route::get('booking_schedule/{uniquecode}','Business\WebsiteIntegrationConroller
 Route::get('/logout_n/{uniquecode}', 'Business\WebsiteIntegrationConroller@logout')->name('logout_n');
 Route::post('/membership','Business\WebsiteIntegrationConroller@membership')->name('membership');
 Route::post('/getactivitydates', 'Business\WebsiteIntegrationConroller@getActivityDates')->name('getActivityDates');
-Route::post('/act_detailfilterforcart', 'Business\WebsiteIntegrationConroller@act_detail_filter_for_cart')->name('act_detailfilterforcart');
+Route::post('/fetch_act_detailfilterforcart', 'Business\WebsiteIntegrationConroller@act_detail_filter_for_cart')->name('fetch_act_detailfilterforcart');
 Route::post('/get-participatedata', 'Business\WebsiteIntegrationConroller@getParticipateData')->name('get-participatedata');
 // Route::post('/formparticipate', 'PaymentController@form_participate')->name('formparticipate');
 Route::post('/formparticipate', 'Business\WebsiteIntegrationConroller@form_participate')->name('formparticipate');
@@ -48,12 +48,14 @@ Route::post('/quickcheckin', 'Business\WebsiteIntegrationConroller@checkin')->na
 // Route::resource('orders', 'Business\WebsiteIntegrationConroller')->only(['viewbooking']);
 // web.php
 Route::post('orders/viewbooking', 'Business\WebsiteIntegrationConroller@viewbooking')->name('orders.viewbooking');
+Route::get('orders/viewbooking_get', 'Business\WebsiteIntegrationConroller@viewbooking')->name('orders.viewbooking_get');
+
 // Route::get('business_activity_schedulers/{business_id}/', 'BusinessActivitySchedulerController@index')->name('business_activity_schedulers');
 Route::post('/orders/search-activity', 'Business\WebsiteIntegrationConroller@searchActivity')->name('orders_searchActivity');
 Route::get('businessactivityschedulers_api', 'Business\WebsiteIntegrationConroller@schedule')->name('businessactivityschedulers_api');
 Route::post('/chkOrder_Available', 'Business\WebsiteIntegrationConroller@chkOrderAvailable')->name('chkOrder_Available');
 // Route::resource('schedulers', 'SchedulerController')->only(['index','create','update','destroy','store']);  
-Route::post('/schedulers_store', 'Business\WebsiteIntegrationConroller@SchedulersStore')->name('schedulers_store');  
+Route::post('/schedulers_store_data', 'Business\WebsiteIntegrationConroller@SchedulersStore')->name('schedulers_store_data');  
 Route::get('/edit_profile', 'Business\WebsiteIntegrationConroller@edit_profile')->name('edit_profile');
 Route::post('/profileupdate\{profile}', 'Business\WebsiteIntegrationConroller@updateProfile')->name('profile_update');
 Route::post('/customer_profile_update', 'Business\WebsiteIntegrationConroller@customerProfileUpdate')->name('customer_profile_update');

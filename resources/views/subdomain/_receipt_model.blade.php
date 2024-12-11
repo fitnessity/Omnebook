@@ -2,6 +2,7 @@
 
 @php
     use App\UserBookingDetail;
+    use Carbon\Carbon;
     $totalTax  = $totDis = $totTip = $grandTotal=0;
     $idArry = ''; 
 @endphp
@@ -28,6 +29,7 @@
                 {{-- <label>Powered By</label> --}}
                 <div class="booking-modal-logo">
                     <img src="{{url('/public/dashboard-design/images/powered-by-OMNEBOOK-white1.png')}}">
+                    {{-- <img src="https://dev.fitnessity.co//public/dashboard-design/images/powered-by-OMNEBOOK.png" alt="Fitnessity"> --}}
                 </div>
             </div>
         </div>
@@ -128,7 +130,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ $orderDetail->getparticipate() ?? N/A}}</span>
+                            <span>{!! $orderDetail->getparticipate() ?? N/A !!}</span>
                         </div>
                     </div>
                     
@@ -139,7 +141,15 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
-                            <span>{{ ($orderDetail->order_type == 'Membership') ? $orderDetail->decodeparticipate() : 'N/A' }} </span>
+                            <span>{!! ($orderDetail->order_type == 'Membership') ? $orderDetail->decodeparticipate() : 'N/A' !!} </span>
+                                @php
+                                 $user = App\Customer::where('id',$orderDetail->user_id)->first();
+                                 $name = @$user->fname.' '.@$user->lname .' ( age '. Carbon::parse(@$user->birthdate)->age .' ) ' ;                                 
+                                @endphp
+                                @if(empty($orderDetail->decodeparticipate()))
+                                <span>{{$name}}</span>
+                                @endif
+
                         </div>
                     </div>
                     
@@ -239,7 +249,9 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="float-end text-right">
+                            {{-- <span>{{ json_decode($orderDetail->price)->custom ?? 'N/A' }}</span> --}}
                             <span>${{$orderDetail->total() + $orderDetail->productTotalPrices + $orderDetail->addOnservice_total}}</span>
+                        
                         </div>
                     </div>
                     @if (!$loop->last)
@@ -337,23 +349,27 @@
                 </div>
             </div>  
         </div>
+        @if($orderDetail->status=='refund')
+        <div class="main-separator mb-10">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class=" text-left">
+                        <label class="font-red">REFUNDED AMOUNT</label>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class="float-end line-break text-right">
+                        <span class="font-red">${{@$orderDetail->refund_amount}}</span>
+                    </div>
+                </div>
+            </div>  
+        </div>
+        @endif
+
     </div>
 </div>
-<script>
-     function valid(email)
-    {
-        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-        return emailReg.test(email); //this will either return true or false based on validation
-    }
-    function IsEmail(email) {
-        var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        if (!regex.test(email)) {
-            return false;
-        }else {
-            return true;
-        }
-    }
-</script>
+
 <script type="text/javascript">
     function sendemail(){
         $('.reviewerro').html('');
@@ -371,7 +387,7 @@
             $('.reviewerro').css('display','block');
             $('.reviewerro').html('Sending...');
             $.ajax({
-                url: "{{route('sendreceiptfromcheckout_api')}}",
+                url: "{{route('sendreceiptfromcheckout_sub')}}",
                 xhrFields: {
                     withCredentials: true
                 },

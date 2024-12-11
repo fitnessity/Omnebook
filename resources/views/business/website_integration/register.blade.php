@@ -13,6 +13,7 @@
     <link href="{{ url('/public/dashboard-design/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
     <!-- <link rel="stylesheet" type="text/css" href="{{ url('/public/css/all.css') }}"> -->
     <script src="{{url('public/dashboard-design/js/jquery-3.6.4.min.js')}}"></script>
+  
 </head>
 <style>
     html {
@@ -70,7 +71,7 @@
     @endphp
 <body  style="background-color: {{ $bg }}">
     <div id="your-register-widget-container"></div>
-    <div class="register card-body">
+    <div class="register card-body " id="registerSection">
         <div class="container">
             <div class="live-preview">
                 <div class="row justify-content-md-center">
@@ -257,7 +258,7 @@
                                                                 <input type="email" name="emailid[]" id="emailid" class="form-control email" required onblur="getCode(0,'email');">
                                                                 <span class="error" id="err_emailid"></span>
                                                             </div>
-                                                            <div class="col-md-4 col-lg-3">
+                                                            {{-- <div class="col-md-4 col-lg-3">
                                                                 <label class="mt-10">Emergency Name</label>
                                                                 <input type="text" name="emergency_name[]" id="emergency_name" class="form-control emergency_name" >
                                                                 <span class="error" id="err_emergency_name"></span>
@@ -286,7 +287,7 @@
                                                                     <option value="Daughter">Daughter</option>
                                                                 </select>
                                                                 <span class="error" id="err_emergency_relation"></span>
-                                                            </div>
+                                                            </div> --}}
 
                                                             <div class="col-md-4 col-lg-3">
                                                                 <label class="mt-10">Check in Code </label>
@@ -427,10 +428,21 @@
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 text-center">
                                     <div class="wrap-sp">
-                                        <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input"
+                                        <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input me-2"
                                             value="1">
-                                        <label for="b_trm1" class="text-center">I agree to Fitnessity Terms of Service
-                                            and Privacy Policy</label>
+                                        <!-- <label for="b_trm1" class="text-center">I agree to OmneBook Terms of Service
+                                            and Privacy Policy</label>  -->
+                                            <label for="b_trm1" class="text-center mb-0">
+                                                 I agree to OmneBook
+                                                <a href="https://www.omnebook.com/terms-condition" target="_blank" class="text-decoration-underline">
+                                                    Terms of Service
+                                                </a> 
+                                                and 
+                                                <a href="https://www.omnebook.com/privacy-policy" target="_blank" class="text-decoration-underline">
+                                                    Privacy Policy
+                                                </a>.
+                                            </label>
+
                                     </div>
                                     <div id="termserror" class="font-red fs-15 text-center mb-10"></div>
                                     <div id="systemMessage" class="mb-10 fs-15 mb-10"></div>
@@ -443,7 +455,7 @@
                                     <button type="button" class="btn btn-red register_submit" id="register_skip"
                                         style="background-color: {{ $logBgColor }}; color: {{ $logTextColor }}; border: 1px solid {{ $logBgColor }};";
 
-                                        onclick="getType('skip');">Skip</button>
+                                        onclick="getType('skip');">Submit</button>
                                 </div>
                             </div>
                             <input type="hidden" name="buttonType" id="buttonType" value="">
@@ -453,11 +465,19 @@
             </div>
         </div>
     </div>
-
-    <script src="{{ url('public/dashboard-design/js/jquery-3.6.4.min.js') }}"></script>
     <script src="{{ url('/public/dashboard-design/js/bootstrap.bundle.min.js') }}"></script>
+	<script src="{{url('public/dashboard-design/js/jquery-ui.min.js')}}"></script>
+    <script src="{{ url('public/dashboard-design/js/jquery-3.6.4.min.js') }}"></script>
     <script src="{{ url('/public/dashboard-design/js/flatpickr.min.js') }}"></script>
-
+    <script src="{{ url('public/js/JQueryValidate/jquery.validate.js') }}"></script>	
+    <script src="{{url('public/js/jquery-input-mask-phone-number.js')}}"></script>
+    <script>
+        $(document).on('focus', '[data-behavior~=text-phone]', function(e){
+            $('[data-behavior~=text-phone]').usPhoneFormat({
+                format: '(xxx) xxx-xxxx',
+            });
+        });
+    </script>
     <div class="modal" id="termsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" id="termsModelContent"></div>
@@ -638,10 +658,6 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>  
-    <script src="{{ url('public/dashboard-design/js/jquery-3.6.4.min.js') }}"></script>
-    <script src="{{ url('/public/dashboard-design/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ url('/public/dashboard-design/js/flatpickr.min.js') }}"></script>
 
 
   <script type="text/javascript">
@@ -760,7 +776,7 @@
                     lname: $('#lastname').val(),
                 },
                 success: function(response) {
-                    console.log('Response:', response); 
+                    // console.log('Response:', response); 
                     $('#check_in').val(response);
                 },
                 error: function(xhr, status, error) {
@@ -859,10 +875,12 @@
             cnt--;
             $('#familycnt').val(cnt);
             $('#familydiv' + i).remove();
+            sendHeightn();
         }
 
         
         $(document).on("click",'#add_family',function(e){
+            
             var cnt = $('#familycnt').val();
             cnt++;
             var data = '';
@@ -912,7 +930,7 @@
             });
             $('#familycnt').val(cnt);
            var varnm='#birthdate'+new_cnt;
-           flatpickr(varnm, {
+            flatpickr(varnm, {
                 dateFormat: "m/d/Y", maxDate: "today",
                 onChange: function(selectedDates, dateStr, instance) {
                     var age = calculateAge(dateStr);
@@ -925,9 +943,18 @@
                         $('.check-box-primary-account:first').prop('disabled', false);
                     }
                 }
-            });
-           
+            });           
+            sendHeightn();
         });
+
+
+        function sendHeightn() {
+            // alert('3n');
+            var height = document.body.scrollHeight;        
+            window.parent.postMessage({
+                height: height
+            }, '*');  
+        }
 
         $(document).on('click', '[data-behavior~=termsModelOpen]', function(e) {
             e.preventDefault()
@@ -1009,9 +1036,12 @@
                             'font-red alert-class alert-danger');
                         return false;
                     }
-                    var companyInfo = @json($companyinfo->id);    
+                    var companyInfo = @json($companyinfo->id??null);    
+
+                    var code=@json($code->id);
                     var formData = $("#clientRegistration").serialize();
                     formData += '&company_info=' + encodeURIComponent(companyInfo);
+                    formData += '&code=' + encodeURIComponent(code);
                     $.ajax({
                         // url: '/customers/registration',
                         url: 'https://dev.fitnessity.co/api/customers/registration',
@@ -1037,6 +1067,8 @@
                                     console.log(response.token);
                                     $('.register').css('display','none');
                                     localStorage.setItem('customer',response.id);
+                                    console.log(response.bussiness_id);
+                                    storeToken(response.token);
                                     dashboard(response.token,response.bussiness_id);
                                 } else {
                                     setTimeout(function() {
@@ -1081,39 +1113,194 @@
         // }
 
 
-        function dashboard(token,code)
-        { 
-            // alert('11');
-            var customer = localStorage.getItem('customer');
-            const url = `https://dev.fitnessity.co/api/customer_dashboard?token=${encodeURIComponent(token)}&code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
-                window.parent.postMessage({ type: 'changeSrc', src: url }, '*');
-        }
-
+        // function dashboard(token,code)
+        // { 
+        //     var customer = localStorage.getItem('customer');
+        //     const url = `https://dev.fitnessity.co/api/customer_dashboard?token=${encodeURIComponent(token)}&code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
+        //         window.parent.postMessage({ type: 'changeSrc', src: url }, '*');
+        //         console.log('URL:', url);
+        // }
+        // let dashboardExecuted = false;
+        // let retryCount = 0;//
+        //     const maxRetries = 1; // Set a limit on how many times it retries
+        //     const retryDelay = 1000; // 1-
+        // function dashboard(token,code)
+        //     { 
+        //         // if (localStorage.getItem('dashboardExecuted') === 'true') return;
+        //         var customer = localStorage.getItem('customer');
+        //             const url = `https://dev.fitnessity.co/api/customer_dashboard?token=${encodeURIComponent(token)}&code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
+        //             tryPostMessage(url);
+        //             localStorage.setItem('dashboardExecuted', 'true');
+        //     }    
+        //     function tryPostMessage(url) 
+        //     {
+        //         try {
+        //             window.parent.postMessage({ type: 'changeSrc', src: url }, '*');
+        //         } catch (error) {
+        //             if (retryCount < maxRetries) {
+        //                 retryCount++;
+        //                 console.warn(`Retrying to postMessage... Attempt ${retryCount}`);
+        //                 setTimeout(() => tryPostMessage(url), retryDelay); 
+        //             } else {
+        //                 console.error("Failed to postMessage after multiple attempts. Please check the iframe.");
+        //             }
+        //         }
+        //     }
 
     </script>
-  <script>
-    $(document).on('focus', '[data-behavior~=text-phone]', function(e){
-        $('[data-behavior~=text-phone]').usPhoneFormat({
-            format: '(xxx) xxx-xxxx',
+    <script>
+        $(document).on('focus', '[data-behavior~=text-phone]', function(e){
+            $('[data-behavior~=text-phone]').usPhoneFormat({
+                format: '(xxx) xxx-xxxx',
+            });
         });
-    });
-</script>
-<script>
-        window.onload = function() {
-        function sendHeight() {
-            var height = document.body.scrollHeight;        
-            window.parent.postMessage({
-                height: height
-            }, '*');  
-        }
-        sendHeight();
-        window.addEventListener('message', function(event) {
-            if (event.data.action === 'getHeight') {
-                sendHeight(); 
+    </script>
+    <script>
+            window.onload = function() {
+            function sendHeight() {
+                // alert('3');
+                var height = document.body.scrollHeight;        
+                window.parent.postMessage({
+                    height: height
+                }, '*');  
             }
-        });
-    };
+            sendHeight();
+            window.addEventListener('message', function(event) {
+                if (event.data.action === 'getHeight') {
+                    sendHeight(); 
+                }
+            });
+        };
     </script>
-</body>
 
+
+    {{-- <script>
+         function storeToken(token) {
+                localStorage.setItem('authToken', token);
+                localStorage.setItem('loggedin', true);
+                var companyInfo = @json($code->id ?? null);
+                localStorage.setItem('bussiness_id',companyInfo);
+            }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            window.addEventListener("load", (event) => {
+                var tokenc = localStorage.getItem('authToken');
+                var status = localStorage.getItem('loggedin');
+                var code = {{$code->id ?? 'null'}};   
+                //alert('n');
+                // alert(tokenc);
+                // alert(status);
+                if (status !== null && status !== undefined && tokenc !== null) {
+                localStorage.setItem('dashboardExecuted', 'false');                
+                if (localStorage.getItem('dashboardExecuted') === 'true') return;
+                document.getElementById('registerSection').style.display = 'none';
+               
+                fetch('/api/check-token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${tokenc}`
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.valid) {
+                        document.getElementById('registerSection').style.display = 'none';
+                        alert('d');
+                        dashboard(tokenc, code);
+                    } else {
+                        document.getElementById('registerSection').style.display = 'block';
+
+                    }
+                })
+                .catch(error => {
+                    console.error('Error verifying token:', error);
+                });
+            }
+            });
+        });
+        </script> --}}
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                async function verifyTokenAndRedirect() {
+                    const tokenc = localStorage.getItem('authToken');
+                    const status = localStorage.getItem('loggedin');
+                    const code = {{ $code->id ?? 'null' }};        
+                    if (!tokenc || status === null || status === undefined) {
+                        document.getElementById('registerSection').style.display = 'block';
+                        return;
+                    }
+        
+                    try {
+                        $.ajax({
+                            url: '/api/check-token',
+                            type: 'POST',
+                            dataType: 'json',
+                            headers: {
+                                'Authorization': `Bearer ${tokenc}`
+                            },
+                            success: function (data) {
+                                console.log(data);
+                                if (data.valid) {
+                                    document.getElementById('registerSection').style.display = 'none';
+                                    dashboard(tokenc, code);
+                                } else {
+                                    document.getElementById('registerSection').style.display = 'block';
+                                    localStorage.removeItem('authToken'); 
+                                    localStorage.removeItem('loggedin'); 
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error verifying token:', error);
+                                document.getElementById('registerSection').style.display = 'block';
+                            }
+                        });
+
+                    } catch (error) {
+                        console.error('Error verifying token:', error);
+                        document.getElementById('registerSection').style.display = 'block';
+                    }
+                }
+        
+                window.addEventListener("load", verifyTokenAndRedirect);
+            });
+        
+            function storeToken(token) {
+                localStorage.setItem('authToken', token);
+                localStorage.setItem('loggedin', true);
+                const companyInfo = @json($code->id ?? null);
+                localStorage.setItem('business_id', companyInfo);
+            }
+        
+            let dashboardExecuted = false;
+            const retryCount = 0;
+            const maxRetries = 1; 
+            const retryDelay = 1000; 
+        
+            function dashboard(token, code) {
+                if (dashboardExecuted) return; 
+                const customer = localStorage.getItem('customer') || 'null'; 
+                const url = `https://dev.fitnessity.co/api/customer_dashboard?token=${encodeURIComponent(token)}&code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
+                tryPostMessage(url);
+                dashboardExecuted = true; 
+            }
+        
+            function tryPostMessage(url) {
+                try {
+                    window.parent.postMessage({ type: 'changeSrc', src: url }, '*');
+                } catch (error) {
+                    if (retryCount < maxRetries) {
+                        retryCount++;
+                        console.warn(`Retrying to postMessage... Attempt ${retryCount}`);
+                        setTimeout(() => tryPostMessage(url), retryDelay);
+                    } else {
+                        console.error("Failed to postMessage after multiple attempts. Please check the iframe.");
+                    }
+                }
+            }
+        </script>
+        
+</body>
 </html>

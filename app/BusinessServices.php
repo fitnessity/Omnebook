@@ -282,17 +282,7 @@ class BusinessServices extends Model
     	}
     }
 
-    // public function first_profile_pic_home(){
-    //     $pictures = explode(',',$this->profile_pic);
-    //     return Storage::disk('s3')->exists( $pictures[0]) ? Storage::URL( $pictures[0]) : '/public/images/service-nofound.jpg';
-    // }
-    // public function first_profile_pic(){
-    //     $pictures = explode(',',$this->profile_pic);
-    //     // return Storage::disk('s3')->exists( $pictures[0]) ? Storage::URL( $pictures[0]) : '/public/images/service-nofound.jpg';
-    //     // $picture_url = 'https://d2r3bve520mp70.cloudfront.net/' . $pictures[0];
-    //     return $picture_url;
-
-    // }
+   
     public function first_profile_pic()
     {
         if (!empty($this->profile_pic)) {
@@ -310,19 +300,6 @@ class BusinessServices extends Model
     public function getConverPhotoUrl()
     {  
          return Storage::disk('s3')->exists($this->cover_photo) ? Storage::url($this->cover_photo) : '/public/images/service-nofound.jpg';
-        // if(Storage::disk('s3')->exists($this->cover_photo))
-        // {
-
-        //     $cover_photo_url = 'https://d2r3bve520mp70.cloudfront.net/' . $this->cover_photo;
-        // }
-        // else{
-        //     $cover_photo_url ='/public/images/service-nofound.jpg';
-        // }
-        // if($cover_photo_url=='')
-        // {
-        //     $cover_photo_url = '/public/images/service-nofound.jpg';
-         // }
-        // return $cover_photo_url;
     }
     
     // public function getConverPhotoUrl_img()
@@ -340,11 +317,6 @@ class BusinessServices extends Model
             return '/public/images/service-nofound.jpg';
 
         }
-        // if (!empty($this->cover_photo)) {
-        //     return $this->cover_photo;
-        // } else {
-            // return '/public/images/service-nofound.jpg';
-        // }
     }
     public function min_price(){
         $pricearr =$discountPriceArr= [];

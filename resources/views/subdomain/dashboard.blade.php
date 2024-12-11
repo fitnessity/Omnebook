@@ -9,9 +9,9 @@
 		<div class="page-content">
 			<div class="container-fluid">
 				<div class="row mb-3">
-					<div class="col-12">
-						<div class="text-right mb-3 mt-3">
-							<a class="btn btn-red" id="purchaseMembershipBtn">Purchase A Membership </a>
+					<div class="col-12 mt-3">
+						<div class="text-right mb-3">
+							<a class="btn btn-red mt-3" id="purchaseMembershipBtn">Purchase A Membership </a>
 						</div>
 					 </div>
 					<div class="col-12">
@@ -19,7 +19,7 @@
 							<div class="">
 								@if(!$business->getCompanyImage())
 								<div class="company-list-text mb-10">
-					          		<p class="character">{{$business->first_letter}}</p>
+					          		<p class="character">{{$business->first_letter??$business->cname_first_letter}}</p>
 					          	</div>
 								@else
 									<img src="{{$business->getCompanyImage()}}" alt="" class="avatar">
@@ -162,7 +162,9 @@
 														</td>
 														<td>
 															<div class="">
-																<a class="btn btn-red" href="{{ url('/personal/orders') . '?' . http_build_query(['business_id' => request()->business_id, 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}">View Booking</a>
+																{{-- <a class="btn btn-red" href="{{ url('/personal/orders') . '?' . http_build_query(['business_id' => request()->business_id, 'customer_id' => request()->has('customer_id') ? request()->customer_id : null,'type' => request()->has('type') ? request()->type : null]) }}">View Booking</a> --}}
+																<a class="btn btn-red" id="viewBookingBtn-{{ $c->id }}" onclick="viewBooking('{{ $c->id }}')">View Booking</a>
+
 															</div>
 														</td>
 													</tr>
@@ -266,13 +268,17 @@
 		$( ".birthdate" ).datepicker();
 	});
 </script> --}}
-<script src="{{url('public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+{{-- <script src="{{url('public/dashboard-design/js/bootstrap.bundle.min.js')}}"></script> --}}
+{{-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.js"></script>
 <script src="{{url('public/js/jquery-input-mask-phone-number.js')}}"></script>
 <script src="{{url('public/dashboard-design/js/feather.min.js')}}"></script>
 <script src="{{url('public/dashboard-design/js/waves.min.js')}}"></script>
-<script src="{{url('public/dashboard-design/js/app.js')}}"></script>
+<script src="{{url('public/dashboard-design/js/app.js')}}"></script> --}}
+
+
 <script>
 	$(document).ready(function() {
 		$("#actfildate_forcart").datepicker();
@@ -283,7 +289,7 @@
 	function checkin(id) {
         $('#error-message').removeClass('text-danger font-green').html('');
 		$.ajax({
-            url: "{{route('quick-check-in')}}", 
+            url: "{{route('quickcheckin_sub')}}", 
             type: 'POST',
             data: {
                 checkinId: id,
@@ -311,6 +317,7 @@
 			var companyinfo = @json($business); 		
 			var user = {{ auth()->id() }};
 			var csrfToken = '{{ csrf_token() }}'; 
+			var unique_code={{$unique_code}}
 			$.ajax({
 				url: '{{ route("membership_sub") }}', 
 				method: 'POST',
@@ -321,6 +328,7 @@
 				data: {
 					companyinfo: companyinfo,
 					user:user,					
+					unique_code:unique_code,
 				},
 				success: function(response) {
 					$('#modalBodyContent').html(response);
@@ -332,6 +340,36 @@
 				}
 			});
 		});
+</script>
+
+
+<script>
+	function viewBooking(bookingId) {
+		var businessId = {{ $business->id }};
+		var user={{$user->id}};
+		var button = $('#viewBookingBtn-' + bookingId); 
+		var originalContent = button.html();
+		button.html('<img src="https://dev.fitnessity.co/public/images/processing.gif" alt="Loading..." class="clientloading">');
+
+		$.ajax({
+			url: "{{ route('orders.viewbooking_sub') }}", 
+			method: 'POST',
+			data: {
+				id: bookingId, 
+				_token: $('meta[name="csrf-token"]').attr('content'),
+				business_id: businessId,  // Add businessId here
+				user_id:user,
+			},
+			success: function(response) {
+				$('#bookingModal .modal-body').html(response.html);
+				$('#bookingModal').modal('show');
+				button.html(originalContent);
+			},
+			error: function() {
+				$('#bookingModal .modal-body').html('<p>Error loading booking details.</p>');
+			}
+		});
+	}
 </script>
 
 @endsection

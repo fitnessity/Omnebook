@@ -147,15 +147,43 @@ class User extends Authenticatable implements JWTSubject
         return $profile_pic;
     }
 
-    public function getCoverPic(){
-       $cover_photo = '';
-        if(Storage::disk('s3')->exists($this->cover_photo)){
+    // public function getCoverPic(){
+    //    $cover_photo = '';
+    //     if(Storage::disk('s3')->exists($this->cover_photo)){
+    //         $cover_photo = Storage::url($this->cover_photo);
+    //     }
+
+    //     return $cover_photo;
+    // }
+    public function getCoverPic() {
+        $cover_photo = '';
+    
+        if (is_null($this->cover_photo)) {
+            \Log::error("Cover photo is null for user ID: " . $this->id);
+        } elseif (!Storage::disk('s3')->exists($this->cover_photo)) {
+            \Log::error("Cover photo does not exist in S3 for user ID: " . $this->id . ". File: " . $this->cover_photo);
+        } else {
             $cover_photo = Storage::url($this->cover_photo);
         }
-
+    
         return $cover_photo;
     }
+    
 
+    public function checkS3Connection()
+    {
+        try {
+            // Attempt to list the contents of the root directory in the S3 bucket
+            Storage::disk('s3')->listContents('/');
+    
+            \Log::info("S3 connection is working fine.");
+            return "S3 connection is working fine.";
+        } catch (\Exception $e) {
+            \Log::error("S3 connection failed: " . $e->getMessage());
+            return "S3 connection failed: " . $e->getMessage();
+        }
+    }
+    
     public function getaddress(){
         $address = '';
         if($this->address != ''){

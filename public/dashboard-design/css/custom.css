@@ -1414,7 +1414,7 @@ header{ position: fixed !important; }
   border-radius: 4px;
 }
 .filledstep-bar {
-  padding: 10px 0 50px;
+  padding: 10px 0 30px;
   text-align: center;
 }
 .filledstep-bar span.filledstep {
@@ -1441,7 +1441,8 @@ header{ position: fixed !important; }
 }
 .sign-step_2 .prfle-wrap {
   text-align: center;
-  line-height: 80px;
+  line-height: 75px;
+  font-size: 25px;
 }
 .reg-email-step2 {
   text-align: center;
@@ -1611,8 +1612,10 @@ header{ position: fixed !important; }
   padding-top: 15px;
 }
 .sign-step_5 h2 {
-  font-size: 26px;
+  font-size: 18px;
   font-weight: 600;
+  margin-top: 0px;
+  margin-bottom: 0px;
   text-align: center;
 }
 .mt-25{
@@ -10081,6 +10084,9 @@ height: 400px;
   margin-right: 10px;
 }
 
+:is([data-layout="vertical"], [data-layout="semibox"])[data-sidebar-size="sm"] .main-content #bookppointments_wrapper #bookppointments-sidebar-wrapper {
+  margin-left: -430px;
+}
 @media(min-width:768px) {
   #bookppointments_wrapper {
     padding-left: 0;
@@ -10102,4 +10108,138 @@ height: 400px;
     position: relative;
     margin-right: 0;
   }
+}
+
+.register-profilephoto{
+  /* background-color: rgba(var(--vz-light-rgb),.4);
+  border: 1px solid var(--vz-border-color); */
+  color: #000;
+  font-size: 16px;
+  padding: 8px;
+  border-radius: 10px;
+}
+.register-profilephoto label{
+  font-weight: bold;
+}
+.avatar-xl-rg{
+  height: 115px;
+  width: 115px;
+}
+.avatar-xs-rg-icon {
+  height: 3rem;
+  width: 3rem;
+}
+#termserror{
+  color: #C9302C;
+}
+.c-name-set label{
+  text-transform: capitalize;
+}
+table.dataTable > tbody > tr.child ul.dtr-details{
+  width: 100%;
+}
+.pagination li.active > .page-link, .page-link.active{
+  background-color: #1c256c;
+  border-color: #1c256c;
+}
+
+
+.clipboard-url {
+  position: relative;
+}
+/* You just need to get this field */
+.copy-input-url {
+  width: 100%;
+  cursor: pointer;
+  background-color: #eaeaeb;
+  border:none;
+  color:#6c6c6c;
+  font-size: 14px;
+  border-radius: 5px;
+  padding: 15px 45px 15px 15px;
+  font-family: 'Montserrat', sans-serif;
+}
+.copy-input-url:focus {
+  outline:none;
+}
+
+.copy-btn-url {
+  width:40px;
+  background-color: #eaeaeb;
+  font-size: 18px;
+  padding: 6px 9px;
+  border-radius: 5px;
+  border:none;
+  color:#6c6c6c;
+  margin-left:-50px;
+  transition: all .4s;
+}
+.copy-btn-url:hover {
+  transform: scale(1.3);
+  color:#1a1a1a;
+  cursor:pointer;
+}
+
+.copy-btn-url:focus {
+  outline:none;
+}
+.simplebar-mask {
+  direction: inherit;
+  position: absolute;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: auto !important;
+  height: auto !important;
+  z-index: 0;
+}
+
+:is([data-layout="vertical"], [data-layout="semibox"])[data-sidebar-size="sm"] #page-topbar {
+  z-index: 0;
+}
+.simplebar-content-wrapper {
+  direction: inherit;
+  -webkit-box-sizing: border-box !important;
+  box-sizing: border-box !important;
+  position: relative;
+  display: block;
+  height: 100%;
+  width: auto;
+  visibility: visible;
+  overflow: auto;
+  max-width: 100%;
+  max-height: 100%;
+  scrollbar-width: none;
+  padding: 0 !important;
+}
+
+.simplebar-height-auto-observer-wrapper {
+  -webkit-box-sizing: inherit !important;
+  box-sizing: inherit !important;
+  height: 100%;
+  width: 100%;
+  max-width: 1px;
+  position: relative;
+  float: left;
+  max-height: 1px;
+  overflow: hidden;
+  z-index: -1;
+  padding: 0;
+  margin: 0;
+  pointer-events: none;
+  -webkit-box-flex: inherit;
+  -ms-flex-positive: inherit;
+  flex-grow: inherit;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -ms-flex-preferred-size: 0;
+  flex-basis: 0;
+}
+
+:is([data-layout="vertical"], [data-layout="semibox"])[data-sidebar-size="sm"] .navbar-menu .navbar-nav .nav-item:hover > a.menu-link {
+  background-color: #fff;
 }

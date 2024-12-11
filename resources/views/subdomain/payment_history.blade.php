@@ -1,9 +1,8 @@
 @inject('request', 'Illuminate\Http\Request')
-@extends('layouts.business.header')
+@extends('subdomain.layouts.header')
 
 @section('content')
 
-	@include('layouts.profile.business_topbar')
 	<!-- ============================================================== -->
     <!-- Start right Content here -->
     <!-- ============================================================== -->
@@ -41,10 +40,10 @@
 													</tr>
 												</thead>
 												<tbody id="tbodydetail">
-													@forelse($transactionDetail as $history )
+													@forelse($transactionDetail as $history)
 														<tr>
-  															<td>{{ date('m/d/Y', strtotime($history['created_at'])) }}</td>
-															<td>{!! (new App\Transaction($history))->item_description($business_id)['itemDescription'] !!}</td> 
+															<td>{{ date('m/d/Y', strtotime($history['created_at'])) }}</td>
+															<td>{!! (new App\Transaction($history))->item_description($business->id)['itemDescription'] !!}</td> 
 															<td>{{(new App\Transaction($history))->item_type_terms() }}</td> 
 															<td>{{(new App\Transaction($history))->getPmtMethod() }}</td> 
 															<td>${{$history['amount']}}</td>
@@ -52,16 +51,16 @@
 															<td>{!! (new App\Transaction($history))->getBookingStatus() !!}</td> 
 															<td><a class="mailRecipt" data-behavior="ajax_html_modal" data-url="{{route('receiptmodel_sub',['orderId'=>$history['item_id'],'customer'=>$history['customer_id']])}}" data-item-type="{{(new App\Transaction($history))->item_type_terms() }}" data-modal-width="modal-70" ><i class="far fa-file-alt" aria-hidden="true"></i></a>
 															</td>
-														</tr>
-  														@empty 
-														 <tr> <td colspan="8">Payment History Is Not Available</td></tr>
+															</tr>
+													    @empty 
+														<tr> <td colspan="8">Payment History Is Not Available</td></tr>
                                        				@endforelse
 												</tbody>
 											</table>
 											<div class="float-right">
 												@if(!empty($transactionDetail))
-                                 		{{ @$transactionDetail->appends(['business_id' => request()->business_id])->links() }}
-                                  	@endif
+													{{ @$transactionDetail->appends(['business_id' => request()->business_id])->links() }}
+                                  				@endif
 											</div>
 										</div>
 									</div>
@@ -75,10 +74,47 @@
      </div><!-- end main content-->
 </div><!-- END layout-wrapper -->
 
-	
-	 
-	@include('layouts.business.footer')
-	@include('layouts.business.scripts')
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="ajax_html_modal" data-bs-focus="false">
+	<div class="modal-dialog modal-dialog-centered" id="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-btn-modal"></button>
+			</div>
+			<div class="modal-body"></div>
+		</div>
+	</div>
+</div>
 
+<script>
+	$(document).on('click', '[data-behavior~=ajax_html_modal]', function(e){
+		$("#modal-dialog").removeClass();
+		$("#modal-dialog").addClass('modal-dialog modal-dialog-centered');
+        var width = $(this).data('modal-width');
+        var reload = $(this).data('reload');
+        if(width == undefined){
+            // width = 'modal-50';
+        }
+         var chkbackdrop  = $(this).attr('data-modal-chkBackdrop');            
+        e.preventDefault()
+        $.ajax({
+            url: $(this).data('url'),
+            success: function(html){
+            	$('#ajax_html_modal .modal-body').html(html)
+                $('#ajax_html_modal .modal-dialog').addClass(width);
+                if(reload == 1 ){
+                	$('#close-btn-modal').attr('onclick', 'window.location.reload()');
+                }else{
+                	$('#close-btn-modal').removeAttr('onclick');
+                }
+            	if(chkbackdrop == 1){
+            		$('#ajax_html_modal').modal({ backdrop: 'static', keyboard: false });
+            		$('#ajax_html_modal').modal('show')
 
+        		}else{
+                    $('#ajax_html_modal').modal('show')
+        		}
+            }
+        })
+    });
+</script>
 @endsection

@@ -163,6 +163,7 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {   //print_r($request->all());exit;
         $user =  $this->user;
+        // dd($request->hasFile('coverPic'));
         $success = $fail = '';
         if($request->type == 'details'){
             $this->validate($request, [
@@ -542,7 +543,6 @@ class ProfileController extends Controller
     }
 
     public function cardsSave(Request $request) {
-       
         $user = User::where('id', $this->user->id)->first();
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
         $payment_methods = $stripe->paymentMethods->all(['customer' => $user->stripe_customer_id, 'type' => 'card']);
@@ -589,56 +589,55 @@ class ProfileController extends Controller
 
     public function paymentHistory(Request $request){
         $user = $this->user;
-        // dd($user);
         if(!request()->business_id){
             return redirect()->route('personal.manage-account.index');
         }
         $customers = $user->customers()->where('business_id',request()->business_id)->first();
         $customer_ids = @$customers->id;
         $business_id = request()->business_id;
-        $status = Transaction::select('transaction.*')->where('item_type', 'UserBookingStatus')
+        $statusArray = Transaction::select('transaction.*')->where('item_type', 'UserBookingStatus')
               ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
               ->join('user_booking_details as ubd', function($join) use ($business_id,$customer_ids) {
                     $join->on('ubd.booking_id', '=', 'ubs.id')
                         ->where('ubd.order_type', 'Membership')
                         ->where('ubd.user_id', $customer_ids)
                         ->where('ubd.business_id', '=', $business_id);
-              })->get();
+              })->get()->toArray();
 
-        $recurring = Transaction::select('transaction.*')->Where('item_type', 'Recurring')
-                    ->join('recurring as re', 're.id', '=', 'transaction.item_id')->where('re.business_id', '=', $business_id)->where('re.user_id', $customer_ids)->get();
+        $recurringArray = Transaction::select('transaction.*')->Where('item_type', 'Recurring')
+                    ->join('recurring as re', 're.id', '=', 'transaction.item_id')->where('re.business_id', '=', $business_id)->where('re.user_id', $customer_ids)->get()->toArray();
 
         //$mergedArray = array_merge($status, $recurring);
-        $statusArray = $recurringArray  = []; 
-        foreach ($status as $history) {
-            $statusArray[] = [ 
-                    "created_at" =>date('m/d/Y', strtotime($history->created_at)),
-                    'itemDescription' => $history->item_description($business_id)['itemDescription'],
-                    'item_type_terms' => $history->item_type_terms(),
-                    'getPmtMethod' => $history->getPmtMethod(),
-                    'amount' => $history->amount,
-                    'qty' => $history->item_description($business_id)['qty'],
-                    'getBookingStatus' => $history->getBookingStatus(),
-                    'item_id' => $history->item_id,
-                    'customer_id' => $history->customer_id,
-                    'id' => $history->id,
-                ];
-        }
+        // $statusArray = $recurringArray  = []; 
+        // foreach ($status as $history) {
+        //     $statusArray[] = [ 
+        //             "created_at" =>date('m/d/Y', strtotime($history->created_at)),
+        //             'itemDescription' => $history->item_description($business_id)['itemDescription'],
+        //             'item_type_terms' => $history->item_type_terms(),
+        //             'getPmtMethod' => $history->getPmtMethod(),
+        //             'amount' => $history->amount,
+        //             'qty' => $history->item_description($business_id)['qty'],
+        //             'getBookingStatus' => $history->getBookingStatus(),
+        //             'item_id' => $history->item_id,
+        //             'customer_id' => $history->customer_id,
+        //             'id' => $history->id,
+        //         ];
+        // }
 
-        foreach ($recurring as $history) {
-            $recurringArray[] = [ 
-                    "created_at" =>date('m/d/Y', strtotime($history->created_at)),
-                    'itemDescription' => $history->item_description($business_id)['itemDescription'],
-                    'item_type_terms' => $history->item_type_terms(),
-                    'getPmtMethod' => $history->getPmtMethod(),
-                    'amount' => $history->amount,
-                    'qty' => $history->item_description($business_id)['qty'],
-                    'getBookingStatus' => $history->getBookingStatus(),
-                    'item_id' => $history->item_id,
-                    'customer_id' => $history->customer_id,
-                    'id' => $history->id,
-                ];
-        }
+        // foreach ($recurring as $history) {
+        //     $recurringArray[] = [ 
+        //             "created_at" =>date('m/d/Y', strtotime($history->created_at)),
+        //             'itemDescription' => $history->item_description($business_id)['itemDescription'],
+        //             'item_type_terms' => $history->item_type_terms(),
+        //             'getPmtMethod' => $history->getPmtMethod(),
+        //             'amount' => $history->amount,
+        //             'qty' => $history->item_description($business_id)['qty'],
+        //             'getBookingStatus' => $history->getBookingStatus(),
+        //             'item_id' => $history->item_id,
+        //             'customer_id' => $history->customer_id,
+        //             'id' => $history->id,
+        //         ];
+        // }
         
         $mergedArray = array_merge($statusArray, $recurringArray);
         usort($mergedArray, function ($a, $b) {
@@ -657,7 +656,7 @@ class ProfileController extends Controller
         );
         // print_r($transactionDetail);exit;
         $transactionDetail->setPath(url()->current());
-        return view('personal.profile.payment_history', compact('transactionDetail')); 
+        return view('personal.profile.payment_history', compact('transactionDetail','business_id')); 
     }
 
 

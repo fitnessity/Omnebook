@@ -233,6 +233,11 @@ class SchedulerController extends Controller
         UserBookingDetail::where('id',$user_booking_detail->id)->update(["act_schedule_id"=>'',"bookedtime"=>NULL,'booking_detail'=>json_encode($array)]);*/
         UserBookingDetail::where('id',$user_booking_detail->id)->update(["act_schedule_id"=>'']);
         $checkinDetail->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Rescheduled successfully',
+        ], 200);
+
     }
 
 }

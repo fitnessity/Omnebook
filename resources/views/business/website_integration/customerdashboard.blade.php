@@ -59,7 +59,7 @@
 						<div class="avatar-xsmall me-2">
 								{{-- <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">N S</span> --}}
 								@if(!$business->getCompanyImage())
-										<span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$business->first_letter}}</span> 
+										<span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$business->first_letter??$business->cname_first_letter}}</span> 
 									@else
 										<img src="{{$business->getCompanyImage()}}" alt="" class="avatar-xsmall rounded-circle">
 								@endif
@@ -136,7 +136,7 @@
 							<div class="">
 								@if(!$business->getCompanyImage())
 								<div class="company-list-text mb-10">
-					          		<p class="character">{{$business->first_letter}}</p>
+					          		<p class="character">{{$business->first_letter ?? $business->cname_first_letter}}</p>
 					          	</div>
 								@else
 									<img src="{{$business->getCompanyImage()}}" alt="" class="avatar">
@@ -425,8 +425,8 @@
 			var customer = localStorage.getItem('customer');
 			var code = {{$business->id ?? 'null'}};
 			// const url = `https://dev.fitnessity.co/api/edit_profile?customer_id=${encodeURIComponent(customer)}`;
-			const url = `https://dev.fitnessity.co/api/edit_profile?code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
-
+			// const url = `https://dev.fitnessity.co/api/edit_profile?code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
+			const url = `https://dev.fitnessity.co/api/edit_profile?code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent({{$user->id}})}`;
             window.parent.postMessage({ type: 'changeSrc', src: url }, '*');   
 		}
 	</script>
@@ -434,6 +434,8 @@
 		window.addEventListener('load', function() {
 			var val = '1';
 			localStorage.setItem('loggedin',val);
+			var user = @json($user);
+			localStorage.setItem('user', JSON.stringify(user));
 		});
 	</script>
 	<script>
@@ -538,8 +540,10 @@
 	<script>
 		// $(document).ready(function() {
 			$('#purchaseMembershipBtn').on('click', function() {
-				var companyinfo = @json($companyinfo); 		
+				var companyinfo = @json($companyinfo?? null); 		
 				var user={{$user->id}};
+				var business = {{$business->id ?? 'null'}};
+		
 		
 				$.ajax({
 					url: '{{ route("membership") }}', 
@@ -547,6 +551,7 @@
 					data: {
 						companyinfo: companyinfo,
 						user:user,
+						business_id:business,
 					},
 					success: function(response) {
 						$('#modalBodyContent').html(response);

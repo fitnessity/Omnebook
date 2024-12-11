@@ -459,12 +459,21 @@
 	#sidebar-wrapper{overflow-y: scroll;}
 	#client_wrapper.toggled #sidebar-wrapper {	width: 195px;  }
 	#client_wrapper.toggled {padding-left: 190px; }
-	#service_wrapper.toggled {padding-left: 190px;	  }
+	
+	.s-sidebar-nav{width: 100%;}
+
 	#service_wrapper.toggled #page-content-wrapper {	position: relative;	margin-right: -250px;	  }
 	#service_wrapper.toggled #service-sidebar-wrapper {	width: 195px; }
-	.s-sidebar-nav{width: 100%;}
 	#service-sidebar-wrapper{overflow-y: scroll;}
 	#service-sidebar-wrapper{left: 250px; top: 173px;}
+	#service_wrapper.toggled {padding-left: 190px; }
+
+	#bookppointments_wrapper.toggled #page-content-wrapper {	position: relative;	margin-right: -250px;	  }
+	#bookppointments_wrapper.toggled #bookppointments-sidebar-wrapper {	width: 195px; }
+	#bookppointments-sidebar-wrapper{overflow-y: scroll;}
+	#bookppointments-sidebar-wrapper{left: 250px; top: 173px;}
+	#bookppointments_wrapper.toggled {padding-left: 190px; }
+	
 	.navbar-nav.sidebar-nav .nav-link i{display: none;}
 	.sidebar-nav{position: relative; width: 100%;}
 	.customer-list-table td{text-align: left;}

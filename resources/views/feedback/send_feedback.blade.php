@@ -131,7 +131,7 @@ textarea {
 									<input type="text" name="name" id="name" size="255" maxlength="255" placeholder="name" value="{{ $loggedinUser['firstname'] }} {{ $loggedinUser['lastname'] }}" readonly>
 										<input type="email" name="email" id="email" size="255" placeholder="Email Address" maxlength="255" value="{{ $loggedinUser['email'] }}" readonly>
 							    @endif 
-								<textarea placeholder="Say something About Fitnessity" name="comment" id="comment" rows="5"></textarea>
+								<textarea placeholder="Say something About OmneBook" name="comment" id="comment" rows="5"></textarea>
 								<textarea placeholder="Any suggestions for us ?" name="suggestion" id="suggestion" rows="5"></textarea>
 								@if ($errors->has('suggestion'))
 									<span class="help-block" style="color:red; font-size: 15px; display: block;">

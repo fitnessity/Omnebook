@@ -69,7 +69,7 @@
                     <div class="avatar-xsmall me-2">
                                 {{-- <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">N S</span> --}}
                                 @if(!$business->getCompanyImage())
-                                        <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$business->first_letter}}</span> 
+                                        <span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$business->first_letter ?? $business->cname_first_letter}}</span> 
                                     @else
                                         <img src="{{$business->getCompanyImage()}}" alt="" class="avatar-xsmall rounded-circle">
                                 @endif
@@ -334,7 +334,9 @@
             var customer = localStorage.getItem('customer');
             var code = {{$business->id ?? 'null'}};
             // const url = `https://dev.fitnessity.co/api/edit_profile?customer_id=${encodeURIComponent(customer)}`;
-            const url = `https://dev.fitnessity.co/api/edit_profile?code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
+            // const url = `https://dev.fitnessity.co/api/edit_profile?code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent(customer)}`;
+            const url = `https://dev.fitnessity.co/api/edit_profile?code=${encodeURIComponent(code)}&customer_id=${encodeURIComponent({{$user->id}})}`;
+
 
             window.parent.postMessage({ type: 'changeSrc', src: url }, '*');   
         }

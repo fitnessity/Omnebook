@@ -147,11 +147,11 @@
                                                                         <div class="mt-3 filter-check">
                                                                             <label for="">Background Color</label>
                                                                         </div>
-                                                                        <div class="d-flex flex-wrap gap-2">
+                                                                        <!-- <div class="d-flex flex-wrap gap-2">
                                                                             <div class="pickr">
                                                                                 <button type="button" class="pcr-button" role="button" aria-label="toggle color picker dialog" style="--pcr-color: rgba(244, 67, 54, 1);"></button>
                                                                             </div>
-                                                                        </div>
+                                                                        </div> -->
                                                                     </div>
                                                                     <!-- <div class="col-lg-6 col-md-6 col-12">
                                                                         <div class="mt-3 filter-check">
@@ -263,7 +263,7 @@
                                                                     <div id="flush-collapseBrands" class="accordion-collapse collapse show" aria-labelledby="flush-headingBrands">
                                                                         <div class="accordion-body text-body pt-0">
                                                                         
-                                                                            <div class="gap-2 mt-3 filter-check">
+                                                                            <!-- <div class="gap-2 mt-3 filter-check">
                                                                                 <label for="">Colors</label>
                                                                                 <p>By not setting a color, the defaults will be used.</p>
                                                                                 <label for="">Text Color</label>
@@ -274,7 +274,7 @@
                                                                                 <div class="pickr mb-15">
                                                                                     <button type="button" class="pcr-button w-100" role="button" aria-label="toggle color picker dialog" style="--pcr-color: rgba(156, 39, 176, 1);"></button>
                                                                                 </div>
-                                                                            </div>
+                                                                            </div> -->
                                                                         </div>                                    
                                                                     </div>
                                                                 </div>
@@ -2102,6 +2102,7 @@
 
 
 @include('layouts.business.footer')
+@include('layouts.business.scripts')
 
 
 

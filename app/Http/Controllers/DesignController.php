@@ -369,4 +369,13 @@ class DesignController extends Controller {
     public function appointments_booking_history(Request $request){
         return view('design.appointments_booking_history');
     }
+    public function bookings_appointments_scheduler(Request $request){
+        return view('design.bookings_appointments_scheduler');
+    }
+    public function bookings_appointments_calendar(Request $request){
+        return view('design.bookings_appointments_calendar');
+    }
+    public function bookings_appointments(Request $request){
+        return view('design.bookings_appointments');
+    }
 }

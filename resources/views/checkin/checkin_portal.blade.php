@@ -1004,7 +1004,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 																				@endphp
 																				<div class="item">
 																					<div class="{{$hint_class}}">
-																						<a href="{{$request->fullUrlWithQuery(['date' => $date->format('Y-m-d') ,'activetab' => 'schedule'])}}" class="calendar-btn">{{$date->format("D d")}}</a>
+																						<a href="{{$request->fullUrlWithQuery(['date' => $date->format('Y-m-d')])}}" class="calendar-btn">{{$date->format("D d")}}</a>
 																					</div>
 																				</div>
 																			@endforeach
@@ -1013,14 +1013,14 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 																		
 																		<div class="tab-data">
 																			<div class="row">
-																				<div class="col-md-4 col-sm-4 col-xs-12">
+																				<div class="col-lg-4 col-md-3 col-sm-4 col-xs-12">
 																					<div class="checkout-sapre-tor">
 																					</div>
 																				</div>
-																				<div class="col-md-4 col-sm-4 col-xs-12 valor-mix-title">
+																				<div class="col-lg-4 col-md-6 col-sm-4 col-xs-12 valor-mix-title">
 																					<label>Activities on {{$filter_date->format("l, F j")}}</label>
 																				</div>
-																				<div class="col-md-4 col-sm-4 col-xs-12">
+																				<div class="col-lg-4 col-md-3 col-sm-4 col-xs-12">
 																					<div class="checkout-sapre-tor">
 																					</div>
 																				</div>
@@ -1028,6 +1028,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 																			<div class="activity-tabs">
 																				@php $categoryList = []; @endphp
 																				@if($serviceType == $st && !empty($services))
+																				
 																					@foreach($services as $ser)
 																						@php  
 																							if($priceid != ''){
@@ -1036,30 +1037,25 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 																									$categoryList [] = @$pricelist->business_price_details_ages;
 																								}
 																							}else{
-																								// $cat=App\BusinessPriceDetailsAges::where('serviceid',$ser->id)->where('class_type',$ser->service_type)->get();
-																								$cat = App\BusinessPriceDetailsAges::getCategoriesByServiceAndType($ser->id, $ser->service_type);
-																								foreach ($cat as $category) {
-																									$categoryList [] = $category;
+																								foreach(@$ser->BusinessPriceDetailsAges as $cat){
+																									$categoryList [] = $cat;
 																								}
-																								// foreach(@$ser->BusinessPriceDetailsAges as $cat){
-																								// 	$categoryList [] = $cat;
-																								// }
 																							}
 																						@endphp
 																					@endforeach
+
 																					@php 	
 																						function customKeySort($a, $b) {
-																						    $timeA = strtotime($a);
-																						    $timeB = strtotime($b);
-																						    
-																						    if ($timeA == $timeB) {
-																						        return 0;
-																						    }
-																						    return ($timeA < $timeB) ? -1 : 1;
+																							$timeA = strtotime($a);
+																							$timeB = strtotime($b);
+																							
+																							if ($timeA == $timeB) {
+																								return 0;
+																							}
+																							return ($timeA < $timeB) ? -1 : 1;
 																						}
 																						$schedule = [];
 																						foreach($categoryList as $c){
-																							
 																							foreach($c->BusinessActivityScheduler as $sc){
 																								if($sc->end_activity_date >= $filter_date->format('Y-m-d') && $sc->starting <= $filter_date->format('Y-m-d')){
 																									if(strpos($sc->activity_days, $filter_date->format('l')) !== false){
@@ -1079,7 +1075,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 																						uksort($schedule, 'customKeySort');
 																						$categoryListFull = [];
 																						foreach ($schedule as $value) {
-																						    $categoryListFull = array_merge($categoryListFull, (array)$value);
+																							$categoryListFull = array_merge($categoryListFull, (array)$value);
 																						}
 																						$categoryListFull = array_unique($categoryListFull);
 																					@endphp 
@@ -1103,123 +1099,124 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 																							} 
 																							if(!empty($sche_ary)){
 																							@endphp
-																								<div class="row">
-																									<div class="col-md-6 col-sm-6 col-xs-12">
-																										<div class="classes-info text-left">
-																											<div class="row">
-																												{{-- 
-																												<div class="col-md-12 col-xs-12">
-																													<label class="fs-16">Scheduler Name: </label> <span class="fs-16">{{@$cList->category_title}}</span>
-																												</div>
-																												--}}
-																												<div class="col-md-12 col-xs-12 ">
-																													<label>Activity Name: </label> <span> {{$cList->BusinessServices->program_name}}</span>
-																												</div>
-																												<div class="col-md-12 col-xs-12">
-																													<div class="text-left line-height-1">
-																														<label>Activity: </label> <span> {{$cList->BusinessServices->sport_activity}}</span>
-																													</div>
-																												</div>
-																											</div>
-																										</div>
-																									</div>
-																									
-																									<div class="col-md-6 col-sm-6 col-xs-12">
-																										<div class="row">
-																											@if(!empty($sche_ary))
-																												@foreach($sche_ary as $scary)
-																													@php 
-																														$duration = $scary->get_duration();
+																							@php } @endphp
+																								@if(!empty($sche_ary))
+																								@foreach($sche_ary as $scary)
+																									@php 
+																										$duration = $scary->get_duration();
 
-																														$SpotsLeftdis = 0;
-																														$bs = new  \App\Repositories\BookingRepository;
-																														$bookedspot = $bs->gettotalbooking($scary->id,$filter_date->format('Y-m-d')); 
-																														$SpotsLeftdis = $scary->spots_available - $bookedspot;
-																														
-																												        $cancel_chk = 0;
-																														$canceldata = ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id,'cancel_date_chk'=>1])->first();
-																														$date = $filter_date->format('Y-m-d');
-																														$time = $scary->shift_start;
-																														$st_time = date('Y-m-d H:i:s', strtotime("$date $time"));
-																														$current  = date('Y-m-d H:i:s');
-																														$difference = round((strtotime($st_time) - strtotime($current))/3600, 1);
-																														$timeOfActivity = date('h:i a', strtotime($scary->shift_start));
-																														$grayBtnChk = 0;$class = '';
-																														if($filter_date->format('Y-m-d') == date('Y-m-d') ){
-																															
-																															$start = new DateTime($scary->shift_start);
-																											                $current = new DateTime();
-																											                $current_time =  $current->format("Y-m-d H:i");
+																										$SpotsLeftdis = 0;
+																										$bs = new  \App\Repositories\BookingRepository;
+																										$bookedspot = $bs->gettotalbooking($scary->id,$filter_date->format('Y-m-d')); 
+																										$SpotsLeftdis = $scary->spots_available - $bookedspot;
+																										
+																										$cancel_chk = 0;
+																										$canceldata = ActivityCancel::where(['cancel_date'=>$filter_date->format('Y-m-d'),'schedule_id'=>$scary->id,'cancel_date_chk'=>1])->first();
+																										$date = $filter_date->format('Y-m-d');
+																										$time = $scary->shift_start;
+																										$st_time = date('Y-m-d H:i:s', strtotime("$date $time"));
+																										$current  = date('Y-m-d H:i:s');
+																										$difference = round((strtotime($st_time) - strtotime($current))/3600, 1);
+																										$timeOfActivity = date('h:i a', strtotime($scary->shift_start));
+																										$grayBtnChk = 0;$class = '';
+																										if($filter_date->format('Y-m-d') == date('Y-m-d') ){
+																											
+																											$start = new DateTime($scary->shift_start);
+																											$current = new DateTime();
+																											$current_time =  $current->format("Y-m-d H:i");
 
-																											                if($cList->BusinessServices->can_book_after_activity_starts == 'No' && $cList->BusinessServices->beforetime != '' && $cList->BusinessServices->beforetimeint != ''){
-																											                    $matchTime = $start->modify('-'.$cList->BusinessServices->beforetimeint.' '.$cList->BusinessServices->beforetime)->format("Y-m-d H:i");
-																											                    if($current_time > $matchTime){
-																											                        $grayBtnChk = 1;
-																																	$class = 'btn-schedule-grey';
-																											                    }
-																											                    
-																											                }else if($cList->BusinessServices->can_book_after_activity_starts == 'Yes' && $cList->BusinessServices->beforetime != '' && $cList->BusinessServices->beforetimeint != ''){
-																											                    $matchTime = $start->modify('+'.$cList->BusinessServices->aftertimeint.' '.$cList->BusinessServices->aftertime)->format("Y-m-d H:i");
-																											                    if($current_time > $matchTime){
-																											                        $grayBtnChk = 1;
-																																	$class = 'btn-schedule-grey';
-																											                    }
-																											                }
+																											if($cList->BusinessServices->can_book_after_activity_starts == 'No' && $cList->BusinessServices->beforetime != '' && $cList->BusinessServices->beforetimeint != ''){
+																												$matchTime = $start->modify('-'.$cList->BusinessServices->beforetimeint.' '.$cList->BusinessServices->beforetime)->format("Y-m-d H:i");
+																												if($current_time > $matchTime){
+																													$grayBtnChk = 1;
+																													$class = 'post-btn-gray';
+																												}
+																												
+																											}else if($cList->BusinessServices->can_book_after_activity_starts == 'Yes' && $cList->BusinessServices->beforetime != '' && $cList->BusinessServices->beforetimeint != ''){
+																												$matchTime = $start->modify('+'.$cList->BusinessServices->aftertimeint.' '.$cList->BusinessServices->aftertime)->format("Y-m-d H:i");
+																												if($current_time > $matchTime){
+																													$grayBtnChk = 1;
+																													$class = 'post-btn-gray';
+																												}
+																											}
 
-																														}
+																										}
 
 
-																														if($SpotsLeftdis == 0){
-																															$grayBtnChk = 2;
-																															$class = 'btn-schedule-grey';
-																														}
+																										if($SpotsLeftdis == 0){
+																											$grayBtnChk = 2;
+																											$class = 'post-btn-gray';
+																										}
 
-																														if($canceldata != ''){
-																															$grayBtnChk = 3;
-																															$class = 'btn-schedule-grey';
-																														}
+																										if($canceldata != ''){
+																											$grayBtnChk = 3;
+																											$class = 'post-btn-gray';
+																										}
 
-																														if($scary->chkReservedToday($filter_date->format('Y-m-d'))){
-																															$class = 'btn-schedule-grey';
-																															$grayBtnChk = 4;
-																														}
-
-																														$insName = $scary->getInstructure($filter_date->format('Y-m-d'));
-																													@endphp
-
-																													<div class="col-md-4 col-sm-5 col-xs-12">
-																														<div class="classes-time">
-																															
-																															<button class="post-btn {{$class}} activity-scheduler" onclick="openPopUp({{$scary->id}} , {{$cList->BusinessServices->id}} ,'{{$cList->BusinessServices->program_name}}','{{$timeOfActivity}}',{{$grayBtnChk}},'{{$scary->category_id}}');"  {{ ( $SpotsLeftdis == 0 || $grayBtnChk == 4 || $canceldata != '' )?  "disabled" : ''}}  >{{$timeOfActivity}} <br>{{$duration}}</button>
-																															<label>{{ $SpotsLeftdis == 0 ? 
-																																"Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</label>
-
-																															@if($canceldata != '')<label class="font-red">Cancelled</label>@endif
-																															
-																															@if($scary->chkReservedToday($filter_date->format('Y-m-d')))<label class="font-green">Already Reserved</label>@endif
-
-																															<label>{{ $insName }}</label>
+																										$insName = $scary->getInstructure($filter_date->format('Y-m-d'));
+																									@endphp
+																									{{-- @if( $cList->class_detail()>0) --}}
+																											<div class="show-all">
+																													<div class="row">
+																														<div class="col-lg-2 col-md-12 col-sm-6 col-xs-12">
+																															<div class="table-inner-data">
+																																<span class="mg-time">{{$timeOfActivity}} </span>
+																																<div class="time-min bg-red-fall">
+																																	<span>{{$duration}}</span>
+																																</div>
+																															</div>
+																														</div>
+																												
+																													<div class="col-lg-7 col-md-8 col-sm-6 col-xs-12">
+																														<div class="table-inner-data-sec f-left">
+																															<img src="{{ $cList->BusinessServices->first_profile_pic() ? $cList->BusinessServices->first_profile_pic() : url('/images/service-nofound.jpg') }}" alt="Fitnessity">                                                    
+																															<div class="p-name">
+																																<h3>{{$cList->BusinessServices->program_name}}</h3>
+																																<div class="d-grid">
+																																	<p> {{$cList->BusinessServices->sport_activity}} Spot Available {{ $SpotsLeftdis == 0 ? 
+																																				"Sold Out" : $SpotsLeftdis."/".$scary->spots_available."  Spots Left" }}</p>
+																																				@if($canceldata != '')<p class="font-red">Cancelled</p>@endif
+																																				@if($scary->chkReservedToday($filter_date->format('Y-m-d')) )<p class="font-green">Already Reserved</p>@endif
+																																		<p>Instructor:{{ $insName }}
+																																		{{-- <span class="diffi">Difficulty Level:
+																																		{{ $cList->getClassNames() ? $cList->getClassNames() : '' }}	
+																																		</span> --}}
+																																		@if($cList->getClassNames())
+																																		| <span class="diffi">Difficulty Level: 
+																																				{{ $cList->getClassNames() }}
+																																			</span>
+																																		@endif
+																																	</p>  
+																																</div>
+																																			
+																															</div>
 																														</div>
 																													</div>
-																												@endforeach
-																											@else
-																												<div class="col-md-12 col-sm-6 col-xs-12 noschedule">No Time available</div>
-																											@endif
+																													<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+																														<div class="join-btn">
+																															<button class="btn btn-red {{$class}} activity-scheduler" onclick="openPopUp({{$scary->id}} , {{$cList->BusinessServices->id}} ,'{{$cList->BusinessServices->program_name}}','{{$timeOfActivity}}',{{$grayBtnChk}},'{{$scary->category_id}}');"  {{ $SpotsLeftdis == 0 ?  "disabled" : ''}}  {{ $canceldata != '' ?  "disabled" : ''}} >Book Now</button>
+																														</div>
+																													</div>																			
+																													<div class="col-md-12 col-xs-12">
+																														<div class="checkout-sapre-tor">
+																														</div>
+																													</div>
+																												</div>
 																											</div>
-																										</div>
-																										<div class="col-md-12 col-xs-12">
-																											<div class="checkout-sapre-tor">
-																											</div>
-																										</div>
-																									</div> 
-																							@php } @endphp
+																										{{-- @endif --}}
+																							@endforeach
+																							@else
+																								<div class="col-md-12 col-sm-6 col-xs-12 noschedule">No Time available</div>
+																							@endif
 																						@endforeach
 																					@endif
 																				@endif
 																			</div>
-																		</div>
-																	</div>
-																	@endforeach
+																		</div>							
+
+
+																</div>
+															@endforeach
 																</div>
 															</div>
 														</div>

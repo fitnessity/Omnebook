@@ -60,26 +60,26 @@ class WebsiteIntegrationConroller extends Controller
     {
         $currentCompany = Auth::user()->current_company()->first();
         $data =  WebsiteIntegration::where('business_id', $currentCompany->id)->first();
-        $color1 = @$data->log_textcolor; 
-        $color2 = @$data->log_bg_color; 
-        $color3 = @$data->reg_textcolor; 
-        $color4 = @$data->reg_bg_color; 
-        $color8 = @$data->reg_back_color;
-        $color5 = @$data->primary_color; 
-        $color6 = @$data->secondary_color; 
-        $color9 = @$data->schedule_back_color;
-        $color10 = @$data->schedule_label;
-        $color11=@$data->schedule_label_color;
-        $color12=@$data->date_color;
+        $color1 = @$data->log_textcolor??'#ea1515'; 
+        $color2 = @$data->log_bg_color??'#ea1515'; 
+        $color3 = @$data->reg_textcolor??'#fff'; 
+        $color4 = @$data->reg_bg_color??'#ea1515'; 
+        $color8 = @$data->reg_back_color??'#fff';
+        $color5 = @$data->primary_color??'#fff'; 
+        $color6 = @$data->secondary_color??'#ea1515'; 
+        $color9 = @$data->schedule_back_color??'#fff';
+        $color10 = @$data->schedule_label??'#fff';
+        $color11=@$data->schedule_label_color??'#fff';
+        $color12=@$data->date_color??'#ea1515';
         // dd($color6);
         // $logoUrl = $data ? Storage::disk('s3')->url($data->logo) : null;
         $logoUrl = ($data && !empty($data->logo)) ? Storage::disk('s3')->url($data->logo) : null;
         $selectedState=@$data->default_state;
         $company_code = $currentCompany->unique_code;
-        $selectLink = '<a href="#"></a>';    
-        $login_sub = '<a href="https://host.fitnessity.co/login/'. $company_code .'"></a>';
-        $register_sub = '<a href="https://host.fitnessity.co/register/' . $company_code .'"></a>';
-        $schedule_sub = '<a href="https://host.fitnessity.co/schedule/' . $company_code .'"></a>';
+        $selectLink = '';    
+        $login_sub = 'https://host.fitnessity.co/login/' . $company_code;
+        $register_sub = 'https://host.fitnessity.co/register/' . $company_code;
+        $schedule_sub = 'https://host.fitnessity.co/schedule/' . $company_code;
         
         $login = '<div id="your-login-widget-container" data-unique-code="' . $company_code . '"></div>';
         $register='<div id="your-register-widget-container" data-unique-code="' . $company_code . '"></div>';
@@ -197,7 +197,6 @@ class WebsiteIntegrationConroller extends Controller
         // dd('22');
         $userId = auth()->id();
         $code = CompanyInformation::where('user_id', $userId)->first();
-    
         return view('business.website_integration.login', compact('code'));
     }
     
@@ -206,7 +205,11 @@ class WebsiteIntegrationConroller extends Controller
         $code=$unique_code;
         $code = CompanyInformation::where('unique_code', $code)->first();
         $companyinfo=WebsiteIntegration::where('user_id',$code->user_id)->first();
+        // dd($code);
         return view('business.website_integration.userlogin',compact('companyinfo','code'));
+
+
+
     }
     public function Loginuserbook($unique_code)
     {
@@ -368,15 +371,17 @@ class WebsiteIntegrationConroller extends Controller
     {
         // Validate incoming request
         $postArr = $request->only('email', 'password', 'company_info');
+        // dd($request->all());
         
         $rules = [
             'email' => 'required|email',
             'password' => 'required',
-            'company_info' => 'required|exists:website_integrations,id',
+            // 'company_info' => 'required|exists:website_integrations,id',
         ];
         
         $validator = Validator::make($postArr, $rules);
-
+        $business=request()->input('code');
+        // dd($business);
         if ($validator->fails()) {
             return response()->json([
                 'type' => 'danger',
@@ -385,8 +390,8 @@ class WebsiteIntegrationConroller extends Controller
         }
 
         // Fetch the necessary business and customer details
-        $webdata = WebsiteIntegration::where('id', $request->company_info)->first();
-        $customer = Customer::where('business_id', $webdata->business_id)->where('email', $request->email)->first();
+        // $webdata = WebsiteIntegration::where('id', $request->company_info)->first();
+        $customer = Customer::where('business_id', $business)->where('email', $request->email)->first();
         
         if (!$customer) {
             return response()->json([
@@ -483,7 +488,7 @@ class WebsiteIntegrationConroller extends Controller
         // return $tok;
         $token = $request->query('token');
         $businessId = $request->query('code');    
-        // dd($code);
+        // dd($businessId);
         // dd($request->query('customer_id'));
         if (!$token) {
             return response()->json(['error' => 'Token is required'], 401);
@@ -562,7 +567,7 @@ class WebsiteIntegrationConroller extends Controller
         // dd($classes);
         // dd(\DB::getQueryLog()); 
         // dd($user);
-        return view('business.website_integration.customerdashboard',compact('customer','companyinfo','name','notesCnt','activeMembershipCnt','docCnt','docCntNew','announcemetCnt','attendanceCnt','announcemetCntNew','bookingCnt','bookingPct','classes','attendancePct','business','notesCntNew','activeMembershipCntNew','user'));
+        return view('business.website_integration.customerdashboard',compact('customer','user','companyinfo','name','notesCnt','activeMembershipCnt','docCnt','docCntNew','announcemetCnt','attendanceCnt','announcemetCntNew','bookingCnt','bookingPct','classes','attendancePct','business','notesCntNew','activeMembershipCntNew','user'));
         // $html = view('business.website_integration.customerdashboard', compact(
         //     'customer', 'name', 'notesCnt', 'activeMembershipCnt', 'docCnt', 'docCntNew', 
         //     'announcemetCnt', 'attendanceCnt', 'announcemetCntNew', 'bookingCnt', 
@@ -580,7 +585,7 @@ class WebsiteIntegrationConroller extends Controller
         $code = CompanyInformation::where('unique_code', $unique_code)->first();
         $companyinfo=WebsiteIntegration::where('user_id',$code->user_id)->first();
         // $companyinfo=WebsiteIntegration::where('user_id',$code->user_id)->first();
-        $businessTerms = BusinessTerms::where('cid',$companyinfo->business_id)->first();
+        $businessTerms = BusinessTerms::where('cid',$code->id)->first();
 
         $business_id=$code->id;
         $intent = $clientSecret = null;
@@ -603,7 +608,7 @@ class WebsiteIntegrationConroller extends Controller
                     $clientSecret = $intent['client_secret'];
                 } 
             }
-        return view('business.website_integration.register',compact('clientSecret', 'business_id','success', 'businessTerms','successMsg','companyinfo','businessTerms'));
+        return view('business.website_integration.register',compact('clientSecret', 'business_id','success', 'businessTerms','successMsg','companyinfo','code','businessTerms'));
     }
     public function getCheckinCode(Request $request){
         if($request->checkin_code){
@@ -622,10 +627,13 @@ class WebsiteIntegrationConroller extends Controller
         $postArr = $request->all();
         // $user = Auth::user();
         // $company = $user->businesses->find(Auth::user()->cid);
-        $code=$request->company_info;
+        $comp=$request->company_info;
+        $bussiness=$request->code;
+
         // dd($code);
-        $companyinfo=WebsiteIntegration::where('id',$code)->first();
-        $company = CompanyInformation::where('id', $companyinfo->business_id)->first();
+        // dd($code);
+        $companyinfo=WebsiteIntegration::where('id',$bussiness)->first();
+        $code = CompanyInformation::where('id', $bussiness)->first();
         $rules = [
             'firstname' => 'required',
             'lastname' => 'required',
@@ -643,14 +651,14 @@ class WebsiteIntegrationConroller extends Controller
             );
             return Response::json($response);
         } else {
-            if (!$this->customers->findUniquefeildPerBusiness($company->id, 'email',$postArr['email'])) {
+            if (!$this->customers->findUniquefeildPerBusiness($code->id, 'email',$postArr['email'])) {
                 $response = array(
                     'type' => 'danger',
                     'msg' => 'Email already exists. Please select different Email',
                 );
                 return Response::json($response);
             }; 
-            if (!$this->customers->findUniquefeildPerBusiness($company->id, 'phone_number',$postArr['contact'])) {
+            if (!$this->customers->findUniquefeildPerBusiness($code->id, 'phone_number',$postArr['contact'])) {
                 $response = array(
                     'type' => 'danger',
                     'msg' => 'Phone Number already exists. Please Enter different Phone Number',
@@ -681,7 +689,7 @@ class WebsiteIntegrationConroller extends Controller
                 Storage::disk('s3')->put($filename, $image);
 
                 $customerObj = New Customer();
-                $customerObj->business_id = $company->id;
+                $customerObj->business_id = $code->id;
                 $customerObj->fname = $postArr['firstname'];
                 $customerObj->lname = $postArr['lastname'] ?? '';
                 $customerObj->password = Hash::make($random_password);
@@ -729,8 +737,8 @@ class WebsiteIntegrationConroller extends Controller
                         return $item->id;
                     });
 
-                    $result = UserBookingDetail::whereIn('sport', function($query) use ($company){
-                        $query->select('id')->from('business_services')->where('cid', $company->id);
+                    $result = UserBookingDetail::whereIn('sport', function($query) use ($code){
+                        $query->select('id')->from('business_services')->where('cid', $code->id);
                     })->whereIn('booking_id', $ids)->exists();
 
                     if($result){
@@ -754,7 +762,7 @@ class WebsiteIntegrationConroller extends Controller
                     $userObj->birthdate = isset($postArr['dob']) ? date('Y-m-d', strtotime($postArr['dob'])) : NULL;
                     $userObj->stripe_customer_id = $stripe_customer_id;
                     $userObj->unique_code = $checkInCode;
-                    $userObj->cid=$company->id;
+                    $userObj->cid=$code->id;
                     $userObj->save(); 
                     $customerObj->user_id = $userObj->id;
                 }
@@ -790,7 +798,7 @@ class WebsiteIntegrationConroller extends Controller
                                 $customerFamily = New Customer();
                                 $customerFamily->parent_cus_id = $parentId;
                                 $customerFamily->primary_account = $isParentAccount;
-                                $customerFamily->business_id = $company->id;
+                                $customerFamily->business_id = $code->id;
                                 $customerFamily->fname = $request->fname[$i];
                                 $customerFamily->lname = $request->lname[$i];
                                 $customerFamily->relationship = $request->relationship[$i];
@@ -816,7 +824,7 @@ class WebsiteIntegrationConroller extends Controller
                                 }
 
                                 if ($customerFamily) {      
-                                    SGMailService::sendWelcomeMailToCustomer($customerFamily->id,$company->id,'');
+                                    SGMailService::sendWelcomeMailToCustomer($customerFamily->id,$code->id,'');
                                 }
 
                                 $is_user = User::where(['firstname'=> $request->fname[$i],'lastname'=> $request->lname[$i],'email' => $request->emailid[$i]])->first();
@@ -885,14 +893,13 @@ class WebsiteIntegrationConroller extends Controller
                         session()->put('auto_generate_msg', $msg);
                     }
 
-                    // $status = SGMailService::sendWelcomeMailToCustomer($customerObj->id,Auth::user()->cid,$random_password); 
-                    $status = SGMailService::sendWelcomeMailToCustomer($customerObj->id,$company->id,$random_password); 
+                    $status = SGMailService::sendWelcomeMailToCustomer($customerObj->id,$code->id,$random_password); 
                     $response = array(
                         'id'=>$customerObj->id,
                         'type' => 'success',
                         'msg' => 'Registration done successfully.',
                         'token' => $token,
-                        'bussiness_id'=>$company->id,
+                        'bussiness_id'=>$bussiness,
                     );
                     return Response::json($response);
                 } else {
@@ -1054,10 +1061,12 @@ class WebsiteIntegrationConroller extends Controller
     public function membership(Request $request)
     {
 
-        $companyinfo = $request->input('companyinfo');
+        // dd($request->all());
+        // $companyinfo = $request->input('companyinfo');
         $users = $request->input('user');
-        $companyId = $companyinfo['business_id'];
-        $user_Id=$companyinfo['user_id'];
+        $companyId = $request->input('business_id');;
+        // $user_Id=$companyinfo['user_id'];
+        $user_Id=$users;
         $customer =Customer::where('business_id',$companyId)->where('user_id',$user_Id)->first();
         $business = CompanyInformation::where('id',$companyId)->first();
         $customerId=$customer->id;
@@ -1138,13 +1147,17 @@ class WebsiteIntegrationConroller extends Controller
         	$prices = $firstCategory  != '' ? $firstCategory->BusinessPriceDetails()->orderBy('id', 'ASC')->get() : []; 
    		}
         $addOnServices = $firstCategory  != '' ?  $firstCategory->AddOnService: [];
-        if (!$prices->isEmpty()) {
-        	$priceId = $priceId ?? $prices[0]['id'];
-            foreach ($prices as  $pr) {
-            	$select = $pr['id'] == $priceId ? 'selected' : '';
-                $priceOption .='<option value="'.$pr['id'].'" '.$select.'>'.$pr['price_title'].'</option>';
-            }
-        }
+        // if (!$prices->isEmpty()) {
+            // dd($prices);
+            // if (!empty($prices)) {
+                if (!empty($prices) && count($prices) > 0) {
+                    $priceId = $priceId ?? $prices[0]['id'];
+                    foreach ($prices as  $pr) {
+                        $select = $pr['id'] == $priceId ? 'selected' : '';
+                        $priceOption .='<option value="'.$pr['id'].'" '.$select.'>'.$pr['price_title'].'</option>';
+                    }
+                }
+
         $BusinessActivityScheduler = BusinessActivityScheduler::where('serviceid',$serviceId)->where('category_id',@$firstCategory->id)->where('starting','<=',date('Y-m-d',strtotime($activityDate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($activityDate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($activityDate)).'",activity_days)');
 		$bschedule = $BusinessActivityScheduler->get();
 		$bschedulefirst = $scheduleId != '' ? $BusinessActivityScheduler->when($scheduleId, function ($query) use ($scheduleId) {
@@ -2483,7 +2496,8 @@ class WebsiteIntegrationConroller extends Controller
             $business_id=$request->code;
             $cus_id=$request->customer_id;        
             $business = CompanyInformation::find($business_id);    
-            $customer=Customer::where('id',request()->customer_id)->where('business_id',$business_id)->first();
+            $customer=Customer::where('user_id',request()->customer_id)->where('business_id',$business_id)->first();
+            // dd($customer);
             $userid=$customer->user_id;
             $userdata=User::where('id',$userid)->first();
             if($customer->primary_account===0)
@@ -2509,6 +2523,7 @@ class WebsiteIntegrationConroller extends Controller
     }
     public function updateProfile(Request $request, $id)
     {
+        // dd($id);
         $user = User::findOrFail($id);
         $status = false;
         $message = '';
@@ -2843,6 +2858,7 @@ class WebsiteIntegrationConroller extends Controller
                 }
             }
             $user=User::where('id',$request->user)->first();
+            // dd($user);
             $userCompany = @$user->company ?? [];
             $customer = Customer::where(['user_id' => @$user->id, 'business_id' => $business_id])->first();
             $name = @$customer->full_name;
@@ -3016,64 +3032,124 @@ class WebsiteIntegrationConroller extends Controller
     //     return view('business.website_integration.payment_history', compact('mergedArray', 'name', 'business','user'));
     // }
 
-    public function paymentHistory(Request $request)
-{
-    $user = User::find($request->user);
-    $business = CompanyInformation::find($request->businessId);
+    public function paymentHistorys(Request $request)
+    {
+        $user = User::find($request->user);
+        $business = CompanyInformation::find($request->businessId);
+        
+        if (!$user || !$business) {
+            // Handle the case where either the user or business is not found
+            return redirect()->back()->withErrors('User or Business not found.');
+        }
+
+        $customers = $user->customers()->where('business_id', $request->businessId)->first();
+        $customer_ids = $customers->id ?? null;
+        $name = $customers->full_name ?? null;
+
+        if (!$customer_ids) {
+            // Handle no customer found case early and return empty view or error
+            return view('business.website_integration.payment_history', compact('name', 'business', 'user'))->with('mergedArray', []);
+        }
+
+        // Combine the queries using a union for better performance
+        $status = Transaction::select('transaction.*')
+            ->where('item_type', 'UserBookingStatus')
+            ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+            ->join('user_booking_details as ubd', function ($join) use ($customer_ids, $request) {
+                $join->on('ubd.booking_id', '=', 'ubs.id')
+                    ->where('ubd.order_type', 'Membership')
+                    ->where('ubd.user_id', $customer_ids)
+                    ->where('ubd.business_id', $request->businessId);
+            });
+
+        $recurring = Transaction::select('transaction.*')
+            ->where('item_type', 'Recurring')
+            ->join('recurring as re', 're.id', '=', 'transaction.item_id')
+            ->where('re.business_id', $request->businessId)
+            ->where('re.user_id', $customer_ids);
+
+        // Merge queries with union
+        $transactions = $status->union($recurring)->orderBy('created_at', 'desc')->get();
+
+        $mergedArray = $transactions->map(function ($history) use ($request) {
+            return [
+                "created_at" => $history->created_at->format('m/d/Y'),
+                'itemDescription' => $history->item_description($request->businessId)['itemDescription'],
+                'item_type_terms' => $history->item_type_terms(),
+                'getPmtMethod' => $history->getPmtMethod(),
+                'amount' => $history->amount,
+                'qty' => $history->item_description($request->businessId)['qty'],
+                'getBookingStatus' => $history->getBookingStatus(),
+                'item_id' => $history->item_id,
+                'customer_id' => $history->customer_id,
+                'id' => $history->id,
+            ];
+        })->toArray();
+
+        return view('business.website_integration.payment_history', compact('mergedArray', 'name', 'business', 'user'));
+    }
+
+
+
+    // new start
+
+    public function paymentHistory(Request $request){
+        // $user = $this->user;
+        // $businessId = $request->business_id ?? auth()->user()->cid;
+        // $business = CompanyInformation::find($businessId);
+        // $business = CompanyInformation::where('unique_code', $unique_code)->first();
+        $user = User::find($request->user);
+        $business = CompanyInformation::find($request->businessId);
     
-    if (!$user || !$business) {
-        // Handle the case where either the user or business is not found
-        return redirect()->back()->withErrors('User or Business not found.');
-    }
+        $business_id =$business->id;
+        if(!$user || !$business) {
+            // Handle the case where either the user or business is not found
+            return redirect()->back()->withErrors('User or Business not found.');
+        }
 
-    $customers = $user->customers()->where('business_id', $request->businessId)->first();
-    $customer_ids = $customers->id ?? null;
-    $name = $customers->full_name ?? null;
+        $customers = $user->customers()->where('business_id', $request->businessId)->first();
+        $customer_ids = $customers->id ?? null;
+        $name = $customers->full_name ?? null;
 
-    if (!$customer_ids) {
-        // Handle no customer found case early and return empty view or error
-        return view('business.website_integration.payment_history', compact('name', 'business', 'user'))->with('mergedArray', []);
-    }
+        // $customers = $user->customers()->where('business_id',$businessId)->first();
+        // $customer_ids = @$customers->id;
+        // $business_id = $businessId;
 
-    // Combine the queries using a union for better performance
-    $status = Transaction::select('transaction.*')
-        ->where('item_type', 'UserBookingStatus')
-        ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
-        ->join('user_booking_details as ubd', function ($join) use ($customer_ids, $request) {
-            $join->on('ubd.booking_id', '=', 'ubs.id')
-                ->where('ubd.order_type', 'Membership')
-                ->where('ubd.user_id', $customer_ids)
-                ->where('ubd.business_id', $request->businessId);
+        $statusArray = Transaction::select('transaction.*')->where('item_type', 'UserBookingStatus')
+              ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+              ->join('user_booking_details as ubd', function($join) use ($business_id,$customer_ids) {
+                    $join->on('ubd.booking_id', '=', 'ubs.id')
+                        ->where('ubd.order_type', 'Membership')
+                        ->where('ubd.user_id', $customer_ids)
+                        ->where('ubd.business_id', '=', $business_id);
+              })->get()->toArray();
+
+        $recurringArray = Transaction::select('transaction.*')->Where('item_type', 'Recurring')
+                    ->join('recurring as re', 're.id', '=', 'transaction.item_id')->where('re.business_id', '=', $business_id)->where('re.user_id', $customer_ids)->get()->toArray();
+
+        
+        $mergedArray = array_merge($statusArray, $recurringArray);
+        usort($mergedArray, function ($a, $b) {
+            return strtotime($b['created_at']) - strtotime($a['created_at']);
         });
 
-    $recurring = Transaction::select('transaction.*')
-        ->where('item_type', 'Recurring')
-        ->join('recurring as re', 're.id', '=', 'transaction.item_id')
-        ->where('re.business_id', $request->businessId)
-        ->where('re.user_id', $customer_ids);
+        $mergedCollection = collect($mergedArray)->sortByDesc('created_at');
+        $perPage = 10; 
+        $currentPage = request()->get('page', 1); 
+        $paginatedData = array_slice($mergedArray,($currentPage - 1) * $perPage, $perPage);
+        $transactionDetail = new \Illuminate\Pagination\LengthAwarePaginator(
+            $paginatedData,
+            count($mergedCollection),
+            $perPage,
+            $currentPage
+        );
+        // dd($transactionDetail);
+        $transactionDetail->setPath(url()->current());
+        return view('business.website_integration.payment_history', compact('transactionDetail', 'name', 'business', 'user'));
 
-    // Merge queries with union
-    $transactions = $status->union($recurring)->orderBy('created_at', 'desc')->get();
+    }
 
-    $mergedArray = $transactions->map(function ($history) use ($request) {
-        return [
-            "created_at" => $history->created_at->format('m/d/Y'),
-            'itemDescription' => $history->item_description($request->businessId)['itemDescription'],
-            'item_type_terms' => $history->item_type_terms(),
-            'getPmtMethod' => $history->getPmtMethod(),
-            'amount' => $history->amount,
-            'qty' => $history->item_description($request->businessId)['qty'],
-            'getBookingStatus' => $history->getBookingStatus(),
-            'item_id' => $history->item_id,
-            'customer_id' => $history->customer_id,
-            'id' => $history->id,
-        ];
-    })->toArray();
-
-    return view('business.website_integration.payment_history', compact('mergedArray', 'name', 'business', 'user'));
-}
-
-
+    // end
     public function receipt_model_api($orderId, $customer, $isFrom = null)
     {
         $customerData = Customer::where('id', $customer)->first();

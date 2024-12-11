@@ -256,7 +256,6 @@ class PaymentController extends Controller {
             session()->put('cart_item', $updatedCartitems);
             return view('jobpost.confirm-payment-instant');
         }else{
-            // dd('6');
             \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
             $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
             if($loggedinUser->stripe_customer_id != '') {
@@ -276,17 +275,18 @@ class PaymentController extends Controller {
                         'currency' => 'usd',
                         'customer' => $stripe_customer_id,
                         'payment_method' => $onFilePaymentMethodId,
-                        'off_session' => true,
+                        // 'off_session' => true,
+                        'setup_future_usage' => 'off_session', 
                         'confirm' => true,
                         'metadata' => [],
                     ]);
 
                     // $paymentMethod = $stripe->paymentMethods->retrieve($onFilePaymentMethodId);
-                    // if ($paymentMethod->customer !== $stripe_customer_id) {
-                    //     $stripe->paymentMethods->attach($onFilePaymentMethodId, [
-                    //         'customer' => $stripe_customer_id,
-                    //     ]);
-                    // }
+                    if ($paymentMethod->customer !== $stripe_customer_id) {
+                        $stripe->paymentMethods->attach($onFilePaymentMethodId, [
+                            'customer' => $stripe_customer_id,
+                        ]);
+                    }
             
                     // $onFilePaymentIntent = $stripe->charges->create([
                     //     'amount' => round($totalprice * 100), 
@@ -345,7 +345,13 @@ class PaymentController extends Controller {
                     }
                 }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {;
                     // $errormsg = "Your card is not connected with your account. Please add your card again.";
-                    $errormsg = "Error: " . $e->getMessage();
+                    // $errormsg = "Error: " . $e->getMessage();
+                    // return redirect('/carts')->with('stripeErrorMsg', $errormsg);
+
+                    $errorResponse = $e->getJsonBody();
+                    // dd($errorResponse);
+                    $requestId = $errorResponse['error']['request_id'] ?? 'N/A';
+                    $errormsg = "Error: " . $e->getMessage() . " (Request ID: $requestId)";
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }
 
@@ -402,7 +408,7 @@ class PaymentController extends Controller {
                 try {
                     // Create a charge using the direct charge method
                     $charge = $stripe->charges->create([
-                        'amount' => round($totalprice * 100),  // Amount in cents
+                        'amount' => round($totalprice * 100), 
                         'currency' => 'usd',
                         'customer' => $stripe_customer_id,
                         'payment_method' => $newCardPaymentMethodId,

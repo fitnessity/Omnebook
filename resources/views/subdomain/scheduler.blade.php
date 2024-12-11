@@ -103,12 +103,7 @@ $logTextColor =
                                                     <h3>{{$bookscheduler->business_service->program_name}}</h3>
                                                     <p> {{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}} | Spot Available - {{$bookscheduler->spots_left($filter_date)}}/{{$bookscheduler->spots_available}}
                                                         </p>
-                                                    <p>Instructor: {{$bookscheduler->getInstructorNames()}} 
-                                                        <!-- <span class="difficult-level">Difficulty Level:  {{$bookscheduler->getClassNames()}}</span> -->
-                                                        <span class="difficult-level">
-                                                                Difficulty Level: {{ str_replace(',', ', ', $bookscheduler->business_service->difficult_level) }}
-                                                            </span>  
-                                                    </p>
+                                                    <p>Instructor: {{$bookscheduler->getInstructorNames()}} <span class="difficult-level">Difficulty Level:  {{$bookscheduler->business_service->difficult_level}}</span></p>
 
                                                     @if ($bookscheduler->is_start_in_one_hour($filter_date))
                                                         <span> Starting in {{$bookscheduler->time_left($filter_date)->format('%i minutes')}} </span>

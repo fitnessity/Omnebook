@@ -87,7 +87,8 @@ class SubDomainController extends Controller
         $code=$unique_code;
         $code = CompanyInformation::where('unique_code', $code)->first();
         $companyinfo=WebsiteIntegration::where('user_id',$code->user_id)->first();
-        return view('subdomain.register', compact('code','companyinfo'))->render();    
+        $businessTerms = BusinessTerms::where('cid',$code->id)->first();
+        return view('subdomain.register', compact('code','companyinfo','businessTerms'))->render();    
     }
 
     public function UserLogin(Request $request)
@@ -95,7 +96,228 @@ class SubDomainController extends Controller
         // Validate incoming request
         // $host = request()->getHost();
         // dd($host);/
-     
+        // dd($request->all());
+        // dd('4');
+
+        // dd($request->input('code'));
+        // if($request->input('schedule')==1)
+        // {
+        //     $codeId = $request->input('code');
+        //     // new 
+        //     $postArr = $request->only('email', 'password');
+        //     $rules = [
+        //         'email' => 'required|email',
+        //         'password' => 'required',
+        //     ];            
+        //     $validator = Validator::make($postArr, $rules);
+        //     if ($validator->fails()) {
+        //         return response()->json([
+        //             'type' => 'danger',
+        //             'msg' => $validator->errors()->all(),
+        //         ], 400);
+        //     }
+    
+        //     // Fetch the necessary business and customer details
+        //     $webdata = WebsiteIntegration::where('id', $request->company_info)->first();
+        //     $customer = Customer::where('business_id', $codeId)->where('email', $request->email)->first();
+            
+        //     if (!$customer) {
+        //         return response()->json([
+        //             'type' => 'register',
+        //             'msg' => 'You are not registered with this business. Please register now.',
+        //         ], 400);
+        //     }
+    
+        //     // Verify booking and service details
+        //     $status = 0;
+        //     $BusinessActivityScheduler = BusinessActivityScheduler::where('id', $request->bookingid)->first();
+        //     if ($BusinessActivityScheduler) {
+        //         $business_services = BusinessServices::where('id', $BusinessActivityScheduler->serviceid)->first();
+        //         if ($business_services) {
+        //             $status = 1;
+        //         }
+        //     }
+    
+        //     // Check if login attempt is valid
+        //     if (!Auth::attempt(['email' => $postArr['email'], 'password' => $postArr['password'], 'activated' => 1, 'primary_account' => 1])) {
+        //         return response()->json([
+        //             'type' => 'not_exists',
+        //             'msg' => 'User details not verified in our database.',
+        //         ], 401);
+        //     }
+    
+        //     $user = Auth::user();
+        //     $currentDate = Carbon::now()->subYears(18)->format('Y-m-d');
+        //     $userBirthdate = Carbon::parse($user->birthdate);
+    
+        //     if ($userBirthdate > $currentDate) {
+        //         Auth::logout();
+        //         return response()->json([
+        //             'type' => 'not_exists',
+        //             'msg' => 'Only users above 18 years old are allowed to log in.',
+        //         ], 401);
+        //     }
+    
+        //     // Generate JWT token
+        //     try {
+        //         $token = JWTAuth::fromUser($user);
+        //     } catch (JWTException $e) {
+        //         return response()->json([
+        //             'type' => 'danger',
+        //             'msg' => 'Could not create token.',
+        //         ], 500);
+        //     }
+    
+        //     // Update user last login details
+        //     $user->update([
+        //         'last_login' => now(),
+        //         'last_ip' => $request->ip(),
+        //     ]);
+    
+        //     // Check for session redirects and return appropriate responses
+        //     $claim = session('claim_business_page', 'not set');
+        //     $claim_cid = session('claim_cid', '');
+        //     $schedule = session('schedule', '');
+        //     $onboard = session('redirectToOnboard', '');
+    
+        //     if ($onboard) {
+        //         return redirect($onboard);
+        //     }
+    
+        //     if ($request->redirect) {
+        //         return redirect($request->redirect);
+        //     }
+    
+        //     if ($claim == 'set') {
+        //         $company = CompanyInformation::find($claim_cid);
+        //         return redirect('/claim/reminder/' . $company->company_name . '/' . $claim_cid);
+        //     }
+    
+        //     if ($schedule) {
+        //         return redirect('/business_activity_schedulers/' . $schedule);
+        //     }
+    
+        //     // Return the JWT token along with the login status
+        //     return response()->json([
+        //         // 'customer_enc'=>Crypt::encrypt($customer->id),
+        //         // 'token_enc'=>Crypt::encrypt($token),
+        //         'customer'=>$customer->id,
+        //         'type' => 'success',
+        //         'msg' => 'Login successful.',
+        //         'membership' => $status,
+        //     ], 200);
+
+
+        //     // end
+
+
+
+            
+        // }
+
+        if ($request->input('schedule') == 1) {
+            $codeId = $request->input('code');
+        
+            // Validation
+            $postArr = $request->only('email', 'password');
+            $rules = [
+                'email' => 'required|email',
+                'password' => 'required',
+            ];
+            $validator = Validator::make($postArr, $rules);
+        
+            if ($validator->fails()) {
+                return response()->json([
+                    'type' => 'danger',
+                    'msg' => $validator->errors()->all(),
+                ], 400);
+            }
+        
+            // Fetch necessary business and customer details
+            $webdata = WebsiteIntegration::where('id', $request->company_info)->first();
+            $customer = Customer::where('business_id', $codeId)->where('email', $request->email)->first();
+        
+            if (!$customer) {
+                return response()->json([
+                    'type' => 'register',
+                    'msg' => 'You are not registered with this business. Please register now.',
+                ], 400);
+            }
+        
+            // Verify booking and service details
+            $status = 0;
+            $BusinessActivityScheduler = BusinessActivityScheduler::where('id', $request->bookingid)->first();
+            if ($BusinessActivityScheduler) {
+                $business_services = BusinessServices::where('id', $BusinessActivityScheduler->serviceid)->first();
+                if ($business_services) {
+                    $status = 1;
+                }
+            }
+        
+            // Check login attempt
+            if (!Auth::attempt(['email' => $postArr['email'], 'password' => $postArr['password'], 'activated' => 1, 'primary_account' => 1])) {
+                return response()->json([
+                    'type' => 'not_exists',
+                    'msg' => 'User details not verified in our database.',
+                ], 200);
+            }
+        
+            $user = Auth::user();
+            $currentDate = Carbon::now()->subYears(18)->format('Y-m-d');
+            $userBirthdate = Carbon::parse($user->birthdate);
+        
+            if ($userBirthdate > $currentDate) {
+                Auth::logout();
+                return response()->json([
+                    'type' => 'not_exists',
+                    'msg' => 'Only users above 18 years old are allowed to log in.',
+                ], 200);
+            }
+        
+            // Update user last login details
+            $user->update([
+                'last_login' => now(),
+                'last_ip' => $request->ip(),
+            ]);
+        
+            // Check for session redirects and return appropriate responses
+            $claim = session('claim_business_page', 'not set');
+            $claim_cid = session('claim_cid', '');
+            $schedule = session('schedule', '');
+            $onboard = session('redirectToOnboard', '');
+        
+            if ($onboard) {
+                return redirect($onboard);
+            }
+        
+            if ($request->redirect) {
+                return redirect($request->redirect);
+            }
+        
+            if ($claim == 'set') {
+                $company = CompanyInformation::find($claim_cid);
+                return redirect('/claim/reminder/' . $company->company_name . '/' . $claim_cid);
+            }
+        
+            if ($schedule) {
+                return redirect('/business_activity_schedulers/' . $schedule);
+            }
+        
+            // Return login success response
+            return response()->json([
+                'customer' => $customer->id,
+                'type' => 'success',
+                'msg' => 'Login successful.',
+                'membership' => $status,
+            ], 200);
+        }
+        
+        else{
+            $codeId = decrypt($request->input('code'));
+        }
+        $companyinfo = CompanyInformation::where('id', $codeId)->first();
+        // dd($companyinfo);
+        $uniqueCode=$companyinfo->unique_code;
         $postArr = $request->input();
         $rules = [
             'email' => 'required',
@@ -128,46 +350,9 @@ class SubDomainController extends Controller
                     $claim = 'not set';
                     $claim_cid = $claim_status = $claim_cname = $claim_welcome = $checkoutsession = $schedule = $onboard = '';
                     
-                    // Check for session variables and set values accordingly
-                    // if (session()->has('claim_business_page')) {
-                    //     $claim = 'set';
-                    //     $claim_cid = session('claim_cid');
-                    //     $data = CompanyInformation::find($claim_cid);
-                    //     $claim_cname = $data ? $data->company_name : '';
-                    //     $claim_status = session('claim_status');
-                    // }
+                    // dd($uniqueCode);
+                    $redirectUrl = route('sub_customer_dashboard',['unique_code' => $uniqueCode]);
 
-                    // if (session()->has('business_welcome')) {
-                    //     $claim_welcome = session('business_welcome');
-                    // }
-
-                    // if (session()->has('checkoutsession')) {
-                    //     $checkoutsession = session('checkoutsession');
-                    // }
-
-                    // if (session()->has('schedule')) {
-                    //     $schedule = session('schedule');
-                    // }
-
-                    // if (session()->has('redirectToOnboard')) {
-                    //     $onboard = session('redirectToOnboard');
-                    // }
-
-                    // Handle various redirects based on session values
-                    $redirectUrl = '/sub_customer_dashboard';
-                    // if ($onboard != '') {
-                    //     $redirectUrl = $onboard;
-                    // } elseif ($request->redirect) {
-                    //     $redirectUrl = $request->redirect;
-                    // } elseif ($claim == 'set') {
-                    //     $redirectUrl = '/claim/reminder/' . $claim_cname . "/" . $claim_cid;
-                    // } elseif ($checkoutsession != '') {
-                    //     $redirectUrl = '/carts';
-                    // } elseif ($schedule != '') {
-                    //     $redirectUrl = '/business_activity_schedulers/' . $schedule;
-                    // } else {
-                    //     $redirectUrl = route('homepage');
-                    // }
 
                     return response()->json(['type' => 'success', 'redirect' => $redirectUrl]);
                 } else {
@@ -179,10 +364,25 @@ class SubDomainController extends Controller
         }
     }
 
+    
+
     public function next_8_hours(Request $request, $unique_code)
     {
-        $code = CompanyInformation::where('unique_code', $unique_code)->first();
-        $companyinfo = WebsiteIntegration::where('user_id', $code->user_id)->first();    
+        // if (!Auth::check()) {
+        //     return redirect()->route('/login', ['unique_code' => $unique_code]);
+        // }
+        // dd('44');
+        // dd($request->all());
+        $unique_code =  $request->unique_code??$unique_code;   
+        // dd($unique_codes);     
+        if ($request->ajax()) {
+            $code = CompanyInformation::where('unique_code', $request->unique_code)->first();
+            $companyinfo = WebsiteIntegration::where('user_id', $code->user_id)->first();    
+        }
+        else{
+            $code = CompanyInformation::where('unique_code', $unique_code)->first();
+            $companyinfo = WebsiteIntegration::where('user_id', $code->user_id)->first();    
+        }
         $filter_date = new DateTime();
         $shift = 1;
 
@@ -233,25 +433,32 @@ class SubDomainController extends Controller
 
 
         if ($request->ajax()) {
-            return view('subdomain.scheduler', compact('bookschedulers', 'filter_date', 'days', 'companyinfo', 'code'))->render();
+            return view('subdomain.scheduler', compact('bookschedulers', 'filter_date', 'days', 'companyinfo', 'code','unique_code'))->render();
         }
 
         // dd($bookschedulers);
-        return view('subdomain.schedule', compact('bookschedulers', 'filter_date', 'request', 'days', 'companyinfo', 'code'));
+        return view('subdomain.schedule', compact('bookschedulers', 'filter_date', 'request', 'days', 'companyinfo', 'code','unique_code'));
     }
 
 
 
-    public function customerdashboard(Request $request)
+    public function customerdashboard(Request $request,$unique_code)
     {
+
         // dd(auth::user());
+        // dd($unique_code);
         // $business = CompanyInformation::find($request->business_id);
         if (!Auth::check()) {
-            return redirect()->back();
+            // return redirect()->back();
             // return redirect()->route('sub_customer_dashboard');
+            return redirect()->route('/login', ['unique_code' => $unique_code]);
         }
-        $businessId = $request->business_id ?? auth()->user()->cid;//updated
-        $business = CompanyInformation::find($businessId);//updated
+        // $businessId = $request->business_id ?? auth()->user()->cid;//updated
+        // $business = CompanyInformation::find($businessId);//updated
+        // dd($unique_code);
+        $business = CompanyInformation::where('unique_code', $unique_code)->first();
+        $businessId=$business->id;
+        $user=$this->user;
         if($request->customer_id){
             if(request()->type == 'user'){
                 $familyMember = $this->user->user_family_details()->where('id',request()->customer_id)->first();
@@ -264,8 +471,11 @@ class SubDomainController extends Controller
             }
         }else{
             // $customer = Customer::where(['business_id'=>$request->business_id,'user_id'=>Auth::user()->id])->first();
-            $customer = Customer::where(['business_id'=>$request->business_id ?? auth()->user()->cid,'user_id'=>Auth::user()->id])->first();//updated
+            // dd($businessId);
+            $customer = Customer::where(['business_id'=>$businessId,'user_id'=>Auth::user()->id])->first();//updated
             $name = @$customer->full_name;
+            // dd($customer->user);
+            // dd($customer);
         }
         $attendanceCnt = BookingCheckinDetails::where('customer_id' ,@$customer->id)->whereMonth('checkin_date', '>=', date('m'))->whereMonth('checkin_date', '<=', date('m'))->whereNotNull('checked_at')->count();
         $attendanceCntPre = BookingCheckinDetails::where('customer_id' ,@$customer->id)->whereMonth('checkin_date', '>=', date('m') - 1)->whereMonth('checkin_date', '<=', date('m') - 1 )->whereNotNull('checked_at')->count();
@@ -280,12 +490,12 @@ class SubDomainController extends Controller
         $notesCnt = CustomerNotes::where(['customer_id'=> @$customer->id ,'display_chk' => 1])->orderby('due_date','desc')->whereDate('due_date', '=', now())->whereTime('time', '<=', now()->format('H:i'))
                 ->orWhere(function ($query) use($customer) {
                     $query->whereDate('due_date', '<=', now())->where('customer_id', @$customer->id )->where('display_chk' ,1);
-                })->where('business_id', $request->business_id)->count();
+                })->where('business_id', $businessId)->count();
 
         $notesCntNew = CustomerNotes::where(['customer_id'=> @$customer->id ,'display_chk' => 1])->orderby('due_date','desc')->whereDate('due_date', '=', now())->whereTime('time', now()->format('H:i'))
                 ->orWhere(function ($query) use($customer) {
                     $query->whereDate('due_date', now())->where('customer_id', @$customer->id )->where('display_chk' ,1);
-                })->where('business_id', $request->business_id)->count();
+                })->where('business_id', $businessId)->count();
 
         $expiredCards = StripePaymentMethod::where(['user_id'=> @$customer->id, 'user_type' => 'Customer'])->where('exp_year','<=', date('Y'))->where('exp_month','<', date('m'))->count();
         $missedPayments = Recurring::where(['user_id'=> @$customer->id, 'user_type' => 'Customer'])->where('status' ,'!=','Completed')->whereDate('payment_date' ,'<' ,date('Y-m-d'))->count();
@@ -293,30 +503,30 @@ class SubDomainController extends Controller
         $notesCnt += $expiredCards;
         $notesCnt += $missedPayments;
 
-        $activeMembershipCnt = count($this->booking_repo->currentTab($request->serviceType,$request->business_id,@$customer));
+        $activeMembershipCnt = count($this->booking_repo->currentTab($request->serviceType,$businessId,@$customer));
         $activeMembershipCntNew = $business->UserBookingDetails()->where('user_id' ,@$customer->id)->whereDate('created_at', date('Y-m-d'))->count();
-        $docCnt =  $documents = CustomersDocuments::where('customer_id',  @$customer->id)->where('business_id', $request->business_id)->count();
+        $docCnt =  $documents = CustomersDocuments::where('customer_id',  @$customer->id)->where('business_id', $businessId)->count();
 
-        $docCntNew =  $documents = CustomersDocuments::where('customer_id',  @$customer->id)->where('business_id', $request->business_id)->whereDate('created_at',date('Y-m-d'))->count();
+        $docCntNew =  $documents = CustomersDocuments::where('customer_id',  @$customer->id)->where('business_id', $businessId)->whereDate('created_at',date('Y-m-d'))->count();
 
-        $announcemetCnt = Announcement::where(['business_id' => $request->business_id, 'status' => 'active'])
+        $announcemetCnt = Announcement::where(['business_id' => $businessId, 'status' => 'active'])
                 ->where(function ($query) {
                     $query->whereDate('announcement_date', '<=', date('Y-m-d'))->whereTime('announcement_time', '<=', date('H:i'));
                     })->orWhere(function ($query) {
                         $query->whereDate('announcement_date', '<=', date('Y-m-d'))->whereNull('announcement_time');
                 })->count();
 
-        $announcemetCntNew = Announcement::where(['business_id' => $request->business_id, 'status' => 'active'])->whereDate('announcement_date', date('Y-m-d'))->count();
-
+        $announcemetCntNew = Announcement::where(['business_id' => $businessId, 'status' => 'active'])->whereDate('announcement_date', date('Y-m-d'))->count();
+        // \DB::enableQueryLog(); // Enable query log
         $classes = BookingCheckinDetails::where('customer_id' ,@$customer->id)->whereDate('checkin_date' , '>=' , date('Y-m-d'))->orderby('checkin_date','asc')->get()->filter(function ($bd){
             return $bd->booking_detail_id;
         });
-
-        return view('subdomain.dashboard',compact('customer','name','notesCnt','activeMembershipCnt','docCnt','docCntNew','announcemetCnt','attendanceCnt','announcemetCntNew','bookingCnt','bookingPct','classes','attendancePct','business','notesCntNew','activeMembershipCntNew'));
+        // dd(\DB::getQueryLog()); // Show results of log
+        return view('subdomain.dashboard',compact('customer','name','user','unique_code','notesCnt','activeMembershipCnt','docCnt','docCntNew','announcemetCnt','attendanceCnt','announcemetCntNew','bookingCnt','bookingPct','classes','attendancePct','business','notesCntNew','activeMembershipCntNew','business'));
     }
     public function membership(Request $request)
     {
-        
+        // dd($request->all());
         $companyinfo = $request->input('companyinfo');
         $users = $request->input('user');
         $companyId = $companyinfo['id'];
@@ -341,6 +551,63 @@ class SubDomainController extends Controller
         // return view('business.website_integration', compact('companyId','services','customerId'));
 
     }
+
+    public function viewbooking(Request $request)
+    {
+        // dd('11');
+        // dd($request->all());
+        // $userid =$request->user_id;
+        // dd($user_id);/
+        // $user=User::find($userid);
+        // $data = $request->query();
+        // // dd($data);
+        // if($data)
+        // {
+
+        //     // dd($data);
+        //     dd($request->all());
+        // }
+        $user = Auth::user();
+        $userid =$user->id;
+        $business = $user->company()->where('id',request()->business_id)->first();
+        // dd(request()->all());
+        if(!request()->business_id){
+            return redirect()->back();
+        }
+        if($request->customer_id){
+            if(request()->type == 'user'){
+                $familyMember = Auth::user()->user_family_details()->where('id',request()->customer_id)->first();
+                $user = User::where(['firstname'=> @$familyMember->first_name, 'lastname'=>@$familyMember->last_name, 'email'=>@$familyMember->email])->first();
+                $customer = Customer::where(['user_id' => @$user->id])->first();
+                $name = @$familyMember->full_name;
+            }else{
+                $customer = Customer::find(request()->customer_id);
+                $name = @$customer->full_name;
+            }   
+        }else{
+            $customer = Customer::where(['business_id'=>$request->business_id,'user_id'=>$userid])->first();
+            $name = @$customer->full_name;
+        }
+
+        $bookingDetails = $currentBooking =  [];
+        $bookingDetails =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,@$customer);
+        $currentBookingData = $this->booking_repo->currentTab($request->serviceType,$request->business_id,@$customer);
+       
+        foreach($currentBookingData as $i=>$book_details){
+            $currentBooking[@$book_details->business_services_with_trashed->id .'!~!'.@$book_details->business_services_with_trashed->program_name] [] = $book_details;
+        }
+        // new code start
+
+        // ends
+        // dd($book_details);
+        // dd('4');
+        $tabval = $request->tab; 
+        // return view('personal.orders.index', compact('bookingDetails','currentBooking','tabval','customer','name','business'));
+        $html = view('subdomain.orders_index', compact('bookingDetails', 'currentBooking', 'tabval', 'customer', 'name', 'business','user'))->render();
+        return response()->json(['html' => $html]);
+
+    }
+
 
     public function act_detail_filter_for_cart(Request $request){
         // dd($request->all());
@@ -382,7 +649,8 @@ class SubDomainController extends Controller
    		}
         // dd($prices);
         $addOnServices = $firstCategory  != '' ?  $firstCategory->AddOnService: [];
-        if (!$prices->isEmpty()) {
+        // if (!$prices->isEmpty()) {
+            if (!empty($prices)) {
         	$priceId = $priceId ?? $prices[0]['id'];
             foreach ($prices as  $pr) {
             	$select = $pr['id'] == $priceId ? 'selected' : '';
@@ -429,14 +697,16 @@ class SubDomainController extends Controller
  		return response()->json(['html' => $html ,'date'=>$formattedDate]);
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request,$unique_code)
     {
-        $loggedinUser = Auth::user()->cid;
+        // $loggedinUser = Auth::user()->cid;
+        $business = CompanyInformation::where('unique_code', $unique_code)->first();
+        $loggedinUser=$business->id;
         Auth::logout();
         Session::flush();
         $cookie = cookie()->forget('sub_session');
         $code = CompanyInformation::where('id', $loggedinUser)->first();
-        return redirect()->route('/login', ['unique_code' => $code->unique_code]);
+        return redirect()->route('/login', ['unique_code' => $unique_code]);
     }
 
     public function getParticipateData(Request $request){
@@ -587,8 +857,10 @@ class SubDomainController extends Controller
         ]);
     }
     public function getMembershipPayment(Request $request){
+        // dd($request->all());
         $cart = $request->input('cart_items'); 
-        $users=$request->users;
+        $users=$request->users??auth()->user()->id;
+
         $customer_id= $request->customer_id;
         $customer = Customer::where('id', $customer_id)->first(); 
         if ($customer) {
@@ -630,7 +902,7 @@ class SubDomainController extends Controller
     
 
     	    $cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id', $users)->get();
-
+            // dd($users);
             return view('subdomain.membership_payment', compact('intent','cardInfo', 'cartWidgetIds','cartCount' ,'discount' ,'taxDisplay' ,'users','total_amount' ,'subTotal','customer_id','businessId'));
 
         }
@@ -1041,14 +1313,16 @@ class SubDomainController extends Controller
             "CategoryName"=> $price_detail->business_price_details_ages_with_trashed->category_title
         );
     }	
-    public function editProfile(Request $request ,$business_id, $user_id)
+    public function editProfile(Request $request ,$business_id, $user_id,$unique_code)
     {
         // dd($request->all());
+
         if($request->business_id){
             // dd($request->customer_id);
             $business_id=$business_id;
             $cus_id=$user_id;        
-            $business = CompanyInformation::find($business_id);    
+            // $business = CompanyInformation::find($business_id);    
+            $business = CompanyInformation::where('unique_code', $unique_code)->first();
             $customer=Customer::where('user_id',$user_id)->where('business_id',$business_id)->first();
             $userid=$customer->user_id;
             $userdata=User::where('id',$userid)->first();
@@ -1058,19 +1332,56 @@ class SubDomainController extends Controller
                 if($user)
                 {
                     $name = @$user->full_name;
-                    return view('subdomain.user_family_profile',compact('user','business','name'));
+                    return view('subdomain.user_family_profile',compact('user','business','name','unique_code'));
                 }
                 else{
                     $user=customer::where('user_id',$userid)->first();
                     $name = @$customer->full_name;
-                    return view('subdomain.customersprofile',compact('user','business','name'));
+                    return view('subdomain.customersprofile',compact('user','business','name','unique_code'));
                 }
             }
             else{
                 $user=User::where('id',$userid)->first();
                 $name = @$customer->full_name;
-                return view('subdomain.edit_profile',compact('user','business','name'));   
+                return view('subdomain.edit_profile',compact('user','business','name','unique_code'));   
             }
+        }
+    }
+
+    public function searchActivity(Request $request){
+        $serviceType = $request->serviceType;
+        // dd($request->customerId);
+        // dd($serviceType);
+        if(!$request->customerId){
+            $customer = Auth::user()->customers()->where('business_id' ,$request->businessId)->first();
+            $customerID = @$customer->id;
+        }else{
+            $customer = Customer::find($request->customerId);
+            $customerID = $request->customerId;
+        }
+        $orderDetails = [];
+        $tabName = $request->type;
+        if($customerID){
+            if($request->type == 'current'){
+                $bDetails = $this->booking_repo->currentTab($request->serviceType,$request->business_id,@$customer);
+            }else{
+                $bookingDetails =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,@$customer);
+                $bDetails = $this->booking_repo->tabFilterData($bookingDetails,$tabName,request()->serviceType ,date('Y-m-d'));
+            }
+
+            foreach($bDetails as $bd){
+                if($request->text != ''){
+                    $activity = BusinessServices::where('id',$bd->sport)->where('program_name', 'like', '%'.$request->text.'%')->withTrashed()->first();
+                }else{
+                    $activity = BusinessServices::where('id',$bd->sport)->withTrashed()->first();
+                }
+                if($activity){
+                    $orderDetails[@$bd->business_services_with_trashed->id .'!~!'.@$bd->business_services_with_trashed->program_name] [] = $bd;
+                }
+            }
+
+            //print_r($orderDetails);exit();
+            return view('subdomain.user_booking_detail',compact('orderDetails','tabName','customer'))->render();
         }
     }
 
@@ -1266,7 +1577,13 @@ class SubDomainController extends Controller
         $code=$request->company_info;
         // dd($postArr);
         $companyinfo=WebsiteIntegration::where('id',$code)->first();
-        $company = CompanyInformation::where('id', $companyinfo->business_id)->first();         
+        $company = CompanyInformation::where('id', $companyinfo->business_id)->first(); 
+        
+        $uniqueCode=$company->unique_code;
+        // $codeId = decrypt($request->input('code'));
+        // $companyinfo = CompanyInformation::where('id', $codeId)->first();
+        // $uniqueCode=$companyinfo->unique_code;
+
         $rules = [
             'firstname' => 'required',
             'lastname' => 'required',
@@ -1555,12 +1872,15 @@ class SubDomainController extends Controller
                         Auth::login($user, true); 
 
                     }
+                    $redirectUrl = route('sub_customer_dashboard', ['unique_code' => $uniqueCode]);
+
                     if (Auth::check()) {
                         $response = array(
                             'id'=>$customerObj->id,
                             'type' => 'success',
                             'msg' => 'Registration done successfully.',
-                            'redirect'=>'/sub_customer_dashboard'
+                            'uniqueCode'=>$uniqueCode,
+                            'redirect'=>$redirectUrl,
                         );
                     }
                   
@@ -1595,13 +1915,16 @@ class SubDomainController extends Controller
         }
     }
 
-    public function manage_account(Request $request)
+    public function manage_account(Request $request,$unique_code)
     {
         // dd('1');
+
         $user = $this->user;
         // dd($user->id);
-        $businessId = $request->business_id ?? auth()->user()->cid;
-        $business = CompanyInformation::find($businessId);
+        // $businessId = $request->business_id ?? auth()->user()->cid;
+        // $business = CompanyInformation::find($businessId);
+        $business = CompanyInformation::where('unique_code', $unique_code)->first();
+        $businessId =$business->id;
         $customer_nm=Customer::where('user_id',$user->id)->where('business_id',$businessId)->first();
         $name = @$customer_nm->full_name;
             
@@ -1637,7 +1960,7 @@ class SubDomainController extends Controller
             }
         }
 
-        return view('subdomain.manage_account',compact('user','UserFamilyDetails','business','name'));
+        return view('subdomain.manage_account',compact('user','UserFamilyDetails','business','name','unique_code'));
     }
 
     public function create_manage(Request $request){
@@ -1713,4 +2036,720 @@ class SubDomainController extends Controller
         return redirect()->back()->with(['message'=>$message]);
     }
 
+    public function paymentHistory(Request $request,$unique_code){
+        $user = $this->user;
+        // $businessId = $request->business_id ?? auth()->user()->cid;
+        // $business = CompanyInformation::find($businessId);
+        $business = CompanyInformation::where('unique_code', $unique_code)->first();
+        $businessId =$business->id;
+        $customer_nm=Customer::where('user_id',$user->id)->where('business_id',$businessId)->first();
+        $name = @$customer_nm->full_name;
+        if(!$businessId){
+            return redirect()->back();
+        }
+        $customers = $user->customers()->where('business_id',$businessId)->first();
+        $customer_ids = @$customers->id;
+        $business_id = $businessId;
+        // \DB::enableQueryLog();
+            $statusArray = Transaction::select('transaction.*')->where('item_type', 'UserBookingStatus')
+              ->join('user_booking_status as ubs', 'ubs.id', '=', 'transaction.item_id')
+              ->join('user_booking_details as ubd', function($join) use ($business_id,$customer_ids) {
+                    $join->on('ubd.booking_id', '=', 'ubs.id')
+                        ->where('ubd.order_type', 'Membership')
+                        ->where('ubd.user_id', $customer_ids)
+                        ->where('ubd.business_id', '=', $business_id);
+              })->get()->toArray();
+        // dd(\DB::getQueryLog()); 
+        // dd($statusArray);
+        $recurringArray = Transaction::select('transaction.*')->Where('item_type', 'Recurring')
+                    ->join('recurring as re', 're.id', '=', 'transaction.item_id')->where('re.business_id', '=', $business_id)->where('re.user_id', $customer_ids)->get()->toArray();
+
+        
+        $mergedArray = array_merge($statusArray, $recurringArray);
+        usort($mergedArray, function ($a, $b) {
+            return strtotime($b['created_at']) - strtotime($a['created_at']);
+        });
+
+        $mergedCollection = collect($mergedArray)->sortByDesc('created_at');
+        $perPage = 10; 
+        $currentPage = request()->get('page', 1); 
+        $paginatedData = array_slice($mergedArray,($currentPage - 1) * $perPage, $perPage);
+        $transactionDetail = new \Illuminate\Pagination\LengthAwarePaginator(
+            $paginatedData,
+            count($mergedCollection),
+            $perPage,
+            $currentPage
+        );
+        // dd($transactionDetail);
+        $transactionDetail->setPath(url()->current());
+
+        // dd($transactionDetail);
+        return view('subdomain.payment_history', compact('transactionDetail','business','name','unique_code')); 
+    }
+    
+    public function receiptmodel($orderId,$customer,$isFrom = null){
+        // dd('6');
+        $customerData = Customer::where('id',$customer)->first();
+        $transaction = Transaction::where('item_id',$orderId)->first();
+        if(!$isFrom){
+            if(@$transaction->item_type == 'UserBookingStatus'){
+                $oid = $orderId; $bookingArray = UserBookingDetail::where('booking_id',$oid)->pluck('id')->toArray();
+            }else{
+                $orderId = @$transaction->Recurring->booking_detail_id; $oid = $orderId;
+                $bookingArray = UserBookingDetail::where('id',$orderId)->pluck('id')->toArray();
+            }
+            $transactionType = @$transaction->item_type;
+        }else{
+            $oid = $orderId;
+            $bookingArray = UserBookingDetail::where('id',$orderId)->pluck('id')->toArray();
+            $transactionType = 'Membership';
+        }
+        // dd('33');
+        return view('subdomain._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $oid ,'type' =>$transactionType]);
+    }
+
+    public function sendreceiptfromcheckout(Request $request){
+        $compare_chk=[];
+        
+        $odetail = explode("," , $request->orderdetalidary);
+        foreach($odetail as $od){
+             $book_data = UserBookingDetail::getbyid($od);
+             $cid = @$book_data->business_id;
+             $newary = array($cid=>array("oid"=>$od,"cid"=> $cid,"booking_id"=>$request->booking_id));
+             if(in_array( $cid ,array_keys($compare_chk))){
+                  foreach($compare_chk  as $chk){
+                       if($chk['cid'] == $cid ){
+                            $oid = $compare_chk[$cid]['oid'].','.$od;
+                            $compare_chk[$cid]['oid'] = $oid;
+                       }
+                  }
+             }else{
+                  $compare_chk  = $compare_chk + $newary;
+             }
+        }
+        foreach($compare_chk as $detail){
+             $orderId = explode("," , $detail['oid']);
+             foreach($orderId as $oid){
+                  $getreceipemailtbody = $this->booking_repo->getreceipemailtbody($detail['booking_id'], $oid);
+
+                  if($request->notes != ''){
+                       $getreceipemailtbody['notes'] = $request->notes;
+                  } 
+                  $email_detail = array(
+                       'getreceipemailtbody' => $getreceipemailtbody,
+                       'email' => $request->email);
+                  $status  = SGMailService::sendBookingReceipt($email_detail);
+             }
+        }
+   }
+
+     public function creditCards($unique_code)
+    {
+        $cardInfo = [];
+        $intent = null;
+        $user = $this->user;
+        // dd($user);
+        $customers = $user->customers()->pluck('id')->toArray();
+        $customer_ids = implode(',',$customers);
+        // $businessId = $request->business_id ?? auth()->user()->cid;
+        // $business = CompanyInformation::find($businessId);
+        $business = CompanyInformation::where('unique_code', $unique_code)->first();
+        $businessId = $business->id;
+        $customer_nm=Customer::where('user_id',$user->id)->where('business_id',$businessId)->first();
+        $name = @$customer_nm->full_name;
+       
+        $query = StripePaymentMethod::where('user_type', 'user')
+            ->where('user_id',$user->id);
+
+        if ($customer_ids) {
+            $query->orWhere(function($subquery) use ($customer_ids) {
+                $subquery->where('user_type', 'customer')
+                    ->whereIn('user_id', explode(',', $customer_ids));
+            });
+        }
+
+        $cardInfo = $query->orderBy('created_at', 'desc')->get();
+
+        \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
+        $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+        if($user->stripe_customer_id != ''){
+            $intent = $stripe->setupIntents->create([
+                'payment_method_types' => ['card'],
+                'customer' => $user->stripe_customer_id,
+            ]);
+        }
+
+        return view('subdomain.credit_cards',compact('cardInfo','intent','business','name','unique_code'));
+    }
+
+        public function cardsSave(Request $request) 
+        {
+            // dd($request->all());
+
+            $user = User::where('id', $this->user->id)->first();
+            $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+            $payment_methods = $stripe->paymentMethods->all(['customer' => $user->stripe_customer_id, 'type' => 'card']);
+            $fingerprints = [];
+            foreach($payment_methods as $payment_method){
+                $fingerprint = $payment_method['card']['fingerprint'];
+                if (in_array($fingerprint, $fingerprints, true)) {
+                    $deletePaymentMethod = StripePaymentMethod::where('payment_id', $payment_method['id'])->first();
+                    if($deletePaymentMethod != ''){
+                        $deletePaymentMethod->delete();
+                    }
+                } else {
+                    $fingerprints[] = $fingerprint;
+                    $card = StripePaymentMethod::where(['payment_id'=>$payment_method['id']])->first();
+                    if(!$card){
+                        $stripePaymentMethod = new StripePaymentMethod;
+                        $stripePaymentMethod->payment_id = $payment_method['id'];
+                        $stripePaymentMethod->user_type = 'User';
+                        $stripePaymentMethod->user_id = $user->id;
+                        $stripePaymentMethod->pay_type = $payment_method['type'];
+                        $stripePaymentMethod->brand = $payment_method['card']['brand'];
+                        $stripePaymentMethod->exp_month = $payment_method['card']['exp_month'];
+                        $stripePaymentMethod->exp_year = $payment_method['card']['exp_year'];
+                        $stripePaymentMethod->last4 = $payment_method['card']['last4'];
+                        $stripePaymentMethod->save();
+                    }
+                }
+            }
+
+            return redirect()->route('credit-cards');     
+        }
+
+        public function cardDelete(Request $request) {
+            $user = User::where('id', $this->user->id)->first();
+            $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $request->stripe_payment_method)->firstOrFail();
+            $stripePaymentMethod->delete();
+        }
+
+        public function activity_scheduler_index(Request $request,$bussinessId,$unique_code)
+        {
+            // return '33';
+            // dd('4');
+            try {
+                $chkScheduleSession = '';
+                // $business_id = $request->business_id ?? auth()->user()->cid;
+                // $company = CompanyInformation::findOrFail($business_id);
+                // $company = CompanyInformation::where('unique_code', $unique_code)->first();
+                $business = CompanyInformation::where('unique_code', $unique_code)->first();
+
+                // dd($unique_code);
+                $business_id = $business->id;
+                $companyName = $business->dba_business_name ?? $business->company_name;
+                $business_services = $business->service()->where('is_active', 1)->orderBy('created_at', 'desc');
+                $servicetype = 'all';
+
+                if ($request->stype && $request->business_service_id == '') {
+                    $servicetype = $request->stype;
+                    if ($request->stype != 'all') {
+                        $business_services = $business->service()->where(['is_active' => 1, 'service_type' => $servicetype])->orderBy('created_at', 'desc');
+                    }
+
+                    if (session()->has('schedule')) {
+                        session()->forget('schedule');
+                    }
+                }
+
+                $user = Auth::user();
+                // dd($user);
+                $userCompany = @$user->company ?? [];
+                $customer = Customer::where(['user_id' => @$user->id, 'business_id' => $business_id])->first();
+                $name = @$customer->full_name;
+
+                if ($user && $request->customer_id == '') {
+                    $request->customer_id = $customer->id;
+                }
+
+                if ($request->customer_id) {
+                    if (request()->type == 'user') {
+                        $familyMember = Auth::user()->user_family_details()->where('id', request()->customer_id)->first();
+                        $user = User::where([
+                            'firstname' => @$familyMember->first_name,
+                            'lastname' => @$familyMember->last_name,
+                            'email' => @$familyMember->email
+                        ])->first();
+                        $customer = Customer::where(['user_id' => @$user->id])->first();
+                    } else {
+                        $customer = Customer::where('id', $request->customer_id)->first();
+                    }
+                    $memberships = @$customer->active_memberships()->pluck('sport')->unique();
+                }
+
+                if($request->stype!='all')
+                {
+                    if ($request->business_service_id) {
+                        $servicetype = $request->stype;
+                        $business_services = $business_services->where(['id' => $request->business_service_id, 'is_active' => 1, 'service_type' => $servicetype]);
+                    }
+                }
+                else{
+                    if ($request->business_service_id) {
+                        $servicetype = $request->stype;
+                        $business_services = $business_services->where(['id' => $request->business_service_id, 'is_active' => 1]);
+                    }
+                }
+
+                $service_ids = $business_services->pluck('id')->toArray();        
+                $filter_date = new DateTime();
+                $shift = 1;
+                if ($request->date && (new DateTime($request->date)) > $filter_date) {
+                    $filter_date = new DateTime($request->date);
+                    $shift = 0;
+                }
+                $days = [];
+                $days[] = new DateTime(date('Y-m-d'));
+                for ($i = 0; $i <= 100; $i++) {
+                    $d = clone($filter_date);
+                    $days[] = $d->modify('+' . ($i + $shift) . ' day');
+                }
+
+                $services = [];
+                if (!empty($service_ids)) {
+                    $serviceids = BusinessPriceDetailsAges::whereIn('serviceid', $service_ids)
+                        ->where('stype', '1')
+                        ->whereIn('class_type', $business_services->pluck('service_type')->toArray())
+                        ->pluck('serviceid');
+
+                    $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)
+                        ->whereIn('serviceid', $serviceids)
+                        ->orderBy('shift_start', 'asc')
+                        ->get();
+
+                    foreach ($bookschedulers as $bs) {
+                        $services[] = $bs->business_service;
+                    }
+
+                    $services = array_unique($services);
+                }
+
+                if ($user && count($userCompany) == 0) {
+                    $request->customer_id = '';
+                }
+                // dd($days);
+                // dd($days);
+                return view('subdomain.activity_schedule', [
+                    'days' => $days,
+                    'filter_date' => $filter_date,
+                    'serviceType' => $servicetype,
+                    'services' => $services,
+                    'companyName' => $companyName,
+                    'businessId' => $business_id,
+                    'priceid' => $request->priceid,
+                    'customer' => $customer,
+                    'business'=>$business,
+                    'unique_code'=>$unique_code,
+                    'name'=>$name,
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Error in schedule method: ' . $e->getMessage());
+                return redirect()->back();
+                // dd($e->getMessage());
+            }
+            
+        }
+
+        public function setSessionOfSchedule(Request $request){
+            Session::put('schedule', $request->businessId);   
+        }
+
+        public function chksession($dId,$date = null,$timeid = null,$chk = null){
+            $inSession = 0;
+            $detail = UserBookingDetail::find($dId);
+            $inSessionArray = Session::get('multibooking') ?? [];
+            $remaining = $detail->getremainingsession();
+            if($date != ''){
+                foreach($inSessionArray as $i=>$ary){
+                    if($ary['timeId'] == $timeid && $ary['date'] == $date){
+                        $inSessionArray[$i]['priceId'] = $detail->priceid;
+                        $inSessionArray[$i]['oId'] = $detail->id;
+                    }
+                }
+                session::put('multibooking', $inSessionArray);
+            }
+            if($chk == 1){
+                foreach($inSessionArray as $i=>$ary){
+                    if($ary['priceId'] == $detail->priceid && $ary['oId'] == $detail->id){
+                        $inSession++; 
+                    }
+                }
+            }
+            $inSession = max(1, $inSession);
+            $remaining = $remaining - $inSession;
+            return max(0, $remaining);
+        }
+        public function chkOrderAvailable(Request $request){
+            $html = $data = ''; $remaining = 0; $firstDataProcessed = false; 
+            if($request->priceId != ''){
+                $priceDetail = BusinessPriceDetails::find($request->priceId);
+                $bookingDetail = UserBookingDetail::where(['sport'=> $request->sid ,'user_id'=>$request->cid,'priceid' => $request->priceId])->whereDate('expired_at' ,'>' ,date('Y-m-d'))->first();
+                $remaining = max(@$bookingDetail != '' ? @$bookingDetail->getremainingsession() - 1 : 0, 0);
+                @$bookingDetail != '' ? @$bookingDetail->getremainingsession() - 1 : 0;
+                if($remaining != 0 ){
+                    $html .= '<option value="'.$priceDetail->id.'" data-did="'.$bookingDetail->id.'">'.$priceDetail->price_title.'</option>';
+                }
+            }else{
+                $customer = Customer::where('business_id' ,$request->businessId)->find($request->cid);
+                $active_memberships = $customer ? @$customer->active_memberships()->where('user_booking_details.user_id',$request->cid)->get() : [];
+
+                foreach($active_memberships as $active_membership){
+                    $remainingSession = max($active_membership->getremainingsession() - 1, 0);
+                    if($remainingSession > 0 && $active_membership->business_price_detail){
+                        $priceDetail = $active_membership->business_price_detail;
+                        $html .= '<option value="'.$priceDetail->id.'" data-did ="'.$active_membership->id.'">'.$priceDetail->price_title.'</option>';
+                        if (!$firstDataProcessed) {
+                            $remaining = $remainingSession; 
+                            $firstDataProcessed = true; 
+                        }
+                    }
+                }
+            }
+            if($html != ''){
+                $data .='<select class="mb-10 form-select" id="priceId" onchange="getRemainingSession()">'.$html.'</select><div class="font-red text-center" id="remainingSession">'.$remaining.' Session Remaining.</div>';
+            }
+            return $data;
+        }
+
+        public function store_scheduler(Request $request)
+        {  
+            
+            $activitySchedulerData = BusinessActivityScheduler::find($request->timeid);
+            $customer = Customer::where(['id'=>$request->customerID,'business_id'=>$request->businessId])->first();
+            $UserBookingDetails = '';
+            $today = date('Y-m-d');
+            
+            $UserBookingDetails = $customer->bookingDetail()->when($request->oid, function($query) use($request){
+                    $query->where('id', $request->oid);
+                })->when($request->priceId, function ($query) use ($request) {
+                    $query->where('priceid', $request->priceId);
+                })
+                //->where('sport',$request->serviceID)
+                ->orderby('created_at','desc')->first();
+            if($UserBookingDetails != ''){
+                $sendmail = 0;
+                $checkIndetail = $UserBookingDetails->BookingCheckinDetails()->whereDate('checkin_date','=',$request->date)->where(['checked_at' =>null])->first();
+                if($request->date == $today){
+                    $start_time = (new DateTime($activitySchedulerData->shift_start))->format("H:i");
+                    $current_time = (new DateTime())->format("H:i");
+                    if($current_time > $start_time){
+                        return "You can't book this activity for today";
+                    }
+                }
+                if($checkIndetail != ''){
+                    $checkIndetail->update(["business_activity_scheduler_id"=>$request->timeid,
+                            "checkin_date"=>$request->date]);
+                    $sendmail = 1;
+                }else{
+                    $chkData = $UserBookingDetails->BookingCheckinDetails()->whereDate('business_activity_scheduler_id',0)->where(['checkin_date' =>null])->first();
+                    if($chkData != ''){
+                        $chkData->update(["business_activity_scheduler_id"=>$request->timeid,
+                            "checkin_date"=>$request->date, "instructor_id"=>@$activitySchedulerData->instructure_ids]);
+                        $sendmail = 1;
+                    }else{
+                        // echo $UserBookingDetails.'<br>';
+                        // print_r($UserBookingDetails->BookingCheckinDetails()->get());
+                        // echo '<br>';
+                        //echo $UserBookingDetails->BookingCheckinDetails()->count();
+                        if($UserBookingDetails->BookingCheckinDetails()->count() < $UserBookingDetails->pay_session){
+                            BookingCheckinDetails::create([
+                                "business_activity_scheduler_id"=>$request->timeid, 
+                                "instructor_id"=>@$activitySchedulerData->instructure_ids, 
+                                "customer_id" => $customer->id,
+                                'booking_detail_id'=> $UserBookingDetails->id,
+                                "checkin_date"=>$request->date,
+                                "use_session_amount" => 0,
+                                "source_type" => 'online_scheduler'
+                            ]);
+                            $sendmail = 1;
+                        }else{
+                            return "fail";
+                        }
+                    }
+                }
+
+                if($sendmail == 1){
+                    $UserBookingDetails->update(["act_schedule_id"=>$request->timeid,'bookedtime'=>$request->date]);
+
+                    $getreceipemailtbody = $this->booking_repo->getreceipemailtbody($UserBookingDetails->booking_id, $UserBookingDetails->id);
+                    $email_detail = array(
+                        'getreceipemailtbody' => $getreceipemailtbody,
+                        'email' => $customer->email);
+                    $status  = SGMailService::sendBookingReceipt($email_detail);
+
+                    $email_detail_provider = array(
+                        "email" => @$UserBookingDetails->company_information->business_email, 
+                        "CustomerName" => @$UserBookingDetails->Customer->full_name, 
+                        "Url" => env('APP_URL').'/personal/orders?business_id='.Auth::user()->cid, 
+                        "BusinessName"=> @$UserBookingDetails->company_information->dba_business_name,
+                        "Age" => $this->calculateAge(@$UserBookingDetails->Customer->birthdate), // Using the controller method
+                        "BookedPerson"=> @$UserBookingDetails->Customer->full_name,
+                        "ParticipantsName"=> @$UserBookingDetails->Customer->full_name,
+                        "date"=> date('m/d/Y',strtotime($request->date)),
+                        "time"=>  @$UserBookingDetails->business_activity_scheduler->activity_time(),
+                        "duration"=> @$UserBookingDetails->business_activity_scheduler->get_clean_duration(),
+                        "ActivitiyType"=>  @$UserBookingDetails->business_services->service_type,
+                        "ProgramName"=> @$UserBookingDetails->business_services->program_name,
+                        "CategoryName"=> @$UserBookingDetails->business_price_detail->business_price_details_ages_with_trashed->category_title);
+
+                    SGMailService::confirmationMail($email_detail_provider);
+                }
+                //$UserBookingDetails->update(["act_schedule_id"=>$request->timeid,"bookedtime"=>$request->date]);
+                return "success";
+            }else{
+                return "fail";
+            }   
+        }
+        private function calculateAge($birthdate)
+        {
+            if (!$birthdate) {
+                return null; // Return null if birthdate is not available
+            }
+        
+            $birthDateTime = new DateTime($birthdate);
+            $currentDateTime = new DateTime();
+        
+            return $currentDateTime->diff($birthDateTime)->y;
+        }
+
+
+        public function destroy_scheduler(Request $request,$id)
+        {
+            $checkinDetail = BookingCheckinDetails::findOrFail($id);
+            $user_booking_detail = $checkinDetail->UserBookingDetail;
+        /* $array = json_decode($user_booking_detail->booking_detail,true);
+            $array['sessiondate'] = '';
+            UserBookingDetail::where('id',$user_booking_detail->id)->update(["act_schedule_id"=>'',"bookedtime"=>NULL,'booking_detail'=>json_encode($array)]);*/
+            UserBookingDetail::where('id',$user_booking_detail->id)->update(["act_schedule_id"=>'']);
+            $checkinDetail->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Rescheduled successfully',
+            ], 200);
+        }
+
+    public function data(Request $request)
+    {
+        // dd($request->all());
+        $companyinfo = $request->companyinfo;
+        $code = CompanyInformation::where('id', $companyinfo['business_id'])->first();
+        $filter_date = new DateTime();
+        $shift = 1;
+        
+        if ($request->date && (new DateTime($request->date)) > $filter_date) {
+            $filter_date = new DateTime($request->date);    
+            $shift = 0;
+        }    
+        $dayName = $filter_date->format('l');
+        $services = $request->input('services', 'All Services');
+        $greatfor = $request->input('great_for', 'All');
+        $difficultylevel = $request->input('difficulty_level', 'All Levels');
+        $bookschedulers = BusinessActivityScheduler::whereHas('business_service', function($query) use ($services, $greatfor, $difficultylevel) {
+            $query->where('business_services.is_active', 1);             
+            if ($services !== 'All Services') {
+                $query->where('service_type', $services);
+            }
+            if ($greatfor !== 'All') {
+                $query->whereRaw("FIND_IN_SET(?, activity_for)", [$greatfor]);
+            }
+            if ($difficultylevel !== 'All Levels') {
+                $query->whereRaw("FIND_IN_SET(?, difficult_level)", [$difficultylevel]);
+            }
+        })
+        ->whereHas('business_price_details_ages', function ($query) {
+            $query->where('stype', 1);
+            $query->whereNotNull('class_type');
+        })
+        ->where('activity_days', 'LIKE', "%$dayName%") 
+        ->where('end_activity_date', '>', now()) 
+        ->where('cid',$code->id) 
+        ->orderBy('end_activity_date', 'desc')
+        ->get();
+        $days = [];
+        $days[] = new DateTime(date('Y-m-d'));
+        for($i = 0; $i <= 4; $i++){
+            $d = clone($filter_date);
+            $days[] = $d->modify('+'.($i+$shift).' day');
+        }
+        if ($request->ajax()) {
+            return view('subdomain.scheduler', compact('bookschedulers', 'filter_date', 'days', 'companyinfo','code'))->render();
+        }
+        
+        return view('subdomain.schedule', compact('bookschedulers', 'filter_date', 'request', 'days', 'companyinfo','code'));
+    }
+
+
+    public function getActivityDates(Request $request)
+    {
+        $sid = $request->input('sid');
+        $next_available_date = null;
+        $activities = BusinessActivityScheduler::where('serviceid', $sid)->get();
+        $result = [];
+        foreach($activities as $local_activity){
+            $activity_next_available_date = $local_activity->next_available_date();
+            if($activity_next_available_date != ''){
+                if ($next_available_date === null || $activity_next_available_date < $next_available_date) {
+                    $next_available_date = $activity_next_available_date;
+                }
+            }
+            array_push($result, [$local_activity->starting, $local_activity->end_activity_date, $local_activity->activity_days]);
+        }
+
+        if($next_available_date == null){
+            $next_available_date = new \DateTime();
+        }
+
+        return response()->json([
+            'next_available_date' => $next_available_date->format('M-d-Y'),
+            'active_days' => $result
+        ]);
+    }
+
+
+    public function schedule_index(Request $request, $business_id)
+    {
+        // return '33';
+        // dd('44');/''
+        try {
+            $chkScheduleSession = '';
+            $company = CompanyInformation::findOrFail($business_id);
+            $companyName = $company->dba_business_name ?? $company->company_name;
+            $business_services = $company->service()->where('is_active', 1)->orderBy('created_at', 'desc');
+            $servicetype = 'all';
+
+            if ($request->stype && $request->business_service_id == '') {
+                $servicetype = $request->stype;
+                if ($request->stype != 'all') {
+                    $business_services = $company->service()->where(['is_active' => 1, 'service_type' => $servicetype])->orderBy('created_at', 'desc');
+                }
+
+                if (session()->has('schedule')) {
+                    session()->forget('schedule');
+                }
+            }
+
+            $user = Auth::user();
+            // dd($user);
+            $userCompany = @$user->company ?? [];
+            $customer = Customer::where(['user_id' => @$user->id, 'business_id' => $business_id])->first();
+            $name = @$customer->full_name;
+
+            if ($user && $request->customer_id == '') {
+                $request->customer_id = $customer->id;
+            }
+
+            if ($request->customer_id) {
+                if (request()->type == 'user') {
+                    $familyMember = Auth::user()->user_family_details()->where('id', request()->customer_id)->first();
+                    $user = User::where([
+                        'firstname' => @$familyMember->first_name,
+                        'lastname' => @$familyMember->last_name,
+                        'email' => @$familyMember->email
+                    ])->first();
+                    $customer = Customer::where(['user_id' => @$user->id])->first();
+                    $name = @$customer->full_name;
+
+                } else {
+                    $customer = Customer::where('id', $request->customer_id)->first();
+                    $name = @$customer->full_name;
+
+                }
+                $memberships = @$customer->active_memberships()->pluck('sport')->unique();
+            }
+
+            if($request->stype!='all')
+            {
+                if ($request->business_service_id) {
+                    $servicetype = $request->stype;
+                    $business_services = $business_services->where(['id' => $request->business_service_id, 'is_active' => 1, 'service_type' => $servicetype]);
+                }
+            }
+            else{
+                if ($request->business_service_id) {
+                    $servicetype = $request->stype;
+                    $business_services = $business_services->where(['id' => $request->business_service_id, 'is_active' => 1]);
+                }
+            }
+
+            $service_ids = $business_services->pluck('id')->toArray();        
+            $filter_date = new DateTime();
+            $shift = 1;
+            if ($request->date && (new DateTime($request->date)) > $filter_date) {
+                $filter_date = new DateTime($request->date);
+                $shift = 0;
+            }
+            $days = [];
+            $days[] = new DateTime(date('Y-m-d'));
+            for ($i = 0; $i <= 100; $i++) {
+                $d = clone($filter_date);
+                $days[] = $d->modify('+' . ($i + $shift) . ' day');
+            }
+
+            $services = [];
+            if (!empty($service_ids)) {
+                $serviceids = BusinessPriceDetailsAges::whereIn('serviceid', $service_ids)
+                    ->where('stype', '1')
+                    ->whereIn('class_type', $business_services->pluck('service_type')->toArray())
+                    ->pluck('serviceid');
+
+                $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)
+                    ->whereIn('serviceid', $serviceids)
+                    ->orderBy('shift_start', 'asc')
+                    ->get();
+
+                foreach ($bookschedulers as $bs) {
+                    $services[] = $bs->business_service;
+                }
+
+                $services = array_unique($services);
+            }
+
+            if ($user && count($userCompany) == 0) {
+                $request->customer_id = '';
+            }
+            return view('subdomain.activity_schedule', [
+                'days' => $days,
+                'filter_date' => $filter_date,
+                'serviceType' => $servicetype,
+                'services' => $services,
+                'companyName' => $companyName,
+                'businessId' => $business_id,
+                'priceid' => $request->priceid,
+                'customer' => $customer,
+                'company'=>$company,
+                'business'=>$company,
+                'name'=>$name,
+                'unique_code'=>$company->unique_code,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error in schedule method: ' . $e->getMessage());
+            // return redirect()->back();
+            dd($e->getMessage());
+        }
+        
+    }
+    public function checkin(Request $request){
+        // dd($request->all());
+		$checkInDetails = BookingCheckinDetails::find($request->checkinId);
+
+		$chk = $checkInDetails->update([
+			'checked_at' => date('Y-m-d H:i:s'),
+		]);
+
+		$activityName = $checkInDetails->UserBookingDetail->business_services_with_trashed->program_name .' ('. $checkInDetails->UserBookingDetail->businessPriceDetailsAgesTrashed->category_title.')';
+		
+		if($chk){
+			return response()->json([
+	            'success' => true,
+	            'message' => "You're Checked In for <br>". $activityName, 
+                'message1' => "You're Checked In for ". $activityName, 
+	        ]);
+		}else{
+			return response()->json([
+	            'success' => false,
+	            'message' => 'There is a issue in checkin. Try again.', 
+	        ]);
+		}
+	}
 }

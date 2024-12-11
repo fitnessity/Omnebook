@@ -13,7 +13,7 @@
 							<div class="">
 								@if(!$business->getCompanyImage())
 								<div class="company-list-text mb-10">
-					          		<p class="character">{{$business->first_letter}}</p>
+					          		<p class="character">{{$business->first_letter ?? $business->cname_first_letter}}</p>
 					          	</div>
 								@else
 									<img src="{{$business->getCompanyImage()}}" alt="" class="avatar">

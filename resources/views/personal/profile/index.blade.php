@@ -13,8 +13,10 @@
 			<div class="container-fluid">
 				 <div class="position-relative mx-n4 mt-n4">
 					<div class="profile-wid-bg profile-setting-img">
-						<img src="@if($user->getCoverPic()) {{$user->getCoverPic()}} @else 'assets/images/profile-bg.jpg' @endif" class="profile-wid-img" alt="">
+						{{-- <img src="@if($user->getCoverPic()) {{$user->getCoverPic()}} @else 'assets/images/profile-bg.jpg' @endif" class="profile-wid-img" alt=""> --}}
 						<!-- <img src="assets/images/profile-bg.jpg" class="profile-wid-img" > -->
+						<img src="{{ $user->getCoverPic() ?: asset('assets/images/profile-bg.jpg') }}" class="profile-wid-img" alt="">
+						
 						<div class="overlay-content">
 							<div class="text-end p-3">
 								<form id="image-upload-form1" action="{{Route('personal.profile.update',['profile'=> $user->id])}}" method="post" enctype="multipart/form-data">
@@ -22,7 +24,7 @@
 									@csrf
 									<div class="p-0 ms-auto rounded-circle profile-photo-edit">
 										<input id="profile-foreground-img-file-input" type="file" class="profile-foreground-img-file-input" name="coverPic">
-										<label for="profile-foreground-img-file-input" class="profile-photo-edit btn btn-light"><i class="ri-image-edit-line align-bottom me-1"></i> Change Cover
+										<label for="profile-foreground-img-file-input" class="profile-photo-edit btn btn-light"><i class="ri-image-edit-line align-bottom me-1"></i> Change Cover 
 										</label>
 									</div>
 								</form>
@@ -30,7 +32,7 @@
 						</div>
 					</div>
 				</div>
-				
+					{{-- {{$user->checkS3Connection()}} --}}
 				<div class="row">
 					<div class="col-xxl-3 col-lg-3">
 						<div class="card mt-n5">

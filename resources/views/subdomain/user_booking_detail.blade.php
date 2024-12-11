@@ -52,14 +52,12 @@
 												</div>
 											</div>
 										</div>
-									
 										<div class="col-lg-2 col-md-3 col-8">
 											@if($tabName != 'past')
 												<div class="mmt-10">
-													{{-- <a type="button" class="btn btn-red" id="{{$bs->user_id}}" onClick="redirectUrl(this.getAttribute('data-url'))" @if(@$reserveUrl) data-url="{{route('check-in-portal',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => request()->customer_id ,'activetab' => 'schedule'])}}" @else data-url="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => ((request()->customer_id) ? $bs['user_id'] : '')] )}}" @endif> @if($tabName != 'current') Reschedule @else Reserve Now @endif</a> --}}
+													<!-- {{-- <a type="button" class="btn btn-red" id="{{$bs->user_id}}" onClick="redirectUrl(this.getAttribute('data-url'))" @if(@$reserveUrl) data-url="{{route('check-in-portal',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => request()->customer_id ,'activetab' => 'schedule'])}}" @else data-url="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => ((request()->customer_id) ? $bs['user_id'] : '')] )}}" @endif> @if($tabName != 'current') Reschedule @else Reserve Now @endif</a> --}} -->
 													<!-- <a class="btn btn-red" href="#"  data-bs-toggle="modal" data-bs-target=".selectbooking">Reserve Now</a> -->
-												
-													<a type="button" class="btn btn-red" onClick="redirectUrl(this.getAttribute('data-url'))" 
+													<a  class="btn btn-red" type="button" onClick="redirectUrl(this.getAttribute('data-url'))"
 														@if(@$reserveUrl) 
 															data-url="{{route('check-in-portal', [
 																'business_id' => $bs['business_id'],
@@ -69,21 +67,22 @@
 																'activetab' => 'schedule'
 															])}}" 
 														@else 
-															data-url="{{route('business_activity_schedulers', [
+															data-url="{{route('business_activityschedulers_sub', [
 																'business_id' => $bs['business_id'],
 																'business_service_id' => $bs['sport'],
 																'stype' => @$bs->business_services_with_trashed->service_type,
 																'priceid' => $bs['priceid'],
 																'customer_id' => @$bs['user_id']
 															])}}" 
+															{{-- data-url="https://dev.fitnessity.co/api/businessactivityschedulers_api?businessId={{ $bs['business_id'] }}&business_service_id={{ $bs['sport'] }}&stype={{ @$bs->business_services_with_trashed->service_type }}&priceId={{ $bs['priceid'] }}&customer_id={{$bs['user_id']}}" --}}
 														@endif>
 														@if($tabName != 'current') 
 															Reschedule 
 														@else 
-															Reserve Now 
+															Reserve Now
 														@endif
+														
 													 </a>
-													 
 												</div>		
 											@endif
 										</div>
@@ -94,7 +93,13 @@
 													<i class="ri-more-fill"></i>
 													<ul>
 														<li>
-															<a class="openreceiptmodel set-file-icon" data-behavior="ajax_html_modal" data-url="{{url('/receiptmodel/'.$bs->id.'/'.$bs->user_id.'/booking')}}" data-item-type="Membership" data-modal-width="modal-70"><i class="fas fa-plus text-muted" aria-hidden="true"></i>Receipt </a>
+															{{-- <a class="openreceiptmodel set-file-icon" data-behavior="ajax_html_modal" data-url="{{url('/receiptmodel/'.$bs->id.'/'.$bs->user_id.'/booking')}}" data-item-type="Membership" data-modal-width="modal-70"><i class="ffas fa-plus text-muted" aria-hidden="true"></i>Receipt </a> --}}
+														
+														
+															<a class="openreceiptmodel set-file-icon" href="#" data-url="{{url('/receiptmodel_sub/'.$bs->id.'/'.$bs->user_id.'/booking')}}">
+																<i class="fas fa-plus text-muted" aria-hidden="true"></i>Receipt
+															</a>
+															
 														</li>
 													</ul>
 												</div>
@@ -237,10 +242,27 @@
 										<div class="col-12">
 											<div class="float-end mt-20">
 												@if($tabName !='past')
-													<a class="btn btn-red" target="_blank" @if(@$reserveUrl) href="{{route('check-in-portal',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => request()->customer_id ,'activetab' => 'schedule'] )}}" @else href="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => ((request()->customer_id) ? $bs['user_id'] : '')] )}}" @endif >Schedule</a>
-												@endif
-												@if(Route::currentRouteName() != 'check-in-portal')
-												<a class="btn btn-black" href="{{env('APP_URL')}}/businessprofile/{{strtolower(str_replace(' ', '', $bs->company_information->public_company_name))}}/{{$bs->company_information->id}}" target="_blank">View Provider</a>
+													<!-- <a class="btn btn-red" @if(@$reserveUrl) href="{{route('check-in-portal',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => request()->customer_id ,'activetab' => 'schedule'] )}}" @else href="{{route('business_activity_schedulers',['business_id' => $bs['business_id'] ,'business_service_id'=>$bs['sport'] ,'stype'=>@$bs->business_services_with_trashed->service_type ,'priceid' =>$bs['priceid'] ,'customer_id' => ((request()->customer_id) ? $bs['user_id'] : '')] )}}" @endif >Schedule {{$customer->id}}</a> -->
+														<a id="scheduleLink" class="btn btn-red" @if(@$reserveUrl) href="{{ route('check-in-portal', 
+														       ['business_id' => $bs['business_id'], 
+																	'business_service_id' => $bs['sport'], 
+																	'stype' => @$bs->business_services_with_trashed->service_type, 
+																	'priceid' => $bs['priceid'], 
+																	'customer_id' => $customer->id, 
+																	'activetab' => 'schedule'
+																])}}" 
+															@else 
+																href="{{ route('business_activityschedulers_sub', [
+																	'business_id' => $bs['business_id'], 
+																	'business_service_id' => $bs['sport'], 
+																	'stype' => @$bs->business_services_with_trashed->service_type, 
+																	'priceid' => $bs['priceid'], 
+																	'customer_id' => $customer->id
+																]) }}" 
+																{{-- data-url="https://dev.fitnessity.co/api/businessactivityschedulers_api?businessId={{ $bs['business_id'] }}&business_service_id={{ $bs['sport'] }}&stype={{ @$bs->business_services_with_trashed->service_type }}&priceId={{ $bs['priceid'] }}&customer_id={{ $bs['user_id'] }}" --}}
+															@endif onclick="handleScheduleClick(this.getAttribute('data-url'))">
+															Schedule 
+														</a>
 												@endif
 											</div>
 										</div>
@@ -274,20 +296,58 @@
 		        </div>
 		    </div>
 		</div>
+
+		{{-- neww --}}
+
+
+		{{-- emds --}}
+		
 	</div>
 	@php $counter++; @endphp
-@empty
-	<div class="text-center mt-25">
-		<p class="text-center mt-20"> Membership Is Not Available. </p>
-		@if(@$membershipbtn == 1 ) 
-		{{-- <a class="btn btn-red" data-modal-chkBackdrop="1" data-reload="1" data-modal-width="modal-50" data-behavior="ajax_html_modal" data-bs-backdrop="static" data-bs-keyboard="false" data-url="{{route('checkin.activity_booking_html')}}" class="btn btn-red"> Purchase A Membership </a>  --}}
-		<a class="btn btn-red" data-bs-toggle="modal" data-modal-chkBackdrop="1" data-reload="1" data-modal-width="modal-50" data-behavior="ajax_html_modal" data-bs-backdrop="static" data-bs-keyboard="false" data-url="{{route('checkin.activity_booking_html')}}"> Purchase A Membership </a>
-		@endif 
-	</div>
-@endforelse
+	@empty
+		<div class="text-center mt-25">
+			<p class="text-center mt-20"> Membership Is Not Available. </p>
+			@if(@$membershipbtn == 1) 
+			<!-- {{-- <a class="btn btn-red" data-modal-chkBackdrop="1" data-reload="1" data-modal-width="modal-50" data-behavior="ajax_html_modal" data-bs-backdrop="static" data-bs-keyboard="false" data-url="{{route('checkin.activity_booking_html')}}" class="btn btn-red"> Purchase A Membership </a>  --}} -->
+			<a class="btn btn-red" data-bs-toggle="modal" data-modal-chkBackdrop="1" data-reload="1" data-modal-width="modal-50" data-behavior="ajax_html_modal" data-bs-backdrop="static" data-bs-keyboard="false" data-url="{{route('checkin.activity_booking_html')}}">Purchase A Membership</a>
+			@endif 
+		</div>
+	@endforelse
 
-<script type="text/javascript">
-	function redirectUrl(url) {
-		window.location = url
-	}
+	<script type="text/javascript">
+		function redirectUrl(url) {
+			// alert('3');
+			// alert('33');
+			alert(url);
+			window.location.href = url;
+		}
+	</script>
+
+	<script>
+		document.getElementById('scheduleLink').addEventListener('click', function(event) {
+			if (event.metaKey || event.ctrlKey || event.shiftKey) {
+				event.preventDefault();
+				alert('Opening this link in a new tab is not allowed.');
+			}
+		});
+	</script>
+<script>
+    // function handleScheduleClick(event) {
+    //     event.preventDefault();
+    //     localStorage.setItem("scheduler", 'checkedin');
+    //     var url = event.currentTarget.getAttribute('href');
+    //     localStorage.setItem("schedulerurl", url);
+    //     window.location.href = url;
+    // }
+
+	function handleScheduleClick(url) {
+        // event.preventDefault();
+        // localStorage.setItem("scheduler", 'checkedin');
+        // var url = event.currentTarget.getAttribute('href');
+        // localStorage.setItem("schedulerurl", url);
+        // window.location.href = url;
+		window.parent.postMessage({ type: 'changeSrc', src: url }, '*'); 
+
+    }
 </script>
+
