@@ -43,14 +43,14 @@ class Kernel extends ConsoleKernel
             }
         })->daily();
 
-        // $schedule->call(function () {
-        //     $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->where('attempt' ,'<' ,3)->orderBy('created_at','desc')->get();
+        $schedule->call(function () {
+            $recurringDetails = Recurring::whereDate('payment_date' ,'<=', date('Y-m-d'))->where('stripe_payment_id' ,'=' ,'')->where('status','!=','Completed')->where('attempt' ,'<' ,3)->orderBy('created_at','desc')->get();
             
-        //     /*print_r($recurringDetails);exit();*/
-        //     foreach($recurringDetails as $recurringDetail){
-        //         $recurringDetail->createRecurringPayment();
-        //     }
-        // })->daily();
+            /*print_r($recurringDetails);exit();*/
+            foreach($recurringDetails as $recurringDetail){
+                $recurringDetail->createRecurringPayment();
+            }
+        })->daily();
 
         $schedule->call(function () {
             $userBookingDetails = UserBookingDetail::whereDate("expired_at", ">=" ,date('Y-m-d'))->get();
