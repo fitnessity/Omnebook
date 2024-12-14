@@ -180,9 +180,16 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="https://dev.fitnessity.co/design/manage_services" aria-controls="sidebarPages">
+                        <i class="ri-user-settings-fill"></i> <span data-key="t-pages"> Services design</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('business.services.index')}}" aria-controls="sidebarPages">
                         <i class="ri-user-settings-fill"></i> <span data-key="t-pages"> Services </span>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="https://dev.fitnessity.co/design/bookings_appointments" aria-controls="sidebarPages">
                         <i class="ri-bookmark-line"></i> <span data-key="t-pages">Booking & Appointments</span> 

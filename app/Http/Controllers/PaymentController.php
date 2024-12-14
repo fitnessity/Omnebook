@@ -21,6 +21,7 @@ use Illuminate\Support\Str;
 use DateTime;
 use DateTimeZone;
 use App\Services\CartService;
+use Stripe\Stripe;
 
 class PaymentController extends Controller {
     public function __construct(BookingRepository $bookings) {
@@ -734,4 +735,109 @@ class PaymentController extends Controller {
         if($request->return_url)
             return redirect($request->return_url);
     }
+
+
+    //new
+    // public function createCheckoutSessions(Request $request)
+    // {
+    //     // dd('33');
+    //     Stripe::setApiKey(env('SECRET_KEY'));
+    //     // dd('3');
+    //     $checkoutSession = Session::create([
+    //         'payment_method_types' => ['card'],
+    //         'customer' => $request->user()->stripe_customer_id, 
+    //         'line_items' => [[
+    //             'price_data' => [
+    //                 'currency' => 'usd',
+    //                 'product_data' => [
+    //                     'name' => 'Sample Product',
+    //                 ],
+    //                 'unit_amount' => 5000, 
+    //             ],
+    //             'quantity' => 1,
+    //         ]],
+    //         'mode' => 'payment',
+    //         'success_url' => route('payment.success'),
+    //         'cancel_url' => route('payment.cancel'),
+    //     ]);
+
+    //     dd('3');
+    //     return response()->json(['id' => $checkoutSession->id]);
+    // }
+
+    public function createCheckoutSessions(Request $request)
+    {
+        $stripe = new \Stripe\StripeClient(env('SECRET_KEY'));
+
+        $checkoutSession = $stripe->checkout->sessions->create([
+            'line_items' => [
+                [
+                    'price_data' => [
+                        'currency' => 'usd',
+                        'product_data' => ['name' => 'Sample Product'],
+                        'unit_amount' => 5000, // 50 USD in cents
+                    ],
+                    'quantity' => 1,
+                ],
+            ],
+            'mode' => 'payment',
+            'success_url' => route('payment.success', ['session_id' => '{CHECKOUT_SESSION_ID}']),
+            'cancel_url' => route('payment.cancel'),
+        ]);
+
+        return response()->json(['id' => $checkoutSession->id]);
+    }
+
+    // public function createCheckoutSessions(Request $request)
+    // {
+    //     $stripe = new \Stripe\StripeClient(env('SECRET_KEY'));
+
+    //     // Check if the user has a Stripe customer ID
+    //     $customers=Customer::find('230');
+    //     // dd($customer);
+    //     if (!$customers->stripe_customer_id) {
+    //         $customer = $stripe->customers->create([
+    //             'email' => $customers->email,
+    //             // Additional customer details if needed
+    //         ]);
+
+    //         // Save the customer ID in the user record
+    //         // $request->user()->update(['stripe_customer_id' => $customer->id]);
+    //     }
+
+    //     $checkoutSession = $stripe->checkout->sessions->create([
+    //         'customer' => $request->user()->stripe_customer_id,
+    //         'payment_method_types' => ['card'],
+    //         'line_items' => [
+    //             [
+    //                 'price_data' => [
+    //                     'currency' => 'usd',
+    //                     'product_data' => ['name' => 'Sample Product'],
+    //                     'unit_amount' => 5000, // 50 USD in cents
+    //                 ],
+    //                 'quantity' => 1,
+    //             ],
+    //         ],
+    //         'mode' => 'payment',
+    //         'success_url' => route('payment.success', ['session_id' => '{CHECKOUT_SESSION_ID}']),
+    //         'cancel_url' => route('payment.cancel'),
+    //     ]);
+
+    //     return response()->json(['id' => $checkoutSession->id]);
+    // }
+
+    public function success()
+    {
+        return view('test');
+    }
+
+    public function cancel()
+    {
+        return view('test');
+    }
+
+
+
+
+    //end
 }

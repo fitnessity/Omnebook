@@ -259,7 +259,7 @@
                                                                 <input type="email" name="emailid[]" id="emailid" class="form-control email" required onblur="getCode(0,'email');">
                                                                 <span class="error" id="err_emailid"></span>
                                                             </div>
-                                                            <div class="col-md-4 col-lg-3">
+                                                            {{-- <div class="col-md-4 col-lg-3">
                                                                 <label class="mt-10">Emergency Name</label>
                                                                 <input type="text" name="emergency_name[]" id="emergency_name" class="form-control emergency_name" >
                                                                 <span class="error" id="err_emergency_name"></span>
@@ -288,7 +288,7 @@
                                                                     <option value="Daughter">Daughter</option>
                                                                 </select>
                                                                 <span class="error" id="err_emergency_relation"></span>
-                                                            </div>
+                                                            </div> --}}
 
                                                             <div class="col-md-4 col-lg-3">
                                                                 <label class="mt-10">Check in Code </label>
@@ -1017,9 +1017,11 @@
                             'font-red alert-class alert-danger');
                         return false;
                     }
-                    var companyInfo = @json($companyinfo->id);    
+                    var companyInfo = @json($companyinfo->id ?? null);    
+                    var code=@json($code->id);
                     var formData = $("#clientRegistration").serialize();
                     formData += '&company_info=' + encodeURIComponent(companyInfo);
+                    formData += '&code=' + encodeURIComponent(code);
                     
                     $.ajax({
                         url: '/sub_registration',
@@ -1031,7 +1033,6 @@
                             $('.register_submit').prop('disabled', true).css('background',
                                 '#999999');
                             $('#systemMessage').addClass('font-red');
-
                             $('#loading-img').removeClass('d-none');
                             //$("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
                         },

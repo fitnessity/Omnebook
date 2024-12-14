@@ -21,19 +21,33 @@ use App\Http\Controllers\SubDomainController;
 
 
 
+
 Route::get('/clear-cache', function () {
     Artisan::call('cache:clear');
     Artisan::call('route:clear');
     Artisan::call('config:clear');
+    Artisan::call('optimize:clear');
+
     return 'Cache cleared successfully.';
 });
-// route::get('/tester',function(){
-//     return view('test');
-// });
 
-// Route::domain('host.fitnessity.co')->get('/', function () {
-//     return view('test');  
-// });
+
+
+    // new
+    Route::post('/create-checkout-session','PaymentController@createCheckoutSessions')->name('create-checkout-session');
+    Route::get('/payment-success',  'PaymentController@success')->name('payment.success');
+    Route::get('/payment-cancel', 'PaymentController@cancel')->name('payment.cancel');
+    
+
+    // end
+
+    route::get('/tester',function(){
+        return view('test');
+    });
+
+    // Route::domain('host.fitnessity.co')->get('/', function () {
+    //     return view('test');  
+    // });
 
     Route::domain(env('SUB_DOMAIN'))->group(function () {
     Route::middleware(['subdomain.auth'])->group(function () {
@@ -104,8 +118,9 @@ Route::get('/clear-cache', function () {
 // });
 
 
-Route::domain(env('MAIN_DOMAIN'))->group(function () {
 
+// Route::domain(env('MAIN_DOMAIN'))->group(function () {
+Route::group(['domain' => (env('MAIN_DOMAIN'))], function() {
 Route::get('/test','HomeController@Test')->name('test');
 // web.php
 Route::get('/send-welcome-email', 'Business\CustomerController@sendWelcomeEmail');
@@ -146,7 +161,8 @@ Route::post('/customer_create', 'Business\CustomerController@CustomerCreate')->n
 
 Route::name('business.')->prefix('/business/{business_id}')->namespace('Business')->middleware('auth', 'business_scope')->group(function () {
     // customer_create
-    
+    Route::delete('/faq/{id}','ServiceController@FaqDestroy')->name('faq');
+    Route::post('services/updateService', 'ServiceController@updateService')->name('services.updateService');
     Route::get('schedulers/delete_modal', 'SchedulerController@delete_modal')->name('schedulers.delete_modal');
     Route::get('schedulers/cancel_all', 'SchedulerController@cancel_all')->name('schedulers.cancel_all');
     Route::post('cancel-all-activity', 'SchedulerController@cancel_all_store')->name('cancel_all_store');
@@ -165,6 +181,10 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::resource('orders', 'OrderController')->only(['create', 'store']);
     Route::get('/orders_check', 'OrderController@create')->name('orders_check');//new added 29-11-24
     Route::resource('services', 'ServiceController')->only(['index','create','edit', 'update', 'destroy', 'store']);
+    // show_service_details
+    Route::get('show_service_details', 'ServiceController@ServiceCreate')->name('show_service_details');
+    Route::get('/show_service_details/{id}', 'ServiceController@ServiceCreate')->name('show_service_details');
+
     Route::get('services/get-schedule', 'ServiceController@getSchedule')->name('service.get-schedule');
     Route::get('services/get-schedule-data', 'ServiceController@getScheduleData')->name('service.get-schedule-data');
     Route::post('class/store', 'ServiceController@storeClass')->name('class.store');
@@ -172,6 +192,9 @@ Route::name('business.')->prefix('/business/{business_id}')->namespace('Business
     Route::post('class/update/', 'ServiceController@updateClass')->name('class.update');
     Route::get('class/delete/{id}', 'ServiceController@deleteClass')->name('class.delete');
     Route::post('class/store-priceid', 'ServiceController@storeClassPriceOption')->name('class.store_priceid');
+    // storeClassPriceOptionupdate
+    Route::post('class/storeClassPriceOptionupdate', 'ServiceController@storeClassPriceOptionupdate')->name('class.storeClassPriceOptionupdate');
+    //business.schedulers.store
     Route::get('services/select', 'ServiceController@select')->name('service.select');
     Route::post('services/destroyimage', 'ServiceController@destroyimage')->name('service.destroyimage');
     Route::post('service_redirection','ServiceController@service_redirection')->name('service_redirection');
@@ -1248,6 +1271,7 @@ Route::name('design.')->prefix('/design')->middleware('auth')->group(function ()
     Route::get('/bookings_appointments_scheduler','DesignController@bookings_appointments_scheduler')->name('bookings_appointments_scheduler');
     Route::get('/bookings_appointments_calendar','DesignController@bookings_appointments_calendar')->name('bookings_appointments_calendar');
     Route::get('/bookings_appointments','DesignController@bookings_appointments')->name('bookings_appointments');
+    Route::get('/marketplace','DesignController@marketplace')->name('marketplace');
 });
 });
 ?>

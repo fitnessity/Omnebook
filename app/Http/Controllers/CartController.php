@@ -17,6 +17,7 @@ class CartController extends Controller {
     	$cardInfo = [];
 	    $user = Auth::user();
 	    $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
+		// dd(config('constants.STRIPE_KEY'));
 	    $cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id', $user->id)->get();
 	    $cart = [];
 	    $cartdata  =  $request->session()->get('cart_item', []);

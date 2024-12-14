@@ -1573,11 +1573,11 @@ class SubDomainController extends Controller
     public function postRegistrationCustomer(Request $request) {
         set_time_limit(-1);
         $postArr = $request->all();
-        
-        $code=$request->company_info;
+        $code=$request->code;
         // dd($postArr);
+        // dd($code);
         $companyinfo=WebsiteIntegration::where('id',$code)->first();
-        $company = CompanyInformation::where('id', $companyinfo->business_id)->first(); 
+        $company = CompanyInformation::where('id', $code)->first(); 
         
         $uniqueCode=$company->unique_code;
         // $codeId = decrypt($request->input('code'));

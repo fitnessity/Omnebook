@@ -14,6 +14,8 @@
     <div class="mb-3">
         <label>Class Description</label>
         <textarea name="desc" id="desc1" style="display: none;">{{$class->desc}}</textarea>
+        {{-- <textarea name="desc" id="desc1">{{$class->desc}}</textarea> --}}
+
     </div>
     <div class="modal-footer">
         <button type="submit" class="btn btn-primary btn-red">Update</button>

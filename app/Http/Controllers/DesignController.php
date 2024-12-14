@@ -378,4 +378,7 @@ class DesignController extends Controller {
     public function bookings_appointments(Request $request){
         return view('design.bookings_appointments');
     }
+    public function marketplace(Request $request){
+        return view('design.marketplace');
+    }
 }
