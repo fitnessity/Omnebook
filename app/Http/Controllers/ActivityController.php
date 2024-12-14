@@ -32,7 +32,8 @@ class ActivityController extends Controller {
 		$activities = BusinessServices::where('business_services.is_active', 1)->where('business_services.service_type', 'classes')->with(['company_information']);
 		$name = 'Personal Training';
         $current_date = new DateTime();
-        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $activities->pluck('id'))->limit(3)->get();
+        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $activities->pluck('id'))->distinct()->limit(3)->get();
+		//     ->distinct()
 
 		return view('activity.get_started',[
 			'activity_get_start_fast'=>$activity_get_start_fast,
