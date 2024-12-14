@@ -308,19 +308,21 @@ class BusinessServices extends Model
     public function getConverPhotoUrl()
     {  
         //  return Storage::disk('s3')->exists($this->cover_photo) ? Storage::url($this->cover_photo) : '/public/images/service-nofound.jpg';
-        if(Storage::disk('s3')->exists($this->cover_photo))
-        {
+        // if(Storage::disk('s3')->exists($this->cover_photo))
+        // {
 
-            $cover_photo_url = 'https://d2r3bve520mp70.cloudfront.net/' . $this->cover_photo;
-        }
-        else{
-            $cover_photo_url ='/public/images/service-nofound.jpg';
-        }
+        //     $cover_photo_url = 'https://d2r3bve520mp70.cloudfront.net/' . $this->cover_photo;
+        // }
+        // else{
+        //     $cover_photo_url ='/public/images/service-nofound.jpg';
+        // }
         // if($cover_photo_url=='')
         // {
         //     $cover_photo_url = '/public/images/service-nofound.jpg';
          // }
-        return $cover_photo_url;
+        // return $cover_photo_url;
+        return Storage::disk('s3')->exists($this->cover_photo) ? Storage::url($this->cover_photo) : '/public/images/service-nofound.jpg';
+
     }
     
     // public function getConverPhotoUrl_img()
