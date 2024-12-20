@@ -8,7 +8,7 @@
                <div class="row mb-3">
 					<div class="col-12">
 						<div class="page-heading">
-							<label>BOOKINGS INFO - {{strtoupper($name)}}  </label>
+							<h1>BOOKINGS INFO - {{strtoupper($name)}}  </h1>
 						</div>
 					</div>
                 </div><!--end row-->

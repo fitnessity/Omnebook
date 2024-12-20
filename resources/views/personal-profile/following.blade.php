@@ -45,7 +45,7 @@ use App\UserFollow;
                                         	if(File::exists(public_path("/uploads/profile_pic/thumb/".$logo )))
 											{
 												echo '<div class="admin-img">';
-                                                echo '<img src="/public/uploads/profile_pic/thumb/'.$logo.'" alt="Fitnessity">';
+                                                echo '<img src="/public/uploads/profile_pic/thumb/'.$logo.'" alt="Omnebook">';
 											}
 											else
 											{

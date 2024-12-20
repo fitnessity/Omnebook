@@ -14,7 +14,7 @@
                      <div class="row mb-3">
 								<div class="col-6">
 									<div class="page-heading">
-										<label>Manage Company </label>
+										<h1>Manage Company </h1>
 									</div>
 								</div>
 								<div class="col-6">
@@ -62,7 +62,7 @@
 													<div class="row">
 														<div class="col-lg-1 col-md-2 col-sm-2 col-3">
 															@if(Storage::disk('s3')->exists($company->logo) && !empty($company->logo) )
-					                                <img src="{{Storage::URL($company->logo)}}" alt="{{$company->dba_business_name}}" class="avatar">
+					                                <img src="{{Storage::URL($company->logo)}}" alt="{{$company->dba_business_name}}" class="avatar" loading="lazy" alt="Omnebook">
 					                              @else 
 					                                <div class="company-list-text mb-10">
 					          								@php $cp=substr($company->dba_business_name, 0, 1); @endphp

@@ -30,14 +30,6 @@ use Maatwebsite\Excel\HeadingRowImport;
 
 class OnlineController extends Controller
 {   
-    /*protected $plan;
-    public $error = '';
-
-    public function __construct(PlanRepository $plan)
-    {
-        $this->middleware('admin');
-        $this->plan = $plan;    
-    }*/
 
     public function index()
     {
@@ -177,7 +169,6 @@ class OnlineController extends Controller
          
        $input = $request->all();
 
-        /* File Upload Start */
         $image = '';
         if($request->hasFile('image')) {
 
@@ -197,10 +188,7 @@ class OnlineController extends Controller
                 return redirect('/admin/online/edit/'.$input['id'])->with('status', $image_upload);
             }    
         }
-        /* File Upload End */
-       
-       // update:where()($input['id'],$input);
-       
+              
         $online = DB::table('online')->where('id', $input['id'])->update($input);
 
         if($online)

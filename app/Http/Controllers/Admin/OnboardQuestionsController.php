@@ -58,7 +58,6 @@ class OnboardQuestionsController extends Controller
 
     public function update($id, Request $request)
     {
-        /*print_r($request->all());*/
         $status = $this->on_board->update($id,[
            	'title' => $request->title,
             'content' => $request->content,]);

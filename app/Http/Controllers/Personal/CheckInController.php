@@ -81,7 +81,6 @@ class CheckInController  extends Controller
             return $bd->booking_detail_id;
         });
 
-        // dd('4');
         return view('personal.check_in_prortal.index',compact('customer','name','notesCnt','activeMembershipCnt','docCnt','docCntNew','announcemetCnt','announcemetCntNew','notesCntNew','activeMembershipCntNew','classes'));
     }
 

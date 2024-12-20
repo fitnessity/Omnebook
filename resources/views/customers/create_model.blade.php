@@ -13,7 +13,7 @@
                         <div class="row mb-3">
                             <div class="col-12">
                                 <div class="page-heading">
-                                    <label>Add A New Client Manually -Or- Onboard A New Client Fast</label>
+                                    <h1>Add A New Client Manually -Or- Onboard A New Client Fast</h1>
                                 </div>
                             </div>
                         </div>
@@ -39,7 +39,7 @@
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" data-bs-toggle="tab" href="#search" role="tab"
-                                                    aria-selected="false">Search Fitnessity</a>
+                                                    aria-selected="false">Search Omnebook</a>
                                             </li>
                                         </ul>
                                         <!-- Tab panes -->
@@ -672,7 +672,7 @@
                                                                         id="b_trm1" class="form-check-input"
                                                                         value="1">
                                                                     <label for="b_trm1" class="text-center">I agree
-                                                                        to Fitnessity Terms of Service and Privacy
+                                                                        to Omnebook Terms of Service and Privacy
                                                                         Policy</label>
                                                                 </div>
                                                                 <div id="termserror"
@@ -742,8 +742,8 @@
                                             <div class="tab-pane" id="search" role="tabpanel">
                                                 <div class="text-center font-black">
                                                     <h3>Onboard A New Client Fast</h3>
-                                                    <h4>Search for your clients on Fitnessity</h4>
-                                                    <p>“Your client could already have an account on Fitnessity.<br>If
+                                                    <h4>Search for your clients on Omnebook</h4>
+                                                    <p>“Your client could already have an account on Omnebook.<br>If
                                                         so, get access and sync their information fast.”</p>
                                                 </div>
                                                 <div class="row check-txt-center claimyour-business">
@@ -1342,7 +1342,7 @@
                 $('.request-access').html(
                     '<p>To import the name, contact information, family members and credit card information for ' +
                     ui.item.firstname + ' ' + ui.item.lastname +
-                    ', they must authorize you access.</p><label>Steps </label><div class="request-step"><p>1. Click the Request Access button below. </p><p>2. Fitnessity will send an email to the customer to authorize you access.</p><p>3. Once authorization has been granted, the sync button will turn green, and you can sync the information immediately.</p><button type="button" style="margin-bottom: 10px;" class="signup-new request_access_btn" id="request_access_btn">Request Access</button></div><div class="error text-center errclass"></div>'
+                    ', they must authorize you access.</p><label>Steps </label><div class="request-step"><p>1. Click the Request Access button below. </p><p>2. Omnebook will send an email to the customer to authorize you access.</p><p>3. Once authorization has been granted, the sync button will turn green, and you can sync the information immediately.</p><button type="button" style="margin-bottom: 10px;" class="signup-new request_access_btn" id="request_access_btn">Request Access</button></div><div class="error text-center errclass"></div>'
                     );
                 return false;
             },

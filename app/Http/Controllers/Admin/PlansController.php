@@ -127,7 +127,6 @@ class PlansController extends Controller
 
     public function update($id, Request $request)
     {
-        /*print_r($request->all());*/
         $features = $this->features->getAllFeatures();
         $myArray = [];
         foreach ($features as $key=>$f){
@@ -232,7 +231,6 @@ class PlansController extends Controller
     
     public function businessClaim(Request $request)
     {
-        // $claims = CompanyInformation::where('claim_business_status',1)->get();
         $claims = CompanyInformation::where('is_verified',1)->get();
         foreach($claims as $value){
             $user = User::where('id',$value['user_id'])->first();
@@ -260,17 +258,13 @@ class PlansController extends Controller
 			$ext = $request->file('import_file')->getClientOriginalExtension();
 			if($ext != 'csv' && $ext != 'csvx' && $ext != 'xls' && $ext != 'xlsx' )
 			{
-				//Session::flash('error',"File format is not supported.");
-				//return redirect()->back();
 				return response()->json(['status'=>500,'message'=>'File format is not supported.']);
 			}
 			ini_set('max_execution_time', 10000); 
 			$headings = (new HeadingRowImport)->toArray($request->file('import_file'));
-			/*print_r($headings);*/
             if(!empty($headings)){
                 foreach($headings as $key => $row) {
                     $firstrow = $row[0];
-                   // print_r($row);
                     if(  $firstrow[0] != 'business_name' || $firstrow[1] != 'activity' 
                         || $firstrow[2] != 'location'|| $firstrow[3] != 'website' || $firstrow[4] != 'phone'|| $firstrow[5] !=    'address') 
                     {
@@ -307,7 +301,6 @@ class PlansController extends Controller
         {
             $d = json_decode($request->datas);
             foreach($d as $key=>$value){
-               // print_r($value);
                 if(in_array($key,$searchIDs))
                     $business_claim = new BusinessClaim();
                 else
@@ -330,7 +323,6 @@ class PlansController extends Controller
                     $business_claim = BusinessClaim::where('website',$value[3])->first();
                 else
                     $business_claim = new BusinessClaim();
-               // $business_claim = BusinessClaim::where('business_name',$value[0])->first();
 				$business_claim->business_name = ucfirst($value[0]);
 				$business_claim->activity = ($value[1]);
 				$business_claim->location = ($value[2]);
@@ -591,7 +583,7 @@ class PlansController extends Controller
             $business_price = []; $business_activity=[];$business_price_ages=[];
         }
         $sports_names = $this->sports->getAllSportsNames();
-        $approve = []; //Evidents::where('user_id', $loggedinUser['id'])->get();
+        $approve = []; 
         $serviceType = Miscellaneous::businessType();
         $programType = Miscellaneous::programType();
         $programFor = Miscellaneous::programFor();
@@ -618,7 +610,6 @@ class PlansController extends Controller
     }
 
     public function list_activity($id){
-		//DB::enableQueryLog();
         $companyInfo = CompanyInformation::where('id', $id)->orderBy('id', 'DESC')->get();
 	   $companyservice = BusinessServices::where('cid', $id)->orderBy('id', 'DESC')->get();
         return view('admin.plan.list_service', [            
@@ -629,7 +620,6 @@ class PlansController extends Controller
     }
 
     public function update_services(Request $request){
-        //echo "<pre>"; print_r($request->all());exit();
         $pay_chk = $pay_session_type = $pay_session = $pay_price = $pay_discountcat = $pay_discounttype = $pay_estearn = $pay_setnum = $pay_setduration = $pay_after = $recurring_price= $recurring_every= $recurring_duration= $fitnessity_fee= $is_recurring ="";
         $pay_discount = 0;
         $profile_picture = "";
@@ -637,19 +627,15 @@ class PlansController extends Controller
         $comdata = CompanyInformation::where('id',$request->cid)->first();
         if($request->hidd_service_type =='experience') {
             if ($request->hasFile('servicepic')) {
-            	/*echo "service";*/
                 $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR ;
                 $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pic' . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR;
                 $image_upload = Miscellaneous::uploadPhotoGallery($request->servicepic, $gallery_upload_path, 1, $thumb_upload_path, 130, 100);
             
                 if($image_upload['success'] == true) {
-                	/*echo "success";*/
                     $profile_picture = $image_upload['filename'];
-                    /*print_r( $profile_picture);*/
                 }
             } else {
                 $profile_picture = $request->oldservicepic;
-                /* print_r( $profile_picture);*/
             }
             if($request->hasfile('dayplanpic'))
             {
@@ -676,7 +662,6 @@ class PlansController extends Controller
             }
         }
 
-        // experience feild
         $notincluded_thing =  $included_thing = $frm_wear = $safe_varification = $days_title = $days_desc = $days_dayplanpic = '';
         if(isset($request->frm_included_things) && !empty($request->frm_included_things)) {
             $included_thing = @implode(",",$request->frm_included_things);    
@@ -735,7 +720,6 @@ class PlansController extends Controller
             $teachingstyle = @implode(",",$request->frm_teachingstyle);    
         }
 
-        /*echo $profile_picture;exit();*/
         if($request->hidd_service_type != 'experience'){
             BusinessServices::where('cid',$request->cid)->where('id',$request->sid)->update(['service_type'=>$request->hidd_service_type,
                 'sport_activity'=> @$request->frm_servicesport ,
@@ -804,8 +788,6 @@ class PlansController extends Controller
                         }
 
                         if($request->input('is_recurring_child_'.$i.$y) == 1){
-                            /*$recurring_every = $request->input('recurring_every_'.$i.$y);
-                            $recurring_duration = $request->input('recurring_duration_'.$i.$y);*/
                             $childrecurring_price = $request->input('recurring_price_child_'.$i.$y);
                             $childrecurring_run_auto_pay = $request->input('run_auto_pay_child_'.$i.$y);
                             $childrecurring_cust_be_charge = $request->input('cust_be_charge_child_'.$i.$y);
@@ -844,8 +826,6 @@ class PlansController extends Controller
                             $infantrecurring_recurring_pmt = $request->input('recurring_pmt_infant_'.$i.$y);
                             $infantrecurring_total_contract_revenue = $request->input('total_contract_revenue_infant_'.$i.$y);
                         }else{
-                            /*$infantrecurring_every = NULL;
-                            $infantrecurring_duration = NULL;*/
                             $infantrecurring_price = NULL;
                             $infantrecurring_run_auto_pay  = NULL;
                             $infantrecurring_cust_be_charge = NULL;
@@ -911,8 +891,7 @@ class PlansController extends Controller
                             "recurring_recurring_pmt_infant" => $infantrecurring_recurring_pmt,
                             "recurring_total_contract_revenue_infant" => $infantrecurring_total_contract_revenue,
 
-                            /*"recurring_every"=>$recurring_every,
-                            "recurring_duration"=> $recurring_duration,*/
+                            
                             "fitnessity_fee"=> isset($request->fitnessity_fee) ? $request->fitnessity_fee : '',
                             "pay_setnum" => $request->input('pay_setnum_'.$i.$y),
                             "pay_setduration" => $request->input('pay_setduration_'.$i.$y),
@@ -938,7 +917,7 @@ class PlansController extends Controller
                             "infant_estearn" =>  $request->input('infant_setearn_'.$i.$y),  
                             "weekend_infant_estearn" =>  $request->input('weekend_infant_estearn_'.$i.$y),  
                         ];
-                       /* print_r($businessPayment);*/
+                       
                         BusinessPriceDetails::create($businessPayment);
                     }
                 }
@@ -985,7 +964,7 @@ class PlansController extends Controller
                 }
              }
             
-            /* using the insertion time only */
+       
             $request->servicepic = $profile_picture;
         } else {
             if ($request->hasFile('servicepic')) {
@@ -999,11 +978,10 @@ class PlansController extends Controller
                 $profile_picture = $request->oldservicepic;
             }
 
-            /* using the insertion time only */
             $request->servicepic = $profile_picture;
         }
 
-        // experience feild
+        
         $notincluded_thing =  $included_thing = $frm_wear = $safe_varification = $days_title = $days_desc = $days_dayplanpic = '';
         if(isset($request->frm_included_things) && !empty($request->frm_included_things)) {
             $included_thing = @implode(",",$request->frm_included_things);    
@@ -1098,8 +1076,6 @@ class PlansController extends Controller
             $bs->userid = $comdata->user_id;
         }
         $bs->save();
-      /*  print_r($bs);exit();*/
-           
       
         $paycount = count($request->category_title);
         if($paycount > 0) {
@@ -1118,8 +1094,6 @@ class PlansController extends Controller
                 if($age_cnt >= 0){
                     for($y=0; $y <= $age_cnt; $y++) {
                         if($request->input('is_recurring_adult_'.$i.$y) == 1){
-                            /*$recurring_every = $request->input('recurring_every_'.$i.$y);
-                            $recurring_duration = $request->input('recurring_duration_'.$i.$y);*/
                             $adultrecurring_price = $request->input('recurring_price_adult_'.$i.$y);
                             $adultrecurring_run_auto_pay = $request->input('run_auto_pay_adult_'.$i.$y);
                             $adultrecurring_cust_be_charge = $request->input('cust_be_charge_adult_'.$i.$y);
@@ -1132,8 +1106,6 @@ class PlansController extends Controller
                             $adultrecurring_recurring_pmt = $request->input('recurring_pmt_adult_'.$i.$y);
                             $adultrecurring_total_contract_revenue = $request->input('total_contract_revenue_adult_'.$i.$y);
                         }else{
-                            /*$recurring_every = NULL;
-                            $recurring_duration = NULL;*/
                             $adultrecurring_price = NULL;
                             $adultrecurring_run_auto_pay  = NULL;
                             $adultrecurring_cust_be_charge = NULL;
@@ -1148,8 +1120,6 @@ class PlansController extends Controller
                         }
 
                         if($request->input('is_recurring_child_'.$i.$y) == 1){
-                            /*$recurring_every = $request->input('recurring_every_'.$i.$y);
-                            $recurring_duration = $request->input('recurring_duration_'.$i.$y);*/
                             $childrecurring_price = $request->input('recurring_price_child_'.$i.$y);
                             $childrecurring_run_auto_pay = $request->input('run_auto_pay_child_'.$i.$y);
                             $childrecurring_cust_be_charge = $request->input('cust_be_charge_child_'.$i.$y);
@@ -1162,8 +1132,6 @@ class PlansController extends Controller
                             $childrecurring_recurring_pmt = $request->input('recurring_pmt_child_'.$i.$y);
                             $childrecurring_total_contract_revenue = $request->input('total_contract_revenue_child_'.$i.$y);
                         }else{
-                            /*$childrecurring_every = NULL;
-                            $childrecurring_duration = NULL;*/
                             $childrecurring_price = NULL;
                             $childrecurring_run_auto_pay  = NULL;
                             $childrecurring_cust_be_charge = NULL;
@@ -1178,8 +1146,6 @@ class PlansController extends Controller
                         }
 
                         if($request->input('is_recurring_infant_'.$i.$y) == 1){
-                            /*$recurring_every = $request->input('recurring_every_'.$i.$y);
-                            $recurring_duration = $request->input('recurring_duration_'.$i.$y);*/
                             $infantrecurring_price = $request->input('recurring_price_infant_'.$i.$y);
                             $infantrecurring_run_auto_pay = $request->input('run_auto_pay_infant_'.$i.$y);
                             $infantrecurring_cust_be_charge = $request->input('cust_be_charge_infant_'.$i.$y);
@@ -1192,8 +1158,6 @@ class PlansController extends Controller
                             $infantrecurring_recurring_pmt = $request->input('recurring_pmt_infant_'.$i.$y);
                             $infantrecurring_total_contract_revenue = $request->input('total_contract_revenue_infant_'.$i.$y);
                         }else{
-                            /*$infantrecurring_every = NULL;
-                            $infantrecurring_duration = NULL;*/
                             $infantrecurring_price = NULL;
                             $infantrecurring_run_auto_pay  = NULL;
                             $infantrecurring_cust_be_charge = NULL;
@@ -1259,8 +1223,6 @@ class PlansController extends Controller
                             "recurring_recurring_pmt_infant" => $infantrecurring_recurring_pmt,
                             "recurring_total_contract_revenue_infant" => $infantrecurring_total_contract_revenue,
                             
-                            /*"recurring_every"=>$recurring_every,
-                            "recurring_duration"=> $recurring_duration,*/
                             "fitnessity_fee"=> isset($request->fitnessity_fee) ? $request->fitnessity_fee : '',
                             "pay_setnum" => $request->input('pay_setnum_'.$i.$y),
                             "pay_setduration" => $request->input('pay_setduration_'.$i.$y),
@@ -1286,7 +1248,6 @@ class PlansController extends Controller
                             "infant_estearn" =>  $request->input('infant_estearn_'.$i.$y),  
                             "weekend_infant_estearn" =>  $request->input('weekend_infant_estearn_'.$i.$y),  
                         ];
-                       /* print_r($businessPayment);*/
                         BusinessPriceDetails::create($businessPayment);
                     }
                 }
@@ -1315,7 +1276,6 @@ class PlansController extends Controller
     }
 
 	public function business_delete($id){
-		//$comp = CompanyInformation::where('id', $id)->first();
 		$del = CompanyInformation::where('id',$id)->delete();
 		
 		if($del){
@@ -1358,10 +1318,9 @@ class PlansController extends Controller
     }
 
     public function adminaddbusinessschedule(Request $request){
-        /*print_r($request->all());exit();*/
+       
 
         $shift_start = $request->duration_cnt;
-        /*echo $shift_start; exit;*/
         if($shift_start >= 0) {
             $busschedata =  BusinessServices::where('cid', $request->cid)->first();
           
@@ -1404,10 +1363,6 @@ class PlansController extends Controller
     }
 
     public function sendemail(Request $request){
-
-       /* $detail_data_com['company_data'] = CompanyInformation::where('id',$request->cid)->first();
-        $AllDetail  = json_decode(json_encode($detail_data_com), true); 
-        $status = MailService::sendEmailfromadmin($AllDetail);*/
 
         $company_data= CompanyInformation::where('id',$request->cid)->first();
         $email_detail = array(

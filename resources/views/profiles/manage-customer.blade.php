@@ -594,7 +594,7 @@
 									<div class="col-md-8">
 										<div class="terms-wrap wrap-sp">
 											<input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-											<label for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
+											<label for="b_trm1">I agree to Omnebook <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
 										</div>
 										<button type="button" style="margin:0px;" class="signup-new" id="register_submit" >Create Account</button>
 									</div>
@@ -605,8 +605,8 @@
                     </div>
 					<div class="col-lg-6 col-xs-12 space-remover manage-customer-gray-bg">
                         <div class="manage-customer-search">
-							<h4>Search For Client On Fitnessity</h4>
-							<p>"Your client could already have a profile on fitnessity"</p>
+							<h4>Search For Client On Omnebook</h4>
+							<p>"Your client could already have a profile on Omnebook"</p>
 						</div>
 						<div class="row check-txt-center">
 							<div class="col-md-10 col-xs-10">

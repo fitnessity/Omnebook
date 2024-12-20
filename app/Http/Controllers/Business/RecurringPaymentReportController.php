@@ -54,7 +54,6 @@ class RecurringPaymentReportController extends BusinessBaseController
             if($endDate == '' && $startDate == ''){
                 $endDate = $startDate  = $this->currentDate;
             }
-            /*$data = $this->membership($type,$endDate,$startDate,$business_id,'','payment_date');*/
 
             $dataRemaing = $this->membership($type,$endDate,$startDate,$business_id,['Retry','Scheduled','Failed'],'payment_date');
             $dataComp = $this->membership($type,$endDate,$startDate,$business_id,['Completed'],'payment_on');
@@ -72,7 +71,6 @@ class RecurringPaymentReportController extends BusinessBaseController
         });
         return $data;
 
-        //print_r($data);exit;
     }
 
     public function getMemberships(Request $request,$business_id){

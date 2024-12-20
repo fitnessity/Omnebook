@@ -193,7 +193,7 @@
 						<div class="col-lg-12">
 							<div class="delivery-method-note mb-15">
 								<i class="fas fa-info mr-10 "></i>
-								<p class="mb-0">Remembar that message blasts may only contain Fitnessity links(e.g) reasons, any non Fitnessity linkes will be removed from SMS, push notifications and e-mails.</p>
+								<p class="mb-0">Remembar that message blasts may only contain Omnebook links(e.g) reasons, any non Omnebook linkes will be removed from SMS, push notifications and e-mails.</p>
 							</div>
 							<div class="border-bottom-grey"></div>
 						</div>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Fitnessity</title>
+    <title>Omnebook</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta content="Fitnessity: Because Fitness=Necessity" name="description" />
+	<meta content="omnebook: Because Fitness=Necessity" name="description" />
 	<meta content="" name="author" />
 	<meta name="csrf-token" content="{{ csrf_token() }}"> 
     <link href="{{ asset('/dashboard-design/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
@@ -73,49 +73,49 @@
 					<li class="menu-title"><span data-key="t-menu">Menu</span></li>
 					<li class="nav-item">
 						<a class="nav-link menu-link" href="#" aria-controls="sidebarDashboards" onclick="dashboard_menu();">
-							<img src="https://dev.fitnessity.co//public/img/social-profile.png" alt="Fitnessity"> <span data-key="t-dashboards">Dashboard</span>
+							<img src="https://dev.fitnessity.co//public/img/social-profile.png" alt="omnebook"> <span data-key="t-dashboards">Dashboard</span>
 						</a>
 					</li>
 					
 					<!-- <li class="nav-item">
 						<a class="nav-link menu-link" href="https://dev.fitnessity.co/profile/viewProfile" aria-controls="sidebarDashboards">
-							<img src="https://dev.fitnessity.co//public/img/social-profile.png" alt="Fitnessity"> <span data-key="t-dashboards">View Social Profile</span>
+							<img src="https://dev.fitnessity.co//public/img/social-profile.png" alt="omnebook"> <span data-key="t-dashboards">View Social Profile</span>
 						</a>
 					</li> -->
 					
 					<li class="nav-item">
 						<a class="nav-link menu-link active" href="#" aria-controls="sidebarDashboards" href="#">
-							<img src="https://dev.fitnessity.co//public/img/edit-2.png" alt="Fitnessity"> <span data-key="t-dashboards">   Edit Profile &amp; Password </span>
+							<img src="https://dev.fitnessity.co//public/img/edit-2.png" alt="omnebook"> <span data-key="t-dashboards">   Edit Profile &amp; Password </span>
 						</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link menu-link" onclick="Schedule()" aria-controls="sidebarDashboards">
-							<img src="{{asset('/public/img/schedule-1.png')}}" alt="Fitnessity">
+							<img src="{{asset('/public/img/schedule-1.png')}}" alt="omnebook">
 							<span data-key="t-dashboards"> Schedule</span>
 						</a>					
 					</li>
 					<li class="nav-item">
 						<a class="nav-link menu-link" onclick="ManageAccount()" aria-controls="sidebarLanding">
-							<img src="{{asset('/public/img/menu-icon5.svg')}}" alt="Fitnessity"> <span data-key="t-landing">Manage Accounts</span>
+							<img src="{{asset('/public/img/menu-icon5.svg')}}" alt="omnebook"> <span data-key="t-landing">Manage Accounts</span>
 						</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link menu-link" onclick="PaymentHistory()" aria-controls="sidebarDashboards">
-							<img src="{{asset('/img/payment.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Payment History</span>
+							<img src="{{asset('/img/payment.png')}}" alt="omnebook"> <span data-key="t-dashboards">Payment History</span>
 						</a>
 					</li>
 					
 					<li class="nav-item">
                         <a class="nav-link menu-link" onclick="CreditCard()" aria-controls="sidebarDashboards">
-                            <img src="{{asset('/public/img/credit-card.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Credit Card </span>
+                            <img src="{{asset('/public/img/credit-card.png')}}" alt="omnebook"> <span data-key="t-dashboards"> Credit Card </span>
                         </a>
                     </li>  
 					<li class="nav-item">
 						<!-- {{-- <a class="nav-link menu-link" href="{{route('logout_n'.$business->unique_code)}}" aria-controls="sidebarDashboards">
-							<img src="https://dev.fitnessity.co//public/img/social-profile.png" alt="Fitnessity"> <span data-key="t-dashboards">Logout</span>
+							<img src="https://dev.fitnessity.co//public/img/social-profile.png" alt="omnebook"> <span data-key="t-dashboards">Logout</span>
 						</a> --}} -->
 							<a id="logoutLink" class="nav-link menu-link" href="{{ route('logout_n', ['uniquecode' => $business->unique_code]) }}" aria-controls="sidebarDashboards">
-							<img src="https://dev.fitnessity.co//public/img/social-profile.png" alt="Fitnessity">
+							<img src="https://dev.fitnessity.co//public/img/social-profile.png" alt="omnebook">
 							<span data-key="t-dashboards">Logout</span>
 						</a>
 						

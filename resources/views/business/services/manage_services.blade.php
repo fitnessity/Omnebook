@@ -7,7 +7,6 @@
 	@include('layouts.business.business_topbar')
     @include('business.services.manage_services_sidebar')
 
-    @if(isset($service_data))
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <a href="#menu-toggle" class="btn btn-black mb-15" id="menu-toggle"><i class="fas fa-bars"></i></a>
@@ -15,20 +14,22 @@
                 <div class="row mb-3 y-middle">
                     <div class="col-lg-6 col-md-6 col-12">
                         <div class="page-heading">
-                            <label>Manage {{@$companyName}} Services</label>
+                            <h1>Manage {{@$companyName}} Services</h1>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-12">
                         <div class="service-create">
-                            <a href="{{route('business.service.select')}}" class="btn btn-dark-grey">Create New Service</a>
+                            <a href="javascript:;" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#exampleModal1">Create New Service</a> 
                         </div>
+                        @if(isset($service_data))
                         <div class="service-create mr-15">
                             {{-- https://dev.fitnessity.co/activity-details/304 --}}
-                            <a href="{{ route('activities_show', ['serviceid' => $service_data->id]) }}" class="btn btn-light-grey" target="_blank">Preview</a>
+                            <a href="{{ route('activities_show', ['serviceid' => $service_data->id]) }}" class="btn btn-black" target="_blank">Preview</a>
                         </div>
+                        @endif
                     </div>
                 </div>
-
+                @if(isset($service_data))
                 <div class="row">
                     <div class="col-xl-7 col-lg-8 col-md-12 col-12">
                         <div class="card">
@@ -1215,7 +1216,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="add-category">
-                                                        <a class="add-category-btn" onclick="addFaq()">Add Another Faq</a>
+                                                        <a class="btn btn-red" onclick="addFaq()">Add Another Faq</a>
                                                         <p>This is a new faq section</p>
                                                     </div>
                                                 </div>
@@ -1473,7 +1474,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="add-category">
-                                                        <a class="add-category-btn" onclick="addCategory()">Add Another Category</a>
+                                                        <a class="btn btn-red" onclick="addCategory()">Add Another Category</a>
                                                         <p>This is a new category section</p>
                                                     </div>
                                                 </div>
@@ -1652,15 +1653,114 @@
                         </div>
                     </div>
                 </div>
+                @endif
+
             </div>
         </div>
-    @endif
 </div>
 </div>
 </div>
 </div>
 <!-- /#wrapper -->
 
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered  modal-80">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="exampleModalLabel">Create Services &amp; Prices</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3 pb-1">
+                    <div class="col-12">
+                        <!-- <div class="page-heading">
+                            <h1>Create Services &amp; Prices</h1>
+                        </div> -->
+                        <div class="page-sub-title step1">
+                            <label>GET STARTED BY SELECTING A SERVICE YOU OFFER BELOW</label>
+                            <p>Click on one of the services below to start creating a service to offer. Only select the type of business that best represents the type of experiences you offer your clients. Don’t worry; you can set up more than one type of business type.</p>
+                        </div>
+                    </div>
+                    <!--end col-->
+                </div>
+                <div class="row">
+                    <div class="col-xl-3 col-md-6 col-sm-6">
+                        <!-- card -->
+                        <a class="card card-animate fix-box" data-id="individual">
+                            <div class="card-body border">
+                                <div class="text-center selection-service">
+                                    <img src="https://dev.fitnessity.co/public/images/newimage/bus-individual.png" class="pro_card_img1" alt="Omnebook" loading="lazy">
+                                </div>
+                                <div class="text-center mt-4 service-details">
+                                    <div class="selecting-title">Personal Trainer</div>
+                                    <p>A provider offers one-on-one personal training, coaching, nutrition advice, or instructions.</p>
+                                </div>
+                                <input type="hidden" name="service_type" id="service_type" value="">
+                                <div class="box-footer">
+                                    <button type="button" class="btn-red select-event createService" data-service="individual"> Select </button>
+                                </div>
+                            </div><!-- end card body -->
+                        </a><!-- end card -->
+                    </div><!-- end col -->
+
+                    <div class="col-xl-3 col-md-6 col-sm-6">
+                        <!-- card -->
+                        <a class="card card-animate fix-box" data-id="classes">
+                            <div class="card-body border">
+                                <div class="text-center selection-service">
+                                    <img src="https://dev.fitnessity.co/public/images/newimage/bus-gym.png" class="pro_card_img1" alt="Omnebook" loading="lazy">
+                                </div>
+                                <div class="text-center mt-4 service-details">
+                                    <div class="selecting-title">CLASSES</div>
+                                    <p>A provider offers group omnebook workouts and classes at a gym, studio, or facility.</p>
+                                </div>
+                                <div class="box-footer">
+                                    <button type="button" class="btn-red select-event createService" data-service="classes"> Select </button>
+                                </div>
+                            </div><!-- end card body -->
+                        </a><!-- end card -->
+                    </div><!-- end col -->
+
+                    <div class="col-xl-3 col-md-6 col-sm-6">
+                        <!-- card -->
+                        <a class="card card-animate fix-box" data-id="experience">
+                            <div class="card-body border">
+                                <div class="text-center selection-service">
+                                    <img src="https://dev.fitnessity.co/public/images/newimage/bus-experience.png" class="pro_card_img1" alt="Omnebook" loading="lazy">
+                                </div>
+                                <div class="text-center mt-4 service-details">
+                                    <div class="selecting-title">Adventures &amp; Tours</div>
+                                    <p>A provider that offers an adventurous activity or an experience surrounding the activity.</p>
+                                </div>
+                                <div class="box-footer">
+                                    <button type="button" class="btn-red select-event createService" data-service="experience"> Select </button>
+                                </div>
+                            </div><!-- end card body -->
+                        </a><!-- end card -->
+                    </div><!-- end col -->
+
+                    <div class="col-xl-3 col-md-6 col-sm-6">
+                        <!-- card -->
+                        <a class="card card-animate fix-box" data-id="events">
+                            <div class="card-body border">
+                                <div class="text-center selection-service">
+                                    <img src="https://dev.fitnessity.co/public/dashboard-design/images/yoga.jpeg" class="pro_card_img1" alt="Omnebook" loading="lazy">
+                                </div>
+                                <div class="text-center mt-4 service-details">
+                                    <div class="selecting-title">EVENTS</div>
+                                    <p>You offer events, seminars, races, marathons, meets, tournaments and more.</p>
+                                </div>
+                                <div class="box-footer">
+                                    <button type="button" class="btn-red select-event createService" data-service="events"> Select </button>
+                                </div>
+                            </div><!-- end card body -->
+                        </a><!-- end card -->
+                    </div><!-- end col -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @if(isset($service_data))
     <div class="modal fade scheduleclass-modal" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -1692,8 +1792,10 @@
                     <button type="submit" class="btn btn-primary btn-red">Save</button>
                 </div>
                 </form>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div>
 
 
@@ -1728,6 +1830,13 @@
     @include('layouts.business.footer')
     @include('layouts.business.scripts')
     <script src="{{asset('/public/dashboard-design/ckeditor/ckeditor5.js')}}"></script>
+
+<script>
+     $(".createService").click(function () {
+            var service_type = $(this).data('service'); 
+            window.location.href = "/business/"+{{$business_id}}+"/services/create?serviceType="+service_type;
+        });
+</script>
 
 <script>
 
@@ -2253,7 +2362,7 @@
 
     function openaddschedule(i,catId) {
         $.ajax({
-            url: "{{route('business.service.get-schedule-data')}}",
+            url: "{{route('business.service.get-schedule-data-edit')}}",
             type: 'GET',
             data:{
                 catId:catId,
@@ -2444,6 +2553,780 @@
         $('[data-bs-toggle="tooltip"]').tooltip({'placement': 'top'})
     });   
 </script>
+<script type="text/javascript">
+    function  priceOptionFor(i,j,val) {
+        let displayArray = ['adult','child','infant'];
+        $('[name="'+val+i+j+'"]').change(function(){
+            if ($(this).is(':checked')) {
+                if(val == 'all'){
+                    displayArray.forEach((element) => {
+                        $("#"+element+i+j).prop("checked", true); 
+                        $("#accor_nesting"+element+i+j).removeClass('d-none');
+                    });
+                }
+                $("#accor_nesting"+val+i+j).removeClass('d-none');
+                
+            }else{
+                if(val == 'all'){
+                    displayArray.forEach((element) => {
+                        $("#"+element+i+j).prop("checked", false); 
+                        $("#accor_nesting"+element+i+j).addClass('d-none');
+                    });
+                }
+              $("#accor_nesting"+val+i+j).addClass('d-none');
+            }
+        });
+    }
+
+    function changeWEndPrice(i,j,type){
+        var discount = 0;
+        var pay_price =  $('#'+type+'_weekend_price_diff'+i+j).val();
+        discount =  $('#'+type+'_discount'+i+j).val();
+        var fitnessity_fee = '{{$fitnessity_fee}}';
+        $('#weekend_'+type+'_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*discount)/100);
+        $('#weekend_'+type+'_estearn'+i+j).attr('readonly', true);
+        $('#recurring_price_'+type+''+i+j).val(pay_price);
+    }
+
+    function changeDiscount(i,j,type){
+        var discount = 0;
+        var week_price =  $('#'+type+'_cus_weekly_price'+i+j).val();
+        var priceoff = $('#'+type+'_weekend_price_diff'+i+j).val();
+        discount =  $('#'+type+'_discount'+i+j).val();
+        var fitnessity_fee = '{{$fitnessity_fee}}';
+
+        $('#'+type+'_estearn'+i+j).val(week_price - ((week_price * discount)/100 + (week_price*fitnessity_fee)/100));
+        $('#'+type+'_estearn'+i+j).attr('readonly', true);
+        $('#weekend_'+type+'_estearn'+i+j).val(priceoff - ((priceoff * discount)/100 + (priceoff*fitnessity_fee)/100));
+        $('#weekend_'+type+'_estearn'+i+j).attr('readonly', true);
+    }
+
+    function changeWDayPrice(i,j,type){
+        // alert(j);        
+        // console.log('i',i);
+        var discount = 0;
+        var contract_revenue = 0;
+        var pay_price =  $('#'+type+'_cus_weekly_price'+i+j).val();
+        // alert(pay_price);
+        // alert(i);
+        // alert(j);
+        var discount =  $('#'+type+'_discount'+i+j).val();
+        var fitnessity_fee = '{{$fitnessity_fee}}';
+        // alert(j);
+        // console.log($('#'+type+'_cus_weekly_price'+i+j).val());
+        $('#'+type+'_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*discount)/100);
+        $('#'+type+'_estearn'+i+j).attr('readonly', true);
+        pay_price = pay_price == '' ? 0 :pay_price
+       
+        var autopay = 1;
+        autopay = $('#nuberofautopays_'+type+i+j).val();
+        contract_revenue = (autopay *pay_price);
+        $('#p1_price_'+type+i+j).html('$'+pay_price);
+        $('#p_first_pmt_'+type+i+j).html('$'+pay_price);
+        $('#p_recurring_pmt_'+type+i+j).html('$'+pay_price);
+        $('#p_total_contract_revenue_'+type+i+j).html('$'+contract_revenue);
+        $('#total_contract_revenue_'+type+i+j).val(contract_revenue);
+        $('#first_pmt_'+type+i+j).val(pay_price);
+        $('#recurring_price_'+type+i+j).val(pay_price);
+        $('#recurring_pmt_'+type+i+j).val(pay_price);
+    }
+
+    function add_another_price_ages(i) {
+        var cnt = $('#priceCount'+i).val();
+        cnt++;
+        $('#priceCount'+i).val(cnt);
+        data = getHtmlData(i,cnt);
+        $('#priceOptionDiv'+i).append(data);
+    }
+
+    function changeCategoryTittle(id, val){
+        $('.categoryTitle'+id).html('Category : '+val);
+    }
+
+    function addCategory(){
+        var cnt=$('#categoryCount').val();
+        cnt++;
+        $('#categoryCount').val(cnt);
+        data = '';
+        data += '<div class="accordion accordion-border-box mt-3" id="category'+cnt+'"> <div class="accordion-item shadow"> <h2 class="accordion-header" id="accordionnestingcat0"> <button class="accordion-custom-btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingcategory'+cnt+'" aria-expanded="false" aria-controls="accor_nestingcategory'+cnt+'"><div class="container-fluid nopadding"> <div class="row "> <div class="col-md-6 categoryTitle'+cnt+'"> Category </div> <div class="col-md-6"> <div class="multiple-options"> <div class="setting-icon"> <i class="ri-more-fill"></i> <ul id="catUl'+cnt+'"> <li><a onclick=" return add_another_price_duplicate_category('+cnt+');"><i class="fas fa-plus text-muted"></i>Duplicate Entire Category</a></li> <li class="dropdown-divider"></li> <li><a href="" onclick="removeCategoryDiv('+cnt+');"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li> </ul> </div> </div> </div> </div> </div> </button> </h2> <div id="accor_nestingcategory'+cnt+'" class="accordion-collapse collapse" aria-labelledby="accordionnestingcat0" data-bs-parent="#category'+cnt+'"> <div class="accordion-body"> <div class="row"> <div class="col-md-12"> <div class="flex-shrink-0 float-right"> <div class="form-check form-switch form-switch-right form-switch-md"> <label for="default-base-showcode" class="form-label text-muted visibilitytext'+cnt+'">Show To Public</label> <input class="custom-switch form-check-input visibility'+cnt+'" type="checkbox" name="visibility_to_public[]" value="V'+cnt+'" checked> </div> </div> </div> <div class="col-lg-5 col-md-6 col-12"> <div class="set-price mb-0"> <input type="hidden" name="cat_id_db[]" id="cat_id_db" value=""> <label>Category Name</label> <input name="category_title[]" id="category_title" class="form-control"  type="text" placeholder="Ex: Kids Martial Arts (5 to 7 yrs Old)"  oninput="changeCategoryTittle('+cnt+',this.value);" > </div> </div> </div> <input type="hidden" name="priceCount'+cnt+'" id="priceCount'+cnt+'" value="0" /> <div id="priceOptionDiv'+cnt+'">';
+        data +=  getHtmlData(cnt,0);
+        data += '</div> <div class="col-md-12"> <div class="addanother"> <a class="" onclick=" return add_another_price_ages('+cnt+');"> +Add Another Price Option</a> </div> </div>'; 
+        data +='<input type="hidden"  name="addOnServiceCount'+cnt+'" id="addOnServiceCount'+cnt+'" value="0" /><div id="addOnServiceDiv'+cnt+'">';
+        data +=  getaddOnServiceHtml(cnt,0);
+        data +='</div><div class="col-md-12"><div class="addanother"><a class="" onclick=" return add_another_add_on_service('+cnt+');"> +Add Another Add On Service</a></div></div>';
+        data += '</div> </div> </div> </div>';
+
+        /*data += '<div class="modal fade tax'+cnt+'" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"> <div class="modal-dialog modal-dialog-centered"> <div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="myModalLabel">Taxes</h5> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> </div> <div class="modal-body"> <div class="mb-3"> <input type="text" name="sales_tax[]" id="sales_tax" class="form-control" value="" placeholder="Sales Tax"> </div> <div class="mb-3"> <input type="text" name="dues_tax[]" id="dues_tax" class="form-control" value="" placeholder="Dues Tax"> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-primary btn-red" data-bs-dismiss="modal">Submit</button> </div> </div> </div> </div>';*/
+
+        $('#categoryMainDiv').append(data);
+		
+        $(".visibility"+cnt).change(function() {
+            if(this.checked) {
+                $('.visibilitytext'+cnt).html("Show To Public");
+            }else{
+                $('.visibilitytext'+cnt).html("Hide From Public");
+            }
+        });
+    }
+
+    function add_another_add_on_service(i){
+        var cnt = $('#addOnServiceCount'+i).val();
+        cnt++;
+        $('#addOnServiceCount'+i).val(cnt);
+        data = getaddOnServiceHtml(i,cnt);
+        $('#addOnServiceDiv'+i).append(data);
+    }
+
+    function getHtmlData(i,cnt) {
+        var number = "'number'";
+        var dropdown = "'dropdown'";
+        var onclickadult ="'adult'";
+        var onclickchild ="'child'";
+        var onclickinfant ="'infant'";
+        var fitnessityFee = '{{$fitnessity_fee}}';
+        var recurringFee = '{{$recurring_fee}}';
+        var data = "";
+        data += '<div class="accordion nesting2-accordion accordion-border-box mt-3" id="priceoption'+i+cnt+'"> <div class="accordion-item shadow">';
+        data += '<h2 class="accordion-header" id="acc_nesting'+i+cnt+'"> <button class="accordion-custom-btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingprice'+i+cnt+'" aria-expanded="true" aria-controls="accor_nestingprice'+i+cnt+'"> <div class="container-fluid nopadding"> <div class="row"> <div class="col-lg-6 col-md-6 col-8 priceTitle'+i+cnt+'"> Price Option </div> <div class="col-lg-6 col-md-6 col-4"> <div class="priceoptionsettings"> <div class="setting-icon"> <i class="ri-more-fill"></i> <ul id="ul'+i+cnt+'"> <li><a onclick=" return add_another_price_duplicate_session(' + i + ','+cnt+');"><i class="fas fa-plus text-muted"></i>Duplicate This Price Option Only</a></li> <li class="dropdown-divider"></li> <li><a href="" onclick="deletePriceOption('+i+','+cnt+')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li></ul> </div> </div> </div> </div> </div> </button> </h2> <div id="accor_nestingprice'+i+cnt+'" class="accordion-collapse collapse" aria-labelledby="acc_nesting'+i+cnt+'" data-bs-parent="#priceoption'+i+cnt+'"> <div class="accordion-body"> <input type="hidden" name="price_id_db_'+i+cnt+'" id="price_id_db'+i+cnt+'" value="" /> <div class="row"><div class="col-lg-12"> <div class="flex-shrink-0 float-right mb-15"> <div class="form-check form-switch form-switch-right form-switch-md"> <label for="default-base-showcode" class="form-label text-muted visibilitytext0">Hide From Public</label> <input class="custom-switch form-check-input visibility0" type="checkbox" name="visibility_to_public[]" value="V0"> </div> </div> </div> <div class="col-lg-6 col-md-6"> <div class="set-price mb-10"> <label>Price Title</label> <input name="price_title_'+i+cnt+'" id="price_title'+i+cnt+'" oninput="getpricetitle('+i+','+cnt+')" class="form-control" type="text" placeholder="Ex: 6 month Membership" > </div> </div> <div class="col-lg-6 col-md-6"> <div class="set-price mb-10"> <label>Session Type</label><select name="pay_session_type_'+i+cnt+'" id="pay_session_type'+i+cnt+'" onchange="pay_session_select('+i+','+cnt+',this.value);" class="form-select" data-choices="" data-choices-search-false="" > <option value="Single">Single</option> <option value="Multiple">Multiple</option> <option value="Unlimited">Unlimited</option> </select> </div> </div> <div class="col-lg-6 col-md-6"> <div class="set-price mb-0"> <label>Number of Sessions</label><input name="pay_session_'+i+cnt+'" id="pay_session'+i+cnt+'" class="form-control pay_session" readonly type="text" placeholder="1"  onkeypress="return event.charCode >= 46 && event.charCode <= 57"> </div> </div> <div class="col-lg-6 col-md-6"> <div class="set-price mb-0"> <label>Membership Type</label> <select name="membership_type_'+i+cnt+'" id="membership_type'+i+cnt+'" class="form-select membership_type" data-choices="" data-choices-search-false="" > <option value="Drop In">Drop In</option> <option value="Semester">Semester (Long Term)</option> </select> </div> </div> <div class="col-lg-12 mt-35"><span class="fs-15 font-red">Set Your Price</span> <p class="info-txt-price mb-10">You can set your prices to be the same or different based on age, the weekday or the weekend. To add prices for children or infants, click on the box.</p> </div> <div class="col-md-12 service-back-box"><div class="service-price-type"><label>Price Type</label></div> <div> <div class="mt-15 price-selection price-selection-radio"> <input type="radio" id="freeprice'+i+cnt+'" name="sectiondisplay'+i+cnt+'" onclick="showdiv('+i+','+cnt+');" value="freeprice"> <label class="recurring-pmt" for="freeprice'+i+cnt+'">Free</label> <input type="radio" id="weekdayprice'+i+cnt+'" name="sectiondisplay'+i+cnt+'" onclick="showdiv('+i+','+cnt+');" value="weekdayprice" checked="checked"> <label class="recurring-pmt" for="weekdayprice'+i+cnt+'">Everyday Price</label> <input type="radio" id="weekendprice'+i+cnt+'" name="sectiondisplay'+i+cnt+'" onclick="showdiv('+i+','+cnt+');" value="weekendprice"> <label class="recurring-pmt" for="weekendprice'+i+cnt+'">Weekend Price</label> </div> </div> <div class="price-selection-checkbox displaysectiondiv'+i+cnt+'"> <div class="choose-age price-selection"> <p>Select who this price option is for. (choose all that apply)</p> <input type="checkbox" id="all'+i+cnt+'" name="all'+i+cnt+'" onclick="priceOptionFor('+i+','+cnt+',this.value);" value="all"> <label class="recurring-pmt" for="all'+i+cnt+'">All</label> <input type="checkbox" id="adult'+i+cnt+'" name="adult'+i+cnt+'" onclick="priceOptionFor('+i+','+cnt+',this.value);" value="adult"> <label class="recurring-pmt" for="adult'+i+cnt+'">Adults 18+</label> <input type="checkbox" id="child'+i+cnt+'" name="child'+i+cnt+'" onclick="priceOptionFor('+i+','+cnt+',this.value);" value="child"> <label class="recurring-pmt" for="child'+i+cnt+'">Kids 3 to 17</label> <input type="checkbox" id="infant'+i+cnt+'" name="infant'+i+cnt+'" onclick="priceOptionFor('+i+','+cnt+',this.value);" value="infant"> <label class="recurring-pmt" for="infant'+i+cnt+'">Infants 2 & under</label> </div> </div> </div></div>'; 
+        data += '<div class="accordion nesting4-accordion accordion-border-box mt-3  d-none displaysectiondiv'+i+cnt+'" id="accor_nestingadult'+i+cnt+'"> <div class="accordion-item shadow"> <h2 class="accordion-header" id="accordionnesting4Example2"> <button class="accordion-custom-btn accordion-button collapsed font-red" type="button" data-bs-toggle="collapse" data-bs-target="#accor_adult'+i+cnt+'" aria-expanded="false" aria-controls="accor_adult'+i+cnt+'"> Prices Options for Adults </button> </h2> <div id="accor_adult'+i+cnt+'" class="accordion-collapse collapse" aria-labelledby="accor_nestingadult'+i+cnt+'" data-bs-parent="#accor_nestingadult'+i+cnt+'"> <div class="accordion-body"> <div class="container nopadding"> <div class="row"> <div class="age-cat"> <div class="cat-age sp-select"> <label>Adults</label> <p>Ages 12 & Older</p> </div> </div> <div class="weekly-customer"> <div class="cus-week-price sp-select"> <label>Everyday Price</label> <p> (Monday - Sunday)</p> <input name="adult_cus_weekly_price_'+i+cnt+'" id="adult_cus_weekly_price'+i+cnt+'" onkeyup="changeWDayPrice('+i+','+cnt+','+onclickadult+');" type="text" class="form-control "onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$"></div> </div> <div class="weekend-price Weekend'+i+cnt+'"> <div class="cus-week-price sp-select"> <label>Weekend Price </label> <p> (Saturday & Sunday)</p> <input name="adult_weekend_price_diff_'+i+cnt+'" id="adult_weekend_price_diff'+i+cnt+'" onkeyup="changeWEndPrice('+i+','+cnt+','+onclickadult+');" value="" class="form-control" type="text" placeholder="$" onkeypress="return event.charCode >= 46 && event.charCode <= 57"></div> </div> <div class="re-discount"> <div class="discount sp-select"> <label>Any Discount? </label> <p> (Recommended 10% to 15%)</p> <input class="form-control" type="text" name="adult_discount_'+i+cnt+'" id="adult_discount'+i+cnt+'" onkeyup="changeDiscount('+i+','+cnt+','+onclickadult+');" value="" onkeypress="return event.charCode >= 46 && event.charCode <= 57"> </div> </div>   <div class="col-md-12"> <div class="mb-15 mt-15 checkbox-selection"> <input data-count="0" type="checkbox" id="is_recurring_adult'+i+cnt+'" name="is_recurring_adult_'+i+cnt+'" value="0" onclick="openmodelbox('+i+','+cnt+','+onclickadult+');" > <button id="btn_recurring_adult'+i+cnt+'" name="btn_recurring_adult_'+i+cnt+'[]" type="button" data-count="0" class="btn btn-primary recurrint_id d-none" data-bs-toggle="modal" data-bs-target=".edit-adult'+i+cnt+'" onclick="recurrint_id('+i+','+cnt+','+onclickadult+');">Launch demo modal</button> <label for="adults1">Is This A Recurring Payment? Set the Weekly payment terms for Adults </label> </div> </div> </div> </div> </div> </div> </div> </div> <div class="accordion nesting4-accordion accordion-border-box mt-3  d-none displaysectiondiv'+i+cnt+' " id="accor_nestingchild'+i+cnt+'" > <div class="accordion-item shadow"> <h2 class="accordion-header" id="accordionnesting4Example2"> <button class="accordion-custom-btn accordion-button collapsed font-red" type="button" data-bs-toggle="collapse" data-bs-target="#accor_child'+i+cnt+'" aria-expanded="false" aria-controls="accor_child'+i+cnt+'"> Prices Options for Children </button> </h2> <div id="accor_child'+i+cnt+'" class="accordion-collapse collapse" aria-labelledby="accor_nestingchild'+i+cnt+'" data-bs-parent="#accor_nestingchild'+i+cnt+'"> <div class="accordion-body"> <div class="container nopadding"> <div class="row"> <div class="age-cat"> <div class="cat-age sp-select"> <label>Children</label> <p>Ages 12 & Older</p> </div> </div> <div class="weekly-customer"> <div class="cus-week-price sp-select"> <label>Everyday Price</label> <p> (Monday - Sunday)</p> <input name="child_cus_weekly_price_'+i+cnt+'" id="child_cus_weekly_price'+i+cnt+'" onkeyup="changeWDayPrice('+i+','+cnt+' ,'+onclickchild+');" type="text" class="form-control "onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$"></div> </div> <div class="weekend-price Weekend'+i+cnt+'"> <div class="cus-week-price sp-select"> <label>Weekend Price </label> <p> (Saturday & Sunday)</p> <input name="child_weekend_price_diff_'+i+cnt+'" id="child_weekend_price_diff'+i+cnt+'" onkeyup="changeWEndPrice('+i+','+cnt+','+onclickchild+');" value="" class="form-control" type="text" placeholder="$" onkeypress="return event.charCode >= 46 && event.charCode <= 57"></div> </div> <div class="re-discount"> <div class="discount sp-select"> <label>Any Discount? </label> <p> (Recommended 10% to 15%)</p> <input class="form-control" type="text" name="child_discount_'+i+cnt+'" id="child_discount'+i+cnt+'" onkeyup="changeDiscount('+i+','+cnt+','+onclickchild+');" value="" onkeypress="return event.charCode >= 46 && event.charCode <= 57"> </div> </div>     <div class="col-md-12"> <div class="mb-15 mt-15 checkbox-selection"> <input data-count="0" type="checkbox" id="is_recurring_child'+i+cnt+'" name="is_recurring_child_'+i+cnt+'" value="0" onclick="openmodelbox('+i+','+cnt+','+onclickchild+');" > <label for="child">Is This A Recurring Payment? Set the Weekly payment terms for Children</label> <button id="btn_recurring_child'+i+cnt+'" name="btn_recurring_child_'+i+cnt+'[]" type="button" data-count="0" class="btn btn-primary recurrint_id d-none" data-bs-toggle="modal" data-bs-target=".edit-child'+i+cnt+'" onclick="recurrint_id('+i+','+cnt+','+onclickchild+');">Launch demo modal</button></div> </div> </div> </div> </div> </div> </div> </div> <div class="accordion nesting4-accordion accordion-border-box mt-3 d-none displaysectiondiv'+i+cnt+'" id="accor_nestinginfant'+i+cnt+'"> <div class="accordion-item shadow"> <h2 class="accordion-header" id="accordionnesting4Example2"> <button class="accordion-custom-btn accordion-button collapsed font-red" type="button" data-bs-toggle="collapse" data-bs-target="#accor_infant'+i+cnt+'" aria-expanded="false" aria-controls="accor_infant'+i+cnt+'"> Prices Options for Infants </button> </h2> <div id="accor_infant'+i+cnt+'" class="accordion-collapse collapse" aria-labelledby="accor_nestinginfant'+i+cnt+'" data-bs-parent="#accor_nestinginfant'+i+cnt+'"> <div class="accordion-body"> <div class="container nopadding"> <div class="row"> <div class="age-cat"> <div class="cat-age sp-select"> <label>Infant</label> <p>Ages 12 & Older</p> </div> </div> <div class="weekly-customer"> <div class="cus-week-price sp-select"> <label>Everyday Price</label> <p> (Monday - Sunday)</p> <input name="infant_cus_weekly_price_'+i+cnt+'" id="infant_cus_weekly_price'+i+cnt+'" onkeyup="changeWDayPrice('+i+','+cnt+','+onclickinfant+');" type="text" class="form-control" onkeypress="return event.charCode >= 46 && event.charCode <= 57" placeholder="$"> </div> </div> <div class="weekend-price Weekend'+i+cnt+'"> <div class="cus-week-price sp-select"> <label>Weekend Price </label> <p> (Saturday & Sunday)</p> <input name="infant_weekend_price_diff_'+i+cnt+'" id="infant_weekend_price_diff'+i+cnt+'" onkeyup="changeWEndPrice('+i+','+cnt+','+onclickinfant+');" value="" class="form-control" type="text" placeholder="$" onkeypress="return event.charCode >= 46 && event.charCode <= 57"> </div> </div> <div class="re-discount"> <div class="discount sp-select"> <label>Any Discount? </label> <p> (Recommended 10% to 15%)</p> <input class="form-control" type="text" name="infant_discount_'+i+cnt+'" id="infant_discount'+i+cnt+'" onkeyup="changeDiscount('+i+','+cnt+','+onclickinfant+');" value=""onkeypress="return event.charCode >= 46 && event.charCode <= 57"> </div> </div>      <div class="col-md-12"> <div class="mb-15 mt-15 checkbox-selection"> <input data-count="0" type="checkbox" id="is_recurring_infant'+i+cnt+'" name="is_recurring_infant_'+i+cnt+'" value="0" onclick="openmodelbox('+i+','+cnt+','+onclickinfant+');" > <button id="btn_recurring_infant'+i+cnt+'" name="btn_recurring_infant_'+i+cnt+'[]" type="button" data-count="0" class="btn btn-primary recurrint_id d-none" data-bs-toggle="modal" data-bs-target=".edit-infant'+i+cnt+'" onclick="recurrint_id('+i+','+cnt+','+onclickinfant+');">Launch demo modal</button> <label for="infant">Is This A Recurring Payment? Set the Weekly payment terms for Infants </label>';
+        data += '</div> </div> </div> </div> </div> </div> </div> </div> <div class="row"> <div class="col-md-12"> <div class="serviceprice mt-20"> <h3>When Does This Price Setting Expire</h3> </div> </div> <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> <div class="set-num"> <label>Set The Number</label> <input type="text" name="pay_setnum_'+i+cnt+'" id="pay_setnum'+i+cnt+'" class="form-control valid" placeholder="(ex,1,2,3,etc.)" value="1" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" > </div> </div> <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> <div class="set-num"> <label>The Duration</label> <select name="pay_setduration_'+i+cnt+'" id="pay_setduration'+i+cnt+'" class="form-control valid"> <option>Days</option> <option>Months</option> <option>Years</option> </select> </div> </div> </div> </div> </div>'; 
+        data += '<div class="modal fade edit-adult'+i+cnt+'" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"> <div class="modal-dialog modal-dialog-centered modal-70"> <div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="ModelRecurringTitle_adult'+i+cnt+'">Editing Recurring Payments Contract Settings for ("Adult")</h5> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> </div> <div class="modal-body"> <div class="row"> <div class="col-lg-8"> <div class="setting-title"> <h3>Settings </h3> </div> <div class="setting-box"> <div class="row"> <div class="col-lg-4 mb-10"> <label class="contractsettings">How often will customers be charged?</label> </div> <div class="col-md-2 mb-10"> <span class="every">Every</span> </div> <div class="col-md-3 mb-10"> <input name="customer_charged_num_adult_'+i+cnt+'" id="customer_charged_num_adult_'+i+cnt+'" value="1" oninput="changeduration('+i+','+cnt+','+onclickadult+','+number+');" onkeypress="return event.charCode >= 48 && event.charCode <= 57"class="form-control valid" type="text" placeholder="1" > </div> <div class="col-md-3 mb-10"> <select class="form-select" name="customer_charged_time_adult_'+i+cnt+'" id="customer_charged_time_adult_'+i+cnt+'" oninput="changeduration('+i+','+cnt+','+onclickadult+','+dropdown+');"data-choices="" data-choices-search-false=""> <option value="Week">week</option> <option value="Month">Month</option> <option value="Year">Year</option> </select> </div> </div> <div class="row"> <div class="col-md-4 mb-10"> <label class="contractsettings">Number of autopays </label> </div> <div class="col-md-8"> <div class="autopays mb-10"> <input type="text" class="form-control valid" name="nuberofautopays_adult_'+i+cnt+'" id="nuberofautopays_adult'+i+cnt+'" placeholder="1" value="" oninput="getnumberofpmt('+i+','+cnt+','+onclickadult+');"> </div> <div class="contract mb-10"> <label> Total duration of contract: </label> <p id="total_duration_adult'+i+cnt+'"> 0 Week</p> </div> </div> </div> <div class="row"> <div class="col-md-4"> <label class="contractsettings mb-10" id="contractsettings_adult'+i+cnt+'">What happens after 4 payments?</label> </div> <div class="col-md-8"> <div class="autopay mb-10"> <input type="radio" id="happens_aftr_12_pmt_adult'+i+cnt+'" name="happens_aftr_12_pmt_adult_'+i+cnt+'" value="contract_expire" checked=""> <label for="contract">Contract Expires</label><br> <input type="radio" id="happens_aftr_12_pmt_adult'+i+cnt+'" name="happens_aftr_12_pmt_adult_'+i+cnt+'" value="contract_renew"> <label for="renews" id="renew_adult'+i+cnt+'">Contract Automaitcally Renews Every 1 payments</label><br> </div> </div> </div> <div class="row"> <div class="col-md-4"> <label class="contractsettings mb-10">When will clients be charged?</label> </div> <div class="col-md-8"> <div class="saledate mb-10"> <select class="form-select" name="client_be_charge_on_adult_'+i+cnt+'" id="client_be_charge_on_adult'+i+cnt+'" data-choices="" data-choices-search-false=""> <option value="sale date">On the sale date </option> <option value="1stday"> 1st Day of the Month</option> <option value="15thday"> 15th Day of the Month</option> </select> </div> </div> </div> <div class="row"> <div class="col-md-4"> <label class="contractsettings mb-10">Recurring Price</label> </div> <div class="col-md-8"> <input type="text" class="form-control valid mb-10" name="recurring_price_adult_'+i+cnt+'" id="recurring_price_adult'+i+cnt+'" placeholder="1" value="" oninput="contract_revenue('+i+','+cnt+','+onclickadult+');"> </div> </div> </div> </div> <div class="col-lg-4"> <div class="setting-title mb-10"> <h3>Contract Review </h3> </div> <div class="setting-box"> <div class="set-border"> <div class="row"> <div class="col-md-8"> <p class="font-black" id="p_price_title_adult'+i+cnt+'"></p> </div> <div class="col-md-4"> <p class="font-black" id="p1_price_adult'+i+cnt+'"> $0</p> </div> </div> </div> <div class="row"> <div class="col-md-12"> <div class="Settings-title"> <h5> Revenue Breakdown </h5> </div> </div> <div class="col-md-10"> <p class="font-black mbb-5" id="trems_payment_adult'+i+cnt+'">Terms: 0 Week Payments</p> </div> <div class="col-md-8"> <p class="font-black mbb-5">First Payment:</p> </div> <div class="col-md-4"> <p class="font-black mbb-5" id="p_first_pmt_adult'+i+cnt+'">$0</p> </div> <input type="hidden" name="first_pmt_adult_'+i+cnt+'" id="first_pmt_adult'+i+cnt+'" value=""> <input type="hidden" name="recurring_pmt_adult_'+i+cnt+'" id="recurring_pmt_adult'+i+cnt+'" value=""> <div class="col-md-8"> <p class="font-black mbb-5">Recurring Payment: </p> </div> <div class="col-md-4"> <p class="font-black mbb-5" id="p_recurring_pmt_adult'+i+cnt+'">$0</p> </div> <input type="hidden" name="total_contract_revenue_adult_'+i+cnt+'" id="total_contract_revenue_adult'+i+cnt+'" value="0"><div class="col-md-8"> <label class="font-black mbb-5">Total Contract Revenue: </label> </div> <div class="col-md-4"> <p class="font-black mbb-5" id="p_total_contract_revenue_adult'+i+cnt+'"> $0 </p> </div> </div> </div> </div> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-primary btn-red" data-bs-dismiss="modal">Submit</button> </div> </div> </div> </div>';
+        data += '<div class="modal fade edit-child'+i+cnt+'" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"> <div class="modal-dialog modal-dialog-centered modal-70"> <div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="ModelRecurringTitle_child'+i+cnt+'">Editing Recurring Payments Contract Settings for ("child")</h5> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> </div> <div class="modal-body"> <div class="row"> <div class="col-lg-8"> <div class="setting-title"> <h3>Settings </h3> </div> <div class="setting-box"> <div class="row"> <div class="col-lg-4 mb-10"> <label class="contractsettings">How often will customers be charged?</label> </div> <div class="col-md-2 mb-10"> <span class="every">Every</span> </div> <div class="col-md-3 mb-10"> <input name="customer_charged_num_child_'+i+cnt+'" id="customer_charged_num_child_'+i+cnt+'" value="1" oninput="changeduration('+i+','+cnt+','+onclickchild+','+number+');" onkeypress="return event.charCode >= 48 && event.charCode <= 57"class="form-control valid" type="text" placeholder="1" > </div> <div class="col-md-3 mb-10"> <select class="form-select" name="customer_charged_time_child_'+i+cnt+'" id="customer_charged_time_child_'+i+cnt+'" oninput="changeduration('+i+','+cnt+','+onclickchild+','+dropdown+');"data-choices="" data-choices-search-false=""> <option value="Week">week</option> <option value="Month">Month</option> <option value="Year">Year</option> </select> </div> </div> <div class="row"> <div class="col-md-4 mb-10"> <label class="contractsettings">Number of autopays </label> </div> <div class="col-md-8"> <div class="autopays mb-10"> <input type="text" class="form-control valid" name="nuberofautopays_child_'+i+cnt+'" id="nuberofautopays_child'+i+cnt+'" placeholder="1" value="" oninput="getnumberofpmt('+i+','+cnt+','+onclickchild+');"> </div> <div class="contract mb-10"> <label> Total duration of contract: </label> <p id="total_duration_child'+i+cnt+'"> 0 Week</p> </div> </div> </div> <div class="row"> <div class="col-md-4"> <label class="contractsettings mb-10" id="contractsettings_child'+i+cnt+'">What happens after 4 payments?</label> </div> <div class="col-md-8"> <div class="autopay mb-10"> <input type="radio" id="happens_aftr_12_pmt_child'+i+cnt+'" name="happens_aftr_12_pmt_child_'+i+cnt+'" value="contract_expire" checked=""> <label for="contract">Contract Expires</label><br> <input type="radio" id="happens_aftr_12_pmt_child'+i+cnt+'" name="happens_aftr_12_pmt_child_'+i+cnt+'" value="contract_renew"> <label for="renews" id="renew_child'+i+cnt+'">Contract Automaitcally Renews Every 1 payments</label><br> </div> </div> </div> <div class="row"> <div class="col-md-4"> <label class="contractsettings mb-10">When will clients be charged?</label> </div> <div class="col-md-8"> <div class="saledate mb-10"> <select class="form-select" name="client_be_charge_on_child_'+i+cnt+'" id="client_be_charge_on_child'+i+cnt+'" data-choices="" data-choices-search-false=""> <option value="sale date">On the sale date </option> <option value="1stday"> 1st Day of the Month</option> <option value="15thday"> 15th Day of the Month</option> </select> </div> </div> </div> <div class="row"> <div class="col-md-4"> <label class="contractsettings mb-10">Recurring Price</label> </div> <div class="col-md-8"> <input type="text" class="form-control valid mb-10" name="recurring_price_child_'+i+cnt+'" id="recurring_price_child'+i+cnt+'" placeholder="1" value="" oninput="contract_revenue('+i+','+cnt+','+onclickchild+');"> </div> </div> </div> </div> <div class="col-lg-4"> <div class="setting-title mb-10"> <h3>Contract Review </h3> </div> <div class="setting-box"> <div class="set-border"> <div class="row"> <div class="col-md-8"> <p class="font-black" id="p_price_title_child'+i+cnt+'"></p> </div> <div class="col-md-4"> <p class="font-black" id="p1_price_child'+i+cnt+'"> $0</p> </div> </div> </div> <div class="row"> <div class="col-md-12"> <div class="Settings-title"> <h5> Revenue Breakdown </h5> </div> </div> <div class="col-md-10"> <p class="font-black mbb-5" id="trems_payment_child'+i+cnt+'">Terms: 0 Week Payments</p> </div> <div class="col-md-8"> <p class="font-black mbb-5">First Payment:</p> </div> <div class="col-md-4"> <p class="font-black mbb-5" id="p_first_pmt_child'+i+cnt+'">$0</p> </div> <input type="hidden" name="first_pmt_child_'+i+cnt+'" id="first_pmt_child'+i+cnt+'" value=""> <input type="hidden" name="recurring_pmt_child_'+i+cnt+'" id="recurring_pmt_child'+i+cnt+'" value=""> <div class="col-md-8"> <p class="font-black mbb-5">Recurring Payment: </p> </div> <div class="col-md-4"> <p class="font-black mbb-5" id="p_recurring_pmt_child'+i+cnt+'">$0</p> </div> <input type="hidden" name="total_contract_revenue_child_'+i+cnt+'" id="total_contract_revenue_child'+i+cnt+'" value="0"><div class="col-md-8"> <label class="font-black mbb-5">Total Contract Revenue: </label> </div> <div class="col-md-4"> <p class="font-black mbb-5" id="p_total_contract_revenue_child'+i+cnt+'"> $0 </p> </div> </div> </div> </div> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-primary btn-red" data-bs-dismiss="modal">Submit</button> </div> </div> </div> </div>'; 
+        data += '<div class="modal fade edit-infant'+i+cnt+'" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"> <div class="modal-dialog modal-dialog-centered modal-70"> <div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="ModelRecurringTitle_infant'+i+cnt+'">Editing Recurring Payments Contract Settings for ("Infant")</h5> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> </div> <div class="modal-body"> <div class="row"> <div class="col-lg-8"> <div class="setting-title"> <h3>Settings </h3> </div> <div class="setting-box"> <div class="row"> <div class="col-lg-4 mb-10"> <label class="contractsettings">How often will customers be charged?</label> </div> <div class="col-md-2 mb-10"> <span class="every">Every</span> </div> <div class="col-md-3 mb-10"> <input name="customer_charged_num_infant_'+i+cnt+'" id="customer_charged_num_infant_'+i+cnt+'" value="1" oninput="changeduration('+i+','+cnt+','+onclickchild+','+number+');" onkeypress="return event.charCode >= 48 && event.charCode <= 57"class="form-control valid" type="text" placeholder="1" > </div> <div class="col-md-3 mb-10"> <select class="form-select" name="customer_charged_time_infant_'+i+cnt+'" id="customer_charged_time_infant_'+i+cnt+'" oninput="changeduration('+i+','+cnt+','+onclickchild+','+dropdown+');"data-choices="" data-choices-search-false=""> <option value="Week">week</option> <option value="Month">Month</option> <option value="Year">Year</option> </select> </div> </div> <div class="row"> <div class="col-md-4 mb-10"> <label class="contractsettings">Number of autopays </label> </div> <div class="col-md-8"> <div class="autopays mb-10"> <input type="text" class="form-control valid" name="nuberofautopays_infant_'+i+cnt+'" id="nuberofautopays_infant'+i+cnt+'" placeholder="1" value="" oninput="getnumberofpmt('+i+','+cnt+','+onclickchild+');"> </div> <div class="contract mb-10"> <label> Total duration of contract: </label> <p id="total_duration_infant'+i+cnt+'"> 0 Week</p> </div> </div> </div> <div class="row"> <div class="col-md-4"> <label class="contractsettings mb-10" id="contractsettings_infant'+i+cnt+'">What happens after 4 payments?</label> </div> <div class="col-md-8"> <div class="autopay mb-10"> <input type="radio" id="happens_aftr_12_pmt_infant'+i+cnt+'" name="happens_aftr_12_pmt_infant_'+i+cnt+'" value="contract_expire" checked=""> <label for="contract">Contract Expires</label><br> <input type="radio" id="happens_aftr_12_pmt_infant'+i+cnt+'" name="happens_aftr_12_pmt_infant_'+i+cnt+'" value="contract_renew"> <label for="renews" id="renew_infant'+i+cnt+'">Contract Automaitcally Renews Every 1 payments</label><br> </div> </div> </div> <div class="row"> <div class="col-md-4"> <label class="contractsettings mb-10">When will clients be charged?</label> </div> <div class="col-md-8"> <div class="saledate mb-10"> <select class="form-select" name="client_be_charge_on_infant_'+i+cnt+'" id="client_be_charge_on_infant'+i+cnt+'" data-choices="" data-choices-search-false=""> <option value="sale date">On the sale date </option> <option value="1stday"> 1st Day of the Month</option> <option value="15thday"> 15th Day of the Month</option> </select> </div> </div> </div> <div class="row"> <div class="col-md-4"> <label class="contractsettings mb-10">Recurring Price</label> </div> <div class="col-md-8"> <input type="text" class="form-control valid mb-10" name="recurring_price_infant_'+i+cnt+'" id="recurring_price_infant'+i+cnt+'" placeholder="1" value="" oninput="contract_revenue('+i+','+cnt+','+onclickchild+');"> </div> </div> </div> </div> <div class="col-lg-4"> <div class="setting-title mb-10"> <h3>Contract Review </h3> </div> <div class="setting-box"> <div class="set-border"> <div class="row"> <div class="col-md-8"> <p class="font-black" id="p_price_title_infant'+i+cnt+'"></p> </div> <div class="col-md-4"> <p class="font-black" id="p1_price_infant'+i+cnt+'"> $0</p> </div> </div> </div> <div class="row"> <div class="col-md-12"> <div class="Settings-title"> <h5> Revenue Breakdown </h5> </div> </div> <div class="col-md-10"> <p class="font-black mbb-5" id="trems_payment_infant'+i+cnt+'">Terms: 0 Week Payments</p> </div> <div class="col-md-8"> <p class="font-black mbb-5">First Payment:</p> </div> <div class="col-md-4"> <p class="font-black mbb-5" id="p_first_pmt_infant'+i+cnt+'">$0</p> </div> <input type="hidden" name="first_pmt_infant_'+i+cnt+'" id="first_pmt_infant'+i+cnt+'" value=""> <input type="hidden" name="recurring_pmt_infant_'+i+cnt+'" id="recurring_pmt_infant'+i+cnt+'" value=""> <div class="col-md-8"> <p class="font-black mbb-5">Recurring Payment: </p> </div> <div class="col-md-4"> <p class="font-black mbb-5" id="p_recurring_pmt_infant'+i+cnt+'">$0</p> </div> <input type="hidden" name="total_contract_revenue_infant_'+i+cnt+'" id="total_contract_revenue_infant'+i+cnt+'" value="0"><div class="col-md-8"> <label class="font-black mbb-5">Total Contract Revenue: </label> </div> <div class="col-md-4"> <p class="font-black mbb-5" id="p_total_contract_revenue_infant'+i+cnt+'"> $0 </p> </div> </div> </div> </div> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-primary btn-red" data-bs-dismiss="modal">Submit</button> </div> </div> </div> </div>'; 
+        data += '</div> </div>';        
+        return data;
+    }
+
+
+    function getaddOnServiceHtml(i,cnt) {
+        var data = "";
+        data = '<div class="accordion nesting2-accordion accordion-border-box mt-3" id="addOnService'+i+cnt+'"> <div class="accordion-item shadow"> <h2 class="accordion-header" id="acc_nestingaddOn'+i+cnt+'"> <button class="accordion-custom-btn accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accor_nestingpriceaddOn'+i+cnt+'" aria-expanded="true" aria-controls="accor_nestingpriceaddOn'+i+cnt+'"> <div class="container-fluid nopadding"> <div class="row"> <div class="col-lg-6 col-md-6 col-8">Add On Service </div> <div class="col-lg-6 col-md-6 col-4"> <div class="priceoptionsettings"> <div class="setting-icon"> <i class="ri-more-fill"></i> <ul id="uladdOn'+i+cnt+'"> <li><a href="" onclick="deleteAddOnService('+i+','+cnt+')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li> </ul> </div> </div> </div> </div> </div> </button> </h2> <div id="accor_nestingpriceaddOn'+i+cnt+'" class="accordion-collapse collapsed" aria-labelledby="acc_nestingaddOn'+i+cnt+'" data-bs-parent="#addOnService'+i+cnt+'"> <div class="accordion-body"> <input type="hidden" name="add_on_service_id_db_'+i+cnt+'" id="add_on_service_id_db'+i+cnt+'" value="{{@$price->id}}" /> <div class="row"> <div class="col-lg-6 col-md-6"> <div class="set-price mb-10"> <label>Service Name</label> <input name="service_name_'+i+cnt+'" id="service_name'+i+cnt+'" value ="" class="form-control" type="text" placeholder="Enter Name"> </div> </div> <div class="col-lg-6 col-md-6"> <div class="set-price mb-10"> <label>Service Price</label> <input name="service_price_'+i+cnt+'" id="service_price'+i+cnt+'" value="" class="form-control" placeholder="Enter Price"> </div> </div> <div class="col-lg-12 col-md-6"> <div class="set-price mb-0"> <label>Service Description</label> <textarea class="form-control" id="service_description'+i+cnt+'" name="service_description_'+i+cnt+'" placeholder="Enter description" rows="3" spellcheck="false" class="form-control" ></textarea> </div> </div> </div> </div> </div> </div> </div>';
+        return data;
+    }
+
+    function deletePriceOption(i,j){
+        var cnt=$('#priceCount'+i).val();
+        cnt--;
+        $('#priceCount'+i).val(cnt);
+        $('#priceoption'+i+j).remove(); 
+    }
+
+    function deleteAddOnService(i,j){
+        var cnt=$('#addOnServiceCount'+i).val();
+        cnt--;
+        $('#addOnServiceCount'+i).val(cnt);
+        $('#addOnService'+i+j).remove(); 
+    }
+
+    function removeCategoryDiv(i){
+        var cnt=$('#categoryCount').val();
+        cnt--;
+        $('#categoryCount').val(cnt);
+        $('#category'+i).remove();
+    }
+
+    function getnumberofpmt(i,j,val){  
+        var part  = $("#nuberofautopays_"+val+i+j).val();
+        var price = $("#recurring_price_"+val+i+j).val();
+        price = (price == 0 || price == '') ?  $("#"+val+"_cus_weekly_price"+i+j).val() : price;
+
+        if(part == 0){
+            part = 0;
+        }
+
+        var time = $("#customer_charged_time_"+val+'_'+i+j).val();
+        var number = $('#customer_charged_num_'+val+'_'+i+j).val();
+        var total = part*price;
+        var total_time = (part*number);
+
+        displayPrice  =  total != 0 ? total : price;
+        displayPart  =  total != 0 ? part : 0;
+        displayTotalTime  =  total != 0 ? total_time : 0;
+
+        $("#p_total_contract_revenue_"+val+i+j).html('$'+displayPrice);
+        $("#total_contract_revenue_"+val+i+j).val(displayPrice);
+        $("#total_duration_"+val+i+j).html(displayTotalTime+' '+time);
+        $("#trems_payment_"+val+i+j).html('Terms: '+displayPart+' '+time+' Payments');
+
+        $("#p_first_pmt_"+val+i+j).html('$'+price);
+        $("#p_recurring_pmt_"+val+i+j).html('$'+price);
+        $("#first_pmt_"+val+i+j).val(price);
+        $("#recurring_pmt_"+val+i+j).val(price);
+        $("#contractsettings_"+val+i+j).html('What happens after '+part +' payments?');        
+        $("#renew_"+val+i+j).html('Contract Automaitcally Renews Every '+part +' payments');
+        $('#'+val+'_recurring_p').html('Is This A Recurring Payment? Set the '+time+'ly payment terms for '+val +' ('+total_time+' '+time+'s contract | $'+price+' A '+time+' for '+total_time+' '+time+'s | Totalling $'+total+' <button type="button" data-toggle="modal" data-target="#ModelRecurring_'+val+i+j+'" class="modelbox-edit-link">Edit</button> )');     
+    }
+
+    function getpricetitle(i,j){
+        var x = document.getElementById("price_title"+i+j).value;
+        $("#priceTitle"+i+j).html('Price Option : ' + x);
+        let type = ["adult",'child','infant'];
+        type.forEach((element) =>{
+            document.getElementById("ModelRecurringTitle_"+element+i+j).innerHTML = 'Editing Recurring Payments Contract Settings for ( '+x +' for "'+element.charAt(0).toUpperCase() +element.slice(1)+'")';
+            $("#p_price_title_"+element+i+j).html(x);
+            $("#p1_price_title_"+element+i+j).html(x);
+        });
+    }
+
+    function contract_revenue(i,j,val) {
+        var autopay = 1;
+        var contract_revenue = 1;
+        var pay_price = $('#recurring_price_'+val+i+j).val(); 
+        var fitnessity_fee = '{{$fitnessity_fee}}';
+        autopay = $('#nuberofautopays_'+val+i+j).val();
+        contract_revenue = (autopay *pay_price);
+
+        var time = $("#customer_charged_time_"+val+'_'+i+j).val();
+        var number = $('#customer_charged_num_'+val+'_'+i+j).val();
+        var total_time = (autopay*number);
+
+        $('#p1_price_'+val+i+j).html('$'+pay_price);
+        $('#p_total_contract_revenue_'+val+i+j).html('$'+contract_revenue);
+        $('#total_contract_revenue_'+val+i+j).val(contract_revenue);
+        $('#p_recurring_pmt_'+val+i+j).html('$'+pay_price);
+        $('#p_first_pmt_'+val+i+j).html('$'+pay_price);
+        $('#first_pmt_'+val+i+j).val(pay_price);
+        $('#recurring_price_'+val+i+j).val(pay_price);
+        $('#recurring_pmt_'+val+i+j).val(pay_price);
+        $('#'+val+'_cus_weekly_price'+i+j).val(pay_price);
+        var discount =  $('#'+val+'_discount'+i+j).val();
+        $('#'+val+'_estearn'+i+j).val(pay_price - (pay_price*fitnessity_fee)/100 - (pay_price*discount)/100);
+        $('#'+val+'_recurring_p').html('Is This A Recurring Payment? Set the '+time+'ly payment terms for '+val +' ('+total_time+' '+time+' contract | $'+pay_price+' A Month for '+total_time+' '+time+'s | Totalling $'+contract_revenue+' <button type="button" data-toggle="modal" data-target="#ModelRecurring_'+val+i+j+'" class="modelbox-edit-link">Edit</button> )');   
+    }
+
+    function changeduration(i,j,val,type){
+        var time = $('#customer_charged_time_'+val+'_'+i+j).val();
+        var number = $('#customer_charged_num_'+val+'_'+i+j).val();
+        var autopay = $('#nuberofautopays_'+val+i+j).val();
+        let total_time = (autopay *number);
+        $('#total_duration_'+val+i+j).html(total_time +' '+ time);
+        $('#trems_payment_'+val+i+j).html('Terms: '+autopay+' '+time+' Payments');
+    }
+
+    function deleteRecurring(i,j,type) {
+        $('#is_recurring_'+type+i+j).attr('checked',false);
+        $('#recurringtxt'+type+i+j).html("Is This A Recurring Payment? Set the payment terms for "+type);
+    }
+
+    function scheduleLink(cid,id){
+        window.open("/business/"+cid+"/schedulers/create?categoryId="+id,"_blank")
+    }
+
+    function add_another_price_duplicate_session(i,j){
+        // var cnt = $('#priceCount'+i).val();
+        // alert(i);
+        // alert(j);
+        var cnt = $('input[name="priceCount' + i + '"]').val();
+        cnt++;
+        var data = '';
+        data += '<div id="priceoption'+i+''+cnt+'" class="accordion nesting2-accordion accordion-border-box mt-3">';
+        data += $('#priceoption'+i+''+j).html();
+        data += '</div>';
+        var newCategory=$("#priceoption"+i+cnt);
+        newCategory.find('[id]').each(function() {
+            var oldName = $(this).attr('id');
+            var newName = oldName.replace(i, cnt);
+            $(this).attr('id', newName);
+        });
+
+        // adult_cus_weekly_price
+        /*var re = data.replaceAll(i+","+j,i+","+cnt);
+        re = re.replaceAll("_"+i+j,"_"+i+cnt);
+        if(i==0){
+            re = re.replaceAll("0"+j,"0"+cnt);
+        }else{
+            re = re.replaceAll(i+''+j,i+''+cnt);
+        }*/
+
+        // Temporarily replace value attributes with placeholders
+         // Use unique placeholders for value attributes
+        var placeholders = {};
+        var tempData = data.replace(/value=["']?([^"']*)["']?/g, function(match, p1) {
+            var placeholder = 'PLACEHOLDER_' + Math.random().toString(36).substring(2);
+            placeholders[placeholder] = p1;
+            return 'value="' + placeholder + '"';
+        });
+
+        // Perform replacements
+        var re = tempData.replace(new RegExp(i + "," + j, "g"), i + "," + cnt);
+        re = re.replace(new RegExp("_" + i + j, "g"), "_" + i + cnt);
+
+        if (i == 0) {
+            re = re.replace(new RegExp("0" + j, "g"), "0" + cnt);
+        } else {
+            re = re.replace(new RegExp(i + '' + j, "g"), i + '' + cnt);
+        }
+
+        // Restore value attributes from placeholders
+        re = re.replace(/value="([^"]*)"/g, function(match, p1) {
+            return 'value="' + (placeholders[p1] || '') + '"';
+        });
+        
+
+        // start
+        newCategory.find('input[name]').each(function() {
+                var oldid = $(this).attr('id');
+                if (oldid) {
+                    var newid = oldid.replace(/\d+$/, cnt +''+i);
+                    $(this).attr('id', newid);
+                } 
+                else {
+                    // console.log(i);
+                    var newid = 'input_' +  parseFloat(cnt + i);
+                    $(this).attr('id', newid);
+                    // console.log('New ID created:', newid);
+                }
+            });
+            newCategory.find('p[id]').each(function() {
+                var oldid = $(this).attr('id');
+                if (oldid) {
+                    var newid = oldid.replace(/\d+$/, cnt + '' + i);
+                    $(this).attr('id', newid);
+                    // console.log('Old ID:', oldid, 'New ID:', newid);
+                } else {
+                    var newid = 'p_' + parseFloat(cnt + i);
+                    $(this).attr('id', newid);
+                    // console.log('New ID created:', newid);
+                }
+            });
+        // end
+        $('#priceOptionDiv'+i).append(re);
+        
+        if(j==0){
+            $('#ul'+i+cnt).append('<li class="dropdown-divider"></li><li><a href="" onclick="deletePriceOption('+i+','+cnt+')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>');
+        }
+        // alert(cnt);
+        // $('#priceCount'+i).val(cnt);
+        $('input[name="priceCount' + i + '"]').val(cnt);
+
+
+        $('#priceoption'+i+cnt).find("input[name='price_id_db_"+i+cnt+"']").val('');
+        var firstClass = $('#acc_nesting'+i+cnt).find('.accordion-button').first();
+        firstClass.removeClass('collapsed');
+        $('#accor_nestingprice'+i+j).removeClass("show");
+        $('#accor_nestingprice'+i+cnt).addClass("collapse show");
+    }
+   
+     $('.non-collapsing').on('click', function (e) {
+        e.stopPropagation();
+    });
+
+    // function add_another_price_duplicate_category(i) {
+    //     var cnt = $('#categoryCount').val();
+    //     var agecnt = $('#priceCount' + i).val();
+    //     var aosCnt = $('#addOnServiceCount' + i).val();
+    //     cnt++;
+    //     $('#categoryCount').val(cnt);
+    //     var originalCategory = $('#category' + i);
+    //     var newCategory = originalCategory.clone().attr('id', 'category' + cnt);
+
+        
+
+    //     newCategory.find('[id^="accor_nestingcategory"]').each(function() {
+    //         var oldId = $(this).attr('id');
+    //         var newId = oldId.replace(i, cnt);
+    //         $(this).attr('id', newId);
+    //         var ariaControls = $(this).attr('aria-controls');
+    //         if (ariaControls) {
+    //             var newAriaControls = ariaControls.replace(i, cnt);
+    //             $(this).attr('aria-controls', newAriaControls);
+    //         }
+    //     });
+    //     newCategory.find('[data-bs-target]').each(function() {
+    //         var target = $(this).attr('data-bs-target');
+    //         var newTarget = target.replace(i, cnt);
+    //         $(this).attr('data-bs-target', newTarget);
+    //     });
+        
+       
+        
+    //     newCategory.find('.accordion-collapse').each(function() {
+    //         var oldId = $(this).attr('id');
+    //         var newId = oldId.replace(i, cnt);
+    //         $(this).attr('id', newId);
+    //         var ariaLabelledby = $(this).attr('aria-labelledby');
+    //         if (ariaLabelledby) {
+    //             var newAriaLabelledby = ariaLabelledby.replace(i, cnt);
+    //             $(this).attr('aria-labelledby', newAriaLabelledby);
+    //         }
+    //     });
+    //     newCategory.find('input[name]').each(function() {
+    //         var oldName = $(this).attr('name');
+    //         var newName = oldName.replace(i, cnt);
+    //         $(this).attr('name', newName);
+    //     });
+
+    //     console.log('aaaaaa == edit-adult' + i + cnt);
+    //     /*newCategory.find('[class^="edit-adult' + i + cnt + '"]').each(function() {
+            
+    //         var oldId = $(this).attr('class');
+    //         console.log('old == ' + oldId);
+    //         var newId = oldId.replace(i, cnt);
+    //         console.log('new == ' + newId);
+    //         $(this).attr('class', newId);
+    //     });*/
+
+        
+        
+
+    //     newCategory.html(newCategory.html()
+    //         .replaceAll("categoryTitle" + i, "categoryTitle" + cnt)
+    //         .replaceAll("changeCategoryTittle(" + i, "changeCategoryTittle(" + cnt)
+    //         .replaceAll("accordionnestingcat" + i, "accordionnestingcat" + cnt)
+    //         .replaceAll("priceCount" + i, "priceCount" + cnt)
+    //         .replaceAll("addOnServiceCount" + i, "addOnServiceCount" + cnt)
+    //         .replaceAll("priceOptionDiv" + i, "priceOptionDiv" + cnt)
+    //         .replaceAll("addOnServiceDiv" + i, "addOnServiceDiv" + cnt)
+    //         .replaceAll("catUl" + i, "catUl" + cnt)
+    //         .replaceAll("(" + i + ")", "(" + cnt + ")")
+    //         .replaceAll("(" + i + ",", "(" + cnt + ",")
+    //     );
+    //     for (var z = 0; z <= agecnt; z++) {
+    //         newCategory.find("input[name='price_id_db_" + cnt + "" + z + "']").val('');
+    //     }
+    //     for (var s = 0; s <= aosCnt; s++) {
+    //         var sprice = $('#service_price' + i + s).val();
+    //         newCategory.find('#service_price' + cnt + s).val(sprice);
+    //         newCategory.find("input[name='add_on_service_id_db_" + cnt + s + "']").val('');
+    //     }
+    //     if (i == 0) {
+    //         newCategory.find('#catUl' + cnt).append('<li class="dropdown-divider"></li><li><a href="" onclick="removeCategoryDiv(' + cnt + ');"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>');
+    //     }
+    //     newCategory.find("input[name='cat_id_db[]']").val('');
+    //     newCategory.find('.accordion-button').first().removeClass('collapsed');
+    //     $('#accor_nestingcategory' + i).removeClass("show");
+    //     $('#accor_nestingcategory' + cnt).addClass("collapse show");
+
+    //     $('#categoryMainDiv').append(newCategory);
+
+        
+    // }
+
+    // function add_another_price_duplicate_category(i) {
+    //     var cnt = $('#categoryCount').val();
+    //     var agecnt = $('#priceCount' + i).val();
+    //     var aosCnt = $('#addOnServiceCount' + i).val();
+    //     cnt++;
+    //     $('#categoryCount').val(cnt);
+    //     var originalCategory = $('#category' + i);
+    //     var newCategory = originalCategory.clone().attr('id', 'category' + cnt);
+    //     newCategory.find('[id^="accor_nestingcategory"]').each(function() {
+    //         var oldId = $(this).attr('id');
+    //         var newId = oldId.replace(i, cnt);
+    //         $(this).attr('id', newId);
+    //         var ariaControls = $(this).attr('aria-controls');
+    //         if (ariaControls) {
+    //             var newAriaControls = ariaControls.replace(i, cnt);
+    //             $(this).attr('aria-controls', newAriaControls);
+    //         }
+    //     });
+    //     newCategory.find('[data-bs-target]').each(function() {
+    //         var target = $(this).attr('data-bs-target');
+    //         var newTarget = target.replace(i, cnt);
+    //         $(this).attr('data-bs-target', newTarget);
+    //     });
+    //     newCategory.find('.accordion-collapse').each(function() {
+    //         var oldId = $(this).attr('id');
+    //         var newId = oldId.replace(i, cnt);
+    //         $(this).attr('id', newId);
+    //         var ariaLabelledby = $(this).attr('aria-labelledby');
+    //         if (ariaLabelledby) {
+    //             var newAriaLabelledby = ariaLabelledby.replace(i, cnt);
+    //             $(this).attr('aria-labelledby', newAriaLabelledby);
+    //         }
+    //     });
+    //     newCategory.find('input[name]').each(function() {
+    //         var oldName = $(this).attr('name');
+    //         var newName = oldName.replace(i, cnt);
+    //         $(this).attr('name', newName);
+    //     });
+    //     newCategory.html(newCategory.html()
+    //         .replaceAll("categoryTitle" + i, "categoryTitle" + cnt)
+    //         .replaceAll("changeCategoryTittle(" + i, "changeCategoryTittle(" + cnt)
+    //         .replaceAll("accordionnestingcat" + i, "accordionnestingcat" + cnt)
+    //         .replaceAll("priceCount" + i, "priceCount" + cnt)
+    //         .replaceAll("addOnServiceCount" + i, "addOnServiceCount" + cnt)
+    //         .replaceAll("priceOptionDiv" + i, "priceOptionDiv" + cnt)
+    //         .replaceAll("addOnServiceDiv" + i, "addOnServiceDiv" + cnt)
+    //         .replaceAll("catUl" + i, "catUl" + cnt)
+    //         .replaceAll("(" + i + ")", "(" + cnt + ")")
+    //         .replaceAll("(" + i + ",", "(" + cnt + ",")
+    //     );
+    //     for (var z = 0; z <= agecnt; z++) {
+    //         newCategory.find("input[name='price_id_db_" + cnt + "" + z + "']").val('');
+    //     }
+    //     for (var s = 0; s <= aosCnt; s++) {
+    //         var sprice = $('#service_price' + i + s).val();
+    //         newCategory.find('#service_price' + cnt + s).val(sprice);
+    //         newCategory.find("input[name='add_on_service_id_db_" + cnt + s + "']").val('');
+    //     }
+    //     if (i == 0) {
+    //         newCategory.find('#catUl' + cnt).append('<li class="dropdown-divider"></li><li><a href="" onclick="removeCategoryDiv(' + cnt + ');"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>');
+    //     }
+    //     newCategory.find("input[name='cat_id_db[]']").val('');
+    //     newCategory.find('.accordion-button').first().removeClass('collapsed');
+    //     $('#accor_nestingcategory' + i).removeClass("show");
+    //     $('#accor_nestingcategory' + cnt).addClass("collapse show");
+
+    //     $('#categoryMainDiv').append(newCategory);
+
+        
+    // }
+
+    function add_another_price_duplicate_category(i) 
+    {
+            var cnt = $('#categoryCount').val();
+            var agecnt = $('#priceCount' + i).val();
+            var aosCnt = $('#addOnServiceCount' + i).val();
+            cnt++;
+            $('#categoryCount').val(cnt);
+            var originalCategory = $('#category' + i);
+            var newCategory = originalCategory.clone().attr('id', 'category' + cnt);
+
+            // Update IDs, aria-controls, data-bs-target, etc.
+            newCategory.find('[id^="accor_nestingcategory"]').each(function() {
+                var oldId = $(this).attr('id');
+                var newId = oldId.replace(i, cnt);
+                $(this).attr('id', newId);
+                var ariaControls = $(this).attr('aria-controls');
+                if (ariaControls) {
+                    var newAriaControls = ariaControls.replace(i, cnt);
+                    $(this).attr('aria-controls', newAriaControls);
+                }
+            });
+
+            newCategory.find('[data-bs-target]').each(function() {
+                var target = $(this).attr('data-bs-target');
+                var newTarget = target.replace(i, cnt);
+                $(this).attr('data-bs-target', newTarget);
+            });
+
+            newCategory.find('.accordion-collapse').each(function() {
+                var oldId = $(this).attr('id');
+                var newId = oldId.replace(i, cnt);
+                $(this).attr('id', newId);
+                var ariaLabelledby = $(this).attr('aria-labelledby');
+                if (ariaLabelledby) {
+                    var newAriaLabelledby = ariaLabelledby.replace(i, cnt);
+                    $(this).attr('aria-labelledby', newAriaLabelledby);
+                }
+            });
+
+    
+            // Update input names
+            newCategory.find('input[name]').each(function() {
+                var oldName = $(this).attr('name');
+                var newName = oldName.replace(i, cnt);
+                $(this).attr('name', newName);
+            });
+
+                newCategory.find('input[name]').each(function() {
+                var oldid = $(this).attr('id');
+                if (oldid) {
+                    var newid = oldid.replace(/\d+$/, cnt +''+i);
+                    $(this).attr('id', newid);
+                    // console.log('Old ID:', oldid, 'New ID:', newid);
+                } 
+                else {
+                    // console.log(i);
+                    var newid = 'input_' +  parseFloat(cnt + i);
+                    $(this).attr('id', newid);
+                    // console.log('New ID created:', newid);
+                }
+            });
+            newCategory.find('p[id]').each(function() {
+                var oldid = $(this).attr('id');
+                if (oldid) {
+                    var newid = oldid.replace(/\d+$/, cnt + '' + i);
+                    $(this).attr('id', newid);
+                    // console.log('Old ID:', oldid, 'New ID:', newid);
+                } else {
+                    var newid = 'p_' + parseFloat(cnt + i);
+                    $(this).attr('id', newid);
+                    // console.log('New ID created:', newid);
+                }
+            });
+       
+            // Update the HTML content inside the new category
+            newCategory.html(newCategory.html()
+                .replaceAll("categoryTitle" + i, "categoryTitle" + cnt)
+                .replaceAll("changeCategoryTittle(" + i, "changeCategoryTittle(" + cnt)
+                .replaceAll("accordionnestingcat" + i, "accordionnestingcat" + cnt)
+                .replaceAll("priceCount" + i, "priceCount" + cnt)
+                .replaceAll("addOnServiceCount" + i, "addOnServiceCount" + cnt)
+                .replaceAll("priceOptionDiv" + i, "priceOptionDiv" + cnt)
+                .replaceAll("addOnServiceDiv" + i, "addOnServiceDiv" + cnt)
+                .replaceAll("catUl" + i, "catUl" + cnt)
+                .replaceAll("(" + i + ")", "(" + cnt + ")")
+                .replaceAll("(" + i + ",", "(" + cnt + ",")
+            );
+
+            newCategory.find('.modaldiv_new').each(function() {
+                var oldClass = $(this).attr('class');
+                var newClass = oldClass.replace('edit-adult' + i, 'edit-adult' + cnt);            
+                $(this).attr('class', newClass);
+            });
+            
+            newCategory.find('.modaldiv_new').each(function() {
+                var oldClasses = $(this).attr('class');
+                var newClasses = oldClasses.replace('edit-child' + i, 'edit-child' + cnt);
+                $(this).attr('class', newClasses);
+            });
+            newCategory.find('.modaldiv_new').each(function() {
+                var oldClasses = $(this).attr('class');
+                var newClasses = oldClasses.replace('edit-infant' + i, 'edit-infant' + cnt);
+                $(this).attr('class', newClasses);
+            });
+
+            //   newCategory.find('[id^="priceoption' + i + '"]').each(function() {
+            //         var oldId = $(this).attr('id');
+            //         var newId = oldId.replace('priceoption' + i, 'priceoption' + cnt);
+            //         $(this).attr('id', newId);
+            //     });
+
+            newCategory.find('.priceoption_accord').each(function() {
+                var oldClass = $(this).attr('id');
+                var newClass = oldClass.replace('priceoption' + i, 'priceoption' + cnt);
+                $(this).attr('id', newClass);
+            });
+
+            // Clear specific input fields
+            for (var z = 0; z <= agecnt; z++) {
+                newCategory.find("input[name='price_id_db_" + cnt + "" + z + "']").val('');
+            }
+
+            for (var s = 0; s <= aosCnt; s++) {
+                var sprice = $('#service_price' + i + s).val();
+                newCategory.find('#service_price' + cnt + s).val(sprice);
+                newCategory.find("input[name='add_on_service_id_db_" + cnt + s + "']").val('');
+            }
+
+            // Handle delete option for the first category
+            if (i == 0) {
+                newCategory.find('#catUl' + cnt).append('<li class="dropdown-divider"></li><li><a href="" onclick="removeCategoryDiv(' + cnt + ');"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>');
+            }
+
+            newCategory.find("input[name='cat_id_db[]']").val('');
+            newCategory.find('.accordion-button').first().removeClass('collapsed');
+            $('#accor_nestingcategory' + i).removeClass("show");
+            $('#accor_nestingcategory' + cnt).addClass("collapse show");
+
+            $('#categoryMainDiv').append(newCategory);
+    }
+
+
+    function __add_another_price_duplicate_category__ddd(i){
+        // alert('22');
+        var cnt = $('#categoryCount').val();
+        var agecnt = $('#priceCount'+i).val();
+        var aosCnt = $('#addOnServiceCount'+i).val();
+        cnt++;
+        $('#categoryCount').val(cnt);
+        $('#category'+i).children().first();
+		
+        var data = '';
+        data += '<div class="accordion accordion-border-box mt-3" id="category'+cnt+'">';
+        data += $('#category'+i).html();
+        data += '</div>';
+
+        var re = data.replaceAll("accor_nestingcategory"+i,"accor_nestingcategory"+cnt);
+       
+        for(var z=0; z<=agecnt;z++){  
+            if(i== 0){ 
+                re = re.replace(new RegExp("0"+""+z, "g"),cnt+""+z);
+            }else{
+                re = re.replace(new RegExp(i+""+z, "g"), cnt+""+z);
+            }
+        }
+   
+        var sname = sprice = sdesc = '';
+        for(var s=0; s<=aosCnt ;s++){  
+            if(i== 0){ 
+                sprice = $('#service_price0'+s).val();
+                re = re.replace(new RegExp("0"+""+s, "g"),cnt+""+s);
+            }else{
+                sprice = $('#service_price'+i+""+s).val();
+                re = re.replace(new RegExp(i+""+s, "g"), cnt+""+s);
+            }
+        }
+       
+        re = re.replaceAll("categoryTitle"+i,"categoryTitle"+cnt);
+        re = re.replaceAll("changeCategoryTittle("+i,"changeCategoryTittle("+cnt);
+        re = re.replaceAll("accordionnestingcat"+i,"accordionnestingcat"+cnt);
+        re = re.replaceAll("priceCount"+i,"priceCount"+cnt);
+        re = re.replaceAll("addOnServiceCount"+i,"addOnServiceCount"+cnt);
+        re = re.replaceAll("#category"+i,"#category"+cnt);
+        re = re.replaceAll("#visibilitytext"+i,"#visibilitytext"+cnt);
+        re = re.replaceAll("#visibility"+i,"#visibility"+cnt);
+        re = re.replaceAll("priceOptionDiv"+i,"priceOptionDiv"+cnt);
+        re = re.replaceAll("addOnServiceDiv"+i,"addOnServiceDiv"+cnt);
+        re = re.replaceAll("catUl"+i,"catUl"+cnt);
+        re = re.replaceAll("("+i+")","("+cnt+")");
+        re = re.replaceAll("("+i+",","("+cnt+",");
+    
+        $('#categoryMainDiv').append(re);
+        
+        for(var z=0; z<=agecnt ;z++){
+            $('#category'+cnt).find("input[name='price_id_db_"+cnt+""+z+"']").val('');
+        }
+
+        for(var s=0; s<=aosCnt ;s++){
+            $('#service_price'+cnt+""+s).val(sprice);
+            $('#category'+cnt).find("input[name='add_on_service_id_db_"+cnt+""+s+"']").val('');
+        }
+
+        if(i==0){
+           $('#catUl'+cnt).append('<li class="dropdown-divider"></li><li><a href="" onclick="removeCategoryDiv('+cnt+');"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a></li>');
+        }
+
+        $('#category'+cnt).find("input[name='cat_id_db[]']").val('');
+        var firstClass = $('#category'+cnt).find('.accordion-button').first();
+        firstClass.removeClass('collapsed');
+		$('#accor_nestingcategory'+i).removeClass("show");
+		$('#accor_nestingcategory'+cnt).addClass("collapse show");
+		var subacnt=$('#category'+i).children().length;
+		for(var s=0; s<=subacnt; s++)
+		{
+            var priceClass = $('#acc_nesting'+cnt+s).find('.accordion-button').first();
+            priceClass.removeClass('collapsed');
+			$('#accor_nestingprice'+cnt+s).addClass("collapse show");
+            $('#accor_nestingpriceaddOn'+cnt+s).addClass("collapse show");
+		}
+    }
+
+    function serchCategory(value,type){
+        if(type == 'category'){
+            $('#priceList').val('');
+        }else{
+            $('#categoryList').val('');
+        }
+        var cnt = $('#categoryCount').val();
+        for(var s=0; s<=cnt; s++)
+        {
+            $('#category'+s).css('display','block');
+            if(s != value){
+                $('#category'+s).css('display','none');
+            }
+        }
+    }
+
+    function SubmitForm(price,type,category){
+        $('#submitType').val('recurring');
+        $('#displayRecPrice').val(price);
+        $('#displayRecCategory').val(category);
+        $('#displayType').val(type);
+        $('#priceForm').click();
+    }
+
+    function handleRadioChange(radio) {
+        if(radio.value == 'Yes'){
+            $('.cutoff').removeClass('d-none');
+        }else{
+            $('.cutoff').addClass('d-none');
+        }
+    }
+</script>
+
 
 <script type="text/javascript">
 

@@ -25,23 +25,12 @@ class ZoomController extends Controller
         $loggedinUser = Auth::user();
        
     }
-    // public function index(Request $r)
-    // {
-    //     $loggedinUser = Auth::user();
-    //     $mtng = Meeting::where(['meeting_id'=>$r->id])->get();
-    //     $id = $mtng[0]->meeting_id;
-    //     $p = $mtng[0]->password;
-    //     $role = ($loggedinUser['role']=='business')?1:0;
-    //     $name = $loggedinUser['firstname'];
-    //   return view('zoom.zoom2',compact('id','p','role','name'));
-    // }
+  
     public function index(Request $r)
     {
         
         $loggedinUser = Auth::user();
-     //   print_r('sdfdsf');die;
         if(Auth::check()){
-           // print_r("dfgsg");die;
         $mtng = Meeting::where(['meeting_id'=>$r->id])->get();
         $id = $mtng[0]->meeting_id;
       $p = ($loggedinUser['id']==$mtng[0]['user_id'])?$mtng[0]->password:null;
@@ -105,11 +94,7 @@ class ZoomController extends Controller
 
     public function invite(Request $r){
         $loggedinUser = Auth::user();
-        $emails = $r->user;
-        //print_r($emails);die;
-        //$emails= implode(',',$emails);
-     
-        //$emails = array('shivamkumar0214@gmail.com','shivam@webfymedia.com'); 
+        $emails = $r->user; 
         $loggedinUser['mid']=$r->meeting;
         $m =  Meeting::where('meeting_id',$r->meeting)->get();
        $loggedinUser['password'] = $m[0]['password'];
@@ -125,7 +110,7 @@ class ZoomController extends Controller
             $rd= true;
         }
         if($rd){
-                //$r->session()->flash('', 'Invitation sent');
+
                 Session::flash('alert-success', "Invitation sent");
         return redirect('/createmeeting');
         }

@@ -1,7 +1,6 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;
     background: #FFF !important;
     overflow-x: hidden
 }
@@ -228,7 +227,7 @@ html {
 .banner-bottom h1 {
     color: #fff;
     font-size: 48px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     /*background: url(../images/more-line.png) no-repeat center bottom;*/
     /*background: url(../images/banner-title-bg.png) no-repeat center bottom;*/
     padding-bottom: 15px;
@@ -268,7 +267,7 @@ html {
     /*border-bottom: 5px solid #c6c6c6;*/
     font-size: 31px;
     margin-bottom: 10px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     letter-spacing: 1px;
     line-height: 1.5;
 }
@@ -413,7 +412,7 @@ html {
 .cat-item h1 {
     font-size: 26px;
     color: #ffffff;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     text-align: center;
     line-height: 1.5;
     letter-spacing: 1px;
@@ -493,7 +492,7 @@ html {
 .rank-sidebar h1 {
     color: #151820;
     font-size: 36px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     text-transform: uppercase;
     border-bottom: 4px solid #98002e;
     margin-bottom: 25px;
@@ -643,7 +642,7 @@ html {
 .four-icon h3 {
     font-size: 30px;
     color: #3e4148;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     padding-top: 35px
 }
 
@@ -656,7 +655,7 @@ html {
 }
 
 .ourlocation button {
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     color: #fff;
     font-size: 36px;
     padding-bottom: 30px;
@@ -793,7 +792,7 @@ html {
     font-size: 30px;
     color: #fff;
     text-transform: uppercase;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
 }
 
 .event-detail > p {
@@ -844,13 +843,13 @@ html {
     padding: 0 10px;
     color: #fff;
     font-size: 14px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
 }
 
 .sitemap ul li a {
     color: #acaeb4;
     font-size: 14px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
 }
 
 .sitemap ul li a:hover {
@@ -896,11 +895,12 @@ html {
 
 .inner-banner h1 {
     color: #fff;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     background: url(../images/inner-title-bg.png) no-repeat left bottom;
     font-size: 48px;
     margin: 110px 0;
-    padding-bottom: 10px
+    padding-bottom: 10px;
+    font-weight: 600;
 }
 
 .contact-banner {
@@ -909,17 +909,18 @@ html {
 
 .contact-banner h1 {
     color: #fff;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     background: url(../images/inner-title-bg.png) no-repeat left bottom;
     font-size: 48px;
     margin: 110px 0;
-    padding-bottom: 10px
+    padding-bottom: 10px;
+    font-weight: 600;
 }
 
 .breadcrumbs {
     float: left;
     width: 100%;
-    background: #151820;
+    background: #000;
     font-size: 18px;
     color: #d4d4d4;
     padding: 30px 0
@@ -928,6 +929,7 @@ html {
 .breadcrumbs li {
     display: inline-block;
     padding: 0 10px;
+    text-transform: uppercase;
 }
 
 .breadcrumbs li a {
@@ -965,7 +967,7 @@ html {
 }
 
 .about-title h1 {
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     background: url(../images/inner-title-bg.png) center bottom no-repeat;
     padding-bottom: 15px;
     margin-bottom: 20px
@@ -976,24 +978,9 @@ html {
     margin: 0 auto 0
 }
 
-.about-left {
-    float: left;
-    width: 50%;
-}
-
-.about-right {
-    float: left;
-    width: 50%;
-}
-
-.about-left-right-para {
-    width: 500px;
-    float: right;
-    padding-right: 35px
-}
 
 .about-left-right-para h2 {
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     font-size: 36px;
     color: #151820;
     width: 70%;
@@ -1020,7 +1007,7 @@ html {
 
 .about-services-title h1 {
     font-size: 32px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     /*color: #3e4148;*/
     /*background: url(../images/more-line.png) center bottom no-repeat;*/
     padding-bottom: 0px;
@@ -1087,7 +1074,7 @@ html {
     background: url(../images/team-head-bg.jpg) no-repeat bottom left;
     padding-bottom: 15px;
     margin-bottom: 55px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
 }
 
 .team-one {
@@ -1147,7 +1134,7 @@ html {
 
 .about-signup h1 {
     font-size: 60px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     padding-bottom: 80px
 }
 
@@ -1206,7 +1193,7 @@ html {
 .location-left h1 {
     font-size: 36px;
     color: #151820;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     margin-bottom: 40px;
     padding-bottom: 10px;
     border-bottom: 4px solid #d0323e;
@@ -1249,23 +1236,7 @@ html {
     border: 1px solid #cdced0
 }
 
-.location-right button {
-    background: #98002e;
-    color: #fff;
-    padding: 10px;
-    border: 1px solid #98002e;
-    font-size: 18px;
-    font-family: 'Roboto', sans-serif;
-    margin: 10px 0;
-    cursor: pointer
-}
 
-.location-right button:hover {
-    background: none;
-    color: #fff;
-	background: #3e4148;
-	border: 1px solid #3e4148;
-}
 
 .cont-detail {
     float: left;
@@ -1276,14 +1247,14 @@ html {
 .cont-detail li {
     float: left;
     padding: 0 25px;
-    font-size: 18px;
+    font-size: 16px;
     color: #777;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
 }
 
 .cont-detail li a {
     color: #777;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
 }
 
 .cont-detail li i {
@@ -1294,7 +1265,7 @@ html {
 .help-desk {
     float: left;
     width: 100%;
-    background: url(../../images/help-desk-bg.jpg) no-repeat center top;
+    background: url(../../images/help-desk.jpg) no-repeat center top; 
     background-size: cover;
     min-height: 633px;
     text-align: center;
@@ -1304,7 +1275,7 @@ html {
 
 .help-desk h1 {
     font-size: 60px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
 }
 
 .help-desk p {
@@ -1402,10 +1373,10 @@ html {
 }
 
 .contact-three-box h4 {
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-size: 24px;
     font-weight: 500;
-    color: #555;
+    color: #000;
     margin: 25px 0 20px;
     padding-bottom: 10px;
     background: url(../images/square-head-bg.png) no-repeat center bottom
@@ -1456,18 +1427,18 @@ html {
     float: left;
     width: 100%;
     font-size: 18px;
-    color: #777;
+    color: #000;
     padding-bottom: 30px
 }
 
 .latest-know-list h4 {
     font-size: 24px;
-    color: #555;
+    color: #000;
     background: url(../images/square-head-bg.png) left bottom no-repeat;
     padding-bottom: 15px;
     text-transform: uppercase;
     margin-bottom: 15px;
-	font-family: 'bebasregular';
+	/* font-family: 'bebasregular'; */
 }
 
 .latest-know-list span {
@@ -1482,7 +1453,7 @@ html {
 }
 
 .latest-know-list li a {
-    color: #777;
+    color: #000;
 }
 
 .latest-know-list li a:hover {
@@ -1550,7 +1521,7 @@ html {
 .signup.advance-search-popup h3 {
     color: #98002e;
     font-size: 48px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     padding-bottom: 30px;
 }
 
@@ -1568,7 +1539,7 @@ html {
     color: #fff;
     padding: 15px 70px;
     font-size: 24px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     display: inline-block;
     margin-bottom: 30px;
 }
@@ -1597,7 +1568,7 @@ html {
 .pop-title h3 {
     color: #04344d;
     font-size: 24px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     letter-spacing: 2px;
     word-spacing: 5px;
 }
@@ -1608,14 +1579,14 @@ html {
     color: #fff;
     font-size: 24px;
     padding: 12px 100px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     margin-top: 20px
 }
 
 .pop-learn {
     font-size: 18px;
     color: #98002e;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-weight: 600;
     float: left;
     width: 100%;
@@ -1629,14 +1600,14 @@ html {
     color: #3e4148;
     font-size: 18px;
     padding: 0px 0 30px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     text-transform: uppercase
 }
 
 .signup p a {
     color: #98002e;
     font-size: 18px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-weight: 600;
     background: none
 }
@@ -1684,8 +1655,8 @@ html {
 }
 
 .social-login a:hover {
-    opacity: 0.5;
     text-decoration: none;
+    background: #1c256c;
 }
 
 .social-login i {
@@ -1746,7 +1717,7 @@ html {
     padding: 10px 70px;
     font-size: 24px;
     text-transform: uppercase;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     transition: 0.5s;
     border: 1px solid #3e4148;
 }
@@ -1848,7 +1819,7 @@ html {
 
 .popular-search h2 {
     float: left;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     font-size: 36px;
     color: #151820;
     background: url(../images/pop-line.jpg) no-repeat left bottom;
@@ -1895,7 +1866,7 @@ html {
 
 .pop-search-detail h4 {
     font-size: 24pxpx;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     border-bottom: 2px solid #98002e;
     display: inline-block;
     padding: 5px 5px
@@ -1903,7 +1874,7 @@ html {
 
 .pop-search-detail button {
     color: #fff;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-weight: 200;
     font-size: 16px;
     background: none;
@@ -1944,7 +1915,7 @@ html {
 .profile-menu ul li a {
     float: left;
     color: #bdbdbd;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     padding: 7px 15px;
     font-size: 16px;
     transition: 0.5s
@@ -2145,7 +2116,7 @@ html {
     font-weight: 600;
     padding: 15px 15px 15px 0;
     font-size: 24px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
 }
 
 .profile-tab {
@@ -2276,7 +2247,7 @@ html {
     color: #fff;
     padding: 20px 50px;
     font-size: 24px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     position: relative;
     top: -50px
 }
@@ -2578,7 +2549,7 @@ a.sgn {
     width: 100%;
     float: left;
     padding: 10px 15px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-weight: 18px;
     font-size: 18px;
     background: #ccc;
@@ -2973,7 +2944,7 @@ table.add_education thead tr th {
     padding: 3px 5px;
     background: #bfbfbf;
     border-left: 1px solid #fff;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-size: 16px;
     font-weight: 300;
     text-transform: uppercase;
@@ -2988,7 +2959,7 @@ table.add_education thead tr th:first-child {
 table.add_education tbody tr td {
     padding: 3px 5px;
     background: #fff;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-size: 16px;
     font-weight: 300;
     text-transform: uppercase;
@@ -3226,7 +3197,7 @@ a.learn-more:hover {
 .store-header-top-left a {
     color: #fff;
     font-size: 14px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
 }
 
 .store-header-top-right .btn-primary {
@@ -3258,7 +3229,7 @@ a.learn-more:hover {
     background: none;
     float: left;
     padding: 10px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     color: #fff;
     width: 200px
 }
@@ -3333,7 +3304,7 @@ a.learn-more:hover {
     float: left;
     width: 40%;
     font-size: 80px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     position: relative
 }
 
@@ -3348,7 +3319,7 @@ a.learn-more:hover {
     width: 60%;
     font-size: 35px;
     color: #15181f;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
 }
 
 .store-banner-right-con a {
@@ -3402,7 +3373,7 @@ a.learn-more:hover {
     padding: 15px;
     border-left: 1px solid #292929;
     font-size: 14px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     color: #fff
 }
 
@@ -3463,13 +3434,13 @@ a.learn-more:hover {
 
 .offer-head a {
     font-size: 22px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     color: #fff;
 }
 
 .offer-head p {
     font-size: 22px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     color: #fff;
     font-weight: 200;
 }
@@ -3489,7 +3460,7 @@ a.learn-more:hover {
 .welcome-store-head h1 {
     font-size: 48px;
     color: #3e4148;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     background: url(../images/more-line.png) center bottom no-repeat;
     padding-bottom: 10px;
     margin-bottom: 30px
@@ -3510,7 +3481,7 @@ a.learn-more:hover {
 .latest-product h3 {
     background: url(../images/pop-line.jpg) bottom left no-repeat;
     font-size: 36px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     padding-bottom: 10px;
     margin-bottom: 50px
 }
@@ -3528,7 +3499,7 @@ a.learn-more:hover {
 
 .latest-product-deatil h4 {
     font-size: 20px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
 }
 
 .latest-product li:hover .latest-product-deatil {
@@ -3553,7 +3524,7 @@ a.learn-more:hover {
 .store-product-price p {
     color: #fff;
     float: right;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     font-size: 24px;
     padding: 10px 15px 0 0
 }
@@ -3586,7 +3557,7 @@ a.learn-more:hover {
     color: #3e4148;
     background: url(../images/inner-title-bg.png) center bottom no-repeat;
     padding-bottom: 10px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     display: inline-block;
     margin-bottom: 50px;
 }
@@ -3625,7 +3596,7 @@ a.learn-more:hover {
 
 .full-offer-right h3 {
     font-size: 36px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     background: url(../images/full-offer-title-bg.jpg) right bottom no-repeat;
     padding-bottom: 10px;
 }
@@ -3702,7 +3673,7 @@ a.learn-more:hover {
 
 .direct-hire-sidebar h1 {
     font-size: 36px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     font-weight: 900
 }
 
@@ -3756,7 +3727,7 @@ a.learn-more:hover {
 .choose-professional-type p {
     font-size: 18px;
     color: #fff;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-weight: 200;
     padding: 9px 15px;
     float: left;
@@ -3839,7 +3810,7 @@ a.learn-more:hover {
     font-size: 18px;
     color: #3e4148;
     border-bottom: 0px solid #b2b2b2;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     text-transform: uppercase;
     padding-bottom: 10px;
     margin-bottom: 0px;
@@ -3977,7 +3948,7 @@ a.learn-more:hover {
     float: left;
     width: 100%;
     position: relative;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     padding-bottom: 20px
 }
 
@@ -4030,7 +4001,7 @@ a.learn-more:hover {
 
 .business-left h2 {
     font-size: 30px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     padding: 25px 0
 }
 
@@ -4105,7 +4076,7 @@ a.learn-more:hover {
 .business-title h1 {
     font-size: 48px;
     background: url(../images/more-line.png) center bottom no-repeat;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     padding-bottom: 15px;
     color: #3e4148;
     margin-bottom: 37px;
@@ -4134,7 +4105,7 @@ a.learn-more:hover {
     float: left;
     font-size: 18px;
     color: #777;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     padding: 20px 5px;
     border-bottom: 2px solid #fff;
 }
@@ -4177,7 +4148,7 @@ a.learn-more:hover {
     font-size: 24px;
     color: #555;
     border-bottom: 1px solid #d9d9d9;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     padding-bottom: 15px;
     margin-bottom: 15px;
 }
@@ -4792,7 +4763,7 @@ ul.categ_listing_list li a {
     float: left;
     width: 100%;
     padding: 12px 55px 12px 12px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-size: 16px;
     font-weight: 400;
     color: #777;
@@ -4805,7 +4776,7 @@ ul.categ_listing_list li span {
     position: absolute;
     right: 0px;
     top: 0px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-size: 16px;
     font-weight: 400;
     color: #fff;
@@ -4903,7 +4874,7 @@ ul.active_threads li a {
 
 .activity-ranking h3 {
     font-size: 24px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-weight: 600;
     float: left
 }
@@ -5009,7 +4980,7 @@ ul.active_threads li a {
     border-bottom: 1px solid #3e4148;
     padding-bottom: 10px;
     margin-bottom: 15px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
 }
 
 .sponsered img {
@@ -5032,7 +5003,7 @@ ul.active_threads li a {
 .view-location h2 {
     font-size: 30px;
     text-align: center;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
 }
 
 .view-location button {
@@ -5086,7 +5057,7 @@ ul.job_menu_list li a {
     width: auto;
     padding: 10px 20px;
     color: #777;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-size: 18px;
     font-weight: 400;
     text-transform: uppercase;
@@ -5126,7 +5097,7 @@ ul.job_topic li a {
     text-align: center;
     padding: 10px;
     color: #000;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-size: 17px;
     font-weight: 400;
     text-transform: uppercase;
@@ -5191,7 +5162,7 @@ ul.job_topic li:hover a {
     float: left;
     width: auto;
     margin: 0 0 10px 0;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-size: 20px;
     color: #555555;
     font-weight: 400;
@@ -5277,7 +5248,7 @@ ul.pagination_list li {
 ul.pagination_list li a {
     color: #555;
     font-size: 16px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     text-align: center;
     width: 100%;
     float: left;
@@ -5345,7 +5316,7 @@ ul.pagination > li > a:hover {
     float: left;
     width: 23%;
     font-size: 24px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-weight: 800;
     color: #fff;
     background: #98002e;
@@ -5371,7 +5342,7 @@ ul.pagination > li > a:hover {
     font-size: 14px;
     top: -20px;
     padding: 0 5px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-weight: 200;
     width: 23%
 }
@@ -5713,7 +5684,7 @@ span.border-rgt {
 .new-profile-nav ul li a {
     float: left;
     padding: 25px 20px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-size: 18px;
     color: #777;
     transition: 0.5s;
@@ -5884,7 +5855,7 @@ ul.refl_social li a.ln {
     margin-bottom: 40px;
     font-size: 60px;
     text-transform: uppercase;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
 }
 
 .referal_top_content h3 {
@@ -5894,7 +5865,7 @@ ul.refl_social li a.ln {
     margin-bottom: 20px;
     font-size: 36px;
     text-transform: uppercase;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
 }
 
 .referal_top_content p {
@@ -6355,7 +6326,7 @@ span.qh-lbl {
     color: #fff;
     padding: 15px 70px;
     font-size: 23px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     display: inline-block;
     font-weight: 400;
     text-transform: uppercase;
@@ -6368,7 +6339,7 @@ span.qh-lbl {
     color: #fff;
     padding: 15px 70px;
     font-size: 23px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     display: inline-block;
     font-weight: 400;
     text-transform: uppercase;
@@ -7562,7 +7533,7 @@ a.sgn {
     width: 100%;
     float: left;
     padding: 10px 15px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-weight: 18px;
     font-size: 18px;
     background: #ccc;
@@ -7957,7 +7928,7 @@ table.add_education thead tr th {
     padding: 3px 5px;
     background: #bfbfbf;
     border-left: 1px solid #fff;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-size: 16px;
     font-weight: 300;
     text-transform: uppercase;
@@ -7972,7 +7943,7 @@ table.add_education thead tr th:first-child {
 table.add_education tbody tr td {
     padding: 3px 5px;
     background: #fff;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-size: 16px;
     font-weight: 300;
     text-transform: uppercase;
@@ -8403,7 +8374,7 @@ span.required {
 .signup-new h2 {
     font-size: 24px;
     color: #fff;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-weight: 600;
     padding: 10px 0 20px
 }
@@ -8476,7 +8447,7 @@ span.required {
     width: 100%;
     text-align: center;
     display: inline-block;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-weight: 600
 }
 
@@ -8485,7 +8456,7 @@ span.required {
     display: inline-block;
     width: 100%;
     text-align: center;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     text-transform: uppercase;
     padding-bottom: 25px;
     font-style: italic;
@@ -9467,10 +9438,10 @@ req-line.thumb-light a {
     display: inline-block;
 }
 
-/*.editpostdiv span a { color:red; position: absolute; z-index: 999; float: right; left: 136px; display: none; font-size: 17px;}*/
+/*.editpostdiv span a { color:#98002e; position: absolute; z-index: 999; float: right; left: 136px; display: none; font-size: 17px;}*/
 
 .editpostdivanchor {
-    color: red;
+    color: #98002e;
     position: absolute;
     z-index: 999;
     float: right;
@@ -9480,7 +9451,7 @@ req-line.thumb-light a {
 }
 
 .favoriteIcon {
-    color: red;
+    color: #98002e;
     position: absolute;
     z-index: 999;
     float: left;
@@ -9500,7 +9471,7 @@ req-line.thumb-light a {
 }
 
 .required-sign {
-    color: red;
+    color: #98002e;
 }
 
 .readmore {
@@ -9517,7 +9488,7 @@ req-line.thumb-light a {
 .profiledetail h1 {
     font-size: 24px;
     color: #3e4148;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     margin: 0px 0px 20px 0px;
     text-align: left;
     background: url(../images/full-offer-title-bg.jpg) left bottom no-repeat;
@@ -9880,13 +9851,13 @@ req-line.thumb-light a {
 }
 .forgotpass {
     font-size: 18px;
-    color: #23527c !important;
+    color: #1c256c !important;
     padding-bottom: 20px;
     text-align: right !important;
     float: right !important;
     width: 100%;
     text-align: center !important;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
 }
 .mt20 { margin-top: 20px !important; }
 .mb-20 { margin-bottom: 20px !important; }
@@ -10191,17 +10162,17 @@ req-line.thumb-light a {
     width: 100%;
     float: left;
     /*text-align:center;*/
-    color: #3e4148;
-    font-size: 18px;
+    color: #000;
+    font-size: 16px;
     padding: 20px 0 30px;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     text-transform: uppercase
 }
 
 .pagecontent p a {
     color: #98002e;
-    font-size: 18px;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 16px;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-weight: 600;
     background: none
 }
@@ -10214,13 +10185,13 @@ req-line.thumb-light a {
     padding: 20px 0 0px !important
 }
 
-.pagecontent p {
+/* .pagecontent p {
     font-family: 'Roboto Condensed', sans-serif !important
 }
 
 .pagecontent li {
     font-family: 'Roboto Condensed', sans-serif !important
-}
+} */
 
 .fitnessity-checkbox-div span {
     float: left;
@@ -10345,7 +10316,7 @@ ul.tab_topic li a {
     text-align: center;
     padding: 10px;
     color: #777;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-size: 18px;
     font-weight: 400;
     text-transform: uppercase;
@@ -10526,7 +10497,7 @@ ul.tab_topic li:hover a {
 
 .pop-search-detail-sports h4 {
     font-size: 24pxpx;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     border-bottom: 2px solid #98002e;
     display: inline-block;
     padding: 5px 5px;
@@ -10535,7 +10506,7 @@ ul.tab_topic li:hover a {
 
 .pop-search-detail-sports button {
     color: #fff;
-    font-family: 'Roboto Condensed', sans-serif;
+    /* font-family: 'Roboto Condensed', sans-serif; */
     font-weight: 200;
     font-size: 16px;
     background: none;
@@ -10692,7 +10663,7 @@ ul.tab_topic li:hover a {
 }
 
 .subheading {
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     font-size: 36px;
     color: #151820;
     /*width: 70%;*/
@@ -10921,10 +10892,10 @@ button.common-btn {
     display: none;
 }
 
-.review-follow a:hover, a:focus {
+/* .review-follow a:hover, a:focus {
     color: #000;
     text-decoration: none;
-}
+} */
 
 .fav-star {
     font-size: 28px;
@@ -11100,14 +11071,14 @@ input.invalid {
     position: relative;
     display: flex;
     align-items: flex-start;
-    padding-left: 10px;
+    /* padding-left: 10px; */
 	margin-top: 20px;
 }
 
 .terms-wrap label {
     color: #000000;
-    padding-bottom: 15px;
-    padding-left: 15px;
+    /* padding-bottom: 15px;
+    padding-left: 15px; */
     text-align: left;
     font-size: 14px !important;
     font-weight: 400;
@@ -11124,13 +11095,17 @@ input.invalid {
 
 .terms-wrap .form-check-input {
     margin: 0 !important;
-    min-height: 30px !important;
+    min-height: 20px !important;
     /*position: absolute !important;
     left: 0 !important;
     top: 2px !important;*/
-    width: 30px !important;
+    width: 20px !important;
+    padding: 0px;
 }
-
+.terms-wrap .form-check-input:focus{
+    border-color: #030303;
+    box-shadow: none;
+}
 p.or-data {
     margin-bottom: 16px;
     margin-top: 16px;
@@ -11150,20 +11125,17 @@ p.or-data {
     font-size: 18px;
     border-radius: 0px;
     font-weight: 600;
-    height: 40px;
-    line-height: 40px;
     padding: 0;
     text-align: center;
 }
 
-.social-login a i {
+/* .social-login a i {
     font-size: 23px;
     width: 30px;
-    height: 30px;
     line-height: 30px;
     margin-right: 3%;
     vertical-align: middle;
-}
+} */
 
 #register_modal .already,
 #register_modal .already a {
@@ -11202,7 +11174,7 @@ p.or-data {
 #login_modal_content .pop-title h3 {
     color: #fff !important;
     font-size: 28px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     line-height: 58px;
 }
 
@@ -11756,7 +11728,7 @@ div#CreateCompanyModal #company_info .calendarr {
 }
 
 #addServiceModal #mayankstep2 .day-time-div-main .day-time-div .fa-trash {
-    background: red;
+    background: #98002e;
     width: 30px;
     height: 30px;
     line-height: 30px;
@@ -11961,7 +11933,7 @@ div#CreateCompanyModal #preview img.header_img {
     line-height: 30px;
     text-align: center;
     color: #fff;
-    background-color: red;
+    background-color: #98002e;
     margin: 5px;
     border-radius: 50px;
 }
@@ -12078,11 +12050,11 @@ div#CreateCompanyModal #preview img.header_img {
     padding-bottom: 15px;
 }
 
-/*contact page*/
-.contactpage-sec h2 {
-    font-family: 'bebasregular';
+/*contact page*/ 
+.contactpage-sec h2 { 
+    /* font-family: 'bebasregular'; */
     text-transform: uppercase;
-    font-size: 36px;
+    font-size: 30px;
     background: url(https://fitnessitynew.raursoft.org/public/images/xinner-title-bg.png.pagespeed.ic.9Ko_to2ohF.webp) left bottom no-repeat;
     padding-bottom: 20px;
     margin-bottom: 30px;
@@ -12099,7 +12071,7 @@ div#CreateCompanyModal #preview img.header_img {
 
 .contactpage-sec .location-left .cont-detail {
     padding: 30px;
-    background: rgba(0, 0, 0, 0.4);
+    background: #1c256c;
     margin-bottom: 30px;
 }
 
@@ -12535,7 +12507,7 @@ div#CreateCompanyModal #preview img.header_img {
     color: #fff;
     text-align: right;
     margin: 0;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     line-height: 45px;
 }
 
@@ -12610,7 +12582,7 @@ div#CreateCompanyModal #preview img.header_img {
     color: #fff;
     text-align: right;
     margin: 0;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     line-height: 45px;
 }
 
@@ -12722,7 +12694,7 @@ div#CreateCompanyModal #preview img.header_img {
 }
 
 .editcompany-sec .edit-addprgm #mayankstep2 .day-time-div-main .day-time-div .fa-trash {
-    background: red;
+    background: #98002e;
     width: 30px;
     height: 30px;
     line-height: 30px;
@@ -13166,7 +13138,7 @@ div#CreateCompanyModal #preview img.header_img {
     font-size: 36px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     line-height: 44px;
     margin-top: 35px;
 }
@@ -13235,7 +13207,7 @@ div#CreateCompanyModal #preview img.header_img {
     font-size: 36px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     line-height: 44px;
     margin-top: 35px;
 }
@@ -13510,7 +13482,7 @@ div#CreateCompanyModal #preview img.header_img {
     font-size: 34px;
     font-weight: 700;
     margin: 5px 0 5px;
-    color: #333;
+    color: #000;
     text-transform: uppercase;
 }
 
@@ -13553,11 +13525,11 @@ div#CreateCompanyModal #preview img.header_img {
 
 .claimyour-business .frm-claim button {
     color: #fff;
-    background: #d32323;
-    border: 1px solid #d32323;
+    background: #98002e;
+    border: 1px solid #98002e;
     background-image: none;
     background-repeat: no-repeat;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.28571em;
     padding: 8px 19px 9px;
     border-radius: 3px;
@@ -13591,14 +13563,14 @@ div#CreateCompanyModal #preview img.header_img {
     font-weight: 700;
     margin-bottom: 15px;
     position: relative;
-	font-size:14px;
+	font-size:16px;
 }
 
 .claim-rightblock p i {
     position: absolute;
     left: 28px;
     top: 2px;
-    color: #e00000;
+    color: #98002e;
 }
 
 .addbusiness-block {
@@ -13620,8 +13592,8 @@ div#CreateCompanyModal #preview img.header_img {
     margin: 0px;
     padding: 6px 19px 6px;
     border-radius: 8px;
-    background: #e91514;
-    border-color: #e91514;
+    background: #98002e;
+    border-color: #98002e;
 }
 
 
@@ -17210,14 +17182,14 @@ input:checked + .slider:before {
     padding-right: 15px;
 } */
 
-.claiming-business-block h3 {
+.claiming-business-block h1 {
     font-weight: 700;
     font-size: 32px;
     margin-bottom: 15px;
 }
 
 .claiming-business-block p {
-    margin-bottom: 15px;
+    margin-bottom: 16px;
 	font-size: 15px;
 }
 
@@ -18273,7 +18245,7 @@ input#zipcode {
 .why_title {
     color: #fff;
     font-size: 32px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     margin-bottom: 15px;
     font-weight: bold;
     text-transform: uppercase;
@@ -18714,7 +18686,7 @@ input#zipcode {
     border: 2px solid #04344d;
     font-size: 16px;
     outline: none;
-    border-radius: 16px;
+    border-radius: 10px;
     min-height: 45px;
     display: block;
     float: none;
@@ -18724,16 +18696,19 @@ input#zipcode {
 }
 
 .register_wrap form input::placeholder {
-    color: #04344d;
+    color: #000;
     opacity: 1;
+    font-size: 16px;
 }
 
 .register_wrap form input:-ms-input-placeholder {
-    color: #04344d;
+    color: #000;
+    font-size: 16px;
 }
 
 .register_wrap form input::-ms-input-placeholder {
-    color: #04344d;
+    color: #000;
+    font-size: 16px;
 }
 .piccrop_block {
     border: 1px dashed #ddd;
@@ -18782,7 +18757,7 @@ input#zipcode {
 
 .privacy-block {  padding-top: 35px }
 .privacy-block h3{ font-weight: 700; padding-bottom: 15px;  padding-top: 10px; font-size: 22px;}
-.pagecontent h4{font-size: 18px;}
+.pagecontent h4{font-size: 16px;}
 .privacy-block h5{ font-weight: 700; padding-bottom: 15px; }
 .privacy-block .pagecontent p{ text-transform: none; padding: 10px 0 20px 0px !important; }
 .privacy-block .pagecontent ul li{ list-style-type: disc; font-size: 14px; }
@@ -19069,7 +19044,7 @@ input#zipcode {
 	padding: 15px;
 }
 #star {
-  color: red;
+  color: #98002e;
 }
 .photo-select-review{
 	border: 1px solid #ccc;
@@ -19151,14 +19126,15 @@ input#zipcode {
 	font-size: 17px;
 	font-weight: 500;
 }
-.show-all .header-bg-show .time-base label{
+.show-all .header-bg-show .time-base h1{
 	font-size: 17px;
 	font-weight: 500;
+    display: inline;
 }
 .show-all .header-bg-show .time-base span{
 	font-size: 17px;
-	color: #337ab7;
-	text-decoration: underline;
+	color: #1c256c;
+	/* text-decoration: underline; */
 }
 .show-all .header-bg-show .time-base {
 	float: right;
@@ -19332,7 +19308,7 @@ input#zipcode {
 }
 
 .activity-time-main-red{
-    color:  red;
+    color:  #98002e;
 }
 
 .activity-time-main span{
@@ -19849,7 +19825,7 @@ input#zipcode {
 	color: #337ab7;
 }
 .day_circle.timezone-round.day_circle_fill {
-  background-color: red;
+  background-color: #98002e;
   color: #fff;
 }
 .border-modal-data{
@@ -19994,7 +19970,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	display: inline-block;
 }
 .activity-expired{
-    color: red;
+    color: #98002e;
 }
 
 #addcartdiv{
@@ -20068,7 +20044,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .cart-title{
 	margin-bottom: 30px;
 }
-.cart-title h5{
+.cart-title h1{
 	text-align: center;
 	font-size: 21px;
 	font-weight: 500;
@@ -20153,7 +20129,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .cart-sub-title .cart-view{
 	text-decoration: underline;
 	font-size: 15px;
-	color: #0034ff;
+	color: #98002e;
 }
 .claimed{
 	display: inline-block;
@@ -20162,14 +20138,14 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	display: inline-block;
 }
 .claimed span{
-	color: red;
+	color: #98002e;
 	font-size: 9px;
 }
 .kickboxing-slider .owl-nav .owl-prev {
 	width: 30px;
 	height: 30px;
 	text-align: center;
-	background: #c72321;
+	background: #1c256c;
 	opacity: 1;
 	border-radius: 50px;
 	top: 45%;
@@ -20182,7 +20158,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	width: 30px;
 	height: 30px;
 	text-align: center;
-	background: #c72321;
+	background: #1c256c;
 	opacity: 1;
 	border-radius: 50px;
 	top: 45%;
@@ -20237,6 +20213,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .activity-width .special-offer .multiples h2 {
   font-size: 15px;
+  margin-bottom: 10px;
 }
 .points-cards-home-text{
 	display: flex;
@@ -20251,7 +20228,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 }
 .partcipate-model-error{
 	text-align: center;
-    color: red;
+    color: #98002e;
 	margin-bottom:15px;
 }
 
@@ -20319,7 +20296,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	width: 100%;
 	max-height: 500px;
 }
-.instant-banner h4{
+.instant-banner h1{
 	position: absolute;  
 	font-size: 32px;
 	top: 200px;
@@ -20330,7 +20307,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 	text-align: left;
 }
 .bottom-content{
-	height: 236px;
+	height: 255px;
 }
 
 
@@ -21194,9 +21171,9 @@ span.Zebra_DatePicker_Icon_Wrapper {
   font-size: 18px;
   font-weight: 600;
 }
-.activity-information  a{
+/* .activity-information  a{
 	color: #333;
-}
+} */
 .activity-information p {
   margin-bottom: 4px;
   color: #000;
@@ -21758,7 +21735,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .register-pop-title h3{
 	color: #04344d;
     font-size: 24px;
-    font-family: 'bebasregular';
+    /* font-family: 'bebasregular'; */
     letter-spacing: 2px;
     word-spacing: 5px;
 }
@@ -22445,7 +22422,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 .heading-step{
     text-align: left;
     margin: 30px;
-    color: red;
+    color: #98002e;
 }
 .manage-customer-from form select{
 	padding: 7px;
@@ -22480,7 +22457,7 @@ span.Zebra_DatePicker_Icon_Wrapper {
 
 .delcustomer{
     margin: 20px;
-    color: red;
+    color: #98002e;
     font-size: 20px;
 }
 
@@ -23917,7 +23894,7 @@ padding-left: 0px;
 .reset-title h3{
 	color: #04344d;
 	font-size: 24px;
-	font-family: 'bebasregular';
+	/* font-family: 'bebasregular'; */
 	letter-spacing: 2px;
 	word-spacing: 5px;
 }
@@ -23945,7 +23922,7 @@ padding-left: 0px;
 	color: #3e4148;
 	font-size: 18px;
 	padding: 0px 0 30px;
-	font-family: 'Roboto Condensed', sans-serif;
+	/* font-family: 'Roboto Condensed', sans-serif; */
 	text-transform: uppercase;
 	margin-top: 15px;
 }
@@ -24151,7 +24128,7 @@ padding-left: 0px;
 .small-logo{
 	text-align: center;
 }
-.staff-login h3{
+.staff-login h1{
 	line-height: 35px;
 }
 .remember-staff{
@@ -24891,11 +24868,11 @@ padding-left: 0px;
 .booking-summery{
 	font-size: 14px;
 }
- .register_wrap{
+ /* .register_wrap{
 	max-height: 920px;
     overflow-x: hidden;
     overflow-y: scroll;
-}
+} */
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -25711,9 +25688,9 @@ padding-left: 0px;
     font-size: 15px;
 }
 .btn-red {
-  background-color: #98002e !important;
-  border: 1px solid #98002e !important;
-  color: #fff !important;
+  background-color: #98002e;
+  border: 1px solid #98002e;
+  color: #fff;
   border-radius: 10px;
   font-size: 13px;
 }
@@ -25721,10 +25698,7 @@ padding-left: 0px;
 	padding-right: 15px; 
   	padding-left: 15px;
 }
-.signup-new:hover{
-	background: #2d2d2d !important;
-	color: fff !important;
-}
+
 .sign-step_4 ul.nav-tabs li a.active{ 
     border: none !important;
 }

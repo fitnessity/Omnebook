@@ -10,12 +10,6 @@ class WebhookController extends Controller
     public function handleWebhook(Request $request)
     {
         
-       /* $signature = $request->header('X-Twilio-Email-Event-Webhook-Signature');
-
-        if (!$this->isValidSignature($request->all(), $signature)) {
-            Log::warning('Invalid signature', 403);
-        }*/
-
         $data = json_decode($request->getContent(), true);
 
         if (is_array($data) && isset($data[0])) {
@@ -69,7 +63,7 @@ class WebhookController extends Controller
 
     private function isValidSignature($payload, $signature)
     {
-        $secret = env('SENDGRID_WEBHOOK_SECRET'); // Set your webhook secret from SendGrid
+        $secret = env('SENDGRID_WEBHOOK_SECRET');
 
         $computedSignature = hash_hmac('sha256', $payload, $secret);
 

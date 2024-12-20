@@ -118,11 +118,8 @@ class RecurringController extends Controller
             $amount += $recurringDetail->amount + $recurringDetail->tax;
             $stripeCustomerId = $recurringDetail->Customer != '' ? $recurringDetail->Customer->stripe_customer_id : '';
             $cardDetails = StripePaymentMethod::whereRaw('((user_type = "User" and user_id = ?) or (user_type = "Customer" and user_id = ?))', [@$customer->user_id, $recurringDetail->user_id])->get();
-
-            //$cardDetails = StripePaymentMethod::where('user_id',$recurringDetail->user_id)->get();
         }
 
-        //print_r($cardDetails);
         $chkCard = 1;
         if(!empty($cardDetails) && $stripeCustomerId){
             foreach($cardDetails as $card){

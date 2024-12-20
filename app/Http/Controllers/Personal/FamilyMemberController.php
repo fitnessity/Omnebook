@@ -37,7 +37,6 @@ class FamilyMemberController extends Controller
            
             $currentbookingstatus =[];
             $currentbookingstatus = $this->booking_repo->currentTab($request->serviceType,$request->business_id,$customer);
-            //print_r($currentbookingstatus );exit;
             $tabval = $request->tab; 
 
             return view('personal.family_member.index', [

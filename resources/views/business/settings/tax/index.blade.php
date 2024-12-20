@@ -13,7 +13,7 @@
 			              	<div class="row mb-3">
 								<div class="col-6">
 									<div class="page-heading">
-										<label>Set Taxes</label>
+										<h1>Set Taxes</h1>
 									</div>
 								</div> <!--end col-->
 						 	</div>	

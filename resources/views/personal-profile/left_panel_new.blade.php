@@ -32,25 +32,25 @@
                 <li class="menu-title"><span data-key="t-menu">Menuuuu</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link " href="" aria-controls="sidebarDashboards">
-                        <img src="{{asset('/public/img/menu-icon1.svg')}}" alt="Fitnessity"> <span data-key="t-dashboards">User Profile</span> 
+                        <img src="{{asset('/public/img/menu-icon1.svg')}}" alt="Omnebook"> <span data-key="t-dashboards">User Profile</span> 
                     </a>
                 </li>
                 
 				<li class="nav-item">
                     <a class="nav-link menu-link " href="" aria-controls="sidebarUI">
-                        <img src="{{asset('/public/img/calender.png')}}" alt="Fitnessity"> <span data-key="t-base-ui"> Calenderrrrrr</span>
+                        <img src="{{asset('/public/img/calender.png')}}" alt="Omnebook"> <span data-key="t-base-ui"> Calenderrrrrr</span>
                     </a>
                 </li>
 				
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="" aria-controls="sidebarLanding">
-                        <img src="{{asset('/public/img/email1.png')}}" alt="Fitnessity"> <span data-key="t-landing">Inbox </span>
+                        <img src="{{asset('/public/img/email1.png')}}" alt="Omnebook"> <span data-key="t-landing">Inbox </span>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link menu-link " >
-                        <img src="{{asset('/public/img/checkout-register.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Checkout Register56456454 </span>
+                        <img src="{{asset('/public/img/checkout-register.png')}}" alt="Omnebook"> <span data-key="t-widgets">Checkout Register56456454 </span>
                     </a>
                 </li>
 

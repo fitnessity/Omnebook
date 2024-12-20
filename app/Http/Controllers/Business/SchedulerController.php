@@ -19,10 +19,6 @@ class SchedulerController extends BusinessBaseController
 
      public function index(Request $request){
           $filterDate = Carbon::parse($request->date);
-          // \DB::enableQueryLog(); 
-          // $schedules = BusinessActivityScheduler::alldayschedule($filterDate,$request->activity_type)->where('cid', $request->current_company->id)->get();
-          // dd(\DB::getQueryLog()); 
-
           $services = BusinessServices::where('cid', $request->current_company->id)->where('is_active','1')->get();
           $categoryIds = [];
 
@@ -67,8 +63,6 @@ class SchedulerController extends BusinessBaseController
      }
 
      public function store(Request $request){
-          //print_r($request->all());exit;
-          // dd($request->all());
           $shift_start = $request->duration_cnt;
           if($shift_start >= 0) {
                $idary = BusinessActivityScheduler::where('cid', $request->cId)->where('userid', Auth::user()->id)->where('serviceid',  $request->serviceId)->where('category_id',$request->categoryId)->pluck('id')->toArray();
@@ -112,28 +106,77 @@ class SchedulerController extends BusinessBaseController
                }
           }
 
-          /*$category = BusinessPriceDetailsAges::where('id' , $request->categoryId)->whereNotNull('class_type')->first();
-          if($category){
-              $service = $category->BusinessServices;
-              return redirect()->to('business/'.$request->cId.'/services/create?serviceType='.$service->service_type.'&serviceId='.$request->serviceId.'#stepFour');
-          }else{*/
-              /*return redirect()->route('business.schedulers.create', ["business_id"=>$request->cId,"categoryId"=>$request->categoryId]);*/
-          /*}*/
-
           if($request->has('returnUrl')){
               $category = BusinessPriceDetailsAges::where('id' , $request->categoryId)->whereNotNull('class_type')->first();
               $service = $category->BusinessServices;
               $url = '/business/'.$request->cId.'/services/create?serviceType='.$service->service_type.'&serviceId='.$service->id.'#stepFour';
               return redirect($url);
+          }else{
+              return redirect()->route('business.schedulers.create', ["business_id"=>$request->cId,"categoryId"=>$request->categoryId]);
+          }
+     }
 
-              //return redirect()->to($request->returnUrl);
+
+     public function storeedit(Request $request){
+          $shift_start = $request->duration_cnt;
+          if($shift_start >= 0) {
+               $idary = BusinessActivityScheduler::where('cid', $request->cId)->where('userid', Auth::user()->id)->where('serviceid',  $request->serviceId)->where('category_id',$request->categoryId)->pluck('id')->toArray();
+     
+               $idary1 = array();
+               for($i=0; $i<=$shift_start; $i++) { 
+                    $idary1[] = $request->id[$i] != '' ?  $request->id[$i] : '';
+                    
+                    if($request->shift_start[$i] != '' && $request->shift_end[$i] != '' && $request->set_duration[$i] != '') {
+
+                         $expdate  = date('Y-m-d', strtotime($request->starting. '+'.$request->scheduled.$request->until ));
+                         $activitySchedulerData = [
+                             "cid" => $request->cId,
+                             "category_id" => $request->categoryId,
+                             "userid" =>Auth::user()->id,
+                             "serviceid" =>$request->serviceId,
+                             "activity_meets" => $request->frm_class_meets,
+                             "starting" => date('Y-m-d', strtotime($request->starting)),
+                             "activity_days" => isset($request->activity_days[$i]) ? $request->activity_days[$i] : '',
+                             "shift_start" => isset($request->shift_start[$i]) ? $request->shift_start[$i] : '',
+                             "shift_end" => isset($request->shift_end[$i]) ? $request->shift_end[$i] : '',
+                             "set_duration" => isset($request->set_duration[$i]) ? $request->set_duration[$i] : '',
+                             "spots_available" => isset($request->sport_avail[$i]) ? $request->sport_avail[$i] : '',
+                             "scheduled_day_or_week" => $request->until, 
+                             "scheduled_day_or_week_num" => $request->scheduled,
+                             "end_activity_date" => $expdate,
+                             "instructure_ids" => $request->instructure[$i] != ''  ? implode(',' , $request->instructure[$i]) :  '',
+                             "is_active" => 1,
+                         ];
+
+                         $data = BusinessActivityScheduler::updateOrCreate(['id' => $request->id[$i]], $activitySchedulerData);
+                         if($request->instructure[$i] != ''){
+                              BookingCheckinDetails::where('business_activity_scheduler_id',$data->id)->whereDate('checkin_date','>=',date('Y-m-d'))->update(['instructor_id'=>implode(',' , $request->instructure[$i])]);
+                         }
+                    }
+               }
+        
+               $differenceArray1 = array_diff($idary, $idary1);
+               foreach($differenceArray1 as $deletdata){
+                    BusinessActivityScheduler::where('id',$deletdata)->delete();
+               }
+          }
+
+          if($request->has('returnUrl')){
+              $category = BusinessPriceDetailsAges::where('id' , $request->categoryId)->whereNotNull('class_type')->first();
+              $service = $category->BusinessServices;
+          
+          return redirect()->route('business.show_service_details', [
+               'business_id' => $request->cId,
+               'id' => $service->id,
+           ])->withFragment('stepFour');
+
+
           }else{
               return redirect()->route('business.schedulers.create', ["business_id"=>$request->cId,"categoryId"=>$request->categoryId]);
           }
      }
 
      public function destroy(Request $request){
-          //print_r($request->all());exit;
           $mail_type = $request->has('cancel_date_chk') ? 'cancel' : 'reschedule';
           $cancel_date_chk = $request->has('cancel_date_chk') ? 1:0 ;
           $act_cancel_chk = $request->has('cancel_date_chk') ? 1:0;

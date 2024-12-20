@@ -18,7 +18,6 @@ class SalesReportController extends BusinessBaseController
 
      public function index(Request $request ,$business_id)
      {
-          //print_r($request->all());exit;
           $filterOptions = $request->filterOptions;
           $date= '';
          	$today = date('m/d/Y');

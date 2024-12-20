@@ -2,7 +2,7 @@
 @extends('layouts.business.header')
 
 <head>
-    <title> Fitnessity </title>
+    <title> Omnebook </title>
     <meta charset="utf-8">
     <meta name="description" content="Looking for a place to grow your career. There are many good reasons to consider the great insurance jobs available through Legends United.">
     <meta name="keywords" content="Great Insurance Jobs">
@@ -748,39 +748,39 @@ body{
                         <ul class="badgez-widget">
 							<li>
                             	<a href="#" title="Male User" data-toggle="tooltip">
-                                <img src="/images/badges/badge2.png" alt="fitnessity"></a>
+                                <img src="/images/badges/badge2.png" alt="Omnebook"></a>
 							</li>
                             <li>
                             	<a href="#" title="Earned $5000+" data-toggle="tooltip">
-                                <img src="/images/badges/badge12.png" alt="fitnessity"></a>
+                                <img src="/images/badges/badge12.png" alt="Omnebook"></a>
                             </li>
                             <li>
                             	<a href="#" title="10 Years old User" data-toggle="tooltip">
-                                <img src="/images/badges/year10.png" alt="fitnessity"></a>
+                                <img src="/images/badges/year10.png" alt="Omnebook"></a>
                             </li>
                             <li>
                             	<a href="#" title="Page Admin" data-toggle="tooltip">
-                                <img src="/images/badges/badge1.png" alt="fitnessity"></a>
+                                <img src="/images/badges/badge1.png" alt="Omnebook"></a>
 							</li>
                             <li>
                             	<a href="#" title="100+ Refferal" data-toggle="tooltip">
-                                <img src="/images/badges/badge8.png" alt="fitnessity"></a>
+                                <img src="/images/badges/badge8.png" alt="Omnebook"></a>
                             </li>
                             <li>
                             	<a href="#" title="Tranding Posts" data-toggle="tooltip">
-                                <img src="/images/badges/badge21.png" alt="fitnessity"></a>
+                                <img src="/images/badges/badge21.png" alt="Omnebook"></a>
                             </li>
                             <li>
                             	<a href="#" title="1000+ Subscribers" data-toggle="tooltip">
-                                <img src="/images/badges/badge3.png" alt="fitnessity"></a>
+                                <img src="/images/badges/badge3.png" alt="Omnebook"></a>
                             </li>
                             <li>
                             	<a href="#" title="fitness Shirt winner" data-toggle="tooltip">
-                                <img src="/images/badges/badge20.png" alt="fitnessity"></a>
+                                <img src="/images/badges/badge20.png" alt="Omnebook"></a>
                             </li>
                             <li>
                             	<a href="#" title="500+ Followers" data-toggle="tooltip">
-                                <img src="/images/badges/badge10.png" alt="fitnessity"></a>
+                                <img src="/images/badges/badge10.png" alt="Omnebook"></a>
                             </li>
 						</ul>
 					</div><?php */?>
@@ -844,7 +844,7 @@ body{
                                             <span class="create-post">Post Your Experiences</span>
 											<div class="post-img figure">
                                             	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$loggedinUser->profile_pic ))){ ?>
-												<img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" alt="Fitnessity">
+												<img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" alt="Omnebook">
                                                 <?php }else{ 
 												$pf=substr(@$loggedinUser->firstname, 0, 1).substr(@$loggedinUser->lastname, 0, 1);
 													echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
@@ -898,7 +898,7 @@ body{
 											<div class="friend-info">
 												<div class="post-img figure">
                                                     <?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$loggedinUser->profile_pic ))){ ?>
-                                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" alt="Fitnessity">
+                                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" alt="Omnebook">
                                                     <?php }else{ 
                                                     $pf=substr(@$loggedinUser->firstname, 0, 1).substr(@$loggedinUser->lastname, 0, 1);
                                                         echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
@@ -917,7 +917,7 @@ body{
 																<div class="col-lg-12 col-md-12 col-sm-12">
 																	<div class="default-img-profile">
 																		<img  src="{{ url('public/images/newimage/fitness-img-1.jpg') }}">
-																		<label> Joined Fitnessity on </label>
+																		<label> Joined Omnebook on </label>
 																		<span class="spanstyle"><?php 
                                                                                 $date=date_create($UserProfileDetail->created_at); echo date_format($date,"m/d/Y"); ?>
                                                                         </span>
@@ -1063,7 +1063,7 @@ body{
                                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <figure>
                                                                     <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                    <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" alt="fitnessity">
+                                                                    <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" alt="Omnebook">
                                                                     </a>
                                                                 </figure>
                                                             </div>
@@ -1080,14 +1080,14 @@ body{
                                                                 @if(isset($getimages[0]))
                                                                     <figure>
                                                                         <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="Omnebook">
                                                                         </a>
                                                                     </figure>
                                                                 @endif
                                                                 @if(isset($getimages[1]))
                                                                     <figure>
                                                                         <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
+                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="Omnebook">
                                                                         </a>
                                                                     </figure>
                                                                 @endif
@@ -1096,7 +1096,7 @@ body{
                                                                 @if(isset($getimages[2]))
                                                                     <figure>
                                                                         <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity">
+                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="Omnebook">
                                                                         </a>
                                                                     </figure>
                                                                 @endif
@@ -1110,7 +1110,7 @@ body{
                                                                 @if(isset($getimages[4]))
                                                                     <figure>
                                                                         <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="fitnessity">
+                                                                            <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="Omnebook">
                                                                         </a>
                                                                         <div class="more-photos">
                                                                             <span>+{{$countimg}}</span>
@@ -1127,7 +1127,7 @@ body{
                                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <figure>
                                                                     <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="Omnebook">
                                                                     </a>
                                                                 </figure>
                                                             </div>
@@ -1136,21 +1136,21 @@ body{
                                                             <div class="col-lg-4 col-md-4 col-sm-4"> 
                                                                 <figure>
                                                                     <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" height="170">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="Omnebook" height="170">
                                                                     </a>
                                                                 </figure>   
                                                             </div> 
                                                             <div class="col-lg-4 col-md-4 col-sm-4"> 
                                                                 <figure>
                                                                     <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" height="170">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="Omnebook" height="170">
                                                                     </a>
                                                                 </figure>    
                                                             </div> 
                                                             <div class="col-lg-4 col-md-4 col-sm-4">  
                                                                 <figure>
                                                                     <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity" height="170">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="Omnebook" height="170">
                                                                     </a>
                                                                 </figure>   
                                                             </div> 
@@ -1163,19 +1163,19 @@ body{
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
                                                                     <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity" width="100" height="335">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="Omnebook" width="100" height="335">
                                                                     </a>
                                                                 </figure>
                                                             </div>
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
                                                                     <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" width="100" height="165">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="Omnebook" width="100" height="165">
                                                                     </a>
                                                                 </figure>
                                                                 <figure>
                                                                     <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" width="100" height="165">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="Omnebook" width="100" height="165">
                                                                     </a>
                                                                 </figure>
                                                             </div>
@@ -1187,14 +1187,14 @@ body{
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
                                                                     <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="Omnebook">
                                                                     </a>
                                                                 </figure>
                                                             </div>
                                                             <div class="col-lg-6 col-md-6 col-sm-6">
                                                                 <figure>
                                                                     <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="Omnebook">
                                                                     </a>
                                                                 </figure>
                                                             </div>
@@ -1207,7 +1207,7 @@ body{
                                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <figure>
                                                                     <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery{{@$profile_post->id}}">
-                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+                                                                        <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="Omnebook">
                                                                     </a>
                                                                 </figure>
                                                             </div>
@@ -1711,7 +1711,7 @@ body{
 																		<div class="photo-tab-imgs">
                                                                             <figure>
                                                                                 <a href="{{ URL::to('public/uploads/gallery')}}/{{$data->user_id}}/{{$img_part[$i]}}" data-fancybox="gallery_photo{{$i}}" class="firstfancyimg">
-                                                                                    <img height="170" width="170" lass="bixrwtb6" src="{{ URL::to('public/uploads/gallery')}}/{{$data->user_id}}/{{$img_part[$i]}}" alt="fitnessity">
+                                                                                    <img height="170" width="170" lass="bixrwtb6" src="{{ URL::to('public/uploads/gallery')}}/{{$data->user_id}}/{{$img_part[$i]}}" alt="Omnebook">
                                                                                 </a>
                                                                             </figure>
 																			<!-- <img height="170" width="170" class="bixrwtb6" src="{{asset('public/uploads/gallery/')}}/{{$data->user_id}}/{{$img_part[$i]}}"> -->
@@ -1758,7 +1758,7 @@ body{
                                                             <div class="friend-info">
                                                             <figure>
                                                             	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$userData->profile_pic ))){ ?>
-                                                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$userData->profile_pic) }}" alt="Fitnessity">
+                                                                    <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$userData->profile_pic) }}" alt="Omnebook">
                                                                 <?php }else{ 
                                                                     $pf=substr(@$userData->firstname, 0, 1).substr(@$userData->lastname, 0, 1);
                                                                         echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
@@ -3332,7 +3332,7 @@ $(document).ready(function () {
                                 type: 'GET',
                                 beforeSend: function () {
                                     // $('#register_submit').prop('disabled', true);
-                                    showSystemMessages('#systemMessage', 'info', 'Please wait while we delete family member with Fitnessity.');
+                                    showSystemMessages('#systemMessage', 'info', 'Please wait while we delete family member with Omnebook.');
                                 },
                                 complete: function () {
                                     //$('#register_submit').prop('disabled', true);

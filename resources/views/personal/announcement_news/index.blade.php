@@ -9,7 +9,7 @@
 			<div class="container-fluid">
 				<div class="row mb-3">
 					<div class="col-12">
-						<div class="page-heading"><label>Announcement & News</label></div>
+						<div class="page-heading"><h1>Announcement & News</h1></div>
 					</div>
 				</div><!--end row-->
 				<div class="row">

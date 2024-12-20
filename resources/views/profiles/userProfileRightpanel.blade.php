@@ -33,7 +33,7 @@
 		<div class="your-page">
         	<figure>
             	<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".@$loggedinUser->profile_pic ))){ ?>
-					<img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" alt="Fitnessity">
+					<img src="{{ url('/public/uploads/profile_pic/thumb/'.@$loggedinUser->profile_pic) }}" alt="Omnebook">
                 <?php }else{ 
 					$pf=substr(@$loggedinUser->firstname, 0, 1).substr(@$loggedinUser->lastname, 0, 1);
 					echo '<div class="youpage-img-text"><p>'.$pf.'</p></div>';
@@ -143,7 +143,7 @@
                     	<?php
 						if(File::exists(public_path("/uploads/profile_pic/thumb/".$followpic )))
 						{ ?>
-                        	<figure><img src="/public/uploads/profile_pic/thumb/<?php echo $followpic; ?>" alt="fitnessity"></figure>
+                        	<figure><img src="/public/uploads/profile_pic/thumb/<?php echo $followpic; ?>" alt="Omnebook"></figure>
 						<?php }else{ 
 							$pf=substr(@$queryUser["firstname"], 0, 1).substr(@$queryUser["lastname"], 0, 1);
 						?>

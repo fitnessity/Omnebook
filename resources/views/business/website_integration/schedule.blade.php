@@ -341,8 +341,8 @@ $logTextColor =
                                             </div>
                                             <div class="col-md-7 col-xs-12 col-sm-5">
                                                 <div class="table-inner-data-sec">
-                                                    {{-- <img src="{{ Storage::disk('s3')->exists($bookscheduler->business_service->first_profile_pic()) ? Storage::URL($bookscheduler->business_service->first_profile_pic()) : url('/images/service-nofound.jpg') }}" alt="Fitnessity"> --}}
-                                                    <img src="{{ $bookscheduler->business_service->first_profile_pic() ? $bookscheduler->business_service->first_profile_pic() : url('/images/service-nofound.jpg') }}" alt="Fitnessity">                                                    
+                                                    {{-- <img src="{{ Storage::disk('s3')->exists($bookscheduler->business_service->first_profile_pic()) ? Storage::URL($bookscheduler->business_service->first_profile_pic()) : url('/images/service-nofound.jpg') }}" alt="omnebook"> --}}
+                                                    <img src="{{ $bookscheduler->business_service->first_profile_pic() ? $bookscheduler->business_service->first_profile_pic() : url('/images/service-nofound.jpg') }}" alt="omnebook">                                                    
                                                     <div class="p-name font-change">
                                                         <label>{{$bookscheduler->business_service->program_name}}</label>
                                                         <p> {{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}} | Spot Available - {{$bookscheduler->spots_left($filter_date)}}/{{$bookscheduler->spots_available}}
@@ -447,11 +447,11 @@ $logTextColor =
                                                         Storage::disk('s3')->exists($companyinfo->logo) &&
                                                         $companyinfo->logo != '')
                                                     <div class="item-inner">
-                                                        <img src="{{ Storage::disk('s3')->url($companyinfo->logo) }}" alt="Fitnessity"
+                                                        <img src="{{ Storage::disk('s3')->url($companyinfo->logo) }}" alt="omnebook"
                                                             loading="lazy">
                                                     </div>
                                                 @else
-                                                    <img src="{{ asset('public/images/omnebook.png') }}" alt="Fitnessity"
+                                                    <img src="{{ asset('public/images/omnebook.png') }}" alt="omnebook"
                                                         loading="lazy">
                                                 @endif
                                             </a>

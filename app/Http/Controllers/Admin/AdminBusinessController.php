@@ -35,7 +35,6 @@ class AdminBusinessController extends Controller
     public function index()
     {
         $businessType = Miscellaneous::businessType();
-        //$professionals = $this->professionals->getAllProfessionals();
         $businessUsers = $this->professionals->getAllBusinessUsers();
 
         return view('admin.businessusers.index', [

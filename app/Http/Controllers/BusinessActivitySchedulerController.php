@@ -16,167 +16,8 @@ class BusinessActivitySchedulerController extends Controller
     {     
         $this->booking_repo = $booking_repo;
     }
-    // public function index(Request $request , $business_id)
-    // {
-    //     $chkScheduleSession = '';
-    //     $company = CompanyInformation::findOrFail($business_id);
-    //     $companyName = $company->dba_business_name;
-    //     $companyName = $companyName ?? $company->company_name ; 
-    //     $business_services = $company->service()->where('is_active',1)->orderBy('created_at','desc');
-    //     $servicetype = 'all';
- 
-    //     if($request->stype && $request->business_service_id == ''){
-    //         $servicetype = $request->stype;
-    //         if($request->stype != 'all')
-    //         {
-    //             $business_services = $company->service()->where(['is_active'=>1, 'service_type' => $servicetype])->orderBy('created_at','desc');
-    //         }
-    //         else{
-    //             $business_services = $company->service()->where('is_active',1)->orderBy('created_at','desc');
-    //         }        
-    //     if(session()->has('schedule')) {
-    //         session()->forget('schedule');
-    //     }
-    //     $user = Auth::user();
-    //     $userCompany = @$user->company ?? [];
-    //     $customer = Customer::where(['user_id'=>@$user->id, 'business_id'=>$business_id])->first();
-    //     if($user != '' && $request->customer_id == ''){
-    //         $request->customer_id = $customer->id;
-    //     }
-    //     if($request->customer_id){
-    //         if(request()->type == 'user'){
-    //             $familyMember = Auth::user()->user_family_details()->where('id',request()->customer_id)->first();
-    //             $user = User::where(['firstname'=> @$familyMember->first_name, 'lastname'=>@$familyMember->last_name, 'email'=>@$familyMember->email])->first();
-    //             $customer = Customer::where(['user_id' => @$user->id])->first();
-    //         }else{
-    //             $customer = Customer::where('id',$request->customer_id)->first();
-    //         }
-    //         $memberships = @$customer->active_memberships()->pluck('sport')->unique();
-    //     }
-    //     if($request->business_service_id){
-    //         $servicetype = $request->stype;
-    //         $business_services = $business_services->where(['id'=>$request->business_service_id,'is_active'=>1, 'service_type' => $servicetype]); 
-    //     }
-    //     $serviceids=BusinessPriceDetailsAges::wherein('serviceid',$business_services->pluck('id'))->where('stype','1')->where('class_type', $business_services->pluck('service_type'));
-    //     $filter_date = new DateTime(); $shift = 1;
-    //     if($request->date && (new DateTime($request->date)) > $filter_date){
-    //         $filter_date = new DateTime($request->date); $shift = 0;
-    //     }
-    //     $days = []; $days[] = new DateTime(date('Y-m-d'));
-    //     for($i = 0; $i<=100; $i++){
-    //         $d = clone($filter_date);
-    //         $days[] = $d->modify('+'.($i+$shift).' day');
-    //     }
-    //     $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $serviceids->pluck('serviceid'))->orderBy('shift_start', 'asc')->get();
-    //     $services = [];
-    //     foreach($bookschedulers as $bs){ $services [] = $bs->business_service; }
-    //     if($user != '' && count($userCompany) == 0){  $request->customer_id = '';}
-    //     $services = array_unique($services);
-    //     // dd('33');
-    //     return view('business-activity-schedular.index',[
-    //         'days' => $days,
-    //         'filter_date' => $filter_date,
-    //         'serviceType' => $servicetype,
-    //         'services' => $services,
-    //         'companyName' => $companyName,
-    //         'businessId' => $business_id,
-    //         'priceid' => $request->priceid,
-    //         'customer' => $customer,
-    //     ]);
-    //  }
-    // }
-    //     public function index(Request $request, $business_id)
-    //     {
-    //     $chkScheduleSession = '';
-    //     $company = CompanyInformation::findOrFail($business_id);
-    //     $companyName = $company->dba_business_name ?? $company->company_name;
-    //     $business_services = $company->service()->where('is_active', 1)->orderBy('created_at', 'desc');
-    //     $servicetype = 'all';
-
-    //     if ($request->stype && $request->business_service_id == '') {
-    //         $servicetype = $request->stype;
-    //         if ($request->stype != 'all') {
-    //             $business_services = $company->service()->where(['is_active' => 1, 'service_type' => $servicetype])->orderBy('created_at', 'desc');
-    //         }
-
-    //         if (session()->has('schedule')) {
-    //             session()->forget('schedule');
-    //         }
-    //     }
-
-    //     $user = Auth::user();
-    //     $userCompany = @$user->company ?? [];
-    //     $customer = Customer::where(['user_id' => @$user->id, 'business_id' => $business_id])->first();
-        
-    //     if ($user && $request->customer_id == '') {
-    //         $request->customer_id = $customer->id;
-    //     }
-        
-    //     if ($request->customer_id) {
-    //         if (request()->type == 'user') {
-    //             $familyMember = Auth::user()->user_family_details()->where('id', request()->customer_id)->first();
-    //             $user = User::where(['firstname' => @$familyMember->first_name, 'lastname' => @$familyMember->last_name, 'email' => @$familyMember->email])->first();
-    //             $customer = Customer::where(['user_id' => @$user->id])->first();
-    //         } else {
-    //             $customer = Customer::where('id', $request->customer_id)->first();
-    //         }
-    //         $memberships = @$customer->active_memberships()->pluck('sport')->unique();
-    //     }
-
-    //     if ($request->business_service_id) {
-    //         $servicetype = $request->stype;
-    //         $business_services = $business_services->where(['id' => $request->business_service_id, 'is_active' => 1, 'service_type' => $servicetype]);
-    //     }
-
-    //     $serviceids = BusinessPriceDetailsAges::whereIn('serviceid', $business_services->pluck('id'))
-    //         ->where('stype', '1')
-    //         ->where('class_type', $business_services->pluck('service_type'));
-
-    //     $filter_date = new DateTime();
-    //     $shift = 1;
-    //     if ($request->date && (new DateTime($request->date)) > $filter_date) {
-    //         $filter_date = new DateTime($request->date);
-    //         $shift = 0;
-    //     }
-
-    //     $days = [];
-    //     $days[] = new DateTime(date('Y-m-d'));
-    //     for ($i = 0; $i <= 100; $i++) {
-    //         $d = clone($filter_date);
-    //         $days[] = $d->modify('+' . ($i + $shift) . ' day');
-    //     }
-
-    //     $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)
-    //         ->whereIn('serviceid', $serviceids->pluck('serviceid'))
-    //         ->orderBy('shift_start', 'asc')
-    //         ->get();
-
-    //     $services = [];
-    //     foreach ($bookschedulers as $bs) {
-    //         $services[] = $bs->business_service;
-    //     }
-
-    //     if ($user && count($userCompany) == 0) {
-    //         $request->customer_id = '';
-    //     }
-
-    //     $services = array_unique($services);
-
-    //     return view('business-activity-schedular.index', [
-    //         'days' => $days,
-    //         'filter_date' => $filter_date,
-    //         'serviceType' => $servicetype,
-    //         'services' => $services,
-    //         'companyName' => $companyName,
-    //         'businessId' => $business_id,
-    //         'priceid' => $request->priceid,
-    //         'customer' => $customer,
-    //     ]);
-    // }
-
     public function index(Request $request, $business_id)
     {
-        // return '33';
         try {
             $chkScheduleSession = '';
             $company = CompanyInformation::findOrFail($business_id);
@@ -196,7 +37,6 @@ class BusinessActivitySchedulerController extends Controller
             }
 
             $user = Auth::user();
-            // dd($user);
             $userCompany = @$user->company ?? [];
             $customer = Customer::where(['user_id' => @$user->id, 'business_id' => $business_id])->first();
             
@@ -567,7 +407,6 @@ class BusinessActivitySchedulerController extends Controller
                         }
                     }
                     if($sendmail == 1){
-                        // dd('44');
                         $UserBookingDetails->update(["act_schedule_id"=>$ary['timeId'],'bookedtime'=>$ary['date']]);
                         $getreceipemailtbody = $this->booking_repo->getreceipemailtbody($UserBookingDetails->booking_id, $UserBookingDetails->id);
                         $email_detail = array(
@@ -603,7 +442,7 @@ class BusinessActivitySchedulerController extends Controller
     private function calculateAge($birthdate)
     {
         if (!$birthdate) {
-            return null; // Return null if birthdate is not available
+            return null; 
         }
     
         $birthDateTime = new DateTime($birthdate);

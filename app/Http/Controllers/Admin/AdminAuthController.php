@@ -122,16 +122,11 @@ class AdminAuthController extends Controller
 
                     return Response::json($response);
         } else {
-            //$aa = Auth::attempt(['email' => $postArr['email'], 'password' => $postArr['password'], 'role' => "admin"]);
-            //dd($aa)
-            //echo bcrypt($postArr['password']);die;
             if (auth()->guard('admin')->attempt(['email' => $postArr['email'], 'password' => $postArr['password']])) {
-                // The user is being remembered...
-             
+                
                 session_start();
                 $_SESSION["myses"] = auth()->guard('admin')->user();
                 $user = auth()->guard('admin')->user();
-                //User::whereId($user->id)->update(['last_login' => date('Y-m-d H:i:s'),'last_ip'=>$request->ip()]);
                 $request->session()->flash('alert-success', 'Welcome '.$postArr['email']);
                 $response = array(
                         'type' => 'success',

@@ -1166,7 +1166,7 @@ z-index: 9999999;
                 <div class="row" style="text-align: center;">
                   <!--  <a href="/reviews"><img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>u19.png" /></a>-->
                 </div>
-                 <h1>Become A Fitnessity Vetted Business</h1>
+                 <h1>Become A Omnebook Vetted Business</h1>
                 <div class="signup-block">
                   <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

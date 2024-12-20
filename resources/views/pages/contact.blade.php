@@ -1,14 +1,21 @@
 @extends('layouts.business.header')
-<link rel='stylesheet' type='text/css' href="https://d2bgo0bc1t29nh.cloudfront.net/css/frontend/general.css">
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/frontend/general.css')}}">
+<link rel='stylesheet' type='text/css' href="{{url('/public/css/responsive.css')}}">
 @section('content')
 
 
-<img src="http://www.fitnessity.co/public/images/cont-banner.jpg">
+<!-- <img src="../public/images/cont-banner.jpg">
 <section class="main-slider contact-banner">
     <div class="container">
         <h1>CONTACT US</h1>
     </div>
-</section>
+</section> -->
+
+<section class="inner-banner pmt-105" style="background-image:url('../public/images/cont-banner.jpg')">
+      <div class="container">
+            <h1>CONTACT US</h1>
+      </div>
+  </section>
 
 <section class="breadcrumbs">
     <div class="container">
@@ -23,7 +30,7 @@
                 <span aria-hidden="true" style="font-size:20px">×</span>
             </button> <!-- {{ session()->get('success') }} -->
         </div>  
-        <div class="alert alert-success alert-dismissible successmsgcontact"style="display: none;">Thank you for contacting Fitnessity. We will get back to you soon!</div>                               
+        <div class="alert alert-success alert-dismissible successmsgcontact"style="display: none;">Thank you for contacting Omnebook. We will get back to you soon!</div>                               
         
 <div class="location-detail contactpage-sec">
     <div class="container">
@@ -43,7 +50,7 @@
                 <p><input type="text" placeholder="Email" name="email" id="email" autocomplete="off" /></p>
                 <textarea placeholder="Send us your Enquiry" name="message" id="message" rows="10"></textarea>
                 <input type="hidden" name="_token" id="token" value="{{csrf_token()}}">
-                <button type="submit" id='frmcontact_submit' onclick="$('#frmcontact').submit();">SEND  ENQUIRY <i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                <button type="submit" id='frmcontact_submit' onclick="$('#frmcontact').submit();" class="btn btn-red mt-25">SEND  ENQUIRY</button>
             </form>
         </div>
 

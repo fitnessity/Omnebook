@@ -8,13 +8,11 @@ use App\UserEmploymentHistory;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
-//use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use App\Repositories\UserRepository;
 use App\Repositories\CmsRepository;
 use App\Miscellaneous;
 use ReCaptcha\ReCaptcha;
 use Image;
-//use Illuminate\Support\Facades\Input;
 use Hash;
 use Redirect;
 use Response;
@@ -92,20 +90,10 @@ class AuthController extends Controller
      
      public function uploadProfile111(Request $request)
      {
-          // save profile pic
         $image = new Image();
         $request->profile_pic = '';
         if($request->hasFile('profile_pic')) {
             $file =  $request->file('profile_pic');
-
-            //getting timestamp
-            // $timestamp = date('YmdHis', strtotime(date('Y-M-d H:i:s')));
-
-            // $name = $timestamp. '-' .$file->getClientOriginalName();
-
-            // $image->filePath = $name;
-
-            // $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR, $name);
             
             $file_upload_path = public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR;
 
@@ -115,7 +103,6 @@ class AuthController extends Controller
 
             $request->profile_pic =$image_upload['filename'];
 
-            //Store thumb
             if (!file_exists(public_path('uploads/profile_pic/thumb150'))) {
                     mkdir(public_path('uploads/profile_pic/thumb150'), 0755, true);
             }
@@ -150,24 +137,15 @@ class AuthController extends Controller
      
      public function saveaddress(Request $request)
      {
-        /* $s = AddrStates::where('state_name',$request->state)->get();
-        $c = AddrCities::where('city_name',$request->city)->get();
-        $co =AddrCountries::where('country_name',$request->country_name)->get();*/
-    
     
          $user = User::where('id',Auth::user()->id)->first();
-        //  new code start
         if ($request->has('skip') && $request->skip) {
             $user->show_step = $request->show_step;
             $user->save();
             return response()->json(['status' => 200, 'redirecturl' => '/']);
         }
-        // end
          $user->show_step=$request->show_step;
          $user->address=$request->address;
-         /*$user->country=@$co[0]->country_code;
-         $user->city=@$c[0]->id;
-         $user->state=@$s[0]->id;*/
          $user->country=$request->country;
          $user->city=$request->city;
          $user->state=$request->state;
@@ -206,7 +184,6 @@ class AuthController extends Controller
 
     protected function businessValidator($data)
     {
-        // $data['captcha'] =$this->users->captchaCheck($data['g-recaptcha-response']);
         $remoteip = $_SERVER['REMOTE_ADDR'];
         $secret   = env('RE_CAP_SECRET');
 
@@ -250,7 +227,6 @@ class AuthController extends Controller
 
     protected function professionalValidator($data)
     {
-        // $data['captcha'] =$this->users->captchaCheck($data['g-recaptcha-response']);
         $remoteip = $_SERVER['REMOTE_ADDR'];
         $secret   = env('RE_CAP_SECRET');
 
@@ -302,7 +278,6 @@ class AuthController extends Controller
 
     public function jsModalregister()
     {
-        //print_r("hgh");die;
         if(Auth::check()){
         $show_step=Auth::user()->show_step;
         }
@@ -353,7 +328,6 @@ class AuthController extends Controller
 
     public function postLogin(Request $request){
         
-        //$postArr = Input::all();
         $postArr = $request->all();
 
         $rules = [
@@ -407,12 +381,7 @@ class AuthController extends Controller
                 if(Auth::user()->is_firstlogin_after_approve) {
                     $request->session()->flash('alert-success', 'Congratulations....!!! Your profile is now active on Fitnessity.');
                     User::WHERE('id', Auth::user()->id)->update(['is_firstlogin_after_approve' => '0']);
-                }else {
-                    //$request->session()->flash('alert-success', 'Welcome '.$postArr['email']);
                 }
-                // The user is being remembered...
-                // check if user category change
-
                 $parent_sports = Sports::SELECT('sports.parent_sport_id')->LEFTJOIN('user_services', 'user_services.sport', '=', 'sports.parent_sport_id')->where('user_services.user_id',Auth::user()->id)->where('sports.is_deleted',0)->get();
 
                 if(count($parent_sports) > 0 && !empty($parent_sports)){
@@ -464,18 +433,14 @@ class AuthController extends Controller
 
     public function PostRegister(Request $request){
 
-        //$postArr = Input::all();
-        $postArr = $request->all();
-        
-
+        $postArr = $request->all();        
         $rules = [
-            'firstname'         => 'required',
-            'lastname'         => 'required',
-            // 'email'             => 'required|unique:users',
-            'password'          => 'required',
+            'firstname' => 'required',
+            'lastname'  => 'required',
+            'password'  => 'required',
             'confirm_password'  => 'required|same:password',
-            'g-recaptcha-response'  => 'required',
-            'captcha'               => 'required|min:1'
+            'g-recaptcha-response' => 'required',
+            'captcha' => 'required|min:1'
         ];
 
         $rulesMessage = [
@@ -496,7 +461,6 @@ class AuthController extends Controller
             );
             return Response::json($response);
         } else {
-            //check for unique email id
             if(!$this->users->validateUser($postArr['email']))
             {
                 $response = array(
@@ -505,7 +469,6 @@ class AuthController extends Controller
                 );
                 return Response::json($response);
             };
-            //check for unique user name
             if(!$this->users->validateUser($postArr['username']))
             {
                 $response = array(
@@ -528,18 +491,12 @@ class AuthController extends Controller
                 $userObj->country = 'US';
                 $userObj->activated = 0;
                 $userObj->phone_number = $postArr['contact'];
-                // $userObj->last_ip = '192.168.0.0';
-                // $userObj->status = "email_activation_pending";
                 $userObj->status = "approved";
                 $userObj->buddy_key = $postArr['password'];
-
-                //For signup confirmation 
                 $userObj->confirmation_code = Str::random(25);
                 $userObj->save();
 
                 if($userObj){
-                    //send notification email to user
-                    // MailService::sendEmailReminder($userObj->id);
                     MailService::sendEmailSignupVerification($userObj->id);
 
                     $url = "/";
@@ -575,7 +532,6 @@ class AuthController extends Controller
             }
         }
     }
-    // sign up process for business
 
     public function getRegisterbusiness() {
         $cms = new CmsRepository;
@@ -591,15 +547,6 @@ class AuthController extends Controller
 
     public function postRegisterbusiness(Request $request) {
         
-        /* $validator = $this->businessValidator($request->all());
-       
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        } */
-
-        //check for unique email id
         if(!$this->users->validateUser($request->email))
         {
             $response = array(
@@ -609,20 +556,10 @@ class AuthController extends Controller
             return Response::json($response);
         }
 
-        // save profile pic
         $image = new Image();
         $request->profile_pic = '';
         if($request->hasFile('profile_pic')) {
             $file =  $request->file('profile_pic');
-
-            //getting timestamp
-            // $timestamp = date('YmdHis', strtotime(date('Y-M-d H:i:s')));
-
-            // $name = $timestamp. '-' .$file->getClientOriginalName();
-
-            // $image->filePath = $name;
-
-            // $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR, $name);
             
             $file_upload_path = public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR;
 
@@ -632,7 +569,6 @@ class AuthController extends Controller
 
             $request->profile_pic =$image_upload['filename'];
 
-            //Store thumb
             if (!file_exists(public_path('uploads/profile_pic/thumb150'))) {
                     mkdir(public_path('uploads/profile_pic/thumb150'), 0755, true);
             }
@@ -662,7 +598,6 @@ class AuthController extends Controller
         $userObj->activated = 0;
         $userObj->buddy_key = $request->password;
 
-        // get lat long
         $latlongdata = Miscellaneous::getLatLong($request->zipcode);
         $userObj->latitude = $latlongdata['lat'];
         $userObj->longitude= $latlongdata['long'];
@@ -670,19 +605,14 @@ class AuthController extends Controller
         $userObj->status  = 'draft';
 
         if(isset($request->profile_pic) && $request->profile_pic != '') {
-            // save new profile pic
             $userObj->profile_pic = $request->profile_pic;
         }
 
         if(!$userObj->save()) {
             
             return response()->json(['type'=>'danger','msg'=>'Some error has occured while registering user!','redirecturl'=>'/auth/registerBusiness']);
-            
-           /*  $request->session()->flash('alert-danger', 'Some error has occured while registering user!');
-            return redirect('/auth/registerBusiness'); */
 
         }else {
-            //save blank entry into professional detail table
             $userProfileObj = New UserProfessionalDetail();
             $userProfileObj->user_id = $userObj->id;
             $userProfileObj->save();
@@ -729,17 +659,9 @@ class AuthController extends Controller
             }
             
 
-            //send notification email to user
-            // MailService::sendEmailReminder($userObj->id);
             MailService::sendEmailSignupVerification($userObj->id);
-            //$request->session()->flash('alert-success', 'Thank you for registering with Fitnessity. Please verify your email address.');
-            // Auth::loginUsingId($userObj->id);
-            // return redirect('/profile/createProfile');
-            // return redirect('/auth/registerBusiness');
-            // return view::make('auth.verified_email')->with('user', $userObj);
             if(isset($userObj->confirmation_code) && !empty($userObj->confirmation_code)){
                 return response()->json(['type'=>'success','msg'=>'Thank you for registering with Fitnessity. Please verify your email address.','redirecturl'=>'/register/confirm/'.$userObj->confirmation_code]);
-                //return redirect('/register/confirm/'.$userObj->confirmation_code);
             } else {
                 return response()->json(['type'=>'danger','msg'=>'Thank you for registering with Fitnessity. Please verify your email address.','redirecturl'=>'/']);
             }
@@ -747,8 +669,6 @@ class AuthController extends Controller
         
     }    
 
-
-    // sign up process for professional
 
     public function getRegisterprofessional() {
         $cms = new CmsRepository;
@@ -763,22 +683,8 @@ class AuthController extends Controller
     }
 
     public function postRegisterprofessional(Request $request) {
-        
-       /*  $validator = $this->professionalValidator($request->all());
-       
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        } */
-
-        //check for unique email id
         if(!$this->users->validateUser($request->email))
         {
-/*             $validator->errors()->add('field', 'Email already exists. Please select different Email');
-            $this->throwValidationException(
-                $request, $validator
-            ); */
             $response = array(
                 'type' => 'danger',
                 'msg' => 'Email already exists. Please select different Email',
@@ -786,21 +692,11 @@ class AuthController extends Controller
             return Response::json($response);
         }
 
-        // save profile pic
         $image = new Image();
         $request->profile_pic = '';
         if($request->hasFile('profile_pic')) {
             $file =  $request->file('profile_pic');
 
-            //getting timestamp
-            // $timestamp = date('YmdHis', strtotime(date('Y-M-d H:i:s')));
-
-            // $name = $timestamp. '-' .$file->getClientOriginalName();
-
-            // $image->filePath = $name;
-
-            // $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR, $name);
-            
             $file_upload_path = public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR;
 
             $thumb_upload_path = public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR.'thumb'.DIRECTORY_SEPARATOR;
@@ -809,7 +705,6 @@ class AuthController extends Controller
 
             $request->profile_pic =$image_upload['filename'];
 
-            //Store thumb
             if (!file_exists(public_path('uploads/profile_pic/thumb150'))) {
                     mkdir(public_path('uploads/profile_pic/thumb150'), 0755, true);
             }
@@ -839,7 +734,6 @@ class AuthController extends Controller
         $userObj->buddy_key = $postArr['password'];
 		$userObj->profile_pic = $request->profile_pic;
 
-        // get lat long
         $latlongdata = Miscellaneous::getLatLong($request->zipcode);
         $userObj->latitude = $latlongdata['lat'];
         $userObj->longitude= $latlongdata['long'];
@@ -847,29 +741,17 @@ class AuthController extends Controller
         $userObj->status  = 'draft';
 
         if(isset($request->profile_pic) && $request->profile_pic != '') {
-            // save new profile pic
             $userObj->profile_pic = $request->profile_pic;
         }
 
         if(!$userObj->save()) {
             return response()->json(['type'=>'danger','msg'=>'Some error has occured while registering user!','redirecturl'=>'/auth/registerProfessional']);
-            //return redirect('/auth/registerProfessional');
         }else {
-            //save blank entry into professional detail table
             $userProfileObj = New UserProfessionalDetail();
             $userProfileObj->user_id = $userObj->id;
             $userProfileObj->save();
-
-            //send notification email to user
-            // MailService::sendEmailReminder($userObj->id);
             MailService::sendEmailSignupVerification($userObj->id);
-            //$request->session()->flash('alert-success', 'Thank you for registering with Fitnessity. Please verify your email address.');
-            // Auth::loginUsingId($userObj->id);
-            // return redirect('/profile/createProfile');
-            // return redirect('/auth/registerBusiness');
-            // return view::make('auth.verified_email')->with('user', $userObj);
             if(isset($userObj->confirmation_code) && !empty($userObj->confirmation_code)){
-                //return redirect('/register/confirm/'.$userObj->confirmation_code);
                 return response()->json(['type'=>'success','msg'=>'Thank you for registering with Fitnessity. Please verify your email address.','redirecturl'=>'/register/confirm/'.$userObj->confirmation_code]);
             } else {
                 return response()->json(['type'=>'success','msg'=>'Thank you for registering with Fitnessity. Please verify your email address.','redirecturl'=>'/']);
@@ -880,8 +762,6 @@ class AuthController extends Controller
 
     public function verifyUserAccount(Request $request)
     {
-      /*echo $request->confirmation_code;
-      exit;*/
         if($request->confirmation_code && $request->confirmation_code != '' && $request->confirmation_code != NULL){
 
             $user = User::whereConfirmationCode($request->confirmation_code)->first();
@@ -893,12 +773,7 @@ class AuthController extends Controller
                 $user->activated = 1;
                 
                 if($user->save()){
-
-                    //Email Verified Acknowledgement
                     MailService::sendEmailVerifiedAcknowledgement($user->id);
-                    //Login
-                    // Auth::loginUsingId($user->id);
-                    // $request->session()->flash('alert-success', 'Your email has been successfully verified. Please login to access Fitnessity.');
                     $s= Api::create_users($user);
                     Auth::login($user);
                     
@@ -909,16 +784,12 @@ class AuthController extends Controller
                         $user->show_step = 2;
                         $user->save();
                              return redirect('/?showstep=1'); 
-                      // return redirect('/profile/editProfileHistory');
-                     //  return redirect('/profile/viewProfile');
-
+                   
                     } else {
                          $user->show_step = 2;
                          $user->save();
                          $request->session()->flash('alert-success', 'Your email has been successfully verified!');
                          return redirect('/?showstep=1'); 
-                      //  return redirect('/profile/editCustomerProfile/'.$c);
-                        //return redirect('/profile/viewProfile');
                     }
 
                 } else {
@@ -1010,7 +881,4 @@ class AuthController extends Controller
         }
     }
 
-    public function test(){
-        
-    }
 }

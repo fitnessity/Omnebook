@@ -50,46 +50,7 @@ class TestNotificationController extends Controller
                 @fwrite($apns, $apnsMessage);
         }
         fclose($apns);
-echo $apnsMessage;
-        /*$deviceToken = 'c5bbab97e14ff34c339088cd9413b03a9f1adb953582032466788dde1c79d6a9';
-        $result = PushNotification::app('appNameIOS')
-                ->to($deviceToken)
-                ->send('Hello World, i`m a push message');
-echo json_encode($result);
+        echo $apnsMessage;
 
-//iOS app
-$devices = PushNotification::DeviceCollection(array(
-    PushNotification::Device($deviceToken, array('badge' => 5)),
-));
-$message = PushNotification::Message('Message Text',array(
-    'badge' => 1,
-    'sound' => 'default',
-
-    'actionLocKey' => 'Action button title!',
-
-    'custom' => array('custom data' => array(
-        'we' => 'want', 'send to app'
-    ))
-));
-
-$collection = PushNotification::app('appNameIOS')
-    ->to($devices)
-    ->send($message);
-
-// get response for each device push
-foreach ($collection->pushManager as $push) {
-    $response = $push->getAdapter()->getResponse();
-}
-
-// access to adapter for advanced settings
-$push = PushNotification::app('appNameAndroid');
-$push->adapter->setAdapterParameters(['sslverifypeer' => false]);
-
-echo json_encode($result);
-//        echo app_path().'/texi_push_devlopment.pem';
-        return json_encode('hi');die;
-//        return view('tasks.index', [
-//            'tasks' => $this->tasks->forUser($request->user()),
-//        ]);*/
     }
 }

@@ -45,7 +45,6 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {   
-        //print_r($request->all()); exit;
         $chkCompanyId =  $request->cid ?? $request->company;
         $companyId = $chkCompanyId != '' &&  $chkCompanyId != '0' ? $chkCompanyId : '';
         if($request->step == 1){
@@ -241,7 +240,6 @@ class CompanyController extends Controller
               'serBusinessoff1'=> isset($request->offers) ? @implode(",",$request->offers):''
             ];
 
-            //print_r($service);exit;
             if($request->id){
                 BusinessService::where('id' , $request->id)->update($service);
             }else{
@@ -293,7 +291,6 @@ class CompanyController extends Controller
 
 
         if($request->step != 4){
-            // return redirect()->route('personal.company.create',['company'=> $companyId]);
             return redirect()->back();
 
         }else{
@@ -351,7 +348,6 @@ class CompanyController extends Controller
     }
     public function TermsConditions(Request $request)
     {
-        // dd($request->all());
         $termsCondition = new TermsCondition();
         $termsCondition->title = $request->category_title;
         $termsCondition->description = $request->contracttermstext;
@@ -365,7 +361,6 @@ class CompanyController extends Controller
 
     public function TermsConditionsUpdate(Request $request)
     {
-        // dd($request->all());
         $termId = Crypt::decrypt($request->input('term_id'));
         $term = TermsCondition::findOrFail($termId);
         $term->title = $request->input('category_title');
@@ -376,7 +371,6 @@ class CompanyController extends Controller
     }
     public function TermsConditionsDelete(Request $request,$id)
     {
-        // dd($request->all());
         $termId = Crypt::decrypt($request->input('id'));
             try {
                 $item = TermsCondition::findOrFail($termId); 
@@ -390,14 +384,11 @@ class CompanyController extends Controller
    
     public function DefaultTermsConditions(Request $request)
     {
-        // dd($request->all());
         if ($request->input('term_id') != null) {
             $termId = Crypt::decrypt($request->input('term_id'));
             $terms =  BusinessTerms::find($termId);
-            // dd('if');
         }
         else{
-            // dd('else');
             $terms = new BusinessTerms();
             $cid=Auth::user()->cid;
             $userid=Auth::user()->id;

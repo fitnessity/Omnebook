@@ -36,7 +36,7 @@ textarea {
   padding: 50px 0 30px 0;
 }
 .font-feed{
-	font-size: 18px;
+	font-size: 16px;
 	margin-bottom: 30px;
 }
 .side-img img{
@@ -75,8 +75,8 @@ textarea {
 	}
 }
 </style>
-<img src="/images/feedback.jpg"  style="width: 100%;">
-<section class="main-slider contact-banner">
+
+<section class="inner-banner pmt-105"  style="background-image:url('../public/images/feedback.jpg')">
     <div class="container"> <h1>Feedback</h1> </div>
 </section>
 
@@ -139,7 +139,7 @@ textarea {
 									</span>
 							   	@endif
 								<input type="hidden" name="_token" id="token" value="{{csrf_token()}}">
-								<button type="submit">SEND  FEEDBACK </button>
+								<button class="btn btn-red" type="submit">Send Feedback</button>
 							</form>
 							<div class="font-green fs-18">{{ session()->get('success') }}</div>
                         </div>

@@ -27,18 +27,6 @@ class StaffController extends Controller
     public $error = '';
     public function index(Request $request)
     {
-        /*if(Auth::check() == '0'){
-        	if($request->has('term'))
-        	{
-        		$companies = CompanyInformation::whereRaw('LOWER(`company_name`) LIKE ?', [ '%'. strtolower($request->term) .'%' ])->get();	
-        	}
-
-        	if ($request->ajax()) {
-                return response()->json($companies);
-            }
-            return view('staff.login');
-        }
-        return redirect('/');*/
         if(Auth::check() == 1){
 
             Auth::logout();
@@ -90,11 +78,9 @@ class StaffController extends Controller
             }
             ini_set('max_execution_time', 10000); 
             $headings = (new HeadingRowImport)->toArray($request->file('import_file'));
-            /*print_r($headings);*/
             if(!empty($headings)){
                 foreach($headings as $key => $row) {
                     $firstrow = $row[0];
-                    /*print_r($firstrow);exit;*/
                     if(  $firstrow[0] != 'name' || $firstrow[1] != 'home_phone' || $firstrow[2] != 'work_phone' || $firstrow[3] != 'ext' ||  $firstrow[4] != 'mobile_phone'|| $firstrow[5] != 'email'|| $firstrow[6] != 'address' || $firstrow[7] != 'city' || $firstrow[8] != 'state'|| $firstrow[9] != 'postal_code' ) 
                     {
                         $this->error = 'Problem in header.';

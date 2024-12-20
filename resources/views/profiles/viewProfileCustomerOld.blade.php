@@ -1636,7 +1636,7 @@ console.log(moment("YYYY-MM-DD",data.birthday))
 
                    // $('#register_submit').prop('disabled', true);
 
-                    showSystemMessages('#systemMessage', 'info', 'Please wait while we delete family member with Fitnessity.');
+                    showSystemMessages('#systemMessage', 'info', 'Please wait while we delete family member with Omnebook.');
 
                   },
 

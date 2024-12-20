@@ -15,7 +15,7 @@
             	<h1>Edit Your Profile</h1>
 
                 <!-- <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum</p> -->
-                <p>Fitnessity was built to give the professional options to operate a successful business on the platform. You choose what works best for you. You can change plans at any time. We have two payment options. All transactions are handle through the Fitnessity platform, no exceptions.</p> 
+                <p>Omnebook was built to give the professional options to operate a successful business on the platform. You choose what works best for you. You can change plans at any time. We have two payment options. All transactions are handle through the Omnebook platform, no exceptions.</p> 
             </div>
 
             <div class="steps-block">
@@ -65,7 +65,7 @@
 		    	<div id="singup_step_3" class="singup_steps">
 
 					<div class="membership_title">
-					    <h1>FITNESSITY BUSINESS MEMBERSHIP</h1>
+					    <h1>OMNEBOOK BUSINESS MEMBERSHIP</h1>
 					    <!-- <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse mole</p> -->
 					    <p>Choose Your option to get started</p>
 					</div>

@@ -116,7 +116,7 @@
                                     <div class="card-header">
                                         <div class="row y-middle">
                                             <div class="col-lg-6" id>
-                                                <h5 class="card-title mb-0" id="list_name">All Contacts</h5>
+                                                <h1 class="card-title mb-0" id="list_name">All Contacts</h1>
                                             </div>
                                             <input type="hidden" name="clientListId" id="clientListId" value="">
                                             <input type="hidden" name="clientListName" id="clientListName" value="">

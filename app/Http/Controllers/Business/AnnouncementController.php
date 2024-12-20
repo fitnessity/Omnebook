@@ -51,8 +51,6 @@ class AnnouncementController extends BusinessBaseController
      */
     public function store(Request $request,$business_id)
     {
-        //print_r($request->all());exit;
-
 
         $announcement = Announcement::create([
             'user_id' => Auth::user()->id, 
@@ -130,7 +128,6 @@ class AnnouncementController extends BusinessBaseController
      */
     public function update(Request $request, $business_id ,$announcementID)
     {   
-        //print_r($request->all());exit;
         $announcement = Announcement::find($announcementID);
         $announcement->update([
             'title' => $request->title, 
@@ -179,8 +176,6 @@ class AnnouncementController extends BusinessBaseController
             $contactList->delete();
         }
 
-        //AnnouncementContactList::whereIn('id',$contactListIdsDiff)->delete();
-
         return redirect()->route('business.announcement.index');
     }
 
@@ -207,12 +202,6 @@ class AnnouncementController extends BusinessBaseController
             @header('Content-type: text/html; charset=utf-8'); 
             return $re;
         }
-
-        /*$uploadedFile = $request->file('upload');
-        $path = $uploadedFile->store('ck-editor');
-        $url = Storage::url($path);
-        $fileName = basename($path);
-        return response()->json(['fileName' => $fileName, 'uploaded'=> 1, 'url' => $url]);*/
     }
 
     public function getAnnouncementStats(Request $request)

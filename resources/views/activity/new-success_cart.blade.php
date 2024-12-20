@@ -84,7 +84,7 @@ if(!empty($cart["cart_item"])) {
 		<div class="row">
 			<div class="col-md-12">
 				<div class="cart-title cart-success">
-					<h5>SUCCESSFULLY ADDED TO YOUR CART</h5>
+					<h1>SUCCESSFULLY ADDED TO YOUR CART</h1>
 				</div>
 			</div>
 		</div>

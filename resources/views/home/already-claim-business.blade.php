@@ -28,7 +28,7 @@
             <div class="col-lg-6 col-md-12 col-12 claiming-business-block">
                 <div class="claiming-boxn">
                 
-                    <h3>Business has already been claimed.</h3>
+                    <h1>Business has already been claimed.</h1>
                     @if(Auth::check())
                         <button class="btn btn-red" type="button" onclick="manageCompany()">Go to the Manage Page</button>
                     @else

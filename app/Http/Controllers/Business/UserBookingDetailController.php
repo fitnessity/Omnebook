@@ -43,11 +43,8 @@ class UserBookingDetailController extends Controller
      */
     public function update(Request $request, $business_id)
     {
-        //print_r($request->all());
-        // dd($request->all());
         $company = $request->current_company->findOrFail($business_id);
         $customer = $company->customers()->findOrFail($request->customer_id);
-        //$booking_status = $customer->bookingStatus()->findOrFail($request->booking_id);
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
         if($request->expired_at){
             $expired_at = date('Y-m-d',strtotime($request->expired_at));
@@ -56,10 +53,7 @@ class UserBookingDetailController extends Controller
         if($request->contract_date){
             $contract_date = date('Y-m-d',strtotime($request->contract_date));
         }
-
-        /*echo $expired_at;
-        echo $contract_date;*/
-        $update = $booking_detail->update([
+           $update = $booking_detail->update([
             'pay_session' =>$request->pay_session,
             'contract_date' =>$contract_date, 
             'expired_at'=>$expired_at
@@ -76,20 +70,17 @@ class UserBookingDetailController extends Controller
     {
         $company = $request->current_company->findOrFail($business_id);
         $customer = $company->customers()->findOrFail($request->customer_id);
-        //$booking_status = $customer->bookingStatus()->findOrFail($id);
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
         $booking_detail->update(["status" => 'void']);
     }
  
     public function refund(Request $request, $business_id, $booking_id){
-        // dd($request->all());
         $company = $request->current_company->findOrFail($business_id);        
         $customer = $company->customers()->findOrFail($request->customer_id);
 
         $booking_detail = $customer->bookingDetail()->findOrFail($request->booking_detail_id);
             if($booking_detail->can_refund()){
                 if($request->refund_method == 'credit'){
-                    // $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
                     $transaction=Transaction::whereIn('user_type', ['customer', 'user'])->where('item_id',$booking_id)->whereIn('user_id',[$customer->id,$customer->user_id])->first();
                     if($transaction && $transaction->can_refund()){
                         if(!$transaction->refund($request->refund_amount ? $request->refund_amount : Null)){
@@ -120,7 +111,6 @@ class UserBookingDetailController extends Controller
                 else{
                     return response()->json(['message' => 'not pay by credit card ot transction can not found'], 400);
                 }
-            // dd('44');
             $result = [
                 'status' => 'refund',
                 'expired_at' => date('Y-m-d',strtotime($request->refund_date)),
@@ -130,38 +120,16 @@ class UserBookingDetailController extends Controller
                 "refund_reason" => $request->refund_reason,
                 "refund_by" => $this->loggedId,
             ];
-            // dd($result);
-            // $booking_detail->refund();
-            $booking_detail->update($result);//com
+            $booking_detail->update($result);
         }
         else{
             return response()->json(['message' => 'membership can not found'], 400);
         }
-        // $transaction = $customer->Transaction()->where('item_id', $booking_id)->first();
-
-        // if($transaction->can_refund()){
-        //     var_dump('refund');
-        //     // if refund_method is credit
-        //     if($transaction->refund_method == 'credit'){
-        //         $customer->charge($transaction->amount, 'refund');
-        //     }
-
-        //     // $transaction->refund(); 
-
-        //     // $booking_detail->update(["status" => 'cancel' ,
-        //     //                         'expired_at' => date('Y-m-d',strtotime($request->terminated_at)),
-        //     //                         'terminate_reason' => $request->terminate_reason,
-        //     //                         'terminated_at' => date('Y-m-d',strtotime($request->terminated_at)),
-        //     //                         'terminate_fee' => $request->terminate_fee,
-        //     //                         'terminate_comment' =>$request->terminate_comment]);
-        // }else{
-        //     return response()->json(['message' => 'transction can not found'], 400);
-        // }
+        
     } 
 
     public function suspend(Request $request, $business_id){
 
-        // dd($request->all());
         $company = $request->current_company->findOrFail($business_id);
         $customer = $company->customers()->findOrFail($request->customer_id);
 
@@ -169,7 +137,6 @@ class UserBookingDetailController extends Controller
 
         if($booking_detail->can_suspend()){
             if($request->stop_recurring == 1){
-                // dd('44');
                 if($customer->charge($request->suspension_fee, 'terminate')){
                     $booking_detail->update(["status" => 'suspend' ,
                                             'stop_reccuring'=>$request->stop_recurring,
@@ -185,7 +152,6 @@ class UserBookingDetailController extends Controller
                 }
             }
             else{
-                // dd('22');
                 $booking_detail->update(["status" => 'suspend',
                 'suspend_reason' => $request->suspension_reason,
                 'suspend_started' => date('Y-m-d',strtotime($request->suspensionstartdate)),

@@ -40,7 +40,6 @@ class DocumentController extends Controller
         $documents = CustomersDocuments::where('customer_id', $id)->when($request->business_id, function ($query) use ($request) {
             return $query->where('business_id', $request->business_id);
         })->get();
-        //where('status',1)
 
         $terms = BusinessTerms::where('cid' ,$request->business_id)->first();
         $lastBooking = $customer->bookingDetail()->orderby('created_at','desc')->first();
@@ -96,7 +95,7 @@ class DocumentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {   //print_r($request->all());exit;
+    {   
         $content = CustomerDocumentsRequested::find($id);
         $imageName = '';
         if($request->hasFile('image')){
@@ -159,7 +158,7 @@ class DocumentController extends Controller
         $name = str_replace("documents/", "", $document->path);
         $imageContent = file_get_contents($filePath);
         $headers = [
-            'Content-Type'        => 'image/jpeg', // Change the content type based on your image type
+            'Content-Type'        => 'image/jpeg', 
             'Content-Disposition' => 'attachment; filename='.$name,
         ];
         return Response::make($imageContent, 200, $headers);
@@ -201,7 +200,7 @@ class DocumentController extends Controller
         $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $signatureDataUrl));
         $filename = 'signatures/signature_' . time() . '.png';
         $customer = Customer::find($request->cus_id);
-        //echo $customer ;exit;
+        
         $documents = CustomersDocuments::find($request->id);
         if($signatureDataUrl){
             Storage::disk('s3')->put($filename, $image);
@@ -250,8 +249,8 @@ class DocumentController extends Controller
         $imageContent = $client->get($imageUrl)->getBody();
 
         $headers = [
-            'Content-Type' => 'image/png', // Adjust the content type based on your image type
-            'Cache-Control' => 'public, max-age=604800', // Optional: Add cache control headers
+            'Content-Type' => 'image/png', 
+            'Cache-Control' => 'public, max-age=604800', 
         ];
         return response($imageContent)->withHeaders($headers);
     }

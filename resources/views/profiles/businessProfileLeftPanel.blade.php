@@ -134,7 +134,7 @@
 	        <figure>
 	            <?php if(@$compinfo->logo != '') {
 	             if(File::exists(public_path("/uploads/profile_pic/thumb/".@$compinfo->logo))){ ?>
-	                <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$compinfo->logo) }}" alt="Fitnessity">
+	                <img src="{{ url('/public/uploads/profile_pic/thumb/'.@$compinfo->logo) }}" alt="Omnebook">
 	            <?php }else{ 
 	                $pf=substr(@$compinfo->dba_business_name, 0, 1);
 	                echo '<div class="youpage-img-text"><p>'.$pf.'</p></div>';
@@ -187,7 +187,7 @@
 	                                    <a href="{{ Config::get('constants.SITE_URL') }}/userprofile/{{ $queryUser->username}}" title="{{ $queryUser->username }}" data-toggle="tooltip">
 	                                    	<?php 
 											if(File::exists(public_path("/uploads/profile_pic/thumb/".$queryUser->profile_pic ))){ ?>
-	                                        	<img src="{{ url('/public/uploads/profile_pic/thumb/'.$queryUser->profile_pic) }}" alt="Fitnessity">
+	                                        	<img src="{{ url('/public/uploads/profile_pic/thumb/'.$queryUser->profile_pic) }}" alt="Omnebook">
 	                                        <?php } else { 
 												$pf=substr($queryUser->firstname, 0, 1).substr($queryUser->lastname, 0, 1);
 												echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';

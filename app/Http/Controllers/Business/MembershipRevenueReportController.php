@@ -31,7 +31,6 @@ class MembershipRevenueReportController extends BusinessBaseController
 
      public function index(Request $request ,$business_id)
      {
-          //print_r($request->all());exit;
           $singlePmt = $adultRevenue = $childRevenue = $infantRevenue = $grandTotal = $recurring = $productRevenue = $recurringPmt= 0;
           $filterOptions = $request->filterOptions;
           $filterStartDate = $request->startDate != '' ? Carbon::parse($request->startDate) : Carbon::parse(date('Y-m-01'));
@@ -50,8 +49,6 @@ class MembershipRevenueReportController extends BusinessBaseController
           $memberships = $this->memberships($filterStartDate,$filterEndDate,$business_id);
           $recurringMemberships = $this->recurringMemberships($filterStartDate,$filterEndDate,$business_id);
           $products = $this->products($filterStartDate,$filterEndDate,$business_id);
-
-          //$memberships = $memberships->union($recurringMemberships)->get();
 
     	     return view('business.reports.membership_revenue.index',compact('business_id','filterStartDate','filterEndDate','sortedDates','filterOptions','memberships','products','singlePmt','adultRevenue','childRevenue','infantRevenue','grandTotal','recurring','productRevenue','recurringMemberships','recurringPmt'));
      }

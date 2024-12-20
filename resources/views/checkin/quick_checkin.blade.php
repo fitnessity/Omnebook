@@ -16,11 +16,11 @@
                         <div class="card-check-in p-relative h-100">
                             <div class="pb-60 text-center">
                                 <a href="#" class="register-check">
-                                    <img src="{{$logoUrl}}" alt="logo">
+                                    <img src="{{$logoUrl}}" alt="logo" loading="lazy">
                                 </a>
                             </div>  
                             <div class="welcome-provider text-center">
-                                <h3>Welcome to</h3>
+                                <h1>Welcome to</h1>
                                 <span>{{$business->company_name}}</span>
                                 <p>Please enter your unique 4-digit code to log in. </p>
                             </div>  
@@ -33,13 +33,13 @@
 
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bg-white">
                             <div class="page-heading text-right">
-                                <label class="mr-10">
+                                <h1 class="mr-10">
                                 <a class="btn btn-red" href="{{route('check-in-welcome')}}"  
                                     style="background-color: {{ $settings ? $settings->digit_screen_color : '' }}; 
                                            border-color: {{ $settings ? $settings->digit_screen_color : '' }};">
                                      Finish
                                  </a>
-                                </label>
+                                </h1>
                                 <label class="mr-10">
                                     {{-- <a class="btn btn-red" href="{{route('checkin.check_out' ,['type' => 1])}}">Exit</a> --}}
                                     <a class="btn btn-red"  data-bs-toggle="modal" data-bs-target=".exitModal"  
@@ -60,7 +60,7 @@
                             </div>
                             <div class="text-center reg-up-img">
                                 <div class="mb-3">
-                                    <img src="{{url('/dashboard-design/images/u-login.png')}}" alt="logo">
+                                    <img src="{{url('/dashboard-design/images/u-login.png')}}" alt="logo" loading="lazy">
                                 </div>
                             </div>
                             <div class="container">
@@ -68,7 +68,7 @@
                                     <div class="col-xxl-6 col-lg-7">
                                         <div class="or-text p-relative pt-15 pb-15">
                                             <div class="mb-3">
-                                                <button type="button" class="btn-red-primary btn-red mt-25 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background-color: {{ $settings ? $settings->digit_screen_color : '' }}; 
+                                                <button type="button" class="btn btn-red mt-25 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background-color: {{ $settings ? $settings->digit_screen_color : '' }}; 
                                                border-color: {{ $settings ? $settings->digit_screen_color : '' }};">Enter a quick four digit code </button>
                                             </div>
                                         </div> 

@@ -17,12 +17,12 @@
                         <hr style="border: 15px solid black;width: 104%;margin-left: -38px;">
                         <section class="row">
                             <div class="col-md-12 text-center">
-                                <div class="tab-hed">Welcome To Fitnessity For Business Profile Setup</div>
+                                <h1 class="tab-hed">Welcome To Omnebook For Business Profile Setup</h1>
                             </div>
                             <div class="col-md-12 text-center">
                                 <div class="tab-para">Ready To Start Earning More ? </div>
                                 <br>
-                                <p class="tab-para1">Fitnessity was designed to make the world of fitness accessible from one platform.<br> We connect customer swith trainers to coaches, classes to therapists, adventures & tours.</p>
+                                <p class="tab-para1">Omnebook was designed to make the world of fitness accessible from one platform.<br> We connect customer swith trainers to coaches, classes to therapists, adventures & tours.</p>
                                 <p class="tab-para1">Offer your services online, at your place of business or on location</p>
                                 <p class="tab-para1">Add your business information, images, videos, services, prices, get verified by completed a background check, start getting reviews,<br>
                                     manage your customers and accounts and much more. Start receiving bookings from customers looking for activites and services your offer.</p>

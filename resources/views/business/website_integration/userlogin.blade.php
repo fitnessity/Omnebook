@@ -79,11 +79,11 @@
                                         Storage::disk('s3')->exists($companyinfo->logo) &&
                                         $companyinfo->logo != '')
                                     <div class="item-inner">
-                                        <img src="{{ Storage::disk('s3')->url($companyinfo->logo) }}" alt="Fitnessity"
+                                        <img src="{{ Storage::disk('s3')->url($companyinfo->logo) }}" alt="omnebook"
                                             loading="lazy">
                                     </div>
                                 @else
-                                    <img src="{{ asset('public/images/omnebook.png') }}" alt="Fitnessity"
+                                    <img src="{{ asset('public/images/omnebook.png') }}" alt="omnebook"
                                         loading="lazy">
                                 @endif
                             </a>
@@ -91,7 +91,7 @@
                         <form method="post" action="#" id="myForm">
                             {{ csrf_field() }}
                             <div class="pop-title ftitle1">
-                                {{-- <h3>Welcome to <br> fitnessity</h3> --}}
+                                {{-- <h3>Welcome to <br> omnebook</h3> --}}
                                 <h3>{{$code->company_name}}</h3>
                             </div>
                             <br />

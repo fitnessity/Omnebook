@@ -33,7 +33,6 @@ class SportsController extends Controller
     public function __construct(SportsRepository $sports,SportsCategoriesRepository $sports_cats,ProfessionalRepository $professional)
     {
         $this->middleware('admin',['except' => ['getAjaxSportListFromCat','getAjaxHappeningNow']]);
-        // $this->middleware('admin');
         $this->sports = $sports;    
         $this->sports_cats = $sports_cats;
         $this->professional = $professional;
@@ -90,10 +89,6 @@ class SportsController extends Controller
     
     public function getAjaxHappeningNow(Request $request)
     {   
-		/* echo $ip = $_SERVER['REMOTE_ADDR']; // your ip address here die;
-        $query = @unserialize(file_get_contents('http://ip-api.com/php/'.$ip));
-        print_r($query);
-        die; */
         $flag = $request->input('flag');
         $sport_names = $this->sports->getAllSportsNames();
         
@@ -148,11 +143,6 @@ class SportsController extends Controller
             return redirect('/admin/sports')->with('status', $response);
         }
 
-        /*if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        }*/
 
         $category_id = @$arr['category_id']?implode(",",$arr['category_id']):'';
         $arr['category_id'] = $category_id;
@@ -190,21 +180,13 @@ class SportsController extends Controller
                 }                
             }
         } 
-        // else {
-        //     $response = array(
-        //         'danger' => 'Provide Image',
-        //     );
-        //     return redirect()->route('create-new-sport')->with('status', $response);   
-        // }
-        
+    
         $status = $this->sports->create($arr);
 
         if($status)
         {
 
-            /* 
-             * Send mail to all user who has under the select sport category for update
-            */
+            
             if($arr['parent_sport_id'] > 0){
                 $ps_id = $arr['parent_sport_id'];
 
@@ -289,16 +271,6 @@ class SportsController extends Controller
                 $request, $validator
             );
         }
-        // if($validator->fails()) {
-        //   $errMsg = array();
-        //     foreach($validator->messages()->getMessages() as $field_name => $messages) {
-        //         $errMsg = end($messages);
-        //     }
-        //     $response = array(
-        //             'danger' =>  $errMsg,
-        //     );
-        //     return redirect('/admin/sports/edit/'.$input['id'])->with('status', $response);
-        // }
 
         $sport_name = $input['sport_name']?$input['sport_name']:'';
         $parent_sport_id = $input['parent_sport_id']?$input['parent_sport_id']:NULL;
@@ -328,7 +300,6 @@ class SportsController extends Controller
         $store = $this->sports->update($input['id'],$input);
         
         if($store){
-            //Update categories of all child sports
             DB::table('sports')->where('parent_sport_id', $input['id'])
                  ->update(['category_id' => $input['category_id']]);
 
@@ -371,14 +342,7 @@ class SportsController extends Controller
     public function activate(Request $request)
     {
         $is_parent = $this->sports->checkIsParentSport($request->id);
-        // if($is_parent == 1){
-        //     return json_encode([
-        //         'status' => false,
-        //         'msg' => 'You can not delete this sport because it is having sub sports attached with it.'
-        //     ]);   
-        // } else {
             $status = $this->sports->update($request->id, array('is_deleted'=>'0'));
-        // }
         
         if($status)
         {
@@ -415,13 +379,5 @@ class SportsController extends Controller
         }
 
         return Validator::make($data, $validation, $message);
-        // return Validator::make($data, [            
-        //     'sport_name' => 'required|max:255',
-        //     'category_id' => 'required|max:11'
-        // ],
-        // [
-        //     'sport_name.required' => 'Provide a sport name',
-        //     'category_id.required' => 'Provide a category'
-        // ]);
     }
 }

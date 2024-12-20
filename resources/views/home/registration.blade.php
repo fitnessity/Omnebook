@@ -25,11 +25,11 @@
                 <!--{{$show_step}}-->
                 @if($show_step == 1)
                 <div class="logo-my">
-                    <a href="javascript:void(0)"> <img src="{{ asset('/public/images/omnebook.png')}}" alt="omnebook"> </a>
+                    <a href="javascript:void(0)"> <img src="{{ asset('/public/images/omnebook.png')}}" alt="omnebook" loading="lazy"> </a>
                 </div>
                 <form id="frmregister" method="post">
                     <div class="pop-title ftitle1">
-                        <h3>Welcome to Omnebook</h3> 
+                        <h1>Welcome to Omnebook</h1> 
                     </div>
                     <div id='systemMessage'></div>
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
@@ -38,7 +38,7 @@
                     <input type="text" name="lastname" id="lastname" size="30" maxlength="80" placeholder="Last Name">
                     <input type="text" name="username" id="username" size="30" maxlength="80" placeholder="Username" autocomplete="off">
 
-                    <input type="email" name="email" id="email" class="myemail" size="30" placeholder="e-MAIL" maxlength="80" autocomplete="off">
+                    <input type="email" name="email" id="email" class="myemail" size="30" placeholder="E-mail" maxlength="80" autocomplete="off">
                     <input type="text" name="contact" id="contact" size="30" maxlength="14" autocomplete="off" placeholder="Phone" data-behavior="text-phone">
                     <input type="text" id="dob" name="dob" class=" flatpicker_birthdate1" placeholder="Birthday">
 					<div class="position-relative auth-pass-inputgroup">	
@@ -60,8 +60,12 @@
                     </div>
                     
 
-                    <div class="terms-wrap">
+                    <!-- <div class="terms-wrap">
                         <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
+                        <label for="b_trm1">I agree to Omnebook <a href="/terms-condition" class="font-red" target="_blank">Terms of Service</a> and <a href="/privacy-policy" class="font-red" target="_blank">Privacy Policy</a></label>
+                    </div> -->
+                    <div class="terms-wrap">
+                        <input type="checkbox" name="b_trm1" id="b_trm1" class="check-box-primary-account" value="1">
                         <label for="b_trm1">I agree to Omnebook <a href="/terms-condition" class="font-red" target="_blank">Terms of Service</a> and <a href="/privacy-policy" class="font-red" target="_blank">Privacy Policy</a></label>
                     </div>
                     <div id='termserror'></div><br>
@@ -101,7 +105,7 @@
                                 @endif
                         
                                 <div class="prfle-wrap">
-                                    <img src="" alt="">
+                                    <img src="" alt="Omnebook" loading="lazy">
                                     {{substr(Auth::user()->firstname,0,1)}}
                                 </div>
                                 <div class="reg-email-step2">{{Auth::user()->email}}</div>
@@ -244,7 +248,7 @@
                                         <div class="">
                                             <div class="text-center">
                                                 <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
-                                                    <img src="https://fitnessity-production.s3.amazonaws.com/customer/2CTmSCCKXZb6uc9phijr2izM9fO5aKnijry4qGQT.jpg" class="rounded-circle avatar-xl-rg img-thumbnail user-profile-image  shadow" alt="user-profile-image" onchange="readURL(this);>
+                                                    <img src="https://fitnessity-production.s3.amazonaws.com/customer/2CTmSCCKXZb6uc9phijr2izM9fO5aKnijry4qGQT.jpg" class="rounded-circle avatar-xl-rg img-thumbnail user-profile-image  shadow" alt="user-profile-image" loading="lazy" onchange="readURL(this);>
                                                                                     
                                                     <form id="image-upload-form" action="https://dev.fitnessity.co/personal/profile/720" method="post" enctype="multipart/form-data">
                                                         <input type="hidden" name="_method" value="PUT">		

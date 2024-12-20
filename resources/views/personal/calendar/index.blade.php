@@ -35,7 +35,7 @@
                             <div class="row mb-3">
                                 <div class="col-6">
                                     <div class="page-heading">
-                                        <label>Calendar</label>
+                                        <h1>Calendar</h1>
                                     </div>
                                 </div>
                             </div>

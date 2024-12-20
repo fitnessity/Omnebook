@@ -16,7 +16,7 @@
                             <div class="row mb-3 pb-1">
 								<div class="col-12">
 									<div class="page-heading">
-										<label>Create Services & Prices</label>
+										<h1>Create Services & Prices</h1>
 									</div>
 									<div class="page-sub-title step1">
 										<label>GET STARTED BY SELECTING A SERVICE YOU OFFER BELOW</label>
@@ -34,7 +34,7 @@
                                         <a class="card card-animate fix-box" data-id="individual">
                                             <div class="card-body">
                                                 <div class="text-center selection-service">
-													<img src="{{url('/public/images/newimage/bus-individual.png')}}" class="pro_card_img1" loading="lazy">
+													<img src="{{url('/public/images/newimage/bus-individual.png')}}" class="pro_card_img1" alt="Omnebook" loading="lazy">
                                                 </div>
                                                 <div class="text-center mt-4 service-details">
 													<div class="selecting-title">Personal Trainer</div>
@@ -52,11 +52,11 @@
                                         <a class="card card-animate fix-box" data-id="classes">
                                            <div class="card-body">
                                                 <div class="text-center selection-service">
-													<img src="{{url('/public/images/newimage/bus-gym.png')}}" class="pro_card_img1" loading="lazy">
+													<img src="{{url('/public/images/newimage/bus-gym.png')}}" class="pro_card_img1" alt="Omnebook" loading="lazy">
                                                 </div>
                                                 <div class="text-center mt-4 service-details">
 													<div class="selecting-title">CLASSES</div>
-													<p>A provider offers group fitness workouts and classes at a gym, studio, or facility.</p>
+													<p>A provider offers group omnebook workouts and classes at a gym, studio, or facility.</p>
                                                 </div>
                                                 <div class="box-footer">
 													<button type="button" class="btn-red select-event"> Select </button>
@@ -70,7 +70,7 @@
                                         <a class="card card-animate fix-box" data-id="experience">
                                             <div class="card-body">
                                                 <div class="text-center selection-service">
-													<img src="{{url('/public/images/newimage/bus-experience.png')}}" class="pro_card_img1" loading="lazy">
+													<img src="{{url('/public/images/newimage/bus-experience.png')}}" class="pro_card_img1" alt="Omnebook" loading="lazy">
                                                 </div>
                                                 <div class="text-center mt-4 service-details">
 													<div class="selecting-title">Adventures & Tours</div>
@@ -88,7 +88,7 @@
                                         <a class="card card-animate fix-box" data-id="events">
                                             <div class="card-body">
                                                 <div class="text-center selection-service">
-													<img src="{{url('/public/dashboard-design/images/yoga.jpeg')}}" class="pro_card_img1" loading="lazy">
+													<img src="{{url('/public/dashboard-design/images/yoga.jpeg')}}" class="pro_card_img1" alt="Omnebook" loading="lazy">
                                                 </div>
                                                 <div class="text-center mt-4 service-details">
 													<div class="selecting-title">EVENTS</div>

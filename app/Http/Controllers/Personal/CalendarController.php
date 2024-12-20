@@ -65,8 +65,7 @@ class CalendarController extends Controller
                 ->join("business_activity_scheduler as ser_sche", DB::raw('ser_sche.id'), '=', 'bdetails.act_schedule_id')
                 ->whereIn('bdetails.user_id', $ids)
                 ->get();
-       
-       /* echo "<pre>";print_r($data);exit;*/
+
         $fullary= $dataAry = $ajaxArray = [];
         foreach($data as $dt){
             $full_name = "N/A";
@@ -176,7 +175,7 @@ class CalendarController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {   //print_r($request->all());exit;
+    {   
     }
 
     /**

@@ -5,7 +5,7 @@
         <div class="card-body pt-2">
             <div class="row"> 
                 <div class="col-6">
-                    <label class="fs-15 mt-10">Saved Cards</label>
+                    <h1 class="fs-15 mt-10">Saved Cards</h1>
                 </div>
             </div> 
 

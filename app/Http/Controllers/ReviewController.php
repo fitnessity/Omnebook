@@ -41,7 +41,6 @@ class ReviewController extends Controller
     protected function ReviewValidator($data)
     {
         return Validator::make($data, [            
-                    // 'reviewfor_userid' => 'required',
                     'title' => 'required|max:255',
                     'review' => 'required',
                 ],

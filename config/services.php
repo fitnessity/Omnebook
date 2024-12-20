@@ -44,5 +44,6 @@ return [
     ],
     'stripe' => [
         'pkey' => env('STRIPE_PKEY'),
+        'skey' => env('SECRET_KEY'),
     ],
 ];

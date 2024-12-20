@@ -938,7 +938,7 @@ button.Zebra_DatePicker_Icon.Zebra_DatePicker_Icon_Disabled {
     </div>
   </div>
 <br>
-<p class="step_para1">Thank You! Your secure online booking with fitnessity is complete. an email with details of your booking has been sent to you and <span id="bsuname"></sapn>.</p>
+<p class="step_para1">Thank You! Your secure online booking with Omnebook is complete. an email with details of your booking has been sent to you and <span id="bsuname"></sapn>.</p>
 
 <hr>
   <!--<button type="button" class="stepbtn" href="#" onclick="$('#formstep5').show();$('#formstep6').hide();" style="float: left;">BACK</button>

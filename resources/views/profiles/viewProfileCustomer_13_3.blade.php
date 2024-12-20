@@ -10,7 +10,7 @@
     <meta name="description" content="Looking for a place to grow your career. There are many good reasons to consider the great insurance jobs available through Legends United.">
     <meta name="keywords" content="Great Insurance Jobs">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title> Fitnessity </title>
+    <title> Omnebook </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" />
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -1919,7 +1919,7 @@ console.log(moment("YYYY-MM-DD",data.birthday))
 
                    // $('#register_submit').prop('disabled', true);
 
-                    showSystemMessages('#systemMessage', 'info', 'Please wait while we delete family member with Fitnessity.');
+                    showSystemMessages('#systemMessage', 'info', 'Please wait while we delete family member with Omnebook.');
 
                   },
 

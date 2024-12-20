@@ -834,7 +834,7 @@
                                                                 </div>
                                                                 <div class="form-group pleftright">
                                                                     <label for="agree">
-                                                                        <input type="checkbox" id="agree" name=""> <span>I AGREE TO FITNESSITY <b> TERMS OF SERVICE</b> AND <b> PRIVACY POLICY</b></span>
+                                                                        <input type="checkbox" id="agree" name=""> <span>I AGREE TO OMNEBOOK <b> TERMS OF SERVICE</b> AND <b> PRIVACY POLICY</b></span>
                                                                     </label>
                                                                 </div>
                                                                 <div class="form-group text-center">
@@ -850,8 +850,8 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <h3>Search For Client On Fitnessity</h3>
-                                                            <p>*Your client could already have a profile on Fitnessity*</p>
+                                                            <h3>Search For Client On Omnebook</h3>
+                                                            <p>*Your client could already have a profile on Omnebook*</p>
                                                             <form>
                                                                 <div class="form-group">
                                                                     <input type="search" name="" id="" class="searchbox">

@@ -236,15 +236,11 @@ class CustomerController extends Controller
         try {
                 $originalName = $file->getClientOriginalName();
                 $fileName = time() . '_' . str_replace(' ', '_', $originalName);
-                // $file->move(public_path('uploads/customers'), $fileName);
                 try {
-                    // Move the file
                     $file->move(public_path('uploads/customers'), $fileName);
                 } catch (\Exception $e) {
-                    // Handle the error here, you can log or return an error response
                     return response()->json(['status' => 500, 'message' => 'Failed to move the file: ' . $e->getMessage()]);
                 }
-                // dd('3');
                 $data = BusinessCustomerUploadFiles::create([
                     'user_id' => $user->id,
                     'business_id' => $business_id,
@@ -476,7 +472,6 @@ class CustomerController extends Controller
                     $status = SGMailService::sendWelcomeMailToCustomer($customerObj->id,Auth::user()->cid,$random_password); 
                     $status_check = SGMailService::sendMailToCustomer($customerObj->id,Auth::user()->cid,$random_password); 
                     
-                    // $checkstatus=;
                     $response = array(
                         'id'=>$customerObj->id,
                         'type' => 'success',

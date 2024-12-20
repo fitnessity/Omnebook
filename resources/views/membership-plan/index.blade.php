@@ -12,7 +12,7 @@
          <div class="container-fluid">
             <div class="row mb-3">
 					<div class="col-12">
-						<div class="page-heading"><label>Pricing Plans</label></div>
+						<div class="page-heading"><h1>Pricing Plans</h1></div>
 					</div>
             </div><!--end row-->
 

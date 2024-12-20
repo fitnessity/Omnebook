@@ -1291,8 +1291,8 @@ class BusinessController extends Controller
 								$("#viewmore'.$act['id'].'").show();
 							});
 						</script>';
-			}//for
-		}//if
+			}
+		}
 		echo $actbox;
 		exit;	
 	}

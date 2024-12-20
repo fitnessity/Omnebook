@@ -218,40 +218,40 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
 					<a class="nav-link menu-link" href="#" aria-controls="sidebarDashboards" onclick="dashboard_menu();">
-						<img src="{{url('public/img/social-profile.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Dashboard</span>
+						<img src="{{url('public/img/social-profile.png')}}" alt="omnebook"> <span data-key="t-dashboards">Dashboard</span>
 					</a>
 				</li>
 				
 				<li class="nav-item">
                     <a class="nav-link menu-link " href="#" aria-controls="sidebarDashboards" onclick="EditProfile();">
-                        <img src="{{url('public/img/edit-2.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Edit Profile &amp; Password </span>
+                        <img src="{{url('public/img/edit-2.png')}}" alt="omnebook"> <span data-key="t-dashboards"> Edit Profile &amp; Password </span>
                     </a>
                 </li>
 
 				<li class="nav-item">
 					<a class="nav-link menu-link active" href="#" aria-controls="sidebarDashboards">
-						<img src="{{asset('/public/img/schedule-1.png')}}" alt="Fitnessity">
+						<img src="{{asset('/public/img/schedule-1.png')}}" alt="omnebook">
 						<span data-key="t-dashboards"> Schedule</span>
 					</a>					
 				</li>
 				<li class="nav-item">
 					<a class="nav-link menu-link" onclick="ManageAccount()" aria-controls="sidebarLanding">
-						<img src="{{asset('/public/img/menu-icon5.svg')}}" alt="Fitnessity"> <span data-key="t-landing">Manage Accounts</span>
+						<img src="{{asset('/public/img/menu-icon5.svg')}}" alt="omnebook"> <span data-key="t-landing">Manage Accounts</span>
 					</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link menu-link" onclick="PaymentHistory()" aria-controls="sidebarDashboards">
-						<img src="{{asset('/img/payment.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Payment History</span>
+						<img src="{{asset('/img/payment.png')}}" alt="omnebook"> <span data-key="t-dashboards">Payment History</span>
 					</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link menu-link" onclick="CreditCard()" aria-controls="sidebarDashboards">
-						<img src="{{asset('/public/img/credit-card.png')}}" alt="Fitnessity"> <span data-key="t-dashboards"> Credit Card </span>
+						<img src="{{asset('/public/img/credit-card.png')}}" alt="omnebook"> <span data-key="t-dashboards"> Credit Card </span>
 					</a>
 				</li>  
 				<li class="nav-item">
 						<a id="logoutLink" class="nav-link menu-link" href="{{ route('logout_n', ['uniquecode' => $business->unique_code]) }}" aria-controls="sidebarDashboards">
-						<img src="{{url('public/img/social-profile.png')}}" alt="Fitnessity">
+						<img src="{{url('public/img/social-profile.png')}}" alt="omnebook">
 						<span data-key="t-dashboards">Logout</span>
 					</a>
 					
@@ -267,7 +267,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 	           <div class="row mb-3">
 					<div class="col-12">
 						<div class="page-heading text-center mt-4">
-							<h2>{{$companyName}}</h2>
+							<h1>{{$companyName}}</h1>
 							<p>Booking Schedule for  {{ucwords(@$customer->full_name)}}</p>
 						</div>
 					</div>
@@ -470,7 +470,7 @@ $service_type_ary = array("all","classes","individual","events","experience");@e
 																						
 																							<div class="col-lg-7 col-md-8 col-sm-6 col-xs-12">
 																								<div class="table-inner-data-sec f-left">
-																									<img src="{{ $cList->BusinessServices->first_profile_pic() ? $cList->BusinessServices->first_profile_pic() : url('/images/service-nofound.jpg') }}" alt="Fitnessity">                                                    
+																									<img src="{{ $cList->BusinessServices->first_profile_pic() ? $cList->BusinessServices->first_profile_pic() : url('/images/service-nofound.jpg') }}" alt="omnebook">                                                    
 																									<div class="p-name">
 																										<h3>{{$cList->BusinessServices->program_name}}</h3>
 																										<div class="d-grid">

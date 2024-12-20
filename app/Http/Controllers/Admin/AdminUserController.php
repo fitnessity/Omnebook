@@ -25,8 +25,6 @@ use DB;
 
 class AdminUserController extends Controller
 {
-    /*protected $loginPath = '/admin';
-    protected $redirectTo = '/admin';*/
     protected $users;
     protected $booking;
 
@@ -90,11 +88,10 @@ class AdminUserController extends Controller
         $latestCustomers = $this->users->getLatestUsers('customer');
         $latestProfessionals = $this->users->getLatestUsers('business');
 
-        //Booking
         $totalBooking = $this->booking->getBookingCount();
         $totalConfirmedBooking = $this->booking->getBookingCount('confirmed');
 
-        //$totalBookedProfessional = $this->booking->getTotalBookedProfessional();
+      
         $totalBookedProfessional = 0;
           
         return view('admin.dashboard', [
@@ -118,12 +115,10 @@ class AdminUserController extends Controller
 
     public function viewCustomers()
     {   
-        //$customers = $this->users->getCustomers();
-        //$customers = User::where('role','!=','admin')->get();   
+      
 		$customers = User::where('is_deleted','=','0')->get();    
         return view('admin.customers.index', [
                 'allCustomers' => $customers,
-                //'pageTitle' => "Manage Customers"
                 'pageTitle' => "Manage Users"
                 ]);
 
@@ -144,12 +139,6 @@ class AdminUserController extends Controller
 					if($update){ $upd=1; }
 			}
 			
-			/*DB::enableQueryLog();
-            $update = User::whereIn('id', $input['customerIds'])
-                     ->update([
-                        'is_deleted' => '1'
-                    ]);
-			dd(\DB::getQueryLog());*/
             if($upd==0) {
                 $response = array(
                         'danger' => 'Some error while deleting customers.',
@@ -231,7 +220,6 @@ class AdminUserController extends Controller
 
             $image_upload = Miscellaneous::saveFileAndThumbnail($request->file('profile_pic'),$file_upload_path,1,$thumb_upload_path,'415','354');
 
-            //Store thumb
             if (!file_exists(public_path('uploads/profile_pic/thumb150'))) {
                     mkdir(public_path('uploads/profile_pic/thumb150'), 0755, true);
             }
@@ -241,14 +229,12 @@ class AdminUserController extends Controller
 
             $userObj = User::find($request->id);  
 
-            // delete existing image
             if(isset($userObj->profile_pic))
             {
                 @unlink(public_path('uploads/profile_pic/thumb150'). DIRECTORY_SEPARATOR . $userObj->profile_pic);
                 @unlink(public_path('uploads/profile_pic/thumb'). DIRECTORY_SEPARATOR . $userObj->profile_pic);
                 @unlink(public_path('uploads/profile_pic'). DIRECTORY_SEPARATOR . $userObj->profile_pic);
             }
-            // save new profile pic
             $userObj->profile_pic = $image_upload['filename'];
         }
 
@@ -371,7 +357,6 @@ class AdminUserController extends Controller
             'gender' => 'required',
             'phone_number' => 'regex:/^\(?([1-9]{1}[0-9]{2})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/',
             'address' => 'required|max:255',
-            // 'country' => 'required|max:10',
             'city' => 'required|max:10',
             'state' => 'required|max:10',
             'zipcode' => 'required|integer',

@@ -82,31 +82,17 @@ class TaskController extends Controller
         return redirect('/tasks');
     }
 
-    // public function testmail()
-    // {
-    //     $user = User::findOrFail();
-    //     Mail::send('emails.welcome', ['user' => $user], function ($m) use ($user) {
-    //         $m->from('contact@fitnessity.net', 'Fitnessity');
-
-    //         $m->to($user->email, $user->name)->subject('Welcome!');
-    //     });
-    // }
 
     public function testTwilio(Request $request)
     {
         require asset('/twilio/sdk/Services/Twilio.php');
-//        require asset('/css/material-charts.css');die;
-          // Create an authenticated client for the Twilio API
+
           $client = new Services_Twilio($_ENV['TWILIO_ACCOUNT_SID'], $_ENV['TWILIO_AUTH_TOKEN']);
-
-          // Use the Twilio REST API client to send a text message
           $m = $client->account->messages->sendMessage(
-                $_ENV['TWILIO_NUMBER'], // the text will be sent from your Twilio number
-                $number, // the phone number the text will be sent to
-                $message // the body of the text message
+                $_ENV['TWILIO_NUMBER'], 
+                $number, 
+                $message 
           );
-
-          // Return the message object to the browser as JSON
           return $m;
     }
 }

@@ -162,7 +162,6 @@ class LessonController extends Controller {
             $company_ids = [];
             $search = $filter['program_type'];
             $searchDatas->where(function($q) use ($search) {
-                //foreach ($search as $data) {
                     if(strpos($search,'_')!= ''){
                         $str = ucwords(str_replace('_',' ', $search));
                     }
@@ -170,7 +169,6 @@ class LessonController extends Controller {
                         $str = ucwords($search);
                     }
                     $q->orWhere('sport_activity', 'LIKE', '%'. $str . '%');
-                //}
             });
         }
         if ($filter['professional_type'] != null) {
@@ -365,7 +363,6 @@ class LessonController extends Controller {
             }
             $company = CompanyInformation::whereIn('id', $company_ids)->get()->toArray();
             if (count($company) != 0) {
-                //array_push($companys,$company);
                 $companys = array_merge($companys, $company);
             }
         }
@@ -522,12 +519,12 @@ class LessonController extends Controller {
                     if (count($value1->child)) {
                         $sports_select .= "<optgroup label='" . $value1->title . "'>";
                         foreach ($value1->child as $key2 => $value2) {
-                            $selected = null; // ($service==$key2)?"selected":"";
+                            $selected = null;
                             $sports_select .= "<option value='" . $key2 . "' " . $selected . " >" . $value2 . "</option>";
                         }
                         $sports_select .= "</optgroup>";
                     } else {
-                        $selected = null; //($service==$value1->value)?"selected":"";
+                        $selected = null; 
                         $sports_select .= "<option value='" . $value1->value . "' " . $selected . ">" . $value1->title . "</option>";
                     }
                 }
@@ -754,12 +751,12 @@ class LessonController extends Controller {
                     if (count($value1->child)) {
                         $sports_select .= "<optgroup label='" . $value1->title . "'>";
                         foreach ($value1->child as $key2 => $value2) {
-                            $selected = null; // ($service==$key2)?"selected":"";
+                            $selected = null;
                             $sports_select .= "<option value='" . $key2 . "' " . $selected . " >" . $value2 . "</option>";
                         }
                         $sports_select .= "</optgroup>";
                     }else {
-                        $selected = null; //($service==$value1->value)?"selected":"";
+                        $selected = null; 
                         $sports_select .= "<option value='" . $value1->value . "' " . $selected . ">" . $value1->title . "</option>";
                     }
                 }
@@ -944,7 +941,6 @@ class LessonController extends Controller {
                 if(!empty($company)) {
                     $companyData[$company['id']][] = $company;
                 }
-                //$price = BusinessPriceDetails::where('cid', $service['cid'])->get();
                 $price = BusinessPriceDetails::where('serviceid', $service['id'])->get();
                 $price = isset($price[0]) ? $price[0] : [];
                 if(!empty($company)) {
@@ -1072,12 +1068,12 @@ class LessonController extends Controller {
                     if (count($value1->child)) {
                         $sports_select .= "<optgroup label='" . $value1->title . "'>";
                         foreach ($value1->child as $key2 => $value2) {
-                            $selected = null; // ($service==$key2)?"selected":"";
+                            $selected = null; 
                             $sports_select .= "<option value='" . $key2 . "' " . $selected . " >" . $value2 . "</option>";
                         }
                         $sports_select .= "</optgroup>";
                     } else {
-                        $selected = null; //($service==$value1->value)?"selected":"";
+                        $selected = null;
                         $sports_select .= "<option value='" . $value1->value . "' " . $selected . ">" . $value1->title . "</option>";
                     }
                 }
@@ -2247,7 +2243,6 @@ class LessonController extends Controller {
       return $actbox;
     }
     public function addToCart(Request $request) {
-        // dd($request->all());
         if(@$request->flushsession == 1){ $request->session()->forget('cart_item'); }
         $cart_item = $request->session()->has('cart_item') ? $request->session()->get('cart_item') : [];
         $tax = $request->has('value_tax') != '' ? $request->value_tax : 0;
@@ -2362,7 +2357,6 @@ class LessonController extends Controller {
                 }
             }
         }
-        // dd($cart_item);
         if (isset($cart_item)) { $request->session()->put('cart_item', $cart_item); }
         else { $request->session()->forget('cart_item');}
         if($request->chk == 'activity_purchase'){

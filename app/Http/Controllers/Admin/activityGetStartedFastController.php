@@ -46,8 +46,6 @@ class activityGetStartedFastController extends Controller
     {
         $getstarted = ActivtyGetStartedFast::where('id',$id)->get();
 
-        //echo "<pre>"; print_r($getstarted); exit;
-
         if($getstarted)
         {
             return view('admin.activity_Get_Started_Fast.edit', [
@@ -66,8 +64,6 @@ class activityGetStartedFastController extends Controller
         $getstarted = ActivtyGetStartedFast::where('id',$id)->first();
          
         $input = $request->all();
-        /*print_r($request->all());exit();*/
-        /* File Upload Start */
         $image = '';
         if($request->hasFile('image')) {
 
@@ -87,9 +83,6 @@ class activityGetStartedFastController extends Controller
                 return redirect('/admin/activity-get-started-fast/edit/'.$input['id'])->with('status', $image_upload);
             }    
         }
-        /* File Upload End */
-       
-       // update:where()($input['id'],$input);
        
         $getstarted = DB::table('activity_Get_Started_Fast')->where('id', $input['id'])->update($input);
 

@@ -9,7 +9,7 @@
 								<div class="membership-block">
 									<div class="row">
 										<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 membership-left">
-								            <h1>FITNESSITY 
+								            <h1>OMNEBOOK 
 												PROFESSIONALs <br/>
 												( Freelancers )
 											</h1>

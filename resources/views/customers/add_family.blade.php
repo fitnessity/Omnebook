@@ -13,7 +13,7 @@
                         	<div class="row mb-3">
 								<div class="col-12">
 									<div class="page-heading">
-										<label>Add Family or Friends</label>
+										<h1>Add Family or Friends</h1>
 									</div>
 								</div>
 							</div>

@@ -22,6 +22,9 @@ use DateTime;
 use DateTimeZone;
 use App\Services\CartService;
 use Stripe\Stripe;
+use Stripe\Terminal\ConnectionToken;
+use Stripe\PaymentIntent;
+
 
 class PaymentController extends Controller {
     public function __construct(BookingRepository $bookings) {
@@ -30,7 +33,6 @@ class PaymentController extends Controller {
         $this->arr = [];        
     }
     public function createCheckoutSession(Request $request) {
-        // dd('333');
         $loggedinUser = Auth::user();
         $customer='';
         $cartService = new CartService();
@@ -38,7 +40,6 @@ class PaymentController extends Controller {
         $userid=Customer::where('user_id',$loggedinUser->id)->first();
 
         if($request->grand_total == 0){
-            // dd('7');
             $orderdata = array(
                 'user_id' => $loggedinUser->id, 'status' => 'active', 'currency_code' => 'usd', 'amount' => $request->grand_total,
                 'order_type' => 'simpleorder', 'bookedtime' => Carbon::now()->format('Y-m-d'),
@@ -407,7 +408,6 @@ class PaymentController extends Controller {
 
                 $newCardPaymentMethodId = $request->new_card_payment_method_id;
                 try {
-                    // Create a charge using the direct charge method
                     $charge = $stripe->charges->create([
                         'amount' => round($totalprice * 100), 
                         'currency' => 'usd',
@@ -418,15 +418,12 @@ class PaymentController extends Controller {
                         'metadata' => [],
                     ]);
                     
-                    // Check if the card should be saved or not
                     if ($request->save_card != 1) {
                         $stripePaymentMethod = \App\StripePaymentMethod::where('payment_id', $newCardPaymentMethodId)->firstOrFail();
                         $stripePaymentMethod->delete();
                     }
 
-                    // Check if the payment was successful
                     if ($charge['status'] == 'succeeded') {
-                        // Create order data
                         $orderdata = array(
                             'user_id' => Auth::user()->id,
                             'status' => 'active',
@@ -436,7 +433,6 @@ class PaymentController extends Controller {
                         ); 
                         $userBookingStatus = UserBookingStatus::create($orderdata);
 
-                        // Create transaction record
                         $transactiondata = array( 
                             'user_type' => 'user',
                             'user_id' => $loggedinUser->id,
@@ -461,7 +457,7 @@ class PaymentController extends Controller {
                     $errormsg = "Your card is not connected with your account. Please add your card again.";
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 } catch (\Exception $e) {
-                    $errormsg = $e->getMessage(); // Modify to capture general errors
+                    $errormsg = $e->getMessage(); 
                     return redirect('/carts')->with('stripeErrorMsg', $errormsg);
                 }
 
@@ -687,8 +683,6 @@ class PaymentController extends Controller {
         if ($request->session()->has('cart_item')) {
             $cart_item = $request->session()->get('cart_item');
         }
-        // dd($cart_item);
-        // dd($request->all());
         if(in_array($request->act, array_keys($cart_item["cart_item"]))) {
             foreach($cart_item["cart_item"] as $k => $v) {
                 if($request->act == $k) {
@@ -835,9 +829,27 @@ class PaymentController extends Controller {
     {
         return view('test');
     }
+    
 
 
+    public function index()
+    {
+        return view('tap_pay', ['stripeKey' => config('services.stripe.key')]);
+    }
 
+    public function process(Request $request)
+    {
+        Stripe::setApiKey(env('SECRET_KEY'));
 
+        $paymentIntent = PaymentIntent::create([
+            'amount' => 1000, 
+            'currency' => 'usd',
+            'automatic_payment_methods' => ['enabled' => true],
+        ]);
+
+        return response()->json([
+            'clientSecret' => $paymentIntent->client_secret,
+        ]);
+    }
     //end
 }

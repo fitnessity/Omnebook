@@ -22,7 +22,7 @@
                      <div class="row mb-3">
 								<div class="col-12">
 									<div class="page-heading">
-										<label>Manage Store</label>
+										<h1>Manage Store</h1>
 									</div>
 								</div><!--end col-->
 							</div><!--end row-->

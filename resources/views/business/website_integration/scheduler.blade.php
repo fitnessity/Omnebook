@@ -97,8 +97,8 @@ $logTextColor =
                                       
                                         <div class="col-lg-7 col-md-7 col-xs-12 col-sm-5">
                                             <div class="table-inner-data-sec">
-                                                {{-- <img src="{{ Storage::disk('s3')->exists($bookscheduler->business_service->first_profile_pic()) ? Storage::URL($bookscheduler->business_service->first_profile_pic()) : url('/images/service-nofound.jpg') }}" alt="Fitnessity"> --}}
-                                                <img src="{{ $bookscheduler->business_service->first_profile_pic() ? $bookscheduler->business_service->first_profile_pic() : url('/images/service-nofound.jpg') }}" alt="Fitnessity">                                                    
+                                                {{-- <img src="{{ Storage::disk('s3')->exists($bookscheduler->business_service->first_profile_pic()) ? Storage::URL($bookscheduler->business_service->first_profile_pic()) : url('/images/service-nofound.jpg') }}" alt="omnebook"> --}}
+                                                <img src="{{ $bookscheduler->business_service->first_profile_pic() ? $bookscheduler->business_service->first_profile_pic() : url('/images/service-nofound.jpg') }}" alt="omnebook">                                                    
                                                 <div class="p-name">
                                                     <h3>{{$bookscheduler->business_service->program_name}}</h3>
                                                     <p> {{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}} | Spot Available - {{$bookscheduler->spots_left($filter_date)}}/{{$bookscheduler->spots_available}}

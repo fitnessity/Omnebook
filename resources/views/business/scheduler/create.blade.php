@@ -37,7 +37,7 @@
                     	<div class="row mb-3">
 								<div class="col-12">
 									<div class="page-heading">
-										<label>Set the schedule for a {{$category->BusinessServices->formal_service_types()}}</label>
+										<h1>Set the schedule for a {{$category->BusinessServices->formal_service_types()}}</h1>
 									</div>
 								</div>
 							</div>

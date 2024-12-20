@@ -143,11 +143,11 @@
                     <div class="col-md-12">
                         <div class="details_section">
                             <p>
-                                Completing your background check increases your trust & safety status on Fitnessity. We will notify you when the results are complete
+                                Completing your background check increases your trust & safety status on Omnebook. We will notify you when the results are complete
                             </p>
                             <h5><b>A quick legal notice:</b></h5>
                             <p>
-                                With your permission and understanding, Fitnessity, Inc. (the “Company”) is working with Evident ID, Inc. (“EvidentID”) to obtain a consumer report that will include a criminal background check of federal, state, and local criminal court records, a review of public sex offender registries, and Social Security number verification in connection with your request to use or your ability to continue to use the Fitnessity platform. Although Fitnessity does not believe that this consumer report is being obtained for an employment purpose, Fitnessity and Evident ID will nonetheless comply with the requirements of the Fair Credit Reporting Act and related state laws that apply specifically to consumer reports obtained for employment purposes.
+                                With your permission and understanding, Omnebook, Inc. (the “Company”) is working with Evident ID, Inc. (“EvidentID”) to obtain a consumer report that will include a criminal background check of federal, state, and local criminal court records, a review of public sex offender registries, and Social Security number verification in connection with your request to use or your ability to continue to use the Omnebook platform. Although Omnebook does not believe that this consumer report is being obtained for an employment purpose, Omnebook and Evident ID will nonetheless comply with the requirements of the Fair Credit Reporting Act and related state laws that apply specifically to consumer reports obtained for employment purposes.
                             </p>
                             <p>
                                 After you’ve completed the form, you can check the status of your background check at {website link here}
@@ -198,7 +198,7 @@
                         <div class="form-group col-md-12 checking_circle">
                             <input type="radio" name="radio_verified" id="radio_verified">
                             <label for="radio_verified">
-                                By checking this circle, you agree to Fitnessity, Inc. and Evident ID, Inc. Privacy Policy, and consent to Evident ID contacting you by email, phone, or SMS texts with information relating to your background check.
+                                By checking this circle, you agree to Omnebook, Inc. and Evident ID, Inc. Privacy Policy, and consent to Evident ID contacting you by email, phone, or SMS texts with information relating to your background check.
                             </label>
                         </div>
 
@@ -331,7 +331,7 @@
                     <div class="col-md-12 complete-section text-center">
                         <h2>ALL DONE!</h2>
                         <p>
-                            Thanks for submitting your background check forms. You are one set closer to being a Fitnessity Verified Busienss. <br>
+                            Thanks for submitting your background check forms. You are one set closer to being a Omnebook Verified Busienss. <br>
                             Once the process is complete, you will see the Verified badge on your profile. <br>
                             You can view the status of your background check here.
                         </p>
@@ -546,7 +546,7 @@
                                 be a competitive market. When creating your profile, how do you stand out from
                                 others. Every image, video, description, price, background check, review, and the
                                 way you deliver your services will help you become a top business professional
-                                on Fitnessity</p>
+                                on Omnebook</p>
                             <h3>Recommended Tips to Do :</h3>
                             <p>- Create a professional profile. It’s your website and resume to potential clients.</p>
                             <p>- Sell your business and show what makes your business the best.</p>

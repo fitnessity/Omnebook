@@ -197,7 +197,7 @@
 							<div class="col-md-12">
 								<div class="new-client-info">
 									<figure>
-			            				<img src="{{ url('/uploads/profile_pic/thumb/1669274706-1650612371-20.jpg')}}" alt="Fitnessity">
+			            				<img src="{{ url('/uploads/profile_pic/thumb/1669274706-1650612371-20.jpg')}}" alt="Omnebook">
 			                		</figure>
 									<div class="page-meta">
 										<label> New Client </label>

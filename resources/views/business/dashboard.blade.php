@@ -112,7 +112,7 @@
                                                         $name = ucwords(Auth::user()->full_name);
                                                     }
                                                 @endphp
-                                                <h4 class="fs-16 mb-1">Good Morning, {{$name}} </h4>
+                                                <h1 class="fs-16 mb-1">Good Morning, {{$name}} </h1>
                                                 <p class="text-muted mb-0">Here's a snap shot of what's happening with <b>{{ ucwords($dba_business_name)}}</b> today.</p>
                                             </div>
                                             <div class="mt-3 mt-lg-0">

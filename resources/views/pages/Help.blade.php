@@ -37,7 +37,7 @@ p{ display: none !important; }
 
 <div class="help-desk">
 	<div class="container">
-		<h1>WELCOME &nbsp; &nbsp; TO &nbsp; &nbsp; HELP DESK</h1>
+		<h1>WELCOME TO HELP DESK</h1>
 		<h6 class="help-rp" style="font-size: 18px;padding: 25px 0 53px;">If you have any questions, you can find results faster with the help desk.</h6>
 		<form>
         	<input type="text" name="" id="help" list="qa" placeholder="How can we help you?" />
@@ -56,7 +56,7 @@ p{ display: none !important; }
 				<div class="contact-three-box">
 					<span><i class="fas fa-lightbulb" aria-hidden="true"></i></span>
 					<h4>KNOWLEDGE BASE</h4>
-					<h5 class="fs-13" style="color: #777;padding: 0 30px;">
+					<h5 class="fs-13">
                     The fastest way to get support is finding the answer through Knowledge Base system.</h5>
 
 				</div>
@@ -65,7 +65,7 @@ p{ display: none !important; }
 				<div class="contact-three-box">
 					<span><i class="fas fa-comments" aria-hidden="true"></i></span>
 					<h4>SUPPORT FORUM</h4>
-					<h5 class="fs-13" style="color: #777;padding: 0 30px;">You can also easy to find out the answer over existing topics on the support forum.</h5>
+					<h5 class="fs-13">You can also easy to find out the answer over existing topics on the support forum.</h5>
 
 				</div>
 			</div>
@@ -73,7 +73,7 @@ p{ display: none !important; }
 				<div class="contact-three-box">
 					<span><i class="fa fa-bullhorn" aria-hidden="true"></i></span>
 					<h4>NEWS 24X7</h4>
-					<h5 class="fs-13" style="color: #777;padding: 0 30px;">Latest news are presented here in the news section area.</h5>
+					<h5 class="fs-13">Latest news are presented here in the news section area.</h5>
 				</div>
 			</div>
 		</div>

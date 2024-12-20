@@ -301,7 +301,7 @@
 													<div class="row">
 														<div class="col-lg-9 col-9">
 															<div class="newsfeed-title">
-																<label>What's new on Fitnessity</label>
+																<label>What's new on Omnebook</label>
 															</div>
 														</div>
 														<div class="col-lg-3 col-3">
@@ -714,7 +714,7 @@
 																			<div class="row">
 																				<div class="col-lg-12 col-12">
 																					<div class="top-welcome">
-																						<label>Welcome to Fitnessity</label>
+																						<label>Welcome to Omnebook</label>
 																						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
 																					</div>
 																				</div>
@@ -723,9 +723,9 @@
 																			<div class="row">
 																				<div class="col-lg-12 col-12">
 																					<div class="top-welcome mt-15 mb-15">
-																						<label>Follow@fitnessity on Instagram</label>
+																						<label>Follow@Omnebook on Instagram</label>
 																						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-																						<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
+																						<button type="submit" class="btn-red-primary btn-red mt-15">Follow Omnebook </button>
 																					</div>
 																				</div>
 																			</div>
@@ -733,9 +733,9 @@
 																			<div class="row">
 																				<div class="col-lg-12 col-12">
 																					<div class="top-welcome mt-15 mb-15">
-																						<label>Follow@fitnessity on Twitter</label>
+																						<label>Follow@Omnebook on Twitter</label>
 																						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-																						<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
+																						<button type="submit" class="btn-red-primary btn-red mt-15">Follow Omnebook </button>
 																					</div>
 																				</div>
 																			</div>
@@ -743,9 +743,9 @@
 																			<div class="row">
 																				<div class="col-lg-12 col-12">
 																					<div class="top-welcome mt-15 mb-15">
-																						<label>Follow@fitnessity on Facebook</label>
+																						<label>Follow@Omnebook on Facebook</label>
 																						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-																						<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
+																						<button type="submit" class="btn-red-primary btn-red mt-15">Follow Omnebook </button>
 																					</div>
 																				</div>
 																			</div>
@@ -753,9 +753,9 @@
 																			<div class="row">
 																				<div class="col-lg-12 col-12">
 																					<div class="top-welcome mt-15 mb-15">
-																						<label>Follow@fitnessity on Ticktok</label>
+																						<label>Follow@Omnebook on Ticktok</label>
 																						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-																						<button type="submit" class="btn-red-primary btn-red mt-15">Follow Fitnessity </button>
+																						<button type="submit" class="btn-red-primary btn-red mt-15">Follow Omnebook </button>
 																					</div>
 																				</div>
 																			</div>

@@ -54,7 +54,7 @@
 		    	<div id="singup_step_3" class="singup_steps">
 
 					<div class="membership_title">
-					    <h1>FITNESSITY BUSINESS MEMBERSHIP</h1>
+					    <h1>OMNEBOOK BUSINESS MEMBERSHIP</h1>
 					    <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse mole</p>
 					</div>
 					@include('profiles.plan-details')

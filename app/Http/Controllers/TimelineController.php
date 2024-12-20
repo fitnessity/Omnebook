@@ -268,38 +268,15 @@ class TimelineController extends Controller
                  $request, $validator
              );
          }
-        //$input  = array_merge($input, ['feed_type' => 'content', 'user_id' => Auth::user()->id]);
-        // $data = array('user_id' => Auth::user()->id, 'original_post_id' => $input['feed_id'],'feed_type'=>'content', 'content'=>$input['content'], 'is_shared'=>'0');
-        // $feed = $this->repository->create($data);
+
         $feed = $this->repository->shareFeed($request->all(), Auth::user()->id);
 
-        // if($feed){
-        //     $status['status'] = true;
-        //     $status['type'] = 'success';
-        //     $status['alert-type'] = 'alert-success';
-        //     $status['msg']  = "Thank you for submitting your response with us!";
-        // } else {
-        //     $status['status'] = false;
-        //     $status['type'] = 'danger';
-        //     $status['alert-type'] = 'alert-danger';
-        //     $status['msg']  = "Some error has occured while saving the feed.";
-        // }
-
-        
-        // $request->session()->flash($status['type'], $status['msg']);
-        // $response = array(
-        //     'type' => $status['type'],
-        //     'msg' => $status['msg']
-        //  );
-        //  return Response::json($response);
-        //  exit();
         if($feed)
         {
             $html = getFeedHtmlByType($feed); 
 
             $shareduser = DB::table('timeline_feeds')->select('user_id')->where('id',$request->get("feed_id"))->first();
             $user =  $shareduser->user_id;
-            // echo '<pre>'; print_r($shareduser->user_id); die();
             if(count($shareduser) > 0 && $user != Auth::user()->id)
             {
                 
@@ -473,8 +450,7 @@ class TimelineController extends Controller
      */
     public function postEditComment(Request $request)
     {
-        $input      = $request->all();
-        //$feedObject = $this->repository->find($input['feed_id']);
+        $input = $request->all();
 
         if(isset($input['reply_id']) && $input['reply_id']>0){
             if($this->repository->isReportedFeed($input['feed_id']) || $this->repository->isReportedComment($input['feed_id'],$input['reply_id']) || $this->repository->isReportedComment($input['feed_id'],$input['comment_id']) ) {
@@ -489,7 +465,6 @@ class TimelineController extends Controller
 
             if($comment)
             {
-                //$user = getUserById($comment->user_id);
                 $html = getSingleReplyCommentInnerHTML($comment, []);
 
                 echo json_encode(array(
@@ -518,7 +493,7 @@ class TimelineController extends Controller
             }
 
 
-            $comment    = $this->repositoryTimeLineComment->updateFeedComment($input['comment_id'], $input['comment_text']);
+            $comment = $this->repositoryTimeLineComment->updateFeedComment($input['comment_id'], $input['comment_text']);
 
             if($comment)
             {
@@ -561,7 +536,7 @@ class TimelineController extends Controller
                  die;
             }
 
-            $comment    = $this->repositoryTimeLineComment->removeFeedComment($input['reply_id']);
+            $comment = $this->repositoryTimeLineComment->removeFeedComment($input['reply_id']);
 
             if($comment)
             {
@@ -586,14 +561,13 @@ class TimelineController extends Controller
                  die;
             }
 
-            //delete all reply and its associated report
-            $comment    = $this->repositoryTimeLineComment->removeFeedComment($input['comment_id']);
+            $comment = $this->repositoryTimeLineComment->removeFeedComment($input['comment_id']);
 
             if($comment)
             {
                 echo json_encode(array(
-                    'status'    => true,
-                    'message'   => 'Comment Deleted'
+                    'status' => true,
+                    'message' => 'Comment Deleted'
                 ));
                 die;
             }
@@ -646,27 +620,19 @@ class TimelineController extends Controller
     {
         $loggedinUser = Auth::user();
         $sports_names = $this->sports->getAllSportsNames();
-        // $serviceType = Miscellaneous::businessType();
         $programType = Miscellaneous::programType();
-        // $programFor = Miscellaneous::programFor();
         $numberOfPeople = Miscellaneous::numberOfPeople();
         $ageRange = Miscellaneous::ageRange();
-        // $expLevel = Miscellaneous::expLevel();
         $serviceLocation = Miscellaneous::serviceLocation();
         $pFocuses = Miscellaneous::pFocuses();
         $duration = Miscellaneous::duration();
-        // $servicePriceOption = Miscellaneous::servicePriceOption();
-        // $specialDeals = Miscellaneous::specialDeals();
 
         return view('timeline.ourprogram', [
             'UserProfileDetail' => $this->users->getUserProfileDetail($loggedinUser['id'], array('service')),
             'sports_names' => $sports_names,
-            // 'serviceType' => $serviceType,
             'programType' => $programType,
-            // 'programFor' => $programFor,
             'numberOfPeople' => $numberOfPeople,
             'ageRange' => $ageRange,
-            // 'expLevel' => $expLevel,
             'serviceLocation' => $serviceLocation,
             'pFocuses' => $pFocuses,
             'duration'=> $duration,
@@ -900,14 +866,11 @@ class TimelineController extends Controller
         if(!$loggedinUser){
             
             return view('timeline.timeline-feed', [
-                'feed'        => $feed,
-                'pageTitle'         => "Timeline",
-
+                'feed'  => $feed,
+                'pageTitle' => "Timeline",
                 'fbshare_url' => "http://".$_SERVER['HTTP_HOST']."/".$request->path(),
                 'fbshare_type' => 'website',
                 'fbshare_title' => $feed->content,
-                // 'fbshare_desc' => 'this is test desc from here',
-               // 'fbshare_image' => ($feed->feed_type == "gallery" && file_exists(public_path().'/uploads/post-gallery'.'/'.$feed->user_id.'/'.$feed->timelineMedia[0]->media_path)) ? asset('/uploads/post-gallery').'/'.$feed->user_id.'/'.$feed->timelineMedia[0]->media_path : asset('images')."/logo.png",
                 'fbshare_image' => ($feed->feed_type == "gallery" && file_exists(public_path().'/uploads/post-gallery'.'/'.$feed->user_id.'/'.$feed->timelineMedia[0]->media_path)) 
                     ? asset('/uploads/post-gallery').'/'.$feed->user_id.'/'.$feed->timelineMedia[0]->media_path 
                     : asset('images')."/banner1.jpg",
@@ -918,11 +881,10 @@ class TimelineController extends Controller
              return view('timeline.sharedtimeline', [
             'feed'        => $feed,
             'pageTitle'         => "Timeline",
-
             'fbshare_url' => "http://".$_SERVER['HTTP_HOST']."/".$request->path(),
             'fbshare_type' => 'website',
             'fbshare_title' => $feed->content,
-            'repository'        => $this->repository,
+            'repository'     => $this->repository,
             'UserProfileDetail' => $this->users->getUserProfileDetail($loggedinUser['id']),
             'fbshare_image' => ($feed->feed_type == "gallery" && file_exists(public_path().'/uploads/post-gallery'.'/'.$feed->user_id.'/'.$feed->timelineMedia[0]->media_path)) 
                 ? asset('/uploads/post-gallery').'/'.$feed->user_id.'/'.$feed->timelineMedia[0]->media_path 
@@ -932,9 +894,8 @@ class TimelineController extends Controller
         }
         } else {
             return view('timeline.timeline-feed', [
-                'feed'        => '',
-                'pageTitle'         => "Timeline",
-
+                'feed'  => '',
+                'pageTitle' => "Timeline",
                 'fbshare_url' => "http://".$_SERVER['HTTP_HOST']."/".$request->path(),
                 'fbshare_type' => 'website',
                 'fbshare_title' => '',
@@ -966,19 +927,6 @@ class TimelineController extends Controller
          );
          return Response::json($response);
          exit();
-        // if($status)
-        // {
-        //     echo json_encode(array(
-        //         'status' => true,
-        //         'msg' => 'Your report request has been sent.'
-        //     ));
-        //     die;
-        // }
-
-        // echo json_encode(array(
-        //     'status' => false
-        // ));
-        // die;
     }
 
     protected function reportFeedValidator($data)

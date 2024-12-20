@@ -30,7 +30,7 @@
 								
 						<div class="col-12">
 							<div class="page-heading">
-								<label>Sales Report</label>
+								<h1>Sales Report</h1>
 							</div>
 						</div>
 					</div>

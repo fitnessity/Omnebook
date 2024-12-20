@@ -34,14 +34,9 @@ class NewsletterController extends Controller
         if($input['name'] != "" && $input['email'] != "")
         {
             $data = $this->newsletter->getByEmail($input['email']);
-            if(!empty($data))
-            {
-                //echo '1';
-            }
-            else
-            {
+            if (empty($data)) {
                 $status = $this->newsletter->create($request->all());
-            }
+            } 
         }
         else
         {

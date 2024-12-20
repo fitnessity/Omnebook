@@ -2,7 +2,7 @@
     <div class="col-lg-4 bg-sidebar">
        <div class="your-booking-page side-part">
             <figure>
-                <img src="{{$odt['com_pic']}}" alt="Fitnessity">
+                <img src="{{$odt['com_pic']}}" alt="Omnebook">
             </figure>
             <div class="booking-page-meta">
                 <a href="#" title="" class="underline">{{$odt['company_name']}}</a>

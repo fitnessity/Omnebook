@@ -27,14 +27,11 @@ class OrderController extends PersonalBaseController
 
     public function index(Request $request)
     {
-        // dd($request->all());
         $user = Auth::user();
-        // dd($user);
         $business = $user->company()->where('id',request()->business_id)->first();
         if(!request()->business_id){
             return redirect()->route('personal.manage-account.index');
         }
-        // DB::enableQueryLog();
         if($request->customer_id){
             if(request()->type == 'user'){
                 $familyMember = Auth::user()->user_family_details()->where('id',request()->customer_id)->first();
@@ -52,7 +49,6 @@ class OrderController extends PersonalBaseController
 
         $bookingDetails = $currentBooking =  [];
         $bookingDetails =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,@$customer);
-        // DB::enableQueryLog();
         $currentBookingData = $this->booking_repo->currentTab($request->serviceType,$request->business_id,@$customer);
        
         foreach($currentBookingData as $i=>$book_details){
@@ -60,9 +56,7 @@ class OrderController extends PersonalBaseController
         }
 
         $tabval = $request->tab; 
-        // dd($currentBooking);
-        // dd(\DB::getQueryLog()); 
-        // dd('3');
+
         return view('personal.orders.index', compact('bookingDetails','currentBooking','tabval','customer','name','business'));
     }
 
@@ -134,7 +128,6 @@ class OrderController extends PersonalBaseController
 
     public function searchActivity(Request $request){
         $serviceType = $request->serviceType;
-        // dd($request->customerId);
         if(!$request->customerId){
             $customer = Auth::user()->customers()->where('business_id' ,$request->businessId)->first();
             $customerID = @$customer->id;
@@ -162,8 +155,6 @@ class OrderController extends PersonalBaseController
                     $orderDetails[@$bd->business_services_with_trashed->id .'!~!'.@$bd->business_services_with_trashed->program_name] [] = $bd;
                 }
             }
-
-            //print_r($orderDetails);exit();
             return view('personal.orders.user_booking_detail',compact('orderDetails','tabName'))->render();
         }
     }

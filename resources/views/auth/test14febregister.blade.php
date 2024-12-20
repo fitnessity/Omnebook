@@ -36,7 +36,7 @@ input {
             <img src="<?php echo Config::get('constants.FRONT_IMAGE'); ?>close.jpg" height="70" width="34"/>
           </button>
          <div class="signup signup-new">
-            <p class="sign-para">Fitnessity makes it easy to network, share your experiences with others and get more involved in multiple sports and fitness activities. It’s free to join and it’s for everyone.</p>
+            <p class="sign-para">Omnebook makes it easy to network, share your experiences with others and get more involved in multiple sports and fitness activities. It’s free to join and it’s for everyone.</p>
             
 
 
@@ -58,7 +58,7 @@ input {
         <div class="signright">
                 <div class="new-signup-left">
                 
-                  <h2>FITNESSITY FOR BUSINESS</h2>
+                  <h2>OMNEBOOK FOR BUSINESS</h2>
                   <p style="margin-top: 36% !important;"> Do you operate a gym, training facility, or other local business that offer sports or fitness oriented activities in multiple sports? Sign up and list your business for free and become a partner.</p>
                   <button type="button" onclick="$('#signup_selection').hide();$('#fitnessity_for_business').show();">SIGN UP</button>
                   <!-- <a href="javascript:void();" data-toggle="modal" data-target="#learnmore_modal"  onclick="openLoginModal('learnmore')">LEARN MORE <i class="fa fa-angle-right" aria-hidden="true"></i></a> -->
@@ -109,7 +109,7 @@ input {
             </li>
             <li>
               <h3>Get Bookings</h3>
-              <p>Customers coming to Fitnessity are looking to book a lesson, class or adventure </p>
+              <p>Customers coming to Omnebook are looking to book a lesson, class or adventure </p>
 
               <p>Submit a quote to a customer or get booked directly from your profile</p>
 
@@ -445,7 +445,7 @@ input {
 
             <!-- <p>By signing up, I agree to <a href="/terms-condition" data-toggle="modal" data-target="#terms_modal">Fitnessity Terms of Service</a> and <a href="/privacy-policy" data-toggle="modal" data-target="#terms_modal">Privacy Policy</a></p>  -->
 
-            <p><input type="checkbox" id="b_trm" class="form-check-input" value="1"> By signing up, I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></p>   
+            <p><input type="checkbox" id="b_trm" class="form-check-input" value="1"> By signing up, I agree to Omnebook <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></p>   
 
             <!-- <button type="submit" class="btn btn-primary" id="register_submit">CREATE ACCOUNT</button> -->
             <div class="signup-new-customer">
@@ -734,7 +734,7 @@ input {
 
             <!-- <p>By signing up, I agree to <a href="/terms-condition" data-toggle="modal" data-target="#terms_modal">Fitnessity Terms of Service</a> and <a href="/privacy-policy" data-toggle="modal" data-target="#terms_modal">Privacy Policy</a></p>  -->
             
-            <p><input type="checkbox" id="p_trm" class="form-check-input" value=""> By signing up, I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></p>   
+            <p><input type="checkbox" id="p_trm" class="form-check-input" value=""> By signing up, I agree to Omnebook <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></p>   
 
             <!-- <button type="submit" class="btn btn-primary" id="register_submit">CREATE ACCOUNT</button> -->
             <div class="signup-new-customer">
@@ -829,7 +829,7 @@ input {
 
             <!-- <p>By signing up, I agree to <a href="/terms-condition" data-toggle="modal" data-target="#terms_modal">Fitnessity Terms of Service</a> and <a href="/privacy-policy" data-toggle="modal" data-target="#terms_modal">Privacy Policy</a></p>  -->
 
-            <p>By signing up, I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></p>   
+            <p>By signing up, I agree to Omnebook <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></p>   
 
             <!-- <button type="submit" class="btn btn-primary" id="register_submit">CREATE ACCOUNT</button> -->
             <div class="signup-new-customer">
@@ -907,7 +907,7 @@ function registerUser() {
               data:formData,
               beforeSend: function () {
                 $('#register_submit').prop('disabled', true);
-                showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+                showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Omnebook.');
               },
               complete: function () {
                 $('#register_submit').prop('disabled', true);
@@ -1126,7 +1126,7 @@ var formData = {
               headers: {'X-CSRF-TOKEN': $("#_token").val()},
               beforeSend: function () {
                 $('#b_submit').prop('disabled', true);
-                showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+                showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Omnebook.');
               },
               complete: function () {
                 $('#b_submit').prop('disabled', true);
@@ -1168,7 +1168,7 @@ var formData = {
               headers: {'X-CSRF-TOKEN': $("#_token").val()},
               beforeSend: function () {
                 $('#p_submit').prop('disabled', true);
-                showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+                showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Omnebook.');
               },
               complete: function () {
                 $('#p_submit').prop('disabled', true);

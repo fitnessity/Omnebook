@@ -138,7 +138,7 @@
                <div class="row mb-3">
 					<div class="col-12">
 						<div class="page-heading">
-							<label>Credit Card Information</label>
+							<h1>Credit Card Information</h1>
 						</div>
 					</div>
                 </div><!--end row-->

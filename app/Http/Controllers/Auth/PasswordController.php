@@ -60,8 +60,6 @@ class PasswordController extends Controller
      */
     public function postEmail(Request $request)
     {
-        /*print_r($request->all());exit;*/
-        // dd('4');
         if(!(Auth::check()))
             $userdata = $this->users->findByEmail($request['email']);
         else{
@@ -82,16 +80,10 @@ class PasswordController extends Controller
             "link" => $link.'/reset-password/'.Crypt::encryptString($userdata->id),
             "email"=> $request['email']
         );
-        // $status = SGMailService::sendresetemail($email_data);
         try {
             $status = SGMailService::sendresetemail($email_data);
-            // dd($status); // Check the returned status for debugging
         } catch (\Exception $e) {
-            // Catch the exception and print the error message
-            dd([
-                'error_message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
+            return redirect()->back();
         }
         
         return $status;
@@ -162,7 +154,6 @@ class PasswordController extends Controller
     public function ResetPassword($id)
     {
         $user_id = Crypt::decryptString($id);
-        //$user_id = $id;
         return view('auth.reset_password',compact('user_id'));
     }
 

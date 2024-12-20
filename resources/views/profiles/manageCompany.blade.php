@@ -176,7 +176,7 @@ $(document).ready(function(){
           headers: {'X-CSRF-TOKEN': $("#_token").val()},
           beforeSend: function () {
             $('.deletec').prop('disabled', true);
-            showSystemMessages('#systemMessage', 'info', 'Please wait while we delete a company with Fitnessity.');
+            showSystemMessages('#systemMessage', 'info', 'Please wait while we delete a company with Omnebook.');
           },
           complete: function () {
             $('#deletec').prop('disabled', false);

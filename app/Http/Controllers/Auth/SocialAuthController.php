@@ -20,9 +20,6 @@ class SocialAuthController extends Controller
 {
     public function socialLogin($provider, Request $request)
     {
-        //echo "hi";
-        //exit;
-
         $request->session()->put('auth_type', 'login');
         return Socialite::driver($provider)->redirect();
     }
@@ -36,7 +33,6 @@ class SocialAuthController extends Controller
 
     public function handleProviderCallbackLogin(SocialAccountService $service, $provider, Request $request)
     {
-        //check if any error
         if(isset($request->error) || isset($request->denied)) {
             $request->session()->flash('alert-danger', 'Some error occured. Please try again later.');
             return redirect('/');
@@ -46,7 +42,6 @@ class SocialAuthController extends Controller
 
         if($auth_type == "login") {
             $user = $service->getUser(Socialite::driver($provider));
-            //$user = Auth::user();
             if(!$user) {
                 $request->session()->flash('alert-danger', 'You are not registered to Fitnessity using these details. Please signup first.');
                 return redirect('/');
@@ -99,81 +94,3 @@ class SocialAuthController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    /*protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'social_id' => 'required',
-        ]);
-    }
-
-    public function postLogin(){
-        
-        $postArr = Input::all();
-        $validator = $this->validator($postArr);
-
-        if($validator->fails()) {
-          $errMsg = array();
-            foreach($validator->messages()->getMessages() as $field_name => $messages) {
-                $errMsg = $messages;
-            }
-            $response = array('type' => 'danger','msg' => $errMsg);
-            return Response::json($response);
-        } else {
-
-            //check if user already exists
-            $existingUser = $this->users->checkUserSocialLogin($postArr['social_id'], $postArr['social_provider']);
-            if(count($existingUser) == 0) {
-                $response = array(
-                        'type' => 'danger',
-                        'msg' => 'You are not registered to Fitnessity using these details. Please signup first',
-                );
-                return Response::json($response);
-                exit();
-            }
-            else {
-                Auth::login($existingUser);
-                $response = array(
-                        'type' => 'success',
-                        'msg' => 'You are logged in successfully',
-                        'redirecturl' => '/'
-                );
-                return Response::json($response);
-            }
-        }
-    }
-
-    public function PostRegister(){
-
-        $postArr = Input::all();        
-        $validator = $this->validator($postArr);
-
-        if($validator->fails()) {
-            $errMsg = array();
-            foreach($validator->messages()->getMessages() as $field_name => $messages) {
-                $errMsg = $messages;
-            }
-            $response = array('type' => 'danger','msg' => $errMsg);
-            return Response::json($response);
-        } else {
-
-            // make an entry for user
-            $postArr['role'] = 'customer';
-            $result = $this->users->registerSocialUser($postArr);
-            if(!$result){
-                $response = array(
-                   'type' => 'danger',
-                   'msg' => 'Some wrror occured while registering. Please try again later.',
-                );
-                return Response::json($response);
-            }else {
-                $response = array(
-                    'type' => 'success',
-                    'msg' => 'You are registered successfully. Please login to system.',
-                    'redirecturl' => '/',
-                );
-                return Response::json($response);
-            }
-        }
-    }
-    
-}*/

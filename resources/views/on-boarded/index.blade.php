@@ -85,7 +85,7 @@
 												<div>
 													<div class="mb-6 mt-4">
 														<div class="steps-title about-text-steps">
-															<h5 class="mb-1">Tell Us About You</h5>
+															<h1 class="mb-1">Tell Us About You</h1>
 															<p>You will have a personal and business account.</p>
 															<p>You can also make bookings for activities you love or network with others</p>
 														</div>
@@ -254,7 +254,7 @@
 										<div class="col-12">
 											<div>
 												<div class="steps-title about-text-steps mb-25">
-													<h5 class="mb-1">Claiming your business</h5>
+													<h1 class="mb-1">Claiming your business</h1>
 													<p>How Would You Would Like to Verify Ownership of {{@$companyDetail->public_company_name}}</p>
 												</div>
 												
@@ -275,7 +275,7 @@
 																		@endphp
 															            <div class="claiming-boxn">
 															                <h4><i class="fa fa-envelope" aria-hidden="true"></i> EMAIL ME</h4>
-															                <p>Fitnessity will send a verification email to the email address below. Please check your email to verify.</p>
+															                <p>Omnebook will send a verification email to the email address below. Please check your email to verify.</p>
 															                <form id="varify_email_for_claim">
 															                    @csrf
 															                    <div class="form-group">
@@ -299,7 +299,7 @@
 
 															            <div class="claiming-boxn twon">
 															                <h4><i class="fa fa-mobile" aria-hidden="true"></i> TEXT ME</h4>
-															                <p>Fitnessity will send a 4-digit verification code via SMS, You'll submit this code on the next screen.</p>
+															                <p>Omnebook will send a 4-digit verification code via SMS, You'll submit this code on the next screen.</p>
 															                <form id="varify_phone_for_claim">
 															                    <div class="form-group">
 															                        <span>Send text to: +1 {{@$companyDetail->business_phone}}</span>
@@ -314,7 +314,7 @@
 
 															            <div class="claiming-boxn twon">
 															                <h4><i class="fas fa-phone-alt" aria-hidden="true"></i> CALL ME</h4>
-															                <p>Fitnessity will call you and with a verification code will be displayed on the next screen. Submit this code using your phone.</p>
+															                <p>Omnebook will call you and with a verification code will be displayed on the next screen. Submit this code using your phone.</p>
 															                <form id="varify_call_for_claim">
 															                    @csrf
 															                    <div class="form-group">

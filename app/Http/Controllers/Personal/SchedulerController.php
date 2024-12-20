@@ -84,7 +84,7 @@ class SchedulerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {  // print_r($request->all());exit;
+    { 
         $activitySchedulerData = BusinessActivityScheduler::find($request->timeid);
         $customer = Customer::where(['id'=>$request->customerID,'business_id'=>$request->businessId])->first();
         $UserBookingDetails = '';
@@ -118,10 +118,6 @@ class SchedulerController extends Controller
                         "checkin_date"=>$request->date, "instructor_id"=>@$activitySchedulerData->instructure_ids]);
                     $sendmail = 1;
                 }else{
-                    // echo $UserBookingDetails.'<br>';
-                    // print_r($UserBookingDetails->BookingCheckinDetails()->get());
-                    // echo '<br>';
-                    //echo $UserBookingDetails->BookingCheckinDetails()->count();
                     if($UserBookingDetails->BookingCheckinDetails()->count() < $UserBookingDetails->pay_session){
                         BookingCheckinDetails::create([
                             "business_activity_scheduler_id"=>$request->timeid, 
@@ -165,7 +161,6 @@ class SchedulerController extends Controller
 
                 SGMailService::confirmationMail($email_detail_provider);
             }
-            //$UserBookingDetails->update(["act_schedule_id"=>$request->timeid,"bookedtime"=>$request->date]);
             return "success";
         }else{
             return "fail";
@@ -175,7 +170,7 @@ class SchedulerController extends Controller
     private function calculateAge($birthdate)
     {
         if (!$birthdate) {
-            return null; // Return null if birthdate is not available
+            return null;
         }
     
         $birthDateTime = new DateTime($birthdate);
@@ -228,9 +223,6 @@ class SchedulerController extends Controller
     {
         $checkinDetail = BookingCheckinDetails::findOrFail($id);
         $user_booking_detail = $checkinDetail->UserBookingDetail;
-       /* $array = json_decode($user_booking_detail->booking_detail,true);
-        $array['sessiondate'] = '';
-        UserBookingDetail::where('id',$user_booking_detail->id)->update(["act_schedule_id"=>'',"bookedtime"=>NULL,'booking_detail'=>json_encode($array)]);*/
         UserBookingDetail::where('id',$user_booking_detail->id)->update(["act_schedule_id"=>'']);
         $checkinDetail->delete();
         return response()->json([

@@ -33,6 +33,52 @@
                         </div>
                     {{-- </a> --}}
                 </li>
+
+                <div class="modal fade edit-schedule{{$service->id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-70">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="myModalLabel">Select the category you would like to schedule for {{$service->program_name}}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="modal-inner-txt">
+                                    <h4>Category</h4>
+                                </div>
+                                <div class="modal-inner-txt border-modal-data">
+                                    @if(!empty($categories) && count($categories) >0)
+                                        @foreach($categories as $i=>$category)
+                                            @php
+                                                $schedules = App\BusinessActivityScheduler::where('serviceid',$service->id)->where('cid',$service->cid)->where('category_id', $category->id);
+
+                                                $time = 'Not Scheduled';
+                                                if($schedules->first() != ''){ 
+                                                    $time = $schedules->first()->get_clean_duration();
+                                                } 
+                                            @endphp
+                                            <div class="row mb-25">
+                                                <div class="col-lg-4 col-md-3 col-sm-5 col-xs-12 black-separator">
+                                                    <span class="font-13">{{$i+1}}. {{$category->category_title}}</span>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 black-separator">
+                                                    <span class="font-13">{{$time}}</span>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 black-separator">
+                                                    <span class="font-13"> {{$schedules->count()}} TIMESLOTS SCHEDULED</span>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"> 
+                                                    <span> <a href="{{route('business.schedulers.create', ['business_id'=>$category->cid,'categoryId'=>$category->id,'session'=> $service->id ]) }}">+ EDIT SCHEDULE</a></span>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <p>There Is No Category.</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="modal fade moreoptions{{$service->id}}" tabindex="-1" aria-labelledby="mySmallModalLabel"
                     aria-modal="true" role="dialog">
                     <div class="modal-dialog modal-dialog-centered modal-70">
@@ -98,3 +144,108 @@
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
+        <div class="modal fade view-booking" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-80">
+                <div class="modal-content" id="bookingmodel">
+                </div>
+            </div>
+        </div> 
+        {{-- <div class="manage-comapny">    
+            <a href="{{route('personal.company.index')}}">Back to Manage Company</a>
+        </div>
+         --}}
+        <script>
+        
+            $(document).ready(function() {
+                var chkDisplay = '{{$displayModal}}';
+                if(chkDisplay){
+                    $('.edit-schedule'+chkDisplay).modal('show');
+                }
+            });
+    
+            function getbookingmodel(sid,chk,type,open){  
+                let date = '';
+                if(chk == 'ajax'){
+                    date = $('#managecalendarservice').val();
+                }else if(chk == 'simple'){
+                    date = new Date().toLocaleDateString();
+                    if(open == 'open'){
+                        $('#bookingmodel').html('');
+                    }
+                }
+    
+                $.ajax({
+                    url:"{{route('getbookingmodeldata')}}",
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    type:"get",
+                    data:{
+                        sid:sid,
+                        date:date,
+                        type:type,
+                        categoryId:($('#category').val() == 'all') ? '' : $('#category').val(),
+                    },
+                    success:function(data){
+                        $('.moreoptions'+sid).modal('hide');
+                        $('#bookingmodel').html(data);
+                        if(open == 'open'){
+                            $('.view-booking').modal('show');
+                        }
+                    }
+                });
+            } 
+    
+                $(document).on('click', '#btndelete', function(event) {
+                    let text = "Are you sure to delete this activity?";
+                    if (confirm(text) == true) {
+                        var sid = $(this).attr('data-id');
+                        var companyid = '{{$request->current_company->id}}';
+                        $.ajax({ 
+                            url:"/business/"+companyid+"/services/"+sid,
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            type:"delete",
+                            data: { 
+                                _token: '{{csrf_token()}}', 
+                            },                
+                            success: function(response) {
+                            console.log('AJAX request successful:', response);
+                            if (response.success) {
+                                $('.messageDiv').addClass('btn btn-success');
+                                $('.messageDiv').html(response.message);
+                                setTimeout(function() {
+                                    $('.messageDiv').fadeOut(400, function() {
+                                        $('.modal').modal('hide'); 
+                                        location.reload();
+                                    });
+                                }, 3000);
+                            }
+                        }
+    
+                        });
+                    }
+                });
+    
+            $(document).on('click', '#btnactive', function(event) {
+                var sid = $(this).attr('data-id');
+                var btnactive = $(this).attr('data-btnactive');
+                var companyid = '{{$request->current_company->id}}';
+                $.ajax({ 
+                    url:"/business/"+companyid+"/services/"+sid,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    type:"PATCH",
+                    data: { 
+                        _token: '{{csrf_token()}}', 
+                        btnactive: btnactive
+                    },
+                    success: function(html){
+                       location.reload();
+                    }
+                });
+            });
+    
+        </script>

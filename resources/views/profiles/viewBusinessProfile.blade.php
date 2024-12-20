@@ -2,7 +2,7 @@
 	@extends('layouts.business.header')
 
 <head>
-    <title> Fitnessity </title>
+    <title> Omnebook </title>
     <meta charset="utf-8">
     <meta name="description" content="Looking for a place to grow your career. There are many good reasons to consider the great insurance jobs available through Legends United.">
     <meta name="keywords" content="Great Insurance Jobs">
@@ -559,7 +559,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 											<div class="friend-info">
 												<figure>
 													@if($compinfo['logo'] != '')
-													<img src="{{ url('/public/uploads/profile_pic/thumb/'.$compinfo['logo']) }}" alt="fitnessity" class="img-fluid">
+													<img src="{{ url('/public/uploads/profile_pic/thumb/'.$compinfo['logo']) }}" alt="Omnebook" class="img-fluid">
 													@else
 													<?php
 														echo '<div class="company-img-text">';
@@ -580,7 +580,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																	<div class="default-img-profile">
 																		<img src="{{url('/public/images/newimage/fitness-img-1.jpg')}}">
 																		<label> Joined </label>
-																		<label class="lstyle">  Fitnessity for Business </label>
+																		<label class="lstyle">  Omnebook for Business </label>
 																	   <span class="spanstyle"><?php 
 																		$date=date_create($compinfo->created_at); echo date_format($date,"d/m/Y"); ?></span>
 																	</div>
@@ -607,7 +607,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 												<div class="friend-info">
 													<figure>
 														@if($compinfo['logo'] != '' && File::exists(public_path("/uploads/profile_pic/thumb/".$compinfo['logo'])))
-														<img src="{{ url('/public/uploads/profile_pic/thumb/'.$compinfo['logo']) }}" alt="fitnessity" class="img-fluid">
+														<img src="{{ url('/public/uploads/profile_pic/thumb/'.$compinfo['logo']) }}" alt="Omnebook" class="img-fluid">
 														@else
 															<?php
 															echo '<div class="company-img-text">';
@@ -696,7 +696,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
                                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <figure>
                                                                     <a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" data-fancybox="gallery">
-                                                                    <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" alt="fitnessity">
+                                                                    <img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$img}}" alt="Omnebook">
                                                                     </a>
                                                                 </figure>
                                                             </div>
@@ -713,14 +713,14 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																			@if(isset($getimages[0]))
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="Omnebook">
 																					</a>
 																				</figure>
 																			@endif
 																			@if(isset($getimages[1]))
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="Omnebook">
 																					</a>
 																				</figure>
 																			@endif
@@ -729,21 +729,21 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																			@if(isset($getimages[2]))
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="Omnebook">
 																					</a>
 																				</figure>
 																			@endif
 																			@if(isset($getimages[3]))
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="Omnebook">
 																					</a>
 																				</figure>
 																			@endif
 																			@if(isset($getimages[4]))
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" data-fancybox="gallery">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="fitnessity">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[4]}}" alt="Omnebook">
 																					</a>
 																					<div class="more-photos">
 																						<span>+{{$countimg}}</span>
@@ -760,7 +760,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																			<div class="col-lg-12 col-md-12 col-sm-12">
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="Omnebook">
 																					</a>
 																				</figure>
 																			</div>
@@ -769,21 +769,21 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																			<div class="col-lg-4 col-md-4 col-sm-4"> 
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" height="170">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="Omnebook" height="170">
 																					</a>
 																				</figure>   
 																			</div> 
 																			<div class="col-lg-4 col-md-4 col-sm-4"> 
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" height="170">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="Omnebook" height="170">
 																					</a>
 																				</figure>    
 																			</div> 
 																			<div class="col-lg-4 col-md-4 col-sm-4">  
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" data-fancybox="gallery">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="fitnessity" height="170">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[3]}}" alt="Omnebook" height="170">
 																					</a>
 																				</figure>   
 																			</div> 
@@ -796,19 +796,19 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																			<div class="col-lg-6 col-md-6 col-sm-6">
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity" width="100" height="335">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="Omnebook" width="100" height="335">
 																					</a>
 																				</figure>
 																			</div>
 																			<div class="col-lg-6 col-md-6 col-sm-6">
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="gallery">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity" width="100" height="165">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="Omnebook" width="100" height="165">
 																					</a>
 																				</figure>
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" data-fancybox="gallery">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="fitnessity" width="100" height="165">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[2]}}" alt="Omnebook" width="100" height="165">
 																					</a>
 																				</figure>
 																			</div>
@@ -820,14 +820,14 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																			<div class="col-lg-6 col-md-6 col-sm-6">
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="groupimg1">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="Omnebook">
 																					</a>
 																				</figure>
 																			</div>
 																			<div class="col-lg-6 col-md-6 col-sm-6">
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" data-fancybox="groupimg1">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="fitnessity">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[1]}}" alt="Omnebook">
 																					</a>
 																				</figure>
 																			</div>
@@ -840,7 +840,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																			<div class="col-lg-12 col-md-12 col-sm-12">
 																				<figure>
 																					<a href="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" data-fancybox="gallery">
-																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="fitnessity">
+																						<img src="{{ URL::to('public/uploads/gallery')}}/{{$userid}}/{{$getimages[0]}}" alt="Omnebook">
 																					</a>
 																				</figure>
 																			</div>
@@ -980,7 +980,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																	<li class="commentappendremove">
 																		<div class="comet-avatar">
 																			<?php if(File::exists(public_path("/uploads/profile_pic/thumb/".$username->profile_pic ))){ ?>
-																				<img src="{{ url('/public/uploads/profile_pic/thumb/'.$username->profile_pic) }}" alt="Fitnessity">
+																				<img src="{{ url('/public/uploads/profile_pic/thumb/'.$username->profile_pic) }}" alt="Omnebook">
 																			<?php }else{ 
 																				$pf=substr($username->firstname, 0, 1).substr($username->lastname, 0, 1);
 																				echo '<div class="admin-img-text"><p>'.$pf.'</p></div>';
@@ -1008,7 +1008,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																<div class="comet-avatar">
 
 															@if(File::exists(public_path("/uploads/profile_pic/thumb/".$compinfo->user_id )))
-																<img src="{{ url('/public/uploads/profile_pic/thumb/'.$compinfo->user_id) }}" alt="fitnessity" >
+																<img src="{{ url('/public/uploads/profile_pic/thumb/'.$compinfo->user_id) }}" alt="Omnebook" >
 															@else
 																<?php
 																echo '<div class="company-img-text">';
@@ -1311,7 +1311,7 @@ if (isset($_GET['cover']) && $_GET['cover'] == 1) {
 																			foreach($rimg as $img)
 																			{ ?>
 																				<a href="{{ url('/public/uploads/review/'.$img) }}" data-fancybox="group" data-caption="{{$review->title}}">
-																				<img src="{{ url('/public/uploads/review/'.$img) }}" alt="Fitnessity" />
+																				<img src="{{ url('/public/uploads/review/'.$img) }}" alt="Omnebook" />
 																				</a>
 																				<?php
 																			}

@@ -696,7 +696,7 @@ button.Zebra_DatePicker_Icon.Zebra_DatePicker_Icon_Disabled {
 
         <div class="signup signup-new">
 
-          <p class="sign-para">Fitnessity makes it easy to network, share your experiences with others and get more involved in multiple sports and fitness activities. It’s free to join and it’s for everyone.</p>
+          <p class="sign-para">Omnebook makes it easy to network, share your experiences with others and get more involved in multiple sports and fitness activities. It’s free to join and it’s for everyone.</p>
 
           <div class="signleft" style="width:45%">
 
@@ -732,7 +732,7 @@ button.Zebra_DatePicker_Icon.Zebra_DatePicker_Icon_Disabled {
 
 
 
-              <h2>FITNESSITY FOR BUSINESS</h2>
+              <h2>OMNEBOOK FOR BUSINESS</h2>
 
               <p style="margin-top: 36% !important;"> Do you operate a gym, training facility, or other local business that offer sports or fitness oriented activities in multiple sports? Sign up and list your business for free and become a partner.</p>
 
@@ -834,7 +834,7 @@ button.Zebra_DatePicker_Icon.Zebra_DatePicker_Icon_Disabled {
 
               <h3>Get Bookings</h3>
 
-              <p>Customers coming to Fitnessity are looking to book a lesson, class or adventure </p>
+              <p>Customers coming to Omnebook are looking to book a lesson, class or adventure </p>
 
 
 
@@ -1046,7 +1046,7 @@ button.Zebra_DatePicker_Icon.Zebra_DatePicker_Icon_Disabled {
 
         <div class="pop-title ftitle1">
 
-          <h3>Welcome to fitnessity</h3>
+          <h3>Welcome to Omnebook</h3>
 
         </div>
 
@@ -1094,7 +1094,7 @@ button.Zebra_DatePicker_Icon.Zebra_DatePicker_Icon_Disabled {
 
 
 
-                <p style="font-size: 13.5px;float: none;margin-left: 3px;">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></p> 
+                <p style="font-size: 13.5px;float: none;margin-left: 3px;">I agree to Omnebook <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></p> 
 
               </div>
 
@@ -1269,7 +1269,7 @@ button.Zebra_DatePicker_Icon.Zebra_DatePicker_Icon_Disabled {
 
                     <div class="reg-email-step2">{{Auth::user()->email}}</div>
 
-                    <h2>Welcome to Fitnessity</h2>
+                    <h2>Welcome to Omnebook</h2>
 
                     <div class="reg-title-step2"><input type="text" name="" id="" value="{{Auth::user()->username}}" readonly=""> <span class="edt-name"><i class="fa fa-pencil" aria-hidden="true"></i></span></div>
 
@@ -2887,7 +2887,7 @@ button.Zebra_DatePicker_Icon.Zebra_DatePicker_Icon_Disabled {
 
              <input type="checkbox" id="b_trm" class="form-check-input" value="1" style="position: relative;left: -48%;top: 26px;">
 
-             <p style="font-size: 13.5px;float: none;margin-left: 8px;margin-top: 1%;">I agree to Fitnessity <a href="/terms-condition" target="_blank" class="t_c">Terms of Service</a> and <a href="/privacy-policy" target="_blank" class="t_c">Privacy Policy</a></p> 
+             <p style="font-size: 13.5px;float: none;margin-left: 8px;margin-top: 1%;">I agree to Omnebook <a href="/terms-condition" target="_blank" class="t_c">Terms of Service</a> and <a href="/privacy-policy" target="_blank" class="t_c">Privacy Policy</a></p> 
 
              <input type="hidden" name="_token" value="{{csrf_token()}}">
 
@@ -3371,7 +3371,7 @@ button.Zebra_DatePicker_Icon.Zebra_DatePicker_Icon_Disabled {
 
           $('#register_submit').prop('disabled', true);
 
-          showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+          showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Omnebook.');
 
         },
 
@@ -4069,7 +4069,7 @@ $.ajax({
 
     $('#b_submit').prop('disabled', true);
 
-    showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+    showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Omnebook.');
 
   },
 

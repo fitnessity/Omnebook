@@ -76,16 +76,6 @@ class AdminProfileController extends Controller
             );
         }
 
-        // if($validator->fails()) {
-        //   $errMsg = array();
-        //     foreach($validator->messages()->getMessages() as $field_name => $messages) {
-        //         $errMsg = end($messages);
-        //     }   
-        //     $response = array(
-        //             'danger' =>  $errMsg,
-        //     );
-        //     return redirect('/admin/profile/editprofiledetail')->with('status', $response);
-        // }
 
         $loggedinUser = $_SESSION['myses'];
         
@@ -111,13 +101,11 @@ class AdminProfileController extends Controller
 
             $file = Input::file('profile_pic');
 
-            //getting timestamp
             $timestamp = date('YmdHis', strtotime(date('Y-M-d H:i:s')));
             $name = $timestamp. '-' .$file->getClientOriginalName();
             $image->filePath = $name;
             $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'profile_pic'.DIRECTORY_SEPARATOR, $name);
 
-            // save new profile pic
             $userObj = User::find($loggedinUser['id']);        
             $userObj->profile_pic = $image->filePath;
         }
@@ -142,7 +130,6 @@ class AdminProfileController extends Controller
             'gender' => 'required',
             'phone_number' => 'regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/',
             'address' => 'required|max:255',
-            // 'country' => 'required|max:10',
             'city' => 'required|max:10',
             'state' => 'required|max:10',
             'zipcode' => 'required|integer',

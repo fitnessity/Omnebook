@@ -6,24 +6,24 @@ $total_quantity = 0;
 <!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
-        <title>Fitnessity</title>
+        <title>Omnebook</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta content="charset=utf-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <meta name="description" content=" Fitnessity: Because Fitness=Necessity ">
+        <meta name="description" content=" Omnebook: Because Omnebook=Necessity ">
         <meta itemprop="name" content="">
-        <meta itemprop="description" content=" Fitnessity: Because Fitness=Necessity ">
+        <meta itemprop="description" content=" Omnebook: Because Omnebook=Necessity ">
         <meta itemprop="image" content="">
         <meta name="twitter:card" content="product">
         <meta name="twitter:title" content="">
-        <meta name="twitter:description" content=" Fitnessity: Because Fitness=Necessity ">
+        <meta name="twitter:description" content=" Omnebook: Because Omnebook=Necessity ">
         <meta name="twitter:image" content="">
         <meta property="og:url" content="">
         <meta property="og:type" content="">
         <meta property="og:title" content="">
-        <meta property="og:description" content=" Fitnessity: Because Fitness=Necessity ">
+        <meta property="og:description" content=" Omnebook: Because Omnebook=Necessity ">
         <meta property="og:image" content="">
-        <meta property="og:site_name" content="Fitnessity">
+        <meta property="og:site_name" content="Omnebook">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
         <link rel="shortcut icon" href="{{ url('/public/images/email/favicon.ico') }}">
         <link rel="icon" href="{{ url('/public/images/email/favicon.ico') }}">
@@ -381,7 +381,7 @@ $total_quantity = 0;
 						 	<div class="userblock mobile-none">
                         		<div class="login_links" onclick="openNav()">
                                 	<img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}"
-                                     alt="Fitnessity" >
+                                     alt="Omnebook" >
                                 </div>
 								<nav class="pc-sidebar">
 									<div class="navbar-wrapper">
@@ -390,7 +390,7 @@ $total_quantity = 0;
 												<a href="javascript:void(0)" class="cancle fa fa-times" onclick="closeNav()"></a>
 												<ul class="pc-navbar">
 													<li style="text-align: center;"> 
-                                                        <img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" class="sidemenupic" alt="Fitnessity">
+                                                        <img src="{{ Storage::disk('s3')->exists(Auth::user()->profile_pic) ? Storage::URL(Auth::user()->profile_pic) : url('/images/user-icon.png') }}" class="sidemenupic" alt="Omnebook">
 													</li>
 													<li class="pc-caption"><span> Welcome</span></li>
                                                     <li class="pc-caption-1">
@@ -466,7 +466,7 @@ $total_quantity = 0;
 												</ul>
 											</div>
 											<p class="pri-1"> <a href="{{ Config::get('constants.SITE_URL') }}/privacy-policy" style="color: white;"> Privacy </a> - <a href="{{ Config::get('constants.SITE_URL') }}/terms-condition" style="color: white;">Terms </a></p>
-											<p class="pri-2">Fitnessity, Inc 2021</p>
+											<p class="pri-2">Omnebook, Inc 2021</p>
 										</div>
 									</div>
 								</nav>

@@ -62,7 +62,6 @@ class MembershipExpirationsController extends BusinessBaseController
     }
 
     public function getMemberships(Request $request){
-        //print_r($request->all());exit;
     	$type = $request->days;
     	$expiringMembership = $this->membership($type,$request->endDate,$request->startDate);
 	    $expiringMembership = $expiringMembership->orderby('expired_at','desc')->get();
@@ -79,8 +78,8 @@ class MembershipExpirationsController extends BusinessBaseController
     {
   		$type = $request->days;
 		$expiringMembership = $this->membership($type,$request->endDate,$request->startDate);
-        $offset = $request->get('offset', 0); // Offset for pagination, passed from the frontend
-        $limit = 10; // Number of records to load per request
+        $offset = $request->get('offset', 0); 
+        $limit = 10;
       
         $expiringMembership = $expiringMembership->orderby('expired_at','desc')->get();
         $memberships = $expiringMembership->filter(function ($item) {

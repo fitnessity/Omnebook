@@ -7,14 +7,14 @@
          <div class="container-fluid">
             <div class="row">
                <div class="col">
-                  <div class="h-100">
-                     <div class="row mb-3">
-								<div class="col-6">
-									<div class="page-heading">
-										<label>Booking Scheduler </label>
-									</div>
+                  	<div class="h-100">
+                     	<div class="row mb-3">
+							<div class="col-6">
+								<div class="page-heading">
+									<h1>Booking Scheduler </h1>
 								</div>
 							</div>
+						</div>
 							<div class="row">
 								<div class="col-md-12">
 									<div class="card">

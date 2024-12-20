@@ -121,8 +121,12 @@ a.btn-style-two {
 	border-radius: 10px !important;
 	background-color: transparent;
 	padding: 9px 12px;
-	background-color: #98002e !important;
+	background-color: #98002e;
 	font-size: 14px;
+}
+a.btn-style-two:hover{
+    background-color: #1c256c;
+    color: #fff;
 }
 .btn-cart {
     position: relative;

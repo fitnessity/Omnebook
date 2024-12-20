@@ -35,7 +35,6 @@ class GetstartedController extends Controller
     }
     public function store(Request $request)
     {
-    	//echo "<pre>"; print_r($request->all()); exit;
     	$validator = $this->saveValidator($request->all());
         if ($validator->fails()) {
             $this->throwValidationException(
@@ -107,8 +106,6 @@ class GetstartedController extends Controller
     {
         $getstarted = Getstarted::where('id',$id)->get();
 
-        //echo "<pre>"; print_r($getstarted); exit;
-
         if($getstarted)
         {
             return view('admin.getstarted.edit', [
@@ -128,7 +125,6 @@ class GetstartedController extends Controller
          
        $input = $request->all();
        print_r($request->all());exit();
-        /* File Upload Start */
         $image = '';
         if($request->hasFile('image')) {
 
@@ -148,9 +144,7 @@ class GetstartedController extends Controller
                 return redirect('/admin/getstarted/edit/'.$input['id'])->with('status', $image_upload);
             }    
         }
-        /* File Upload End */
-       
-       // update:where()($input['id'],$input);
+
        
         $getstarted = DB::table('getstarted')->where('id', $input['id'])->update($input);
 

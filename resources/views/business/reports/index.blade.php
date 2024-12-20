@@ -16,7 +16,7 @@
                        <div class="row mb-3">
 							<div class="col-6">
 								<div class="page-heading">
-									<label>Reports</label>
+									<h1>Reports</h1>
 								</div>
 							</div>
                             <!--end col-->

@@ -26,7 +26,7 @@
 <!-- Email Header : BEGIN -->
 <tr>
 <td style="padding: 0  0 18px 0; text-align: center">
-<webversion style="color: black;">Welcome to Fitnessity</webversion>
+<webversion style="color: black;">Welcome to Omnebook</webversion>
 <!--<a href="#"  ><img src="images/logo.png" width="149" height="43" alt="logo" border="0" style="height: auto;"></a>-->
 </td>
 </tr>
@@ -92,7 +92,7 @@
             <tr>
                 <td style="text-align: center; padding: 0px 45px;" align="center">
 					<h6 style="font-weight: 500; font-size: 13px; color: white;"> WHAT ACTIVITY EXCITES YOU TO STAY ACTIVE?    </h6>
-					<h6 style="font-weight: 400; font-size: 11px; color: white;"> Fitnessity (Fit-ness-ity) is a directory & marketplace connecting consumers to trainers, coaches, classes & active experiences with adventures & Tours. You can participate in activities locally, online, or while on the go. Fitnessity is for people who believe that an active lifestyle is a necessity.    </h6>
+					<h6 style="font-weight: 400; font-size: 11px; color: white;"> Omnebook is a directory & marketplace connecting consumers to trainers, coaches, classes & active experiences with adventures & Tours. You can participate in activities locally, online, or while on the go. Omnebook is for people who believe that an active lifestyle is a necessity.    </h6>
                 </td>
             </tr>
         </table>
@@ -107,7 +107,7 @@
 <!-- Font Image : BEGIN -->
 <tr>
 <td style=" padding:0px 10px 0px; text-align: center" align="center">
-<h6 style="font-size: 15px; font-weight: 400; text-decoration: underline #f46464 2px;">Here’s how to get started with Fitnessity<h6>
+<h6 style="font-size: 15px; font-weight: 400; text-decoration: underline #f46464 2px;">Here’s how to get started with Omnebook<h6>
 </td>
 </tr>
 <!-- Font Image : END -->
@@ -210,7 +210,7 @@
 <tr>
     <td dir="ltr" style="font-family: sans-serif; font-size: 15px; line-height: 45px; color: #555555; padding: 20px 20px; text-align: left; height: 90px;" align="center" valign="center">
         <h2 style="margin: 0 0 5px 0; font-family: 'Poppins',sans-serif; font-size: 20px; line-height: 28px; color: black; font-weight: 400;">Buy Equipment, Apparel, Gear, and More  (coming soon) </h2>
-        <h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300; padding: 10px 15px 5px 0px;">We make it easy to find the products you need for the activities you love. While booking activities, you may need gear and more. Find what you are looking for offered by service providers listed on Fitnessity.</h2>
+        <h2 style="margin: 0 0 10px 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 22px; color: black; font-weight: 300; padding: 10px 15px 5px 0px;">We make it easy to find the products you need for the activities you love. While booking activities, you may need gear and more. Find what you are looking for offered by service providers listed on Omnebook.</h2>
         <!-- Button : BEGIN -->
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="border-spacing:0!important;  border-collapse:collapse!important;  table-layout:fixed!important;  ">
             <tr>
@@ -253,7 +253,7 @@
             
         </tr>
     </table>
-	<h5 style="color: white; text-align: center; font-weight: 400; margin-top: 0px; margin-bottom: 7px;">www.fitnessity.co  contact@fitnessity.co | HQ New York, NY</h5>
+	<h5 style="color: white; text-align: center; font-weight: 400; margin-top: 0px; margin-bottom: 7px;">www.Omnebook.co  contact@Omnebook.co | HQ New York, NY</h5>
 </td>
 
 </tr>

@@ -83,11 +83,11 @@
                                         Storage::disk('s3')->exists($companyinfo->logo) &&
                                         $companyinfo->logo != '')
                                     <div class="item-inner">
-                                        <img src="{{ Storage::disk('s3')->url($companyinfo->logo) }}" alt="Fitnessity"
+                                        <img src="{{ Storage::disk('s3')->url($companyinfo->logo) }}" alt="Omnebook"
                                             loading="lazy">
                                     </div>
                                 @else
-                                    <img src="{{ asset('public/images/logo-small.jpg') }}" alt="Fitnessity"
+                                    <img src="{{ asset('public/images/logo-small.jpg') }}" alt="Omnebook"
                                         loading="lazy">
                                 @endif
                             </a>

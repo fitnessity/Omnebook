@@ -45,17 +45,12 @@ class StaffController extends Controller
      */
     public function store(Request $request, $business_id)
     {   
-        //print_r($request->all());exit;
         $image = '';
         if ($request->hasFile('files')){   
             $image = $request->file('files')->store('staff');
         }
         $random_password = Str::random(8);
-        // do {
-        //     $unique_code = rand(1000, 9999);
-        // } while (BusinessStaff::where('unique_code', $unique_code)->exists());
-    
-        $unique_code = generateUniqueCode();//my code 
+        $unique_code = generateUniqueCode();
         $company = $request->current_company;
         $create = BusinessStaff::create(['business_id' => $company->id,'first_name' => $request->first_name, 'last_name' => $request->last_name, 'gender' => $request->gender,'position' =>$request->position, 'phone' => $request->phone ,'email'=>$request->email, 'profile_pic' => $image, 'bio'=> $request->bio,'address'=>$request->address,'city'=> $request->city,'state'=> $request->state,'postcode'=>$request->postcode,'birthdate'=>date('Y-m-d',strtotime($request->birthdate)) ,'password'=>Hash::make($random_password),'buddy_key'=>$random_password,   'unique_code' => $unique_code]);
         if($request->has('fromservice')){
@@ -107,14 +102,6 @@ class StaffController extends Controller
      */
     public function update(Request $request ,$business_id, $id)
     {
-        //print_r($request->all());
-        // $uniqueCodeExists = BusinessStaff::where('unique_code', $request->unique_code)
-        // ->where('id', '!=', $id)
-        // ->exists();
-
-        // if ($uniqueCodeExists) {
-        //     return redirect()->back()->withErrors(['unique_code' => 'The unique code already exists.']);
-        // }
         $uniqueCodeExists = BusinessStaff::where('unique_code', $request->unique_code)
         ->where('id', '!=', $id)
         ->exists();
@@ -157,7 +144,6 @@ class StaffController extends Controller
             'unique_code'=>$request->unique_code,
         ];   
         $staff->update($update);
-        //print_r($update);exit;     
         return redirect()->back();
     }
 

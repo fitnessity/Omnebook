@@ -115,7 +115,7 @@
                    <div class="row mb-3">
                         <div class="col-12">
                             <div class="page-heading text-center mt-2">
-                                <h2>{{$companyName}}</h2>
+                                <h1>{{$companyName}}</h1>
                                 <p>Booking Schedule for {{ucwords(@$customer->full_name)}}</p>
                                 {{-- <p>If you already have a membership with multiple sessions. Reserve your spot here.<br> If you don’t already have a membership, <a href="{{route('activities_index')}}">Book Here </a></p> --}}
                             </div>

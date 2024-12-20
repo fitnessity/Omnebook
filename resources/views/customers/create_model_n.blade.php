@@ -13,7 +13,7 @@
                         <div class="row mb-3">
                             <div class="col-12">
                                 <div class="page-heading">
-                                    <label>Create A New Account or Search OmneBook</label>
+                                    <h1>Create A New Account or Search OmneBook</h1>
                                 </div>
                             </div>
                         </div>

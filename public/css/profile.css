@@ -1399,7 +1399,7 @@
 
 #calendar {
     position: relative;
-    font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+    /* font-family: 'Montserrat', Arial, Helvetica, sans-serif; */
 }
 
 #calendar .complete-block {
@@ -2141,7 +2141,7 @@ a {
 
 .btn-red {
     background-color: #98002e;
-    border: none;
+    border: 1px solid #98002e;
     color: #fff;
 }
 .reviewerro {

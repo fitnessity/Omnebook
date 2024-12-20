@@ -24,14 +24,6 @@ use Maatwebsite\Excel\HeadingRowImport;
 
 class DiscoverController extends Controller
 {   
-    /*protected $plan;
-    public $error = '';
-
-    public function __construct(PlanRepository $plan)
-    {
-        $this->middleware('admin');
-        $this->plan = $plan;    
-    }*/
 
     public function index()
     {
@@ -154,7 +146,6 @@ class DiscoverController extends Controller
          
        $input = $request->all();
 
-        /* File Upload Start */
         $image = '';
         if($request->hasFile('image')) {
 
@@ -174,9 +165,6 @@ class DiscoverController extends Controller
                 return redirect('/admin/discover/edit/'.$input['id'])->with('status', $image_upload);
             }    
         }
-        /* File Upload End */
-       
-       // update:where()($input['id'],$input);
        
         $discover = DB::table('discover')->where('id', $input['id'])->update($input);
 

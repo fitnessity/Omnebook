@@ -18,7 +18,7 @@
 		<div class="row">
 			<div class="col-md-12 col-xs-12">
 				<div class="title get-start-sp">
-					<h3>Find Activities By Category</h3>
+					<h1>Find Activities By Category</h1>
 				</div>
 			</div>
 			<!-- Mobile Slider -->
@@ -28,18 +28,18 @@
 						<div class="owl-item" style="width: 300px;">
 							<div class="card-info instant-section-info">
 								<div class="img">
-								   <img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" alt="Fitnessity" loading="lazy">
+								   <img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" alt="Omnebook" loading="lazy">
 								</div>
 								<h4>{{$getdatafast['title']}}</h4>
 								<p>{{$getdatafast['small_text']}}</p>
 								@if($getdatafast['id'] == 1)
-									<a class="showall-btn btn-position" href="{{route('get_started_personal_trainer')}}" >Show all</a>
+									<a class="btn btn-red btn-position" href="{{route('get_started_personal_trainer')}}" >Show all</a>
 								@elseif($getdatafast['id'] == 2)
-									<a class="showall-btn btn-position" href="{{route('get_started_ways_to_workout')}}" >Show all</a>
+									<a class="btn btn-red btn-position" href="{{route('get_started_ways_to_workout')}}" >Show all</a>
 								@elseif($getdatafast['id'] == 3)
-									<a class="showall-btn btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
+									<a class="btn btn-red btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
 								@else
-									<a class="showall-btn btn-position" href="{{route('get_started_activities_events')}}">Show all</a>
+									<a class="btn btn-red btn-position" href="{{route('get_started_activities_events')}}">Show all</a>
 								@endif
 							</div>
 						</div>
@@ -50,17 +50,17 @@
 			@foreach($getstarteddata as $getdatafast)
 				<div class="col-md-3 col-sm-3 col-xs-12 mobile-none ipad-none">
 					<div class="instant-section-info">
-						<img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" alt="Fitnessity" loading="lazy">
+						<img src="{{ url('public/uploads/discover/thumb/'.$getdatafast['image'])}}" alt="Omnebook" loading="lazy">
 						<h4>{{$getdatafast['title']}}</h4>
 						<p>{{$getdatafast['small_text']}}</p>
 						@if($getdatafast['id'] == 1)
-							<a class="showall-btn btn-position" href="{{route('get_started_personal_trainer')}}" >Show all</a>
+							<a class="btn btn-red btn-position" href="{{route('get_started_personal_trainer')}}" >Show all</a>
 						@elseif($getdatafast['id'] == 2)
-							<a class="showall-btn btn-position" href="{{route('get_started_ways_to_workout')}}" >Show all</a>
+							<a class="btn btn-red btn-position" href="{{route('get_started_ways_to_workout')}}" >Show all</a>
 						@elseif($getdatafast['id'] == 3)
-							<a class="showall-btn btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
+							<a class="btn btn-red btn-position" href="{{route('get_started_activities_experiences')}}">Show all</a>
 						@else
-							<a class="showall-btn btn-position" href="{{route('get_started_activities_events')}}">Show all</a>
+							<a class="btn btn-red btn-position" href="{{route('get_started_activities_events')}}">Show all</a>
 						@endif
 					</div>
 				</div>
@@ -79,8 +79,8 @@
 				<div class="row">
 					<div class="col-md-10">
 						<div class="title">
-							<h3 class="desktop-none f-16">Get Started Fast With Activities Starting In 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
-							<h3 class="mobile-none ipad-none">Get Started Fast With Activities Starting In 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h3>
+							<h1 class="desktop-none f-16">Get Started Fast With Activities Starting In 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h1>
+							<h1 class="mobile-none ipad-none">Get Started Fast With Activities Starting In 8 Hrs for <?php echo date('l').', '.date('F d, Y', $date); ?></h1>
 						</div>
 					</div>
 					<div class="col-md-2 col-xs-12"> 
@@ -108,7 +108,7 @@
 																	<div class="col-xs-12 col-sm-12 col-12 like-heart">
 																		<div class="item-inner">
 																			<!-- {{-- <img src="{{$bookscheduler->business_service->first_profile_pic()}}" class="productImg" alt="Fitnessity"> --}} -->
-																			<img src="{{$bookscheduler->business_service->getConverPhotoUrl()}}" class="productImg" alt="Fitnessity" loading="lazy">
+																			<img src="{{$bookscheduler->business_service->getConverPhotoUrl()}}" class="productImg" alt="Omnebook" loading="lazy">
 																		</div>
 																		<div class="wegites-like">
 																			@auth
@@ -188,7 +188,7 @@
 			
 																		<div class="row">
 																			<div class="col-xs-12 text-center">
-																				<a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}"> Book Now</a>
+																				<a class="btn btn-red" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}"> Book Now</a>
 																			</div>
 																			<div class="col-xs-12">
 																				<div class="activity-time-main <?php echo ($bookscheduler->is_start_in_one_hour($current_date)) ? 'activity-time-main-red' : ''?>">
@@ -225,7 +225,7 @@
 											<div class="p-relative like-heart">
 												<div class="item-inner">
 													<!-- {{-- <img src="{{$bookscheduler->business_service->first_profile_pic()}}" class="productImg" alt="Fitnessity"> --}} -->
-													<img src="{{$bookscheduler->business_service->getConverPhotoUrl()}}" class="productImg" alt="Fitnessity" loading="lazy">
+													<img src="{{$bookscheduler->business_service->getConverPhotoUrl()}}" class="productImg" alt="Omnebook" loading="lazy">
 													<!-- {{-- <input type="text" value="{{$bookscheduler->business_service->getConverPhotoUrl()}}"> --}} -->
 												</div>
 												<div class="wegites-like">
@@ -286,7 +286,7 @@
 												<span><a  href="{{route('businessprofiletimeline', ['user_name' => $bookschedulercom_name, 'id' => $bookscheduler->company_information->id])}}"target="_blank"  class="companyalink">{{$bookschedulercom_name}}</a></span>
 												
 												<p>{{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}}</p>
-												<div class="mt-15"><a class="showall-btn" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a></div>
+												<div class="mt-15"><a class="btn btn-red" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a></div>
 												
 											</div>
 											<div class="row">
@@ -336,7 +336,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
-					<h3>See New Activities Listed This Month </h3>
+					<h1>See New Activities Listed This Month </h1>
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
@@ -398,10 +398,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																		@endif
 																	@endforeach
 																@else
@@ -410,7 +410,7 @@
 																			<img src="{{Storage::URL($pic_image)}}" loading="lazy">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																	@endif
 																@endif
 															</div>
@@ -447,10 +447,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																		@endif
 																	@endforeach
 																@else
@@ -459,7 +459,7 @@
 																			<img src="{{Storage::URL($pic_image)}}" loading="lazy">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																	@endif
 																@endif
 															</div>
@@ -518,7 +518,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
+														<a class="btn btn-red" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -541,7 +541,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
-					<h3>Most Popular Activities	</h3>
+					<h1>Most Popular Activities	</h1>
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
@@ -603,10 +603,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																		@endif
 																	@endforeach
 																@else
@@ -615,7 +615,7 @@
 																			<img src="{{Storage::URL($pic_image)}}" loading="lazy">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																	@endif
 																@endif
 															</div>
@@ -660,10 +660,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																		@endif
 																	@endforeach
 																@else
@@ -672,7 +672,7 @@
 																			<img src="{{Storage::URL($pic_image)}}" loading="lazy">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																	@endif
 																@endif
 															</div>
@@ -747,7 +747,7 @@
 													<hr>
 													<div class="all-details">
 														<div class="col-md-12 col-xs-12">
-														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
+														<a class="btn btn-red" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
 														</div>
 														<div class="col-md-12 col-xs-12">
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
@@ -775,7 +775,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
-					<h3>Find Trainers & Coaches </h3>
+					<h1>Find Trainers & Coaches </h1>
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
@@ -835,19 +835,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity" loading="lazy"> 
+																			<img src="{{Storage::URL($pic_image)}}" alt="Omnebook" loading="lazy"> 
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																	@endif
 																@endif
 															</div>
@@ -898,14 +898,14 @@
 																			@foreach($pic_image as $img)
 																				@if(Storage::disk('s3')->exists($img) && $img != '' )
 																					<div class="item-inner">
-																						<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
+																						<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																					</div>
 																				@endif
 																			@endforeach
 																		@else
 																			@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																				<div class="item-inner">
-																					<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity" loading="lazy">
+																					<img src="{{Storage::URL($pic_image)}}" alt="Omnebook" loading="lazy">
 																				</div>
 																			@endif
 																		@endif
@@ -966,7 +966,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="{{route('activities_show',['serviceid'=> $serviceid])}}">Book Now</a>
+														<a class="btn btn-red" href="{{route('activities_show',['serviceid'=> $serviceid])}}">Book Now</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -991,7 +991,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
-					<h3>Find Ways To Workout</h3>
+					<h1>Find Ways To Workout</h1>
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
@@ -1059,10 +1059,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner"> 
-																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																		@endif
 																	@endforeach
 																@else
@@ -1071,7 +1071,7 @@
 																			<img src="{{Storage::URL($pic_image)}}" loading="lazy">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																	@endif
 																@endif
 															</div>
@@ -1122,10 +1122,10 @@
 																				@foreach($pic_image as $img)
 																					@if(Storage::disk('s3')->exists($img) && $img != '' )
 																						<div class="item-inner">
-																							<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
+																							<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																						</div>
 																					@else
-																						<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																						<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																					@endif
 																				@endforeach
 																			@else
@@ -1134,7 +1134,7 @@
 																						<img src="{{Storage::URL($pic_image)}}" loading="lazy">
 																					</div>
 																				@else
-																					<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																					<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																				@endif
 																			@endif
 																		</div>
@@ -1194,7 +1194,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="{{route('activities_show',['serviceid'=> $serviceid])}}">Book Now</a>
+														<a class="btn btn-red" href="{{route('activities_show',['serviceid'=> $serviceid])}}">Book Now</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -1221,7 +1221,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
-					<h3>Find Fun Activities & Things To Do</h3>
+					<h1>Find Fun Activities & Things To Do</h1>
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
@@ -1289,19 +1289,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity" loading="lazy">
+																			<img src="{{Storage::URL($pic_image)}}" alt="Omnebook" loading="lazy">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																	@endif
 																@endif
 															</div>
@@ -1353,10 +1353,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy"> 
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy"> 
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																		@endif
 																	@endforeach
 																@else
@@ -1365,7 +1365,7 @@
 																			<img src="{{Storage::URL($pic_image)}}" loading="lazy">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																	@endif
 																@endif
 															</div>
@@ -1426,7 +1426,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
+														<a class="btn btn-red" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -1450,7 +1450,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
-					<h3>Find Events In Your Area</h3>
+					<h1>Find Events In Your Area</h1>
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
@@ -1516,10 +1516,10 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																		@endif
 																	@endforeach
 																@else
@@ -1528,7 +1528,7 @@
 																			<img src="{{Storage::URL($pic_image)}}" loading="lazy">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																	@endif
 																@endif
 															</div>
@@ -1579,19 +1579,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity" loading="lazy">
+																			<img src="{{Storage::URL($pic_image)}}" alt="Omnebook" loading="lazy">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																	@endif
 																@endif
 															</div>
@@ -1651,7 +1651,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
+														<a class="btn btn-red" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -1677,7 +1677,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-6 col-sm-6">
 				<div class="title">
-					<h3>See All Activities 	</h3>
+					<h1>See All Activities 	</h1>
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-sm-6">
@@ -1743,19 +1743,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity" loading="lazy">
+																			<img src="{{Storage::URL($pic_image)}}" alt="Omnebook" loading="lazy">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																	@endif
 																@endif
 															</div>
@@ -1807,19 +1807,19 @@
 																	@foreach($pic_image as $img)
 																		@if(Storage::disk('s3')->exists($img) && $img != '' )
 																			<div class="item-inner">
-																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Fitnessity" loading="lazy">
+																				<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																			</div>
 																		@else
-																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																			<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																		@endif
 																	@endforeach
 																@else
 																	@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 																		<div class="item-inner">
-																			<img src="{{Storage::URL($pic_image)}}" alt="Fitnessity" loading="lazy">
+																			<img src="{{Storage::URL($pic_image)}}" alt="Omnebook" loading="lazy">
 																		</div>
 																	@else
-																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Fitnessity" loading="lazy">
+																		<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 																	@endif
 																@endif
 															</div>
@@ -1880,7 +1880,7 @@
 													</div>
 													<hr>
 													<div class="all-details">
-														<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
+														<a class="btn btn-red" href="{{route('activities_show',['serviceid'=>  $serviceid])}}">Book Now</a>
 														<p class="addToCompare" id='compid{{$service["id"]}}' title="Add to Compare">COMPARE SIMILAR +</p>
 													</div>
 												</div>
@@ -1904,16 +1904,16 @@
 		<div class="row align-self-center">
 			<div class="col-lg-6 col-md-9 col-xs-12">
 				<div class="find-business">
-					<div class="row">
+					<div class="row y-middle">
 						<div class="col-md-8">
 							<div class="">
 								<p>Can't Find A Business Offering Your Favorite Activity?</p>
-								<p class="inner-txt">You can add a business to fitnessity for free.</p>
+								<p class="inner-txt">You can add a business to Omnebook for free.</p>
 							</div>
 						</div>
 						<div class="col-md-4">
 							<div class="btn-txt">
-								<a href="#" class="showall-btn" data-bs-toggle="modal" data-bs-target="#addbusiness">Add A Business</a>
+								<a href="#" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#addbusiness">Add A Business</a>
 							</div>
 						</div>
 					</div>
@@ -1958,7 +1958,7 @@
 					</div>
                     <div class="col-lg-12">
                         <div class="modal-inner-txt">
-                        	<p>Are you a customer or business owner wanting to add information about a business? <br>It’s free to add to Fitnessity!</p>
+                        	<p>Are you a customer or business owner wanting to add information about a business? <br>It’s free to add to Omnebook!</p>
                         </div>
                     </div>
 					<div class="col-lg-12 btns-modal">
@@ -2056,7 +2056,7 @@
 						</div>
                         <div class="col-lg-12">
                             <div class="modal-inner-txt">
-                                <p>Are you a customer or business owner wanting to add information about a business? <br>It’s free to add to Fitnessity!</p>
+                                <p>Are you a customer or business owner wanting to add information about a business? <br>It’s free to add to Omnebook!</p>
                             </div>
                         </div>
 						<div class="col-lg-12 btns-modal">

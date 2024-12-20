@@ -11,17 +11,17 @@
             <div class="register_wrap" id="signup_normal">
                 <input type="hidden" id="showstep" value="">
                 <div class="logo-my">
-                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/omnebook.png')}}" alt="Fitnessity"> </a>
+                    <a href="javascript:void(0)"> <img src="{{ asset('public/images/omnebook.png')}}" alt="Omnebook" loading="lazy"> </a>
                 </div>               
                 <form method="post" action="{{route('dologin')}}" >
                     {{ csrf_field() }}
                     <div class="pop-title ftitle1 staff-login">
-                        <h3 id="firsth">Welcome to Omnebook</h3>
-						<h3 id="secondh"> for business</h3>
+                        <h1 id="firsth">Welcome to Omnebook</h1>
+						<h1 id="secondh"> for business</h1>
                     </div>
                     <br/> 
 					<div class="pop-title ftitle1 staff-login">	
-						<h3>Staff Login Only</h3>
+						<h1>Staff Login Only</h1>
 					</div>
 
                     @if(session('errorMsg'))
@@ -52,9 +52,9 @@
 						</div> -->
 					</div>
 
-                    <button class="btn signup-new" id='login_submit' type="submit">Log in </button>
+                    <button class="btn signup-new mt-25" id='login_submit' type="submit">Log in </button>
                     <div class="small-logo">
-						<img src="{{ asset('public/dashboard-design/images/powered-by-OMNEBOOK.png')}}" alt="Fitnessity"> 
+						<img src="{{ asset('public/dashboard-design/images/powered-by-OMNEBOOK.png')}}" alt="Omnebook" loading="lazy"> 
 					</div>
                 </form>
             </div>

@@ -33,7 +33,7 @@
 								</div>
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 									<div class="page-heading">
-										<label>Money Owed Details & History</label>
+										<h1>Money Owed Details & History</h1>
 									</div>
 								</div><!--end col-->
 							</div><!--end row-->

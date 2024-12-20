@@ -32,8 +32,6 @@ class SchedulerCheckinDetailController extends BusinessBaseController
                 return $query->where('user_id', $request->customerId);
             })->where('act_schedule_id',$scheduler_id)->where('bookedtime',date('Y-m-d'))->get();
         $today = date('Y-m-d');
-
-        //print_r($booking_checkin_details);exit;
     
         $customers = [];
         $customerIds = $booking_checkin_details->pluck('customer_id')->unique();
@@ -50,7 +48,6 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         if($instructor_id == ''){
              $instructor_id = $business_activity_scheduler->getInstructureIds($filter_date->format('Y-m-d'));
         }
-        // print_r($customers);exit;
 
         if($request->chk === '1'){
             session()->flash('success', 'Check in successful');
@@ -153,7 +150,6 @@ class SchedulerCheckinDetailController extends BusinessBaseController
      */
     public function update(Request $request, $business_id, $scheduler_id, $id)
     {
-        //print_r($request->all());exit;
         $company = $request->current_company;
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
         $business_checkin_detail = BookingCheckinDetails::whereRaw('1=1');
@@ -161,8 +157,6 @@ class SchedulerCheckinDetailController extends BusinessBaseController
 
         if($request->checked_at){
             $customerInClass = BookingCheckinDetails::checkCustomerInClass($scheduler_id,$request->checked_at);
-           /* echo $customerInClass;
-            exit();*/
            
             $checkin = BookingCheckinDetails::whereNotNull('booking_detail_id')->findOrFail($id);
             if($checkin){
@@ -184,29 +178,17 @@ class SchedulerCheckinDetailController extends BusinessBaseController
                 }
             }
         }else{
-            //echo "hii";exit;
             $bookingDetail = UserBookingDetail::findOrFail($request->booking_detail_id);
             $chkBookedSpot = $bookingDetail->getremainingsession();
             $checkin_detail = BookingCheckinDetails::findOrFail($id);
             if($chkBookedSpot > 0 ){
-                //echo "hii";exit;
                 $overwrite['use_session_amount'] = 0;
                 $overwrite['checked_at'] = Null;
                 $checkin_detail->update(array_merge($request->only(['checked_at', 'booking_detail_id', 'use_session_amount', 'no_show_action', 'no_show_charged']), $overwrite));
             }else{
-               //echo "bcvcv";exit;
                 $sendmail= 0;
-                /*$bookedSpot = $bookingDetail->getWithoutAttendBookedSession();
-                $usedSession = $bookingDetail->getUsedSession();*/
                 $membershipSessionOverAlert = 1;
-
-                /*$sessionOvermessage .= "You have total ".$bookingDetail->pay_session." Sessions and used ".$usedSession." Session. ";
-                if($bookedSpot > 0){
-                    $sessionOvermessage .= "Currently you have booked ".$bookedSpot." spots (for ".$bookedSpot." Sessions)  across different dates. ";
-                }*/
-
                 $sessionOvermessage .= "All sessions have been booked.";
-                
                 $checkin_detail->update(['checked_at' => NULL, 'booking_detail_id' => NULL, 'use_session_amount' => 0]);
             }
         }
@@ -274,12 +256,6 @@ class SchedulerCheckinDetailController extends BusinessBaseController
             }
         }
 
-        // if (!$request->ajax()) {
-        //   return redirect()->route('business.schedulers.checkin_details.index',[
-        //     'scheduler'=>$business_checkin_detail->business_activity_scheduler_id, 
-        //     'date' =>$business_checkin_detail->checkin_date
-        //   ]);
-        // }
 
         return $sendmail;
     }
@@ -295,9 +271,7 @@ class SchedulerCheckinDetailController extends BusinessBaseController
         $idsArray = explode(',', $id);
         $company = $request->current_company;
         $business_activity_scheduler = $company->business_activity_schedulers()->findOrFail($scheduler_id);
-        /*$business_checkin_detail = BookingCheckinDetails::whereIn('booking_detail_id', $idsArray)->whereDate('checkin_date', $request->date)->get();*/
         BookingCheckinDetails::whereIn('id', $idsArray)->whereDate('checkin_date', $request->date)->delete();
-        //$business_checkin_detail->delete();
     }
 
     public function latecancel_modal(Request $request, $business_id, $scheduler_id, $id){

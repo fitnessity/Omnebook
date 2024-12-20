@@ -38,15 +38,12 @@ class ManageAccountController extends Controller
         $user = $this->user;
         $UserFamilyDetails = $familyDetails = [];
         $customer = @$user->customers;
-        // dd($customer);
-        // DB::enableQueryLog();
         if($customer){
             foreach($customer as $cs){
                 foreach ($cs->get_families() as $fm){
                     $familyDetails [] = $fm;
                 }  
             }
-            // dd(\DB::getQueryLog()); 
             $groupedFamilyDetails = collect($familyDetails)->groupBy(function ($item) {
                 return $item->fname . ' ' . $item->lname;
             });
@@ -54,7 +51,7 @@ class ManageAccountController extends Controller
             $uniqueFamilyDetails = collect([]);
 
             foreach ($groupedFamilyDetails as $name => $group) {
-                $uniqueFamilyDetails->push($group->first()); // Add the first item from each group
+                $uniqueFamilyDetails->push($group->first()); 
             }
 
             foreach ($uniqueFamilyDetails as $detail) {
@@ -67,7 +64,6 @@ class ManageAccountController extends Controller
             }
         }
 
-        // dd($UserFamilyDetails);
         return view('personal.manage_account.index',compact('user','UserFamilyDetails'));
     }
 
@@ -162,31 +158,18 @@ class ManageAccountController extends Controller
     public function store_fu(Request $request)
     {
         $user = $this->user;
-        // dd($user);
-    
-        // Fetch BusinessServices based on serviceid
-        // $businessService = BusinessServices::where('id', $serviceid)->first();
         $business_id=$request->business_id;
-        // dd($business_id);
         if (!$business_id) {
             return redirect()->back()->with(['message' => 'Invalid Bussiness ID.']);
         }
 
-        // dd($user->id);
-        // $business_id = $businessService->cid;
         $parentid=Customer::where('user_id',Auth::id())->where('business_id',$business_id)->first();
-        // dd($parentid);
-
-        // Print the SQL query (for debugging purposes)
-        // print_r($sql);
         
         $message = "There is issue while adding member. Please try again.";
         $profile_pic = $request->hasFile('profile_pic') ? $request->file('profile_pic')->store('customer') : '';
 
-        // Convert birthdate format to YYYY-MM-DD
         $birthdate = \Carbon\Carbon::createFromFormat('m-d-Y', $request->birthdate)->format('Y-m-d');
 
-        // Create UserFamilyDetail
         UserFamilyDetail::create([
             'user_id' => $user->id,
             'first_name' => $request->fname,
@@ -201,7 +184,6 @@ class ManageAccountController extends Controller
             'emergency_contact_name' => $request->emergency_name,
         ]);
 
-        // Check if user is a provider in any company
         $chkProviderOrNot = CompanyInformation::where('user_id', $user->id)->get();
         if ($chkProviderOrNot->isNotEmpty()) {
             foreach ($chkProviderOrNot as $c) {
@@ -209,12 +191,11 @@ class ManageAccountController extends Controller
                 if (!$businessCustomer) {
                     $random_password = Str::random(8);
                     $password = Hash::make($random_password);
-                    $businessCustomer = createBusinessCustomer($user, $password, $c->id); // If a customer is not available for a specific business, create one
+                    $businessCustomer = createBusinessCustomer($user, $password, $c->id); 
                 }
             }
         }
 
-        // Process business customers for the specified business ID
         $password = '';
         if (empty($businessCustomer)) {
             $random_password = Str::random(8);
@@ -242,7 +223,6 @@ class ManageAccountController extends Controller
                 'birthdate' => $birthdate,
                 'parent_cus_id' => $parentid->id,
             ]);
-            // dd($createCustomer);
             $createCustomer->create_stripe_customer_id();
             $message = "Member added successfully.";
         } else {
@@ -282,8 +262,8 @@ class ManageAccountController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {   //print_r($request->all());exit;
-        
+    {   
+          
     }
 
     /**

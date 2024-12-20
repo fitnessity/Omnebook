@@ -39,9 +39,6 @@ class CustomerController extends Controller {
     public function client(){ return view('customers.add_client'); }
     public function index(Request $request, $business_id){
         $user = Auth::user();
-        // dd($business_id);
-        // \DB::enableQueryLog(); // Enable query log
-        // dd($request->all());
         $company = $user->businesses()->findOrFail($business_id);
         $customers = $company->customers()->orderBy('fname');
         if($request->term){
@@ -84,7 +81,6 @@ class CustomerController extends Controller {
         }
         $customers_n = $customers->get();
                 
-        // new start
         $customers = collect(); 
         foreach ($customers_n as $customer)
         {
@@ -98,20 +94,12 @@ class CustomerController extends Controller {
                 $customers->push($customer);
             }
         }        
-        // end
 
         $customerCount = count($customers); 
         set_time_limit(8000000); ini_set('memory_limit', '-1'); ini_set('max_execution_time', 10000);
         $customerStatusCounts = $customers->mapToGroups(function ($customer) {
             return [$customer->is_active() => $customer];
         });
-        
-        // dd($relatedCustomers);
-        // $customerCount = count($customers); 
-        // set_time_limit(8000000); ini_set('memory_limit', '-1'); ini_set('max_execution_time', 10000);
-        // $customerStatusCounts = $customers->mapToGroups(function ($customer) {
-        //     return [$customer->is_active() => $customer];
-        // });
       
         
         
@@ -171,13 +159,10 @@ class CustomerController extends Controller {
             }
         }
         if ($request->ajax()) {
-            // dd($customerCount);
-            // dd(\DB::getQueryLog()); // Show results of log
             return response()->json([
                 'customers' => $customers,
                 'customerCount' => $customerCount,
             ]);
-            // return response()->json($customers);
         }
         return view('customers.index', compact(['company','customerCount','currentCount','validLetters','customersCollection']));
     }
@@ -212,16 +197,13 @@ class CustomerController extends Controller {
     }
     public function loadView(Request $request)
     {
-         // Enable query log
         $char = $request->input('char');
         $cid = Auth::user()->cid;
         $company = CompanyInformation::find($cid);
         $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->orderBy('fname')->get();
-        // \DB::enableQueryLog();
         $customerStatusCounts = $customers->mapToGroups(function ($customer) {
             return [$customer->is_active() => $customer];
         });
-        // dd(\DB::getQueryLog()); // Show results of log
 
         if($request->customer_type == 'active'){
             $customers =  $customerStatusCounts->get('Active', collect());
@@ -241,7 +223,6 @@ class CustomerController extends Controller {
             }
         }else if($request->customer_type == 'owed'){
             $customersAry = $customers->filter->owedOrnot();
-            //print_r( $customersAry);exit();
             $customers = [];
             foreach ($customersAry as $key => $value) {
                 if(!empty($value->owedDetail()->get())){
@@ -356,8 +337,6 @@ class CustomerController extends Controller {
         $suspended_memberships = $customerdata != '' ? $customerdata->suspended_memberships()->orderBy('created_at','desc')->get() : [];
         $purchase_history = @$customerdata != '' ?  @$customerdata->purchase_history()->orderBy('created_at','desc')->get() : [];
         
-        // $active_memberships=[];
-        // $suspended_memberships=[];
         $booking_detail = UserBookingDetail::where('business_id', $business_id)
         ->where('user_id', '!=', $customerdata->id)
         ->whereNotNull('user_id')  
@@ -472,9 +451,6 @@ class CustomerController extends Controller {
             $password = Str::random(8);
             $customer->update(['password' => Hash::make($password)]);
         }
-        // dd($customer);
-        // $status =  SGMailService::sendWelcomeMailToCustomer($request->cid,$request->bid,$password);
-        // sendMailToCustomer
         $status =  SGMailService::sendMailToCustomer($request->cid,$request->bid,$password);
        return  $status;
     }
@@ -500,7 +476,6 @@ class CustomerController extends Controller {
                         'file' => 'uploads/customers/' . $fileName,
                         'file_type'=>'Members file', 'status' => 1,
                     ]);
-                    // return response()->json(['status' => 200, 'message' => 'We are processing your file. Once completed, We will send you an email and notification.', 'data' => $data]);
                     return response()->json(['status' => 200,'data' => $data]);
                 } 
             catch (\Exception $e) 
@@ -528,7 +503,7 @@ class CustomerController extends Controller {
                     }
                     Log::info('Total rows read: ' . count($rows));
                     $headerFound = false;
-                    $filteredRows = collect(); // Ensure $filteredRows is a collection
+                    $filteredRows = collect();
                     foreach ($rows as $index => $row) {
                         if ($row === null || empty(array_filter($row->toArray()))) {
                             continue;
@@ -560,7 +535,6 @@ class CustomerController extends Controller {
                             $job = new Membership($request->business_id, $chunk->toArray(),$user->email,$upid,$tracker->id,$user->id);
                             dispatch($job)->onQueue('membership');
                         }
-                        // return response()->json(['status' => 200, 'message' => 'File imported Successfully']);
                         return response()->json(['status' => 200, 'message' => 'We are processing your file. Once completed, We will send you an email and notification.', 'data' => $data]);
                     } else {
                         return response()->json(['status' => 500, 'message' => 'You don\'t have permission to upload files at this moment']);
@@ -898,7 +872,7 @@ class CustomerController extends Controller {
                         'phone_number' => $member->mobile,
                         'birthdate' => $member->birthday,
                         'gender' => $member->gender,
-                        'user_id' => NULL, //this is null bcz of user is not created at 
+                        'user_id' => NULL, 
                         'parent_cus_id'=> $chk->id ,
                         'relationship' =>$member->relationship, 'request_status' =>1,
                     ]);
@@ -935,14 +909,13 @@ class CustomerController extends Controller {
             $bookingArray = UserBookingDetail::where('id',$orderId)->pluck('id')->toArray();
             $transactionType = 'Membership';
         }
-        // dd('33');
         return view('customers._receipt_model',['array'=> $bookingArray ,'email' =>@$customerData->email, 'orderId' => $oid ,'type' =>$transactionType]);
     }
     public function getMoreRecords(Request $request)
     {
         $char = $request->char;
-        $offset = $request->get('offset', 0); // Offset for pagination, passed from the frontend
-        $limit = 20; // Number of records to load per request
+        $offset = $request->get('offset', 0);
+        $limit = 20; 
         $cid = Auth::user()->cid;
         $company = CompanyInformation::find($cid);
         $customers = Customer::where('business_id', $cid)->where('fname', 'LIKE', $char.'%')->skip($offset)->take($limit)->orderBy('fname')->get();
@@ -1034,7 +1007,7 @@ class CustomerController extends Controller {
         $name = str_replace("Customer-Documents/", "", $document->path);
         $imageContent = file_get_contents($filePath);
         $headers = [
-            'Content-Type' => 'image/jpeg', // Change the content type based on your image type
+            'Content-Type' => 'image/jpeg',
             'Content-Disposition' => 'attachment; filename='.$name,
         ];
         return Response::make($imageContent, 200, $headers);
@@ -1054,18 +1027,12 @@ class CustomerController extends Controller {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'notes' => 'required|string',
-            // 'due_date' => 'nullable|date',
-            // 'time' => 'nullable|string',
         ]);
     
-        // Check if validation fails
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'errors' => $validator->errors()]);
         }
-        // dd($request->all());
-        // dd(Auth::user()->id);
         $cid=Customer::where('user_id',Auth::user()->id)->where('business_id',$business_id)->first();
-        // dd($cid);
         $timeString = isset($request->time) ? implode(',', $request->time) : null;
 
         $note = CustomerNotes::updateOrCreate(
@@ -1074,12 +1041,10 @@ class CustomerController extends Controller {
                 'user_id' => Auth::user()->id, 
                 'business_id' => $business_id,
                 'type'=>'add_notes',
-                // 'customer_id' => $request->cid,
                 'customer_id' => $cid->id,
                 'title' => $request->title,
                 'note' => $request->notes,
                 'due_date' => $request->due_date,
-                // 'time' => $request->time,
                 'time'=>$timeString,
                 'display_chk' => $request->displayChk ?? 0,
                 'status' => 1,
@@ -1115,24 +1080,16 @@ class CustomerController extends Controller {
     }
 
 
-    // addRemainderNotes
-
     public function addRemainderNotes(Request $request, $business_id){
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'notes' => 'required|string',
-            // 'due_date' => 'nullable|date',
-            // 'time' => 'nullable|string',
         ]);
     
-        // Check if validation fails
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'errors' => $validator->errors()]);
         }
-        // dd($request->all());
-        // dd(Auth::user()->id);
         $cid=Customer::where('user_id',Auth::user()->id)->where('business_id',$business_id)->first();
-        // dd($cid);
         $timeString = isset($request->time) ? implode(',', $request->time) : null;
 
         $note = CustomerNotes::updateOrCreate(
@@ -1141,12 +1098,10 @@ class CustomerController extends Controller {
                 'user_id' => Auth::user()->id, 
                 'business_id' => $business_id,
                 'type'=>'add_remainder',
-                // 'customer_id' => $request->cid,
                 'customer_id' => $cid->id,
                 'title' => $request->title,
                 'note' => $request->notes,
                 'due_date' => $request->due_date,
-                // 'time' => $request->time,
                 'time'=>$timeString,
                 'display_chk' => $request->displayChk ?? 0,
                 'status' => 1,
@@ -1248,9 +1203,7 @@ class CustomerController extends Controller {
         $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->orderBy('created_at','desc')->get() : [];
         $suspended_memberships = $customerdata != '' ? $customerdata->suspended_memberships()->orderBy('created_at','desc')->get() : [];
         $purchase_history = @$customerdata != '' ?  @$customerdata->purchase_history()->orderBy('created_at','desc')->get() : [];
-        
-        // $active_memberships=[];
-        // $suspended_memberships=[];
+    
         $booking_detail = UserBookingDetail::where('business_id', $business_id)
         ->where('user_id', '!=', $customerdata->id)
         ->whereNotNull('user_id')  
@@ -1327,8 +1280,6 @@ class CustomerController extends Controller {
         $terms = $company->business_terms->first();
         $customerdata = $company->customers->find($request->customer_id);
             if(!$customerdata){ return redirect()->back(); }
-            // $visits = $customerdata != '' ? $customerdata->visits()->get() : [];
-            // $active_memberships = $customerdata != '' ? $customerdata->active_memberships()->orderBy('created_at','desc')->get() : [];
             $complete_booking_details = @$customerdata != '' ? $customerdata->complete_booking_details()->get() : [];
 
             $html = view('customers.completed_membership_list', compact('complete_booking_details', 'customerdata'))->render();

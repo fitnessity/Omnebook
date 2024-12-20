@@ -104,7 +104,7 @@
                             <div class="tab-pane  active" id="links" role="tabpanel">
                                 <div class="card bg-soft-grey">
                                     <div class="card-header align-items-center d-flex bg-soft-grey">
-                                        <h4 class="card-title mb-0 flex-grow-1">Website Widgets & Links</h4>
+                                        <h1 class="card-title mb-0 flex-grow-1">Website Widgets & Links</h1>
                                     </div>
                                     <div class="card-body">
                                         <div class="live-preview">
@@ -176,9 +176,9 @@
                                                                                           <div class="profile-user position-relative mx-auto mb-2">
                                                                                               {{-- <img src="{{asset('images/fitnessity_logo1_black.png')}}" class="avatar-lg img-thumbnail user-profile-image shadow" alt="upload-image"> --}}
                                                                                               @if($logoUrl)
-                                                                                              <img src="{{ $logoUrl }}" class="avatar-lg img-thumbnail user-profile-image shadow" alt="upload-image">
+                                                                                              <img src="{{ $logoUrl }}" class="avatar-lg img-thumbnail user-profile-image shadow" alt="upload-image" loading="lazy">
                                                                                             @else
-                                                                                                <img src="{{ asset('images/fitnessity_logo1_black.png') }}" class="avatar-lg img-thumbnail user-profile-image shadow" alt="default-logo">
+                                                                                                <img src="{{ asset('images/fitnessity_logo1_black.png') }}" class="avatar-lg img-thumbnail user-profile-image shadow" alt="default-logo" loading="lazy">
                                                                                             @endif
                                                                                               <div class="avatar-xxs p-0 rounded-circle profile-photo-edit">
                                                                                                   <input id="profile-img-file-input" type="file" class="profile-img-file-input" name="logo">
@@ -741,7 +741,7 @@
                                                                                         <div class="col-md-12 col-lg-12 text-center">
                                                                                             <div class="wrap-sp">
                                                                                                 <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-                                                                                                <label for="b_trm1" class="text-center">I agree to Fitnessity Terms of Service and Privacy Policy</label>
+                                                                                                <label for="b_trm1" class="text-center">I agree to Omnebook Terms of Service and Privacy Policy</label>
                                                                                             </div>
                                                                                             <div id="termserror" class="font-red fs-15 text-center mb-10"></div>
                                                                                             <div id="systemMessage" class="mb-10 fs-15 mb-10"></div>
@@ -1019,7 +1019,7 @@
                                                                                         <div class="col-md-12 col-lg-12 text-center">
                                                                                             <div class="wrap-sp">
                                                                                                 <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-                                                                                                <label for="b_trm1" class="text-center">I agree to Fitnessity Terms of Service and Privacy Policy</label>
+                                                                                                <label for="b_trm1" class="text-center">I agree to Omnebook Terms of Service and Privacy Policy</label>
                                                                                             </div>
                                                                                             <div id="termserror" class="font-red fs-15 text-center mb-10"></div>
                                                                                             <div id="systemMessage" class="mb-10 fs-15 mb-10"></div>
@@ -1487,7 +1487,7 @@
                                                                                     </div>
                                                                                     <div class="col-lg-7 col-md-7 col-xs-12 col-sm-7 col-12">
                                                                                         <div class="table-inner-data-sec">
-                                                                                            <img src="https://fitnessity-production.s3.amazonaws.com/activity/meka8JsFR68TpdRhatzxzZpTFPVUSvgEx1MGILm5.jpg" alt="Fitnessity">
+                                                                                            <img src="https://fitnessity-production.s3.amazonaws.com/activity/meka8JsFR68TpdRhatzxzZpTFPVUSvgEx1MGILm5.jpg" alt="Omnebook" loading="lazy">
                                                                                             <div class="p-name font-change">
                                                                                                 <label>jumping 1</label>
                                                                                                 <div class="d-grid">
@@ -1530,7 +1530,7 @@
                                                                                                 </div>
                                                                                                 <div class="col-lg-7 col-md-7 col-xs-12 col-sm-7  col-12">
                                                                                                     <div class="table-inner-data-sec">
-                                                                                                        <img src="https://fitnessity-production.s3.amazonaws.com/activity/eisJPbu7UPhASgD4edJSOufZSXENkw3TkZV281HL.jpg" alt="Fitnessity">
+                                                                                                        <img src="https://fitnessity-production.s3.amazonaws.com/activity/eisJPbu7UPhASgD4edJSOufZSXENkw3TkZV281HL.jpg" alt="Omnebook" loading="lazy">
                                                                                                         <div class="p-name font-change">
                                                                                                             <label>Summer Camp at Valor</label>
                                                                                                             <div class="d-grid">
@@ -1575,7 +1575,7 @@
                                                                                                 </div>
                                                                                                 <div class="col-lg-7 col-md-7 col-xs-12 col-sm-7  col-12">
                                                                                                     <div class="table-inner-data-sec">
-                                                                                                        <img src="https://fitnessity-production.s3.amazonaws.com/activity/wvahqhcKOL6C8NQ1IBqh3vtfVOc3MOAM3aarjoLf.jpg" alt="Fitnessity">
+                                                                                                        <img src="https://fitnessity-production.s3.amazonaws.com/activity/wvahqhcKOL6C8NQ1IBqh3vtfVOc3MOAM3aarjoLf.jpg" alt="Omnebook" loading="lazy">
                                                                                                         <div class="p-name font-change">
                                                                                                             <label>Bucephalus Riding and Polo Club1</label>
                                                                                                             <div class="d-grid">
@@ -1653,7 +1653,7 @@
                                         <div class="live-preview">
                                             <div class="row ">
                                                 <div class="col-lg-12">
-                                                    <button href="#" class="btn btn-black">Refresh all fitnessity data</button>
+                                                    <button href="#" class="btn btn-black">Refresh all Omnebook data</button>
                                                 </div>                                                  
                                             </div>
                                         </div>
@@ -1875,12 +1875,12 @@
                         <div class="register_wrap" id="signup_normal">
                             <input type="hidden" id="showstep" value="">
                             <div class="logo-my">
-                                <a href="javascript:void(0)"> <img src="http://dev.fitnessity.co//public/images/omnebook.png"> </a>
+                                <a href="javascript:void(0)"> <img src="http://dev.fitnessity.co//public/images/omnebook.png" loading="lazy" alt="Omnebook"> </a>
                             </div>               
                             <form method="post" action="">
                                 <input type="hidden" name="_token" value="5QJLNEz2voSG1yd1mOKWRs91y0u50UhbqKLCiNJS">
                                 <div class="pop-title ftitle1">
-                                    <h3>Welcome to Fitnessity</h3>
+                                    <h3>Welcome to Omnebook</h3>
                                 </div>
                                 <br> 
                                 <input type="hidden" name="redirect" value="http://dev.fitnessity.co/design/integration_portal">
@@ -1945,11 +1945,11 @@
                                 <input type="hidden" id="showstep" value="1">
                                 <!--1-->
                                                 <div class="logo-my">
-                                    <a href="javascript:void(0)"> <img src="http://dev.fitnessity.co//public/images/omnebook.png" alt="Fitnessity"> </a>
+                                    <a href="javascript:void(0)"> <img src="http://dev.fitnessity.co//public/images/omnebook.png" loading="lazy" alt="Omnebook"> </a>
                                 </div>
                                 <form id="frmregister" method="post" novalidate="novalidate">
                                     <div class="pop-title ftitle1">
-                                        <h3>Welcome to fitnessity</h3>
+                                        <h3>Welcome to Omnebook</h3>
                                     </div>
                                     <div id="systemMessage"></div>
                                     <input type="hidden" name="_token" value="E4MKIsrjC7a9tlI0LqoOFnqRZdAK85o1YLbI53LN">
@@ -1983,7 +1983,7 @@
                 
                                     <div class="terms-wrap">
                                         <input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-                                        <label for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
+                                        <label for="b_trm1">I agree to Omnebook <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
                                     </div>
                                     <div id="termserror"></div><br>
                                     <button type="button" style="margin:0px;" class="signup-new" id="register_submit" onclick="$('#frmregister').submit();">Create Account</button>
@@ -2020,10 +2020,10 @@
            		<div class="row mb-3">
 					<div class="col-12">
                     	<div class="text-center pbooking-modal-logo">
-                        	<img src="http://dev.fitnessity.co//public/images/fitnessity_logo1_black.png">
+                        	<img src="http://dev.fitnessity.co//public/images/fitnessity_logo1_black.png" loading="lazy" alt="Omnebook">
                         </div>
 						<div class="page-heading text-center">
-							<h2>Fitness Pvt. Ltd.</h2>
+							<h1>Omnebook Pvt. Ltd.</h1>
 							<p>Booking Schedule for Nipa Soni (Demo)</p>
 							<p>If you already have a membership with multiple sessions. Reserve your spot here.<br> If you don’t already have a membership, <a href="http://dev.fitnessity.co/activities">Book Here </a></p>
 						</div>
@@ -2058,7 +2058,7 @@
 												<div class="row">
 													<div class="col-md-12 col-sm-12 col-xs-12 text-right">
 														<div class="calendar-icon">
-															<input type="text" name="date" class="date datepicker hasDatepicker" readonly="" placeholder="DD/MM/YYYY" id="dp1720435536625"><img class="ui-datepicker-trigger" src="/public/img/calendar-icon.png" alt="Select date" title="Select date">
+															<input type="text" name="date" class="date datepicker hasDatepicker" readonly="" placeholder="DD/MM/YYYY" id="dp1720435536625"><img class="ui-datepicker-trigger" src="/public/img/calendar-icon.png" loading="lazy" alt="Omnebook" title="Select date">
 														</div>
 													</div>
 												</div>

@@ -20,12 +20,12 @@ if(!empty(@$response)){
                 <div class="register_wrap" id="signup_normal">
                     <input type="hidden" id="showstep" value="">
                     <div class="logo-my">
-                        <a href="javascript:void(0)"> <img src="{{ asset('/public/images/omnebook.png')}}" alt="Fitnessity"> </a>
+                        <a href="javascript:void(0)"> <img src="{{ asset('/public/images/omnebook.png')}}" alt="Omnebook" loading="lazy"> </a>
                     </div>               
                     <form method="post" action="{{route('auth/userlogin')}}">
                         {{ csrf_field() }}
                         <div class="pop-title ftitle1"> 
-                            <h3>Welcome to <br> Omnebook</h3>
+                            <h1>Welcome to Omnebook</h1>
                         </div>
                         <br/> 
 

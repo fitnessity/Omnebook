@@ -14,16 +14,16 @@
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
                                     <div class="page-heading text-right">
-                                        <label class="mb-15">
+                                        <h1 class="mb-15">
                                             <a class="btn btn-red" data-bs-toggle="modal" data-bs-target=".exitModal"
-                                                style="background-color: {{ $settings ? $settings->welcome_screen_color : '' }};border-color: {{ $settings ? $settings->welcome_screen_color : '' }};">Exit</a></label>
+                                                style="background-color: {{ $settings ? $settings->welcome_screen_color : '' }};border-color: {{ $settings ? $settings->welcome_screen_color : '' }};">Exit</a></h1>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-6 col-12">
                                     <div class="self-welcome-logo">
                                         <a href="#" class="d-inline-block auth-logo">
-                                            <img src="{{ $logoUrl }}" alt="logo">
+                                            <img src="{{ $logoUrl }}" alt="logo" loading="lazy">
                                         </a>
                                     </div>
                                 </div>
@@ -35,12 +35,12 @@
                                 </div>
                                 <div class="col-lg-6 col-12">
                                     <div class="welcome-title d-grid text-center">
-                                        <label>Welcome To</label>
+                                        <h1>Welcome To</h1>
                                         <span>{{ $business->company_name }} </span>
                                     </div>
                                     <div class="text-center">
                                         <!-- <a href="{{ route('quick-checkin') }}" class="btn btn-red fs-15 mr-15"><i class="ri-add-line align-bottom me-1"></i>Check In</a> -->
-                                     <a href="{{ route('quick-checkin') }}" class="btn btn-red fs-15 mr-15"
+                                     <a href="{{ route('quick-checkin') }}" class="btn btn-red mr-15"
                                             style="background-color: {{ $settings ? $settings->welcome_screen_color : '' }}; 
                                                 border-color: {{ $settings ? $settings->welcome_screen_color : '' }};">
                                             <i class="ri-add-line align-bottom me-1"></i>Check In
@@ -49,7 +49,7 @@
                                         class="btn btn-black fs-15"><i class="ri-add-line align-bottom me-1"></i>Sign
                                         Up old
                                         </a>  --}} -->
-                                        <a href="javascript:void(0);" class="btn btn-black fs-15"
+                                        <a href="javascript:void(0);" class="btn btn-black"
                                             data-business-id="{{ $business->id }}"
                                             data-url="{{ route('business_customer_create_model', $business->id) }}"
                                             id="signupButton" data-bs-target="#customerModal" data-bs-toggle="modal">
@@ -60,7 +60,7 @@
                                 <div class="col-lg-6 col-12 mobile-none">
                                     <div class="float-right qr-code">
                                         <div class="text-center">
-                                            <img src="{{ url('/dashboard-design/images/qr-codes.png') }}" alt="logo">
+                                            <img src="{{ url('/dashboard-design/images/qr-codes.png') }}" alt="Omnebook" loading="lazy">
                                             <p>Scan QR Code for touchless check-in or sign-up</p>
                                         </div>
                                     </div>
@@ -588,7 +588,7 @@
                                                                                     id="b_trm1" class="form-check-input"
                                                                                     value="1">
                                                                                 <label for="b_trm1" class="text-center">I agree
-                                                                                    to Fitnessity Terms of Service and Privacy
+                                                                                    to Omnebook Terms of Service and Privacy
                                                                                     Policy</label>
                                                                             </div>
                                                                             <div id="termserror"
@@ -600,7 +600,7 @@
                                                                                     <div
                                                                                         class="loading-container text-center loading-width mb-10">
                                                                                         <img src="{{ '/public/images/processing.gif' }}"
-                                                                                            alt="Processing..." />
+                                                                                            alt="Processing..." loading="lazy" />
                                                                                     </div>
                                                                                 </div>
                                                                             </div>

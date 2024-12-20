@@ -12,7 +12,7 @@
   <section class="breadcrumbs">
   <div class="container">
       <ul>
-        <li><a href="/">HOME    </a></li><li><i class="fa fa-angle-right"></i>
+        <li><a href="/">HOME  </a></li><li><i class="fa fa-angle-right"></i>
       </li>
         <li>{{ $pageTitle }}</li>
         </ul>

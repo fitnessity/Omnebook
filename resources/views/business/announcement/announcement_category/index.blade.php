@@ -19,7 +19,7 @@
                 	<div class="row mb-3">
 						<div class="col-12">
 							<div class="page-heading">
-								<label>Announcement Category</label>
+								<h1>Announcement Category</h1>
 							</div>
 						</div>
 					</div><!--end row-->

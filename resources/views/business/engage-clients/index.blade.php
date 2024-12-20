@@ -21,7 +21,7 @@
                                 <div class="row y-middle">
                                     <div class="col-lg-6">
                                         <div class="engage-client-text-section">
-                                            <h3 class="mb-25">Promote your business with blast campaigns </h3>
+                                            <h1 class="mb-25">Promote your business with blast campaigns </h1>
                                             <p class="mb-15">Increase bookings and engage with your clients by sharing special offers and important updates over email and text message.</p>
                                             <ul class="mb-25">
                                                 <li>Customise the message content to suit your style</li>
@@ -34,7 +34,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="engage-client-img text-center mmt-25 imt-25">
-                                            <img src="{{url('/dashboard-design/images/engage-client.png')}}" loading="lazy">
+                                            <img src="{{url('/dashboard-design/images/engage-client.png')}}" alt="Omnebook" loading="lazy">
                                         </div>
                                     </div>
                                 </div>

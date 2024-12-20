@@ -65,26 +65,6 @@ class UserProfileController extends Controller {
         $this->sports = $sports;
         $this->arr = [];
         if (Auth::check()) {
-            // View::share('languages', $languages);
-            // View::share('UserProfileDetail', $UserProfileDetail);
-            // View::share('sports_select', $sports_select);
-            // View::share('sport_dd', $sport_dd + $sports_names);
-            // View::share('businessType', $businessType);
-            // View::share('activity', $activity);
-            // View::share('programType', $programType);
-            // View::share('programFor', $programFor);
-            // View::share('teaching', $teaching);
-            // View::share('numberOfPeople', $numberOfPeople);
-            // View::share('ageRange', $ageRange);
-            // View::share('expLevel', $expLevel);
-            // View::share('serviceLocation', $serviceLocation);
-            // View::share('pFocuses', $pFocuses);
-            // View::share('duration', $duration);
-            // View::share('specialDeals', $specialDeals);
-            // View::share('servicePriceOption', $servicePriceOption);
-            // View::share('allLanguages', $languages);
-            // View::share('timeSlots', $timeSlots);
-            // View::share('mydetails', $mydetails);
         }
     }
     public function about() { 
@@ -314,20 +294,6 @@ class UserProfileController extends Controller {
                                                         <li><a href="/delPost/'.$profile_post->id.'"><i class="fa fa-trash-o"></i>Delete Post</a></li>';
                                                         }
                                                         
-                                                        /*if(empty($postreport)){
-                                                       $html .= ' <li class="bad-report"><a is_report="1" id="'.$profile_post->id.'" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Report Post</a></li>';
-                                                        }elseif($postreport->report_post==1){
-                                                        $html .= '<li class="bad-report"><a is_report="0" id="'.$profile_post->id.'" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Un Report Post</a></li>';
-
-                                                         }elseif($postreport->report_post==0){
-                                                         $html .= '<li class="bad-report"><a is_report="1" id="'.$profile_post->id.'" href="javascript:void(0);" class="reportPost"><i class="fa fa-flag"></i>Report Post</a></li>';
-                                                         
-                                                        }
-                                                        
-                                                        $html .= '<li><i class="fa fa-address-card-o"></i>Boost This Post</li>
-                                                        <li><i class="fa fa-clock-o"></i>Schedule Post</li>
-                                                        <li><i class="fa fa-wpexplorer"></i>Select as featured</li>
-                                                        <li><i class="fa fa-bell-slash-o"></i>Turn off Notifications</li>';*/
                                                     $html .='</ul>
                                                 </div>
                                             </div>
@@ -765,23 +731,12 @@ class UserProfileController extends Controller {
     }
 
     public function postDetail($id) {
-        //$id = $request->id;
         $profile_post = ProfilePost::find($id); 
-        
-        /*echo "<pre>";
-        print_r($profile_post);
-        exit;*/
         return view('profiles.postDetail',compact('profile_post'));
     }
 
     public function showcomments($id,Request $request) { 
-        $commentdisplay = $request->commentdisplay; 
-        
-        /*if($commentdisplay == 5){
-            $commentData =  PostComment::skip(2)->take($commentdisplay)->get();
-        }else{           
-            $commentData =  PostComment::limit($commentdisplay)->get();
-        } */
+        $commentdisplay = $request->commentdisplay;         
         if($commentdisplay == 5){
             $commentdisplay = $commentdisplay+2;
             $commentData =  PostComment::where('post_id',$id)->limit($commentdisplay)->get();
@@ -822,12 +777,10 @@ class UserProfileController extends Controller {
       
       if(!empty($like)){
         
-        /* already like any post */
             $like->is_like = $request->is_like;
             $like->update();  
                      
         }else{
-            /* new post like */
             $data=array(
                 "user_id" => Auth::user()->id,
                 "post_id" => $id,
@@ -897,7 +850,6 @@ class UserProfileController extends Controller {
             $imgpost = $data->images;
         }
          if($request->hasFile('video')){    
-            /* max 10 mb */
             $this->validate($request, [
                 'video' => 'required|mimes:mp4,mov,ogg,qt | max:10000',            
             ]);
@@ -905,29 +857,19 @@ class UserProfileController extends Controller {
             $imagebanner = $request->file('video');        
             $name = $imagebanner->getClientOriginalName();        
             $imagebanner->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'gallery'.DIRECTORY_SEPARATOR. $loggedinUser->id .DIRECTORY_SEPARATOR.'video'.DIRECTORY_SEPARATOR, $name); 
-           /*if (isset($data->video)) {
-             $bannerImage = public_path(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'gallery'.DIRECTORY_SEPARATOR. $loggedinUser->id .DIRECTORY_SEPARATOR.'video'.DIRECTORY_SEPARATOR,$data->video);
-             unlink($bannerImage);
-           }*/
+
            $videopost = $name;
         }else{
             $videopost = $data->video;
         }
 
         if($request->hasFile('music_post')){    
-            /* max 10 mb */
-            /*$this->validate($request, [
-                'video' => 'required|mimes:mp4,mov,ogg,qt | max:10000',            
-            ]);*/
 
             $imagebanner = $request->file('music_post');        
             $name = $imagebanner->getClientOriginalName();        
             $imagebanner->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'gallery'.DIRECTORY_SEPARATOR. $loggedinUser->id .DIRECTORY_SEPARATOR.'music'.DIRECTORY_SEPARATOR, $name); 
-           /*if (isset($data->video)) {
-             $bannerImage = public_path(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'gallery'.DIRECTORY_SEPARATOR. $loggedinUser->id .DIRECTORY_SEPARATOR.'video'.DIRECTORY_SEPARATOR,$data->video);
-             unlink($bannerImage);
-           }*/
-           $musicpost = $name;
+    
+            $musicpost = $name;
         }else{
             $musicpost = $data->music;
         }
@@ -959,7 +901,6 @@ class UserProfileController extends Controller {
         );
         ProfileSave::create($array);
         return response()->json(array("success"=>'success'));
-       // return redirect()->route('profile-viewProfile')->with('success', 'Post save succesfully! ');
     }
 
     public function RemovesavePost($pid,$uid)
@@ -972,7 +913,6 @@ class UserProfileController extends Controller {
         $images=array();
         $loggedinUser = Auth::user(); 
                
-       // if($files=$request->file('image_post')) {            
         if($request->hasFile('image_post')){  
             $files=$request->file('image_post'); 
             foreach($files as $file){
@@ -989,10 +929,6 @@ class UserProfileController extends Controller {
             ProfilePost::create($data);
         }
         else if($request->hasFile('video')){    
-            /* max 10 mb */
-            /*$this->validate($request, [
-                'video' => 'required|mimes:mp4,mov,ogg,qt | max:10000',            
-            ]);*/
             $imagebanner = $request->file('video');        
             $name = $imagebanner->getClientOriginalName();        
             $imagebanner->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'gallery'.DIRECTORY_SEPARATOR. $loggedinUser->id .DIRECTORY_SEPARATOR.'video'.DIRECTORY_SEPARATOR, $name); 
@@ -1023,9 +959,7 @@ class UserProfileController extends Controller {
             $imgname= 'selfie_image'.date('dmYHis');
             
             file_put_contents(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'gallery'.DIRECTORY_SEPARATOR. $loggedinUser->id.DIRECTORY_SEPARATOR.$imgname.'.png', $data);
-            
-            //echo 'call'.$loggedinUser->id; exit;
-            
+                        
             $data=array(
                 "post_text" => $request->post_text,
                 "user_id" => $loggedinUser->id,
@@ -1110,7 +1044,6 @@ class UserProfileController extends Controller {
         }
         
         if($request->btnview == 'View') {
-           // return redirect('/pcompany/view/'.$request->cid);
            return redirect('/profile/viewbusinessProfile/'.$request->cid);
         }
         
@@ -1126,7 +1059,6 @@ class UserProfileController extends Controller {
     
     
     public function editBusinessService(Request $request) {
-        //print_r($request->all());exit;
         $businessData = [
             'bstep' => 72,
             'cid' => $request->cid,
@@ -1157,7 +1089,7 @@ class UserProfileController extends Controller {
         $UserProfileDetail = [];
        
         $sports_names = $this->sports->getAllSportsNames();
-        $approve = []; //Evidents::where('user_id', $loggedinUser['id'])->get();
+        $approve = []; 
         $serviceType = Miscellaneous::businessType();
         $programType = Miscellaneous::programType();
         $programFor = Miscellaneous::programFor();
@@ -1216,8 +1148,6 @@ class UserProfileController extends Controller {
         
         $companyservice = BusinessServices::where('userid', Auth::user()->id)->where('cid', $companyId)->orderBy('id', 'DESC')->get();
         }
-        //dd($companyservice);
-        //dd(json_encode(@explode(',', $business_spec->languages)));
         $user = User::where('id', Auth::user()->id)->first();
         $city = AddrCities::where('id', $user->city)->first();
         if (empty($city)) {
@@ -1304,50 +1234,8 @@ class UserProfileController extends Controller {
         if ($request->session()->has('cart_item')) {
             $cart = $request->session()->get('cart_item');
         }
-        
-
-        /*
-            $company = CompanyInformation::where('id', Auth::user()->cid)->first();        
-            
-            if($company){
-
-    	        if($company->charges_enabled == '0'){
-    		        $stripe_client = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-    		        
-    		        
-    				try{
-    					$stripe_account = $stripe_client->accounts->retrieve(
-    					  	$company->stripe_connect_id,
-    					  	[]
-    			  		);
-    			  		
-    			  		if($stripe_account->charges_enabled){
-    			  			$company->charges_enabled = 1;
-    				  		$company->save();	
-
-    				  		return redirect()->route('createNewBusinessProfile');				  		
-    			  		}
-
-    		
-    			  	}catch(\Stripe\Exception\PermissionException $e){
-
-    			  	}catch(\Stripe\Exception\InvalidArgumentException $e){
-
-    			  	}
-    	        }else{
-    		        return redirect()->route('createNewBusinessProfile');				  		
-    	        }
-
-            }
-    */
-
-        
+                
         return view('business.welcomeBusinessProfile', compact('company', 'firstCompany', 'cart'));
-        
-        /*$company='';
-        $firstCompany='';
-        $cart='';
-        return view('business.welcomeBusinessProfile');*/
     }
 
     public function companyBusinessProfile(Request $request) {
@@ -1387,11 +1275,8 @@ class UserProfileController extends Controller {
 
     }
 
-    /* Step 1 - Business Profile */
+    
     public function addbstep(Request $request) {
-        //dd(Auth::user()->cid);
-
-
         $companyId = $serviceId = 0;
         if(isset($request->cid) && $request->cid != 0) {
             $companyId = $request->cid;
@@ -1414,67 +1299,18 @@ class UserProfileController extends Controller {
         CompanyInformation::where('id', $businessData['cid'])->update(['serviceid' => $businessData['serviceid']]);
         User::where('id', Auth::user()->id)->update($businessData);
 
-
-/*
-        if($request->gostripe == '1'){
-	        $stripe_client = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-	        $company = CompanyInformation::where('id', $companyId)->get()->first();
-	        if(!$company){
-	            $company = CompanyInformation::create([
-		            "stripe_connect_id" => "1111111"
-		        ]);        
-                User::where('id', Auth::user()->id)->update(['cid' => $company->id]);
-	        }
-	        
-			try{
-				$stripe_account = $stripe_client->accounts->retrieve(
-				  	$company->stripe_connect_id,
-				  	[]
-		  		);
-	
-		  	}catch(\Stripe\Exception\PermissionException $e){
-				$stripe_account = $stripe_client->accounts->create([
-					'type' => 'express', 
-					'email' => Auth::user()->email,
-				]);
-				$company->stripe_connect_id = $stripe_account->id;
-				$company->save();
-		  	}
-		  	
-		  	if($stripe_account->charges_enabled){
-		  		$company->charges_enabled = 1;
-		  		$company->save();
-	  		}else{
-
-		  		$link = $stripe_client->accountLinks->create(
-				  [
-				    'account' => $stripe_account->id,
-				    'refresh_url' => 'https://fitnessity.co/business-welcome?stripe_status=pending&cid=' . $company->id,
-				    'return_url' => 'https://fitnessity.co/business-welcome?stripe_status=pending&cid=' . $company->id,
-				    'type' => 'account_onboarding',
-				  ]
-				);
-				$url = $link['url'];
-				return redirect($url);
-	  		}		
-
-
-        }
-*/
         
         return redirect()->route('createNewBusinessProfile');
     }
 
-    /* Step 2 - Business Profile */
+
     public function addbusinesscompanydetail(Request $request) {
-    /*    print_r($request->all());*/
         $validator = Validator::make($request->all(), [
             'Companyname' => 'required',
             'Address' => 'required',
             'City' => 'required',
             'State' => 'required',
             'ZipCode' => 'required',
-            // 'Businessusername' => 'required',
             'Firstnameb' => 'required',
             'Lastnameb' => 'required',
             'userid' => 'required'
@@ -1495,7 +1331,7 @@ class UserProfileController extends Controller {
         } else {
             $profile_picture = $request->oldProfilepic;
         }
-        /* using the insertion time only */
+
         $request->Profilepic = $profile_picture;
         $data['lat'] = $request->lat;
         $data['lon'] = $request->lon;
@@ -1562,19 +1398,7 @@ class UserProfileController extends Controller {
         ];
 
 
-        /************* new flow change ******************
-        $business_details = BusinessCompanyDetail::where('userid', Auth::user()->id)->get();
-        if (!isset($business_details[0])) {
-            BusinessCompanyDetail::create($request->all());
-        } else {
-            BusinessCompanyDetail::where('userid', Auth::user()->id)->update($businessData);
-        }
-
-        return redirect()->route('experienceBusinessProfile');
-        ****************************************************/
-        
-        
-        /* Table - business_companydetails */
+       
         $business_details = BusinessCompanyDetail::where('cid', $cid)->where('userid', Auth::user()->id)->get();
         if (!isset($business_details[0])) {
             BusinessCompanyDetail::create($businessData);
@@ -1589,22 +1413,7 @@ class UserProfileController extends Controller {
         return redirect()->route('createNewBusinessProfile');
     }
 
-    /* Step 3 - Business Profile */
     public function addbusinessexperience(Request $request) {
-        // echo"<pre>"; print_r($request->all());exit();
-         //dd($request->all());
-        /************* new flow change ******************
-          $businessData = $request->all();
-          $business_details = BusinessExperience::where('userid', Auth::user()->id)->get();
-          if(!isset($business_details[0])) {
-          BusinessExperience::create($request->all());
-          } else {
-          BusinessExperience::where('userid', Auth::user()->id)->update($businessData);
-          }
-         
-        return redirect()->route('specificationBusinessProfile');
-        ****************************************************/
-        //global $cid;
         $frm_organisation = array();
         $frm_posi = array();
         $frm_servi_start = array();
@@ -1661,7 +1470,6 @@ class UserProfileController extends Controller {
             "userid" => $request->userid,
             "frm_organisationname" => $frm_organisationname,
             "frm_position" => $frm_position,
-            /*"frm_ispresentcheck" => $stillwork,*/
             "frm_ispresentcheck" => $frm_ispresentcheck,
             "frm_servicestart" => $frm_servicestart,
             "frm_serviceend" => $frm_serviceend,
@@ -1675,11 +1483,8 @@ class UserProfileController extends Controller {
             "frm_skilldetail" => $frm_skilldetail,
             "showstep" => 4
         ];
-       /* print_r($businessData);*/
-        
-        /* Table - business_experience */
+
         $business_exp = BusinessExperience::where('cid', $request->cid)->where('userid', Auth::user()->id)->get();
-        // print_r($business_exp);exit();
         if (!isset($business_exp[0])) {
             BusinessExperience::create($businessData);
         } else {
@@ -1691,9 +1496,8 @@ class UserProfileController extends Controller {
         return redirect()->route('createNewBusinessProfile');
     }
 
-    /* Step 4 - Business Profile */
+    
     public function addbusinessspecification(Request $request) {
-        //dd($request->all());
         
         $languages = $serBusinessoff1 = $medical_type = $goals_option = "";
         if(isset($request->languages) && !empty($request->languages)) {
@@ -1737,7 +1541,7 @@ class UserProfileController extends Controller {
           'serBusinessoff1'=>$serBusinessoff1
         ];
         
-        /* Table - business_services */
+
         $business_spec = BusinessService::where('cid', $request->cid)->where('userid', Auth::user()->id)->get();
         if (!isset($business_spec[0])) {
             BusinessService::create($businessData);
@@ -1746,13 +1550,11 @@ class UserProfileController extends Controller {
         }
         
         User::where('id', Auth::user()->id)->update(['bstep' => 5]);
-        //return view('profiles.createNewBusinessProfile');
+        
         return redirect()->route('createNewBusinessProfile');
     }
 
-    /* Step 5 - Business Profile */
     public function addbusinessterms(Request $request) {
-        /*dd($request->all());*/
 
         $refundpolicy = 0;
         $covid = 0;
@@ -1801,8 +1603,7 @@ class UserProfileController extends Controller {
             "refundpolicy" => $refundpolicy,
             "refundpolicytext" => $refundpolicytext
         ];
-        //dd($businessData);
-        /* Table - business_terms */
+
         $business_term = BusinessTerms::where('cid', $request->cid)->where('userid', Auth::user()->id)->get();
         if (!isset($business_term[0])) {
             BusinessTerms::create($request->all());
@@ -1810,15 +1611,12 @@ class UserProfileController extends Controller {
             BusinessTerms::where('cid', $request->cid)->where('userid', Auth::user()->id)->update($businessData);
         }
         
-        //User::where('id', Auth::user()->id)->update(['bstep' => 6]); ///nnn 24-5-2022 - hide evident by nipa
-        User::where('id', Auth::user()->id)->update(['bstep' => 7]); // redirect user to create service tab 
+        User::where('id', Auth::user()->id)->update(['bstep' => 7]); 
         
         return redirect()->route('createNewBusinessProfile');
     }
 
-    /* Step 6 - Business Profile */
     public function addbusinessverification(Request $request) {
-        //dd($request->all());
         $businessData = [
             "cid" => $request->cid,
             "userid" => $request->userid,
@@ -1840,7 +1638,6 @@ class UserProfileController extends Controller {
             "created" => date("Y-m-d")
         ];
         
-        /* Table - business_verified */
         $business_veri = BusinessVerified::where('cid', $request->cid)->where('userid', Auth::user()->id)->get();
         if (!isset($business_veri[0])) {
             BusinessVerified::create($businessData);
@@ -1852,7 +1649,6 @@ class UserProfileController extends Controller {
         return redirect()->route('createNewBusinessProfile');
     }
 
-    /* Step 8 - Business Profile */
     public function addbusinessbooking(Request $request) {
         if($request->cid != "" && $request->cid > 0) {
             return redirect('/pcompany/view/'.$request->cid);
@@ -1875,49 +1671,22 @@ class UserProfileController extends Controller {
                 ]
         );
 
-        //  $voiceMessage = new VoiceResponse();
-        //  $voiceMessage->say('Your one time password is 123456', ['voice' => 'woman', 'language' => 'en-IN']);
-        // $voiceMessage->say('This is an automated call providing you your OTP from the test app.');
-        //  $voiceMessage->say('Your one time password is ' . $otpCode);
-        //  $voiceMessage->pause(['length' => 1]);
-        //  $voiceMessage->say('Your one time password is ' . $otpCode);
-        //  $voiceMessage->say('GoodBye');
-        //   return response($voiceMessage)
-        //          ->header('Content-Type', 'application/xml');
-        // print_r($voiceMessage);die;
-        // $otp = $OTPService->createOtp();
-        //   $otp = '123456';
-        // $callId = $twilioService->makeOtpVoiceCall(env('AUTHORIZED_PHONE_NUMBER'), $otp);
-        // return view('otp.validate', ['callId' => $callId]);
     }
 
     public function generateVoiceMessage(Request $request, $otpCode, TwilioService $twilioService) {
         $twimlResponse = $twilioService->generateTwimlForVoiceCall($otpCode);
         print_r($twimlResponse);
         die;
-        // return response($twimlResponse)
-        //     ->header('Content-Type', 'application/xml');
     }
 
     public function sendCustomMessage(Request $request) {
-        // $validatedData = $request->validate([
-        //     'users' => 'required|array',
-        //     'body' => 'required',
-        // ]);
-        // $recipients = $validatedData["users"];
-        // // iterate over the array of recipients and send a twilio request for each
-        // foreach ($recipients as $recipient) {
-        //     $this->sendMessage($validatedData["body"], $recipient);
-        // }
-        // return back()->with(['success' => "Messages on their way!"]);
         $account_sid = getenv("TWILIO_SID");
         $auth_token = getenv("TWILIO_AUTH_TOKEN");
         $twilio_number = getenv("TWILIO_NUMBER");
         $client = new Client($account_sid, $auth_token);
-        // $client->messages->create(+919782051806, ['from' => +15005550006, 'body' => 'Send sms from twillio']);
         try {
             $message = $client->messages
-                    ->create("+918854862050", // to
+                    ->create("+918854862050", 
                     [
                 "body" => "Hey Mr Nugget, you the bomb!",
                 "from" => $twilio_number
@@ -1932,8 +1701,6 @@ class UserProfileController extends Controller {
 
         $company = CompanyInformation::where('id', $request->company_id)->first();
         $image = json_decode($company->company_images);
-        //print_r(gettype($image));die;
-        //unset($image[$request->myindex]);
         array_splice($image, $request->myindex, 1);
         $company->company_images = count($image) == 0 ? null : json_encode($image);
         $company->save();
@@ -1944,8 +1711,6 @@ class UserProfileController extends Controller {
 
         $company = User::where('id', Auth::user()->id)->first();
         $image = json_decode($company->company_images);
-        //print_r(gettype($image));die;
-        //unset($image[$request->myindex]);
         array_splice($image, $request->myindex, 1);
         $company->company_images = count($image) == 0 ? null : json_encode($image);
         $company->save();
@@ -1957,17 +1722,6 @@ class UserProfileController extends Controller {
         $gallery = DB::select('select id, attachment_name from users_add_attachment where id = ? order by id DESC', [$request->delId]);
         if(!empty($gallery)) {
             foreach($gallery as $pic) {
-                /*
-                $uid = Auth::user()->id;
-                $gallery_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'gallery' . DIRECTORY_SEPARATOR . $uid . DIRECTORY_SEPARATOR . $pic->attachment_name;
-                $thumb_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'gallery' . DIRECTORY_SEPARATOR . $uid . DIRECTORY_SEPARATOR . 'thumb' . DIRECTORY_SEPARATOR . $pic->attachment_name;
-                
-                chmod($gallery_upload_path, 0777);
-                unlink($gallery_upload_path);
-
-                chmod($thumb_upload_path, 0777);
-                unlink($thumb_upload_path); 
-                */
                 DB::table('users_add_attachment')->delete($request->delId);
             }
         }
@@ -1999,13 +1753,11 @@ class UserProfileController extends Controller {
     }
 
     public function getBladeDetail($company_id, Request $request) {
-        //die('getBladeDetail');
         $view = 'home.individual-page';
         return $this->companyProfilePage($request, $view, $company_id);
     }
 
     public function getBladeDetail1($company_id, Request $request) {
-        //die('getBladeDetail1');
         $view = 'home.individual-page-new';
         return $this->companyProfilePage($request, $view, $company_id);
 
@@ -2020,27 +1772,13 @@ class UserProfileController extends Controller {
        return view('jobpost.search_profile', compact('UserProfileDetail','ProfileFollowcount','ProfileFavcount','ProfileView'));
 
     }
-    /*public function profileDetailPage($user_id) { 
-       $ip = \Request::getClientIp(true);    
-      
-      // $UserProfileDetail = User::where('username',$user_name)->get();
-       $UserProfileDetail = User::find($user_id);
-      // $user_id=$UserProfileDetail->id;
-       
-       $ProfileFollowcount = ProfileFollow::where('user_id',$user_id)->count();
-       $ProfileFavcount = ProfileFav::where('user_id',$user_id)->count();
-       $ProfileView = profileView::where('ip',$ip)->count();   
-       return view('jobpost.search_profile', compact('UserProfileDetail','ProfileFollowcount','ProfileFavcount','ProfileView'));
 
-    }*/
     public function viewuserpersonalprofile($user_name){
         $ip = \Request::getClientIp(true);
         $UserProfileDetail = User::where('username',$user_name)->first();
         $user_id= @$UserProfileDetail->id;
     
         $gallery = $this->galleryList($user_id);
-        /*echo "<pre>";print_r($gallery);
-        exit;*/
         $viewgallery = $this->viewGalleryList($user_id); 
                
         $UserProfileDetail = $this->users->getUserProfileDetail($user_id, array('professional_detail', 'history', 'education', 'certification', 'service'));
@@ -2061,15 +1799,10 @@ class UserProfileController extends Controller {
         $duration = Miscellaneous::duration();
         $servicePriceOption = Miscellaneous::servicePriceOption();
         $specialDeals = Miscellaneous::specialDeals();
-        //  $loggedinUser['role'] = 'customer';
-        // $loggedinUser->save();
-        //dd($UserProfileDetail);die;
 
         $view = 'profiles.viewUserProfile';
         $family = UserFamilyDetail::where('user_id', $user_id)->get();
         $business_details = BusinessInformation::where('user_id',$user_id)->get();
-        //  dd($this->users->getStateList($UserProfileDetail['country']));
-        //die;
 
         $user = User::where('id', $user_id)->first();
         $city = AddrCities::where('id', $user->city)->first();
@@ -2089,11 +1822,6 @@ class UserProfileController extends Controller {
         $firstCompany = CompanyInformation::where('user_id', $user_id)->first();
         $companies = CompanyInformation::where('user_id', $user_id)->get();
 
-        /*$cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }*/
-
         $ProfileFollowcount = ProfileFollow::where('user_id', $user_id)->count();
         $ProfileFavcount = ProfileFav::where('user_id', $user_id)->count();
         $ProfileViewCount = ProfileView::where('user_id', $user_id)->count();
@@ -2106,10 +1834,7 @@ class UserProfileController extends Controller {
         }
         $followingarr1=implode(",",$followingarr);
         $f = explode(",", $followingarr1);
-        //DB::enableQueryLog();
         $profile_posts = ProfilePost::whereIn('user_id', $f)->limit(5)->orderBy('id','desc')->get();
-        //dd(\DB::getQueryLog());
-        //$profile_posts = ProfilePost::limit(5)->orderBy('id','desc')->get();
 
         $videos = ProfilePost::select('video','user_id')->where('video','!=',null)->where('user_id',$user_id)->orderBy('id','desc')->limit(1)->get();
 
@@ -2117,7 +1842,6 @@ class UserProfileController extends Controller {
         $profilesave = ProfileSave::where('user_id',$user_id)->orderBy('id','desc')->get();
 
         return view($view, [
-            //'cart' => $cart,
             'UserProfileDetail' => $UserProfileDetail,
             'videos'=> $videos,
             'profilesave'=>$profilesave,
@@ -2152,10 +1876,6 @@ class UserProfileController extends Controller {
             'profile_posts' => $profile_posts,
         ]);    
       
-       /*$ProfileFollowcount = ProfileFollow::where('user_id',$user_id)->count();
-       $ProfileFavcount = ProfileFav::where('user_id',$user_id)->count();
-       $ProfileView = profileView::where('ip',$ip)->count(); */  
-      //return view('profiles.viewUserProfile', compact('UserProfileDetail','ProfileFollowcount','ProfileFavcount','ProfileView'));
     }
     public function profileView(Request $request)
     {
@@ -2170,7 +1890,6 @@ class UserProfileController extends Controller {
     public function newFUn(Request $request) {
         return redirect('/search-result-location?location=' . $request->location . '&page=1&page_size=10');
     }
-    //for header & banner search
     public function searchResultLocation(Request $request) {
 
         $user_data = array();
@@ -2203,7 +1922,6 @@ class UserProfileController extends Controller {
                 $company = CompanyInformation::where('dba_business_name', 'LIKE', $select_label . '%')->get();
             }
         }
-        //dd($data_user); exit;
         $sports = $this->sports->getAlphabetsWiseSportsNames();
         $sports_names = $this->sports->getAllSportsNames();
         $sports_child_parent = $this->sports->getSportsChildParentWise();
@@ -2352,7 +2070,7 @@ class UserProfileController extends Controller {
                 }
             }
         }
-        //dd($locations);
+      
         $return = Sports::select(DB::raw('sports.*'), DB::raw('sports_categories.category_name'), DB::raw('IF((select count(*) from sports as sports1 where sports1.is_deleted = "0" AND sports1.parent_sport_id = sports.id ) > 0,1,0) as has_child'))
                 ->leftjoin("sports_categories", DB::raw('sports.category_id'), '=', 'sports_categories.id');
         $return->where('sports.is_deleted', '0');
@@ -2427,9 +2145,9 @@ class UserProfileController extends Controller {
             foreach ($my_service_data as $value2) {
                 array_push($company_ids, $value2['company_id']);
             }
-            // dd($company_ids);
+          
             $company = CompanyInformation::whereIn('id', $company_ids)->where('city', 'LIKE', $myloc . '%')->get();
-            // dd(count($company));
+          
         }
 
         if ($request->age_range != null && $request->age_range != 'undefined') {
@@ -2441,7 +2159,6 @@ class UserProfileController extends Controller {
                 }
             }
             $company = CompanyInformation::whereIn('id', $company_ids)->where('city', 'LIKE', $myloc . '%')->get();
-            // dd(count($company));
         }
 
         if ($request->activity_for != null && $request->activity_for != 'undefined') {
@@ -2452,9 +2169,7 @@ class UserProfileController extends Controller {
                     array_push($company_ids, $value2['company_id']);
                 }
             }
-            // dd($company_ids);
             $company = CompanyInformation::whereIn('id', $company_ids)->where('city', 'LIKE', $myloc . '%')->get();
-            // dd(count($company));
         }
 
         if ($request->activity_type != null && $request->activity_type != 'undefined') {
@@ -2466,9 +2181,7 @@ class UserProfileController extends Controller {
                     array_push($company_ids, $value2['company_id']);
                 }
             }
-            // dd($company_ids);
             $company = CompanyInformation::whereIn('id', $company_ids)->where('city', 'LIKE', $myloc . '%')->get();
-            // dd(count($company));
         }
 
         if ($request->language != null && $request->language != 'undefined') {
@@ -2485,9 +2198,8 @@ class UserProfileController extends Controller {
         if ($request->professional_type != null && $request->professional_type != 'undefined') {
             foreach ($request->professional_type as $data) {
                 $str = ':"' . $data;
-                //print_r($str);die;
+               
                 $my_service_data = UserService::where('company_id', '!=', null)->where('servicetype', 'LIKE', '%' . $str . '%')->get();
-                //  print_r($my_service_data);die;
                 foreach ($my_service_data as $value2) {
 
                     array_push($company_ids, $value2['company_id']);
@@ -2608,8 +2320,7 @@ class UserProfileController extends Controller {
         return view('home.search-location', compact('select_professional_type', 'select_activity_type', 'select_activity_for', 'select_age', 'select_experience', 'select_personality', 'select_activity_location', 'select_language', 'request_location', 'resultnew', 'locations'
         ));
 
-        //return response()->json(['status'=>200,'search_data'=>$data,'search_data2'=>$company]);
-        //return view('home.searchLocationResult',compact('search_data','search_data2','locations'));
+      
     }
 
     public function SendVerificationlink(Request $request) {
@@ -2628,23 +2339,14 @@ class UserProfileController extends Controller {
 
         Mail::to($email)->send(new BusinessVerifyMail($business, $code));
 
-        //   print_r("gfhj");die;
 
         return redirect('/get-business-detail/' . $request->business_id . '?mail_sent=1&email=' . $request->business_email);
 
-        // return view('home.business-claim-detail', [
-        //     'data'=>$business,
-        //     'mail_sent'=>1
-        //     ]);
     }
 
     public function SendVerificationlinkMsg(Request $request) {
 
-        //  return redirect()->back()->with('msg', 'Phone nuber is not correct');
-
         $business = BusinessClaim::where('id', $request->business_id)->first();
-
-        // $code= $this->generateRandomString();
 
         $code = rand(1000, 9999);
 
@@ -2704,8 +2406,8 @@ class UserProfileController extends Controller {
             $twilio = new Client($sid, $token);
 
             $call = $twilio->calls
-                    ->create($business->phone, // to
-                    $twilio_number, // from
+                    ->create($business->phone, 
+                    $twilio_number, 
                     [
 
                 "twiml" => "<Response><Say voice='woman' language='en-IN'>Your one time password is " . $code . "</Say></Response>"
@@ -2778,23 +2480,10 @@ class UserProfileController extends Controller {
 
 
 
-        // print_r($request->session()->get('phone'));die;
 
         return redirect('/profile/viewProfile?companyCreate=1')->with(['phone' => $business['phone'], 'company_name' => $business['business_name'], 'business_id' => $business['id'], 'city' => $business['location']]);
 
 
-
-        //     $company_data = new CompanyInformation();
-        //     $company_data->user_id = $business['user_id'];
-        //   //  $company_data->first_name = $data['company_representative_first_name'];
-        // //    $company_data->last_name = $data['company_representative_last_name'];
-        //     $company_data->company_name = $business['business_name'];
-        //     $company_data->address = $business['location'];
-        //     //$company_data->email = $data['email'];
-        //     $company_data->contact_number = $business['phone'];
-        //   $company_data->save();
-        //   $business->is_verified = 1;
-        //   $business->save();
     }
 
     public function generateRandomString($length = 10) {
@@ -2829,7 +2518,6 @@ class UserProfileController extends Controller {
 
     public function getBusinessClaim($myloc) {
 
-        //print_r($myloc);die;
 
         $data = BusinessClaim::where('location', 'LIKE', $myloc . '%')->where('is_verified', 0)->get();
 
@@ -2855,7 +2543,6 @@ class UserProfileController extends Controller {
 
     public function getLocationBusinessClaimDetaill(Request $request) {
 
-        //print_r($myloc);die;
 
         $data = BusinessClaim::where('business_name', 'LIKE', $request->business_name . '%')->where('location', $request->location)->where('is_verified', 0)->get();
 
@@ -2878,16 +2565,12 @@ class UserProfileController extends Controller {
             $value['phone'] = $value['contact_number'];
         }
 
-        //    dd(gettype($data));
-        //    $data2 =  array_merge( (array) $data, (array) $company);
-        // $data2 = array_merge($data,$company);
 
         return response()->json(['status' => 200, 'search_data' => $data, 'search_data2' => $company]);
     }
 
     public function getBusinessClaimDetaill($valueid, Request $request) {
 
-        //print_r($myloc);die;
 
         $data = BusinessClaim::where('id', $valueid)->first();
 
@@ -2906,7 +2589,6 @@ class UserProfileController extends Controller {
                 'data' => $data,
                 'msg_sent' => 1
 
-                    //'email'=>$request->email
             ]);
         } elseif ($request->call_sent) {
 
@@ -2915,7 +2597,6 @@ class UserProfileController extends Controller {
                 'data' => $data,
                 'call_sent' => 1
 
-                    //'email'=>$request->email
             ]);
         } else {
 
@@ -2926,7 +2607,6 @@ class UserProfileController extends Controller {
             ]);
         }
 
-        //return response()->json(['status'=>200,'search_data'=>$data]);
     }
 
     public function viewPCompany(Request $request, $company_id) {
@@ -3111,7 +2791,7 @@ class UserProfileController extends Controller {
         }
         
         return Response::json($response);
-        //DB::update('update users_follow set follow_id = "0" where  user_id = "' . $remove_id . '"');
+
     }
 
     public function unfollow_company(Request $request) {
@@ -3208,7 +2888,7 @@ class UserProfileController extends Controller {
 
                         foreach ($value1->child as $key2 => $value2) {
 
-                            $selected = null; // ($service==$key2)?"selected":"";
+                            $selected = null; 
 
                             $sports_select .= "<option value='" . $key2 . "' " . $selected . " >" . $value2 . "</option>";
                         }
@@ -3216,7 +2896,7 @@ class UserProfileController extends Controller {
                         $sports_select .= "</optgroup>";
                     } else {
 
-                        $selected = null; //($service==$value1->value)?"selected":"";
+                        $selected = null; 
 
                         $sports_select .= "<option value='" . $value1->value . "' " . $selected . ">" . $value1->title . "</option>";
                     }
@@ -3224,10 +2904,6 @@ class UserProfileController extends Controller {
             }
         }
 
-
-
-        // dd($UserProfileDetail);
-        // die;
 
 
 
@@ -3262,9 +2938,6 @@ class UserProfileController extends Controller {
         $timeSlots = Miscellaneous::getTimeSlot();
 
 
-
-        // dd($loggedinUser['id']);
-        // die;
 
         if (UserProfessionalDetail::where('user_id', $loggedinUser['id'])->first() == null) {
 
@@ -3328,7 +3001,6 @@ class UserProfileController extends Controller {
     }
     
     public function deleteCompany(Request $request) {
-        //print_r($request->company_id);die;
         UserEducation::where('company_id', $request->company_id)->where('user_id', Auth::user()->id)->delete();
         UserEmploymentHistory::where('company_id', $request->company_id)->where('user_id', Auth::user()->id)->delete();
         UserCertification::where('company_id', $request->company_id)->where('user_id', Auth::user()->id)->delete();
@@ -3341,7 +3013,6 @@ class UserProfileController extends Controller {
 
     public function editCompany(Request $request) {
         if (!Gate::allows('profile_edit_access')) {
-            // $request->session()->flash('alert-danger', 'Access Restricted');
             return redirect('/profile/viewProfile');
         }
         if ((CompanyInformation::where('id', $request->company_id)->where('user_id', Auth::user()->id)->count()) == 0) {
@@ -3366,12 +3037,12 @@ class UserProfileController extends Controller {
                     if (count($value1->child)) {
                         $sports_select .= "<optgroup label='" . $value1->title . "'>";
                         foreach ($value1->child as $key2 => $value2) {
-                            $selected = null; // ($service==$key2)?"selected":"";
+                            $selected = null; 
                             $sports_select .= "<option value='" . $key2 . "' " . $selected . " >" . $value2 . "</option>";
                         }
                         $sports_select .= "</optgroup>";
                     } else {
-                        $selected = null; //($service==$value1->value)?"selected":"";
+                        $selected = null; 
                         $sports_select .= "<option value='" . $value1->value . "' " . $selected . ">" . $value1->title . "</option>";
                     }
                 }
@@ -3389,7 +3060,6 @@ class UserProfileController extends Controller {
         $ProfessionalDetail1 = UserProfessionalDetail::where('company_id', $request->company_id)->where('user_id', Auth::user()->id)->first();
         $UserProfileDetail['professional_detail'] = $professional_detail1;
         $UserProfileDetail['ProfessionalDetail'] = $ProfessionalDetail1;
-        //dd($UserProfileDetail['ProfessionalDetail']);die;
         $businessType = Miscellaneous::businessType();
         $programType = Miscellaneous::programType();
         $programFor = Miscellaneous::programFor();
@@ -3471,10 +3141,6 @@ class UserProfileController extends Controller {
 
         if ($request->class_meets == 'Weekly') {
 
-
-
-            //print_r($sdate);die;
-
             $this->arr = [];
 
             $day_arr = json_decode($request->serv_time_slot);
@@ -3531,7 +3197,6 @@ class UserProfileController extends Controller {
                 }
             }
 
-            //print_r($this->arr);die;
 
             Log::info("called");
 
@@ -3549,7 +3214,6 @@ class UserProfileController extends Controller {
             $available_dates = $this->arr;
         }
 
-        // die;
 
         $inserted = array(
             'user_id' => Auth::user()->id,
@@ -3622,7 +3286,6 @@ class UserProfileController extends Controller {
 
         $data = UserService::orderBy('id', 'DESC')->first();
 
-        //$id = DB::getPdo()->lastInsertId();
 
         return response()->JSON(['status' => 200, 'message' => $data]);
     }
@@ -3650,11 +3313,7 @@ class UserProfileController extends Controller {
 
         if ($request->hasFile('images')) {
 
-            //print_r("dsfdsf");die;
-
             foreach ($images as $item) {
-
-
 
                 $file = $item;
 
@@ -3666,8 +3325,6 @@ class UserProfileController extends Controller {
 
                 array_push($file_arr, $image_upload['filename']);
 
-                //$request->profile_pic =$image_upload['filename'];
-                //Store thumb
 
                 if (!file_exists(public_path('uploads/profile_pic/thumb150'))) {
 
@@ -3703,7 +3360,6 @@ class UserProfileController extends Controller {
 
         if ($request->hasFile('images')) {
 
-            //print_r("dsfdsf");die;
 
             foreach ($images as $item) {
 
@@ -3719,8 +3375,6 @@ class UserProfileController extends Controller {
 
                 array_push($file_arr, $image_upload['filename']);
 
-                //$request->profile_pic =$image_upload['filename'];
-                //Store thumb
 
                 if (!file_exists(public_path('uploads/profile_pic/thumb150'))) {
 
@@ -3753,7 +3407,7 @@ class UserProfileController extends Controller {
                 $galleryPic[] = $obj;
             }
         }
-        //return Response::json($galleryPic);
+
         return $galleryPic;
     }
 
@@ -3770,7 +3424,6 @@ class UserProfileController extends Controller {
                 $galleryPic[] = $obj;
             }
         }
-        //return Response::json($galleryPic);
         return $galleryPic;
     }
     
@@ -3787,7 +3440,6 @@ class UserProfileController extends Controller {
                 $galleryPic[] = $obj;
             }
         }
-        //return Response::json($galleryPic);
         return $galleryPic;
     }
 
@@ -3810,34 +3462,9 @@ class UserProfileController extends Controller {
             return redirect()->route('profile-viewProfile');
         }
 
-        /*         * **************** Dropzone ************************
-          $result = [];
-          $file_array = [];
-          $file_array['uid_attach'] = isset($request->uid_attach) ? $request->uid_attach : 0;
-
-          if (!file_exists(public_path('uploads/gallery/'.$file_array['uid_attach']))) {
-          mkdir(public_path('uploads/gallery/'.$file_array['uid_attach']), 0755, true);
-          }
-
-          $uploaddir = public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'gallery'.DIRECTORY_SEPARATOR.$file_array['uid_attach'].DIRECTORY_SEPARATOR;
-
-          $uploadfile = $uploaddir . basename($_FILES['file']['name']);
-
-          if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-          $result['success'] = "File is valid, and was successfully uploaded.\n";
-          DB::insert('insert into users_add_attachment (user_id, attachment_name, attachment_data, attachment_status) values (?, ?, ?, ?)', [$file_array['uid_attach'], $_FILES['file']['name'], '', 1]);
-          } else {
-          $result['error'] = "Possible file upload attack!\n";
-          }
-
-          return Response::json($result);
-         */
     }
 
     public function createCompany(Request $request) {
-        //die;
-        // print_r($request->all());die;
-        // save profile pic
 
         $image = new Image();
 
@@ -3855,8 +3482,7 @@ class UserProfileController extends Controller {
 
             $request->profile_pic = $image_upload['filename'];
 
-            //Store thumb
-
+            
             if (!file_exists(public_path('uploads/profile_pic/thumb150'))) {
 
                 mkdir(public_path('uploads/profile_pic/thumb150'), 0755, true);
@@ -3922,8 +3548,6 @@ class UserProfileController extends Controller {
 
         if (isset($request->profile_pic) && $request->profile_pic != '') {
 
-            // save new profile pic
-
             $company_data->logo = $request->profile_pic;
         }
 
@@ -3965,8 +3589,6 @@ class UserProfileController extends Controller {
                 $education->company_id = $company_data->id;
 
                 $dates = \DateTime::createFromFormat("m-d-Y", $request->service_start);
-
-                //$education->service_start = $request->service_start;
 
                 $education->service_start = $dates->format('Y-m-d');
 
@@ -4018,8 +3640,6 @@ class UserProfileController extends Controller {
                 $skil_award->type = $request->type;
 
                 $datee = \DateTime::createFromFormat("m-d-Y", $request->skill_completion_date);
-
-                // $certificate->completion_date = $datee->format('Y-m-d');
 
                 $skil_award->completion_date = $datee->format('Y-m-d');
 
@@ -4084,130 +3704,11 @@ class UserProfileController extends Controller {
 
 
 
-            //     if($request->hasFile('frm_profile_pic'))
-            //     {
-            //         $file_upload_path = public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'service_profile_pic'.DIRECTORY_SEPARATOR;
-            //         $thumb_upload_path = public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'service_profile_pic'.DIRECTORY_SEPARATOR.'thumb'.DIRECTORY_SEPARATOR;
-            //         $image_upload = Miscellaneous::saveFileAndThumbnail($request->file('frm_profile_pic'),$file_upload_path,1,$thumb_upload_path,'247','266');
-            //         $image_name = $image_upload['filename'];
-            //     }
-            //     else
-            //     {
-            //         $image_name = $request->old_profile_pic;
-            //     } 
-            //     $available_dates = [];
-            //     if($request->class_meets == 'Weekly'){
-            //         //print_r($sdate);die;
-            //         $this->arr = [];
-            //         $day_arr = json_decode($request->serv_time_slot);
-            //         foreach($day_arr as $value){
-            //         if($value->sunday_start != ''){
-            //           $sdate = date('Y-m-d', strtotime('next Sunday', strtotime($request->starting_date)));
-            //           $this->mydate($sdate,$request->end_date);
-            //         }
-            //         if($value->monday_start != ''){
-            //           $sdate = date('Y-m-d', strtotime('next Monday', strtotime($request->starting_date)));
-            //           $this->mydate($sdate,$request->end_date);
-            //         }
-            //         if($value->tuesday_start != ''){
-            //           $sdate = date('Y-m-d', strtotime('next Tuesday', strtotime($request->starting_date)));
-            //           $this->mydate($sdate,$request->end_date);
-            //         }
-            //         if($value->wednesday_start != ''){
-            //           $sdate = date('Y-m-d', strtotime('next Wednesday', strtotime($request->starting_date)));
-            //           $this->mydate($sdate,$request->end_date);
-            //         }
-            //         if($value->thrusday_start != ''){
-            //           $sdate = date('Y-m-d', strtotime('next Thrusday', strtotime($request->starting_date)));
-            //           $this->mydate($sdate,$request->end_date);
-            //         }
-            //         if($value->friday_start != ''){
-            //           $sdate = date('Y-m-d', strtotime('next Friday', strtotime($request->starting_date)));
-            //           $this->mydate($sdate,$request->end_date);
-            //         }
-            //         if($value->saturday_start != ''){
-            //           $sdate = date('Y-m-d', strtotime('next Saturday', strtotime($request->starting_date)));
-            //           $this->mydate($sdate,$request->end_date);
-            //         }
-            //         }
-            //         //print_r($this->arr);die;
-            //         Log::info("called");
-            //       $available_dates = $this->arr; 
-            //         Log::info($available_dates);
-            //     }
-            //     else{
-            //         $this->arr = [$request->starting_date];
-            //         $available_dates = $this->arr;
-            //     }
-            //   // die;
-            //      $inserted = array(
-            //     'user_id' => Auth::user()->id,
-            //     'image'=> $image_name,
-            //     'sport' => $request->frm_servicesport,
-            //     'title' => $request->frm_servicetitle,
-            //     'price' => $request->frm_serviceprice,
-            //     'timeslot_from' => $request->frm_servicetimeslotfrom,
-            //     'timeslot_to' => $request->frm_servicetimeslotto,
-            //     'servicedesc' => $request->frm_servicedesc,
-            //     'servicetype' => json_encode(json_decode($request->frm_servicetype),JSON_FORCE_OBJECT),
-            //     'programtype' => $request->frm_programtype,
-            //     'agerange' => json_encode(json_decode($request->frm_agerange),JSON_FORCE_OBJECT),
-            //     'programfor' => json_encode(json_decode($request->frm_programfor),JSON_FORCE_OBJECT),
-            //     'numberofpeople' => json_encode(json_decode($request->frm_numberofpeople),JSON_FORCE_OBJECT),
-            //     'experience_level' => json_encode(json_decode($request->frm_experience_level),JSON_FORCE_OBJECT),
-            //     'servicelocation' => json_encode(json_decode($request->frm_servicelocation),JSON_FORCE_OBJECT),
-            //     'focuses' => json_encode(json_decode($request->frm_servicefocuses),JSON_FORCE_OBJECT),
-            //     'specialdeals' => json_encode(json_decode($request->frm_specialdeals),JSON_FORCE_OBJECT),
-            //     'servicepriceoption' => json_encode(json_decode($request->frm_servicepriceoption),JSON_FORCE_OBJECT),
-            //     'duration' => $request->frm_serviceduration,
-            //     'terms_conditions' => $request->termcondfaqtext,
-            //     "expire_days"=>$request->expire_days,
-            //     "expire_in_option"=>$request->expire_in_option1,
-            //     "expire_in_option2"=>$request->expire_in_option2,
-            //     "sessions"=>$request->sessions,
-            //     "multiple_count"=>$request->multiple_count,
-            //     "recurring_pay"=>$request->recurring_pay,
-            //     "introoffer"=>$request->introoffer,
-            //     "runautopay"=>$request->runautopay,
-            //     "often"=>$request->often,
-            //     "often_every_op1"=>$request->often_every_op1,
-            //     "often_every_op2"=>$request->often_every_op2,
-            //     "numberofpays"=>$request->numberofpays,
-            //     "chargeclients"=>$request->chargeclients,
-            //     "termcondfaq"=>$request->termcondfaq,
-            //     'terms_conditions' => $request->termcondfaqtext,
-            //     "contractterms"=>$request->contractterms,
-            //     "contracttermstext"=>$request->contracttermstext,
-            //     "liability"=>$request->liability,
-            //     "liabilitytext"=>$request->liabilitytext,
-            //     "setupprice"=>$request->setupprice,
-            //     "offerpro_states"=>$request->offerpro_states,
-            //     "activitydesignsfor"=>json_encode(json_decode($request->activitydesignsfor),JSON_FORCE_OBJECT),
-            //     "activitytype"=>json_encode(json_decode($request->activitytype),JSON_FORCE_OBJECT),
-            //     "frm_teachingstyle"=>json_encode(json_decode($request->frm_teachingstyle),JSON_FORCE_OBJECT),
-            //     "salestax"=>$request->salestax,
-            //     "after_drop"=>$request->after_drop,
-            //     "salestaxpercentage"=>$request->salestaxpercentage,
-            //     "duestax"=>$request->duestax,
-            //     "duestaxpercentage"=>$request->duestaxpercentage,
-            //   //  "serv_time_slot" =>json_encode(json_decode($request->hours)),
-            //     'company_id'=>$company_data->id,
-            //     'serv_time_slot'=>$request->serv_time_slot,
-            //     'class_meets'=>$request->class_meets,
-            //     'starting_date'=>$request->starting_date,
-            //     'end_date'=>$request->end_date,
-            //     'available_dates'=>json_encode($available_dates),
-            //     'schedule_until'=>$request->schedule_until
-            // );
-            //     $serviceObj = DB::table('user_services')
-            //                     ->insert($inserted);
-            // $msg = "Service saved successfully!";
-
+          
             if ($id) {
 
                 $u = User::where('id', Auth::user()->id)->first();
                 
-                //$u->role = 'business'; /* Changed by manoj 08Aug21 */
                 $u->role = 'customer';
 
                 $u->is_upgrade = 1;
@@ -4220,8 +3721,6 @@ class UserProfileController extends Controller {
     }
 
     public function mydate($date, $end_date) {
-
-        //$this->arr[] = $date;
 
         Log::info("date " . $date);
 
@@ -4241,23 +3740,11 @@ class UserProfileController extends Controller {
             return $this->arr;
         }
 
-        //echo date('M d, Y', $date);
     }
 
     public function switchAccount(Request $request) {
         $user = User::where('id', Auth::user()->id)->first();
         if ($user->is_upgrade == 1) {
-            /* Changed by manoj 08Aug21 */
-            /*
-            if ($request->manage_company) {
-                $user->role = 'business';
-            } else {
-                if ($user->role == 'customer')
-                    $user->role = 'business';
-                else
-                    $user->role = 'customer';
-            }
-            */
             if ($request->manage_company) {
                 $user->role = 'customer';
             } else {
@@ -4306,8 +3793,6 @@ class UserProfileController extends Controller {
 
         $userObj->establishment_year = $request->b_Establishmentyear;
 
-        // get lat long
-
         $latlongdata = Miscellaneous::getLatLong($request->zipcode);
 
         $userObj->latitude = $latlongdata['lat'];
@@ -4348,12 +3833,9 @@ class UserProfileController extends Controller {
 
         $userObj->establishment_year = $request->b_Establishmentyear;
         
-        //$userObj->role = 'business'; /* Changed by Manoj 08Aug21 */
         $userObj->role = 'customer';
 
         $userObj->is_upgrade = 1;
-
-        // get lat long
 
         $latlongdata = Miscellaneous::getLatLong($request->zipcode);
 
@@ -4458,18 +3940,12 @@ class UserProfileController extends Controller {
 
         if ($validator->fails()) {
 
-            //return redirect->back()->withErrors
-
             return redirect('profile/change-password')->withErrors($validator)->withInput();
         } else {
 
             $user = User::where('id', Auth::user()->id)->first();
 
-            //print_r($postArr['password']);die;
-
             if (Hash::check($postArr['current_password'], $user->password)) {
-
-                // print_r("if");die;
 
                 $user->password = bcrypt($postArr['password']);
 
@@ -4480,11 +3956,7 @@ class UserProfileController extends Controller {
                 return redirect('profile/viewProfile');
             } else {
 
-                // print_r("else");die;
-
                 $request->session()->flash('alert-danger', 'Current password not match');
-
-                //return redirect()->back();
 
                 return redirect('/profile/change-password');
             }
@@ -4516,10 +3988,6 @@ class UserProfileController extends Controller {
 
             'first_name' => 'required',
             'last_name' => 'required',
-            // 'email'             => 'required|email',
-            //'relationship'          => 'required',
-            //'gender'  => 'required',
-            //'birthday'  => 'required',
             'mobile' => 'required'
         ];
 
@@ -4584,7 +4052,6 @@ class UserProfileController extends Controller {
     }
 
     public function submitFamilyForm1(Request $request) {
-        //print_r($request->all());exit();
         for($i=0;$i<=$request->familycnt;$i++){
             if($request->first_name[$i] != ''){
                 
@@ -4692,44 +4159,14 @@ class UserProfileController extends Controller {
         }
     }
 
-    /* public function sam(){
-
-      require_once(base_path().'/buddy/wp-load.php');
-
-      require_once(base_path().'/buddy/wp-blog-header.php');
-
-
-
-
-
-
-
-      } */
-
-    // protected function historyValidator($data)
-    // {
-    //     return Validator::make($data, [            
-    //                 'organization' => 'required|max:255',
-    //                 'position' => 'required|max:255',
-    //                 'servicestart' => 'required|max:255',
-    //                 'serviceend' => 'required|max:255',  
-    //             ],
-    //             [
-    //                 'required' => 'The :attribute is required.',
-    //             ]);
-    // }
 
     public function historyValidator() {
 
         $data = Input::all();
 
-        //print_r($data);die;
-
         $validator = Validator::make($data, [
 
                     'organization' => 'required|max:255',
-                        //'position' => 'required|max:255',
-                        // 'passingyear' => 'required|max:255',
                         ], [
 
                     'required' => 'The :attribute is required.',
@@ -4784,14 +4221,11 @@ class UserProfileController extends Controller {
                     $education->service_end = $dateee->format('Y-m-d');
                 }
 
-                //$education->service_end = date('Y-m-d', strtotime(Input::get('service_end'))) ;
             }
 
             $dateee = \DateTime::createFromFormat("m-d-Y", Input::get('service_start'));
 
             $education->service_start = $dateee->format('Y-m-d');
-
-            //$education->service_start = date('Y-m-d', strtotime(Input::get('service_start'))) ;
 
 
 
@@ -4802,7 +4236,6 @@ class UserProfileController extends Controller {
                 'msg' => 'Successfully ' . $msg . ' user employee history details',
                 'id' => $education->id
 
-                    //'redirecturl' => $url,
             );
 
             return Response::json($response);
@@ -4813,13 +4246,11 @@ class UserProfileController extends Controller {
 
         $data = Input::all();
 
-        //print_r($data);die;
 
         $validator = Validator::make($data, [
 
                     'course' => 'required|max:255',
                     'university' => 'required|max:255',
-                        // 'passingyear' => 'required|max:255',
                         ], [
 
                     'required' => 'The :attribute is required.',
@@ -4869,7 +4300,6 @@ class UserProfileController extends Controller {
             $response = array(
                 'type' => 'success',
                 'msg' => 'Successfully ' . $msg . ' education details',
-                //'redirecturl' => $url,
                 'id' => $education->id
             );
 
@@ -4888,7 +4318,6 @@ class UserProfileController extends Controller {
             $response = array(
                 'type' => 'success',
                 'msg' => 'Successfully deleted education detail',
-                    //'redirecturl' => $url,
             );
 
             return Response::json($response);
@@ -4899,7 +4328,6 @@ class UserProfileController extends Controller {
             $response = array(
                 'type' => 'success',
                 'msg' => 'Successfully deleted certificate data',
-                    //'redirecturl' => $url,
             );
 
             return Response::json($response);
@@ -4910,7 +4338,6 @@ class UserProfileController extends Controller {
             $response = array(
                 'type' => 'success',
                 'msg' => 'Successfully deleted skill data',
-                    //'redirecturl' => $url,
             );
 
             return Response::json($response);
@@ -4921,35 +4348,11 @@ class UserProfileController extends Controller {
             $response = array(
                 'type' => 'success',
                 'msg' => 'Successfully deleted emplyee history data',
-                    //'redirecturl' => $url,
             );
 
             return Response::json($response);
         }
     }
-
-    // protected function EducationValidator()
-    // {
-    //     $data = Input::all();
-    //     return Validator::make($data, [            
-    //                 'course' => 'required|max:255',
-    //                 'university' => 'required|max:255',
-    //                 'passingyear' => 'required|max:255',
-    //             ],
-    //             [
-    //                 'required' => 'The :attribute is required.',
-    //             ]);
-    // }
-    // protected function CertificationValidator($data)
-    // {
-    //     return Validator::make($data, [            
-    //                 'certificatetitle' => 'required|max:255',
-    //                 'certificatetitle' => 'required|max:255',
-    //             ],
-    //             [
-    //                 'required' => 'The :attribute is required.',
-    //             ]);
-    // }
 
     public function CertificationValidator() {
 
@@ -5003,7 +4406,6 @@ class UserProfileController extends Controller {
             $response = array(
                 'type' => 'success',
                 'msg' => 'Successfully ' . $msg . ' certification details',
-                //'redirecturl' => $url,
                 'id' => $education->id
             );
 
@@ -5062,14 +4464,11 @@ class UserProfileController extends Controller {
 
             $education->completion_date = $dateee->format('Y-m-d');
 
-            // $education->completion_date = date('Y-m-d', strtotime(Input::get('completion_date')));
-
             $education->save();
 
             $response = array(
                 'type' => 'success',
                 'msg' => 'Successfully ' . $msg . ' skill award details',
-                //'redirecturl' => $url,
                 'id' => $education->id
             );
 
@@ -5106,7 +4505,6 @@ class UserProfileController extends Controller {
                     'firstname' => 'required|max:255',
                     'lastname' => 'required|max:255',
                     'gender' => 'required',
-                    // 'phone_number' => 'regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/',
                     'phone_number' => 'regex:/^\(?([1-9]{1}[0-9]{2})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/',
                     'address' => 'required|max:255',
                     'city' => 'required|max:10',
@@ -5227,20 +4625,15 @@ class UserProfileController extends Controller {
             'users' => $this->users->findById($loggedinUser['id']),
             'sports_select' => $sports_select,
             'sport_dd' => $sport_dd + $sports_names,
-            // 'days' => Miscellaneous::getDays();
             'pageTitle' => "PROFILE"
         ]);
     }
 
     public function saveProfileHistory(Request $request) {
 
-        // ini_set('memory_limit', '-1');
-
         ini_set('max_execution_time', 300);
 
         $loggedinUser = Auth::user();
-
-        //save training details
 
         $professionalObj = New UserProfessionalDetail();
 
@@ -5280,8 +4673,6 @@ class UserProfileController extends Controller {
         }
 
 
-
-        // save employment history
 
         $history_record = array();
 
@@ -5337,7 +4728,6 @@ class UserProfileController extends Controller {
 
 
 
-        // save education
 
         $education_record = array();
 
@@ -5381,7 +4771,6 @@ class UserProfileController extends Controller {
 
 
 
-        // save certification
 
         $certificate_record = array();
 
@@ -5423,7 +4812,6 @@ class UserProfileController extends Controller {
 
 
 
-        // save service
 
         $service_record = array();
 
@@ -5522,8 +4910,6 @@ class UserProfileController extends Controller {
     public function editProfileSecurity() {
 
         if (!Gate::allows('profile_edit_access')) {
-
-            // $request->session()->flash('alert-danger', 'Access Restricted');
 
             return redirect('/profile/viewProfile');
         }
@@ -5643,8 +5029,6 @@ class UserProfileController extends Controller {
     public function editProfileMembership() {
 
         if (!Gate::allows('profile_edit_access')) {
-
-            // $request->session()->flash('alert-danger', 'Access Restricted');
 
             return redirect('/profile/viewProfile');
         }
@@ -5812,10 +5196,6 @@ class UserProfileController extends Controller {
 
             'first_name' => 'required',
             'last_name' => 'required',
-            // 'email'             => 'required|email',
-            //'relationship'          => 'required',
-            //'gender'  => 'required',
-            //'birthday'  => 'required',
             'mobile' => 'required'
         ];
 
@@ -5839,35 +5219,8 @@ class UserProfileController extends Controller {
         } else {
 
             if (Input::get('family_id') == 0) {
-
-                // $count = UserFamilyDetail::where('user_id',Auth::user()->id)->where('email',Input::get('email'))->count();
-                // if($count == 0){
-                //     $family = new UserFamilyDetail();
-                // }
-                // else{
-                //      $response = array(
-                //     'type' => 'danger',
-                //     'msg' => 'Email already registered',
-                //     //'redirecturl' => $url,
-                //     );
-                //     return Response::json($response);
-                // }
-
                 $family = new UserFamilyDetail();
             } else {
-
-                // $count = UserFamilyDetail::where('user_id',Auth::user()->id)->where('email',Input::get('email'))->where('id','!=',Input::get('family_id'))->count();
-                // if($count == 0){
-                // $family = UserFamilyDetail::where('id',Input::get('family_id'))->first();
-                // }
-                // else{
-                //      $response = array(
-                //     'type' => 'danger',
-                //     'msg' => 'Email already registered',
-                //     //'redirecturl' => $url,
-                //     );
-                //     return Response::json($response);
-                // }
 
                 $family = UserFamilyDetail::where('id', Input::get('family_id'))->first();
             }
@@ -5901,12 +5254,9 @@ class UserProfileController extends Controller {
             else
                 $msg = 'Successfully updated family members';
 
-            //  $url = '/';
-
             $response = array(
                 'type' => 'success',
                 'msg' => $msg,
-                    //'redirecturl' => $url,
             );
 
             return Response::json($response);
@@ -5969,16 +5319,6 @@ class UserProfileController extends Controller {
 
         $user = User::findOrFail(720);
 
-       /* $details = [
-        'title' => 'Mail from ItSolutionStuff.com',
-        'body' => 'This is for testing email using smtp'
-    ];
-   
-    \Mail::to('arya.developers.2017@gmail.com')->send(new \App\Mail\MyTestMail($details));
-   
-    dd("Email is Sent.");*/
-       
-
         Mail::send('emails.signup-verification', ['user' => $user], function ($m) use ($user) {
 
             $m->from('noreply@fitnessity.co', 'Fitnessity');
@@ -6003,19 +5343,6 @@ class UserProfileController extends Controller {
          }
 
         
-
-
-
-        /*  $gallery = DB::select('select id, attachment_name from users_add_attachment where id = ? order by id DESC', [$id]);
-*/
-      /*  if(!empty($gallery)) {
-            foreach($gallery as $pic) {
-                echo $pic;
-                exit;
-                DB::update('update users_add_attachment set attachment_name = '.$imgname.' where id = "' . $request->selectId . '"');
-            }
-        }*/
-
          return redirect()->route('profile-viewProfile');
 
     }
@@ -6128,108 +5455,16 @@ class UserProfileController extends Controller {
             'viewgallery' => $viewgallery,
         ]);
         
-        
-        /*$loggedinUser = Auth::user();
-        $gallery = $this->galleryList($loggedinUser['id']);
-        $viewgallery = $this->viewGalleryList($loggedinUser['id']);
-        $UserProfileDetail = $this->users->getUserProfileDetail($loggedinUser['id'], array('professional_detail', 'history', 'education', 'certification', 'service'));
-        if (isset($UserProfileDetail['ProfessionalDetail']) && @count($UserProfileDetail['ProfessionalDetail']) > 0) {
-            $UserProfileDetail['ProfessionalDetail'] = UserProfessionalDetail::getFormedProfile($UserProfileDetail['ProfessionalDetail']);
-        }
-        $sports_names = $this->sports->getAllSportsNames();
-        $approve = Evidents::where('user_id', $loggedinUser['id'])->get();
-        $serviceType = Miscellaneous::businessType();
-        $programType = Miscellaneous::programType();
-        $programFor = Miscellaneous::programFor();
-        $numberOfPeople = Miscellaneous::numberOfPeople();
-        $ageRange = Miscellaneous::ageRange();
-        $expLevel = Miscellaneous::expLevel();
-        $serviceLocation = Miscellaneous::serviceLocation();
-        $pFocuses = Miscellaneous::pFocuses();
-        $duration = Miscellaneous::duration();
-        $servicePriceOption = Miscellaneous::servicePriceOption();
-        $specialDeals = Miscellaneous::specialDeals();
-        if ($loggedinUser['role'] == 'business' || $loggedinUser['role'] == 'professional' || $loggedinUser['role'] == 'admin') {
-            $view = 'profiles.viewProfile';
-        } elseif ($loggedinUser['role'] == 'customer') {
-            $view = 'profiles.viewProfileCustomer';
-        }
-        $family = UserFamilyDetail::where('user_id', Auth::user()->id)->get();
-        $business_details = BusinessInformation::where('user_id', Auth::user()->id)->get();
-        
-        $user = User::where('id', Auth::user()->id)->first();
-        $city = AddrCities::where('id', $user->city)->first();
-        if (empty($city)) {
-            $UserProfileDetail['city'] = $user->city;
-        } else {
-            $UserProfileDetail['city'] = $city->city_name;
-        }
-        $state = AddrStates::where('id', $user->state)->first();
-        if (empty($state)) {
-            $UserProfileDetail['state'] = $user->state;
-        } else {
-            $UserProfileDetail['state'] = $state->state_name;
-        }
-        $UserProfileDetail['country'] = $user->country;
-        $firstCompany = CompanyInformation::where('user_id', Auth::user()->id)->first();
-        $companies = CompanyInformation::where('user_id', Auth::user()->id)->get();
-        
-        $cart = [];
-        if ($request->session()->has('cart_item')) {
-            $cart = $request->session()->get('cart_item');
-        }
-        $ProfileFollowcount = ProfileFollow::where('user_id',Auth::user()->id)->count();
-        $ProfileFavcount = ProfileFav::where('user_id',Auth::user()->id)->count();
-        $ProfileViewCount = ProfileView::where('user_id',Auth::user()->id)->count();
-        $profile_posts = ProfilePost::all();
-        
-        return view('profiles.businessProfile', [
-            'cart' => $cart,
-            'UserProfileDetail' => $UserProfileDetail,
-            'gallery' => $gallery,
-            'viewgallery' => $viewgallery,
-            'firstCompany' => $firstCompany,
-            'countries' => $this->users->getCountriesList(),
-            'states' => $this->users->getStateList($UserProfileDetail['country']),
-            'cities' => $this->users->getCityList($UserProfileDetail['state']),
-            'phonecode' => Miscellaneous::getPhoneCode(),
-            'sports_names' => $sports_names,
-            'serviceType' => $serviceType,
-            'programType' => $programType,
-            'programFor' => $programFor,
-            'numberOfPeople' => $numberOfPeople,
-            'ageRange' => $ageRange,
-            'expLevel' => $expLevel,
-            'serviceLocation' => $serviceLocation,
-            'pFocuses' => $pFocuses,
-            'duration' => $duration,
-            'specialDeals' => $specialDeals,
-            'servicePriceOption' => $servicePriceOption,
-            'pageTitle' => "PROFILE",
-            'approve' => $approve,
-            'family' => $family,
-            'business_details' => $business_details,
-            'companies' => $companies,
-            'ProfileFollowcount' => $ProfileFollowcount,
-            'ProfileFavcount' => $ProfileFavcount,
-            'ProfileViewCount' => $ProfileViewCount,
-            'profile_posts' => $profile_posts,
-        ]);*/
     }
     public function viewProfile(Request $request) {
 
-        // print_r("profile called");
-        //update user's lat long
-        //$this->users->updatelatlong();
-       /*session()->forget('cart_item');*/
         if (!Gate::allows('profile_view_access')) {
             $request->session()->flash('alert-danger', 'Access Restricted');
             return redirect('/');
         }
         $loggedinUser = Auth::user();
         $gallery = $this->galleryList($loggedinUser['id']);
-        /*echo "<pre>";print_r($gallery);
-        exit;*/
+        
         $viewgallery = $this->viewGalleryList($loggedinUser['id']);
         $UserProfileDetail = $this->users->getUserProfileDetail($loggedinUser['id'], array('professional_detail', 'history', 'education', 'certification', 'service'));
         
@@ -6259,10 +5494,6 @@ class UserProfileController extends Controller {
 
         $specialDeals = Miscellaneous::specialDeals();
 
-        //  $loggedinUser['role'] = 'customer';
-        // $loggedinUser->save();
-        //dd($UserProfileDetail);die;
-
         if ($loggedinUser['role'] == 'business' || $loggedinUser['role'] == 'professional' || $loggedinUser['role'] == 'admin') {
             $view = 'profiles.viewProfile';
         } elseif ($loggedinUser['role'] == 'customer') {
@@ -6271,9 +5502,7 @@ class UserProfileController extends Controller {
 
         $family = UserFamilyDetail::where('user_id', Auth::user()->id)->get();
         $business_details = BusinessInformation::where('user_id', Auth::user()->id)->get();
-        //  dd($this->users->getStateList($UserProfileDetail['country']));
-        //die;
-
+      
         $user = User::where('id', Auth::user()->id)->first();
         $city = AddrCities::where('id', $user->city)->first();
 
@@ -6309,19 +5538,14 @@ class UserProfileController extends Controller {
         }
         $followingarr1=implode(",",$followingarr);
         $f = explode(",", $followingarr1);
-        //DB::enableQueryLog();
+       
         $profile_posts = ProfilePost::whereIn('user_id', $f)->limit(5)->orderBy('id','desc')->get();
-        //dd(\DB::getQueryLog());
-        //$profile_posts = ProfilePost::limit(5)->orderBy('id','desc')->get();
-
+       
         $videos = ProfilePost::select('video','user_id')->where('video','!=',null)->where('user_id',Auth::user()->id)->orderBy('id','desc')->get();
 
         $images = ProfilePost::select('images','user_id')->where('images','!=',null)->where('user_id',Auth::user()->id)->orderBy('id','desc')->get();
         $profilesave = ProfileSave::where('user_id',Auth::user()->id)->orderBy('id','desc')->get();
 
-        /*echo "<pre>";
-        print_r($videos);
-        exit;*/
         return view($view, [
             'cart' => $cart,
             'UserProfileDetail' => $UserProfileDetail,
@@ -6361,11 +5585,8 @@ class UserProfileController extends Controller {
 
     public function companyDetail(Request $request) {   
 
-        //return $request->type;
 
         if ($request->type) {
-
-            //print_r("if")
 
             $type = $request->type;
         } else {
@@ -6373,23 +5594,16 @@ class UserProfileController extends Controller {
             $type = 1;
         }
 
-        // print_r($type);die;
-
         if ($request->type == 1) {
-
-            // print_r("if");die;
 
             $data = BusinessInformation::where('user_id', Auth::user()->id)->where('company_name', $request->company_name)->first();
         } else {
-
-            //print_r(Auth::user()->id);die;
 
             $data = User::where('id', Auth::user()->id)->where('company_name', $request->company_name)->first();
 
             $data['zip_code'] = $data['zipcode'];
         }
 
-        //return $data;
 
         if ($data) {
 
@@ -6481,8 +5695,6 @@ class UserProfileController extends Controller {
             return Response::json($response);
         }
 
-        // save profile pic
-
         $image = new Image();
 
 
@@ -6511,8 +5723,6 @@ class UserProfileController extends Controller {
 
 
 
-        //Store thumb of 150x150
-
         if (!file_exists(public_path('uploads/profile_pic/thumb150'))) {
 
             mkdir(public_path('uploads/profile_pic/thumb150'), 0755, true);
@@ -6526,15 +5736,11 @@ class UserProfileController extends Controller {
 
 
 
-        // save new profile pic
-
         $loggedinUser = Auth::user();
 
         $userObj = User::find($loggedinUser['id']);
 
 
-
-        // delete existing image
 
         if (isset($userObj->profile_pic)) {
 
@@ -6576,9 +5782,6 @@ class UserProfileController extends Controller {
             
           return Redirect::back()->with('success', 'Profile picture updated succesfully!');
 
-            //return redirect()->back();
-
-            //return Response::json($response);
         }
     }
 
@@ -6606,8 +5809,6 @@ class UserProfileController extends Controller {
 
             return Response::json($response);
         }
-
-        // save profile pic
 
         $image = new Image();
 
@@ -6643,8 +5844,6 @@ class UserProfileController extends Controller {
 
 
 
-        //Store thumb of 150x150
-
         if (!file_exists(public_path('uploads/profile_pic/thumb150'))) {
 
             mkdir(public_path('uploads/profile_pic/thumb150'), 0755, true);
@@ -6658,15 +5857,12 @@ class UserProfileController extends Controller {
 
 
 
-        // save new profile pic
 
         $loggedinUser = Auth::user();
 
         $userObj = CompanyInformation::where('id', $request->company_id)->first();
 
 
-
-        // delete existing image
 
         if (isset($userObj->logo)) {
 
@@ -6710,7 +5906,6 @@ class UserProfileController extends Controller {
         }
     }
 
-    //update banner image
 
     public function editBannerPicture(Request $request) {
         $validator = Validator::make($request->all(), [ 'banner_image' => 'required|image|mimes:jpeg,jpg,png'], [ 'required' => 'The :attribute is required.']);
@@ -6804,15 +5999,7 @@ class UserProfileController extends Controller {
             $validator = $this->detailValidator($request->all());
         } else if (Auth::user()->role == "customer") {
             $validator = $this->detailValidatorForCustomer($request->all());
-        }
-        // if($validator->fails()) {
-        //   $errMsg = array();
-        //     foreach($validator->messages()->getMessages() as $field_name => $messages) {
-        //         $errMsg = $messages;
-        //     }
-        //     $response = array('type' => 'danger','msg' => $errMsg);
-        //     return Response::json($response);
-        // }       
+        }     
         $nstate = AddrStates::where('state_name', $request->state)->first();
         $ncity = AddrCities::where('city_name', $request->city)->first();
         $loggedinUser = Auth::user();
@@ -6830,11 +6017,9 @@ class UserProfileController extends Controller {
         $userObj->country = $request->country;
         $userObj->zipcode = $request->zipcode;
         $userObj->intro = $request->intro;
-        //get lat long
         $latlongdata = Miscellaneous::getLatLong($request->zipcode);
         $userObj->latitude = $latlongdata['lat'];
         $userObj->longitude = $latlongdata['long'];
-        //return Response::json($userObj);
         if (!$userObj->save()) {
             $response = array(
                 'type' => 'danger',
@@ -6859,17 +6044,8 @@ class UserProfileController extends Controller {
                     'user_id' => $loggedinUser['id'],
                     'about_me' => $request->about_me
                     ]);
-                    // $customer_detail;
                 }
             }
-            /* if(!$status)
-              {
-              $response = array(
-              'type' => 'danger',
-              'msg' => 'Some error while updating profile.',
-              );
-              return Response::json($response);
-              } */
             $response = array(
                 'type' => 'success',
                 'msg' => 'Profile updated succesfully!'
@@ -6881,7 +6057,6 @@ class UserProfileController extends Controller {
     public function editProfileHistory() {
 
         if (!Gate::allows('profile_edit_access')) {
-            // $request->session()->flash('alert-danger', 'Access Restricted');
             return redirect('/profile/viewProfile');
         }
 
@@ -6921,7 +6096,7 @@ class UserProfileController extends Controller {
 
                         foreach ($value1->child as $key2 => $value2) {
 
-                            $selected = null; // ($service==$key2)?"selected":"";
+                            $selected = null; 
 
                             $sports_select .= "<option value='" . $key2 . "' " . $selected . " >" . $value2 . "</option>";
                         }
@@ -6929,7 +6104,7 @@ class UserProfileController extends Controller {
                         $sports_select .= "</optgroup>";
                     } else {
 
-                        $selected = null; //($service==$value1->value)?"selected":"";
+                        $selected = null; 
 
                         $sports_select .= "<option value='" . $value1->value . "' " . $selected . ">" . $value1->title . "</option>";
                     }
@@ -7010,15 +6185,7 @@ class UserProfileController extends Controller {
     public function saveEditedProfileHistory(Request $request) {
 
 
-
-        //  print_r($request->all());
-        //die;
-
         $loggedinUser = Auth::user();
-
-
-
-        //$professionalObj = UserProfessionalDetail::find($request->professional_detail_id);
 
         $update = array(
             'experience_level' => json_encode($request->experience_level, JSON_FORCE_OBJECT),
@@ -7042,7 +6209,6 @@ class UserProfileController extends Controller {
             'travel_times' => NULL
         );
 
-        //print_r($update);die;
 
         $g = UserProfessionalDetail::where('company_id', $request->company_id)->where('user_id', Auth::user()->id)->first();
 
@@ -7090,17 +6256,7 @@ class UserProfileController extends Controller {
 
 
 
-        // print_r($request->professional_detail_id);die;
-        // if(!$db) {
-        //     $request->session()->flash('alert-danger', 'Some error has occured while saving profile.');
-        //     return redirect('/profile/editProfileHistory');
-        // }
-
-
-
         $request->session()->flash('alert-success', 'Profile saved successfully!');
-
-        //return redirect('/profile/editProfileHistory');
 
         return redirect('manage/company');
     }
@@ -7148,42 +6304,7 @@ class UserProfileController extends Controller {
 
 
 
-        /*  if($request->editservice_id > 0)
-
-          {
-
-          $check = "false";
-
-          }
-
-          else
-
-          {
-
-          $check = "true";
-
-          }
-
-          $validator = $this->validator($input,true);
-
-          if ($validator->fails()) {
-
-          $error = $validator->messages()->all();
-
-          return $response = array(
-
-          'type' => 'danger',
-
-          'msg'  => $error
-
-
-
-          );
-
-          }
-
-         */
-
+    
         if ($request->hasFile('frm_profile_pic')) {
 
             $file_upload_path = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'service_profile_pic' . DIRECTORY_SEPARATOR;
@@ -7204,8 +6325,6 @@ class UserProfileController extends Controller {
             $image_name = $request->old_profile_pic;
         }
 
-//return $image_name;exit;
-        // save new profile pic
 
         $loggedinUser = Auth::user();
 
@@ -7219,9 +6338,6 @@ class UserProfileController extends Controller {
 
         if ($request->class_meets == 'Weekly') {
 
-
-
-            //print_r($sdate);die;
 
             $this->arr = [];
 
@@ -7365,14 +6481,11 @@ class UserProfileController extends Controller {
 
             $inserted = array_merge($inserted, $new_array);
 
-            //array_push($inserted,('company_id'=>$$request->company_id));
         }
 
 
 
         if ($request->editservice_id > 0) {
-
-            //print_r($inserted);
 
             $serviceObj = DB::table('user_services')
                     ->where('id', $request->editservice_id)
@@ -7387,17 +6500,12 @@ class UserProfileController extends Controller {
             $msg = "Service saved successfully!";
         }
 
-        /* logic to save service - ends */
-
         return $response = array(
             'type' => 'success',
             'msg' => $msg,
             'image_name' => $image_name
         );
 
-        /* $request->session()->flash('alert-success', 'Service saved successfully!');
-
-          return redirect('/profile/editProfileHistory'); */
     }
 
     protected function validator($data, $check) {
@@ -7406,7 +6514,6 @@ class UserProfileController extends Controller {
 
             "user_id" => "required", "sport" => "required", "title" => "required", "price" => "required", "servicedesc" => "required", "servicetype" => "required", "programtype" => "required", "agerange" => "required", "programfor" => "required", "numberofpeople" => "required", "experience_level" => "required", "servicelocation" => "required", "focuses" => "required", "specialdeals" => "required", "servicepriceoption" => "required", "duration" => "required", "terms_conditions" => "required", "expire_days" => "required", "expire_in_option" => "required", "expire_in_option2" => "required", "sessions" => "required", "multiple_count" => "required", "recurring_pay" => "required", "introoffer" => "required", "runautopay" => "required", "often" => "required", "often_every_op1" => "required", "often_every_op2" => "required", "numberofpays" => "required", "chargeclients" => "required", "termcondfaq" => "required", "contractterms" => "required", "contracttermstext" => "required", "liability" => "required", "liabilitytext" => "required", "setupprice" => "required", "offerpro_states" => "required", "activitydesignsfor" => "required", "activitytype" => "required", "frm_teachingstyle" => "required"
 
-                // 'image' => 'required|image|mimes:jpeg,jpg,bmp,png|max:750'
         ];
 
 
@@ -7460,8 +6567,6 @@ class UserProfileController extends Controller {
         $UserProfileDetail = $this->users->getUserProfileDetail($loggedinUser['id'], array('professional_detail', 'history', 'education', 'certification', 'service'));
 
         $service = UserService::where('id', $id)->get();
-
-        //    print_r($id);die;
 
         if (count($service) != 0) {
 
@@ -7585,8 +6690,6 @@ class UserProfileController extends Controller {
 
         $service = UserService::where('id', $id)->get();
 
-        //    print_r($id);die;
-
         if (count($service) != 0) {
 
             $service_c = @$service[0]['sport'];
@@ -7708,8 +6811,6 @@ class UserProfileController extends Controller {
         $UserProfileDetail = $this->users->getUserProfileDetail($loggedinUser['id'], array('professional_detail', 'history', 'education', 'certification', 'service'));
 
         $service = UserService::where('id', $id)->get();
-
-        //    print_r($id);die;
 
         if (count($service) != 0) {
 
@@ -7847,7 +6948,6 @@ class UserProfileController extends Controller {
 
         $dd = DB::select('select * from user_evident where user_id = "' . $loggedinUser["id"] . '"');
 
-        //   dd($dd);
 
         $check = false;
 
@@ -7989,7 +7089,6 @@ class UserProfileController extends Controller {
                 break;
 
             default:
-                # code...
                 break;
         }
     }
@@ -8072,7 +7171,6 @@ class UserProfileController extends Controller {
         $UserProfileDetail['birthdate'] = date('Y-m-d', strtotime($user->birthdate));
         $UserProfileDetail['email'] = $user->email;
         $UserProfileDetail['favorit_activity'] = $user->favorit_activity;
-        //$UserProfileDetail['email'] = $user->email;
         if (!empty($user->profile_pic)) {
             $UserProfileDetail['profile_pic'] = $user->profile_pic;
         }
@@ -8100,7 +7198,6 @@ class UserProfileController extends Controller {
             'UserProfileDetail' => $UserProfileDetail,
             'pageTitle' => "PROFILE"
         ]);
-        //return view('personal-profile.user-profile');
     }
 
     public function updateuserprofile(Request $request) {
@@ -8452,8 +7549,8 @@ class UserProfileController extends Controller {
 
         try{
             $call = $twilio->calls
-                ->create($phone_number, // to
-                $twilio_number, // from
+                ->create($phone_number,
+                $twilio_number, 
                 [
                     "twiml" => "<Response><Say voice='woman' language='en-IN'>Your one time Varification Code is " . $random . "</Say></Response>"
                 ]
@@ -8555,11 +7652,9 @@ class UserProfileController extends Controller {
 
   
     public function modelboxsuccess(Request $request){
-        /*print_r($request->all());*/
         for($x=0;$x=$request->i;$x++){
             for($y=0;$y=$request->j;$y++){
                 $id= $request->input('priceid_'.$x.$y);
-               /* echo $id;exit;*/
                 $nuberofautopays_adult= $request->input('nuberofautopays_adult_'.$x.$y);
                 $client_be_charge_on_adult= $request->input('client_be_charge_on_adult_'.$x.$y);
                 $first_pmt_adult= $request->input('first_pmt_adult_'.$x.$y);

@@ -38,7 +38,7 @@
                      <div class="row mb-3">
 								<div class="col-12">
 									<div class="page-heading">
-										<label>COMPANY SET UP</label>
+										<h1>COMPANY SET UP</h1>
 									</div>
 								</div>
 							</div>

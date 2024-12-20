@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use Validator;
 use ReCaptcha\ReCaptcha;
 use Image;
-//use Illuminate\Support\Facades\Input;
 use Hash;
 use Redirect;
 use Response;
@@ -63,46 +62,9 @@ class HomeController extends Controller {
 		return view('profiles.leftPanel');
 	}
     public function all_trainings() {
-        /* $all_categories = $this->sports_cat->getAllSportsCategories();
-
-          $most_searched_sports = Sports::get();
-
-          $fitnessity_data = Cms::where('status','1')
-          ->where('content_alias','fitnessity')->get();
-
-          $sliders = Slider::get();
-
-          $trainers = Trainer::limit(5)->get();
-          $onlines = Online::limit(9)->get();
-          $persons = Person::limit(9)->get();
-          $discovers = Discover::limit(3)->get();
-
-          $count_trainer = Trainer::count();
-          $count_online = Online::count();
-          $count_business = BusinessClaim::count();
-          $count_userbooking = UserBookingDetail::count(); */
-
         return view('home.allTrainings');
     }
     public function all_sports() {
-        /* $all_categories = $this->sports_cat->getAllSportsCategories();
-
-          $most_searched_sports = Sports::get();
-
-          $fitnessity_data = Cms::where('status','1')
-          ->where('content_alias','fitnessity')->get();
-
-          $sliders = Slider::get();
-
-          $trainers = Trainer::limit(5)->get();
-          $onlines = Online::limit(9)->get();
-          $persons = Person::limit(9)->get();
-          $discovers = Discover::limit(3)->get();
-
-          $count_trainer = Trainer::count();
-          $count_online = Online::count();
-          $count_business = BusinessClaim::count();
-          $count_userbooking = UserBookingDetail::count(); */
 
         return view('home.allSports');
     }
@@ -176,8 +138,6 @@ class HomeController extends Controller {
     }
 
     public function postRegistration(Request $request) {
-        // dd('33');
-        // dd($request->all());
         $postArr = $request->all();
         $rules = [
             'firstname' => 'required',
@@ -229,12 +189,7 @@ class HomeController extends Controller {
                     ]);
                 $stripe_customer_id = $customer->id;
 
-                // new code start
-                // do {
-                //     $unique_code = rand(1000, 9999);
-                // } while (User::where('unique_code', $unique_code)->exists());
                 $unique_code = generateUniqueCode();
-                // new code end
                 $userObj = New User();
                 $userObj->firstname = $postArr['firstname'];
                 $userObj->lastname = ($postArr['lastname']) ? $postArr['lastname'] : '';
@@ -248,13 +203,10 @@ class HomeController extends Controller {
                 $userObj->activated = 0;
                 $userObj->phone_number = $postArr['contact'];
                 $userObj->birthdate = date("Y-m-d", strtotime($postArr['dob']));
-                // $userObj->last_ip = '192.168.0.0';
-                // $userObj->status = "email_activation_pending";
                 $userObj->status = "approved";
                 $userObj->buddy_key = $postArr['password'];
                 $userObj->isguestuser = 0;
                 $userObj->unique_code=$unique_code;
-                //For signup confirmation 
                 $userObj->confirmation_code = Str::random(25);
                 $userObj->save();
 
@@ -263,10 +215,7 @@ class HomeController extends Controller {
                 }
 
                 if ($userObj) {                    
-                    //send notification email to user
-                    // MailService::sendEmailReminder($userObj->id);
                     MailService::sendEmailSignupVerification($userObj->id);
-                    // sendWelcomeMailToCustomer
                     
                     $url = "/";
                     if (isset($userObj->confirmation_code) && !empty($userObj->confirmation_code)) {
@@ -325,7 +274,6 @@ class HomeController extends Controller {
                 $user->activated = 1;
                 $user->show_step = 2;
                 if ($user->save()) {
-                    // MailService::sendEmailVerifiedAcknowledgement($user->id);
                     SGMailService::sendWelcomeMail($user->email,$user->buddy_key);
                     Auth::login($user);
                     Auth::loginUsingId($user->id, true);

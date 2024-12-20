@@ -89,7 +89,7 @@ if(!empty($cart["cart_item"])) {
 		<div class="row">
 			<div class="col-md-12">
 				<div class="cart-title cart-success">
-					<h5>SUCCESSFULLY ADDED TO YOUR CART</h5>
+					<h1>SUCCESSFULLY ADDED TO YOUR CART</h1>
 				</div>
 			</div>
 		</div>
@@ -139,7 +139,7 @@ if(!empty($cart["cart_item"])) {
 				<div class="row">
 					<div class="col-md-4 col-sm-4">
 						<div class="cart-itme-img">
-							<img src="{{@$profilePicact}}">
+							<img src="{{@$profilePicact}}" alt="Omnebook" loading="lazy"> 
 							<h4>You Just Booked With </h4>
 						</div>
 
@@ -420,13 +420,13 @@ if(!empty($cart["cart_item"])) {
 						</div>
 						<div class="cart-btns-continues">
 							<div class="btn-cart-modal">
-								<a type="submit" href="{{route('activities_index')}}" class="btn btn-black mt-10 fs-12" >Continue Shopping</a>
+								<a type="submit" href="{{route('activities_index')}}" class="btn btn-red mt-10" >Continue Shopping</a>
 							</div>
 							<div class="btn-cart-info instant-detail-booknow">
 								@if(Auth::user())
-									<a type="submit" href="{{route('carts_index')}}" class="btn btn-red mt-10 fs-12" >View Cart & Checkout</a>
+									<a type="submit" href="{{route('carts_index')}}" class="btn btn-black mt-10" >View Cart & Checkout</a>
 									@else
-									<a class="btn btn-red mt-10 fs-12" data-bs-toggle="modal" data-bs-target="#cartcheckout">View Cart & Checkout</a>
+									<a class="btn btn-black mt-10" data-bs-toggle="modal" data-bs-target="#cartcheckout">View Cart & Checkout</a>
 								@endif
 								
 							</div>
@@ -443,7 +443,7 @@ if(!empty($cart["cart_item"])) {
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-				<div class="cart-title">
+				<div class="text-center discover-more">
 					<h5>DISCOVER MORE BELOW</h5>
 				</div>
 			</div>
@@ -497,19 +497,19 @@ if(!empty($cart["cart_item"])) {
 														@foreach($pic_image as $img)
 															@if(Storage::disk('s3')->exists($img) && $img != '' )
 																<div class="item-inner cart-slider-dis">
-																	<img src="{{Storage::URL($img)}}" class="productImg" alt="omnebook">
+																	<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																</div>
 															@else
-																<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="omnebook">
+																<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 															@endif
 														@endforeach
 													@else
 														@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 															<div class="item-inner">
-																<img src="{{Storage::URL($pic_image)}}">
+																<img src="{{Storage::URL($pic_image)}}" alt="Omnebook" loading="lazy">
 															</div>
 														@else
-															<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="omnebook">
+															<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 														@endif
 													@endif
 												</div>
@@ -547,19 +547,19 @@ if(!empty($cart["cart_item"])) {
 														@foreach($pic_image as $img)
 															@if(Storage::disk('s3')->exists($img) && $img != '' )
 																<div class="item-inner">
-																	<img src="{{Storage::URL($img)}}" class="productImg" alt="omnebook">
+																	<img src="{{Storage::URL($img)}}" class="productImg" alt="Omnebook" loading="lazy">
 																</div>
 															@else
-																<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="omnebook">
+																<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 															@endif
 														@endforeach
 													@else
 														@if(Storage::disk('s3')->exists($pic_image) && $pic_image != '' )
 															<div class="item-inner">
-																<img src="{{Storage::URL($pic_image)}}" alt="omnebook">
+																<img src="{{Storage::URL($pic_image)}}" alt="Omnebook" loading="lazy">
 															</div>
 														@else
-															<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="omnebook">
+															<img src="{{url('/images/service-nofound.jpg')}}" class="productImg" alt="Omnebook" loading="lazy">
 														@endif
 													@endif
 												</div>
@@ -627,7 +627,7 @@ if(!empty($cart["cart_item"])) {
 											</div>
 											<hr>
 											<div class="all-details">
-												<a class="showall-btn" href="/activity-details/{{$serviceid}}">Book Now</a>
+												<a class="btn btn-red" href="/activity-details/{{$serviceid}}">Book Now</a>
 											</div>
 										</div>
 									</div>

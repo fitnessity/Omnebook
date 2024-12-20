@@ -12,8 +12,8 @@
                       	<div class="h-100">
 	                        <div class="row mb-3">
 								<div class="col-6">
-									<div class="page-heading">
-										<label>Manage Staff</label>
+									<div class="page-heading"> 
+										<h1>Manage Staff</h1>
 									</div>
 								</div>
 								<div class="col-6">
@@ -81,7 +81,7 @@
 															<tr>
 																<td class="">
 																	@if(Storage::disk('s3')->exists($cf->profile_pic))
-																		<img src="{{Storage::Url($cf->profile_pic)}}" alt="fitnessity" class="avatar-xs rounded-circle me-2 shadow" loading="lazy">
+																		<img src="{{Storage::Url($cf->profile_pic)}}" alt="Omnebook" class="avatar-xs rounded-circle me-2 shadow" loading="lazy">
 																	@else
 																		<div class="avatar-xsmall">
 																			<span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">{{$cf->first_name[0]}}</span>

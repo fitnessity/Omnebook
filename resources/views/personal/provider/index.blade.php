@@ -13,7 +13,7 @@
                <div class="row mb-3">
 					<div class="col-12">
 						<div class="page-heading">
-							<label>Select A Provider </label>
+							<h1>Select A Provider </h1>
 						</div>
 					</div>
                 </div><!--end row-->

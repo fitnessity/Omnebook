@@ -13,7 +13,7 @@
                                 <div class="row mb-3">
                                     <div class="col-lg-6 col-sm-8 col-md-8 col-sm-8">
                                         <div class="page-heading">
-                                            <label>Manage  {{@$companyName}} Services</label>
+                                            <h1>Manage  {{@$companyName}} Services</h1>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-sm-4 col-md-4 col-sm-4">

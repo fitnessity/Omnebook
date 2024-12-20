@@ -396,7 +396,6 @@ class HomeController extends Controller
             });
         }
         $user = $user->get();
-		// dd($user);
     	return response()->json($user);
     }
     public function sendGrantAccessMail(Request $request){
@@ -420,7 +419,7 @@ class HomeController extends Controller
                         'phone_number' => $member->mobile,
                         'birthdate' => $member->birthday,
                         'gender' => $member->gender,
-                        'user_id' => NULL, //this is null bcz of user is not created at 
+                        'user_id' => NULL, 
                         'parent_cus_id'=> $customer->id ,
                         'relationship' =>$member->relationship,
                         'request_status' =>1
@@ -444,4 +443,9 @@ class HomeController extends Controller
         Auth::guard('web')->login($user, true);
         return redirect('/');
     }
+
+	public function notfound() 
+	{ 
+		return view('errors.404'); 
+	}
 }

@@ -35,7 +35,7 @@ class BookactivityController extends Controller
     }
     public function store(Request $request)
     {
-    	//echo "<pre>"; print_r($request->all()); exit;
+
     	$validator = $this->saveValidator($request->all());
         if ($validator->fails()) {
             $this->throwValidationException(
@@ -107,7 +107,6 @@ class BookactivityController extends Controller
     {
         $book = Bookactivity::where('id',$id)->get();
 
-        //echo "<pre>"; print_r($book); exit;
 
         if($book)
         {
@@ -128,7 +127,6 @@ class BookactivityController extends Controller
          
        $input = $request->all();
 
-        /* File Upload Start */
         $image = '';
         if($request->hasFile('image')) {
 
@@ -148,9 +146,7 @@ class BookactivityController extends Controller
                 return redirect('/admin/book/edit/'.$input['id'])->with('status', $image_upload);
             }    
         }
-        /* File Upload End */
-       
-       // update:where()($input['id'],$input);
+
        
         $book = DB::table('bookactivity')->where('id', $input['id'])->update($input);
 

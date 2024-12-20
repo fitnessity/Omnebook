@@ -102,14 +102,11 @@ class SelfCheckInController extends Controller {
         $request->customer_id = $customer->id;
         $request->business_id = $customer->business_id;
 
-       // echo $request->return_url;exit;
         return view('checkin.card_list',compact('cards','customer','intent'));
     }
 
 	public function portal(Request $request){
-        // dd('4');
         $request->customer_id = session()->get('self_checkin_customer_id');
-        // dd($request->customer_id);
         if($request->customer_id){
             $business = Auth::user()->current_company;
             $businessId = $business->id;
@@ -132,10 +129,7 @@ class SelfCheckInController extends Controller {
 
             $expiredCards = StripePaymentMethod::where(['user_id'=> @$customer->id, 'user_type' => 'Customer'])->where('exp_year','<=', date('Y'))->where('exp_month','<', date('m'))->get();
 
-            // \DB::enableQueryLog(); // Enable query log
-
             $missedPayments = Recurring::where(['user_id'=> @$customer->id, 'user_type' => 'Customer'])->where('status' ,'!=','Completed')->whereDate('payment_date' ,'<' ,date('Y-m-d'))->orderBy('payment_date','desc')->get();
-            // dd(\DB::getQueryLog()); // Show results of log
 
 
             $notesCnt += count($expiredCards);
@@ -153,11 +147,9 @@ class SelfCheckInController extends Controller {
             $docCnt =  $documents = CustomersDocuments::where('customer_id',  @$customer->id)->where('business_id', $business->id)->count();
 
             $docCntNew =  $documents = CustomersDocuments::where('customer_id',  @$customer->id)->where('business_id', $business->id)->whereDate('created_at',date('Y-m-d'))->count();
-            // \DB::enableQueryLog(); 
             $classes = BookingCheckinDetails::where('customer_id' ,$request->customer_id)->whereDate('checkin_date' , '>=' , date('Y-m-d'))->orderby('checkin_date','asc')->get()->filter(function ($bd){
                 return $bd->booking_detail_id;
             });
-            // dd(\DB::getQueryLog());
             $bookingDetails = $currentBooking =  [];
             $bookingDetails =  $this->booking_repo->otherTab($request->serviceType, $request->business_id,@$customer);
           
@@ -203,10 +195,8 @@ class SelfCheckInController extends Controller {
                 $d = clone($filter_date);
                 $days[] = $d->modify('+'.($i+$shift).' day');
             }
-            // dd($business_services->pluck('id'));
-            // \DB::enableQueryLog(); // Enable query log
+
             $bookschedulers = BusinessActivityScheduler::getallscheduler($filter_date)->whereIn('serviceid', $business_services->pluck('id'))->orderBy('shift_start', 'asc')->get();
-            // dd(\DB::getQueryLog());
             $services = [];
             foreach($bookschedulers as $bs){
                 $services [] = $bs->business_service;
@@ -216,7 +206,6 @@ class SelfCheckInController extends Controller {
             $priceid = $request->priceid;
 
 
-            //documents and terms
             $documents = CustomersDocuments::where('customer_id', $customer->id)->when($customer->business_id, function ($query) use ($customer) {
                 return $query->where('business_id', $customer->business_id);
             })->get();
@@ -224,7 +213,6 @@ class SelfCheckInController extends Controller {
             $terms = BusinessTerms::where('cid' ,$customer->business_id)->first();
             $lastBooking = $customer->bookingDetail()->orderby('created_at','desc')->first();
 
-            //notes and alerts
             $notes = CustomerNotes::where(['customer_id'=> $customer->id ,'display_chk' => 1])->orderby('due_date','desc')->whereDate('due_date', '=', now())->whereTime('time', '<=', now()->format('H:i'))
                 ->orWhere(function ($query) use($customer) {
                     $query->whereDate('due_date', '<=', now())->where('customer_id', $customer->id )->where('display_chk' ,1);
@@ -236,7 +224,6 @@ class SelfCheckInController extends Controller {
 
             $alertCount = count($expiredCards) +  count($missedPayments);
 
-            //anouncement
             $announcements = Announcement::where(['business_id' => $customer->business_id,'status' => 'active'])->whereDate('announcement_date', '<=', date('Y-m-d'))->get();
 
             $announcement = $announcements->sortByDesc(function($announcement) {
@@ -246,8 +233,6 @@ class SelfCheckInController extends Controller {
 
             $announcement = $announcement->values()->all();
             
-            // dd($priceid);
-            // dd($missedPayments);
             return view('checkin.checkin_portal',compact('customer','name','notesCnt','activeMembershipCnt','docCnt','docCntNew','announcemetCnt','announcemetCntNew','notesCntNew','activeMembershipCntNew','classes','missedPayments','bookingDetails','currentBooking','tabval','businessId','serviceType','days','filter_date','services','priceid','lastBooking','terms','documents','notes','expiredCards','alertCount','announcement','settings'));
         }else{
             return redirect()->route('quick-checkin');
@@ -273,7 +258,6 @@ class SelfCheckInController extends Controller {
     {
         $user = Auth::user();
         $company = $user->current_company;
-        // dd($company->id);
         $code = $request->input('code');        
         if ($company) {
             $staff = BusinessStaff::where('business_id', $company->id)->where('unique_code', $code)->first();    
@@ -504,10 +488,8 @@ class SelfCheckInController extends Controller {
         }
     }
 
-    // my code start
    
     public function autopayPaymentMultiple(Request $request){
-        // dd($request->id); exit;
         
         \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
         $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
@@ -517,12 +499,8 @@ class SelfCheckInController extends Controller {
         if($request->has('cardinfo')){
             $onFilePaymentMethodId = $request->cardinfo;
             try {
-                //$ids = is_array($request->id) ? $request->id : explode(',', $request->id);
                 $ids= explode(",",implode(',', $request->id));
-                // print_r($ids);  
-                // dd($ids);
                 foreach ($ids as $id) {
-                    // echo $id;
                 $onFilePaymentIntent = $stripe->paymentIntents->create([
                     'amount' =>  round($request->price *100),
                     'currency' => 'usd',
@@ -555,7 +533,6 @@ class SelfCheckInController extends Controller {
                 
                     $transactionstatus = Transaction::create($transactiondata);
                     $recDetail->charged();
-                    // return response()->json(['message' => 'success']);
                 }
             }
             return response()->json(['message' => 'success']);
@@ -591,7 +568,6 @@ class SelfCheckInController extends Controller {
         }else{
             $newCardPaymentMethodId = $request->new_card_payment_method_id;
             try {
-                // $ids = is_array($request->id) ? $request->id : explode(',', $request->id);
                 $ids= explode(",",implode(',', $request->id));
  
                 foreach ($ids as $id) 
@@ -630,7 +606,6 @@ class SelfCheckInController extends Controller {
                         $transactionstatus = Transaction::create($transactiondata);
                         $recDetail->charged();
 
-                        // return response()->json(['message' => 'success']);
                     }
                 }
                 return response()->json(['message' => 'success']);
@@ -665,17 +640,13 @@ class SelfCheckInController extends Controller {
             }
         }
     }
-    // ends
     public function bookingHtml(Request $request){
         $business = Auth::user()->current_company;
-        // dd($business);
         $companyId = $business->id; 
         $customerId =  session()->get('self_checkin_customer_id');
-        // \DB::enableQueryLog(); // Enable query log
         $services = $business->business_services()->where('is_active' ,1)->whereHas('schedulers', function ($query) {
             $query->where('end_activity_date', '>', now())->orWhereNull('end_activity_date');
         })->get();
-       // Show results of log
         $services = $business->business_services()
         ->where('is_active', 1)
         ->whereHas('schedulers', function ($query) {
@@ -685,11 +656,7 @@ class SelfCheckInController extends Controller {
             $query->where('stype', 1)->orWhere('serviceid', 0);
         })
         ->get();
-        // dd($business);
-        // dd(\DB::getQueryLog());
-        $userId = Auth::id();
-        // dd($customerId);
-       
+        $userId = Auth::id();       
         $PriceAgesDetail = BusinessPriceDetailsAges::where('userid', $userId )->where('cid', $business->id)->where('serviceid', 0)->get();
         return view('checkin.booking_html_modal', compact('companyId','services','customerId','PriceAgesDetail'));
     }
@@ -759,11 +726,7 @@ class SelfCheckInController extends Controller {
           ]
         );
         $user=Auth::user();
-        // $cardInfo = $customer->stripePaymentMethods()->get();     
-        // \DB::enableQueryLog();
         $cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id',  $customer->user_id)->get(); 
-        // dd(\DB::getQueryLog()); // Show results of log
-        // dd($cardInfo);
         $request->businessId = $customer->business_id;      
         return view('checkin.membership_payment', compact('intent','cardInfo' ,'cartCount' ,'discount' ,'taxDisplay' ,'total_amount' ,'subTotal'));
     }
@@ -781,39 +744,20 @@ class SelfCheckInController extends Controller {
 
             ]);
         }
-        // dd($request->code);
         $customer = Customer::find(session()->get('self_checkin_customer_id'));
         $user = $customer->user()->where('unique_code', $request->code)->first();
-       
-        // if (!$user) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Invalid 4 digit code. Please try again.', 
-        //     ]);
-        // }else{
-        //     return response()->json([
-        //         'success' => true,
-        //         'message' => 'Check out successful!',
-        //         // 'url' => route('checkin.check_out', ['type' => 1]),
-        //         'url' => route('check-in-welcome'),
-        //     ]);
-            
-        // }
        
         if ($user) {
             return response()->json([
                 'success' => true,
                 'message' => 'Check out successfuls!',
                 'url' => route('check-in-welcome'),
-                // 'url' => route('checkin.check_out', ['type' => 1]),
             ]);
         }        
         $user = Auth::user();
         $company = $user->current_company;
 
         $businessStaff = BusinessStaff::where('unique_code', $request->code)->where('business_id',$company->id)->first();
-        // $businessStaff = BusinessStaff::where('unique_code', $request->code)->first();
-        // dd($businessStaff);
         if ($businessStaff) {
             return response()->json([
                 'success' => true,
@@ -842,25 +786,9 @@ class SelfCheckInController extends Controller {
 
             ]);
         }
-        // dd($request->code);
         $customer = Customer::find(session()->get('self_checkin_customer_id'));
         $user = User::where('unique_code', $request->code)->first();
        
-        // if (!$user) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Invalid 4 digit code. Please try again.', 
-        //     ]);
-        // }else{
-        //     return response()->json([
-        //         'success' => true,
-        //         'message' => 'Check out successful!',
-        //         'url' => route('checkin.check_out', ['type' => 1]),
-        //     ]);
-            
-        // }
-
-        // my code starts
         if ($user) {
             return response()->json([
                 'success' => true,
@@ -872,7 +800,6 @@ class SelfCheckInController extends Controller {
         $company = $user->current_company;
 
         $businessStaff = BusinessStaff::where('unique_code', $request->code)->where('business_id',$company->id)->first();
-        // $businessStaff = BusinessStaff::where('unique_code', $request->code)->first();
         if ($businessStaff) {
             return response()->json([
                 'success' => true,
@@ -884,10 +811,8 @@ class SelfCheckInController extends Controller {
             'success' => false,
             'message' => 'Invalid 4 digit code. Please try again.',
         ]);
-        // ends
             
     }
-    // my function starts
     
     public function chkChekouStaffExit(Request $request)
     {
@@ -920,9 +845,7 @@ class SelfCheckInController extends Controller {
         ]);
     }
 
-    // ends
     public function memberhsipPay(Request $request){
-        // dd('22');
         $loggedinUser = Customer::find($request->customer_id);
 
         $cartService = new CartService();
@@ -940,7 +863,6 @@ class SelfCheckInController extends Controller {
 
         if($request->has('cardinfo')){
             $onFilePaymentMethodId = $request->cardinfo;
-            // $stripe->paymentMethods->attach($onFilePaymentMethodId, ['customer' => $stripe_customer_id]);
             try {
                 $onFilePaymentIntent = $stripe->paymentIntents->create([
                     'amount' =>  round($totalprice *100),
@@ -985,7 +907,6 @@ class SelfCheckInController extends Controller {
                     $transactionstatus = Transaction::create($transactiondata);
                 }
             }catch(\Stripe\Exception\CardException | \Stripe\Exception\InvalidRequestException $e) {
-                // return "Your card is not connected with your account. Please add your card again.";
                 return "Error: " . $e->getError()->message;
     
             }catch( \Exception $e) {
@@ -1057,9 +978,7 @@ class SelfCheckInController extends Controller {
             $businessServices = BusinessServices::find($item['code']);
             $user = $businessServices->user;
             $price_detail = $cartService->getPriceDetail($item['priceid']);
-            // dd($item);
             $participateLoop =  $cartService->participateLoop($item,$businessServices->cid);
-            // dd($participateLoop);
             foreach($participateLoop as $d){
                 $participateAry = $qtyAry = $qtyPrice = [];
                 foreach(['adult', 'child', 'infant'] as $role){
@@ -1194,15 +1113,6 @@ class SelfCheckInController extends Controller {
                     }
                 }
 
-                // BookingCheckinDetails::create([
-                //     'business_activity_scheduler_id' => @$activityScheduler->id,
-                //     'instructor_id' => @$activityScheduler->instructure_ids,
-                //     'customer_id' => $d['id'],
-                //     'booking_detail_id' => $booking_detail->id,
-                //     'checkin_date' => date('Y-m-d',strtotime($item['sesdate'])),
-                //     'use_session_amount' => 0,
-                //     'source_type' => 'marketplace',
-                // ]);
                 try {
                     $checkinDetails = BookingCheckinDetails::create([
                         'business_activity_scheduler_id' => @$activityScheduler->id,
@@ -1214,12 +1124,8 @@ class SelfCheckInController extends Controller {
                         'source_type' => 'marketplace',
                     ]);
                 
-                    // You can use dd here if you want to check the inserted record
-                    // dd($checkinDetails);
-                
                 } catch (\Exception $e) {
-                    // dd the error message in case of an exception
-                    dd('Error:', $e->getMessage());
+                    return redirect()->back();
                 }
 
                 $getreceipemailtbody = $this->booking_repo->getreceipemailtbody($booking_detail->booking_id, $booking_detail->id);
@@ -1281,17 +1187,11 @@ class SelfCheckInController extends Controller {
             "CategoryName"=> $price_detail->business_price_details_ages_with_trashed->category_title
         );
     }	 
-    // public function test($email)
-    // {
-    //     $users = User::where('email', $email)->get();
-    //     return $users;
-    // }
     public function getParticipateData(Request $request){
     	$cusId = $request->cus_id ?? '';
     	$family = getFamilyMember($cusId,$request->cid);
     	$priceid = $request->priceid;  $type = $request->type; 
     	$customer = ( $cusId ) ? Customer::find($cusId) : '';
-		// dd($cusId);
 		return view('checkin.participate_data' ,compact('priceid','type','family','customer'));
     }
 }

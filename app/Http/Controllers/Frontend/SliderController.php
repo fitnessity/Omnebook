@@ -29,15 +29,6 @@ use Maatwebsite\Excel\HeadingRowImport;
 
 class SliderController extends Controller
 {   
-    /*protected $plan;
-    public $error = '';
-
-    public function __construct(PlanRepository $plan)
-    {
-        $this->middleware('admin');
-        $this->plan = $plan;    
-    }*/
-
     public function index()
     {
         $sliders = Slider::get();
@@ -155,8 +146,6 @@ class SliderController extends Controller
        $input = $request->all();
 
 
-
-        /* File Upload Start */
         $image = '';
         if($request->hasFile('image')) {
 
@@ -176,7 +165,6 @@ class SliderController extends Controller
                 return redirect('/admin/slider/edit/'.$input['id'])->with('status', $image_upload);
             }    
         }
-        /* File Upload End */
       
         $slider = DB::table('slider')->where('id', $input['id'])->update($input);
 

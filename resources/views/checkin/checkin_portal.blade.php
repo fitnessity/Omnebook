@@ -20,7 +20,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
                         <div class="row mb-3">
 							<div class="col-lg-9 col-md-11 col-sm-11 col-xs-11 mt-10">
 								<div class="page-heading">
-									<label class="mb-15">Check-in Portal </label>
+									<h1 class="mb-15">Check-in Portal </h1>
 								</div>
 								<div class="page-subheading mb-5">
 									<span class="fs-20">Good Morning, {{$name}}</span>
@@ -62,7 +62,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
                                                 <div class="text-center">
 													<div class="check-in-profile d-inline-block">
 														@if($customer->profile_pic_url)
-				                                            <img src="{{$customer->profile_pic_url}}" class="img-thumbnail rounded-circle" alt="user-profile-image">
+				                                            <img src="{{$customer->profile_pic_url}}" class="img-thumbnail rounded-circle" alt="user-profile-image" loading="lazy">
 				                                        @else
 				                                            <div class="rounded-circle avatar-xl img-thumbnail user-profile-image shadow no-img-latter">
 				                                                <p class="character character-renovate">{{$customer->first_letter}}</p>
@@ -1169,7 +1169,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 																												
 																													<div class="col-lg-7 col-md-8 col-sm-6 col-xs-12">
 																														<div class="table-inner-data-sec f-left">
-																															<img src="{{ $cList->BusinessServices->first_profile_pic() ? $cList->BusinessServices->first_profile_pic() : url('/images/service-nofound.jpg') }}" alt="Fitnessity">                                                    
+																															<img src="{{ $cList->BusinessServices->first_profile_pic() ? $cList->BusinessServices->first_profile_pic() : url('/images/service-nofound.jpg') }}" alt="Omnebook">                                                    
 																															<div class="p-name">
 																																<h3>{{$cList->BusinessServices->program_name}}</h3>
 																																<div class="d-grid">
@@ -1251,7 +1251,7 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 				</div>
 				<div class="modal-body">
 					<div class="text-center">
-						<p class="fs-14">You are about to remove your sync with Fitness {{@$business->public_company_name}} denying access, the provider will no longer be able to link with your account. This allows the provider to automatically update your account and booking information with them.</p>
+						<p class="fs-14">You are about to remove your sync with Omnebook {{@$business->public_company_name}} denying access, the provider will no longer be able to link with your account. This allows the provider to automatically update your account and booking information with them.</p>
 						<a class="addbusiness-btn-modal btn btn-red" href="{{route('personal.grantAccess',['business_id'=>request()->business_id ,'customerId'=>@$customer->id ,'type' => request()->type,'status' =>'deny'])}}">Deny Access</a>
 					</div>
 				</div>
@@ -1325,13 +1325,13 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 					<div class="row y-middle">
 						<div class="col-lg-6 col-md-6">
 							<div class="checking-popup">
-								<img src="{{@$settings->alerts_photo_cover}}" alt="Fitnessity">
+								<img src="{{@$settings->alerts_photo_cover}}" alt="Omnebook" loading="lazy">
 							</div>																											
 						</div>
 						<div class="col-lg-6 col-md-6">
 							<div class="text-center mb-mv-25">
 								<div class="tick-set">
-									<img src="{{url('/dashboard-design/images/tick.png')}}" alt="Fitnessity">
+									<img src="{{url('/dashboard-design/images/tick.png')}}" alt="Omnebook" loading="lazy">
 								</div>
 								<label class="fs-24 checkinContent"></label>
 								<h5 class="mt-3">Is there anything else you would like to do?</h5>
@@ -1365,13 +1365,13 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 					<div class="row y-middle">
 						<div class="col-lg-6 col-md-6">
 							<div class="checking-popup">
-								<img src="{{@$settings->alerts_photo_cover}}" alt="Fitnessity">
+								<img src="{{@$settings->alerts_photo_cover}}" alt="Omnebook" loading="lazy">
 							</div>																											
 						</div>
 						<div class="col-lg-6 col-md-6">
 							<div class="text-center mb-mv-25">
 								<div class="tick-set">
-									<img src="{{url('/dashboard-design/images/cross.png')}}" alt="Fitnessity">
+									<img src="{{url('/dashboard-design/images/cross.png')}}" alt="Omnebook" loading="lazy">
 								</div>
 								<div class="mb-15 card_exp">
 									<label class="fs-24 mb-0"> Sorry, I can't check you in yet.</label>
@@ -1408,14 +1408,14 @@ $serviceTypeAry = array("all","classes","individual","events","experience");
 					<div class="row y-middle">
 						<div class="col-lg-6 col-md-6">
 							<div class="checking-popup">
-								<img src="{{@$settings->alerts_photo_cover}}" alt="Fitnessity">
+								<img src="{{@$settings->alerts_photo_cover}}" alt="Omnebook" loading="lazy">
 							</div>																											
 						</div>
 						<div class="col-lg-6 col-md-6">
 							
 							<div class="text-center">
 								<div class="tick-set">
-									<img src="{{url('/dashboard-design/images/cross.png')}}" alt="Fitnessity">
+									<img src="{{url('/dashboard-design/images/cross.png')}}" alt="Omnebook" loading="lazy">
 								</div>
 								<label class="fs-24"> Sorry, I can't check you in yet. </label>
 								<label class="fs-24 card_exp"> Your Credit Card expired. Please update your card.</label>

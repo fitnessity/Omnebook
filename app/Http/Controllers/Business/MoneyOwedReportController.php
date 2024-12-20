@@ -26,10 +26,6 @@ class MoneyOwedReportController extends BusinessBaseController
     }
 
     public function membership($type,$endDate,$startDate){
-        /*return Recurring::where('business_id',$business_id)->whereDate('payment_date','>=', $startDate)->whereDate('payment_date','<=', $endDate)
-            ->when($status,function($query) use($status){
-                $query->where('status','requires_capture');
-            });*/
         return Transaction::whereDate('transaction.created_at','>=', $startDate)->whereDate('transaction.created_at','<=', $endDate)->where('transaction.status','!=', 'complete');
     }
 
@@ -82,10 +78,6 @@ class MoneyOwedReportController extends BusinessBaseController
 
     public function export(Request $request ,$business_id){
         $type = $request->type;
-
-       /* $upcoming = $this->getDetail('Upcoming',$request->endDate,$request->startDate,$business_id);
-        $sucessfull = $this->getDetail('onToday',$request->endDate,$request->startDate,$business_id);
-        $failed = $this->getDetail('FailedPayment',$request->endDate,$request->startDate,$business_id);*/
         $all = $this->getDetail('All',$request->endDate,$request->startDate,$business_id);
         $reminingMoney = $this->getDetail('',$request->endDate,$request->startDate,$business_id);
     

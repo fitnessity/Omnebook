@@ -60,9 +60,6 @@ class CmsController extends Controller
             return view('admin.cms.edit', [
                 'id' => $id,
                 'module_details' => $module_details,
-                //'module_details' => @$module_details->content?json_decode($module_details->content):'',
-                //'module_title' => @$module_details->content_title?$module_details->content_title:'',
-                //'banner_image' => @$module_details->banner_image?$module_details->banner_image:'',
                 'pageTitle' => "Edit CMS"
             ]);
 
@@ -89,28 +86,14 @@ class CmsController extends Controller
             );
         }
         
-        // if($validator->fails()) {
-        //   $errMsg = array();
-        //     foreach($validator->messages()->getMessages() as $field_name => $messages) {
-        //         $errMsg = end($messages);
-        //     }
-        //     $response = array(
-        //             'danger' =>  $errMsg,
-        //     );
-        //     return redirect('/admin/cms/edit/'.$input['id'])->with('status', $response);
-        // }
-        
-        //$content = $input['edit_content']?$input['edit_content']:'';
         $content = $request->edit_content;
         $title = $input['edit_title']?trim($input['edit_title']):'';
 
-        // Image 
         $image = new Image();
         $banner_image = '';
         if($request->file('banner_image')) {
             $file = $request->file('banner_image');
 
-            //getting timestamp
             $timestamp = date('YmdHis', strtotime(date('Y-M-d H:i:s')));
             $name = $timestamp. '-' .$file->getClientOriginalName();
 
@@ -118,7 +101,6 @@ class CmsController extends Controller
             $file->move(public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'cms'.DIRECTORY_SEPARATOR, $name);
             $banner_image = $image->filePath;
         }
-        // End Image
             $filepath='';
             if($request->file('video'))
             {
@@ -141,10 +123,7 @@ class CmsController extends Controller
                 $video = $request->file('video');
                 $filepath = $video;
             }
-            /*echo $filepath;
-            exit;*/
 
-        //End Video
         if($request->file('video') == ''){
             $filepath = $input['video-name'];
         }
@@ -172,8 +151,6 @@ class CmsController extends Controller
         return Validator::make($data, [            
             'edit_title' => 'required|max:255',
             'edit_content' => 'required',
-            /*'banner_image' => 'image|mimes:jpeg,jpg,bmp,png|max:1024',
-            'Video' => 'video|mimes:mp4|max:1024',*/
         ],
         [
             'edit_title.required' => 'Provide a content title',

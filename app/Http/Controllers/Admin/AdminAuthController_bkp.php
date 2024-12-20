@@ -59,8 +59,7 @@ class AdminAuthBkpController extends Controller
                 'type' => 'danger',
                 'msg' => $errMsg,
             );
-            return Response::json($response);
-            // return View::make('admin.login')->with('message',"Something went Wrong");        
+            return Response::json($response);     
         } else {
 
             if (Auth::attempt(['email' => $postArr['email'], 'password' => $postArr['password']])) {
@@ -72,7 +71,7 @@ class AdminAuthBkpController extends Controller
                     return Response::json($response);
                     exit();
                 }
-                // The user is being remembered...
+
                 $request->session()->flash('alert-success', 'Welcome '.$postArr['email']);
                 $response = array(
                     'type' => 'success',

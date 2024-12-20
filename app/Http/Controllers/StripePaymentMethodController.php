@@ -72,7 +72,6 @@ class StripePaymentMethodController extends Controller
 
         $customer = Customer::find($request->customerID);
         $card = StripePaymentMethod::where('payment_id',$request->cardId)->first();
-        //echo $card ;exit;
         try {
 
             \Stripe\Stripe::setApiKey(config('constants.STRIPE_KEY'));
@@ -88,24 +87,13 @@ class StripePaymentMethodController extends Controller
                 ]
             );
 
-            /*$stripe->customers->updateSource(
-                $customer->stripe_customer_id,
-                $request->cardId,
-                [
-                    'exp_month' => $request->month, 
-                    'exp_year' => $request->year, 
-                ]
-            );
-*/
             $card->exp_month = $request->month;
             $card->exp_year =  $request->year;
             $card->save();
             return "success";
         } catch (InvalidRequestException $e) {
-            // Handle Stripe API errors
             return 'Error updating card: ' . $e->getMessage();
         } catch (\Exception $e) {
-            // Handle other exceptions
             return 'Error updating card: ' . $e->getMessage();
         }
     }

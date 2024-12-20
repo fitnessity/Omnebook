@@ -9,7 +9,7 @@
 	           <div class="row mb-3">
 					<div class="col-12">
 						<div class="page-heading text-center">
-							<h2>{{$company->company_name}}</h2>
+							<h1>{{$company->company_name}}</h1>
 							<p>Booking Schedule for {{ucwords(@$customer->full_name)}}</p>
 						</div>
 					</div>

@@ -651,7 +651,7 @@ class MailService
 
         Mail::send('emails.contact-us', ['name' => $mail_data['name'], 'email' => $mail_data['email'], 'post_message' => nl2br($mail_data['message'])], function ($m) use ($mail_data) {
                 $m->from(env('MAIL_FROM_ADDRESS'), $mail_data['name']);
-                $m->to(env('CONTACT_EMAIL'))->subject('Fitnessity: '.$mail_data['name'].' has contacted you');
+                $m->to(env('CONTACT_EMAIL'))->subject('Omnebook: '.$mail_data['name'].' has contacted you');
         });
     }
 
@@ -665,7 +665,7 @@ class MailService
 
         Mail::send('emails.signup-verification', ['user' => $user], function ($m) use ($user) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'Omnebook');
 
 
 
@@ -683,11 +683,11 @@ class MailService
 
         Mail::send('emails.email-verified-acknowledgement', ['user' => $user], function ($m) use ($user) {
 
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Fitnessity');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'Omnebook');
 
 
 
-            $m->to($user->email, $user->firstname.' '.$user->lastname)->subject('Welcome To Fitnessity');
+            $m->to($user->email, $user->firstname.' '.$user->lastname)->subject('Welcome To Omnebook');
 
         });
 

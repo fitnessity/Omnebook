@@ -67,7 +67,7 @@ class ProductController extends Controller
                     return $categoryString;   
                 })->addColumn('product_image1', function($row){
                     if($row->product_image){
-                        $proImg ='<img src="'.Storage::URL($row->product_image).'" alt="" class="avatar-xs rounded-circle me-2 shadow"> ';
+                        $proImg ='<img src="'.Storage::URL($row->product_image).'" alt="Omnebook" loading="lazy" class="avatar-xs rounded-circle me-2 shadow"> ';
                     }else{
                         $fc =  substr($row->name, 0, 1);
                         $proImg = '<div class="avatar-xsmall"><span class="mini-stat-icon avatar-title xsmall-font rounded-circle text-success bg-soft-red fs-4 uppercase">'.$fc.'</span></div>';
@@ -112,7 +112,6 @@ class ProductController extends Controller
      */
     public function store(Request $request,$business_id)
     {      
-        //print_r($request->all());exit;
         $companyInfo = $request->current_company;
         $id = $request->id ?? 0;
         $thisProduct = $companyInfo->products()->where('id', $id)->first(); 
@@ -171,7 +170,6 @@ class ProductController extends Controller
             'rental_price' =>$request->rental_price ?? 0,
             'on_sale_price' =>$request->on_sale_price  ?? 0,
             'business_cost' =>$request->cost_price  ?? 0,
-            /*'sales_tax' =>$request->sales_tax  ?? 0,*/
             'shipping_cost' =>$request->shipping_cost ?? 0,
             'rental_duration' => $request->rental_duration_int != '' ? $request->rental_duration_int.' '. $request->rental_duration: '',
             'require_deposit' =>$request->require_deposite,

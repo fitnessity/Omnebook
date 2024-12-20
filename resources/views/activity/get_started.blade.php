@@ -39,8 +39,8 @@
 @if($activity_get_start_fast)
 	<section class="instant-hire" >
 		<div class="instant-banner">
-			<img src="{{url('/public/uploads/discover/thumb/'.@$activity_get_start_fast->image) }}" alt="Fitnessity">
-			<h4>{{@$activity_get_start_fast->title}}</h4>
+			<img src="{{url('/public/uploads/discover/thumb/'.@$activity_get_start_fast->image) }}" alt="Omnebook">
+			<h1>{{@$activity_get_start_fast->title}}</h1>
 		</div>
 	</section>
 @endif
@@ -95,16 +95,16 @@
 		<div class="row align-self-center">
 			<div class="col-lg-6 col-md-9 col-xs-12">
 				<div class="find-business">
-					<div class="row">
+					<div class="row y-middle">
 						<div class="col-md-8">
 							<div class="">
 								<p>Can't Find A Business Offering Your Favorite Activity?</p>
-								<p class="inner-txt">You can add a business to fitnessity for free.</p>
+								<p class="inner-txt">You can add a business to Omnebook for free.</p>
 							</div>
 						</div>
 						<div class="col-md-4">
 							<div class="btn-txt">
-								<a href="#" class="showall-btn" data-bs-toggle="modal" data-bs-target="#addbusiness">Add A Business</a>
+								<a href="#" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#addbusiness">Add A Business</a>
 							</div>
 						</div>
 					</div>
@@ -156,7 +156,7 @@
 					</div>
                     <div class="col-lg-12">
                         <div class="modal-inner-txt">
-                        	<p>Are you a customer or business owner wanting to add information about a business? <br>It’s free to add to Fitnessity!</p>
+                        	<p>Are you a customer or business owner wanting to add information about a business? <br>It’s free to add to Omnebook!</p>
                         </div>
                     </div>
 					<div class="col-lg-12 btns-modal">

@@ -43,17 +43,6 @@ class UserBookingController extends Controller
     public function sendemailofreceipt(Request $request, $business_id){
 
         var_dump($business_id);
-        //print_r($request->all());exit;
 
-        // $getreceipemailtbody = $this->bookings->getreceipemailtbody($request->oid, $request->odetailid);
-        // $email_detail = array(
-        //     'getreceipemailtbody' => $getreceipemailtbody,
-        //     'email' => $request->email);
-        // /*$status = MailService::sendEmailReceipt($email_detail);*/
-
-        // //$status  = SGMailService::sendBookingReceipt($request->order_id);
-        // //$status  = SGMailService::sendBookingReceipt($request->oid);
-        // $status  = SGMailService::sendBookingReceipt($email_detail);
-        // return $status;
     }
 }

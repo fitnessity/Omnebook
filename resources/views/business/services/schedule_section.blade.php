@@ -1,15 +1,14 @@
 
-
 @php
         function timeSlotOption($lbl, $val) {
-            $start = "00:00"; //you can write here 00:00:00 but not need to it
+            $start = "00:00"; 
             $end = "23:30";
 
             $tStart = strtotime($start);
             $tEnd = strtotime($end);
             $tNow = $tStart;
       
-            $startpm = "00:00"; //you can write here 00:00:00 but not need to it
+            $startpm = "00:00"; 
             $endpm = "11:30";
             echo '<select name="'.$lbl.'[]" id="'.$lbl.'" class="'.$lbl.' form-control" required="required">';
             echo '<option value="">Select Time</option>';
@@ -204,26 +203,7 @@
 																				</div>
 																				<div class="col-lg-12 col-md-6 col-sm-6">
 																					<div class="priceselect sp-select mt-10">
-							                                                           <label>Choose Instructure</label>
-																					   <!-- <div class="priceselect sp-select">
-																							<label>Select Service Type</label>
-																							<div id="individualstype" style="">
-																								<select name="serviceTypes[]" id="serviceTypes1" multiple>
-																									<option value="Personal Training">Personal Training</option>
-																									<option value="Coaching">Coachingindividual</option>
-																									<option value="Therapy">Therapy</option>
-																									<option value="Event">Event </option>
-																									<option value="Seminar">Seminar </option>
-																								</select>
-																							</div>
-                                                                        				</div>
-																						<script>
-																							var serviceTypes1 = new SlimSelect({
-																								select: '#serviceTypes1'
-																							});
-																							GetData['service_typetwo'] = serviceTypes1.selected();
-																						</script> -->
-
+							                                                           <label>Choose Instructure</label>		
 							                                                           <input type="hidden" name="instructure[{{ $i }}]" value="">
 							                                                           <select name="instructure[{{$i}}][]" id="instructure{{$i}}" multiple >
 							                                                              @foreach($staffData as $data)

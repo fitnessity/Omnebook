@@ -184,7 +184,7 @@ input:disabled{
 
 				<div class="col-lg-8 col-xs-12">
 					<div class="separator-border-bottom">
-						<h3 class="subtitle details-sp pb-0"> Description </h3>
+						<h1 class="subtitle details-sp pb-0"> Description </h1>
 						<p class="mb-30"> {!! $service['program_desc'] ?? 'N/A' !!}</p>
 
 					</div>
@@ -1613,7 +1613,7 @@ input:disabled{
   	<div class="container">
 		<div class="col-xs-12">
 	    	<p class="navbar-text navbar-right desktop-none" style="text-align:center;">
-	    	<a id="fixedButton" href="#check_availability" class="showall-btn sticky-book-now" href="http://lvh.me:8080/activities/get_started/events">Book Now</a>
+	    	<a id="fixedButton" href="#check_availability" class="btn btn-red sticky-book-now" href="http://lvh.me:8080/activities/get_started/events">Book Now</a>
 	    	</p>
 		</div>
   	</div>
@@ -2431,7 +2431,7 @@ input:disabled{
 	            var contents =
 	                    '<div class="card-claimed-business"> <div class="row"><div class="col-lg-12" >' +
 	                    '<div class="img-claimed-business">' +
-	                    '<img src="' + locations[i][4] + '" alt="fitnessity">' +
+	                    '<img src="' + locations[i][4] + '" alt="Omnebook">' +
 	                    '</div></div> </div>' +
 	                    '<div class="row"><div class="col-lg-12" ><div class="content-claimed-business">' +
 	                    '<div class="content-claimed-business-inner">' +

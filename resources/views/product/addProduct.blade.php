@@ -14,7 +14,7 @@
                         <div class="row mb-3">
 							<div class="col-12">
 								<div class="page-heading">
-									<label>Manage Product</label>
+									<h1>Manage Product</h1>
 								</div>
 							</div><!--end col-->
 						</div><!--end row-->

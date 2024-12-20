@@ -40,7 +40,7 @@
 						<div class="row mb-3">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								<div class="page-heading">
-									<label>Point of Sale </label>
+									<h1>Point of Sale </h1>
 								</div>
 							</div>
 						</div>
@@ -870,7 +870,7 @@
 																			<div class="row">
 																			   <div class="col-md-12 col-xs-12">
 																				  <div class="payment-method-img">
-																					  <img src="{{asset('/public/images/cash-icon.png')}}" alt="img" class="w-100" width="100" loading="lazy">
+																					  <img src="{{asset('/public/images/cash-icon.png')}}" alt="Omnebook" class="w-100" width="100" loading="lazy">
 																				  </div>
 																			   </div>
 																			   <div class="col-md-12 col-xs-12">
@@ -895,7 +895,7 @@
 																					<div class="row">
 																						<div class="col-md-12 col-xs-12">
 																							<div class="payment-method-img">
-																								<img src="{{asset('/public/images/cc-on-file.png')}}" alt="img" class="w-100" width="100" loading="lazy">
+																								<img src="{{asset('/public/images/cc-on-file.png')}}" alt="Omnebook" class="w-100" width="100" loading="lazy">
 																							</div>
 																						</div>
 																						<div class="col-md-12 col-xs-12">
@@ -921,7 +921,7 @@
 																			<div class="row">
 																				<div class="col-md-12 col-xs-12">
 																					<div class="payment-method-img">
-																						<img src="{{asset('/public/images/input-cc.png')}}" alt="img" class="w-100" width="100" loading="lazy">
+																						<img src="{{asset('/public/images/input-cc.png')}}" alt="Omnebook" class="w-100" width="100" loading="lazy">
 																					</div>
 																				</div>
 																				<div class="col-md-12 col-xs-12">
@@ -944,7 +944,7 @@
 																			<div class="row">
 																				<div class="col-md-12 col-xs-12">
 																					<div class="payment-method-img">
-																						<img src="{{asset('/public/images/check.png')}}" alt="img" class="w-100" width="100" loading="lazy">
+																						<img src="{{asset('/public/images/check.png')}}" alt="Omnebook" class="w-100" width="100" loading="lazy">
 																					</div>
 																				</div>
 																				<div class="col-md-12 col-xs-12">
@@ -964,7 +964,7 @@
 																			<div class="row">
 																				<div class="col-md-12 col-xs-12">
 																					<div class="payment-method-img">
-																						<img src="{{asset('/public/images/comp.png')}}" alt="img" class="w-100" width="100" loading="lazy">
+																						<img src="{{asset('/public/images/comp.png')}}" alt="Omnebook" class="w-100" width="100" loading="lazy">
 																					</div>
 																				</div>
 																				<div class="col-md-12 col-xs-12">

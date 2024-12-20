@@ -1142,7 +1142,7 @@
 									<div class="col-md-8">
 										<div class="terms-wrap wrap-sp">
 											<input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-											<label for="b_trm1">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
+											<label for="b_trm1">I agree to Omnebook <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
 										</div>
 										<button type="button" style="margin:0px;" class="signup-new" id="register_submit" >Create Account</button>
 									</div>

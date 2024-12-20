@@ -31,7 +31,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="business-banner">
-					<img src="{{url('/public/images/newimage/addbusiness-customer.jpg')}}" alt="fitnessity" loading="lazy">
+					<img src="{{url('/public/images/newimage/addbusiness-customer.jpg')}}" alt="Omnebook" loading="lazy">
 				</div>
 			</div>
 		</div>
@@ -41,8 +41,8 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="business-info">
-					<h3>ADD A BUSINESS TO FITNESSITY AS A CUSTOMER</h3>
-					<p>Thank you for telling us about a new business to list on Fitnessity. Your contributions introduces others to another great business and to make our community stronger. To get started, tell us a little bit yourself and about the business.</p>
+					<h3>ADD A BUSINESS TO OMNEBOOK AS A CUSTOMER</h3>
+					<p>Thank you for telling us about a new business to list on Omnebook. Your contributions introduces others to another great business and to make our community stronger. To get started, tell us a little bit yourself and about the business.</p>
 				</div>
 			</div>
 			<div class="col-md-12">
@@ -280,7 +280,7 @@
             <div class="modal-body">
 				<div class="row contentPop"> 
 					<div class="col-lg-12">
-					   <h4 class="modal-title" style="color: #000; line-height: inherit; font-weight: 600;">Successfully Added Business to Fitnessity</h4>
+					   <h4 class="modal-title" style="color: #000; line-height: inherit; font-weight: 600;">Successfully Added Business to Omnebook</h4>
 					   <p style="color: #000; line-height: inherit; font-weight: 500; margin-bottom: 10px;" >This business will be reviewed by the Quality Control Team before going live</p>
 					</div>
                     <div class="col-lg-12" id="modelbody_successmodelbox">

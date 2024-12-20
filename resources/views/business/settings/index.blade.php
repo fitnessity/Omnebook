@@ -43,7 +43,7 @@ function timeSlotOptionforservice($lbl, $val) {
 										<div class="row mb-3">
 											<div class="col-6">
 												<div class="page-heading">
-													<label>Settings</label>
+													<h1>Settings</h1>
 												</div>
 											</div> <!--end col-->
 										</div>	

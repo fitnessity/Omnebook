@@ -81,7 +81,7 @@ $user = Auth::user();
                         <hr style="border: 15px solid black;width: 104%;margin-left: -38px;">
                         <section class="row">
                             <div class="col-md-12 text-center">
-                                <div class="tab-hed">Welcome To Fitnessity For Business Profile Setup</div>
+                                <div class="tab-hed">Welcome To Omnebook For Business Profile Setup</div>
                             </div>
                             <div class="col-md-12 text-center">
                                 <div class="tab-para">Ready To Start Earning More ? </div>
@@ -92,8 +92,8 @@ You can offer your services online, at your place of business, or on the go. Sta
                                 <p class="tab-para1">Things to Know</p>
                                 <ul>
                                 	<li>You are recoomended to complete a background check to earn the trust of potential customers.</li>
-                                    <li>To get reviews, a customer must participate in the service you offer. Fitnessity doesn't allow random reviews from cutomers to outsiders.</li>
-                                    <li>The Fitnessity Quality Control team will be monitoring to make sure that you are conducting business with the highest standars.</li>
+                                    <li>To get reviews, a customer must participate in the service you offer. Omnebook doesn't allow random reviews from cutomers to outsiders.</li>
+                                    <li>The Omnebook Quality Control team will be monitoring to make sure that you are conducting business with the highest standars.</li>
                                	</ul>
                                 <p class="tab-para1">Add your business information, images, videos, services, prices, get verified by completed a background check, start getting reviews,<br>
                                     manage your customers and accounts and much more. Start receiving bookings from customers looking for activites and services your offer.</p>
@@ -1248,9 +1248,9 @@ You can offer your services online, at your place of business, or on the go. Sta
                         <h4>Powered by: <img src="{{ url('public/images/evident.png') }}" alt=""></h4>
                     </div>
                     <div class="col-md-12 complete-section text-center" style="padding:50px">
-                        <h3><b>Become a Fitnessity vetted business by undergoing a background check.</b></h3>
+                        <h3><b>Become a Omnebook vetted business by undergoing a background check.</b></h3>
                         <p id="checkpass">
-                            Complete a background check and earn your customer trust. It's a fast and simple process. Background checks are optional and <b>NOT</b> mandatory. Earn a Fitnessity vetted business badge for your profile page. Vetted businesses received more bookings than non-verified.
+                            Complete a background check and earn your customer trust. It's a fast and simple process. Background checks are optional and <b>NOT</b> mandatory. Earn a Omnebook vetted business badge for your profile page. Vetted businesses received more bookings than non-verified.
                         </p>
                     </div>
                     <div class="col-md-12">
@@ -1399,11 +1399,11 @@ You can offer your services online, at your place of business, or on the go. Sta
                     <div class="col-md-12">
                         <div class="details_section">
                             <p>
-                                Completing your background check increases your trust & safety status on Fitnessity. We will notify you when the results are complete
+                                Completing your background check increases your trust & safety status on Omnebook. We will notify you when the results are complete
                             </p>
                             <h5><b>A quick legal notice:</b></h5>
                             <p>
-                                With your permission and understanding, Fitnessity, Inc. (the “Company”) is working with Evident ID, Inc. (“EvidentID”) to obtain a consumer report that will include a criminal background check of federal, state, and local criminal court records, a review of public sex offender registries, and Social Security number verification in connection with your request to use or your ability to continue to use the Fitnessity platform. Although Fitnessity does not believe that this consumer report is being obtained for an employment purpose, Fitnessity and Evident ID will nonetheless comply with the requirements of the Fair Credit Reporting Act and related state laws that apply specifically to consumer reports obtained for employment purposes.
+                                With your permission and understanding, Omnebook, Inc. (the “Company”) is working with Evident ID, Inc. (“EvidentID”) to obtain a consumer report that will include a criminal background check of federal, state, and local criminal court records, a review of public sex offender registries, and Social Security number verification in connection with your request to use or your ability to continue to use the Omnebook platform. Although Omnebook does not believe that this consumer report is being obtained for an employment purpose, Omnebook and Evident ID will nonetheless comply with the requirements of the Fair Credit Reporting Act and related state laws that apply specifically to consumer reports obtained for employment purposes.
                             </p>
                             <p>
                                 After you’ve completed the form, you can check the status of your background check at {<a href="https://www.evidentid.com/products/background-checks/" target="_new">Evident Background Check</a>}
@@ -1457,7 +1457,7 @@ You can offer your services online, at your place of business, or on the go. Sta
                         <div class="form-group col-md-12 checking_circle">
                             <input type="radio" name="radio_verified" id="radio_verified" class="pull-left" {{ ($firstname!="") ? 'checked' : '' }}>
                             <label for="radio_verified">
-                                By checking this circle, you agree to Fitnessity, Inc. and Evident ID, Inc. Privacy Policy, and consent to Evident ID contacting you by email, phone, or SMS texts with information relating to your background check.
+                                By checking this circle, you agree to Omnebook, Inc. and Evident ID, Inc. Privacy Policy, and consent to Evident ID contacting you by email, phone, or SMS texts with information relating to your background check.
                             </label>
                             <span class="error" id="err_radio_verified"></span>
                         </div>
@@ -1490,7 +1490,7 @@ You can offer your services online, at your place of business, or on the go. Sta
                         <div class="form-group">
                             <div style="border:1px solid #000; padding:10px;">
                             <h3>APPLICANT DISCLOSURE STATEMENT</h3> 
-                            <p>With your application to Fitnessity (COMPANY) to provide services as an independent contractor, employee, or volunteer, you may have the information requested about you from a Consumer Reporting Agency (CRA). This information may be obtained in the form of a consumer report.</p> 
+                            <p>With your application to Omnebook (COMPANY) to provide services as an independent contractor, employee, or volunteer, you may have the information requested about you from a Consumer Reporting Agency (CRA). This information may be obtained in the form of a consumer report.</p> 
                             <p>These reports may contain information about your character, general reputation, personal characteristics and/or mode of living. The types of information that may be obtained include, but are not limited to, social security number verifications; address history; criminal records checks; public court records checks; driving records checks; and professional licensing/certification checks. This information may be obtained from private and/or public records sources, including, as appropriate; governmental agencies, courthouses, educational institutions, former employers, or other information sources.</p>  
                             </div>
                             <textarea readonly name="rights_summary" id="rights_summary" cols="30" rows="10" class="form-control" style="display:none">
@@ -1499,7 +1499,7 @@ You can offer your services online, at your place of business, or on the go. Sta
                             echo $rights_summary;
                             } else { ?>
                             <h3>APPLICANT DISCLOSURE STATEMENT</h3> 
-                            <p>With your application to Fitnessity (COMPANY) to provide services as an independent contractor, employee, or volunteer, you may have the information requested about you from a Consumer Reporting Agency (CRA). This information may be obtained in the form of a consumer report.</p> 
+                            <p>With your application to Omnebook (COMPANY) to provide services as an independent contractor, employee, or volunteer, you may have the information requested about you from a Consumer Reporting Agency (CRA). This information may be obtained in the form of a consumer report.</p> 
                             <p>These reports may contain information about your character, general reputation, personal characteristics and/or mode of living. The types of information that may be obtained include, but are not limited to, social security number verifications; address history; criminal records checks; public court records checks; driving records checks; and professional licensing/certification checks. This information may be obtained from private and/or public records sources, including, as appropriate; governmental agencies, courthouses, educational institutions, former employers, or other information sources.</p>
                             <?php } ?>
                             </textarea>
@@ -1608,7 +1608,7 @@ You can offer your services online, at your place of business, or on the go. Sta
                         You have completed all steps to start your background check. Your application is completed, and you have passed your background check. Congratulations! Your business verified membership will expire on <?=date('d/m/Y', strtotime("+1 year"))?>. You will need to do another verification once the membership expires. Your business verified badge has been added to your profile.
                         </p>
                         <p id="checkreject" style="display:none">
-                        Your background check did not pass. Fitnessity has been alerted and is taking a look at the results. Your profile will not reflect a verified business badge. If you think this is a mistake, please get in touch with us at contact@fitnesiity.co/verifiedbusiness, and you may be able to do another check after.
+                        Your background check did not pass. Omnebook has been alerted and is taking a look at the results. Your profile will not reflect a verified business badge. If you think this is a mistake, please get in touch with us at contact@fitnesiity.co/verifiedbusiness, and you may be able to do another check after.
                         </p>
                         <img src="{{ url('public/images/verified-logo.png') }}" alt="">
                     </div>
@@ -1951,7 +1951,7 @@ competitive with your price point but not too low to de-value your experience.</
                         <div class="col-md-8 text-justify classesBody" style="display:{{ ($service_type=='classes')?'block':'none' }}; background:url(/public/img/fitness-bg2.jpg); background-size:100% 100%;">
                             <p>Booking and creating group classes, boot camps, clinics, and more is very easy. You can create services both online and offline.
 WHen creating your profile, how do you stand out from others? Every image, video, description, price, completed background check,
-positive reviews, and how you deliver your services will help you become a top business professional on Fitnessity.</p>
+positive reviews, and how you deliver your services will help you become a top business professional on Omnebook.</p>
                             <h3>Recommended Tips to Do :</h3>
                              <ul>
                                 <li>Create a professional profile. It's your website and resumes to potentials clients.</li>
@@ -2135,7 +2135,7 @@ detailed itinerary so that guests know what to expect.</p>
                                 be a competitive market. When creating your profile, how do you stand out from
                                 others. Every image, video, description, price, background check, review, and the
                                 way you deliver your services will help you become a top business professional
-                                on Fitnessity</p>
+                                on Omnebook</p>
                             <h3>Recommended Tips to Do :</h3>
                             <p>- Create a professional profile. It’s your website and resume to potential clients.</p>
                             <p>- Sell your business and show what makes your business the best.</p>
@@ -2150,11 +2150,11 @@ detailed itinerary so that guests know what to expect.</p>
                         
                         <div class="col-md-8 text-justify classesBody" style="display:{{ ($service_type=='classes')?'block':'none' }}; background:url(/public/img/fitness-bg2.jpg); background-size:100% 100%;">
                             <p>Booking and creating group classes, boot camps, clinics and more are one of the most popular 
-                                services for kids, teens, and adults. Create services that use all of the tools Fitnessity 
+                                services for kids, teens, and adults. Create services that use all of the tools Omnebook 
                                 offers to make your business the best it can be. Create services for both online and offline 
                                 if you can. When creating your profile, how do you stand out from others? Every image, video, 
                                 description, price, background check, review, and how you deliver your services will help you 
-                                become a top business professional on Fitnessity.</p>
+                                become a top business professional on Omnebook.</p>
                             <h3>Recommended Tips to Do :</h3>
                             <p>- Create a professional profile. It’s your website and resume to potential clients.</p>
                             <p>- Sell your business and show what makes your business the best.</p>
@@ -3417,7 +3417,7 @@ hat and yellow vest. Please arrive 10 minutes before your activity starts.)"></t
                                                 <!--end for model box-->
                                                  
                                                  <div class="form-group col-md-3">
-                                                     <label for="pay_estearn">Your Estimated Earnings <a href="#" title="The user will earn minus the fitnessity service fee when the user sets the price." class="tooltip-custom sp1" data-toggle="tooltip" data-placement="top">?</a></label>
+                                                     <label for="pay_estearn">Your Estimated Earnings <a href="#" title="The user will earn minus the Omnebook service fee when the user sets the price." class="tooltip-custom sp1" data-toggle="tooltip" data-placement="top">?</a></label>
                                                      <input type="text" name="pay_estearn[]" id="pay_estearn" class="pay_estearn form-control" value="<?=$pay_estearn?>">
                                                  </div>
                                                  
@@ -3426,7 +3426,7 @@ hat and yellow vest. Please arrive 10 minutes before your activity starts.)"></t
                                                     <input type="text" name="pay_discount[]" id="pay_discount" class="form-control" placeholder="0" value="{{$pay_discount}}">
                                                  </div>
                                                   <div class="form-group col-md-3" >
-                                                    <label for="pay_discount">Fitnessity Fee</label>
+                                                    <label for="pay_discount">Omnebook Fee</label>
                                                     <input type="text" name="fitnessity_fee[]" id="fitnessity_fee" class="form-control" placeholder="15" value="{{$fitnessity_fee}}" readonly="readonly">
                                                  </div>
                                              </div>
@@ -3537,12 +3537,12 @@ hat and yellow vest. Please arrive 10 minutes before your activity starts.)"></t
                                                     <input type="text" name="pay_discount[]" id="pay_discount" class="form-control" placeholder="0">
                                                  </div>
                                                   <div class="form-group col-md-3" >
-                                                    <label for="pay_discount">Fitnessity Fee</label>
+                                                    <label for="pay_discount">Omnebook Fee</label>
                                                     <input type="text" name="fitnessity_fee[]" id="fitnessity_fee" class="form-control" placeholder="15" value="15"  readonly="readonly">
                                                  </div>
                                                  
                                                 <div class="form-group col-md-3">
-                                                    <label for="pay_estearn">Your Estimated Earnings <a href="#" title="Your estimated earnings after Fitnessity takes a service fee of 10%. " class="tooltip-custom sp1" data-toggle="tooltip" data-placement="top">?</a></label>
+                                                    <label for="pay_estearn">Your Estimated Earnings <a href="#" title="Your estimated earnings after Omnebook takes a service fee of 10%. " class="tooltip-custom sp1" data-toggle="tooltip" data-placement="top">?</a></label>
                                                     <input type="text" name="pay_estearn[]" id="pay_estearn" class="pay_estearn form-control">
                                                 </div>
                                             </div>
@@ -5890,7 +5890,7 @@ $(document).ready(function(){
             return false;
         }
         if ($('input[name="radio_verified"]:checked').length == 0) {
-            $('#err_radio_verified').html('You agree to Fitnessity, Inc. and Evident ID, Inc');
+            $('#err_radio_verified').html('You agree to Omnebook, Inc. and Evident ID, Inc');
             $('#radio_verified').focus();
             return false;
         }

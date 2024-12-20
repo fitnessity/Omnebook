@@ -1770,7 +1770,7 @@
                                 be a competitive market. When creating your profile, how do you stand out from
                                 others. Every image, video, description, price, background check, review, and the
                                 way you deliver your services will help you become a top business professional
-                                on Fitnessity</p>
+                                on Omnebook</p>
                             <h3>Recommended Tips to Do :</h3>
                             <p>- Create a professional profile. It’s your website and resume to potential clients.</p>
                             <p>- Sell your business and show what makes your business the best.</p>

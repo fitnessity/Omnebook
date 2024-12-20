@@ -188,15 +188,6 @@ class ActivityController extends Controller {
 	        $current_date = new DateTime();
 	        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtacty->pluck('id'))->limit(3)->get();
 
-			// $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)
-			// ->whereIn('serviceid', $nxtacty->pluck('id'))
-			// ->join('business_price_details_ages', 'business_activity_scheduler.serviceid', '=', 'business_price_details_ages.serviceid')
-			// ->where('business_price_details_ages.visibility_to_public', '!=', 0)
-			// ->select('business_activity_scheduler.*', 'business_price_details_ages.*') // Select the desired fields
-			// ->limit(3)
-			// ->get();
-			// dd(\DB::getQueryLog()); // Show results of log
-
 			$allactivities = $this->filterActivities($all_activities)->get();
 			$serviceLocation = Miscellaneous::serviceLocation();
 			return view('activity.getstartedfast',[
@@ -211,14 +202,7 @@ class ActivityController extends Controller {
 			$all_activities = BusinessServices::where('business_services.is_active', 1);
 			$this_nthactivity = BusinessServices::where('business_services.is_active', 1)->whereMonth('business_services.CREATED_AT', date('Y-m'));
 			$most_popularactivity = BusinessServices::where('business_services.is_active', 1)->join('user_booking_details', 'business_services.id', '=', 'user_booking_details.sport')->select('business_services.*','user_booking_details.sport')->groupby('business_services.id')->orderby('user_booking_details.created_at','desc');
-			// $most_popularactivity = BusinessServices::where('business_services.is_active', 1)
-			// ->join('user_booking_details', 'business_services.id', '=', 'user_booking_details.sport')
-			// ->join('business_price_details_ages', 'business_services.id', '=', 'business_price_details_ages.serviceid')
-			// ->where('business_price_details_ages.visibility_to_public', '!=', 0)->where('business_price_details_ages.class_type',null)
-			// ->select('business_services.*', 'user_booking_details.sport')
-			// ->groupBy('business_services.id')
-			// ->orderBy('user_booking_details.created_at', 'desc');
-
+			
 			$Trainers_coaches_acitvity = BusinessServices::where(['business_services.is_active'=> 1,'service_type'=>'individual']);
 			
 			$Fun_Activities = BusinessServices::where(['business_services.is_active'=> 1,'service_type'=>'experience']);
@@ -803,16 +787,8 @@ class ActivityController extends Controller {
 	        }	
 	        $nxtacty = $nxtact->get();
 	        $current_date = new DateTime();
-	        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtacty->pluck('id'))->limit(3)->get();
-				// \DB::enableQueryLog(); // Enable query log
-
-			// $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)
-			// 	->whereIn('serviceid', $nxtacty->pluck('id'))
-			// 	->whereHas('businessPriceDetailAge', function($query) {
-			// 		$query->where('visibility_to_public', '!=', 0);
-			// 	})
-			// 	->limit(3)
-    		// 	->get();
+	        $bookschedulers = BusinessActivityScheduler::next_8_hours($current_date)->whereIn('serviceid', $nxtacty->pluck('id'))->distinct()->limit(3)->get();
+			
 
 			$allactivities = $this->filterActivities($all_activities)->limit(10)->get();
 			$thismonthactivity = $this->filterActivities($this_nthactivity)->limit(10)->get();
@@ -1093,7 +1069,7 @@ class ActivityController extends Controller {
 	    }
 	    $schedulers = $schedule != '' ? $schedule->get() : [];
 	    $firstSchedule = $schedule != '' ? $schedule->first() : '';
-		// dd($service);
+		
 		if (!$service) {
 			return response()->json(['message' => 'Service not found'], 200);
 		}		
@@ -1113,15 +1089,11 @@ class ActivityController extends Controller {
         	$priceId = $priceId ?? $prices[0]['id'];
             foreach ($prices as  $pr) {
             	$select = $pr['id'] == $priceId ? 'selected' : '';
-				
-                // $priceOption .='<option value="'.$pr['id'].'" '.$select.'>'.$pr['price_title'].'</option>';//old 25-10-24
-            
-				// new code
+				                
 				if($pr['visibility_to_public']==1)
 				{
 					$priceOption .='<option value="'.$pr['id'].'" '.$select.'>'.$pr['price_title'].'</option>';
 				}
-				// end
 			}
         }
         $BusinessActivityScheduler = BusinessActivityScheduler::where('serviceid',$serviceId)->where('category_id',@$firstCategory->id)->where('starting','<=',date('Y-m-d',strtotime($activityDate)) )->where('end_activity_date','>=',  date('Y-m-d',strtotime($activityDate)) )->whereRaw('FIND_IN_SET("'.date('l',strtotime($activityDate)).'",activity_days)');
@@ -1166,7 +1138,6 @@ class ActivityController extends Controller {
     	$family = getFamilyMember($cusId,$request->cid);
     	$priceid = $request->priceid;  $type = $request->type; 
     	$customer = ( $cusId ) ? Customer::find($cusId) : '';
-		// dd($cusId);
 		return view('activity.participate_data' ,compact('priceid','type','family','customer'));
     }
     public function getAddOnData(Request $request){

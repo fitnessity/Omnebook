@@ -426,7 +426,7 @@
 						</div>
 						<div class="col-md-6 col-sm-6 col-xs-12">
 							<div class="time-base">
-								<label>Time Based On:</label>
+								<h1>Time Based On:</h1>
 								<span>New York, NY</span>
 							</div>
 						</div>
@@ -453,7 +453,7 @@
 										</div>
 										<div class="col-md-6 col-xs-12 col-sm-5">
 											<div class="table-inner-data-sec">
-												<img src="{{ Storage::disk('s3')->exists($bookscheduler->business_service->first_profile_pic()) ? Storage::URL($bookscheduler->business_service->first_profile_pic()) : url('/images/service-nofound.jpg') }}" alt="Fitnessity">
+												<img src="{{ Storage::disk('s3')->exists($bookscheduler->business_service->first_profile_pic()) ? Storage::URL($bookscheduler->business_service->first_profile_pic()) : url('/images/service-nofound.jpg') }}" alt="Omnebook">
 												<div class="p-name">
 													<h3>{{$bookscheduler->business_service->program_name}}</h3>
 													<p> {{$bookscheduler->business_service->formal_service_types()}} | {{$bookscheduler->business_service->sport_activity}} | Spot Available - {{$bookscheduler->spots_left($filter_date)}}/{{$bookscheduler->spots_available}}
@@ -480,7 +480,7 @@
 										</div>
 										<div class="col-md-2 col-xs-6 col-sm-2 col-6">
 											<div class="join-btn">
-												<a class="showall-btn btn-position" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
+												<a class="btn btn-red" href="{{route('activities_show', ['serviceid' => $bookscheduler->business_service->id])}}">Book Now</a>
 											</div>
 										</div>
 									</div>

@@ -13,7 +13,7 @@
                             <div class="row mb-3">
                                 <div class="col-12">
                                     <div class="page-heading">
-                                        <label>Add A New Client Manually -Or- Onboard A New Client Fast</label>
+                                        <h1>Add A New Client Manually -Or- Onboard A New Client Fast</h1>
                                     </div>
                                 </div>
                             </div>

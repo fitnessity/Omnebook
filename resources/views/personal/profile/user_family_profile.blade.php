@@ -42,7 +42,7 @@
 											</div>
 										</form>
 									</div>
-									<h5 class="fs-16 mb-1">{{$user->full_name}}</h5>
+									<h1 class="fs-16 mb-1">{{$user->full_name}}</h1>
 								</div>
 							</div>
 						</div><!--end card-->

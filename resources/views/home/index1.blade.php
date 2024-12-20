@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-xxl-9 col-lg-9 col-md-12">
                             <div class="fit-widget-container-banner">
-                                <label class="fs-65 mb-15">{!!@$topBanner->content_title!!}</label>
+                                <h1 class="fs-65 mb-15">{!!@$topBanner->content_title!!}</h1>
                                 {!!@$topBanner->content!!}
                             </div>
                             <div class="mt-25">
@@ -65,7 +65,7 @@
                             <div class="taxonomy-item taxonomy-card">
                                 <a class="taxonomy-link hover-effect" href="{{env('APP_URL')}}{{@$sldr['link']}}">
                                     <div class="taxonomy-title">{{@$sldr['title']}} </div>
-                                    <img class="img-responsive" src="{{asset('uploads/slider/thumb/'.@$sldr['image'])}}" alt="Fitnessity" loading="lazy">
+                                    <img class="img-responsive" src="{{asset('uploads/slider/thumb/'.@$sldr['image'])}}" alt="Omnebook" loading="lazy">
                                 </a>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                     @endforeach
                     
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 text-center">
-                        <a href="{{url('/activities')}}" class="btn btn-red fs-15 btn-w-130 mt-30">Find More</a>
+                        <a href="{{url('/activities')}}" class="btn btn-red btn-w-130 mt-30">Find More</a>
                     </div>
                     
                 </div>
@@ -104,7 +104,7 @@
                             <div class="taxonomy-item taxonomy-item-v2">
                                 <div class="taxonomy-item-image">
                                     <a class="taxonomy-link hover-effect" href="/activities/?city={{$city}}">
-                                        <img class="img-responsive" src="{{asset('uploads/slider/thumb/1646834734-ACTIVITES BACKGROUND.jpg')}}" alt="Fitnessity" loading="lazy">
+                                        <img class="img-responsive" src="{{asset('uploads/slider/thumb/1646834734-ACTIVITES BACKGROUND.jpg')}}" alt="Omnebook" loading="lazy">
                                     </a>    
                                 </div>
                                 <div class="taxonomy-item-content">
@@ -136,9 +136,9 @@
                                     {!!$bepart_data->content!!}
 
                                     @if(Auth::check())
-                                        <a class="btn btn-red" href="/activities">START TODAY</a>
+                                        <a class="btn btn-red" href="/activities">Start Today</a>
                                     @else
-                                        <a href="{{route('registration')}}" class="btn btn-red">START TODAY</a>
+                                        <a href="{{route('registration')}}" class="btn btn-red">Start Today</a>
                                     @endif
                                 </div>
                             </div>
@@ -148,12 +148,12 @@
 
                     <div class="col-lg-8 hpl-50">
                         <div class="amazonaws mb-10">
-                            <img src="{{ asset('public/uploads/cms/'.$whyFitnessity->banner_image) }}" alt="Fitnessity" loading="lazy">
+                            <img src="{{ asset('public/uploads/cms/'.$whyFitnessity->banner_image) }}" alt="Omnebook" loading="lazy">
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="info-imgs">
-                            <img src="{{ asset('public/'.$whyFitnessity->video) }}" alt="Fitnessity" loading="lazy">
+                            <img src="{{ asset('public/'.$whyFitnessity->video) }}" alt="Omnebook" loading="lazy">
                         </div>
                     </div>
                     <div class="col-lg-8 hpl-50">
@@ -197,7 +197,7 @@
                             <div class="fit-project-item mb-30">
                                 <a href="{{$slider->link}}">
                                     <div class="project-img">
-                                        <img src="{{asset('/public/uploads/slider/thumb/'.$slider->image)}}" alt="Fitnessity" loading="lazy">
+                                        <img src="{{asset('/public/uploads/slider/thumb/'.$slider->image)}}" alt="Omnebook" loading="lazy">
                                         <div class="discover-title">
                                             <h2>{{$slider->title}}</h2>
                                         </div>
@@ -226,7 +226,7 @@
                                     <h2>{!!@ $connectBusiness->content_title !!}</h2>
                                      {!!@$connectBusiness->content!!}
                                     <div>
-                                        <a href="{{route('businessClaim')}}" class="btn btn-border-white btn-w-180 fs-15 mb-10">List My Business</a>
+                                        <a href="{{route('businessClaim')}}" class="btn btn-border-white btn-w-180 mb-10">List My Business</a>
                                     </div>
                                 </div>
                             </div>

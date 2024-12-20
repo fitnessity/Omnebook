@@ -29,9 +29,8 @@ class ProfileController extends Controller
 
     public function dashboard(Request $request)
     {
-        // $business = CompanyInformation::find($request->business_id);
-        $businessId = $request->business_id ?? auth()->user()->cid;//updated
-        $business = CompanyInformation::find($businessId);//updated
+        $businessId = $request->business_id ?? auth()->user()->cid;
+        $business = CompanyInformation::find($businessId);
         if($request->customer_id){
             if(request()->type == 'user'){
                 $familyMember = $this->user->user_family_details()->where('id',request()->customer_id)->first();
@@ -43,8 +42,7 @@ class ProfileController extends Controller
                 $name = @$customer->full_name;
             }
         }else{
-            // $customer = Customer::where(['business_id'=>$request->business_id,'user_id'=>Auth::user()->id])->first();
-            $customer = Customer::where(['business_id'=>$request->business_id ?? auth()->user()->cid,'user_id'=>Auth::user()->id])->first();//updated
+            $customer = Customer::where(['business_id'=>$request->business_id ?? auth()->user()->cid,'user_id'=>Auth::user()->id])->first();
             $name = @$customer->full_name;
         }
         $attendanceCnt = BookingCheckinDetails::where('customer_id' ,@$customer->id)->whereMonth('checkin_date', '>=', date('m'))->whereMonth('checkin_date', '<=', date('m'))->whereNotNull('checked_at')->count();
@@ -104,7 +102,6 @@ class ProfileController extends Controller
             }else{
                 $user = Customer::find(request()->customer_id);
                 return view('personal.profile.customer_profile',compact('user'));
-                // return view('personal.profile.user_family_profile',compact('user'));
             }
         }else{
             $user = $this->user; 
@@ -161,7 +158,7 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {   //print_r($request->all());exit;
+    {  
         $user =  $this->user;
         // dd($request->hasFile('coverPic'));
         $success = $fail = '';
@@ -203,13 +200,6 @@ class ProfileController extends Controller
             $status = $user->update(['password' => Hash::make($request->newPassword) ,'buddy_key' =>$request->newPassword]);
             $success = 'Password has been changed successfully.';
 
-            /* $currentPassword = $user->password;
-            if (Hash::check($request->newPassword, $currentPassword)) {
-                $status = $user->update(['password' => Hash::make($request->newPassword)]);
-                $success = 'Password has been changed successfully.';
-            }else{
-                $fail = 'Problem in password change.Please check your old password and enter again.';
-            }*/
         }else if($request->type == 'portfolio'){
             $data = $request->except(['_token', 'id', 'type']);
             $user->update($data);
@@ -236,10 +226,8 @@ class ProfileController extends Controller
         
         if(@$status){
             return Redirect::route('personal.profile.index')->with('success', $success);
-            //return Redirect::back()->with('success',$success);
         }else{
             return Redirect::route('personal.profile.index')->with('error', $fail);
-           //return Redirect::back()->with('error', $fail);
         }
     }
 
@@ -293,20 +281,12 @@ class ProfileController extends Controller
 
         if(@$status){
             return Redirect::route('personal.profile.index',['type' => 'user','customer_id' =>$request->id])->with('success', $success);
-            //return Redirect::back()->with('success',$success);
         }else{
             return Redirect::route('personal.profile.index',['type' => 'user','customer_id' =>$request->id])->with('error', $fail);
-           //return Redirect::back()->with('error', $fail);
         }
-       /* 
-        if(@$status)
-            return Redirect::back()->with('success',$success);
-        else
-            return Redirect::back()->with('error', $fail);*/
     }
 
     public function customerProfileUpdate(Request $request){
-        /*print_r($request->all());exit;*/
         $user = Customer::find($request->id);
         $success = $fail = '';
         if($request->type == 'details'){
@@ -349,20 +329,12 @@ class ProfileController extends Controller
 
         if(@$status){
             return Redirect::route('personal.profile.index',['type' =>'customer' ,'customer_id' =>$request->id])->with('success', $success);
-            //return Redirect::back()->with('success',$success);
         }else{
             return Redirect::route('personal.profile.index',['type' =>'customer' ,'customer_id' =>$request->id])->with('error', $fail);
-           //return Redirect::back()->with('error', $fail);
         }
-
-        /*if(@$status)
-            return Redirect::back()->with('success',$success);
-        else
-            return Redirect::back()->with('error', $fail);*/
     }
 
     public function provider(Request $request){
-        // \DB::enableQueryLog(); 
         $company_information = [];
         $continue = 0;
         if($request->customer_id){
@@ -397,11 +369,7 @@ class ProfileController extends Controller
                 }
             }
         }
-        /*$url = url()->current();
-        $separator = (parse_url($url, PHP_URL_QUERY) == null) ? '?' : '&';*/
-        // dd(\DB::getQueryLog());
         $business = array_values(array_filter(array_unique($company_information, SORT_REGULAR)));
-        // dd($business);
         return view('personal.provider.index',compact('business','id'));
     }
 
@@ -415,7 +383,6 @@ class ProfileController extends Controller
         unset($data['_token']);
         unset($data['id']);
         unset($data['type']);
-        //print_r($data);
         $user =  $this->user;
         $user->update($data);
     }
@@ -514,7 +481,6 @@ class ProfileController extends Controller
         $cardInfo = [];
         $intent = null;
         $user = $this->user;
-        // dd($user);
         $customers = $user->customers()->pluck('id')->toArray();
         $customer_ids = implode(',',$customers);
 
@@ -607,37 +573,6 @@ class ProfileController extends Controller
         $recurringArray = Transaction::select('transaction.*')->Where('item_type', 'Recurring')
                     ->join('recurring as re', 're.id', '=', 'transaction.item_id')->where('re.business_id', '=', $business_id)->where('re.user_id', $customer_ids)->get()->toArray();
 
-        //$mergedArray = array_merge($status, $recurring);
-        // $statusArray = $recurringArray  = []; 
-        // foreach ($status as $history) {
-        //     $statusArray[] = [ 
-        //             "created_at" =>date('m/d/Y', strtotime($history->created_at)),
-        //             'itemDescription' => $history->item_description($business_id)['itemDescription'],
-        //             'item_type_terms' => $history->item_type_terms(),
-        //             'getPmtMethod' => $history->getPmtMethod(),
-        //             'amount' => $history->amount,
-        //             'qty' => $history->item_description($business_id)['qty'],
-        //             'getBookingStatus' => $history->getBookingStatus(),
-        //             'item_id' => $history->item_id,
-        //             'customer_id' => $history->customer_id,
-        //             'id' => $history->id,
-        //         ];
-        // }
-
-        // foreach ($recurring as $history) {
-        //     $recurringArray[] = [ 
-        //             "created_at" =>date('m/d/Y', strtotime($history->created_at)),
-        //             'itemDescription' => $history->item_description($business_id)['itemDescription'],
-        //             'item_type_terms' => $history->item_type_terms(),
-        //             'getPmtMethod' => $history->getPmtMethod(),
-        //             'amount' => $history->amount,
-        //             'qty' => $history->item_description($business_id)['qty'],
-        //             'getBookingStatus' => $history->getBookingStatus(),
-        //             'item_id' => $history->item_id,
-        //             'customer_id' => $history->customer_id,
-        //             'id' => $history->id,
-        //         ];
-        // }
         
         $mergedArray = array_merge($statusArray, $recurringArray);
         usort($mergedArray, function ($a, $b) {
@@ -645,8 +580,8 @@ class ProfileController extends Controller
         });
 
         $mergedCollection = collect($mergedArray)->sortByDesc('created_at');
-        $perPage = 10; // specify the number of items per page
-        $currentPage = request()->get('page', 1); // get the current page from the request
+        $perPage = 10; 
+        $currentPage = request()->get('page', 1); 
         $paginatedData = array_slice($mergedArray,($currentPage - 1) * $perPage, $perPage);
         $transactionDetail = new \Illuminate\Pagination\LengthAwarePaginator(
             $paginatedData,
@@ -654,7 +589,6 @@ class ProfileController extends Controller
             $perPage,
             $currentPage
         );
-        // print_r($transactionDetail);exit;
         $transactionDetail->setPath(url()->current());
         return view('personal.profile.payment_history', compact('transactionDetail','business_id')); 
     }

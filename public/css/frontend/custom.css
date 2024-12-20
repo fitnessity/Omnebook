@@ -218,7 +218,7 @@ span.status::after {
 	overflow: hidden;
 	border: 3px solid #ddd;
 	vertical-align: middle;
-	background-color: #ea1515;
+	background-color: #98002e;
 }
 .company-img-text p
 {
@@ -245,11 +245,12 @@ span.status::after {
     overflow: hidden;
     border: 3px solid #ddd;
     vertical-align: middle;
-    background-color: #ea1515;
+    background-color: #98002e;
     margin-top: 5px;
+	color: #fff;
 }
 .img-controller{
-	margin: 10px 14px 10px 14px;
+	margin: 9px 15px 9px 15px;
 }
 
 

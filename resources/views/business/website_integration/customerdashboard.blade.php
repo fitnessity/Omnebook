@@ -143,7 +143,7 @@
 								@endif
 							</div>
 							<div class="page-heading">
-								<label>{{$business->public_company_name}}</label>
+								<h1>{{$business->public_company_name}}</h1>
 							</div>
 						</div>
 					</div>				

@@ -13,7 +13,7 @@
                             <div class="row mb-3">
                                 <div class="col-12">
                                     <div class="page-heading">
-                                        <label>Add/Edit Services and Prices for "{{$serviceType == 'individual' ? "Personal Training" : ucfirst($serviceType)}}"</label>
+                                        <h1>Add/Edit Services and Prices for "{{$serviceType == 'individual' ? "Personal Training" : ucfirst($serviceType)}}"</h1>
                                     </div>
                                 </div>
                             </div>
@@ -160,7 +160,7 @@
                                                                                                                             </div>
                                                                                                                         </div>
                                                                                                                     </div>
-                                                                                                                    <img src="{{Storage::Url(@$service->cover_photo)}}" loading="lazy">
+                                                                                                                    <img src="{{Storage::Url(@$service->cover_photo)}}" loading="lazy" alt="Omnebook">
                                                                                                                 </div>
                                                                                                             @endif
                                                                                                         <!-- {{-- </div> --}} -->
@@ -262,7 +262,7 @@
                                                                                                                         </div>
                                                                                                                     </div>
                                                                                                                 </div>
-                                                                                                                <img src="{{Storage::Url($img)}}" loading="lazy">
+                                                                                                                <img src="{{Storage::Url($img)}}" loading="lazy" alt="Omnebook">
                                                                                                             </div>
                                                                                                             @endif
                                                                                                         @endforeach
@@ -899,7 +899,7 @@
                                                                                                                                 <label for="dayplanpic{{$i}}" id="label">
                                                                                                                                 @php    $old_pic = @$dplanimg[$i] != ''  ?  @$dplanimg[$i] : ''; 
                                                                                                                                         $day_pic = @$dplanimg[$i] != ''  ?  Storage::Url(@$dplanimg[$i]) : url('/public/images/Upload-Icon.png'); @endphp
-                                                                                                                                <img src="{{$day_pic}}" class="pro_card_img blah planblah{{$i}}" id="showimg" loading="lazy">
+                                                                                                                                <img src="{{$day_pic}}" class="pro_card_img blah planblah{{$i}}" id="showimg" loading="lazy" alt="Omnebook">
                                                                                                                                 <span id="span_{{$i}}">Upload your file here</span>
                                                                                                                                     <input name="dayplanpic_{{$i}}" id="dayplanpic{{$i}}" onchange="planImg(this,{{$i}});" type="file" class="uploadFile img" value="Upload Photo" >
                                                                                                                                 </label>
@@ -941,7 +941,7 @@
                                                                                                                     <div class="col-lg-4 col-md-4 col-sm-3">
                                                                                                                         <div class="photo-upload">
                                                                                                                             <label for="dayplanpic0" id="label">
-                                                                                                                                <img src="{{url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah planblah0" id="showimg" loading="lazy">
+                                                                                                                                <img src="{{url('/public/images/Upload-Icon.png')}}" class="pro_card_img blah planblah0" id="showimg" loading="lazy" alt="Omnebook">
                                                                                                                                 <span id="span_0">Upload your file here</span>
                                                                                                                                 <input type="file" name="dayplanpic_0" id="dayplanpic0" class="uploadFile img" value="Upload Photo" onchange="planImg(this,0);">
                                                                                                                             </label>
@@ -1251,7 +1251,7 @@
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <div class="add-category">
-                                                                    <a class="add-category-btn" onclick="addFaq()">Add Another Faq</a>
+                                                                    <a class="btn btn-red" onclick="addFaq()">Add Another Faq</a>
                                                                     <p>This is a new faq section</p>
                                                                 </div>
                                                             </div>

@@ -16,7 +16,7 @@
                         <div class="row mb-3">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="page-heading">
-                                    <label>Check-in Settings</label>
+                                    <h1>Check-in Settings</h1>
                                 </div>
                             </div>
                             
@@ -445,7 +445,7 @@
                                                                 <div class="row">
                                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
                                                                         <div class="page-heading text-right">
-                                                                            <label class="mb-15"><a class="btn btn-red" href="">Exit</a></label>
+                                                                            <h1 class="mb-15"><a class="btn btn-red" href="">Exit</a></h1>
                                                                         </div>
                                                                         
                                                                     </div>
@@ -465,8 +465,8 @@
                                                                     </div>
                                                                     <div class="col-lg-6 col-12">
                                                                         <div class="welcome-title-preview d-grid text-center">
-                                                                            <label>Welcome To</label>
-                                                                            <span>Fitness Pvt. Ltd. </span>
+                                                                            <h1>Welcome To</h1>
+                                                                            <span>Omnebook Pvt. Ltd. </span>
                                                                         </div>
                                                                         <div class="text-center">
                                                                             <a href="http://dev.fitnessity.co/quick-checkin" class="btn btn-red fs-15 mb-15"><i class="ri-add-line align-bottom me-1"></i>Check In</a>
@@ -507,7 +507,7 @@
                                                             </div>  
                                                             <div class="welcome-provider-preview text-center">
                                                                 <h3>Welcome to</h3>
-                                                                <span>Fitness Pvt. Ltd.</span>
+                                                                <span>Omnebook Pvt. Ltd.</span>
                                                                 <p>Please select a check-in option to the right. </p>
                                                             </div>  
                                                             <div class="self-check-arrow">
@@ -519,7 +519,7 @@
                                                         <div class=" bg-white">
                                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                                 <div class="page-heading text-right">
-                                                                    <label class="mr-10"><a class="btn btn-red" href="">Exit</a></label>
+                                                                    <h1 class="mr-10"><a class="btn btn-red" href="">Exit</a></h1>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -565,13 +565,13 @@
                                                             <div class="row y-middle">
                                                                 <div class="col-lg-6 col-md-6">
                                                                     <div class="checking-popup">
-                                                                        <img src="https://fitnessity-production.s3.amazonaws.com/checkin/d839c659-2b85-4f57-9917-1209cf2c0d30.jpg" loading="lazy">
+                                                                        <img src="https://fitnessity-production.s3.amazonaws.com/checkin/d839c659-2b85-4f57-9917-1209cf2c0d30.jpg" alt="Omnebook" loading="lazy">
                                                                     </div>                                                                                                          
                                                                 </div>
                                                                 <div class="col-lg-6 col-md-6">
                                                                     <div class="text-center mb-mv-25">
                                                                         <div class="tick-set">
-                                                                            <img src="http://dev.fitnessity.co/dashboard-design/images/cross.png" loading="lazy">
+                                                                            <img src="http://dev.fitnessity.co/dashboard-design/images/cross.png" alt="Omnebook" loading="lazy">
                                                                         </div>
                                                                         <div class="mb-15">
                                                                             <label class="fs-24 mb-0"> Sorry, I can't check you in yet.</label>
@@ -640,7 +640,7 @@
                                         <div class="col-lg-6 col-12">
                                             <div class="self-welcome-logo">
                                                 <a href="#" class="d-inline-block auth-logo">
-                                                    <img src="http://dev.fitnessity.co/images/fitnessity_logo1_black.png" alt="logo" loading="lazy">
+                                                    <img src="http://dev.fitnessity.co/images/omnebook.png" alt="logo" loading="lazy">
                                                 </a>
                                             </div>
                                         </div>
@@ -653,7 +653,7 @@
                                         <div class="col-lg-6 col-12">
                                             <div class="welcome-title-preview d-grid text-center">
                                                 <label>Welcome To</label>
-                                                <span>Fitness Pvt. Ltd. </span>
+                                                <span>Omnebook Pvt. Ltd. </span>
                                             </div>
                                             <div class="text-center">
                                                 <!-- {{-- <a href="http://dev.fitnessity.co/quick-checkin" class="btn fs-15 mb-15" id="checkInButton" style="background-color: #ea1515; border: 1px solid #ea1515; color: #fff; border-radius: 10px;"><i class="ri-add-line align-bottom me-1"></i>Check In</a> --}} -->
@@ -705,12 +705,12 @@
                     <div class="card-check-in-preview p-relative h-100">
                                 <div class="pb-60 text-center">
                                     <a href="#" class="register-check">
-                                        <img src="http://dev.fitnessity.co//public/images/fitnessity_logo1_black.png" alt="logo" loading="lazy">
+                                        <img src="http://dev.fitnessity.co//public/images/omnebook.png" alt="logo" loading="lazy"> 
                                     </a>
                                 </div>  
                                 <div class="welcome-provider-preview text-center">
                                     <h3>Welcome to</h3>
-                                    <span>Fitness Pvt. Ltd.</span>
+                                    <span>Omnebook Pvt. Ltd.</span>
                                     <p>Please select a check-in option to the right. </p>
                                 </div>  
                                 <div class="self-check-arrow">
@@ -722,10 +722,10 @@
                             <div class=" bg-white">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="page-heading text-right">
-                                        <label class="mr-10">
+                                        <h1 class="mr-10">
                                             {{-- <a class="btn" style="background-color: #ea1515; border: 1px solid #ea1515; color: #fff; border-radius: 10px;" href="http://dev.fitnessity.co/checkin/check-out?type=1" id="passcodeExitButton">Exit</a> --}}
                                             <a class="btn" style="background-color: {{ $color2 ?: '#ea1515' }}; border: 1px solid {{ $color2 ?: '#ea1515' }}; color: #fff; border-radius: 10px;" href="http://dev.fitnessity.co/checkin/check-out?type=1" id="passcodeExitButton">Exit</a>
-                                        </label>
+                                        </h1>
                                     </div>
                                 </div>
                             </div>
@@ -778,9 +778,9 @@
                                     <div class="col-lg-6 col-md-6">
                                         <div class="checking-popup">           
                                         @if(@$data->alerts_photo)
-                                            <img src="{{Storage::URL($data->alerts_photo)}}" loading="lazy"/>
+                                            <img src="{{Storage::URL($data->alerts_photo)}}" alt="Omnebook" loading="lazy"/>
                                         @else                       
-                                        <img src="https://fitnessity-production.s3.amazonaws.com/checkin/d839c659-2b85-4f57-9917-1209cf2c0d30.jpg" loading="lazy">
+                                        <img src="https://fitnessity-production.s3.amazonaws.com/checkin/d839c659-2b85-4f57-9917-1209cf2c0d30.jpg" alt="Omnebook" loading="lazy">
                                         @endif
                                         <!-- <img src="https://fitnessity-production.s3.amazonaws.com/checkin/d839c659-2b85-4f57-9917-1209cf2c0d30.jpg"> -->
                                     </div>																											
@@ -788,7 +788,7 @@
                                     <div class="col-lg-6 col-md-6">
                                         <div class="text-center mb-mv-25">
                                             <div class="tick-set">
-                                                <img src="http://dev.fitnessity.co/dashboard-design/images/cross.png" loading="lazy">
+                                                <img src="http://dev.fitnessity.co/dashboard-design/images/cross.png" alt="Omnebook" loading="lazy">
                                             </div>
                                             <div class="mb-15">
                                                     <label class="fs-24 mb-0"> Sorry, I can't check you in yet.</label>

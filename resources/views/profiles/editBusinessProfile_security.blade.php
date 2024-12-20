@@ -7,7 +7,7 @@
   <meta name="description" content="Looking for a place to grow your career. There are many good reasons to consider the great insurance jobs available through Legends United.">
   <meta name="keywords" content="Great Insurance Jobs">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title> Fitnessity </title>
+  <title> Omnebook </title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
 
   <link rel="preconnect" href="https://fonts.gstatic.com">

@@ -23,15 +23,6 @@ use Maatwebsite\Excel\HeadingRowImport;
 
 class TrainerController extends Controller
 {   
-    /*protected $plan;
-    public $error = '';
-
-    public function __construct(PlanRepository $plan)
-    {
-        $this->middleware('admin');
-        $this->plan = $plan;    
-    }*/
-
     public function index()
     {
         $trainers = Trainer::get();
@@ -148,7 +139,6 @@ class TrainerController extends Controller
          
        $input = $request->all();
 
-        /* File Upload Start */
         $image = '';
         if($request->hasFile('image')) {
 
@@ -168,9 +158,6 @@ class TrainerController extends Controller
                 return redirect('/admin/trainer/edit/'.$input['id'])->with('status', $image_upload);
             }    
         }
-        /* File Upload End */
-       
-       // update:where()($input['id'],$input);
        
         $trainer = DB::table('trainer')->where('id', $input['id'])->update($input);
 

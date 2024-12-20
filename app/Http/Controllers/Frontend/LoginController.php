@@ -33,9 +33,7 @@ class LoginController extends Controller {
     }
 	
     public function postLogin(Request $request) {
-        // dd('22');
         $postArr = $request->input();
-    	//dd($postArr);
     	$rules = [
             'email' => 'required',
             'password' => 'required',
@@ -51,7 +49,6 @@ class LoginController extends Controller {
                 'msg' => $errMsg,
             );
             return view('home.login',compact('response'));
-            /*   return Response::json($response);*/
         } else {      
             $currentDate = Carbon::now();
             $resultDate = $currentDate->subYears(18)->format('Y-m-d');      
@@ -113,7 +110,6 @@ class LoginController extends Controller {
                     );
                     return view('home.login',compact('response'));
                 }
-               /* return Response::json($response);*/
             } else {
                 $response = array(
                     'type' => 'not_exists',

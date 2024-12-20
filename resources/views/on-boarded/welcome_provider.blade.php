@@ -13,9 +13,9 @@
 						<div class="row y-middle">
 							<div class="col-5">
 								<div class="text-center welcome-text mb-35">
-									<label>Welcome to</label>
+									<h1>Welcome to</h1>
 									<div class="welcome-logo mb-15">
-										<img src="{{url('dashboard-design/images/fitnessity-for-business.png')}}">
+										<img src="{{url('dashboard-design/images/fitnessity-for-business.png')}}" alt="Omnebook" loading="lazy">
 									</div>
 								</div>
 								<div class="onboared text-center">
@@ -32,7 +32,7 @@
 									</div>
 									<div class="col-4">
 										<div class="onboard-img mb-15">
-											<img src="{{url('dashboard-design/images/onboard-2.png')}}" alt="">
+											<img src="{{url('dashboard-design/images/onboard-2.png')}}" alt="Omnebook" loading="lazy">
 										</div>
 									</div>
 								</div>
@@ -46,7 +46,7 @@
 									</div>
 									<div class="col-4">
 										<div class="onboard-img mb-15">
-											<img src="{{url('dashboard-design/images/claim-1.png')}}" alt="">
+											<img src="{{url('dashboard-design/images/claim-1.png')}}" alt="Omnebook" loading="lazy">
 										</div>
 									</div>
 								</div>
@@ -60,7 +60,7 @@
 									</div>
 									<div class="col-4">
 										<div class="onboard-img mb-15">
-											<img src="{{url('dashboard-design/images/onboard-1.png')}}" alt="">
+											<img src="{{url('dashboard-design/images/onboard-1.png')}}" alt="Omnebook" loading="lazy">
 										</div>
 									</div>
 								</div>
@@ -74,7 +74,7 @@
 									</div>
 									<div class="col-4">
 										<div class="onboard-img mb-15">
-											<img src="{{url('dashboard-design/images/onboard-3.png')}}" alt="">
+											<img src="{{url('dashboard-design/images/onboard-3.png')}}" alt="Omnebook" loading="lazy">
 										</div>
 									</div>
 								</div>
@@ -88,7 +88,7 @@
 									</div>
 									<div class="col-4">
 										<div class="onboard-img mb-15">
-											<img src="{{url('dashboard-design/images/onboard-4.png')}}" alt="">
+											<img src="{{url('dashboard-design/images/onboard-4.png')}}" alt="Omnebook" loading="lazy">
 										</div>
 									</div>
 								</div>
@@ -102,7 +102,7 @@
 									</div>
 									<div class="col-4">
 										<div class="onboard-img mb-15">
-											<img src="{{url('dashboard-design/images/start.png')}}" alt="">
+											<img src="{{url('dashboard-design/images/start.png')}}" alt="Omnebook" loading="lazy">
 										</div>
 									</div>
 								</div>

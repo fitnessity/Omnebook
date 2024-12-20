@@ -11,7 +11,7 @@
 				<div class="row mb-3">
 					<div class="col-12">
 						<div class="page-heading">
-							<label>Documents & Contracts </label>
+							<h1>Documents & Contracts </h1>
 						</div>
 					</div>
 				</div><!--end row-->

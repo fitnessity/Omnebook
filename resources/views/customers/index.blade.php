@@ -22,7 +22,7 @@
 		                    <div class="row mb-3">
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<div class="page-heading">
-										<label>Manage Customers</label>
+										<h1>Manage Customers</h1>
 									</div>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -81,42 +81,42 @@
 																<ul class="nav nav-tabs mb-3" role="tablist">
 																	<li class="nav-item">
 																		<a class="nav-link @if(request()->customer_type == '') active @endif" href="{{ route('business_customer_index', ['business_id' => request()->business_id]) }}" aria-selected="false" id="totalMembers">
-																			Total Members (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." class="clientloading">)
+																			Total Members (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." loading="lazy" class="clientloading">)
 																		</a>
 																	</li>
 																	<li class="nav-item">
 																		<a class="nav-link @if(request()->customer_type == 'active') active @endif" href="{{ route('business_customer_index', ['business_id' => request()->business_id, 'customer_type' => 'active']) }}"  aria-selected="false" id="activeMembers">
-																			Active Members (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." class="clientloading">)
+																			Active Members (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." loading="lazy" class="clientloading">)
 																		</a>
 																	</li>
 																	<li class="nav-item">
 																		<a class="nav-link @if(request()->customer_type == 'in-active') active @endif" href="{{ route('business_customer_index', ['business_id' => request()->business_id, 'customer_type' => 'in-active']) }}"  aria-selected="false" id="inactiveMembers">
-																			Inactive Members (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." class="clientloading">)
+																			Inactive Members (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." loading="lazy" class="clientloading">)
 																		</a>
 																	</li>
 																	<li class="nav-item">
 																		<a class="nav-link @if(request()->customer_type == 'prospect') active @endif" href="{{ route('business_customer_index', ['business_id' => request()->business_id, 'customer_type' => 'prospect']) }}"  aria-selected="false" id="prospectMembers">
-																			Prospects (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." class="clientloading">)
+																			Prospects (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." loading="lazy" class="clientloading">)
 																		</a>
 																	</li>
 																	<li class="nav-item">
 																		<a class="nav-link @if(request()->customer_type == 'suspended') active @endif"  href="{{ route('business_customer_index', ['business_id' => request()->business_id, 'customer_type' => 'suspended']) }}" role="tab" aria-selected="false" id="suspendedMembers">
-																			Suspended (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." class="clientloading">)
+																			Suspended (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." loading="lazy" class="clientloading">)
 																		</a>
 																	</li>
 																	<li class="nav-item">
 																		<a class="nav-link @if(request()->customer_type == 'owed') active @endif"  href="{{ route('business_customer_index', ['business_id' => request()->business_id, 'customer_type' => 'owed']) }}" aria-selected="false" id="owedMembers">
-																			Owed (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." class="clientloading">)
+																			Owed (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." loading="lazy" class="clientloading">)
 																		</a>
 																	</li>
 																	<li class="nav-item">
 																		<a class="nav-link @if(request()->customer_type == 'at-risk') active @endif"  href="{{ route('business_customer_index', ['business_id' => request()->business_id, 'customer_type' => 'at-risk']) }}" aria-selected="false" id="atRiskMembers">
-																			At-Risk (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." class="clientloading">)
+																			At-Risk (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." loading="lazy" class="clientloading">)
 																		</a>
 																	</li>
 																	<li class="nav-item">
 																		<a class="nav-link @if(request()->customer_type == 'big-spenders') active @endif"  href="{{ route('business_customer_index', ['business_id' => request()->business_id, 'customer_type' => 'big-spenders']) }}" aria-selected="false" id="spenderMembers">
-																			Big Spenders (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." class="clientloading">)
+																			Big Spenders (<img src="{{url('/public/images/processing.gif')}}" alt="Processing..." loading="lazy" class="clientloading">)
 																		</a>
 																	</li>
 																</ul>
@@ -173,7 +173,7 @@
 																						                        	<div class="mini-stats-wid d-flex align-items-center mt-3">
 																							                        	<div class="flex-shrink-0 avatar-sm">
 																															@if($customer->profile_pic)
-																																<img class='mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4' src="{{Storage::Url($customer->profile_pic)}}" width=60 height=60 alt=""> 
+																																<img class='mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4' src="{{Storage::Url($customer->profile_pic)}}" width=60 height=60 alt="Omnebook" loading="lazy"> 
 																															@else
 																																<span class="mini-stat-icon avatar-title rounded-circle text-success bg-soft-red fs-4 uppercase">{{$customer->first_letter}}</span>
 																															@endif
@@ -252,7 +252,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="loading-container text-center loading-width d-none">
-							  	<img src="{{'/public/images/processing.gif'}}" alt="Processing..." />
+							  	<img src="{{'/public/images/processing.gif'}}" alt="Processing..." loading="lazy"/>
 							</div>
 						</div>
 					</div>
@@ -281,7 +281,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="loading-container text-center loading-width d-none">
-							  	<img src="{{'/public/images/processing.gif'}}" alt="Processing..." />
+							  	<img src="{{'/public/images/processing.gif'}}" alt="Processing..." loading="lazy"/>
 							</div>
 						</div>
 					</div>
@@ -343,7 +343,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="loading-container text-center loading-width d-none">
-							  	<img src="{{'/public/images/processing.gif'}}" alt="Processing..." />
+							  	<img src="{{'/public/images/processing.gif'}}" alt="Processing..." loading="lazy"/>
 							</div>
 						</div>
 					</div>

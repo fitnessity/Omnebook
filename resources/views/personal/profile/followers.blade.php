@@ -13,7 +13,7 @@
             <div class="row mb-3">
 					<div class="col-12">
 						<div class="page-heading">
-							<label>Followers</label>
+							<h1>Followers</h1>
 						</div>
 					</div>
             </div><!--end row-->

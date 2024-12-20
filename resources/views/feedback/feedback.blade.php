@@ -11,7 +11,7 @@
       <!-- <div id="signup_normal"> -->
 
         <div class="pop-title employe-title">
-        	<h3>FITNESSITY FEEDBACK</h3>
+        	<h3>OMNEBOOK FEEDBACK</h3>
         </div>
 
         <button type="button" class="close modal-close" data-dismiss="modal">
@@ -35,7 +35,7 @@
                     <span>ratings</span>
                     <div id="stars" class="starrr"></div>
                   </div>                  
-                  <textarea name="comment" id="comment" placeholder="Say something About Fitnessity"></textarea>             
+                  <textarea name="comment" id="comment" placeholder="Say something About Omnebook"></textarea>             
                   <textarea name="suggestion" id="suggestion" placeholder="Any suggestions for us ?"></textarea>
                   @if (Auth::guest())
                     <input type="text" name="name" id="name" size="255" maxlength="255" placeholder="Name">

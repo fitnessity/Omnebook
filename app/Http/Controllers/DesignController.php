@@ -42,10 +42,10 @@ class DesignController extends Controller {
         return view('design.manage_booking'); //d
     }
     public function schedule_create(Request $request){
-        return view('design.schedule_create'); //d
+        return view('design.schedule_create'); 
     }
     public function manage_company(Request $request){
-        return view('design.manage_company'); //d
+        return view('design.manage_company'); 
     }
     public function company_setup(Request $request){
         return view('design.company_setup');
@@ -380,5 +380,8 @@ class DesignController extends Controller {
     }
     public function marketplace(Request $request){
         return view('design.marketplace');
+    }
+    public function page_not_found(Request $request){
+        return view('design.page_not_found');
     }
 }

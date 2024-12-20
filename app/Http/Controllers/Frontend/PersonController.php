@@ -31,14 +31,6 @@ use Maatwebsite\Excel\HeadingRowImport;
 
 class PersonController extends Controller
 {   
-    /*protected $plan;
-    public $error = '';
-
-    public function __construct(PlanRepository $plan)
-    {
-        $this->middleware('admin');
-        $this->plan = $plan;    
-    }*/
 
     public function index()
     {
@@ -178,7 +170,6 @@ class PersonController extends Controller
          
        $input = $request->all();
 
-        /* File Upload Start */
         $image = '';
         if($request->hasFile('image')) {
 
@@ -198,9 +189,6 @@ class PersonController extends Controller
                 return redirect('/admin/person/edit/'.$input['id'])->with('status', $image_upload);
             }    
         }
-        /* File Upload End */
-       
-       // update:where()($input['id'],$input);
        
         $person = DB::table('person')->where('id', $input['id'])->update($input);
 

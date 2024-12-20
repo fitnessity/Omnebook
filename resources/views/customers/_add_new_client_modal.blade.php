@@ -44,7 +44,7 @@
 										<div class="col-lg-8 col-md-12 col-9">
 											<div class="terms-wrap wrap-sp">
 												<input type="checkbox" name="b_trm1" id="b_trm1" class="form-check-input" value="1">
-												<label for="b_trm1" class="modalregister-private">I agree to Fitnessity <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
+												<label for="b_trm1" class="modalregister-private">I agree to Omnebook <a href="/terms-condition" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a></label>
 											</div>
 											<div id="termserror" class="error"></div><br>
 											<button type="button" style="margin-bottom: 10px;" class="signup-new btn-red" id="register_submit" onclick="$('#frmregister').submit();">Continue</button><br>
@@ -343,8 +343,8 @@
 					<div class="col-lg-6 col-md-6 col-sm-6 space-remover manage-customer-gray-bg">
 						<div class="manage-customer-search search-info">
 							<h3>Onboard A New Client Fast</h3>
-							<h4>Search for your clients on Fitnessity</h4>
-							<p>“Your client could already have an account on Fitnessity.<br>If so, get access and sync their information fast.”</p>
+							<h4>Search for your clients on Omnebook</h4>
+							<p>“Your client could already have an account on Omnebook.<br>If so, get access and sync their information fast.”</p>
 						</div>
 						<div class="row check-txt-center claimyour-business">
 							<div class="col-md-10 col-xs-10 col-8 frm-claim">
@@ -420,7 +420,7 @@
                 	$("#termserror").html('');
                     $('#register_submit').prop('disabled', true).css('background','#999999');
                     $('#systemMessage').addClass('font-red');
-                    $("#systemMessage").html('Please wait while we register you with Fitnessity.').addClass('alert-class alert-danger');
+                    $("#systemMessage").html('Please wait while we register you with Omnebook.').addClass('alert-class alert-danger');
                 },
                 complete: function () {
                 
@@ -470,7 +470,7 @@
 	                },                
 	                beforeSend: function () {
 	                    $('.step3_next').prop('disabled', true).css('background','#999999');
-	                    $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
+	                    $('#systemMessage').html('Please wait while we processed you with Omnebook.');
 	                },
 	                complete: function () {
 	                    $('.step3_next').prop('disabled', false).css('background','#ed1b24');
@@ -526,7 +526,7 @@
 	            },
 	            beforeSend: function () {
 	                $('.step4_next').prop('disabled', true).css('background','#999999');
-	                $('#systemMessage').html('Please wait while we processed you with Fitnessity.');
+	                $('#systemMessage').html('Please wait while we processed you with Omnebook.');
 	            },
 	            complete: function () {
 	                $('.step4_next').prop('disabled', false).css('background','#ed1b24');

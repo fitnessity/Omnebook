@@ -237,9 +237,6 @@ class SchedulerController extends Controller
                $customer = Customer::where('id', $request->userid)->first();
                $birthdate = Carbon::parse($customer->birthdate);
                $age = $birthdate->age;
-               // \DB::enableQueryLog(); // Enable query log
-               // // $output = '<option value="">Select Category</option>';
-               // dd($age);
                if ($age >= 3 && $age <= 17) {            
                $pricelist = BusinessPriceDetails::where('serviceid', $request->sid)
                     ->where(function ($query) {
@@ -256,9 +253,6 @@ class SchedulerController extends Controller
                     ->get();
 
                     if (!$pricelist->isEmpty()) {
-                    //      $output .= '<option value="">No Category added</option>';
-                    // } else 
-                    //      {
                               $output = '<option value="">Select Category</option>';
                               $addedTitles = [];
                               foreach ($pricelist as $price) {
@@ -272,7 +266,6 @@ class SchedulerController extends Controller
                                              $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
                                              $addedTitles[] = $cl->category_title;
                                          }
-                                        // $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
                                    }
                               }
                          }
@@ -295,8 +288,6 @@ class SchedulerController extends Controller
                     })
                     ->get();
                     if (!$pricelist->isEmpty()) {
-                    //      $output .= '<option value="">No Category added</option>';
-                    // } else {
                          $output = '<option value="">Select Category</option>';
                          $addedTitles = [];
 
@@ -313,7 +304,6 @@ class SchedulerController extends Controller
                                         $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
                                         $addedTitles[] = $cl->category_title;
                                     }
-                                   // $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
                               }
                          }
                     }
@@ -341,8 +331,6 @@ class SchedulerController extends Controller
 
                     if (!$pricelist->isEmpty())
                      {
-                    //      $output .= '<option value="">No Category added</option>';
-                    //  } else {
                          $output = '<option value="">Select Category</option>';
                          $addedTitles = [];
 
@@ -359,7 +347,6 @@ class SchedulerController extends Controller
                                    $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
                                    $addedTitles[] = $cl->category_title;
                                }
-                              //    $output .= '<option value="' . $cl->id . '">' . $cl->category_title . '</option>';
                              }
                              
                          }
@@ -369,9 +356,7 @@ class SchedulerController extends Controller
                      }
                }
 
-           
-               // \DB::enableQueryLog(); // Enable query log
-             
+                        
                $excludedCategoryIds  = BusinessPriceDetails::where('serviceid', $request->sid)->whereNull('type_price')
                ->pluck('category_id')->toArray();
                $catelist = BusinessPriceDetailsAges::where('serviceid', $request->sid)
@@ -386,10 +371,6 @@ class SchedulerController extends Controller
                foreach ($catelist as $cat) {
                    $output .= '<option value="' . $cat->id . '">' . $cat->category_title . '</option>';
                }
-               
-               // dd(\DB::getQueryLog()); // Show results of log
-              
-               //  dd($excludedCategoryIds);
                       
              }
              
@@ -411,18 +392,12 @@ class SchedulerController extends Controller
                    }
                }
                
-               // $output = '<option value="">Select Price Title</option>';
-               // foreach($pricelist as $pl){
-               //      $output .= '<option value="'.$pl->id.'">'.$pl->price_title.'</option>';
-               // }
-               
                $addOnServices = $catedata  != '' ?  $catedata->AddOnService: [];
                $addOnData = View::make('business.orders.add_on_service')->with(['addOnServices' =>$addOnServices,'ajax'=>'','idsArray'=>[] ,'qtysArray'=>[]])->render();
                
                $html .= $catedata->dues_tax.'^^'.$catedata->sales_tax.'^!^'.$addOnData;
                
           }else if($request->chk == 'priceopt'){
-               // dd($request->all());
                $customer = Customer::where('id', $request->userid)->first();
                $birthdate = Carbon::parse($customer->birthdate);
                $age = $birthdate->age;
@@ -552,14 +527,11 @@ class SchedulerController extends Controller
                $age = Carbon::parse($date)->age;
                $output .=  $age < 18 ? $username .' ('.$age .' yrs) '.$relation .' (Paid For by '.$data1[1].')': $username .' ('.$age .' yrs)';   
           }    
-          // dd($output);
-
           return ($html != '' ? $output.'~~'.$html : $output);
          
      }
 
      public function booking_activity_cancel(Request $request){
-          //print_r($request->all());exit;
           $stripeid = '';
           $name  = '';
           $successmsg  = '';
@@ -618,7 +590,6 @@ class SchedulerController extends Controller
           }else{
                BookingActivityCancel::create($data);
           }
-          /*  print_r($request->all());exit;*/
           return redirect('/scheduler-checkin/'.$request->pageid)->with('success', $successmsg); 
      }
 
@@ -631,7 +602,6 @@ class SchedulerController extends Controller
           }else{
                $cardInfo = $booking_data->user->get_stripe_card_info();
           }
-          //print_r($cardInfo);exit;
           $data = BookingActivityCancel::where(['booking_id'=> $request->oid,'order_detail_id'=> $request->order_detail_id])->first();
           $cancel_charge_amt = '';
           $html = '';

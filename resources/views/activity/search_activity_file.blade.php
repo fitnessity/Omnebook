@@ -11,8 +11,8 @@
 					<div class="col-lg-auto">
 						<div class="p-relative like-heart mt-25">
 							<div class="other-activity-imgs">
-								{{-- <img src="https://fitnessity-production.s3.amazonaws.com/activity/5gmokEA2e4XKU4TSPDErZfFKJyYImLAVbVwXQHlk.jpg" alt="Fitnessity"> --}}
-								<img src="{{$sService->first_profile_pic()}}" alt="Fitnessity">
+								{{-- <img src="https://fitnessity-production.s3.amazonaws.com/activity/5gmokEA2e4XKU4TSPDErZfFKJyYImLAVbVwXQHlk.jpg" alt="Omnebook"> --}}
+								<img src="{{$sService->first_profile_pic()}}" alt="Omnebook">
 							</div>
 							<div class="wegites-like">
 									@if(Auth::check())
@@ -67,7 +67,7 @@
 											<p>{{ $sService->formal_service_types() }} | {{ $sService->sport_activity }}</p>
 											<div class="mt-15 mb-15">
 												{{-- <a class="showall-btn" href="http://dev.fitnessity.co/activity-details/160">Book Now</a> --}}
-												<a class="showall-btn" href="{{route('activities_show',['serviceid'=>  $sService->id])}}">Book Now</a>
+												<a class="btn btn-red" href="{{route('activities_show',['serviceid'=>  $sService->id])}}">Book Now</a>
 											</div>
 											{{-- @if($sService->min_price() != '')
 											<div>

@@ -68,7 +68,6 @@ class PostController extends Controller
         $offset = $limit * $page;
         $profile_posts = ProfilePost::skip($offset)->take($limit)->orderBy('id','desc')->get();
         $html = '';
-        //$loggedinUser = Auth::user();
         foreach ($profile_posts as $data) {
             $userData = User::where('id',$data->user_id)->first();
             $postreport = PostReport::where('post_id',$data->id)->first();

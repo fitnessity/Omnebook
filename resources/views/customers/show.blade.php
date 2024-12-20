@@ -36,7 +36,7 @@
 	                        <div class="row mb-3">
 								<div class="col-12">
 									<div class="page-heading">
-										<label>Manage Customers</label>
+										<h1>Manage Customers</h1>
 									</div>
 								</div>
 							</div>
@@ -82,7 +82,7 @@
 																						<div class="col-12 col-md-3 col-lg-2 col-sm-4 customer-details-img">
 																							<div class="avatar-lg">
 																								@if(@$customerdata->profile_pic)
-																									<img src="{{Storage::Url($customerdata->profile_pic)}}" class="customers-name rounded-circle" alt="">
+																									<img src="{{Storage::Url($customerdata->profile_pic)}}" class="customers-name rounded-circle" alt="Omnebook" loading="lazy">
 																								@else
 																									<div class="customers-name rounded-circle"><p>{{@$customerdata->fname[0]}}</p></div>
 																								@endif
@@ -482,7 +482,7 @@
 																							<div class="col-lg-3 col-sm-6">
 																								<div class="cards-block dispalycard" style="cursor: pointer" data-name="{{$card->name}}" data-cvv="{{$card->last4}}" data-cnumber="{{$card->exp_month}}" data-month="{{$card->exp_month}}" data-year="{{$card->exp_year}}" data-type="{{strtolower($card->brand)}}" data-id="{{$card->id}}">
 																									<div class="cards-content" style="background-image: url({{ url('public/img/visa-card-bg.jpg')}});">
-																										<img src="{{ url('/public/images/creditcard/'.strtolower($card->brand).'.jpg') }}" alt="">
+																										<img src="{{ url('/public/images/creditcard/'.strtolower($card->brand).'.jpg') }}" alt="Omnebook" loading="lazy">
 																										<span></span>
 																										<p>{{ucfirst(strtolower($card->brand))}}</p>
 																										<span>
@@ -971,7 +971,7 @@
 								<div class="userblock text-center">
 									<div class="login_link s">
 										@if($customerdata->profile_pic)
-                          			<img src="{{Storage::Url($customerdata->profile_pic)}}" class="customers-name rounded-circle" alt="">
+                          			<img src="{{Storage::Url($customerdata->profile_pic)}}" class="customers-name rounded-circle" alt="Omnebook" loading="lazy">
                           		@else
                           			<div class="company-list-text"><p>{{$customerdata->fname[0] ?? 'A'}}</p></div>
                           		@endif

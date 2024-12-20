@@ -33,7 +33,7 @@ class FamilyMemberController extends Controller
             });
             $uniqueFamilyDetails = collect([]);
             foreach ($groupedFamilyDetails as $name => $group) {
-                $uniqueFamilyDetails->push($group->first()); // Add the first item from each group
+                $uniqueFamilyDetails->push($group->first()); 
             }
             foreach ($uniqueFamilyDetails as $detail) {
                 $familyDetails [] = $detail;
@@ -89,7 +89,7 @@ class FamilyMemberController extends Controller
                 if($businessCustomer == ''){
                     $random_password = Str::random(8);
                     $password = Hash::make($random_password);
-                    $businessCustomer = createBusinessCustomer($user,$password,$c->id); //If a customer is not available for a specific business, we should first create a customer. This is necessary because the customer's ID is saved as a parent ID for a family member.
+                    $businessCustomer = createBusinessCustomer($user,$password,$c->id); 
                 }
     			$customer = Customer::where(['business_id'=> $businessCustomer->business_id, 
                                              'fname' =>  $request->fname, 'lname' => $request->lname,
@@ -160,9 +160,9 @@ class FamilyMemberController extends Controller
         if($request->has('id')){
             $user = Auth::user();
             if($type == 'user'){
-                $familyData = $user->user_family_details()->findOrFail($request->id); // this is for user who are not providers 
+                $familyData = $user->user_family_details()->findOrFail($request->id);  
             }else{
-                $familyData = Customer::where('id',$request->id)->first(); // this is for user who are providers
+                $familyData = Customer::where('id',$request->id)->first();
             }
         }
         return view('personal-profile.add-edit-family',compact('familyData' ,'type'));

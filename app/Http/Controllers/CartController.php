@@ -17,8 +17,7 @@ class CartController extends Controller {
     	$cardInfo = [];
 	    $user = Auth::user();
 	    $stripe = new \Stripe\StripeClient(config('constants.STRIPE_KEY'));
-		// dd(config('constants.STRIPE_KEY'));
-	    $cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id', $user->id)->get();
+		$cardInfo = StripePaymentMethod::where('user_type', 'User')->where('user_id', $user->id)->get();
 	    $cart = [];
 	    $cartdata  =  $request->session()->get('cart_item', []);
 	    if(!empty($cartdata) && count($cartdata) >0 ) {
@@ -130,10 +129,10 @@ class CartController extends Controller {
 			<input type="hidden" name="table_id" id="table_id" value="'.@$getdata->id.'">
 			<div class="row">
 				<div class="col-lg-2 col-sm-4 col-4">
-					<div class="activity-title-img"><img src="'.$request->img.'" alt="Avatar" class="avatar-cart"></div>
+					<div class="activity-title-img mb-15"><img src="'.$request->img.'" alt="Avatar" class="avatar-cart"></div>
 				</div>
 				<div class="col-lg-10 col-sm-8 col-8">
-					<div class="activity-details">
+					<div class="activity-details mb-15">
 						<h3 id="act_name">'.$request->name.'</h3>
 						<p class="fs-13">We will include all of the booking details in the email your guest will receive</p>
 					</div>
@@ -141,9 +140,9 @@ class CartController extends Controller {
 			</div>
 			<div class="row">
 				<div class="col-lg-6">
-					<div class="gift-comments">
+					<div class="gift-comments mb-15">
 						<label class="">Leave a comment for them</label>
-						<textarea class="form-control" rows="4" name="comment" id="comment" maxlength="150" required>'.@$getdata->comment.'</textarea>
+						<textarea class="form-control mb-10" rows="4" name="comment" id="comment" maxlength="150" required>'.@$getdata->comment.'</textarea>
 						<label>From:</label>
 						<input type="name" class="form-control myemail" name="gift_from" id="gift_from" autocomplete="off" placeholder="" size="30" maxlength="80" value="'.@$getdata->gift_from.'" required>
 					</div>
@@ -173,7 +172,7 @@ class CartController extends Controller {
 					</div>
 				</div>
 				<div class="col-lg-12 text-right">
-					<button class="post-btn-red fs-13" type="submit" id="submit">Save</button>
+					<button class="btn btn-red fs-13" type="submit" id="submit">Save</button>
 				</div>
 			</div>
     	</form>';

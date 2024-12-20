@@ -22,7 +22,7 @@
 								</div>
 								<div class="col-6">
 									<div class="page-heading">
-										<label>Fitnessity Subscriptions</label>
+										<h1>Omnebook Subscriptions</h1>
 									</div>
 								</div><!--end col-->
 							</div> <!--end row-->
@@ -108,7 +108,7 @@
 												</div>
 
 												<div>
-													<p class="fs-12">Older invoices may not be displayed. To retrieve these invoices, contact fitnessity customer support</p>
+													<p class="fs-12">Older invoices may not be displayed. To retrieve these invoices, contact Omnebook customer support</p>
 												</div>
 												<div class="col-xxl-12 col-lg-12 col-md-12 col-sm-12">
 													<div class="scheduler-table">

@@ -4,15 +4,15 @@
 
 <div class="profile-div">
   <div class="container">
-     <h3 style="color:red"><b>Welcome to Fitnessity for Business</b></h3></br>
+     <h3 style="color:red"><b>Welcome to Omnebook for Business</b></h3></br>
     <div class="row"> 
     	<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
         	<div class="signup-block">
             	<!-- <h1>Create Your Profile</h1> -->
 
                 <!-- <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum</p> -->
-                <p>Let’s get started with filling out your application and creating your business profile with Fitnessity.</p></br></br>
-                <p>We want to help you put your best profile together to attract clients that are looking for the services you offer. All business profiles must go through an approval process with the Fitnessity Quality Control Team. Not all applications are accepted, so take time to fill out your profile info in full and accurately. Our process usually takes 24 hours to complete.</p>
+                <p>Let’s get started with filling out your application and creating your business profile with Omnebook.</p></br></br>
+                <p>We want to help you put your best profile together to attract clients that are looking for the services you offer. All business profiles must go through an approval process with the Omnebook Quality Control Team. Not all applications are accepted, so take time to fill out your profile info in full and accurately. Our process usually takes 24 hours to complete.</p>
             	</br></br></br></br></br></br>
                 
                 <p><strong>Note: </strong> If you haven’t already, create a free personal profile to network with friends, share your experiences and get connected with more clients.</p>
@@ -272,7 +272,7 @@
 					                          </span> </label>
 					                          <input type="hidden" name="terms_condition" value="" id="terms_condition">
 					                          <!-- <input type="checkbox" name="terms_condition" class="chk chkgoal" id="terms_condition"> -->
-					                          I agree to <a href="javascript:void(0)" data-toggle="modal" data-target="#terms_modal">Fitnessity Terms and Conditions</a>
+					                          I agree to <a href="javascript:void(0)" data-toggle="modal" data-target="#terms_modal">Omnebook Terms and Conditions</a>
 					                        </div>
 					                        <div id="term_error_div" style="display:none;">
 					                        	<div class="error">

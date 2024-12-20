@@ -27,11 +27,9 @@ class EngageClientsController extends BusinessBaseController {
 	}
 
 	public function contactList(Request $request,$business_id){
-		//print_r($request->all());exit;
 		$customList = CustomList::where(['business_id'=>$business_id])->get();
 		$programList = BusinessServices::where(['cid'=>$business_id ,'is_active' => 1])->get();
 		$categoryList = BusinessPriceDetailsAges::where(['cid'=>$business_id])->get();
-		//$customers = Customer::where('business_id',$business_id)->get();
 
 		$type = $request->has('type') ? $request->type : 'all';
 		$typeId = $request->has('typeId') ? $request->typeId : '';
@@ -148,7 +146,6 @@ class EngageClientsController extends BusinessBaseController {
 			}else{
 				$customersIdAray = UserBookingDetail::where('business_id',$business_id)->whereDate('expired_at', '<', $currentDate)->whereNotNull('user_id')->pluck('user_id')->toArray();
 			}
-			//print_r($customersIdAray);exit;
 			$customers = Customer::whereIn('id',$customersIdAray)->get();
 		}
 		
@@ -157,7 +154,6 @@ class EngageClientsController extends BusinessBaseController {
 	}
 
 	public function storeClientCustomList(Request $request ,$business_id){
-		//print_r($request->all());exit;
 
 		$cIds = $request->input('cid');
 		$cidArray = explode(',', $cIds);

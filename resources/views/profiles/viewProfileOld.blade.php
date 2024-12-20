@@ -442,7 +442,7 @@ input,select {
 
             @if(in_array(Auth::user()->status, array("draft", "rejected")))
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6" style="float:right;">
-                <form action="/profile/sendProfileToReview/submit_review" method="POST" onclick="return confirm('Are you sure to submit your profile to Fitnessity Review Process ?')">
+                <form action="/profile/sendProfileToReview/submit_review" method="POST" onclick="return confirm('Are you sure to submit your profile to Omnebook Review Process ?')">
                   <input type="hidden" name="_token" value="{{ csrf_token() }}">
                   <button class="nw-view-profile">Submit Profile To Review</button>
                 </form>
@@ -1247,7 +1247,7 @@ var posturl = '/upgarde/createBusiness';
               headers: {'X-CSRF-TOKEN': $("#_token").val()},
               beforeSend: function () {
                 $('.b_submit').prop('disabled', true);
-                showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Fitnessity.');
+                showSystemMessages('#systemMessage', 'info', 'Please wait while we register you with Omnebook.');
               },
               complete: function () {
                 $('.b_submit').prop('disabled', false);

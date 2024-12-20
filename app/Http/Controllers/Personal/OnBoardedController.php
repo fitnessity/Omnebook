@@ -69,8 +69,6 @@ class OnBoardedController extends Controller {
     }
 
     public function store(Request $request){
-        //print_r($request->all());    exit;
-
         $userDt = User::find($request->id);
         $companyDt = CompanyInformation::find($request->cid);
 

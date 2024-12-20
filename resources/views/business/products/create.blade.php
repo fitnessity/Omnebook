@@ -16,7 +16,7 @@
                             <div class="row mb-3">
     							<div class="col-12">
     								<div class="page-heading">
-    									<label>Add/Edit Product</label>
+    									<h1>Add/Edit Product</h1>
     								</div>
     							</div>
                                 <!--end col-->
@@ -68,7 +68,7 @@
                                                             </div>
                                                             <div class="avatar-lg">
                                                                 <div class="avatar-title bg-light rounded">
-                                                                    <img src="@if(@$product->product_image != '' ) {{Storage::URL($product->product_image)}} @endif" id="product-img" class="avatar-md h-auto" loading="lazy" alt="fitnessity"/>
+                                                                    <img src="@if(@$product->product_image != '' ) {{Storage::URL($product->product_image)}} @endif" id="product-img" class="avatar-md h-auto" loading="lazy" alt="Omnebook"/>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -327,7 +327,7 @@
         																		<label class="form-label">Image</label>
         																			<div class="text-center">
         																				<div class="profile-user position-relative d-inline-block mx-auto  mb-4">
-        																				    <img src="@if(@$product->agreement_img)  {{Storage::URL($product->agreement_img)}} @endif" alt="" class="rounded-circle avatar-xl img-thumbnail user-profile-image shadow" loading="lazy">
+        																				    <img src="@if(@$product->agreement_img)  {{Storage::URL($product->agreement_img)}} @endif" alt="Omnebook" class="rounded-circle avatar-xl img-thumbnail user-profile-image shadow" loading="lazy">
         																					<div class="avatar-xs p-0 rounded-circle profile-photo-edit">
         																						<input id="profile-img-file-input" type="file" class="profile-img-file-input" name="agreement_img"><label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
         																							<span class="avatar-title rounded-circle bg-light text-body shadow">

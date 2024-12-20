@@ -47,7 +47,7 @@
                         
                         <button class="btn {{ $company->side_panel_color == 1 ? 'btn-switch-business' : '' }} {{ $company->side_panel_color == 0 ? 'btn-switch-business-white ' : '' }} dropdown-toggle" type="button" id="dropdownMenuButton21" data-bs-toggle="dropdown" aria-expanded="false">
                             @if($businessImage)
-                                    <img src="{{$businessImage}}" alt="Fitnessity" class="avatar-xs rounded-circle me-2 shadow">
+                                    <img src="{{$businessImage}}" alt="Omnebook" class="avatar-xs rounded-circle me-2 shadow">
                                 @else
                                     <div class="avatar-xs me-2 one-latter">
                                         <span class="avatar-title rounded-circle bg-danger-red text-white">{{@$company->cname_first_letter}}</span>
@@ -62,7 +62,7 @@
 						<li>
 							<a class="dropdown-item" onclick="changeCompany({{$companyId}})">
                                 @if($businessImage)
-                                    <img src="{{$businessImage}}" alt="Fitnessity" class="avatar-xs rounded-circle me-2 shadow">
+                                    <img src="{{$businessImage}}" alt="Omnebook" class="avatar-xs rounded-circle me-2 shadow">
                                 @else
                                     <div class="avatar-xs me-2 one-latter">
                                         <span class="avatar-title rounded-circle bg-danger-red text-white">{{@$company->cname_first_letter}}</span>
@@ -82,7 +82,7 @@
 							<a class="dropdown-item" onclick="changeCompany({{$list->id}})">
 								<div class="avatar-xs me-2 one-latter">
                                     @if( Storage::disk('s3')->exists($list->logo))
-                                        <img src="{{Storage::URL($list->logo)}}" alt="Fitnessity" class="avatar-xs rounded-circle me-2 shadow">
+                                        <img src="{{Storage::URL($list->logo)}}" alt="Omnebook" class="avatar-xs rounded-circle me-2 shadow">
                                     @else
                                         <span class="avatar-title rounded-circle bg-danger-red text-white">{{$list->cname_first_letter}}</span>
                                     @endif
@@ -117,7 +117,7 @@
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName()=='business_dashboard') active @endif" href="{{route('business_dashboard')}}" aria-controls="sidebarDashboards">
-                        <img src="{{asset('/public/img/home.png')}}" alt="Fitnessity"> <span data-key="t-dashboards">Dashboards</span>
+                        <img src="{{asset('/public/img/home.png')}}" alt="Omnebook"> <span data-key="t-dashboards">Dashboards</span>
                     </a>
                 </li>
                 
@@ -128,18 +128,18 @@
                         </a> -->
                     @else
                         <a class="nav-link menu-link @if(Route::current()->getName()=='business.staff.show') active @endif" href="{{route('business.staff.show',['company' => $companyId,'staff'=>Session('StaffLogin')])}}" >
-                                <img src="{{asset('/public/img/company-set-up.png')}}" alt="Fitnessity"> <span data-key="t-apps">Staff Personal Detail</span></a>
+                                <img src="{{asset('/public/img/company-set-up.png')}}" alt="Omnebook"> <span data-key="t-apps">Staff Personal Detail</span></a>
                     @endif
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link"  @if($companyId!='') href="{{route('business.service.select',['business_id'=>$companyId])}}" @endif aria-controls="sidebarLayouts">
-                        <img src="{{asset('/public/img/service-price.png')}}" alt="Fitnessity"> <span data-key="t-layouts">Create New Service  </span> 
+                        <img src="{{asset('/public/img/service-price.png')}}" alt="Omnebook"> <span data-key="t-layouts">Create New Service  </span> 
                     </a>
                 </li> 
 				
                 <li class="nav-item">
                     <a class="nav-link menu-link" @if($companyId) href="#sidebarAuth"  @endif data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
-                        <img src="{{asset('/public/img/manage-company.png')}}" alt="Fitnessity"> <span data-key="t-authentication">Manage </span>
+                        <img src="{{asset('/public/img/manage-company.png')}}" alt="Omnebook"> <span data-key="t-authentication">Manage </span>
                     </a>
                     <div class="collapse menu-dropdown @if(Route::current()->getName() == 'personal.company.index' || Route::current()->getName() == 'personal.company.index' || Route::current()->getName()=='business.schedulers.index' || Route::current()->getName() == 'business.services.index')) collapse show @endif" id="sidebarAuth">
                         <ul class="nav nav-sm flex-column">
@@ -198,20 +198,20 @@
                 @if($companyId)
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName() == 'business_customer_index' || Route::current()->getName() == 'business_customer_show') tab-active @endif" href="{{route('business_customer_index')}}" aria-controls="sidebarPages">
-                        <img src="{{asset('/public/img/clients.png')}}" alt="Fitnessity"> <span data-key="t-pages"> Clients </span>
+                        <img src="{{asset('/public/img/clients.png')}}" alt="Omnebook"> <span data-key="t-pages"> Clients </span>
                     </a>
                 </li>
                 @endif
 
                <!-- <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName() == 'booking_request') tab-active @endif" href="{{route('booking_request')}}" aria-controls="sidebarLanding">
-                        <img src="{{asset('/public/img/email1.png')}}" alt="Fitnessity"> <span data-key="t-landing">Inbox </span>
+                        <img src="{{asset('/public/img/email1.png')}}" alt="Omnebook"> <span data-key="t-landing">Inbox </span>
                     </a>
                 </li> -->
 
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName() == 'provider_calendar' ) tab-active @endif"  @if($companyId) href="{{route('provider_calendar')}}" @endif aria-controls="sidebarUI">
-                        <img src="{{asset('/public/img/calender.png')}}" alt="Fitnessity"> <span data-key="t-base-ui"> Calender</span>
+                        <img src="{{asset('/public/img/calender.png')}}" alt="Omnebook"> <span data-key="t-base-ui"> Calender</span>
                     </a>
                 </li>
 
@@ -223,20 +223,20 @@
 
                 <!-- <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName() == 'business.announcement.index' ) tab-active @endif" @if($companyId) href="{{route('business.announcement.index')}}" @endif aria-controls="sidebarUI">
-                        <img src="{{asset('/public/img/calender.png')}}" alt="Fitnessity"> <span data-key="t-base-ui"> Announcement </span>
+                        <img src="{{asset('/public/img/calender.png')}}" alt="Omnebook"> <span data-key="t-base-ui"> Announcement </span>
                     </a>
                 </li> -->
 
                 @if(!Session('StaffLogin'))
                     <li class="nav-item">
                         <a class="nav-link menu-link" @if($companyId) href="{{route('stripe-dashboard')}}" aria-controls="sidebarAdvanceUI"  @endif target="_blank">
-                            <img src="{{asset('/public/img/financial-dash.png')}}" alt="Fitnessity"> <span data-key="t-advance-ui">Financial Dashboard</span>
+                            <img src="{{asset('/public/img/financial-dash.png')}}" alt="Omnebook"> <span data-key="t-advance-ui">Financial Dashboard</span>
                         </a>
                     </li>
                 @endif
                 <li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName()=='business.orders.create') tab-active @endif" @if($companyId) href="{{ route('business.orders.create', [ 'book_id'=>'0']) }}"   @endif>
-                        <img src="{{asset('/public/img/checkout-register.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Point Of Sale </span>
+                        <img src="{{asset('/public/img/checkout-register.png')}}" alt="Omnebook"> <span data-key="t-widgets">Point Of Sale </span>
                     </a>
                 </li>
 
@@ -260,13 +260,13 @@
 
 				<li class="nav-item">
 					<a class="nav-link menu-link @if(Route::current()->getName()=='business.reports.index') tab-active @endif" @if($companyId) href="{{ route('business.reports.index') }}"   @endif aria-controls="sidebarForms">
-						<img src="{{asset('/public/img/salesreports1.png')}}" alt="Fitnessity"> <span data-key="t-forms">Reports</span><span class="badge badge-pill bg-success" data-key="t-new">New</span>
+						<img src="{{asset('/public/img/salesreports1.png')}}" alt="Omnebook"> <span data-key="t-forms">Reports</span><span class="badge badge-pill bg-success" data-key="t-new">New</span>
 					</a>
 				</li>
 				
 				<li class="nav-item">
                     <a class="nav-link menu-link @if(Route::current()->getName()=='business.settings.index') tab-active @endif" @if($companyId) href="{{ route('business.settings.index') }}"   @endif >
-                        <img src="{{asset('/public/img/setings-1.png')}}" alt="Fitnessity"> <span data-key="t-widgets">Settings </span><span class="badge badge-pill bg-success" data-key="t-new">New</span> 
+                        <img src="{{asset('/public/img/setings-1.png')}}" alt="Omnebook"> <span data-key="t-widgets">Settings </span><span class="badge badge-pill bg-success" data-key="t-new">New</span> 
                     </a>
                 </li>
 				
